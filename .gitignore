@@ -1,0 +1,45 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+*.cso
+*.cod
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+DirectXTK-master/
+FBX SDK/
+Adollib/cereal-master/
+Adollib/Release/
+Adollib/Debug/
+Adollib/.vs/
+Adollib/Data/Skymaps/
+Adollib/Sounds/sound_effects.xwb
+Adollib/Musics/bgm_title.wav
+Adollib/Musics/bgm_result.wav

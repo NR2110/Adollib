@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Adollib">
+      <UniqueIdentifier>{457a0db0-78dc-4f19-9ba1-e6eb79f8abcf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Adollib\main">
+      <UniqueIdentifier>{1aa0d38b-0bac-4886-bcb7-4d0604cec1e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Adollib\object">
+      <UniqueIdentifier>{ba801f30-dc48-437a-b82e-1c30330c227f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Adollib\math">
+      <UniqueIdentifier>{eea9848d-7e6b-474f-aa58-f3a76a5c04fc}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="scene_game.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="scene_title.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Adollib.cpp">
+      <Filter>Adollib\main</Filter>
+    </ClCompile>
+    <ClCompile Include="loop.cpp">
+      <Filter>Adollib\main</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Adollib\main</Filter>
+    </ClCompile>
+    <ClCompile Include="systems.cpp">
+      <Filter>Adollib\main</Filter>
+    </ClCompile>
+    <ClCompile Include="vector.cpp">
+      <Filter>Adollib\math</Filter>
+    </ClCompile>
+    <ClCompile Include="quaternion.cpp">
+      <Filter>Adollib\math</Filter>
+    </ClCompile>
+    <ClCompile Include="matrix.cpp">
+      <Filter>Adollib\math</Filter>
+    </ClCompile>
+    <ClCompile Include="complex.cpp">
+      <Filter>Adollib\math</Filter>
+    </ClCompile>
+    <ClCompile Include="camera.cpp">
+      <Filter>Adollib\object</Filter>
+    </ClCompile>
+    <ClCompile Include="gameobject_manager.cpp">
+      <Filter>Adollib\object</Filter>
+    </ClCompile>
+    <ClCompile Include="gameobject.cpp">
+      <Filter>Adollib\object</Filter>
+    </ClCompile>
+    <ClCompile Include="rigit_body_manager.cpp">
+      <Filter>Adollib\math</Filter>
+    </ClCompile>
+    <ClCompile Include="rigit_body.cpp">
+      <Filter>Adollib\math</Filter>
+    </ClCompile>
+    <ClCompile Include="scene.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="scene_manager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="resource_manager.cpp">
+      <Filter>Adollib\main</Filter>
+    </ClCompile>
+    <ClCompile Include="texture.cpp">
+      <Filter>Adollib\main</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="scene_game.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scene_title.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib.h">
+      <Filter>Adollib\main</Filter>
+    </ClInclude>
+    <ClInclude Include="loop.h">
+      <Filter>Adollib\main</Filter>
+    </ClInclude>
+    <ClInclude Include="misc.h">
+      <Filter>Adollib\main</Filter>
+    </ClInclude>
+    <ClInclude Include="systems.h">
+      <Filter>Adollib\main</Filter>
+    </ClInclude>
+    <ClInclude Include="vector.h">
+      <Filter>Adollib\math</Filter>
+    </ClInclude>
+    <ClInclude Include="quaternion.h">
+      <Filter>Adollib\math</Filter>
+    </ClInclude>
+    <ClInclude Include="matrix.h">
+      <Filter>Adollib\math</Filter>
+    </ClInclude>
+    <ClInclude Include="complex.h">
+      <Filter>Adollib\math</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h">
+      <Filter>Adollib\object</Filter>
+    </ClInclude>
+    <ClInclude Include="transform.h">
+      <Filter>Adollib\object</Filter>
+    </ClInclude>
+    <ClInclude Include="object.h">
+      <Filter>Adollib\object</Filter>
+    </ClInclude>
+    <ClInclude Include="gameobject_manager.h">
+      <Filter>Adollib\object</Filter>
+    </ClInclude>
+    <ClInclude Include="gameobject.h">
+      <Filter>Adollib\object</Filter>
+    </ClInclude>
+    <ClInclude Include="component.h">
+      <Filter>Adollib\object</Filter>
+    </ClInclude>
+    <ClInclude Include="rigit_body_manager.h">
+      <Filter>Adollib\math</Filter>
+    </ClInclude>
+    <ClInclude Include="rigit_body.h">
+      <Filter>Adollib\math</Filter>
+    </ClInclude>
+    <ClInclude Include="scene.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scene_manager.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scene_list.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="resource_manager.h">
+      <Filter>Adollib\main</Filter>
+    </ClInclude>
+    <ClInclude Include="texture.h">
+      <Filter>Adollib\main</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
