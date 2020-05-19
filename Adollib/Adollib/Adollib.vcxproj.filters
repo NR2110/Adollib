@@ -76,6 +76,9 @@
     <ClCompile Include="texture.cpp">
       <Filter>Adollib\main</Filter>
     </ClCompile>
+    <ClCompile Include="DirectXTK-master\Inc\WICTextureLoader.cpp">
+      <Filter>Adollib\main</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scene_game.h">
@@ -145,6 +148,9 @@
       <Filter>Adollib\main</Filter>
     </ClInclude>
     <ClInclude Include="texture.h">
+      <Filter>Adollib\main</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectXTK-master\Inc\WICTextureLoader.h">
       <Filter>Adollib\main</Filter>
     </ClInclude>
   </ItemGroup>

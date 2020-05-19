@@ -143,6 +143,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="component.h" />
+    <ClInclude Include="DirectXTK-master\Inc\WICTextureLoader.h" />
     <ClInclude Include="gameobject.h" />
     <ClInclude Include="gameobject_manager.h" />
     <ClInclude Include="loop.h" />
@@ -170,6 +171,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="DirectXTK-master\Inc\WICTextureLoader.cpp" />
     <ClCompile Include="gameobject.cpp" />
     <ClCompile Include="gameobject_manager.cpp" />
     <ClCompile Include="loop.cpp" />
