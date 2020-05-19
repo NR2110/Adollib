@@ -1,2 +1,36 @@
-﻿  texture.cpp
-  Adollib.vcxproj -> C:\Users\2190072\Desktop\Adollib\Debug\Adollib.exe
+﻿  Adollib.cpp
+  camera.cpp
+  gameobject.cpp
+  gameobject_manager.cpp
+  loop.cpp
+  main.cpp
+C:\Users\2190072\Desktop\Adollib\Adollib\Adollib\main.cpp(97,15): warning C4244: '初期化中': 'ULONGLONG' から 'DWORD' への変換です。データが失われる可能性があります。
+  matrix.cpp
+C:\Users\2190072\Desktop\Adollib\Adollib\Adollib\main.cpp(115,27): warning C4244: '=': 'ULONGLONG' から 'DWORD' への変換です。データが失われる可能性があります。
+  quaternion.cpp
+  resource_manager.cpp
+  rigit_body.cpp
+C:\Users\2190072\Desktop\Adollib\Adollib\Adollib\matrix.cpp(155,5): warning C4067: プリプロセッサ ディレクティブの後に余分な文字がありました - 改行が必要です
+  rigit_body_manager.cpp
+C:\Users\2190072\Desktop\Adollib\Adollib\Adollib\rigit_body.cpp(36,80): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2190072\Desktop\Adollib\Adollib\Adollib\rigit_body_manager.cpp(26,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\2190072\Desktop\Adollib\Adollib\Adollib\rigit_body_manager.cpp(34,10): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Desktop\Adollib\Adollib\Adollib\rigit_body_manager.cpp(35,15): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Desktop\Adollib\Adollib\Adollib\rigit_body_manager.cpp(38,10): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Desktop\Adollib\Adollib\Adollib\rigit_body_manager.cpp(39,15): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Desktop\Adollib\Adollib\Adollib\rigit_body_manager.cpp(45,21): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Desktop\Adollib\Adollib\Adollib\rigit_body_manager.cpp(57,24): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Desktop\Adollib\Adollib\Adollib\rigit_body_manager.cpp(61,24): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+  scene.cpp
+  scene_game.cpp
+  scene_manager.cpp
+  scene_title.cpp
+  systems.cpp
+  texture.cpp
+  vector.cpp
+  コードを生成中...
+C:\Users\2190072\Desktop\Adollib\Adollib\Adollib\rigit_body_manager.cpp(92,21): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Desktop\Adollib\Adollib\Adollib\vector.cpp(77): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
+C:\Users\2190072\Desktop\Adollib\Adollib\Adollib\vector.cpp(329): warning C4715: 'Adollib::n_vector2::norm_sqr': 値を返さないコントロール パスがあります。
+C:\Users\2190072\Desktop\Adollib\Adollib\Adollib\rigit_body.cpp(131): warning C4715: 'intersect_sphere_sphere': 値を返さないコントロール パスがあります。
+  Adollib.vcxproj -> C:\Users\2190072\Desktop\Adollib\Adollib\Debug\Adollib.exe

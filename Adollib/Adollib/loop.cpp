@@ -29,6 +29,6 @@ void loop::Render(){
 	go_manager.render();
 	
 
-//	systems::Flip();
+	systems::Flip();
 
 }

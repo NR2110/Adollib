@@ -53,19 +53,19 @@ namespace Adollib
 		// ==============================================================
 		// 戻り値 T*		:	Tがあればそのポインタを、なければnullptrを返す
 		// ==============================================================
-		template<typename T>
-		T* get_component() const
-		{
-			for (auto&& com : gameobject->components)
-			{
-				if (typeid(T) == typeid(*com))
-				{
-					T* component = dynamic_cast<T*>(com.get());
-					return component;
-				}
-			}
-			return nullptr;
-		}
+		//template<typename T>
+		//T* get_component() const
+		//{
+		//	for (auto&& com : gameobject->components)
+		//	{
+		//		if (typeid(T) == typeid(*com))
+		//		{
+		//			T* component = dynamic_cast<T*>(com.get());
+		//			return component;
+		//		}
+		//	}
+		//	return nullptr;
+		//}
 	};
 
 

@@ -1,4 +1,6 @@
+//
 //#include "resource_manager.h"
+//
 //
 ////--------------------------------
 ////  •Ï”éŒ¾
@@ -64,7 +66,7 @@
 //	if (!find)
 //	{
 //		ResourceShaderResourceViews* p = &SRViews[no];
-//		if (FAILED(CreateWICTextureFromFile(device, fileName, &resource, &(p->SRView))))
+//		if (FAILED(DirectX::CreateWICTextureFromFile(device, fileName, &resource, &(p->SRView))))
 //			return false;
 //
 //		find = p;

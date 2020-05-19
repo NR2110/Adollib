@@ -61,7 +61,7 @@ namespace Adollib {
 		static bool Initialize(HWND hWnd, int width, int height);
 		static void Release();
 		static void Clear(DWORD color = 0x00000000);
-		//static void Flip(int n = 0);
+		static void Flip(int n = 0);
 
 		static int GetScreenWidth() { return SCREEN_WIDTH; }
 		static int GetScreenHeight() { return SCREEN_HEIGHT; }
