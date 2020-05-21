@@ -1,30 +1,32 @@
 #include "systems.h"
 
 
+#pragma comment( lib, "d3dcompiler.lib" )
+
 using namespace Adollib;
 
-ComPtr<ID3D11Device>		systems::Device;
-ComPtr<IDXGISwapChain>		systems::SwapChain;
+ComPtr<ID3D11Device>		Systems::Device;
+ComPtr<IDXGISwapChain>		Systems::SwapChain;
 
-ComPtr<ID3D11DeviceContext>		systems::DeviceContext;
-ComPtr<ID3D11RenderTargetView> systems::RenderTargetView;
+ComPtr<ID3D11DeviceContext>		Systems::DeviceContext;
+ComPtr<ID3D11RenderTargetView> Systems::RenderTargetView;
 
-ComPtr<ID3D11Texture2D>				systems::DepthStencilTexture;
-ComPtr<ID3D11DepthStencilView>		systems::DepthStencilView;
-ComPtr<ID3D11ShaderResourceView>	systems::ShaderResourceView;
-ComPtr<ID3D11DepthStencilState>		systems::DepthStencilState[2];
-ComPtr<ID3D11RasterizerState>		systems::RasterizerState[RASTERIZE_TYPE];
-ComPtr<ID3D11BlendState>			systems::BlendState[BLEND_TYPE];
+ComPtr<ID3D11Texture2D>				Systems::DepthStencilTexture;
+ComPtr<ID3D11DepthStencilView>		Systems::DepthStencilView;
+ComPtr<ID3D11ShaderResourceView>	Systems::ShaderResourceView;
+ComPtr<ID3D11DepthStencilState>		Systems::DepthStencilState[2];
+ComPtr<ID3D11RasterizerState>		Systems::RasterizerState[RASTERIZE_TYPE];
+ComPtr<ID3D11BlendState>			Systems::BlendState[BLEND_TYPE];
 
 
- int systems::SCREEN_WIDTH = 1280;
- int systems::SCREEN_HEIGHT = 720;
+ int Systems::SCREEN_WIDTH = 1280;
+ int Systems::SCREEN_HEIGHT = 720;
 
-float systems::elapsed_time = 0;
+float Systems::elapsed_time = 0;
 
 #pragma region Initialize
 
-bool systems::Initialize(HWND hWnd, int width, int height)
+bool Systems::Initialize(HWND hWnd, int width, int height)
 {
 	CreateDevice(hWnd);
 	InitializeRenderTarget();
@@ -34,7 +36,7 @@ bool systems::Initialize(HWND hWnd, int width, int height)
 	return false;
 }
 
-HRESULT systems::CreateDevice(HWND hWnd)
+HRESULT Systems::CreateDevice(HWND hWnd)
 {
 	HRESULT hr = S_OK;
 
@@ -136,7 +138,7 @@ HRESULT systems::CreateDevice(HWND hWnd)
 	return S_OK;
 }
 
-bool systems::InitializeRenderTarget()
+bool Systems::InitializeRenderTarget()
 {
 	// バックバッファ取得
 	ID3D11Texture2D* BackBuffer = NULL;
@@ -170,7 +172,7 @@ bool systems::InitializeRenderTarget()
 	return true;
 }
 
-void systems::SetViewPort(int width, int height)
+void Systems::SetViewPort(int width, int height)
 {
 	D3D11_VIEWPORT vp;
 	vp.Width = (FLOAT)width;
@@ -183,7 +185,7 @@ void systems::SetViewPort(int width, int height)
 
 }
 
-bool systems::CreateDepthStencil()
+bool Systems::CreateDepthStencil()
 {
 	// 深度ステンシル設定
 	D3D11_TEXTURE2D_DESC td;
@@ -270,7 +272,7 @@ bool systems::CreateDepthStencil()
 	return true;
 }
 
-bool systems::CreateRasterizerState()
+bool Systems::CreateRasterizerState()
 {
 	D3D11_RASTERIZER_DESC rd;
 	for (int state = 0; state < RASTERIZE_TYPE; state++) {
@@ -347,7 +349,7 @@ bool systems::CreateRasterizerState()
 
 }
 
-bool systems::CreateBlendState()
+bool Systems::CreateBlendState()
 {
 	D3D11_BLEND_DESC bd;
 
@@ -507,7 +509,7 @@ bool systems::CreateBlendState()
 	return true;
 }
 
-bool systems::CreateCamera() {
+bool Systems::CreateCamera() {
 	//cameras addc;
 	//Camera.push_back(addc);
 	return true;
@@ -517,14 +519,14 @@ bool systems::CreateCamera() {
 
 
 
-void systems::Release()
+void Systems::Release()
 {
 }
 
 //------------------------------------------------
 //	クリア
 //------------------------------------------------
-void systems::Clear(DWORD color)
+void Systems::Clear(DWORD color)
 {
 
 
@@ -542,7 +544,7 @@ void systems::Clear(DWORD color)
 //------------------------------------------------
 //	フリップ
 //------------------------------------------------
-void systems::Flip(int n)
+void Systems::Flip(int n)
 {
 	// フリップ処理
 	SwapChain->Present(n, 0);

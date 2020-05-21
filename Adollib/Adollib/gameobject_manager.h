@@ -47,6 +47,8 @@ namespace Adollib {
 		static Gameobject* createCylinder(const std::string& go_name = "Cylinder");
 		static Gameobject* createCube(const std::string& go_name = "Cube");
 		static Gameobject* createPlane(const std::string& go_name = "Plane");
+		static Gameobject* createSprite(const std::string& go_name = "Sprite");
+
 
 	};
 }

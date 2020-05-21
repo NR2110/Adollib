@@ -69,7 +69,7 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 	wcex.hIconSm = 0;
 	RegisterClassEx(&wcex);
 
-	RECT rc = { 0, 0, systems::SCREEN_WIDTH, systems::SCREEN_HEIGHT };
+	RECT rc = { 0, 0, Systems::SCREEN_WIDTH, Systems::SCREEN_HEIGHT };
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 	HWND hwnd = 
 		CreateWindow(
@@ -86,7 +86,7 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 		);
 	ShowWindow(hwnd, cmd_show);
 
-	if (FAILED(systems::Initialize(hwnd, systems::SCREEN_WIDTH, systems::SCREEN_HEIGHT))){
+	if (FAILED(Systems::Initialize(hwnd, Systems::SCREEN_WIDTH, Systems::SCREEN_HEIGHT))){
 
 		return 0;
 	}
@@ -109,13 +109,13 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 		}
 		else
 		{
-			systems::elapsed_time =
+			Systems::elapsed_time =
 				(GetTickCount64() - before) * 0.001f;
 
 			before = GetTickCount64();
 			float mspf = 1000.0f / fps;
 
-			Interval -= systems::elapsed_time;
+			Interval -= Systems::elapsed_time;
 			fps++;
 			if (Interval < 0) {
 				std::ostringstream outs;
@@ -128,11 +128,11 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 			}
 
 			// XVE•`‰æ
-			loop.Update(hwnd, systems::SCREEN_WIDTH, systems::SCREEN_HEIGHT);
+			loop.Update(hwnd, Systems::SCREEN_WIDTH, Systems::SCREEN_HEIGHT);
 			loop.Render();
 		}
 	}
 	//SAFE_DELETE(scenemanager);
-	systems::Release();
+	Systems::Release();
 	return 0;
 }

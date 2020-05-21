@@ -22,13 +22,13 @@ void loop::Update(HWND hWnd, int width, int height) {
 
 void loop::Render(){
 
-	systems::SetViewPort(systems::SCREEN_WIDTH, systems::SCREEN_HEIGHT);
+	Systems::SetViewPort(Systems::SCREEN_WIDTH, Systems::SCREEN_HEIGHT);
 
-	systems::Clear();
+	Systems::Clear();
 
 	go_manager.render();
 	
 
-	systems::Flip();
+	Systems::Flip();
 
 }

@@ -17,6 +17,9 @@
     <Filter Include="Adollib\math">
       <UniqueIdentifier>{eea9848d-7e6b-474f-aa58-f3a76a5c04fc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Adollib\shader">
+      <UniqueIdentifier>{36de64fc-7e7c-4b76-a489-b6c226ddc5d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="scene_game.cpp">
@@ -77,6 +80,12 @@
       <Filter>Adollib\main</Filter>
     </ClCompile>
     <ClCompile Include="DirectXTK-master\Inc\WICTextureLoader.cpp">
+      <Filter>Adollib\main</Filter>
+    </ClCompile>
+    <ClCompile Include="sprite.cpp">
+      <Filter>Adollib\main</Filter>
+    </ClCompile>
+    <ClCompile Include="shader.cpp">
       <Filter>Adollib\main</Filter>
     </ClCompile>
   </ItemGroup>
@@ -153,5 +162,32 @@
     <ClInclude Include="DirectXTK-master\Inc\WICTextureLoader.h">
       <Filter>Adollib\main</Filter>
     </ClInclude>
+    <ClInclude Include="sprite.h">
+      <Filter>Adollib\main</Filter>
+    </ClInclude>
+    <ClInclude Include="shader.h">
+      <Filter>Adollib\main</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="defalt.hlsli">
+      <Filter>Adollib\shader</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="defalt_ps.hlsl">
+      <Filter>Adollib\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="defalt_vs.hlsl">
+      <Filter>Adollib\shader</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="defult.fx">
+      <Filter>Adollib\shader</Filter>
+    </Text>
+    <Text Include="funk.fx">
+      <Filter>Adollib\shader</Filter>
+    </Text>
   </ItemGroup>
 </Project>

@@ -55,7 +55,6 @@ namespace Adollib {
 		//:::::::::::::::::::::::::
 		void set_collider_plane(vector3 pos, vector3 normal);
 
-
 	};
 
 }

@@ -21,7 +21,7 @@ using Microsoft::WRL::ComPtr;
 
 namespace Adollib {
 
-	class systems {
+	class Systems {
 
 	private:
 		static ComPtr<IDXGISwapChain>			SwapChain;
