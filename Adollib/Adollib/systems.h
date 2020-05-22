@@ -44,8 +44,6 @@ namespace Adollib {
 		static ComPtr<ID3D11BlendState>		BlendState[BLEND_TYPE];
 		static bool CreateBlendState();
 
-		static bool CreateCamera();
-
 
 	public:
 		static int SCREEN_WIDTH;

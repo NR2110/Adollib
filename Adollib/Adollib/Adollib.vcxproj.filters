@@ -186,6 +186,12 @@
     <ClInclude Include="gameobject_camera.h">
       <Filter>Adollib\object</Filter>
     </ClInclude>
+    <ClInclude Include="cbuffer_manager.h">
+      <Filter>Adollib\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="light_types.h">
+      <Filter>Adollib\shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="defult.fx">

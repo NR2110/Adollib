@@ -137,6 +137,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Adollib.h" />
+    <ClInclude Include="cbuffer_manager.h" />
     <ClInclude Include="complex.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -147,6 +148,7 @@
     <ClInclude Include="gameobject_camera.h" />
     <ClInclude Include="gameobject_light.h" />
     <ClInclude Include="gameobject_manager.h" />
+    <ClInclude Include="light_types.h" />
     <ClInclude Include="loop.h" />
     <ClInclude Include="material.h" />
     <ClInclude Include="matrix.h" />

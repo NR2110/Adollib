@@ -31,7 +31,6 @@ bool Systems::Initialize(HWND hWnd, int width, int height)
 	InitializeRenderTarget();
 	CreateRasterizerState();
 	CreateBlendState();
-	CreateCamera();
 	return false;
 }
 
@@ -508,11 +507,13 @@ bool Systems::CreateBlendState()
 	return true;
 }
 
-bool Systems::CreateCamera() {
-	//cameras addc;
-	//Camera.push_back(addc);
-	return true;
-}
+#pragma endregion
+
+#pragma region Render
+
+
+
+
 
 #pragma endregion
 

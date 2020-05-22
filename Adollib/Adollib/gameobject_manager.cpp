@@ -1,5 +1,10 @@
+
+#include "systems.h"
 #include "gameobject_manager.h"
 #include "scene.h"
+
+#include "cbuffer_manager.h"
+#include "light_types.h"
 
 namespace Adollib {
 	std::map<Scenelist, std::list<std::shared_ptr<Gameobject>>> Gameobject_manager::gameobjects;
@@ -91,7 +96,51 @@ namespace Adollib {
 	void Gameobject_manager::render(Scenelist Sce) {
 		if (Sce == Scenelist::scene_null)return;
 
+		std::list<std::shared_ptr<Light>>::iterator itr_li = lights[Sce].begin();	itr_li++;
+		std::list<std::shared_ptr<Camera>>::iterator itr_ca = cameras[Sce].begin();	itr_ca++;
+
+		//light用のコンスタントバッファの準備
+		ConstantBufferForPerFrame cb;
+		cb.AmbientColor = Ambient.get_XM4();
+		cb.LightDir = LightDir.get_XM4();
+		cb.LightColor = DirLightColor.get_XM4();
+
+		//コンスタントバッファに渡すためにpointlight,spotlightの配列を整理
+		POINTLIGHT PointLight[POINTMAX];
+		SPOTLIGHT SpotLight[SPOTMAX];
 		{
+			int point_num = 0;
+			int spot_num = 0;
+			for (int i = 0; i < lights[Sce].size(); i++) {
+
+				for (int o = 0; o < itr_li->get()->PointLight.size(); o++) {
+					PointLight[point_num] = *itr_li->get()->PointLight[o];
+					point_num++;
+				}
+
+				for (int o = 0; o < itr_li->get()->SpotLight.size(); o++) {
+					SpotLight[spot_num] = *itr_li->get()->SpotLight[o];
+					spot_num++;
+				}
+			}
+		}
+
+		memcpy(cb.PointLight, PointLight, sizeof(POINTLIGHT) * POINTMAX);
+		memcpy(cb.SpotLight, SpotLight, sizeof(SPOTLIGHT) * SPOTMAX);
+
+		//そのシーンのカメラの数だけ回す
+		for (int i = 0; i < cameras[Sce].size(); i++) {
+
+			cb.EyePos.x = itr_ca->get()->transform->position.x;
+			cb.EyePos.y = itr_ca->get()->transform->position.y;
+			cb.EyePos.z = itr_ca->get()->transform->position.z;
+			cb.EyePos.w = 1.0f;
+
+			//コンスタントバッファ更新
+			Systems::DeviceContext->UpdateSubresource(ConstantBuffer, 0, NULL, &cb, 0, 0);
+			Systems::DeviceContext->VSSetConstantBuffers(2, 1, ConstantBuffer.GetAddressOf());
+			Systems::DeviceContext->PSSetConstantBuffers(2, 1, ConstantBuffer.GetAddressOf());
+
 			//Sceのsceneにアタッチされたcomponentのrenderを呼ぶ
 			std::list<std::shared_ptr<Gameobject>>::iterator itr = gameobjects[Sce].begin();
 			std::list<std::shared_ptr<Gameobject>>::iterator itr_end = gameobjects[Sce].end();

@@ -25,6 +25,10 @@ void loop::Render(){
 
 	Systems::Clear();
 
+	//initで一度呼ばれているためコメント化
+	//何かあれば適当に
+	//Systems::SetViewPort(Systems::SCREEN_WIDTH, Systems::SCREEN_HEIGHT);
+
 	go_manager.render();
 	
 

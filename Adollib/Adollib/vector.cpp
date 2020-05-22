@@ -5,7 +5,7 @@
 using namespace Adollib;
 
 //::::::::::::::::::::::::::::::::::::::::::::::::
-#pragma region vector3
+	#pragma region vector3
 //::::::::::::::::::::::::::::::::::::::::::::::::
 
 //operator
@@ -248,7 +248,7 @@ vector3 Adollib::vector3_slerp(const vector3& V1, const vector3& V2, float R) {
 //::::::::::::::::::::::::::::::::::::::::::::::::
 
 //::::::::::::::::::::::::::::::::::::::::::::::::
-#pragma region vector4
+	#pragma region vector4
 //::::::::::::::::::::::::::::::::::::::::::::::::
 
 //operator
@@ -428,7 +428,7 @@ vector4 vector4::unit_vect() const {
 //::::::::::::::::::::::::::::::::::::::::::::::::
 
 //::::::::::::::::::::::::::::::::::::::::::::::::
-#pragma region vector2
+	#pragma region vector2
 //::::::::::::::::::::::::::::::::::::::::::::::::
 //operator
 n_vector2 n_vector2::operator+ () const {

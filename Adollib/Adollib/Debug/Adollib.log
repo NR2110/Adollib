@@ -1,13 +1,29 @@
-﻿  Adollib.cpp
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DepthStencilStats' の左辺を無視します。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RasterizerStats' の左辺を無視します。
-  WICTextureLoader.cpp
-  gameobject.cpp
+﻿  gameobject.cpp
   gameobject_camera.cpp
   gameobject_light.cpp
   gameobject_manager.cpp
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_manager.cpp(99,28): error C2039: 'Ambient': 'Adollib::Light' のメンバーではありません。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(14): message : 'Adollib::Light' の宣言を確認してください
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_manager.cpp(99,35): error C2679: 二項演算子 '=': 型 'Adollib::vector4' の右オペランドを扱う演算子が見つかりません (または変換できません)。
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\DirectXMath.h(655,15): message : 'DirectX::XMFLOAT4 &DirectX::XMFLOAT4::operator =(DirectX::XMFLOAT4 &&)' の可能性があります
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\DirectXMath.h(652,15): message : または 'DirectX::XMFLOAT4 &DirectX::XMFLOAT4::operator =(const DirectX::XMFLOAT4 &)'
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_manager.cpp(99,35): message : 引数リスト '(DirectX::XMFLOAT4, Adollib::vector4)' を一致させようとしているとき
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_manager.cpp(100,24): error C2039: 'LightDir': 'Adollib::Light' のメンバーではありません。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(14): message : 'Adollib::Light' の宣言を確認してください
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_manager.cpp(100,32): error C2679: 二項演算子 '=': 型 'Adollib::vector4' の右オペランドを扱う演算子が見つかりません (または変換できません)。
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\DirectXMath.h(655,15): message : 'DirectX::XMFLOAT4 &DirectX::XMFLOAT4::operator =(DirectX::XMFLOAT4 &&)' の可能性があります
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\DirectXMath.h(652,15): message : または 'DirectX::XMFLOAT4 &DirectX::XMFLOAT4::operator =(const DirectX::XMFLOAT4 &)'
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_manager.cpp(100,32): message : 引数リスト '(DirectX::XMFLOAT4, Adollib::vector4)' を一致させようとしているとき
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_manager.cpp(101,26): error C2039: 'DirLightColor': 'Adollib::Light' のメンバーではありません。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(14): message : 'Adollib::Light' の宣言を確認してください
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_manager.cpp(101,39): error C2679: 二項演算子 '=': 型 'Adollib::vector4' の右オペランドを扱う演算子が見つかりません (または変換できません)。
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\DirectXMath.h(655,15): message : 'DirectX::XMFLOAT4 &DirectX::XMFLOAT4::operator =(DirectX::XMFLOAT4 &&)' の可能性があります
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\DirectXMath.h(652,15): message : または 'DirectX::XMFLOAT4 &DirectX::XMFLOAT4::operator =(const DirectX::XMFLOAT4 &)'
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_manager.cpp(101,39): message : 引数リスト '(DirectX::XMFLOAT4, Adollib::vector4)' を一致させようとしているとき
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_manager.cpp(103,21): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_manager.cpp(111,26): error C2065: 'PointLight': 定義されていない識別子です。
   loop.cpp
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(35): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BlendStats' の左辺を無視します。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_manager.cpp(112,25): error C2065: 'SpotLight': 定義されていない識別子です。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DepthStencilStats' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RasterizerStats' の左辺を無視します。
   main.cpp
@@ -16,18 +32,8 @@ C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RasterizerStats' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(35): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BlendStats' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\main.cpp(97,15): warning C4244: '初期化中': 'ULONGLONG' から 'DWORD' への変換です。データが失われる可能性があります。
-  material.cpp
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\main.cpp(115,27): warning C4244: '=': 'ULONGLONG' から 'DWORD' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DepthStencilStats' の左辺を無視します。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RasterizerStats' の左辺を無視します。
-  matrix.cpp
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(35): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BlendStats' の左辺を無視します。
-  quaternion.cpp
-  resource_manager.cpp
-  rigit_body.cpp
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\matrix.cpp(155,5): warning C4067: プリプロセッサ ディレクティブの後に余分な文字がありました - 改行が必要です
   rigit_body_manager.cpp
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\rigit_body.cpp(36,80): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\main.cpp(115,27): warning C4244: '=': 'ULONGLONG' から 'DWORD' への変換です。データが失われる可能性があります。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\rigit_body_manager.cpp(26,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\rigit_body_manager.cpp(34,10): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\rigit_body_manager.cpp(35,15): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
@@ -36,30 +42,10 @@ C:\Users\2190072\Documents\Adollib\Adollib\Adollib\rigit_body_manager.cpp(39,15)
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\rigit_body_manager.cpp(45,21): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\rigit_body_manager.cpp(57,24): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\rigit_body_manager.cpp(61,24): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-  scene.cpp
-  scene_game.cpp
   scene_manager.cpp
-  scene_title.cpp
-  shader.cpp
+  texture.cpp
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\rigit_body_manager.cpp(92,21): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DepthStencilStats' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RasterizerStats' の左辺を無視します。
-  sprite.cpp
   コードを生成中...
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(35): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BlendStats' の左辺を無視します。
-  コンパイル中...
-  systems.cpp
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\rigit_body.cpp(131): warning C4715: 'intersect_sphere_sphere': 値を返さないコントロール パスがあります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DepthStencilStats' の左辺を無視します。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RasterizerStats' の左辺を無視します。
-  texture.cpp
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(35): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BlendStats' の左辺を無視します。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DepthStencilStats' の左辺を無視します。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RasterizerStats' の左辺を無視します。
-  vector.cpp
-  コードを生成中...
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(35): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BlendStats' の左辺を無視します。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\vector.cpp(77): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\vector.cpp(329): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\vector.cpp(509): warning C4715: 'Adollib::n_vector2::norm_sqr': 値を返さないコントロール パスがあります。
-  Adollib.vcxproj -> C:\Users\2190072\Documents\Adollib\Adollib\Debug\Adollib.exe

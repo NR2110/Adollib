@@ -13,7 +13,7 @@ namespace Adollib {
 
 	//•`‰æ—ptransfome
 	class Transfome {
-
+	public:
 		//•`‰æ—p‚Ìî•ñ 
 		vector3 position;
 		quaternion orientte;
