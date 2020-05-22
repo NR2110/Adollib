@@ -88,6 +88,67 @@ namespace Adollib {
 #pragma endregion
 	//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+
+	//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+	#pragma region vector4
+	//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+	class vector4 {
+
+	public:
+		float x;
+		float y;
+		float z;
+		float w;
+
+	private:
+		// îÒconstÇÃåvéZÇµÇΩÇÁïœçXÇ™Ç†ÇÈÇ‹Ç≈sqrtÇégÇÌÇ»Ç≠ÇƒçœÇﬁ
+		float normed;
+	public:
+		vector4() :x(0), y(0), z(0), w(0) {};
+		vector4(float x, float y, float z, float w) :x(x), y(y), z(z), w(w) {};
+		//vector3(n_vector2 V) :x(V.x), y(V.y), z(0) {};
+
+		vector4 operator+ () const;
+		vector4 operator- () const;
+
+		vector4 operator+ (const vector4& M) const;
+		vector4 operator- (const vector4& M) const;
+		vector4 operator* (const vector4& M) const;
+		vector4 operator* (float S) const;
+		vector4 operator/ (float S) const;
+		float& operator[] (const int i);
+		float operator[] (const int i) const;
+
+		vector4& operator+= (const vector4& M);
+		vector4& operator-= (const vector4& M);
+		vector4& operator*= (float S);
+		vector4& operator/= (float S);
+
+		bool operator== (const vector4& M);
+		bool operator!= (const vector4& M);
+
+		friend vector4 operator*(float S, const vector4& M);
+
+		//XMFLOAT3ÇÃïœä∑
+		DirectX::XMFLOAT4 get_XM4();
+
+
+		// norm^2
+		float norm_sqr() const;
+		float norm_sqr();
+
+		// norm
+		float norm() const;
+
+		// unit_vect
+		vector4 unit_vect() const;
+		vector4 unit_vect();
+
+	};
+
+#pragma endregion
+	//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
 	//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	#pragma region vector2
 	//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

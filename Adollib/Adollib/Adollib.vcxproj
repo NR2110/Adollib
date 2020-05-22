@@ -137,7 +137,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Adollib.h" />
-    <ClInclude Include="camera.h" />
     <ClInclude Include="complex.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -145,8 +144,11 @@
     <ClInclude Include="component.h" />
     <ClInclude Include="DirectXTK-master\Inc\WICTextureLoader.h" />
     <ClInclude Include="gameobject.h" />
+    <ClInclude Include="gameobject_camera.h" />
+    <ClInclude Include="gameobject_light.h" />
     <ClInclude Include="gameobject_manager.h" />
     <ClInclude Include="loop.h" />
+    <ClInclude Include="material.h" />
     <ClInclude Include="matrix.h" />
     <ClInclude Include="misc.h" />
     <ClInclude Include="object.h" />
@@ -161,6 +163,7 @@
     <ClInclude Include="scene_title.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="sprite.h" />
+    <ClInclude Include="states_manager.h" />
     <ClInclude Include="systems.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="transform.h" />
@@ -168,16 +171,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Adollib.cpp" />
-    <ClCompile Include="camera.cpp" />
     <ClCompile Include="complex.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="DirectXTK-master\Inc\WICTextureLoader.cpp" />
     <ClCompile Include="gameobject.cpp" />
+    <ClCompile Include="gameobject_camera.cpp" />
+    <ClCompile Include="gameobject_light.cpp" />
     <ClCompile Include="gameobject_manager.cpp" />
     <ClCompile Include="loop.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="material.cpp" />
     <ClCompile Include="matrix.cpp" />
     <ClCompile Include="quaternion.cpp" />
     <ClCompile Include="resource_manager.cpp" />
@@ -194,28 +199,15 @@
     <ClCompile Include="vector.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="defalt.hlsli" />
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="defalt_ps.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-    </FxCompile>
-    <FxCompile Include="defalt_vs.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-    </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
     <Text Include="defult.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </Text>
     <Text Include="funk.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </Text>
+    <Text Include="LightType.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </Text>

@@ -248,6 +248,186 @@ vector3 Adollib::vector3_slerp(const vector3& V1, const vector3& V2, float R) {
 //::::::::::::::::::::::::::::::::::::::::::::::::
 
 //::::::::::::::::::::::::::::::::::::::::::::::::
+#pragma region vector4
+//::::::::::::::::::::::::::::::::::::::::::::::::
+
+//operator
+vector4 vector4::operator+ () const {
+	return *this;
+}
+vector4 vector4::operator- () const {
+	vector4 R = *this;
+	R.x *= -1;
+	R.y *= -1;
+	R.z *= -1;
+	R.w *= -1;
+	return R;
+}
+
+vector4 vector4::operator+ (const vector4& M) const {
+	vector4 R;
+	R.x = x + M.x;
+	R.y = y + M.y;
+	R.z = z + M.z;
+	R.w = w + M.w;
+	return R;
+}
+vector4 vector4::operator- (const vector4& M) const {
+	vector4 R;
+	R.x = x - M.x;
+	R.y = y - M.y;
+	R.z = z - M.z;
+	R.w = w - M.z;
+	return R;
+}
+vector4 vector4::operator* (const vector4& M) const {
+	vector4 R;
+	R.x = x * M.x;
+	R.y = y * M.y;
+	R.z = z * M.z;
+	R.w = w * M.w;
+	return R;
+}
+vector4 vector4::operator* (float S) const {
+	vector4 R;
+	R.x = x * S;
+	R.y = y * S;
+	R.z = z * S;
+	R.w = w * S;
+	return R;
+}
+vector4 Adollib::operator*(float S, const vector4& M) {
+	vector4 R;
+	R.x = M.x * S;
+	R.y = M.y * S;
+	R.z = M.z * S;
+	R.w = M.w * S;
+	return R;
+}
+
+vector4 vector4::operator/ (float S) const {
+	vector4 R;
+	R.x = x / S;
+	R.y = y / S;
+	R.z = z / S;
+	R.w = w / S;
+	return R;
+}
+float& vector4::operator[] (const int i) {
+	switch (i)
+	{
+	case 0: return x;
+		break;
+	case 1: return y;
+		break;
+	case 2: return z;
+		break;
+	case 3: return w;
+		break;
+	}
+	float R;
+	return R;
+}
+float vector4::operator[] (const int i) const {
+	switch (i)
+	{
+	case 0: return x;
+		break;
+	case 1: return y;
+		break;
+	case 2: return z;
+		break;
+	case 3: return w;
+		break;
+	}
+	return 0;
+}
+
+
+vector4& vector4::operator+= (const vector4& M) {
+	x = x + M.x;
+	y = y + M.y;
+	z = z + M.z;
+	w = w + M.w;
+	return *this;
+}
+vector4& vector4::operator-= (const vector4& M) {
+	x = x - M.x;
+	y = y - M.y;
+	z = z - M.z;
+	w = w - M.w;
+	return *this;
+}
+vector4& vector4::operator*= (float S) {
+	x = x * S;
+	y = y * S;
+	z = z * S;
+	w = w * S;
+	return *this;
+}
+vector4& vector4::operator/= (float S) {
+	x = x / S;
+	y = y / S;
+	z = z / S;
+	w = w / S;
+	return *this;
+}
+
+bool vector4::operator== (const vector4& M) {
+	if (x == M.x && y == M.y && z == M.z && w == M.w)return true;
+	return false;
+}
+bool vector4::operator!= (const vector4& M) {
+	if (x == M.x && y == M.y && z == M.z && w == M.w)return false;
+	return true;
+}
+
+DirectX::XMFLOAT4 vector4::get_XM4() {
+	DirectX::XMFLOAT4 R;
+	R.x = x;
+	R.y = y;
+	R.z = z;
+	R.w = w;
+	return R;
+}
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+float vector4::norm_sqr() {
+	float S = norm();
+	if (normed * normed == S) return normed;
+	else if (S == 1.0f) normed = 1.0f;
+	else normed = sqrtf(S);
+	return normed;
+}
+
+float vector4::norm_sqr() const {
+	float S = norm();
+	if (normed * normed == S) return normed;
+	if (S == 1.0f) return 1.0f;
+	else return sqrtf(S);
+}
+
+float vector4::norm() const {
+	return x * x + y * y + z * z + w * w;
+}
+
+vector4 vector4::unit_vect() {
+	float V = norm_sqr();
+	if (V == 1.0f)return *this;
+	if (V < FLT_EPSILON)return vector4(0, 0, 0, 0);
+	vector4 R = *this;
+	return R / V;
+}
+vector4 vector4::unit_vect() const {
+	float V = norm_sqr();
+	vector4 R = *this;
+	return R / V;
+}
+
+
+#pragma endregion
+//::::::::::::::::::::::::::::::::::::::::::::::::
+
+//::::::::::::::::::::::::::::::::::::::::::::::::
 #pragma region vector2
 //::::::::::::::::::::::::::::::::::::::::::::::::
 //operator

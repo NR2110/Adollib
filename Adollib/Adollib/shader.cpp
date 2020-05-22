@@ -220,23 +220,23 @@ namespace Adollib {
 		hr = Systems::Device->CreateGeometryShader(GSBlob->GetBufferPointer(), GSBlob->GetBufferSize(), NULL, GS.GetAddressOf());
 		assert(SUCCEEDED(hr));
 
-		// ハルシェーダ
-		ComPtr<ID3DBlob> HSBlob = NULL;
-		hr = Compile(filename, HSFunc, "hs_5_0", HSBlob.GetAddressOf());
-		assert(SUCCEEDED(hr));
+		//// ハルシェーダ
+		//ComPtr<ID3DBlob> HSBlob = NULL;
+		//hr = Compile(filename, HSFunc, "hs_5_0", HSBlob.GetAddressOf());
+		//assert(SUCCEEDED(hr));
 
-		// ハルシェーダ生成
-		hr = Systems::Device->CreateHullShader(HSBlob->GetBufferPointer(), HSBlob->GetBufferSize(), NULL, HS.GetAddressOf());
-		assert(SUCCEEDED(hr));
+		//// ハルシェーダ生成
+		//hr = Systems::Device->CreateHullShader(HSBlob->GetBufferPointer(), HSBlob->GetBufferSize(), NULL, HS.GetAddressOf());
+		//assert(SUCCEEDED(hr));
 
-		// ドメインシェーダ
-		ComPtr<ID3DBlob> DSBlob = NULL;
-		hr = Compile(filename, DSFunc, "ds_5_0", DSBlob.GetAddressOf());
-		assert(SUCCEEDED(hr));
+		//// ドメインシェーダ
+		//ComPtr<ID3DBlob> DSBlob = NULL;
+		//hr = Compile(filename, DSFunc, "ds_5_0", DSBlob.GetAddressOf());
+		//assert(SUCCEEDED(hr));
 
-		// ドメインシェーダ生成
-		hr = Systems::Device->CreateDomainShader(DSBlob->GetBufferPointer(), DSBlob->GetBufferSize(), NULL, DS.GetAddressOf());
-		assert(SUCCEEDED(hr));
+		//// ドメインシェーダ生成
+		//hr = Systems::Device->CreateDomainShader(DSBlob->GetBufferPointer(), DSBlob->GetBufferSize(), NULL, DS.GetAddressOf());
+		//assert(SUCCEEDED(hr));
 
 
 
@@ -256,8 +256,8 @@ namespace Adollib {
 		Systems::DeviceContext->VSSetShader(VS.Get(), NULL, 0);
 		Systems::DeviceContext->PSSetShader(PS.Get(), NULL, 0);
 		Systems::DeviceContext->GSSetShader(GS.Get(), NULL, 0);
-		Systems::DeviceContext->HSSetShader(HS.Get(), NULL, 0);
-		Systems::DeviceContext->DSSetShader(DS.Get(), NULL, 0);
+		//Systems::DeviceContext->HSSetShader(HS.Get(), NULL, 0);
+		//Systems::DeviceContext->DSSetShader(DS.Get(), NULL, 0);
 
 	}
 

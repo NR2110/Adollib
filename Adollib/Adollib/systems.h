@@ -15,7 +15,7 @@
 #pragma comment(lib,"d3d11.lib")
 
 #include "scene.h"
-#include "camera.h"
+#include "states_manager.h"
 
 using Microsoft::WRL::ComPtr;
 
@@ -36,11 +36,11 @@ namespace Adollib {
 		static bool CreateDepthStencil();
 		static bool InitializeRenderTarget();
 
-		static const int RASTERIZE_TYPE = 4;
+		static const int RASTERIZE_TYPE = 4; //ラスタライザの種類
 		static ComPtr<ID3D11RasterizerState> RasterizerState[RASTERIZE_TYPE];
 		static bool CreateRasterizerState();
 
-		static const int BLEND_TYPE = 9;
+		static const int BLEND_TYPE = 9; //blendstateの種類
 		static ComPtr<ID3D11BlendState>		BlendState[BLEND_TYPE];
 		static bool CreateBlendState();
 
@@ -54,7 +54,7 @@ namespace Adollib {
 		static ComPtr<ID3D11Device>			Device;
 		static ComPtr<ID3D11DeviceContext>	DeviceContext;
 
-		static std::vector<cameras> Camera;
+		//static std::vector<cameras> Camera;
 
 		static float elapsed_time;
 
@@ -72,16 +72,6 @@ namespace Adollib {
 		static ID3D11BlendState* GetBlendState(int state) { return BlendState[state].Get(); }
 
 		static void SetViewPort(int width, int height);
-
-		//DepthStencilState
-		enum { DS_FALSE, DS_TRUE };
-
-		//RasterizerState
-		enum { RS_CULL_BACK, RS_WIRE, RS_CULL_FRONT, RS_CULL_NONE };
-
-		//BlendState
-		enum { BS_NONE, BS_ALPHA, BS_ADD, BS_SUBTRACT, BS_REPLACE, BS_MULTIPLY, BS_LIGHTEN, BS_DARKEN, BS_SCREEN };
-
 
 	};
 

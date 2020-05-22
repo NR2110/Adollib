@@ -1,6 +1,5 @@
 
 #include "loop.h"
-#include "camera.h"
 
 using namespace Adollib;
 
