@@ -91,7 +91,7 @@ namespace Adollib
 		vector<mesh> meshes;
 
 	public:
-		Mesh(ID3D11Device* device, const char* fbx_filename, const char* filePath);
+		Mesh(const char* fbx_filename, const char* filePath);
 
 	private:
 		void CreateIndices(FbxMesh*, vector<u_int>*);

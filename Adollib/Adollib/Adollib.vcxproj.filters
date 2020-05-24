@@ -76,9 +76,6 @@
     <ClCompile Include="scene_manager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="texture.cpp">
-      <Filter>Adollib\main</Filter>
-    </ClCompile>
     <ClCompile Include="sprite.cpp">
       <Filter>Adollib\main</Filter>
     </ClCompile>
@@ -104,6 +101,9 @@
       <Filter>Adollib\object\mesh</Filter>
     </ClCompile>
     <ClCompile Include="resource_manager.cpp">
+      <Filter>Adollib\object\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="texture.cpp">
       <Filter>Adollib\object\mesh</Filter>
     </ClCompile>
   </ItemGroup>
@@ -168,9 +168,6 @@
     <ClInclude Include="scene_list.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="texture.h">
-      <Filter>Adollib\main</Filter>
-    </ClInclude>
     <ClInclude Include="sprite.h">
       <Filter>Adollib\main</Filter>
     </ClInclude>
@@ -205,6 +202,9 @@
       <Filter>Adollib\object\mesh</Filter>
     </ClInclude>
     <ClInclude Include="resource_manager.h">
+      <Filter>Adollib\object\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="texture.h">
       <Filter>Adollib\object\mesh</Filter>
     </ClInclude>
   </ItemGroup>

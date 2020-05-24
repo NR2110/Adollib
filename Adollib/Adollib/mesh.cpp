@@ -14,12 +14,12 @@ using namespace fbxsdk;
 
 namespace Adollib
 {
-	Mesh::Mesh(ID3D11Device* device, const char* fileName, const char* filePath)
+	Mesh::Mesh(const char* fileName, const char* filePath)
 	{
 		HRESULT hr = S_OK;
 
 		// FBXの読み込み
-		ResourceManager::CreateModelFromFBX(device, meshes, fileName, filePath);
+		ResourceManager::CreateModelFromFBX(meshes, fileName, filePath);
 
 		// 頂点シェーダー,入力レイアウトオブジェクトの生成 
 #pragma region CreateVertexShader
@@ -33,7 +33,7 @@ namespace Adollib
 				{ "WEIGHTS",  0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 				{ "BONES"  ,  0, DXGI_FORMAT_R32G32B32A32_UINT,  0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 			};
-			ResourceManager::CreateVsFromCso(device, "skinned_mesh_vs.cso", vertexShader.GetAddressOf(), vertexLayout.GetAddressOf(), inputElemntDesc, ARRAYSIZE(inputElemntDesc));
+			ResourceManager::CreateVsFromCso("skinned_mesh_vs.cso", vertexShader.GetAddressOf(), vertexLayout.GetAddressOf(), inputElemntDesc, ARRAYSIZE(inputElemntDesc));
 		}
 		else
 		{
@@ -43,7 +43,7 @@ namespace Adollib
 				{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT,    0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 				{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,       0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 			};
-			ResourceManager::CreateVsFromCso(device, "skinned_mesh2_vs.cso", vertexShader.GetAddressOf(), vertexLayout.GetAddressOf(), inputElemntDesc, ARRAYSIZE(inputElemntDesc));
+			ResourceManager::CreateVsFromCso("skinned_mesh2_vs.cso", vertexShader.GetAddressOf(), vertexLayout.GetAddressOf(), inputElemntDesc, ARRAYSIZE(inputElemntDesc));
 		}
 
 	}

@@ -9,6 +9,7 @@
 #include <functional>
 #include "DirectXTK-master/Inc/WICTextureLoader.h"
 #include "misc.h"
+#include "systems.h"
 #include "resource_manager.h"
 using namespace std;
 
@@ -18,7 +19,6 @@ namespace Adollib
 #pragma region Create VS
 
 	HRESULT ResourceManager::CreateVsFromCso(
-		ID3D11Device* device,              // デバイス
 		const char* csoName,	           // 頂点シェーダーファイル名
 		ID3D11VertexShader** vertexShader, // 頂点シェーダーオブジェクトのポインタの格納先
 		ID3D11InputLayout** inputLayout,   // 入力レイアウトオブジェクトのポインタの格納先
@@ -41,7 +41,7 @@ namespace Adollib
 		fclose(fp);
 
 		// 頂点シェーダーオブジェクトを生成する
-		HRESULT hr = device->CreateVertexShader(
+		HRESULT hr = Systems::Device->CreateVertexShader(
 			cso_data.get(),  // 頂点シェーダーデータのポインタ
 			cso_sz,		     // 頂点シェーダーデータのサイズ
 			nullptr,
@@ -52,7 +52,7 @@ namespace Adollib
 		// 入力レイアウトオブジェクトの生成
 		if (inputLayout)
 		{
-			hr = device->CreateInputLayout(
+			hr = Systems::Device->CreateInputLayout(
 				inputElementDesc, // 頂点データの内容
 				numElements,	  // 頂点データの要素数
 				cso_data.get(),	  // 頂点シェーダーデータ（input_element_descの内容と sprite_vs.hlslの内容に不一致がないかチェックするため）
@@ -70,7 +70,6 @@ namespace Adollib
 #pragma region Create PS
 
 	HRESULT ResourceManager::CreatePsFromCso(
-		ID3D11Device* device, // デバイス
 		const char* cso_name, // ピクセルシェーダーファイル名
 		ID3D11PixelShader** pixel_shader // 格納するポインタ
 	)
@@ -91,7 +90,7 @@ namespace Adollib
 		fclose(fp);
 
 		// 生成
-		HRESULT hr = device->CreatePixelShader(
+		HRESULT hr = Systems::Device->CreatePixelShader(
 			cso_data.get(), // ピクセルシェーダーデータのポインタ
 			cso_sz,			// ピクセルシェーダーデータサイズ
 			nullptr,
@@ -107,7 +106,6 @@ namespace Adollib
 #pragma region Load Texture
 
 	HRESULT ResourceManager::LoadTextureFromFile(
-		ID3D11Device* device,                          // デバイス
 		const wchar_t* fileName,                       // テクスチャのファイル名
 		ID3D11ShaderResourceView** shaderResourceView, // 格納するシェーダーリソースビューポインタ
 		D3D11_TEXTURE2D_DESC* texture2dDesc            // テクスチャリソースを格納するポインタ
@@ -133,7 +131,7 @@ namespace Adollib
 		else
 		{
 			// 見つからなかった場合は生成する
-			hr = DirectX::CreateWICTextureFromFile(device, fileName, resource.GetAddressOf(), shaderResourceView);
+			hr = DirectX::CreateWICTextureFromFile(Systems::Device.Get(), fileName, resource.GetAddressOf(), shaderResourceView);
 			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 
 			// map挿入する
@@ -152,7 +150,7 @@ namespace Adollib
 #pragma endregion
 
 	// モデルの読み込み
-	HRESULT ResourceManager::CreateModelFromFBX(ID3D11Device* device, vector<Mesh::mesh>& meshes, const char* fileName, const char* filePath)
+	HRESULT ResourceManager::CreateModelFromFBX(vector<Mesh::mesh>& meshes, const char* fileName, const char* filePath)
 	{
 		HRESULT hr = S_OK;
 		Mesh::mesh skinMeshes;
@@ -292,17 +290,17 @@ namespace Adollib
 							mbstowcs_s(&ret, texName, MAX_PATH, texPath.c_str(), _TRUNCATE);
 
 							D3D11_TEXTURE2D_DESC texture2D_Desc = {};
-							hr = ResourceManager::LoadTextureFromFile(device, texName, mesh.subsets.at(index_of_material).diffuse.shaderResourceVirw.GetAddressOf(), &texture2D_Desc);
+							hr = ResourceManager::LoadTextureFromFile(texName, mesh.subsets.at(index_of_material).diffuse.shaderResourceVirw.GetAddressOf(), &texture2D_Desc);
 							_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 
 							// ピクセルシェーダーオブジェクトの生成 
-							ResourceManager::CreatePsFromCso(device, "skinned_mesh_ps.cso", mesh.subsets.at(index_of_material).pixelShader.GetAddressOf());
+							ResourceManager::CreatePsFromCso("skinned_mesh_ps.cso", mesh.subsets.at(index_of_material).pixelShader.GetAddressOf());
 						}
 					}
 					else
 					{
 						// ピクセルシェーダーオブジェクトの生成 テクスチャのない場合
-						ResourceManager::CreatePsFromCso(device, "geometric_primitive_ps.cso", mesh.subsets.at(index_of_material).pixelShader.GetAddressOf());
+						ResourceManager::CreatePsFromCso("geometric_primitive_ps.cso", mesh.subsets.at(index_of_material).pixelShader.GetAddressOf());
 					}
 				}
 			}
@@ -395,7 +393,7 @@ namespace Adollib
 			vertexSubResource.SysMemSlicePitch = 0;     // 頂点バッファでは使わない
 
 			// 頂点バッファの生成
-			hr = device->CreateBuffer(&vertexDesc, &vertexSubResource, mesh.vertexBuffer.GetAddressOf());
+			hr = Systems::Device->CreateBuffer(&vertexDesc, &vertexSubResource, mesh.vertexBuffer.GetAddressOf());
 			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 #pragma endregion
 
@@ -418,7 +416,7 @@ namespace Adollib
 			indexSubResource.SysMemPitch = 0;        // 頂点バッファでは使わない
 			indexSubResource.SysMemSlicePitch = 0;   // 頂点バッファでは使わない
 
-			hr = device->CreateBuffer(&indexDesc, &indexSubResource, mesh.indexBuffer.GetAddressOf());
+			hr = Systems::Device->CreateBuffer(&indexDesc, &indexSubResource, mesh.indexBuffer.GetAddressOf());
 			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 		}
 
