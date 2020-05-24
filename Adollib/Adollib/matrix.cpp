@@ -104,6 +104,19 @@ matrix& matrix::operator/= (float S) {
 	return *this;
 }
 
+DirectX::XMMATRIX matrix::get_XMMATRIX(){
+	DirectX::XMFLOAT4X4 V = get_XMFLOAT4X4();
+	return DirectX::XMLoadFloat4x4(&V);
+}
+DirectX::XMFLOAT4X4 matrix::get_XMFLOAT4X4() {
+	DirectX::XMFLOAT4X4 ret;
+	ret._11 = _11; ret._12 = _12; ret._13 = _13; ret._14 = _14;
+	ret._21 = _21; ret._22 = _22; ret._23 = _23; ret._24 = _24;
+	ret._31 = _31; ret._32 = _32; ret._33 = _33; ret._34 = _34;
+	ret._41 = _41; ret._42 = _42; ret._43 = _43; ret._44 = _44;
+	return ret;
+}
+
 #pragma endregion
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 

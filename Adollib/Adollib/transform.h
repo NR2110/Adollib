@@ -16,7 +16,7 @@ namespace Adollib {
 	public:
 		//•`‰æ—p‚Ìî•ñ 
 		vector3 position;
-		quaternion orientte;
+		quaternion prientation;
 		vector3 scale;
 
 		//e‚©‚ç‚Ì‘Š‘Îî•ñ

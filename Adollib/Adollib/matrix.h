@@ -41,6 +41,9 @@ namespace Adollib {
 
 		friend matrix operator*(float S, const matrix& M);
 
+		DirectX::XMMATRIX get_XMMATRIX();
+		DirectX::XMFLOAT4X4 get_XMFLOAT4X4();
+
 	private:
 		/*
 		//float* matrix_to_array(const matrix& M) const {

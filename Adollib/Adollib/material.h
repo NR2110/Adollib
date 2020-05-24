@@ -13,21 +13,23 @@ namespace Adollib {
 	public:
 		std::vector<std::unique_ptr<Shader>> shader;
 
+		
+
 		vector4 color;
 
 		std::string tex_filename;
 
-		State_manager::DepthStencilStats DS_state;
+		State_manager::DStypes DS_state;
 
-		State_manager::RasterizerStats RS_state;
+		State_manager::RStypes RS_state;
 
-		State_manager::BlendStats BS_state;
+		State_manager::BStypes BS_state;
 
 		Material() {
 			color = vector4(1, 1, 1, 1);
-			DS_state = State_manager::DepthStencilStats::DS_TRUE;
-			RS_state = State_manager::RasterizerStats::RS_CULL_BACK;
-			BS_state = State_manager::BlendStats::BS_ADD;
+			DS_state = State_manager::DStypes::DS_TRUE;
+			RS_state = State_manager::RStypes::RS_CULL_BACK;
+			BS_state = State_manager::BStypes::BS_ADD;
 		};
 
 	private:

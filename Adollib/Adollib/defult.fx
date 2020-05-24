@@ -1,5 +1,5 @@
-#include "Func.fx"
-#include "LightType.fx"
+#include "func.fx"
+#include "light_type.fx"
 //--------------------------------------------
 //	テクスチャ
 //--------------------------------------------
@@ -10,14 +10,23 @@ SamplerState DecalSampler : register(s0);
 //--------------------------------------------
 //	グローバル変数
 //--------------------------------------------
-cbuffer CBPerMesh : register(b0)
+cbuffer CBPerObj : register(b0)
 {
 	matrix  World;
-	matrix	matWVP;
+};
+
+cbuffer CBPerCamera : register(b1)
+{
+	matrix  View;
+};
+
+cbuffer CBPerSystem : register(b2)
+{
+	matrix  Projection;
 };
 
 
-cbuffer CBPerFrame : register(b2)
+cbuffer CBPerFrame : register(b3)
 {
 	float4  LightColor;		//ライトの色
 	float4	LightDir;		//ライトの方向

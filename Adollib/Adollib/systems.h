@@ -31,7 +31,6 @@ namespace Adollib {
 		static ComPtr<ID3D11ShaderResourceView>	ShaderResourceView;
 		static ComPtr<ID3D11DepthStencilState>	DepthStencilState[2];
 
-
 		static HRESULT CreateDevice(HWND hWnd);
 		static bool CreateDepthStencil();
 		static bool InitializeRenderTarget();
@@ -44,15 +43,12 @@ namespace Adollib {
 		static ComPtr<ID3D11BlendState>		BlendState[BLEND_TYPE];
 		static bool CreateBlendState();
 
-
 	public:
 		static int SCREEN_WIDTH;
 		static int SCREEN_HEIGHT;
 
 		static ComPtr<ID3D11Device>			Device;
 		static ComPtr<ID3D11DeviceContext>	DeviceContext;
-
-		//static std::vector<cameras> Camera;
 
 		static float elapsed_time;
 
@@ -65,11 +61,44 @@ namespace Adollib {
 		static int GetScreenHeight() { return SCREEN_HEIGHT; }
 		static ID3D11DepthStencilView* GetDepthStencilView() { return DepthStencilView.Get(); }
 		static ID3D11RenderTargetView* GetRenderTargetView() { return RenderTargetView.Get(); }
-		static ID3D11DepthStencilState* GetDephtStencilState(int state) { return DepthStencilState[state].Get(); }
-		static ID3D11RasterizerState* GetRasterizerState(int state) { return RasterizerState[state].Get(); }
-		static ID3D11BlendState* GetBlendState(int state) { return BlendState[state].Get(); }
+
+		static State_manager::DStypes DS_type;
+		static State_manager::RStypes RS_type;
+		static State_manager::BStypes BS_type;
+		static ID3D11DepthStencilState* GetDephtStencilState(State_manager::DStypes state) { 	return DepthStencilState[static_cast<int>(state)].Get();	}
+		static ID3D11RasterizerState* GetRasterizerState(State_manager::RStypes state)	   {	return RasterizerState[static_cast<int>(state)].Get(); 	}
+		static ID3D11BlendState* GetBlendState(State_manager::BStypes state)			   { 	return BlendState[static_cast<int>(state)].Get();			}
+
+		static void SetDephtStencilState(State_manager::DStypes state) { 
+			DeviceContext->OMSetDepthStencilState(GetDephtStencilState(state), 1); 
+			DS_type = state;
+		}
+		static void SetRasterizerState(State_manager::RStypes state) {
+			DeviceContext->RSSetState(GetRasterizerState(state));
+			RS_type = state;
+		}
+		static void SetBlendState(State_manager::BStypes state) {
+			DeviceContext->OMSetBlendState(GetBlendState(state), nullptr, 0xFFFFFFFF);
+			BS_type = state;
+		}
+
+		static State_manager::DStypes GetDS_type() { return DS_type; }
+		static State_manager::RStypes GetRS_type() { return RS_type; }
+		static State_manager::BStypes GetBS_type() { return BS_type; }
 
 		static void SetViewPort(int width, int height);
+
+		static void CreateConstantBuffer(ID3D11Buffer** ppCB, u_int size) {
+			// 定数バッファ生成
+			D3D11_BUFFER_DESC bd;
+			ZeroMemory(&bd, sizeof(D3D11_BUFFER_DESC));
+			bd.ByteWidth = size;
+			bd.Usage = D3D11_USAGE_DEFAULT;
+			bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+			bd.CPUAccessFlags = 0;
+
+			HRESULT hr = Device->CreateBuffer(&bd, NULL, ppCB);
+		};
 
 	};
 

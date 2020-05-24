@@ -13,16 +13,16 @@ namespace Adollib {
 
 	class Light : public object {
 	public:
-		POINTLIGHT PointLight[POINTMAX];
-		SPOTLIGHT SpotLight[SPOTMAX];
+		std::vector <std::shared_ptr<POINTLIGHT>> PointLight;
+		std::vector <std::shared_ptr<SPOTLIGHT>>  SpotLight;
 
 		void set_dirLight(DirectX::XMFLOAT3 dir, DirectX::XMFLOAT3 color);
 
 		void set_ambient(DirectX::XMFLOAT3 amb);
 
-		void set_pointLight(int index, DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 color, float range);
+		void set_pointLight(DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 color, float range);
 
-		void set_spotLight(int index, DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 color, DirectX::XMFLOAT3 dir, float range, float near, float far);
+		void set_spotLight(DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 color, DirectX::XMFLOAT3 dir, float range, float near, float far);
 
 
 		std::string name = std::string("null"); //Ç±ÇÃgoÇÃñºëO(åüçıóp)

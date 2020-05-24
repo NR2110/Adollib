@@ -20,7 +20,7 @@
     <Filter Include="Adollib\shader">
       <UniqueIdentifier>{36de64fc-7e7c-4b76-a489-b6c226ddc5d4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Adollib\shader\fx">
+    <Filter Include="Adollib\shader\hlsli">
       <UniqueIdentifier>{2ee81938-f4b8-4424-be0e-212cafffefba}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -95,6 +95,12 @@
       <Filter>Adollib\object</Filter>
     </ClCompile>
     <ClCompile Include="gameobject_camera.cpp">
+      <Filter>Adollib\object</Filter>
+    </ClCompile>
+    <ClCompile Include="mesh.cpp">
+      <Filter>Adollib\object</Filter>
+    </ClCompile>
+    <ClCompile Include="mesh_manager.cpp">
       <Filter>Adollib\object</Filter>
     </ClCompile>
   </ItemGroup>
@@ -192,16 +198,33 @@
     <ClInclude Include="light_types.h">
       <Filter>Adollib\shader</Filter>
     </ClInclude>
+    <ClInclude Include="mesh.h">
+      <Filter>Adollib\object</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh_manager.h">
+      <Filter>Adollib\object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="defult.fx">
-      <Filter>Adollib\shader\fx</Filter>
+      <Filter>Adollib\shader\hlsli</Filter>
     </Text>
     <Text Include="funk.fx">
-      <Filter>Adollib\shader\fx</Filter>
+      <Filter>Adollib\shader\hlsli</Filter>
     </Text>
     <Text Include="LightType.fx">
-      <Filter>Adollib\shader\fx</Filter>
+      <Filter>Adollib\shader\hlsli</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="funk.hlsli">
+      <Filter>Adollib\shader\hlsli</Filter>
+    </None>
+    <None Include="light_type.hlsli">
+      <Filter>Adollib\shader\hlsli</Filter>
+    </None>
+    <None Include="constant.hlsli">
+      <Filter>Adollib\shader\hlsli</Filter>
+    </None>
   </ItemGroup>
 </Project>

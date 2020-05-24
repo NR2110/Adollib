@@ -11,7 +11,25 @@ namespace Adollib {
 	std::map<Scenelist, std::list<std::shared_ptr<Light>>> Gameobject_manager::lights;
 	std::map<Scenelist, std::list<std::shared_ptr<Camera>>> Gameobject_manager::cameras;
 
+	ComPtr<ID3D11Buffer> Gameobject_manager::light_cb;
+	ComPtr<ID3D11Buffer> Gameobject_manager::view_cb;
+	ComPtr<ID3D11Buffer> Gameobject_manager::projection_cb;
+
 	void Gameobject_manager::awake() {
+
+		Systems::CreateConstantBuffer(&light_cb, sizeof(ConstantBufferPerLight));
+		Systems::CreateConstantBuffer(&view_cb, sizeof(ConstantBufferPerCamera));
+		Systems::CreateConstantBuffer(&projection_cb, sizeof(ConstantBufferPerSystem));
+		//CB : ConstantBufferPerSystem
+		ConstantBufferPerSystem s_sb;
+		float fov = ToRadian(45);
+		float aspect = (FLOAT)Systems::SCREEN_WIDTH / (FLOAT)Systems::SCREEN_HEIGHT;
+		float nearZ = 0.1f;
+		float farZ = 10000.0f;
+		s_sb.Projection = DirectX::XMMatrixPerspectiveFovLH(fov, aspect, nearZ, farZ);
+		Systems::DeviceContext->UpdateSubresource(projection_cb.Get(), 0, NULL, &s_sb, 0, 0);
+		Systems::DeviceContext->VSSetConstantBuffers(2, 1, projection_cb.GetAddressOf());
+		Systems::DeviceContext->PSSetConstantBuffers(2, 1, projection_cb.GetAddressOf());
 
 		//sceneの数だけgo_managerを生成
 		for (int i = 0; i < static_cast<int>(Scenelist::scene_list_size); i++) {
@@ -96,14 +114,14 @@ namespace Adollib {
 	void Gameobject_manager::render(Scenelist Sce) {
 		if (Sce == Scenelist::scene_null)return;
 
-		std::list<std::shared_ptr<Light>>::iterator itr_li = lights[Sce].begin();	itr_li++;
-		std::list<std::shared_ptr<Camera>>::iterator itr_ca = cameras[Sce].begin();	itr_ca++;
+		std::list<std::shared_ptr<Light>>::iterator itr_li = lights[Sce].begin();
+		std::list<std::shared_ptr<Camera>>::iterator itr_ca = cameras[Sce].begin();
 
-		//light用のコンスタントバッファの準備
-		ConstantBufferForPerFrame cb;
-		cb.AmbientColor = Ambient.get_XM4();
-		cb.LightDir = LightDir.get_XM4();
-		cb.LightColor = DirLightColor.get_XM4();
+		//CB : ConstantBufferPerLight
+		ConstantBufferPerLight l_cb;
+		l_cb.AmbientColor = Ambient.get_XM4();
+		l_cb.LightDir = LightDir.get_XM4();
+		l_cb.LightColor = DirLightColor.get_XM4();
 
 		//コンスタントバッファに渡すためにpointlight,spotlightの配列を整理
 		POINTLIGHT PointLight[POINTMAX];
@@ -112,7 +130,7 @@ namespace Adollib {
 			int point_num = 0;
 			int spot_num = 0;
 			for (int i = 0; i < lights[Sce].size(); i++) {
-
+				itr_li++;
 				for (int o = 0; o < itr_li->get()->PointLight.size(); o++) {
 					PointLight[point_num] = *itr_li->get()->PointLight[o];
 					point_num++;
@@ -125,23 +143,32 @@ namespace Adollib {
 			}
 		}
 
-		memcpy(cb.PointLight, PointLight, sizeof(POINTLIGHT) * POINTMAX);
-		memcpy(cb.SpotLight, SpotLight, sizeof(SPOTLIGHT) * SPOTMAX);
+		memcpy(l_cb.PointLight, PointLight, sizeof(POINTLIGHT) * POINTMAX);
+		memcpy(l_cb.SpotLight, SpotLight, sizeof(SPOTLIGHT) * SPOTMAX);
+		Systems::DeviceContext->UpdateSubresource(light_cb.Get(), 0, NULL, &l_cb, 0, 0);
+		Systems::DeviceContext->VSSetConstantBuffers(3, 1, light_cb.GetAddressOf());
+		Systems::DeviceContext->PSSetConstantBuffers(3, 1, light_cb.GetAddressOf());
 
+		//CB : ConstantBufferPerCamera
+		ConstantBufferPerCamera c_cb;
 		//そのシーンのカメラの数だけ回す
 		for (int i = 0; i < cameras[Sce].size(); i++) {
+			itr_ca++;
 
-			cb.EyePos.x = itr_ca->get()->transform->position.x;
-			cb.EyePos.y = itr_ca->get()->transform->position.y;
-			cb.EyePos.z = itr_ca->get()->transform->position.z;
-			cb.EyePos.w = 1.0f;
+			// ビュー行列
+			vector3 pos = itr_ca->get()->get_world_position();
+			quaternion orient = itr_ca->get()->get_world_orientate();
+			vector3 look_pos = pos + vector3_be_rotated_by_quaternion(vector3(0, 0, 1), orient);
 
-			//コンスタントバッファ更新
-			Systems::DeviceContext->UpdateSubresource(ConstantBuffer, 0, NULL, &cb, 0, 0);
-			Systems::DeviceContext->VSSetConstantBuffers(2, 1, ConstantBuffer.GetAddressOf());
-			Systems::DeviceContext->PSSetConstantBuffers(2, 1, ConstantBuffer.GetAddressOf());
+			DirectX::XMVECTOR eye = DirectX::XMVectorSet(pos.x, pos.y, pos.z, 1.0f);
+			DirectX::XMVECTOR focus = DirectX::XMVectorSet(look_pos.x, look_pos.y, look_pos.z, 1.0f);
+			DirectX::XMVECTOR up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f);
+			c_cb.View = DirectX::XMMatrixLookAtLH(eye, focus, up);
+			Systems::DeviceContext->UpdateSubresource(view_cb.Get(), 0, NULL, &c_cb, 0, 0);
+			Systems::DeviceContext->VSSetConstantBuffers(1, 1, view_cb.GetAddressOf());
+			Systems::DeviceContext->PSSetConstantBuffers(1, 1, view_cb.GetAddressOf());
 
-			//Sceのsceneにアタッチされたcomponentのrenderを呼ぶ
+			//Sceのsceneにアタッチされたgoのrenderを呼ぶ
 			std::list<std::shared_ptr<Gameobject>>::iterator itr = gameobjects[Sce].begin();
 			std::list<std::shared_ptr<Gameobject>>::iterator itr_end = gameobjects[Sce].end();
 

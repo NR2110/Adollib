@@ -6,13 +6,13 @@ namespace Adollib {
 
 	public:
 		//DepthStencilState
-		static enum class DepthStencilStats { 
+		static enum class DStypes { 
 			DS_FALSE,
 			DS_TRUE 
 		};
 
 		//RasterizerState
-		static enum class RasterizerStats { 
+		static enum class RStypes { 
 			RS_CULL_BACK,
 			RS_WIRE, 
 			RS_CULL_FRONT,
@@ -21,7 +21,7 @@ namespace Adollib {
 		};
 
 		//BlendState
-		static enum class BlendStats { 
+		static enum class BStypes { 
 			BS_NONE, 
 			BS_ALPHA, 
 			BS_ADD, 

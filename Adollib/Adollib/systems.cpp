@@ -17,6 +17,10 @@ ComPtr<ID3D11DepthStencilState>		Systems::DepthStencilState[2];
 ComPtr<ID3D11RasterizerState>		Systems::RasterizerState[RASTERIZE_TYPE];
 ComPtr<ID3D11BlendState>			Systems::BlendState[BLEND_TYPE];
 
+State_manager::DStypes Systems::DS_type = State_manager::DStypes::DS_TRUE;
+State_manager::RStypes Systems::RS_type = State_manager::RStypes::RS_CULL_BACK;
+State_manager::BStypes Systems::BS_type = State_manager::BStypes::BS_ADD;
+
 
  int Systems::SCREEN_WIDTH = 1280;
  int Systems::SCREEN_HEIGHT = 720;
@@ -228,7 +232,7 @@ bool Systems::CreateDepthStencil()
 	D3D11_DEPTH_STENCIL_DESC depth_stencil_desc;
 	ZeroMemory(&depth_stencil_desc, sizeof(depth_stencil_desc));
 	depth_stencil_desc.DepthEnable = FALSE;
-	hr = Device->CreateDepthStencilState(&depth_stencil_desc, DepthStencilState[static_cast<int>(State_manager::DepthStencilStats::DS_FALSE)].GetAddressOf());
+	hr = Device->CreateDepthStencilState(&depth_stencil_desc, DepthStencilState[static_cast<int>(State_manager::DStypes::DS_FALSE)].GetAddressOf());
 	//assert(FAILED(hr));
 
 	if (FAILED(hr))
@@ -239,7 +243,7 @@ bool Systems::CreateDepthStencil()
 	depth_stencil_desc.DepthEnable = TRUE;
 	depth_stencil_desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 	depth_stencil_desc.DepthFunc = D3D11_COMPARISON_LESS;
-	hr = Device->CreateDepthStencilState(&depth_stencil_desc, DepthStencilState[static_cast<int>(State_manager::DepthStencilStats::DS_TRUE)].GetAddressOf());
+	hr = Device->CreateDepthStencilState(&depth_stencil_desc, DepthStencilState[static_cast<int>(State_manager::DStypes::DS_TRUE)].GetAddressOf());
 	//assert(FAILED(hr));
 
 
@@ -273,9 +277,9 @@ bool Systems::CreateDepthStencil()
 bool Systems::CreateRasterizerState()
 {
 	D3D11_RASTERIZER_DESC rd;
-	for (int state = 0; state < static_cast<int>(State_manager::RasterizerStats::RS_SIZE) - 1; state++) {
-		switch (static_cast<State_manager::RasterizerStats>(state)) {
-		case State_manager::RasterizerStats::RS_CULL_BACK:
+	for (int state = 0; state < static_cast<int>(State_manager::RStypes::RS_SIZE) - 1; state++) {
+		switch (static_cast<State_manager::RStypes>(state)) {
+		case State_manager::RStypes::RS_CULL_BACK:
 			ZeroMemory(&rd, sizeof(rd));
 			rd.FillMode = D3D11_FILL_SOLID;
 			rd.CullMode = D3D11_CULL_BACK;
@@ -290,7 +294,7 @@ bool Systems::CreateRasterizerState()
 
 			break;
 
-		case State_manager::RasterizerStats::RS_WIRE:
+		case State_manager::RStypes::RS_WIRE:
 			ZeroMemory(&rd, sizeof(rd));
 			rd.FillMode = D3D11_FILL_WIREFRAME;
 			rd.CullMode = D3D11_CULL_BACK;
@@ -304,7 +308,7 @@ bool Systems::CreateRasterizerState()
 			rd.AntialiasedLineEnable = FALSE;
 			break;
 
-		case State_manager::RasterizerStats::RS_CULL_FRONT:
+		case State_manager::RStypes::RS_CULL_FRONT:
 			ZeroMemory(&rd, sizeof(rd));
 			rd.FillMode = D3D11_FILL_SOLID;
 			rd.CullMode = D3D11_CULL_FRONT;
@@ -319,7 +323,7 @@ bool Systems::CreateRasterizerState()
 
 			break;
 
-		case State_manager::RasterizerStats::RS_CULL_NONE:
+		case State_manager::RStypes::RS_CULL_NONE:
 			ZeroMemory(&rd, sizeof(rd));
 			rd.FillMode = D3D11_FILL_SOLID;
 			rd.CullMode = D3D11_CULL_NONE;
@@ -351,9 +355,9 @@ bool Systems::CreateBlendState()
 {
 	D3D11_BLEND_DESC bd;
 
-	for (int state = 0; state < static_cast<int>(State_manager::BlendStats::BS_SIZE) - 1; state++) {
-		switch (static_cast<State_manager::BlendStats>(state)) {
-		case State_manager::BlendStats::BS_NONE:
+	for (int state = 0; state < static_cast<int>(State_manager::BStypes::BS_SIZE) - 1; state++) {
+		switch (static_cast<State_manager::BStypes>(state)) {
+		case State_manager::BStypes::BS_NONE:
 			ZeroMemory(&bd, sizeof(bd));
 			bd.IndependentBlendEnable = false;
 			bd.AlphaToCoverageEnable = false;
@@ -369,7 +373,7 @@ bool Systems::CreateBlendState()
 
 			break;
 
-		case State_manager::BlendStats::BS_ALPHA:
+		case State_manager::BStypes::BS_ALPHA:
 			ZeroMemory(&bd, sizeof(bd));
 			bd.IndependentBlendEnable = false;
 			bd.AlphaToCoverageEnable = false;
@@ -385,7 +389,7 @@ bool Systems::CreateBlendState()
 
 			break;
 
-		case State_manager::BlendStats::BS_ADD:
+		case State_manager::BStypes::BS_ADD:
 			ZeroMemory(&bd, sizeof(bd));
 			bd.IndependentBlendEnable = false;
 			bd.AlphaToCoverageEnable = false;
@@ -401,7 +405,7 @@ bool Systems::CreateBlendState()
 
 			break;
 
-		case State_manager::BlendStats::BS_SUBTRACT:
+		case State_manager::BStypes::BS_SUBTRACT:
 			ZeroMemory(&bd, sizeof(bd));
 			bd.IndependentBlendEnable = false;
 			bd.AlphaToCoverageEnable = false;
@@ -417,7 +421,7 @@ bool Systems::CreateBlendState()
 
 			break;
 
-		case State_manager::BlendStats::BS_REPLACE:
+		case State_manager::BStypes::BS_REPLACE:
 			ZeroMemory(&bd, sizeof(bd));
 			bd.IndependentBlendEnable = false;
 			bd.AlphaToCoverageEnable = false;
@@ -432,7 +436,7 @@ bool Systems::CreateBlendState()
 			bd.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
 			break;
-		case State_manager::BlendStats::BS_MULTIPLY:
+		case State_manager::BStypes::BS_MULTIPLY:
 			ZeroMemory(&bd, sizeof(bd));
 			bd.IndependentBlendEnable = false;
 			bd.AlphaToCoverageEnable = false;
@@ -447,7 +451,7 @@ bool Systems::CreateBlendState()
 			bd.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
 			break;
-		case State_manager::BlendStats::BS_LIGHTEN:
+		case State_manager::BStypes::BS_LIGHTEN:
 			ZeroMemory(&bd, sizeof(bd));
 			bd.IndependentBlendEnable = false;
 			bd.AlphaToCoverageEnable = false;
@@ -463,7 +467,7 @@ bool Systems::CreateBlendState()
 
 			break;
 
-		case State_manager::BlendStats::BS_DARKEN:
+		case State_manager::BStypes::BS_DARKEN:
 			ZeroMemory(&bd, sizeof(bd));
 			bd.IndependentBlendEnable = false;
 			bd.AlphaToCoverageEnable = false;
@@ -478,7 +482,7 @@ bool Systems::CreateBlendState()
 			bd.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
 			break;
-		case State_manager::BlendStats::BS_SCREEN:
+		case State_manager::BStypes::BS_SCREEN:
 			ZeroMemory(&bd, sizeof(bd));
 			bd.IndependentBlendEnable = false;
 			bd.AlphaToCoverageEnable = false;
@@ -537,7 +541,7 @@ void Systems::Clear(DWORD color)
 
 	DeviceContext->ClearRenderTargetView(RenderTargetView.Get(), clearColor);
 	DeviceContext->ClearDepthStencilView(DepthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-	DeviceContext->OMSetDepthStencilState(DepthStencilState[static_cast<int>(State_manager::DepthStencilStats::DS_TRUE)].Get(), 1);
+	DeviceContext->OMSetDepthStencilState(DepthStencilState[static_cast<int>(State_manager::DStypes::DS_TRUE)].Get(), 1);
 
 }
 

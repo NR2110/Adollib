@@ -7,8 +7,8 @@ namespace Adollib {
 
 	void Light::initialize() {
 
-		ZeroMemory(PointLight, sizeof(POINTLIGHT) * POINTMAX);
-		ZeroMemory(SpotLight, sizeof(SPOTLIGHT) * SPOTMAX);
+		//ZeroMemory(PointLight, sizeof(POINTLIGHT) * POINTMAX);
+		//ZeroMemory(SpotLight, sizeof(SPOTLIGHT) * SPOTMAX);
 
 		std::list <std::shared_ptr<Component>>::iterator itr = components.begin();
 		itr++;
@@ -48,40 +48,40 @@ namespace Adollib {
 		Ambient = { amb.x,amb.y,amb.z,0 };
 
 	}
-	void Light::set_pointLight(int index, XMFLOAT3 pos, XMFLOAT3 color, float range)
+	void Light::set_pointLight(XMFLOAT3 pos, XMFLOAT3 color, float range)
 	{
-		if (index < 0) return;
-		if (index >= POINTMAX)return;
-		PointLight[index].index = (float)index;
-		PointLight[index].range = range;
-		PointLight[index].type = 1.0f;
-		PointLight[index].dumy = 0.0f;
-		PointLight[index].pos = XMFLOAT4(pos.x, pos.y, pos.z, 0);
-		PointLight[index].color = XMFLOAT4(color.x, color.y, color.z, 0);
+		std::shared_ptr<POINTLIGHT> pointlight;
+		pointlight->range = range;
+		pointlight->type = 1.0f;
+		pointlight->dumy = 0.0f;
+		pointlight->pos = XMFLOAT4(pos.x, pos.y, pos.z, 0);
+		pointlight->color = XMFLOAT4(color.x, color.y, color.z, 0);
+
+		PointLight.push_back(pointlight);
 
 	}
-	void Light::set_spotLight(int index, XMFLOAT3 pos, XMFLOAT3 color, XMFLOAT3 dir,
+	void Light::set_spotLight(XMFLOAT3 pos, XMFLOAT3 color, XMFLOAT3 dir,
 		float range, float near_area, float far_area)
 	{
-		if (index < 0) return;
-		if (index >= SPOTMAX)return;
+		std::shared_ptr<SPOTLIGHT> spotlight;
 		float d = sqrtf(dir.x * dir.x + dir.y * dir.y + dir.z * dir.z);
 		if (d > 0) {
 			dir.x /= d; dir.y /= d; dir.z /= d;
 		}
 
-		SpotLight[index].index = (float)index;
-		SpotLight[index].range = range;
-		SpotLight[index].type = 1.0f;
-		SpotLight[index].near_area = near_area;
-		SpotLight[index].far_area = far_area;
-		SpotLight[index].dumy0 = 0.0f;
-		SpotLight[index].dumy1 = 0.0f;
-		SpotLight[index].dumy2 = 0.0f;
+		spotlight->range = range;
+		spotlight->type = 1.0f;
+		spotlight->near_area = near_area;
+		spotlight->far_area = far_area;
+		spotlight->dumy0 = 0.0f;
+		spotlight->dumy1 = 0.0f;
+		spotlight->dumy2 = 0.0f;
 
-		SpotLight[index].pos = XMFLOAT4(pos.x, pos.y, pos.z, 0);
-		SpotLight[index].color = XMFLOAT4(color.x, color.y, color.z, 0);
-		SpotLight[index].dir = XMFLOAT4(dir.x, dir.y, dir.z, 0);
+		spotlight->pos = XMFLOAT4(pos.x, pos.y, pos.z, 0);
+		spotlight->color = XMFLOAT4(color.x, color.y, color.z, 0);
+		spotlight->dir = XMFLOAT4(dir.x, dir.y, dir.z, 0);
+
+		SpotLight.push_back(spotlight);
 	}
 
 

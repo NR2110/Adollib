@@ -18,7 +18,7 @@ namespace Adollib {
 
 		std::list <std::shared_ptr<Component>> components; //アタッチされているConponentのポインタ
 
-		Camera* pearent = nullptr; //親へのポインタ
+		Gameobject* pearent = nullptr; //親へのポインタ
 		std::list<std::shared_ptr<Gameobject>> children; //個へのポインタ
 
 		bool active = true; //falseなら更新、描画を止める
@@ -34,6 +34,14 @@ namespace Adollib {
 	private:
 
 	public:
+		quaternion get_world_orientate() {
+			if (pearent != nullptr) return pearent->transform->prientation * transform->prientation;
+			else return transform->prientation;
+		};
+		vector3 get_world_position() {
+			if (pearent != nullptr) return pearent->transform->position + transform->position;
+			else return transform->position;
+		};
 
 	};
 

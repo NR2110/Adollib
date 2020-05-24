@@ -8,11 +8,34 @@
 #include "scene.h"
 #include "scene_list.h"
 
+#include <d3d11.h>
+#include <WRL.h>
+
+
 namespace Adollib {
 	class Gameobject_manager{
-		
-
 	private:
+		struct ConstantBufferPerLight{
+			DirectX::XMFLOAT4	LightColor;		//ライトの色
+			DirectX::XMFLOAT4	LightDir;		//ライトの方向
+			DirectX::XMFLOAT4	AmbientColor;	//環境光
+			float	param1;			//環境マッピングブレンド率
+			float	param2;
+			float	param3;
+			float	param4;
+
+			POINTLIGHT  PointLight[POINTMAX];//ポイントライト
+			SPOTLIGHT  SpotLight[SPOTMAX];	//スポットライト
+		};
+		struct ConstantBufferPerCamera {
+			DirectX::XMMATRIX View;
+		};
+		struct ConstantBufferPerSystem {
+			DirectX::XMMATRIX Projection;
+		};
+		static Microsoft::WRL::ComPtr<ID3D11Buffer> light_cb;
+		static Microsoft::WRL::ComPtr<ID3D11Buffer> view_cb;
+		static Microsoft::WRL::ComPtr<ID3D11Buffer> projection_cb;
 
 	public:
 		//実体はすべてここで保存する
