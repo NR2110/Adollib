@@ -1,292 +1,552 @@
 
+
+#include <memory>
+#include <wrl.h>
+#include <map>
+#include <string>
+#include <fbxsdk.h>
+#include <vector>
+#include <functional>
+#include "DirectXTK-master/Inc/WICTextureLoader.h"
+#include "misc.h"
 #include "resource_manager.h"
+using namespace std;
 
-
-//--------------------------------
-//  変数宣言
-//--------------------------------
-ResourceManager::ResourceShaderResourceViews    ResourceManager::SRViews[RESOURCE_MAX];
-ResourceManager::ResourceVertexShaders          ResourceManager::vertexShaders[RESOURCE_MAX];
-ResourceManager::ResourcePixelShaders           ResourceManager::pixelShaders[RESOURCE_MAX];
-
-//--------------------------------
-//  バイナリファイルの読み込み
-//--------------------------------
-bool readBinaryFile(const char* filename, char** blob, unsigned int& size)
+namespace Adollib
 {
-	using namespace std;
+	// バーテックスシェーダーの生成
+#pragma region Create VS
 
-	ifstream inputFile(filename, ifstream::binary);
-	inputFile.seekg(0, ifstream::end);
-	size = static_cast<int>(inputFile.tellg());
-	inputFile.seekg(0, ifstream::beg);
-	*blob = new char[size];
-	inputFile.read(*blob, size);
-	return true;
-
-}
-
-//--------------------------------
-//  テクスチャ読み込み
-//--------------------------------
-bool ResourceManager::loadShaderResourceView(
-	ID3D11Device* device, const wchar_t* fileName,
-	ID3D11ShaderResourceView** SRView, D3D11_TEXTURE2D_DESC* texDesc)
-{
-	using DirectX::CreateWICTextureFromFile;
-
-	int no = -1;
-	ResourceShaderResourceViews* find = nullptr;
-	ID3D11Resource* resource = nullptr;
-
-	// データ探索
-	for (int n = 0; n < RESOURCE_MAX; n++)
+	HRESULT ResourceManager::CreateVsFromCso(
+		ID3D11Device* device,              // デバイス
+		const char* csoName,	           // 頂点シェーダーファイル名
+		ID3D11VertexShader** vertexShader, // 頂点シェーダーオブジェクトのポインタの格納先
+		ID3D11InputLayout** inputLayout,   // 入力レイアウトオブジェクトのポインタの格納先
+		D3D11_INPUT_ELEMENT_DESC* inputElementDesc, // 頂点データ
+		UINT numElements)                  // 頂点データの要素数
 	{
-		ResourceShaderResourceViews* p = &SRViews[n];//	エイリアス
+		// 頂点シェーダーファイルを開く
+		FILE* fp = nullptr;
+		fopen_s(&fp, csoName, "rb");
+		_ASSERT_EXPR_A(fp, "CSO File not found");
 
-													 // データが無いなら無視
-													 // 但し、最初に見つけた領域ならセット用に確保
-		if (p->refNum == 0) //データがなかったら
+		// 頂点シェーダーファイルのサイズを求める
+		fseek(fp, 0, SEEK_END);
+		long cso_sz = ftell(fp);
+		fseek(fp, 0, SEEK_SET);
+
+		// メモリ上にシェーダーデータを読み込む
+		unique_ptr<unsigned char[]> cso_data = make_unique<unsigned char[]>(cso_sz);
+		fread(cso_data.get(), cso_sz, 1, fp); // 用意した領域にデータを読み込む
+		fclose(fp);
+
+		// 頂点シェーダーオブジェクトを生成する
+		HRESULT hr = device->CreateVertexShader(
+			cso_data.get(),  // 頂点シェーダーデータのポインタ
+			cso_sz,		     // 頂点シェーダーデータのサイズ
+			nullptr,
+			vertexShader
+		);
+		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
+
+		// 入力レイアウトオブジェクトの生成
+		if (inputLayout)
 		{
-			if (no == -1) no = n; //最初に見つけたところを保存
-
-			continue;
+			hr = device->CreateInputLayout(
+				inputElementDesc, // 頂点データの内容
+				numElements,	  // 頂点データの要素数
+				cso_data.get(),	  // 頂点シェーダーデータ（input_element_descの内容と sprite_vs.hlslの内容に不一致がないかチェックするため）
+				cso_sz,			  // 頂点シェーダーデータサイズ
+				inputLayout		  // 入力レイアウトオブジェクトのポインタの格納先。
+			);
+			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 		}
 
-		// 同じファイルじゃないのならcontinue
-		if (wcscmp(p->path, fileName) != 0) continue; //wcscmp:ファイルが同じかどうかを比べる
-
-		// 同名ファイルが存在した
-		find = p;
-		p->SRView->GetResource(&resource);
-		break;
+		return hr;
 	}
+#pragma endregion
 
-	// データが見つからなかった→新規読み込み
-	if (!find)
+	// ピクセルシェーダーの生成
+#pragma region Create PS
+
+	HRESULT ResourceManager::CreatePsFromCso(
+		ID3D11Device* device, // デバイス
+		const char* cso_name, // ピクセルシェーダーファイル名
+		ID3D11PixelShader** pixel_shader // 格納するポインタ
+	)
 	{
-		ResourceShaderResourceViews* p = &SRViews[no];
-		if (FAILED(DirectX::CreateWICTextureFromFile(device, fileName, &resource, &(p->SRView))))
-			return false;
+		// ピクセルシェーダーファイルを開く
+		FILE* fp = nullptr;
+		fopen_s(&fp, cso_name, "rb");
+		_ASSERT_EXPR_A(fp, "CSO File not found");
 
-		find = p;
-		wcscpy_s(p->path, 256, fileName);
+		// ピクセルシェーダーファイルのサイズを求める
+		fseek(fp, 0, SEEK_END);
+		long cso_sz = ftell(fp);
+		fseek(fp, 0, SEEK_SET);
+
+		// メモリ上にピクセルシェーダーデータを格納する領域を用意する
+		unique_ptr<unsigned char[]> cso_data = make_unique<unsigned char[]>(cso_sz);
+		fread(cso_data.get(), cso_sz, 1, fp); // 用意した領域にデータを読み込む
+		fclose(fp);
+
+		// 生成
+		HRESULT hr = device->CreatePixelShader(
+			cso_data.get(), // ピクセルシェーダーデータのポインタ
+			cso_sz,			// ピクセルシェーダーデータサイズ
+			nullptr,
+			pixel_shader    // ピクセルシェーダーオブジェクトのポインタの格納先
+		);
+		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
+
+		return hr;
 	}
+#pragma endregion
 
-	// 最終処理
-	ID3D11Texture2D* tex2D;
-	resource->QueryInterface(&tex2D);
-	*SRView = find->SRView;
-	tex2D->GetDesc(texDesc);
-	find->refNum++;
-	tex2D->Release();
-	resource->Release();
-	return true;
-}
+	// テクスチャの読み込み
+#pragma region Load Texture
 
-//--------------------------------
-//  頂点シェーダのロード
-//--------------------------------
-bool ResourceManager::loadVertexShader(
-	ID3D11Device* device, const char* csoFileName,
-	D3D11_INPUT_ELEMENT_DESC* inputElementDesc, int numElements,
-	ID3D11VertexShader** vertexShader, ID3D11InputLayout** inputLayout)
-{
-	*vertexShader = nullptr;
-	*inputLayout = nullptr;
-
-	ResourceVertexShaders* find = nullptr;
-	int no = -1;
-
-	// const char * -> wchar_t *
-	wchar_t	fileName[256];
-	size_t	stringSize;
-	mbstowcs_s(&stringSize, fileName, csoFileName, strlen(csoFileName));
-
-	// データ検索
-	for (int n = 0; n < RESOURCE_MAX; n++)
+	HRESULT ResourceManager::LoadTextureFromFile(
+		ID3D11Device* device,                          // デバイス
+		const wchar_t* fileName,                       // テクスチャのファイル名
+		ID3D11ShaderResourceView** shaderResourceView, // 格納するシェーダーリソースビューポインタ
+		D3D11_TEXTURE2D_DESC* texture2dDesc            // テクスチャリソースを格納するポインタ
+	)
 	{
-		ResourceVertexShaders* p = &vertexShaders[n];
+		HRESULT hr = S_OK;
+		Microsoft::WRL::ComPtr<ID3D11Resource> resource;
 
-		if (p->refNum == 0)
+		// リソース内のデータにアクセスするためのシェーダーリソースビューを作成する
+
+		// 辞書的な平衡二分木を作成し、既に作成済みのリソースビューがあれば共有する
+		static map<wstring, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>> cache;
+		auto it = cache.find(fileName); // 成功でその要素のイテレータを返す、失敗はmap.end()を返す
+		if (it != cache.end())
 		{
-			if (no == -1) no = n;
-			continue;
+			// 見つかった場合、取得する
+
+			//it->second.Attach(*shader_resource_view);
+			*shaderResourceView = it->second.Get(); // 実態の取得
+			(*shaderResourceView)->AddRef();         // 参照カウントをインクリメントし寿命を延ばす
+			(*shaderResourceView)->GetResource(resource.GetAddressOf()); // リソースの取得
+		}
+		else
+		{
+			// 見つからなかった場合は生成する
+			hr = DirectX::CreateWICTextureFromFile(device, fileName, resource.GetAddressOf(), shaderResourceView);
+			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
+
+			// map挿入する
+			cache.insert(make_pair(fileName, *shaderResourceView));
 		}
 
-		if (wcscmp(p->path, fileName) != 0) continue;
+		Microsoft::WRL::ComPtr<ID3D11Texture2D> texture2d;
+		hr = resource.Get()->QueryInterface<ID3D11Texture2D>(texture2d.GetAddressOf()); // インターフェースの取得、確認するため的なやつ
+		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 
-		// 同名ファイルが存在した
-		find = p;
-		break;
+		// テクスチャリースのプロパティを取得する
+		texture2d->GetDesc(texture2dDesc);
+
+		return hr;
 	}
+#pragma endregion
 
-	// データが見つからなかった
-	if (!find)
+	// モデルの読み込み
+	HRESULT ResourceManager::CreateModelFromFBX(ID3D11Device* device, vector<Mesh::mesh>& meshes, const char* fileName, const char* filePath)
 	{
-		ResourceVertexShaders* p = &vertexShaders[no];
-		char* blob;
-		unsigned int size;
+		HRESULT hr = S_OK;
+		Mesh::mesh skinMeshes;
 
-		// コンパイル済みピクセルシェーダーオブジェクトの読み込み
-		if (!readBinaryFile(csoFileName, &blob, size)) return false;
+#pragma region Load FBX
 
-		// 頂点シェーダーオブジェクトの生成
-		if (FAILED(device->CreateVertexShader(blob, size, nullptr, &p->vertexShader)))
-			return false;
+		// FbxManagerとFbxSceneとFbxImporterオブジェクトを作成
+		FbxManager* manager = FbxManager::Create();
+		manager->SetIOSettings(FbxIOSettings::Create(manager, IOSROOT));
+		FbxImporter* importer = FbxImporter::Create(manager, "");
+		bool import_status = false;
+		import_status = importer->Initialize(fileName, -1, manager->GetIOSettings());
+		_ASSERT_EXPR_A(import_status, importer->GetStatus().GetErrorString());
 
-		// 入力レイアウトの作成
-		HRESULT hr = device->CreateInputLayout(inputElementDesc, numElements, blob, size, &p->layout);
-		delete[] blob;
-		if (FAILED(hr)) return false;
+		FbxScene* scene = FbxScene::Create(manager, "");
+		// データをインポート
+		import_status = importer->Import(scene);
+		_ASSERT_EXPR_A(import_status, importer->GetStatus().GetErrorString());
 
-		// 新規データの保存
-		find = p;
-		wcscpy_s(find->path, 256, fileName);
-	}
+		// 三角ポリゴン化
+		FbxGeometryConverter geometry_converter(manager);
+		geometry_converter.Triangulate(scene, /*replace*/true);
 
-	// 最終処理
-	*vertexShader = find->vertexShader;
-	*inputLayout = find->layout;
-	find->refNum++;
-
-	return true;
-}
-
-//--------------------------------
-//  ピクセルシェーダのロード
-//--------------------------------
-bool ResourceManager::loadPixelShader(
-	ID3D11Device* device, const char* csoFileName,
-	ID3D11PixelShader** pixelShader)
-{
-	*pixelShader = nullptr;
-	ResourcePixelShaders* find = nullptr;
-	int no = -1;
-
-	// const char * -> wchar_t *
-	wchar_t	fileName[256];
-	size_t stringSize = 0;
-	mbstowcs_s(&stringSize, fileName, csoFileName, strlen(csoFileName));
-
-	// データ検索
-	for (int n = 0; n < RESOURCE_MAX; n++)
-	{
-		ResourcePixelShaders* p = &pixelShaders[n];
-		if (p->refNum == 0)
+		// ノード属性の取得　(現在はメッシュのみ)
+		vector<FbxNode*> fetched_meshes;
+		function<void(FbxNode*)> traverse = [&](FbxNode* node)
 		{
-			if (no == -1) no = n;
-			continue;
+			if (node)
+			{
+				FbxNodeAttribute* fbx_node_attribute = node->GetNodeAttribute();
+				if (fbx_node_attribute) {
+					switch (fbx_node_attribute->GetAttributeType())
+					{
+					case FbxNodeAttribute::eMesh:
+						fetched_meshes.push_back(node);
+						break;
+					}
+				}
+				for (int i = 0; i < node->GetChildCount(); i++)
+					traverse(node->GetChild(i));
+			}
+		};
+		traverse(scene->GetRootNode());
+
+		// メッシュデータの取得
+		vector<Mesh::VertexFormat> vertices;
+		vector<u_int> indices;
+		u_int vertex_count = 0;
+
+		meshes.resize(fetched_meshes.size());
+		for (size_t i = 0; i < fetched_meshes.size(); i++)
+		{
+			FbxMesh* fbxMesh = fetched_meshes.at(i)->GetMesh();
+			Mesh::mesh& mesh = meshes.at(i);
+
+			// globalTransform
+			FbxAMatrix global_transform = fbxMesh->GetNode()->EvaluateGlobalTransform(0);
+			for (int row = 0; row < 4; row++)
+			{
+				for (int column = 0; column < 4; column++)
+				{
+					mesh.globalTransform.m[row][column] = static_cast<float>(global_transform[row][column]);
+				}
+			}
+
+			FbxStringList uv_names;
+			fbxMesh->GetUVSetNames(uv_names);
+
+			// マテリアルの取得
+			const int number_of_materials = fbxMesh->GetNode()->GetMaterialCount();
+			mesh.subsets.resize(number_of_materials);
+			if (number_of_materials > 0)
+			{
+				// Count the faces of each material
+				const int number_of_polygons = fbxMesh->GetPolygonCount();
+				for (int index_of_polygon = 0; index_of_polygon < number_of_polygons; ++index_of_polygon)
+				{
+					const u_int material_index = fbxMesh->GetElementMaterial()->GetIndexArray().GetAt(index_of_polygon);
+					mesh.subsets.at(material_index).indexCount += 3;
+				}
+				// Record the offset (how many vertex)
+				int offset = 0;
+				for (Mesh::subset& sb : mesh.subsets)
+				{
+					sb.indexStart = offset;
+					offset += sb.indexCount;
+					// This will be used as counter in the following procedures, reset to zero
+					sb.indexCount = 0;
+				}
+			}
+			for (int index_of_material = 0; index_of_material < number_of_materials; ++index_of_material)
+			{
+				Mesh::subset& subset = mesh.subsets.at(index_of_material);
+				const FbxSurfaceMaterial* surface_material = fbxMesh->GetNode()->GetMaterial(index_of_material);
+				const FbxProperty property = surface_material->FindProperty(FbxSurfaceMaterial::sDiffuse);
+				const FbxProperty factor = surface_material->FindProperty(FbxSurfaceMaterial::sDiffuseFactor);
+				if (property.IsValid() && factor.IsValid())
+				{
+					FbxDouble3 color = property.Get<FbxDouble3>();
+					double f = factor.Get<FbxDouble>();
+					mesh.subsets.at(index_of_material).diffuse.color.x = static_cast<float>(color[0] * f);
+					mesh.subsets.at(index_of_material).diffuse.color.y = static_cast<float>(color[1] * f);
+					mesh.subsets.at(index_of_material).diffuse.color.z = static_cast<float>(color[2] * f);
+					mesh.subsets.at(index_of_material).diffuse.color.w = 1.0f;
+				}
+				if (property.IsValid())
+				{
+					const int number_of_textures = property.GetSrcObjectCount<FbxFileTexture>();
+					if (number_of_textures)
+					{
+						const FbxFileTexture* file_texture = property.GetSrcObject<FbxFileTexture>();
+						if (file_texture)
+						{
+							// texname
+							const char* filename = file_texture->GetRelativeFileName();
+
+							string name = filename;
+
+							bool isFind = FALSE;
+							while (!isFind)
+							{
+								// 無視する
+								if (name.find("png") != string::npos ||
+									name.find("jpg") != string::npos)
+								{
+									int n = name.rfind("\\");
+									if (n != -1)
+										name = name.substr(n + 1);
+									isFind = TRUE;
+								}
+							}
+
+							string texPath = (string)filePath + (string)name;
+							setlocale(LC_ALL, "japanese");
+							wchar_t texName[MAX_PATH] = { 0 };
+							size_t ret = 0;
+							mbstowcs_s(&ret, texName, MAX_PATH, texPath.c_str(), _TRUNCATE);
+
+							D3D11_TEXTURE2D_DESC texture2D_Desc = {};
+							hr = ResourceManager::LoadTextureFromFile(device, texName, mesh.subsets.at(index_of_material).diffuse.shaderResourceVirw.GetAddressOf(), &texture2D_Desc);
+							_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
+
+							// ピクセルシェーダーオブジェクトの生成 
+							ResourceManager::CreatePsFromCso(device, "skinned_mesh_ps.cso", mesh.subsets.at(index_of_material).pixelShader.GetAddressOf());
+						}
+					}
+					else
+					{
+						// ピクセルシェーダーオブジェクトの生成 テクスチャのない場合
+						ResourceManager::CreatePsFromCso(device, "geometric_primitive_ps.cso", mesh.subsets.at(index_of_material).pixelShader.GetAddressOf());
+					}
+				}
+			}
+
+			// アニメーションの取得
+			fetch_animations(fbxMesh, mesh.skeletalAnimation);
+
+			//// ボーンのウエイトの取得
+			vector<Mesh::bone_influences_per_control_point> bone_influences;
+			fetch_bone_influences(fbxMesh, bone_influences);
+
+			const FbxVector4* array_of_control_points = fbxMesh->GetControlPoints();
+			const int number_of_polygons = fbxMesh->GetPolygonCount();
+			indices.resize(number_of_polygons * 3);
+			for (int index_of_polygon = 0; index_of_polygon < number_of_polygons; index_of_polygon++)
+			{
+				// The material for current face.
+				int index_of_material = 0;
+				if (number_of_materials > 0)
+				{
+					index_of_material = fbxMesh->GetElementMaterial()->GetIndexArray().GetAt(index_of_polygon);
+				}
+				// Where should I save the vertex attribute index, according to the material
+				Mesh::subset& subset = mesh.subsets.at(index_of_material);
+				const int index_offset = subset.indexStart + subset.indexCount;
+				for (int index_of_vertex = 0; index_of_vertex < 3; index_of_vertex++) {
+					Mesh::VertexFormat vertex;
+					// 頂点
+					const int index_of_control_point = fbxMesh->GetPolygonVertex(index_of_polygon, index_of_vertex);
+					vertex.position.x = static_cast<float>(array_of_control_points[index_of_control_point][0]);
+					vertex.position.y = static_cast<float>(array_of_control_points[index_of_control_point][1]);
+					vertex.position.z = static_cast<float>(array_of_control_points[index_of_control_point][2]);
+					// 法線
+					if (fbxMesh->GetElementNormalCount())
+					{
+						FbxVector4 normal;
+						fbxMesh->GetPolygonVertexNormal(index_of_polygon, index_of_vertex, normal);
+						vertex.normal.x = static_cast<float>(normal[0]);
+						vertex.normal.y = static_cast<float>(normal[1]);
+						vertex.normal.z = static_cast<float>(normal[2]);
+					}
+					// UV
+					if (fbxMesh->GetElementUVCount())
+					{
+						FbxVector2 uv;
+						bool unmapped_uv;
+						fbxMesh->GetPolygonVertexUV(index_of_polygon, index_of_vertex, uv_names[0], uv, unmapped_uv);
+						vertex.texcoord.x = static_cast<float>(uv[0]);
+						vertex.texcoord.y = 1.0f - static_cast<float>(uv[1]);
+					}
+					// Weight
+					if (fbxMesh->GetDeformerCount(FbxDeformer::eSkin) && bone_influences.size() > index_of_control_point)
+					{
+						for (int bone_influence_count = 0; bone_influence_count < bone_influences[index_of_control_point].size(); bone_influence_count++)
+						{
+							if (bone_influence_count < MAX_BONE_INFLUENCES)
+							{
+								vertex.bone_weights[bone_influence_count] = bone_influences[index_of_control_point][bone_influence_count].weight;
+								vertex.bone_indices[bone_influence_count] = bone_influences[index_of_control_point][bone_influence_count].index;
+							}
+						}
+					}
+					// push_back
+					vertices.push_back(vertex);
+					indices.at(index_offset + index_of_vertex) = static_cast<u_int>(vertex_count);
+					vertex_count++;
+				}
+				subset.indexCount += 3;
+			}
+
+
+#pragma endregion
+
+			// 頂点情報・インデックス情報のセット
+#pragma region Set VertexData and IndexData
+
+		// 頂点バッファの設定
+			D3D11_BUFFER_DESC vertexDesc = {};
+			vertexDesc.ByteWidth = sizeof(Mesh::VertexFormat) * vertices.size();   // バッファのサイズ	
+			vertexDesc.Usage = D3D11_USAGE_IMMUTABLE;	        // バッファの読み書き法
+			vertexDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;    // パイプラインにどうバインドするか指定
+			vertexDesc.CPUAccessFlags = 0;                      // CPUのアクセスフラグ　0でアクセスしない
+			vertexDesc.MiscFlags = 0;                           // その他のフラグ
+			vertexDesc.StructureByteStride = 0;                 // バッファ構造体の場合の要素数
+
+			// 頂点バッファに頂点データを入れるための設定
+			D3D11_SUBRESOURCE_DATA vertexSubResource = {};
+			vertexSubResource.pSysMem = &vertices[0];   // 初期化データのポインタ
+			vertexSubResource.SysMemPitch = 0;          // 頂点バッファでは使わない
+			vertexSubResource.SysMemSlicePitch = 0;     // 頂点バッファでは使わない
+
+			// 頂点バッファの生成
+			hr = device->CreateBuffer(&vertexDesc, &vertexSubResource, mesh.vertexBuffer.GetAddressOf());
+			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
+#pragma endregion
+
+			// インデックスバッファオブジェクトの生成
+#pragma region Create IndexBuffer
+
+			// index
+			//CreateIndices(fbxMesh, &indices);
+
+			D3D11_BUFFER_DESC indexDesc = {};
+			indexDesc.ByteWidth = indices.size() * sizeof(u_int);          // バッファのサイズ	
+			indexDesc.Usage = D3D11_USAGE_IMMUTABLE;	          // バッファの読み書き法
+			indexDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;    // パイプラインにどうバインドするか指定
+			indexDesc.CPUAccessFlags = 0;                    // CPUのアクセスフラグ　0でアクセスしない
+			indexDesc.MiscFlags = 0;                           // その他のフラグ
+			indexDesc.StructureByteStride = 0;                 // バッファ構造体の場合の要素数
+
+			D3D11_SUBRESOURCE_DATA indexSubResource = {};
+			indexSubResource.pSysMem = &indices[0];   // 初期化データのポインタ
+			indexSubResource.SysMemPitch = 0;        // 頂点バッファでは使わない
+			indexSubResource.SysMemSlicePitch = 0;   // 頂点バッファでは使わない
+
+			hr = device->CreateBuffer(&indexDesc, &indexSubResource, mesh.indexBuffer.GetAddressOf());
+			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 		}
-		if (wcscmp(p->path, fileName) != 0) continue;
 
-		// 同名ファイルが存在した
-		find = p;
-		break;
+#pragma endregion
+
+		// FBXロード完了
+		manager->Destroy();
+
+		return hr;
 	}
 
-	// 新規作成
-	if (!find)
+
+	// アニメーションを取得する
+	void ResourceManager::fetch_animations(FbxMesh* fbx_mesh, vector<Mesh::skeletal_animation>& skeletal_animation,
+		u_int sampling_rate)
 	{
-		ResourcePixelShaders* p = &pixelShaders[no];
-		char* blob;
-		unsigned int size;
-
-		// コンパイル済みピクセルシェーダーオブジェクトの読み込み
-		if (!readBinaryFile(csoFileName, &blob, size)) return false;
-
-		HRESULT hr = device->CreatePixelShader(blob, size, nullptr, &p->pixelShader);
-		delete[] blob;
-		if (FAILED(hr)) return false;
-
-		find = p;
-		wcscpy_s(find->path, 256, fileName);
+		// Get the list of all the animation stack.
+		FbxArray<FbxString*> array_of_animation_stack_names;
+		fbx_mesh->GetScene()->FillAnimStackNameArray(array_of_animation_stack_names);
+		// Get the number of animations.
+		int number_of_animations = array_of_animation_stack_names.Size();
+		if (number_of_animations > 0)
+		{
+			skeletal_animation.resize(number_of_animations);
+			for (int i = 0; i < number_of_animations; i++)
+			{
+				// Get the FbxTime per animation's frame.
+				FbxTime::EMode time_mode = fbx_mesh->GetScene()->GetGlobalSettings().GetTimeMode();
+				FbxTime frame_time;
+				frame_time.SetTime(0, 0, 0, 1, 0, time_mode);
+				sampling_rate = sampling_rate > 0 ? sampling_rate : frame_time.GetFrameRate(time_mode);
+				float sampling_time = 1.0f / sampling_rate;
+				skeletal_animation.at(i).sampling_time = sampling_time;
+				skeletal_animation.at(i).animation_tick = 0.0f;
+				FbxString* animation_stack_name = array_of_animation_stack_names.GetAt(i);
+				FbxAnimStack* current_animation_stack
+					= fbx_mesh->GetScene()->FindMember<FbxAnimStack>(animation_stack_name->Buffer());
+				fbx_mesh->GetScene()->SetCurrentAnimationStack(current_animation_stack);
+				FbxTakeInfo* take_info = fbx_mesh->GetScene()->GetTakeInfo(animation_stack_name->Buffer());
+				FbxTime start_time = take_info->mLocalTimeSpan.GetStart();
+				FbxTime end_time = take_info->mLocalTimeSpan.GetStop();
+				FbxTime sampling_step;
+				sampling_step.SetTime(0, 0, 1, 0, 0, time_mode);
+				sampling_step = static_cast<FbxLongLong>(sampling_step.Get() * sampling_time);
+				for (FbxTime current_time = start_time; current_time < end_time; current_time += sampling_step)
+				{
+					Mesh::skeletal skeletal;
+					fetch_bone_matrices(fbx_mesh, skeletal, current_time);
+					skeletal_animation.at(i).push_back(skeletal);
+				}
+			}
+		}
+		for (int i = 0; i < number_of_animations; i++)
+		{
+			delete array_of_animation_stack_names[i];
+		}
 	}
 
-	// 最終処理（参照渡しでデータを渡す）
-	*pixelShader = find->pixelShader;
-	find->refNum++;
 
-	return true;
-}
-
-//--------------------------------
-//  テクスチャ解放処理
-//--------------------------------
-void ResourceManager::releaseShaderResourceView(ID3D11ShaderResourceView* SRView)
-{
-	if (!SRView) return;
-	for (int n = 0; n < RESOURCE_MAX; n++)
+	// ボーン行列を取得する
+	void ResourceManager::fetch_bone_matrices(FbxMesh* fbx_mesh, vector<Mesh::bone>& skeletal, FbxTime time)
 	{
-		ResourceShaderResourceViews* p = &SRViews[n];
-
-		// データが無いなら無視GetSRViewFromDepthStencil
-		if (p->refNum == 0) continue;
-
-		// データが違うなら無視
-		if (SRView != p->SRView) continue;
-
-		// データが存在した
-		p->release();
-		break;
+		const int number_of_deformers = fbx_mesh->GetDeformerCount(FbxDeformer::eSkin);
+		for (int index_of_deformer = 0; index_of_deformer < number_of_deformers; ++index_of_deformer)
+		{
+			FbxSkin* skin = static_cast<FbxSkin*>(fbx_mesh->GetDeformer(index_of_deformer, FbxDeformer::eSkin));
+			const int number_of_clusters = skin->GetClusterCount();
+			skeletal.resize(number_of_clusters);
+			for (int index_of_cluster = 0; index_of_cluster < number_of_clusters; ++index_of_cluster)
+			{
+				Mesh::bone& bone = skeletal.at(index_of_cluster);
+				FbxCluster* cluster = skin->GetCluster(index_of_cluster);
+				// this matrix trnasforms coordinates of the initial pose from mesh space to global space
+				FbxAMatrix reference_global_init_position;
+				cluster->GetTransformMatrix(reference_global_init_position);
+				// this matrix trnasforms coordinates of the initial pose from bone space to global space
+				FbxAMatrix cluster_global_init_position;
+				cluster->GetTransformLinkMatrix(cluster_global_init_position);
+				// this matrix trnasforms coordinates of the current pose from bone space to global space
+				FbxAMatrix cluster_global_current_position;
+				cluster_global_current_position = cluster->GetLink()->EvaluateGlobalTransform(time);
+				// this matrix trnasforms coordinates of the current pose from mesh space to global space
+				FbxAMatrix reference_global_current_position;
+				reference_global_current_position = fbx_mesh->GetNode()->EvaluateGlobalTransform(time);
+				// Matrices are defined using the Column Major scheme. When a FbxAMatrix represents a transformation
+				// (translation, rotation and scale), the last row of the matrix represents the translation part of the
+				// transformation.
+				FbxAMatrix transform = reference_global_current_position.Inverse() * cluster_global_current_position
+					* cluster_global_init_position.Inverse() * reference_global_init_position;
+				// convert FbxAMatrix(transform) to XMDLOAT4X4(bone.transform)
+				for (int row = 0; row < 4; row++)
+				{
+					for (int column = 0; column < 4; column++)
+					{
+						bone.transform.m[row][column] = static_cast<float>(transform[row][column]);
+					}
+				}
+			}
+		}
 	}
-}
 
-//--------------------------------
-//  頂点シェーダ解放処理
-//--------------------------------
-void ResourceManager::releaseVertexShader(
-	ID3D11VertexShader* vertexShader, ID3D11InputLayout* inputLayout)
-{
-	if (!vertexShader) return;
-	if (!inputLayout) return;
-
-	for (int n = 0; n < RESOURCE_MAX; n++)
+	// ボーンのウエイトを取得する
+	// FBXMesh*                                    読み込むFBXMesh
+	// vector<bone_influences_per_control_point>&  取得したウエイトの保存先
+	void ResourceManager::fetch_bone_influences(const FbxMesh* fbx_mesh, vector<Mesh::bone_influences_per_control_point>& influences)
 	{
-		ResourceVertexShaders* p = &vertexShaders[n];
-		if (p->refNum == 0) continue;
-		if (vertexShader != p->vertexShader) continue;
-		if (inputLayout != p->layout) continue;
-
-		//	データが存在した
-		p->release();
-		break;
+		const int number_of_control_points = fbx_mesh->GetControlPointsCount();
+		influences.resize(number_of_control_points);
+		const int number_of_deformers = fbx_mesh->GetDeformerCount(FbxDeformer::eSkin);
+		for (int index_of_deformer = 0; index_of_deformer < number_of_deformers; ++index_of_deformer) {
+			FbxSkin* skin = static_cast<FbxSkin*>(fbx_mesh->GetDeformer(index_of_deformer, FbxDeformer::eSkin));
+			const int number_of_clusters = skin->GetClusterCount();
+			for (int index_of_cluster = 0; index_of_cluster < number_of_clusters; ++index_of_cluster) {
+				FbxCluster* cluster = skin->GetCluster(index_of_cluster);
+				const int number_of_control_point_indices = cluster->GetControlPointIndicesCount();
+				const int* array_of_control_point_indices = cluster->GetControlPointIndices();
+				const double* array_of_control_point_weights = cluster->GetControlPointWeights();
+				for (int i = 0; i < number_of_control_point_indices; ++i) {
+					Mesh::bone_influences_per_control_point& influences_per_control_point
+						= influences.at(array_of_control_point_indices[i]);
+					Mesh::bone_influence influence;
+					influence.index = index_of_cluster;
+					influence.weight = static_cast<float>(array_of_control_point_weights[i]);
+					influences_per_control_point.push_back(influence);
+				}
+			}
+		}
 	}
+
+
 }
-
-//--------------------------------
-//  ピクセルシェーダ解放処理
-//--------------------------------
-void ResourceManager::releasePixelShader(ID3D11PixelShader* pixelShader)
-{
-	if (!pixelShader) return;
-	for (int n = 0; n < RESOURCE_MAX; n++)
-	{
-		ResourcePixelShaders* p = &pixelShaders[n];
-
-		if (p->refNum == 0) continue;
-
-		if (pixelShader != p->pixelShader) continue;
-
-		//	データが存在した
-		p->release();
-		break;
-	}
-}
-
-//--------------------------------
-//  解放処理
-//--------------------------------
-void ResourceManager::release()
-{
-	for (int i = 0; i < RESOURCE_MAX; i++)
-	{
-		SRViews[i].release(true);
-		vertexShaders[i].release(true);
-		pixelShaders[i].release(true);
-	}
-}
-
-
-
-//******************************************************************************

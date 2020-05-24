@@ -23,6 +23,9 @@
     <Filter Include="Adollib\shader\hlsli">
       <UniqueIdentifier>{2ee81938-f4b8-4424-be0e-212cafffefba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Adollib\object\mesh">
+      <UniqueIdentifier>{d2534fb1-3e0f-4465-bf38-05c093fa394f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="scene_game.cpp">
@@ -73,9 +76,6 @@
     <ClCompile Include="scene_manager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="resource_manager.cpp">
-      <Filter>Adollib\main</Filter>
-    </ClCompile>
     <ClCompile Include="texture.cpp">
       <Filter>Adollib\main</Filter>
     </ClCompile>
@@ -88,20 +88,23 @@
     <ClCompile Include="DirectXTK-master\Inc\WICTextureLoader.cpp">
       <Filter>Adollib\main</Filter>
     </ClCompile>
-    <ClCompile Include="material.cpp">
-      <Filter>Adollib\object</Filter>
-    </ClCompile>
     <ClCompile Include="gameobject_light.cpp">
       <Filter>Adollib\object</Filter>
     </ClCompile>
     <ClCompile Include="gameobject_camera.cpp">
       <Filter>Adollib\object</Filter>
     </ClCompile>
+    <ClCompile Include="material.cpp">
+      <Filter>Adollib\object\mesh</Filter>
+    </ClCompile>
     <ClCompile Include="mesh.cpp">
-      <Filter>Adollib\object</Filter>
+      <Filter>Adollib\object\mesh</Filter>
     </ClCompile>
     <ClCompile Include="mesh_manager.cpp">
-      <Filter>Adollib\object</Filter>
+      <Filter>Adollib\object\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="resource_manager.cpp">
+      <Filter>Adollib\object\mesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -165,9 +168,6 @@
     <ClInclude Include="scene_list.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="resource_manager.h">
-      <Filter>Adollib\main</Filter>
-    </ClInclude>
     <ClInclude Include="texture.h">
       <Filter>Adollib\main</Filter>
     </ClInclude>
@@ -179,9 +179,6 @@
     </ClInclude>
     <ClInclude Include="DirectXTK-master\Inc\WICTextureLoader.h">
       <Filter>Adollib\main</Filter>
-    </ClInclude>
-    <ClInclude Include="material.h">
-      <Filter>Adollib\object</Filter>
     </ClInclude>
     <ClInclude Include="states_manager.h">
       <Filter>Adollib\main</Filter>
@@ -198,11 +195,17 @@
     <ClInclude Include="light_types.h">
       <Filter>Adollib\shader</Filter>
     </ClInclude>
+    <ClInclude Include="material.h">
+      <Filter>Adollib\object\mesh</Filter>
+    </ClInclude>
     <ClInclude Include="mesh.h">
-      <Filter>Adollib\object</Filter>
+      <Filter>Adollib\object\mesh</Filter>
     </ClInclude>
     <ClInclude Include="mesh_manager.h">
-      <Filter>Adollib\object</Filter>
+      <Filter>Adollib\object\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="resource_manager.h">
+      <Filter>Adollib\object\mesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

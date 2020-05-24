@@ -1,113 +1,23 @@
 #pragma once
-
-//******************************************************************************
-//
-//
-//      プリミティブ描画用
-//
-//
-//******************************************************************************
-
-//------< include >-------------------------------------------------------------
-#include <fstream>
 #include <d3d11.h>
-#include "DirectXTK-master/Inc/WICTextureLoader.h"
+#include "mesh.h"
 
-
-	//==========================================================================
-	//
-	//      ResourceManagerクラス
-	//
-	//==========================================================================
-class ResourceManager
+namespace Adollib
 {
-	static const int RESOURCE_MAX = 64;
-
-	//--------------------------------
-	//  構造体定義
-	//--------------------------------
-	struct ResourceShaderResourceViews
+	class ResourceManager
 	{
-		int refNum;
-		wchar_t path[256];
-		ID3D11ShaderResourceView* SRView;
-		ResourceShaderResourceViews() : refNum(0), SRView(nullptr) { path[0] = '\0'; }
-		void release(bool force = (false))
-		{
-			if (refNum == 0) return;
-			if (--refNum <= 0) force = true;
-			if (force)
-			{
-				if (SRView) SRView->Release();
-				SRView = nullptr;
-				refNum = 0;
-				path[0] = '\0';
-			}
-		}
+	public:
+		static HRESULT CreateVsFromCso(ID3D11Device* device, const char* cso_name, ID3D11VertexShader** vertex_shader, ID3D11InputLayout** input_layout, D3D11_INPUT_ELEMENT_DESC* input_element_desc, UINT num_elements);
+		static HRESULT CreatePsFromCso(ID3D11Device* device, const char* cso_name, ID3D11PixelShader** pixel_shader);
+		static HRESULT LoadTextureFromFile(ID3D11Device* device, const wchar_t* file_name, ID3D11ShaderResourceView** shader_resource_view, D3D11_TEXTURE2D_DESC* texture2d_desc);
+		static HRESULT CreateModelFromFBX(ID3D11Device* device, vector<Mesh::mesh>& meshes, const char* fileName, const char* filePath);
+
+	private:
+		ResourceManager() {};
+		~ResourceManager() {};
+		static void fetch_bone_influences(const FbxMesh* fbx_mesh, vector<Mesh::bone_influences_per_control_point>& influences);
+		static void fetch_bone_matrices(FbxMesh* fbx_mesh, vector<Mesh::bone>& skeletal, FbxTime time);
+		static void fetch_animations(FbxMesh* fbx_mesh, vector<Mesh::skeletal_animation>& skeletal_animation,
+			u_int sampling_rate = 0);
 	};
-	struct ResourceVertexShaders
-	{
-		int refNum;
-		wchar_t path[256];
-		ID3D11VertexShader* vertexShader;
-		ID3D11InputLayout* layout;
-		ResourceVertexShaders() : refNum(0), vertexShader(nullptr), layout(nullptr) { path[0] = '\0'; }
-		void release(bool force = (false))
-		{
-			if (refNum == 0) return;
-			if (--refNum <= 0) force = true;
-			if (force)
-			{
-				if (layout) layout->Release();
-				if (vertexShader) vertexShader->Release();
-				layout = nullptr;
-				vertexShader = nullptr;
-				refNum = 0;
-				path[0] = '\0';
-			}
-		}
-	};
-	struct ResourcePixelShaders
-	{
-		int refNum;
-		wchar_t path[256];
-		ID3D11PixelShader* pixelShader;
-		ResourcePixelShaders() : refNum(0), pixelShader(nullptr) { path[0] = '\0'; }
-		void release(bool force = (false))
-		{
-			if (refNum == 0) return;
-			if (--refNum <= 0) force = true;
-			if (force)
-			{
-				if (pixelShader) pixelShader->Release();
-				pixelShader = nullptr;
-				refNum = 0;
-				path[0] = '\0';
-			}
-		}
-	};
-
-	static ResourceShaderResourceViews	SRViews[RESOURCE_MAX];
-	static ResourceVertexShaders		vertexShaders[RESOURCE_MAX];
-	static ResourcePixelShaders			pixelShaders[RESOURCE_MAX];
-
-private:
-	ResourceManager() {};
-	~ResourceManager() {};
-
-public:
-	static void release();
-	static bool loadShaderResourceView(ID3D11Device*, const wchar_t*,
-		ID3D11ShaderResourceView**, D3D11_TEXTURE2D_DESC*);
-	static bool loadVertexShader(ID3D11Device*, const char*,
-		D3D11_INPUT_ELEMENT_DESC*, int, ID3D11VertexShader**, ID3D11InputLayout**);
-	static bool loadPixelShader(ID3D11Device*, const char*, ID3D11PixelShader**);
-
-	static void releaseShaderResourceView(ID3D11ShaderResourceView*);
-	static void releaseVertexShader(ID3D11VertexShader*, ID3D11InputLayout*);
-	static void releasePixelShader(ID3D11PixelShader*);
-};
-
-
-
-//******************************************************************************
+}
