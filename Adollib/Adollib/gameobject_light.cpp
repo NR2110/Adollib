@@ -11,7 +11,6 @@ namespace Adollib {
 		//ZeroMemory(SpotLight, sizeof(SPOTLIGHT) * SPOTMAX);
 
 		std::list <std::shared_ptr<Component>>::iterator itr = components.begin();
-		itr++;
 		std::list <std::shared_ptr<Component>>::iterator itr_end = components.end();
 
 		for (; itr != itr_end; itr++) {
@@ -23,7 +22,6 @@ namespace Adollib {
 	void Light::update() {
 
 		std::list <std::shared_ptr<Component>>::iterator itr = components.begin();
-		itr++;
 		std::list <std::shared_ptr<Component>>::iterator itr_end = components.end();
 
 		for (; itr != itr_end; itr++) {

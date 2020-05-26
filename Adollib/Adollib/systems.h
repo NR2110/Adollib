@@ -89,6 +89,9 @@ namespace Adollib {
 		static void SetViewPort(int width, int height);
 
 		static void CreateConstantBuffer(ID3D11Buffer** ppCB, u_int size) {
+
+			size += 16 - (1 + (size - 1) % 16);
+
 			// 定数バッファ生成
 			D3D11_BUFFER_DESC bd;
 			ZeroMemory(&bd, sizeof(D3D11_BUFFER_DESC));

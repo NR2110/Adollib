@@ -14,5 +14,4 @@ using namespace fbxsdk;
 namespace Adollib
 {
 
-
 }

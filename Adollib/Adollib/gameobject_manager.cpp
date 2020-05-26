@@ -2,7 +2,7 @@
 #include "systems.h"
 #include "gameobject_manager.h"
 #include "scene.h"
-
+#include "resource_manager.h"
 #include "cbuffer_manager.h"
 #include "light_types.h"
 
@@ -53,7 +53,7 @@ namespace Adollib {
 			std::list<std::shared_ptr<Gameobject>>::iterator itr = gameobjects[Sce].begin();
 			std::list<std::shared_ptr<Gameobject>>::iterator itr_end = gameobjects[Sce].end();
 
-			for (itr++; itr != itr_end; itr++) {
+			for (; itr != itr_end; itr++) {
 				itr->get()->initialize();
 			}
 		}
@@ -62,7 +62,7 @@ namespace Adollib {
 			std::list<std::shared_ptr<Light>>::iterator itr = lights[Sce].begin();
 			std::list<std::shared_ptr<Light>>::iterator itr_end = lights[Sce].end();
 
-			for (itr++; itr != itr_end; itr++) {
+			for (; itr != itr_end; itr++) {
 				itr->get()->initialize();
 			}
 		}
@@ -71,7 +71,7 @@ namespace Adollib {
 			std::list<std::shared_ptr<Camera>>::iterator itr = cameras[Sce].begin();
 			std::list<std::shared_ptr<Camera>>::iterator itr_end = cameras[Sce].end();
 
-			for (itr++; itr != itr_end; itr++) {
+			for (; itr != itr_end; itr++) {
 				itr->get()->initialize();
 			}
 		}
@@ -86,7 +86,7 @@ namespace Adollib {
 			std::list<std::shared_ptr<Gameobject>>::iterator itr = gameobjects[Sce].begin();
 			std::list<std::shared_ptr<Gameobject>>::iterator itr_end = gameobjects[Sce].end();
 
-			for (itr++; itr != itr_end; itr++) {
+			for (; itr != itr_end; itr++) {
 				itr->get()->update();
 			}
 		}
@@ -95,7 +95,7 @@ namespace Adollib {
 			std::list<std::shared_ptr<Light>>::iterator itr = lights[Sce].begin();
 			std::list<std::shared_ptr<Light>>::iterator itr_end = lights[Sce].end();
 
-			for (itr++; itr != itr_end; itr++) {
+			for (; itr != itr_end; itr++) {
 				itr->get()->update();
 			}
 		}
@@ -104,7 +104,7 @@ namespace Adollib {
 			std::list<std::shared_ptr<Camera>>::iterator itr = cameras[Sce].begin();
 			std::list<std::shared_ptr<Camera>>::iterator itr_end = cameras[Sce].end();
 
-			for (itr++; itr != itr_end; itr++) {
+			for (; itr != itr_end; itr++) {
 				itr->get()->update();
 			}
 		}
@@ -130,7 +130,6 @@ namespace Adollib {
 			int point_num = 0;
 			int spot_num = 0;
 			for (int i = 0; i < lights[Sce].size(); i++) {
-				itr_li++;
 				for (int o = 0; o < itr_li->get()->PointLight.size(); o++) {
 					PointLight[point_num] = *itr_li->get()->PointLight[o];
 					point_num++;
@@ -140,6 +139,7 @@ namespace Adollib {
 					SpotLight[spot_num] = *itr_li->get()->SpotLight[o];
 					spot_num++;
 				}
+				itr_li++;
 			}
 		}
 
@@ -153,7 +153,6 @@ namespace Adollib {
 		ConstantBufferPerCamera c_cb;
 		//そのシーンのカメラの数だけ回す
 		for (int i = 0; i < cameras[Sce].size(); i++) {
-			itr_ca++;
 
 			// ビュー行列
 			vector3 pos = itr_ca->get()->get_world_position();
@@ -164,6 +163,7 @@ namespace Adollib {
 			DirectX::XMVECTOR focus = DirectX::XMVectorSet(look_pos.x, look_pos.y, look_pos.z, 1.0f);
 			DirectX::XMVECTOR up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f);
 			c_cb.View = DirectX::XMMatrixLookAtLH(eye, focus, up);
+			c_cb.Eyepos = DirectX::XMFLOAT4(pos.x, pos.y, pos.z, 1.0f);
 			Systems::DeviceContext->UpdateSubresource(view_cb.Get(), 0, NULL, &c_cb, 0, 0);
 			Systems::DeviceContext->VSSetConstantBuffers(1, 1, view_cb.GetAddressOf());
 			Systems::DeviceContext->PSSetConstantBuffers(1, 1, view_cb.GetAddressOf());
@@ -172,7 +172,7 @@ namespace Adollib {
 			std::list<std::shared_ptr<Gameobject>>::iterator itr = gameobjects[Sce].begin();
 			std::list<std::shared_ptr<Gameobject>>::iterator itr_end = gameobjects[Sce].end();
 
-			for (itr++; itr != itr_end; itr++) {
+			for (; itr != itr_end; itr++) {
 				itr->get()->render();
 			}
 		}
@@ -196,7 +196,7 @@ namespace Adollib {
 	
 
 	Gameobject* Gameobject_manager::create(Scenelist Sce) {
-		std::shared_ptr <Gameobject> Value;
+		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
 		gameobjects[Sce].push_back(Value);
 		Value.get()->go_iterator = gameobjects[Sce].end();
 		Value.get()->this_scene = Sce;
@@ -204,7 +204,7 @@ namespace Adollib {
 		return Value.get();
 	}
 	Gameobject* Gameobject_manager::create(const std::string go_name, Scenelist Sce) {
-		std::shared_ptr <Gameobject> Value;
+		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();;
 		gameobjects[Sce].push_back(Value);
 		Value.get()->name = go_name;
 		Value.get()->go_iterator = gameobjects[Sce].end();
@@ -214,7 +214,7 @@ namespace Adollib {
 	}
 
 	Light* Gameobject_manager::create_light(Scenelist Sce) {
-		std::shared_ptr <Light> Value;
+		std::shared_ptr <Light> Value = std::make_shared<Light>();
 		lights[Sce].push_back(Value);
 		Value.get()->go_iterator = lights[Sce].end();
 		Value.get()->this_scene = Sce;
@@ -222,7 +222,7 @@ namespace Adollib {
 		return Value.get();
 	}
 	Light* Gameobject_manager::create_light(const std::string go_name, Scenelist Sce) {
-		std::shared_ptr <Light> Value;
+		std::shared_ptr <Light> Value = std::make_shared<Light>();
 		lights[Sce].push_back(Value);
 		Value.get()->name = go_name;
 		Value.get()->go_iterator = lights[Sce].end();
@@ -232,31 +232,40 @@ namespace Adollib {
 	}
 
 	Camera* Gameobject_manager::create_camera(Scenelist Sce) {
-		std::shared_ptr <Camera> Value;
+		std::shared_ptr <Camera> Value = std::make_shared<Camera>();
 		cameras[Sce].push_back(Value);
 		Value.get()->go_iterator = cameras[Sce].end();
 		Value.get()->this_scene = Sce;
+		Value.get()->transform = new Transfome;
 
 		return Value.get();
 	}
 	Camera* Gameobject_manager::create_camera(const std::string go_name, Scenelist Sce) {
-		std::shared_ptr <Camera> Value;
+		std::shared_ptr <Camera> Value = std::make_shared<Camera>();
 		cameras[Sce].push_back(Value);
 		Value.get()->name = go_name;
 		Value.get()->go_iterator = cameras[Sce].end();
 		Value.get()->this_scene = Sce;
+		Value.get()->transform = new Transfome;
 
 		return Value.get();
 	}
 
 
-	//Gameobject* Gameobject_manager::create(const std::string& go_name, const std::string& model_filename) {
+	Gameobject* Gameobject_manager::createSphere(const std::string& go_name,  Scenelist Sce) {
+		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
+		gameobjects[Sce].push_back(Value);
+		Value.get()->name = go_name;
+		Value.get()->go_iterator = gameobjects[Sce].end();
+		Value.get()->this_scene = Sce;
+		Value.get()->transform = new Transfome;
+		Value.get()->material = new Material;
+		Value.get()->material->Load_VS("./DefaultShader/default_vs.cso");
+		Value.get()->material->Load_PS("./DefaultShader/default_ps.cso");
+		ResourceManager::CreateModelFromFBX(&Value.get()->material->meshes, "./DefaultModel/cube.fbx", "");
 
-	//}
-
-	//Gameobject* Gameobject_manager::createSphere(const std::string& go_name) {
-
-	//}
+		return Value.get();
+	}
 	//Gameobject* Gameobject_manager::createCylinder(const std::string& go_name) {
 
 	//}

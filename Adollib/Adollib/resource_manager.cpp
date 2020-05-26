@@ -17,7 +17,7 @@ namespace Adollib
 {
 	std::map<std::string, std::vector<Mesh::mesh>> ResourceManager::meshes;
 	std::map<std::wstring, Texture> ResourceManager::texturs;
-	std::map<std::string, ResourceManager::VS_resorce*>   ResourceManager::VSshaders;
+	std::map<std::string, ResourceManager::VS_resorce>   ResourceManager::VSshaders;
 	std::map<std::string, ID3D11PixelShader*>    ResourceManager::PSshaders;
 	std::map<std::string, ID3D11GeometryShader*> ResourceManager::GSshaders;
 	std::map<std::string, ID3D11HullShader*>     ResourceManager::HSshaders;
@@ -34,7 +34,7 @@ namespace Adollib
 	{
 		VS_resorce VS;
 		if (VSshaders.count((string)csoName) == 1) {
-			VS = *VSshaders[(string)csoName];
+			VS = VSshaders[(string)csoName];
 		}
 		else {
 			HRESULT hr;
@@ -73,7 +73,7 @@ namespace Adollib
 			);
 			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 
-			*VSshaders[(string)csoName] = VS;
+			VSshaders[(string)csoName] = VS;
 		}
 		*vertexShader = VS.VSshader;
 		*inputLayout  = VS.layout;
@@ -279,11 +279,11 @@ namespace Adollib
 #pragma endregion
 
 	// モデルの読み込み
-	HRESULT ResourceManager::CreateModelFromFBX(vector<Mesh::mesh>& ret_mesh, const char* fileName, const char* filePath)
+	HRESULT ResourceManager::CreateModelFromFBX(vector<Mesh::mesh>* ret_mesh, const char* fileName, const char* filePath)
 	{
 		//すでにロード済みであればそのアドレスを返す
 		if (meshes.count((string)filePath + (string)fileName) == 1) {
-			ret_mesh = meshes[(string)filePath + (string)fileName];
+			ret_mesh = &meshes[(string)filePath + (string)fileName];
 			return S_OK;
 		}
 
@@ -335,11 +335,11 @@ namespace Adollib
 		vector<u_int> indices;
 		u_int vertex_count = 0;
 
-		ret_mesh.resize(fetched_meshes.size());
+		ret_mesh->resize(fetched_meshes.size());
 		for (size_t i = 0; i < fetched_meshes.size(); i++)
 		{
 			FbxMesh* fbxMesh = fetched_meshes.at(i)->GetMesh();
-			Mesh::mesh& mesh = ret_mesh.at(i);
+			Mesh::mesh& mesh = ret_mesh->at(i);
 
 			// globalTransform
 			FbxAMatrix global_transform = fbxMesh->GetNode()->EvaluateGlobalTransform(0);
@@ -429,13 +429,13 @@ namespace Adollib
 							_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 
 							// ピクセルシェーダーオブジェクトの生成 
-							ResourceManager::CreatePsFromCso("skinned_mesh_ps.cso", mesh.subsets.at(index_of_material).pixelShader.GetAddressOf());
+						//	ResourceManager::CreatePsFromCso("./DefaultShader/default_ps.cso", mesh.subsets.at(index_of_material).pixelShader.GetAddressOf());
 						}
 					}
 					else
 					{
-						// ピクセルシェーダーオブジェクトの生成 テクスチャのない場合
-						ResourceManager::CreatePsFromCso("geometric_primitive_ps.cso", mesh.subsets.at(index_of_material).pixelShader.GetAddressOf());
+						// ピクセルシェーダーオブジェクトの生成 
+					//	ResourceManager::CreatePsFromCso("./DefaultShader/default_ps.cso", mesh.subsets.at(index_of_material).pixelShader.GetAddressOf());
 					}
 				}
 			}
@@ -558,7 +558,8 @@ namespace Adollib
 #pragma endregion
 
 		// FBXロード完了
-		meshes[(string)filePath + (string)fileName] = ret_mesh;
+		meshes[(string)filePath + (string)fileName] = *ret_mesh;
+		ret_mesh = &meshes[(string)filePath + (string)fileName];
 
 		manager->Destroy();
 

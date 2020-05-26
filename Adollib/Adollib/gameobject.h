@@ -17,8 +17,8 @@ namespace Adollib {
 		};
 
 		ComPtr<ID3D11Buffer> world_cb; //WVP行列用バッファ
-
 	public:
+
 		std::string name = std::string("null"); //このgoの名前(検索用)
 
 		Transfome* transform = nullptr; //描画用の情報
@@ -49,7 +49,7 @@ namespace Adollib {
 		//このgoのworld変換行列を返す
 		matrix get_word_matrix() {
 			matrix WorldMatrix;
-			if (pearent != nullptr) {
+			if (pearent == nullptr) {
 				WorldMatrix = (transform->prientation).get_rotate_matrix();
 				WorldMatrix._41 = transform->position.x;
 				WorldMatrix._42 = transform->position.y;

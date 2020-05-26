@@ -15,7 +15,7 @@ namespace Adollib
 		static HRESULT CreateHsFromCso(const char* cso_name, ID3D11HullShader** hull_shader);
 		static HRESULT CreateDsFromCso(const char* cso_name, ID3D11DomainShader** domain_shader);
 		static HRESULT LoadTextureFromFile(const wchar_t* file_name, ID3D11ShaderResourceView** pSRV, D3D11_TEXTURE2D_DESC* pTex2dDesc);
-		static HRESULT CreateModelFromFBX(vector<Mesh::mesh>& meshes, const char* fileName, const char* filePath = "");
+		static HRESULT CreateModelFromFBX(vector<Mesh::mesh>* meshes, const char* fileName, const char* filePath = "");
 
 	private:
 		ResourceManager() {};
@@ -31,7 +31,7 @@ namespace Adollib
 			ID3D11InputLayout* layout;
 
 		};
-		static std::map<std::string, VS_resorce*>   VSshaders;
+		static std::map<std::string, VS_resorce>   VSshaders;
 		static std::map<std::string, ID3D11PixelShader*>    PSshaders;
 		static std::map<std::string, ID3D11GeometryShader*> GSshaders;
 		static std::map<std::string, ID3D11HullShader*>     HSshaders;

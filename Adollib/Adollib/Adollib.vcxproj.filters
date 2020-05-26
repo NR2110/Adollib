@@ -203,25 +203,25 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="defult.fx">
+    <None Include="DefaultShader\default.hlsli">
       <Filter>Adollib\shader\hlsli</Filter>
-    </Text>
-    <Text Include="funk.fx">
+    </None>
+    <None Include="DefaultShader\light_type.hlsli">
       <Filter>Adollib\shader\hlsli</Filter>
-    </Text>
-    <Text Include="LightType.fx">
+    </None>
+    <None Include="DefaultShader\head.hlsli">
       <Filter>Adollib\shader\hlsli</Filter>
-    </Text>
+    </None>
+    <None Include="DefaultShader\func.hlsli">
+      <Filter>Adollib\shader\hlsli</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="funk.hlsli">
+    <FxCompile Include="DefaultShader\default_ps.hlsl">
       <Filter>Adollib\shader\hlsli</Filter>
-    </None>
-    <None Include="light_type.hlsli">
+    </FxCompile>
+    <FxCompile Include="DefaultShader\default_vs.hlsl">
       <Filter>Adollib\shader\hlsli</Filter>
-    </None>
-    <None Include="constant.hlsli">
-      <Filter>Adollib\shader\hlsli</Filter>
-    </None>
+    </FxCompile>
   </ItemGroup>
 </Project>

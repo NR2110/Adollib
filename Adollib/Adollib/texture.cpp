@@ -62,7 +62,6 @@ bool Texture::Load(const wchar_t* filename)
 void Texture::Set(UINT Slot, BOOL flg)
 {
 	if (flg == FALSE) {
-
 		ID3D11ShaderResourceView* rtv[1] = { NULL };
 		ID3D11SamplerState* ss[1] = { NULL };
 		Systems::DeviceContext->PSSetShaderResources(Slot, 1, rtv);

@@ -20,16 +20,16 @@ namespace Adollib {
 		ComPtr<ID3D11HullShader>		HS = nullptr; //　ハルシェーダ
 		ComPtr<ID3D11DomainShader>		DS = nullptr; //　ドメインネームシェーダ
 
-		ComPtr<ID3D11InputLayout>		VertexLayout;
-
 		HRESULT Compile(WCHAR* filename, LPCSTR method, LPCSTR shaderModel, ID3DBlob** ppBlobOut);
 
 
 	public:
+		ComPtr<ID3D11InputLayout>		VertexLayout;
+
 		Shader() { /*ZeroMemory(this, sizeof(Shader));*/ }
 		virtual ~Shader();
 
-		void Load_VS(const char* cso_name);
+		void Load_VS(const char* csoName,ID3D11InputLayout** inputLayout,D3D11_INPUT_ELEMENT_DESC* inputElementDesc,  UINT numElements);
 		void Load_PS(const char* cso_name);
 		void Load_GS(const char* cso_name);
 		void Load_HS(const char* cso_name);

@@ -15,14 +15,14 @@ namespace Adollib {
 	class Transfome {
 	public:
 		//描画用の情報 
-		vector3 position;
-		quaternion prientation;
-		vector3 scale;
+		vector3 position = vector3(0, 0, 0);
+		quaternion prientation = quaternion(1, 0, 0, 0);
+		vector3 scale = vector3(1, 1, 1);
 
 		//親からの相対情報
-		vector3 local_pos;
-		quaternion local_orient;
-		vector3 local_scale;
+		vector3 local_pos = vector3(0, 0, 0);
+		quaternion local_orient = quaternion(1, 0, 0, 0);
+		vector3 local_scale = vector3(1, 1, 1);
 
 		// アタッチされたいるcollider
 		std::list<std::shared_ptr<RigitBody_Transform>> colliders;

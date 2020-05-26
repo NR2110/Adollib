@@ -9,7 +9,7 @@
 using namespace DirectX;
 using namespace std;
 
-#define MAX_BONES (160)
+#define MAX_BONES (4)
 
 namespace Adollib
 {
@@ -19,9 +19,8 @@ namespace Adollib
 	private:
 		Microsoft::WRL::ComPtr<ID3D11InputLayout> vertexLayout;
 
-		float timer = 0;
-
 	public:
+
 		// 頂点フォーマット
 		struct VertexFormat
 		{
@@ -83,12 +82,6 @@ namespace Adollib
 
 	public:
 		Mesh() {};
-
-		XMFLOAT3 scale = { 1, 1, 1 };
-		XMFLOAT3 rot = { 0, 180, 0 };
-		XMFLOAT3 pos = {};
-		int animeIndex = 0;
-		int isLineDraw = FALSE;
 
 		//Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer = nullptr;
 		//Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer = nullptr;

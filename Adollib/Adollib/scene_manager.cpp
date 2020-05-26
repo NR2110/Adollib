@@ -12,7 +12,7 @@ namespace Adollib {
 	//::: Scene‚ğ•ÏX‚·‚éÛ‚Í‚±‚±‚ğ•ÏX ::::::::::::::::::::::::::::::::::::::::
 	void Scene_manager::initialize() {
 		Scene::now_scene = Scenelist::scene_null;
-		Scene::next_scene = Scenelist::scene_null;
+		Scene::next_scene = Scenelist::scene_game;
 
 		scenes[Scenelist::scene_game] = std::make_unique<scene_game>();
 		scenes[Scenelist::scene_title] = std::make_unique<scene_title>();
@@ -25,11 +25,13 @@ namespace Adollib {
 
 			Gameobject_manager::destroy(Scene::now_scene); //‘Oscene‚Ìgameobject‚ğíœ
 
+			Scene::now_scene = Scene::next_scene;
 			if(Scene::now_scene != Scenelist::scene_null)
-				scenes[Scene::next_scene]->initialize(); //Ÿscene‚Ìcomponent‚ğİ’è
-				Gameobject_manager::initialize(Scene::next_scene); //Ÿscene‚Ìinitialize‚ğŒÄ‚Ô
 
-				Scene::now_scene = Scene::next_scene;		
+				scenes[Scene::now_scene]->initialize(); //Ÿscene‚Ìcomponent‚ğİ’è
+
+			Gameobject_manager::initialize(Scene::now_scene); //Ÿscene‚Ìinitialize‚ğŒÄ‚Ô
+	
 		}
 
 	}
