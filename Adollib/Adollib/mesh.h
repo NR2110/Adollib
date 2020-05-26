@@ -17,19 +17,11 @@ namespace Adollib
 	class Mesh
 	{
 	private:
-		Microsoft::WRL::ComPtr<ID3D11VertexShader> vertexShader;
 		Microsoft::WRL::ComPtr<ID3D11InputLayout> vertexLayout;
 
 		float timer = 0;
 
 	public:
-
-		XMFLOAT3 scale = { 1, 1, 1 };
-		XMFLOAT3 rot = { 0, 180, 0 };
-		XMFLOAT3 pos = {};
-		int animeIndex = 0;
-		int isLineDraw = FALSE;
-
 		// 頂点フォーマット
 		struct VertexFormat
 		{
@@ -88,13 +80,21 @@ namespace Adollib
 			XMFLOAT4X4 globalTransform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
 			vector<skeletal_animation> skeletalAnimation;
 		};
-		vector<mesh> meshes;
 
 	public:
-		Mesh(const char* fbx_filename, const char* filePath);
+		Mesh() {};
 
-	private:
-		void CreateIndices(FbxMesh*, vector<u_int>*);
+		XMFLOAT3 scale = { 1, 1, 1 };
+		XMFLOAT3 rot = { 0, 180, 0 };
+		XMFLOAT3 pos = {};
+		int animeIndex = 0;
+		int isLineDraw = FALSE;
+
+		//Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer = nullptr;
+		//Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer = nullptr;
+		//vector<subset> subsets;
+		//XMFLOAT4X4 globalTransform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
+		//vector<skeletal_animation> skeletalAnimation;
 
 
 	};

@@ -15,6 +15,8 @@ using namespace std;
 
 namespace Adollib
 {
+	std::map<std::string, std::vector<Mesh::mesh>> ResourceManager::meshes;
+
 	// バーテックスシェーダーの生成
 #pragma region Create VS
 
@@ -150,8 +152,14 @@ namespace Adollib
 #pragma endregion
 
 	// モデルの読み込み
-	HRESULT ResourceManager::CreateModelFromFBX(vector<Mesh::mesh>& meshes, const char* fileName, const char* filePath)
+	HRESULT ResourceManager::CreateModelFromFBX(vector<Mesh::mesh>& ret_mesh, const char* fileName, const char* filePath)
 	{
+		//すでにロード済みであればそのアドレスを返す
+		if (meshes.count((string)filePath + (string)fileName) == 1) {
+			ret_mesh = meshes[(string)filePath + (string)fileName];
+			return S_OK;
+		}
+
 		HRESULT hr = S_OK;
 		Mesh::mesh skinMeshes;
 
@@ -200,11 +208,11 @@ namespace Adollib
 		vector<u_int> indices;
 		u_int vertex_count = 0;
 
-		meshes.resize(fetched_meshes.size());
+		ret_mesh.resize(fetched_meshes.size());
 		for (size_t i = 0; i < fetched_meshes.size(); i++)
 		{
 			FbxMesh* fbxMesh = fetched_meshes.at(i)->GetMesh();
-			Mesh::mesh& mesh = meshes.at(i);
+			Mesh::mesh& mesh = ret_mesh.at(i);
 
 			// globalTransform
 			FbxAMatrix global_transform = fbxMesh->GetNode()->EvaluateGlobalTransform(0);
@@ -423,6 +431,8 @@ namespace Adollib
 #pragma endregion
 
 		// FBXロード完了
+		meshes[(string)filePath + (string)fileName] = ret_mesh;
+
 		manager->Destroy();
 
 		return hr;

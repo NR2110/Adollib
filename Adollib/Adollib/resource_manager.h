@@ -1,6 +1,7 @@
 #pragma once
 #include <d3d11.h>
 #include "mesh.h"
+#include "texture.h"
 
 namespace Adollib
 {
@@ -19,5 +20,7 @@ namespace Adollib
 		static void fetch_bone_matrices(FbxMesh* fbx_mesh, vector<Mesh::bone>& skeletal, FbxTime time);
 		static void fetch_animations(FbxMesh* fbx_mesh, vector<Mesh::skeletal_animation>& skeletal_animation,
 			u_int sampling_rate = 0);
+
+		static std::map<std::string, std::vector<Mesh::mesh>> meshes;
 	};
 }

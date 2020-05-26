@@ -20,7 +20,7 @@ bool Texture::Load(const wchar_t* filename)
 {
 	HRESULT hr = S_OK;
 
-	//hr = ResourceManager::loadShaderResourceView(systems::Device.Get(), filename, ShaderResourceView.GetAddressOf(), &texture2d_desc);
+	hr = ResourceManager::LoadTextureFromFile(filename, ShaderResourceView.GetAddressOf(), &texture2d_desc);
 
 	if(FAILED(hr)){
 		assert(!"テクスチャ画像読み込み失敗");

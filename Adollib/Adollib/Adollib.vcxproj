@@ -153,7 +153,6 @@
     <ClInclude Include="material.h" />
     <ClInclude Include="matrix.h" />
     <ClInclude Include="mesh.h" />
-    <ClInclude Include="mesh_manager.h" />
     <ClInclude Include="misc.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="quaternion.h" />
@@ -189,7 +188,6 @@
     <ClCompile Include="material.cpp" />
     <ClCompile Include="matrix.cpp" />
     <ClCompile Include="mesh.cpp" />
-    <ClCompile Include="mesh_manager.cpp" />
     <ClCompile Include="quaternion.cpp" />
     <ClCompile Include="resource_manager.cpp" />
     <ClCompile Include="rigit_body.cpp" />

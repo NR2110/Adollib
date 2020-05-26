@@ -97,9 +97,6 @@
     <ClCompile Include="mesh.cpp">
       <Filter>Adollib\object\mesh</Filter>
     </ClCompile>
-    <ClCompile Include="mesh_manager.cpp">
-      <Filter>Adollib\object\mesh</Filter>
-    </ClCompile>
     <ClCompile Include="resource_manager.cpp">
       <Filter>Adollib\object\mesh</Filter>
     </ClCompile>
@@ -196,9 +193,6 @@
       <Filter>Adollib\object\mesh</Filter>
     </ClInclude>
     <ClInclude Include="mesh.h">
-      <Filter>Adollib\object\mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="mesh_manager.h">
       <Filter>Adollib\object\mesh</Filter>
     </ClInclude>
     <ClInclude Include="resource_manager.h">
