@@ -20,6 +20,11 @@ namespace Adollib {
 		Systems::CreateConstantBuffer(&light_cb, sizeof(ConstantBufferPerLight));
 		Systems::CreateConstantBuffer(&view_cb, sizeof(ConstantBufferPerCamera));
 		Systems::CreateConstantBuffer(&projection_cb, sizeof(ConstantBufferPerSystem));
+
+		Systems::SetDephtStencilState(State_manager::DStypes::DS_TRUE);
+		Systems::SetRasterizerState  (State_manager::RStypes::RS_CULL_BACK);
+		Systems::SetBlendState       (State_manager::BStypes::BS_ADD);
+
 		//CB : ConstantBufferPerSystem
 		ConstantBufferPerSystem s_sb;
 		float fov = ToRadian(45);

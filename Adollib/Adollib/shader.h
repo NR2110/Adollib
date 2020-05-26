@@ -24,7 +24,6 @@ namespace Adollib {
 
 
 	public:
-		ComPtr<ID3D11InputLayout>		VertexLayout;
 
 		Shader() { /*ZeroMemory(this, sizeof(Shader));*/ }
 		virtual ~Shader();

@@ -47,7 +47,7 @@ namespace Adollib {
 	}
 
 	void Shader::Load_VS(const char* cso_name, ID3D11InputLayout** inputLayout, D3D11_INPUT_ELEMENT_DESC* inputElementDesc, UINT numElements) {
-		ResourceManager::CreateVsFromCso(cso_name, VS.GetAddressOf(), VertexLayout.GetAddressOf(), inputElementDesc, numElements);
+		ResourceManager::CreateVsFromCso(cso_name, VS.GetAddressOf(), inputLayout, inputElementDesc, numElements);
 	}
 	void Shader::Load_PS(const char* cso_name) {
 		ResourceManager::CreatePsFromCso(cso_name, PS.GetAddressOf());

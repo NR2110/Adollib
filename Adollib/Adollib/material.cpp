@@ -19,12 +19,9 @@ namespace Adollib {
 
 		shader.Activate();
 
-		//if (Systems::BS_type != BS_state) Systems::SetBlendState(BS_state);
-		//if (Systems::RS_type != RS_state) Systems::SetRasterizerState(RS_state);
-		//if (Systems::DS_type != DS_state) Systems::SetDephtStencilState(DS_state);
-		Systems::SetBlendState(BS_state);
-		Systems::SetRasterizerState(RS_state);
-		Systems::SetDephtStencilState(DS_state);
+		if (Systems::BS_type != BS_state) Systems::SetBlendState(BS_state);
+		if (Systems::RS_type != RS_state) Systems::SetRasterizerState(RS_state);
+		if (Systems::DS_type != DS_state) Systems::SetDephtStencilState(DS_state);
 
 		for (Mesh::mesh mesh : meshes)
 		{
