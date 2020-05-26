@@ -242,6 +242,7 @@ namespace Adollib {
 		Value.get()->go_iterator = cameras[Sce].end();
 		Value.get()->this_scene = Sce;
 		Value.get()->transform = new Transfome;
+		Value.get()->transform->position = vector3(0, 0, -5);
 
 		return Value.get();
 	}

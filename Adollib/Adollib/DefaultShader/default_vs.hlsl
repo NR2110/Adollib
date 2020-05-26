@@ -7,17 +7,17 @@ PSInput main(VSInput input)
 {
 	PSInput output = (PSInput)0;
 
-	// BONE
-	float3 p = { 0, 0, 0 };
-	float3 n = { 0, 0, 0 };
-	int i = 0;
-	for (i = 0; i < 4; i++)
-	{
-		p += (input.BoneWeights[i] * mul(input.Position, BoneTransforms[input.BoneIndices[i]])).xyz;
-		n += (input.BoneWeights[i] * mul(float4(input.Normal.xyz, 0), BoneTransforms[input.BoneIndices[i]])).xyz;
-	}
-	input.Position = float4(p, 1.0f);
-	input.Normal = float4(n, 1);
+	//// BONE
+	//float3 p = { 0, 0, 0 };
+	//float3 n = { 0, 0, 0 };
+	//int i = 0;
+	//for (i = 0; i < 4; i++)
+	//{
+	//	p += (input.BoneWeights[i] * mul(input.Position, BoneTransforms[input.BoneIndices[i]])).xyz;
+	//	n += (input.BoneWeights[i] * mul(float4(input.Normal.xyz, 0), BoneTransforms[input.BoneIndices[i]])).xyz;
+	//}
+	//input.Position = float4(p, 1.0f);
+	//input.Normal = float4(n, 1);
 
 	float4 P = float4(input.Position, 1.0);
 	// ƒ[ƒ‹ƒh•ÏŠ·À•W
