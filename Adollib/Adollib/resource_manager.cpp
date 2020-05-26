@@ -16,9 +16,14 @@ using namespace std;
 namespace Adollib
 {
 	std::map<std::string, std::vector<Mesh::mesh>> ResourceManager::meshes;
+	std::map<std::wstring, Texture> ResourceManager::texturs;
+	std::map<std::string, ResourceManager::VS_resorce*>   ResourceManager::VSshaders;
+	std::map<std::string, ID3D11PixelShader*>    ResourceManager::PSshaders;
+	std::map<std::string, ID3D11GeometryShader*> ResourceManager::GSshaders;
+	std::map<std::string, ID3D11HullShader*>     ResourceManager::HSshaders;
+	std::map<std::string, ID3D11DomainShader*>   ResourceManager::DSshaders;
 
-	// バーテックスシェーダーの生成
-#pragma region Create VS
+#pragma region Shader load
 
 	HRESULT ResourceManager::CreateVsFromCso(
 		const char* csoName,	           // 頂点シェーダーファイル名
@@ -27,80 +32,211 @@ namespace Adollib
 		D3D11_INPUT_ELEMENT_DESC* inputElementDesc, // 頂点データ
 		UINT numElements)                  // 頂点データの要素数
 	{
-		// 頂点シェーダーファイルを開く
-		FILE* fp = nullptr;
-		fopen_s(&fp, csoName, "rb");
-		_ASSERT_EXPR_A(fp, "CSO File not found");
+		VS_resorce VS;
+		if (VSshaders.count((string)csoName) == 1) {
+			VS = *VSshaders[(string)csoName];
+		}
+		else {
+			HRESULT hr;
 
-		// 頂点シェーダーファイルのサイズを求める
-		fseek(fp, 0, SEEK_END);
-		long cso_sz = ftell(fp);
-		fseek(fp, 0, SEEK_SET);
+			// 頂点シェーダーファイルを開く
+			FILE* fp = nullptr;
+			fopen_s(&fp, csoName, "rb");
+			_ASSERT_EXPR_A(fp, "CSO File not found");
 
-		// メモリ上にシェーダーデータを読み込む
-		unique_ptr<unsigned char[]> cso_data = make_unique<unsigned char[]>(cso_sz);
-		fread(cso_data.get(), cso_sz, 1, fp); // 用意した領域にデータを読み込む
-		fclose(fp);
+			// 頂点シェーダーファイルのサイズを求める
+			fseek(fp, 0, SEEK_END);
+			long cso_sz = ftell(fp);
+			fseek(fp, 0, SEEK_SET);
 
-		// 頂点シェーダーオブジェクトを生成する
-		HRESULT hr = Systems::Device->CreateVertexShader(
-			cso_data.get(),  // 頂点シェーダーデータのポインタ
-			cso_sz,		     // 頂点シェーダーデータのサイズ
-			nullptr,
-			vertexShader
-		);
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
+			// メモリ上にシェーダーデータを読み込む
+			unique_ptr<unsigned char[]> cso_data = make_unique<unsigned char[]>(cso_sz);
+			fread(cso_data.get(), cso_sz, 1, fp); // 用意した領域にデータを読み込む
+			fclose(fp);
 
-		// 入力レイアウトオブジェクトの生成
-		if (inputLayout)
-		{
+			// 頂点シェーダーオブジェクトを生成する
+			hr = Systems::Device->CreateVertexShader(
+				cso_data.get(),  // 頂点シェーダーデータのポインタ
+				cso_sz,		     // 頂点シェーダーデータのサイズ
+				nullptr,
+				&VS.VSshader
+			);
+			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
+
+			// 入力レイアウトオブジェクトの生成
 			hr = Systems::Device->CreateInputLayout(
 				inputElementDesc, // 頂点データの内容
 				numElements,	  // 頂点データの要素数
 				cso_data.get(),	  // 頂点シェーダーデータ（input_element_descの内容と sprite_vs.hlslの内容に不一致がないかチェックするため）
 				cso_sz,			  // 頂点シェーダーデータサイズ
-				inputLayout		  // 入力レイアウトオブジェクトのポインタの格納先。
+				&VS.layout		  // 入力レイアウトオブジェクトのポインタの格納先。
 			);
 			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
+
+			*VSshaders[(string)csoName] = VS;
 		}
+		*vertexShader = VS.VSshader;
+		*inputLayout  = VS.layout;
 
-		return hr;
+		return S_OK;
 	}
-#pragma endregion
 
-	// ピクセルシェーダーの生成
-#pragma region Create PS
 
 	HRESULT ResourceManager::CreatePsFromCso(
-		const char* cso_name, // ピクセルシェーダーファイル名
+		const char* csoName, // ピクセルシェーダーファイル名
 		ID3D11PixelShader** pixel_shader // 格納するポインタ
 	)
 	{
-		// ピクセルシェーダーファイルを開く
-		FILE* fp = nullptr;
-		fopen_s(&fp, cso_name, "rb");
-		_ASSERT_EXPR_A(fp, "CSO File not found");
+		if (PSshaders.count((string)csoName) == 1) {
+			*pixel_shader = PSshaders[(string)csoName];
+		}
+		else {
+			// ピクセルシェーダーファイルを開く
+			FILE* fp = nullptr;
+			fopen_s(&fp, csoName, "rb");
+			_ASSERT_EXPR_A(fp, "CSO File not found");
 
-		// ピクセルシェーダーファイルのサイズを求める
-		fseek(fp, 0, SEEK_END);
-		long cso_sz = ftell(fp);
-		fseek(fp, 0, SEEK_SET);
+			// ピクセルシェーダーファイルのサイズを求める
+			fseek(fp, 0, SEEK_END);
+			long cso_sz = ftell(fp);
+			fseek(fp, 0, SEEK_SET);
 
-		// メモリ上にピクセルシェーダーデータを格納する領域を用意する
-		unique_ptr<unsigned char[]> cso_data = make_unique<unsigned char[]>(cso_sz);
-		fread(cso_data.get(), cso_sz, 1, fp); // 用意した領域にデータを読み込む
-		fclose(fp);
+			// メモリ上にピクセルシェーダーデータを格納する領域を用意する
+			unique_ptr<unsigned char[]> cso_data = make_unique<unsigned char[]>(cso_sz);
+			fread(cso_data.get(), cso_sz, 1, fp); // 用意した領域にデータを読み込む
+			fclose(fp);
 
-		// 生成
-		HRESULT hr = Systems::Device->CreatePixelShader(
-			cso_data.get(), // ピクセルシェーダーデータのポインタ
-			cso_sz,			// ピクセルシェーダーデータサイズ
-			nullptr,
-			pixel_shader    // ピクセルシェーダーオブジェクトのポインタの格納先
-		);
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
+			// 生成
+			HRESULT hr = Systems::Device->CreatePixelShader(
+				cso_data.get(), // ピクセルシェーダーデータのポインタ
+				cso_sz,			// ピクセルシェーダーデータサイズ
+				nullptr,
+				pixel_shader    // ピクセルシェーダーオブジェクトのポインタの格納先
+			);
+			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 
-		return hr;
+			PSshaders[(string)csoName] = *pixel_shader;
+		}
+
+		return S_OK;
+	}
+
+
+	HRESULT ResourceManager::CreateGsFromCso(
+		const char* csoName, // ピクセルシェーダーファイル名
+		ID3D11GeometryShader** geometry_shader // 格納するポインタ
+	)
+	{
+		if (PSshaders.count((string)csoName) == 1) {
+			*geometry_shader = GSshaders[(string)csoName];
+		}
+		else {
+			// ピクセルシェーダーファイルを開く
+			FILE* fp = nullptr;
+			fopen_s(&fp, csoName, "rb");
+			_ASSERT_EXPR_A(fp, "CSO File not found");
+
+			// ピクセルシェーダーファイルのサイズを求める
+			fseek(fp, 0, SEEK_END);
+			long cso_sz = ftell(fp);
+			fseek(fp, 0, SEEK_SET);
+
+			// メモリ上にピクセルシェーダーデータを格納する領域を用意する
+			unique_ptr<unsigned char[]> cso_data = make_unique<unsigned char[]>(cso_sz);
+			fread(cso_data.get(), cso_sz, 1, fp); // 用意した領域にデータを読み込む
+			fclose(fp);
+
+			// 生成
+			HRESULT hr = Systems::Device->CreateGeometryShader(
+				cso_data.get(), // ピクセルシェーダーデータのポインタ
+				cso_sz,			// ピクセルシェーダーデータサイズ
+				nullptr,
+				geometry_shader    // ピクセルシェーダーオブジェクトのポインタの格納先
+			);
+			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
+
+			GSshaders[(string)csoName] = *geometry_shader;
+		}
+
+		return S_OK;
+	}
+
+	HRESULT ResourceManager::CreateHsFromCso(
+		const char* csoName, // ピクセルシェーダーファイル名
+		ID3D11HullShader** hull_shader // 格納するポインタ
+	)
+	{
+		if (PSshaders.count((string)csoName) == 1) {
+			*hull_shader = HSshaders[(string)csoName];
+		}
+		else {
+			// ピクセルシェーダーファイルを開く
+			FILE* fp = nullptr;
+			fopen_s(&fp, csoName, "rb");
+			_ASSERT_EXPR_A(fp, "CSO File not found");
+
+			// ピクセルシェーダーファイルのサイズを求める
+			fseek(fp, 0, SEEK_END);
+			long cso_sz = ftell(fp);
+			fseek(fp, 0, SEEK_SET);
+
+			// メモリ上にピクセルシェーダーデータを格納する領域を用意する
+			unique_ptr<unsigned char[]> cso_data = make_unique<unsigned char[]>(cso_sz);
+			fread(cso_data.get(), cso_sz, 1, fp); // 用意した領域にデータを読み込む
+			fclose(fp);
+
+			// 生成
+			HRESULT hr = Systems::Device->CreateHullShader(
+				cso_data.get(), // ピクセルシェーダーデータのポインタ
+				cso_sz,			// ピクセルシェーダーデータサイズ
+				nullptr,
+				hull_shader    // ピクセルシェーダーオブジェクトのポインタの格納先
+			);
+			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
+
+			HSshaders[(string)csoName] = *hull_shader;
+		}
+
+		return S_OK;
+	}
+
+	HRESULT ResourceManager::CreateDsFromCso(
+		const char* csoName, // ピクセルシェーダーファイル名
+		ID3D11DomainShader** domain_shader // 格納するポインタ
+	)
+	{
+		if (PSshaders.count((string)csoName) == 1) {
+			*domain_shader = DSshaders[(string)csoName];
+		}
+		else {
+			// ピクセルシェーダーファイルを開く
+			FILE* fp = nullptr;
+			fopen_s(&fp, csoName, "rb");
+			_ASSERT_EXPR_A(fp, "CSO File not found");
+
+			// ピクセルシェーダーファイルのサイズを求める
+			fseek(fp, 0, SEEK_END);
+			long cso_sz = ftell(fp);
+			fseek(fp, 0, SEEK_SET);
+
+			// メモリ上にピクセルシェーダーデータを格納する領域を用意する
+			unique_ptr<unsigned char[]> cso_data = make_unique<unsigned char[]>(cso_sz);
+			fread(cso_data.get(), cso_sz, 1, fp); // 用意した領域にデータを読み込む
+			fclose(fp);
+
+			// 生成
+			HRESULT hr = Systems::Device->CreateDomainShader(
+				cso_data.get(), // ピクセルシェーダーデータのポインタ
+				cso_sz,			// ピクセルシェーダーデータサイズ
+				nullptr,
+				domain_shader    // ピクセルシェーダーオブジェクトのポインタの格納先
+			);
+			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
+
+			DSshaders[(string)csoName] = *domain_shader;
+		}
+
+		return S_OK;
 	}
 #pragma endregion
 
@@ -108,44 +244,35 @@ namespace Adollib
 #pragma region Load Texture
 
 	HRESULT ResourceManager::LoadTextureFromFile(
-		const wchar_t* fileName,                       // テクスチャのファイル名
-		ID3D11ShaderResourceView** shaderResourceView, // 格納するシェーダーリソースビューポインタ
-		D3D11_TEXTURE2D_DESC* texture2dDesc            // テクスチャリソースを格納するポインタ
+		const wchar_t* fileName,
+		ID3D11ShaderResourceView** pSRV, 
+		D3D11_TEXTURE2D_DESC* pTex2dDesc
 	)
 	{
 		HRESULT hr = S_OK;
 		Microsoft::WRL::ComPtr<ID3D11Resource> resource;
 
-		// リソース内のデータにアクセスするためのシェーダーリソースビューを作成する
-
-		// 辞書的な平衡二分木を作成し、既に作成済みのリソースビューがあれば共有する
-		static map<wstring, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>> cache;
-		auto it = cache.find(fileName); // 成功でその要素のイテレータを返す、失敗はmap.end()を返す
-		if (it != cache.end())
+		if(texturs.count((std::wstring)fileName) == 1)
 		{
-			// 見つかった場合、取得する
-
-			//it->second.Attach(*shader_resource_view);
-			*shaderResourceView = it->second.Get(); // 実態の取得
-			(*shaderResourceView)->AddRef();         // 参照カウントをインクリメントし寿命を延ばす
-			(*shaderResourceView)->GetResource(resource.GetAddressOf()); // リソースの取得
+			pSRV = texturs[(std::wstring)fileName].ShaderResourceView.GetAddressOf();
 		}
 		else
 		{
+			Texture& tex = texturs[(std::wstring)fileName];
+
 			// 見つからなかった場合は生成する
-			hr = DirectX::CreateWICTextureFromFile(Systems::Device.Get(), fileName, resource.GetAddressOf(), shaderResourceView);
+			hr = DirectX::CreateWICTextureFromFile(Systems::Device.Get(), fileName, resource.GetAddressOf(), &tex.ShaderResourceView);
+			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
+			pSRV = &tex.ShaderResourceView;
+
+			Microsoft::WRL::ComPtr<ID3D11Texture2D> texture2d;
+			hr = resource.Get()->QueryInterface<ID3D11Texture2D>(texture2d.GetAddressOf());
 			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 
-			// map挿入する
-			cache.insert(make_pair(fileName, *shaderResourceView));
+			// テクスチャリースのプロパティを取得する
+			texture2d->GetDesc(&tex.texture2d_desc);
+			pTex2dDesc = &tex.texture2d_desc;
 		}
-
-		Microsoft::WRL::ComPtr<ID3D11Texture2D> texture2d;
-		hr = resource.Get()->QueryInterface<ID3D11Texture2D>(texture2d.GetAddressOf()); // インターフェースの取得、確認するため的なやつ
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
-
-		// テクスチャリースのプロパティを取得する
-		texture2d->GetDesc(texture2dDesc);
 
 		return hr;
 	}

@@ -5,6 +5,8 @@
 class Texture
 {
 protected:
+
+public:
 	ComPtr<ID3D11ShaderResourceView> ShaderResourceView = nullptr;
 	ComPtr<ID3D11SamplerState> sampler = nullptr;
 	ComPtr<ID3D11RenderTargetView> RenderTargetView = nullptr;
@@ -12,7 +14,6 @@ protected:
 	// テクスチャ情報
 	D3D11_TEXTURE2D_DESC texture2d_desc;
 
-public:
 	Texture();
 	virtual ~Texture();
 	bool Load(const wchar_t* filename = nullptr);

@@ -17,8 +17,8 @@ namespace Adollib {
 		ComPtr<ID3D11VertexShader>		VS = nullptr; // 頂点シェーダ
 		ComPtr<ID3D11PixelShader>		PS = nullptr; // ピクセルシェーダ
 		ComPtr<ID3D11GeometryShader>	GS = nullptr; // ジオメトリシェーダ
-		//ComPtr<ID3D11HullShader>		HS = nullptr; //　ハルシェーダ
-		//ComPtr<ID3D11DomainShader>	DS = nullptr; //　ドメインネームシェーダ
+		ComPtr<ID3D11HullShader>		HS = nullptr; //　ハルシェーダ
+		ComPtr<ID3D11DomainShader>		DS = nullptr; //　ドメインネームシェーダ
 
 		ComPtr<ID3D11InputLayout>		VertexLayout;
 
@@ -29,9 +29,11 @@ namespace Adollib {
 		Shader() { /*ZeroMemory(this, sizeof(Shader));*/ }
 		virtual ~Shader();
 
-		bool Create(WCHAR* filename, LPCSTR VSName, LPCSTR PSName);
-		bool Create(WCHAR* filename, LPCSTR VSName, LPCSTR PSName, LPCSTR GSName);
-		bool Create(WCHAR* filename, LPCSTR VSName, LPCSTR PSName, LPCSTR GSName, LPCSTR HSName, LPCSTR DSName);
+		void Load_VS(const char* cso_name);
+		void Load_PS(const char* cso_name);
+		void Load_GS(const char* cso_name);
+		void Load_HS(const char* cso_name);
+		void Load_DS(const char* cso_name);
 
 		void Activate();
 	};
