@@ -17,6 +17,11 @@ ComPtr<ID3D11DepthStencilState>		Systems::DepthStencilState[2];
 ComPtr<ID3D11RasterizerState>		Systems::RasterizerState[RASTERIZE_TYPE];
 ComPtr<ID3D11BlendState>			Systems::BlendState[BLEND_TYPE];
 
+MonoInput* Systems::inputManager = nullptr;
+//MonoAudio* Systems::audioManager = nullptr;
+//Debug* framework::debug = nullptr;
+Time* Systems::time = nullptr;
+
 State_manager::DStypes Systems::DS_type = State_manager::DStypes::DS_TRUE;
 State_manager::RStypes Systems::RS_type = State_manager::RStypes::RS_CULL_BACK;
 State_manager::BStypes Systems::BS_type = State_manager::BStypes::BS_ADD;
@@ -35,6 +40,21 @@ bool Systems::Initialize(HWND hWnd, int width, int height)
 	InitializeRenderTarget();
 	CreateRasterizerState();
 	CreateBlendState();
+
+	Time::create();
+	time = Time::getInstancePtr();
+	time->initialize();
+	time->setFrameRate(60.0f);
+	time->isFloatFPS(false);
+	//// Debugの生成
+	//Debug::create();
+	//debug = Debug::getInstancePtr();
+
+	// 入力マネージャーの生成
+	MonoInput::create();
+	inputManager = MonoInput::getInstancePtr();
+	inputManager->initialize(hWnd);
+
 	return false;
 }
 

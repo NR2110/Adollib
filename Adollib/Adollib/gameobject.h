@@ -3,6 +3,8 @@
 #include <list>
 #include <memory>
 
+#include "input.h"
+#include "time.h"
 #include "object.h"
 #include "component.h"
 #include "transform.h"
@@ -13,7 +15,7 @@ namespace Adollib {
 	class Gameobject : public object {
 	private:
 		struct ConstantBufferPerGO {
-			DirectX::XMMATRIX world;
+			DirectX::XMFLOAT4X4 world;
 		};
 
 		ComPtr<ID3D11Buffer> world_cb; //WVP行列用バッファ
@@ -93,6 +95,107 @@ namespace Adollib {
 		// normal : 相対法線
 		//:::::::::::::::::::::::::
 		void set_collider_plane(vector3 pos, vector3 normal);
+
+
+		//activeが変更されたときの処理を呼び出す
+		void set_active(bool value) {
+			if (active == value)return;
+			if (value == false) {
+				auto itr = components.begin();
+				auto end = components.end();
+				while (itr != end)
+				{
+					itr->get()->onDisable();
+				}
+			}
+			else if (value == true) {
+				auto itr = components.begin();
+				auto end = components.end();
+				while (itr != end)
+				{
+					itr->get()->onEnable();
+				}
+			}
+		};
+		// ==============================================================
+		// このGameObjectにコンポーネントをアタッチする
+		// ==============================================================
+		// typename T	:	追加するコンポーネント名
+		// ==============================================================
+		// 戻り値 T*		:	追加したコンポーネントを返す。既にあるか、Componentから派生していない場合nullptr
+		// ==============================================================
+		template<typename T>
+		T* addComponent()
+		{
+			// 既に同一コンポーネントが存在する場合、Addしない
+			for (auto&& com : components)
+			{
+				//if (dynamic_cast<T*>(com) != nullptr)
+				if (typeid(T) == typeid(*com))
+				{
+					//static_assert(0, "ERROR");
+					return nullptr;
+				}
+			}
+
+			//std::shared_ptr<T> newCom = std::make_shared<T>();
+			T* newCom = new T();
+
+			// Componentクラスから派生したものかチェック
+			Component* pCom = dynamic_cast<Component*>(newCom);
+			if (pCom != nullptr)
+			{
+				components.emplace_back(std::shared_ptr<Component>(pCom));
+				pCom->transform = this->transform;
+				pCom->gameobject = this;
+				pCom->input = MonoInput::getInstancePtr();
+				pCom->time = Time::getInstancePtr();
+				pCom->awake();		// 初期化処理を定義してあるコンポーネントならばそれを呼ぶ
+				return newCom;
+			}
+			return nullptr;
+		}
+
+		// ==============================================================
+		// このGameObjectにアタッチされているコンポーネントを削除する
+		// ==============================================================
+		// typename T	:	削除したいコンポーネント名
+		// ==============================================================
+		// 戻り値 bool	:	削除したらtrue、していないならfalse
+		// ==============================================================
+		template<typename T>
+		bool removeComponent()
+		{
+			// 同一コンポーネントが存在する場合、removeする
+			for (auto itr = components.begin(), itr_end = components.end(); itr != itr_end; ++itr)
+			{
+				if (typeid(T*) == typeid(*itr))
+				{
+					T* component = dynamic_cast<T*>(*itr);
+					//delete component;
+					component->finalize();
+					components.erase(itr);
+					return true;
+				}
+			}
+			return false;
+		}
+
+
+		// ==============================================================
+		// このGameObjectにアタッチされているコンポーネントをすべて開放する
+		// ==============================================================
+		void clearComponent() {
+			auto itr = components.begin();
+			auto end = components.end();
+			while (itr != end)
+			{
+				itr->get()->finalize();
+				itr = components.erase(itr);
+			}
+			//components.clear();
+		}
+
 
 	};
 

@@ -15,6 +15,8 @@
 #pragma comment(lib,"d3d11.lib")
 
 #include "scene.h"
+#include "input.h"
+#include "time.h"
 #include "states_manager.h"
 
 using Microsoft::WRL::ComPtr;
@@ -42,6 +44,13 @@ namespace Adollib {
 		static const int BLEND_TYPE = 9; //blendstate‚ÌŽí—Þ
 		static ComPtr<ID3D11BlendState>		BlendState[BLEND_TYPE];
 		static bool CreateBlendState();
+
+	private:
+	public:
+		static MonoInput* inputManager;
+		static Time* time;
+		//static MonoAudio* audioManager;
+		//static Debug* debug;
 
 	public:
 		static int SCREEN_WIDTH;

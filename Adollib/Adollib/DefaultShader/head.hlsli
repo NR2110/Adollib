@@ -12,18 +12,18 @@ SamplerState DecalSampler : register(s0);
 //--------------------------------------------
 cbuffer CBPerObj : register(b0)
 {
-	matrix  World;
+	row_major float4x4  World;
 };
 
 cbuffer CBPerCamera : register(b1)
 {
-	matrix  View;
+	row_major float4x4  View;
 	float4	EyePos;
 };
 
 cbuffer CBPerSystem : register(b2)
 {
-	matrix  Projection;
+	row_major float4x4  Projection;
 };
 
 

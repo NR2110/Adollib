@@ -1,6 +1,7 @@
 
 #include "systems.h"
 #include "material.h"
+#include "matrix.h"
 
 namespace Adollib {
 	 Material::Material() {
@@ -19,6 +20,7 @@ namespace Adollib {
 
 		shader.Activate();
 
+		RS_state = State_manager::RStypes::RS_CULL_NONE;
 		if (Systems::BS_type != BS_state) Systems::SetBlendState(BS_state);
 		if (Systems::RS_type != RS_state) Systems::SetRasterizerState(RS_state);
 		if (Systems::DS_type != DS_state) Systems::SetDephtStencilState(DS_state);
@@ -30,8 +32,11 @@ namespace Adollib {
 			Systems::DeviceContext->IASetVertexBuffers(0, 1, mesh.vertexBuffer.GetAddressOf(), &stride, &offset);
 			Systems::DeviceContext->IASetIndexBuffer(mesh.indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 
-			//CB : material
+			//CB : ConstantBufferPerMaterial
 			ConstantBufferPerMaterial cb;
+			for (int i = 0; i < MAX_BONES; i++) {
+				cb.boneTransforms[i] = matrix_identity().get_XMFLOAT4X4();
+			}
 			{
 				// boneTransform
 				if (mesh.skeletalAnimation.size() > 0 && mesh.skeletalAnimation[animeIndex].size() > 0)

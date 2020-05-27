@@ -30,9 +30,9 @@ namespace Adollib{
 
 	void Gameobject::render() {
 
-		//CB : World
+		//CB : ConstantBufferPerWorld
 		ConstantBufferPerGO g_cb;
-		g_cb.world = get_word_matrix().get_XMMATRIX();
+		g_cb.world = get_word_matrix().get_XMFLOAT4X4();
 		Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
 		Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 		Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());

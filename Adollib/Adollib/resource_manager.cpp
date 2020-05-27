@@ -443,7 +443,7 @@ namespace Adollib
 			// アニメーションの取得
 			fetch_animations(fbxMesh, mesh.skeletalAnimation);
 
-			//// ボーンのウエイトの取得
+			// ボーンのウエイトの取得
 			vector<Mesh::bone_influences_per_control_point> bone_influences;
 			fetch_bone_influences(fbxMesh, bone_influences);
 

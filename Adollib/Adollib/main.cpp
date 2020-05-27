@@ -23,8 +23,11 @@ LRESULT CALLBACK fnWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
+	case WM_CREATE:
+		break;
 	case WM_ACTIVATEAPP:
-		//	DirectX::Keyboard::ProcessMessage(msg, wparam, lparam);
+		DirectX::Keyboard::ProcessMessage(msg, wparam, lparam);
+		DirectX::Mouse::ProcessMessage(msg, wparam, lparam);
 		break;
 	case WM_KEYDOWN:
 		if (wparam == VK_ESCAPE)
@@ -35,14 +38,30 @@ LRESULT CALLBACK fnWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 	case WM_SYSKEYDOWN:
 	case WM_KEYUP:
 	case WM_SYSKEYUP:
-		//	DirectX::Keyboard::ProcessMessage(msg, wparam, lparam);
+		DirectX::Keyboard::ProcessMessage(msg, wparam, lparam);
+		break;
+	case WM_INPUT:
+	case WM_MOUSEMOVE:
+	case WM_LBUTTONDOWN:
+	case WM_LBUTTONUP:
+	case WM_RBUTTONDOWN:
+	case WM_RBUTTONUP:
+	case WM_MBUTTONDOWN:
+	case WM_MBUTTONUP:
+	case WM_MOUSEWHEEL:
+	case WM_XBUTTONDOWN:
+	case WM_XBUTTONUP:
+	case WM_MOUSEHOVER:
+		DirectX::Mouse::ProcessMessage(msg, wparam, lparam);
 		break;
 	case WM_ENTERSIZEMOVE:
+		// WM_EXITSIZEMOVE is sent when the user grabs the resize bars.
+		Systems::time->stop();
 		break;
 	case WM_EXITSIZEMOVE:
-		break;
-	case WM_SETCURSOR:
-		ShowCursor(FALSE);
+		// WM_EXITSIZEMOVE is sent when the user releases the resize bars.
+		// Here we reset everything based on the new window dimensions.
+		Systems::time->start();
 		break;
 	default:
 		return DefWindowProc(hwnd, msg, wparam, lparam);

@@ -27,11 +27,11 @@ namespace Adollib {
 
 		//CB : ConstantBufferPerSystem
 		ConstantBufferPerSystem s_sb;
-		float fov = ToRadian(45);
+		float fov = ToRadian(60);
 		float aspect = (FLOAT)Systems::SCREEN_WIDTH / (FLOAT)Systems::SCREEN_HEIGHT;
 		float nearZ = 0.1f;
 		float farZ = 10000.0f;
-		s_sb.Projection = DirectX::XMMatrixPerspectiveFovLH(fov, aspect, nearZ, farZ);
+		DirectX::XMStoreFloat4x4(&s_sb.Projection, DirectX::XMMatrixPerspectiveFovLH(fov, aspect, nearZ, farZ));
 		Systems::DeviceContext->UpdateSubresource(projection_cb.Get(), 0, NULL, &s_sb, 0, 0);
 		Systems::DeviceContext->VSSetConstantBuffers(2, 1, projection_cb.GetAddressOf());
 		Systems::DeviceContext->PSSetConstantBuffers(2, 1, projection_cb.GetAddressOf());
@@ -92,6 +92,7 @@ namespace Adollib {
 			std::list<std::shared_ptr<Gameobject>>::iterator itr_end = gameobjects[Sce].end();
 
 			for (; itr != itr_end; itr++) {
+				if (itr->get()->active == false)return;
 				itr->get()->update();
 			}
 		}
@@ -101,6 +102,7 @@ namespace Adollib {
 			std::list<std::shared_ptr<Light>>::iterator itr_end = lights[Sce].end();
 
 			for (; itr != itr_end; itr++) {
+				if (itr->get()->active == false)return;
 				itr->get()->update();
 			}
 		}
@@ -110,6 +112,7 @@ namespace Adollib {
 			std::list<std::shared_ptr<Camera>>::iterator itr_end = cameras[Sce].end();
 
 			for (; itr != itr_end; itr++) {
+				if (itr->get()->active == false)return;
 				itr->get()->update();
 			}
 		}
@@ -136,11 +139,13 @@ namespace Adollib {
 			int spot_num = 0;
 			for (int i = 0; i < lights[Sce].size(); i++) {
 				for (int o = 0; o < itr_li->get()->PointLight.size(); o++) {
+					if (itr_li->get()->active == false)return;
 					PointLight[point_num] = *itr_li->get()->PointLight[o];
 					point_num++;
 				}
 
 				for (int o = 0; o < itr_li->get()->SpotLight.size(); o++) {
+					if (itr_li->get()->active == false)return;
 					SpotLight[spot_num] = *itr_li->get()->SpotLight[o];
 					spot_num++;
 				}
@@ -157,7 +162,8 @@ namespace Adollib {
 		//CB : ConstantBufferPerCamera
 		ConstantBufferPerCamera c_cb;
 		//そのシーンのカメラの数だけ回す
-		for (int i = 0; i < cameras[Sce].size(); i++) {
+		for (int i = 0; i < cameras[Sce].size(); i++, itr_ca++) {
+			if (itr_ca->get()->active == false)return;
 
 			// ビュー行列
 			vector3 pos = itr_ca->get()->get_world_position();
@@ -167,7 +173,7 @@ namespace Adollib {
 			DirectX::XMVECTOR eye = DirectX::XMVectorSet(pos.x, pos.y, pos.z, 1.0f);
 			DirectX::XMVECTOR focus = DirectX::XMVectorSet(look_pos.x, look_pos.y, look_pos.z, 1.0f);
 			DirectX::XMVECTOR up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f);
-			c_cb.View = DirectX::XMMatrixLookAtLH(eye, focus, up);
+			XMStoreFloat4x4(&c_cb.View, DirectX::XMMatrixLookAtLH(eye, focus, up));
 			c_cb.Eyepos = DirectX::XMFLOAT4(pos.x, pos.y, pos.z, 1.0f);
 			Systems::DeviceContext->UpdateSubresource(view_cb.Get(), 0, NULL, &c_cb, 0, 0);
 			Systems::DeviceContext->VSSetConstantBuffers(1, 1, view_cb.GetAddressOf());
@@ -178,6 +184,7 @@ namespace Adollib {
 			std::list<std::shared_ptr<Gameobject>>::iterator itr_end = gameobjects[Sce].end();
 
 			for (; itr != itr_end; itr++) {
+				if (itr->get()->active == false)return;
 				itr->get()->render();
 			}
 		}
@@ -242,7 +249,7 @@ namespace Adollib {
 		Value.get()->go_iterator = cameras[Sce].end();
 		Value.get()->this_scene = Sce;
 		Value.get()->transform = new Transfome;
-		Value.get()->transform->position = vector3(0, 0, -5);
+		Value.get()->transform->position = vector3(0, 0, 0);
 
 		return Value.get();
 	}
@@ -265,6 +272,8 @@ namespace Adollib {
 		Value.get()->go_iterator = gameobjects[Sce].end();
 		Value.get()->this_scene = Sce;
 		Value.get()->transform = new Transfome;
+		Value.get()->transform->position.z = 5;
+
 		Value.get()->material = new Material;
 		Value.get()->material->Load_VS("./DefaultShader/default_vs.cso");
 		Value.get()->material->Load_PS("./DefaultShader/default_ps.cso");

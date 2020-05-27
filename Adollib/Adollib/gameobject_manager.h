@@ -24,11 +24,11 @@ namespace Adollib {
 			SPOTLIGHT  SpotLight[SPOTMAX];	//スポットライト
 		};
 		struct ConstantBufferPerCamera {
-			DirectX::XMMATRIX View;
+			DirectX::XMFLOAT4X4 View;
 			DirectX::XMFLOAT4 Eyepos;
 		};
 		struct ConstantBufferPerSystem {
-			DirectX::XMMATRIX Projection;
+			DirectX::XMFLOAT4X4 Projection;
 		};
 		static Microsoft::WRL::ComPtr<ID3D11Buffer> light_cb;
 		static Microsoft::WRL::ComPtr<ID3D11Buffer> view_cb;
@@ -75,11 +75,50 @@ namespace Adollib {
 		// ==============================================================
 		// 戻り値　GameObject*	:	生成したGameObject*を返す
 		// ==============================================================
+
+
 		static Gameobject* createSphere(const std::string& go_name = "Sphere", Scenelist Sce = Scene::now_scene);
 		static Gameobject* createCylinder(const std::string& go_name = "Cylinder", Scenelist Sce = Scene::now_scene);
 		static Gameobject* createCube(const std::string& go_name = "Cube", Scenelist Sce = Scene::now_scene);
 		static Gameobject* createPlane(const std::string& go_name = "Plane", Scenelist Sce = Scene::now_scene);
 		static Gameobject* createSprite(const std::string& go_name = "Sprite", Scenelist Sce = Scene::now_scene);
+
+		static Gameobject* find(const std::string& name, Scenelist Sce = Scene::now_scene)
+		{
+			const auto itr_end = gameobjects[Sce].end();
+			for (auto itr = gameobjects[Sce].begin(); itr != itr_end; itr++)
+			{
+				if (itr->get()->name == name)
+				{
+					return itr->get();
+				}
+			}
+			return nullptr;
+		}
+		static Camera* find_camera(const std::string& name, Scenelist Sce = Scene::now_scene)
+		{
+			const auto itr_end = cameras[Sce].end();
+			for (auto itr = cameras[Sce].begin(); itr != itr_end; itr++)
+			{
+				if (itr->get()->name == name)
+				{
+					return itr->get();
+				}
+			}
+			return nullptr;
+		}
+		static Light* find_light(const std::string& name, Scenelist Sce = Scene::now_scene)
+		{
+			const auto itr_end = lights[Sce].end();
+			for (auto itr = lights[Sce].begin(); itr != itr_end; itr++)
+			{
+				if (itr->get()->name == name)
+				{
+					return itr->get();
+				}
+			}
+			return nullptr;
+		}
 
 
 	};

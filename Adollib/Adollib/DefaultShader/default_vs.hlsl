@@ -7,7 +7,7 @@ PSInput main(VSInput input)
 {
 	PSInput output = (PSInput)0;
 
-	//// BONE
+	// BONE
 	//float3 p = { 0, 0, 0 };
 	//float3 n = { 0, 0, 0 };
 	//int i = 0;
@@ -23,8 +23,8 @@ PSInput main(VSInput input)
 	// ワールド変換座標
 	float4 worldPos = mul(World, P);
 	// 射影空間に変換(列優先)
-	matrix matWVP = World * View * Projection;
-	P = mul(matWVP, P);
+	row_major float4x4 matWVP = mul(World, mul(View, Projection));
+	P = mul(P, matWVP);
 	// ワールド法線算出
 	float3 N = mul((float3x3)World, input.Normal);
 	N = normalize(N);//正規化
@@ -33,7 +33,6 @@ PSInput main(VSInput input)
 	//float3 E = EyePos.xyz;				// カメラ位置
 	//E = normalize(E - worldPos.xyz);	// 視点方向ベクトル
 	//									// ライトベクトル
-
 										// 出力値設定.
 	output.Position = P;
 	//output.Color = input.Color;

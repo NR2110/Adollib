@@ -1,8 +1,6 @@
 #include "gameobject_light.h"
 #include <d3d11.h>
 
-using namespace DirectX;
-
 namespace Adollib {
 
 	void Light::initialize() {
@@ -10,8 +8,8 @@ namespace Adollib {
 		//ZeroMemory(PointLight, sizeof(POINTLIGHT) * POINTMAX);
 		//ZeroMemory(SpotLight, sizeof(SPOTLIGHT) * SPOTMAX);
 
-		std::list <std::shared_ptr<Component>>::iterator itr = components.begin();
-		std::list <std::shared_ptr<Component>>::iterator itr_end = components.end();
+		std::list <std::shared_ptr<Component_light>>::iterator itr = components.begin();
+		std::list <std::shared_ptr<Component_light>>::iterator itr_end = components.end();
 
 		for (; itr != itr_end; itr++) {
 			itr->get()->start();
@@ -21,8 +19,8 @@ namespace Adollib {
 
 	void Light::update() {
 
-		std::list <std::shared_ptr<Component>>::iterator itr = components.begin();
-		std::list <std::shared_ptr<Component>>::iterator itr_end = components.end();
+		std::list <std::shared_ptr<Component_light>>::iterator itr = components.begin();
+		std::list <std::shared_ptr<Component_light>>::iterator itr_end = components.end();
 
 		for (; itr != itr_end; itr++) {
 			itr->get()->update();
@@ -32,7 +30,7 @@ namespace Adollib {
 
 
 
-	void Light::set_dirLight(XMFLOAT3 dir, XMFLOAT3 color)
+	void Light::set_dirLight(vector3 dir, vector3 color)
 	{
 		float d = sqrtf(dir.x * dir.x + dir.y * dir.y + dir.z * dir.z);
 
@@ -41,12 +39,12 @@ namespace Adollib {
 		DirLightColor = vector4(color.x, color.y, color.z, 1);
 
 	}
-	void Light::set_ambient(XMFLOAT3 amb)
+	void Light::set_ambient(vector3 amb)
 	{
 		Ambient = { amb.x,amb.y,amb.z,0 };
 
 	}
-	void Light::set_pointLight(XMFLOAT3 pos, XMFLOAT3 color, float range)
+	void Light::set_pointLight(vector3 pos, vector3 color, float range)
 	{
 		std::shared_ptr<POINTLIGHT> pointlight;
 		pointlight->range = range;
@@ -58,7 +56,7 @@ namespace Adollib {
 		PointLight.push_back(pointlight);
 
 	}
-	void Light::set_spotLight(XMFLOAT3 pos, XMFLOAT3 color, XMFLOAT3 dir,
+	void Light::set_spotLight(vector3 pos, vector3 color, vector3 dir,
 		float range, float near_area, float far_area)
 	{
 		std::shared_ptr<SPOTLIGHT> spotlight;

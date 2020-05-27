@@ -1,21 +1,27 @@
 #pragma once
 
 #include "object.h"
-
+#include "input.h"
+#include "time.h"
 #include <string>
 #include <memory>
 
 namespace Adollib
 {
+	class Gameobject;
+	class Transfome;
+
 	// ****************************************************
 	// gameobjectにアタッチされるすべてに対するベースクラス // TODO : インターフェースにしてもよいかも？
 	// ****************************************************
 	class Component : public object
 	{
 	public:
+		Gameobject* gameobject;	// このコンポーネントがアタッチされているGameObject
+		Transfome*  transform;	// GameObjectのTransformへのポインタ
 
-		// 更新処理の順を区別するためのフラグ
-		bool is_camera_component = false;	// カメラならばtrue //一番最後に更新する?
+		MonoInput* input = nullptr;
+		Time* time = nullptr;
 
 	public:
 		Component(const Component&) = delete;
@@ -25,7 +31,7 @@ namespace Adollib
 		virtual ~Component() = default;
 
 
-		// スクリプトをアタッチしたときに呼ぶ(transformの設定、これより前にアタッチしたコンポーネントまでしか取得できない)
+		// addComponentされたときに呼ばれる
 		virtual void awake() {};
 
 		// 所属するシーンの初期化時に一度だけ呼ばれる
@@ -43,29 +49,9 @@ namespace Adollib
 		// このスクリプトがアタッチされているGOのactiveSelfがfalseになった時呼ばれる
 		virtual void onDisable() {};
 
+		// removeComponent()、clear()時に呼ぶ
+		virtual void finalize() {};	
 
-
-		//QUESTION : なぜここに?
-		// ==============================================================
-		// このgameobjectにアタッチされているコンポーネントを取得する
-		// ==============================================================
-		// typename T	:	取得したいコンポーネント名
-		// ==============================================================
-		// 戻り値 T*		:	Tがあればそのポインタを、なければnullptrを返す
-		// ==============================================================
-		//template<typename T>
-		//T* get_component() const
-		//{
-		//	for (auto&& com : gameobject->components)
-		//	{
-		//		if (typeid(T) == typeid(*com))
-		//		{
-		//			T* component = dynamic_cast<T*>(com.get());
-		//			return component;
-		//		}
-		//	}
-		//	return nullptr;
-		//}
 	};
 
 
