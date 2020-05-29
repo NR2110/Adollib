@@ -6,6 +6,7 @@
 #include "input.h"
 #include "time.h"
 #include "object.h"
+#include "rigit_body.h"
 #include "component.h"
 #include "transform.h"
 #include "scene_list.h"
@@ -17,6 +18,10 @@ namespace Adollib {
 		struct ConstantBufferPerGO {
 			DirectX::XMFLOAT4X4 world;
 		};
+		struct collider_effect {
+			vector3 position;
+			quaternion orient;
+		};
 
 		ComPtr<ID3D11Buffer> world_cb; //WVP行列用バッファ
 	public:
@@ -27,12 +32,25 @@ namespace Adollib {
 
 		Material* material = nullptr;
 
-		std::list < std::shared_ptr< RigitBody_Transform>> collider; //アタッチされているcollider
+		std::list < std::shared_ptr<Rigitbody*>> collider; //アタッチされているcolliderへのポインタ
+		collider_effect co_e; //衝突計算から受ける処理の一時的保存場所
 
 		std::list <std::shared_ptr<Component>> components; //アタッチされているConponentのポインタ
 
 		Gameobject* pearent = nullptr; //親へのポインタ
 		std::list<std::shared_ptr<Gameobject>> children; //個へのポインタ
+
+		//すべての子を返す
+		std::list<std::shared_ptr<Gameobject>> get_children() {
+			std::list<std::shared_ptr<Gameobject>>::iterator itr = children.begin();
+			std::list<std::shared_ptr<Gameobject>> ret;
+
+			for (int i = 0; i < children.size(); i++) {
+				ret.splice(ret.end(), itr->get()->get_children());
+					itr++;
+			}
+			return ret;
+		};
 
 		bool active = true; //falseなら更新、描画を止める
 
@@ -52,49 +70,55 @@ namespace Adollib {
 		matrix get_word_matrix() {
 			matrix WorldMatrix;
 			if (pearent == nullptr) {
-				WorldMatrix = (transform->prientation).get_rotate_matrix();
-				WorldMatrix._41 = transform->position.x;
-				WorldMatrix._42 = transform->position.y;
-				WorldMatrix._43 = transform->position.z;
+				WorldMatrix = (transform->local_orient).get_rotate_matrix();
+
+				WorldMatrix._41 = transform->local_pos.x;
+				WorldMatrix._42 = transform->local_pos.y;
+				WorldMatrix._43 = transform->local_pos.z;
 			}
 			else {
-				WorldMatrix = (transform->prientation * pearent->transform->prientation).get_rotate_matrix();
-				WorldMatrix._41 = (transform->position + pearent->transform->position).x;
-				WorldMatrix._42 = (transform->position + pearent->transform->position).y;
-				WorldMatrix._43 = (transform->position + pearent->transform->position).z;
+				WorldMatrix = (pearent->transform->orientation * transform->local_orient).get_rotate_matrix();
+
+				WorldMatrix._41 = (pearent->transform->position + transform->local_pos).x;
+				WorldMatrix._42 = (pearent->transform->position + transform->local_pos).y;
+				WorldMatrix._43 = (pearent->transform->position + transform->local_pos).z;
 			}
 			return WorldMatrix;
 		};
 
 		//goのworld空間上でのの姿勢を返す
 		quaternion get_world_orientate() {
-			if (pearent != nullptr) return pearent->transform->prientation * transform->prientation;
-			else return transform->prientation;
+			if (pearent != nullptr) return pearent->transform->orientation * transform->local_orient;
+			else return transform->local_orient;
 		};
 		//goのworld空間上での座標を返す
 		vector3 get_world_position() {
-			if (pearent != nullptr) return pearent->transform->position + transform->position;
-			else return transform->position;
+			if (pearent != nullptr) return pearent->transform->position + transform->local_pos;
+			else return transform->local_pos;
 		};
+
+		void set_collider(Sphere* S, std::string tag, std::vector<std::string> no_hit_tag);
+		void set_collider(Box* B,    std::string tag, std::vector<std::string> no_hit_tag);
+		void set_collider(Plane* P,  std::string tag, std::vector<std::string> no_hit_tag);
 
 		//:::::::::::::::::::::::::
 		// pos : 描画座標からの相対座標
 		// r : 半径
 		//:::::::::::::::::::::::::
-		void set_collider_sphere(vector3 pos, float r);
+		void set_collider_sphere(vector3 pos, float r, float density = 1, std::string tag = std::string("Sphere"), std::vector<std::string> no_hit_tag = std::vector<std::string>());
 
 		//:::::::::::::::::::::::::
 		// pos : 描画座標からの相対座標
 		// size : 描画回転からの x,y,z の相対half_size
 		// rotate : 描画回転からの相対回転
 		//:::::::::::::::::::::::::
-		void set_collider_box(vector3 pos, vector3 size, quaternion orient);
+		void set_collider_box(vector3 pos, vector3 size, quaternion orient, float density = 1, std::string tag = std::string("Box"), std::vector<std::string> no_hit_tag = std::vector<std::string>());
 
 		//:::::::::::::::::::::::::
 		// pos : 相対座標
 		// normal : 相対法線
 		//:::::::::::::::::::::::::
-		void set_collider_plane(vector3 pos, vector3 normal);
+		void set_collider_plane(vector3 pos, vector3 normal, float density = 1, std::string tag = std::string("Plane"), std::vector<std::string> no_hit_tag = std::vector<std::string>());
 
 
 		//activeが変更されたときの処理を呼び出す

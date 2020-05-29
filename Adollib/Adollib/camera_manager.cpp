@@ -11,12 +11,12 @@ namespace Adollib
 {
 	// Š‘®‚·‚éƒV[ƒ“‚Ì‰Šú‰»Žž‚Éˆê“x‚¾‚¯ŒÄ‚Î‚ê‚é
 	void camera_manager_s::awake() {
-			set_camera(vector3(0, 0, 0), vector3(0, 0, 1));
+			set_camera(vector3(0, 0, -20), vector3(0, 0, 1));
 	}
 
 	void camera_manager_s::start()
 	{
-			set_camera(vector3(0, 0, 0), vector3(0, 0, 1));
+		//	set_camera(vector3(0, 0, 20), vector3(0, 0, 1));
 
 
 	}
@@ -104,8 +104,8 @@ namespace Adollib {
 		camera = Gameobject_manager::create_camera("camera");
 		camera->addComponent<camera_s>();
 
-		camera->transform->position = pos;
-		camera->transform->prientation = quaternion_look_at(pos, look_pos);
+		camera->transform->local_pos = pos;
+		camera->transform->local_orient = quaternion_look_at(pos, look_pos);
 
 		//camera->transform->local_position = pos.get_XM3();
 		//camera->transform->local_rotation = quaternion_look_at(pos, vector3(0, 0, 0)).euler().get_XM3();

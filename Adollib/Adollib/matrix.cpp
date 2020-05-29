@@ -330,6 +330,18 @@ vector3 Adollib::vector3_trans(const vector3& V, const matrix& M) {
 	return R;
 }
 
+matrix Adollib::matrix_world(const vector3& scale, const matrix& rotate, const vector3& trans) {
+	matrix ret = rotate;
+	ret._11 *= scale.x; ret._12 *= scale.x; ret._13 *= scale.x;
+	ret._21 *= scale.y; ret._22 *= scale.y; ret._23 *= scale.y;
+	ret._31 *= scale.z; ret._32 *= scale.z; ret._33 *= scale.z;
+	ret._41 += trans.x;
+	ret._42 += trans.x;
+	ret._43 += trans.x;
+	ret._44 = 1;
+
+	return ret;
+}
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 DirectX::XMMATRIX Adollib::matrix_to_XMMATRIX(const matrix& M) {

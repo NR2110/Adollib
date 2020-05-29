@@ -12,6 +12,7 @@ namespace Adollib
 		//protected:
 		//std::string name;	// オブジェクト名
 
+		bool updated;
 	public:
 		object() = default;
 		virtual ~object()

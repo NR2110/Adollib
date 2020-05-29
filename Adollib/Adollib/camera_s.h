@@ -8,8 +8,6 @@ namespace Adollib
 	class camera_s : public Component_camera
 	{
 	public:
-		vector3 position;
-		vector3 rotate;
 
 	public:
 		void awake();

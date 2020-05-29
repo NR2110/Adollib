@@ -89,6 +89,9 @@ namespace Adollib {
 	//vector3‚É‰ñ“]s—ñ‚ğ‚©‚¯‚é
 	vector3 vector3_trans(const vector3& V, const matrix& M);
 
+	//worlds—ñ‚Ì¶¬
+	matrix matrix_world(const vector3& scale, const matrix& rotate, const vector3& trans);
+
 	//matrix‚©‚çXMMATRIX‚Ö‚Ì•ÏŠ·
 	DirectX::XMMATRIX matrix_to_XMMATRIX(const matrix& M);
 

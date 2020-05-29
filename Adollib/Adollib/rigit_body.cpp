@@ -3,6 +3,8 @@
 using namespace Adollib;
 using namespace Contacts;
 
+#include "gameobject.h"
+
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 		#pragma region Rigitbody
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -13,28 +15,27 @@ void Rigitbody::integrate(float duration) {
 		//並進移動に加える力(accumulated_force)から加速度を出して並進速度を更新する
 		vector3 liner_acceleration; //加速度
 		liner_acceleration = accumulated_force / inertial_mass;
-		linear_velocity += liner_acceleration * duration;
 
-		//位置の行進
-		if(linear_velocity.norm() >= FLT_EPSILON)
-		position += linear_velocity * duration;
+		//位置の更新
+		linear_velocity += liner_acceleration * duration;
+		gameobject->transform->position += linear_velocity * duration;
+		
 
 		//各回転に加える力(accumulated_torque)から加速度を出して角速度を更新する
 		matrix inverse_inertia_tensor = matrix_inverse(inertial_tensor);
-		matrix rotation = orientation.get_rotate_matrix();
+		matrix rotation = local_orientation.get_rotate_matrix();
 		matrix transposed_rotation = matrix_trans(rotation);
 		inverse_inertia_tensor = transposed_rotation * inverse_inertia_tensor * rotation; //QUESTION : 何してるの?対角化?
 		vector3 angular_acceleration = vector3_trans(accumulated_torque, inverse_inertia_tensor);
 
 		angular_velocity += angular_acceleration * duration;
-
 		if (angular_velocity.norm() < FLT_EPSILON)angular_velocity = vector3(0, 0, 0);
 
 		//QUESTION : 上の式じゃダメなの?
 		//各速度による姿勢の更新 
 #if 1
-		orientation *= quaternion_radian_axis(angular_velocity.norm_sqr() * duration * 0.5, angular_velocity.unit_vect());
-		orientation = orientation.unit_vect();
+		gameobject->transform->orientation *= quaternion_radian_axis(angular_velocity.norm_sqr() * duration * 0.5, angular_velocity.unit_vect());
+		gameobject->transform->orientation = gameobject->transform->orientation.unit_vect();
 
 
 #else 
@@ -46,9 +47,17 @@ void Rigitbody::integrate(float duration) {
 #endif
 	}
 
+	//colliderのワールド情報の更新
+	world_position = world_position + gameobject->transform->position;
+	world_orientation = local_orientation + gameobject->transform->orientation;
+
 	//加速を0にする
 	accumulated_force = vector3(0, 0, 0);
 	accumulated_torque = vector3(0, 0, 0);
+}
+void Rigitbody::resolve_gameobject() {
+	gameobject->co_e.position += world_position - local_position;
+	gameobject->co_e.orient *= world_orientation * local_orientation.conjugate();
 }
 
 void Rigitbody::add_force(const vector3& force) {
@@ -73,7 +82,7 @@ matrix Rigitbody::inverse_inertial_tensor() const{
 		inverse_inertial_tensor = matrix_inverse(inertial_tensor);
 		if(1){
 			matrix rotation, transposed_rotation;
-			rotation = orientation.get_rotate_matrix();
+			rotation = local_orientation.get_rotate_matrix();
 			transposed_rotation = matrix_trans(rotation);
 			inverse_inertial_tensor = transposed_rotation * inverse_inertial_tensor * rotation;
 		}
@@ -109,11 +118,11 @@ bool intersect_sphere_sphere(vector3& normal, float& penetration, vector3& point
 
 	//相対速度からRayを求める
 	vector3 d = S0.linear_velocity - S1.linear_velocity;
-	if (vector3_dot(d, S1.position - S0.position) <= 0) return false; //離れていってる
+	if (vector3_dot(d, S1.world_position - S0.world_position) <= 0) return false; //離れていってる
 	penetration = d.norm_sqr();
 	d = d.unit_vect();
 
-	vector3 m = S0.position - S1.position;
+	vector3 m = S0.world_position - S1.world_position;
 	float b = vector3_dot(m, d);
 	float c = vector3_dot(m, m) - (S0.r + S1.r) * (S0.r + S1.r);
 
@@ -125,8 +134,8 @@ bool intersect_sphere_sphere(vector3& normal, float& penetration, vector3& point
 	if (penetration < time)return false; //このフレームの移動では衝突しない
 
 	penetration -= time;
-	point = S0.position + time * d;
-	normal = (point - S1.position).unit_vect();
+	point = S0.world_position + time * d;
+	normal = (point - S1.world_position).unit_vect();
 	point -= normal * S0.r;
 }
 
@@ -156,8 +165,8 @@ int Adollib::Contacts::generate_contact_sphere_sphere(Sphere& S0, Sphere& S1, st
 	}
 
 #else
-	vector3 p0 = S0.position;
-	vector3 p1 = S1.position;
+	vector3 p0 = S0.world_position;
+	vector3 p1 = S1.world_position;
 
 	vector3 n = p0 - p1;
 	float length = n.norm_sqr();
@@ -183,16 +192,16 @@ int Adollib::Contacts::generate_contact_sphere_sphere(Sphere& S0, Sphere& S1, st
 int Adollib::Contacts::generate_contact_sphere_plane(Sphere& sphere, Plane& plane, std::vector<Contact>& contacts, float restitution, bool half_space) {
 	//球面と平面の衝突判定を行う
 	matrix rotate, inverse_rotate;
-	rotate = plane.orientation.get_rotate_matrix();
-	rotate._41 = plane.position.x; //transpseの入力
-	rotate._42 = plane.position.y;
-	rotate._43 = plane.position.z;
+	rotate = plane.local_orientation.get_rotate_matrix();
+	rotate._41 = plane.world_position.x; //transpseの入力
+	rotate._42 = plane.world_position.y;
+	rotate._43 = plane.world_position.z;
 	rotate._44 = 1;
 	vector3 n(rotate._21, rotate._22, rotate._23); //QUESTION : なんでこれで法線になるの?
 	inverse_rotate = matrix_inverse(rotate);
 
 	vector3 p;
-	p = vector3_trans(sphere.position, inverse_rotate); //平面が"原点を通り"法線が(0,1,0)"の状態の時の球の中心座標
+	p = vector3_trans(sphere.world_position, inverse_rotate); //平面が"原点を通り"法線が(0,1,0)"の状態の時の球の中心座標
 
 	//平面の裏からの衝突判定
 	if (half_space && p.y < 0)return 0;
@@ -201,7 +210,7 @@ int Adollib::Contacts::generate_contact_sphere_plane(Sphere& sphere, Plane& plan
 
 		Contact contact;
 		contact.normal = p.y > 0 ? n : -n;
-		contact.point = sphere.position + p.y * -n;
+		contact.point = sphere.world_position + p.y * -n;
 		contact.penetration = sphere.r - abs(p.y);
 		contact.body[0] = &sphere;
 		contact.body[1] = &plane;
@@ -215,23 +224,23 @@ int Adollib::Contacts::generate_contact_sphere_plane(Sphere& sphere, Plane& plan
 int Adollib::Contacts::generate_contact_sphere_box(Sphere& sphere, Box& box, std::vector<Contact>& contacts, float restitution) {
 	//球とboxの衝突判定を行う
 	matrix rotate, inverse_rotate;
-	rotate = box.orientation.get_rotate_matrix();
-	rotate._41 = box.position.x; //transpseの入力
-	rotate._42 = box.position.y;
-	rotate._43 = box.position.z;
+	rotate = box.local_orientation.get_rotate_matrix();
+	rotate._41 = box.world_position.x; //transpseの入力
+	rotate._42 = box.world_position.y;
+	rotate._43 = box.world_position.z;
 	rotate._44 = 1;
 	inverse_rotate = matrix_inverse(rotate);
 
 	vector3 center;
-	center = vector3_trans(sphere.position, inverse_rotate); //boxが"中心原点"回転してない(orientが(0,0,1))"の状態の時の球の中心座標
+	center = vector3_trans(sphere.world_position, inverse_rotate); //boxが"中心原点"回転してない(orientが(0,0,1))"の状態の時の球の中心座標
 
 	matrix debug_init = rotate * inverse_rotate;
-	vector3 AAA = vector3_trans(vector3_trans(sphere.position, rotate), inverse_rotate);
-	matrix value = box.orientation.get_rotate_matrix();
-	vector3 BBB = vector3_trans(vector3_trans(sphere.position, value), matrix_inverse(value));
+	vector3 AAA = vector3_trans(vector3_trans(sphere.world_position, rotate), inverse_rotate);
+	matrix value = box.local_orientation.get_rotate_matrix();
+	vector3 BBB = vector3_trans(vector3_trans(sphere.world_position, value), matrix_inverse(value));
 	vector3 debug_pos_center = vector3_trans(center, rotate);
 	vector3 debug_pos_box_bymatrix = vector3_trans(vector3(0, 1, 0), rotate);
-	vector3 debug_pos_box_byquaternion = vector3_be_rotated_by_quaternion(vector3(0, 1, 0), box.orientation) + box.position;
+	vector3 debug_pos_box_byquaternion = vector3_be_rotated_by_quaternion(vector3(0, 1, 0), box.local_orientation) + box.world_position;
 
 	if (
 		abs(center.x) - sphere.r > box.half_size.x ||
@@ -257,7 +266,7 @@ int Adollib::Contacts::generate_contact_sphere_box(Sphere& sphere, Box& box, std
 
 		closest_point = vector3_trans(closest_point, rotate); //通常の座標に戻す
 		Contact contact;
-		contact.normal = (sphere.position - closest_point).unit_vect();
+		contact.normal = (sphere.world_position - closest_point).unit_vect();
 		contact.point = closest_point;
 		contact.penetration = sphere.r - distance;
 		contact.penetration *= 2;
@@ -289,15 +298,15 @@ int Adollib::Contacts::generate_contact_box_plane(Box& box, Plane& plane, std::v
 	};
 
 	vector3 n;
-	n = vector3_be_rotated_by_quaternion(vector3(0,1,0),plane.orientation); //orientationをベクトルに直す
-	float plane_distance = vector3_dot(n, plane.position);
+	n = vector3_be_rotated_by_quaternion(vector3(0,1,0),plane.local_orientation); //orientationをベクトルに直す
+	float plane_distance = vector3_dot(n, plane.world_position);
 
 	int contacts_used = 0;
 	for (int i = 0; i < 8; i++) {
 
 		//頂点をもとの座標に
-		vertices[i] = vector3_be_rotated_by_quaternion(vertices[i], box.orientation);
-		vertices[i] += box.position;
+		vertices[i] = vector3_be_rotated_by_quaternion(vertices[i], box.local_orientation);
+		vertices[i] += box.world_position;
 
 		float vertices_distance = vector3_dot(vertices[i], n); //平面の法線上に投影
 
@@ -634,17 +643,17 @@ bool sat_obb_obb(
 int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Contact>& contacts, float restitution)
 {
 	matrix m;
-	m = b0.orientation.get_rotate_matrix();
+	m = b0.local_orientation.get_rotate_matrix();
 	OBB obb0;
-	obb0.center = b0.position;
+	obb0.center = b0.world_position;
 	obb0.u_axes[0].x = m._11; obb0.u_axes[0].y = m._12; obb0.u_axes[0].z = m._13;
 	obb0.u_axes[1].x = m._21; obb0.u_axes[1].y = m._22; obb0.u_axes[1].z = m._23;
 	obb0.u_axes[2].x = m._31; obb0.u_axes[2].y = m._32; obb0.u_axes[2].z = m._33;
 	obb0.half_width = b0.half_size;
 
-	m = b1.orientation.get_rotate_matrix();
+	m = b1.local_orientation.get_rotate_matrix();
 	OBB obb1;
-	obb1.center = b1.position;
+	obb1.center = b1.world_position;
 	obb1.u_axes[0].x = m._11; obb1.u_axes[0].y = m._12; obb1.u_axes[0].z = m._13;
 	obb1.u_axes[1].x = m._21; obb1.u_axes[1].y = m._22; obb1.u_axes[1].z = m._23;
 	obb1.u_axes[2].x = m._31; obb1.u_axes[2].y = m._32; obb1.u_axes[2].z = m._33;
@@ -674,8 +683,8 @@ int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Co
 		if (vector3_dot(obb1.u_axes[1], d) > 0) p.y = -p.y;
 		if (vector3_dot(obb1.u_axes[2], d) > 0) p.z = -p.z;
 		//ワールド空間へ座標変換
-		vector3_be_rotated_by_quaternion(p, b1.orientation);
-		p += b1.position;
+		vector3_be_rotated_by_quaternion(p, b1.local_orientation);
+		p += b1.world_position;
 
 		//Contactオブジェクトを生成し、全てのメンバ変数に値をセットし、コンテナ(contacts)に追加する
 		Contact contact;
@@ -704,8 +713,8 @@ int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Co
 		if (vector3_dot(obb0.u_axes[1], d) > 0) p.y = -p.y;
 		if (vector3_dot(obb0.u_axes[2], d) > 0) p.z = -p.z;
 
-		vector3_be_rotated_by_quaternion(p, b0.orientation);
-		p += b0.position;
+		vector3_be_rotated_by_quaternion(p, b0.local_orientation);
+		p += b0.world_position;
 
 		Contact contact;
 		contact.normal = n;
@@ -735,8 +744,8 @@ int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Co
 			if (vector3_dot(obb0.u_axes[1], n) > 0) p[0].y = -p[0].y;
 			if (vector3_dot(obb0.u_axes[2], n) > 0) p[0].z = -p[0].z;
 			p[0][smallest_axis[0]] = 0;				 
-			vector3_be_rotated_by_quaternion(p[0], b0.orientation);
-			p[0] += b0.position;
+			vector3_be_rotated_by_quaternion(p[0], b0.local_orientation);
+			p[0] += b0.world_position;
 
 			//_DDM::I().AddCross(p[0], 1);
 			//_DDM::I().AddLine(b0.position, b0.position + smallest_penetration * 100 * obb0.u_axes[smallest_axis[0]]);
@@ -745,8 +754,8 @@ int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Co
 			if (vector3_dot(obb1.u_axes[1], n) > 0) p[1].y = -p[1].y;
 			if (vector3_dot(obb1.u_axes[2], n) > 0) p[1].z = -p[1].z;
 			p[1][smallest_axis[1]] = 0;
-			vector3_be_rotated_by_quaternion(p[1], b1.orientation);
-			p[1] += b1.position;
+			vector3_be_rotated_by_quaternion(p[1], b1.local_orientation);
+			p[1] += b1.world_position;
 
 			//_DDM::I().AddCross(p[1], 1);
 			//_DDM::I().AddLine(b1.position, b1.position + smallest_penetration * 100 * obb1.u_axes[smallest_axis[1]]);
@@ -774,11 +783,11 @@ void Contact::resolve()
 
 	//衝突時のそれぞれの速度
 	vector3 pdota;
-	pdota = vector3_cross(body[0]->angular_velocity, (point - body[0]->position));
+	pdota = vector3_cross(body[0]->angular_velocity, (point - body[0]->world_position));
 	pdota += body[0]->linear_velocity;
 
 	vector3 pdotb;
-	pdotb = vector3_cross(body[1]->angular_velocity, (point - body[1]->position));
+	pdotb = vector3_cross(body[1]->angular_velocity, (point - body[1]->world_position));
 	pdotb += body[1]->linear_velocity;
 
 	//衝突時の衝突平面法線方向の相対速度(結局衝突に使うのは法線方向への速さ)
@@ -792,8 +801,8 @@ void Contact::resolve()
 	float denominator = 0;
 	float term1 = body[0]->inverse_mass();
 	float term2 = body[1]->inverse_mass();
-	vector3 ra = point - body[0]->position;
-	vector3 rb = point - body[1]->position;
+	vector3 ra = point - body[0]->world_position;
+	vector3 rb = point - body[1]->world_position;
 	vector3 ta, tb;
 	ta = vector3_cross(ra, normal);
 	tb = vector3_cross(rb, normal);
@@ -859,20 +868,16 @@ void Contact::resolve()
 	//inertial_massがFLT_MAX
 	if (body[0]->is_movable() == false) {
 	//	body[0]->position += penetration * body[1]->inertial_mass / (body[0]->inertial_mass + body[1]->inertial_mass) * normal;
-		body[1]->position -= penetration * normal;
+		body[1]->world_position -= penetration * normal;
 	}
 	else if (body[1]->is_movable() == false) {
-		body[0]->position += penetration * normal;
+		body[0]->world_position += penetration * normal;
 		//	body[1]->position -= penetration * body[0]->inertial_mass / (body[0]->inertial_mass + body[1]->inertial_mass) * normal;
 	}
 	else {
-		body[0]->position += penetration * body[1]->inertial_mass / (body[0]->inertial_mass + body[1]->inertial_mass) * normal;
-		body[1]->position -= penetration * body[0]->inertial_mass / (body[0]->inertial_mass + body[1]->inertial_mass) * normal;
+		body[0]->world_position += penetration * body[1]->inertial_mass / (body[0]->inertial_mass + body[1]->inertial_mass) * normal;
+		body[1]->world_position -= penetration * body[0]->inertial_mass / (body[0]->inertial_mass + body[1]->inertial_mass) * normal;
 	}
-
-		if (isnan(body[0]->position.norm() + body[1]->position.norm())) {
-			int adfsgdhf = 0;
-		}
 
 }
 

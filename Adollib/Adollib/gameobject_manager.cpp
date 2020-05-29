@@ -1,6 +1,7 @@
 
 #include "systems.h"
 #include "gameobject_manager.h"
+#include "rigit_body_manager.h"
 #include "scene.h"
 #include "resource_manager.h"
 #include "cbuffer_manager.h"
@@ -84,8 +85,8 @@ namespace Adollib {
 	}
 
 	void Gameobject_manager::update(Scenelist Sce) {
-		if (Sce == Scenelist::scene_null)return;
 
+		if (Sce == Scenelist::scene_null)return;
 		{
 			//Sceのsceneにアタッチされたcomponentのupdateを呼ぶ
 			std::list<std::shared_ptr<Gameobject>>::iterator itr = gameobjects[Sce].begin();
@@ -116,6 +117,20 @@ namespace Adollib {
 				itr->get()->update();
 			}
 		}
+
+		Rigitbody_manager::update();
+
+		{
+			//Sceのsceneにアタッチされたcomponentのupdateを呼ぶ
+			std::list<std::shared_ptr<Gameobject>>::iterator itr = gameobjects[Sce].begin();
+			std::list<std::shared_ptr<Gameobject>>::iterator itr_end = gameobjects[Sce].end();
+
+			for (; itr != itr_end; itr++) {
+				itr->get()->transform->local_pos += itr->get()->co_e.position;
+				itr->get()->transform->local_orient *= itr->get()->co_e.orient;
+			}
+		}
+
 
 	}
 
@@ -272,7 +287,22 @@ namespace Adollib {
 		Value.get()->go_iterator = gameobjects[Sce].end();
 		Value.get()->this_scene = Sce;
 		Value.get()->transform = new Transfome;
-		Value.get()->transform->position.z = 5;
+
+		Value.get()->material = new Material;
+		Value.get()->material->Load_VS("./DefaultShader/default_vs.cso");
+		Value.get()->material->Load_PS("./DefaultShader/default_ps.cso");
+		ResourceManager::CreateModelFromFBX(&Value.get()->material->meshes, "./DefaultModel/sphere.fbx", "");
+
+		return Value.get();
+	}
+
+	Gameobject* Gameobject_manager::createCube(const std::string& go_name, Scenelist Sce) {
+		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
+		gameobjects[Sce].push_back(Value);
+		Value.get()->name = go_name;
+		Value.get()->go_iterator = gameobjects[Sce].end();
+		Value.get()->this_scene = Sce;
+		Value.get()->transform = new Transfome;
 
 		Value.get()->material = new Material;
 		Value.get()->material->Load_VS("./DefaultShader/default_vs.cso");
@@ -284,9 +314,21 @@ namespace Adollib {
 	//Gameobject* Gameobject_manager::createCylinder(const std::string& go_name) {
 
 	//}
-	//Gameobject* Gameobject_manager::createCube(const std::string& go_name) {
+	Gameobject* Gameobject_manager::createCylinder(const std::string& go_name, Scenelist Sce) {
+		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
+		gameobjects[Sce].push_back(Value);
+		Value.get()->name = go_name;
+		Value.get()->go_iterator = gameobjects[Sce].end();
+		Value.get()->this_scene = Sce;
+		Value.get()->transform = new Transfome;
 
-	//}
+		Value.get()->material = new Material;
+		Value.get()->material->Load_VS("./DefaultShader/default_vs.cso");
+		Value.get()->material->Load_PS("./DefaultShader/default_ps.cso");
+		ResourceManager::CreateModelFromFBX(&Value.get()->material->meshes, "./DefaultModel/cylinder.fbx", "");
+
+		return Value.get();
+	}
 	//Gameobject* Gameobject_manager::createPlane(const std::string& go_name) {
 
 	//}

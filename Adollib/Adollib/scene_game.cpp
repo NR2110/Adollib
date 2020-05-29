@@ -8,8 +8,9 @@ namespace Adollib {
 	void scene_game::initialize() {
 		int i = 0;
 
-		Gameobject* GO =  Gameobject_manager::createSphere();
+		Gameobject* GO =  Gameobject_manager::createCube();
 		GO->addComponent<camera_manager_s>();
+		GO->transform->local_pos = vector3(0, 0, 0);
 
 		//Gameobject_manager::create_camera();
 

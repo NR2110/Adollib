@@ -37,12 +37,12 @@ namespace Adollib {
 
 	public:
 		quaternion get_world_orientate() {
-			if (pearent != nullptr) return pearent->transform->prientation * transform->prientation;
-			else return transform->prientation;
+			if (pearent != nullptr) return pearent->transform->orientation * transform->local_orient;
+			else return transform->local_orient;
 		};
 		vector3 get_world_position() {
-			if (pearent != nullptr) return pearent->transform->position + transform->position;
-			else return transform->position;
+			if (pearent != nullptr) return pearent->transform->position + transform->local_pos;
+			else return transform->local_pos;
 		};
 
 		//active‚ª•ÏX‚³‚ê‚½‚Æ‚«‚Ìˆ—‚ðŒÄ‚Ño‚·

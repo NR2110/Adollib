@@ -15,6 +15,7 @@ void loop::Update(HWND hWnd, int width, int height) {
 	//Adollib::InputManager::getInstance()->update(hwnd);
 
 	Systems::inputManager->update();
+
 	scene_manager.update();
 	go_manager.update();
 

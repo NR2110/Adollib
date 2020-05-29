@@ -13,11 +13,17 @@
 
 namespace Adollib {
 
+	class Gameobject;
+
 	class Rigitbody {
 	public:
+		Gameobject* gameobject;           //親情報
 
-		vector3 position;           //座標
-		quaternion orientation;        //向き
+		vector3 world_position;				//ワールド座標
+		quaternion world_orientation;			//ワールド姿勢
+
+		vector3 local_position;             //goからの相対座標
+		quaternion local_orientation;       //goからの相対姿勢
 
 		vector3 linear_velocity;    //並進速度
 		vector3 angular_velocity;   //角速度
@@ -31,7 +37,7 @@ namespace Adollib {
 		vector3 accumulated_torque; //角回転に加える力
 
 		Rigitbody::Rigitbody() :
-			position(0, 0, 0), orientation(0, 0, 0, 1),
+			local_position(0, 0, 0), local_orientation(0, 0, 0, 1),
 			linear_velocity(0, 0, 0), angular_velocity(0, 0, 0),
 			inertial_mass(1), accumulated_force(0, 0, 0),
 			accumulated_torque(0, 0, 0)
@@ -40,6 +46,8 @@ namespace Adollib {
 		}
 
 		void integrate(float duration = 1);
+		
+		void resolve_gameobject();
 
 		void add_force(const vector3& force); //並進移動に力を加える
 
@@ -62,7 +70,7 @@ namespace Adollib {
 
 		Sphere(float r, float density, vector3 pos = vector3(0,0,0)) : r(r) {
 			//座標
-			position = pos;
+			local_position = pos;
 
 			//質量の計算
 			inertial_mass = 4.0f / 3.0f * r * r * r * DirectX::XM_PI * density;
@@ -99,15 +107,15 @@ namespace Adollib {
 			inertial_tensor._33 = FLT_MAX;
 
 			n = n.unit_vect();
-			position = n * d;
+			local_position = n * d;
 
 			vector3 Y(0, 1, 0);
 			float angle = acosf(vector3_dot(Y, n));
 			vector3 axis;
 			axis = vector3_cross(Y, n);
 			axis = axis.unit_vect();
-			orientation = quaternion_angle_axis(angle, axis);
-			orientation = orientation.unit_vect();
+			local_orientation = quaternion_angle_axis(angle, axis);
+			local_orientation = local_orientation.unit_vect();
 		}
 
 		//サイズの所得関数のオーバーライド
@@ -125,7 +133,7 @@ namespace Adollib {
 		//不動オブジェクトとして生成
 		Box(vector3 half_size, float density, vector3 pos = vector3(0,0,0)) : half_size(half_size) {
 			//座標
-			position = pos;
+			local_position = pos;
 
 			//質量の計算
 			inertial_mass = (half_size.x * half_size.y * half_size.z) * 8.0f * density;

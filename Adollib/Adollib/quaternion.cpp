@@ -131,7 +131,7 @@ quaternion quaternion::conjugate() const {
 	return quaternion(w, -x, -y, -z);
 }
 quaternion quaternion::inverse() const {
-	return conjugate() / norm();
+	return conjugate() / norm_sqr();
 }
 
 vector3 quaternion::euler() const {
@@ -206,7 +206,7 @@ quaternion Adollib::quaternion_slerp(const quaternion& Q1, const quaternion& Q2,
 
 	return quaternion(vector3_be_rotated_by_quaternion(Q1.get_NV3(), F));
 }
-quaternion Adollib::quaternion_by_euler(float x, float y, float z) {
+quaternion Adollib::quaternion_from_euler(float x, float y, float z) {
 	quaternion Rx = quaternion_angle_axis(x, vector3(1, 0, 0));
 	quaternion Ry = quaternion_angle_axis(y, vector3(0, 1, 0));
 	quaternion Rz = quaternion_angle_axis(z, vector3(0, 0, 1));
@@ -214,13 +214,27 @@ quaternion Adollib::quaternion_by_euler(float x, float y, float z) {
 	quaternion A = Rz * Rx * Ry;
 	return  A; 
 }
-quaternion Adollib::quaternion_by_euler(vector3 V) {
+quaternion Adollib::quaternion_from_euler(vector3 V) {
 	quaternion Rx = quaternion_angle_axis(V.x, vector3(1, 0, 0));
 	quaternion Ry = quaternion_angle_axis(V.y, vector3(0, 1, 0));
 	quaternion Rz = quaternion_angle_axis(V.z, vector3(0, 0, 1));
 
 	return Rz * Rx * Ry;
 }
+//quaternion Adollib::quaternion_from_euler_by_local_axis(vector3 Q, float x, float y, float z) {
+//	quaternion Rx = quaternion_angle_axis(x, Q);
+//	quaternion Ry = quaternion_angle_axis(y, Q);
+//	quaternion Rz = quaternion_angle_axis(z, Q);
+//
+//	return Rz * Rx * Ry;
+//}
+//quaternion Adollib::quaternion_from_euler_by_local_axis(vector3 Q, vector3 V) {
+//	quaternion Rx = quaternion_angle_axis(V.x, vector3(1, 0, 0));
+//	quaternion Ry = quaternion_angle_axis(V.y, vector3(0, 1, 0));
+//	quaternion Rz = quaternion_angle_axis(V.z, vector3(0, 0, 1));
+//
+//	return Rz * Rx * Ry;
+//}
 quaternion Adollib::quaternion_by_rotate_matrix(matrix& M) {
 	vector3 V = matrix_to_euler(M);
 	quaternion Rx = quaternion_angle_axis(V.x, vector3(1, 0, 0));
