@@ -26,12 +26,6 @@ State_manager::DStypes Systems::DS_type = State_manager::DStypes::DS_TRUE;
 State_manager::RStypes Systems::RS_type = State_manager::RStypes::RS_CULL_BACK;
 State_manager::BStypes Systems::BS_type = State_manager::BStypes::BS_ADD;
 
-
- int Systems::SCREEN_WIDTH = 1280;
- int Systems::SCREEN_HEIGHT = 720;
-
-float Systems::elapsed_time = 0;
-
 #pragma region Initialize
 
 bool Systems::Initialize(HWND hWnd, int width, int height)
@@ -134,8 +128,8 @@ HRESULT Systems::CreateDevice(HWND hWnd)
 
 	//スワップチェイン作成
 	DXGI_SWAP_CHAIN_DESC scd;
-	scd.BufferDesc.Width =  SCREEN_WIDTH;
-	scd.BufferDesc.Height = SCREEN_HEIGHT;
+	scd.BufferDesc.Width = Al_Global::SCREEN_WIDTH;
+	scd.BufferDesc.Height = Al_Global::SCREEN_HEIGHT;
 	scd.BufferDesc.RefreshRate.Numerator = 60;
 	scd.BufferDesc.RefreshRate.Denominator = 1;
 	scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -189,7 +183,7 @@ bool Systems::InitializeRenderTarget()
 	DeviceContext->OMSetRenderTargets(1, RenderTargetView.GetAddressOf(), DepthStencilView.Get());
 
 	// ビューポートの設定
-	SetViewPort(SCREEN_WIDTH, SCREEN_HEIGHT);
+	SetViewPort(Al_Global::SCREEN_WIDTH, Al_Global::SCREEN_HEIGHT);
 
 	return true;
 }
@@ -212,8 +206,8 @@ bool Systems::CreateDepthStencil()
 	// 深度ステンシル設定
 	D3D11_TEXTURE2D_DESC td;
 	ZeroMemory(&td, sizeof(D3D11_TEXTURE2D_DESC));
-	td.Width = SCREEN_WIDTH;
-	td.Height = SCREEN_HEIGHT;
+	td.Width = Al_Global::SCREEN_WIDTH;
+	td.Height = Al_Global::SCREEN_HEIGHT;
 	td.MipLevels = 1;
 	td.ArraySize = 1;
 	td.Format = DXGI_FORMAT_R24G8_TYPELESS;

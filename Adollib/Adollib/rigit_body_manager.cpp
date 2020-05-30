@@ -76,21 +76,21 @@ namespace Adollib
 					if (no_hit == true)continue;
 				}
 
-				switch (RBs[i].RB->collider_type) {
-				case Collidertype::Sphere:
-					if (RBs[o].RB->collider_type == Collidertype::Sphere) generate_contact_sphere_sphere(*RB_sphere_s[Sce][i].R, *RB_sphere_s[Sce][o].R, contacts, resituation);
-					else if (RBs[o].RB->collider_type == Collidertype::Box)    generate_contact_sphere_box(*RB_sphere_s[Sce][i].R, *RB_box_s[Sce][o - RB_sphere_s[Sce].size()].R, contacts, resituation);
-					else if (RBs[o].RB->collider_type == Collidertype::Plane)  generate_contact_sphere_plane(*RB_sphere_s[Sce][i].R, *RB_plane_s[Sce][o - RB_sphere_s[Sce].size() - RB_box_s[Sce].size()].R, contacts, resituation);
+				switch (RBs[i].rigit_body->shape) {
+				case Rigitbody_shape::shape_sphere:
+					if (RBs[o].rigit_body->shape == Rigitbody_shape::shape_sphere) generate_contact_sphere_sphere(*RB_sphere_s[Sce][i].R, *RB_sphere_s[Sce][o].R, contacts, resituation);
+					else if (RBs[o].rigit_body->shape == Rigitbody_shape::shape_box)    generate_contact_sphere_box(*RB_sphere_s[Sce][i].R, *RB_box_s[Sce][o - RB_sphere_s[Sce].size()].R, contacts, resituation);
+					else if (RBs[o].rigit_body->shape == Rigitbody_shape::shape_plane)  generate_contact_sphere_plane(*RB_sphere_s[Sce][i].R, *RB_plane_s[Sce][o - RB_sphere_s[Sce].size() - RB_box_s[Sce].size()].R, contacts, resituation);
 					break;
 
-				case Collidertype::Box:
-					if (RBs[o].RB->collider_type == Collidertype::Sphere) generate_contact_sphere_box(*RB_sphere_s[Sce][o].R, *RB_box_s[Sce][i - RB_sphere_s[Sce].size()].R, contacts, resituation);
-					else if (RBs[o].RB->collider_type == Collidertype::Box)    generate_contact_box_box(*RB_box_s[Sce][i - RB_sphere_s[Sce].size()].R, *RB_box_s[Sce][o - RB_sphere_s[Sce].size()].R, contacts, resituation);
-					else if (RBs[o].RB->collider_type == Collidertype::Plane)  generate_contact_box_plane(*RB_box_s[Sce][i - RB_sphere_s[Sce].size()].R, *RB_plane_s[Sce][o - RB_sphere_s[Sce].size() - RB_box_s[Sce].size()].R, contacts, resituation);
+				case Rigitbody_shape::shape_box:
+					if (RBs[o].rigit_body->shape == Rigitbody_shape::shape_sphere) generate_contact_sphere_box(*RB_sphere_s[Sce][o].R, *RB_box_s[Sce][i - RB_sphere_s[Sce].size()].R, contacts, resituation);
+					else if (RBs[o].rigit_body->shape == Rigitbody_shape::shape_box)    generate_contact_box_box(*RB_box_s[Sce][i - RB_sphere_s[Sce].size()].R, *RB_box_s[Sce][o - RB_sphere_s[Sce].size()].R, contacts, resituation);
+					else if (RBs[o].rigit_body->shape == Rigitbody_shape::shape_plane)  generate_contact_box_plane(*RB_box_s[Sce][i - RB_sphere_s[Sce].size()].R, *RB_plane_s[Sce][o - RB_sphere_s[Sce].size() - RB_box_s[Sce].size()].R, contacts, resituation);
 					break;
-				case Collidertype::Plane:
-					if (RBs[o].RB->collider_type == Collidertype::Sphere) generate_contact_sphere_plane(*RB_sphere_s[Sce][o].R, *RB_plane_s[Sce][i - RB_sphere_s[Sce].size() - RB_box_s[Sce].size()].R, contacts, resituation);
-					else if (RBs[o].RB->collider_type == Collidertype::Box)    generate_contact_box_plane(*RB_box_s[Sce][o - RB_sphere_s[Sce].size()].R, *RB_plane_s[Sce][i - RB_sphere_s[Sce].size() - RB_box_s[Sce].size()].R, contacts, resituation);
+				case Rigitbody_shape::shape_plane:
+					if (RBs[o].rigit_body->shape == Rigitbody_shape::shape_sphere) generate_contact_sphere_plane(*RB_sphere_s[Sce][o].R, *RB_plane_s[Sce][i - RB_sphere_s[Sce].size() - RB_box_s[Sce].size()].R, contacts, resituation);
+					else if (RBs[o].rigit_body->shape == Rigitbody_shape::shape_box)    generate_contact_box_plane(*RB_box_s[Sce][o - RB_sphere_s[Sce].size()].R, *RB_plane_s[Sce][i - RB_sphere_s[Sce].size() - RB_box_s[Sce].size()].R, contacts, resituation);
 					//else if (RB_2->collider_type == Collidertype::Plane)  generate_contact_sphere_plane(*RB_sphere_s[i].R, *RB_plane_s[o - RB_sphere_s[Sce].size() - RB_box_s.size()].R, contacts, resituation);
 					break;
 				default:
@@ -164,8 +164,6 @@ namespace Adollib {
 		push_A.No_hit_tag = No_hit_tag;
 		push_A.pearent = for_drawing;
 
-		push_A.collider_type = Collidertype::Sphere;
-
 		RB_sphere_s[Sce].push_back(push_A);
 	}
 	void Rigitbody_manager::set_rigitbody(Adollib::Box* R, Gameobject* for_drawing, std::string tag, std::vector<std::string> No_hit_tag, Scenelist Sce) {
@@ -175,8 +173,6 @@ namespace Adollib {
 		push_A.No_hit_tag = No_hit_tag;
 		push_A.pearent = for_drawing;
 
-		push_A.collider_type = Collidertype::Box;
-
 		RB_box_s[Sce].push_back(push_A);
 	}
 	void Rigitbody_manager::set_rigitbody(Adollib::Plane* R, Gameobject* for_drawing, std::string tag, std::vector<std::string> No_hit_tag, Scenelist Sce) {
@@ -185,8 +181,6 @@ namespace Adollib {
 		push_A.tag = tag;
 		push_A.No_hit_tag = No_hit_tag;
 		push_A.pearent = for_drawing;
-
-		push_A.collider_type = Collidertype::Plane;
 
 		RB_plane_s[Sce].push_back(push_A);
 	}

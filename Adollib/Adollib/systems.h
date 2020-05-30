@@ -9,7 +9,7 @@
 #include <memory>
 #include <map>
 #include <vector>
-
+#include "Adollib.h"
 #include <assert.h>
 
 #pragma comment(lib,"d3d11.lib")
@@ -53,21 +53,16 @@ namespace Adollib {
 		//static Debug* debug;
 
 	public:
-		static int SCREEN_WIDTH;
-		static int SCREEN_HEIGHT;
-
 		static ComPtr<ID3D11Device>			Device;
 		static ComPtr<ID3D11DeviceContext>	DeviceContext;
-
-		static float elapsed_time;
 
 		static bool Initialize(HWND hWnd, int width, int height);
 		static void Release();
 		static void Clear(DWORD color = 0x00000000);
 		static void Flip(int n = 0);
 
-		static int GetScreenWidth() { return SCREEN_WIDTH; }
-		static int GetScreenHeight() { return SCREEN_HEIGHT; }
+		//static int GetScreenWidth() { return Adollib::SCREEN_WIDTH; }
+		//static int GetScreenHeight() { return Adollib::SCREEN_HEIGHT; }
 		static ID3D11DepthStencilView* GetDepthStencilView() { return DepthStencilView.Get(); }
 		static ID3D11RenderTargetView* GetRenderTargetView() { return RenderTargetView.Get(); }
 

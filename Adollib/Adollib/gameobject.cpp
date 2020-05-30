@@ -1,6 +1,9 @@
 #include "gameobject.h"
 #include "systems.h"
 #include "rigit_body_manager.h"
+
+#include "material_for_collider.h"
+#include "Adollib.h"
 namespace Adollib{
 
 	void Gameobject::initialize() {
@@ -38,7 +41,15 @@ namespace Adollib{
 		Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 		Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 
-		material->render();
+		//material->render();
+
+		//if (Al_Global::render_collider_flag == false)  return;
+
+		for (int i = 0;i < collider.size();i++) {
+			Collider_renderer::render(collider[i]);
+		}
+		
+
 	}
 
 
@@ -55,6 +66,7 @@ namespace Adollib{
 
 		Sphere* sphere = new Sphere(r, density, pos); //衝突判定用の実体を生成
 		sphere->gameobject = this;
+		collider.push_back(sphere);
 		Rigitbody_manager::set_rigitbody(sphere, this, tag, no_hit_tag, this_scene); //衝突判定のマネージャーに渡す
 
 	}
@@ -69,6 +81,7 @@ namespace Adollib{
 		Box* box = new Box(size, density, pos); //衝突判定用の実体を生成
 		box->local_orientation = quaternion(1, 0, 0, 0);
 		box->gameobject = this;
+		collider.push_back(box);
 		Rigitbody_manager::set_rigitbody(box, this, tag, no_hit_tag, this_scene); //衝突判定のマネージャーに渡す
 	}
 
@@ -81,6 +94,7 @@ namespace Adollib{
 		float d = vector3_dot(normal, pos);
 		Plane* plane = new Plane(normal, d);
 		plane->gameobject = this;
+		collider.push_back(plane);
 		Rigitbody_manager::set_rigitbody(plane, this, tag, no_hit_tag, this_scene); //衝突判定のマネージャーに渡す
 	}
 

@@ -2,6 +2,7 @@
 #include <tchar.h>
 
 #include "systems.h"
+#include "Adollib.h"
 #include "loop.h"
 
 #include <math.h>
@@ -88,7 +89,7 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 	wcex.hIconSm = 0;
 	RegisterClassEx(&wcex);
 
-	RECT rc = { 0, 0, Systems::SCREEN_WIDTH, Systems::SCREEN_HEIGHT };
+	RECT rc = { 0, 0, Al_Global::SCREEN_WIDTH, Al_Global::SCREEN_HEIGHT };
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 	HWND hwnd = 
 		CreateWindow(
@@ -105,7 +106,7 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 		);
 	ShowWindow(hwnd, cmd_show);
 
-	if (FAILED(Systems::Initialize(hwnd, Systems::SCREEN_WIDTH, Systems::SCREEN_HEIGHT))){
+	if (FAILED(Systems::Initialize(hwnd, Al_Global::SCREEN_WIDTH, Al_Global::SCREEN_HEIGHT))){
 
 		return 0;
 	}
@@ -128,13 +129,13 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 		}
 		else
 		{
-			Systems::elapsed_time =
+			Al_Global::elapsed_time =
 				(GetTickCount64() - before) * 0.001f;
 
 			before = GetTickCount64();
 			float mspf = 1000.0f / fps;
 
-			Interval -= Systems::elapsed_time;
+			Interval -= Al_Global::elapsed_time;
 			fps++;
 			if (Interval < 0) {
 				std::ostringstream outs;
@@ -147,7 +148,7 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 			}
 
 			// XVE•`‰æ
-			loop.Update(hwnd, Systems::SCREEN_WIDTH, Systems::SCREEN_HEIGHT);
+			loop.Update(hwnd, Al_Global::SCREEN_WIDTH, Al_Global::SCREEN_HEIGHT);
 			loop.Render();
 		}
 	}

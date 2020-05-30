@@ -112,6 +112,9 @@
     <ClCompile Include="input.cpp">
       <Filter>Adollib\main</Filter>
     </ClCompile>
+    <ClCompile Include="material_for_collider.cpp">
+      <Filter>Adollib\object\mesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scene_title.h">
@@ -227,6 +230,9 @@
     </ClInclude>
     <ClInclude Include="time.h">
       <Filter>Adollib\main</Filter>
+    </ClInclude>
+    <ClInclude Include="material_for_collider.h">
+      <Filter>Adollib\object\mesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -11,16 +11,10 @@ namespace Adollib
 	class Rigitbody_manager
 	{
 	private:
-		enum class Collidertype {
-			Sphere,
-			Box,
-			Plane
-		};
 		struct RB_base {
 			Gameobject* pearent;
 			std::string tag;
 			std::vector<std::string> No_hit_tag;
-			Collidertype collider_type;
 		};
 		struct RB_sphere : public RB_base {
 			Adollib::Sphere* R;

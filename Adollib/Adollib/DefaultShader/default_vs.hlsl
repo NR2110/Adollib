@@ -35,8 +35,8 @@ PSInput main(VSInput input)
 	//									// ライトベクトル
 										// 出力値設定.
 	output.Position = P;
-	//output.Color = input.Color;
-	output.Color = float4(1, 1, 1, 1);
+	output.Color = materialColor;
+	//output.Color = float4(1, 1, 1, 1);
 	output.Tex = input.Tex;
 	output.wPos = worldPos.xyz;
 	//output.wEyeDir = E;

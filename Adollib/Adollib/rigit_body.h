@@ -15,9 +15,19 @@ namespace Adollib {
 
 	class Gameobject;
 
+	enum class Rigitbody_shape {
+		shape_box,
+		shape_sphere,
+		shape_plane
+
+	};
+
 	class Rigitbody {
 	public:
+
 		Gameobject* gameobject;           //親情報
+
+		Rigitbody_shape shape;
 
 		vector3 world_position;				//ワールド座標
 		quaternion world_orientation;			//ワールド姿勢
@@ -71,6 +81,9 @@ namespace Adollib {
 		float r; //半径
 
 		Sphere(float r, float density, vector3 pos = vector3(0,0,0)) : r(r) {
+			//shapeの設定
+			shape = Rigitbody_shape::shape_sphere;
+
 			//座標
 			local_position = pos;
 
@@ -98,6 +111,8 @@ namespace Adollib {
 	public:
 		//不動オブジェクトとして生成
 		Plane(vector3 n, float d) {
+			//shapeの設定
+			shape = Rigitbody_shape::shape_plane;
 
 			//質量の計算
 			inertial_mass = FLT_MAX;
@@ -134,6 +149,9 @@ namespace Adollib {
 
 		//不動オブジェクトとして生成
 		Box(vector3 half_size, float density, vector3 pos = vector3(0,0,0)) : half_size(half_size) {
+			//shapeの設定
+			shape = Rigitbody_shape::shape_box;
+
 			//座標
 			local_position = pos;
 

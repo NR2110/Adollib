@@ -1,5 +1,6 @@
 
 #include "systems.h"
+#include "Adollib.h"
 #include "transform.h"
 #include "gameobject.h"
 #include "camera_s.h"
@@ -50,18 +51,18 @@ namespace Adollib
 
 		//ƒJƒƒ‰‚Ì‰ñ“]
 		if (set_carsol_stop == false) {
-			float rotate_pow = 3 * Systems::elapsed_time;
+			float rotate_pow = 3 * Al_Global::elapsed_time;
 			vector3 rotate_vec = vector3(0, 0, 0);
-			rotate_vec.y = input->getCursorPosX() - Systems::SCREEN_WIDTH / 2;
-			rotate_vec.x = input->getCursorPosY() - Systems::SCREEN_HEIGHT / 2;
+			rotate_vec.y = input->getCursorPosX() - Al_Global::SCREEN_WIDTH / 2;
+			rotate_vec.x = input->getCursorPosY() - Al_Global::SCREEN_HEIGHT / 2;
 
 			rotate *= quaternion_angle_axis(rotate_vec.y, vector3(0, 1, 0));
 			rotate *= quaternion_angle_axis(rotate_vec.x, vector3_cross(vector3(0, 1, 0), vector3_be_rotated_by_quaternion(vector3(0, 0, 1), transform->local_orient)).unit_vect());
 
-			input->setCursorPos(Systems::SCREEN_WIDTH / 2, Systems::SCREEN_HEIGHT / 2);
+			input->setCursorPos(Al_Global::SCREEN_WIDTH / 2, Al_Global::SCREEN_HEIGHT / 2);
 		}
 		else {
-			float rotate_pow = 100 * Systems::elapsed_time;
+			float rotate_pow = 100 * Al_Global::elapsed_time;
 			vector3 rotate_vec = vector3(0, 0, 0);
 			if (input->getKeyState(Key::I))rotate_vec += vector3(-1, 0, 0);
 			if (input->getKeyState(Key::K))rotate_vec += vector3(+1, 0, 0);
@@ -74,13 +75,13 @@ namespace Adollib
 		}
 		if (input->getKeyTrigger(Key::P))
 			set_carsol_stop == true ?
-			set_carsol_stop = false, input->setCursorPos(Systems::SCREEN_WIDTH / 2, Systems::SCREEN_HEIGHT / 2):
-			set_carsol_stop = true,  input->setCursorPos(Systems::SCREEN_WIDTH / 2, Systems::SCREEN_HEIGHT / 2);
+			set_carsol_stop = false, input->setCursorPos(Al_Global::SCREEN_WIDTH / 2, Al_Global::SCREEN_HEIGHT / 2):
+			set_carsol_stop = true,  input->setCursorPos(Al_Global::SCREEN_WIDTH / 2, Al_Global::SCREEN_HEIGHT / 2);
 
 		//ƒJƒƒ‰‚ÌˆÚ“®
 		{
 			vector3 move_vec = vector3(0, 0, 0);
-			float   move_pow = 10 * Systems::elapsed_time;
+			float   move_pow = 10 * Al_Global::elapsed_time;
 			if (input->getKeyState(Key::W))move_vec += vector3(0, 0, +1);
 			if (input->getKeyState(Key::S))move_vec += vector3(0, 0, -1);
 			if (input->getKeyState(Key::D))move_vec += vector3(+1, 0, 0);

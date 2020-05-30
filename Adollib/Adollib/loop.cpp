@@ -23,7 +23,7 @@ void loop::Update(HWND hWnd, int width, int height) {
 
 void loop::Render(){
 
-	Systems::SetViewPort(Systems::SCREEN_WIDTH, Systems::SCREEN_HEIGHT);
+	Systems::SetViewPort(Al_Global::SCREEN_WIDTH, Al_Global::SCREEN_HEIGHT);
 
 	Systems::Clear();
 

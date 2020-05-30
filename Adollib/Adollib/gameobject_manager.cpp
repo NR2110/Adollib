@@ -2,6 +2,7 @@
 #include "systems.h"
 #include "gameobject_manager.h"
 #include "rigit_body_manager.h"
+#include "material_for_collider.h"
 #include "scene.h"
 #include "resource_manager.h"
 #include "cbuffer_manager.h"
@@ -30,7 +31,7 @@ namespace Adollib {
 		//CB : ConstantBufferPerSystem
 		ConstantBufferPerSystem s_sb;
 		float fov = ToRadian(60);
-		float aspect = (FLOAT)Systems::SCREEN_WIDTH / (FLOAT)Systems::SCREEN_HEIGHT;
+		float aspect = (FLOAT)Al_Global::SCREEN_WIDTH / (FLOAT)Al_Global::SCREEN_HEIGHT;
 		float nearZ = 0.1f;
 		float farZ = 10000.0f;
 		DirectX::XMStoreFloat4x4(&s_sb.Projection, DirectX::XMMatrixPerspectiveFovLH(fov, aspect, nearZ, farZ));
@@ -49,6 +50,8 @@ namespace Adollib {
 			std::list<std::shared_ptr<Camera>> ca_manager;
 			cameras[static_cast<Scenelist>(i)] = ca_manager;
 		}
+
+		Collider_renderer::initialize(); 
 
 	}
 

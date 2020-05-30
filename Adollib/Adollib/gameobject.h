@@ -26,7 +26,7 @@ namespace Adollib {
 
 		Material* material = nullptr;
 
-		std::list < std::shared_ptr<Rigitbody*>> collider; //アタッチされているcolliderへのポインタ
+		std::vector <Rigitbody*> collider; //アタッチされているcolliderへのポインタ
 
 		std::list <std::shared_ptr<Component>> components; //アタッチされているConponentのポインタ
 
