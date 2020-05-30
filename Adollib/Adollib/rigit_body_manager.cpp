@@ -43,13 +43,16 @@ namespace Adollib
 				RB_s.rigit_body = RB_plane_s[Sce][i - RB_sphere_s[Sce].size() - RB_box_s[Sce].size()].R;
 			}
 
-			RB_s.RB->pearent->co_e.orient = quaternion(0, 0, 0, 1);
+			RB_s.RB->pearent->co_e.orient = quaternion_identity();
 			RB_s.RB->pearent->co_e.position = vector3(0, 0, 0);
+
+			RBs.push_back(RB_s);
 		}
 
 #if USE_CHECK_CONTACT
 #else
 		for (int i = 0; i < RBs.size(); i++) {
+			RBs[i].rigit_body->update_world_trans();
 			RBs[i].rigit_body->integrate();
 		}
 #endif

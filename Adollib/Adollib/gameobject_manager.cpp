@@ -6,11 +6,12 @@
 #include "resource_manager.h"
 #include "cbuffer_manager.h"
 #include "light_types.h"
-
 namespace Adollib {
+
 	std::map<Scenelist, std::list<std::shared_ptr<Gameobject>>> Gameobject_manager::gameobjects;
 	std::map<Scenelist, std::list<std::shared_ptr<Light>>> Gameobject_manager::lights;
 	std::map<Scenelist, std::list<std::shared_ptr<Camera>>> Gameobject_manager::cameras;
+	vector<object*> Gameobject_manager::masters; //GO親子ツリーの頂点を保存
 
 	ComPtr<ID3D11Buffer> Gameobject_manager::light_cb;
 	ComPtr<ID3D11Buffer> Gameobject_manager::view_cb;
@@ -85,16 +86,21 @@ namespace Adollib {
 	}
 
 	void Gameobject_manager::update(Scenelist Sce) {
-
 		if (Sce == Scenelist::scene_null)return;
+
+		std::vector<object*> gos;
+		//updateを呼んだかのフラグを消すついでに
+		//扱いやすいように一つの配列に保存
 		{
 			//Sceのsceneにアタッチされたcomponentのupdateを呼ぶ
 			std::list<std::shared_ptr<Gameobject>>::iterator itr = gameobjects[Sce].begin();
 			std::list<std::shared_ptr<Gameobject>>::iterator itr_end = gameobjects[Sce].end();
 
 			for (; itr != itr_end; itr++) {
-				if (itr->get()->active == false)return;
-				itr->get()->update();
+				gos.push_back(itr->get());
+				itr->get()->updated = false;
+				itr->get()->co_e.position = vector3(0, 0, 0);
+				itr->get()->co_e.orient = quaternion_identity();
 			}
 		}
 		{
@@ -103,8 +109,10 @@ namespace Adollib {
 			std::list<std::shared_ptr<Light>>::iterator itr_end = lights[Sce].end();
 
 			for (; itr != itr_end; itr++) {
-				if (itr->get()->active == false)return;
-				itr->get()->update();
+				gos.push_back(itr->get());
+				itr->get()->updated = false;
+				itr->get()->co_e.position = vector3(0, 0, 0);
+				itr->get()->co_e.orient = quaternion_identity();
 			}
 		}
 		{
@@ -113,11 +121,26 @@ namespace Adollib {
 			std::list<std::shared_ptr<Camera>>::iterator itr_end = cameras[Sce].end();
 
 			for (; itr != itr_end; itr++) {
-				if (itr->get()->active == false)return;
-				itr->get()->update();
+				gos.push_back(itr->get());
+				itr->get()->updated = false;
+				itr->get()->co_e.position = vector3(0, 0, 0);
+				itr->get()->co_e.orient = quaternion_identity();
 			}
 		}
 
+		//ツリーの親を更新
+		masters.clear();
+		for (int i = 0; i < gos.size(); i++) {
+			object* master =  gos[i]->get_pearent();
+			if (master->updated == true)continue;
+			master->updated = true;
+			masters.push_back(master);
+		}
+
+		//親から子へupdateを呼ぶ
+		for (int i = 0; i < masters.size(); i++) {
+			masters[i]->update_P_to_C();
+		}
 		Rigitbody_manager::update();
 
 		{
@@ -128,7 +151,13 @@ namespace Adollib {
 			for (; itr != itr_end; itr++) {
 				itr->get()->transform->local_pos += itr->get()->co_e.position;
 				itr->get()->transform->local_orient *= itr->get()->co_e.orient;
+
 			}
+		}
+
+		//親から子へワールド情報を更新
+		for (int i = 0; i < masters.size(); i++) {
+			masters[i]->update_world_trans();
 		}
 
 
@@ -156,6 +185,7 @@ namespace Adollib {
 				for (int o = 0; o < itr_li->get()->PointLight.size(); o++) {
 					if (itr_li->get()->active == false)return;
 					PointLight[point_num] = *itr_li->get()->PointLight[o];
+				//	PointLight[point_num].pos = (*itr_li->get()->PointLight[o]->pos )+( *itr_li->get()->transform->position);
 					point_num++;
 				}
 
@@ -181,8 +211,8 @@ namespace Adollib {
 			if (itr_ca->get()->active == false)return;
 
 			// ビュー行列
-			vector3 pos = itr_ca->get()->get_world_position();
-			quaternion orient = itr_ca->get()->get_world_orientate();
+			vector3 pos = itr_ca->get()->transform->position;
+			quaternion orient = itr_ca->get()->transform->orientation;
 			vector3 look_pos = pos + vector3_be_rotated_by_quaternion(vector3(0, 0, 1), orient);
 
 			DirectX::XMVECTOR eye = DirectX::XMVectorSet(pos.x, pos.y, pos.z, 1.0f);
@@ -225,57 +255,58 @@ namespace Adollib {
 	Gameobject* Gameobject_manager::create(Scenelist Sce) {
 		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
 		gameobjects[Sce].push_back(Value);
-		Value.get()->go_iterator = gameobjects[Sce].end();
+		
+		//Value.get()->go_iterator = gameobjects[Sce].end();
 		Value.get()->this_scene = Sce;
-
+		Value.get()->initialize();
 		return Value.get();
 	}
 	Gameobject* Gameobject_manager::create(const std::string go_name, Scenelist Sce) {
 		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();;
 		gameobjects[Sce].push_back(Value);
 		Value.get()->name = go_name;
-		Value.get()->go_iterator = gameobjects[Sce].end();
+		//Value.get()->go_iterator = gameobjects[Sce].end();
 		Value.get()->this_scene = Sce;
-
+		Value.get()->initialize();
 		return Value.get();
 	}
 
 	Light* Gameobject_manager::create_light(Scenelist Sce) {
 		std::shared_ptr <Light> Value = std::make_shared<Light>();
 		lights[Sce].push_back(Value);
-		Value.get()->go_iterator = lights[Sce].end();
+		//Value.get()->go_iterator = lights[Sce].end();
 		Value.get()->this_scene = Sce;
-
+		Value.get()->initialize();
 		return Value.get();
 	}
 	Light* Gameobject_manager::create_light(const std::string go_name, Scenelist Sce) {
 		std::shared_ptr <Light> Value = std::make_shared<Light>();
 		lights[Sce].push_back(Value);
 		Value.get()->name = go_name;
-		Value.get()->go_iterator = lights[Sce].end();
+	//	Value.get()->go_iterator = lights[Sce].end();
 		Value.get()->this_scene = Sce;
-
+		Value.get()->initialize();
 		return Value.get();
 	}
 
 	Camera* Gameobject_manager::create_camera(Scenelist Sce) {
 		std::shared_ptr <Camera> Value = std::make_shared<Camera>();
 		cameras[Sce].push_back(Value);
-		Value.get()->go_iterator = cameras[Sce].end();
+		//Value.get()->go_iterator = cameras[Sce].end();
 		Value.get()->this_scene = Sce;
 		Value.get()->transform = new Transfome;
 		Value.get()->transform->position = vector3(0, 0, 0);
-
+		Value.get()->initialize();
 		return Value.get();
 	}
 	Camera* Gameobject_manager::create_camera(const std::string go_name, Scenelist Sce) {
 		std::shared_ptr <Camera> Value = std::make_shared<Camera>();
 		cameras[Sce].push_back(Value);
 		Value.get()->name = go_name;
-		Value.get()->go_iterator = cameras[Sce].end();
+		//Value.get()->go_iterator = cameras[Sce].end();
 		Value.get()->this_scene = Sce;
 		Value.get()->transform = new Transfome;
-
+		Value.get()->initialize();
 		return Value.get();
 	}
 
@@ -284,7 +315,7 @@ namespace Adollib {
 		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
 		gameobjects[Sce].push_back(Value);
 		Value.get()->name = go_name;
-		Value.get()->go_iterator = gameobjects[Sce].end();
+		//Value.get()->go_iterator = gameobjects[Sce].end();
 		Value.get()->this_scene = Sce;
 		Value.get()->transform = new Transfome;
 
@@ -292,7 +323,7 @@ namespace Adollib {
 		Value.get()->material->Load_VS("./DefaultShader/default_vs.cso");
 		Value.get()->material->Load_PS("./DefaultShader/default_ps.cso");
 		ResourceManager::CreateModelFromFBX(&Value.get()->material->meshes, "./DefaultModel/sphere.fbx", "");
-
+		Value.get()->initialize();
 		return Value.get();
 	}
 
@@ -300,7 +331,7 @@ namespace Adollib {
 		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
 		gameobjects[Sce].push_back(Value);
 		Value.get()->name = go_name;
-		Value.get()->go_iterator = gameobjects[Sce].end();
+		//Value.get()->go_iterator = gameobjects[Sce].end();
 		Value.get()->this_scene = Sce;
 		Value.get()->transform = new Transfome;
 
@@ -308,7 +339,7 @@ namespace Adollib {
 		Value.get()->material->Load_VS("./DefaultShader/default_vs.cso");
 		Value.get()->material->Load_PS("./DefaultShader/default_ps.cso");
 		ResourceManager::CreateModelFromFBX(&Value.get()->material->meshes, "./DefaultModel/cube.fbx", "");
-
+		Value.get()->initialize();
 		return Value.get();
 	}
 	//Gameobject* Gameobject_manager::createCylinder(const std::string& go_name) {
@@ -318,7 +349,7 @@ namespace Adollib {
 		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
 		gameobjects[Sce].push_back(Value);
 		Value.get()->name = go_name;
-		Value.get()->go_iterator = gameobjects[Sce].end();
+		//Value.get()->go_iterator = gameobjects[Sce].end();
 		Value.get()->this_scene = Sce;
 		Value.get()->transform = new Transfome;
 
@@ -326,7 +357,7 @@ namespace Adollib {
 		Value.get()->material->Load_VS("./DefaultShader/default_vs.cso");
 		Value.get()->material->Load_PS("./DefaultShader/default_ps.cso");
 		ResourceManager::CreateModelFromFBX(&Value.get()->material->meshes, "./DefaultModel/cylinder.fbx", "");
-
+		Value.get()->initialize();
 		return Value.get();
 	}
 	//Gameobject* Gameobject_manager::createPlane(const std::string& go_name) {

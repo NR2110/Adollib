@@ -25,7 +25,7 @@ namespace Adollib {
 		if (Systems::RS_type != RS_state) Systems::SetRasterizerState(RS_state);
 		if (Systems::DS_type != DS_state) Systems::SetDephtStencilState(DS_state);
 
-		for (Mesh::mesh mesh : meshes)
+		for (Mesh::mesh mesh : *meshes)
 		{
 			UINT stride = sizeof(VertexFormat);
 			UINT offset = 0;

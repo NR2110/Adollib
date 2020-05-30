@@ -18,7 +18,7 @@ void Rigitbody::integrate(float duration) {
 
 		//位置の更新
 		linear_velocity += liner_acceleration * duration;
-		gameobject->transform->position += linear_velocity * duration;
+		world_position += linear_velocity * duration;
 		
 
 		//各回転に加える力(accumulated_torque)から加速度を出して角速度を更新する
@@ -34,8 +34,8 @@ void Rigitbody::integrate(float duration) {
 		//QUESTION : 上の式じゃダメなの?
 		//各速度による姿勢の更新 
 #if 1
-		gameobject->transform->orientation *= quaternion_radian_axis(angular_velocity.norm_sqr() * duration * 0.5, angular_velocity.unit_vect());
-		gameobject->transform->orientation = gameobject->transform->orientation.unit_vect();
+		world_orientation *= quaternion_radian_axis(angular_velocity.norm_sqr() * duration * 0.5, angular_velocity.unit_vect());
+		world_orientation = world_orientation.unit_vect();
 
 
 #else 
@@ -48,16 +48,20 @@ void Rigitbody::integrate(float duration) {
 	}
 
 	//colliderのワールド情報の更新
-	world_position = world_position + gameobject->transform->position;
-	world_orientation = local_orientation + gameobject->transform->orientation;
+	//world_position = local_position + gameobject->transform->position;
+	//world_orientation = local_orientation + gameobject->transform->orientation;
 
 	//加速を0にする
 	accumulated_force = vector3(0, 0, 0);
 	accumulated_torque = vector3(0, 0, 0);
 }
 void Rigitbody::resolve_gameobject() {
-	gameobject->co_e.position += world_position - local_position;
-	gameobject->co_e.orient *= world_orientation * local_orientation.conjugate();
+	gameobject->co_e.position += world_position - local_position - gameobject->get_world_position();
+	gameobject->co_e.orient *= world_orientation * local_orientation.conjugate() * gameobject->get_world_orientate().conjugate();
+}
+void Rigitbody::update_world_trans() {
+	world_position = gameobject->get_world_position() + local_position;
+	world_orientation = gameobject->get_world_orientate() * local_orientation;
 }
 
 void Rigitbody::add_force(const vector3& force) {
@@ -192,7 +196,7 @@ int Adollib::Contacts::generate_contact_sphere_sphere(Sphere& S0, Sphere& S1, st
 int Adollib::Contacts::generate_contact_sphere_plane(Sphere& sphere, Plane& plane, std::vector<Contact>& contacts, float restitution, bool half_space) {
 	//球面と平面の衝突判定を行う
 	matrix rotate, inverse_rotate;
-	rotate = plane.local_orientation.get_rotate_matrix();
+	rotate = plane.world_orientation.get_rotate_matrix();
 	rotate._41 = plane.world_position.x; //transpseの入力
 	rotate._42 = plane.world_position.y;
 	rotate._43 = plane.world_position.z;
@@ -224,7 +228,7 @@ int Adollib::Contacts::generate_contact_sphere_plane(Sphere& sphere, Plane& plan
 int Adollib::Contacts::generate_contact_sphere_box(Sphere& sphere, Box& box, std::vector<Contact>& contacts, float restitution) {
 	//球とboxの衝突判定を行う
 	matrix rotate, inverse_rotate;
-	rotate = box.local_orientation.get_rotate_matrix();
+	rotate = box.world_orientation.get_rotate_matrix();
 	rotate._41 = box.world_position.x; //transpseの入力
 	rotate._42 = box.world_position.y;
 	rotate._43 = box.world_position.z;
@@ -234,13 +238,13 @@ int Adollib::Contacts::generate_contact_sphere_box(Sphere& sphere, Box& box, std
 	vector3 center;
 	center = vector3_trans(sphere.world_position, inverse_rotate); //boxが"中心原点"回転してない(orientが(0,0,1))"の状態の時の球の中心座標
 
-	matrix debug_init = rotate * inverse_rotate;
-	vector3 AAA = vector3_trans(vector3_trans(sphere.world_position, rotate), inverse_rotate);
-	matrix value = box.local_orientation.get_rotate_matrix();
-	vector3 BBB = vector3_trans(vector3_trans(sphere.world_position, value), matrix_inverse(value));
-	vector3 debug_pos_center = vector3_trans(center, rotate);
-	vector3 debug_pos_box_bymatrix = vector3_trans(vector3(0, 1, 0), rotate);
-	vector3 debug_pos_box_byquaternion = vector3_be_rotated_by_quaternion(vector3(0, 1, 0), box.local_orientation) + box.world_position;
+	//matrix debug_init = rotate * inverse_rotate;
+	//vector3 AAA = vector3_trans(vector3_trans(sphere.world_position, rotate), inverse_rotate);
+	//matrix value = box.world_orientation.get_rotate_matrix();
+	//vector3 BBB = vector3_trans(vector3_trans(sphere.world_position, value), matrix_inverse(value));
+	//vector3 debug_pos_center = vector3_trans(center, rotate);
+	//vector3 debug_pos_box_bymatrix = vector3_trans(vector3(0, 1, 0), rotate);
+	//vector3 debug_pos_box_byquaternion = vector3_be_rotated_by_quaternion(vector3(0, 1, 0), box.world_orientation) + box.world_position;
 
 	if (
 		abs(center.x) - sphere.r > box.half_size.x ||
@@ -298,14 +302,14 @@ int Adollib::Contacts::generate_contact_box_plane(Box& box, Plane& plane, std::v
 	};
 
 	vector3 n;
-	n = vector3_be_rotated_by_quaternion(vector3(0,1,0),plane.local_orientation); //orientationをベクトルに直す
+	n = vector3_be_rotated_by_quaternion(vector3(0,1,0),plane.world_orientation); //orientationをベクトルに直す
 	float plane_distance = vector3_dot(n, plane.world_position);
 
 	int contacts_used = 0;
 	for (int i = 0; i < 8; i++) {
 
 		//頂点をもとの座標に
-		vertices[i] = vector3_be_rotated_by_quaternion(vertices[i], box.local_orientation);
+		vertices[i] = vector3_be_rotated_by_quaternion(vertices[i], box.world_orientation);
 		vertices[i] += box.world_position;
 
 		float vertices_distance = vector3_dot(vertices[i], n); //平面の法線上に投影
@@ -643,7 +647,7 @@ bool sat_obb_obb(
 int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Contact>& contacts, float restitution)
 {
 	matrix m;
-	m = b0.local_orientation.get_rotate_matrix();
+	m = b0.world_orientation.get_rotate_matrix();
 	OBB obb0;
 	obb0.center = b0.world_position;
 	obb0.u_axes[0].x = m._11; obb0.u_axes[0].y = m._12; obb0.u_axes[0].z = m._13;
@@ -651,7 +655,7 @@ int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Co
 	obb0.u_axes[2].x = m._31; obb0.u_axes[2].y = m._32; obb0.u_axes[2].z = m._33;
 	obb0.half_width = b0.half_size;
 
-	m = b1.local_orientation.get_rotate_matrix();
+	m = b1.world_orientation.get_rotate_matrix();
 	OBB obb1;
 	obb1.center = b1.world_position;
 	obb1.u_axes[0].x = m._11; obb1.u_axes[0].y = m._12; obb1.u_axes[0].z = m._13;
@@ -683,7 +687,7 @@ int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Co
 		if (vector3_dot(obb1.u_axes[1], d) > 0) p.y = -p.y;
 		if (vector3_dot(obb1.u_axes[2], d) > 0) p.z = -p.z;
 		//ワールド空間へ座標変換
-		vector3_be_rotated_by_quaternion(p, b1.local_orientation);
+		vector3_be_rotated_by_quaternion(p, b1.world_orientation);
 		p += b1.world_position;
 
 		//Contactオブジェクトを生成し、全てのメンバ変数に値をセットし、コンテナ(contacts)に追加する
@@ -713,7 +717,7 @@ int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Co
 		if (vector3_dot(obb0.u_axes[1], d) > 0) p.y = -p.y;
 		if (vector3_dot(obb0.u_axes[2], d) > 0) p.z = -p.z;
 
-		vector3_be_rotated_by_quaternion(p, b0.local_orientation);
+		vector3_be_rotated_by_quaternion(p, b0.world_orientation);
 		p += b0.world_position;
 
 		Contact contact;
@@ -744,7 +748,7 @@ int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Co
 			if (vector3_dot(obb0.u_axes[1], n) > 0) p[0].y = -p[0].y;
 			if (vector3_dot(obb0.u_axes[2], n) > 0) p[0].z = -p[0].z;
 			p[0][smallest_axis[0]] = 0;				 
-			vector3_be_rotated_by_quaternion(p[0], b0.local_orientation);
+			vector3_be_rotated_by_quaternion(p[0], b0.world_orientation);
 			p[0] += b0.world_position;
 
 			//_DDM::I().AddCross(p[0], 1);
@@ -754,7 +758,7 @@ int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Co
 			if (vector3_dot(obb1.u_axes[1], n) > 0) p[1].y = -p[1].y;
 			if (vector3_dot(obb1.u_axes[2], n) > 0) p[1].z = -p[1].z;
 			p[1][smallest_axis[1]] = 0;
-			vector3_be_rotated_by_quaternion(p[1], b1.local_orientation);
+			vector3_be_rotated_by_quaternion(p[1], b1.world_orientation);
 			p[1] += b1.world_position;
 
 			//_DDM::I().AddCross(p[1], 1);

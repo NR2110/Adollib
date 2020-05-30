@@ -34,6 +34,8 @@ namespace Adollib {
 		static Microsoft::WRL::ComPtr<ID3D11Buffer> view_cb;
 		static Microsoft::WRL::ComPtr<ID3D11Buffer> projection_cb;
 
+		static vector<object*> masters; //GO親子ツリーの頂点を保存
+
 	public:
 		//実体はすべてここで保存する
 		static std::map<Scenelist, std::list<std::shared_ptr<Gameobject>>> gameobjects;

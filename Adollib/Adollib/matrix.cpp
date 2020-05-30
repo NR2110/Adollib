@@ -336,8 +336,8 @@ matrix Adollib::matrix_world(const vector3& scale, const matrix& rotate, const v
 	ret._21 *= scale.y; ret._22 *= scale.y; ret._23 *= scale.y;
 	ret._31 *= scale.z; ret._32 *= scale.z; ret._33 *= scale.z;
 	ret._41 += trans.x;
-	ret._42 += trans.x;
-	ret._43 += trans.x;
+	ret._42 += trans.y;
+	ret._43 += trans.z;
 	ret._44 = 1;
 
 	return ret;

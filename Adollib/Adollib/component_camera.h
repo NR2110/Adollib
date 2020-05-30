@@ -15,7 +15,7 @@ namespace Adollib
 	// ****************************************************
 	// gameobject_cameraにアタッチされるすべてに対するベースクラス // TODO : インターフェースにしてもよいかも？
 	// ****************************************************
-	class Component_camera : public object
+	class Component_camera 
 	{
 	public:
 		Camera*    gameobject;	// このコンポーネントがアタッチされているGameObject
@@ -25,6 +25,7 @@ namespace Adollib
 		Time* time = nullptr;
 
 	public:
+
 		Component_camera(const Component_camera&) = delete;
 		Component_camera& operator=(const Component_camera&) = delete;
 

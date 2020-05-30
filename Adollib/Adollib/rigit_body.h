@@ -47,7 +47,9 @@ namespace Adollib {
 
 		void integrate(float duration = 1);
 		
-		void resolve_gameobject();
+		void resolve_gameobject(); //gameobject‚Ö•Ï‰»—Ê‚ğ“n‚·
+
+		void update_world_trans(); //gameobject‚Ìtransform‚©‚çcollider‚Ìworld‹óŠÔ‚Å‚Ìî•ñ‚ğXV
 
 		void add_force(const vector3& force); //•ÀiˆÚ“®‚É—Í‚ğ‰Á‚¦‚é
 

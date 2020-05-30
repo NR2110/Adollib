@@ -14,9 +14,43 @@
 namespace Adollib {
 
 	class Light : public object {
+	private:
+		void update();
 	public:
+		std::list<std::shared_ptr<object>> get_children() {		//すべての子を返す
+			std::list<std::shared_ptr<object>>::iterator itr = children.begin();
+			std::list<std::shared_ptr<object>> ret;
+
+			for (int i = 0; i < children.size(); i++) {
+				ret.splice(ret.end(), itr->get()->get_children());
+				itr++;
+			}
+			return ret;
+		};
+		object* get_pearent() {		//一番の親を返す
+			object* P = this;
+			for (; P == nullptr;) {
+				P = pearent;
+			}
+			return P;
+		};
+		void update_P_to_C() {
+			update();
+			std::list<std::shared_ptr<object>>::iterator itr = children.begin();
+			std::list<std::shared_ptr<object>>::iterator itr_end = children.end();
+			for (; itr != itr_end;) {
+				itr->get()->update_P_to_C();
+				itr++;
+			}
+		}
+		void update_world_trans() {
+			//transform->orientation = get_world_orientate();
+			//transform->position = get_world_position();
+			//transform->scale = get_world_scale();
+		}
+
 		std::vector <std::shared_ptr<POINTLIGHT>> PointLight;
-		std::vector <std::shared_ptr<SPOTLIGHT>>  SpotLight;
+		std::vector <std::shared_ptr<SPOTLIGHT>>  SpotLight; 
 
 		void set_dirLight(vector3 dir, vector3 color);
 
@@ -31,8 +65,8 @@ namespace Adollib {
 
 		std::list <std::shared_ptr<Component_light>> components; //アタッチされているConponentのポインタ
 
-		Gameobject* pearent = nullptr; //親へのポインタ
-		std::list<std::shared_ptr<Gameobject>> children; //個へのポインタ
+		object* pearent = nullptr; //親へのポインタ
+		std::list<std::shared_ptr<object>> children; //個へのポインタ
 
 		bool active = true; //falseなら更新、描画を止める
 
@@ -42,7 +76,6 @@ namespace Adollib {
 
 		//アタッチされたコンポーネントの処理
 		void initialize();
-		void update();
 		void render() {};
 	private:
 

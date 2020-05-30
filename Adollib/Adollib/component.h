@@ -14,7 +14,7 @@ namespace Adollib
 	// ****************************************************
 	// gameobjectにアタッチされるすべてに対するベースクラス // TODO : インターフェースにしてもよいかも？
 	// ****************************************************
-	class Component : public object
+	class Component 
 	{
 	public:
 		Gameobject* gameobject;	// このコンポーネントがアタッチされているGameObject

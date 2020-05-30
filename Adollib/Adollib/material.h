@@ -23,7 +23,7 @@ namespace Adollib {
 
 		std::string tex_filename;
 
-		std::vector<Mesh::mesh> meshes;
+		std::vector<Mesh::mesh>* meshes;
 
 		State_manager::DStypes DS_state;
 
