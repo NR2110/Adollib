@@ -8,7 +8,7 @@ namespace Adollib {
 		 color = vector4(1, 1, 1, 1);
 		 DS_state = State_manager::DStypes::DS_TRUE;
 		 RS_state = State_manager::RStypes::RS_CULL_BACK;
-		 BS_state = State_manager::BStypes::BS_ADD;
+		 BS_state = State_manager::BStypes::BS_NONE;
 
 		Systems::CreateConstantBuffer(&Mat_cb, sizeof(ConstantBufferPerMaterial));
 	}

@@ -62,6 +62,7 @@ void Rigitbody::resolve_gameobject() {
 void Rigitbody::update_world_trans() {
 	world_position = gameobject->get_world_position() + local_position;
 	world_orientation = gameobject->get_world_orientate() * local_orientation;
+	world_scale = gameobject->get_world_scale() * local_scale;
 }
 
 void Rigitbody::add_force(const vector3& force) {
@@ -176,7 +177,7 @@ int Adollib::Contacts::generate_contact_sphere_sphere(Sphere& S0, Sphere& S1, st
 	float length = n.norm_sqr();
 	n = n.unit_vect();
 
-	if (length < S0.r + S1.r) {
+	if (length < S0.r * S0.world_scale.x + S1.r * S0.world_scale.x) {
 
 		//衝突していたらContactオブジェクトを生成する
 		Contact contact;
@@ -210,7 +211,7 @@ int Adollib::Contacts::generate_contact_sphere_plane(Sphere& sphere, Plane& plan
 	//平面の裏からの衝突判定
 	if (half_space && p.y < 0)return 0;
 
-	if (abs(p.y) < sphere.r) {
+	if (abs(p.y) < sphere.r * sphere.world_scale.x) {
 
 		Contact contact;
 		contact.normal = p.y > 0 ? n : -n;
@@ -228,11 +229,12 @@ int Adollib::Contacts::generate_contact_sphere_plane(Sphere& sphere, Plane& plan
 int Adollib::Contacts::generate_contact_sphere_box(Sphere& sphere, Box& box, std::vector<Contact>& contacts, float restitution) {
 	//球とboxの衝突判定を行う
 	matrix rotate, inverse_rotate;
-	rotate = box.world_orientation.get_rotate_matrix();
-	rotate._41 = box.world_position.x; //transpseの入力
-	rotate._42 = box.world_position.y;
-	rotate._43 = box.world_position.z;
-	rotate._44 = 1;
+	//rotate = box.world_orientation.get_rotate_matrix();
+	//rotate._41 = box.world_position.x; //transpseの入力
+	//rotate._42 = box.world_position.y;
+	//rotate._43 = box.world_position.z;
+	//rotate._44 = 1;
+	rotate = matrix_world(box.world_scale, box.world_orientation.get_rotate_matrix(), box.world_position);
 	inverse_rotate = matrix_inverse(rotate);
 
 	vector3 center;
@@ -247,9 +249,9 @@ int Adollib::Contacts::generate_contact_sphere_box(Sphere& sphere, Box& box, std
 	//vector3 debug_pos_box_byquaternion = vector3_be_rotated_by_quaternion(vector3(0, 1, 0), box.world_orientation) + box.world_position;
 
 	if (
-		abs(center.x) - sphere.r > box.half_size.x ||
-		abs(center.y) - sphere.r > box.half_size.y ||
-		abs(center.z) - sphere.r > box.half_size.z 
+		abs(center.x) - sphere.r * sphere.world_scale.x > box.half_size.x ||
+		abs(center.y) - sphere.r * sphere.world_scale.x > box.half_size.y ||
+		abs(center.z) - sphere.r * sphere.world_scale.x > box.half_size.z
 		) return 0;
 
 	//box上の最近点
@@ -266,13 +268,13 @@ int Adollib::Contacts::generate_contact_sphere_box(Sphere& sphere, Box& box, std
 	if (center.z < -box.half_size.z)closest_point.z = -box.half_size.z;
 
 	float distance = (closest_point - center).norm_sqr(); //最近点と球中心の距離
-	if (distance < sphere.r && distance > FLT_EPSILON) { //float誤差も調整
+	if (distance < sphere.r * sphere.world_scale.x && distance > FLT_EPSILON) { //float誤差も調整
 
 		closest_point = vector3_trans(closest_point, rotate); //通常の座標に戻す
 		Contact contact;
 		contact.normal = (sphere.world_position - closest_point).unit_vect();
 		contact.point = closest_point;
-		contact.penetration = sphere.r - distance;
+		contact.penetration = sphere.r * sphere.world_scale.x - distance;
 		contact.penetration *= 2;
 		contact.body[0] = &sphere;
 		contact.body[1] = &box;
@@ -291,14 +293,14 @@ int Adollib::Contacts::generate_contact_box_plane(Box& box, Plane& plane, std::v
 #if 1
 	vector3 vertices[8] = {
 		//原点AABBの頂点の位置
-		vector3(-box.half_size.x, -box.half_size.y, -box.half_size.z),
-		vector3(-box.half_size.x, -box.half_size.y, +box.half_size.z),
-		vector3(-box.half_size.x, +box.half_size.y, -box.half_size.z),
-		vector3(-box.half_size.x, +box.half_size.y, +box.half_size.z),
-		vector3(+box.half_size.x, -box.half_size.y, -box.half_size.z),
-		vector3(+box.half_size.x, -box.half_size.y, +box.half_size.z),
-		vector3(+box.half_size.x, +box.half_size.y, -box.half_size.z),
-		vector3(+box.half_size.x, +box.half_size.y, +box.half_size.z)
+		vector3(-box.half_size.x * box.world_scale.x, -box.half_size.y * box.world_scale.y, -box.half_size.z * box.world_scale.z),
+		vector3(-box.half_size.x * box.world_scale.x, -box.half_size.y * box.world_scale.y, +box.half_size.z * box.world_scale.z),
+		vector3(-box.half_size.x * box.world_scale.x, +box.half_size.y * box.world_scale.y, -box.half_size.z * box.world_scale.z),
+		vector3(-box.half_size.x * box.world_scale.x, +box.half_size.y * box.world_scale.y, +box.half_size.z * box.world_scale.z),
+		vector3(+box.half_size.x * box.world_scale.x, -box.half_size.y * box.world_scale.y, -box.half_size.z * box.world_scale.z),
+		vector3(+box.half_size.x * box.world_scale.x, -box.half_size.y * box.world_scale.y, +box.half_size.z * box.world_scale.z),
+		vector3(+box.half_size.x * box.world_scale.x, +box.half_size.y * box.world_scale.y, -box.half_size.z * box.world_scale.z),
+		vector3(+box.half_size.x * box.world_scale.x, +box.half_size.y * box.world_scale.y, +box.half_size.z * box.world_scale.z)
 	};
 
 	vector3 n;
@@ -654,6 +656,9 @@ int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Co
 	obb0.u_axes[1].x = m._21; obb0.u_axes[1].y = m._22; obb0.u_axes[1].z = m._23;
 	obb0.u_axes[2].x = m._31; obb0.u_axes[2].y = m._32; obb0.u_axes[2].z = m._33;
 	obb0.half_width = b0.half_size;
+	obb0.half_width.x *= b0.world_scale.x;
+	obb0.half_width.y *= b0.world_scale.y;
+	obb0.half_width.z *= b0.world_scale.z;
 
 	m = b1.world_orientation.get_rotate_matrix();
 	OBB obb1;
@@ -662,6 +667,9 @@ int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Co
 	obb1.u_axes[1].x = m._21; obb1.u_axes[1].y = m._22; obb1.u_axes[1].z = m._23;
 	obb1.u_axes[2].x = m._31; obb1.u_axes[2].y = m._32; obb1.u_axes[2].z = m._33;
 	obb1.half_width = b1.half_size;
+	obb1.half_width.x *= b1.world_scale.x;
+	obb1.half_width.y *= b1.world_scale.y;
+	obb1.half_width.z *= b1.world_scale.z;
 
 
 	float smallest_penetration = FLT_MAX;	//最小めり込み量

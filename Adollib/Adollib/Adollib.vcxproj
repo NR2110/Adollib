@@ -160,6 +160,8 @@
     <ClInclude Include="mesh.h" />
     <ClInclude Include="misc.h" />
     <ClInclude Include="object.h" />
+    <ClInclude Include="object_fall.h" />
+    <ClInclude Include="object_manager.h" />
     <ClInclude Include="quaternion.h" />
     <ClInclude Include="resource_manager.h" />
     <ClInclude Include="rigit_body.h" />
@@ -198,6 +200,8 @@
     <ClCompile Include="material_for_collider.cpp" />
     <ClCompile Include="matrix.cpp" />
     <ClCompile Include="mesh.cpp" />
+    <ClCompile Include="object_fall.cpp" />
+    <ClCompile Include="object_manager.cpp" />
     <ClCompile Include="quaternion.cpp" />
     <ClCompile Include="resource_manager.cpp" />
     <ClCompile Include="rigit_body.cpp" />

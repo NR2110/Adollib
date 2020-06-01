@@ -258,18 +258,26 @@ namespace Adollib {
 	Gameobject* Gameobject_manager::create(Scenelist Sce) {
 		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
 		gameobjects[Sce].push_back(Value);
-		
-		//Value.get()->go_iterator = gameobjects[Sce].end();
+		Value.get()->name = "no_name";
+
 		Value.get()->this_scene = Sce;
+		Value.get()->transform = new Transfome;
+		Value.get()->no_material = true;
+
 		Value.get()->initialize();
 		return Value.get();
+
+
 	}
 	Gameobject* Gameobject_manager::create(const std::string go_name, Scenelist Sce) {
-		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();;
+		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
 		gameobjects[Sce].push_back(Value);
+
 		Value.get()->name = go_name;
-		//Value.get()->go_iterator = gameobjects[Sce].end();
 		Value.get()->this_scene = Sce;
+		Value.get()->no_material = true;
+
+		Value.get()->transform = new Transfome;
 		Value.get()->initialize();
 		return Value.get();
 	}
@@ -277,7 +285,7 @@ namespace Adollib {
 	Light* Gameobject_manager::create_light(Scenelist Sce) {
 		std::shared_ptr <Light> Value = std::make_shared<Light>();
 		lights[Sce].push_back(Value);
-		//Value.get()->go_iterator = lights[Sce].end();
+
 		Value.get()->this_scene = Sce;
 		Value.get()->initialize();
 		return Value.get();
@@ -286,7 +294,7 @@ namespace Adollib {
 		std::shared_ptr <Light> Value = std::make_shared<Light>();
 		lights[Sce].push_back(Value);
 		Value.get()->name = go_name;
-	//	Value.get()->go_iterator = lights[Sce].end();
+
 		Value.get()->this_scene = Sce;
 		Value.get()->initialize();
 		return Value.get();
@@ -295,7 +303,7 @@ namespace Adollib {
 	Camera* Gameobject_manager::create_camera(Scenelist Sce) {
 		std::shared_ptr <Camera> Value = std::make_shared<Camera>();
 		cameras[Sce].push_back(Value);
-		//Value.get()->go_iterator = cameras[Sce].end();
+
 		Value.get()->this_scene = Sce;
 		Value.get()->transform = new Transfome;
 		Value.get()->transform->position = vector3(0, 0, 0);
@@ -306,7 +314,7 @@ namespace Adollib {
 		std::shared_ptr <Camera> Value = std::make_shared<Camera>();
 		cameras[Sce].push_back(Value);
 		Value.get()->name = go_name;
-		//Value.get()->go_iterator = cameras[Sce].end();
+
 		Value.get()->this_scene = Sce;
 		Value.get()->transform = new Transfome;
 		Value.get()->initialize();
@@ -318,7 +326,7 @@ namespace Adollib {
 		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
 		gameobjects[Sce].push_back(Value);
 		Value.get()->name = go_name;
-		//Value.get()->go_iterator = gameobjects[Sce].end();
+
 		Value.get()->this_scene = Sce;
 		Value.get()->transform = new Transfome;
 
@@ -334,7 +342,7 @@ namespace Adollib {
 		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
 		gameobjects[Sce].push_back(Value);
 		Value.get()->name = go_name;
-		//Value.get()->go_iterator = gameobjects[Sce].end();
+
 		Value.get()->this_scene = Sce;
 		Value.get()->transform = new Transfome;
 
@@ -352,7 +360,7 @@ namespace Adollib {
 		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
 		gameobjects[Sce].push_back(Value);
 		Value.get()->name = go_name;
-		//Value.get()->go_iterator = gameobjects[Sce].end();
+
 		Value.get()->this_scene = Sce;
 		Value.get()->transform = new Transfome;
 

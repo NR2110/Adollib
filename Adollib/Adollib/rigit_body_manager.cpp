@@ -2,6 +2,7 @@
 
 #include "rigit_body_manager.h"
 #include "scene.h"
+#include "Adollib.h"
 
 using namespace Adollib;
 using namespace Contacts;
@@ -14,7 +15,6 @@ namespace Adollib
 
 	void Rigitbody_manager::update(Scenelist Sce)
 	{
-
 		std::vector<Contact> contacts;
 		float resituation = 0.4;
 		int object_num = RB_sphere_s[Sce].size() + RB_box_s[Sce].size() + RB_plane_s[Sce].size();
@@ -52,7 +52,9 @@ namespace Adollib
 #if USE_CHECK_CONTACT
 #else
 		for (int i = 0; i < RBs.size(); i++) {
+			//world空間での情報を更新
 			RBs[i].rigit_body->update_world_trans();
+			//毎フレームの処理を行う
 			RBs[i].rigit_body->integrate();
 		}
 #endif

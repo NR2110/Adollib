@@ -124,7 +124,7 @@ float quaternion::norm() const {
 }
 quaternion quaternion::unit_vect() const {
 	float L = norm_sqr();
-	if (L == 0)return quaternion(0, 0, 0);
+	if (L == 0)return quaternion(1, 0, 0, 0);
 	else return quaternion((*this) / L);
 }
 quaternion quaternion::conjugate() const {
@@ -212,14 +212,14 @@ quaternion Adollib::quaternion_from_euler(float x, float y, float z) {
 	quaternion Rz = quaternion_angle_axis(z, vector3(0, 0, 1));
 
 	quaternion A = Rz * Rx * Ry;
-	return  A; 
+	return  A.unit_vect(); 
 }
 quaternion Adollib::quaternion_from_euler(vector3 V) {
 	quaternion Rx = quaternion_angle_axis(V.x, vector3(1, 0, 0));
 	quaternion Ry = quaternion_angle_axis(V.y, vector3(0, 1, 0));
 	quaternion Rz = quaternion_angle_axis(V.z, vector3(0, 0, 1));
 
-	return Rz * Rx * Ry;
+	return (Rz * Rx * Ry).unit_vect();
 }
 //quaternion Adollib::quaternion_from_euler_by_local_axis(vector3 Q, float x, float y, float z) {
 //	quaternion Rx = quaternion_angle_axis(x, Q);

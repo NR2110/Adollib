@@ -21,6 +21,7 @@ namespace Adollib {
 		void update();
 		ComPtr<ID3D11Buffer> world_cb; //WVP行列用バッファ
 	public:
+		bool no_material = false; //material情報を所持しているか
 
 		std::string name = std::string("null"); //このgoの名前(検索用)
 
@@ -119,7 +120,7 @@ namespace Adollib {
 		//:::::::::::::::::::::::::
 		void add_collider_box(
 			vector3 pos = vector3(0, 0, 0),
-			vector3 size = vector3(1, 1, 1), 
+			vector3 scale = vector3(1, 1, 1), 
 			quaternion orient = quaternion_identity(),
 			float density = 1,
 			std::string tag = std::string("Box"),

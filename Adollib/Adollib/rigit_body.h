@@ -29,11 +29,13 @@ namespace Adollib {
 
 		Rigitbody_shape shape;
 
-		vector3 world_position;				//ワールド座標
-		quaternion world_orientation;			//ワールド姿勢
+		vector3 world_position;		   //ワールド座標
+		quaternion world_orientation;  //ワールド姿勢
+		vector3 world_scale;           //ワールドscale
 
 		vector3 local_position;             //goからの相対座標
 		quaternion local_orientation;       //goからの相対姿勢
+		vector3 local_scale;				//goとの相対scale
 
 		vector3 linear_velocity;    //並進速度
 		vector3 angular_velocity;   //角速度

@@ -5,6 +5,7 @@
 #include <DirectXMath.h>
 
 #include "camera_s.h"
+#include "Adollib.h"
 
 
 namespace Adollib
@@ -18,12 +19,14 @@ namespace Adollib
 	{
 		//	set_camera(vector3(0, 0, 20), vector3(0, 0, 1));
 
-
 	}
 
 	// 毎フレーム呼ばれる更新処理
 	void camera_manager_s::update()
 	{
+		if (input->getKeyTrigger(Key::C))
+			Al_Global::render_collider_flag = Al_Global::render_collider_flag == false ? true : false;
+
 		//quaternion Q = quaternion_by_euler(45, 45, 45);
 		//quaternion X = quaternion_angle_axis(45, vector3(1, 0, 0));
 		//quaternion Y = quaternion_angle_axis(45, vector3(0, 1, 0));

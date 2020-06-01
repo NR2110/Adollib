@@ -7,7 +7,7 @@ PSInput main(VSInput input)
 {
 	PSInput output = (PSInput)0;
 
-	// BONE
+	//// BONE
 	//float3 p = { 0, 0, 0 };
 	//float3 n = { 0, 0, 0 };
 	//int i = 0;

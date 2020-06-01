@@ -39,13 +39,17 @@ namespace Adollib {
 
 		meshes[Rigitbody_shape::shape_sphere];
 		ResourceManager::CreateModelFromFBX(&meshes[Rigitbody_shape::shape_sphere], "./DefaultModel/sphere.fbx", "");
+
+		meshes[Rigitbody_shape::shape_plane];
+		ResourceManager::CreateModelFromFBX(&meshes[Rigitbody_shape::shape_plane], "./DefaultModel/plane.fbx", "");
 	}
 
 	void Collider_renderer::render(const Rigitbody* R) {
-
+		static int time = 0;
+		time++;
 		//CB : ConstantBufferPerCO_OBJ
 		ConstantBufferPerGO g_cb;
-		g_cb.world = matrix_world(vector3(1, 1, 1), R->world_orientation.get_rotate_matrix(), R->world_position).get_XMFLOAT4X4();
+		g_cb.world = matrix_world(R->world_scale * 1.0001, R->world_orientation.get_rotate_matrix(), R->world_position).get_XMFLOAT4X4();
 		Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
 		Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 		Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
@@ -55,8 +59,8 @@ namespace Adollib {
 
 		shader.Activate();
 
-		Systems::SetBlendState(State_manager::BStypes::BS_ALPHA);
-		Systems::SetRasterizerState(State_manager::RStypes::RS_CULL_NONE);
+		Systems::SetBlendState(State_manager::BStypes::BS_NONE);
+		Systems::SetRasterizerState(State_manager::RStypes::RS_WIRE);
 		Systems::SetDephtStencilState(State_manager::DStypes::DS_TRUE);
 
 		std::vector<Mesh::mesh>* meshs;
@@ -74,7 +78,7 @@ namespace Adollib {
 			ConstantBufferPerMaterial cb;
 			cb.shininess = 1;
 			cb.ambientColor = XMFLOAT4(0.1f, 0.1f, 0.1f, 1);
-			cb.materialColor = vector4(1, 0, 0, 1).get_XM4();
+			cb.materialColor = Al_Global::get_gaming(time, 600).get_XM4();
 			Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
 			Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
 			Systems::DeviceContext->PSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());

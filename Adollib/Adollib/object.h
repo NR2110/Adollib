@@ -27,6 +27,7 @@ namespace Adollib
 		bool updated; 
 		Transfome* transform; //不本意なtransform
 		collider_effect co_e; //衝突計算から受ける処理の一時的保存場所
+
 	public:
 
 		virtual void initialize() {};

@@ -29,6 +29,12 @@
     <Filter Include="ソース ファイル\scene_game">
       <UniqueIdentifier>{99480d18-a01a-478a-95d0-fb97c50cd010}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\scene_game\camera">
+      <UniqueIdentifier>{8ef12ffc-f6e1-45e5-ba59-12c05479917f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\scene_game\object">
+      <UniqueIdentifier>{1318d6d5-7f58-4468-9a25-b89ef51ca1f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="scene_title.cpp">
@@ -103,17 +109,23 @@
     <ClCompile Include="scene_game.cpp">
       <Filter>ソース ファイル\scene_game</Filter>
     </ClCompile>
-    <ClCompile Include="camera_manager.cpp">
-      <Filter>ソース ファイル\scene_game</Filter>
-    </ClCompile>
-    <ClCompile Include="camera_s.cpp">
-      <Filter>ソース ファイル\scene_game</Filter>
-    </ClCompile>
     <ClCompile Include="input.cpp">
       <Filter>Adollib\main</Filter>
     </ClCompile>
     <ClCompile Include="material_for_collider.cpp">
       <Filter>Adollib\object\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="camera_manager.cpp">
+      <Filter>ソース ファイル\scene_game\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="camera_s.cpp">
+      <Filter>ソース ファイル\scene_game\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="object_manager.cpp">
+      <Filter>ソース ファイル\scene_game\object</Filter>
+    </ClCompile>
+    <ClCompile Include="object_fall.cpp">
+      <Filter>ソース ファイル\scene_game\object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -210,12 +222,6 @@
     <ClInclude Include="scene_game.h">
       <Filter>ソース ファイル\scene_game</Filter>
     </ClInclude>
-    <ClInclude Include="camera_manager.h">
-      <Filter>ソース ファイル\scene_game</Filter>
-    </ClInclude>
-    <ClInclude Include="camera_s.h">
-      <Filter>ソース ファイル\scene_game</Filter>
-    </ClInclude>
     <ClInclude Include="component_camera.h">
       <Filter>Adollib\object</Filter>
     </ClInclude>
@@ -233,6 +239,18 @@
     </ClInclude>
     <ClInclude Include="material_for_collider.h">
       <Filter>Adollib\object\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="camera_manager.h">
+      <Filter>ソース ファイル\scene_game\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="camera_s.h">
+      <Filter>ソース ファイル\scene_game\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="object_manager.h">
+      <Filter>ソース ファイル\scene_game\object</Filter>
+    </ClInclude>
+    <ClInclude Include="object_fall.h">
+      <Filter>ソース ファイル\scene_game\object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
