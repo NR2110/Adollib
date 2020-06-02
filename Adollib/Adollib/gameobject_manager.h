@@ -78,7 +78,7 @@ namespace Adollib {
 		// ñﬂÇËílÅ@GameObject*	:	ê∂ê¨ÇµÇΩGameObject*Çï‘Ç∑
 		// ==============================================================
 
-
+		static Gameobject* createFromFBX(const std::string& FBX_pass, const std::string& go_name = "FBX", Scenelist Sce = Scene::now_scene);
 		static Gameobject* createSphere(const std::string& go_name = "Sphere", Scenelist Sce = Scene::now_scene);
 		static Gameobject* createCylinder(const std::string& go_name = "Cylinder", Scenelist Sce = Scene::now_scene);
 		static Gameobject* createCube(const std::string& go_name = "Cube", Scenelist Sce = Scene::now_scene);

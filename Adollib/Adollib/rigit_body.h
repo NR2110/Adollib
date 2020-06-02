@@ -23,7 +23,10 @@ namespace Adollib {
 	};
 
 	class Rigitbody {
+	private:
+
 	public:
+		bool move = true;
 
 		Gameobject* gameobject;           //親情報
 
@@ -36,6 +39,7 @@ namespace Adollib {
 		vector3 local_position;             //goからの相対座標
 		quaternion local_orientation;       //goからの相対姿勢
 		vector3 local_scale;				//goとの相対scale
+		float density;
 
 		vector3 linear_velocity;    //並進速度
 		vector3 angular_velocity;   //角速度
@@ -75,6 +79,8 @@ namespace Adollib {
 
 		virtual quaternion get_dimension() const = 0;
 
+		virtual void update_inertial(const vector3& size, float density = 1) = 0;
+
 	};
 
 	//球体用クラス
@@ -85,6 +91,9 @@ namespace Adollib {
 		Sphere(float r, float density, vector3 pos = vector3(0,0,0)) : r(r) {
 			//shapeの設定
 			shape = Rigitbody_shape::shape_sphere;
+
+			//密度の保存
+			this->density = density;
 
 			//座標
 			local_position = pos;
@@ -102,8 +111,22 @@ namespace Adollib {
 		}
 
 		//サイズの所得関数のオーバーライド
-		virtual quaternion get_dimension() const {
+		quaternion get_dimension() const {
 			return quaternion(r, r, r);
+		}
+		//sizeや密度が変更されると質量や完成モーメントの変更が必要になるからそのために用意(球の半径 = size.x)
+		void update_inertial(const vector3& size, float density = 1) {
+			this->density = density;
+
+			float r = size.x;
+			//質量の計算
+			inertial_mass = 4.0f / 3.0f * r * r * r * DirectX::XM_PI * density;
+
+			//慣性モーメントの計算
+			inertial_tensor = matrix_identity();
+			inertial_tensor._11 = 0.4f * inertial_mass * r * r;
+			inertial_tensor._22 = 0.4f * inertial_mass * r * r;
+			inertial_tensor._33 = 0.4f * inertial_mass * r * r;
 		}
 
 	};
@@ -125,6 +148,9 @@ namespace Adollib {
 			inertial_tensor._22 = FLT_MAX;
 			inertial_tensor._33 = FLT_MAX;
 
+			//動かない
+			move = false;
+
 			n = n.unit_vect();
 			local_position = n * d;
 
@@ -138,8 +164,20 @@ namespace Adollib {
 		}
 
 		//サイズの所得関数のオーバーライド
-		virtual quaternion get_dimension() const {
+		quaternion get_dimension() const {
 			return quaternion(1, 0, 1);
+		}
+		//sizeや密度が変更されると質量や完成モーメントの変更が必要になるからそのために用意(planeは処理なし)
+		void update_inertial(const vector3& size, float density = 1) {
+			//float r = size.x;
+			////質量の計算
+			//inertial_mass = 4.0f / 3.0f * r * r * r * DirectX::XM_PI * density;
+
+			////慣性モーメントの計算
+			//inertial_tensor = matrix_identity();
+			//inertial_tensor._11 = 0.4f * inertial_mass * r * r;
+			//inertial_tensor._22 = 0.4f * inertial_mass * r * r;
+			//inertial_tensor._33 = 0.4f * inertial_mass * r * r;
 		}
 
 	};
@@ -153,6 +191,9 @@ namespace Adollib {
 		Box(vector3 half_size, float density, vector3 pos = vector3(0,0,0)) : half_size(half_size) {
 			//shapeの設定
 			shape = Rigitbody_shape::shape_box;
+
+			//密度の保存
+			this->density = density;
 
 			//座標
 			local_position = pos;
@@ -168,8 +209,22 @@ namespace Adollib {
 		}
 
 		//サイズの所得関数のオーバーライド
-		virtual quaternion get_dimension() const {
+		quaternion get_dimension() const {
 			return half_size;
+		}
+
+		//sizeや密度が変更されると質量や完成モーメントの変更が必要になるからそのために用意
+		void update_inertial(const vector3& half_size, float density = 1) {
+			this->density = density;
+
+			//質量の計算
+			inertial_mass = (half_size.x * half_size.y * half_size.z) * 8.0f * density;
+
+			//慣性モーメントの計算
+			inertial_tensor = matrix_identity();
+			inertial_tensor._11 = 0.3333333f * inertial_mass * ((half_size.y * half_size.y) + (half_size.z * half_size.z));
+			inertial_tensor._22 = 0.3333333f * inertial_mass * ((half_size.z * half_size.z) + (half_size.x * half_size.x));
+			inertial_tensor._33 = 0.3333333f * inertial_mass * ((half_size.x * half_size.x) + (half_size.y * half_size.y));
 		}
 
 	};

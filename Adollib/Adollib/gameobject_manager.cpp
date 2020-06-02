@@ -253,35 +253,6 @@ namespace Adollib {
 
 	}
 
-	
-
-	Gameobject* Gameobject_manager::create(Scenelist Sce) {
-		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
-		gameobjects[Sce].push_back(Value);
-		Value.get()->name = "no_name";
-
-		Value.get()->this_scene = Sce;
-		Value.get()->transform = new Transfome;
-		Value.get()->no_material = true;
-
-		Value.get()->initialize();
-		return Value.get();
-
-
-	}
-	Gameobject* Gameobject_manager::create(const std::string go_name, Scenelist Sce) {
-		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
-		gameobjects[Sce].push_back(Value);
-
-		Value.get()->name = go_name;
-		Value.get()->this_scene = Sce;
-		Value.get()->no_material = true;
-
-		Value.get()->transform = new Transfome;
-		Value.get()->initialize();
-		return Value.get();
-	}
-
 	Light* Gameobject_manager::create_light(Scenelist Sce) {
 		std::shared_ptr <Light> Value = std::make_shared<Light>();
 		lights[Sce].push_back(Value);
@@ -321,6 +292,48 @@ namespace Adollib {
 		return Value.get();
 	}
 
+	Gameobject* Gameobject_manager::create(Scenelist Sce) {
+		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
+		gameobjects[Sce].push_back(Value);
+		Value.get()->name = "no_name";
+
+		Value.get()->this_scene = Sce;
+		Value.get()->transform = new Transfome;
+		Value.get()->no_material = true;
+
+		Value.get()->initialize();
+		return Value.get();
+
+
+	}
+	Gameobject* Gameobject_manager::create(const std::string go_name, Scenelist Sce) {
+		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
+		gameobjects[Sce].push_back(Value);
+
+		Value.get()->name = go_name;
+		Value.get()->this_scene = Sce;
+		Value.get()->no_material = true;
+
+		Value.get()->transform = new Transfome;
+		Value.get()->initialize();
+		return Value.get();
+	}
+
+	Gameobject* Gameobject_manager::createFromFBX(const std::string& FBX_pass, const std::string& go_name, Scenelist Sce) {
+		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
+		gameobjects[Sce].push_back(Value);
+		Value.get()->name = go_name;
+
+		Value.get()->this_scene = Sce;
+		Value.get()->transform = new Transfome;
+
+		Value.get()->material = new Material;
+		Value.get()->material->Load_VS("./DefaultShader/default_vs.cso");
+		Value.get()->material->Load_PS("./DefaultShader/default_ps.cso");
+		ResourceManager::CreateModelFromFBX(&Value.get()->material->meshes, FBX_pass.c_str(), "");
+		Value.get()->initialize();
+		return Value.get();
+	}
 
 	Gameobject* Gameobject_manager::createSphere(const std::string& go_name,  Scenelist Sce) {
 		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();

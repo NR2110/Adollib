@@ -75,7 +75,7 @@ namespace Adollib{
 	void Gameobject::add_collider_box(vector3 pos, vector3 scale, quaternion orient, float density, std::string tag, std::vector<std::string> no_hit_tag) {
 
 		Box* box = new Box(scale, density, pos); //Õ“Ë”»’è—p‚ÌŽÀ‘Ì‚ð¶¬
-		box->local_orientation = quaternion(1, 0, 0, 0);
+		box->local_orientation = orient;
 		box->local_scale = scale;
 		box->gameobject = this;
 		collider.push_back(box);

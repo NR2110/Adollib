@@ -35,6 +35,12 @@
     <Filter Include="ソース ファイル\scene_game\object">
       <UniqueIdentifier>{1318d6d5-7f58-4468-9a25-b89ef51ca1f0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\scene_game\player">
+      <UniqueIdentifier>{5803a67c-c3e6-4d3c-82a6-90b2b6264aeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\scene_game\enemy">
+      <UniqueIdentifier>{16cb34cf-ce56-4401-8f99-e845686d95f9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="scene_title.cpp">
@@ -75,9 +81,6 @@
     </ClCompile>
     <ClCompile Include="rigit_body.cpp">
       <Filter>Adollib\math</Filter>
-    </ClCompile>
-    <ClCompile Include="scene.cpp">
-      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="scene_manager.cpp">
       <Filter>ソース ファイル</Filter>
@@ -126,6 +129,12 @@
     </ClCompile>
     <ClCompile Include="object_fall.cpp">
       <Filter>ソース ファイル\scene_game\object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\player.cpp">
+      <Filter>ソース ファイル\scene_game\player</Filter>
+    </ClCompile>
+    <ClCompile Include="scene.cpp">
+      <Filter>Adollib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -178,9 +187,6 @@
       <Filter>Adollib\math</Filter>
     </ClInclude>
     <ClInclude Include="scene.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="scene_manager.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="scene_list.h">
@@ -251,6 +257,15 @@
     </ClInclude>
     <ClInclude Include="object_fall.h">
       <Filter>ソース ファイル\scene_game\object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\player.h">
+      <Filter>ソース ファイル\scene_game\player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\scene_game_all.h">
+      <Filter>ソース ファイル\scene_game</Filter>
+    </ClInclude>
+    <ClInclude Include="scene_manager.h">
+      <Filter>Adollib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

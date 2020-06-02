@@ -136,6 +136,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Scripts\player.h" />
+    <ClInclude Include="..\Scripts\scene_game_all.h" />
     <ClInclude Include="Adollib.h" />
     <ClInclude Include="camera_manager.h" />
     <ClInclude Include="camera_s.h" />
@@ -182,6 +184,7 @@
     <ClInclude Include="vector.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Scripts\player.cpp" />
     <ClCompile Include="Adollib.cpp" />
     <ClCompile Include="camera_manager.cpp" />
     <ClCompile Include="camera_s.cpp" />

@@ -15,9 +15,10 @@ void Rigitbody::integrate(float duration) {
 		//並進移動に加える力(accumulated_force)から加速度を出して並進速度を更新する
 		vector3 liner_acceleration; //加速度
 		liner_acceleration = accumulated_force / inertial_mass;
+		linear_velocity += liner_acceleration * duration;
 
 		//位置の更新
-		linear_velocity += liner_acceleration * duration;
+		if (linear_velocity.norm() >= FLT_EPSILON)
 		world_position += linear_velocity * duration;
 		
 
@@ -57,12 +58,16 @@ void Rigitbody::integrate(float duration) {
 }
 void Rigitbody::resolve_gameobject() {
 	gameobject->co_e.position += world_position - local_position - gameobject->get_world_position();
-	gameobject->co_e.orient *= world_orientation * local_orientation.conjugate() * gameobject->get_world_orientate().conjugate();
+	gameobject->co_e.orient *= local_orientation.conjugate() * gameobject->get_world_orientate().conjugate() * world_orientation;
 }
 void Rigitbody::update_world_trans() {
 	world_position = gameobject->get_world_position() + local_position;
 	world_orientation = gameobject->get_world_orientate() * local_orientation;
 	world_scale = gameobject->get_world_scale() * local_scale;
+
+	update_inertial(world_scale, density);
+	
+
 }
 
 void Rigitbody::add_force(const vector3& force) {
@@ -73,7 +78,7 @@ void Rigitbody::add_torque(const vector3& force) {
 }
 
 bool Rigitbody::is_movable() const {
-	return (inertial_mass > 0 && inertial_mass < FLT_MAX);
+	return (move && inertial_mass > 0 && inertial_mass < FLT_MAX);
 }
 float Rigitbody::inverse_mass() const {
 	if (is_movable()) return 1.0f / inertial_mass;
@@ -87,7 +92,7 @@ matrix Rigitbody::inverse_inertial_tensor() const{
 		inverse_inertial_tensor = matrix_inverse(inertial_tensor);
 		if(1){
 			matrix rotation, transposed_rotation;
-			rotation = local_orientation.get_rotate_matrix();
+			rotation = world_orientation.get_rotate_matrix();
 			transposed_rotation = matrix_trans(rotation);
 			inverse_inertial_tensor = transposed_rotation * inverse_inertial_tensor * rotation;
 		}
@@ -234,38 +239,35 @@ int Adollib::Contacts::generate_contact_sphere_box(Sphere& sphere, Box& box, std
 	//rotate._42 = box.world_position.y;
 	//rotate._43 = box.world_position.z;
 	//rotate._44 = 1;
-	rotate = matrix_world(box.world_scale, box.world_orientation.get_rotate_matrix(), box.world_position);
+	rotate = matrix_world(vector3(1,1,1), box.world_orientation.get_rotate_matrix(), box.world_position);
 	inverse_rotate = matrix_inverse(rotate);
 
 	vector3 center;
 	center = vector3_trans(sphere.world_position, inverse_rotate); //boxが"中心原点"回転してない(orientが(0,0,1))"の状態の時の球の中心座標
 
-	//matrix debug_init = rotate * inverse_rotate;
-	//vector3 AAA = vector3_trans(vector3_trans(sphere.world_position, rotate), inverse_rotate);
-	//matrix value = box.world_orientation.get_rotate_matrix();
-	//vector3 BBB = vector3_trans(vector3_trans(sphere.world_position, value), matrix_inverse(value));
-	//vector3 debug_pos_center = vector3_trans(center, rotate);
-	//vector3 debug_pos_box_bymatrix = vector3_trans(vector3(0, 1, 0), rotate);
-	//vector3 debug_pos_box_byquaternion = vector3_be_rotated_by_quaternion(vector3(0, 1, 0), box.world_orientation) + box.world_position;
+	vector3 box_halfsize = box.half_size;
+	box_halfsize.x *= box.world_scale.x;
+	box_halfsize.y *= box.world_scale.y;
+	box_halfsize.z *= box.world_scale.z;
 
 	if (
-		abs(center.x) - sphere.r * sphere.world_scale.x > box.half_size.x ||
-		abs(center.y) - sphere.r * sphere.world_scale.x > box.half_size.y ||
-		abs(center.z) - sphere.r * sphere.world_scale.x > box.half_size.z
+		abs(center.x) - sphere.r * sphere.world_scale.x > box_halfsize.x ||
+		abs(center.y) - sphere.r * sphere.world_scale.x > box_halfsize.y ||
+		abs(center.z) - sphere.r * sphere.world_scale.x > box_halfsize.z
 		) return 0;
 
 	//box上の最近点
 	vector3 closest_point;
 
 	closest_point = center;
-	if (center.x > +box.half_size.x)closest_point.x = +box.half_size.x;
-	if (center.x < -box.half_size.x)closest_point.x = -box.half_size.x;
+	if (center.x > +box_halfsize.x)closest_point.x = +box_halfsize.x;
+	if (center.x < -box_halfsize.x)closest_point.x = -box_halfsize.x;
 
-	if (center.y > +box.half_size.y)closest_point.y = +box.half_size.y;
-	if (center.y < -box.half_size.y)closest_point.y = -box.half_size.y;
+	if (center.y > +box_halfsize.y)closest_point.y = +box_halfsize.y;
+	if (center.y < -box_halfsize.y)closest_point.y = -box_halfsize.y;
 
-	if (center.z > +box.half_size.z)closest_point.z = +box.half_size.z;
-	if (center.z < -box.half_size.z)closest_point.z = -box.half_size.z;
+	if (center.z > +box_halfsize.z)closest_point.z = +box_halfsize.z;
+	if (center.z < -box_halfsize.z)closest_point.z = -box_halfsize.z;
 
 	float distance = (closest_point - center).norm_sqr(); //最近点と球中心の距離
 	if (distance < sphere.r * sphere.world_scale.x && distance > FLT_EPSILON) { //float誤差も調整

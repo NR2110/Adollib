@@ -51,12 +51,15 @@ namespace Adollib
 
 #if USE_CHECK_CONTACT
 #else
+		static int iii = 0;
 		for (int i = 0; i < RBs.size(); i++) {
 			//world空間での情報を更新
+			if(iii == 0)
 			RBs[i].rigit_body->update_world_trans();
 			//毎フレームの処理を行う
 			RBs[i].rigit_body->integrate();
 		}
+		iii++;
 #endif
 
 		for (int i = 0; i < object_num; i++) {
@@ -109,7 +112,7 @@ namespace Adollib
 		}
 		for (int i = 0; i < RBs.size(); i++) {
 			//colliderの影響をアタッチされたgoへ
-			RBs[i].rigit_body->resolve_gameobject();
+		//	RBs[i].rigit_body->resolve_gameobject();
 		}
 
 
@@ -118,36 +121,6 @@ namespace Adollib
 			rigit_bodys[i]->integrate();
 		}
 #endif
-
-		//int nan_num = 0;
-		//for (int i = 0; i < RB_sphere_s[Sce].size(); i++) {
-		//	RB_sphere_s[i].for_drawing->transform->local_position = RB_sphere_s[i].R->position.get_XM3();
-
-		//	if (isnan(RB_sphere_s[i].R->position.norm() + RB_sphere_s[i].R->orientation.norm())) {
-		//		nan_num++;
-		//	}
-
-		//}
-		//for (int i = 0; i < RB_box_s.size(); i++) {
-		//	RB_box_s[i].for_drawing->transform->local_position = RB_box_s[i].R->position.get_XM3();
-		//	RB_box_s[i].for_drawing->transform->local_rotation = RB_box_s[i].R->orientation.euler().get_XM3();
-		//	RB_box_s[i].for_drawing->transform->local_scale = RB_box_s[i].R->half_size.get_XM3();
-
-		//	if (isnan(RB_box_s[i].R->position.norm() + RB_box_s[i].R->orientation.norm())) {
-		//		nan_num++;
-		//	}
-
-		//}
-		//for (int i = 0; i < RB_plane_s[Sce].size(); i++) {
-		//	RB_plane_s[i].for_drawing->transform->local_position = RB_plane_s[i].R->position.get_XM3();
-
-		//	if (isnan(RB_plane_s[i].R->angular_velocity.norm())) {
-		//		nan_num++;
-		//	}
-		//}
-
-		//framework::debug->setString("nan_nam : %d", nan_num);
-
 
 	}
 

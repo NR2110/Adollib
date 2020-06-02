@@ -36,6 +36,7 @@ namespace Adollib {
 		};
 		void update_P_to_C() {
 			update();
+			transform->local_orient = transform->local_orient.unit_vect();
 			std::list<std::shared_ptr<object>>::iterator itr = children.begin();
 			std::list<std::shared_ptr<object>>::iterator itr_end = children.end();
 			for (; itr != itr_end;) {

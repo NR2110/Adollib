@@ -26,7 +26,7 @@ PSInput main(VSInput input)
 	row_major float4x4 matWVP = mul(World, mul(View, Projection));
 	P = mul(P, matWVP);
 	// ワールド法線算出
-	float3 N = mul((float3x3)World, input.Normal);
+	float3 N = mul(input.Normal, (float3x3)World);
 	N = normalize(N);//正規化
 
 	// // 視線ベクトル算出

@@ -23,10 +23,10 @@ namespace Adollib
 			//set_moveable_box(n_vector3(0, 200, 0), n_vector3(10, 10, 10), n_vector3(45, 45, 0), n_vector3(0, 1, 1));
 			//set_moveable_box(n_vector3(0, 200, 0), n_vector3(10, 10, 10), n_vector3(0, 0, 0), n_vector3(0, 1, 1));
 
-		//set_moveable_box(vector3(0, 5 + 10 * 0, 0), vector3(2, 2, 2), vector3(30, 30, 0), vector3(0, 1, 1));
+		set_fall_box(vector3(0, 30, 0), vector3(1, 1, 1), vector3(30, 30, 0), vector3(0, 1, 1));
 
 
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 5; i++) {
 			set_fall_box(vector3(0, 5 + 10 * i, 0), vector3(2, 2, 2), vector3(30, 30, 0), vector3(0, 1, 1));
 			set_fall_box(vector3(5, 5 + 10 * i, 0), vector3(2, 2, 2), vector3(30, 30, 0), vector3(0, 1, 1));
 			set_fall_box(vector3(5, 5 + 10 * i, 5), vector3(2, 2, 2), vector3(30, 30, 0), vector3(0, 1, 1));
@@ -123,7 +123,7 @@ namespace Adollib
 		object->transform->local_pos = pos;
 		object->transform->local_scale = vector3(30, 0.1, 30);
 
-		object->add_collider_plane(vector3(0,0,0), normal);
+		object->add_collider_plane(vector3(0, 0, 0), normal);
 	}
 
 	//
