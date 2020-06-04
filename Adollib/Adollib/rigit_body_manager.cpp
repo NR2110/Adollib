@@ -51,15 +51,13 @@ namespace Adollib
 
 #if USE_CHECK_CONTACT
 #else
-		static int iii = 0;
 		for (int i = 0; i < RBs.size(); i++) {
 			//world空間での情報を更新
-			if(iii == 0)
 			RBs[i].rigit_body->update_world_trans();
+
 			//毎フレームの処理を行う
 			RBs[i].rigit_body->integrate();
 		}
-		iii++;
 #endif
 
 		for (int i = 0; i < object_num; i++) {
@@ -105,16 +103,15 @@ namespace Adollib
 			}
 		}
 
-
 		for (int i = 0; i < contacts.size(); i++) {
 			//衝突の解決
 			contacts[i].resolve();
 		}
+
 		for (int i = 0; i < RBs.size(); i++) {
 			//colliderの影響をアタッチされたgoへ
-		//	RBs[i].rigit_body->resolve_gameobject();
+			RBs[i].rigit_body->resolve_gameobject();
 		}
-
 
 #if USE_CHECK_CONTACT
 		for (int i = 0; i < rigit_bodys.size(); i++) {

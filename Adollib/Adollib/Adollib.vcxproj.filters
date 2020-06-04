@@ -118,23 +118,26 @@
     <ClCompile Include="material_for_collider.cpp">
       <Filter>Adollib\object\mesh</Filter>
     </ClCompile>
-    <ClCompile Include="camera_manager.cpp">
-      <Filter>ソース ファイル\scene_game\camera</Filter>
-    </ClCompile>
-    <ClCompile Include="camera_s.cpp">
-      <Filter>ソース ファイル\scene_game\camera</Filter>
-    </ClCompile>
-    <ClCompile Include="object_manager.cpp">
-      <Filter>ソース ファイル\scene_game\object</Filter>
-    </ClCompile>
-    <ClCompile Include="object_fall.cpp">
-      <Filter>ソース ファイル\scene_game\object</Filter>
-    </ClCompile>
     <ClCompile Include="..\Scripts\player.cpp">
       <Filter>ソース ファイル\scene_game\player</Filter>
     </ClCompile>
     <ClCompile Include="scene.cpp">
       <Filter>Adollib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\object_rotate.cpp">
+      <Filter>ソース ファイル\scene_game\object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\camera_manager.cpp">
+      <Filter>ソース ファイル\scene_game\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\camera_s.cpp">
+      <Filter>ソース ファイル\scene_game\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\object_fall.cpp">
+      <Filter>ソース ファイル\scene_game\object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\object_manager.cpp">
+      <Filter>ソース ファイル\scene_game\object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -246,18 +249,6 @@
     <ClInclude Include="material_for_collider.h">
       <Filter>Adollib\object\mesh</Filter>
     </ClInclude>
-    <ClInclude Include="camera_manager.h">
-      <Filter>ソース ファイル\scene_game\camera</Filter>
-    </ClInclude>
-    <ClInclude Include="camera_s.h">
-      <Filter>ソース ファイル\scene_game\camera</Filter>
-    </ClInclude>
-    <ClInclude Include="object_manager.h">
-      <Filter>ソース ファイル\scene_game\object</Filter>
-    </ClInclude>
-    <ClInclude Include="object_fall.h">
-      <Filter>ソース ファイル\scene_game\object</Filter>
-    </ClInclude>
     <ClInclude Include="..\Scripts\player.h">
       <Filter>ソース ファイル\scene_game\player</Filter>
     </ClInclude>
@@ -266,6 +257,21 @@
     </ClInclude>
     <ClInclude Include="scene_manager.h">
       <Filter>Adollib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\object_rotate.h">
+      <Filter>ソース ファイル\scene_game\object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\camera_manager.h">
+      <Filter>ソース ファイル\scene_game\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\camera_s.h">
+      <Filter>ソース ファイル\scene_game\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\object_fall.h">
+      <Filter>ソース ファイル\scene_game\object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\object_manager.h">
+      <Filter>ソース ファイル\scene_game\object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

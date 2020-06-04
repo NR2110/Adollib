@@ -28,13 +28,15 @@ namespace Adollib {
 	public:
 		bool move = true;
 
+		vector3 impulse = vector3(0, 0, 0);
+
 		Gameobject* gameobject;           //親情報
 
 		Rigitbody_shape shape;
 
-		vector3 world_position;		   //ワールド座標
-		quaternion world_orientation;  //ワールド姿勢
-		vector3 world_scale;           //ワールドscale
+		vector3 world_position;		     //ワールド空間での座標
+		quaternion world_orientation;    //ワールド空間での姿勢
+		vector3 world_size;              //ワールド空間での大きさ
 
 		vector3 local_position;             //goからの相対座標
 		quaternion local_orientation;       //goからの相対姿勢
@@ -43,6 +45,9 @@ namespace Adollib {
 
 		vector3 linear_velocity;    //並進速度
 		vector3 angular_velocity;   //角速度
+
+		vector3 liner_acceleration;  //加速
+		vector3 angular_acceleration;//角加速
 
 		float inertial_mass;           //慣性質量
 
@@ -65,7 +70,7 @@ namespace Adollib {
 		
 		void resolve_gameobject(); //gameobjectへ変化量を渡す
 
-		void update_world_trans(); //gameobjectのtransformからcolliderのworld空間での情報を更新
+		virtual void update_world_trans() = 0; //gameobjectのtransformからcolliderのworld空間での情報を更新
 
 		void add_force(const vector3& force); //並進移動に力を加える
 
@@ -114,6 +119,8 @@ namespace Adollib {
 		quaternion get_dimension() const {
 			return quaternion(r, r, r);
 		}
+		//world変換関数のオーバーライド
+		void update_world_trans();
 		//sizeや密度が変更されると質量や完成モーメントの変更が必要になるからそのために用意(球の半径 = size.x)
 		void update_inertial(const vector3& size, float density = 1) {
 			this->density = density;
@@ -167,6 +174,8 @@ namespace Adollib {
 		quaternion get_dimension() const {
 			return quaternion(1, 0, 1);
 		}
+		//world変換関数のオーバーライド
+		void update_world_trans();
 		//sizeや密度が変更されると質量や完成モーメントの変更が必要になるからそのために用意(planeは処理なし)
 		void update_inertial(const vector3& size, float density = 1) {
 			//float r = size.x;
@@ -212,6 +221,8 @@ namespace Adollib {
 		quaternion get_dimension() const {
 			return half_size;
 		}
+		//world変換関数のオーバーライド
+		void update_world_trans();
 
 		//sizeや密度が変更されると質量や完成モーメントの変更が必要になるからそのために用意
 		void update_inertial(const vector3& half_size, float density = 1) {

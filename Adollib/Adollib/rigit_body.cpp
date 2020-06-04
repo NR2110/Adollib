@@ -13,8 +13,7 @@ void Rigitbody::integrate(float duration) {
 	if (is_movable()) {
 
 		//並進移動に加える力(accumulated_force)から加速度を出して並進速度を更新する
-		vector3 liner_acceleration; //加速度
-		liner_acceleration = accumulated_force / inertial_mass;
+		liner_acceleration += accumulated_force / inertial_mass;
 		linear_velocity += liner_acceleration * duration;
 
 		//位置の更新
@@ -27,7 +26,7 @@ void Rigitbody::integrate(float duration) {
 		matrix rotation = local_orientation.get_rotate_matrix();
 		matrix transposed_rotation = matrix_trans(rotation);
 		inverse_inertia_tensor = transposed_rotation * inverse_inertia_tensor * rotation; //QUESTION : 何してるの?対角化?
-		vector3 angular_acceleration = vector3_trans(accumulated_torque, inverse_inertia_tensor);
+		angular_acceleration += vector3_trans(accumulated_torque, inverse_inertia_tensor);
 
 		angular_velocity += angular_acceleration * duration;
 		if (angular_velocity.norm() < FLT_EPSILON)angular_velocity = vector3(0, 0, 0);
@@ -55,19 +54,36 @@ void Rigitbody::integrate(float duration) {
 	//加速を0にする
 	accumulated_force = vector3(0, 0, 0);
 	accumulated_torque = vector3(0, 0, 0);
+
+	liner_acceleration = vector3(0, 0, 0);
+	angular_acceleration = vector3(0, 0, 0);
 }
 void Rigitbody::resolve_gameobject() {
-	gameobject->co_e.position += world_position - local_position - gameobject->get_world_position();
 	gameobject->co_e.orient *= local_orientation.conjugate() * gameobject->get_world_orientate().conjugate() * world_orientation;
-}
-void Rigitbody::update_world_trans() {
-	world_position = gameobject->get_world_position() + local_position;
-	world_orientation = gameobject->get_world_orientate() * local_orientation;
-	world_scale = gameobject->get_world_scale() * local_scale;
-
-	update_inertial(world_scale, density);
+	gameobject->co_e.position += world_position -  vector3_be_rotated_by_quaternion(local_position * gameobject->get_world_scale(), world_orientation) - gameobject->get_world_position();
+	impulse = vector3(0, 0, 0);
 	
+}
+void Box::update_world_trans() {
+	world_orientation = gameobject->get_world_orientate() * local_orientation;
+	world_size = gameobject->get_world_scale() * local_scale * half_size;
+	world_position = gameobject->get_world_position() + vector3_be_rotated_by_quaternion(local_position * gameobject->get_world_scale(), world_orientation);
 
+	update_inertial(world_size, density);
+}
+void Sphere::update_world_trans() {
+	world_orientation = gameobject->get_world_orientate() * local_orientation;
+	world_size = gameobject->get_world_scale() * local_scale * r;
+	world_position = gameobject->get_world_position() + vector3_be_rotated_by_quaternion(local_position * world_size, world_orientation);
+
+	update_inertial(world_size, density);
+}
+void Plane::update_world_trans() {
+	world_orientation = gameobject->get_world_orientate() * local_orientation;
+	world_size = gameobject->get_world_scale() * local_scale;
+	world_position = gameobject->get_world_position() + vector3_be_rotated_by_quaternion(local_position * world_size, world_orientation);
+
+	update_inertial(world_size, density);
 }
 
 void Rigitbody::add_force(const vector3& force) {
@@ -182,12 +198,12 @@ int Adollib::Contacts::generate_contact_sphere_sphere(Sphere& S0, Sphere& S1, st
 	float length = n.norm_sqr();
 	n = n.unit_vect();
 
-	if (length < S0.r * S0.world_scale.x + S1.r * S0.world_scale.x) {
+	if (length < S0.world_size.x + S0.world_size.x) {
 
 		//衝突していたらContactオブジェクトを生成する
 		Contact contact;
 		contact.normal = n;
-		contact.penetration = S0.r + S1.r - length;
+		contact.penetration = S0.world_size.x + S0.world_size.x - length;
 		contact.point = p1 + 0.5f * length * n;
 		contact.body[0] = &S0;
 		contact.body[1] = &S1;
@@ -216,12 +232,12 @@ int Adollib::Contacts::generate_contact_sphere_plane(Sphere& sphere, Plane& plan
 	//平面の裏からの衝突判定
 	if (half_space && p.y < 0)return 0;
 
-	if (abs(p.y) < sphere.r * sphere.world_scale.x) {
+	if (abs(p.y) < sphere.world_size.x) {
 
 		Contact contact;
 		contact.normal = p.y > 0 ? n : -n;
 		contact.point = sphere.world_position + p.y * -n;
-		contact.penetration = sphere.r - abs(p.y);
+		contact.penetration = sphere.world_size.x - abs(p.y);
 		contact.body[0] = &sphere;
 		contact.body[1] = &plane;
 		contact.restitution = restitution;
@@ -245,15 +261,12 @@ int Adollib::Contacts::generate_contact_sphere_box(Sphere& sphere, Box& box, std
 	vector3 center;
 	center = vector3_trans(sphere.world_position, inverse_rotate); //boxが"中心原点"回転してない(orientが(0,0,1))"の状態の時の球の中心座標
 
-	vector3 box_halfsize = box.half_size;
-	box_halfsize.x *= box.world_scale.x;
-	box_halfsize.y *= box.world_scale.y;
-	box_halfsize.z *= box.world_scale.z;
+	vector3 box_halfsize = box.world_size;
 
 	if (
-		abs(center.x) - sphere.r * sphere.world_scale.x > box_halfsize.x ||
-		abs(center.y) - sphere.r * sphere.world_scale.x > box_halfsize.y ||
-		abs(center.z) - sphere.r * sphere.world_scale.x > box_halfsize.z
+		abs(center.x) - sphere.world_size.x > box_halfsize.x ||
+		abs(center.y) - sphere.world_size.x > box_halfsize.y ||
+		abs(center.z) - sphere.world_size.x > box_halfsize.z
 		) return 0;
 
 	//box上の最近点
@@ -270,13 +283,13 @@ int Adollib::Contacts::generate_contact_sphere_box(Sphere& sphere, Box& box, std
 	if (center.z < -box_halfsize.z)closest_point.z = -box_halfsize.z;
 
 	float distance = (closest_point - center).norm_sqr(); //最近点と球中心の距離
-	if (distance < sphere.r * sphere.world_scale.x && distance > FLT_EPSILON) { //float誤差も調整
+	if (distance < sphere.world_size.x && distance > FLT_EPSILON) { //float誤差も調整
 
 		closest_point = vector3_trans(closest_point, rotate); //通常の座標に戻す
 		Contact contact;
 		contact.normal = (sphere.world_position - closest_point).unit_vect();
 		contact.point = closest_point;
-		contact.penetration = sphere.r * sphere.world_scale.x - distance;
+		contact.penetration = sphere.world_size.x - distance;
 		contact.penetration *= 2;
 		contact.body[0] = &sphere;
 		contact.body[1] = &box;
@@ -295,18 +308,18 @@ int Adollib::Contacts::generate_contact_box_plane(Box& box, Plane& plane, std::v
 #if 1
 	vector3 vertices[8] = {
 		//原点AABBの頂点の位置
-		vector3(-box.half_size.x * box.world_scale.x, -box.half_size.y * box.world_scale.y, -box.half_size.z * box.world_scale.z),
-		vector3(-box.half_size.x * box.world_scale.x, -box.half_size.y * box.world_scale.y, +box.half_size.z * box.world_scale.z),
-		vector3(-box.half_size.x * box.world_scale.x, +box.half_size.y * box.world_scale.y, -box.half_size.z * box.world_scale.z),
-		vector3(-box.half_size.x * box.world_scale.x, +box.half_size.y * box.world_scale.y, +box.half_size.z * box.world_scale.z),
-		vector3(+box.half_size.x * box.world_scale.x, -box.half_size.y * box.world_scale.y, -box.half_size.z * box.world_scale.z),
-		vector3(+box.half_size.x * box.world_scale.x, -box.half_size.y * box.world_scale.y, +box.half_size.z * box.world_scale.z),
-		vector3(+box.half_size.x * box.world_scale.x, +box.half_size.y * box.world_scale.y, -box.half_size.z * box.world_scale.z),
-		vector3(+box.half_size.x * box.world_scale.x, +box.half_size.y * box.world_scale.y, +box.half_size.z * box.world_scale.z)
+		vector3(-box.world_size.x, -box.world_size.y, -box.world_size.z),
+		vector3(-box.world_size.x, -box.world_size.y, +box.world_size.z),
+		vector3(-box.world_size.x, +box.world_size.y, -box.world_size.z),
+		vector3(-box.world_size.x, +box.world_size.y, +box.world_size.z),
+		vector3(+box.world_size.x, -box.world_size.y, -box.world_size.z),
+		vector3(+box.world_size.x, -box.world_size.y, +box.world_size.z),
+		vector3(+box.world_size.x, +box.world_size.y, -box.world_size.z),
+		vector3(+box.world_size.x, +box.world_size.y, +box.world_size.z)
 	};
 
 	vector3 n;
-	n = vector3_be_rotated_by_quaternion(vector3(0,1,0),plane.world_orientation); //orientationをベクトルに直す
+	n = vector3_be_rotated_by_quaternion(vector3(0, 1, 0), plane.world_orientation); //orientationをベクトルに直す
 	float plane_distance = vector3_dot(n, plane.world_position);
 
 	int contacts_used = 0;
@@ -399,12 +412,13 @@ struct OBB {
 	vector3 half_width; //軸ごとの辺の長さ
 };
 
+
 //軸に投影した長さ
 float sum_of_projected_radii(const OBB& obb,const vector3 &vec) {
 	return
-		abs(vector3_dot(vec, obb.half_width.x * obb.u_axes[0])) +
-		abs(vector3_dot(vec, obb.half_width.y * obb.u_axes[1])) +
-		abs(vector3_dot(vec, obb.half_width.z * obb.u_axes[2]));
+		fabsf(vector3_dot(vec, obb.half_width.x * obb.u_axes[0])) +
+		fabsf(vector3_dot(vec, obb.half_width.y * obb.u_axes[1])) +
+		fabsf(vector3_dot(vec, obb.half_width.z * obb.u_axes[2]));
 }
 
 //OBBとOBBの分離軸判定 衝突していればtrueを返す ついでに色々引数に入れる
@@ -417,6 +431,8 @@ bool sat_obb_obb(
 	smallest_penetration = FLT_MAX;
 	float penetration = 0; //貫通量
 
+	std::vector<vector3> contact_point;
+
 	float ra, rb; //obb1,obb2のLに投影された長さ
 	vector3 L; //投影する軸
 	vector3 T = obb2.center - obb1.center; //2obbの中心座標の距離
@@ -427,6 +443,8 @@ bool sat_obb_obb(
 		L = obb1.u_axes[i];
 		ra = obb1.half_width[i];
 		rb = sum_of_projected_radii(obb2, L);
+		if (vector3_dot(L, T) + rb < ra)continue;
+
 		penetration = ra + rb - abs(vector3_dot(L, T));
 		if (penetration < 0) return 0;
 		if (smallest_penetration > penetration)
@@ -443,9 +461,12 @@ bool sat_obb_obb(
 	{
 		L = obb2.u_axes[i];
 		ra = sum_of_projected_radii(obb1, L);
+		if (vector3_dot(L, T) + rb < ra)continue;
+
 		rb = obb2.half_width[i];
 		penetration = ra + rb - abs(vector3_dot(L, T));
 		if (penetration < 0) return 0;
+
 		if (smallest_penetration > penetration)
 		{
 			smallest_penetration = penetration;
@@ -467,6 +488,8 @@ bool sat_obb_obb(
 
 			ra = sum_of_projected_radii(obb1, L);
 			rb = sum_of_projected_radii(obb2, L);
+			if (vector3_dot(L, T) + rb < ra)continue;
+
 			penetration = ra + rb - abs(vector3_dot(L, T));
 			if (penetration < 0) return 0;
 			if (smallest_penetration > penetration)
@@ -474,178 +497,55 @@ bool sat_obb_obb(
 				smallest_penetration = penetration;
 				smallest_axis[0] = OB1;
 				smallest_axis[1] = OB2;
-				smallest_case = EDGE_EDGE;
+				smallest_case = EDGE_EDGE; 
 			}
 		}
 	}
-
-	/*
-	// Test axis L = A0 x B0
-	L = vector3_cross(obb1.u_axes[0], obb2.u_axes[0]);
-	if (L.norm_sqr() > FLT_EPSILON) //Is A0 not parallel to B0?
-	{
-		L = L.unit_vect();
-		ra = sum_of_projected_radii(obb1, L);
-		rb = sum_of_projected_radii(obb2, L);
-		penetration = ra + rb - fabsf(L.x * T.x + L.y * T.y + L.z * T.z);
-		if (penetration < 0) return 0;
-		if (smallest_penetration > penetration)
-		{
-			smallest_penetration = penetration;
-			smallest_axis[0] = 0;
-			smallest_axis[1] = 0;
-			smallest_case = EDGE_EDGE;
-		}
-	}
-
-	// Test axis L = A0 x B1
-	vector3_cross(&L, &obb1.u_axes[0], &obb2.u_axes[1]);
-	if (D3DXVec3LengthSq(&L) > FLT_EPSILON)
-	{
-		D3DXVec3Normalize(&L, &L);
-		ra = sum_of_projected_radii(obb1, L);
-		rb = sum_of_projected_radii(obb2, L);
-		penetration = ra + rb - fabsf(L.x * T.x + L.y * T.y + L.z * T.z);
-		if (penetration < 0) return 0;
-		if (smallest_penetration > penetration)
-		{
-			smallest_penetration = penetration;
-			smallest_axis[0] = 0;
-			smallest_axis[1] = 1;
-			smallest_case = EDGE_EDGE;
-		}
-	}
-	// Test axis L = A0 x B2
-	vector3_cross(&L, &obb1.u_axes[0], &obb2.u_axes[2]);
-	if (D3DXVec3LengthSq(&L) > FLT_EPSILON)
-	{
-		D3DXVec3Normalize(&L, &L);
-		ra = sum_of_projected_radii(obb1, L);
-		rb = sum_of_projected_radii(obb2, L);
-		penetration = ra + rb - fabsf(L.x * T.x + L.y * T.y + L.z * T.z);
-		if (penetration < 0) return 0;
-		if (smallest_penetration > penetration)
-		{
-			smallest_penetration = penetration;
-			smallest_axis[0] = 0;
-			smallest_axis[1] = 2;
-			smallest_case = EDGE_EDGE;
-		}
-	}
-	// Test axis L = A1 x B0
-	vector3_cross(&L, &obb1.u_axes[1], &obb2.u_axes[0]);
-	if (D3DXVec3LengthSq(&L) > FLT_EPSILON)
-	{
-		D3DXVec3Normalize(&L, &L);
-		ra = sum_of_projected_radii(obb1, L);
-		rb = sum_of_projected_radii(obb2, L);
-		penetration = ra + rb - fabsf(L.x * T.x + L.y * T.y + L.z * T.z);
-		if (penetration < 0) return 0;
-		if (smallest_penetration > penetration)
-		{
-			smallest_penetration = penetration;
-			smallest_axis[0] = 1;
-			smallest_axis[1] = 0;
-			smallest_case = EDGE_EDGE;
-		}
-	}
-
-	// Test axis L = A1 x B1
-	vector3_cross(&L, &obb1.u_axes[1], &obb2.u_axes[1]);
-	if (D3DXVec3LengthSq(&L) > FLT_EPSILON)
-	{
-		D3DXVec3Normalize(&L, &L);
-		ra = sum_of_projected_radii(obb1, L);
-		rb = sum_of_projected_radii(obb2, L);
-		penetration = ra + rb - fabsf(L.x * T.x + L.y * T.y + L.z * T.z);
-		if (penetration < 0) return 0;
-		if (smallest_penetration > penetration)
-		{
-			smallest_penetration = penetration;
-			smallest_axis[0] = 1;
-			smallest_axis[1] = 1;
-			smallest_case = EDGE_EDGE;
-		}
-	}
-
-	// Test axis L = A1 x B2
-	vector3_cross(&L, &obb1.u_axes[1], &obb2.u_axes[2]);
-	if (D3DXVec3LengthSq(&L) > FLT_EPSILON)
-	{
-		D3DXVec3Normalize(&L, &L);
-		ra = sum_of_projected_radii(obb1, L);
-		rb = sum_of_projected_radii(obb2, L);
-		penetration = ra + rb - fabsf(L.x * T.x + L.y * T.y + L.z * T.z);
-		if (penetration < 0) return 0;
-		if (smallest_penetration > penetration)
-		{
-			smallest_penetration = penetration;
-			smallest_axis[0] = 1;
-			smallest_axis[1] = 2;
-			smallest_case = EDGE_EDGE;
-		}
-	}
-
-	// Test axis L = A2 x B0
-	vector3_cross(&L, &obb1.u_axes[2], &obb2.u_axes[0]);
-	if (D3DXVec3LengthSq(&L) > FLT_EPSILON)
-	{
-		D3DXVec3Normalize(&L, &L);
-		ra = sum_of_projected_radii(obb1, L);
-		rb = sum_of_projected_radii(obb2, L);
-		penetration = ra + rb - fabsf(L.x * T.x + L.y * T.y + L.z * T.z);
-		if (penetration < 0) return 0;
-		if (smallest_penetration > penetration)
-		{
-			smallest_penetration = penetration;
-			smallest_axis[0] = 2;
-			smallest_axis[1] = 0;
-			smallest_case = EDGE_EDGE;
-		}
-	}
-
-	// Test axis L = A2 x B1
-	vector3_cross(&L, &obb1.u_axes[2], &obb2.u_axes[1]);
-	if (D3DXVec3LengthSq(&L) > FLT_EPSILON)
-	{
-		D3DXVec3Normalize(&L, &L);
-		ra = sum_of_projected_radii(obb1, L);
-		rb = sum_of_projected_radii(obb2, L);
-		penetration = ra + rb - fabsf(L.x * T.x + L.y * T.y + L.z * T.z);
-		if (penetration < 0) return 0;
-		if (smallest_penetration > penetration)
-		{
-			smallest_penetration = penetration;
-			smallest_axis[0] = 2;
-			smallest_axis[1] = 1;
-			smallest_case = EDGE_EDGE;
-		}
-	}
-
-	// Test axis L = A2 x B2
-	vector3_cross(&L, &obb1.u_axes[2], &obb2.u_axes[2]);
-	if (D3DXVec3LengthSq(&L) > FLT_EPSILON)
-	{
-		D3DXVec3Normalize(&L, &L);
-		ra = sum_of_projected_radii(obb1, L);
-		rb = sum_of_projected_radii(obb2, L);
-		penetration = ra + rb - fabsf(L.x * T.x + L.y * T.y + L.z * T.z);
-		if (penetration < 0) return 0;
-		if (smallest_penetration > penetration)
-		{
-			smallest_penetration = penetration;
-			smallest_axis[0] = 2;
-			smallest_axis[1] = 2;
-			smallest_case = EDGE_EDGE;
-		}
-	}
-	//*/
 
 	//assert(smallest_penetration < FLT_MAX);
 	//assert(smallest_penetration > FLT_EPSILON);
 
 	// 分離軸が見当たらない場合OBBは交差しているはず
 	return (smallest_penetration < FLT_MAX && smallest_penetration > FLT_EPSILON) ? true : false;
+}
+
+
+std::vector<vector3> vertex_in_obb(const OBB& obb1, const OBB& obb2) {
+
+	std::vector<vector3> ret;
+	vector3 vertexs[8]{
+		{+obb1.half_width.x * obb1.u_axes[0] + obb1.half_width.y * obb1.u_axes[1] + obb1.half_width.z * obb1.u_axes[2]},
+		{+obb1.half_width.x * obb1.u_axes[0] + obb1.half_width.y * obb1.u_axes[1] - obb1.half_width.z * obb1.u_axes[2]},
+		{+obb1.half_width.x * obb1.u_axes[0] - obb1.half_width.y * obb1.u_axes[1] + obb1.half_width.z * obb1.u_axes[2]},
+		{+obb1.half_width.x * obb1.u_axes[0] - obb1.half_width.y * obb1.u_axes[1] - obb1.half_width.z * obb1.u_axes[2]},
+		{-obb1.half_width.x * obb1.u_axes[0] + obb1.half_width.y * obb1.u_axes[1] + obb1.half_width.z * obb1.u_axes[2]},
+		{-obb1.half_width.x * obb1.u_axes[0] + obb1.half_width.y * obb1.u_axes[1] - obb1.half_width.z * obb1.u_axes[2]},
+		{-obb1.half_width.x * obb1.u_axes[0] - obb1.half_width.y * obb1.u_axes[1] + obb1.half_width.z * obb1.u_axes[2]},
+		{-obb1.half_width.x * obb1.u_axes[0] - obb1.half_width.y * obb1.u_axes[1] - obb1.half_width.z * obb1.u_axes[2]}
+	};
+	float ra, rb; //obb1,obb2のLに投影された長さ
+	vector3 L; //投影する軸
+	vector3 T = obb1.center - obb2.center; //2obbの中心座標の距離
+
+	for (int i = 0; i < 8; i++) {
+		bool vertex_in_obb = true;
+
+		for (int o = 0; o < 3; o++) {
+			vector3 L = obb2.u_axes[o];
+			float ra = obb2.half_width[o];
+			float rb = vector3_dot(L, vertexs[i]);
+			float AA = vector3_dot(L, T) + rb;
+			if (AA > ra) {
+				vertex_in_obb = false;
+				break;
+			}
+		}
+
+		if (vertex_in_obb == true)
+			ret.push_back(vertexs[i]);
+	}
+
+	return ret;
 }
 
 int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Contact>& contacts, float restitution)
@@ -657,10 +557,7 @@ int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Co
 	obb0.u_axes[0].x = m._11; obb0.u_axes[0].y = m._12; obb0.u_axes[0].z = m._13;
 	obb0.u_axes[1].x = m._21; obb0.u_axes[1].y = m._22; obb0.u_axes[1].z = m._23;
 	obb0.u_axes[2].x = m._31; obb0.u_axes[2].y = m._32; obb0.u_axes[2].z = m._33;
-	obb0.half_width = b0.half_size;
-	obb0.half_width.x *= b0.world_scale.x;
-	obb0.half_width.y *= b0.world_scale.y;
-	obb0.half_width.z *= b0.world_scale.z;
+	obb0.half_width = b0.world_size;
 
 	m = b1.world_orientation.get_rotate_matrix();
 	OBB obb1;
@@ -668,10 +565,7 @@ int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Co
 	obb1.u_axes[0].x = m._11; obb1.u_axes[0].y = m._12; obb1.u_axes[0].z = m._13;
 	obb1.u_axes[1].x = m._21; obb1.u_axes[1].y = m._22; obb1.u_axes[1].z = m._23;
 	obb1.u_axes[2].x = m._31; obb1.u_axes[2].y = m._32; obb1.u_axes[2].z = m._33;
-	obb1.half_width = b1.half_size;
-	obb1.half_width.x *= b1.world_scale.x;
-	obb1.half_width.y *= b1.world_scale.y;
-	obb1.half_width.z *= b1.world_scale.z;
+	obb1.half_width = b1.world_size;
 
 
 	float smallest_penetration = FLT_MAX;	//最小めり込み量
@@ -690,25 +584,31 @@ int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Co
 		}
 		n = n.unit_vect();
 
-		//接触点(p)はobb1の8頂点のうちのどれか
-		vector3 p = obb1.half_width;	//obb1の各辺の長さは、obb1の重心から接触点(p)への相対位置の手がかりになる
-		//obb0とobb1の位置関係(d)より接触点(p)を求める
-		if (vector3_dot(obb1.u_axes[0], d) > 0) p.x = -p.x;
-		if (vector3_dot(obb1.u_axes[1], d) > 0) p.y = -p.y;
-		if (vector3_dot(obb1.u_axes[2], d) > 0) p.z = -p.z;
-		//ワールド空間へ座標変換
-		vector3_be_rotated_by_quaternion(p, b1.world_orientation);
-		p += b1.world_position;
+		////接触点(p)はobb1の8頂点のうちのどれか
+		//vector3 p = obb1.half_width;	//obb1の各辺の長さは、obb1の重心から接触点(p)への相対位置の手がかりになる
+		////obb0とobb1の位置関係(d)より接触点(p)を求める
+		//if (vector3_dot(obb1.u_axes[0], d) > 0) p.x = -p.x;
+		//if (vector3_dot(obb1.u_axes[1], d) > 0) p.y = -p.y;
+		//if (vector3_dot(obb1.u_axes[2], d) > 0) p.z = -p.z;
 
-		//Contactオブジェクトを生成し、全てのメンバ変数に値をセットし、コンテナ(contacts)に追加する
-		Contact contact;
-		contact.normal = n;
-		contact.point = p;
-		contact.penetration = smallest_penetration;
-		contact.body[0] = &b0;
-		contact.body[1] = &b1;
-		contact.restitution = restitution;
-		contacts.push_back(contact);
+		std::vector<vector3> vertexs = vertex_in_obb(obb1, obb0);
+		for (int i = 0; i < vertexs.size(); i++) {
+			//ワールド空間へ座標変換
+			vector3 p = vertexs[i];
+
+			//p = vector3_be_rotated_by_quaternion(p, b1.world_orientation);
+			p += b1.world_position;
+
+			//Contactオブジェクトを生成し、全てのメンバ変数に値をセットし、コンテナ(contacts)に追加する
+			Contact contact;
+			contact.normal = n;
+			contact.point = p;
+			contact.penetration = smallest_penetration;
+			contact.body[0] = &b0;
+			contact.body[1] = &b1;
+			contact.restitution = restitution;
+			contacts.push_back(contact);
+		}
 	}
 	//②obb0の頂点がobb1の面と衝突した場合
 	//Contactオブジェクトを生成し、全てのメンバ変数に値をセットし、コンテナ(contacts)に追加する
@@ -722,22 +622,27 @@ int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Co
 		}
 		n = n.unit_vect();
 
-		vector3 p = obb0.half_width;
-		if (vector3_dot(obb0.u_axes[0], d) > 0) p.x = -p.x;
-		if (vector3_dot(obb0.u_axes[1], d) > 0) p.y = -p.y;
-		if (vector3_dot(obb0.u_axes[2], d) > 0) p.z = -p.z;
+		//vector3 p = obb0.half_width;
+		//if (vector3_dot(obb0.u_axes[0], d) > 0) p.x = -p.x;
+		//if (vector3_dot(obb0.u_axes[1], d) > 0) p.y = -p.y;
+		//if (vector3_dot(obb0.u_axes[2], d) > 0) p.z = -p.z;
+		std::vector<vector3> vertexs = vertex_in_obb(obb0, obb1);
+		for (int i = 0; i < vertexs.size(); i++) {
+			//ワールド空間へ座標変換
+			vector3 p = vertexs[i];
 
-		vector3_be_rotated_by_quaternion(p, b0.world_orientation);
-		p += b0.world_position;
+			//p = vector3_be_rotated_by_quaternion(p, b0.world_orientation);
+			p += b0.world_position;
 
-		Contact contact;
-		contact.normal = n;
-		contact.point = p;
-		contact.penetration = smallest_penetration;
-		contact.body[0] = &b1;
-		contact.body[1] = &b0;
-		contact.restitution = restitution;
-		contacts.push_back(contact);
+			Contact contact;
+			contact.normal = n;
+			contact.point = p;
+			contact.penetration = smallest_penetration;
+			contact.body[0] = &b1;
+			contact.body[1] = &b0;
+			contact.restitution = restitution;
+			contacts.push_back(contact);
+		}
 	}
 	//③obb0の辺とobb1の辺と衝突した場合
 	//Contactオブジェクトを生成し、全てのメンバ変数に値をセットし、コンテナ(contacts)に追加する
@@ -758,7 +663,7 @@ int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Co
 			if (vector3_dot(obb0.u_axes[1], n) > 0) p[0].y = -p[0].y;
 			if (vector3_dot(obb0.u_axes[2], n) > 0) p[0].z = -p[0].z;
 			p[0][smallest_axis[0]] = 0;				 
-			vector3_be_rotated_by_quaternion(p[0], b0.world_orientation);
+			p[0] = vector3_be_rotated_by_quaternion(p[0], b0.world_orientation);
 			p[0] += b0.world_position;
 
 			//_DDM::I().AddCross(p[0], 1);
@@ -768,7 +673,7 @@ int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Co
 			if (vector3_dot(obb1.u_axes[1], n) > 0) p[1].y = -p[1].y;
 			if (vector3_dot(obb1.u_axes[2], n) > 0) p[1].z = -p[1].z;
 			p[1][smallest_axis[1]] = 0;
-			vector3_be_rotated_by_quaternion(p[1], b1.world_orientation);
+			p[1] = vector3_be_rotated_by_quaternion(p[1], b1.world_orientation);
 			p[1] += b1.world_position;
 
 			//_DDM::I().AddCross(p[1], 1);
@@ -792,6 +697,7 @@ int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Co
 void Contact::resolve()
 {
 	assert(penetration > 0);
+	if (body[0]->is_movable() == false && body[1]->is_movable() == false)return;
 
 	float vrel = 0; //相対速度
 
@@ -834,9 +740,6 @@ void Contact::resolve()
 
 	//Baraff[1997](8-12)より各剛体の並進速度(linear_velocity)と角速度(angular_velocity)を更新する
 	vector3 impulse = j * normal;
-	if (isnan(impulse.norm())) {
-		int xzcx = 0;
-	}
 
 	vector3 friction(0, 0, 0);	//摩擦力
 	float cof = 0.6f;		//摩擦係数（Coefficient of friction）
@@ -845,27 +748,26 @@ void Contact::resolve()
 	vector3 vtb = pdotb - vector3_dot(normal, pdotb) * normal;	//衝突点Bの速度（pdotb）の衝突面平行成分
 	vector3 vt = vta - vtb;	//衝突点ABの衝突面接線方向の相対速度（すべり方向）
 	float vrel_t = vt.norm_sqr();
-	//摩擦の適応(静摩擦、動摩擦の区別なし)
+
 	if (vrel_t > fabsf(vrel)* cof)	//衝突点ABの衝突面法線方向の相対速度の大きさ（vrel）と衝突点ABの衝突面接線方向の相対速度の大きさ（vrel_t）の比較
 	{
 		friction = -vt.unit_vect(); //摩擦力はすべり方向の逆方向に作用する
 		friction *= j * cof;	//摩擦力は衝突の大きさと摩擦係数に比例する
 	}
- 	impulse += friction;	//撃力に補正を与える
+	impulse += friction;	//撃力に補正を与える
 
 	//QUESTION : なぜ速度に加えているのか
 #if 0
-	//body[0]->linear_velocity += impulse * body[0]->inverse_mass();
 	body[0]->accumulated_force += impulse;
 	ta = vector3_cross(ra, impulse);
 	//ta = vector3_trans(ta, body[0]->inverse_inertial_tensor());
 	body[0]->accumulated_torque += ta;
-
-	//body[1]->linear_velocity -= impulse * body[1]->inverse_mass();
+	body[0]->impulse += impulse - body[0]->impulse;
 	body[1]->accumulated_force -= impulse;
 	tb = vector3_cross(rb, impulse);
 	//tb = vector3_trans(tb, body[1]->inverse_inertial_tensor());
 	body[1]->accumulated_torque -= tb;
+
 #else
 	body[0]->linear_velocity += impulse * body[0]->inverse_mass();
 	ta = vector3_cross(ra, impulse);
@@ -879,14 +781,11 @@ void Contact::resolve()
 #endif
 
 	//めり込み量の解決
-	//inertial_massがFLT_MAX
 	if (body[0]->is_movable() == false) {
-	//	body[0]->position += penetration * body[1]->inertial_mass / (body[0]->inertial_mass + body[1]->inertial_mass) * normal;
 		body[1]->world_position -= penetration * normal;
 	}
 	else if (body[1]->is_movable() == false) {
 		body[0]->world_position += penetration * normal;
-		//	body[1]->position -= penetration * body[0]->inertial_mass / (body[0]->inertial_mass + body[1]->inertial_mass) * normal;
 	}
 	else {
 		body[0]->world_position += penetration * body[1]->inertial_mass / (body[0]->inertial_mass + body[1]->inertial_mass) * normal;

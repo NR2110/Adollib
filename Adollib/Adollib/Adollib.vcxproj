@@ -136,11 +136,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Scripts\camera_manager.h" />
+    <ClInclude Include="..\Scripts\camera_s.h" />
+    <ClInclude Include="..\Scripts\object_fall.h" />
+    <ClInclude Include="..\Scripts\object_manager.h" />
+    <ClInclude Include="..\Scripts\object_rotate.h" />
     <ClInclude Include="..\Scripts\player.h" />
     <ClInclude Include="..\Scripts\scene_game_all.h" />
     <ClInclude Include="Adollib.h" />
-    <ClInclude Include="camera_manager.h" />
-    <ClInclude Include="camera_s.h" />
     <ClInclude Include="cbuffer_manager.h" />
     <ClInclude Include="complex.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -162,8 +165,6 @@
     <ClInclude Include="mesh.h" />
     <ClInclude Include="misc.h" />
     <ClInclude Include="object.h" />
-    <ClInclude Include="object_fall.h" />
-    <ClInclude Include="object_manager.h" />
     <ClInclude Include="quaternion.h" />
     <ClInclude Include="resource_manager.h" />
     <ClInclude Include="rigit_body.h" />
@@ -184,10 +185,13 @@
     <ClInclude Include="vector.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Scripts\camera_manager.cpp" />
+    <ClCompile Include="..\Scripts\camera_s.cpp" />
+    <ClCompile Include="..\Scripts\object_fall.cpp" />
+    <ClCompile Include="..\Scripts\object_manager.cpp" />
+    <ClCompile Include="..\Scripts\object_rotate.cpp" />
     <ClCompile Include="..\Scripts\player.cpp" />
     <ClCompile Include="Adollib.cpp" />
-    <ClCompile Include="camera_manager.cpp" />
-    <ClCompile Include="camera_s.cpp" />
     <ClCompile Include="complex.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -203,8 +207,6 @@
     <ClCompile Include="material_for_collider.cpp" />
     <ClCompile Include="matrix.cpp" />
     <ClCompile Include="mesh.cpp" />
-    <ClCompile Include="object_fall.cpp" />
-    <ClCompile Include="object_manager.cpp" />
     <ClCompile Include="quaternion.cpp" />
     <ClCompile Include="resource_manager.cpp" />
     <ClCompile Include="rigit_body.cpp" />

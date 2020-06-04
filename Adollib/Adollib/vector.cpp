@@ -154,7 +154,7 @@ float vector3::norm() const {
 vector3 vector3::unit_vect() {
 	float V = norm_sqr();
 	if (V == 1.0f)return *this;
-	if (V < FLT_EPSILON)return vector3(0, 0, 0);
+	if (V == 0)return vector3(0, 0, 0);
 	vector3 R = *this;
 	return R / V;
 }
