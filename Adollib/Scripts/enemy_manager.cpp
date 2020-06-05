@@ -14,6 +14,9 @@ namespace Adollib
 
 	void Enemy_manager::start()
 	{
+		Al_Global::Coefficient_of_friction = 0.6;
+		Al_Global::resituation = 0.4;
+
 		add_enemy(Enemy::Enemy_type::normal, vector3(5, 0, 5), quaternion_from_euler(0,180,0));
 		//add_enemy(Enemy::Enemy_type::normal, vector3(5, 5, 5.06), quaternion_identity());
 	}

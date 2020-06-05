@@ -67,9 +67,7 @@ namespace Adollib {
 		quaternion look_P = quaternion_from_euler(0, P.y, 0);
 		quaternion E_look = quaternion_from_euler(0, E.y, 0);
 
-		quaternion look = look_P * E_look.conjugate();
-
-
+		quaternion look = look_P - E_look.conjugate();
 
 		return look;
 	}

@@ -13,6 +13,9 @@ namespace Adollib {
 
 		static float elapsed_time;
 
+		static float Coefficient_of_friction;
+		static float resituation;
+
 		//::::::::::::::::::::
 		// time : 
 		// change_time : F‚ª•Ï‰»‚·‚éŠÔŠu

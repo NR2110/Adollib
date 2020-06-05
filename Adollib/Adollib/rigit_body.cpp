@@ -4,6 +4,7 @@ using namespace Adollib;
 using namespace Contacts;
 
 #include "gameobject.h"
+#include "Adollib.h"
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 		#pragma region Rigitbody
@@ -548,42 +549,168 @@ std::vector<vector3> vertex_in_obb(const OBB& obb1, const OBB& obb2) {
 		}
 	}
 
-	{
-		vector3 vertexs[8]{
-			{+obb2.half_width.x * obb2.u_axes[0] + obb2.half_width.y * obb2.u_axes[1] + obb2.half_width.z * obb2.u_axes[2]},
-			{+obb2.half_width.x * obb2.u_axes[0] + obb2.half_width.y * obb2.u_axes[1] - obb2.half_width.z * obb2.u_axes[2]},
-			{+obb2.half_width.x * obb2.u_axes[0] - obb2.half_width.y * obb2.u_axes[1] + obb2.half_width.z * obb2.u_axes[2]},
-			{+obb2.half_width.x * obb2.u_axes[0] - obb2.half_width.y * obb2.u_axes[1] - obb2.half_width.z * obb2.u_axes[2]},
-			{-obb2.half_width.x * obb2.u_axes[0] + obb2.half_width.y * obb2.u_axes[1] + obb2.half_width.z * obb2.u_axes[2]},
-			{-obb2.half_width.x * obb2.u_axes[0] + obb2.half_width.y * obb2.u_axes[1] - obb2.half_width.z * obb2.u_axes[2]},
-			{-obb2.half_width.x * obb2.u_axes[0] - obb2.half_width.y * obb2.u_axes[1] + obb2.half_width.z * obb2.u_axes[2]},
-			{-obb2.half_width.x * obb2.u_axes[0] - obb2.half_width.y * obb2.u_axes[1] - obb2.half_width.z * obb2.u_axes[2]}
-		};
-		float ra, rb; //obb1,obb2のLに投影された長さ
-		vector3 L; //投影する軸
-		vector3 T = obb2.center - obb1.center; //2obbの中心座標の距離
+	//{
+	//	vector3 vertexs[8]{
+	//		{+obb2.half_width.x * obb2.u_axes[0] + obb2.half_width.y * obb2.u_axes[1] + obb2.half_width.z * obb2.u_axes[2]},
+	//		{+obb2.half_width.x * obb2.u_axes[0] + obb2.half_width.y * obb2.u_axes[1] - obb2.half_width.z * obb2.u_axes[2]},
+	//		{+obb2.half_width.x * obb2.u_axes[0] - obb2.half_width.y * obb2.u_axes[1] + obb2.half_width.z * obb2.u_axes[2]},
+	//		{+obb2.half_width.x * obb2.u_axes[0] - obb2.half_width.y * obb2.u_axes[1] - obb2.half_width.z * obb2.u_axes[2]},
+	//		{-obb2.half_width.x * obb2.u_axes[0] + obb2.half_width.y * obb2.u_axes[1] + obb2.half_width.z * obb2.u_axes[2]},
+	//		{-obb2.half_width.x * obb2.u_axes[0] + obb2.half_width.y * obb2.u_axes[1] - obb2.half_width.z * obb2.u_axes[2]},
+	//		{-obb2.half_width.x * obb2.u_axes[0] - obb2.half_width.y * obb2.u_axes[1] + obb2.half_width.z * obb2.u_axes[2]},
+	//		{-obb2.half_width.x * obb2.u_axes[0] - obb2.half_width.y * obb2.u_axes[1] - obb2.half_width.z * obb2.u_axes[2]}
+	//	};
+	//	float ra, rb; //obb1,obb2のLに投影された長さ
+	//	vector3 L; //投影する軸
+	//	vector3 T = obb2.center - obb1.center; //2obbの中心座標の距離
 
-		for (int i = 0; i < 8; i++) {
-			bool vertex_in_obb = true;
+	//	for (int i = 0; i < 8; i++) {
+	//		bool vertex_in_obb = true;
 
-			for (int o = 0; o < 3; o++) {
-				vector3 L = obb1.u_axes[o];
-				float ra = obb1.half_width[o];
-				float rb = vector3_dot(L, vertexs[i]);
-				float AA = vector3_dot(L, T) + rb;
-				if (AA > ra) {
-					vertex_in_obb = false;
-					break;
-				}
-			}
+	//		for (int o = 0; o < 3; o++) {
+	//			vector3 L = obb1.u_axes[o];
+	//			float ra = obb1.half_width[o];
+	//			float rb = vector3_dot(L, vertexs[i]);
+	//			float AA = vector3_dot(L, T) + rb;
+	//			if (AA > ra) {
+	//				vertex_in_obb = false;
+	//				break;
+	//			}
+	//		}
 
-			if (vertex_in_obb == true)
-				ret.push_back(vertexs[i]);
-		}
-	}
+	//		if (vertex_in_obb == true)
+	//			ret.push_back(vertexs[i]);
+	//	}
+	//}
 	return ret;
 }
 
+#if 1
+int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Contact>& contacts, float restitution)
+{
+	matrix m;
+	m = b0.world_orientation.get_rotate_matrix();
+	OBB obb0;
+	obb0.center = b0.world_position;
+	obb0.u_axes[0].x = m._11; obb0.u_axes[0].y = m._12; obb0.u_axes[0].z = m._13;
+	obb0.u_axes[1].x = m._21; obb0.u_axes[1].y = m._22; obb0.u_axes[1].z = m._23;
+	obb0.u_axes[2].x = m._31; obb0.u_axes[2].y = m._32; obb0.u_axes[2].z = m._33;
+	obb0.half_width = b0.world_size;
+
+	m = b1.world_orientation.get_rotate_matrix();
+	OBB obb1;
+	obb1.center = b1.world_position;
+	obb1.u_axes[0].x = m._11; obb1.u_axes[0].y = m._12; obb1.u_axes[0].z = m._13;
+	obb1.u_axes[1].x = m._21; obb1.u_axes[1].y = m._22; obb1.u_axes[1].z = m._23;
+	obb1.u_axes[2].x = m._31; obb1.u_axes[2].y = m._32; obb1.u_axes[2].z = m._33;
+	obb1.half_width = b1.world_size;
+
+	float smallest_penetration = FLT_MAX;	//最小めり込み量
+	int smallest_axis[2];	//最小めり込み量を得た分離軸の作成に使用した各OBBのローカル軸番号 辺×辺用に2つ
+	SAT_TYPE smallest_case;	//衝突の種類 
+	if (!sat_obb_obb(obb0, obb1, smallest_penetration, smallest_axis, smallest_case)) return 0;
+
+	//obb1の頂点がobb0の面と衝突した場合
+	if (smallest_case == POINTB_FACETA)
+	{
+		vector3 d = obb1.center - obb0.center;	//obb0からobb1への相対位置
+		vector3 n = obb0.u_axes[smallest_axis[0]];	//obb0の衝突面の法線と平行のobb0のローカル軸ベクトル
+		if (vector3_dot(n, d) > 0)	//obb0とobb1の位置関係より衝突面の法線ベクトルを決定する
+		{
+			n = n * -1.0f;
+		}
+		n = n.unit_vect();
+
+		std::vector<vector3> vertexs = vertex_in_obb(obb1, obb0);
+		for (int i = 0; i < vertexs.size(); i++) {
+			//ワールド空間へ座標変換
+			vector3 p = vertexs[i];
+			p += b1.world_position;
+
+			//Contactオブジェクトを生成し、全てのメンバ変数に値をセットし、コンテナ(contacts)に追加する
+			Contact contact;
+			contact.normal = n;
+			contact.point = p;
+			contact.penetration = smallest_penetration;
+			contact.body[0] = &b0;
+			contact.body[1] = &b1;
+			contact.restitution = restitution;
+			contacts.push_back(contact);
+		}
+	}
+	//②obb0の頂点がobb1の面と衝突した場合
+	//Contactオブジェクトを生成し、全てのメンバ変数に値をセットし、コンテナ(contacts)に追加する
+	else if (smallest_case == POINTA_FACETB)
+	{
+		vector3 d = obb0.center - obb1.center;
+		vector3 n = obb1.u_axes[smallest_axis[1]];
+		if (vector3_dot(n, d) > 0)
+		{
+			n = n * -1.0f;
+		}
+		n = n.unit_vect();
+
+		std::vector<vector3> vertexs = vertex_in_obb(obb0, obb1);
+		for (int i = 0; i < vertexs.size(); i++) {
+			//ワールド空間へ座標変換
+			vector3 p = vertexs[i];
+			p += b0.world_position;
+
+			Contact contact;
+			contact.normal = n;
+			contact.point = p;
+			contact.penetration = smallest_penetration;
+			contact.body[0] = &b1;
+			contact.body[1] = &b0;
+			contact.restitution = restitution;
+			contacts.push_back(contact);
+		}
+	}
+	//③obb0の辺とobb1の辺と衝突した場合
+	//Contactオブジェクトを生成し、全てのメンバ変数に値をセットし、コンテナ(contacts)に追加する
+	else if (smallest_case == EDGE_EDGE)
+	{
+		vector3 d = obb1.center - obb0.center;
+		vector3 n;
+		n = vector3_cross(obb0.u_axes[smallest_axis[0]], obb1.u_axes[smallest_axis[1]]);
+		n = n.unit_vect();
+		if (vector3_dot(n, d) > 0)
+		{
+			n = n * -1.0f;
+		}
+
+		vector3 p[2] = { obb0.half_width, obb1.half_width };
+		{
+			if (vector3_dot(obb0.u_axes[0], n) > 0) p[0].x = -p[0].x;
+			if (vector3_dot(obb0.u_axes[1], n) > 0) p[0].y = -p[0].y;
+			if (vector3_dot(obb0.u_axes[2], n) > 0) p[0].z = -p[0].z;
+			p[0][smallest_axis[0]] = 0;				 
+			p[0] = vector3_be_rotated_by_quaternion(p[0], b0.world_orientation);
+			p[0] += b0.world_position;
+
+			if (vector3_dot(obb1.u_axes[0], n) > 0) p[1].x = -p[1].x;
+			if (vector3_dot(obb1.u_axes[1], n) > 0) p[1].y = -p[1].y;
+			if (vector3_dot(obb1.u_axes[2], n) > 0) p[1].z = -p[1].z;
+			p[1][smallest_axis[1]] = 0;
+			p[1] = vector3_be_rotated_by_quaternion(p[1], b1.world_orientation);
+			p[1] += b1.world_position;
+
+		}
+
+		Contact contact;
+		contact.normal = n;
+		contact.point = (p[0] + p[1]) * 0.5f;
+		contact.penetration = smallest_penetration;
+		contact.body[0] = &b0;
+		contact.body[1] = &b1;
+		contact.restitution = restitution;
+		contacts.push_back(contact);
+	}
+	else assert(0);
+
+	return 1;
+}
+#else
 int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Contact>& contacts, float restitution)
 {
 	matrix m;
@@ -626,25 +753,19 @@ int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Co
 		if (vector3_dot(obb1.u_axes[0], d) > 0) p.x = -p.x;
 		if (vector3_dot(obb1.u_axes[1], d) > 0) p.y = -p.y;
 		if (vector3_dot(obb1.u_axes[2], d) > 0) p.z = -p.z;
+		p = vector3_be_rotated_by_quaternion(p, b1.world_orientation);
+		p += b1.world_position;
 
-		//std::vector<vector3> vertexs = vertex_in_obb(obb1, obb0);
-		//for (int i = 0; i < vertexs.size(); i++) {
-		//	//ワールド空間へ座標変換
-		//	vector3 p = vertexs[i];
+		//Contactオブジェクトを生成し、全てのメンバ変数に値をセットし、コンテナ(contacts)に追加する
+		Contact contact;
+		contact.normal = n;
+		contact.point = p;
+		contact.penetration = smallest_penetration;
+		contact.body[0] = &b0;
+		contact.body[1] = &b1;
+		contact.restitution = restitution;
+		contacts.push_back(contact);
 
-			p = vector3_be_rotated_by_quaternion(p, b1.world_orientation);
-			p += b1.world_position;
-
-			//Contactオブジェクトを生成し、全てのメンバ変数に値をセットし、コンテナ(contacts)に追加する
-			Contact contact;
-			contact.normal = n;
-			contact.point = p;
-			contact.penetration = smallest_penetration;
-			contact.body[0] = &b0;
-			contact.body[1] = &b1;
-			contact.restitution = restitution;
-			contacts.push_back(contact);
-		//}
 	}
 	//②obb0の頂点がobb1の面と衝突した場合
 	//Contactオブジェクトを生成し、全てのメンバ変数に値をセットし、コンテナ(contacts)に追加する
@@ -662,24 +783,20 @@ int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Co
 		if (vector3_dot(obb0.u_axes[0], d) > 0) p.x = -p.x;
 		if (vector3_dot(obb0.u_axes[1], d) > 0) p.y = -p.y;
 		if (vector3_dot(obb0.u_axes[2], d) > 0) p.z = -p.z;
+		p = vector3_be_rotated_by_quaternion(p, b0.world_orientation);
+		p += b0.world_position;
 
-		//std::vector<vector3> vertexs = vertex_in_obb(obb0, obb1);
-		//for (int i = 0; i < vertexs.size(); i++) {
-		//	//ワールド空間へ座標変換
-		//	vector3 p = vertexs[i];
+		Contact contact;
+		contact.normal = n;
+		contact.point = p;
+		contact.penetration = smallest_penetration;
+		contact.body[0] = &b1;
+		contact.body[1] = &b0;
+		contact.restitution = restitution;
+		contacts.push_back(contact);
 
-			p = vector3_be_rotated_by_quaternion(p, b0.world_orientation);
-			p += b0.world_position;
 
-			Contact contact;
-			contact.normal = n;
-			contact.point = p;
-			contact.penetration = smallest_penetration;
-			contact.body[0] = &b1;
-			contact.body[1] = &b0;
-			contact.restitution = restitution;
-			contacts.push_back(contact);
-		//}
+
 	}
 	//③obb0の辺とobb1の辺と衝突した場合
 	//Contactオブジェクトを生成し、全てのメンバ変数に値をセットし、コンテナ(contacts)に追加する
@@ -699,7 +816,7 @@ int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Co
 			if (vector3_dot(obb0.u_axes[0], n) > 0) p[0].x = -p[0].x;
 			if (vector3_dot(obb0.u_axes[1], n) > 0) p[0].y = -p[0].y;
 			if (vector3_dot(obb0.u_axes[2], n) > 0) p[0].z = -p[0].z;
-			p[0][smallest_axis[0]] = 0;				 
+			p[0][smallest_axis[0]] = 0;
 			p[0] = vector3_be_rotated_by_quaternion(p[0], b0.world_orientation);
 			p[0] += b0.world_position;
 
@@ -730,7 +847,7 @@ int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Co
 
 	return 1;
 }
-
+#endif
 void Contact::resolve()
 {
 	assert(penetration > 0);
@@ -779,7 +896,7 @@ void Contact::resolve()
 	vector3 impulse = j * normal;
 
 	vector3 friction(0, 0, 0);	//摩擦力
-	float cof = 0.6;		//摩擦係数（Coefficient of friction）
+	float cof = Al_Global::Coefficient_of_friction;		//摩擦係数（Coefficient of friction）
 	//動摩擦力（Dynamic Friction）を表現する
 	vector3 vta = pdota - vector3_dot(normal, pdota) * normal;	//衝突点Aの速度（pdota）の衝突面平行成分
 	vector3 vtb = pdotb - vector3_dot(normal, pdotb) * normal;	//衝突点Bの速度（pdotb）の衝突面平行成分

@@ -17,7 +17,7 @@ namespace Adollib
 	// 毎フレーム呼ばれる更新処理
 	void object_fall::update()
 	{
-		float fall_pow = 0.089 * 0.5 * Al_Global::elapsed_time;
+		float fall_pow = 0.089 * 1 * Al_Global::elapsed_time;
 		collier->liner_acceleration += vector3(0, -1, 0) * fall_pow;
 	}
 

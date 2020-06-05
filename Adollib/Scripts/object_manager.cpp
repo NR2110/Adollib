@@ -18,7 +18,7 @@ namespace Adollib
 		//set_moveable_sphere(n_vector3(0, 30, 0), 5);
 		//set_moveable_sphere(n_vector3(0, 50, 0), 0.1);
 
-		set_plane(vector3(0, -1, 0), vector3(0, 1, 0), vector3(1, 0, 1));
+		//set_plane(vector3(0, -1, 0), vector3(0, 1, 0), vector3(1, 0, 1));
 		//	set_nohit_plane(n_vector3(1000, -1, 1000), n_vector3(0, 1, 0), n_vector3(1, 0, 1));
 			//set_moveable_box(n_vector3(0, 200, 0), n_vector3(10, 10, 10), n_vector3(45, 45, 0), n_vector3(0, 1, 1));
 			//set_moveable_box(n_vector3(0, 200, 0), n_vector3(10, 10, 10), n_vector3(0, 0, 0), n_vector3(0, 1, 1));
@@ -26,11 +26,11 @@ namespace Adollib
 		//set_fall_box(vector3(0, 30, 0), vector3(2, 2, 2), vector3(30, 30, 0), vector3(0, 1, 1));
 
 
-		for (int i = 0; i < 30; i++) {
-			set_fall_box(vector3(0, 5 + 10 * i, 0), vector3(2, 2, 2), vector3(30, 30, 0), vector3(0, 1, 1));
-			set_fall_box(vector3(5, 5 + 10 * i, 0), vector3(2, 2, 2), vector3(30, 30, 0), vector3(0, 1, 1));
-			set_fall_box(vector3(5, 5 + 10 * i, 5), vector3(2, 2, 2), vector3(30, 30, 0), vector3(0, 1, 1));
-			set_fall_box(vector3(0, 5 + 10 * i, 5), vector3(2, 2, 2), vector3(30, 30, 0), vector3(0, 1, 1));
+		for (int i = 0; i < 10; i++) {
+			set_fall_box(vector3(0, 5 + 10 * i, 0), vector3(2, 2, 2), vector3(0, 0, 0), vector3(0, 1, 1));
+			set_fall_box(vector3(5, 5 + 10 * i, 0), vector3(2, 2, 2), vector3(0, 0, 0), vector3(0, 1, 1));
+			set_fall_box(vector3(5, 5 + 10 * i, 5), vector3(2, 2, 2), vector3(0, 0, 0), vector3(0, 1, 1));
+			set_fall_box(vector3(0, 5 + 10 * i, 5), vector3(2, 2, 2), vector3(0, 0, 0), vector3(0, 1, 1));
 
 			//set_moveable_sphere(n_vector3(i, 5 + 10 * i, i), 2,			n_vector3(1, 1, 0));
 			//set_moveable_sphere(n_vector3(i + 5, 5 + 10 * i, i), 2,		n_vector3(1, 1, 0));

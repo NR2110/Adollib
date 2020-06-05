@@ -16,7 +16,7 @@ namespace Adollib
 	void Rigitbody_manager::update(Scenelist Sce)
 	{
 		std::vector<Contact> contacts;
-		float resituation = 0.4;
+		float resituation = Al_Global::resituation;
 		int object_num = RB_sphere_s[Sce].size() + RB_box_s[Sce].size() + RB_plane_s[Sce].size();
 		if (object_num == 0)return;
 
@@ -53,7 +53,7 @@ namespace Adollib
 #else
 		static int iii = 0;
 		for (int i = 0; i < RBs.size(); i++) {
-			if(iii == 0)
+			//if(iii == 0)
 			//world‹óŠÔ‚Å‚Ìî•ñ‚ðXV
 			RBs[i].rigit_body->update_world_trans();
 
