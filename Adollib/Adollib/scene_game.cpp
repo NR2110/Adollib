@@ -15,12 +15,13 @@ namespace Adollib {
 
 		//::: field ::::::::::
 		{
-			Gameobject* GO = Gameobject_manager::create();
+			Gameobject* GO = Gameobject_manager::createCube();
 			GO->transform->local_pos = vector3(0, -1, 0);
 			GO->transform->local_scale = vector3(60, 0.1, 60);
+			GO->material->color = vector4(1, 1, 1, 1);
 
-			Rigitbody* R = GO->add_collider_box();
-			//Rigitbody* R = GO->add_collider_plane();
+			//Rigitbody* R = GO->add_collider_box();
+			Rigitbody* R = GO->add_collider_plane();
 			//Rigitbody* R = GO->add_collider_sphere();
 			R->move = false;
 
@@ -29,11 +30,12 @@ namespace Adollib {
 		//::: player :::::::::
 		{
 			Gameobject* GO = Gameobject_manager::createFromFBX("../Data/FBX/tank.fbx","player");
-			GO->transform->local_pos = vector3(0, 9, 0);
+			GO->transform->local_pos = vector3(0, 5, -5);
 			GO->transform->local_orient = quaternion_from_euler(30, 0, 30);
-			GO->transform->local_scale = vector3(2, 2, 2);
+			GO->transform->local_scale = vector3(5, 5, 5);
+			GO->material->color = vector4(0, 0, 1, 1);
 
-			GO->add_collider_box(vector3(0, 0.34, 0), vector3(0.50, 0.34, 0.72), quaternion_from_euler(0, 0, 0));
+			GO->add_collider_box(vector3(0, 0.34, 0), vector3(0.50, 0.34, 0.72));
 
 			object_fall* O = GO->addComponent<object_fall>();
 			O->collier = GO->collider[0];

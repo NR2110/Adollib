@@ -1,4 +1,4 @@
-﻿  enemy.cpp
+﻿  scene_game.cpp
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。
@@ -6,8 +6,8 @@ C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(48,22): warning 
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Scripts\enemy.h(23): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Enemy::Move_pattern' の左辺を無視します。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\enemy.h(34): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Enemy::Enemy_type' の左辺を無視します。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\enemy.cpp(21,19): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\enemy.cpp(22,17): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\enemy.cpp(62,24): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Scripts\enemy.h(36): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Enemy::Enemy_type' の左辺を無視します。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\scene_game.cpp(20,52): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\scene_game.cpp(38,43): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\scene_game.cpp(38,70): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
   Adollib.vcxproj -> C:\Users\2190072\Documents\Adollib\Adollib\Debug\Adollib.exe

@@ -14,11 +14,15 @@ namespace Adollib
 
 	void Enemy_manager::start()
 	{
-		Al_Global::Coefficient_of_friction = 0.6;
-		Al_Global::resituation = 0.4;
+		Al_Global::Coefficient_of_friction = 0.98;
+		Al_Global::resituation = 0.1;
 
-		add_enemy(Enemy::Enemy_type::normal, vector3(5, 0, 5), quaternion_from_euler(0,180,0));
-		//add_enemy(Enemy::Enemy_type::normal, vector3(5, 5, 5.06), quaternion_identity());
+		add_enemy(Enemy::Enemy_type::pat_1, vector3(10, 0, 5), quaternion_from_euler(0,180,0));
+
+		add_enemy(Enemy::Enemy_type::pat_2, vector3(0, 0, 10), quaternion_from_euler(0, 180, 0));
+
+		add_enemy(Enemy::Enemy_type::pat_3, vector3(-10, 0, 5), quaternion_from_euler(0, 180, 0));
+
 	}
 
 
@@ -61,6 +65,8 @@ namespace Adollib {
 		E->transform->local_pos = start_pos;
 		E->transform->local_orient = start_orient;
 		E->transform->local_scale = vector3(5,5,5);
+
+		GO->material->color = vector4(1, 0, 0, 1);
 
 		object_fall* F = GO->addComponent<object_fall>();
 

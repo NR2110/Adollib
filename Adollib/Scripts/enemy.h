@@ -22,7 +22,7 @@ namespace Adollib
 			Neet
 		};
 
-		quaternion look_q();
+		quaternion look_q(float max_speed = 1);
 
 		void sample_move1();
 		void sample_move2();
@@ -30,12 +30,14 @@ namespace Adollib
 
 	public:
 		static enum class Enemy_type {
-			normal
+			pat_1,
+			pat_2,
+			pat_3
 		};
 
 		Transfome* player;
 
-		Enemy_type enemy_type = Enemy_type::normal;
+		Enemy_type enemy_type = Enemy_type::pat_1;
 		Move_pattern moving = Move_pattern::Neet;
 
 		Rigitbody* collier;

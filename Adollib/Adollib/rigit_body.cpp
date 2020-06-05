@@ -534,13 +534,25 @@ std::vector<vector3> vertex_in_obb(const OBB& obb1, const OBB& obb2) {
 			bool vertex_in_obb = true;
 
 			for (int o = 0; o < 3; o++) {
-				vector3 L = obb2.u_axes[o];
-				float ra = obb2.half_width[o];
-				float rb = vector3_dot(L, vertexs[i]);
-				float AA = vector3_dot(L, T) + rb;
-				if (AA > ra) {
-					vertex_in_obb = false;
-					break;
+				{
+					vector3 L = obb2.u_axes[o];
+					float ra = obb2.half_width[o];
+					float rb = vector3_dot(L, vertexs[i]);
+					float AA = vector3_dot(L, T) + rb;
+					if (AA > ra) {
+						vertex_in_obb = false;
+						break;
+					}
+				}
+				{
+					vector3 L = -obb2.u_axes[o];
+					float ra = obb2.half_width[o];
+					float rb = vector3_dot(L, vertexs[i]);
+					float AA = vector3_dot(L, T) + rb;
+					if (AA > ra) {
+						vertex_in_obb = false;
+						break;
+					}
 				}
 			}
 
@@ -652,6 +664,10 @@ int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Co
 
 		std::vector<vector3> vertexs = vertex_in_obb(obb0, obb1);
 		for (int i = 0; i < vertexs.size(); i++) {
+			if (vertexs.size() == 2) {
+				int sadsfdf = 0;
+			}
+
 			//ワールド空間へ座標変換
 			vector3 p = vertexs[i];
 			p += b0.world_position;
@@ -912,7 +928,7 @@ void Contact::resolve()
 	impulse += friction;	//撃力に補正を与える
 
 	//QUESTION : なぜ速度に加えているのか
-#if 1
+#if 0
 	body[0]->accumulated_force += impulse;
 	ta = vector3_cross(ra, impulse);
 	body[0]->accumulated_torque += ta;

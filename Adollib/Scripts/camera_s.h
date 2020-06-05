@@ -8,6 +8,7 @@ namespace Adollib
 	class camera_s : public Component_camera
 	{
 	public:
+		Transfome* player;
 
 	public:
 		void awake();
