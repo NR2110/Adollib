@@ -29,8 +29,8 @@ namespace Adollib
 		struct VS_resorce {
 			ID3D11VertexShader* VSshader;
 			ID3D11InputLayout* layout;
-
 		};
+
 		static std::map<std::string, VS_resorce>   VSshaders;
 		static std::map<std::string, ID3D11PixelShader*>    PSshaders;
 		static std::map<std::string, ID3D11GeometryShader*> GSshaders;

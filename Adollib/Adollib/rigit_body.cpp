@@ -513,38 +513,74 @@ bool sat_obb_obb(
 std::vector<vector3> vertex_in_obb(const OBB& obb1, const OBB& obb2) {
 
 	std::vector<vector3> ret;
-	vector3 vertexs[8]{
-		{+obb1.half_width.x * obb1.u_axes[0] + obb1.half_width.y * obb1.u_axes[1] + obb1.half_width.z * obb1.u_axes[2]},
-		{+obb1.half_width.x * obb1.u_axes[0] + obb1.half_width.y * obb1.u_axes[1] - obb1.half_width.z * obb1.u_axes[2]},
-		{+obb1.half_width.x * obb1.u_axes[0] - obb1.half_width.y * obb1.u_axes[1] + obb1.half_width.z * obb1.u_axes[2]},
-		{+obb1.half_width.x * obb1.u_axes[0] - obb1.half_width.y * obb1.u_axes[1] - obb1.half_width.z * obb1.u_axes[2]},
-		{-obb1.half_width.x * obb1.u_axes[0] + obb1.half_width.y * obb1.u_axes[1] + obb1.half_width.z * obb1.u_axes[2]},
-		{-obb1.half_width.x * obb1.u_axes[0] + obb1.half_width.y * obb1.u_axes[1] - obb1.half_width.z * obb1.u_axes[2]},
-		{-obb1.half_width.x * obb1.u_axes[0] - obb1.half_width.y * obb1.u_axes[1] + obb1.half_width.z * obb1.u_axes[2]},
-		{-obb1.half_width.x * obb1.u_axes[0] - obb1.half_width.y * obb1.u_axes[1] - obb1.half_width.z * obb1.u_axes[2]}
-	};
-	float ra, rb; //obb1,obb2のLに投影された長さ
-	vector3 L; //投影する軸
-	vector3 T = obb1.center - obb2.center; //2obbの中心座標の距離
 
-	for (int i = 0; i < 8; i++) {
-		bool vertex_in_obb = true;
+	{
+		vector3 vertexs[8]{
+			{+obb1.half_width.x * obb1.u_axes[0] + obb1.half_width.y * obb1.u_axes[1] + obb1.half_width.z * obb1.u_axes[2]},
+			{+obb1.half_width.x * obb1.u_axes[0] + obb1.half_width.y * obb1.u_axes[1] - obb1.half_width.z * obb1.u_axes[2]},
+			{+obb1.half_width.x * obb1.u_axes[0] - obb1.half_width.y * obb1.u_axes[1] + obb1.half_width.z * obb1.u_axes[2]},
+			{+obb1.half_width.x * obb1.u_axes[0] - obb1.half_width.y * obb1.u_axes[1] - obb1.half_width.z * obb1.u_axes[2]},
+			{-obb1.half_width.x * obb1.u_axes[0] + obb1.half_width.y * obb1.u_axes[1] + obb1.half_width.z * obb1.u_axes[2]},
+			{-obb1.half_width.x * obb1.u_axes[0] + obb1.half_width.y * obb1.u_axes[1] - obb1.half_width.z * obb1.u_axes[2]},
+			{-obb1.half_width.x * obb1.u_axes[0] - obb1.half_width.y * obb1.u_axes[1] + obb1.half_width.z * obb1.u_axes[2]},
+			{-obb1.half_width.x * obb1.u_axes[0] - obb1.half_width.y * obb1.u_axes[1] - obb1.half_width.z * obb1.u_axes[2]}
+		};
+		float ra, rb; //obb1,obb2のLに投影された長さ
+		vector3 L; //投影する軸
+		vector3 T = obb1.center - obb2.center; //2obbの中心座標の距離
 
-		for (int o = 0; o < 3; o++) {
-			vector3 L = obb2.u_axes[o];
-			float ra = obb2.half_width[o];
-			float rb = vector3_dot(L, vertexs[i]);
-			float AA = vector3_dot(L, T) + rb;
-			if (AA > ra) {
-				vertex_in_obb = false;
-				break;
+		for (int i = 0; i < 8; i++) {
+			bool vertex_in_obb = true;
+
+			for (int o = 0; o < 3; o++) {
+				vector3 L = obb2.u_axes[o];
+				float ra = obb2.half_width[o];
+				float rb = vector3_dot(L, vertexs[i]);
+				float AA = vector3_dot(L, T) + rb;
+				if (AA > ra) {
+					vertex_in_obb = false;
+					break;
+				}
 			}
-		}
 
-		if (vertex_in_obb == true)
-			ret.push_back(vertexs[i]);
+			if (vertex_in_obb == true)
+				ret.push_back(vertexs[i]);
+		}
 	}
 
+	{
+		vector3 vertexs[8]{
+			{+obb2.half_width.x * obb2.u_axes[0] + obb2.half_width.y * obb2.u_axes[1] + obb2.half_width.z * obb2.u_axes[2]},
+			{+obb2.half_width.x * obb2.u_axes[0] + obb2.half_width.y * obb2.u_axes[1] - obb2.half_width.z * obb2.u_axes[2]},
+			{+obb2.half_width.x * obb2.u_axes[0] - obb2.half_width.y * obb2.u_axes[1] + obb2.half_width.z * obb2.u_axes[2]},
+			{+obb2.half_width.x * obb2.u_axes[0] - obb2.half_width.y * obb2.u_axes[1] - obb2.half_width.z * obb2.u_axes[2]},
+			{-obb2.half_width.x * obb2.u_axes[0] + obb2.half_width.y * obb2.u_axes[1] + obb2.half_width.z * obb2.u_axes[2]},
+			{-obb2.half_width.x * obb2.u_axes[0] + obb2.half_width.y * obb2.u_axes[1] - obb2.half_width.z * obb2.u_axes[2]},
+			{-obb2.half_width.x * obb2.u_axes[0] - obb2.half_width.y * obb2.u_axes[1] + obb2.half_width.z * obb2.u_axes[2]},
+			{-obb2.half_width.x * obb2.u_axes[0] - obb2.half_width.y * obb2.u_axes[1] - obb2.half_width.z * obb2.u_axes[2]}
+		};
+		float ra, rb; //obb1,obb2のLに投影された長さ
+		vector3 L; //投影する軸
+		vector3 T = obb2.center - obb1.center; //2obbの中心座標の距離
+
+		for (int i = 0; i < 8; i++) {
+			bool vertex_in_obb = true;
+
+			for (int o = 0; o < 3; o++) {
+				vector3 L = obb1.u_axes[o];
+				float ra = obb1.half_width[o];
+				float rb = vector3_dot(L, vertexs[i]);
+				float AA = vector3_dot(L, T) + rb;
+				if (AA > ra) {
+					vertex_in_obb = false;
+					break;
+				}
+			}
+
+			if (vertex_in_obb == true)
+				ret.push_back(vertexs[i]);
+		}
+	}
 	return ret;
 }
 
@@ -584,19 +620,19 @@ int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Co
 		}
 		n = n.unit_vect();
 
-		////接触点(p)はobb1の8頂点のうちのどれか
-		//vector3 p = obb1.half_width;	//obb1の各辺の長さは、obb1の重心から接触点(p)への相対位置の手がかりになる
-		////obb0とobb1の位置関係(d)より接触点(p)を求める
-		//if (vector3_dot(obb1.u_axes[0], d) > 0) p.x = -p.x;
-		//if (vector3_dot(obb1.u_axes[1], d) > 0) p.y = -p.y;
-		//if (vector3_dot(obb1.u_axes[2], d) > 0) p.z = -p.z;
+		//接触点(p)はobb1の8頂点のうちのどれか
+		vector3 p = obb1.half_width;	//obb1の各辺の長さは、obb1の重心から接触点(p)への相対位置の手がかりになる
+		//obb0とobb1の位置関係(d)より接触点(p)を求める
+		if (vector3_dot(obb1.u_axes[0], d) > 0) p.x = -p.x;
+		if (vector3_dot(obb1.u_axes[1], d) > 0) p.y = -p.y;
+		if (vector3_dot(obb1.u_axes[2], d) > 0) p.z = -p.z;
 
-		std::vector<vector3> vertexs = vertex_in_obb(obb1, obb0);
-		for (int i = 0; i < vertexs.size(); i++) {
-			//ワールド空間へ座標変換
-			vector3 p = vertexs[i];
+		//std::vector<vector3> vertexs = vertex_in_obb(obb1, obb0);
+		//for (int i = 0; i < vertexs.size(); i++) {
+		//	//ワールド空間へ座標変換
+		//	vector3 p = vertexs[i];
 
-			//p = vector3_be_rotated_by_quaternion(p, b1.world_orientation);
+			p = vector3_be_rotated_by_quaternion(p, b1.world_orientation);
 			p += b1.world_position;
 
 			//Contactオブジェクトを生成し、全てのメンバ変数に値をセットし、コンテナ(contacts)に追加する
@@ -608,7 +644,7 @@ int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Co
 			contact.body[1] = &b1;
 			contact.restitution = restitution;
 			contacts.push_back(contact);
-		}
+		//}
 	}
 	//②obb0の頂点がobb1の面と衝突した場合
 	//Contactオブジェクトを生成し、全てのメンバ変数に値をセットし、コンテナ(contacts)に追加する
@@ -622,16 +658,17 @@ int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Co
 		}
 		n = n.unit_vect();
 
-		//vector3 p = obb0.half_width;
-		//if (vector3_dot(obb0.u_axes[0], d) > 0) p.x = -p.x;
-		//if (vector3_dot(obb0.u_axes[1], d) > 0) p.y = -p.y;
-		//if (vector3_dot(obb0.u_axes[2], d) > 0) p.z = -p.z;
-		std::vector<vector3> vertexs = vertex_in_obb(obb0, obb1);
-		for (int i = 0; i < vertexs.size(); i++) {
-			//ワールド空間へ座標変換
-			vector3 p = vertexs[i];
+		vector3 p = obb0.half_width;
+		if (vector3_dot(obb0.u_axes[0], d) > 0) p.x = -p.x;
+		if (vector3_dot(obb0.u_axes[1], d) > 0) p.y = -p.y;
+		if (vector3_dot(obb0.u_axes[2], d) > 0) p.z = -p.z;
 
-			//p = vector3_be_rotated_by_quaternion(p, b0.world_orientation);
+		//std::vector<vector3> vertexs = vertex_in_obb(obb0, obb1);
+		//for (int i = 0; i < vertexs.size(); i++) {
+		//	//ワールド空間へ座標変換
+		//	vector3 p = vertexs[i];
+
+			p = vector3_be_rotated_by_quaternion(p, b0.world_orientation);
 			p += b0.world_position;
 
 			Contact contact;
@@ -642,7 +679,7 @@ int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Co
 			contact.body[1] = &b0;
 			contact.restitution = restitution;
 			contacts.push_back(contact);
-		}
+		//}
 	}
 	//③obb0の辺とobb1の辺と衝突した場合
 	//Contactオブジェクトを生成し、全てのメンバ変数に値をセットし、コンテナ(contacts)に追加する
@@ -742,30 +779,29 @@ void Contact::resolve()
 	vector3 impulse = j * normal;
 
 	vector3 friction(0, 0, 0);	//摩擦力
-	float cof = 0.6f;		//摩擦係数（Coefficient of friction）
+	float cof = 0.6;		//摩擦係数（Coefficient of friction）
 	//動摩擦力（Dynamic Friction）を表現する
 	vector3 vta = pdota - vector3_dot(normal, pdota) * normal;	//衝突点Aの速度（pdota）の衝突面平行成分
 	vector3 vtb = pdotb - vector3_dot(normal, pdotb) * normal;	//衝突点Bの速度（pdotb）の衝突面平行成分
 	vector3 vt = vta - vtb;	//衝突点ABの衝突面接線方向の相対速度（すべり方向）
 	float vrel_t = vt.norm_sqr();
 
-	if (vrel_t > fabsf(vrel)* cof)	//衝突点ABの衝突面法線方向の相対速度の大きさ（vrel）と衝突点ABの衝突面接線方向の相対速度の大きさ（vrel_t）の比較
+	if (vrel_t > fabsf(vrel)* cof )	//衝突点ABの衝突面法線方向の相対速度の大きさ（vrel）と衝突点ABの衝突面接線方向の相対速度の大きさ（vrel_t）の比較
 	{
 		friction = -vt.unit_vect(); //摩擦力はすべり方向の逆方向に作用する
 		friction *= j * cof;	//摩擦力は衝突の大きさと摩擦係数に比例する
 	}
+	//QUASTION : 摩擦がうまく働かない
 	impulse += friction;	//撃力に補正を与える
 
 	//QUESTION : なぜ速度に加えているのか
-#if 0
+#if 1
 	body[0]->accumulated_force += impulse;
 	ta = vector3_cross(ra, impulse);
-	//ta = vector3_trans(ta, body[0]->inverse_inertial_tensor());
 	body[0]->accumulated_torque += ta;
-	body[0]->impulse += impulse - body[0]->impulse;
+
 	body[1]->accumulated_force -= impulse;
 	tb = vector3_cross(rb, impulse);
-	//tb = vector3_trans(tb, body[1]->inverse_inertial_tensor());
 	body[1]->accumulated_torque -= tb;
 
 #else

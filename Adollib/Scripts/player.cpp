@@ -4,8 +4,6 @@
 
 #include "player.h"
 
-using namespace Adollib;
-
 namespace Adollib
 {
 	// Š‘®‚·‚éƒV[ƒ“‚Ì‰Šú‰»‚Éˆê“x‚¾‚¯ŒÄ‚Î‚ê‚é

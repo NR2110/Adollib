@@ -138,6 +138,8 @@
   <ItemGroup>
     <ClInclude Include="..\Scripts\camera_manager.h" />
     <ClInclude Include="..\Scripts\camera_s.h" />
+    <ClInclude Include="..\Scripts\enemy.h" />
+    <ClInclude Include="..\Scripts\enemy_manager.h" />
     <ClInclude Include="..\Scripts\object_fall.h" />
     <ClInclude Include="..\Scripts\object_manager.h" />
     <ClInclude Include="..\Scripts\object_rotate.h" />
@@ -187,6 +189,8 @@
   <ItemGroup>
     <ClCompile Include="..\Scripts\camera_manager.cpp" />
     <ClCompile Include="..\Scripts\camera_s.cpp" />
+    <ClCompile Include="..\Scripts\enemy.cpp" />
+    <ClCompile Include="..\Scripts\enemy_manager.cpp" />
     <ClCompile Include="..\Scripts\object_fall.cpp" />
     <ClCompile Include="..\Scripts\object_manager.cpp" />
     <ClCompile Include="..\Scripts\object_rotate.cpp" />

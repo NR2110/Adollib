@@ -51,13 +51,16 @@ namespace Adollib
 
 #if USE_CHECK_CONTACT
 #else
+		static int iii = 0;
 		for (int i = 0; i < RBs.size(); i++) {
+			if(iii == 0)
 			//world空間での情報を更新
 			RBs[i].rigit_body->update_world_trans();
 
 			//毎フレームの処理を行う
 			RBs[i].rigit_body->integrate();
 		}
+		iii++;
 #endif
 
 		for (int i = 0; i < object_num; i++) {

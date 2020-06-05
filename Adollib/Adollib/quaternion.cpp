@@ -254,14 +254,14 @@ float Adollib::quaternion_dot(const quaternion& Q1, const quaternion& Q2) {
 }
 
 quaternion Adollib::quaternion_from_to_rotate(const vector3& V1, const vector3& V2) {
-	vector3 g = vector3_cross(V1, V2);
-	float radian = quaternion_radian(V1, V2);
+	vector3 g = vector3_cross(V1.unit_vect(), V2.unit_vect()).unit_vect();
+	float radian = quaternion_radian(V1.unit_vect(), V2.unit_vect());
 
 	quaternion F;
-	F.w = cosf(radian);
-	F.x = g.x * sinf(radian);
-	F.y = g.y * sinf(radian);
-	F.z = g.z * sinf(radian);
+	F.w = cosf(radian / 2);
+	F.x = g.x * sinf(radian / 2);
+	F.y = g.y * sinf(radian / 2);
+	F.z = g.z * sinf(radian / 2);
 
 	return F;
 }

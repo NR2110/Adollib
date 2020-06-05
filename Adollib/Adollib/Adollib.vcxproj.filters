@@ -133,11 +133,17 @@
     <ClCompile Include="..\Scripts\camera_s.cpp">
       <Filter>ソース ファイル\scene_game\camera</Filter>
     </ClCompile>
+    <ClCompile Include="..\Scripts\object_manager.cpp">
+      <Filter>ソース ファイル\scene_game\object</Filter>
+    </ClCompile>
     <ClCompile Include="..\Scripts\object_fall.cpp">
       <Filter>ソース ファイル\scene_game\object</Filter>
     </ClCompile>
-    <ClCompile Include="..\Scripts\object_manager.cpp">
-      <Filter>ソース ファイル\scene_game\object</Filter>
+    <ClCompile Include="..\Scripts\enemy_manager.cpp">
+      <Filter>ソース ファイル\scene_game\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\enemy.cpp">
+      <Filter>ソース ファイル\scene_game\enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -272,6 +278,12 @@
     </ClInclude>
     <ClInclude Include="..\Scripts\object_manager.h">
       <Filter>ソース ファイル\scene_game\object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\enemy_manager.h">
+      <Filter>ソース ファイル\scene_game\enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\enemy.h">
+      <Filter>ソース ファイル\scene_game\enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
