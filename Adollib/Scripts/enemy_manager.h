@@ -13,7 +13,7 @@ namespace Adollib {
 
 	public:
 
-		void add_enemy(Enemy::Enemy_type enemy_type,vector3 start_pos,quaternion start_orient);
+		void add_enemy(Enemy::Enemy_type enemy_type, vector3 start_pos, quaternion start_orient, vector4 color = vector4(1, 0, 0, 1));
 
 
 
@@ -27,9 +27,6 @@ namespace Adollib {
 
 		// 毎フレーム呼ばれる更新処理
 		void update();
-
-		// 毎フレーム、update()後に呼ばれる更新処理
-		void lateUpdate();
 
 		// このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる
 		void onEnable();

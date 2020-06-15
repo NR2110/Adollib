@@ -18,7 +18,7 @@ namespace Adollib
 		//set_moveable_sphere(n_vector3(0, 30, 0), 5);
 		//set_moveable_sphere(n_vector3(0, 50, 0), 0.1);
 
-		//set_plane(vector3(0, -1, 0), vector3(0, 1, 0), vector3(1, 0, 1));
+		set_plane(vector3(0, -1, 0), vector3(0, 1, 0), vector3(1, 0, 1));
 		//	set_nohit_plane(n_vector3(1000, -1, 1000), n_vector3(0, 1, 0), n_vector3(1, 0, 1));
 			//set_moveable_box(n_vector3(0, 200, 0), n_vector3(10, 10, 10), n_vector3(45, 45, 0), n_vector3(0, 1, 1));
 			//set_moveable_box(n_vector3(0, 200, 0), n_vector3(10, 10, 10), n_vector3(0, 0, 0), n_vector3(0, 1, 1));
@@ -27,10 +27,15 @@ namespace Adollib
 
 
 		for (int i = 0; i < 10; i++) {
-			set_fall_box(vector3(0, 5 + 10 * i, 0), vector3(2, 2, 2), vector3(0, 0, 0), vector3(0, 1, 1));
-			set_fall_box(vector3(5, 5 + 10 * i, 0), vector3(2, 2, 2), vector3(0, 0, 0), vector3(0, 1, 1));
-			set_fall_box(vector3(5, 5 + 10 * i, 5), vector3(2, 2, 2), vector3(0, 0, 0), vector3(0, 1, 1));
-			set_fall_box(vector3(0, 5 + 10 * i, 5), vector3(2, 2, 2), vector3(0, 0, 0), vector3(0, 1, 1));
+			//set_fall_box(vector3(0, 5 + 10 * i, 0), vector3(2, 2, 2), vector3(0, 0, 0), vector3(0, 1, 1));
+			//set_fall_box(vector3(5, 5 + 10 * i, 0), vector3(2, 2, 2), vector3(0, 0, 0), vector3(0, 1, 1));
+			//set_fall_box(vector3(5, 5 + 10 * i, 5), vector3(2, 2, 2), vector3(0, 0, 0), vector3(0, 1, 1));
+			//set_fall_box(vector3(0, 5 + 10 * i, 5), vector3(2, 2, 2), vector3(0, 0, 0), vector3(0, 1, 1));
+
+			set_fall_sphere(vector3(i * 0.01, 5 + 10 * i, i * 0.01), 2, vector3(0, 1, 1));
+			set_fall_sphere(vector3(5, 5 + 10 * i, i * 0.01), 2, vector3(0, 1, 1));
+			set_fall_sphere(vector3(5, 5 + 10 * i, 5), 2, vector3(0, 1, 1));
+			set_fall_sphere(vector3(i * 0.01, 5 + 10 * i, 5), 2, vector3(0, 1, 1));
 
 			//set_moveable_sphere(n_vector3(i, 5 + 10 * i, i), 2,			n_vector3(1, 1, 0));
 			//set_moveable_sphere(n_vector3(i + 5, 5 + 10 * i, i), 2,		n_vector3(1, 1, 0));
@@ -50,20 +55,6 @@ namespace Adollib
 
 	// 毎フレーム呼ばれる更新処理
 	void object_manager::update()
-	{
-		//n_matrix A;
-		//A._11 = 1;	A._12 = 0;	A._13 = 0;	A._14 = 100;
-		//A._21 = 0;	A._22 = 1;	A._23 = 0;	A._24 = 0;
-		//A._31 = 0;	A._32 = 0;	A._33 = 1;	A._34 = 0;
-		//A._41 = 0;	A._42 = 0;	A._43 = 0;	A._44 = 1;
-
-		//n_matrix B = matrix_inverse(A);
-
-		//int dafsgdf =1;
-
-	}
-	// 毎フレーム、update()後に呼ばれる更新処理
-	void object_manager::lateUpdate()
 	{
 
 

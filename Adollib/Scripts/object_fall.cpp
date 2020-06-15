@@ -21,13 +21,6 @@ namespace Adollib
 		collier->liner_acceleration += vector3(0, -1, 0) * fall_pow;
 	}
 
-	// 毎フレーム、update()後に呼ばれる更新処理
-	void object_fall::lateUpdate()
-	{
-
-
-	}
-
 	// このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる
 	void object_fall::onEnable()
 	{

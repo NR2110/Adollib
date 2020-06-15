@@ -34,7 +34,7 @@ namespace Adollib
 
 	void camera_s::start()
 	{
-		player = Gameobject_manager::find("player")->transform;
+//		player = Gameobject_manager::find("player")->transform;
 	}
 
 	// 毎フレーム呼ばれる更新処理
@@ -114,11 +114,6 @@ namespace Adollib
 			set_c_player_pos = false :
 			set_c_player_pos = true;
 
-	}
-
-	// 毎フレーム、update()後に呼ばれる更新処理
-	void camera_s::lateUpdate()
-	{
 	}
 
 	// このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる

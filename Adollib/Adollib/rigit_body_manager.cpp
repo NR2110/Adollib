@@ -51,16 +51,13 @@ namespace Adollib
 
 #if USE_CHECK_CONTACT
 #else
-		static int iii = 0;
 		for (int i = 0; i < RBs.size(); i++) {
-			//if(iii == 0)
 			//world空間での情報を更新
 			RBs[i].rigit_body->update_world_trans();
 
 			//毎フレームの処理を行う
 			RBs[i].rigit_body->integrate();
 		}
-		iii++;
 #endif
 
 		for (int i = 0; i < object_num; i++) {
@@ -106,10 +103,43 @@ namespace Adollib
 			}
 		}
 
+		std::list<Contact> contact_sorted;
+		for (int i = 0; i < contacts.size(); i++) {
+			std::list<Contact>::iterator itr = contact_sorted.begin();
+			std::list<Contact>::iterator itr_end = contact_sorted.end();
+
+			for (;;) {
+				if (itr == itr_end) {
+					contact_sorted.push_back(contacts[i]);
+					break;
+				}
+				if (itr->point.y > contacts[i].point.y) {
+					contact_sorted.insert(itr, contacts[i]);
+					break;
+				}
+				itr++;
+			}
+
+		}
+
+		//ちゃんとソートできているかの確認
+		assert(contact_sorted.size() == contacts.size());
+
+#if 1
+		{
+			std::list<Contact>::iterator itr = contact_sorted.begin();
+			std::list<Contact>::iterator itr_end = contact_sorted.end();
+			for (; itr != itr_end; itr++) {
+				itr->resolve();
+			}
+		}
+#else
+
 		for (int i = 0; i < contacts.size(); i++) {
 			//衝突の解決
 			contacts[i].resolve();
 		}
+#endif
 
 		for (int i = 0; i < RBs.size(); i++) {
 			//colliderの影響をアタッチされたgoへ

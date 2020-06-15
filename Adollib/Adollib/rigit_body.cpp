@@ -33,11 +33,10 @@ void Rigitbody::integrate(float duration) {
 		if (angular_velocity.norm() < FLT_EPSILON)angular_velocity = vector3(0, 0, 0);
 
 		//QUESTION : ã‚ÌŽ®‚¶‚áƒ_ƒ‚È‚Ì?
-		//Še‘¬“x‚É‚æ‚éŽp¨‚ÌXV 
+		//Še‘¬“x‚É‚æ‚éŽp¨‚ÌXV
 #if 1
 		world_orientation *= quaternion_radian_axis(angular_velocity.norm_sqr() * duration * 0.5, angular_velocity.unit_vect());
 		world_orientation = world_orientation.unit_vect();
-
 
 #else 
 		//Šp‘¬“x‚É‚æ‚éŽp¨‚ÌXV
@@ -47,10 +46,6 @@ void Rigitbody::integrate(float duration) {
 		orientation = orientation.unit_vect();
 #endif
 	}
-
-	//collider‚Ìƒ[ƒ‹ƒhî•ñ‚ÌXV
-	//world_position = local_position + gameobject->transform->position;
-	//world_orientation = local_orientation + gameobject->transform->orientation;
 
 	//‰Á‘¬‚ð0‚É‚·‚é
 	accumulated_force = vector3(0, 0, 0);
@@ -62,7 +57,6 @@ void Rigitbody::integrate(float duration) {
 void Rigitbody::resolve_gameobject() {
 	gameobject->co_e.orient *= local_orientation.conjugate() * gameobject->get_world_orientate().conjugate() * world_orientation;
 	gameobject->co_e.position += world_position -  vector3_be_rotated_by_quaternion(local_position * gameobject->get_world_scale(), world_orientation) - gameobject->get_world_position();
-	impulse = vector3(0, 0, 0);
 	
 }
 void Box::update_world_trans() {
@@ -597,7 +591,7 @@ std::vector<vector3> vertex_in_obb(const OBB& obb1, const OBB& obb2) {
 	return ret;
 }
 
-#if 1
+#if 0
 int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Contact>& contacts, float restitution)
 {
 	matrix m;
@@ -924,6 +918,10 @@ void Contact::resolve()
 		friction = -vt.unit_vect(); //–€ŽC—Í‚Í‚·‚×‚è•ûŒü‚Ì‹t•ûŒü‚Éì—p‚·‚é
 		friction *= j * cof;	//–€ŽC—Í‚ÍÕ“Ë‚Ì‘å‚«‚³‚Æ–€ŽCŒW”‚É”ä—á‚·‚é
 	}
+	else{
+		//friction = -vt.unit_vect(); //–€ŽC—Í‚Í‚·‚×‚è•ûŒü‚Ì‹t•ûŒü‚Éì—p‚·‚é
+		//friction *= j;	//–€ŽC—Í‚ÍÕ“Ë‚Ì‘å‚«‚³‚Æ–€ŽCŒW”‚É”ä—á‚·‚é
+	}
 	//QUASTION : –€ŽC‚ª‚¤‚Ü‚­“­‚©‚È‚¢
 	impulse += friction;	//Œ‚—Í‚É•â³‚ð—^‚¦‚é
 
@@ -950,6 +948,8 @@ void Contact::resolve()
 #endif
 
 	//‚ß‚èž‚Ý—Ê‚Ì‰ðŒˆ
+#if 0
+	//À•W‚ð’¼Ú‚¢‚¶‚é
 	if (body[0]->is_movable() == false) {
 		body[1]->world_position -= penetration * normal;
 	}
@@ -960,6 +960,30 @@ void Contact::resolve()
 		body[0]->world_position += penetration * body[1]->inertial_mass / (body[0]->inertial_mass + body[1]->inertial_mass) * normal;
 		body[1]->world_position -= penetration * body[0]->inertial_mass / (body[0]->inertial_mass + body[1]->inertial_mass) * normal;
 	}
+#else
+	//‰º‚©‚çã‚Ö
+	if (body[0]->is_movable() == false) {
+		body[1]->world_position -= penetration * normal;
+	}
+	else if (body[1]->is_movable() == false) {
+		body[0]->world_position += penetration * normal;
+	}
+	else {
+		vector3 N = normal;
+		N.y = 0;
+		if (normal.y > 0) {
+			body[0]->world_position += penetration * body[1]->inertial_mass / (body[0]->inertial_mass + body[1]->inertial_mass) * N;
+			body[0]->world_position += penetration * vector3(0, normal.y, 0);
+			body[1]->world_position -= penetration * body[0]->inertial_mass / (body[0]->inertial_mass + body[1]->inertial_mass) * N;
+		}
+		else {
+			body[0]->world_position += penetration * body[1]->inertial_mass / (body[0]->inertial_mass + body[1]->inertial_mass) * N;
+			body[1]->world_position -= penetration * body[0]->inertial_mass / (body[0]->inertial_mass + body[1]->inertial_mass) * N;
+			body[1]->world_position -= penetration * vector3(0, normal.y, 0);
+		}
+	}
+
+#endif
 
 }
 

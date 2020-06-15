@@ -34,13 +34,6 @@ namespace Adollib
 		}
 	}
 
-	// 毎フレーム、update()後に呼ばれる更新処理
-	void object_rotate::lateUpdate()
-	{
-
-
-	}
-
 	// このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる
 	void object_rotate::onEnable()
 	{

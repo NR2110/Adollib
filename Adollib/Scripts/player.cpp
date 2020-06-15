@@ -34,12 +34,6 @@ namespace Adollib
 
 		//framework::debug->setString("angular_velocity : %f,%f,%f", collier->angular_velocity.x, collier->angular_velocity.y, collier->angular_velocity.z);
 	}
-	// 毎フレーム、update()後に呼ばれる更新処理
-	void player::lateUpdate()
-	{
-
-
-	}
 
 	// このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる
 	void player::onEnable()

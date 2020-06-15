@@ -40,9 +40,6 @@ namespace Adollib
 		// 毎フレーム呼ばれる更新処理
 		virtual void update() {};
 
-		// 毎フレーム、update()後に呼ばれる更新処理
-		virtual void lateUpdate() {};
-
 		// このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる(GO生成時にスクリプトが有効な時も呼ばれる)
 		virtual void onEnable() {};
 

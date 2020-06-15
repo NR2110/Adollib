@@ -12,7 +12,8 @@ namespace Adollib
 {
 	// 所属するシーンの初期化時に一度だけ呼ばれる
 	void camera_manager_s::awake() {
-			set_camera(vector3(0, 0, -20), vector3(0, 0, 1));
+			set_camera(vector3(0, 30, -50), vector3(0, 0, 1));
+			Al_Global::resituation = 0.2;
 	}
 
 	void camera_manager_s::start()
@@ -27,7 +28,6 @@ namespace Adollib
 		if (input->getKeyTrigger(Key::C))
 			Al_Global::render_collider_flag = Al_Global::render_collider_flag == false ? true : false;
 
-		//quaternion Q = quaternion_by_euler(45, 45, 45);
 		//quaternion X = quaternion_angle_axis(45, vector3(1, 0, 0));
 		//quaternion Y = quaternion_angle_axis(45, vector3(0, 1, 0));
 		//quaternion Z = quaternion_angle_axis(45, vector3(0, 0, 1));
@@ -78,12 +78,6 @@ namespace Adollib
 		DirectX::XMStoreFloat3(&XFR2, XV2);
 
 		float AAA = 0;*/
-	}
-	// 毎フレーム、update()後に呼ばれる更新処理
-	void camera_manager_s::lateUpdate()
-	{
-
-
 	}
 
 	// このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる

@@ -18,44 +18,45 @@ namespace Adollib {
 	enum class Rigitbody_shape {
 		shape_box,
 		shape_sphere,
-		shape_plane
+		shape_plane,
+
+		shape_null
 
 	};
 
 	class Rigitbody {
-	private:
-
 	public:
-		bool move = true;
+		bool move = true; //可動オブジェクトカどうかのフラグ
 
-		vector3 impulse = vector3(0, 0, 0);
+		Gameobject* gameobject = nullptr;	//親情報
 
-		Gameobject* gameobject;           //親情報
+		Rigitbody_shape shape = Rigitbody_shape::shape_null;	//形情報
 
-		Rigitbody_shape shape;
+		vector3 world_position = vector3();		     //ワールド空間での座標
+		quaternion world_orientation = vector3();    //ワールド空間での姿勢
+		vector3 world_size = vector3();              //ワールド空間での大きさ
 
-		vector3 world_position;		     //ワールド空間での座標
-		quaternion world_orientation;    //ワールド空間での姿勢
-		vector3 world_size;              //ワールド空間での大きさ
+		vector3 local_position = vector3();             //goからの相対座標
+		quaternion local_orientation = quaternion_identity();       //goからの相対姿勢
+		vector3 local_scale = vector3();				//goとの相対scale
+		float density = 1;						//密度
 
-		vector3 local_position;             //goからの相対座標
-		quaternion local_orientation;       //goからの相対姿勢
-		vector3 local_scale;				//goとの相対scale
-		float density;
+		vector3 linear_velocity = vector3();    //並進速度
+		vector3 angular_velocity = vector3();   //角速度
 
-		vector3 linear_velocity;    //並進速度
-		vector3 angular_velocity;   //角速度
+		vector3 liner_acceleration = vector3();  //加速
+		vector3 angular_acceleration = vector3();//角加速
 
-		vector3 liner_acceleration;  //加速
-		vector3 angular_acceleration;//角加速
+		float inertial_mass = 0;           //慣性質量
 
-		float inertial_mass;           //慣性質量
+		vector3 accumulated_force = vector3();  //並進移動に加える力
 
-		vector3 accumulated_force;  //並進移動に加える力
+		matrix inertial_tensor = matrix();      //慣性モーメント
 
-		matrix inertial_tensor;      //慣性モーメント
+		vector3 accumulated_torque = vector3(); //角回転に加える力
 
-		vector3 accumulated_torque; //角回転に加える力
+	//	std::vector<Contact*> contact;  //このcolliderがかかわる衝突へのポインタ
+		//vector3 extruction = vector3();				//このcolliderが受ける押し出し量
 
 		Rigitbody::Rigitbody() :
 			local_position(0, 0, 0), local_orientation(0, 0, 0, 1),
@@ -67,7 +68,8 @@ namespace Adollib {
 		}
 
 		void integrate(float duration = 1);
-		
+		void late_integrate(float duration = 1);
+
 		void resolve_gameobject(); //gameobjectへ変化量を渡す
 
 		virtual void update_world_trans() = 0; //gameobjectのtransformからcolliderのworld空間での情報を更新
@@ -82,7 +84,7 @@ namespace Adollib {
 
 		matrix inverse_inertial_tensor() const; //慣性モーメントの逆行列を返す
 
-		virtual quaternion get_dimension() const = 0;
+		virtual quaternion get_dimension() const = 0; //サイズ所得関数
 
 		virtual void update_inertial(const vector3& size, float density = 1) = 0;
 
@@ -91,9 +93,9 @@ namespace Adollib {
 	//球体用クラス
 	class Sphere : public Rigitbody {
 	public:
-		float r; //半径
+		float r = 1; //半径
 
-		Sphere(float r, float density, vector3 pos = vector3(0,0,0)) : r(r) {
+		Sphere(float r, float density, vector3 pos = vector3(0, 0, 0)) : r(r) {
 			//shapeの設定
 			shape = Rigitbody_shape::shape_sphere;
 
@@ -194,7 +196,7 @@ namespace Adollib {
 	//Boxクラス
 	class Box : public Rigitbody {
 	public:
-		vector3 half_size;
+		vector3 half_size = vector3();
 
 		//不動オブジェクトとして生成
 		Box(vector3 half_size, float density, vector3 pos = vector3(0,0,0)) : half_size(half_size) {

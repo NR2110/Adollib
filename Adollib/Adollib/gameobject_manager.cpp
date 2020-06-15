@@ -211,7 +211,7 @@ namespace Adollib {
 		ConstantBufferPerCamera c_cb;
 		//そのシーンのカメラの数だけ回す
 		for (int i = 0; i < cameras[Sce].size(); i++, itr_ca++) {
-			if (itr_ca->get()->active == false)return;
+			if (itr_ca->get()->active == false)continue;
 
 			// ビュー行列
 			vector3 pos = itr_ca->get()->transform->position;

@@ -62,6 +62,7 @@ namespace Adollib {
 		void initialize();
 		void render();
 		void update_P_to_C() {
+			if (active == true)
 			update();
 			transform->local_orient = transform->local_orient.unit_vect();
 			std::list<std::shared_ptr<object>>::iterator itr = children.begin();
@@ -144,12 +145,14 @@ namespace Adollib {
 		//active‚ª•ÏX‚³‚ê‚½‚Æ‚«‚Ìˆ—‚ðŒÄ‚Ño‚·
 		void set_active(bool value) {
 			if (active == value)return;
+			active = value;
 			if (value == false) {
 				auto itr = components.begin();
 				auto end = components.end();
 				while (itr != end)
 				{
 					itr->get()->onDisable();
+					itr++;
 				}
 			}
 			else if (value == true) {
@@ -158,6 +161,7 @@ namespace Adollib {
 				while (itr != end)
 				{
 					itr->get()->onEnable();
+					itr++;
 				}
 			}
 		};

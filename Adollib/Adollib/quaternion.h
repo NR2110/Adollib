@@ -92,16 +92,13 @@ namespace Adollib {
 	//Q1からQ2への球面補間
 	//R = 0 = Q1
 	//R = 1 = Q2
+	//動作未確認
 	quaternion quaternion_slerp(const quaternion& Q1, const quaternion& Q2, float R);
 
 	//z軸,x軸,y軸の順で回転クォータニオンの生成
 	quaternion quaternion_from_euler(float x, float y, float z);
 	//z軸,x軸,y軸の順で回転クォータニオンの生成
 	quaternion quaternion_from_euler(vector3 V);
-	////任意軸で回転クォータニオンの生成
-	//quaternion quaternion_from_euler_by_local_axis(vector3 axis, float x, float y, float z);
-	////任意軸で回転クォータニオンの生成
-	//quaternion quaternion_from_euler_by_local_axis(vector3 axis, vector3 V);
 
 	//回転行列からクォータニオンの生成
 	quaternion quaternion_by_rotate_matrix(matrix& M);

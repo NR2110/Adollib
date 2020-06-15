@@ -43,10 +43,6 @@ namespace Adollib
 		count -= Al_Global::elapsed_time;
 
 	}
-	// 毎フレーム、update()後に呼ばれる更新処理
-	void Enemy::lateUpdate()
-	{
-	}
 
 	// このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる
 	void Enemy::onEnable()
