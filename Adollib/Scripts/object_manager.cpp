@@ -27,20 +27,21 @@ namespace Adollib
 
 
 		for (int i = 0; i < 10; i++) {
-			//set_fall_box(vector3(0, 5 + 10 * i, 0), vector3(2, 2, 2), vector3(0, 0, 0), vector3(0, 1, 1));
-			//set_fall_box(vector3(5, 5 + 10 * i, 0), vector3(2, 2, 2), vector3(0, 0, 0), vector3(0, 1, 1));
-			//set_fall_box(vector3(5, 5 + 10 * i, 5), vector3(2, 2, 2), vector3(0, 0, 0), vector3(0, 1, 1));
-			//set_fall_box(vector3(0, 5 + 10 * i, 5), vector3(2, 2, 2), vector3(0, 0, 0), vector3(0, 1, 1));
+			set_fall_box(vector3(0, 5 + 10 * i, 0), vector3(2, 2, 2), vector3(0, 0, 0), vector3(0, 1, 1));
+			set_fall_box(vector3(5, 5 + 10 * i, 0), vector3(2, 2, 2), vector3(0, 0, 0), vector3(0, 1, 1));
+			set_fall_box(vector3(5, 5 + 10 * i, 5), vector3(2, 2, 2), vector3(0, 0, 0), vector3(0, 1, 1));
+			set_fall_box(vector3(0, 5 + 10 * i, 5), vector3(2, 2, 2), vector3(0, 0, 0), vector3(0, 1, 1));
 
-			set_fall_sphere(vector3(i * 0.01, 5 + 10 * i, i * 0.01), 2, vector3(0, 1, 1));
-			set_fall_sphere(vector3(5, 5 + 10 * i, i * 0.01), 2, vector3(0, 1, 1));
-			set_fall_sphere(vector3(5, 5 + 10 * i, 5), 2, vector3(0, 1, 1));
-			set_fall_sphere(vector3(i * 0.01, 5 + 10 * i, 5), 2, vector3(0, 1, 1));
+			//set_fall_sphere(vector3(i * 0.01, 5 + 10 * i, i * 0.01), 2, vector3(0, 1, 1));
+			//set_fall_sphere(vector3(5, 5 + 10 * i, i * 0.01), 2, vector3(0, 1, 1));
+			//set_fall_sphere(vector3(5, 5 + 10 * i, 5), 2, vector3(0, 1, 1));
+			//set_fall_sphere(vector3(i * 0.01, 5 + 10 * i, 5), 2, vector3(0, 1, 1));
 
-			//set_moveable_sphere(n_vector3(i, 5 + 10 * i, i), 2,			n_vector3(1, 1, 0));
-			//set_moveable_sphere(n_vector3(i + 5, 5 + 10 * i, i), 2,		n_vector3(1, 1, 0));
-			//set_moveable_sphere(n_vector3(i + 5, 5 + 10 * i, 5 + i), 2, n_vector3(1, 1, 0));
-			//set_moveable_sphere(n_vector3(i, 5 + 10 * i, 5 + i), 2,		n_vector3(1, 1, 0));
+			//set_fall_sphere(vector3(0, 5 + 10 * i, 0), 2, vector3(0, 1, 1));
+			//set_fall_sphere(vector3(5, 5 + 10 * i, 0), 2, vector3(0, 1, 1));
+			//set_fall_sphere(vector3(5, 5 + 10 * i, 5), 2, vector3(0, 1, 1));
+			//set_fall_sphere(vector3(0, 5 + 10 * i, 5), 2, vector3(0, 1, 1));
+
 
 		}
 

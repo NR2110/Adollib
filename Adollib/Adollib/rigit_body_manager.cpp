@@ -26,7 +26,8 @@ namespace Adollib
 			Rigitbody* rigit_body;
 		};
 
-		std::vector<RB_struct> RBs;
+		std::vector<RB_struct> RBs; //本体
+		std::vector<RB_struct*> no_move_obj; //不動オブジェクトを保存(親みたいなもの)
 
 		for (int i = 0; i < object_num; i++) {
 			RB_struct RB_s;
@@ -47,6 +48,8 @@ namespace Adollib
 			RB_s.RB->pearent->co_e.position = vector3(0, 0, 0);
 
 			RBs.push_back(RB_s);
+			if (RB_s.rigit_body->is_movable() == false) no_move_obj.push_back(&RBs.back());
+			
 		}
 
 #if USE_CHECK_CONTACT
@@ -103,6 +106,15 @@ namespace Adollib
 			}
 		}
 
+#if  0
+		for (int i = 0; i < no_move_obj.size(); i++) {
+
+
+		}
+
+
+#elif 1
+		//Contactのソート(下から順に更新するように)
 		std::list<Contact> contact_sorted;
 		for (int i = 0; i < contacts.size(); i++) {
 			std::list<Contact>::iterator itr = contact_sorted.begin();
@@ -125,7 +137,6 @@ namespace Adollib
 		//ちゃんとソートできているかの確認
 		assert(contact_sorted.size() == contacts.size());
 
-#if 1
 		{
 			std::list<Contact>::iterator itr = contact_sorted.begin();
 			std::list<Contact>::iterator itr_end = contact_sorted.end();

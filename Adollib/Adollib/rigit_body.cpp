@@ -204,6 +204,8 @@ int Adollib::Contacts::generate_contact_sphere_sphere(Sphere& S0, Sphere& S1, st
 		contact.body[1] = &S1;
 		contact.restitution = restitution;
 		contacts.push_back(contact);
+		S0.contacts.push_back(&contacts.back());
+		S1.contacts.push_back(&contacts.back());
 		return 1;
 	}
 #endif
@@ -237,6 +239,8 @@ int Adollib::Contacts::generate_contact_sphere_plane(Sphere& sphere, Plane& plan
 		contact.body[1] = &plane;
 		contact.restitution = restitution;
 		contacts.push_back(contact);
+		sphere.contacts.push_back(&contacts.back());
+		plane.contacts.push_back(&contacts.back());
 		return 1;
 	}
 	return 0;
@@ -290,6 +294,8 @@ int Adollib::Contacts::generate_contact_sphere_box(Sphere& sphere, Box& box, std
 		contact.body[1] = &box;
 		contact.restitution = restitution;
 		contacts.push_back(contact);
+		sphere.contacts.push_back(&contacts.back());
+		box.contacts.push_back(&contacts.back());
 
 		return 1;
 	}
@@ -335,6 +341,8 @@ int Adollib::Contacts::generate_contact_box_plane(Box& box, Plane& plane, std::v
 			contact.body[1] = &plane;
 			contact.restitution = restitution;
 			contacts.push_back(contact);
+			box.contacts.push_back(&contacts.back());
+			plane.contacts.push_back(&contacts.back());
 
 			contacts_used++;
 		}
@@ -505,6 +513,8 @@ bool sat_obb_obb(
 }
 
 
+
+
 std::vector<vector3> vertex_in_obb(const OBB& obb1, const OBB& obb2) {
 
 	std::vector<vector3> ret;
@@ -591,7 +601,7 @@ std::vector<vector3> vertex_in_obb(const OBB& obb1, const OBB& obb2) {
 	return ret;
 }
 
-#if 0
+#if 1
 int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Contact>& contacts, float restitution)
 {
 	matrix m;
@@ -775,6 +785,8 @@ int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Co
 		contact.body[1] = &b1;
 		contact.restitution = restitution;
 		contacts.push_back(contact);
+		b0.contacts.push_back(&contacts.back());
+		b1.contacts.push_back(&contacts.back());
 
 	}
 	//‡Aobb0‚Ì’¸“_‚ªobb1‚Ì–Ê‚ÆÕ“Ë‚µ‚½ê‡
@@ -804,6 +816,8 @@ int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Co
 		contact.body[1] = &b0;
 		contact.restitution = restitution;
 		contacts.push_back(contact);
+		b0.contacts.push_back(&contacts.back());
+		b1.contacts.push_back(&contacts.back());
 
 
 
@@ -852,6 +866,8 @@ int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Co
 		contact.body[1] = &b1;
 		contact.restitution = restitution;
 		contacts.push_back(contact);
+		b0.contacts.push_back(&contacts.back());
+		b1.contacts.push_back(&contacts.back());
 	}
 	else assert(0);
 

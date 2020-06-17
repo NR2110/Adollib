@@ -14,6 +14,9 @@
 namespace Adollib {
 
 	class Gameobject;
+	namespace Contacts {
+		class Contact;
+	}
 
 	enum class Rigitbody_shape {
 		shape_box,
@@ -55,7 +58,7 @@ namespace Adollib {
 
 		vector3 accumulated_torque = vector3(); //角回転に加える力
 
-	//	std::vector<Contact*> contact;  //このcolliderがかかわる衝突へのポインタ
+		std::vector<Contacts::Contact*> contacts;  //このcolliderがかかわる衝突へのポインタ
 		//vector3 extruction = vector3();				//このcolliderが受ける押し出し量
 
 		Rigitbody::Rigitbody() :
@@ -254,6 +257,8 @@ namespace Adollib {
 			vector3 normal; //衝突面の法線
 			float penetration; //貫通量
 			float restitution; //反射係数
+
+			std::vector<vector3*> no_move_dir; //不動オブジェクトから受ける動かない方向 (ポインタのほうがメモリ食わないかな?)
 
 			Contact() : point(0, 0, 0), normal(0, 0, 0), penetration(0), restitution(0) {
 				body[0] = body[1] = 0;
