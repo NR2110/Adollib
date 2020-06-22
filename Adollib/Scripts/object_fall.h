@@ -9,7 +9,7 @@ namespace Adollib
 	class object_fall : public Component
 	{
 	public:
-		Rigitbody* collier;
+		Collider* collier;
 
 	public:
 		void awake();

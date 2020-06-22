@@ -14,11 +14,14 @@
 namespace Adollib {
 
 	class Gameobject;
+	namespace physics_function {
+		class Solverbody;
+	}
 	namespace Contacts {
 		class Contact;
 	}
 
-	enum class Rigitbody_shape {
+	enum class Collider_shape {
 		shape_box,
 		shape_sphere,
 		shape_plane,
@@ -27,13 +30,31 @@ namespace Adollib {
 
 	};
 
-	class Rigitbody {
+	struct DOP_6 {
+		//中心座標
+		vector3 pos;
+
+		//::::::::::::::::::
+		//Boardphase用のDOP_6
+		// x : (1,0,0)
+		// y : (0,1,0)
+		// z : (0,0,1)
+		// xy : (1,1,0)
+		// yz : (0,1,1)
+		// zx : (1,0,1)
+		//:::::::::::::::::::
+		float halfsize[6];
+	};
+
+	class Collider {
 	public:
 		bool move = true; //可動オブジェクトカどうかのフラグ
 
 		Gameobject* gameobject = nullptr;	//親情報
 
-		Rigitbody_shape shape = Rigitbody_shape::shape_null;	//形情報
+		Collider_shape shape = Collider_shape::shape_null;	//形情報
+		DOP_6 dop6; //Boardphase用のDOP_6データ
+		physics_function::Solverbody* solve; //衝突用
 
 		vector3 world_position = vector3();		     //ワールド空間での座標
 		quaternion world_orientation = vector3();    //ワールド空間での姿勢
@@ -42,7 +63,10 @@ namespace Adollib {
 		vector3 local_position = vector3();             //goからの相対座標
 		quaternion local_orientation = quaternion_identity();       //goからの相対姿勢
 		vector3 local_scale = vector3();				//goとの相対scale
+
 		float density = 1;						//密度
+		float restitution;						//反発係数
+		float friction = 0.4;					//摩擦力
 
 		vector3 linear_velocity = vector3();    //並進速度
 		vector3 angular_velocity = vector3();   //角速度
@@ -58,10 +82,7 @@ namespace Adollib {
 
 		vector3 accumulated_torque = vector3(); //角回転に加える力
 
-		std::vector<Contacts::Contact*> contacts;  //このcolliderがかかわる衝突へのポインタ
-		//vector3 extruction = vector3();				//このcolliderが受ける押し出し量
-
-		Rigitbody::Rigitbody() :
+		Collider::Collider() :
 			local_position(0, 0, 0), local_orientation(0, 0, 0, 1),
 			linear_velocity(0, 0, 0), angular_velocity(0, 0, 0),
 			inertial_mass(1), accumulated_force(0, 0, 0),
@@ -70,37 +91,53 @@ namespace Adollib {
 			//inertial_tensor = ();
 		}
 
+		//外力の更新
+		void apply_external_force(float duration = 1);
+
+		//座標,姿勢の更新
 		void integrate(float duration = 1);
-		void late_integrate(float duration = 1);
 
-		void resolve_gameobject(); //gameobjectへ変化量を渡す
+		//gameobjectへ変化量を渡す
+		void resolve_gameobject();
 
-		virtual void update_world_trans() = 0; //gameobjectのtransformからcolliderのworld空間での情報を更新
+		//gameobjectのtransformからcolliderのworld空間での情報を更新
+		virtual void update_world_trans() = 0;
 
-		void add_force(const vector3& force); //並進移動に力を加える
+		//並進移動に力を加える
+		void add_force(const vector3& force);
 
-		void add_torque(const vector3& force); //角回転に力を加える
+		//角回転に力を加える
+		void add_torque(const vector3& force);
 
-		bool is_movable() const; //可動オブジェクトかどうか
+		//可動オブジェクトかどうか
+		bool is_movable() const; 
 
-		float inverse_mass() const; //質量の逆数を返す(不稼働オブジェクトは0を返す)
+		//質量の逆数を返す(不稼働オブジェクトは0を返す)
+		float inverse_mass() const;
 
-		matrix inverse_inertial_tensor() const; //慣性モーメントの逆行列を返す
+		//慣性モーメントの逆行列を返す
+		matrix inverse_inertial_tensor() const;
 
-		virtual quaternion get_dimension() const = 0; //サイズ所得関数
+		//サイズ所得関数
+		virtual quaternion get_dimension() const = 0;
 
+		//サイズ変更などに対応するため毎フレーム慣性テンソルなどを更新
 		virtual void update_inertial(const vector3& size, float density = 1) = 0;
+
+		//オブジェクトが動くたびに呼び出す　のが効率よいが適当に毎フレーム呼ぶ
+		//DOP_6データの更新
+		virtual void update_dop6() = 0;
 
 	};
 
 	//球体用クラス
-	class Sphere : public Rigitbody {
+	class Sphere : public Collider {
 	public:
 		float r = 1; //半径
 
 		Sphere(float r, float density, vector3 pos = vector3(0, 0, 0)) : r(r) {
 			//shapeの設定
-			shape = Rigitbody_shape::shape_sphere;
+			shape = Collider_shape::shape_sphere;
 
 			//密度の保存
 			this->density = density;
@@ -140,16 +177,18 @@ namespace Adollib {
 			inertial_tensor._22 = 0.4f * inertial_mass * r * r;
 			inertial_tensor._33 = 0.4f * inertial_mass * r * r;
 		}
+		//dop6の更新
+		void update_dop6();
 
 	};
 
 	//平面用クラス
-	class Plane : public Rigitbody {
+	class Plane : public Collider {
 	public:
 		//不動オブジェクトとして生成
 		Plane(vector3 n, float d) {
 			//shapeの設定
-			shape = Rigitbody_shape::shape_plane;
+			shape = Collider_shape::shape_plane;
 
 			//質量の計算
 			inertial_mass = FLT_MAX;
@@ -193,18 +232,20 @@ namespace Adollib {
 			//inertial_tensor._22 = 0.4f * inertial_mass * r * r;
 			//inertial_tensor._33 = 0.4f * inertial_mass * r * r;
 		}
+		//dop6の更新
+		void update_dop6();
 
 	};
 
 	//Boxクラス
-	class Box : public Rigitbody {
+	class Box : public Collider {
 	public:
 		vector3 half_size = vector3();
 
 		//不動オブジェクトとして生成
 		Box(vector3 half_size, float density, vector3 pos = vector3(0,0,0)) : half_size(half_size) {
 			//shapeの設定
-			shape = Rigitbody_shape::shape_box;
+			shape = Collider_shape::shape_box;
 
 			//密度の保存
 			this->density = density;
@@ -242,55 +283,9 @@ namespace Adollib {
 			inertial_tensor._22 = 0.3333333f * inertial_mass * ((half_size.z * half_size.z) + (half_size.x * half_size.x));
 			inertial_tensor._33 = 0.3333333f * inertial_mass * ((half_size.x * half_size.x) + (half_size.y * half_size.y));
 		}
+		//dop6の更新
+		void update_dop6();
 
 	};
-
-	//衝突用のnamespace 他の人があまり触れないように
-	namespace Contacts {
-
-		//衝突処理用
-		struct Contact {
-
-			Rigitbody* body[2]; //接触したobject
-
-			vector3 point; //衝突点
-			vector3 normal; //衝突面の法線
-			float penetration; //貫通量
-			float restitution; //反射係数
-
-			std::vector<vector3*> no_move_dir; //不動オブジェクトから受ける動かない方向 (ポインタのほうがメモリ食わないかな?)
-
-			Contact() : point(0, 0, 0), normal(0, 0, 0), penetration(0), restitution(0) {
-				body[0] = body[1] = 0;
-			}
-
-			void resolve();
-		};
-
-		//衝突の確認
-		//bool check_contact_sphere_sphere(Sphere& S1, Sphere& S2);
-		//bool check_contact_sphere_plane(Sphere& S1, Plane& S2);
-		//bool check_contact_sphere_box(Sphere& S1, Box& S2);
-		//bool check_contact_box_plane(Box& S1, Plane& S2);
-		//bool check_contact_box_box(Box& S1, Box& S2);
-
-		//衝突の生成
-		int generate_contact_sphere_sphere(Sphere& S1, Sphere& S2, std::vector<Contact>& contacts, float restitution);
-		int generate_contact_sphere_plane(Sphere& S1, Plane& S2, std::vector<Contact>& contacts, float restitution, bool half_space = true);
-		int generate_contact_sphere_box(Sphere& S1, Box& S2, std::vector<Contact>& contacts, float restitution);
-		int generate_contact_box_plane(Box& S1, Plane& S2, std::vector<Contact>& contacts, float restitution);
-		int generate_contact_box_box(Box& S1, Box& S2, std::vector<Contact>& contacts, float restitution);
-	}
-
-
-
-
-
-
-
-
-
-
-
 
 }

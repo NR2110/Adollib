@@ -6,6 +6,8 @@
 #include "scene.h"
 #include <map>
 
+#include "contact.h"
+
 namespace Adollib
 {
 	class Rigitbody_manager
@@ -28,6 +30,8 @@ namespace Adollib
 		static std::map<Scenelist, std::vector<RB_sphere>> RB_sphere_s;
 		static std::map<Scenelist, std::vector<RB_box>> RB_box_s;
 		static std::map<Scenelist, std::vector<RB_plane>> RB_plane_s;
+
+		static std::vector<Contacts::Contact_pair> pair;
 
 	public:
 		//No_hit_tag‚É"all"‚ª‚ ‚é‚Æ‚·‚×‚Ä‚Ì‚à‚Ì‚ÉÕ“Ë‚µ‚È‚­‚È‚é‚æ

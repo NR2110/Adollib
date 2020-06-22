@@ -23,7 +23,7 @@ namespace Adollib
 		//簡単にするために一つの配列にまとめる
 		struct RB_struct {
 			RB_base* RB;
-			Rigitbody* rigit_body;
+			Collider* rigit_body;
 		};
 
 		std::vector<RB_struct> RBs; //本体
@@ -58,8 +58,8 @@ namespace Adollib
 			//world空間での情報を更新
 			RBs[i].rigit_body->update_world_trans();
 
-			//毎フレームの処理を行う
-			RBs[i].rigit_body->integrate();
+			//外力からの影響を計算
+			RBs[i].rigit_body->apply_external_force();
 		}
 #endif
 
@@ -83,20 +83,20 @@ namespace Adollib
 				}
 
 				switch (RBs[i].rigit_body->shape) {
-				case Rigitbody_shape::shape_sphere:
-					if (RBs[o].rigit_body->shape == Rigitbody_shape::shape_sphere) generate_contact_sphere_sphere(*RB_sphere_s[Sce][i].R, *RB_sphere_s[Sce][o].R, contacts, resituation);
-					else if (RBs[o].rigit_body->shape == Rigitbody_shape::shape_box)    generate_contact_sphere_box(*RB_sphere_s[Sce][i].R, *RB_box_s[Sce][o - RB_sphere_s[Sce].size()].R, contacts, resituation);
-					else if (RBs[o].rigit_body->shape == Rigitbody_shape::shape_plane)  generate_contact_sphere_plane(*RB_sphere_s[Sce][i].R, *RB_plane_s[Sce][o - RB_sphere_s[Sce].size() - RB_box_s[Sce].size()].R, contacts, resituation);
+				case Collider_shape::shape_sphere:
+					if (RBs[o].rigit_body->shape == Collider_shape::shape_sphere) generate_contact_sphere_sphere(*RB_sphere_s[Sce][i].R, *RB_sphere_s[Sce][o].R, contacts, resituation);
+					else if (RBs[o].rigit_body->shape == Collider_shape::shape_box)    generate_contact_sphere_box(*RB_sphere_s[Sce][i].R, *RB_box_s[Sce][o - RB_sphere_s[Sce].size()].R, contacts, resituation);
+					else if (RBs[o].rigit_body->shape == Collider_shape::shape_plane)  generate_contact_sphere_plane(*RB_sphere_s[Sce][i].R, *RB_plane_s[Sce][o - RB_sphere_s[Sce].size() - RB_box_s[Sce].size()].R, contacts, resituation);
 					break;
 
-				case Rigitbody_shape::shape_box:
-					if (RBs[o].rigit_body->shape == Rigitbody_shape::shape_sphere) generate_contact_sphere_box(*RB_sphere_s[Sce][o].R, *RB_box_s[Sce][i - RB_sphere_s[Sce].size()].R, contacts, resituation);
-					else if (RBs[o].rigit_body->shape == Rigitbody_shape::shape_box)    generate_contact_box_box(*RB_box_s[Sce][i - RB_sphere_s[Sce].size()].R, *RB_box_s[Sce][o - RB_sphere_s[Sce].size()].R, contacts, resituation);
-					else if (RBs[o].rigit_body->shape == Rigitbody_shape::shape_plane)  generate_contact_box_plane(*RB_box_s[Sce][i - RB_sphere_s[Sce].size()].R, *RB_plane_s[Sce][o - RB_sphere_s[Sce].size() - RB_box_s[Sce].size()].R, contacts, resituation);
+				case Collider_shape::shape_box:
+					if (RBs[o].rigit_body->shape == Collider_shape::shape_sphere) generate_contact_sphere_box(*RB_sphere_s[Sce][o].R, *RB_box_s[Sce][i - RB_sphere_s[Sce].size()].R, contacts, resituation);
+					else if (RBs[o].rigit_body->shape == Collider_shape::shape_box)    generate_contact_box_box(*RB_box_s[Sce][i - RB_sphere_s[Sce].size()].R, *RB_box_s[Sce][o - RB_sphere_s[Sce].size()].R, contacts, resituation);
+					else if (RBs[o].rigit_body->shape == Collider_shape::shape_plane)  generate_contact_box_plane(*RB_box_s[Sce][i - RB_sphere_s[Sce].size()].R, *RB_plane_s[Sce][o - RB_sphere_s[Sce].size() - RB_box_s[Sce].size()].R, contacts, resituation);
 					break;
-				case Rigitbody_shape::shape_plane:
-					if (RBs[o].rigit_body->shape == Rigitbody_shape::shape_sphere) generate_contact_sphere_plane(*RB_sphere_s[Sce][o].R, *RB_plane_s[Sce][i - RB_sphere_s[Sce].size() - RB_box_s[Sce].size()].R, contacts, resituation);
-					else if (RBs[o].rigit_body->shape == Rigitbody_shape::shape_box)    generate_contact_box_plane(*RB_box_s[Sce][o - RB_sphere_s[Sce].size()].R, *RB_plane_s[Sce][i - RB_sphere_s[Sce].size() - RB_box_s[Sce].size()].R, contacts, resituation);
+				case Collider_shape::shape_plane:
+					if (RBs[o].rigit_body->shape == Collider_shape::shape_sphere) generate_contact_sphere_plane(*RB_sphere_s[Sce][o].R, *RB_plane_s[Sce][i - RB_sphere_s[Sce].size() - RB_box_s[Sce].size()].R, contacts, resituation);
+					else if (RBs[o].rigit_body->shape == Collider_shape::shape_box)    generate_contact_box_plane(*RB_box_s[Sce][o - RB_sphere_s[Sce].size()].R, *RB_plane_s[Sce][i - RB_sphere_s[Sce].size() - RB_box_s[Sce].size()].R, contacts, resituation);
 					//else if (RB_2->collider_type == Collidertype::Plane)  generate_contact_sphere_plane(*RB_sphere_s[i].R, *RB_plane_s[o - RB_sphere_s[Sce].size() - RB_box_s.size()].R, contacts, resituation);
 					break;
 				default:

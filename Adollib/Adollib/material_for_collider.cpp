@@ -10,7 +10,7 @@ namespace Adollib {
 	ComPtr<ID3D11Buffer> Collider_renderer::world_cb; //WVP行列用バッファ
 	ComPtr<ID3D11Buffer> Collider_renderer::Mat_cb; //material用バッファ
 
-	std::map<Rigitbody_shape, std::vector<Mesh::mesh>*> Collider_renderer::meshes; //mesh
+	std::map<Collider_shape, std::vector<Mesh::mesh>*> Collider_renderer::meshes; //mesh
 	Shader Collider_renderer::shader; //shader
 
 
@@ -34,17 +34,17 @@ namespace Adollib {
 
 
 		//::: 描画用modelの読み込み :::::::
-		meshes[Rigitbody_shape::shape_box];
-		ResourceManager::CreateModelFromFBX(&meshes[Rigitbody_shape::shape_box], "./DefaultModel/cube.fbx", "");
+		meshes[Collider_shape::shape_box];
+		ResourceManager::CreateModelFromFBX(&meshes[Collider_shape::shape_box], "./DefaultModel/cube.fbx", "");
 
-		meshes[Rigitbody_shape::shape_sphere];
-		ResourceManager::CreateModelFromFBX(&meshes[Rigitbody_shape::shape_sphere], "./DefaultModel/sphere.fbx", "");
+		meshes[Collider_shape::shape_sphere];
+		ResourceManager::CreateModelFromFBX(&meshes[Collider_shape::shape_sphere], "./DefaultModel/sphere.fbx", "");
 
-		meshes[Rigitbody_shape::shape_plane];
-		ResourceManager::CreateModelFromFBX(&meshes[Rigitbody_shape::shape_plane], "./DefaultModel/plane.fbx", "");
+		meshes[Collider_shape::shape_plane];
+		ResourceManager::CreateModelFromFBX(&meshes[Collider_shape::shape_plane], "./DefaultModel/plane.fbx", "");
 	}
 
-	void Collider_renderer::render(const Rigitbody* R) {
+	void Collider_renderer::render(const Collider* R) {
 		static int time = 0;
 		time++;
 		//CB : ConstantBufferPerCO_OBJ

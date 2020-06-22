@@ -63,7 +63,7 @@ namespace Adollib {
 
 		object_fall* F = GO->addComponent<object_fall>();
 
-		Rigitbody* R =  GO->add_collider_box(vector3(0, 0.34, 0), vector3(0.50, 0.34, 0.72));
+		Collider* R =  GO->add_collider_box(vector3(0, 0.34, 0), vector3(0.50, 0.34, 0.72));
 		E->collier = R;
 		F->collier = R;
 

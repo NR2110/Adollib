@@ -10,7 +10,7 @@ namespace Adollib
 	private:
 
 	public:
-		Rigitbody* collier;
+		Collider* collier;
 
 	public:
 		void awake();

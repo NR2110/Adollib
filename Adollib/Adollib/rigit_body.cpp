@@ -5,21 +5,18 @@ using namespace Contacts;
 
 #include "gameobject.h"
 #include "Adollib.h"
+#include "contact.h"
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 		#pragma region Rigitbody
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-void Rigitbody::integrate(float duration) {
+void Collider::integrate(float duration) {
 	if (is_movable()) {
 
 		//並進移動に加える力(accumulated_force)から加速度を出して並進速度を更新する
 		liner_acceleration += accumulated_force / inertial_mass;
 		linear_velocity += liner_acceleration * duration;
-
-		//位置の更新
-		if (linear_velocity.norm() >= FLT_EPSILON)
-		world_position += linear_velocity * duration;
 		
 
 		//各回転に加える力(accumulated_torque)から加速度を出して角速度を更新する
@@ -35,8 +32,6 @@ void Rigitbody::integrate(float duration) {
 		//QUESTION : 上の式じゃダメなの?
 		//各速度による姿勢の更新
 #if 1
-		world_orientation *= quaternion_radian_axis(angular_velocity.norm_sqr() * duration * 0.5, angular_velocity.unit_vect());
-		world_orientation = world_orientation.unit_vect();
 
 #else 
 		//角速度による姿勢の更新
@@ -54,7 +49,17 @@ void Rigitbody::integrate(float duration) {
 	liner_acceleration = vector3(0, 0, 0);
 	angular_acceleration = vector3(0, 0, 0);
 }
-void Rigitbody::resolve_gameobject() {
+void Collider::apply_external_force(float duration = 1) {
+	//位置の更新
+	if (linear_velocity.norm() >= FLT_EPSILON)
+		world_position += linear_velocity * duration;
+
+	world_orientation *= quaternion_radian_axis(angular_velocity.norm_sqr() * duration * 0.5, angular_velocity.unit_vect());
+	world_orientation = world_orientation.unit_vect();
+}
+
+
+void Collider::resolve_gameobject() {
 	gameobject->co_e.orient *= local_orientation.conjugate() * gameobject->get_world_orientate().conjugate() * world_orientation;
 	gameobject->co_e.position += world_position -  vector3_be_rotated_by_quaternion(local_position * gameobject->get_world_scale(), world_orientation) - gameobject->get_world_position();
 	
@@ -80,24 +85,78 @@ void Plane::update_world_trans() {
 
 	update_inertial(world_size, density);
 }
+void Box::update_dop6() {
+	dop6.pos = gameobject->get_world_position();
+	vector3 axis[6]{
+	{1,0,0},
+	{0,1,0},
+	{0,0,1},
+	{1,1,0},
+	{0,1,1},
+	{1,0,1}
+	};
 
-void Rigitbody::add_force(const vector3& force) {
+	//各頂点のローカル座標
+	vector3 half[8]{
+	{+half_size.x, -half_size.y, -half_size.z},
+	{+half_size.x, -half_size.y, +half_size.z},
+	{+half_size.x, +half_size.y, -half_size.z},
+	{+half_size.x, +half_size.y, +half_size.z},
+	{-half_size.x, -half_size.y, -half_size.z},
+	{-half_size.x, -half_size.y, +half_size.z},
+	{-half_size.x, +half_size.y, -half_size.z},
+	{-half_size.x, +half_size.y, +half_size.z},
+	};
+	quaternion WO = gameobject->get_world_orientate();
+	for (int i = 0; i < 8; i++) {
+		half[i] = vector3_be_rotated_by_quaternion(half[i], WO);
+	}
+
+	//DOP_6の更新
+	for (int i = 0; i < 6; i++) {
+		float MAX_DIS = 0;
+		for (int o = 0; o < 8; o++) {
+			float dis = fabsf(vector3_dot(axis[i].unit_vect(), half[o]));
+			if (MAX_DIS * 0.909 < dis) {
+				dop6.halfsize[i] = dis;
+				MAX_DIS = dis * 1.1; //確実にするためちょっと大きめにとる
+			}
+
+		}
+	}
+
+
+}
+void Sphere::update_dop6() {
+	dop6.pos = gameobject->get_world_position();	
+	for (int i = 0; i < 6; i++) {
+		dop6.halfsize[i] = r;
+	}
+}
+void Plane::update_dop6() {
+	dop6.pos = gameobject->get_world_position();
+	for (int i = 0; i < 6; i++) {
+		dop6.halfsize[i] = FLT_MAX;
+	}
+}
+
+void Collider::add_force(const vector3& force) {
 	accumulated_force += force;
 }
-void Rigitbody::add_torque(const vector3& force) {
+void Collider::add_torque(const vector3& force) {
 	accumulated_torque += force;
 }
 
-bool Rigitbody::is_movable() const {
+bool Collider::is_movable() const {
 	return (move && inertial_mass > 0 && inertial_mass < FLT_MAX);
 }
-float Rigitbody::inverse_mass() const {
+float Collider::inverse_mass() const {
 	if (is_movable()) return 1.0f / inertial_mass;
 	//非可動オブジェクトなら0を返す
 	else return 0;
 }
 
-matrix Rigitbody::inverse_inertial_tensor() const{
+matrix Collider::inverse_inertial_tensor() const{
 	matrix inverse_inertial_tensor;
 	if (is_movable()) {
 		inverse_inertial_tensor = matrix_inverse(inertial_tensor);
@@ -127,7 +186,8 @@ matrix Rigitbody::inverse_inertial_tensor() const{
 
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-#pragma region generate
+/*
+		#pragma region generate
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 
@@ -874,139 +934,11 @@ int Adollib::Contacts::generate_contact_box_box(Box& b0, Box& b1, std::vector<Co
 	return 1;
 }
 #endif
-void Contact::resolve()
-{
-	assert(penetration > 0);
-	if (body[0]->is_movable() == false && body[1]->is_movable() == false)return;
-
-	float vrel = 0; //相対速度
-
-	//衝突時のそれぞれの速度
-	vector3 pdota;
-	pdota = vector3_cross(body[0]->angular_velocity, (point - body[0]->world_position));
-	pdota += body[0]->linear_velocity;
-
-	vector3 pdotb;
-	pdotb = vector3_cross(body[1]->angular_velocity, (point - body[1]->world_position));
-	pdotb += body[1]->linear_velocity;
-
-	//衝突時の衝突平面法線方向の相対速度(結局衝突に使うのは法線方向への速さ)
-	vrel = vector3_dot(normal, (pdota - pdotb));
-
-	//分子
-	float numerator = 0;
-	numerator = -(1 + restitution) * vrel;
-
-	//Baraff[1997]の式(8-18)の分母(denominator)を求める
-	float denominator = 0;
-	float term1 = body[0]->inverse_mass();
-	float term2 = body[1]->inverse_mass();
-	vector3 ra = point - body[0]->world_position;
-	vector3 rb = point - body[1]->world_position;
-	vector3 ta, tb;
-	ta = vector3_cross(ra, normal);
-	tb = vector3_cross(rb, normal);
-	ta = vector3_trans(ta, body[0]->inverse_inertial_tensor());
-	tb = vector3_trans(tb, body[1]->inverse_inertial_tensor());
-	ta = vector3_cross(ta, ra);
-	tb = vector3_cross(tb, rb);
-	float term3 = vector3_dot(normal, ta);
-	float term4 = vector3_dot(normal, tb);
-	denominator = term1 + term2 + term3 + term4;
-
-	//上記より撃力を求めるBaraff[1997](8-18)
-	float j = 0;
-	j = numerator / denominator;
-
-	//Baraff[1997](8-12)より各剛体の並進速度(linear_velocity)と角速度(angular_velocity)を更新する
-	vector3 impulse = j * normal;
-
-	vector3 friction(0, 0, 0);	//摩擦力
-	float cof = Al_Global::Coefficient_of_friction;		//摩擦係数（Coefficient of friction）
-	//動摩擦力（Dynamic Friction）を表現する
-	vector3 vta = pdota - vector3_dot(normal, pdota) * normal;	//衝突点Aの速度（pdota）の衝突面平行成分
-	vector3 vtb = pdotb - vector3_dot(normal, pdotb) * normal;	//衝突点Bの速度（pdotb）の衝突面平行成分
-	vector3 vt = vta - vtb;	//衝突点ABの衝突面接線方向の相対速度（すべり方向）
-	float vrel_t = vt.norm_sqr();
-
-	if (vrel_t > fabsf(vrel)* cof )	//衝突点ABの衝突面法線方向の相対速度の大きさ（vrel）と衝突点ABの衝突面接線方向の相対速度の大きさ（vrel_t）の比較
-	{
-		friction = -vt.unit_vect(); //摩擦力はすべり方向の逆方向に作用する
-		friction *= j * cof;	//摩擦力は衝突の大きさと摩擦係数に比例する
-	}
-	else{
-		//friction = -vt.unit_vect(); //摩擦力はすべり方向の逆方向に作用する
-		//friction *= j;	//摩擦力は衝突の大きさと摩擦係数に比例する
-	}
-	//QUASTION : 摩擦がうまく働かない
-	impulse += friction;	//撃力に補正を与える
-
-	//QUESTION : なぜ速度に加えているのか
-#if 0
-	body[0]->accumulated_force += impulse;
-	ta = vector3_cross(ra, impulse);
-	body[0]->accumulated_torque += ta;
-
-	body[1]->accumulated_force -= impulse;
-	tb = vector3_cross(rb, impulse);
-	body[1]->accumulated_torque -= tb;
-
-#else
-	body[0]->linear_velocity += impulse * body[0]->inverse_mass();
-	ta = vector3_cross(ra, impulse);
-	ta = vector3_trans(ta, body[0]->inverse_inertial_tensor());
-	body[0]->angular_velocity += ta;
-
-	body[1]->linear_velocity -= impulse * body[1]->inverse_mass();
-	tb = vector3_cross(rb, impulse);
-	tb = vector3_trans(tb, body[1]->inverse_inertial_tensor());
-	body[1]->angular_velocity -= tb;
-#endif
-
-	//めり込み量の解決
-#if 0
-	//座標を直接いじる
-	if (body[0]->is_movable() == false) {
-		body[1]->world_position -= penetration * normal;
-	}
-	else if (body[1]->is_movable() == false) {
-		body[0]->world_position += penetration * normal;
-	}
-	else {
-		body[0]->world_position += penetration * body[1]->inertial_mass / (body[0]->inertial_mass + body[1]->inertial_mass) * normal;
-		body[1]->world_position -= penetration * body[0]->inertial_mass / (body[0]->inertial_mass + body[1]->inertial_mass) * normal;
-	}
-#else
-	//下から上へ
-	if (body[0]->is_movable() == false) {
-		body[1]->world_position -= penetration * normal;
-	}
-	else if (body[1]->is_movable() == false) {
-		body[0]->world_position += penetration * normal;
-	}
-	else {
-		vector3 N = normal;
-		N.y = 0;
-		if (normal.y > 0) {
-			body[0]->world_position += penetration * body[1]->inertial_mass / (body[0]->inertial_mass + body[1]->inertial_mass) * N;
-			body[0]->world_position += penetration * vector3(0, normal.y, 0);
-			body[1]->world_position -= penetration * body[0]->inertial_mass / (body[0]->inertial_mass + body[1]->inertial_mass) * N;
-		}
-		else {
-			body[0]->world_position += penetration * body[1]->inertial_mass / (body[0]->inertial_mass + body[1]->inertial_mass) * N;
-			body[1]->world_position -= penetration * body[0]->inertial_mass / (body[0]->inertial_mass + body[1]->inertial_mass) * N;
-			body[1]->world_position -= penetration * vector3(0, normal.y, 0);
-		}
-	}
-
-#endif
-
-}
-
-
-
-
-
-
 #pragma endregion
+*/
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+
+
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

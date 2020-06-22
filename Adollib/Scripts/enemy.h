@@ -40,7 +40,7 @@ namespace Adollib
 		Enemy_type enemy_type = Enemy_type::pat_1;
 		Move_pattern moving = Move_pattern::Neet;
 
-		Rigitbody* collier;
+		Collider* collier;
 
 		float count = 0;
 		float move_pow;

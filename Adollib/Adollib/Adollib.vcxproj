@@ -154,6 +154,7 @@
     <ClInclude Include="component.h" />
     <ClInclude Include="component_camera.h" />
     <ClInclude Include="component_light.h" />
+    <ClInclude Include="contact.h" />
     <ClInclude Include="gameobject.h" />
     <ClInclude Include="gameobject_camera.h" />
     <ClInclude Include="gameobject_light.h" />
@@ -167,6 +168,7 @@
     <ClInclude Include="mesh.h" />
     <ClInclude Include="misc.h" />
     <ClInclude Include="object.h" />
+    <ClInclude Include="physics_function.h" />
     <ClInclude Include="quaternion.h" />
     <ClInclude Include="resource_manager.h" />
     <ClInclude Include="rigit_body.h" />
@@ -200,6 +202,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="contact.cpp" />
     <ClCompile Include="gameobject.cpp" />
     <ClCompile Include="gameobject_camera.cpp" />
     <ClCompile Include="gameobject_light.cpp" />
@@ -211,6 +214,7 @@
     <ClCompile Include="material_for_collider.cpp" />
     <ClCompile Include="matrix.cpp" />
     <ClCompile Include="mesh.cpp" />
+    <ClCompile Include="physics_function.cpp" />
     <ClCompile Include="quaternion.cpp" />
     <ClCompile Include="resource_manager.cpp" />
     <ClCompile Include="rigit_body.cpp" />

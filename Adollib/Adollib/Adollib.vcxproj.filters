@@ -41,6 +41,9 @@
     <Filter Include="ソース ファイル\scene_game\enemy">
       <UniqueIdentifier>{16cb34cf-ce56-4401-8f99-e845686d95f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Adollib\math\physics">
+      <UniqueIdentifier>{948ff940-3127-440f-a355-36b477c57395}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="scene_title.cpp">
@@ -76,12 +79,6 @@
     <ClCompile Include="gameobject.cpp">
       <Filter>Adollib\object</Filter>
     </ClCompile>
-    <ClCompile Include="rigit_body_manager.cpp">
-      <Filter>Adollib\math</Filter>
-    </ClCompile>
-    <ClCompile Include="rigit_body.cpp">
-      <Filter>Adollib\math</Filter>
-    </ClCompile>
     <ClCompile Include="scene_manager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -101,9 +98,6 @@
       <Filter>Adollib\object\mesh</Filter>
     </ClCompile>
     <ClCompile Include="mesh.cpp">
-      <Filter>Adollib\object\mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="resource_manager.cpp">
       <Filter>Adollib\object\mesh</Filter>
     </ClCompile>
     <ClCompile Include="texture.cpp">
@@ -144,6 +138,21 @@
     </ClCompile>
     <ClCompile Include="..\Scripts\enemy.cpp">
       <Filter>ソース ファイル\scene_game\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="rigit_body_manager.cpp">
+      <Filter>Adollib\math\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="rigit_body.cpp">
+      <Filter>Adollib\math\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="contact.cpp">
+      <Filter>Adollib\math\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="resource_manager.cpp">
+      <Filter>Adollib\main</Filter>
+    </ClCompile>
+    <ClCompile Include="physics_function.cpp">
+      <Filter>Adollib\math\physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -189,12 +198,6 @@
     <ClInclude Include="component.h">
       <Filter>Adollib\object</Filter>
     </ClInclude>
-    <ClInclude Include="rigit_body_manager.h">
-      <Filter>Adollib\math</Filter>
-    </ClInclude>
-    <ClInclude Include="rigit_body.h">
-      <Filter>Adollib\math</Filter>
-    </ClInclude>
     <ClInclude Include="scene.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
@@ -226,9 +229,6 @@
       <Filter>Adollib\object\mesh</Filter>
     </ClInclude>
     <ClInclude Include="mesh.h">
-      <Filter>Adollib\object\mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="resource_manager.h">
       <Filter>Adollib\object\mesh</Filter>
     </ClInclude>
     <ClInclude Include="texture.h">
@@ -284,6 +284,21 @@
     </ClInclude>
     <ClInclude Include="..\Scripts\enemy.h">
       <Filter>ソース ファイル\scene_game\enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="rigit_body_manager.h">
+      <Filter>Adollib\math\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="rigit_body.h">
+      <Filter>Adollib\math\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="contact.h">
+      <Filter>Adollib\math\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="resource_manager.h">
+      <Filter>Adollib\main</Filter>
+    </ClInclude>
+    <ClInclude Include="physics_function.h">
+      <Filter>Adollib\math\physics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

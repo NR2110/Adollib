@@ -41,13 +41,13 @@ namespace Adollib {
 		static ComPtr<ID3D11Buffer> world_cb; //WVP行列用バッファ
 		static ComPtr<ID3D11Buffer> Mat_cb; //material用バッファ
 
-		static std::map<Rigitbody_shape, std::vector<Mesh::mesh>*> meshes; //mesh
+		static std::map<Collider_shape, std::vector<Mesh::mesh>*> meshes; //mesh
 		static Shader shader; //shader
 	public:
 
 
 		static void initialize();
-		static void render(const Rigitbody*);
+		static void render(const Collider*);
 
 	};
 
