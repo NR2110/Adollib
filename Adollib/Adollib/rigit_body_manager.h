@@ -13,25 +13,11 @@ namespace Adollib
 	class Rigitbody_manager
 	{
 	private:
-		struct RB_base {
-			Gameobject* pearent;
-			std::string tag;
-			std::vector<std::string> No_hit_tag;
-		};
-		struct RB_sphere : public RB_base {
-			Adollib::Sphere* R;
-		};
-		struct RB_box : public RB_base {
-			Adollib::Box* R;
-		};
-		struct RB_plane : public RB_base {
-			Adollib::Plane* R;
-		};
-		static std::map<Scenelist, std::vector<RB_sphere>> RB_sphere_s;
-		static std::map<Scenelist, std::vector<RB_box>> RB_box_s;
-		static std::map<Scenelist, std::vector<RB_plane>> RB_plane_s;
+		static std::map<Scenelist, std::vector<Adollib::Plane*>> RB_plane_s;
+		static std::map<Scenelist, std::vector<Adollib::Box*>> RB_box_s;
+		static std::map<Scenelist, std::vector<Adollib::Sphere*>> RB_sphere_s;
 
-		static std::vector<Contacts::Contact_pair> pair;
+		static std::vector<Contacts::Contact_pair> pairs;
 
 	public:
 		//No_hit_tag‚É"all"‚ª‚ ‚é‚Æ‚·‚×‚Ä‚Ì‚à‚Ì‚ÉÕ“Ë‚µ‚È‚­‚È‚é‚æ

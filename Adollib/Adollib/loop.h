@@ -11,6 +11,7 @@ namespace Adollib {
 		void init();
 		void Update(HWND hWnd, int width, int height);
 		void Render();
+		void destroy();
 
 	private:
 		Scene_manager scene_manager;

@@ -4,20 +4,18 @@
 #include "quaternion.h"
 #include "matrix.h"
 #include "rigit_body.h"
+#include "physics_global.h"
 
 namespace Adollib {
 	//Contactクラス用のnamespace 他の人があまり触れないように
 	namespace Contacts {
-		const int Contact_max_per_pair = 4; //一つのペアで衝突の計算をする最大の数 基本的には4
-		const float Allowable_error = 0.01f;  //これ以上近ければ同一衝突点とする
-		const float Contact_threrhold_normal = 0.01f; // 衝突点の閾値（法線方向)
-		const float Contact_threrhold_tangent = 0.01f;// 衝突点の閾値（平面上）
 
 		//拘束
 		struct Constraint {
 			vector3 axis;		//拘束軸
 			float jacDiagInv;	//拘束式の分母	
 			float rhs;			//初期拘束力
+			float tangent_rhs;  //拘束軸が法線の面上での拘束力
 			float lowerlimit;	//拘束力の下限
 			float upperlimit;	//拘束力の上限
 			float accuminpulse; //累積される拘束力
@@ -42,7 +40,7 @@ namespace Adollib {
 		//衝突処理用
 		class Contact {
 		public:
-			int contact_num;    //衝突点の数
+			int contact_num = 0;    //衝突点の数
 			float friction;		//その衝突の摩擦力
 			Contactpoint contactpoints[Contact_max_per_pair]; //衝突点情報
 
@@ -63,6 +61,19 @@ namespace Adollib {
 				const vector3& contact_pointB
 			);
 
+			//:::::::
+			// 衝突点の衝突が今も存在するかの確認
+			// vector3 pointA : Rigitbody[0]の位置
+			// vector3 rotA : Rigitbody[0]の姿勢	
+			// vector3 pointB : Rigitbody[1]の位置	
+			// vector3 rotB : Rigitbody[1]の姿勢	
+			//:::::::
+			void chack_remove_contact_point(
+				const vector3& pointA,
+				const quaternion& rotA,
+				const vector3& pointB,
+				const quaternion& rotB
+			);
 		private:
 			//:::::::::
 			// addcontactで使用
@@ -104,20 +115,6 @@ namespace Adollib {
 				}
 			};
 
-			//:::::::
-			// 衝突点の衝突が今も存在するかの確認
-			// vector3 pointA : Rigitbody[0]の位置
-			// vector3 rotA : Rigitbody[0]の姿勢	
-			// vector3 pointB : Rigitbody[1]の位置	
-			// vector3 rotB : Rigitbody[1]の姿勢	
-			//:::::::
-			void chack_remove_contact_point(
-				const vector3& pointA,
-				const quaternion& rotA,
-				const vector3& pointB,
-				const quaternion& rotB
-			);
-
 			void resolve();
 		};
 
@@ -131,6 +128,7 @@ namespace Adollib {
 			Pairtype type; //衝突の種類(前フレームからある衝突かどうか)
 
 			Collider* body[2]; //接触したobject
+			
 
 			Contact contacts; //衝突の情報
 		};

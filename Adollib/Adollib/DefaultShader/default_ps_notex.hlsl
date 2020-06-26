@@ -5,6 +5,9 @@
 //--------------------------------------------
 float4 main(PSInput input) : SV_TARGET
 {
+		float A = (dot(input.wNormal, normalize(float3(0,1,1))) + 1) / 4 + 0.5;
+	return input.Color * A;
+
 	float3 L = normalize(LightDir.xyz);
 	float3 E = normalize(EyePos.xyz - input.wPos);
 

@@ -169,6 +169,7 @@
     <ClInclude Include="misc.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="physics_function.h" />
+    <ClInclude Include="physics_global.h" />
     <ClInclude Include="quaternion.h" />
     <ClInclude Include="resource_manager.h" />
     <ClInclude Include="rigit_body.h" />

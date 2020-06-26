@@ -12,12 +12,15 @@ using namespace physics_function;
 //外力による速度などの更新
 void physics_function::applyexternalforce(std::vector<Collider*>& coll) {
 	for (int i = 0; i < coll.size(); i++) {
-		coll[i]->apply_external_force();
+		coll[i]->apply_external_force(timeStep);
 	}
 }
 
 //DOP6による大雑把な当たり判定
 bool Check_insert_DOP6(Collider* collA, Collider* collB) {
+	//無限PlaneはDOPが作れないためnarrowに投げる
+	if (collA->shape == Collider_shape::shape_plane || collB->shape == Collider_shape::shape_plane) return true;
+
 	vector3 dis = collA->dop6.pos - collB->dop6.pos;
 	vector3 axis[6]{
 		{1,0,0},
@@ -36,13 +39,33 @@ bool Check_insert_DOP6(Collider* collA, Collider* collB) {
 
 void physics_function::Boardphase(const std::vector<Collider*>& coll, std::vector<Contacts::Contact_pair>& pairs) {
 
+	//DOPの更新
+	for (int i = 0; i < coll.size(); i++) {
+		coll[i]->update_dop6();
+	}
+
 	//DOP_6による大雑把な当たり判定
 	std::vector<Contacts::Contact_pair> new_pairs;
 	for (int i = 0; i < coll.size(); i++) {
 		for (int o = i + 1; o < coll.size(); o++) {
 
-			if (Check_insert_DOP6(coll[i], coll[o]) == false)continue;
+			// タグによる衝突の是非
+			bool hit = true;
+			for (int q = 0; q < coll[q]->No_hit_tag.size(); q++) {
+				if (coll[i]->No_hit_tag[q] == std::string("all")) hit = false;
+				if (coll[i]->No_hit_tag[q] == coll[o]->tag) hit = false;
+				if (hit == false)break;
+			}
+			if (hit == false)continue;
+			for (int q = 0; q < coll[q]->No_hit_tag.size(); q++) {
+				if (coll[o]->No_hit_tag[q] == std::string("all")) hit = false;
+				if (coll[o]->No_hit_tag[q] == coll[i]->tag) hit = false;
+				if (hit == false)break;
+			}
+			if (hit == false)continue;
 
+			//DOPによる大雑把な当たり判定
+			if (Check_insert_DOP6(coll[i], coll[o]) == false)continue;
 			Contact_pair new_pair;
 			//new_pair.body[0]にアドレスの大きいほうをしまう
 			if (coll[i] > coll[o]) {
@@ -53,17 +76,23 @@ void physics_function::Boardphase(const std::vector<Collider*>& coll, std::vecto
 				new_pair.body[0] = coll[i];
 				new_pair.body[1] = coll[o];
 			}
-			new_pairs.push_back(new_pair);
+			new_pair.type = Pairtype::new_pair;
+
+			new_pairs.emplace_back(new_pair);
 		}
 	}
 
 	//生成したpairが前のpairから存在しているかの確認
-	for (int new_num = 0; new_num < new_pairs.size(); new_num++) {
-		for (int old_num = 0; old_num < pairs.size(); old_num++) {
+	for (int old_num = 0; old_num < pairs.size(); old_num++) {
+		for (int new_num = 0; new_num < new_pairs.size(); new_num++) {
+			if (new_pairs[new_num].type == Pairtype::keep_pair) continue;
+
 			if (
 				new_pairs[new_num].body[0] == pairs[old_num].body[0] &&
 				new_pairs[new_num].body[1] == pairs[old_num].body[1]
 				) {
+				//前から存在していたらデータを引き継ぐ
+				new_pairs[new_num] = pairs[old_num];
 				new_pairs[new_num].type = Pairtype::keep_pair;
 			}
 			else {
@@ -71,6 +100,18 @@ void physics_function::Boardphase(const std::vector<Collider*>& coll, std::vecto
 			}
 		}
 	}
+	//現在使用していない衝突点を削除
+	for (int i = 0; i < new_pairs.size(); i++) {
+		new_pairs[i].contacts.chack_remove_contact_point(
+			new_pairs[i].body[0]->world_position,
+			new_pairs[i].body[0]->world_orientation,
+			new_pairs[i].body[1]->world_position,
+			new_pairs[i].body[1]->world_orientation
+		);
+	}
+
+	pairs.clear();
+	pairs = new_pairs;
 
 }
 
@@ -79,23 +120,63 @@ void physics_function::Boardphase(const std::vector<Collider*>& coll, std::vecto
 //:::::::::::::::::::::::::::
 
 //衝突生成(Narrowphase)
-void physics_function::generate_contact(std::vector<Contacts::Contact_pair*>& pairs) {
+void physics_function::generate_contact(std::vector<Contacts::Contact_pair>& pairs) {
 
+	//::: dynamic_cast 多用地帯 危険! 危険!
 	for (int i = 0; i < pairs.size(); i++) {
 
-		if (pairs[i]->body[0]->shape == Collider_shape::shape_sphere) {
-			if (pairs[i]->body[1]->shape == Collider_shape::shape_sphere) {}
-			if (pairs[i]->body[1]->shape == Collider_shape::shape_box) {}
-			if (pairs[i]->body[1]->shape == Collider_shape::shape_plane) {}
+		if (pairs[i].body[0]->shape == Collider_shape::shape_sphere) {
+			Sphere* shape0 = dynamic_cast<Sphere*>(pairs[i].body[0]);
+
+			if (pairs[i].body[1]->shape == Collider_shape::shape_sphere) {
+				Sphere* shape1 = dynamic_cast<Sphere*>(pairs[i].body[1]);
+				assert(shape0 && shape1); 
+				generate_contact_sphere_sphere(*shape0, *shape1, pairs[i]);
+			}
+			if (pairs[i].body[1]->shape == Collider_shape::shape_box) {
+				Box* shape1 = dynamic_cast<Box*>(pairs[i].body[1]);
+				assert(shape0 && shape1);
+				generate_contact_sphere_box(*shape0, *shape1, pairs[i]);
+			}
+			if (pairs[i].body[1]->shape == Collider_shape::shape_plane) {
+				Plane* shape1 = dynamic_cast<Plane*>(pairs[i].body[1]);
+				assert(shape0 && shape1);
+				generate_contact_sphere_plane(*shape0, *shape1, pairs[i]);
+			}
 		}
-		if (pairs[i]->body[0]->shape == Collider_shape::shape_box) {
-			if (pairs[i]->body[1]->shape == Collider_shape::shape_sphere) {}
-			if (pairs[i]->body[1]->shape == Collider_shape::shape_box) {}
-			if (pairs[i]->body[1]->shape == Collider_shape::shape_plane) {}
+		if (pairs[i].body[0]->shape == Collider_shape::shape_box) {
+			Box* shape0 = dynamic_cast<Box*>(pairs[i].body[0]);
+
+			if (pairs[i].body[1]->shape == Collider_shape::shape_sphere) {
+				Sphere* shape1 = dynamic_cast<Sphere*>(pairs[i].body[1]);
+				assert(shape0 && shape1);
+				generate_contact_sphere_box(*shape1, *shape0, pairs[i]);
+			}
+			if (pairs[i].body[1]->shape == Collider_shape::shape_box) {
+				Box* shape1 = dynamic_cast<Box*>(pairs[i].body[1]);
+				assert(shape0 && shape1);
+				generate_contact_box_box(*shape0, *shape1, pairs[i]);
+			}
+			if (pairs[i].body[1]->shape == Collider_shape::shape_plane) {
+				Plane* shape1 = dynamic_cast<Plane*>(pairs[i].body[1]);
+				assert(shape0 && shape1);
+				generate_contact_box_plane(*shape0, *shape1, pairs[i]);
+			}
 		}
-		if (pairs[i]->body[0]->shape == Collider_shape::shape_plane) {
-			if (pairs[i]->body[1]->shape == Collider_shape::shape_sphere) {}
-			if (pairs[i]->body[1]->shape == Collider_shape::shape_box) {}
+		if (pairs[i].body[0]->shape == Collider_shape::shape_plane) {
+			Plane* shape0 = dynamic_cast<Plane*>(pairs[i].body[0]);
+
+			if (pairs[i].body[1]->shape == Collider_shape::shape_sphere) {
+				Sphere* shape1 = dynamic_cast<Sphere*>(pairs[i].body[1]);
+				assert(shape0 && shape1);
+				generate_contact_sphere_plane(*shape1, *shape0, pairs[i]);
+			}
+
+			if (pairs[i].body[1]->shape == Collider_shape::shape_box) {
+				Box* shape1 = dynamic_cast<Box*>(pairs[i].body[1]);
+				assert(shape0 && shape1);
+				generate_contact_box_plane(*shape1, *shape0, pairs[i]);
+			}
 			//if (pairs[i]->body[1]->shape == Collider_shape::shape_plane) {}
 		}
 
@@ -236,7 +317,7 @@ bool physics_function::generate_contact_sphere_box(const Sphere& sphere, const  
 bool physics_function::generate_contact_box_plane(const Box& box, const Plane& plane, Contacts::Contact_pair& pair) {
 
 	vector3 vertices[8] = {
-		//原点AABBの頂点の位置
+		// obb座標系での各頂点のローカル座標
 		vector3(-box.world_size.x, -box.world_size.y, -box.world_size.z),
 		vector3(-box.world_size.x, -box.world_size.y, +box.world_size.z),
 		vector3(-box.world_size.x, +box.world_size.y, -box.world_size.z),
@@ -258,19 +339,32 @@ bool physics_function::generate_contact_box_plane(const Box& box, const Plane& p
 	inverse_rotate = matrix_inverse(rotate);
 
 	vector3 p;
-	p = vector3_trans(box.world_position, inverse_rotate); //平面が"原点を通り"法線が(0,1,0)"の状態の時のBoxの中心座標
-	n = p.y > 0 ? n : -n; //ボックスが平面下にあったら法線を反対にする
+	p = vector3_trans(box.world_position, inverse_rotate); //平面が"原点を通り"法線が(0,1,0)"の状態の時のBoxの中心座標(p.yが距離になる)
+	//n = p.y > 0 ? n : -n; //ボックスが平面下にあったら法線を反対にする
 
 	float max_penetrate = 0.0f;
 	vector3 pointbox, pointplane;
+	vector3 vs;
+
+	if (p.y < 2) {
+		int dasfgdf = 0;
+	}
+
 	for (int i = 0; i < 8; i++) {
+		// 頂点のワールド座標
+		vs = vector3_be_rotated_by_quaternion(vertices[i], box.world_orientation);
+		
+		// -面法線の内積をとる(面方向への長さ)
+		float rA = vector3_dot(-n, vs);
 
-		float rA = vector3_dot(-n, vertices[i]);
-
-		if (fabsf(p.y) < rA) {
+		if (max_penetrate < rA - p.y) {
 			max_penetrate = rA - p.y;
 			pointbox = vertices[i];
-			pointplane = vector3(p.x, 0, p.z);
+
+			// 頂点をplane空間に
+			vs = vector3_trans(vs + box.world_position, inverse_rotate);
+			pointplane = vs;
+			pointplane.y = 0;
 		}
 	}
 
@@ -280,7 +374,7 @@ bool physics_function::generate_contact_box_plane(const Box& box, const Plane& p
 			//body[1]　が　box
 			pair.contacts.addcontact(
 				max_penetrate,
-				n,
+				-n,
 				pointplane,
 				pointbox
 			);
@@ -290,7 +384,7 @@ bool physics_function::generate_contact_box_plane(const Box& box, const Plane& p
 			//body[1]　が　plane
 			pair.contacts.addcontact(
 				max_penetrate,
-				-n,
+				n,
 				pointbox,
 				pointplane
 			);
@@ -601,14 +695,14 @@ void CalcTangentVector(const vector3& normal, vector3& tangent1, vector3& tangen
 	if (n.norm() < FLT_EPSILON) {
 		vec = vector3(0.0f, 1.0f, 0.0f);
 	}
-	tangent1 = (vector3_cross(normal, vec)).norm_sqr();
-	tangent2 = (vector3_cross(tangent1, normal)).norm_sqr();
+	tangent1 = (vector3_cross(normal, vec)).unit_vect();
+	tangent2 = (vector3_cross(tangent1, normal)).unit_vect();
 }
 
 void physics_function::resolve_contact(std::vector<Collider*> colliders, std::vector<Contacts::Contact_pair>& pairs) {
 
 	//::: 解決用オブジェクトの生成 :::::::::::
-	std::vector<Solverbody> solverBodies;
+	std::vector<Solverbody> SBs;
 	for (int i = 0; i < colliders.size(); i++) {
 		Solverbody SB;
 		SB.orientation = colliders[i]->world_orientation;
@@ -617,8 +711,10 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 		SB.inv_inertia = colliders[i]->inverse_inertial_tensor();
 		SB.inv_mass = colliders[i]->inverse_mass();
 
-		solverBodies.emplace_back(SB);
-		colliders[i]->solve = &solverBodies.back();
+		SBs.emplace_back(SB);
+	}
+	for (int i = 0; i < colliders.size(); i++) {
+		colliders[i]->solve = &SBs[i];
 	}
 
 	//std::vector<Balljoint> balljoints; //今回はなし
@@ -646,6 +742,7 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 			// 反発係数の獲得
 			// 継続の衝突の場合反発係数を0にする
 			float restitution = pair.type == Pairtype::new_pair ? 0.5f * (coll[0]->restitution + coll[1]->restitution) : 0.0f;
+			restitution = 0.5f * (coll[0]->restitution + coll[1]->restitution);
 
 			//衝突時のそれぞれの速度
 			vector3 pdota;
@@ -669,7 +766,7 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 			float term2 = coll[1]->inverse_mass();
 			vector3 tA, tB;
 
-
+			float term3, term4, denominator;
 			// Normal
 			{
 				//Baraff[1997]の式(8-18)の分母(denominator)を求める
@@ -680,13 +777,16 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 				tB = vector3_trans(tB, coll[1]->inverse_inertial_tensor());
 				tA = vector3_cross(tA, rA);
 				tB = vector3_cross(tB, rB);
-				float term3 = vector3_dot(axis, tA);
-				float term4 = vector3_dot(axis, tB);
-				float denominator = term1 + term2 + term3 + term4;
+				term3 = vector3_dot(axis, tA);
+				term4 = vector3_dot(axis, tB);
+				denominator = term1 + term2 + term3 + term4;
 
-				cp.constraint[0].jacDiagInv = 1.0f / denominator; //Baraff1997(8-18)の分母?
-				cp.constraint[0].rhs = -(1.0f + restitution) * vector3_dot(vrel, axis); //Baraff1997(8-18)の分子
-				//cp.constraint[0].rhs -= (bias * EPX_MIN(0.0f, cp.distance + slop)) / timeStep; //めり込みを直す値
+				cp.constraint[0].jacDiagInv = 1.0f / denominator; //Baraff1997(8-18)の分母
+				cp.constraint[0].rhs = -(1.0f + restitution) * vector3_dot(axis, vrel); //Baraff1997(8-18)の分子
+
+				//if(0.0f > cp.distance + slop)
+				//cp.constraint[0].rhs -= (bias * (cp.distance + slop)) / timeStep; //めり込みを直す値
+
 				cp.constraint[0].rhs *= cp.constraint[0].jacDiagInv;
 				cp.constraint[0].lowerlimit = 0.0f;
 				cp.constraint[0].upperlimit = FLT_MAX;
@@ -702,17 +802,16 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 				tB = vector3_trans(tB, coll[1]->inverse_inertial_tensor());
 				tA = vector3_cross(tA, rA);
 				tB = vector3_cross(tB, rB);
-				float term3 = vector3_dot(axis, tA);
-				float term4 = vector3_dot(axis, tB);
-				float denominator = term1 + term2 + term3 + term4;
+				term3 = vector3_dot(axis, tA);
+				term4 = vector3_dot(axis, tB);
+				denominator = term1 + term2 + term3 + term4;
 
-				cp.constraint[0].jacDiagInv = 1.0f / denominator; //Baraff1997(8-18)の分母?
-				cp.constraint[0].rhs = -(1.0f + restitution) * vector3_dot(vrel, axis); //Baraff1997(8-18)の分子
-				//cp.constraint[0].rhs -= (bias * EPX_MIN(0.0f, cp.distance + slop)) / timeStep;
-				cp.constraint[0].rhs *= cp.constraint[0].jacDiagInv;
-				cp.constraint[0].lowerlimit = 0.0f;
-				cp.constraint[0].upperlimit = FLT_MAX;
-				cp.constraint[0].axis = axis;
+				cp.constraint[1].jacDiagInv = 1.0f / denominator; //Baraff1997(8-18)の分母
+				cp.constraint[1].rhs = -(1.0f + restitution) * vector3_dot(axis, vrel); //Baraff1997(8-18)の分子
+				cp.constraint[1].rhs *= cp.constraint[1].jacDiagInv;
+				cp.constraint[1].lowerlimit = 0.0f;
+				cp.constraint[1].upperlimit = FLT_MAX;
+				cp.constraint[1].axis = axis;
 			}
 
 			// Tangent2
@@ -724,23 +823,22 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 				tB = vector3_trans(tB, coll[1]->inverse_inertial_tensor());
 				tA = vector3_cross(tA, rA);
 				tB = vector3_cross(tB, rB);
-				float term3 = vector3_dot(axis, tA);
-				float term4 = vector3_dot(axis, tB);
-				float denominator = term1 + term2 + term3 + term4;
+				term3 = vector3_dot(axis, tA);
+				term4 = vector3_dot(axis, tB);
+				denominator = term1 + term2 + term3 + term4;
 
-				cp.constraint[0].jacDiagInv = 1.0f / denominator; //Baraff1997(8-18)の分母?
-				cp.constraint[0].rhs = -(1.0f + restitution) * vector3_dot(vrel, axis); //Baraff1997(8-18)の分子
-				//cp.constraint[0].rhs -= (bias * EPX_MIN(0.0f, cp.distance + slop)) / timeStep;
-				cp.constraint[0].rhs *= cp.constraint[0].jacDiagInv;
-				cp.constraint[0].lowerlimit = 0.0f;
-				cp.constraint[0].upperlimit = FLT_MAX;
-				cp.constraint[0].axis = axis;
+				cp.constraint[2].jacDiagInv = 1.0f / denominator; //Baraff1997(8-18)の分母?
+				cp.constraint[2].rhs = -(1.0f + restitution) * vector3_dot(axis, vrel); //Baraff1997(8-18)の分子
+				cp.constraint[2].rhs *= cp.constraint[2].jacDiagInv;
+				cp.constraint[2].lowerlimit = 0.0f;
+				cp.constraint[2].upperlimit = FLT_MAX;
+				cp.constraint[2].axis = axis;
 			}
 
 		}
 	}
 
-	//::: 各フレームで変化する速度などを求める :::::::::::::::
+	//::: 変化量を求める :::::::::::::::
 	for (int P_num = 0; P_num < pairs.size(); P_num++) {
 		Contact_pair& pair = pairs[P_num];
 
@@ -791,9 +889,9 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 					constraint.accuminpulse = old_impulse + delta_impulse > constraint.lowerlimit ? (old_impulse + delta_impulse < constraint.upperlimit ? old_impulse + delta_impulse : constraint.upperlimit) : constraint.lowerlimit;
 					delta_impulse = constraint.accuminpulse - old_impulse;
 					solverbody[0]->delta_LinearVelocity += delta_impulse * solverbody[0]->inv_mass * constraint.axis;
-					solverbody[0]->delta_AngularVelocity += delta_impulse * vector3_trans(vector3_cross(rA, constraint.axis), solverbody[0]->inv_inertia);
+					solverbody[0]->delta_AngularVelocity += vector3_trans(vector3_cross(rA, constraint.axis * delta_impulse), solverbody[0]->inv_inertia);
 					solverbody[1]->delta_LinearVelocity -= delta_impulse * solverbody[1]->inv_mass * constraint.axis;
-					solverbody[1]->delta_AngularVelocity -= delta_impulse * vector3_trans(vector3_cross(rB, constraint.axis), solverbody[1]->inv_inertia);
+					solverbody[1]->delta_AngularVelocity -= vector3_trans(vector3_cross(rB, constraint.axis * delta_impulse), solverbody[1]->inv_inertia);
 				}
 
 				float max_friction = pair.contacts.friction * fabsf(cp.constraint[0].accuminpulse);
@@ -813,9 +911,9 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 					constraint.accuminpulse = old_impulse + delta_impulse > constraint.lowerlimit ? (old_impulse + delta_impulse < constraint.upperlimit ? old_impulse + delta_impulse : constraint.upperlimit) : constraint.lowerlimit;
 					delta_impulse = constraint.accuminpulse - old_impulse;
 					solverbody[0]->delta_LinearVelocity += delta_impulse * solverbody[0]->inv_mass * constraint.axis;
-					solverbody[0]->delta_AngularVelocity += delta_impulse * vector3_trans(vector3_cross(rA, constraint.axis), solverbody[0]->inv_inertia);
+					solverbody[0]->delta_AngularVelocity += vector3_trans(vector3_cross(rA, constraint.axis * delta_impulse), solverbody[0]->inv_inertia);
 					solverbody[1]->delta_LinearVelocity -= delta_impulse * solverbody[1]->inv_mass * constraint.axis;
-					solverbody[1]->delta_AngularVelocity -= delta_impulse * vector3_trans(vector3_cross(rB, constraint.axis), solverbody[1]->inv_inertia);
+					solverbody[1]->delta_AngularVelocity -= vector3_trans(vector3_cross(rB, constraint.axis * delta_impulse), solverbody[1]->inv_inertia);
 				}
 				{
 					Constraint& constraint = cp.constraint[2];
@@ -828,18 +926,17 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 					constraint.accuminpulse = old_impulse + delta_impulse > constraint.lowerlimit ? (old_impulse + delta_impulse < constraint.upperlimit ? old_impulse + delta_impulse : constraint.upperlimit) : constraint.lowerlimit;
 					delta_impulse = constraint.accuminpulse - old_impulse;
 					solverbody[0]->delta_LinearVelocity += delta_impulse * solverbody[0]->inv_mass * constraint.axis;
-					solverbody[0]->delta_AngularVelocity += delta_impulse * vector3_trans(vector3_cross(rA, constraint.axis), solverbody[0]->inv_inertia);
+					solverbody[0]->delta_AngularVelocity += vector3_trans(vector3_cross(rA, constraint.axis * delta_impulse), solverbody[0]->inv_inertia);
 					solverbody[1]->delta_LinearVelocity -= delta_impulse * solverbody[1]->inv_mass * constraint.axis;
-					solverbody[1]->delta_AngularVelocity -= delta_impulse * vector3_trans(vector3_cross(rB, constraint.axis), solverbody[1]->inv_inertia);
+					solverbody[1]->delta_AngularVelocity -= vector3_trans(vector3_cross(rB, constraint.axis * delta_impulse), solverbody[1]->inv_inertia);
 				}
 
-
-
-
 			}
-
-
 		}
+	}
+
+	if (pairs[0].contacts.contact_num > 0) {
+		int dafsgd = 0;
 	}
 
 	// 速度の更新
@@ -850,15 +947,13 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 
 
 }
-
 #pragma endregion
 //:::::::::::::::::::::::::::
 
 void physics_function::integrate(std::vector<Collider*>& coll) {
-
-
-
-
+	for (int i = 0; i < coll.size(); i++) {
+		coll[i]->integrate(timeStep);
+	}
 
 }
 

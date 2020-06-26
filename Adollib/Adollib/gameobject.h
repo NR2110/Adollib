@@ -244,7 +244,14 @@ namespace Adollib {
 			//components.clear();
 		}
 
+		//‰ğ•úˆ—
+		void destroy() {
+			//delete material;
+			//material = nullptr;
 
+			//delete transform;
+			//transform = nullptr;
+		}
 	};
 
 }

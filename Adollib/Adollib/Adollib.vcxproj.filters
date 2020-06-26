@@ -300,6 +300,9 @@
     <ClInclude Include="physics_function.h">
       <Filter>Adollib\math\physics</Filter>
     </ClInclude>
+    <ClInclude Include="physics_global.h">
+      <Filter>Adollib\math\physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="DefaultShader\default.hlsli">

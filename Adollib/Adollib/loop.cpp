@@ -37,3 +37,9 @@ void loop::Render(){
 	Systems::Flip();
 
 }
+
+void loop::destroy() {
+	for (int i = 0; i < static_cast<int>(Scenelist::scene_list_size); i++) {
+		Gameobject_manager::destroy(static_cast<Scenelist>(i));
+	}
+}

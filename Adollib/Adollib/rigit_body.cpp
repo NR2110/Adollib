@@ -11,7 +11,7 @@ using namespace Contacts;
 		#pragma region Rigitbody
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-void Collider::integrate(float duration) {
+void Collider::apply_external_force(float duration) {
 	if (is_movable()) {
 
 		//並進移動に加える力(accumulated_force)から加速度を出して並進速度を更新する
@@ -49,7 +49,7 @@ void Collider::integrate(float duration) {
 	liner_acceleration = vector3(0, 0, 0);
 	angular_acceleration = vector3(0, 0, 0);
 }
-void Collider::apply_external_force(float duration = 1) {
+void Collider::integrate(float duration) {
 	//位置の更新
 	if (linear_velocity.norm() >= FLT_EPSILON)
 		world_position += linear_velocity * duration;
@@ -118,19 +118,18 @@ void Box::update_dop6() {
 		for (int o = 0; o < 8; o++) {
 			float dis = fabsf(vector3_dot(axis[i].unit_vect(), half[o]));
 			if (MAX_DIS * 0.909 < dis) {
-				dop6.halfsize[i] = dis;
-				MAX_DIS = dis * 1.1; //確実にするためちょっと大きめにとる
+				dop6.halfsize[i] = dis * 1.1;//確実にするためちょっと大きめにとる
+				MAX_DIS = dis; 
 			}
 
 		}
 	}
 
-
 }
 void Sphere::update_dop6() {
 	dop6.pos = gameobject->get_world_position();	
 	for (int i = 0; i < 6; i++) {
-		dop6.halfsize[i] = r;
+		dop6.halfsize[i] = r * 1.1;
 	}
 }
 void Plane::update_dop6() {

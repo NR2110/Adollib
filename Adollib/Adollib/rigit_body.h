@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <assert.h>
+#include <string>
 #include "quaternion.h"
 #include "matrix.h"
 
@@ -14,7 +15,7 @@
 namespace Adollib {
 
 	class Gameobject;
-	namespace physics_function {
+	namespace  physics_function {
 		class Solverbody;
 	}
 	namespace Contacts {
@@ -54,7 +55,10 @@ namespace Adollib {
 
 		Collider_shape shape = Collider_shape::shape_null;	//形情報
 		DOP_6 dop6; //Boardphase用のDOP_6データ
-		physics_function::Solverbody* solve; //衝突用
+		physics_function::Solverbody* solve;
+
+		std::string tag; //自身のタグ
+		std::vector<std::string> No_hit_tag; //衝突しないタグ
 
 		vector3 world_position = vector3();		     //ワールド空間での座標
 		quaternion world_orientation = vector3();    //ワールド空間での姿勢
@@ -65,7 +69,7 @@ namespace Adollib {
 		vector3 local_scale = vector3();				//goとの相対scale
 
 		float density = 1;						//密度
-		float restitution;						//反発係数
+		float restitution = 0.1; 						//反発係数
 		float friction = 0.4;					//摩擦力
 
 		vector3 linear_velocity = vector3();    //並進速度

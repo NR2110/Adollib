@@ -246,6 +246,25 @@ namespace Adollib {
 	void Gameobject_manager::destroy(Scenelist Sce) {
 		if (Sce == Scenelist::scene_null)return;
 
+		//終了処理
+		std::list<std::shared_ptr<Gameobject>>::iterator itr_GO = gameobjects[Sce].begin();
+		std::list<std::shared_ptr<Gameobject>>::iterator itr_GO_end = gameobjects[Sce].end();
+		for (; itr_GO != itr_GO_end; itr_GO++) {
+			itr_GO->get()->destroy();
+		}
+
+		std::list<std::shared_ptr<Camera>>::iterator itr_Camera = cameras[Sce].begin();
+		std::list<std::shared_ptr<Camera>>::iterator itr_Camera_end = cameras[Sce].end();
+		for (; itr_Camera != itr_Camera_end; itr_Camera++) {
+			itr_Camera->get()->destroy();
+		}
+
+		std::list<std::shared_ptr<Light>>::iterator itr_Light = lights[Sce].begin();
+		std::list<std::shared_ptr<Light>>::iterator itr_Light_end = lights[Sce].end();
+		for (; itr_Light != itr_Light_end; itr_Light++) {
+			itr_Light->get()->destroy();
+		}
+
 		//適当にSceのsceneにアタッチされたgoを削除
 		gameobjects[Sce].clear();
 		lights[Sce].clear();

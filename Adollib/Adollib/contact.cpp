@@ -24,16 +24,17 @@ void Contact::addcontact(
 
 	//していなかったら追加
 	if (num == -1 && contact_num < Contact_max_per_pair) {
-		contactpoints[num + 1].reset();
-		num++;
+		num = contact_num;
+		contactpoints[num].reset();
+		contact_num++;
 	}
 	//すでにContact_max_per_pairの数だけ作られている場合
 	//"最大貫通している点を保持"
 	//"一番面積の大きくなる点を除外"
 	//の条件で処理する
-	else {
+	else if(num == -1){
 		num = find_exclusion_point(contact_pointA, penetration);
-		contactpoints[num].reset;
+		contactpoints[num].reset();
 	}
 
 	//衝突点情報の更新
@@ -129,7 +130,7 @@ int Contact::find_contact_point(
 		float lenB = (contactpoints[i].point[1] - contact_pointB).norm();
 
 		//もし既定の値より近いpointがあればそれを返す
-		if (min < lenA && min < lenB && vector3_dot(contactpoints[i].normal, normal) > 0.99) {
+		if (lenA < min && lenB < min && vector3_dot(contactpoints[i].normal, normal) > 0.99) {
 			ret = i;
 			min = lenA < lenB ? lenA : lenB;
 		}
@@ -148,7 +149,7 @@ void Contact::chack_remove_contact_point(
 		vector3 contactpointA = pointA + vector3_be_rotated_by_quaternion(contactpoints[i].point[0], rotA);
 		vector3 contactpointB = pointB + vector3_be_rotated_by_quaternion(contactpoints[i].point[1], rotB);
 
-		//normal方向の距離を比べる
+		// normal方向の距離を比べる
 		float dis_N = vector3_dot(normal, contactpointA - contactpointB);
 		if (dis_N > Contact_threrhold_normal) {
 			remove_contactpoint(i);
@@ -157,8 +158,8 @@ void Contact::chack_remove_contact_point(
 		}
 		contactpoints[i].distance = dis_N;
 
-		// norma方向を除去して両点の距離をチェック
-		//contactpointAをcontactpointBとnormal軸上で同じ場所に持ってくる
+		// normal方向を除去して両点の距離をチェック
+		// contactpointAをcontactpointBとnormal軸上で同じ場所に持ってくる
 		contactpointA = contactpointA - contactpoints[i].distance * normal;
 		float dis_T = (contactpointA - contactpointB).norm();
 		if (dis_T > Contact_threrhold_tangent) {
@@ -167,6 +168,7 @@ void Contact::chack_remove_contact_point(
 			continue;
 		}
 	}
+
 }
 #pragma endregion
 //:::::::::::::::::::::::::::::::::::::::::::::::::::

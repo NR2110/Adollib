@@ -25,7 +25,7 @@ namespace Adollib {
 		void Boardphase(const std::vector<Collider*>& coll, std::vector<Contacts::Contact_pair>& pairs);
 
 		//Õ“Ë¶¬(Narrowphase)
-		void generate_contact(std::vector<Contacts::Contact_pair*>& pairs);
+		void generate_contact(std::vector<Contacts::Contact_pair>& pairs);
 		//Õ“Ë¶¬
 		bool generate_contact_sphere_sphere(const Sphere& S1, const Sphere& S2, Contacts::Contact_pair& pair);
 		bool generate_contact_sphere_plane(const Sphere& S1, const Plane& S2, Contacts::Contact_pair& pair);

@@ -152,6 +152,8 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 			loop.Render();
 		}
 	}
+
+	loop.destroy();
 	//SAFE_DELETE(scenemanager);
 	Systems::Release();
 	return 0;

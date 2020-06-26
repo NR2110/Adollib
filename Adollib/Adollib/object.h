@@ -32,6 +32,7 @@ namespace Adollib
 
 		virtual void initialize() {};
 		virtual void render() {};
+		virtual void destroy() {};
 
 		virtual void update_P_to_C() {}; //e‚©‚çq‚Öupdate‚ğŒÄ‚Ô
 		virtual void update_world_trans() {};
