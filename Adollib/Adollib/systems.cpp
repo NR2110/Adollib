@@ -40,7 +40,7 @@ bool Systems::Initialize(HWND hWnd, int width, int height)
 	time->initialize();
 	time->setFrameRate(60.0f);
 	time->isFloatFPS(false);
-	//// Debug‚Ì¶¬
+	/// Debug‚Ì¶¬
 	//Debug::create();
 	//debug = Debug::getInstancePtr();
 

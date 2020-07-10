@@ -9,12 +9,13 @@ namespace Adollib {
 		static int SCREEN_WIDTH;
 		static int SCREEN_HEIGHT;
 
-		static bool render_collider_flag;
+		static bool render_collider_flag; //colliderを表示するかのフラグ
 
 		static float elapsed_time;
 
-		static float Coefficient_of_friction;
-		static float resituation;
+		static float base_Coefficient_of_friction; //物体の摩擦力の初期値
+		static float base_resituation; //
+		static float gravity;
 
 		//::::::::::::::::::::
 		// time : 

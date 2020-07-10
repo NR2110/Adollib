@@ -232,7 +232,7 @@ namespace Adollib {
 			std::list<std::shared_ptr<Gameobject>>::iterator itr_end = gameobjects[Sce].end();
 
 			for (; itr != itr_end; itr++) {
-				if (itr->get()->active == false)return;
+				if (itr->get()->active == false)continue;
 				itr->get()->render();
 			}
 		}

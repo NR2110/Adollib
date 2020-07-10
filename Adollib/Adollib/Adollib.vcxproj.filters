@@ -154,6 +154,9 @@
     <ClCompile Include="physics_function.cpp">
       <Filter>Adollib\math\physics</Filter>
     </ClCompile>
+    <ClCompile Include="closest_func.cpp">
+      <Filter>Adollib\math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scene_title.h">
@@ -302,6 +305,9 @@
     </ClInclude>
     <ClInclude Include="physics_global.h">
       <Filter>Adollib\math\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="closest_func.h">
+      <Filter>Adollib\math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

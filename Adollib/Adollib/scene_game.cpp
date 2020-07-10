@@ -13,17 +13,17 @@ namespace Adollib {
 			GO->addComponent<camera_manager_s>();
 		}
 
-		////::: field ::::::::::
+		//::: field ::::::::::
 		//{
-		//	Gameobject* GO = Gameobject_manager::createCube();
-		//	GO->transform->local_pos = vector3(0, -1, 0);
-		//	GO->transform->local_scale = vector3(60, 0.1, 60);
-		//	GO->material->color = vector4(1, 1, 1, 1);
+			//Gameobject* GO = Gameobject_manager::createCube();
+			//GO->transform->local_pos = vector3(0, -1, 0);
+			//GO->transform->local_scale = vector3(60, 0.1, 60);
+			//GO->material->color = vector4(1, 1, 1, 1);
 
-		//	//Rigitbody* R = GO->add_collider_box();
-		//	Rigitbody* R = GO->add_collider_plane();
-		//	//Rigitbody* R = GO->add_collider_sphere();
-		//	R->move = false;
+			//Collider* R = GO->add_collider_box();
+			////Collider* R = GO->add_collider_plane();
+			////Collider* R = GO->add_collider_sphere();
+			//R->move = false;
 
 		//}
 

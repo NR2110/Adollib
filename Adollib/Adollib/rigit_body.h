@@ -149,6 +149,8 @@ namespace Adollib {
 			//À•W
 			local_position = pos;
 
+			local_orientation = quaternion_identity();
+
 			//¿—Ê‚ÌŒvZ
 			inertial_mass = 4.0f / 3.0f * r * r * r * DirectX::XM_PI * density;
 

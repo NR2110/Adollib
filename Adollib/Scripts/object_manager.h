@@ -8,9 +8,6 @@ namespace Adollib
 	class object_manager : public Component
 	{
 	private:
-		Box* B;
-		Gameobject* S0;
-		Gameobject* S1;
 
 	public:
 		Sphere* set_sphere(vector3 pos, float r, vector3 color = vector3(1, 1, 1));

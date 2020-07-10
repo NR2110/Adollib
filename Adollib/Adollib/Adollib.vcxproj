@@ -147,6 +147,7 @@
     <ClInclude Include="..\Scripts\scene_game_all.h" />
     <ClInclude Include="Adollib.h" />
     <ClInclude Include="cbuffer_manager.h" />
+    <ClInclude Include="closest_func.h" />
     <ClInclude Include="complex.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -199,6 +200,7 @@
     <ClCompile Include="..\Scripts\object_rotate.cpp" />
     <ClCompile Include="..\Scripts\player.cpp" />
     <ClCompile Include="Adollib.cpp" />
+    <ClCompile Include="closest_func.cpp" />
     <ClCompile Include="complex.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>

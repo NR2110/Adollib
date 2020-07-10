@@ -62,6 +62,7 @@ namespace Adollib{
 
 		Sphere* sphere = new Sphere(r, density, pos); //衝突判定用の実体を生成
 		sphere->local_scale = vector3(1, 1, 1);
+		sphere->local_orientation = quaternion_identity();
 		sphere->gameobject = this;
 		collider.push_back(sphere);
 		Rigitbody_manager::set_rigitbody(sphere, this, tag, no_hit_tag, this_scene); //衝突判定のマネージャーに渡す

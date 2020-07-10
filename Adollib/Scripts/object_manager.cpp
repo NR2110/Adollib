@@ -3,6 +3,8 @@
 
 #include "object_manager.h"
 #include "object_fall.h"
+
+#include "../Adollib/closest_func.h"
 namespace Adollib
 {
 	// 所属するシーンの初期化時に一度だけ呼ばれる
@@ -18,26 +20,43 @@ namespace Adollib
 		//set_moveable_sphere(n_vector3(0, 30, 0), 5);
 		//set_moveable_sphere(n_vector3(0, 50, 0), 0.1);
 
-		set_plane(vector3(0, 0, 0), vector3(0, 1, 0), vector3(1, 0, 1));
+		//set_plane(vector3(0, 0, 0), vector3(0, 1, 0), vector3(1, 0, 1));
 		//	set_nohit_plane(n_vector3(1000, -1, 1000), n_vector3(0, 1, 0), n_vector3(1, 0, 1));
 			//set_moveable_box(n_vector3(0, 200, 0), n_vector3(10, 10, 10), n_vector3(45, 45, 0), n_vector3(0, 1, 1));
 			//set_moveable_box(n_vector3(0, 200, 0), n_vector3(10, 10, 10), n_vector3(0, 0, 0), n_vector3(0, 1, 1));
+		{
+			Gameobject* GO = Gameobject_manager::createCube();
+			GO->transform->local_pos = vector3(0, -60, 0);
+			GO->transform->local_scale = vector3(60, 60, 60);
+			GO->material->color = vector4(1, 1, 1, 1);
 
-		B = set_fall_box(vector3(0, 30, 0), vector3(2, 2, 2), vector3(45, 45, 45), vector3(0, 1, 1));
-		S0 = set_nohit_sphere(vector3(0, 0, 0), 0.1, vector3(1));
-		S1 = set_nohit_sphere(vector3(0, 0, 0), 0.1, vector3(0));
+			Collider* R = GO->add_collider_box();
+			R->move = false;
+		}
+		//{
+		//	Gameobject* GO = Gameobject_manager::createCube();
+		//	GO->transform->local_pos = vector3(0, -35, 0);
+		//	GO->transform->local_orient = quaternion_from_euler(0, 0, 45);
+		//	GO->transform->local_scale = vector3(30, 30, 30);
+		//	GO->material->color = vector4(1, 1, 1, 1);
 
+		//	Collider* R = GO->add_collider_box();
+		//	R->move = false;
+		//}
 
-		for (int i = 0; i < 10; i++) {
-			//set_fall_box(vector3(0, 5 + 10 * i, 0), vector3(2, 2, 2), vector3(0, 0, 0), vector3(0, 1, 1));
-			//set_fall_box(vector3(5, 5 + 10 * i, 0), vector3(2, 2, 2), vector3(0, 0, 0), vector3(0, 1, 1));
-			//set_fall_box(vector3(5, 5 + 10 * i, 5), vector3(2, 2, 2), vector3(0, 0, 0), vector3(0, 1, 1));
-			//set_fall_box(vector3(0, 5 + 10 * i, 5), vector3(2, 2, 2), vector3(0, 0, 0), vector3(0, 1, 1));
+		//set_fall_box(vector3(0, 4, 0), vector3(2, 2, 2), vector3(0, 0, 0), vector3(0, 1, 1));
+		//set_fall_box(vector3(0, 8, 0), vector3(2, 2, 2), vector3(0, 0, 0), vector3(0, 1, 1));
 
-			//set_fall_sphere(vector3(i * 0.01, 5 + 10 * i, i * 0.01), 2, vector3(0, 1, 1));
+		for (int i = 0; i < 2; i++) {
+			//set_fall_box(vector3(0, 5 + 10 * i, 0), vector3(4, 0.5, 2), vector3(0,i*45,0), vector3(0, 1, 1));
+			//set_fall_box(vector3(5, 5 + 10 * i, 0), vector3(4, 0.5, 2), vector3(0,i*45,0), vector3(0, 1, 1));
+			//set_fall_box(vector3(5, 5 + 10 * i, 5), vector3(4, 0.5, 2), vector3(0,i*45,0), vector3(0, 1, 1));
+			//set_fall_box(vector3(0, 5 + 10 * i, 5), vector3(4, 0.5, 2), vector3(0,i*45,0), vector3(0, 1, 1));
+
+			//set_fall_sphere(vector3(i * 0.01, 20 + 10 * i, i * 0.01), 2, vector3(0, 1, 1));
 			//set_fall_sphere(vector3(5, 5 + 10 * i, i * 0.01), 2, vector3(0, 1, 1));
 			//set_fall_sphere(vector3(5, 5 + 10 * i, 5), 2, vector3(0, 1, 1));
-			//set_fall_sphere(vector3(i * 0.01, 5 + 10 * i, 5), 2, vector3(0, 1, 1));
+			//set_fall_sphere(vector3(i * 0.01, 20 + 10 * i, 5), 2, vector3(0, 1, 1));
 
 			//set_fall_sphere(vector3(0, 5 + 10 * i, 0), 2, vector3(0, 1, 1));
 			//set_fall_sphere(vector3(5, 5 + 10 * i, 0), 2, vector3(0, 1, 1));
@@ -46,6 +65,33 @@ namespace Adollib
 
 
 		}
+
+		int max_c = 2;
+		for (int i = 0; i < max_c; i++) {
+
+			for (int o = 0; o < max_c - i; o++) {
+				set_fall_box(vector3(2.1 * o - (max_c - i) * 2.1/2.0, 0.2 + 2.1 * i, 0), vector3(1, 1, 1), vector3(0, 0, 0), vector3(0, 1, 1));
+			}
+
+			//set_fall_sphere(vector3(i * 0.01, 20 + 10 * i, i * 0.01), 2, vector3(0, 1, 1));
+			//set_fall_sphere(vector3(5, 5 + 10 * i, i * 0.01), 2, vector3(0, 1, 1));
+			//set_fall_sphere(vector3(5, 5 + 10 * i, 5), 2, vector3(0, 1, 1));
+			//set_fall_sphere(vector3(i * 0.01, 20 + 10 * i, 5), 2, vector3(0, 1, 1));
+
+			//set_fall_sphere(vector3(0, 5 + 10 * i, 0), 2, vector3(0, 1, 1));
+			//set_fall_sphere(vector3(5, 5 + 10 * i, 0), 2, vector3(0, 1, 1));
+			//set_fall_sphere(vector3(5, 5 + 10 * i, 5), 2, vector3(0, 1, 1));
+			//set_fall_sphere(vector3(0, 5 + 10 * i, 5), 2, vector3(0, 1, 1));
+
+
+		}
+
+		//set_fall_box(vector3(0, 20, 0), vector3(3, 3, 3), vector3(45, 0, 0), vector3(0, 1, 1));
+
+		//Box* B = set_fall_box(vector3(0, 0.25, 0), vector3(2, 0.25, 1), vector3(0, 90, 0), vector3(0, 0.5, 1));
+		//B->move = false;
+
+		//set_fall_box(vector3(0, 3, 0), vector3(2, 0.25, 1), vector3(0, 0, 45), vector3(0, 1, 1));
 
 #else
 		//	set_plane(n_vector3(0, -1, 0), n_vector3(0, 1, 0), n_vector3(1, 0, 1));
@@ -59,15 +105,21 @@ namespace Adollib
 	// 毎フレーム呼ばれる更新処理
 	void object_manager::update()
 	{
-		vector3 vertecs, pos;
+		vector3 A = vector3(200, 0, 5);
+		vector3 Av = vector3(1, 0, 0);
 
-		vertecs = vector3(-2, -2, -2);
-		pos = B->world_position + vector3_be_rotated_by_quaternion(vertecs, B->world_orientation);
-		S0->transform->local_pos = pos;
+		vector3 B = vector3(0, 1, 0);
+		vector3 Bv = vector3(0, -1, 0);
 
-		vertecs = vector3(2, 2, 2);
-		pos = B->world_position + vector3_be_rotated_by_quaternion(vertecs, B->world_orientation);
-		S1->transform->local_pos = pos;
+		float s, t;
+		Closest_func::get_closestP_two_line(
+			A,Av,
+			B,Bv,
+			s, t
+		);
+
+		A += Av * s;
+		B += Bv * t;
 	}
 
 	// このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる

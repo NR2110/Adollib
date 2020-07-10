@@ -9,8 +9,8 @@ namespace Adollib {
 
 	float Al_Global::elapsed_time = 0;
 
-	float Al_Global::Coefficient_of_friction = 0.6;
-	float Al_Global::resituation = 0.4;
+	float Al_Global::base_Coefficient_of_friction = 0.6;
+	float Al_Global::base_resituation = 0.2;
 
 	float get_P_by_f(float M, float F) {
 		int i = M / F;

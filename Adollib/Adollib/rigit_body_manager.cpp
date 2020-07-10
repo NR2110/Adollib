@@ -22,25 +22,29 @@ namespace Adollib
 
 	void Rigitbody_manager::update(Scenelist Sce)
 	{
-		static bool init = true;
-		static Gameobject* S[4][2];
-		if (init) {
-			init = false;
-			for (int i = 0; i < 4; i++) {
-				S[i][0] = Gameobject_manager::createSphere();
-				S[i][0]->transform->local_scale = vector3(0.2);
-				S[i][0]->material->color = vector4(0, 0, 1, 1);
-				S[i][0]->material->RS_state = State_manager::RStypes::RS_CULL_NONE;
-
-				S[i][1] = Gameobject_manager::createSphere();
-				S[i][1]->transform->local_scale = vector3(0.2);
-				S[i][1]->material->color = vector4(1, 0, 0, 1);
-				S[i][1]->material->RS_state = State_manager::RStypes::RS_CULL_NONE;
-			}
-		}
+		//DBUG : 衝突点の表示の生成 ::::::::::
+		//static bool init = true;
+		//static Gameobject* S[10][4][2];
+		//if (init) {
+		//	init = false;
+		//	for (int p = 0; p < 10; p++) {
+		//		for (int i = 0; i < 4; i++) {
+		//			S[p][i][0] = Gameobject_manager::createSphere("ContactPoint_B");
+		//			S[p][i][0]->transform->local_scale = vector3(0.1);
+		//			S[p][i][0]->material->color = vector4(0, 0, 1, 1);
+		//			S[p][i][0]->material->DS_state = State_manager::DStypes::DS_FALSE;
+		//			 
+		//			S[p][i][1] = Gameobject_manager::createSphere("ContactPoint_R");
+		//			S[p][i][1]->transform->local_scale = vector3(0.1);
+		//			S[p][i][1]->material->color = vector4(1, 0, 0, 1);
+		//			S[p][i][1]->material->DS_state = State_manager::DStypes::DS_FALSE;
+		//		}
+		//	}
+		//}
+		//::::::::::::::::::::::::::::::
 
 		std::vector<Contact> contacts;
-		float resituation = Al_Global::resituation;
+		float resituation = Al_Global::base_resituation;
 		int object_num = RB_sphere_s[Sce].size() + RB_box_s[Sce].size() + RB_plane_s[Sce].size();
 		if (object_num == 0)return;
 
@@ -79,21 +83,33 @@ namespace Adollib
 		// 衝突生成
 		generate_contact(pairs);
 
+
+
 		// 衝突解決
 		resolve_contact(colls, pairs);
 
 		// 位置の更新
 		integrate(colls);
 
-		for (int i = 0; i < 4; i++) {
-			S[i][0]->transform->local_pos = vector3(100000, 100000, 100000);
-			S[i][1]->transform->local_pos = vector3(100000, 100000, 100000);
-		}
-		for (int i = 0; pairs.size() > 0 && i < pairs[0].contacts.contact_num; i++) {
-			S[i][0]->transform->local_pos = vector3_be_rotated_by_quaternion(pairs[0].contacts.contactpoints[i].point[0], pairs[0].body[0]->world_orientation) + pairs[0].body[0]->world_position;
+		//DBUG : 衝突点の表示 ::::::
+		//for (int p = 0; p < 10; p++) {
+		//	for (int i = 0; i < 4; i++) {
+		//		S[p][i][0]->set_active(false);
+		//		S[p][i][1]->set_active(false);
+		//	}
+		//}
+ 	//	for (int p = 0; p < pairs.size() &&  p < 10; p++) {
+		//	for (int i = 0; i < pairs[p].contacts.contact_num; i++) {
 
-			S[i][1]->transform->local_pos = vector3_be_rotated_by_quaternion(pairs[0].contacts.contactpoints[i].point[1], pairs[0].body[1]->world_orientation) + pairs[0].body[1]->world_position;
-		}
+		//		S[p][i][0]->set_active(true);
+		//		S[p][i][1]->set_active(true);
+
+		//		S[p][i][0]->transform->local_pos = vector3_be_rotated_by_quaternion(pairs[p].contacts.contactpoints[i].point[0], pairs[p].body[0]->world_orientation) + pairs[p].body[0]->world_position;
+		//		S[p][i][1]->transform->local_pos = vector3_be_rotated_by_quaternion(pairs[p].contacts.contactpoints[i].point[1], pairs[p].body[1]->world_orientation) + pairs[p].body[1]->world_position;
+		//	}
+		//}
+
+		//:::::::::::::::::::::::::::
 
 
 		for (int i = 0; i < colls.size(); i++) {

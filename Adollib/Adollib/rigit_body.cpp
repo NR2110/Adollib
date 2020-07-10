@@ -56,6 +56,10 @@ void Collider::integrate(float duration) {
 
 	world_orientation *= quaternion_radian_axis(angular_velocity.norm_sqr() * duration * 0.5, angular_velocity.unit_vect());
 	world_orientation = world_orientation.unit_vect();
+
+	//quaternion dAng = quaternion(0, angular_velocity.x, angular_velocity.y, angular_velocity.z) * world_orientation * 0.5f;
+	//world_orientation = (world_orientation + dAng * duration).unit_vect();
+
 }
 
 
@@ -75,7 +79,6 @@ void Sphere::update_world_trans() {
 	world_orientation = gameobject->get_world_orientate() * local_orientation;
 	world_size = gameobject->get_world_scale() * local_scale * r;
 	world_position = gameobject->get_world_position() + vector3_be_rotated_by_quaternion(local_position * world_size, world_orientation);
-
 	update_inertial(world_size, density);
 }
 void Plane::update_world_trans() {
@@ -117,8 +120,8 @@ void Box::update_dop6() {
 		float MAX_DIS = 0;
 		for (int o = 0; o < 8; o++) {
 			float dis = fabsf(vector3_dot(axis[i].unit_vect(), half[o]));
-			if (MAX_DIS * 0.909 < dis) {
-				dop6.halfsize[i] = dis * 1.1;//ŠmŽÀ‚É‚·‚é‚½‚ß‚¿‚å‚Á‚Æ‘å‚«‚ß‚É‚Æ‚é
+			if (MAX_DIS < dis * 1.01f) {
+				dop6.halfsize[i] = dis * 1.01f;//ŠmŽÀ‚É‚·‚é‚½‚ß‚¿‚å‚Á‚Æ‘å‚«‚ß‚É‚Æ‚é
 				MAX_DIS = dis; 
 			}
 
@@ -129,7 +132,7 @@ void Box::update_dop6() {
 void Sphere::update_dop6() {
 	dop6.pos = gameobject->get_world_position();	
 	for (int i = 0; i < 6; i++) {
-		dop6.halfsize[i] = r * 1.1;
+		dop6.halfsize[i] = r * 1.01;
 	}
 }
 void Plane::update_dop6() {
