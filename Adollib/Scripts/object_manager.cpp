@@ -66,11 +66,11 @@ namespace Adollib
 
 		}
 
-		int max_c = 2;
+		int max_c = 1;
 		for (int i = 0; i < max_c; i++) {
 
 			for (int o = 0; o < max_c - i; o++) {
-				set_fall_box(vector3(2.1 * o - (max_c - i) * 2.1/2.0, 0.2 + 2.1 * i, 0), vector3(1, 1, 1), vector3(0, 0, 0), vector3(0, 1, 1));
+				set_fall_box(vector3(2.1 * o - (max_c - i) * 2.1/2.0, 1.0 + 2.1 * i, 0), vector3(1, 1, 1), vector3(0, 0, 0), vector3(0, 1, 1));
 			}
 
 			//set_fall_sphere(vector3(i * 0.01, 20 + 10 * i, i * 0.01), 2, vector3(0, 1, 1));

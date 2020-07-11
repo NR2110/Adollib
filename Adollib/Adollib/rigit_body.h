@@ -3,8 +3,7 @@
 #include <vector>
 #include <assert.h>
 #include <string>
-#include "quaternion.h"
-#include "matrix.h"
+#include "math.h"
 
 //貫通しない衝突判定を用いるか(少し重くなる?)
 //これを用いる場合integral前に衝突判定を行う
@@ -29,22 +28,6 @@ namespace Adollib {
 
 		shape_null
 
-	};
-
-	struct DOP_6 {
-		//中心座標
-		vector3 pos;
-
-		//::::::::::::::::::
-		//Boardphase用のDOP_6
-		// x : (1,0,0)
-		// y : (0,1,0)
-		// z : (0,0,1)
-		// xy : (1,1,0)
-		// yz : (0,1,1)
-		// zx : (1,0,1)
-		//:::::::::::::::::::
-		float halfsize[6];
 	};
 
 	class Collider {

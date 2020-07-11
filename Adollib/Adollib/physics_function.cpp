@@ -37,7 +37,7 @@ bool Check_insert_DOP6(Collider* collA, Collider* collB) {
 	};
 
 	for (int i = 0; i < 6; i++) {
-		if (fabsf(vector3_dot(axis[i].unit_vect(), dis)) > fabsf(collA->dop6.halfsize[i]) * 2 + fabsf(collB->dop6.halfsize[i]) * 2)
+		if (fabsf(vector3_dot(axis[i].unit_vect(), dis)) > fabsf(collA->dop6.max[i]) * 2 + fabsf(collB->dop6.max[i]) * 2)
 			return false;
 	}
 
@@ -59,7 +59,7 @@ bool Check_insert_Plane(Collider* plane, Collider* coll) {
 	plane_dis = vector3_dot(V, plane->world_position);
 
 	for (int i = 0; i < 6; i++) {
-		float coll_len = vector3_dot(V, coll->world_position + axis[i] * coll->dop6.halfsize[i]);
+		float coll_len = vector3_dot(V, coll->world_position + axis[i] * coll->dop6.max[i]);
 		if (plane_dis > coll_len)return true;
 	}
 
@@ -941,7 +941,7 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 			// ”½”­ŒW”‚ÌŠl“¾
 			// Œp‘±‚ÌÕ“Ë‚Ìê‡”½”­ŒW”‚ğ0‚É‚·‚é
 			float restitution = pair.type == Pairtype::new_pair ? 0.5f * (coll[0]->restitution + coll[1]->restitution) : 0.0f;
-			restitution = 0;
+			//restitution = 0;
 
 			//Õ“Ë‚Ì‚»‚ê‚¼‚ê‚Ì‘¬“x
 			vector3 pdota;

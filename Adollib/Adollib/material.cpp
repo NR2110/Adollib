@@ -2,6 +2,7 @@
 #include "systems.h"
 #include "material.h"
 #include "matrix.h"
+#include "frustum_culling.h"
 
 namespace Adollib {
 	 Material::Material() {
@@ -20,17 +21,19 @@ namespace Adollib {
 
 		shader.Activate();
 
-		RS_state = State_manager::RStypes::RS_CULL_NONE;
+		//RS_state = State_manager::RStypes::RS_CULL_NONE;
 		if (Systems::BS_type != BS_state) Systems::SetBlendState(BS_state);
 		if (Systems::RS_type != RS_state) Systems::SetRasterizerState(RS_state);
 		if (Systems::DS_type != DS_state) Systems::SetDephtStencilState(DS_state);
 
 		for (Mesh::mesh mesh : *meshes)
 		{
+			if (FrustumCulling::frustum_culling(&mesh) == false) continue;
+
 			UINT stride = sizeof(VertexFormat);
 			UINT offset = 0;
 			Systems::DeviceContext->IASetVertexBuffers(0, 1, mesh.vertexBuffer.GetAddressOf(), &stride, &offset);
-			Systems::DeviceContext->IASetIndexBuffer(mesh.indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+			Systems::DeviceContext->IASetIndexBuffer  (mesh.indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 
 			//CB : ConstantBufferPerMaterial
 			ConstantBufferPerMaterial cb;
@@ -56,7 +59,7 @@ namespace Adollib {
 					}
 					mesh.skeletalAnimation.at(animeIndex).animation_tick += 1;
 				}
-				//// specular
+				// specular
 				cb.shininess = 1;
 				cb.ambientColor = XMFLOAT4(0.1f, 0.1f, 0.1f, 1);
 				cb.materialColor = color.get_XM4();

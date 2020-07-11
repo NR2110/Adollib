@@ -121,7 +121,7 @@ void Box::update_dop6() {
 		for (int o = 0; o < 8; o++) {
 			float dis = fabsf(vector3_dot(axis[i].unit_vect(), half[o]));
 			if (MAX_DIS < dis * 1.01f) {
-				dop6.halfsize[i] = dis * 1.01f;//ŠmŽÀ‚É‚·‚é‚½‚ß‚¿‚å‚Á‚Æ‘å‚«‚ß‚É‚Æ‚é
+				dop6.max[i] = dis * 1.01f;//ŠmŽÀ‚É‚·‚é‚½‚ß‚¿‚å‚Á‚Æ‘å‚«‚ß‚É‚Æ‚é
 				MAX_DIS = dis; 
 			}
 
@@ -132,13 +132,13 @@ void Box::update_dop6() {
 void Sphere::update_dop6() {
 	dop6.pos = gameobject->get_world_position();	
 	for (int i = 0; i < 6; i++) {
-		dop6.halfsize[i] = r * 1.01;
+		dop6.max[i] = r * 1.01;
 	}
 }
 void Plane::update_dop6() {
 	dop6.pos = gameobject->get_world_position();
 	for (int i = 0; i < 6; i++) {
-		dop6.halfsize[i] = FLT_MAX;
+		dop6.max[i] = FLT_MAX;
 	}
 }
 

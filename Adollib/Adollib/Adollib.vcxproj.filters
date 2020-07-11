@@ -157,6 +157,9 @@
     <ClCompile Include="closest_func.cpp">
       <Filter>Adollib\math</Filter>
     </ClCompile>
+    <ClCompile Include="frustum_culling.cpp">
+      <Filter>Adollib\object\mesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scene_title.h">
@@ -308,6 +311,12 @@
     </ClInclude>
     <ClInclude Include="closest_func.h">
       <Filter>Adollib\math</Filter>
+    </ClInclude>
+    <ClInclude Include="math.h">
+      <Filter>Adollib\math</Filter>
+    </ClInclude>
+    <ClInclude Include="frustum_culling.h">
+      <Filter>Adollib\object\mesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -21,6 +21,7 @@ namespace Adollib {
 		vector3() :x(0), y(0), z(0), normed(0) {};
 		vector3(float x, float y, float z) :x(x), y(y), z(z), normed(0) {};
 		explicit vector3(float v) :x(v), y(v), z(v), normed(0) {};
+		vector3(DirectX::XMFLOAT3 xm) :x(xm.x), y(xm.y), z(xm.z) {};
 		//vector3(n_vector2 V) :x(V.x), y(V.y), z(0) {};
 
 		vector3 operator+ () const;

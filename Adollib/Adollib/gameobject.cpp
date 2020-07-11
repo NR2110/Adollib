@@ -4,6 +4,8 @@
 
 #include "material_for_collider.h"
 #include "Adollib.h"
+#include "frustum_culling.h"
+
 namespace Adollib{
 
 	void Gameobject::initialize() {
@@ -41,6 +43,10 @@ namespace Adollib{
 			Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
 			Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 			Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
+
+			//‹‘äƒJƒŠƒ“ƒO—p
+			FrustumCulling::update_obj(this);
+			FrustumCulling::frustum_culling_init();
 
 			material->render();
 		}

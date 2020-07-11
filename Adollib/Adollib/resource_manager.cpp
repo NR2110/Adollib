@@ -336,10 +336,10 @@ namespace Adollib
 		u_int vertex_count = 0;
 
 		skinMeshes.resize(fetched_meshes.size());
-		for (size_t i = 0; i < fetched_meshes.size(); i++)
+		for (size_t mesh_num = 0; mesh_num < fetched_meshes.size(); mesh_num++)
 		{
-			FbxMesh* fbxMesh = fetched_meshes.at(i)->GetMesh();
-			Mesh::mesh& mesh = skinMeshes.at(i);
+			FbxMesh* fbxMesh = fetched_meshes.at(mesh_num)->GetMesh();
+			Mesh::mesh& mesh = skinMeshes.at(mesh_num);
 
 			// globalTransform
 			FbxAMatrix global_transform = fbxMesh->GetNode()->EvaluateGlobalTransform(0);
@@ -468,6 +468,8 @@ namespace Adollib
 					vertex.position.x = static_cast<float>(array_of_control_points[index_of_control_point][0]);
 					vertex.position.y = static_cast<float>(array_of_control_points[index_of_control_point][1]);
 					vertex.position.z = static_cast<float>(array_of_control_points[index_of_control_point][2]);
+
+
 					// –@ü
 					if (fbxMesh->GetElementNormalCount())
 					{
@@ -504,6 +506,31 @@ namespace Adollib
 					vertex_count++;
 				}
 				subset.indexCount += 3;
+			}
+
+			//DOP_6‚Ì“o˜^
+			{
+				vector3 axis[6]{
+					vector3(1,0,0),
+					vector3(0,1,0),
+					vector3(0,0,1),
+					vector3(1,1,0),
+					vector3(0,1,1),
+					vector3(1,0,1),
+				};
+
+				for (int i = 0; i < 6; i++) {
+					mesh.dop6.max[i] = -FLT_MAX;
+					mesh.dop6.min[i] = +FLT_MAX;
+				}
+				for (int ver = 0; ver < vertices.size(); ver++) {
+					for (int axi = 0; axi < 6; axi++) {
+						float V = vector3_dot(axis[axi].unit_vect(), vertices[ver].position);
+
+						if (mesh.dop6.max[axi] < V)mesh.dop6.max[axi] = V;
+						if (mesh.dop6.min[axi] > V)mesh.dop6.min[axi] = V;
+					}
+				}
 			}
 
 

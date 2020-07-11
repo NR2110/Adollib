@@ -11,7 +11,7 @@ using namespace fbxsdk;
 
 #pragma comment(lib,"libfbxsdk-md.lib")
 
-namespace Adollib
-{
+namespace Adollib{
+
 
 }

@@ -63,9 +63,15 @@ namespace Adollib {
 
 		std::list<std::shared_ptr<Camera>>::iterator go_iterator; //自身へのイテレーター(いつ使うの?)
 
+		float fov = 60.0f;
+		float aspect = 1280 / 720.0f;
+		float nearZ = 0.1f;
+		float farZ = 10000.0f;
+
 		//アタッチされたコンポーネントの処理
 		void initialize();
 		void render() {};
+
 	private:
 
 	public:

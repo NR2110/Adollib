@@ -5,6 +5,7 @@
 #include <fstream>
 #include <wrl.h>
 #include <fbxsdk.h>
+#include "math.h"
 
 using namespace DirectX;
 using namespace std;
@@ -76,6 +77,7 @@ namespace Adollib
 			Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer = nullptr;
 			Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer = nullptr;
 			vector<subset> subsets;
+			DOP_6 dop6; //meshÇÃÉçÅ[ÉJÉãç¿ïWånÇ≈ÇÃDOP_6
 			XMFLOAT4X4 globalTransform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
 			vector<skeletal_animation> skeletalAnimation;
 		};

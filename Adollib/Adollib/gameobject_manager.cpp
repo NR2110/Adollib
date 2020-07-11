@@ -7,6 +7,8 @@
 #include "resource_manager.h"
 #include "cbuffer_manager.h"
 #include "light_types.h"
+#include "frustum_culling.h"
+
 namespace Adollib {
 
 	std::map<Scenelist, std::list<std::shared_ptr<Gameobject>>> Gameobject_manager::gameobjects;
@@ -27,17 +29,6 @@ namespace Adollib {
 		Systems::SetDephtStencilState(State_manager::DStypes::DS_TRUE);
 		Systems::SetRasterizerState  (State_manager::RStypes::RS_CULL_BACK);
 		Systems::SetBlendState       (State_manager::BStypes::BS_ADD);
-
-		//CB : ConstantBufferPerSystem
-		ConstantBufferPerSystem s_sb;
-		float fov = ToRadian(60);
-		float aspect = (FLOAT)Al_Global::SCREEN_WIDTH / (FLOAT)Al_Global::SCREEN_HEIGHT;
-		float nearZ = 0.1f;
-		float farZ = 10000.0f;
-		DirectX::XMStoreFloat4x4(&s_sb.Projection, DirectX::XMMatrixPerspectiveFovLH(fov, aspect, nearZ, farZ));
-		Systems::DeviceContext->UpdateSubresource(projection_cb.Get(), 0, NULL, &s_sb, 0, 0);
-		Systems::DeviceContext->VSSetConstantBuffers(2, 1, projection_cb.GetAddressOf());
-		Systems::DeviceContext->PSSetConstantBuffers(2, 1, projection_cb.GetAddressOf());
 
 		//sceneの数だけgo_managerを生成
 		for (int i = 0; i < static_cast<int>(Scenelist::scene_list_size); i++) {
@@ -207,32 +198,47 @@ namespace Adollib {
 		Systems::DeviceContext->VSSetConstantBuffers(3, 1, light_cb.GetAddressOf());
 		Systems::DeviceContext->PSSetConstantBuffers(3, 1, light_cb.GetAddressOf());
 
-		//CB : ConstantBufferPerCamera
 		ConstantBufferPerCamera c_cb;
+		ConstantBufferPerSystem s_sb;
 		//そのシーンのカメラの数だけ回す
 		for (int i = 0; i < cameras[Sce].size(); i++, itr_ca++) {
 			if (itr_ca->get()->active == false)continue;
 
+			//CB : ConstantBufferPerCamera
 			// ビュー行列
 			vector3 pos = itr_ca->get()->transform->position;
 			quaternion orient = itr_ca->get()->transform->orientation;
 			vector3 look_pos = pos + vector3_be_rotated_by_quaternion(vector3(0, 0, 1), orient);
 
-			DirectX::XMVECTOR eye = DirectX::XMVectorSet(pos.x, pos.y, pos.z, 1.0f);
+			DirectX::XMVECTOR eye   = DirectX::XMVectorSet(pos.x, pos.y, pos.z, 1.0f);
 			DirectX::XMVECTOR focus = DirectX::XMVectorSet(look_pos.x, look_pos.y, look_pos.z, 1.0f);
-			DirectX::XMVECTOR up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f);
+			DirectX::XMVECTOR up    = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f);
 			XMStoreFloat4x4(&c_cb.View, DirectX::XMMatrixLookAtLH(eye, focus, up));
 			c_cb.Eyepos = DirectX::XMFLOAT4(pos.x, pos.y, pos.z, 1.0f);
 			Systems::DeviceContext->UpdateSubresource(view_cb.Get(), 0, NULL, &c_cb, 0, 0);
 			Systems::DeviceContext->VSSetConstantBuffers(1, 1, view_cb.GetAddressOf());
 			Systems::DeviceContext->PSSetConstantBuffers(1, 1, view_cb.GetAddressOf());
 
+			//CB : ConstantBufferPerSystem
+			float fov = ToRadian(itr_ca->get()->fov);
+			float aspect = itr_ca->get()->aspect;
+			float nearZ = itr_ca->get()->nearZ;
+			float farZ = itr_ca->get()->farZ;
+			DirectX::XMStoreFloat4x4(&s_sb.Projection, DirectX::XMMatrixPerspectiveFovLH(fov, aspect, nearZ, farZ));
+			Systems::DeviceContext->UpdateSubresource(projection_cb.Get(), 0, NULL, &s_sb, 0, 0);
+			Systems::DeviceContext->VSSetConstantBuffers(2, 1, projection_cb.GetAddressOf());
+			Systems::DeviceContext->PSSetConstantBuffers(2, 1, projection_cb.GetAddressOf());
+
 			//Sceのsceneにアタッチされたgoのrenderを呼ぶ
 			std::list<std::shared_ptr<Gameobject>>::iterator itr = gameobjects[Sce].begin();
 			std::list<std::shared_ptr<Gameobject>>::iterator itr_end = gameobjects[Sce].end();
 
+			//視錐台カリングにカメラ情報のセット
+			FrustumCulling::update_frustum(itr_ca->get());
+
 			for (; itr != itr_end; itr++) {
-				if (itr->get()->active == false)continue;
+				if (itr->get()->active == false)continue;	
+
 				itr->get()->render();
 			}
 		}

@@ -83,8 +83,6 @@ namespace Adollib
 		// Õ“Ë¶¬
 		generate_contact(pairs);
 
-
-
 		// Õ“Ë‰ðŒˆ
 		resolve_contact(colls, pairs);
 
@@ -98,7 +96,7 @@ namespace Adollib
 		//		S[p][i][1]->set_active(false);
 		//	}
 		//}
- 	//	for (int p = 0; p < pairs.size() &&  p < 10; p++) {
+ 		//	for (int p = 0; p < pairs.size() &&  p < 10; p++) {
 		//	for (int i = 0; i < pairs[p].contacts.contact_num; i++) {
 
 		//		S[p][i][0]->set_active(true);
