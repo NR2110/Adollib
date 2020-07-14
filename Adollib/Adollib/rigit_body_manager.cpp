@@ -89,14 +89,14 @@ namespace Adollib
 		// 位置の更新
 		integrate(colls);
 
-		//DBUG : 衝突点の表示 ::::::
+		////DBUG : 衝突点の表示 ::::::
 		//for (int p = 0; p < 10; p++) {
 		//	for (int i = 0; i < 4; i++) {
 		//		S[p][i][0]->set_active(false);
 		//		S[p][i][1]->set_active(false);
 		//	}
 		//}
- 		//	for (int p = 0; p < pairs.size() &&  p < 10; p++) {
+ 	//		for (int p = 0; p < pairs.size() &&  p < 10; p++) {
 		//	for (int i = 0; i < pairs[p].contacts.contact_num; i++) {
 
 		//		S[p][i][0]->set_active(true);

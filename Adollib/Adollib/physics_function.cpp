@@ -23,21 +23,13 @@ void physics_function::applyexternalforce(std::vector<Collider*>& coll) {
 //:::::::::::::::::::::::::::
 //DOP6‚É‚æ‚é‘åG”c‚È“–‚½‚è”»’è
 bool Check_insert_DOP6(Collider* collA, Collider* collB) {
-	//–³ŒÀPlane‚ÍDOP‚ªì‚ê‚È‚¢‚½‚ßnarrow‚É“Š‚°‚é
+	//–³ŒÀPlane‚ÍDOP‚ªì‚ê‚È‚¢‚½‚ßnarrow‚É“Š‚°‚é?
 	if (collA->shape == Collider_shape::shape_plane || collB->shape == Collider_shape::shape_plane) return true;
 
 	vector3 dis = collA->dop6.pos - collB->dop6.pos;
-	vector3 axis[6]{
-		{1,0,0},
-		{0,1,0},
-		{0,0,1},
-		{1,1,0},
-		{0,1,1},
-		{1,0,1}
-	};
 
 	for (int i = 0; i < 6; i++) {
-		if (fabsf(vector3_dot(axis[i].unit_vect(), dis)) > fabsf(collA->dop6.max[i]) * 2 + fabsf(collB->dop6.max[i]) * 2)
+		if (fabsf(vector3_dot(DOP_6_axis[i], dis)) > fabsf(collA->dop6.max[i]) + fabsf(collA->dop6.min[i])  + fabsf(collB->dop6.max[i]) + fabsf(collB->dop6.min[i]))
 			return false;
 	}
 
@@ -94,17 +86,16 @@ void physics_function::Boardphase(const std::vector<Collider*>& coll, std::vecto
 			if (hit == false)continue;
 
 			//DOP‚É‚æ‚é‘åG”c‚È“–‚½‚è”»’è
-			//if (coll[i]->shape != Collider_shape::shape_plane && coll[o]->shape != Collider_shape::shape_plane) {
-			//if (Check_insert_DOP6(coll[i], coll[o]) == false)continue;
-			//}
-			//else if (coll[i]->shape == Collider_shape::shape_plane && coll[o]->shape != Collider_shape::shape_plane) {
-			//	if (Check_insert_Plane(coll[i], coll[o]) == false)continue;
-			//}
-			//else if (coll[i]->shape != Collider_shape::shape_plane && coll[o]->shape == Collider_shape::shape_plane) {
-			//	if (Check_insert_Plane(coll[o], coll[i]) == false)continue;
-			//}
-			//else continue;
-
+			if (coll[i]->shape != Collider_shape::shape_plane && coll[o]->shape != Collider_shape::shape_plane) {
+				if (Check_insert_DOP6(coll[i], coll[o]) == false)continue;
+			}
+			else if (coll[i]->shape == Collider_shape::shape_plane && coll[o]->shape != Collider_shape::shape_plane) {
+				if (Check_insert_Plane(coll[i], coll[o]) == false)continue;
+			}
+			else if (coll[i]->shape != Collider_shape::shape_plane && coll[o]->shape == Collider_shape::shape_plane) {
+				if (Check_insert_Plane(coll[o], coll[i]) == false)continue;
+			}
+			else continue;
 
 
 			Contact_pair new_pair;
@@ -141,6 +132,7 @@ void physics_function::Boardphase(const std::vector<Collider*>& coll, std::vecto
 			}
 		}
 	}
+
 	//Œ»İg—p‚µ‚Ä‚¢‚È‚¢Õ“Ë“_‚ğíœ
 	for (int i = 0; i < new_pairs.size(); i++) {
 		new_pairs[i].contacts.chack_remove_contact_point(
@@ -487,8 +479,8 @@ bool sat_obb_obb(
 	for (int i = 0; i < 3; i++)
 	{
 		axis = obb1.u_axes[i];
-		ra = obb1.half_width[i];
-		rb = sum_of_projected_radii(obb2, axis);
+		ra = fabsf(obb1.half_width[i]);
+		rb = fabsf(sum_of_projected_radii(obb2, axis));
 
 		assert(ra > 0 && rb > 0);
 
@@ -511,8 +503,8 @@ bool sat_obb_obb(
 	for (int i = 0; i < 3; i++)
 	{
 		axis = obb2.u_axes[i];
-		ra = sum_of_projected_radii(obb1, axis);
-		rb = obb2.half_width[i];
+		ra = fabsf(sum_of_projected_radii(obb1, axis));
+		rb = fabsf(obb2.half_width[i]);
 
 		penetration = ra + rb - abs(vector3_dot(axis, distBtoA));
 		if (penetration < 0) return 0;
@@ -555,9 +547,9 @@ bool sat_obb_obb(
 
 			axis = axis.unit_vect();
 
-			ra = sum_of_projected_radii(obb1, axis);
-			rb = sum_of_projected_radii(obb2, axis);
-			if (vector3_dot(axis, distBtoA) + rb < ra)continue;
+			ra = fabsf(sum_of_projected_radii(obb1, axis));
+			rb = fabsf(sum_of_projected_radii(obb2, axis));
+			//if (vector3_dot(axis, distBtoA) + rb < ra)continue;
 
 			penetration = ra + rb - fabsf(vector3_dot(axis, distBtoA));
 			if (penetration < 0) return 0;
@@ -983,8 +975,9 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 				cp.constraint[0].jacDiagInv = 1.0f / denominator; //Baraff1997(8-18)‚Ì•ª•ê
 				cp.constraint[0].rhs = -(1.0f + restitution) * vector3_dot(axis, vrel); //Baraff1997(8-18)‚Ì•ªq
 
-				if(0.0f < cp.distance - slop)
-				cp.constraint[0].rhs += (bias * (cp.distance - slop)) / timeStep; //‚ß‚è‚İ‚ğ’¼‚·’l
+				if (0.0f < cp.distance - slop) {
+					cp.constraint[0].rhs += (bias * (cp.distance - slop)) / timeStep; //‚ß‚è‚İ‚ğ’¼‚·’l
+				}
 
 				cp.constraint[0].rhs *= cp.constraint[0].jacDiagInv;
 				cp.constraint[0].lowerlimit = 0.0f;
