@@ -88,64 +88,53 @@ void Plane::update_world_trans() {
 
 	update_inertial(world_size, density);
 }
-void Box::update_dop6() {
-	dop6.pos = gameobject->get_world_position();
-	vector3 axis[6]{
-	{1,0,0},
-	{0,1,0},
-	{0,0,1},
-	{1,1,0},
-	{0,1,1},
-	{1,0,1}
-	};
+void Box::update_dop7() {
+	dop7.pos = gameobject->get_world_position();
 
 	//各頂点のローカル座標
-	vector3 half[8]{
+	vector3 half[4]{
 	{+half_size.x, -half_size.y, -half_size.z},
 	{+half_size.x, -half_size.y, +half_size.z},
 	{+half_size.x, +half_size.y, -half_size.z},
-	{+half_size.x, +half_size.y, +half_size.z},
-	{-half_size.x, -half_size.y, -half_size.z},
-	{-half_size.x, -half_size.y, +half_size.z},
-	{-half_size.x, +half_size.y, -half_size.z},
-	{-half_size.x, +half_size.y, +half_size.z},
+	{+half_size.x, +half_size.y, +half_size.z}
 	};
 
-	for (int i = 0; i < 8; i++) {
+	for (int i = 0; i < 4; i++) {
 		half[i] = half[i] * world_size;
 	}
 
 	quaternion WO = gameobject->get_world_orientate();
-	for (int i = 0; i < 8; i++) {
+	for (int i = 0; i < 4; i++) {
 		half[i] = vector3_be_rotated_by_quaternion(half[i], WO);
 	}
 
 	//DOP_6の更新
-	for (int i = 0; i < 6; i++) {
-		float MAX_DIS = 0;
-		for (int o = 0; o < 8; o++) {
-			float dis = fabsf(vector3_dot(axis[i].unit_vect(), half[o]));
-			if (MAX_DIS < dis * 1.01f) {
-				dop6.max[i] = dis * 1.01f;//確実にするためちょっと大きめにとる
-				dop6.min[i] = dis * 1.01f;//確実にするためちょっと大きめにとる
-				MAX_DIS = dis; 
+	float max_len = 0;
+	for (int i = 0; i < DOP_size; i++) {
+		max_len = 0;
+		for (int o = 0; o < 4; o++) {
+			float dis = fabsf(vector3_dot(DOP_7_axis[i], half[o]));
+			if (max_len < dis) {
+				dop7.max[i] = +dis * 1.01f;//確実にするためちょっと大きめにとる
+				dop7.min[i] = -dis * 1.01f;//確実にするためちょっと大きめにとる
+				max_len = dis;
 			}
 
 		}
 	}
 
 }
-void Sphere::update_dop6() {
-	dop6.pos = gameobject->get_world_position();	
-	for (int i = 0; i < 6; i++) {
-		dop6.max[i] = r * 1.01 * world_size.x;
-		dop6.min[i] = r * 1.01 * world_size.x;
+void Sphere::update_dop7() {
+	dop7.pos = gameobject->get_world_position();	
+	for (int i = 0; i < DOP_size; i++) {
+		dop7.max[i] = r * 1.01 * world_size.x;
+		dop7.min[i] = r * 1.01 * world_size.x;
 	}
 }
-void Plane::update_dop6() {
-	dop6.pos = gameobject->get_world_position();
-	for (int i = 0; i < 6; i++) {
-		dop6.max[i] = FLT_MAX;
+void Plane::update_dop7() {
+	dop7.pos = gameobject->get_world_position();
+	for (int i = 0; i < DOP_size; i++) {
+		dop7.max[i] = FLT_MAX;
 	}
 }
 

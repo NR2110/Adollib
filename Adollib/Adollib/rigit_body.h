@@ -37,7 +37,7 @@ namespace Adollib {
 		Gameobject* gameobject = nullptr;	//親情報
 
 		Collider_shape shape = Collider_shape::shape_null;	//形情報
-		DOP_6 dop6; //Boardphase用のDOP_6データ
+		DOP_7 dop7; //Boardphase用のDOP_6データ
 		physics_function::Solverbody* solve;
 
 		std::string tag; //自身のタグ
@@ -113,7 +113,7 @@ namespace Adollib {
 
 		//オブジェクトが動くたびに呼び出す　のが効率よいが適当に毎フレーム呼ぶ
 		//DOP_6データの更新
-		virtual void update_dop6() = 0;
+		virtual void update_dop7() = 0;
 
 	};
 
@@ -167,7 +167,7 @@ namespace Adollib {
 			inertial_tensor._33 = 0.4f * inertial_mass * r * r;
 		}
 		//dop6の更新
-		void update_dop6();
+		void update_dop7();
 
 	};
 
@@ -222,7 +222,7 @@ namespace Adollib {
 			//inertial_tensor._33 = 0.4f * inertial_mass * r * r;
 		}
 		//dop6の更新
-		void update_dop6();
+		void update_dop7();
 
 	};
 
@@ -273,7 +273,7 @@ namespace Adollib {
 			inertial_tensor._33 = 0.3333333f * inertial_mass * ((half_size.x * half_size.x) + (half_size.y * half_size.y));
 		}
 		//dop6の更新
-		void update_dop6();
+		void update_dop7();
 
 	};
 

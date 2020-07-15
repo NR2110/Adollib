@@ -129,7 +129,6 @@ namespace Adollib {
 
 			Collider* body[2]; //ÚG‚µ‚½object
 			
-
 			Contact contacts; //Õ“Ë‚Ìî•ñ
 		};
 

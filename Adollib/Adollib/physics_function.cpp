@@ -22,14 +22,17 @@ void physics_function::applyexternalforce(std::vector<Collider*>& coll) {
 	#pragma region Boardphase
 //:::::::::::::::::::::::::::
 //DOP6Ç…ÇÊÇÈëÂéGîcÇ»ìñÇΩÇËîªíË
-bool Check_insert_DOP6(Collider* collA, Collider* collB) {
+bool Check_insert_DOP7(Collider* collA, Collider* collB) {
 	//ñ≥å¿PlaneÇÕDOPÇ™çÏÇÍÇ»Ç¢ÇΩÇﬂnarrowÇ…ìäÇ∞ÇÈ?
 	if (collA->shape == Collider_shape::shape_plane || collB->shape == Collider_shape::shape_plane) return true;
 
-	vector3 dis = collA->dop6.pos - collB->dop6.pos;
+	vector3 dis = collA->dop7.pos - collB->dop7.pos;
 
-	for (int i = 0; i < 6; i++) {
-		if (fabsf(vector3_dot(DOP_6_axis[i], dis)) > fabsf(collA->dop6.max[i]) + fabsf(collA->dop6.min[i])  + fabsf(collB->dop6.max[i]) + fabsf(collB->dop6.min[i]))
+	for (int i = 0; i < DOP_size; i++) {
+		if (
+			+vector3_dot(DOP_7_axis[i], collA->dop7.pos - collB->dop7.pos) < collB->dop7.min[i] - collA->dop7.max[i] || 
+			-vector3_dot(DOP_7_axis[i], collA->dop7.pos - collB->dop7.pos) < collA->dop7.min[i] - collB->dop7.max[i]
+			)
 			return false;
 	}
 
@@ -50,8 +53,8 @@ bool Check_insert_Plane(Collider* plane, Collider* coll) {
 	V = vector3_be_rotated_by_quaternion(vector3(0, 1, 0), plane->world_orientation);
 	plane_dis = vector3_dot(V, plane->world_position);
 
-	for (int i = 0; i < 6; i++) {
-		float coll_len = vector3_dot(V, coll->world_position + axis[i] * coll->dop6.max[i]);
+	for (int i = 0; i < DOP_size; i++) {
+		float coll_len = vector3_dot(V, coll->world_position + axis[i] * coll->dop7.max[i]);
 		if (plane_dis > coll_len)return true;
 	}
 
@@ -60,13 +63,15 @@ bool Check_insert_Plane(Collider* plane, Collider* coll) {
 
 void physics_function::Boardphase(const std::vector<Collider*>& coll, std::vector<Contacts::Contact_pair>& pairs) {
 
+
 	//DOPÇÃçXêV
 	for (int i = 0; i < coll.size(); i++) {
-		coll[i]->update_dop6();
+		coll[i]->update_dop7();
 	}
 
 	//DOP_6Ç…ÇÊÇÈëÂéGîcÇ»ìñÇΩÇËîªíË
 	std::vector<Contacts::Contact_pair> new_pairs;
+	Contact_pair new_pair;
 	for (int i = 0; i < coll.size(); i++) {
 		for (int o = i + 1; o < coll.size(); o++) {
 
@@ -87,7 +92,7 @@ void physics_function::Boardphase(const std::vector<Collider*>& coll, std::vecto
 
 			//DOPÇ…ÇÊÇÈëÂéGîcÇ»ìñÇΩÇËîªíË
 			if (coll[i]->shape != Collider_shape::shape_plane && coll[o]->shape != Collider_shape::shape_plane) {
-				if (Check_insert_DOP6(coll[i], coll[o]) == false)continue;
+				if (Check_insert_DOP7(coll[i], coll[o]) == false)continue;
 			}
 			else if (coll[i]->shape == Collider_shape::shape_plane && coll[o]->shape != Collider_shape::shape_plane) {
 				if (Check_insert_Plane(coll[i], coll[o]) == false)continue;
@@ -97,16 +102,14 @@ void physics_function::Boardphase(const std::vector<Collider*>& coll, std::vecto
 			}
 			else continue;
 
-
-			Contact_pair new_pair;
 			//new_pair.body[0]Ç…ÉAÉhÉåÉXÇÃëÂÇ´Ç¢ÇŸÇ§ÇÇµÇ‹Ç§
 			if (coll[i] > coll[o]) {
 				new_pair.body[0] = coll[i];
 				new_pair.body[1] = coll[o];
 			}
 			else {
-				new_pair.body[0] = coll[i];
-				new_pair.body[1] = coll[o];
+				new_pair.body[0] = coll[o];
+				new_pair.body[1] = coll[i];
 			}
 			new_pair.type = Pairtype::new_pair;
 

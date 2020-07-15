@@ -77,7 +77,7 @@ namespace Adollib
 			Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer = nullptr;
 			Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer = nullptr;
 			vector<subset> subsets;
-			DOP_6 dop6; //meshのローカル座標系でのDOP_6
+			DOP_7 dop7; //meshのローカル座標系でのDOP_6
 			XMFLOAT4X4 globalTransform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
 			vector<skeletal_animation> skeletalAnimation;
 		};

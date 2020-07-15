@@ -520,15 +520,15 @@ namespace Adollib
 				};
 
 				for (int i = 0; i < 6; i++) {
-					mesh.dop6.max[i] = -FLT_MAX;
-					mesh.dop6.min[i] = +FLT_MAX;
+					mesh.dop7.max[i] = -FLT_MAX;
+					mesh.dop7.min[i] = +FLT_MAX;
 				}
 				for (int ver = 0; ver < vertices.size(); ver++) {
 					for (int axi = 0; axi < 6; axi++) {
 						float V = vector3_dot(axis[axi].unit_vect(), vertices[ver].position);
 
-						if (mesh.dop6.max[axi] < V)mesh.dop6.max[axi] = V;
-						if (mesh.dop6.min[axi] > V)mesh.dop6.min[axi] = V;
+						if (mesh.dop7.max[axi] < V)mesh.dop7.max[axi] = V;
+						if (mesh.dop7.min[axi] > V)mesh.dop7.min[axi] = V;
 					}
 				}
 			}
