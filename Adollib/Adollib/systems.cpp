@@ -102,6 +102,7 @@ HRESULT Systems::CreateDevice(HWND hWnd)
 			continue;
 		}
 		
+		break;
 	}
 
 	//インターフェース取得

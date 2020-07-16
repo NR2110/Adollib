@@ -27,6 +27,18 @@ namespace Adollib
 		if (input->getKeyTrigger(Key::C))
 			Al_Global::render_collider_flag = Al_Global::render_collider_flag == false ? true : false;
 
+		//quaternion A = quaternion_from_euler(180, 0, 0);
+
+		//vector3 B = A.euler();
+
+		//if (10 < fabsf(B.z)) {
+		//	int dafsgdf = 0;
+		//}
+		//if (10 < fabsf(B.x)) {
+		//	int dafsgdf = 0;
+		//}
+		//quaternion C = quaternion_from_euler(B);
+
 		//quaternion X = quaternion_angle_axis(45, vector3(1, 0, 0));
 		//quaternion Y = quaternion_angle_axis(45, vector3(0, 1, 0));
 		//quaternion Z = quaternion_angle_axis(45, vector3(0, 0, 1));

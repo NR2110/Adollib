@@ -160,6 +160,9 @@
     <ClCompile Include="frustum_culling.cpp">
       <Filter>Adollib\object\mesh</Filter>
     </ClCompile>
+    <ClCompile Include="compute_shader.cpp">
+      <Filter>Adollib\shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scene_title.h">
@@ -317,6 +320,9 @@
     </ClInclude>
     <ClInclude Include="frustum_culling.h">
       <Filter>Adollib\object\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="compute_shader.h">
+      <Filter>Adollib\shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

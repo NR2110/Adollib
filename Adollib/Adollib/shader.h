@@ -17,8 +17,8 @@ namespace Adollib {
 		ComPtr<ID3D11VertexShader>		VS = nullptr; // 頂点シェーダ
 		ComPtr<ID3D11PixelShader>		PS = nullptr; // ピクセルシェーダ
 		ComPtr<ID3D11GeometryShader>	GS = nullptr; // ジオメトリシェーダ
-		ComPtr<ID3D11HullShader>		HS = nullptr; //　ハルシェーダ
-		ComPtr<ID3D11DomainShader>		DS = nullptr; //　ドメインネームシェーダ
+		ComPtr<ID3D11HullShader>		HS = nullptr; // ハルシェーダ
+		ComPtr<ID3D11DomainShader>		DS = nullptr; // ドメインネームシェーダ
 
 		HRESULT Compile(WCHAR* filename, LPCSTR method, LPCSTR shaderModel, ID3DBlob** ppBlobOut);
 

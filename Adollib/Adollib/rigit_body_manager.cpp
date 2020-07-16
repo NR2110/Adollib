@@ -80,14 +80,14 @@ namespace Adollib
 		// 大雑把な当たり判定
 		Boardphase(colls, pairs);
 
-		//// 衝突生成
-		//generate_contact(pairs);
+		// 衝突生成
+		generate_contact(pairs);
 
-		//// 衝突解決
-		//resolve_contact(colls, pairs);
+		// 衝突解決
+		resolve_contact(colls, pairs);
 
-		// 位置の更新
-		//integrate(colls);
+		 //位置の更新
+		integrate(colls);
 
 		////DBUG : 衝突点の表示 ::::::
 		//for (int p = 0; p < 10; p++) {

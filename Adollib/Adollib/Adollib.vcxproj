@@ -157,6 +157,7 @@
     <ClInclude Include="component.h" />
     <ClInclude Include="component_camera.h" />
     <ClInclude Include="component_light.h" />
+    <ClInclude Include="compute_shader.h" />
     <ClInclude Include="contact.h" />
     <ClInclude Include="frustum_culling.h" />
     <ClInclude Include="gameobject.h" />
@@ -209,6 +210,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="compute_shader.cpp" />
     <ClCompile Include="contact.cpp" />
     <ClCompile Include="frustum_culling.cpp" />
     <ClCompile Include="gameobject.cpp" />

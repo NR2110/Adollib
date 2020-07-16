@@ -1,29 +1,11 @@
-﻿  physics_function.cpp
+﻿  compute_shader.cpp
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\math.h(12,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\math.h(13,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\math.h(14,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\math.h(15,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\rigit_body.h(55,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\rigit_body.h(56,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(17,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(20,32): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.h(6,21): warning C4099: 'Adollib::physics_function::Solverbody': タイプ名は最初 'class' として使われていましたが 'struct' として使われています。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.h(6): message : 'Adollib::physics_function::Solverbody' の宣言を確認してください
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(16,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(68,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(75,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(76,25): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(80,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(86,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(121,32): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(122,33): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(140,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(164,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(900,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(910,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(918,28): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(1037,28): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(1062,29): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(1138,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(1149,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\compute_shader.cpp(93,29): warning C4305: 'return': 'HRESULT' から 'bool' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\compute_shader.cpp(124,22): warning C4305: 'return': 'HRESULT' から 'bool' へ切り詰めます。
   Adollib.vcxproj -> C:\Users\2190072\Documents\Adollib\Adollib\Debug\Adollib.exe

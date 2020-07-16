@@ -936,7 +936,6 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 			// ”½”­ŒW”‚ÌŠl“¾
 			// Œp‘±‚ÌÕ“Ë‚Ìê‡”½”­ŒW”‚ğ0‚É‚·‚é
 			float restitution = pair.type == Pairtype::new_pair ? 0.5f * (coll[0]->restitution + coll[1]->restitution) : 0.0f;
-			//restitution = 0;
 
 			//Õ“Ë‚Ì‚»‚ê‚¼‚ê‚Ì‘¬“x
 			vector3 pdota;

@@ -15,13 +15,14 @@ using namespace std;
 
 namespace Adollib
 {
-	std::map<std::string, std::vector<Mesh::mesh>> ResourceManager::meshes;
-	std::map<std::wstring, Texture> ResourceManager::texturs;
-	std::map<std::string, ResourceManager::VS_resorce>   ResourceManager::VSshaders;
-	std::map<std::string, ID3D11PixelShader*>    ResourceManager::PSshaders;
-	std::map<std::string, ID3D11GeometryShader*> ResourceManager::GSshaders;
-	std::map<std::string, ID3D11HullShader*>     ResourceManager::HSshaders;
-	std::map<std::string, ID3D11DomainShader*>   ResourceManager::DSshaders;
+	std::unordered_map<std::string, std::vector<Mesh::mesh>> ResourceManager::meshes;
+	std::unordered_map<std::wstring, Texture> ResourceManager::texturs;
+	std::unordered_map<std::string, ResourceManager::VS_resorce>   ResourceManager::VSshaders;
+	std::unordered_map<std::string, ID3D11PixelShader*>    ResourceManager::PSshaders;
+	std::unordered_map<std::string, ID3D11GeometryShader*> ResourceManager::GSshaders;
+	std::unordered_map<std::string, ID3D11HullShader*>     ResourceManager::HSshaders;
+	std::unordered_map<std::string, ID3D11DomainShader*>   ResourceManager::DSshaders;
+	std::unordered_map<std::string, ID3D11ComputeShader*>   ResourceManager::CSshaders;
 
 #pragma region Shader load
 
@@ -238,6 +239,46 @@ namespace Adollib
 
 		return S_OK;
 	}
+
+	HRESULT ResourceManager::CreateCsFromCso(
+		const char* csoName, // ピクセルシェーダーファイル名
+		ID3D11ComputeShader** compute_shader // 格納するポインタ
+	)
+	{
+		if (PSshaders.count((string)csoName) == 1) {
+			*compute_shader = CSshaders[(string)csoName];
+		}
+		else {
+			// ピクセルシェーダーファイルを開く
+			FILE* fp = nullptr;
+			fopen_s(&fp, csoName, "rb");
+			_ASSERT_EXPR_A(fp, "CSO File not found");
+
+			// ピクセルシェーダーファイルのサイズを求める
+			fseek(fp, 0, SEEK_END);
+			long cso_sz = ftell(fp);
+			fseek(fp, 0, SEEK_SET);
+
+			// メモリ上にピクセルシェーダーデータを格納する領域を用意する
+			unique_ptr<unsigned char[]> cso_data = make_unique<unsigned char[]>(cso_sz);
+			fread(cso_data.get(), cso_sz, 1, fp); // 用意した領域にデータを読み込む
+			fclose(fp);
+
+			// 生成
+			HRESULT hr = Systems::Device->CreateComputeShader(
+				cso_data.get(), // ピクセルシェーダーデータのポインタ
+				cso_sz,			// ピクセルシェーダーデータサイズ
+				nullptr,
+				compute_shader    // ピクセルシェーダーオブジェクトのポインタの格納先
+			);
+			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
+
+			CSshaders[(string)csoName] = *compute_shader;
+		}
+
+		return S_OK;
+	}
+
 #pragma endregion
 
 	// テクスチャの読み込み
