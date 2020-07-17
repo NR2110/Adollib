@@ -91,8 +91,13 @@ namespace Adollib {
 				Systems::DeviceContext->DrawIndexed(subset.indexCount, subset.indexStart, 0);
 
 			}
+
 		}
+
+
 	}
+
+
 
 }
 

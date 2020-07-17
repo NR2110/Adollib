@@ -1,16 +1,20 @@
+
 #include "physics_function.h"
-#include <string>
 
 #include "closest_func.h"
+#include <string>
 
 using namespace Adollib;
 using namespace Contacts;
+using namespace Compute_S;
 
 //:::::::::::::::::::::::::::::::::::::::::::::::::::
 		#pragma region physics_function
 //:::::::::::::::::::::::::::::::::::::::::::::::::::
 
 using namespace physics_function;
+
+
 //外力による速度などの更新
 void physics_function::applyexternalforce(std::vector<Collider*>& coll) {
 	for (int i = 0; i < coll.size(); i++) {
@@ -898,6 +902,10 @@ struct cs_Pair
 	int solv_num[2]; //solverbody配列の何番目に情報が入っているか
 	Contact contacts;
 };
+struct  Pair_max
+{
+	int num;
+};
 
 void physics_function::resolve_contact(std::vector<Collider*> colliders, std::vector<Contacts::Contact_pair>& pairs) {
 
@@ -1065,81 +1073,47 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 	}
 
 	//ここからGPUに任せる
-	for (int i = 0; i < 10; i++) {
-		for (int P_num = 0; P_num < pairs.size(); P_num++) {
-			Contact_pair& pair = pairs[P_num];
+	Compute_S::ComputeShader compute_shader;
+	compute_shader.Load("./DefaultShader/physics_resolve.cso");
 
-			coll[0] = pair.body[0];
-			coll[1] = pair.body[1];
-			solverbody[0] = coll[0]->solve;
-			solverbody[1] = coll[1]->solve;
+	Microsoft::WRL::ComPtr<UAVBuffer> solve_SB = nullptr;
+	Microsoft::WRL::ComPtr<StructureBuffer> pair_SB = nullptr;
+	Microsoft::WRL::ComPtr<StructureBuffer> max_SB = nullptr;
 
-			for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
-				//衝突点の情報　
-				Contactpoint& cp = pair.contacts.contactpoints[C_num];
-				vector3 rA = vector3_be_rotated_by_quaternion(cp.point[0], solverbody[0]->orientation);
-				vector3 rB = vector3_be_rotated_by_quaternion(cp.point[1], solverbody[1]->orientation);
+	std::vector<cs_Pair> cs_pair;
+	Pair_max pair_max;
+	pair_max.num = pairs.size();
+	cs_Pair VVV;
+	for (int i = 0; i < pair_max.num; i++) {
+		VVV.contacts = pairs[i].contacts;
+		VVV.solv_num[0] = pairs[i].body[0]->solve->num;
+		VVV.solv_num[1] = pairs[i].body[1]->solve->num;
+		cs_pair.emplace_back(VVV);
+	}
 
-				{
-					Constraint& constraint = cp.constraint[0];
-					float delta_impulse = constraint.rhs;
-					vector3 delta_velocity[2];
-					delta_velocity[0] = solverbody[0]->delta_LinearVelocity + vector3_cross(solverbody[0]->delta_AngularVelocity, rA);
-					delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngularVelocity, rB);
-					delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
-					float old_impulse = constraint.accuminpulse;
-					constraint.accuminpulse = old_impulse + delta_impulse > constraint.lowerlimit ? (old_impulse + delta_impulse < constraint.upperlimit ? old_impulse + delta_impulse : constraint.upperlimit) : constraint.lowerlimit;
-					delta_impulse = constraint.accuminpulse - old_impulse;
-					solverbody[0]->delta_LinearVelocity += delta_impulse * solverbody[0]->inv_mass * constraint.axis;
-					solverbody[0]->delta_AngularVelocity += vector3_trans(vector3_cross(rA, constraint.axis * delta_impulse), solverbody[0]->inv_inertia);
-					solverbody[1]->delta_LinearVelocity -= delta_impulse * solverbody[1]->inv_mass * constraint.axis;
-					solverbody[1]->delta_AngularVelocity -= vector3_trans(vector3_cross(rB, constraint.axis * delta_impulse), solverbody[1]->inv_inertia);
-				}
+	assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(Solverbody), SBs.size(), SBs.data(), solve_SB)));
+	assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(cs_Pair), cs_pair.size(), cs_pair.data(), pair_SB)));
+	assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(Pair_max), 1, &pair_max, max_SB)));
 
-				float max_friction = pair.contacts.friction * fabsf(cp.constraint[0].accuminpulse);
-				cp.constraint[1].lowerlimit = -max_friction;
-				cp.constraint[1].upperlimit = +max_friction;
-				cp.constraint[2].lowerlimit = -max_friction;
-				cp.constraint[2].upperlimit = +max_friction;
+	Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> solve_UAV = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView > pair_SRV = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView > max_SRV = nullptr;
 
-				{
-					Constraint& constraint = cp.constraint[1];
-					float delta_impulse = constraint.rhs;
-					vector3 delta_velocity[2];
-					delta_velocity[0] = solverbody[0]->delta_LinearVelocity + vector3_cross(solverbody[0]->delta_AngularVelocity, rA);
-					delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngularVelocity, rB);
-					delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
-					float old_impulse = constraint.accuminpulse;
-					constraint.accuminpulse = old_impulse + delta_impulse > constraint.lowerlimit ? (old_impulse + delta_impulse < constraint.upperlimit ? old_impulse + delta_impulse : constraint.upperlimit) : constraint.lowerlimit;
-					delta_impulse = constraint.accuminpulse - old_impulse;
-					solverbody[0]->delta_LinearVelocity += delta_impulse * solverbody[0]->inv_mass * constraint.axis;
-					solverbody[0]->delta_AngularVelocity += vector3_trans(vector3_cross(rA, constraint.axis * delta_impulse), solverbody[0]->inv_inertia);
-					solverbody[1]->delta_LinearVelocity -= delta_impulse * solverbody[1]->inv_mass * constraint.axis;
-					solverbody[1]->delta_AngularVelocity -= vector3_trans(vector3_cross(rB, constraint.axis * delta_impulse), solverbody[1]->inv_inertia);
-				}
-				{
-					Constraint& constraint = cp.constraint[2];
-					float delta_impulse = constraint.rhs;
-					vector3 delta_velocity[2];
-					delta_velocity[0] = solverbody[0]->delta_LinearVelocity + vector3_cross(solverbody[0]->delta_AngularVelocity, rA);
-					delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngularVelocity, rB);
-					delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
-					float old_impulse = constraint.accuminpulse;
-					constraint.accuminpulse = old_impulse + delta_impulse > constraint.lowerlimit ? (old_impulse + delta_impulse < constraint.upperlimit ? old_impulse + delta_impulse : constraint.upperlimit) : constraint.lowerlimit;
-					delta_impulse = constraint.accuminpulse - old_impulse;
-					solverbody[0]->delta_LinearVelocity += delta_impulse * solverbody[0]->inv_mass * constraint.axis;
-					solverbody[0]->delta_AngularVelocity += vector3_trans(vector3_cross(rA, constraint.axis * delta_impulse), solverbody[0]->inv_inertia);
-					solverbody[1]->delta_LinearVelocity -= delta_impulse * solverbody[1]->inv_mass * constraint.axis;
-					solverbody[1]->delta_AngularVelocity -= vector3_trans(vector3_cross(rB, constraint.axis * delta_impulse), solverbody[1]->inv_inertia);
-				}
+	assert(SUCCEEDED(compute_shader.createUAV_fromSB(solve_SB, &solve_UAV)));
+	assert(SUCCEEDED(compute_shader.createSRV_fromSB(pair_SB, &pair_SRV)));
+	assert(SUCCEEDED(compute_shader.createSRV_fromSB(max_SB,  &max_SRV)));
 
-			}
-		}
+	ID3D11ShaderResourceView* SRVs[2] = { pair_SRV.Get() ,max_SRV.Get() };
+	compute_shader.run(SRVs, 2, solve_UAV.Get(), 1, 1, 1);
+	
+	Solverbody* S = compute_shader.Read_UAV<Solverbody>(solve_SB);
+	for (int i = 0; i < SBs.size(); i++) {
+		SBs[i] = S[i];
 	}
 
 	// 速度の更新
 	for (int i = 0; i < colliders.size(); i++) {
-		colliders[i]->linear_velocity += colliders[i]->solve->delta_LinearVelocity;
+		colliders[i]->linear_velocity  += colliders[i]->solve->delta_LinearVelocity;
 		colliders[i]->angular_velocity += colliders[i]->solve->delta_AngularVelocity;
 	}
 

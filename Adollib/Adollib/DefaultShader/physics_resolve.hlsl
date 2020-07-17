@@ -34,8 +34,8 @@ struct Contactpoint
 
 struct Contact
 {
+    uint contact_num;
 	float friction;			  //摩擦力
-	uint contact_num;
 	Contactpoint c_points[4]; //衝突点情報
 };
 
@@ -61,7 +61,7 @@ struct Solverbody
 
 struct Out_buf
 {
-	float3 delta_LinearVelocity; // 並進速度差分
+	float3 delta_LinearVelocity;  // 並進速度差分
 	float3 delta_AngularVelocity; // 回転速度差分
 };
 
@@ -82,7 +82,6 @@ struct CS_input_solvbody
 struct CS_input_max
 {
 	uint pair_max;
-	uint solv_body;
 };
 
 struct CS_out
@@ -97,7 +96,8 @@ void function(in Pair pair, inout Solverbody solverbody0, inout Solverbody solve
 {
     for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++)
     {
-		//衝突点の情報　
+        
+		//衝突点の情報
         Contactpoint cp = pair.contacts.c_points[C_num];
         float3 rA = vector3_be_rotated_by_quat(cp.c_point[0], solverbody0.orientation);
         float3 rB = vector3_be_rotated_by_quat(cp.c_point[1], solverbody1.orientation);
