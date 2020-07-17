@@ -1,6 +1,6 @@
 #pragma once
-#include <DirectXMath.h>
 
+#include <DirectXMath.h>
 
 namespace Adollib {
 
@@ -16,11 +16,11 @@ namespace Adollib {
 
 	private:
 		// îÒconstÇÃåvéZÇµÇΩÇÁïœçXÇ™Ç†ÇÈÇ‹Ç≈sqrtÇégÇÌÇ»Ç≠ÇƒçœÇﬁ
-		float normed;
+		//float normed;
 	public:
-		vector3() :x(0), y(0), z(0), normed(0) {};
-		vector3(float x, float y, float z) :x(x), y(y), z(z), normed(0) {};
-		explicit vector3(float v) :x(v), y(v), z(v), normed(0) {};
+		vector3() :x(0), y(0), z(0) {};
+		vector3(float x, float y, float z) :x(x), y(y), z(z) {};
+		explicit vector3(float v) :x(v), y(v), z(v) {};
 		vector3(DirectX::XMFLOAT3 xm) :x(xm.x), y(xm.y), z(xm.z) {};
 		//vector3(n_vector2 V) :x(V.x), y(V.y), z(0) {};
 
@@ -51,7 +51,6 @@ namespace Adollib {
 
 		// norm^2
 		float norm_sqr() const;
-		float norm_sqr();
 
 		// norm
 		float norm() const;
@@ -89,7 +88,6 @@ namespace Adollib {
 
 #pragma endregion
 	//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
 
 	//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	#pragma region vector4
@@ -210,6 +208,4 @@ namespace Adollib {
 #pragma endregion
 	//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-	float ToRadian(float angle);
-	float ToAngle(float radian);
 }

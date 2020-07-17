@@ -892,6 +892,12 @@ void CalcTangentVector(const vector3& normal, vector3& tangent1, vector3& tangen
 	tangent1 = (vector3_cross(normal, vec)).unit_vect();
 	tangent2 = (vector3_cross(tangent1, normal)).unit_vect();
 }
+//GPUに渡す情報
+struct cs_Pair
+{
+	int solv_num[2]; //solverbody配列の何番目に情報が入っているか
+	Contact contacts;
+};
 
 void physics_function::resolve_contact(std::vector<Collider*> colliders, std::vector<Contacts::Contact_pair>& pairs) {
 
@@ -904,6 +910,7 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 		SB.delta_AngularVelocity = vector3(0.0f);
 		SB.inv_inertia = colliders[i]->inverse_inertial_tensor();
 		SB.inv_mass = colliders[i]->inverse_mass();
+		SB.num = i;
 
 		SBs.emplace_back(SB);
 	}
@@ -1057,6 +1064,7 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 		}
 	}
 
+	//ここからGPUに任せる
 	for (int i = 0; i < 10; i++) {
 		for (int P_num = 0; P_num < pairs.size(); P_num++) {
 			Contact_pair& pair = pairs[P_num];
@@ -1128,10 +1136,6 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 			}
 		}
 	}
-
-	//if (pairs[0].contacts.contact_num > 0) {
-	//	int dafsgd = 0;
-	//}
 
 	// 速度の更新
 	for (int i = 0; i < colliders.size(); i++) {

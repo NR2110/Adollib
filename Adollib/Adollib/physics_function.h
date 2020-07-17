@@ -9,6 +9,7 @@ namespace Adollib {
 			quaternion    orientation; // 姿勢
 			matrix inv_inertia; // 慣性テンソルの逆行列
 			float   inv_mass; // 質量の逆数
+			int num;
 		};
 
 		//衝突の確認
@@ -38,6 +39,6 @@ namespace Adollib {
 
 		void integrate(std::vector<Collider*>& coll);
 
-		
+
 	}
 }

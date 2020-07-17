@@ -1,11 +1,21 @@
 #pragma once
+
 #include "vector.h"
 #include "matrix.h"
 #include "quaternion.h"
 
 namespace Adollib {
 
-	static vector3 DOP_7_axis[7] = {
+	static float ToRadian(float angle) {
+		return (float)angle * (3.141592654f / 180.0f);
+	}
+
+	static float ToAngle(float radian) {
+		return (float)radian * 180 / 3.1415926535f;
+	}
+
+
+	static const vector3 DOP_7_axis[7] = {
 		vector3(1,0,0),
 		vector3(0,1,0),
 		vector3(0,0,1),
@@ -15,7 +25,7 @@ namespace Adollib {
 		vector3(-0.3333333,0.3333333,-0.3333333)
 	};
 
-	const int DOP_size = 7;
+	static const int DOP_size = 7;
 	struct DOP_7 {
 		//íÜêSç¿ïW
 		vector3 pos;

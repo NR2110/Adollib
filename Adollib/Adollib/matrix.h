@@ -1,7 +1,7 @@
 #pragma once
 
-#include <DirectXMath.h>
 #include "vector.h"
+#include <DirectXMath.h>
 
 namespace Adollib {
 	class matrix {

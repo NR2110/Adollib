@@ -1,5 +1,8 @@
+
 #include "matrix.h"
+#include "math.h"
 #include <algorithm>
+
 using namespace Adollib;
 
 #define MATRIX_IS_TRANSFORMATION (0); //matrix‚ğ•ÏŠ·s—ñ‚Æ‚µ‚Ä‚Ì‚İˆµ‚¤‚©‚Ç‚¤‚©

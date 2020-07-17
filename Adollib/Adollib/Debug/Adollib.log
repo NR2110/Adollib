@@ -1,11 +1,50 @@
-﻿  compute_shader.cpp
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\math.h(12,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\math.h(13,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\math.h(14,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\math.h(15,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\compute_shader.cpp(93,29): warning C4305: 'return': 'HRESULT' から 'bool' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\compute_shader.cpp(124,22): warning C4305: 'return': 'HRESULT' から 'bool' へ切り詰めます。
+﻿  physics_function.cpp
+  rigit_body_manager.cpp
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\math.h(22,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています physics_function.cpp)
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\math.h(23,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています physics_function.cpp)
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\math.h(24,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています physics_function.cpp)
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\math.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています physics_function.cpp)
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\rigit_body.h(55,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています physics_function.cpp)
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\rigit_body.h(56,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています physics_function.cpp)
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(17,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。 (ソース ファイルをコンパイルしています physics_function.cpp)
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(20,32): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています physics_function.cpp)
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.h(6,21): warning C4099: 'Adollib::physics_function::Solverbody': タイプ名は最初 'class' として使われていましたが 'struct' として使われています。 (ソース ファイルをコンパイルしています physics_function.cpp)
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.h(6): message : 'Adollib::physics_function::Solverbody' の宣言を確認してください (ソース ファイルをコンパイルしています physics_function.cpp)
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(16,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(68,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(75,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(76,25): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(80,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(86,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(121,32): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(122,33): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(140,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(164,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(906,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(917,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(925,28): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(1043,28): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(1069,29): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(1141,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.cpp(1152,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\math.h(22,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています rigit_body_manager.cpp)
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\math.h(23,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています rigit_body_manager.cpp)
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\math.h(24,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています rigit_body_manager.cpp)
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\math.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています rigit_body_manager.cpp)
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\rigit_body.h(55,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています rigit_body_manager.cpp)
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\rigit_body.h(56,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています rigit_body_manager.cpp)
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています rigit_body_manager.cpp)
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています rigit_body_manager.cpp)
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています rigit_body_manager.cpp)
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(48,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています rigit_body_manager.cpp)
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(17,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。 (ソース ファイルをコンパイルしています rigit_body_manager.cpp)
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(20,32): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています rigit_body_manager.cpp)
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.h(6,21): warning C4099: 'Adollib::physics_function::Solverbody': タイプ名は最初 'class' として使われていましたが 'struct' として使われています。 (ソース ファイルをコンパイルしています rigit_body_manager.cpp)
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_function.h(6): message : 'Adollib::physics_function::Solverbody' の宣言を確認してください (ソース ファイルをコンパイルしています rigit_body_manager.cpp)
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています rigit_body_manager.cpp)
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています rigit_body_manager.cpp)
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\rigit_body_manager.cpp(55,10): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\rigit_body_manager.cpp(58,15): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\rigit_body_manager.cpp(72,21): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\rigit_body_manager.cpp(113,21): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
   Adollib.vcxproj -> C:\Users\2190072\Documents\Adollib\Adollib\Debug\Adollib.exe

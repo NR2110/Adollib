@@ -1,4 +1,7 @@
+
 #include "quaternion.h"
+#include "math.h"
+
 #include <math.h>
 
 using namespace Adollib;

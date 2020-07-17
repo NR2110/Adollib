@@ -1,9 +1,0 @@
-﻿  loop.cpp
-  main.cpp
-C:\Users\2190072\Desktop\Adollib\Adollib\main.cpp(95,15): warning C4244: '初期化中': 'ULONGLONG' から 'DWORD' への変換です。データが失われる可能性があります。
-  resource_manager.cpp
-  scene.cpp
-  systems.cpp
-  texture.cpp
-C:\Users\2190072\Desktop\Adollib\Adollib\main.cpp(111,27): warning C4244: '=': 'ULONGLONG' から 'DWORD' への変換です。データが失われる可能性があります。
-LINK : fatal error LNK1181: 入力ファイル 'DirectXTK.lib' を開けません。

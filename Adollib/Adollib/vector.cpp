@@ -1,7 +1,10 @@
+
 #include "vector.h"
+#include "quaternion.h"
+#include "math.h"
 
 #include <math.h>
-#include"quaternion.h"
+
 using namespace Adollib;
 
 //::::::::::::::::::::::::::::::::::::::::::::::::
@@ -132,17 +135,9 @@ DirectX::XMFLOAT3 vector3::get_XM3() {
 	return R;
 }
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-float vector3::norm_sqr() {
-	float S = norm();
-	if (normed * normed == S) return normed;
-	else if (S == 1.0f) normed = 1.0f;
-	else normed = sqrtf(S);
-	return normed;
-}
 
 float vector3::norm_sqr() const{
 	float S = norm();
-	if (normed * normed == S) return normed;
 	if (S == 1.0f) return 1.0f;
 	else return sqrtf(S);
 }
@@ -554,11 +549,3 @@ n_vector2 Adollib::vector2_look_at(const n_vector2& P, const n_vector2& Q) {
 
 #pragma endregion
 //::::::::::::::::::::::::::::::::::::::::::::::::
-
-float Adollib::ToRadian(float angle) {
-	return (float)angle * (3.141592654f / 180.0f);
-}
-
-float Adollib::ToAngle(float radian) {
-	return (float)radian * 180 / 3.1415926535f;
-}

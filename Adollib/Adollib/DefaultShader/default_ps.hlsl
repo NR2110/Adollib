@@ -1,4 +1,5 @@
 #include "default.hlsli"
+#include "math.hlsli"
 
 //--------------------------------------------
 //	ピクセルシェーダー
