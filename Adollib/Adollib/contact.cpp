@@ -37,6 +37,8 @@ void Contact::addcontact(
 		contactpoints[num].reset();
 	}
 
+	assert(!(num == -1) && "Contact.cpp num == -1");
+
 	//Õ“Ë“_î•ñ‚ÌXV
 	contactpoints[num].distance = penetration;
 	contactpoints[num].normal = normal;
@@ -83,7 +85,7 @@ int Contact::find_exclusion_point(const vector3& newPoint, float newDistance) {
 	}
 
 	int ret = -1;
-	float max_area = 0;
+	float max_area = -FLT_MAX;
 	for (int i = 0; i < 4; i++) {
 		if (area[i] > max_area) {
 			ret = i;

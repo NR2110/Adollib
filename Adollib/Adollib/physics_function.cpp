@@ -162,6 +162,8 @@ void physics_function::Boardphase(const std::vector<Collider*>& coll, std::vecto
 //:::::::::::::::::::::::::::
 
 //衝突生成(Narrowphase)
+//void physics_function::generate_contact(std::vector<Adollib::Plane*> planes, std::vector<Adollib::Box*> boxes, std::vector<Adollib::Sphere*> spheres, std::vector<Contacts::Contact_pair>& pairs) {
+
 void physics_function::generate_contact(std::vector<Contacts::Contact_pair>& pairs) {
 
 	//::: dynamic_cast 多用地帯 危険! 危険!
@@ -226,9 +228,9 @@ void physics_function::generate_contact(std::vector<Contacts::Contact_pair>& pai
 	}
 
 	int o = 0;
-	for (int i = 0; i < 1000000; i++) {
-		o++;
-	}
+	//for (int i = 0; i < 4000000; i++) {
+	//	o++;
+	//}
 }
 
 //衝突生成
@@ -579,7 +581,7 @@ bool sat_obb_obb(
 	return (smallest_penetration < FLT_MAX && smallest_penetration > FLT_EPSILON) ? true : false;
 }
 
-bool physics_function::generate_contact_box_box(const Box& b0, const  Box& b1, Contacts::Contact_pair& pair) {
+bool physics_function::generate_contact_box_box(const Box& b0, const Box& b1, Contacts::Contact_pair& pair) {
 	matrix m;
 	m = b0.world_orientation.get_rotate_matrix();
 	OBB obb0;
@@ -1164,11 +1166,11 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 		}
 	}
 
-#elif 0
+#elif 1
 
 	//QUESTION : ここのstatic外すとすぐ落ちるresourceanager見ても原因わからず　謎
-	//static Compute_S::ComputeShader compute_shader;
-	//compute_shader.Load("./DefaultShader/physics_resolve.cso");
+	static Compute_S::ComputeShader compute_shader;
+	compute_shader.Load("./DefaultShader/physics_resolve.cso");
 
 
 
@@ -1190,33 +1192,33 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 		static Microsoft::WRL::ComPtr<StructureBuffer> solve_SB = nullptr;
 		static Microsoft::WRL::ComPtr<UAVBuffer> solve_out = nullptr;
 
-		//assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(cs_Pair), pairs.size(), cs_pair.data(), pair_SB)));
-		//assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(Pair_max), 1, &pair_max, max_SB)));
-		//assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(Solverbody), SBs.size(), SBs.data(), solve_SB)));
-		//assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(Solverbody) * 2, pairs.size(), nullptr, solve_out)));
+		assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(cs_Pair), pairs.size(), cs_pair.data(), pair_SB)));
+		assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(Pair_max), 1, &pair_max, max_SB)));
+		assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(Solverbody), SBs.size(), SBs.data(), solve_SB)));
+		assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(Solverbody) * 2, pairs.size(), nullptr, solve_out)));
 
 		static Microsoft::WRL::ComPtr<ID3D11ShaderResourceView > pair_SRV = nullptr;
 		static Microsoft::WRL::ComPtr<ID3D11ShaderResourceView > max_SRV = nullptr;
 		static Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  solve_SRV = nullptr;
 		static Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> solve_OUT = nullptr;
 
-		//assert(SUCCEEDED(compute_shader.createSRV_fromSB(pair_SB,   &pair_SRV)));
-		//assert(SUCCEEDED(compute_shader.createSRV_fromSB(max_SB,    &max_SRV)));
-		//assert(SUCCEEDED(compute_shader.createSRV_fromSB(solve_SB,  &solve_SRV)));
-		//assert(SUCCEEDED(compute_shader.createUAV_fromSB(solve_out, &solve_OUT)));
+		assert(SUCCEEDED(compute_shader.createSRV_fromSB(pair_SB,   &pair_SRV)));
+		assert(SUCCEEDED(compute_shader.createSRV_fromSB(max_SB,    &max_SRV)));
+		assert(SUCCEEDED(compute_shader.createSRV_fromSB(solve_SB,  &solve_SRV)));
+		assert(SUCCEEDED(compute_shader.createUAV_fromSB(solve_out, &solve_OUT)));
 
-		//ID3D11ShaderResourceView* SRVs[3] = { pair_SRV.Get() ,max_SRV.Get(), solve_SRV.Get() };
-		//compute_shader.run(SRVs, 3, solve_OUT.Get(), 16, 1, 1);
+		ID3D11ShaderResourceView* SRVs[3] = { pair_SRV.Get() ,max_SRV.Get(), solve_SRV.Get() };
+		compute_shader.run(SRVs, 3, solve_OUT.Get(), 16, 1, 1);
 
-		//Solverbody* S = compute_shader.Read_UAV<Solverbody>(solve_out);
-		//for (int i = 0; i < pairs.size() * 2 - 1; i++) {
-		//	SBs[S[i].num].delta_AngularVelocity += S[i].delta_AngularVelocity;
-		//	SBs[S[i].num].delta_LinearVelocity  += S[i].delta_LinearVelocity;
+		Solverbody* S = compute_shader.Read_UAV<Solverbody>(solve_out);
+		for (int i = 0; i < pairs.size() * 2 - 1; i++) {
+			SBs[S[i].num].delta_AngularVelocity += S[i].delta_AngularVelocity;
+			SBs[S[i].num].delta_LinearVelocity  += S[i].delta_LinearVelocity;
 
-		//	if (S[i].delta_LinearVelocity.norm() > 1) {
-		//		int dafsgdf = 0;
-		//	}
-		//}
+			if (S[i].delta_LinearVelocity.norm() > 1) {
+				int dafsgdf = 0;
+			}
+		}
 
 	}
 
