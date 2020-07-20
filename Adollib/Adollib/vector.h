@@ -101,8 +101,7 @@ namespace Adollib {
 		float w;
 
 	private:
-		// ”ñconst‚ÌŒvZ‚µ‚½‚ç•ÏX‚ª‚ ‚é‚Ü‚Åsqrt‚ğg‚í‚È‚­‚ÄÏ‚Ş
-		float normed;
+
 	public:
 		vector4() :x(0), y(0), z(0), w(0) {};
 		vector4(float x, float y, float z, float w) :x(x), y(y), z(z), w(w) {};
@@ -135,7 +134,6 @@ namespace Adollib {
 
 		// norm^2
 		float norm_sqr() const;
-		float norm_sqr();
 
 		// norm
 		float norm() const;

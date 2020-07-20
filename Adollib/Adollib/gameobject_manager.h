@@ -34,7 +34,8 @@ namespace Adollib {
 		static Microsoft::WRL::ComPtr<ID3D11Buffer> view_cb;
 		static Microsoft::WRL::ComPtr<ID3D11Buffer> projection_cb;
 
-		static vector<object*> masters; //GO親子ツリーの頂点を保存
+		static std::vector<object*> masters; //GO親子ツリーの頂点を保存
+		static std::vector<object*> gos;	  //GOを1つの配列に保存
 
 	public:
 		//実体はすべてここで保存する

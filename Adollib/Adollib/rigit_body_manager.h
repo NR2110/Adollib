@@ -13,8 +13,8 @@ namespace Adollib
 	class Rigitbody_manager
 	{
 	private:
-		static std::map<Scenelist, std::vector<Adollib::Plane*>> RB_plane_s;
-		static std::map<Scenelist, std::vector<Adollib::Box*>> RB_box_s;
+		static std::map<Scenelist, std::vector<Adollib::Plane*>>  RB_plane_s;
+		static std::map<Scenelist, std::vector<Adollib::Box*>>    RB_box_s;
 		static std::map<Scenelist, std::vector<Adollib::Sphere*>> RB_sphere_s;
 
 		static std::vector<Contacts::Contact_pair> pairs;

@@ -84,7 +84,7 @@ namespace Adollib
 		generate_contact(pairs);
 
 		// Õ“Ë‰ğŒˆ
-		resolve_contact(colls, pairs);
+		//resolve_contact(colls, pairs);
 
 		 //ˆÊ’u‚ÌXV
 		integrate(colls);

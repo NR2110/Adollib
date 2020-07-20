@@ -8,22 +8,18 @@ void loop::init() {
 	scene_manager.initialize();
 	go_manager.awake();
 
+	Systems::SetViewPort(Al_Global::SCREEN_WIDTH, Al_Global::SCREEN_HEIGHT);
 }
 
 void loop::Update(HWND hWnd, int width, int height) {
-
-	//Adollib::InputManager::getInstance()->update(hwnd);
 
 	Systems::inputManager->update();
 
 	scene_manager.update();
 	go_manager.update();
-
 }
 
 void loop::Render(){
-
-	Systems::SetViewPort(Al_Global::SCREEN_WIDTH, Al_Global::SCREEN_HEIGHT);
 
 	Systems::Clear();
 

@@ -172,17 +172,17 @@ void physics_function::generate_contact(std::vector<Contacts::Contact_pair>& pai
 
 			if (pairs[i].body[1]->shape == Collider_shape::shape_sphere) {
 				Sphere* shape1 = dynamic_cast<Sphere*>(pairs[i].body[1]);
-				assert(shape0 && shape1); 
+				assert(shape0 != nullptr && shape1 != nullptr);
 				generate_contact_sphere_sphere(*shape0, *shape1, pairs[i]);
 			}
 			if (pairs[i].body[1]->shape == Collider_shape::shape_box) {
 				Box* shape1 = dynamic_cast<Box*>(pairs[i].body[1]);
-				assert(shape0 && shape1);
+				assert(shape0 != nullptr && shape1 != nullptr);
 				generate_contact_sphere_box(*shape0, *shape1, pairs[i]);
 			}
 			if (pairs[i].body[1]->shape == Collider_shape::shape_plane) {
 				Plane* shape1 = dynamic_cast<Plane*>(pairs[i].body[1]);
-				assert(shape0 && shape1);
+				assert(shape0 != nullptr && shape1 != nullptr);
 				generate_contact_sphere_plane(*shape0, *shape1, pairs[i]);
 			}
 		}
@@ -191,17 +191,17 @@ void physics_function::generate_contact(std::vector<Contacts::Contact_pair>& pai
 
 			if (pairs[i].body[1]->shape == Collider_shape::shape_sphere) {
 				Sphere* shape1 = dynamic_cast<Sphere*>(pairs[i].body[1]);
-				assert(shape0 && shape1);
+				assert(shape0 != nullptr && shape1 != nullptr);
 				generate_contact_sphere_box(*shape1, *shape0, pairs[i]);
 			}
 			if (pairs[i].body[1]->shape == Collider_shape::shape_box) {
 				Box* shape1 = dynamic_cast<Box*>(pairs[i].body[1]);
-				assert(shape0 && shape1);
+				assert(shape0 != nullptr && shape1 != nullptr);
 				generate_contact_box_box(*shape0, *shape1, pairs[i]);
 			}
 			if (pairs[i].body[1]->shape == Collider_shape::shape_plane) {
 				Plane* shape1 = dynamic_cast<Plane*>(pairs[i].body[1]);
-				assert(shape0 && shape1);
+				assert(shape0 != nullptr && shape1 != nullptr);
 				generate_contact_box_plane(*shape0, *shape1, pairs[i]);
 			}
 		}
@@ -210,19 +210,24 @@ void physics_function::generate_contact(std::vector<Contacts::Contact_pair>& pai
 
 			if (pairs[i].body[1]->shape == Collider_shape::shape_sphere) {
 				Sphere* shape1 = dynamic_cast<Sphere*>(pairs[i].body[1]);
-				assert(shape0 && shape1);
+				assert(shape0 != nullptr && shape1 != nullptr);
 				generate_contact_sphere_plane(*shape1, *shape0, pairs[i]);
 			}
 
 			if (pairs[i].body[1]->shape == Collider_shape::shape_box) {
 				Box* shape1 = dynamic_cast<Box*>(pairs[i].body[1]);
-				assert(shape0 && shape1);
+				assert(shape0 != nullptr && shape1 != nullptr);
 				generate_contact_box_plane(*shape1, *shape0, pairs[i]);
 			}
 			//if (pairs[i]->body[1]->shape == Collider_shape::shape_plane) {}
 		}
 
 
+	}
+
+	int o = 0;
+	for (int i = 0; i < 1000000; i++) {
+		o++;
 	}
 }
 
@@ -1072,51 +1077,156 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 		}
 	}
 
+
+	//Compute_S::ComputeShader compute_shader;
+	//ID3D11ComputeShader** AAA = compute_shader.computeShader.GetAddressOf();
+	//compute_shader.Load("./DefaultShader/physics_resolve.cso");
+	//if (AAA != nullptr && AAA != compute_shader.computeShader.GetAddressOf()) {
+	//	int dafsd = 0;
+	////}
+	//for (int i = 0; i < 10000; i++) {
+	//	Compute_S::ComputeShader aaaaaaaa;
+	//	ID3D11ComputeShader** AAA = compute_shader.computeShader.GetAddressOf();
+	//	aaaaaaaa.Load("./DefaultShader/physics_resolve.cso");
+	//}
+
 	//ここからGPUに任せる
-	Compute_S::ComputeShader compute_shader;
-	compute_shader.Load("./DefaultShader/physics_resolve.cso");
+#if 0
+	for (int i = 0; i < 10; i++) {
+		for (int P_num = 0; P_num < pairs.size(); P_num++) {
+			Contact_pair& pair = pairs[P_num];
 
-	Microsoft::WRL::ComPtr<UAVBuffer> solve_SB = nullptr;
-	Microsoft::WRL::ComPtr<StructureBuffer> pair_SB = nullptr;
-	Microsoft::WRL::ComPtr<StructureBuffer> max_SB = nullptr;
+			coll[0] = pair.body[0];
+			coll[1] = pair.body[1];
+			solverbody[0] = coll[0]->solve;
+			solverbody[1] = coll[1]->solve;
 
-	std::vector<cs_Pair> cs_pair;
-	Pair_max pair_max;
-	pair_max.num = pairs.size();
-	cs_Pair VVV;
-	for (int i = 0; i < pair_max.num; i++) {
-		VVV.contacts = pairs[i].contacts;
-		VVV.solv_num[0] = pairs[i].body[0]->solve->num;
-		VVV.solv_num[1] = pairs[i].body[1]->solve->num;
-		cs_pair.emplace_back(VVV);
+			for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
+				//衝突点の情報　
+				Contactpoint& cp = pair.contacts.contactpoints[C_num];
+				vector3 rA = vector3_be_rotated_by_quaternion(cp.point[0], solverbody[0]->orientation);
+				vector3 rB = vector3_be_rotated_by_quaternion(cp.point[1], solverbody[1]->orientation);
+
+				{
+					Constraint& constraint = cp.constraint[0];
+					float delta_impulse = constraint.rhs;
+					vector3 delta_velocity[2];
+					delta_velocity[0] = solverbody[0]->delta_LinearVelocity + vector3_cross(solverbody[0]->delta_AngularVelocity, rA);
+					delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngularVelocity, rB);
+					delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
+					float old_impulse = constraint.accuminpulse;
+					constraint.accuminpulse = old_impulse + delta_impulse > constraint.lowerlimit ? (old_impulse + delta_impulse < constraint.upperlimit ? old_impulse + delta_impulse : constraint.upperlimit) : constraint.lowerlimit;
+					delta_impulse = constraint.accuminpulse - old_impulse;
+					solverbody[0]->delta_LinearVelocity += delta_impulse * solverbody[0]->inv_mass * constraint.axis;
+					solverbody[0]->delta_AngularVelocity += vector3_trans(vector3_cross(rA, constraint.axis * delta_impulse), solverbody[0]->inv_inertia);
+					solverbody[1]->delta_LinearVelocity -= delta_impulse * solverbody[1]->inv_mass * constraint.axis;
+					solverbody[1]->delta_AngularVelocity -= vector3_trans(vector3_cross(rB, constraint.axis * delta_impulse), solverbody[1]->inv_inertia);
+				}
+
+				float max_friction = pair.contacts.friction * fabsf(cp.constraint[0].accuminpulse);
+				cp.constraint[1].lowerlimit = -max_friction;
+				cp.constraint[1].upperlimit = +max_friction;
+				cp.constraint[2].lowerlimit = -max_friction;
+				cp.constraint[2].upperlimit = +max_friction;
+
+				{
+					Constraint& constraint = cp.constraint[1];
+					float delta_impulse = constraint.rhs;
+					vector3 delta_velocity[2];
+					delta_velocity[0] = solverbody[0]->delta_LinearVelocity + vector3_cross(solverbody[0]->delta_AngularVelocity, rA);
+					delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngularVelocity, rB);
+					delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
+					float old_impulse = constraint.accuminpulse;
+					constraint.accuminpulse = old_impulse + delta_impulse > constraint.lowerlimit ? (old_impulse + delta_impulse < constraint.upperlimit ? old_impulse + delta_impulse : constraint.upperlimit) : constraint.lowerlimit;
+					delta_impulse = constraint.accuminpulse - old_impulse;
+					solverbody[0]->delta_LinearVelocity += delta_impulse * solverbody[0]->inv_mass * constraint.axis;
+					solverbody[0]->delta_AngularVelocity += vector3_trans(vector3_cross(rA, constraint.axis * delta_impulse), solverbody[0]->inv_inertia);
+					solverbody[1]->delta_LinearVelocity -= delta_impulse * solverbody[1]->inv_mass * constraint.axis;
+					solverbody[1]->delta_AngularVelocity -= vector3_trans(vector3_cross(rB, constraint.axis * delta_impulse), solverbody[1]->inv_inertia);
+				}
+				{
+					Constraint& constraint = cp.constraint[2];
+					float delta_impulse = constraint.rhs;
+					vector3 delta_velocity[2];
+					delta_velocity[0] = solverbody[0]->delta_LinearVelocity + vector3_cross(solverbody[0]->delta_AngularVelocity, rA);
+					delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngularVelocity, rB);
+					delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
+					float old_impulse = constraint.accuminpulse;
+					constraint.accuminpulse = old_impulse + delta_impulse > constraint.lowerlimit ? (old_impulse + delta_impulse < constraint.upperlimit ? old_impulse + delta_impulse : constraint.upperlimit) : constraint.lowerlimit;
+					delta_impulse = constraint.accuminpulse - old_impulse;
+					solverbody[0]->delta_LinearVelocity += delta_impulse * solverbody[0]->inv_mass * constraint.axis;
+					solverbody[0]->delta_AngularVelocity += vector3_trans(vector3_cross(rA, constraint.axis * delta_impulse), solverbody[0]->inv_inertia);
+					solverbody[1]->delta_LinearVelocity -= delta_impulse * solverbody[1]->inv_mass * constraint.axis;
+					solverbody[1]->delta_AngularVelocity -= vector3_trans(vector3_cross(rB, constraint.axis * delta_impulse), solverbody[1]->inv_inertia);
+				}
+
+			}
+		}
 	}
 
-	assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(Solverbody), SBs.size(), SBs.data(), solve_SB)));
-	assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(cs_Pair), cs_pair.size(), cs_pair.data(), pair_SB)));
-	assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(Pair_max), 1, &pair_max, max_SB)));
+#elif 0
 
-	Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> solve_UAV = nullptr;
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView > pair_SRV = nullptr;
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView > max_SRV = nullptr;
+	//QUESTION : ここのstatic外すとすぐ落ちるresourceanager見ても原因わからず　謎
+	//static Compute_S::ComputeShader compute_shader;
+	//compute_shader.Load("./DefaultShader/physics_resolve.cso");
 
-	assert(SUCCEEDED(compute_shader.createUAV_fromSB(solve_SB, &solve_UAV)));
-	assert(SUCCEEDED(compute_shader.createSRV_fromSB(pair_SB, &pair_SRV)));
-	assert(SUCCEEDED(compute_shader.createSRV_fromSB(max_SB,  &max_SRV)));
 
-	ID3D11ShaderResourceView* SRVs[2] = { pair_SRV.Get() ,max_SRV.Get() };
-	compute_shader.run(SRVs, 2, solve_UAV.Get(), 1, 1, 1);
-	
-	Solverbody* S = compute_shader.Read_UAV<Solverbody>(solve_SB);
-	for (int i = 0; i < SBs.size(); i++) {
-		SBs[i] = S[i];
+
+	for (int i = 0; i < 10; i++) {
+
+		std::vector<cs_Pair> cs_pair;
+		Pair_max pair_max;
+		pair_max.num = pairs.size();
+		cs_Pair VVV;
+		for (int i = 0; i < pairs.size(); i++) {
+			VVV.contacts = pairs[i].contacts;
+			VVV.solv_num[0] = pairs[i].body[0]->solve->num;
+			VVV.solv_num[1] = pairs[i].body[1]->solve->num;
+			cs_pair.emplace_back(VVV);
+		}
+
+		static Microsoft::WRL::ComPtr<StructureBuffer> pair_SB = nullptr;
+		static Microsoft::WRL::ComPtr<StructureBuffer> max_SB = nullptr;
+		static Microsoft::WRL::ComPtr<StructureBuffer> solve_SB = nullptr;
+		static Microsoft::WRL::ComPtr<UAVBuffer> solve_out = nullptr;
+
+		//assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(cs_Pair), pairs.size(), cs_pair.data(), pair_SB)));
+		//assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(Pair_max), 1, &pair_max, max_SB)));
+		//assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(Solverbody), SBs.size(), SBs.data(), solve_SB)));
+		//assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(Solverbody) * 2, pairs.size(), nullptr, solve_out)));
+
+		static Microsoft::WRL::ComPtr<ID3D11ShaderResourceView > pair_SRV = nullptr;
+		static Microsoft::WRL::ComPtr<ID3D11ShaderResourceView > max_SRV = nullptr;
+		static Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  solve_SRV = nullptr;
+		static Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> solve_OUT = nullptr;
+
+		//assert(SUCCEEDED(compute_shader.createSRV_fromSB(pair_SB,   &pair_SRV)));
+		//assert(SUCCEEDED(compute_shader.createSRV_fromSB(max_SB,    &max_SRV)));
+		//assert(SUCCEEDED(compute_shader.createSRV_fromSB(solve_SB,  &solve_SRV)));
+		//assert(SUCCEEDED(compute_shader.createUAV_fromSB(solve_out, &solve_OUT)));
+
+		//ID3D11ShaderResourceView* SRVs[3] = { pair_SRV.Get() ,max_SRV.Get(), solve_SRV.Get() };
+		//compute_shader.run(SRVs, 3, solve_OUT.Get(), 16, 1, 1);
+
+		//Solverbody* S = compute_shader.Read_UAV<Solverbody>(solve_out);
+		//for (int i = 0; i < pairs.size() * 2 - 1; i++) {
+		//	SBs[S[i].num].delta_AngularVelocity += S[i].delta_AngularVelocity;
+		//	SBs[S[i].num].delta_LinearVelocity  += S[i].delta_LinearVelocity;
+
+		//	if (S[i].delta_LinearVelocity.norm() > 1) {
+		//		int dafsgdf = 0;
+		//	}
+		//}
+
 	}
+
+#endif
 
 	// 速度の更新
 	for (int i = 0; i < colliders.size(); i++) {
 		colliders[i]->linear_velocity  += colliders[i]->solve->delta_LinearVelocity;
 		colliders[i]->angular_velocity += colliders[i]->solve->delta_AngularVelocity;
 	}
-
 
 }
 #pragma endregion

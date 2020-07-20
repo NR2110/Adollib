@@ -66,7 +66,7 @@ namespace Adollib
 
 		}
 
-		int max_c = 10;
+		int max_c = 11;
 		for (int i = 0; i < max_c; i++) {
 
 			for (int o = 0; o < max_c - i; o++) {
@@ -192,7 +192,7 @@ namespace Adollib
 		Sphere* S = object->add_collider_sphere();
 
 		object_fall* F = object->addComponent<object_fall>();
-		F->collier = object->collider[0];
+		F->collier = object->collider[0].get();
 
 		return S;
 	}
@@ -211,7 +211,7 @@ namespace Adollib
 		B->inertial_mass = 1;
 
 		object_fall* F = object->addComponent<object_fall>();
-		F->collier = object->collider[0];
+		F->collier = object->collider[0].get();
 
 		return B;
 	}

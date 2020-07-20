@@ -18,11 +18,11 @@ namespace Adollib
 	std::unordered_map<std::string, std::vector<Mesh::mesh>> ResourceManager::meshes;
 	std::unordered_map<std::wstring, Texture> ResourceManager::texturs;
 	std::unordered_map<std::string, ResourceManager::VS_resorce>   ResourceManager::VSshaders;
-	std::unordered_map<std::string, ID3D11PixelShader*>    ResourceManager::PSshaders;
-	std::unordered_map<std::string, ID3D11GeometryShader*> ResourceManager::GSshaders;
-	std::unordered_map<std::string, ID3D11HullShader*>     ResourceManager::HSshaders;
-	std::unordered_map<std::string, ID3D11DomainShader*>   ResourceManager::DSshaders;
-	std::unordered_map<std::string, ID3D11ComputeShader*>   ResourceManager::CSshaders;
+	std::unordered_map<std::string, Microsoft::WRL::ComPtr<ID3D11PixelShader>>     ResourceManager::PSshaders;
+	std::unordered_map<std::string, Microsoft::WRL::ComPtr<ID3D11GeometryShader>>  ResourceManager::GSshaders;
+	std::unordered_map<std::string, Microsoft::WRL::ComPtr<ID3D11HullShader>>      ResourceManager::HSshaders;
+	std::unordered_map<std::string, Microsoft::WRL::ComPtr<ID3D11DomainShader>>    ResourceManager::DSshaders;
+	std::unordered_map<std::string, Microsoft::WRL::ComPtr<ID3D11ComputeShader>>   ResourceManager::CSshaders;
 
 #pragma region Shader load
 
@@ -76,8 +76,8 @@ namespace Adollib
 
 			VSshaders[(string)csoName] = VS;
 		}
-		*vertexShader = VS.VSshader;
-		*inputLayout  = VS.layout;
+		*vertexShader = VS.VSshader.Get();
+		*inputLayout  = VS.layout.Get();
 
 		return S_OK;
 	}
@@ -89,7 +89,7 @@ namespace Adollib
 	)
 	{
 		if (PSshaders.count((string)csoName) == 1) {
-			*pixel_shader = PSshaders[(string)csoName];
+			*pixel_shader = PSshaders[(string)csoName].Get();
 		}
 		else {
 			// ピクセルシェーダーファイルを開く
@@ -129,10 +129,10 @@ namespace Adollib
 	)
 	{
 		if (PSshaders.count((string)csoName) == 1) {
-			*geometry_shader = GSshaders[(string)csoName];
+			*geometry_shader = GSshaders[(string)csoName].Get();
 		}
 		else {
-			// ピクセルシェーダーファイルを開く
+			// シェーダーファイルを開く
 			FILE* fp = nullptr;
 			fopen_s(&fp, csoName, "rb");
 			_ASSERT_EXPR_A(fp, "CSO File not found");
@@ -142,17 +142,17 @@ namespace Adollib
 			long cso_sz = ftell(fp);
 			fseek(fp, 0, SEEK_SET);
 
-			// メモリ上にピクセルシェーダーデータを格納する領域を用意する
+			// メモリ上にシェーダーデータを格納する領域を用意する
 			unique_ptr<unsigned char[]> cso_data = make_unique<unsigned char[]>(cso_sz);
 			fread(cso_data.get(), cso_sz, 1, fp); // 用意した領域にデータを読み込む
 			fclose(fp);
 
 			// 生成
 			HRESULT hr = Systems::Device->CreateGeometryShader(
-				cso_data.get(), // ピクセルシェーダーデータのポインタ
-				cso_sz,			// ピクセルシェーダーデータサイズ
+				cso_data.get(), // シェーダーデータのポインタ
+				cso_sz,			// シェーダーデータサイズ
 				nullptr,
-				geometry_shader    // ピクセルシェーダーオブジェクトのポインタの格納先
+				geometry_shader    // シェーダーオブジェクトのポインタの格納先
 			);
 			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 
@@ -168,10 +168,10 @@ namespace Adollib
 	)
 	{
 		if (PSshaders.count((string)csoName) == 1) {
-			*hull_shader = HSshaders[(string)csoName];
+			*hull_shader = HSshaders[(string)csoName].Get();
 		}
 		else {
-			// ピクセルシェーダーファイルを開く
+			// シェーダーファイルを開く
 			FILE* fp = nullptr;
 			fopen_s(&fp, csoName, "rb");
 			_ASSERT_EXPR_A(fp, "CSO File not found");
@@ -181,17 +181,17 @@ namespace Adollib
 			long cso_sz = ftell(fp);
 			fseek(fp, 0, SEEK_SET);
 
-			// メモリ上にピクセルシェーダーデータを格納する領域を用意する
+			// メモリ上にシェーダーデータを格納する領域を用意する
 			unique_ptr<unsigned char[]> cso_data = make_unique<unsigned char[]>(cso_sz);
 			fread(cso_data.get(), cso_sz, 1, fp); // 用意した領域にデータを読み込む
 			fclose(fp);
 
 			// 生成
 			HRESULT hr = Systems::Device->CreateHullShader(
-				cso_data.get(), // ピクセルシェーダーデータのポインタ
-				cso_sz,			// ピクセルシェーダーデータサイズ
+				cso_data.get(), // シェーダーデータのポインタ
+				cso_sz,			// シェーダーデータサイズ
 				nullptr,
-				hull_shader    // ピクセルシェーダーオブジェクトのポインタの格納先
+				hull_shader    // シェーダーオブジェクトのポインタの格納先
 			);
 			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 
@@ -207,10 +207,10 @@ namespace Adollib
 	)
 	{
 		if (PSshaders.count((string)csoName) == 1) {
-			*domain_shader = DSshaders[(string)csoName];
+			*domain_shader = DSshaders[(string)csoName].Get();
 		}
 		else {
-			// ピクセルシェーダーファイルを開く
+			// シェーダーファイルを開く
 			FILE* fp = nullptr;
 			fopen_s(&fp, csoName, "rb");
 			_ASSERT_EXPR_A(fp, "CSO File not found");
@@ -220,17 +220,17 @@ namespace Adollib
 			long cso_sz = ftell(fp);
 			fseek(fp, 0, SEEK_SET);
 
-			// メモリ上にピクセルシェーダーデータを格納する領域を用意する
+			// メモリ上にシェーダーデータを格納する領域を用意する
 			unique_ptr<unsigned char[]> cso_data = make_unique<unsigned char[]>(cso_sz);
 			fread(cso_data.get(), cso_sz, 1, fp); // 用意した領域にデータを読み込む
 			fclose(fp);
 
 			// 生成
 			HRESULT hr = Systems::Device->CreateDomainShader(
-				cso_data.get(), // ピクセルシェーダーデータのポインタ
-				cso_sz,			// ピクセルシェーダーデータサイズ
+				cso_data.get(), // シェーダーデータのポインタ
+				cso_sz,			// シェーダーデータサイズ
 				nullptr,
-				domain_shader    // ピクセルシェーダーオブジェクトのポインタの格納先
+				domain_shader    // シェーダーオブジェクトのポインタの格納先
 			);
 			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 
@@ -245,11 +245,13 @@ namespace Adollib
 		ID3D11ComputeShader** compute_shader // 格納するポインタ
 	)
 	{
-		if (PSshaders.count((string)csoName) == 1) {
-			*compute_shader = CSshaders[(string)csoName];
+		if (CSshaders.count((string)csoName) == 1) {
+
+			*compute_shader = CSshaders[(string)csoName].Get();
+
 		}
 		else {
-			// ピクセルシェーダーファイルを開く
+			//コンピュートシェーダーファイルを開く
 			FILE* fp = nullptr;
 			fopen_s(&fp, csoName, "rb");
 			_ASSERT_EXPR_A(fp, "CSO File not found");
@@ -333,7 +335,7 @@ namespace Adollib
 
 #pragma region Load FBX
 
-		// FbxManagerとFbxSceneとFbxImporterオブジェクトを作成
+		//FbxManagerとFbxSceneとFbxImporterオブジェクトを作成
 		FbxManager* manager = FbxManager::Create();
 		manager->SetIOSettings(FbxIOSettings::Create(manager, IOSROOT));
 		FbxImporter* importer = FbxImporter::Create(manager, "");
@@ -621,14 +623,18 @@ namespace Adollib
 
 			hr = Systems::Device->CreateBuffer(&indexDesc, &indexSubResource, mesh.indexBuffer.GetAddressOf());
 			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
+
+			//swqwssssssssasfbxMesh->Destroy();
 		}
 
 #pragma endregion
 
-		// FBXロード完了
+		 //FBXロード完了
 		meshes[(string)filePath + (string)fileName] = skinMeshes;
 		*ret_mesh = &meshes[(string)filePath + (string)fileName];
 
+		//scene->Destroy();
+		//importer->Destroy();
 		manager->Destroy();
 
 		return hr;
@@ -753,4 +759,8 @@ namespace Adollib
 	}
 
 
+	void ResourceManager::destroy() {
+
+
+	}
 }

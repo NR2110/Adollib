@@ -5,6 +5,14 @@
 #include "quaternion.h"
 #include "transform.h"
 
+#ifdef _DEBUG
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+// Replace _NORMAL_BLOCK with _CLIENT_BLOCK if you want the
+// allocations to be of _CLIENT_BLOCK type
+#else
+#define DBG_NEW new
+#endif
+
 namespace Adollib
 {
 	class Gameobject;
@@ -25,7 +33,7 @@ namespace Adollib
 		//std::string name;	// オブジェクト名
 
 		bool updated; 
-		Transfome* transform; //不本意なtransform
+		std::shared_ptr<Transfome> transform; //不本意なtransform
 		collider_effect co_e; //衝突計算から受ける処理の一時的保存場所
 
 	public:

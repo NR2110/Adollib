@@ -25,9 +25,9 @@ namespace Adollib {
 
 		std::string name = std::string("null"); //このgoの名前(検索用)
 
-		Material* material = nullptr;
+		std::shared_ptr<Material> material;
 
-		std::vector <Collider*> collider; //アタッチされているcolliderへのポインタ
+		std::vector <std::shared_ptr<Collider>> collider; //アタッチされているcolliderへのポインタ
 
 		std::list <std::shared_ptr<Component>> components; //アタッチされているConponentのポインタ
 
@@ -187,14 +187,14 @@ namespace Adollib {
 			}
 
 			//std::shared_ptr<T> newCom = std::make_shared<T>();
-			T* newCom = new T();
+			T* newCom = DBG_NEW T();
 
 			// Componentクラスから派生したものかチェック
 			Component* pCom = dynamic_cast<Component*>(newCom);
 			if (pCom != nullptr)
 			{
 				components.emplace_back(std::shared_ptr<Component>(pCom));
-				pCom->transform = this->transform;
+				pCom->transform = this->transform.get();
 				pCom->gameobject = this;
 				pCom->input = MonoInput::getInstancePtr();
 				pCom->time = Time::getInstancePtr();
@@ -239,18 +239,17 @@ namespace Adollib {
 			while (itr != end)
 			{
 				itr->get()->finalize();
+				if (itr->get()) delete itr->get();
 				itr = components.erase(itr);
 			}
-			//components.clear();
+			components.clear();
 		}
 
 		//解放処理
 		void destroy() {
-			//delete material;
-			//material = nullptr;
+			clearComponent();
 
-			//delete transform;
-			//transform = nullptr;
+			collider.clear();
 		}
 	};
 

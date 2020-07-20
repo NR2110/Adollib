@@ -386,17 +386,9 @@ DirectX::XMFLOAT4 vector4::get_XM4() {
 	return R;
 }
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-float vector4::norm_sqr() {
-	float S = norm();
-	if (normed * normed == S) return normed;
-	else if (S == 1.0f) normed = 1.0f;
-	else normed = sqrtf(S);
-	return normed;
-}
 
 float vector4::norm_sqr() const {
 	float S = norm();
-	if (normed * normed == S) return normed;
 	if (S == 1.0f) return 1.0f;
 	else return sqrtf(S);
 }

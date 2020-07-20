@@ -14,11 +14,11 @@ namespace Adollib {
 		class ComputeShader {
 		private:
 			void activate();
-			Microsoft::WRL::ComPtr<ID3D11ComputeShader> computeShader = nullptr;
 			Microsoft::WRL::ComPtr<ID3D11DeviceContext> get_context();
 			Microsoft::WRL::ComPtr<ID3D11Device>        get_device();
 
 		public:
+			Microsoft::WRL::ComPtr<ID3D11ComputeShader> computeShader = nullptr;
 			ComputeShader() {};
 
 			void Load(std::string csname);

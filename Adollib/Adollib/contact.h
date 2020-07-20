@@ -114,8 +114,6 @@ namespace Adollib {
 					contactpoints[i].reset();
 				}
 			};
-
-			void resolve();
 		};
 
 		enum  class Pairtype {

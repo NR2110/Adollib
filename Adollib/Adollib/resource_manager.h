@@ -7,6 +7,7 @@
 
 namespace Adollib
 {
+	//next ResourceManagerÇÃreleaceèàóù
 	class ResourceManager
 	{
 	public:
@@ -19,6 +20,7 @@ namespace Adollib
 		static HRESULT LoadTextureFromFile(const wchar_t* file_name, ID3D11ShaderResourceView** pSRV, D3D11_TEXTURE2D_DESC* pTex2dDesc);
 		static HRESULT CreateModelFromFBX(vector<Mesh::mesh>** meshes, const char* fileName, const char* filePath = "");
 
+		static void destroy();
 	private:
 		ResourceManager() {};
 		~ResourceManager() {};
@@ -29,15 +31,15 @@ namespace Adollib
 		static std::unordered_map<std::string, std::vector<Mesh::mesh>> meshes;
 		static std::unordered_map<std::wstring, Texture> texturs;
 		struct VS_resorce {
-			ID3D11VertexShader* VSshader;
-			ID3D11InputLayout* layout;
+			Microsoft::WRL::ComPtr<ID3D11VertexShader> VSshader;
+			Microsoft::WRL::ComPtr<ID3D11InputLayout> layout;
 		};
 
 		static std::unordered_map <std::string, VS_resorce>			   VSshaders;
-		static std::unordered_map <std::string, ID3D11PixelShader*>    PSshaders;
-		static std::unordered_map <std::string, ID3D11GeometryShader*> GSshaders;
-		static std::unordered_map <std::string, ID3D11HullShader*>     HSshaders;
-		static std::unordered_map <std::string, ID3D11DomainShader*>   DSshaders;
-		static std::unordered_map <std::string, ID3D11ComputeShader*>  CSshaders;
+		static std::unordered_map <std::string, Microsoft::WRL::ComPtr<ID3D11PixelShader>>    PSshaders;
+		static std::unordered_map <std::string, Microsoft::WRL::ComPtr<ID3D11GeometryShader>> GSshaders;
+		static std::unordered_map <std::string, Microsoft::WRL::ComPtr<ID3D11HullShader>>     HSshaders;
+		static std::unordered_map <std::string, Microsoft::WRL::ComPtr<ID3D11DomainShader>>   DSshaders;
+		static std::unordered_map <std::string, Microsoft::WRL::ComPtr<ID3D11ComputeShader>>  CSshaders;
 	};
 }

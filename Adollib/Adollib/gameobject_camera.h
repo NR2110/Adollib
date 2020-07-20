@@ -134,14 +134,14 @@ namespace Adollib {
 			}
 
 			//std::shared_ptr<T> newCom = std::make_shared<T>();
-			T* newCom = new T();
+			T* newCom = DBG_NEW T();
 
 			// Componentクラスから派生したものかチェック
 			Component_camera* pCom = dynamic_cast<Component_camera*>(newCom);
 			if (pCom != nullptr)
 			{
 				components.emplace_back(std::shared_ptr<Component_camera>(pCom));
-				pCom->transform = this->transform;
+				pCom->transform = this->transform.get();
 				pCom->gameobject = this;
 				pCom->input = MonoInput::getInstancePtr();
 				pCom->time = Time::getInstancePtr();
@@ -186,6 +186,7 @@ namespace Adollib {
 			while (itr != end)
 			{
 				itr->get()->finalize();
+				if (itr->get()) delete itr->get();
 				itr = components.erase(itr);
 			}
 			//components.clear();
@@ -193,11 +194,7 @@ namespace Adollib {
 
 		//解放処理
 		void destroy() {
-			//delete material;
-			//material = nullptr;
-
-			//delete transform;
-			//transform = nullptr;
+			clearComponent();
 		}
 	};
 

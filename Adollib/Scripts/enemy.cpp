@@ -17,7 +17,7 @@ namespace Adollib
 	void Enemy::start()
 	{
 		count = 0;
-		player = Gameobject_manager::find("player")->transform;
+		player = Gameobject_manager::find("player")->transform.get();
 		move_pow = 0.02 * Al_Global::elapsed_time ;
 		rot_pow = 0.1 * Al_Global::elapsed_time ;
 	}

@@ -98,7 +98,6 @@ namespace Adollib {
 	}
 
 
-
 }
 
 //Gameobject* Gameobject_manager::createCube(const std::string& go_name, Scenelist Sce) {

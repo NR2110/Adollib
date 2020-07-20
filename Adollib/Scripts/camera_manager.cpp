@@ -13,6 +13,7 @@ namespace Adollib
 	// Š‘®‚·‚éƒV[ƒ“‚Ì‰Šú‰»‚Éˆê“x‚¾‚¯ŒÄ‚Î‚ê‚é
 	void camera_manager_s::awake() {
 			set_camera(vector3(0, 30, -50), vector3(0, 0, 1));
+			Al_Global::render_collider_flag = false;
 	}
 
 	void camera_manager_s::start()

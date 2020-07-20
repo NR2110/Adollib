@@ -1,3 +1,7 @@
+#define _CRTDBG_MAP_ALLOC  
+#include <stdlib.h>  
+#include <crtdbg.h> 
+
 #include <Windows.h>
 #include <tchar.h>
 
@@ -121,6 +125,7 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 
 	loop.init();
 
+	float DD = 0;
 	while (hMsg.message != WM_QUIT) {
 		if (PeekMessage(&hMsg, NULL, 0, 0, PM_REMOVE))
 		{
@@ -131,6 +136,9 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 		{
 			Al_Global::elapsed_time =
 				(GetTickCount64() - before) * 0.001f;
+
+			DD += Al_Global::elapsed_time;
+			if (DD > 4.56) break;
 
 			before = GetTickCount64();
 			float mspf = 1000.0f / fps;
@@ -153,8 +161,11 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 		}
 	}
 
-	loop.destroy();
-	//SAFE_DELETE(scenemanager);
-	Systems::Release();
+	//loop.destroy();
+	//Systems::Release();
+
+	//memory leak 221 Å` 302 ÇÕâΩÇÇµÇƒÇ‡èoÇÈÇΩÇﬂñ≥éã
+	_CrtDumpMemoryLeaks();
+
 	return 0;
 }

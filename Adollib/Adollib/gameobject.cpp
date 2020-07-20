@@ -54,7 +54,7 @@ namespace Adollib{
 		if (Al_Global::render_collider_flag == false)  return;
 
 		for (int i = 0;i < collider.size();i++) {
-			Collider_renderer::render(collider[i]);
+			Collider_renderer::render(collider[i].get());
 		}
 		
 
@@ -66,13 +66,13 @@ namespace Adollib{
 	//:::::::::::::::::::::::::
 	Sphere* Gameobject::add_collider_sphere(vector3 pos, float r, float density, std::string tag, std::vector<std::string> no_hit_tag) {
 
-		Sphere* sphere = new Sphere(r, density, pos); //衝突判定用の実体を生成
+		std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(r, density, pos); //衝突判定用の実体を生成
 		sphere->local_scale = vector3(1, 1, 1);
 		sphere->local_orientation = quaternion_identity();
 		sphere->gameobject = this;
 		collider.push_back(sphere);
-		Rigitbody_manager::set_rigitbody(sphere, this, tag, no_hit_tag, this_scene); //衝突判定のマネージャーに渡す
-		return sphere;
+		Rigitbody_manager::set_rigitbody(sphere.get(), this, tag, no_hit_tag, this_scene); //衝突判定のマネージャーに渡す
+		return sphere.get();
 
 	}
 
@@ -83,13 +83,13 @@ namespace Adollib{
 	//:::::::::::::::::::::::::
 	Box* Gameobject::add_collider_box(vector3 pos, vector3 scale, quaternion orient, float density, std::string tag, std::vector<std::string> no_hit_tag) {
 
-		Box* box = new Box(scale, density, pos); //衝突判定用の実体を生成
+		std::shared_ptr<Box> box = std::make_shared<Box>(scale, density, pos); //衝突判定用の実体を生成
 		box->local_orientation = orient;
 		box->local_scale = vector3(1, 1, 1);
 		box->gameobject = this;
 		collider.push_back(box);
-		Rigitbody_manager::set_rigitbody(box, this, tag, no_hit_tag, this_scene); //衝突判定のマネージャーに渡す
-		return box;
+		Rigitbody_manager::set_rigitbody(box.get(), this, tag, no_hit_tag, this_scene); //衝突判定のマネージャーに渡す
+		return box.get();
 	}
 
 	//:::::::::::::::::::::::::
@@ -99,14 +99,15 @@ namespace Adollib{
 	Plane* Gameobject::add_collider_plane(vector3 pos, vector3 normal, float density, std::string tag, std::vector<std::string> no_hit_tag) {
 
 		float d = vector3_dot(normal, pos);
-		Plane* plane = new Plane(normal, d);
+		std::shared_ptr<Plane>  plane = std::make_shared<Plane>(normal, d);
+
 		plane->move = false;
 		plane->gameobject = this;
 		plane->local_orientation = quaternion_from_to_rotate(vector3(0, 1, 0), normal);
 		plane->local_scale = vector3(30, 0.1, 30);
 		collider.push_back(plane);
-		Rigitbody_manager::set_rigitbody(plane, this, tag, no_hit_tag, this_scene); //衝突判定のマネージャーに渡す
-		return plane;
+		Rigitbody_manager::set_rigitbody(plane.get(), this, tag, no_hit_tag, this_scene); //衝突判定のマネージャーに渡す
+		return plane.get();
 	}
 
 

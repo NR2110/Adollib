@@ -638,6 +638,11 @@ bool Systems::CreateBlendState()
 
 void Systems::Release()
 {
+
+	Time::destroy();
+	time = nullptr;
+	MonoInput::destroy();
+	inputManager = nullptr;
 }
 
 //------------------------------------------------

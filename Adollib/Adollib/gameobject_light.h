@@ -127,7 +127,7 @@ namespace Adollib {
 			}
 
 			//std::shared_ptr<T> newCom = std::make_shared<T>();
-			T* newCom = new T();
+			T* newCom = DBG_NEW T();
 
 			// Componentクラスから派生したものかチェック
 			Component_light* pCom = dynamic_cast<Component_light*>(newCom);
@@ -179,6 +179,7 @@ namespace Adollib {
 			while (itr != end)
 			{
 				itr->get()->finalize();
+				if (itr->get()) delete itr->get();
 				itr = components.erase(itr);
 			}
 			//components.clear();
@@ -186,11 +187,7 @@ namespace Adollib {
 
 		//解放処理
 		void destroy() {
-			//delete material;
-			//material = nullptr;
-
-			//delete transform;
-			//transform = nullptr;
+			clearComponent();
 		}
 	};
 

@@ -14,7 +14,8 @@ namespace Adollib {
 	std::map<Scenelist, std::list<std::shared_ptr<Gameobject>>> Gameobject_manager::gameobjects;
 	std::map<Scenelist, std::list<std::shared_ptr<Light>>> Gameobject_manager::lights;
 	std::map<Scenelist, std::list<std::shared_ptr<Camera>>> Gameobject_manager::cameras;
-	vector<object*> Gameobject_manager::masters; //GO親子ツリーの頂点を保存
+	std::vector<object*> Gameobject_manager::masters; //GO親子ツリーの頂点を保存
+	std::vector<object*> Gameobject_manager::gos;     //GOを1つの配列に保存
 
 	ComPtr<ID3D11Buffer> Gameobject_manager::light_cb;
 	ComPtr<ID3D11Buffer> Gameobject_manager::view_cb;
@@ -82,7 +83,7 @@ namespace Adollib {
 	void Gameobject_manager::update(Scenelist Sce) {
 		if (Sce == Scenelist::scene_null)return;
 
-		std::vector<object*> gos;
+		gos.clear();
 		//updateを呼んだかのフラグを消すついでに
 		//扱いやすいように一つの配列に保存
 		{
@@ -138,7 +139,6 @@ namespace Adollib {
 		Rigitbody_manager::update();
 
 		{
-			//Sceのsceneにアタッチされたcomponentのupdateを呼ぶ
 			std::list<std::shared_ptr<Gameobject>>::iterator itr = gameobjects[Sce].begin();
 			std::list<std::shared_ptr<Gameobject>>::iterator itr_end = gameobjects[Sce].end();
 
@@ -272,15 +272,15 @@ namespace Adollib {
 		}
 
 		//適当にSceのsceneにアタッチされたgoを削除
-		gameobjects[Sce].clear();
-		lights[Sce].clear();
-		cameras[Sce].clear();
+		gameobjects.clear();
+		lights.clear();
+		cameras.clear();
 
 	}
 
 	Light* Gameobject_manager::create_light(Scenelist Sce) {
 		std::shared_ptr <Light> Value = std::make_shared<Light>();
-		lights[Sce].push_back(Value);
+		lights[Sce].emplace_back(Value);
 
 		Value.get()->this_scene = Sce;
 		Value.get()->initialize();
@@ -288,7 +288,7 @@ namespace Adollib {
 	}
 	Light* Gameobject_manager::create_light(const std::string go_name, Scenelist Sce) {
 		std::shared_ptr <Light> Value = std::make_shared<Light>();
-		lights[Sce].push_back(Value);
+		lights[Sce].emplace_back(Value);
 		Value.get()->name = go_name;
 
 		Value.get()->this_scene = Sce;
@@ -298,32 +298,32 @@ namespace Adollib {
 
 	Camera* Gameobject_manager::create_camera(Scenelist Sce) {
 		std::shared_ptr <Camera> Value = std::make_shared<Camera>();
-		cameras[Sce].push_back(Value);
+		cameras[Sce].emplace_back(Value);
 
 		Value.get()->this_scene = Sce;
-		Value.get()->transform = new Transfome;
+		Value.get()->transform = make_shared<Transfome>();
 		Value.get()->transform->position = vector3(0, 0, 0);
 		Value.get()->initialize();
 		return Value.get();
 	}
 	Camera* Gameobject_manager::create_camera(const std::string go_name, Scenelist Sce) {
 		std::shared_ptr <Camera> Value = std::make_shared<Camera>();
-		cameras[Sce].push_back(Value);
+		cameras[Sce].emplace_back(Value);
 		Value.get()->name = go_name;
 
 		Value.get()->this_scene = Sce;
-		Value.get()->transform = new Transfome;
+		Value.get()->transform = make_shared<Transfome>();
 		Value.get()->initialize();
 		return Value.get();
 	}
 
 	Gameobject* Gameobject_manager::create(Scenelist Sce) {
 		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
-		gameobjects[Sce].push_back(Value);
+		gameobjects[Sce].emplace_back(Value);
 		Value.get()->name = "no_name";
 
 		Value.get()->this_scene = Sce;
-		Value.get()->transform = new Transfome;
+		Value.get()->transform = make_shared<Transfome>();
 		Value.get()->no_material = true;
 
 		Value.get()->initialize();
@@ -333,26 +333,26 @@ namespace Adollib {
 	}
 	Gameobject* Gameobject_manager::create(const std::string go_name, Scenelist Sce) {
 		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
-		gameobjects[Sce].push_back(Value);
+		gameobjects[Sce].emplace_back(Value);
 
 		Value.get()->name = go_name;
 		Value.get()->this_scene = Sce;
 		Value.get()->no_material = true;
 
-		Value.get()->transform = new Transfome;
+		Value.get()->transform = make_shared<Transfome>();
 		Value.get()->initialize();
 		return Value.get();
 	}
 
 	Gameobject* Gameobject_manager::createFromFBX(const std::string& FBX_pass, const std::string& go_name, Scenelist Sce) {
 		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
-		gameobjects[Sce].push_back(Value);
+		gameobjects[Sce].emplace_back(Value);
 		Value.get()->name = go_name;
 
 		Value.get()->this_scene = Sce;
-		Value.get()->transform = new Transfome;
+		Value.get()->transform = make_shared<Transfome>();
 
-		Value.get()->material = new Material;
+		Value.get()->material = make_shared<Material>();
 		Value.get()->material->Load_VS("./DefaultShader/default_vs.cso");
 		Value.get()->material->Load_PS("./DefaultShader/default_ps.cso");
 		ResourceManager::CreateModelFromFBX(&Value.get()->material->meshes, FBX_pass.c_str(), "");
@@ -362,13 +362,13 @@ namespace Adollib {
 
 	Gameobject* Gameobject_manager::createSphere(const std::string& go_name,  Scenelist Sce) {
 		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
-		gameobjects[Sce].push_back(Value);
+		gameobjects[Sce].emplace_back(Value);
 		Value.get()->name = go_name;
 
 		Value.get()->this_scene = Sce;
-		Value.get()->transform = new Transfome;
+		Value.get()->transform = make_shared<Transfome>();
 
-		Value.get()->material = new Material;
+		Value.get()->material = make_shared<Material>();
 		Value.get()->material->Load_VS("./DefaultShader/default_vs.cso");
 		Value.get()->material->Load_PS("./DefaultShader/default_ps.cso");
 		ResourceManager::CreateModelFromFBX(&Value.get()->material->meshes, "./DefaultModel/sphere.fbx", "");
@@ -378,13 +378,13 @@ namespace Adollib {
 
 	Gameobject* Gameobject_manager::createCube(const std::string& go_name, Scenelist Sce) {
 		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
-		gameobjects[Sce].push_back(Value);
+		gameobjects[Sce].emplace_back(Value);
 		Value.get()->name = go_name;
 
 		Value.get()->this_scene = Sce;
-		Value.get()->transform = new Transfome;
+		Value.get()->transform = make_shared<Transfome>();
 
-		Value.get()->material = new Material;
+		Value.get()->material = make_shared<Material>();
 		Value.get()->material->Load_VS("./DefaultShader/default_vs.cso");
 		Value.get()->material->Load_PS("./DefaultShader/default_ps.cso");
 		ResourceManager::CreateModelFromFBX(&Value.get()->material->meshes, "./DefaultModel/cube.fbx", "");
@@ -396,13 +396,13 @@ namespace Adollib {
 	//}
 	Gameobject* Gameobject_manager::createCylinder(const std::string& go_name, Scenelist Sce) {
 		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
-		gameobjects[Sce].push_back(Value);
+		gameobjects[Sce].emplace_back(Value);
 		Value.get()->name = go_name;
 
 		Value.get()->this_scene = Sce;
-		Value.get()->transform = new Transfome;
+		Value.get()->transform = make_shared<Transfome>();
 
-		Value.get()->material = new Material;
+		Value.get()->material = make_shared<Material>();
 		Value.get()->material->Load_VS("./DefaultShader/default_vs.cso");
 		Value.get()->material->Load_PS("./DefaultShader/default_ps.cso");
 		ResourceManager::CreateModelFromFBX(&Value.get()->material->meshes, "./DefaultModel/cylinder.fbx", "");
