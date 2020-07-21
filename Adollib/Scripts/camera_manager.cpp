@@ -28,6 +28,29 @@ namespace Adollib
 		if (input->getKeyTrigger(Key::C))
 			Al_Global::render_collider_flag = Al_Global::render_collider_flag == false ? true : false;
 
+		vector3 veA(2, 9, 5);
+		vector3 veB(3, 5, 7);
+		DirectX::XMFLOAT3 XMA (2, 9, 5);
+		DirectX::XMFLOAT3 XMB (3, 5, 7);
+		DirectX::XMVECTOR VEA = DirectX::XMLoadFloat3(&XMA);
+		DirectX::XMVECTOR VEB = DirectX::XMLoadFloat3(&XMB);
+		DirectX::XMFLOAT3 XMCross;
+
+		DirectX::XMStoreFloat3(&XMCross, DirectX::XMVector3Cross(VEA, VEB));
+		vector3 vecCross = vector3_cross(veA, veB);
+
+
+		matrix ma = quaternion_from_euler(32, 65, 8).get_rotate_matrix();
+		DirectX::XMMATRIX XMmat = ma.get_XMMATRIX();
+
+		DirectX::XMStoreFloat3(&XMA, DirectX::XMVector3Transform(VEA, XMmat));
+		veA = vector3_trans(veA, ma);
+
+
+
+		int adfsgdhfjgkh = 0;
+
+
 		//quaternion A = quaternion_from_euler(180, 0, 0);
 
 		//vector3 B = A.euler();

@@ -66,7 +66,7 @@ namespace Adollib
 
 		}
 
-		int max_c = 11;
+		int max_c = 10;
 		for (int i = 0; i < max_c; i++) {
 
 			for (int o = 0; o < max_c - i; o++) {

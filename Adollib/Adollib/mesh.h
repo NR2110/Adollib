@@ -7,9 +7,6 @@
 #include <fbxsdk.h>
 #include "math.h"
 
-using namespace DirectX;
-using namespace std;
-
 #define MAX_BONES (4)
 
 namespace Adollib
@@ -26,9 +23,9 @@ namespace Adollib
 		struct VertexFormat
 		{
 #define MAX_BONE_INFLUENCES (4)
-			XMFLOAT3 position;
-			XMFLOAT3 normal;
-			XMFLOAT2 texcoord;
+			DirectX::XMFLOAT3 position;
+			DirectX::XMFLOAT3 normal;
+			DirectX::XMFLOAT2 texcoord;
 			FLOAT bone_weights[MAX_BONE_INFLUENCES] = { 0 };
 			INT bone_indices[MAX_BONE_INFLUENCES] = {};
 		};
@@ -36,7 +33,7 @@ namespace Adollib
 		// マテリアル
 		struct material
 		{
-			XMFLOAT4 color = { 0.8f, 0.8f, 0.8f, 1.0f };
+			DirectX::XMFLOAT4 color = { 0.8f, 0.8f, 0.8f, 1.0f };
 			Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> shaderResourceVirw = nullptr;
 		};
 
@@ -55,17 +52,17 @@ namespace Adollib
 			int index = 0; // index of bone
 			float weight = 0; // weight of bone
 		};
-		typedef vector<bone_influence> bone_influences_per_control_point;
+		typedef std::vector<bone_influence> bone_influences_per_control_point;
 
 		// ボーン
 		struct bone
 		{
-			XMFLOAT4X4 transform;
+			DirectX::XMFLOAT4X4 transform;
 		};
 
 		// アニメーションデータ
-		typedef vector<bone> skeletal;
-		struct skeletal_animation : public vector<skeletal>
+		typedef std::vector<bone> skeletal;
+		struct skeletal_animation : public std::vector<skeletal>
 		{
 			float sampling_time = 1 / 24.0f;
 			float animation_tick = 0.0f;
@@ -76,10 +73,10 @@ namespace Adollib
 		{
 			Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer = nullptr;
 			Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer = nullptr;
-			vector<subset> subsets;
+			std::vector<subset> subsets;
 			DOP_7 dop7; //meshのローカル座標系でのDOP_6
-			XMFLOAT4X4 globalTransform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
-			vector<skeletal_animation> skeletalAnimation;
+			DirectX::XMFLOAT4X4 globalTransform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
+			std::vector<skeletal_animation> skeletalAnimation;
 		};
 
 	public:

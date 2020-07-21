@@ -106,6 +106,19 @@ matrix& matrix::operator/= (float S) {
 	(*this) = (*this) / S;
 	return *this;
 }
+bool matrix::operator== (const matrix& M) {
+
+	return (
+		_11 == M._11 && _12 == M._12 && _13 == M._13 && _14 == M._14 &&
+		_21 == M._21 && _22 == M._22 && _23 == M._23 && _24 == M._24 &&
+		_31 == M._31 && _32 == M._32 && _33 == M._33 && _34 == M._34 &&
+		_41 == M._41 && _42 == M._42 && _43 == M._43 && _44 == M._44
+		);
+}
+bool matrix::operator!= (const matrix& M) {
+
+	return (!(*this == M));
+}
 
 DirectX::XMMATRIX matrix::get_XMMATRIX(){
 	DirectX::XMFLOAT4X4 V = get_XMFLOAT4X4();

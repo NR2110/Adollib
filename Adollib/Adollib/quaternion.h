@@ -45,6 +45,8 @@ namespace Adollib {
 		quaternion& operator*=(float);
 		quaternion& operator*=(const quaternion&);
 		quaternion& operator/=(float);
+		bool operator==(quaternion& Q);
+		bool operator!=(quaternion& Q);
 
 		quaternion operator+() const;
 		quaternion operator-() const;

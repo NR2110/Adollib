@@ -50,8 +50,8 @@ namespace Adollib {
 		pointlight->range = range;
 		pointlight->type = 1.0f;
 		pointlight->dumy = 0.0f;
-		pointlight->pos = XMFLOAT4(pos.x, pos.y, pos.z, 0);
-		pointlight->color = XMFLOAT4(color.x, color.y, color.z, 0);
+		pointlight->pos = DirectX::XMFLOAT4(pos.x, pos.y, pos.z, 0);
+		pointlight->color = DirectX::XMFLOAT4(color.x, color.y, color.z, 0);
 
 		PointLight.push_back(pointlight);
 
@@ -73,9 +73,9 @@ namespace Adollib {
 		spotlight->dumy1 = 0.0f;
 		spotlight->dumy2 = 0.0f;
 
-		spotlight->pos = XMFLOAT4(pos.x, pos.y, pos.z, 0);
-		spotlight->color = XMFLOAT4(color.x, color.y, color.z, 0);
-		spotlight->dir = XMFLOAT4(dir.x, dir.y, dir.z, 0);
+		spotlight->pos = DirectX::XMFLOAT4(pos.x, pos.y, pos.z, 0);
+		spotlight->color = DirectX::XMFLOAT4(color.x, color.y, color.z, 0);
+		spotlight->dir = DirectX::XMFLOAT4(dir.x, dir.y, dir.z, 0);
 
 		SpotLight.push_back(spotlight);
 	}

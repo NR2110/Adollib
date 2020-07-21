@@ -114,6 +114,20 @@ quaternion& quaternion::operator/=(float S) {
 	(*this) = (*this) / S;
 	return *this;
 }
+bool quaternion::operator==(quaternion& Q) {
+	return (
+		x == Q.x &&
+		y == Q.y &&
+		z == Q.z
+		);
+}
+bool quaternion::operator!=(quaternion& Q) {
+	return (
+		x != Q.x ||
+		y != Q.y ||
+		z != Q.z
+		);
+}
 
 #pragma endregion
 

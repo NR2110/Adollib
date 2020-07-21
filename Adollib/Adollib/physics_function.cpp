@@ -913,6 +913,11 @@ struct  Pair_max
 {
 	int num;
 };
+struct  com_Out
+{
+	Solverbody solvs[2];
+	float accumes[4][3];
+};
 
 void physics_function::resolve_contact(std::vector<Collider*> colliders, std::vector<Contacts::Contact_pair>& pairs) {
 
@@ -1093,7 +1098,7 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 	//}
 
 	//ここからGPUに任せる
-#if 0
+#if 1
 	for (int i = 0; i < 10; i++) {
 		for (int P_num = 0; P_num < pairs.size(); P_num++) {
 			Contact_pair& pair = pairs[P_num];
@@ -1166,7 +1171,7 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 		}
 	}
 
-#elif 1
+#elif 0
 
 	//QUESTION : ここのstatic外すとすぐ落ちるresourceanager見ても原因わからず　謎
 	static Compute_S::ComputeShader compute_shader;
@@ -1175,32 +1180,49 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 
 
 	for (int i = 0; i < 10; i++) {
+		if (pairs.size() == 0)break;
 
-		std::vector<cs_Pair> cs_pair;
 		Pair_max pair_max;
 		pair_max.num = pairs.size();
-		cs_Pair VVV;
-		for (int i = 0; i < pairs.size(); i++) {
-			VVV.contacts = pairs[i].contacts;
-			VVV.solv_num[0] = pairs[i].body[0]->solve->num;
-			VVV.solv_num[1] = pairs[i].body[1]->solve->num;
-			cs_pair.emplace_back(VVV);
+
+		std::vector<cs_Pair> cs_pair;
+		{
+			cs_Pair cp;
+			for (int pair_num = 0; pair_num < pairs.size(); pair_num++) {
+				cp.contacts = pairs[pair_num].contacts;
+				cp.solv_num[0] = pairs[pair_num].body[0]->solve->num;
+				cp.solv_num[1] = pairs[pair_num].body[1]->solve->num;
+				cs_pair.emplace_back(cp);
+			}
 		}
 
 		static Microsoft::WRL::ComPtr<StructureBuffer> pair_SB = nullptr;
 		static Microsoft::WRL::ComPtr<StructureBuffer> max_SB = nullptr;
 		static Microsoft::WRL::ComPtr<StructureBuffer> solve_SB = nullptr;
-		static Microsoft::WRL::ComPtr<UAVBuffer> solve_out = nullptr;
+		static Microsoft::WRL::ComPtr<UAVBuffer>       solve_out = nullptr;
+		pair_SB = nullptr;
+		max_SB = nullptr;
+		solve_SB = nullptr;
+		solve_out = nullptr;
 
 		assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(cs_Pair), pairs.size(), cs_pair.data(), pair_SB)));
 		assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(Pair_max), 1, &pair_max, max_SB)));
 		assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(Solverbody), SBs.size(), SBs.data(), solve_SB)));
-		assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(Solverbody) * 2, pairs.size(), nullptr, solve_out)));
+		assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(com_Out), pairs.size(), nullptr, solve_out)));
 
-		static Microsoft::WRL::ComPtr<ID3D11ShaderResourceView > pair_SRV = nullptr;
-		static Microsoft::WRL::ComPtr<ID3D11ShaderResourceView > max_SRV = nullptr;
-		static Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  solve_SRV = nullptr;
+		//assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(cs_Pair), 5, cs_pair.data(), pair_SB)));
+		//assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(Pair_max), 1, &pair_max, max_SB)));
+		//assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(Solverbody), SBs.size(), SBs.data(), solve_SB)));
+		//assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(Solverbody) * 2, 5, nullptr, solve_out)));
+
+		static Microsoft::WRL::ComPtr<ID3D11ShaderResourceView > pair_SRV  = nullptr;
+		static Microsoft::WRL::ComPtr<ID3D11ShaderResourceView > max_SRV   = nullptr;
+		static Microsoft::WRL::ComPtr<ID3D11ShaderResourceView > solve_SRV = nullptr;
 		static Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> solve_OUT = nullptr;
+		pair_SRV = nullptr;
+		max_SRV = nullptr;
+		solve_SRV = nullptr;
+		solve_OUT = nullptr;
 
 		assert(SUCCEEDED(compute_shader.createSRV_fromSB(pair_SB,   &pair_SRV)));
 		assert(SUCCEEDED(compute_shader.createSRV_fromSB(max_SB,    &max_SRV)));
@@ -1210,17 +1232,100 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 		ID3D11ShaderResourceView* SRVs[3] = { pair_SRV.Get() ,max_SRV.Get(), solve_SRV.Get() };
 		compute_shader.run(SRVs, 3, solve_OUT.Get(), 16, 1, 1);
 
-		Solverbody* S = compute_shader.Read_UAV<Solverbody>(solve_out);
-		for (int i = 0; i < pairs.size() * 2 - 1; i++) {
-			SBs[S[i].num].delta_AngularVelocity += S[i].delta_AngularVelocity;
-			SBs[S[i].num].delta_LinearVelocity  += S[i].delta_LinearVelocity;
+		com_Out* S = compute_shader.Read_UAV<com_Out>(solve_out);
+		for (int pair_num = 0; pair_num < pairs.size(); pair_num++) {
 
-			if (S[i].delta_LinearVelocity.norm() > 1) {
-				int dafsgdf = 0;
+			if (SBs[S[pair_num].solvs[0].num].delta_AngularVelocity != S[pair_num].solvs[0].delta_AngularVelocity ||
+				SBs[S[pair_num].solvs[1].num].delta_AngularVelocity != S[pair_num].solvs[1].delta_AngularVelocity 			
+				) {
+				int dasfgdf = 0;
 			}
+
+			SBs[S[pair_num].solvs[0].num].delta_AngularVelocity += S[pair_num].solvs[0].delta_AngularVelocity;
+			SBs[S[pair_num].solvs[0].num].delta_LinearVelocity  += S[pair_num].solvs[0].delta_LinearVelocity;
+
+			SBs[S[pair_num].solvs[1].num].delta_AngularVelocity += S[pair_num].solvs[1].delta_AngularVelocity;
+			SBs[S[pair_num].solvs[1].num].delta_LinearVelocity  += S[pair_num].solvs[1].delta_LinearVelocity;
+
+			for (int C_num = 0; C_num < pairs[pair_num].contacts.contact_num; C_num++) {
+				pairs[pair_num].contacts.contactpoints[C_num].constraint[0].accuminpulse += S[pair_num].accumes[C_num][0];
+				pairs[pair_num].contacts.contactpoints[C_num].constraint[1].accuminpulse += S[pair_num].accumes[C_num][1];
+				pairs[pair_num].contacts.contactpoints[C_num].constraint[2].accuminpulse += S[pair_num].accumes[C_num][2];
+			}
+
 		}
 
 	}
+#elif 0
+//QUESTION : ここのstatic外すとすぐ落ちるresourceanager見ても原因わからず　謎
+static Compute_S::ComputeShader compute_shader;
+compute_shader.Load("./DefaultShader/physics_resolve.cso");
+
+
+
+for (int i = 0; i < 10; i++) {
+	for (int pair_num = 0; pair_num < pairs.size(); pair_num++) {
+
+		cs_Pair cs_pair;
+		Pair_max pair_max;
+		pair_max.num = pairs.size();
+
+		cs_pair.contacts = pairs[pair_num].contacts;
+		cs_pair.solv_num[0] = pairs[pair_num].body[0]->solve->num;
+		cs_pair.solv_num[1] = pairs[pair_num].body[1]->solve->num;
+		
+
+		static Microsoft::WRL::ComPtr<StructureBuffer> pair_SB = nullptr;
+		static Microsoft::WRL::ComPtr<StructureBuffer> max_SB = nullptr;
+		static Microsoft::WRL::ComPtr<StructureBuffer> solve_SB = nullptr;
+		static Microsoft::WRL::ComPtr<UAVBuffer> solve_out = nullptr;
+
+		assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(cs_Pair), 1, &cs_pair, pair_SB)));
+		assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(Pair_max), 1, &pair_max, max_SB)));
+		assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(Solverbody), SBs.size(), SBs.data(), solve_SB)));
+		assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(Solverbody) * 2, 1, nullptr, solve_out)));
+
+		//assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(cs_Pair), 5, cs_pair.data(), pair_SB)));
+		//assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(Pair_max), 1, &pair_max, max_SB)));
+		//assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(Solverbody), SBs.size(), SBs.data(), solve_SB)));
+		//assert(SUCCEEDED(compute_shader.create_StructureBuffer(sizeof(Solverbody) * 2, 5, nullptr, solve_out)));
+
+		static Microsoft::WRL::ComPtr<ID3D11ShaderResourceView > pair_SRV = nullptr;
+		static Microsoft::WRL::ComPtr<ID3D11ShaderResourceView > max_SRV = nullptr;
+		static Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  solve_SRV = nullptr;
+		static Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> solve_OUT = nullptr;
+
+		assert(SUCCEEDED(compute_shader.createSRV_fromSB(pair_SB, &pair_SRV)));
+		assert(SUCCEEDED(compute_shader.createSRV_fromSB(max_SB, &max_SRV)));
+		assert(SUCCEEDED(compute_shader.createSRV_fromSB(solve_SB, &solve_SRV)));
+		assert(SUCCEEDED(compute_shader.createUAV_fromSB(solve_out, &solve_OUT)));
+
+		ID3D11ShaderResourceView* SRVs[3] = { pair_SRV.Get() ,max_SRV.Get(), solve_SRV.Get() };
+		compute_shader.run(SRVs, 3, solve_OUT.Get(), 16, 1, 1);
+
+		Solverbody* S = compute_shader.Read_UAV<Solverbody>(solve_out);
+			SBs[S[0].num].delta_AngularVelocity += S[0].delta_AngularVelocity;
+			SBs[S[0].num].delta_LinearVelocity += S[0].delta_LinearVelocity;
+			SBs[S[1].num].delta_AngularVelocity += S[1].delta_AngularVelocity;
+			SBs[S[1].num].delta_LinearVelocity += S[1].delta_LinearVelocity;
+
+			//if (
+			//	SBs[S[i].num].delta_AngularVelocity == S[i].delta_AngularVelocity &&
+			//	SBs[S[i].num].delta_LinearVelocity == S[i].delta_LinearVelocity &&
+			//	SBs[S[i].num].inv_inertia == S[i].inv_inertia &&
+			//	SBs[S[i].num].inv_mass == S[i].inv_mass &&
+			//	SBs[S[i].num].num == S[i].num &&
+			//	SBs[S[i].num].orientation == S[i].orientation
+			//	) {
+			//	int dafsdgf = 0;
+			//}
+			//else {
+			//	int dafsgdhfjg = 0;
+			//}
+
+		}
+	}
+
 
 #endif
 

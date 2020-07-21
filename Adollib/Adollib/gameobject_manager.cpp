@@ -301,7 +301,7 @@ namespace Adollib {
 		cameras[Sce].emplace_back(Value);
 
 		Value.get()->this_scene = Sce;
-		Value.get()->transform = make_shared<Transfome>();
+		Value.get()->transform = std::make_shared<Transfome>();
 		Value.get()->transform->position = vector3(0, 0, 0);
 		Value.get()->initialize();
 		return Value.get();
@@ -312,7 +312,7 @@ namespace Adollib {
 		Value.get()->name = go_name;
 
 		Value.get()->this_scene = Sce;
-		Value.get()->transform = make_shared<Transfome>();
+		Value.get()->transform = std::make_shared<Transfome>();
 		Value.get()->initialize();
 		return Value.get();
 	}
@@ -323,7 +323,7 @@ namespace Adollib {
 		Value.get()->name = "no_name";
 
 		Value.get()->this_scene = Sce;
-		Value.get()->transform = make_shared<Transfome>();
+		Value.get()->transform = std::make_shared<Transfome>();
 		Value.get()->no_material = true;
 
 		Value.get()->initialize();
@@ -339,7 +339,7 @@ namespace Adollib {
 		Value.get()->this_scene = Sce;
 		Value.get()->no_material = true;
 
-		Value.get()->transform = make_shared<Transfome>();
+		Value.get()->transform = std::make_shared<Transfome>();
 		Value.get()->initialize();
 		return Value.get();
 	}
@@ -350,9 +350,9 @@ namespace Adollib {
 		Value.get()->name = go_name;
 
 		Value.get()->this_scene = Sce;
-		Value.get()->transform = make_shared<Transfome>();
+		Value.get()->transform = std::make_shared<Transfome>();
 
-		Value.get()->material = make_shared<Material>();
+		Value.get()->material = std::make_shared<Material>();
 		Value.get()->material->Load_VS("./DefaultShader/default_vs.cso");
 		Value.get()->material->Load_PS("./DefaultShader/default_ps.cso");
 		ResourceManager::CreateModelFromFBX(&Value.get()->material->meshes, FBX_pass.c_str(), "");
@@ -366,9 +366,9 @@ namespace Adollib {
 		Value.get()->name = go_name;
 
 		Value.get()->this_scene = Sce;
-		Value.get()->transform = make_shared<Transfome>();
+		Value.get()->transform = std::make_shared<Transfome>();
 
-		Value.get()->material = make_shared<Material>();
+		Value.get()->material = std::make_shared<Material>();
 		Value.get()->material->Load_VS("./DefaultShader/default_vs.cso");
 		Value.get()->material->Load_PS("./DefaultShader/default_ps.cso");
 		ResourceManager::CreateModelFromFBX(&Value.get()->material->meshes, "./DefaultModel/sphere.fbx", "");
@@ -382,9 +382,9 @@ namespace Adollib {
 		Value.get()->name = go_name;
 
 		Value.get()->this_scene = Sce;
-		Value.get()->transform = make_shared<Transfome>();
+		Value.get()->transform = std::make_shared<Transfome>();
 
-		Value.get()->material = make_shared<Material>();
+		Value.get()->material = std::make_shared<Material>();
 		Value.get()->material->Load_VS("./DefaultShader/default_vs.cso");
 		Value.get()->material->Load_PS("./DefaultShader/default_ps.cso");
 		ResourceManager::CreateModelFromFBX(&Value.get()->material->meshes, "./DefaultModel/cube.fbx", "");
@@ -400,9 +400,9 @@ namespace Adollib {
 		Value.get()->name = go_name;
 
 		Value.get()->this_scene = Sce;
-		Value.get()->transform = make_shared<Transfome>();
+		Value.get()->transform = std::make_shared<Transfome>();
 
-		Value.get()->material = make_shared<Material>();
+		Value.get()->material = std::make_shared<Material>();
 		Value.get()->material->Load_VS("./DefaultShader/default_vs.cso");
 		Value.get()->material->Load_PS("./DefaultShader/default_ps.cso");
 		ResourceManager::CreateModelFromFBX(&Value.get()->material->meshes, "./DefaultModel/cylinder.fbx", "");

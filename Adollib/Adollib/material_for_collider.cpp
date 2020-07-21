@@ -77,7 +77,7 @@ namespace Adollib {
 			//CB : ConstantBufferPerCoMaterial
 			ConstantBufferPerMaterial cb;
 			cb.shininess = 1;
-			cb.ambientColor = XMFLOAT4(0.1f, 0.1f, 0.1f, 1);
+			cb.ambientColor = DirectX::XMFLOAT4(0.1f, 0.1f, 0.1f, 1);
 			cb.materialColor = Al_Global::get_gaming(time, 600).get_XM4();
 			Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
 			Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());

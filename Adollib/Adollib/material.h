@@ -57,10 +57,10 @@ namespace Adollib {
 		// 定数バッファ
 		struct ConstantBufferPerMaterial
 		{
-			XMFLOAT4X4 boneTransforms[MAX_BONES];
+			DirectX::XMFLOAT4X4 boneTransforms[MAX_BONES];
 
-			XMFLOAT4 materialColor;
-			XMFLOAT4 ambientColor;
+			DirectX::XMFLOAT4 materialColor;
+			DirectX::XMFLOAT4 ambientColor;
 
 			float shininess;  // スペキュラ係数
 
@@ -71,9 +71,9 @@ namespace Adollib {
 		struct VertexFormat
 		{
 #define MAX_BONE_INFLUENCES (4)
-			XMFLOAT3 position;
-			XMFLOAT3 normal;
-			XMFLOAT2 texcoord;
+			DirectX::XMFLOAT3 position;
+			DirectX::XMFLOAT3 normal;
+			DirectX::XMFLOAT2 texcoord;
 			FLOAT bone_weights[MAX_BONE_INFLUENCES] = { 0 };
 			INT bone_indices[MAX_BONE_INFLUENCES] = {};
 		};

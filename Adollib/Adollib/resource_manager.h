@@ -18,15 +18,15 @@ namespace Adollib
 		static HRESULT CreateDsFromCso(const char* cso_name, ID3D11DomainShader** domain_shader);
 		static HRESULT CreateCsFromCso(const char* cso_name, ID3D11ComputeShader** computeShader);
 		static HRESULT LoadTextureFromFile(const wchar_t* file_name, ID3D11ShaderResourceView** pSRV, D3D11_TEXTURE2D_DESC* pTex2dDesc);
-		static HRESULT CreateModelFromFBX(vector<Mesh::mesh>** meshes, const char* fileName, const char* filePath = "");
+		static HRESULT CreateModelFromFBX(std::vector<Mesh::mesh>** meshes, const char* fileName, const char* filePath = "");
 
 		static void destroy();
 	private:
 		ResourceManager() {};
 		~ResourceManager() {};
-		static void fetch_bone_influences(const FbxMesh* fbx_mesh, vector<Mesh::bone_influences_per_control_point>& influences);
-		static void fetch_bone_matrices(FbxMesh* fbx_mesh, vector<Mesh::bone>& skeletal, FbxTime time);
-		static void fetch_animations(FbxMesh* fbx_mesh, vector<Mesh::skeletal_animation>& skeletal_animation, u_int sampling_rate = 0);
+		static void fetch_bone_influences(const FbxMesh* fbx_mesh, std::vector<Mesh::bone_influences_per_control_point>& influences);
+		static void fetch_bone_matrices(FbxMesh* fbx_mesh, std::vector<Mesh::bone>& skeletal, FbxTime time);
+		static void fetch_animations(FbxMesh* fbx_mesh, std::vector<Mesh::skeletal_animation>& skeletal_animation, u_int sampling_rate = 0);
 
 		static std::unordered_map<std::string, std::vector<Mesh::mesh>> meshes;
 		static std::unordered_map<std::wstring, Texture> texturs;

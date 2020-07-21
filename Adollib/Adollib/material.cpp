@@ -50,18 +50,18 @@ namespace Adollib {
 						frame = 0;
 						mesh.skeletalAnimation.at(animeIndex).animation_tick = 0;
 					}
-					vector<Mesh::bone>& skeletal = mesh.skeletalAnimation.at(animeIndex).at(frame);
+					std::vector<Mesh::bone>& skeletal = mesh.skeletalAnimation.at(animeIndex).at(frame);
 					size_t number_of_bones = skeletal.size();
 					_ASSERT_EXPR(number_of_bones < MAX_BONES, L"'the number_of_bones' exceeds MAX_BONES.");
 					for (size_t i = 0; i < number_of_bones; i++)
 					{
-						XMStoreFloat4x4(&cb.boneTransforms[i], XMLoadFloat4x4(&skeletal.at(i).transform));
+						XMStoreFloat4x4(&cb.boneTransforms[i], DirectX::XMLoadFloat4x4(&skeletal.at(i).transform));
 					}
 					mesh.skeletalAnimation.at(animeIndex).animation_tick += 1;
 				}
 				// specular
 				cb.shininess = 1;
-				cb.ambientColor = XMFLOAT4(0.1f, 0.1f, 0.1f, 1);
+				cb.ambientColor = DirectX::XMFLOAT4(0.1f, 0.1f, 0.1f, 1);
 				cb.materialColor = color.get_XM4();
 			}
 			Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);

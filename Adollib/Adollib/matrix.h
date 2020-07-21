@@ -61,6 +61,8 @@ namespace Adollib {
 		matrix& operator*= (const matrix& M);
 		matrix& operator*= (float S);
 		matrix& operator/= (float S);	
+		bool operator== (const matrix& M);
+		bool operator!= (const matrix& M);
 
 		friend matrix operator*(float S, const matrix& M);
 
