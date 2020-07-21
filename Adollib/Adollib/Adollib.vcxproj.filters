@@ -151,9 +151,6 @@
     <ClCompile Include="resource_manager.cpp">
       <Filter>Adollib\main</Filter>
     </ClCompile>
-    <ClCompile Include="physics_function.cpp">
-      <Filter>Adollib\math\physics</Filter>
-    </ClCompile>
     <ClCompile Include="closest_func.cpp">
       <Filter>Adollib\math</Filter>
     </ClCompile>
@@ -162,6 +159,21 @@
     </ClCompile>
     <ClCompile Include="compute_shader.cpp">
       <Filter>Adollib\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="DefaultShader\thread_manager.cpp">
+      <Filter>Adollib\main</Filter>
+    </ClCompile>
+    <ClCompile Include="ALP_boardphase.cpp">
+      <Filter>Adollib\math\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="ALP_generate_contact.cpp">
+      <Filter>Adollib\math\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="ALP_resolve_contact.cpp">
+      <Filter>Adollib\math\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="ALP_integrate.cpp">
+      <Filter>Adollib\math\physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -306,9 +318,6 @@
     <ClInclude Include="resource_manager.h">
       <Filter>Adollib\main</Filter>
     </ClInclude>
-    <ClInclude Include="physics_function.h">
-      <Filter>Adollib\math\physics</Filter>
-    </ClInclude>
     <ClInclude Include="physics_global.h">
       <Filter>Adollib\math\physics</Filter>
     </ClInclude>
@@ -323,6 +332,24 @@
     </ClInclude>
     <ClInclude Include="compute_shader.h">
       <Filter>Adollib\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="DefaultShader\thread_manager.h">
+      <Filter>Adollib\main</Filter>
+    </ClInclude>
+    <ClInclude Include="ALP_boardphase.h">
+      <Filter>Adollib\math\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="ALP_generate_contact.h">
+      <Filter>Adollib\math\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="ALP_resolve_contact.h">
+      <Filter>Adollib\math\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="ALP_integrate.h">
+      <Filter>Adollib\math\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="ALP_physics_function.h">
+      <Filter>Adollib\math\physics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

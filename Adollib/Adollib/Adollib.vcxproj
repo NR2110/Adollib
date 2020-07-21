@@ -148,6 +148,10 @@
     <ClInclude Include="..\Scripts\player.h" />
     <ClInclude Include="..\Scripts\scene_game_all.h" />
     <ClInclude Include="Adollib.h" />
+    <ClInclude Include="ALP_boardphase.h" />
+    <ClInclude Include="ALP_generate_contact.h" />
+    <ClInclude Include="ALP_integrate.h" />
+    <ClInclude Include="ALP_resolve_contact.h" />
     <ClInclude Include="cbuffer_manager.h" />
     <ClInclude Include="closest_func.h" />
     <ClInclude Include="complex.h">
@@ -159,6 +163,7 @@
     <ClInclude Include="component_light.h" />
     <ClInclude Include="compute_shader.h" />
     <ClInclude Include="contact.h" />
+    <ClInclude Include="DefaultShader\thread_manager.h" />
     <ClInclude Include="frustum_culling.h" />
     <ClInclude Include="gameobject.h" />
     <ClInclude Include="gameobject_camera.h" />
@@ -174,7 +179,7 @@
     <ClInclude Include="mesh.h" />
     <ClInclude Include="misc.h" />
     <ClInclude Include="object.h" />
-    <ClInclude Include="physics_function.h" />
+    <ClInclude Include="ALP_physics_function.h" />
     <ClInclude Include="physics_global.h" />
     <ClInclude Include="quaternion.h" />
     <ClInclude Include="resource_manager.h" />
@@ -205,6 +210,10 @@
     <ClCompile Include="..\Scripts\object_rotate.cpp" />
     <ClCompile Include="..\Scripts\player.cpp" />
     <ClCompile Include="Adollib.cpp" />
+    <ClCompile Include="ALP_boardphase.cpp" />
+    <ClCompile Include="ALP_generate_contact.cpp" />
+    <ClCompile Include="ALP_integrate.cpp" />
+    <ClCompile Include="ALP_resolve_contact.cpp" />
     <ClCompile Include="closest_func.cpp" />
     <ClCompile Include="complex.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -212,6 +221,7 @@
     </ClCompile>
     <ClCompile Include="compute_shader.cpp" />
     <ClCompile Include="contact.cpp" />
+    <ClCompile Include="DefaultShader\thread_manager.cpp" />
     <ClCompile Include="frustum_culling.cpp" />
     <ClCompile Include="gameobject.cpp" />
     <ClCompile Include="gameobject_camera.cpp" />
@@ -224,7 +234,6 @@
     <ClCompile Include="material_for_collider.cpp" />
     <ClCompile Include="matrix.cpp" />
     <ClCompile Include="mesh.cpp" />
-    <ClCompile Include="physics_function.cpp" />
     <ClCompile Include="quaternion.cpp" />
     <ClCompile Include="resource_manager.cpp" />
     <ClCompile Include="rigit_body.cpp" />
