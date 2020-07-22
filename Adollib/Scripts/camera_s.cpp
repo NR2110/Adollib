@@ -107,8 +107,8 @@ namespace Adollib
 
 		if (input->getKeyTrigger(Key::P))
 			set_carsol_stop == true ?
-			set_carsol_stop = false, input->setCursorPos(Al_Global::SCREEN_WIDTH / 2, Al_Global::SCREEN_HEIGHT / 2) :
-			set_carsol_stop = true, input->setCursorPos(Al_Global::SCREEN_WIDTH / 2, Al_Global::SCREEN_HEIGHT / 2);
+			(set_carsol_stop = false, input->setCursorPos(Al_Global::SCREEN_WIDTH / 2, Al_Global::SCREEN_HEIGHT / 2) ):
+			(set_carsol_stop = true, input->setCursorPos(Al_Global::SCREEN_WIDTH / 2, Al_Global::SCREEN_HEIGHT / 2));
 		if (input->getKeyTrigger(Key::Q))
 			set_c_player_pos == true ?
 			set_c_player_pos = false :

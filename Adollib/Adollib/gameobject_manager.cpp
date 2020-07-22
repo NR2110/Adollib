@@ -9,6 +9,8 @@
 #include "light_types.h"
 #include "frustum_culling.h"
 
+#include <future>
+
 namespace Adollib {
 
 	std::map<Scenelist, std::list<std::shared_ptr<Gameobject>>> Gameobject_manager::gameobjects;
@@ -16,6 +18,9 @@ namespace Adollib {
 	std::map<Scenelist, std::list<std::shared_ptr<Camera>>> Gameobject_manager::cameras;
 	std::vector<object*> Gameobject_manager::masters; //GO親子ツリーの頂点を保存
 	std::vector<object*> Gameobject_manager::gos;     //GOを1つの配列に保存
+
+	std::thread Gameobject_manager::physics_thread;
+	bool Gameobject_manager::physics_thread_finish = true;
 
 	ComPtr<ID3D11Buffer> Gameobject_manager::light_cb;
 	ComPtr<ID3D11Buffer> Gameobject_manager::view_cb;
@@ -98,6 +103,7 @@ namespace Adollib {
 				itr->get()->co_e.orient = quaternion_identity();
 			}
 		}
+
 		{
 			//light
 			std::list<std::shared_ptr<Light>>::iterator itr = lights[Sce].begin();
@@ -136,6 +142,20 @@ namespace Adollib {
 		for (int i = 0; i < masters.size(); i++) {
 			masters[i]->update_P_to_C();
 		}
+
+		// multi thread....?
+		//static std::future<bool> ret;
+		//static bool RRR = true;
+		//if (RRR == true)
+		//ret = std::async(std::launch::async, Rigitbody_manager::update, Scene::now_scene);
+		//RRR = ret.get();
+
+		//if (Rigitbody_manager::update_finish == true){
+		//	physics_thread = std::move(std::thread(Rigitbody_manager::update, Scene::now_scene));
+		//	Rigitbody_manager::update_finish = false;
+		//	physics_thread.join();
+		//}
+
 		Rigitbody_manager::update();
 
 		{

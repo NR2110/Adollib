@@ -1,6 +1,4 @@
 #pragma once
-
-#include <map>
 #include "gameobject.h"
 #include "gameobject_light.h"
 #include "gameobject_camera.h"
@@ -10,6 +8,10 @@
 
 #include <d3d11.h>
 #include <WRL.h>
+#include <iostream>
+#include <thread>
+#include <mutex>
+#include <map>
 
 
 namespace Adollib {
@@ -36,6 +38,9 @@ namespace Adollib {
 
 		static std::vector<object*> masters; //GO親子ツリーの頂点を保存
 		static std::vector<object*> gos;	  //GOを1つの配列に保存
+
+		static std::thread physics_thread;
+		static bool physics_thread_finish;
 
 	public:
 		//実体はすべてここで保存する

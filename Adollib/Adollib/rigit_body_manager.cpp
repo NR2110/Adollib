@@ -4,7 +4,7 @@
 #include "scene.h"
 #include "Adollib.h"
 
-#include "ALP_physics_function.h"
+#include "ALP__physics_function.h"
 
 using namespace Adollib;
 using namespace Contacts;
@@ -14,14 +14,18 @@ using namespace physics_function;
 
 namespace Adollib
 {
+
 	std::map<Scenelist, std::vector<Adollib::Plane*>>  Rigitbody_manager::RB_plane_s;
 	std::map<Scenelist, std::vector<Adollib::Box*>> Rigitbody_manager::RB_box_s;
 	std::map<Scenelist, std::vector<Adollib::Sphere*>>Rigitbody_manager::RB_sphere_s;
 
 	std::vector<Contacts::Contact_pair> Rigitbody_manager::pairs;
 
-	void Rigitbody_manager::update(Scenelist Sce)
+	bool Rigitbody_manager::update_finish = true;
+
+	bool Rigitbody_manager::update(Scenelist Sce)
 	{
+		update_finish = false;
 		//DBUG : 衝突点の表示の生成 ::::::::::
 		//static bool init = true;
 		//static Gameobject* S[10][4][2];
@@ -46,7 +50,7 @@ namespace Adollib
 		std::vector<Contact> contacts;
 		float resituation = Al_Global::base_resituation;
 		int object_num = RB_sphere_s[Sce].size() + RB_box_s[Sce].size() + RB_plane_s[Sce].size();
-		if (object_num == 0)return;
+		if (object_num == 0)return false;
 
 		std::vector<Collider*> colls;		//簡単にするために一つの配列にまとめる
 
@@ -78,7 +82,7 @@ namespace Adollib
 		applyexternalforce(colls);
 
 		// 大雑把な当たり判定
-		Boardphase(colls, pairs);
+		Broadphase(colls, pairs);
 
 		// 衝突生成
 		generate_contact(pairs);
@@ -86,7 +90,7 @@ namespace Adollib
 		// 衝突解決
 		resolve_contact(colls, pairs);
 
-		 //位置の更新
+		//位置の更新
 		integrate(colls);
 
 		////DBUG : 衝突点の表示 ::::::
@@ -96,7 +100,7 @@ namespace Adollib
 		//		S[p][i][1]->set_active(false);
 		//	}
 		//}
- 	//		for (int p = 0; p < pairs.size() &&  p < 10; p++) {
+	//		for (int p = 0; p < pairs.size() &&  p < 10; p++) {
 		//	for (int i = 0; i < pairs[p].contacts.contact_num; i++) {
 
 		//		S[p][i][0]->set_active(true);
@@ -114,6 +118,10 @@ namespace Adollib
 			//colliderの影響をアタッチされたgoへ
 			colls[i]->resolve_gameobject();
 		}
+
+		update_finish = true;
+		return true;
+
 	}
 
 

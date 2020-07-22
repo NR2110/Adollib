@@ -160,12 +160,6 @@
     <ClCompile Include="compute_shader.cpp">
       <Filter>Adollib\shader</Filter>
     </ClCompile>
-    <ClCompile Include="DefaultShader\thread_manager.cpp">
-      <Filter>Adollib\main</Filter>
-    </ClCompile>
-    <ClCompile Include="ALP_boardphase.cpp">
-      <Filter>Adollib\math\physics</Filter>
-    </ClCompile>
     <ClCompile Include="ALP_generate_contact.cpp">
       <Filter>Adollib\math\physics</Filter>
     </ClCompile>
@@ -173,6 +167,12 @@
       <Filter>Adollib\math\physics</Filter>
     </ClCompile>
     <ClCompile Include="ALP_integrate.cpp">
+      <Filter>Adollib\math\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="thread_manager.cpp">
+      <Filter>Adollib\main</Filter>
+    </ClCompile>
+    <ClCompile Include="ALP_broadphase.cpp">
       <Filter>Adollib\math\physics</Filter>
     </ClCompile>
   </ItemGroup>
@@ -333,12 +333,6 @@
     <ClInclude Include="compute_shader.h">
       <Filter>Adollib\shader</Filter>
     </ClInclude>
-    <ClInclude Include="DefaultShader\thread_manager.h">
-      <Filter>Adollib\main</Filter>
-    </ClInclude>
-    <ClInclude Include="ALP_boardphase.h">
-      <Filter>Adollib\math\physics</Filter>
-    </ClInclude>
     <ClInclude Include="ALP_generate_contact.h">
       <Filter>Adollib\math\physics</Filter>
     </ClInclude>
@@ -348,7 +342,13 @@
     <ClInclude Include="ALP_integrate.h">
       <Filter>Adollib\math\physics</Filter>
     </ClInclude>
-    <ClInclude Include="ALP_physics_function.h">
+    <ClInclude Include="ALP__physics_function.h">
+      <Filter>Adollib\math\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="thread_manager.h">
+      <Filter>Adollib\main</Filter>
+    </ClInclude>
+    <ClInclude Include="ALP_broadphase.h">
       <Filter>Adollib\math\physics</Filter>
     </ClInclude>
   </ItemGroup>

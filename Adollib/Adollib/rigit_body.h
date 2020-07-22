@@ -69,13 +69,12 @@ namespace Adollib {
 
 		vector3 accumulated_torque = vector3(); //Šp‰ñ“]‚É‰Á‚¦‚é—Í
 
-		Collider::Collider() :
+		Collider() :
 			local_position(0, 0, 0), local_orientation(0, 0, 0, 1),
 			linear_velocity(0, 0, 0), angular_velocity(0, 0, 0),
 			inertial_mass(1), accumulated_force(0, 0, 0),
-			accumulated_torque(0, 0, 0)
+			accumulated_torque(0, 0, 0), solve(nullptr)
 		{
-			//inertial_tensor = ();
 		}
 
 		//ŠO—Í‚ÌXV
