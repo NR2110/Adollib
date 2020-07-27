@@ -387,6 +387,7 @@ DirectX::XMFLOAT4 vector4::get_XM4() {
 }
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+
 float vector4::norm_sqr() const {
 	float S = norm();
 	if (S == 1.0f) return 1.0f;

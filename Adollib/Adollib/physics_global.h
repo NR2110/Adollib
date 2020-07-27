@@ -17,7 +17,7 @@ namespace Adollib {
 		static constexpr float bias = 0.1; //ŠÑ’Ê‰ğŒˆ‚Ég—p‚·‚é‚Î‚Ë‚Ì‹­‚³
 		static constexpr float slop = 0.005f; //ŠÑ’Ê‚Ì‹–—eŒë·
 
-		static float timeStep = 0.004; //delta time‚à‚Ç‚« ‚Æ‚è‚ ‚¦‚¸eplision_time
+		static float timeStep = 0.016; //delta time‚à‚Ç‚« ‚Æ‚è‚ ‚¦‚¸eplision_time
 	}
 
 }
