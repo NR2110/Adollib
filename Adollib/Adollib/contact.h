@@ -74,6 +74,7 @@ namespace Adollib {
 				const vector3& pointB,
 				const quaternion& rotB
 			);
+
 		private:
 			//:::::::::
 			// addcontact‚ÅŽg—p

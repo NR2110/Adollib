@@ -14,8 +14,15 @@ Usage:
 #include <time.h>
 #include <immintrin.h>
 
+//::::::::::::::::::::::
+// int simd : CPUの種類?
+// int n :　サイズ
+// const float* a : ベクトル1
+// const float* b : ベクトル2
+//::::::::::::::::::::::
 static float sdot(int simd, int n, const float* a, const float* b)
 {
+
 	int    ne = 0;
 	float  sum = 0;
 
@@ -73,6 +80,7 @@ int main__mm(int argc, char** argv)
 	float* a, * b;
 
 	// arguments
+	//CPUの種類によっていろいろ変える
 	if (argc >= 3) {
 		n = atoi(argv[1]);
 		nloop = atoi(argv[2]);
@@ -86,16 +94,16 @@ int main__mm(int argc, char** argv)
 		}
 	}
 
-	// alloc
+	// a,bをアライメントし、効率を上げる
 	if (simd == 1) {
 		size = ((n + 3) / 4) * 4 * sizeof(float);
-		a = (float*)_mm_malloc(size, 16);
-		b = (float*)_mm_malloc(size, 16);
+		a = (float*)_mm_malloc(size, 16); //size : 確保するメモリサイズ 
+		b = (float*)_mm_malloc(size, 16); //16 : アライメントの倍数
 	}
 	else if (simd == 2) {
 		size = ((n + 7) / 8) * 8 * sizeof(float);
-		a = (float*)_mm_malloc(size, 32);
-		b = (float*)_mm_malloc(size, 32);
+		a = (float*)_mm_malloc(size, 32); //size : 確保するメモリサ
+		b = (float*)_mm_malloc(size, 32); //32 : アライメントの倍数
 	}
 	else {
 		size = n * sizeof(float);
@@ -127,7 +135,7 @@ int main__mm(int argc, char** argv)
 	printf("n=%d, nloop=%d, dot=%.6e(%.6e), cpu[sec]=%.3f\n",
 		n, nloop, sum, exact, cpu);
 
-	// free
+	// アライメントしたメモリの解放処理
 	if (simd) {
 		_mm_free(a);
 		_mm_free(b);

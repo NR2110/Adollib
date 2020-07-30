@@ -1,6 +1,7 @@
 #pragma once
 
 #include <DirectXMath.h>
+#include <immintrin.h>
 
 namespace Adollib {
 
@@ -10,13 +11,14 @@ namespace Adollib {
 	class vector3 {
 
 	public:
-		float x;
-		float y;
-		float z;
+		struct {
+			float x;
+			float y;
+			float z;
+		};
+
 
 	private:
-		// ”ñconst‚ÌŒvZ‚µ‚½‚ç•ÏX‚ª‚ ‚é‚Ü‚Åsqrt‚ğg‚í‚È‚­‚ÄÏ‚Ş
-		//float normed;
 	public:
 		vector3() :x(0), y(0), z(0) {};
 		vector3(float x, float y, float z) :x(x), y(y), z(z) {};
