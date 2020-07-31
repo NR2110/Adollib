@@ -2,8 +2,12 @@
 
 #include <DirectXMath.h>
 #include <immintrin.h>
+#include <math.h>
+#include "math_e.h"
 
 namespace Adollib {
+
+	class quaternion;
 
 	//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     #pragma region vector3
@@ -209,3 +213,7 @@ namespace Adollib {
 	//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 }
+
+
+
+#include "vector_e.h"

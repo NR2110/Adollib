@@ -169,6 +169,7 @@
     <ClInclude Include="component_light.h" />
     <ClInclude Include="compute_shader.h" />
     <ClInclude Include="contact.h" />
+    <ClInclude Include="DOP.h" />
     <ClInclude Include="frustum_culling.h" />
     <ClInclude Include="gameobject.h" />
     <ClInclude Include="gameobject_camera.h" />
@@ -180,13 +181,16 @@
     <ClInclude Include="material.h" />
     <ClInclude Include="material_for_collider.h" />
     <ClInclude Include="math.h" />
+    <ClInclude Include="math_e.h" />
     <ClInclude Include="matrix.h" />
+    <ClInclude Include="matrix_e.h" />
     <ClInclude Include="mesh.h" />
     <ClInclude Include="misc.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="ALP__physics_function.h" />
     <ClInclude Include="physics_global.h" />
     <ClInclude Include="quaternion.h" />
+    <ClInclude Include="quaternion_e.h" />
     <ClInclude Include="resource_manager.h" />
     <ClInclude Include="rigit_body.h" />
     <ClInclude Include="rigit_body_manager.h" />
@@ -205,6 +209,7 @@
     <ClInclude Include="time.h" />
     <ClInclude Include="transform.h" />
     <ClInclude Include="vector.h" />
+    <ClInclude Include="vector_e.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Scripts\camera_manager.cpp" />
@@ -237,9 +242,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="material.cpp" />
     <ClCompile Include="material_for_collider.cpp" />
-    <ClCompile Include="matrix.cpp" />
     <ClCompile Include="mesh.cpp" />
-    <ClCompile Include="quaternion.cpp" />
     <ClCompile Include="resource_manager.cpp" />
     <ClCompile Include="rigit_body.cpp" />
     <ClCompile Include="rigit_body_manager.cpp" />
@@ -252,7 +255,6 @@
     <ClCompile Include="systems.cpp" />
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="thread_manager.cpp" />
-    <ClCompile Include="vector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DefaultShader\default.hlsli">

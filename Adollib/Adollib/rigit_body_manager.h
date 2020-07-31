@@ -20,8 +20,6 @@ namespace Adollib
 		static std::vector<Contacts::Contact_pair> pairs;
 
 	public:
-		static bool update_finish;
-
 		//No_hit_tag‚É"all"‚ª‚ ‚é‚Æ‚·‚×‚Ä‚Ì‚à‚Ì‚ÉÕ“Ë‚µ‚È‚­‚È‚é‚æ
 		static void set_rigitbody(Adollib::Sphere* R, Gameobject* for_draw, std::string tag, std::vector<std::string> No_hit_tag = std::vector<std::string>(), Scenelist Sce = Scene::now_scene);
 		//No_hit_tag‚É"all"‚ª‚ ‚é‚Æ‚·‚×‚Ä‚Ì‚à‚Ì‚ÉÕ“Ë‚µ‚È‚­‚È‚é‚æ

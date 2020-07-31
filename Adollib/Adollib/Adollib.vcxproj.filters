@@ -61,15 +61,6 @@
     <ClCompile Include="systems.cpp">
       <Filter>Adollib\main</Filter>
     </ClCompile>
-    <ClCompile Include="vector.cpp">
-      <Filter>Adollib\math</Filter>
-    </ClCompile>
-    <ClCompile Include="quaternion.cpp">
-      <Filter>Adollib\math</Filter>
-    </ClCompile>
-    <ClCompile Include="matrix.cpp">
-      <Filter>Adollib\math</Filter>
-    </ClCompile>
     <ClCompile Include="complex.cpp">
       <Filter>Adollib\math</Filter>
     </ClCompile>
@@ -350,6 +341,21 @@
     </ClInclude>
     <ClInclude Include="ALP_broadphase.h">
       <Filter>Adollib\math\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="matrix_e.h">
+      <Filter>Adollib\math</Filter>
+    </ClInclude>
+    <ClInclude Include="vector_e.h">
+      <Filter>Adollib\math</Filter>
+    </ClInclude>
+    <ClInclude Include="quaternion_e.h">
+      <Filter>Adollib\math</Filter>
+    </ClInclude>
+    <ClInclude Include="math_e.h">
+      <Filter>Adollib\math</Filter>
+    </ClInclude>
+    <ClInclude Include="DOP.h">
+      <Filter>Adollib\math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

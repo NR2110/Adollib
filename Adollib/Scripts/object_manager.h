@@ -8,6 +8,8 @@ namespace Adollib
 	class object_manager : public Component
 	{
 	private:
+		std::vector<Box*> boxes;
+		std::vector<Box>  st_box;
 
 	public:
 		Sphere* set_sphere(vector3 pos, float r, vector3 color = vector3(1, 1, 1));

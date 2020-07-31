@@ -1,9 +1,11 @@
 #pragma once
 
-#include "vector.h"
 #include <DirectXMath.h>
 
 namespace Adollib {
+
+	class vector3;
+
 	class matrix {
 	public:
 
@@ -77,27 +79,6 @@ namespace Adollib {
 		DirectX::XMFLOAT4X4 get_XMFLOAT4X4();
 
 	private:
-		/*
-		//float* matrix_to_array(const matrix& M) const {
-		//	float R[4][4] = { 0 };
-		//	R[0][0] = M._11;	R[0][1] = M._12;	R[0][2] = M._13;	 R[0][3] = M._14;
-		//	R[1][0] = M._21;	R[1][1] = M._22;	R[1][2] = M._23;	 R[1][3] = M._24;
-		//	R[2][0] = M._31;	R[2][1] = M._32;	R[2][2] = M._33;	 R[2][3] = M._34;
-		//	R[3][0] = M._41;	R[3][1] = M._42;	R[3][2] = M._43;	 R[3][3] = M._44;
-
-		//	return &R[0][0];
-		//};
-
-		//matrix array_to_matrix(const float S[4][4]) const {
-		//	matrix R;
-		//	R._11 = S[0][0];	R._12 = S[0][1];	R._13 = S[0][2];	R._14 = S[0][3];
-		//	R._21 = S[1][0];	R._22 = S[1][1];	R._23 = S[1][2];	R._24 = S[1][3];
-		//	R._31 = S[2][0];	R._32 = S[2][1];	R._33 = S[2][2];	R._34 = S[2][3];
-		//	R._41 = S[3][0];	R._42 = S[3][1];	R._43 = S[3][2];	R._44 = S[3][3];
-
-		//	return R;
-		//};
-		//*/
 
 	};
 
@@ -134,4 +115,4 @@ namespace Adollib {
 
 }
 
-//typedef Adollib::matrix matrix;
+#include "matrix_e.h"

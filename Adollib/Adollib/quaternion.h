@@ -1,10 +1,11 @@
 #pragma once
 
 #include <DirectXMath.h>
-#include "vector.h"
-#include "matrix.h"
 
 namespace Adollib {
+
+	class vector3;
+	class matrix;
 
 	class quaternion {
 	public:
@@ -119,4 +120,4 @@ namespace Adollib {
 	float quaternion_radian(const quaternion& Q, const quaternion& T);
 };
 
-//typedef Adollib::quaternion quaternion;
+#include "quaternion_e.h"

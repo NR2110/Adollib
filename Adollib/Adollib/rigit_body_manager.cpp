@@ -21,11 +21,10 @@ namespace Adollib
 
 	std::vector<Contacts::Contact_pair> Rigitbody_manager::pairs;
 
-	bool Rigitbody_manager::update_finish = true;
-
 	bool Rigitbody_manager::update(Scenelist Sce)
 	{
-		update_finish = false;
+		physics_function::timeStep = Al_Global::elapsed_time * 0.0001f;
+
 		//DBUG : Õ“Ë“_‚Ì•\Ž¦‚Ì¶¬ ::::::::::
 		//static bool init = true;
 		//static Gameobject* S[10][4][2];
@@ -119,7 +118,6 @@ namespace Adollib
 			colls[i]->resolve_gameobject();
 		}
 
-		update_finish = true;
 		return true;
 
 	}

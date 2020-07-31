@@ -154,6 +154,7 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 			// çXêVÅEï`âÊ
 			loop.Update(hwnd, Al_Global::SCREEN_WIDTH, Al_Global::SCREEN_HEIGHT);
 			loop.Render();
+
 		}
 	}
 

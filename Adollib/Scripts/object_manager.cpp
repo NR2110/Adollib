@@ -66,25 +66,27 @@ namespace Adollib
 
 		}
 
-		int max_c = 10;
-		for (int i = 0; i < max_c; i++) {
+		//int max_c = 10;
+		//for (int i = 0; i < max_c; i++) {
 
-			for (int o = 0; o < max_c - i; o++) {
-				set_fall_box(vector3(2.00001 * o - (max_c - i) * 2.000001 / 2.0, 1.0 + 2.00001 * i, 0), vector3(1, 1, 1), vector3(0, 0, 0), vector3(0, 1, 1));
-			}
+		//	for (int o = 0; o < max_c - i; o++) {
+		//		//set_fall_box(vector3(2.00001 * o - (max_c - i) * 2.000001 / 2.0, 1.0 + 2.00001 * i, 0), vector3(1, 1, 1), vector3(0, 0, 0), vector3(0, 1, 1));
+		//		Box* V = set_fall_box(vector3(2.50001 * o - (max_c - i) * 2.500001 / 2.0, 5.0 + 2.50001 * i, 0), vector3(1, 1, 1), vector3(30, 0, 30), vector3(0, 1, 1));
+		//		boxes.emplace_back(V);
+		//		st_box.emplace_back(*V);
+		//	}
 
-			//set_fall_sphere(vector3(i * 0.01, 20 + 10 * i, i * 0.01), 2, vector3(0, 1, 1));
-			//set_fall_sphere(vector3(5, 5 + 10 * i, i * 0.01), 2, vector3(0, 1, 1));
-			//set_fall_sphere(vector3(5, 5 + 10 * i, 5), 2, vector3(0, 1, 1));
-			//set_fall_sphere(vector3(i * 0.01, 20 + 10 * i, 5), 2, vector3(0, 1, 1));
+		//	//set_fall_sphere(vector3(i * 0.01, 20 + 10 * i, i * 0.01), 2, vector3(0, 1, 1));
+		//	//set_fall_sphere(vector3(5, 5 + 10 * i, i * 0.01), 2, vector3(0, 1, 1));
+		//	//set_fall_sphere(vector3(5, 5 + 10 * i, 5), 2, vector3(0, 1, 1));
+		//	//set_fall_sphere(vector3(i * 0.01, 20 + 10 * i, 5), 2, vector3(0, 1, 1));
 
-			//set_fall_sphere(vector3(0, 5 + 10 * i, 0), 2, vector3(0, 1, 1));
-			//set_fall_sphere(vector3(5, 5 + 10 * i, 0), 2, vector3(0, 1, 1));
-			//set_fall_sphere(vector3(5, 5 + 10 * i, 5), 2, vector3(0, 1, 1));
-			//set_fall_sphere(vector3(0, 5 + 10 * i, 5), 2, vector3(0, 1, 1));
+		//	//set_fall_sphere(vector3(0, 5 + 10 * i, 0), 2, vector3(0, 1, 1));
+		//	//set_fall_sphere(vector3(5, 5 + 10 * i, 0), 2, vector3(0, 1, 1));
+		//	//set_fall_sphere(vector3(5, 5 + 10 * i, 5), 2, vector3(0, 1, 1));
+		//	//set_fall_sphere(vector3(0, 5 + 10 * i, 5), 2, vector3(0, 1, 1));
 
-
-		}
+		//}
 
 		//set_fall_box(vector3(0, 20, 0), vector3(3, 3, 3), vector3(45, 0, 0), vector3(0, 1, 1));
 
@@ -105,21 +107,30 @@ namespace Adollib
 	// 毎フレーム呼ばれる更新処理
 	void object_manager::update()
 	{
-		vector3 A = vector3(200, 0, 5);
-		vector3 Av = vector3(1, 0, 0);
+		if (input->getKeyTrigger(Key::M)) {
+			int max_c = 10;
+			for (int i = 0; i < max_c; i++) {
 
-		vector3 B = vector3(0, 1, 0);
-		vector3 Bv = vector3(0, -1, 0);
+				for (int o = 0; o < max_c - i; o++) {
+					set_fall_box(vector3(2.00001 * o - (max_c - i) * 2.000001 / 2.0, 1.0 + 2.00001 * i, 0), vector3(1, 1, 1), vector3(0, 0, 0), vector3(0, 1, 1));
+					//Box* V = set_fall_box(vector3(2.50001 * o - (max_c - i) * 2.500001 / 2.0, 5.0 + 2.50001 * i, 0), vector3(1, 1, 1), vector3(30, 0, 30), vector3(0, 1, 1));
+					//boxes.emplace_back(V);
+					//st_box.emplace_back(*V);
+				}
 
-		float s, t;
-		Closest_func::get_closestP_two_line(
-			A,Av,
-			B,Bv,
-			s, t
-		);
+				//set_fall_sphere(vector3(i * 0.01, 20 + 10 * i, i * 0.01), 2, vector3(0, 1, 1));
+				//set_fall_sphere(vector3(5, 5 + 10 * i, i * 0.01), 2, vector3(0, 1, 1));
+				//set_fall_sphere(vector3(5, 5 + 10 * i, 5), 2, vector3(0, 1, 1));
+				//set_fall_sphere(vector3(i * 0.01, 20 + 10 * i, 5), 2, vector3(0, 1, 1));
 
-		A += Av * s;
-		B += Bv * t;
+				//set_fall_sphere(vector3(0, 5 + 10 * i, 0), 2, vector3(0, 1, 1));
+				//set_fall_sphere(vector3(5, 5 + 10 * i, 0), 2, vector3(0, 1, 1));
+				//set_fall_sphere(vector3(5, 5 + 10 * i, 5), 2, vector3(0, 1, 1));
+				//set_fall_sphere(vector3(0, 5 + 10 * i, 5), 2, vector3(0, 1, 1));
+
+			}
+		}
+
 	}
 
 	// このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる
