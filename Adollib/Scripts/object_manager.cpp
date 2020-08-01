@@ -119,7 +119,7 @@ namespace Adollib
 	{
 		if (input->getKeyTrigger(Key::M)) {
 			int max_c = 5;
-			int num = 0;
+			int num = 1;
 
 			if(num == 0) //ピラミッド
 			for (int i = 0; i < max_c; i++) {
@@ -138,7 +138,7 @@ namespace Adollib
 
 				}
 
-			if (num == 1) //混合ピラミッド
+			if (num == 2) //混合ピラミッド
 				for (int i = 0; i < max_c; i++) {
 					for (int o = 0; o < max_c - i; o++) {
 						if ((i + o) % 2 == 0)

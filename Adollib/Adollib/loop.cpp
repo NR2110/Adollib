@@ -30,7 +30,7 @@ void loop::Render(){
 	go_manager.render();
 	
 
-	Systems::Flip();
+	//Systems::Flip();
 
 }
 

@@ -44,6 +44,9 @@
     <Filter Include="Adollib\math\physics">
       <UniqueIdentifier>{948ff940-3127-440f-a355-36b477c57395}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Adollib\imgui">
+      <UniqueIdentifier>{f686ac45-2d88-4cab-a5d5-7ca5931f6b99}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="scene_title.cpp">
@@ -165,6 +168,24 @@
     </ClCompile>
     <ClCompile Include="physics_global.cpp">
       <Filter>Adollib\math\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\imgui.cpp">
+      <Filter>Adollib\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\imgui_demo.cpp">
+      <Filter>Adollib\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\imgui_draw.cpp">
+      <Filter>Adollib\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\imgui_impl_dx11.cpp">
+      <Filter>Adollib\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\imgui_impl_win32.cpp">
+      <Filter>Adollib\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\imgui_widgets.cpp">
+      <Filter>Adollib\imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -353,6 +374,30 @@
     </ClInclude>
     <ClInclude Include="DOP.h">
       <Filter>Adollib\math\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imconfig.h">
+      <Filter>Adollib\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imgui.h">
+      <Filter>Adollib\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imgui_impl_dx11.h">
+      <Filter>Adollib\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imgui_impl_win32.h">
+      <Filter>Adollib\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imgui_internal.h">
+      <Filter>Adollib\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imstb_rectpack.h">
+      <Filter>Adollib\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imstb_textedit.h">
+      <Filter>Adollib\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imstb_truetype.h">
+      <Filter>Adollib\imgui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
