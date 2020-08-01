@@ -195,6 +195,7 @@ void main(const Input input)
         cs_out[index].accuminpulse[C_num][2]
              );
             
+        //·•ª‚ğoutput‚·‚é
         cs_out[index].accuminpulse[C_num][0] -= cs_input_pair[index].pair.contacts.c_points[C_num].constraint[0].accuminpulse;
         cs_out[index].accuminpulse[C_num][1] -= cs_input_pair[index].pair.contacts.c_points[C_num].constraint[1].accuminpulse;
         cs_out[index].accuminpulse[C_num][2] -= cs_input_pair[index].pair.contacts.c_points[C_num].constraint[2].accuminpulse;
@@ -204,6 +205,7 @@ void main(const Input input)
 
     }
     
+    //·•ª‚ğoutput‚·‚é
     cs_out[index].solverbody0.delta_LinearVelocity -= cs_input_solve[cs_input_pair[index].pair.solv_num[0]].solverbody.delta_LinearVelocity;
     cs_out[index].solverbody0.delta_AngularVelocity -= cs_input_solve[cs_input_pair[index].pair.solv_num[0]].solverbody.delta_AngularVelocity;
     cs_out[index].solverbody1.delta_LinearVelocity -= cs_input_solve[cs_input_pair[index].pair.solv_num[1]].solverbody.delta_LinearVelocity;

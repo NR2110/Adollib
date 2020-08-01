@@ -2,17 +2,18 @@
 #include "vector.h"
 
 namespace Adollib {
-	static const vector3 DOP_7_axis[7] = {
-		vector3(1,0,0),
-		vector3(0,1,0),
-		vector3(0,0,1),
-		vector3(+0.3333333,0.3333333,+0.3333333),
-		vector3(-0.3333333,0.3333333,+0.3333333),
-		vector3(+0.3333333,0.3333333,-0.3333333),
-		vector3(-0.3333333,0.3333333,-0.3333333)
-	};
 
 	static const int DOP_size = 7;
+
+	static const vector3 DOP_7_axis[DOP_size] = {
+	vector3(1,0,0),
+	vector3(0,1,0),
+	vector3(0,0,1),
+	vector3(+0.3333333,0.3333333,+0.3333333),
+	vector3(-0.3333333,0.3333333,+0.3333333),
+	vector3(+0.3333333,0.3333333,-0.3333333),
+	vector3(-0.3333333,0.3333333,-0.3333333)
+	};
 	struct DOP_7 {
 		//íÜêSç¿ïW
 		vector3 pos;
@@ -27,7 +28,7 @@ namespace Adollib {
 		// c : (1,1,-1)
 		// d : (-1,1,-1)
 		//:::::::::::::::::::
-		float max[7];
+		float max[DOP_size];
 
 		//::::::::::::::::::
 		//BoardphaseópÇÃDOP_6
@@ -39,7 +40,7 @@ namespace Adollib {
 		// c : (1,1,-1)
 		// d : (-1,1,-1)
 		//:::::::::::::::::::
-		float min[7];
+		float min[DOP_size];
 	};
 
 	struct AABB {

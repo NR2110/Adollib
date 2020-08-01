@@ -127,8 +127,8 @@ void Box::update_dop7() {
 void Sphere::update_dop7() {
 	dop7.pos = gameobject->get_world_position();	
 	for (int i = 0; i < DOP_size; i++) {
-		dop7.max[i] = r * 1.01 * world_size.x;
-		dop7.min[i] = r * 1.01 * world_size.x;
+		dop7.max[i] = +r * 1.01 * world_size.x;
+		dop7.min[i] = -r * 1.01 * world_size.x;
 	}
 }
 void Plane::update_dop7() {

@@ -42,7 +42,7 @@ namespace Adollib {
 		public:
 			int contact_num = 0;    //Õ“Ë“_‚Ì”
 			float friction;		//‚»‚ÌÕ“Ë‚Ì–€C—Í
-			Contactpoint contactpoints[Contact_max_per_pair]; //Õ“Ë“_î•ñ
+			Contactpoint contactpoints[physics_g::Contact_max_per_pair]; //Õ“Ë“_î•ñ
 
 			Contact() {
 			}
@@ -111,7 +111,7 @@ namespace Adollib {
 			//‰Šú‰»
 			void reset() {
 				contact_num = 0;
-				for (int i = 0; i < Contact_max_per_pair; i++) {
+				for (int i = 0; i < physics_g::Contact_max_per_pair; i++) {
 					contactpoints[i].reset();
 				}
 			};

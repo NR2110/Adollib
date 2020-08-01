@@ -33,6 +33,16 @@ namespace Adollib
 			Collider* R = GO->add_collider_box();
 			R->move = false;
 		}
+
+		//{
+		//	Gameobject* GO = Gameobject_manager::createSphere();
+		//	GO->transform->local_pos = vector3(0, -300, 0);
+		//	GO->transform->local_scale = vector3(300, 300, 300);
+		//	GO->material->color = vector4(1, 1, 1, 1);
+
+		//	Collider* R = GO->add_collider_sphere();
+		//	R->move = false;
+		//}
 		//{
 		//	Gameobject* GO = Gameobject_manager::createCube();
 		//	GO->transform->local_pos = vector3(0, -35, 0);
@@ -108,27 +118,62 @@ namespace Adollib
 	void object_manager::update()
 	{
 		if (input->getKeyTrigger(Key::M)) {
-			int max_c = 10;
+			int max_c = 5;
+			int num = 0;
+
+			if(num == 0) //ピラミッド
+			for (int i = 0; i < max_c; i++) {
+				for (int o = 0; o < max_c - i; o++) {
+					set_fall_box(vector3(2.00001 * o - (max_c - i) * 2.000001 / 2.0, 1.0 + 2.00001 * i, 0), vector3(1, 1, 1), vector3(0, 0, 0), vector3(0, 1, 1));
+				}
+
+			}
+
+			if(num == 1) //傾いたピラミッド
+				for (int i = 0; i < max_c; i++) {
+					for (int o = 0; o < max_c - i; o++) {
+						set_fall_box(vector3(2.50001 * o - (max_c - i) * 2.500001 / 2.0, 5.0 + 2.50001 * i, 0), vector3(1, 1, 1), vector3(30, 0, 30), vector3(0, 1, 1));
+
+					}
+
+				}
+
+			if (num == 1) //混合ピラミッド
+				for (int i = 0; i < max_c; i++) {
+					for (int o = 0; o < max_c - i; o++) {
+						if ((i + o) % 2 == 0)
+							set_fall_box(vector3(2.50001 * o - (max_c - i) * 2.500001 / 2.0, 5.0 + 2.50001 * i, 0), vector3(1, 1, 1), vector3(30, 0, 30), vector3(0, 1, 1));
+						else
+							set_fall_sphere(vector3(2.50001 * o - (max_c - i) * 2.500001 / 2.0, 5.0 + 2.50001 * i, 0), 1, vector3(0, 1, 1));
+					}
+
+				}
+		}
+
+		if (input->getKeyTrigger(Key::N)) {
+			int max_c = 5;
+			int num = 1;
+
+			if(num == 0) //ピラミッド
 			for (int i = 0; i < max_c; i++) {
 
 				for (int o = 0; o < max_c - i; o++) {
-					set_fall_box(vector3(2.00001 * o - (max_c - i) * 2.000001 / 2.0, 1.0 + 2.00001 * i, 0), vector3(1, 1, 1), vector3(0, 0, 0), vector3(0, 1, 1));
-					//Box* V = set_fall_box(vector3(2.50001 * o - (max_c - i) * 2.500001 / 2.0, 5.0 + 2.50001 * i, 0), vector3(1, 1, 1), vector3(30, 0, 30), vector3(0, 1, 1));
-					//boxes.emplace_back(V);
-					//st_box.emplace_back(*V);
+					set_fall_sphere(vector3(2.50001 * o - (max_c - i) * 2.500001 / 2.0, 5.0 + 2.50001 * i, 0), 1, vector3(0, 1, 1));
 				}
 
-				//set_fall_sphere(vector3(i * 0.01, 20 + 10 * i, i * 0.01), 2, vector3(0, 1, 1));
-				//set_fall_sphere(vector3(5, 5 + 10 * i, i * 0.01), 2, vector3(0, 1, 1));
-				//set_fall_sphere(vector3(5, 5 + 10 * i, 5), 2, vector3(0, 1, 1));
-				//set_fall_sphere(vector3(i * 0.01, 20 + 10 * i, 5), 2, vector3(0, 1, 1));
-
-				//set_fall_sphere(vector3(0, 5 + 10 * i, 0), 2, vector3(0, 1, 1));
-				//set_fall_sphere(vector3(5, 5 + 10 * i, 0), 2, vector3(0, 1, 1));
-				//set_fall_sphere(vector3(5, 5 + 10 * i, 5), 2, vector3(0, 1, 1));
-				//set_fall_sphere(vector3(0, 5 + 10 * i, 5), 2, vector3(0, 1, 1));
-
 			}
+			if (num == 1) { //平坦
+				for (int i = 0; i < max_c; i++) {
+
+					for (int o = 0; o < max_c; o++) {
+						//set_fall_box(vector3(2.00001 * o - (max_c - i) * 2.000001 / 2.0, 1.0 + 2.00001 * i, 0), vector3(1, 1, 1), vector3(0, 0, 0), vector3(0, 1, 1));
+
+						set_fall_sphere(vector3(2.50001 * i - (max_c - i) * 2.500001 / 2.0, 10, 2.50001 * o - (max_c - o) * 2.500001 / 2.0), 1, vector3(0, 1, 1));
+					}
+
+				}
+			}
+
 		}
 
 	}

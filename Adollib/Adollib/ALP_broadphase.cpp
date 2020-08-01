@@ -19,10 +19,15 @@ bool Check_insert_DOP7(const Collider* collA, const Collider* collB) {
 
 	for (int i = 0; i < DOP_size; i++) {
 		if (
-			+vector3_dot(DOP_7_axis[i], collA->dop7.pos - collB->dop7.pos) < collB->dop7.min[i] - collA->dop7.max[i] ||
-			-vector3_dot(DOP_7_axis[i], collA->dop7.pos - collB->dop7.pos) < collA->dop7.min[i] - collB->dop7.max[i]
-			)
+			vector3_dot(+DOP_7_axis[i], collA->dop7.pos - collB->dop7.pos) < collB->dop7.min[i] - collA->dop7.max[i] ||
+			vector3_dot(-DOP_7_axis[i], collA->dop7.pos - collB->dop7.pos) < collA->dop7.min[i] - collB->dop7.max[i]
+			) {
+			float AA = vector3_dot(+DOP_7_axis[i], collA->dop7.pos - collB->dop7.pos);
+			float AB = collB->dop7.min[i] - collA->dop7.max[i];
+			float BA = vector3_dot(-DOP_7_axis[i], collA->dop7.pos - collB->dop7.pos);
+			float BB = collA->dop7.min[i] - collB->dop7.max[i];
 			return false;
+		}
 	}
 
 	return true;
@@ -60,7 +65,7 @@ void add_pair(std::vector<Contacts::Contact_pair>& pairs, Contacts::Contact_pair
 	pairs.emplace_back(pair);
 }
 
-void Broadphase_DOP_8(std::vector<Contacts::Contact_pair>& new_pairs, Collider* collA, Collider* collB) {
+void Broadphase_DOP_7(std::vector<Contacts::Contact_pair>& new_pairs, Collider* collA, Collider* collB) {
 	Contact_pair new_pair;
 	// É^ÉOÇ…ÇÊÇÈè’ìÀÇÃê•îÒ
 	bool hit = true;
@@ -120,25 +125,7 @@ void physics_function::Broadphase(const std::vector<Collider*>& coll, std::vecto
 	Contact_pair new_pair;
 	for (int i = 0; i < coll.size(); i++) {
 		for (int o = i + 1; o < coll.size(); o++) {
-
-			//std::thread T(Boardphase_DOP_8, new_pairs, coll[i], coll[o]);
-
-			//int thread_num = 0;
-			//while (true) {
-			//	if (threads[thread_num].joinable() == false) {
-			//		threads[thread_num] = std::move(T);
-			//		threads[thread_num].join();
-			//		break;
-			//	}
-
-			//	thread_num++;
-			//	if (thread_num == thread_max)thread_num = 0;
-			//}
-
-			//T.join();
-			//T.detach();
-			Broadphase_DOP_8(new_pairs, coll[i], coll[o]);
-
+			Broadphase_DOP_7(new_pairs, coll[i], coll[o]);
 		}
 	}
 

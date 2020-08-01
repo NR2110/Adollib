@@ -13,7 +13,8 @@ using namespace physics_function;
 //外力による速度などの更新
 void physics_function::applyexternalforce(std::vector<Collider*>& coll) {
 	for (int i = 0; i < coll.size(); i++) {
-		coll[i]->apply_external_force(timeStep);
+		//QUESTION : 渡す値と関数内での引数が違う
+		coll[i]->apply_external_force(physics_g::timeStep);
 	}
 }
 //:::::::::::::::::::::::::::
@@ -21,7 +22,7 @@ void physics_function::applyexternalforce(std::vector<Collider*>& coll) {
 
 void physics_function::integrate(std::vector<Collider*>& coll) {
 	for (int i = 0; i < coll.size(); i++) {
-		coll[i]->integrate(timeStep);
+		coll[i]->integrate(physics_g::timeStep);
 	}
 }
 
