@@ -18,8 +18,8 @@ namespace Adollib
 	{
 		count = 0;
 		player = Gameobject_manager::find("player")->transform.get();
-		move_pow = 0.02 * Al_Global::elapsed_time ;
-		rot_pow = 0.1 * Al_Global::elapsed_time ;
+		move_pow = 0.02 * Al_Global::second_per_frame ;
+		rot_pow = 0.1 * Al_Global::second_per_frame ;
 	}
 
 	// 毎フレーム呼ばれる更新処理
@@ -40,7 +40,7 @@ namespace Adollib
 			break;
 		}
 
-		count -= Al_Global::elapsed_time;
+		count -= Al_Global::second_per_frame;
 
 	}
 

@@ -1,25 +1,36 @@
 
 #include "loop.h"
+#include "imgui_manager.h"
+
+#include "work_meter.h"
 
 using namespace Adollib;
 
-void loop::init() {
+bool loop::init(HWND hWnd) {
 
 	scene_manager.initialize();
 	go_manager.awake();
 
 	Systems::SetViewPort(Al_Global::SCREEN_WIDTH, Al_Global::SCREEN_HEIGHT);
+	Adollib::Imgui_manager::init(hWnd);
+
+	return true;
 }
 
-void loop::Update(HWND hWnd, int width, int height) {
+bool loop::Update(MSG hMsg, HWND hWnd, int width, int height) {
 
+	Work_meter::stop(std::string("render_shader"));
+	Work_meter::start(std::string("update_all"));
 	Systems::inputManager->update();
 
 	scene_manager.update();
 	go_manager.update();
+
+	Work_meter::stop(std::string("update_all"));
+	return true;
 }
 
-void loop::Render(){
+bool loop::Render(){
 
 	Systems::Clear();
 
@@ -27,15 +38,23 @@ void loop::Render(){
 	//‰½‚©‚ ‚ê‚Î“K“–‚É
 	//Systems::SetViewPort(Systems::SCREEN_WIDTH, Systems::SCREEN_HEIGHT);
 
+	Work_meter::start(std::string("render_all"));
 	go_manager.render();
-	
+	Work_meter::stop(std::string("render_all"));
 
-	//Systems::Flip();
+	Adollib::Imgui_manager::render();
 
+	Work_meter::start(std::string("render_shader"));
+	Systems::Flip();
+
+	return true;
 }
 
-void loop::destroy() {
+bool loop::destroy() {
+	Adollib::Imgui_manager::destroy();
 	for (int i = 0; i < static_cast<int>(Scenelist::scene_list_size); i++) {
 		Gameobject_manager::destroy(static_cast<Scenelist>(i));
 	}
+
+	return true;
 }

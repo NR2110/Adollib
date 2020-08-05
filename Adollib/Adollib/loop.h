@@ -8,10 +8,10 @@ namespace Adollib {
 
 	class loop {
 	public:
-		void init();
-		void Update(HWND hWnd, int width, int height);
-		void Render();
-		void destroy();
+		bool init(HWND hWnd);
+		bool Update(MSG hMsg, HWND hWnd, int width, int height);
+		bool Render();
+		bool destroy();
 
 	private:
 		Scene_manager scene_manager;

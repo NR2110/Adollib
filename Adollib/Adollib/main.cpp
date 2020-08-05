@@ -1,9 +1,5 @@
 #define _CRTDBG_MAP_ALLOC  
 
-#include "Imgui/imgui.h"
-#include "Imgui/imgui_impl_win32.h"
-#include "Imgui/imgui_impl_dx11.h"
-
 #include <stdlib.h>  
 #include <crtdbg.h> 
 
@@ -12,9 +8,15 @@
 
 #include "systems.h"
 #include "Adollib.h"
+#include "imgui_manager.h"
 #include "loop.h"
 
 #include <math.h>
+
+
+#include "Imgui/imgui.h"
+#include "Imgui/imgui_impl_win32.h"
+#include "Imgui/imgui_impl_dx11.h"
 
 using namespace Adollib;
 
@@ -126,45 +128,17 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 
 		return 0;
 	}
-	// Our state
-	bool show_demo_window = true;
-	bool show_another_window = false;
-	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
 
 	//メインループ
 	MSG hMsg = { 0 };
 	float Interval = 1.0f;
-	DWORD before = GetTickCount64();
+	LARGE_INTEGER now, before, freq;
+	QueryPerformanceCounter(&before);
 	int fps = 0;
 
 	loop loop;
 
-	loop.init();
-	// ImGui
-	{
-		// https://qiita.com/mizuma/items/73218dab2f6b022b0227#%E3%83%9C%E3%82%BF%E3%83%B3%E3%81%A8%E3%83%81%E3%82%A7%E3%83%83%E3%82%AF%E3%83%9C%E3%83%83%E3%82%AF%E3%82%B9
-		// Setup Dear ImGui context
-		IMGUI_CHECKVERSION();
-		ImGui::CreateContext();
-		ImGuiIO& io = ImGui::GetIO(); (void)io;
-		// Setup Dear ImGui style
-		ImGui::StyleColorsDark();
-		//ImGui::StyleColorsClassic();
-
-		ImGui_ImplWin32_Init(hwnd);
-		ImGui_ImplDX11_Init(Systems::Device.Get(), Systems::DeviceContext.Get());
-
-		//ImFont* font = io.Fonts->AddFontFromFileTTF("Assets/Fonts/meiryob.ttc", 21.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-
-		//ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-		//ImFont* font = io.Fonts->AddFontDefault();
-		//ImFont* font = io.Fonts->AddFontFromFileTTF("Imgui/misc/fonts/Roboto-Medium.ttf", 16.0f);
-		//ImFont* font = io.Fonts->AddFontFromFileTTF("Imgui/misc/fonts/Cousine-Regular.ttf", 15.0f);
-		//ImFont* font = io.Fonts->AddFontFromFileTTF("Imgui/misc/fonts/DroidSans.ttf", 16.0f);
-		ImFont* font = io.Fonts->AddFontFromFileTTF("Imgui/misc/fonts/ProggyTiny.ttf", 10.0f);
-		IM_ASSERT(font != NULL);
-	}
+	loop.init(hwnd);
 
 	while (hMsg.message != WM_QUIT) {
 		if (PeekMessage(&hMsg, NULL, 0, 0, PM_REMOVE))
@@ -174,13 +148,27 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 		}
 		else
 		{
-			Al_Global::elapsed_time =
-				(GetTickCount64() - before) * 0.001f;
+			if (Adollib::Imgui_manager::update(hMsg) == false) continue;
 
-			before = GetTickCount64();
+			/*LONGLONG A = GetTickCount64();
+			Al_Global::second_per_frame =
+				(A - before) * 0.001f;
+
+			if (Al_Global::second_per_frame == 0) {
+				int adfsgdhfgj = 0;
+			}
+			before = GetTickCount64();*/
+
+			QueryPerformanceCounter(&now);
+			QueryPerformanceFrequency(&freq);
+			Al_Global::second_per_frame = (float)((now.QuadPart - before.QuadPart ) * (double)1000 / freq.QuadPart) * 0.001f;
+
+			QueryPerformanceCounter(&before);
+
+			Al_Global::second_per_game += Al_Global::second_per_frame;
 			float mspf = 1000.0f / fps;
 
-			Interval -= Al_Global::elapsed_time;
+			Interval -= Al_Global::second_per_frame;
 			fps++;
 			if (Interval < 0) {
 				std::ostringstream outs;
@@ -192,78 +180,78 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 
 			}
 
-#pragma region Imgui
+			// 更新・描画
+			if (loop.Update(hMsg, hwnd, Al_Global::SCREEN_WIDTH, Al_Global::SCREEN_HEIGHT) == false)continue;
 
-			// ImGui
-			if (::PeekMessage(&hMsg, NULL, 0U, 0U, PM_REMOVE))
-			{
-				::TranslateMessage(&hMsg);
-				::DispatchMessage(&hMsg);
-				continue;
-			}
-			// Start the Dear ImGui frame
-			ImGui_ImplDX11_NewFrame();
-			ImGui_ImplWin32_NewFrame();
-			ImGui::NewFrame();
+#pragma region Imgui_demo
 
-			// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-			if (show_demo_window)
-				ImGui::ShowDemoWindow(&show_demo_window);
 			// 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
 			{
-				static float f = 0.0f;
-				static int counter = 0;
+				//static float f = 0.0f;
+				//static int counter = 0;
 
-				ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+				//static bool flags[12] = {false};
+				//ImGuiWindowFlags flag = 0;
+				//if(flags[0]) flag |=  ImGuiWindowFlags_NoTitleBar;			// タイトルバーを非表示にします。
+				//if(flags[1]) flag |=  ImGuiWindowFlags_NoResize;				// ウィンドウをリサイズ不可にします。
+				//if(flags[2]) flag |=  ImGuiWindowFlags_NoMove;				// ウィンドウを移動不可にします。
+				//if(flags[3]) flag |=  ImGuiWindowFlags_NoScrollbar;			// スクロールバーを無効にします。
+				//if(flags[4]) flag |=  ImGuiWindowFlags_NoScrollWithMouse;	// マウスホイールでのスクロール操作を無効にしま
+				//if(flags[5]) flag |=  ImGuiWindowFlags_NoCollapse;			// タイトルバーをダブルクリックして閉じる挙動を無効に
+				//if(flags[6]) flag |=  ImGuiWindowFlags_NoBackground;			// ウィンドウ内の背景を非表示にします。
+				//if(flags[7]) flag |=  ImGuiWindowFlags_NoBringToFrontOnFocus;// ウィンドウをクリックしてフォーカスした際
+				//if(flags[8]) flag |=  ImGuiWindowFlags_NoNav;				// ゲームパッドやキーボードでのUIの操作を無効にします。
+				//if(flags[9]) flag |=  ImGuiWindowFlags_NoSavedSettings;		// imgui.iniでウィンドウの位置などを自動保存/ロー
+				//if(flags[10])flag |= ImGuiWindowFlags_AlwaysAutoResize;		// 自動でウィンドウ内のコンテンツに合わせてリサ
+				//if(flags[11])flag |= ImGuiWindowFlags_NoFocusOnAppearing;	// 表示/非表示の際のトランジションアニメーショ
 
-				ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-				ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-				ImGui::Checkbox("Another Window", &show_another_window);
+				//ImGui::Begin("window setting");                          // Create a window called "Hello, world!" and append into it.
 
-				ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-				ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+				//ImGui::Text("demo");     
+				//static bool is_open = true;
+				//ImGui::Checkbox("that box", &is_open);
 
-				if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-					counter++;
-				ImGui::SameLine();
-				ImGui::Text("counter = %d", counter);
+				//ImGui::Checkbox("Imis_openFlags_NoTitleBar;			", &flags[0]);      // Edit bools storing our window open/close state
+				//ImGui::Checkbox("ImGuiWindowFlags_NoResize;				", &flags[1]);      // Edit bools storing our window open/close state
+				//ImGui::Checkbox("ImGuiWindowFlags_NoMove;				", &flags[2]);      // Edit bools storing our window open/close state
+				//ImGui::Checkbox("ImGuiWindowFlags_NoScrollbar;			", &flags[3]);      // Edit bools storing our window open/close state
+				//ImGui::Checkbox("ImGuiWindowFlags_NoScrollWithMouse;	", &flags[4]);      // Edit bools storing our window open/close state
+				//ImGui::Checkbox("ImGuiWindowFlags_NoCollapse;			", &flags[5]);      // Edit bools storing our window open/close state
+				//ImGui::Checkbox("ImGuiWindowFlags_NoBackground;			", &flags[6]);      // Edit bools storing our window open/close state
+				//ImGui::Checkbox("ImGuiWindowFlags_NoBringToFrontOnFocus;", &flags[7]);      // Edit bools storing our window open/close state
+				//ImGui::Checkbox("ImGuiWindowFlags_NoNav;				", &flags[8]);      // Edit bools storing our window open/close state
+				//ImGui::Checkbox("ImGuiWindowFlags_NoSavedSettings;		", &flags[9]);      // Edit bools storing our window open/close state
+				//ImGui::Checkbox("ImGuiWindowFlags_AlwaysAutoResize;		", &flags[10]);      // Edit bools storing our window open/close state
+				//ImGui::Checkbox("ImGuiWindowFlags_NoFocusOnAppearing;	", &flags[11]);      // Edit bools storing our window open/close state
 
-				ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-				ImGui::End();
+				//ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+				//ImGui::End();
+
+				//if (is_open) {
+				//	ImGui::Begin("Another Window", &is_open, flag);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+
+				//	static float arr[] = { 0.6f, 0.1f, 1.0f, 0.5f, 0.92f, 0.1f, 0.2f };
+				//	// 最小値 0, 最大値 1 のグラフを作成します。
+				//	// ImVec2(0,50)としていることで、幅は自動で決まり、高さは50になります。
+				//		ImGui::PlotHistogram("ヒストグラム", arr, IM_ARRAYSIZE(arr), 0, NULL, 0.0f, 1.0f, ImVec2(0, 100));
+				//			static float progress = 0.22f;
+				//	// 0 ~ 1 までの中での 0.22 が何％の位置にいるのかを表示します。
+				//	ImGui::ProgressBar(progress, ImVec2(0.0f, 0.0f));
+
+
+				//	ImGui::End();
+				//}
 			}
 
-			// 3. Show another simple window.
-			if (show_another_window)
-			{
-				ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-				ImGui::Text("Hello from another window!");
-				if (ImGui::Button("Close Me"))
-					show_another_window = false;
-				ImGui::End();
-			}
-			// Rendering
 
 #pragma endregion
-
-
-			ImGui::Render();
-
-			// 更新・描画
-			loop.Update(hwnd, Al_Global::SCREEN_WIDTH, Al_Global::SCREEN_HEIGHT);
 			loop.Render();
 
-			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-
-			Systems::Flip();
 		}
 	}
 
 	loop.destroy();
 	Systems::Release();
-
-	ImGui_ImplDX11_Shutdown();
-	ImGui_ImplWin32_Shutdown();
-	ImGui::DestroyContext();
 
 	//memory leak 221 ～ 302 は何をしても出るため無視
 	_CrtDumpMemoryLeaks();

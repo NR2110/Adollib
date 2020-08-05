@@ -9,11 +9,11 @@
 #include <memory>
 #include <map>
 #include <vector>
-#include "Adollib.h"
 #include <assert.h>
 
 #pragma comment(lib,"d3d11.lib")
 
+#include "Adollib.h"
 #include "scene.h"
 #include "input.h"
 #include "time.h"
@@ -44,6 +44,8 @@ namespace Adollib {
 		static const int BLEND_TYPE = 9; //blendstate‚ÌŽí—Þ
 		static ComPtr<ID3D11BlendState>		BlendState[BLEND_TYPE];
 		static bool CreateBlendState();
+
+		static bool CreateImgui(); //Imgui‚Ì‚½‚ß‚Ì
 
 	private:
 	public:

@@ -54,7 +54,7 @@ namespace Adollib
 		if (set_c_player_pos == false) {
 			//ƒJƒƒ‰‚Ì‰ñ“]
 			if (set_carsol_stop == false) {
-				float rotate_pow = 3 * Al_Global::elapsed_time;
+				float rotate_pow = 3 * Al_Global::second_per_frame;
 				vector3 rotate_vec = vector3(0, 0, 0);
 				rotate_vec.y = input->getCursorPosX() - Al_Global::SCREEN_WIDTH / 2;
 				rotate_vec.x = input->getCursorPosY() - Al_Global::SCREEN_HEIGHT / 2;
@@ -65,7 +65,7 @@ namespace Adollib
 				input->setCursorPos(Al_Global::SCREEN_WIDTH / 2, Al_Global::SCREEN_HEIGHT / 2);
 			}
 			else {
-				float rotate_pow = 100 * Al_Global::elapsed_time;
+				float rotate_pow = 100 * Al_Global::second_per_frame;
 				vector3 rotate_vec = vector3(0, 0, 0);
 				if (input->getKeyState(Key::I))rotate_vec += vector3(-1, 0, 0);
 				if (input->getKeyState(Key::K))rotate_vec += vector3(+1, 0, 0);
@@ -80,7 +80,7 @@ namespace Adollib
 			//ƒJƒƒ‰‚ÌˆÚ“®
 			{
 				vector3 move_vec = vector3(0, 0, 0);
-				float   move_pow = 10 * Al_Global::elapsed_time;
+				float   move_pow = 10 * Al_Global::second_per_frame;
 				if (input->getKeyState(Key::W))move_vec += vector3(0, 0, +1);
 				if (input->getKeyState(Key::S))move_vec += vector3(0, 0, -1);
 				if (input->getKeyState(Key::D))move_vec += vector3(+1, 0, 0);

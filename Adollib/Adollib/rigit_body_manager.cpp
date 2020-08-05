@@ -12,6 +12,8 @@ using namespace physics_function;
 
 #include "gameobject_manager.h"
 
+#include "work_meter.h"
+
 namespace Adollib
 {
 
@@ -23,7 +25,7 @@ namespace Adollib
 
 	bool Rigitbody_manager::update(Scenelist Sce)
 	{
-		physics_g::timeStep = physics_g::timeStep;
+		physics_g::timeStep = Al_Global::second_per_frame;
 
 		//DBUG : 衝突点の表示の生成 ::::::::::
 		//static bool init = true;
@@ -81,13 +83,19 @@ namespace Adollib
 		applyexternalforce(colls);
 
 		// 大雑把な当たり判定
+		Work_meter::start("Broadphase");
 		Broadphase(colls, pairs);
+		Work_meter::stop("Broadphase");
 
 		// 衝突生成
+		Work_meter::start("Narrowphase");
 		generate_contact(pairs);
+		Work_meter::stop("Narrowphase");
 
 		// 衝突解決
+		Work_meter::start("Resolve");
 		resolve_contact(colls, pairs);
+		Work_meter::stop("Resolve");
 
 		//位置の更新
 		integrate(colls);

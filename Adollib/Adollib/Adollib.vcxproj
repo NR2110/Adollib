@@ -183,6 +183,8 @@
     <ClInclude Include="Imgui\imstb_rectpack.h" />
     <ClInclude Include="Imgui\imstb_textedit.h" />
     <ClInclude Include="Imgui\imstb_truetype.h" />
+    <ClInclude Include="imgui_all.h" />
+    <ClInclude Include="imgui_manager.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="light_types.h" />
     <ClInclude Include="loop.h" />
@@ -217,6 +219,7 @@
     <ClInclude Include="transform.h" />
     <ClInclude Include="vector.h" />
     <ClInclude Include="vector_e.h" />
+    <ClInclude Include="work_meter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Scripts\camera_manager.cpp" />
@@ -250,6 +253,7 @@
     <ClCompile Include="Imgui\imgui_impl_dx11.cpp" />
     <ClCompile Include="Imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="Imgui\imgui_widgets.cpp" />
+    <ClCompile Include="imgui_manager.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="loop.cpp" />
     <ClCompile Include="main.cpp" />
@@ -268,6 +272,7 @@
     <ClCompile Include="sprite.cpp" />
     <ClCompile Include="systems.cpp" />
     <ClCompile Include="texture.cpp" />
+    <ClCompile Include="work_meter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DefaultShader\default.hlsli">

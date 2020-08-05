@@ -5,27 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Adollib">
-      <UniqueIdentifier>{457a0db0-78dc-4f19-9ba1-e6eb79f8abcf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Adollib\main">
-      <UniqueIdentifier>{1aa0d38b-0bac-4886-bcb7-4d0604cec1e3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Adollib\object">
-      <UniqueIdentifier>{ba801f30-dc48-437a-b82e-1c30330c227f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Adollib\math">
-      <UniqueIdentifier>{eea9848d-7e6b-474f-aa58-f3a76a5c04fc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Adollib\shader">
-      <UniqueIdentifier>{36de64fc-7e7c-4b76-a489-b6c226ddc5d4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Adollib\shader\hlsli">
-      <UniqueIdentifier>{2ee81938-f4b8-4424-be0e-212cafffefba}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Adollib\object\mesh">
-      <UniqueIdentifier>{d2534fb1-3e0f-4465-bf38-05c093fa394f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\scene_game">
       <UniqueIdentifier>{99480d18-a01a-478a-95d0-fb97c50cd010}</UniqueIdentifier>
     </Filter>
@@ -41,10 +20,31 @@
     <Filter Include="ソース ファイル\scene_game\enemy">
       <UniqueIdentifier>{16cb34cf-ce56-4401-8f99-e845686d95f9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Adollib\math\physics">
+    <Filter Include="00_Adollib">
+      <UniqueIdentifier>{457a0db0-78dc-4f19-9ba1-e6eb79f8abcf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Adollib\00_main">
+      <UniqueIdentifier>{1aa0d38b-0bac-4886-bcb7-4d0604cec1e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Adollib\11_math">
+      <UniqueIdentifier>{eea9848d-7e6b-474f-aa58-f3a76a5c04fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Adollib\11_math\physics">
       <UniqueIdentifier>{948ff940-3127-440f-a355-36b477c57395}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Adollib\imgui">
+    <Filter Include="00_Adollib\22_object">
+      <UniqueIdentifier>{ba801f30-dc48-437a-b82e-1c30330c227f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Adollib\22_object\mesh">
+      <UniqueIdentifier>{d2534fb1-3e0f-4465-bf38-05c093fa394f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Adollib\33_shader">
+      <UniqueIdentifier>{36de64fc-7e7c-4b76-a489-b6c226ddc5d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Adollib\33_shader\hlsli">
+      <UniqueIdentifier>{2ee81938-f4b8-4424-be0e-212cafffefba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Adollib\99_imgui">
       <UniqueIdentifier>{f686ac45-2d88-4cab-a5d5-7ca5931f6b99}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -53,64 +53,64 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Adollib.cpp">
-      <Filter>Adollib\main</Filter>
+      <Filter>00_Adollib\00_main</Filter>
     </ClCompile>
     <ClCompile Include="loop.cpp">
-      <Filter>Adollib\main</Filter>
+      <Filter>00_Adollib\00_main</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>Adollib\main</Filter>
+      <Filter>00_Adollib\00_main</Filter>
     </ClCompile>
     <ClCompile Include="systems.cpp">
-      <Filter>Adollib\main</Filter>
+      <Filter>00_Adollib\00_main</Filter>
     </ClCompile>
     <ClCompile Include="complex.cpp">
-      <Filter>Adollib\math</Filter>
+      <Filter>00_Adollib\11_math</Filter>
     </ClCompile>
     <ClCompile Include="gameobject_manager.cpp">
-      <Filter>Adollib\object</Filter>
+      <Filter>00_Adollib\22_object</Filter>
     </ClCompile>
     <ClCompile Include="gameobject.cpp">
-      <Filter>Adollib\object</Filter>
+      <Filter>00_Adollib\22_object</Filter>
     </ClCompile>
     <ClCompile Include="scene_manager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="sprite.cpp">
-      <Filter>Adollib\main</Filter>
+      <Filter>00_Adollib\00_main</Filter>
     </ClCompile>
     <ClCompile Include="shader.cpp">
-      <Filter>Adollib\shader</Filter>
+      <Filter>00_Adollib\33_shader</Filter>
     </ClCompile>
     <ClCompile Include="gameobject_light.cpp">
-      <Filter>Adollib\object</Filter>
+      <Filter>00_Adollib\22_object</Filter>
     </ClCompile>
     <ClCompile Include="gameobject_camera.cpp">
-      <Filter>Adollib\object</Filter>
+      <Filter>00_Adollib\22_object</Filter>
     </ClCompile>
     <ClCompile Include="material.cpp">
-      <Filter>Adollib\object\mesh</Filter>
+      <Filter>00_Adollib\22_object\mesh</Filter>
     </ClCompile>
     <ClCompile Include="mesh.cpp">
-      <Filter>Adollib\object\mesh</Filter>
+      <Filter>00_Adollib\22_object\mesh</Filter>
     </ClCompile>
     <ClCompile Include="texture.cpp">
-      <Filter>Adollib\object\mesh</Filter>
+      <Filter>00_Adollib\22_object\mesh</Filter>
     </ClCompile>
     <ClCompile Include="scene_game.cpp">
       <Filter>ソース ファイル\scene_game</Filter>
     </ClCompile>
     <ClCompile Include="input.cpp">
-      <Filter>Adollib\main</Filter>
+      <Filter>00_Adollib\00_main</Filter>
     </ClCompile>
     <ClCompile Include="material_for_collider.cpp">
-      <Filter>Adollib\object\mesh</Filter>
+      <Filter>00_Adollib\22_object\mesh</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\player.cpp">
       <Filter>ソース ファイル\scene_game\player</Filter>
     </ClCompile>
     <ClCompile Include="scene.cpp">
-      <Filter>Adollib</Filter>
+      <Filter>00_Adollib</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\object_rotate.cpp">
       <Filter>ソース ファイル\scene_game\object</Filter>
@@ -134,58 +134,64 @@
       <Filter>ソース ファイル\scene_game\enemy</Filter>
     </ClCompile>
     <ClCompile Include="rigit_body_manager.cpp">
-      <Filter>Adollib\math\physics</Filter>
+      <Filter>00_Adollib\11_math\physics</Filter>
     </ClCompile>
     <ClCompile Include="rigit_body.cpp">
-      <Filter>Adollib\math\physics</Filter>
+      <Filter>00_Adollib\11_math\physics</Filter>
     </ClCompile>
     <ClCompile Include="contact.cpp">
-      <Filter>Adollib\math\physics</Filter>
+      <Filter>00_Adollib\11_math\physics</Filter>
     </ClCompile>
     <ClCompile Include="resource_manager.cpp">
-      <Filter>Adollib\main</Filter>
+      <Filter>00_Adollib\00_main</Filter>
     </ClCompile>
     <ClCompile Include="closest_func.cpp">
-      <Filter>Adollib\math</Filter>
+      <Filter>00_Adollib\11_math</Filter>
     </ClCompile>
     <ClCompile Include="frustum_culling.cpp">
-      <Filter>Adollib\object\mesh</Filter>
+      <Filter>00_Adollib\22_object\mesh</Filter>
     </ClCompile>
     <ClCompile Include="compute_shader.cpp">
-      <Filter>Adollib\shader</Filter>
+      <Filter>00_Adollib\33_shader</Filter>
     </ClCompile>
     <ClCompile Include="ALP_generate_contact.cpp">
-      <Filter>Adollib\math\physics</Filter>
+      <Filter>00_Adollib\11_math\physics</Filter>
     </ClCompile>
     <ClCompile Include="ALP_resolve_contact.cpp">
-      <Filter>Adollib\math\physics</Filter>
+      <Filter>00_Adollib\11_math\physics</Filter>
     </ClCompile>
     <ClCompile Include="ALP_integrate.cpp">
-      <Filter>Adollib\math\physics</Filter>
+      <Filter>00_Adollib\11_math\physics</Filter>
     </ClCompile>
     <ClCompile Include="ALP_broadphase.cpp">
-      <Filter>Adollib\math\physics</Filter>
+      <Filter>00_Adollib\11_math\physics</Filter>
     </ClCompile>
     <ClCompile Include="physics_global.cpp">
-      <Filter>Adollib\math\physics</Filter>
+      <Filter>00_Adollib\11_math\physics</Filter>
     </ClCompile>
     <ClCompile Include="Imgui\imgui.cpp">
-      <Filter>Adollib\imgui</Filter>
+      <Filter>00_Adollib\99_imgui</Filter>
     </ClCompile>
     <ClCompile Include="Imgui\imgui_demo.cpp">
-      <Filter>Adollib\imgui</Filter>
+      <Filter>00_Adollib\99_imgui</Filter>
     </ClCompile>
     <ClCompile Include="Imgui\imgui_draw.cpp">
-      <Filter>Adollib\imgui</Filter>
+      <Filter>00_Adollib\99_imgui</Filter>
     </ClCompile>
     <ClCompile Include="Imgui\imgui_impl_dx11.cpp">
-      <Filter>Adollib\imgui</Filter>
+      <Filter>00_Adollib\99_imgui</Filter>
     </ClCompile>
     <ClCompile Include="Imgui\imgui_impl_win32.cpp">
-      <Filter>Adollib\imgui</Filter>
+      <Filter>00_Adollib\99_imgui</Filter>
     </ClCompile>
     <ClCompile Include="Imgui\imgui_widgets.cpp">
-      <Filter>Adollib\imgui</Filter>
+      <Filter>00_Adollib\99_imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="work_meter.cpp">
+      <Filter>00_Adollib\00_main</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_manager.cpp">
+      <Filter>00_Adollib\99_imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -193,43 +199,43 @@
       <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Adollib.h">
-      <Filter>Adollib\main</Filter>
+      <Filter>00_Adollib\00_main</Filter>
     </ClInclude>
     <ClInclude Include="loop.h">
-      <Filter>Adollib\main</Filter>
+      <Filter>00_Adollib\00_main</Filter>
     </ClInclude>
     <ClInclude Include="misc.h">
-      <Filter>Adollib\main</Filter>
+      <Filter>00_Adollib\00_main</Filter>
     </ClInclude>
     <ClInclude Include="systems.h">
-      <Filter>Adollib\main</Filter>
+      <Filter>00_Adollib\00_main</Filter>
     </ClInclude>
     <ClInclude Include="vector.h">
-      <Filter>Adollib\math</Filter>
+      <Filter>00_Adollib\11_math</Filter>
     </ClInclude>
     <ClInclude Include="quaternion.h">
-      <Filter>Adollib\math</Filter>
+      <Filter>00_Adollib\11_math</Filter>
     </ClInclude>
     <ClInclude Include="matrix.h">
-      <Filter>Adollib\math</Filter>
+      <Filter>00_Adollib\11_math</Filter>
     </ClInclude>
     <ClInclude Include="complex.h">
-      <Filter>Adollib\math</Filter>
+      <Filter>00_Adollib\11_math</Filter>
     </ClInclude>
     <ClInclude Include="transform.h">
-      <Filter>Adollib\object</Filter>
+      <Filter>00_Adollib\22_object</Filter>
     </ClInclude>
     <ClInclude Include="object.h">
-      <Filter>Adollib\object</Filter>
+      <Filter>00_Adollib\22_object</Filter>
     </ClInclude>
     <ClInclude Include="gameobject_manager.h">
-      <Filter>Adollib\object</Filter>
+      <Filter>00_Adollib\22_object</Filter>
     </ClInclude>
     <ClInclude Include="gameobject.h">
-      <Filter>Adollib\object</Filter>
+      <Filter>00_Adollib\22_object</Filter>
     </ClInclude>
     <ClInclude Include="component.h">
-      <Filter>Adollib\object</Filter>
+      <Filter>00_Adollib\22_object</Filter>
     </ClInclude>
     <ClInclude Include="scene.h">
       <Filter>ソース ファイル</Filter>
@@ -238,55 +244,55 @@
       <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="sprite.h">
-      <Filter>Adollib\main</Filter>
+      <Filter>00_Adollib\00_main</Filter>
     </ClInclude>
     <ClInclude Include="shader.h">
-      <Filter>Adollib\shader</Filter>
+      <Filter>00_Adollib\33_shader</Filter>
     </ClInclude>
     <ClInclude Include="states_manager.h">
-      <Filter>Adollib\main</Filter>
+      <Filter>00_Adollib\00_main</Filter>
     </ClInclude>
     <ClInclude Include="gameobject_light.h">
-      <Filter>Adollib\object</Filter>
+      <Filter>00_Adollib\22_object</Filter>
     </ClInclude>
     <ClInclude Include="gameobject_camera.h">
-      <Filter>Adollib\object</Filter>
+      <Filter>00_Adollib\22_object</Filter>
     </ClInclude>
     <ClInclude Include="cbuffer_manager.h">
-      <Filter>Adollib\shader</Filter>
+      <Filter>00_Adollib\33_shader</Filter>
     </ClInclude>
     <ClInclude Include="light_types.h">
-      <Filter>Adollib\shader</Filter>
+      <Filter>00_Adollib\33_shader</Filter>
     </ClInclude>
     <ClInclude Include="material.h">
-      <Filter>Adollib\object\mesh</Filter>
+      <Filter>00_Adollib\22_object\mesh</Filter>
     </ClInclude>
     <ClInclude Include="mesh.h">
-      <Filter>Adollib\object\mesh</Filter>
+      <Filter>00_Adollib\22_object\mesh</Filter>
     </ClInclude>
     <ClInclude Include="texture.h">
-      <Filter>Adollib\object\mesh</Filter>
+      <Filter>00_Adollib\22_object\mesh</Filter>
     </ClInclude>
     <ClInclude Include="scene_game.h">
       <Filter>ソース ファイル\scene_game</Filter>
     </ClInclude>
     <ClInclude Include="component_camera.h">
-      <Filter>Adollib\object</Filter>
+      <Filter>00_Adollib\22_object</Filter>
     </ClInclude>
     <ClInclude Include="component_light.h">
-      <Filter>Adollib\object</Filter>
+      <Filter>00_Adollib\22_object</Filter>
     </ClInclude>
     <ClInclude Include="input.h">
-      <Filter>Adollib\main</Filter>
+      <Filter>00_Adollib\00_main</Filter>
     </ClInclude>
     <ClInclude Include="singleton.h">
-      <Filter>Adollib\main</Filter>
+      <Filter>00_Adollib\00_main</Filter>
     </ClInclude>
     <ClInclude Include="time.h">
-      <Filter>Adollib\main</Filter>
+      <Filter>00_Adollib\00_main</Filter>
     </ClInclude>
     <ClInclude Include="material_for_collider.h">
-      <Filter>Adollib\object\mesh</Filter>
+      <Filter>00_Adollib\22_object\mesh</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\player.h">
       <Filter>ソース ファイル\scene_game\player</Filter>
@@ -295,7 +301,7 @@
       <Filter>ソース ファイル\scene_game</Filter>
     </ClInclude>
     <ClInclude Include="scene_manager.h">
-      <Filter>Adollib</Filter>
+      <Filter>00_Adollib</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\object_rotate.h">
       <Filter>ソース ファイル\scene_game\object</Filter>
@@ -319,122 +325,131 @@
       <Filter>ソース ファイル\scene_game\enemy</Filter>
     </ClInclude>
     <ClInclude Include="rigit_body_manager.h">
-      <Filter>Adollib\math\physics</Filter>
+      <Filter>00_Adollib\11_math\physics</Filter>
     </ClInclude>
     <ClInclude Include="rigit_body.h">
-      <Filter>Adollib\math\physics</Filter>
+      <Filter>00_Adollib\11_math\physics</Filter>
     </ClInclude>
     <ClInclude Include="contact.h">
-      <Filter>Adollib\math\physics</Filter>
+      <Filter>00_Adollib\11_math\physics</Filter>
     </ClInclude>
     <ClInclude Include="resource_manager.h">
-      <Filter>Adollib\main</Filter>
+      <Filter>00_Adollib\00_main</Filter>
     </ClInclude>
     <ClInclude Include="physics_global.h">
-      <Filter>Adollib\math\physics</Filter>
+      <Filter>00_Adollib\11_math\physics</Filter>
     </ClInclude>
     <ClInclude Include="closest_func.h">
-      <Filter>Adollib\math</Filter>
+      <Filter>00_Adollib\11_math</Filter>
     </ClInclude>
     <ClInclude Include="math.h">
-      <Filter>Adollib\math</Filter>
+      <Filter>00_Adollib\11_math</Filter>
     </ClInclude>
     <ClInclude Include="frustum_culling.h">
-      <Filter>Adollib\object\mesh</Filter>
+      <Filter>00_Adollib\22_object\mesh</Filter>
     </ClInclude>
     <ClInclude Include="compute_shader.h">
-      <Filter>Adollib\shader</Filter>
+      <Filter>00_Adollib\33_shader</Filter>
     </ClInclude>
     <ClInclude Include="ALP_generate_contact.h">
-      <Filter>Adollib\math\physics</Filter>
+      <Filter>00_Adollib\11_math\physics</Filter>
     </ClInclude>
     <ClInclude Include="ALP_resolve_contact.h">
-      <Filter>Adollib\math\physics</Filter>
+      <Filter>00_Adollib\11_math\physics</Filter>
     </ClInclude>
     <ClInclude Include="ALP_integrate.h">
-      <Filter>Adollib\math\physics</Filter>
+      <Filter>00_Adollib\11_math\physics</Filter>
     </ClInclude>
     <ClInclude Include="ALP__physics_function.h">
-      <Filter>Adollib\math\physics</Filter>
+      <Filter>00_Adollib\11_math\physics</Filter>
     </ClInclude>
     <ClInclude Include="ALP_broadphase.h">
-      <Filter>Adollib\math\physics</Filter>
+      <Filter>00_Adollib\11_math\physics</Filter>
     </ClInclude>
     <ClInclude Include="matrix_e.h">
-      <Filter>Adollib\math</Filter>
+      <Filter>00_Adollib\11_math</Filter>
     </ClInclude>
     <ClInclude Include="vector_e.h">
-      <Filter>Adollib\math</Filter>
+      <Filter>00_Adollib\11_math</Filter>
     </ClInclude>
     <ClInclude Include="quaternion_e.h">
-      <Filter>Adollib\math</Filter>
+      <Filter>00_Adollib\11_math</Filter>
     </ClInclude>
     <ClInclude Include="math_e.h">
-      <Filter>Adollib\math</Filter>
+      <Filter>00_Adollib\11_math</Filter>
     </ClInclude>
     <ClInclude Include="DOP.h">
-      <Filter>Adollib\math\physics</Filter>
+      <Filter>00_Adollib\11_math\physics</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imconfig.h">
-      <Filter>Adollib\imgui</Filter>
+      <Filter>00_Adollib\99_imgui</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imgui.h">
-      <Filter>Adollib\imgui</Filter>
+      <Filter>00_Adollib\99_imgui</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imgui_impl_dx11.h">
-      <Filter>Adollib\imgui</Filter>
+      <Filter>00_Adollib\99_imgui</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imgui_impl_win32.h">
-      <Filter>Adollib\imgui</Filter>
+      <Filter>00_Adollib\99_imgui</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imgui_internal.h">
-      <Filter>Adollib\imgui</Filter>
+      <Filter>00_Adollib\99_imgui</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imstb_rectpack.h">
-      <Filter>Adollib\imgui</Filter>
+      <Filter>00_Adollib\99_imgui</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imstb_textedit.h">
-      <Filter>Adollib\imgui</Filter>
+      <Filter>00_Adollib\99_imgui</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imstb_truetype.h">
-      <Filter>Adollib\imgui</Filter>
+      <Filter>00_Adollib\99_imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_all.h">
+      <Filter>00_Adollib\00_main</Filter>
+    </ClInclude>
+    <ClInclude Include="work_meter.h">
+      <Filter>00_Adollib\00_main</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_manager.h">
+      <Filter>00_Adollib\99_imgui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="DefaultShader\default.hlsli">
-      <Filter>Adollib\shader\hlsli</Filter>
+      <Filter>00_Adollib\33_shader\hlsli</Filter>
     </None>
     <None Include="DefaultShader\light_type.hlsli">
-      <Filter>Adollib\shader\hlsli</Filter>
+      <Filter>00_Adollib\33_shader\hlsli</Filter>
     </None>
     <None Include="DefaultShader\head.hlsli">
-      <Filter>Adollib\shader\hlsli</Filter>
+      <Filter>00_Adollib\33_shader\hlsli</Filter>
     </None>
     <None Include="DefaultShader\func.hlsli">
-      <Filter>Adollib\shader\hlsli</Filter>
+      <Filter>00_Adollib\33_shader\hlsli</Filter>
     </None>
     <None Include="DefaultShader\quaternion.hlsli">
-      <Filter>Adollib\shader\hlsli</Filter>
+      <Filter>00_Adollib\33_shader\hlsli</Filter>
     </None>
     <None Include="DefaultShader\base_math.hlsli">
-      <Filter>Adollib\shader\hlsli</Filter>
+      <Filter>00_Adollib\33_shader\hlsli</Filter>
     </None>
     <None Include="DefaultShader\math.hlsli">
-      <Filter>Adollib\shader\hlsli</Filter>
+      <Filter>00_Adollib\33_shader\hlsli</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="DefaultShader\default_ps.hlsl">
-      <Filter>Adollib\shader\hlsli</Filter>
+      <Filter>00_Adollib\33_shader\hlsli</Filter>
     </FxCompile>
     <FxCompile Include="DefaultShader\default_vs.hlsl">
-      <Filter>Adollib\shader\hlsli</Filter>
+      <Filter>00_Adollib\33_shader\hlsli</Filter>
     </FxCompile>
     <FxCompile Include="DefaultShader\default_ps_notex.hlsl">
-      <Filter>Adollib\shader\hlsli</Filter>
+      <Filter>00_Adollib\33_shader\hlsli</Filter>
     </FxCompile>
     <FxCompile Include="DefaultShader\physics_resolve.hlsl">
-      <Filter>Adollib\math\physics</Filter>
+      <Filter>00_Adollib\11_math\physics</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

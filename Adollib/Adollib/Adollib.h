@@ -11,7 +11,8 @@ namespace Adollib {
 
 		static bool render_collider_flag; //colliderを表示するかのフラグ
 
-		static float elapsed_time;
+		static float second_per_frame;
+		static float second_per_game;
 
 		static float base_Coefficient_of_friction; //物体の摩擦力の初期値
 		static float base_resituation; //

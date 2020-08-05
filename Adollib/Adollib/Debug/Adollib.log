@@ -1,29 +1,13 @@
-﻿  loop.cpp
-  main.cpp
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています loop.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています loop.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています loop.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています main.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています main.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています main.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(12,41): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています loop.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(13,41): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています loop.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(14,41): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています loop.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(15,41): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています loop.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\rigit_body.h(55,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています loop.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(12,41): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています main.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\rigit_body.h(56,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています loop.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(13,41): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています main.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(14,41): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています main.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(15,41): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています main.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\rigit_body.h(55,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています main.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\rigit_body.h(56,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています main.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(48,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています loop.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(48,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています main.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています loop.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています main.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています loop.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています main.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\main.cpp(138,15): warning C4244: '初期化中': 'ULONGLONG' から 'DWORD' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\main.cpp(180,27): warning C4244: '=': 'ULONGLONG' から 'DWORD' への変換です。データが失われる可能性があります。
+﻿  work_meter.cpp
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\work_meter.cpp(10,34): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\work_meter.cpp(18,5): warning C4067: プリプロセッサ ディレクティブの後に余分な文字がありました - 改行が必要です
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\work_meter.cpp(30,28): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\work_meter.cpp(41,27): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\work_meter.cpp(47,18): warning C4305: '+=': 'double' から 'float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\work_meter.cpp(84,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\work_meter.cpp(104,5): warning C4067: プリプロセッサ ディレクティブの後に余分な文字がありました - 改行が必要です
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\work_meter.cpp(116,5): warning C4067: プリプロセッサ ディレクティブの後に余分な文字がありました - 改行が必要です
   Adollib.vcxproj -> C:\Users\2190072\Documents\Adollib\Adollib\Debug\Adollib.exe

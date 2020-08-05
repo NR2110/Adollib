@@ -54,6 +54,7 @@ bool Systems::Initialize(HWND hWnd, int width, int height)
 
 HRESULT Systems::CreateDevice(HWND hWnd)
 {
+	BOOL Windowed = TRUE;
 	HRESULT hr = S_OK;
 
 	//::: デバイスとスワップチェインンの作成 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -142,7 +143,7 @@ HRESULT Systems::CreateDevice(HWND hWnd)
 	scd.BufferCount = 1;
 	scd.OutputWindow = hWnd;
 
-	scd.Windowed = TRUE;
+	scd.Windowed = Windowed;
 
 	scd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 	scd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;

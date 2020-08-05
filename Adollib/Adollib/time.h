@@ -18,18 +18,10 @@ namespace Adollib
 
 		void initialize()
 		{
-			LONGLONG counts_per_sec;
-			QueryPerformanceFrequency(reinterpret_cast<LARGE_INTEGER*>(&counts_per_sec));	// Hz‚ðŽæ“¾
-			seconds_per_count = 1.0 / static_cast<double>(counts_per_sec);
-			frames_per_sec = (LONGLONG)(counts_per_sec / 60.0);
-
-			QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&this_count));
-			awake_count = this_count;
-			last_count = this_count;
+			
 		}
-		// Returns the total time elapsed since Reset() was called, NOT counting any
-		// time when the clock is stopped.
-		float timeStamp() const  // in seconds
+
+		float timeStamp() const 
 		{
 			// If we are stopped, do not count the time that has passed since we stopped.
 			// Moreover, if we previously already had a pause, the distance 
@@ -140,6 +132,7 @@ namespace Adollib
 		{
 			time_scale = static_cast<double>((std::max)(0.0f, t));
 		}
+
 		// time_scale‚Ì’l‚ð•Ô‚·
 		float timeScale() const
 		{
