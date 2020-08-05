@@ -171,10 +171,12 @@ RWStructuredBuffer<CS_out> cs_out : register(u0); // 出力用
 void main(const Input input)
 {	
     uint index = input.dispatch.x;
-    
+      
+    ///*
     if (index < cs_input_max[0].pair_max)
     {   
         
+        //cs_out[].solverbodyはinoutとして使用するため　初めに入力の値を入れる
         cs_out[index].solverbody0 = cs_input_solve[cs_input_pair[index].pair.solv_num[0]].solverbody;
         cs_out[index].solverbody1 = cs_input_solve[cs_input_pair[index].pair.solv_num[1]].solverbody;
         
@@ -198,18 +200,20 @@ void main(const Input input)
         //差分をoutputする
         cs_out[index].accuminpulse[C_num][0] -= cs_input_pair[index].pair.contacts.c_points[C_num].constraint[0].accuminpulse;
         cs_out[index].accuminpulse[C_num][1] -= cs_input_pair[index].pair.contacts.c_points[C_num].constraint[1].accuminpulse;
-        cs_out[index].accuminpulse[C_num][2] -= cs_input_pair[index].pair.contacts.c_points[C_num].constraint[2].accuminpulse;
-              
+        cs_out[index].accuminpulse[C_num][2] -= cs_input_pair[index].pair.contacts.c_points[C_num].constraint[2].accuminpulse;          
         }
        
-
-    }
+  
+    }  
     
-    //差分をoutputする
+     //差分をoutputする
     cs_out[index].solverbody0.delta_LinearVelocity -= cs_input_solve[cs_input_pair[index].pair.solv_num[0]].solverbody.delta_LinearVelocity;
     cs_out[index].solverbody0.delta_AngularVelocity -= cs_input_solve[cs_input_pair[index].pair.solv_num[0]].solverbody.delta_AngularVelocity;
     cs_out[index].solverbody1.delta_LinearVelocity -= cs_input_solve[cs_input_pair[index].pair.solv_num[1]].solverbody.delta_LinearVelocity;
-    cs_out[index].solverbody1.delta_AngularVelocity -=  cs_input_solve[cs_input_pair[index].pair.solv_num[1]].solverbody.delta_AngularVelocity;
+    cs_out[index].solverbody1.delta_AngularVelocity -= cs_input_solve[cs_input_pair[index].pair.solv_num[1]].solverbody.delta_AngularVelocity;
+    //*/
+    
+ 
     
     
 

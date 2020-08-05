@@ -405,13 +405,13 @@
     <ClInclude Include="Imgui\imstb_truetype.h">
       <Filter>00_Adollib\99_imgui</Filter>
     </ClInclude>
-    <ClInclude Include="imgui_all.h">
-      <Filter>00_Adollib\00_main</Filter>
-    </ClInclude>
     <ClInclude Include="work_meter.h">
       <Filter>00_Adollib\00_main</Filter>
     </ClInclude>
     <ClInclude Include="imgui_manager.h">
+      <Filter>00_Adollib\99_imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_all.h">
       <Filter>00_Adollib\99_imgui</Filter>
     </ClInclude>
   </ItemGroup>

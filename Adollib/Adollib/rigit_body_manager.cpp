@@ -25,7 +25,8 @@ namespace Adollib
 
 	bool Rigitbody_manager::update(Scenelist Sce)
 	{
-		physics_g::timeStep = Al_Global::second_per_frame;
+		physics_g::timeStep = Al_Global::second_per_frame; //フレーム依存じゃない
+		//physics_g::timeStep = physics_g::timeStep; //フレーム依存じゃない
 
 		//DBUG : 衝突点の表示の生成 ::::::::::
 		//static bool init = true;
@@ -100,14 +101,14 @@ namespace Adollib
 		//位置の更新
 		integrate(colls);
 
-		////DBUG : 衝突点の表示 ::::::
+		//DBUG : 衝突点の表示 ::::::
 		//for (int p = 0; p < 10; p++) {
 		//	for (int i = 0; i < 4; i++) {
 		//		S[p][i][0]->set_active(false);
 		//		S[p][i][1]->set_active(false);
 		//	}
 		//}
-        //		for (int p = 0; p < pairs.size() &&  p < 10; p++) {
+		//  for (int p = 0; p < pairs.size() &&  p < 10; p++) {
 		//	for (int i = 0; i < pairs[p].contacts.contact_num; i++) {
 
 		//		S[p][i][0]->set_active(true);
@@ -117,7 +118,6 @@ namespace Adollib
 		//		S[p][i][1]->transform->local_pos = vector3_be_rotated_by_quaternion(pairs[p].contacts.contactpoints[i].point[1], pairs[p].body[1]->world_orientation) + pairs[p].body[1]->world_position;
 		//	}
 		//}
-
 		//:::::::::::::::::::::::::::
 
 

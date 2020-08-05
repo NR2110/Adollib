@@ -658,9 +658,10 @@ void Systems::Clear(DWORD color)
 	//	clearColor[i] = ((color >> 8 * (3 - i)) & 0x000000FF) / 255.0f;
 	//}
 
+	DeviceContext->OMSetDepthStencilState(DepthStencilState[static_cast<int>(State_manager::DStypes::DS_TRUE)].Get(), 1);
+	DeviceContext->OMSetRenderTargets(1, RenderTargetView.GetAddressOf(), DepthStencilView.Get());
 	DeviceContext->ClearRenderTargetView(RenderTargetView.Get(), clearColor);
 	DeviceContext->ClearDepthStencilView(DepthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-	DeviceContext->OMSetDepthStencilState(DepthStencilState[static_cast<int>(State_manager::DStypes::DS_TRUE)].Get(), 1);
 
 }
 

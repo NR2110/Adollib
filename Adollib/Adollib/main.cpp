@@ -133,12 +133,12 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 	MSG hMsg = { 0 };
 	float Interval = 1.0f;
 	LARGE_INTEGER now, before, freq;
-	QueryPerformanceCounter(&before);
 	int fps = 0;
 
 	loop loop;
 
 	loop.init(hwnd);
+	Systems::time->reset();
 
 	while (hMsg.message != WM_QUIT) {
 		if (PeekMessage(&hMsg, NULL, 0, 0, PM_REMOVE))
@@ -150,21 +150,9 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 		{
 			if (Adollib::Imgui_manager::update(hMsg) == false) continue;
 
-			/*LONGLONG A = GetTickCount64();
-			Al_Global::second_per_frame =
-				(A - before) * 0.001f;
+			Systems::time->tick();
 
-			if (Al_Global::second_per_frame == 0) {
-				int adfsgdhfgj = 0;
-			}
-			before = GetTickCount64();*/
-
-			QueryPerformanceCounter(&now);
-			QueryPerformanceFrequency(&freq);
-			Al_Global::second_per_frame = (float)((now.QuadPart - before.QuadPart ) * (double)1000 / freq.QuadPart) * 0.001f;
-
-			QueryPerformanceCounter(&before);
-
+			Al_Global::second_per_frame = Systems::time->deltaTime();
 			Al_Global::second_per_game += Al_Global::second_per_frame;
 			float mspf = 1000.0f / fps;
 
@@ -241,6 +229,8 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 
 				//	ImGui::End();
 				//}
+
+				//ImGui::ShowDemoWindow();
 			}
 
 

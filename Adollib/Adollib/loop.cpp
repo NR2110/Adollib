@@ -1,7 +1,6 @@
 
 #include "loop.h"
 #include "imgui_manager.h"
-
 #include "work_meter.h"
 
 using namespace Adollib;
@@ -20,6 +19,7 @@ bool loop::init(HWND hWnd) {
 bool loop::Update(MSG hMsg, HWND hWnd, int width, int height) {
 
 	Work_meter::stop(std::string("render_shader"));
+
 	Work_meter::start(std::string("update_all"));
 	Systems::inputManager->update();
 

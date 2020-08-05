@@ -13,12 +13,11 @@ namespace Adollib {
 		};
 
 		static const int max_ = 120;
-		static float max_num;
-		static int start_num;
-		static float before;
-		static std::unordered_map<std::string, meter> s_g;
+
+		static std::unordered_map<std::string, meter> start_stop;
 		static std::unordered_map<std::string, float[max_ * 2]> meters;
 		static std::vector<std::string> names;
+		static std::vector<bool> name_flags;
 	public:
 
 		static bool render();

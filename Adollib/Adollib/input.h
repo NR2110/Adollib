@@ -284,8 +284,6 @@ namespace Adollib
 		DirectX::GamePad::DeadZone deadZone;
 		// 初期化時にウィンドウハンドルを受け取る
 		HWND _hwnd;
-		// Timeオブジェクトのポインタを取得する
-		const Time* time = nullptr;
 
 
 		// 入力デバイスに関するポインタ

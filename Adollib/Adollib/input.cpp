@@ -1,5 +1,5 @@
 #include "input.h"
-
+#include "systems.h"
 
 namespace Adollib
 {
@@ -13,7 +13,6 @@ namespace Adollib
 		deadZone = DirectX::GamePad::DeadZone::DEAD_ZONE_INDEPENDENT_AXES;
 
 		_hwnd = hwnd;
-		time = Time::getInstancePtr();
 
 		keyboard = std::make_unique<DirectX::Keyboard>();
 		gamePad = std::make_unique<DirectX::GamePad>();
@@ -113,7 +112,7 @@ namespace Adollib
 				// タイマーを加算
 				if (r->repeatTimer <= MAX_REPEAT_TIME)
 				{
-					r->repeatTimer += time->deltaTime();
+					r->repeatTimer += Systems::time->deltaTime();
 				}
 				s->REPEAT = r->isRepeated;
 
@@ -160,7 +159,7 @@ namespace Adollib
 				// タイマーを加算
 				if (r->repeatTimer <= MAX_REPEAT_TIME)
 				{
-					r->repeatTimer += time->deltaTime();
+					r->repeatTimer += Systems::time->deltaTime();
 				}
 				s->REPEAT = r->isRepeated;
 			}
@@ -185,7 +184,7 @@ namespace Adollib
 			// 振動の時間による更新
 			if (pad_vibrations[i].vibration == true)
 			{
-				pad_vibrations[i].timer += time->deltaTime();
+				pad_vibrations[i].timer += Systems::time->deltaTime();
 				if (pad_vibrations[i].stop_time <= pad_vibrations[i].timer)
 				{
 					stopVibration(i);
@@ -233,7 +232,7 @@ namespace Adollib
 				// タイマーを加算
 				if (r->repeatTimer <= MAX_REPEAT_TIME)
 				{
-					r->repeatTimer += time->deltaTime();
+					r->repeatTimer += Systems::time->deltaTime();
 				}
 				s->REPEAT = r->isRepeated;
 			}

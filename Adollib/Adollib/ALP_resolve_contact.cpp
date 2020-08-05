@@ -60,6 +60,7 @@ struct com_in {
 	int contact_num;
 };
 
+#include "work_meter.h"
 void physics_function::resolve_contact(std::vector<Collider*> colliders, std::vector<Contacts::Contact_pair>& pairs) {
 
 	//::: 解決用オブジェクトの生成 :::::::::::
@@ -239,7 +240,7 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 	//}
 
 	//ここからGPUに任せる
-#if 1
+#if 0
 	for (int i = 0; i < physics_g::accuracy; i++) {
 		for (int P_num = 0; P_num < pairs.size(); P_num++) {
 			Contact_pair& pair = pairs[P_num];
@@ -312,13 +313,11 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 		}
 	}
 
-#elif 0
+#elif 1
 
 	//QUESTION : ここのstatic外すとすぐ落ちるresourceanager見ても原因わからず　謎
 	static Compute_S::ComputeShader compute_shader;
 	compute_shader.Load("./DefaultShader/physics_resolve.cso");
-
-
 
 	for (int i = 0; i < physics_g::accuracy; i++) {
 		if (pairs.size() == 0)break;
@@ -374,19 +373,47 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 		compute_shader.run(SRVs, 3, solve_OUT.Get(), 16, 1, 1);
 
 		com_Out* S = compute_shader.Read_UAV<com_Out>(solve_out);
-		for (int pair_num = 0; pair_num < pairs.size(); pair_num++) {
 
-			if (SBs[S[pair_num].solvs[0].num].delta_AngularVelocity != S[pair_num].solvs[0].delta_AngularVelocity ||
-				SBs[S[pair_num].solvs[1].num].delta_AngularVelocity != S[pair_num].solvs[1].delta_AngularVelocity
-				) {
-				int dasfgdf = 0;
+
+
+		struct A_E {
+			vector3 sum_AngularVelocity = vector3(0);
+			vector3 sum_LinearVelocity  = vector3(0);
+		};
+		std::vector<A_E> ae;
+		{
+			A_E aaee;
+			for (int i = 0; i < colliders.size(); i++) {
+				ae.emplace_back(aaee);
 			}
 
-			SBs[S[pair_num].solvs[0].num].delta_AngularVelocity += S[pair_num].solvs[0].delta_AngularVelocity;
-			SBs[S[pair_num].solvs[0].num].delta_LinearVelocity += S[pair_num].solvs[0].delta_LinearVelocity;
+			for (int pair_num = 0; pair_num < pairs.size(); pair_num++) {
+				ae[S[pair_num].solvs[0].num].sum_AngularVelocity += S[pair_num].solvs[0].delta_AngularVelocity;
+				ae[S[pair_num].solvs[0].num].sum_LinearVelocity += S[pair_num].solvs[0].delta_LinearVelocity;
 
-			SBs[S[pair_num].solvs[1].num].delta_AngularVelocity += S[pair_num].solvs[1].delta_AngularVelocity;
-			SBs[S[pair_num].solvs[1].num].delta_LinearVelocity += S[pair_num].solvs[1].delta_LinearVelocity;
+				ae[S[pair_num].solvs[1].num].sum_AngularVelocity += S[pair_num].solvs[1].delta_AngularVelocity;
+				ae[S[pair_num].solvs[1].num].sum_LinearVelocity += S[pair_num].solvs[1].delta_LinearVelocity;
+			}
+			for (int i = 0; i < colliders.size(); i++) {
+
+				for (int o = 0; o < 3; o++) {
+					if (ae[i].sum_AngularVelocity[o] != 0)
+						ae[i].sum_AngularVelocity[o] = 1.0f / ae[i].sum_AngularVelocity[o];
+
+					if (ae[i].sum_LinearVelocity[o] != 0)
+						ae[i].sum_LinearVelocity[o] = 1.0f / ae[i].sum_LinearVelocity[o];
+
+				}
+			}
+		}
+
+		for (int pair_num = 0; pair_num < pairs.size(); pair_num++) {
+
+			SBs[S[pair_num].solvs[0].num].delta_AngularVelocity += S[pair_num].solvs[0].delta_AngularVelocity * ae[S[pair_num].solvs[0].num].sum_AngularVelocity;
+			SBs[S[pair_num].solvs[0].num].delta_LinearVelocity += S[pair_num].solvs[0].delta_LinearVelocity   * ae[S[pair_num].solvs[0].num].sum_LinearVelocity ;
+
+			SBs[S[pair_num].solvs[1].num].delta_AngularVelocity += S[pair_num].solvs[1].delta_AngularVelocity * ae[S[pair_num].solvs[1].num].sum_AngularVelocity;
+			SBs[S[pair_num].solvs[1].num].delta_LinearVelocity += S[pair_num].solvs[1].delta_LinearVelocity   * ae[S[pair_num].solvs[1].num].sum_LinearVelocity ;
 
 			for (int C_num = 0; C_num < pairs[pair_num].contacts.contact_num; C_num++) {
 				pairs[pair_num].contacts.contactpoints[C_num].constraint[0].accuminpulse += S[pair_num].accumes[C_num][0];
@@ -395,6 +422,8 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 			}
 
 		}
+
+
 
 
 	}
