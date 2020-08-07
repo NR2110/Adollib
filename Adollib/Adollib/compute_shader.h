@@ -64,7 +64,7 @@ namespace Adollib {
 
 				D3D11_MAPPED_SUBRESOURCE subRes;
 				hr = get_context()->Map(pCloneBuf, 0, D3D11_MAP_READ, 0, &subRes);
-				assert(!FAILED(hr));
+				assert(!FAILED(hr) && "convert UAV to templete<T> is failed ");  
 				get_context().Get()->Unmap(pCloneBuf, 0);
 
 				return static_cast<T*>(subRes.pData);

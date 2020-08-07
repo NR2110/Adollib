@@ -69,12 +69,12 @@ struct Out_buf
 
 //::::::::::::::::::::::::::::::::::::::::::
 
-//衝突計算に使用する
+//input_pair
 struct CS_input_pair
 {
 	Pair pair;
 };
-//計算結果を一時的に保存する
+//input_solverbody
 struct CS_input_solvbody
 {
 	Solverbody solverbody;
@@ -95,29 +95,33 @@ struct CS_out
 
 //:::::::::::::::::::::::::::::::::::::::::::::
 
-void function(in float friction, in Contactpoint cp, inout Solverbody out_solvb0, inout Solverbody out_solvb1, inout float ac_norm, inout float ac_tan1, inout float ac_tan2)
+void function(in float friction, in Contactpoint cp, inout Solverbody out_solvb0, inout Solverbody out_solvb1, out float ac_norm, out float ac_tan1, out float ac_tan2)
 {
-
+    ac_norm = 0;
+    ac_tan1 = 0;
+    ac_tan2 = 0;
     
     float3 rA = vector3_be_rotated_by_quat(cp.c_point[0], out_solvb0.orientation);
     float3 rB = vector3_be_rotated_by_quat(cp.c_point[1], out_solvb1.orientation);
 
-		{
+	{
         Constraint constraint = cp.constraint[0];
         float delta_impulse = constraint.rhs;
         float3 delta_velocity[2];
         delta_velocity[0] = out_solvb0.delta_LinearVelocity + cross(out_solvb0.delta_AngularVelocity, rA);
         delta_velocity[1] = out_solvb1.delta_LinearVelocity + cross(out_solvb1.delta_AngularVelocity, rB);
         delta_impulse -= constraint.jacDiagInv * dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
-        float old_impulse = ac_norm;
-        ac_norm = old_impulse + delta_impulse > constraint.lowerlimit ? (old_impulse + delta_impulse < constraint.upperlimit ? old_impulse + delta_impulse : constraint.upperlimit) : constraint.lowerlimit;
-        delta_impulse = ac_norm - old_impulse;
+        float old_impulse = constraint.accuminpulse;
+        constraint.accuminpulse = old_impulse + delta_impulse > constraint.lowerlimit ? (old_impulse + delta_impulse < constraint.upperlimit ? old_impulse + delta_impulse : constraint.upperlimit) : constraint.lowerlimit;
+        delta_impulse = constraint.accuminpulse - old_impulse;
         out_solvb0.delta_LinearVelocity += delta_impulse * out_solvb0.inv_mass * constraint.axis;
         out_solvb0.delta_AngularVelocity += mul(float4(cross(rA, constraint.axis * delta_impulse), 0), (out_solvb0.inv_inertia));
         out_solvb1.delta_LinearVelocity -= delta_impulse * out_solvb1.inv_mass * constraint.axis;
         out_solvb1.delta_AngularVelocity -= mul(float4(cross(rB, constraint.axis * delta_impulse), 0), (out_solvb1.inv_inertia));
+       
+        ac_norm = cp.constraint[0].accuminpulse;
     }
-
+    
     float max_friction = friction * abs(ac_norm);
     cp.constraint[1].lowerlimit = -max_friction;
     cp.constraint[1].upperlimit = +max_friction;
@@ -131,31 +135,37 @@ void function(in float friction, in Contactpoint cp, inout Solverbody out_solvb0
         delta_velocity[0] = out_solvb0.delta_LinearVelocity + cross(out_solvb0.delta_AngularVelocity, rA);
         delta_velocity[1] = out_solvb1.delta_LinearVelocity + cross(out_solvb1.delta_AngularVelocity, rB);
         delta_impulse -= constraint.jacDiagInv * dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
-        float old_impulse = ac_tan1;
-        ac_tan1 = old_impulse + delta_impulse > constraint.lowerlimit ? (old_impulse + delta_impulse < constraint.upperlimit ? old_impulse + delta_impulse : constraint.upperlimit) : constraint.lowerlimit;
-        delta_impulse = ac_tan1 - old_impulse;
+        float old_impulse = constraint.accuminpulse;
+        constraint.accuminpulse = old_impulse + delta_impulse > constraint.lowerlimit ? (old_impulse + delta_impulse < constraint.upperlimit ? old_impulse + delta_impulse : constraint.upperlimit) : constraint.lowerlimit;
+        delta_impulse = constraint.accuminpulse - old_impulse;
         out_solvb0.delta_LinearVelocity += delta_impulse * out_solvb0.inv_mass * constraint.axis;
         out_solvb0.delta_AngularVelocity += mul(float4(cross(rA, constraint.axis * delta_impulse), 0), (out_solvb0.inv_inertia));
         out_solvb1.delta_LinearVelocity -= delta_impulse * out_solvb1.inv_mass * constraint.axis;
         out_solvb1.delta_AngularVelocity -= mul(float4(cross(rB, constraint.axis * delta_impulse), 0), (out_solvb1.inv_inertia));
     }
-		{
+	{
         Constraint constraint = cp.constraint[2];
         float delta_impulse = constraint.rhs;
         float3 delta_velocity[2];
         delta_velocity[0] = out_solvb0.delta_LinearVelocity + cross(out_solvb0.delta_AngularVelocity, rA);
         delta_velocity[1] = out_solvb1.delta_LinearVelocity + cross(out_solvb1.delta_AngularVelocity, rB);
         delta_impulse -= constraint.jacDiagInv * dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
-        float old_impulse = ac_tan2;
-        ac_tan2 = old_impulse + delta_impulse > constraint.lowerlimit ? (old_impulse + delta_impulse < constraint.upperlimit ? old_impulse + delta_impulse : constraint.upperlimit) : constraint.lowerlimit;
-        delta_impulse = ac_tan2 - old_impulse;
+        float old_impulse = constraint.accuminpulse;
+        constraint.accuminpulse = old_impulse + delta_impulse > constraint.lowerlimit ? (old_impulse + delta_impulse < constraint.upperlimit ? old_impulse + delta_impulse : constraint.upperlimit) : constraint.lowerlimit;
+        delta_impulse = constraint.accuminpulse - old_impulse;
         out_solvb0.delta_LinearVelocity += delta_impulse * out_solvb0.inv_mass * constraint.axis;
         out_solvb0.delta_AngularVelocity += mul(float4(cross(rA, constraint.axis * delta_impulse), 0), out_solvb0.inv_inertia);
         out_solvb1.delta_LinearVelocity -= delta_impulse * out_solvb1.inv_mass * constraint.axis;
         out_solvb1.delta_AngularVelocity -= mul(float4(cross(rB, constraint.axis * delta_impulse), 0), out_solvb1.inv_inertia);
     }
 
-	
+    ac_norm = cp.constraint[0].accuminpulse;
+    ac_tan1 = cp.constraint[1].accuminpulse;
+    ac_tan2 = cp.constraint[2].accuminpulse;
+    
+    //ac_norm = ac_norm;
+    //ac_tan1 = ac_tan1;
+    //ac_tan2 = ac_tan2;
     
 
 
@@ -182,9 +192,9 @@ void main(const Input input)
         
         for (int C_num = 0; C_num < cs_input_pair[index].pair.contacts.contact_num; C_num++)
         {
-        cs_out[index].accuminpulse[C_num][0] = cs_input_pair[index].pair.contacts.c_points[C_num].constraint[0].accuminpulse;
-        cs_out[index].accuminpulse[C_num][1] = cs_input_pair[index].pair.contacts.c_points[C_num].constraint[1].accuminpulse;
-        cs_out[index].accuminpulse[C_num][2] = cs_input_pair[index].pair.contacts.c_points[C_num].constraint[2].accuminpulse;
+            cs_out[index].accuminpulse[C_num][0] = cs_input_pair[index].pair.contacts.c_points[C_num].constraint[0].accuminpulse;
+            cs_out[index].accuminpulse[C_num][1] = cs_input_pair[index].pair.contacts.c_points[C_num].constraint[1].accuminpulse;
+            cs_out[index].accuminpulse[C_num][2] = cs_input_pair[index].pair.contacts.c_points[C_num].constraint[2].accuminpulse;
             
             
             function(
@@ -198,9 +208,9 @@ void main(const Input input)
              );
             
         //差分をoutputする
-        cs_out[index].accuminpulse[C_num][0] -= cs_input_pair[index].pair.contacts.c_points[C_num].constraint[0].accuminpulse;
-        cs_out[index].accuminpulse[C_num][1] -= cs_input_pair[index].pair.contacts.c_points[C_num].constraint[1].accuminpulse;
-        cs_out[index].accuminpulse[C_num][2] -= cs_input_pair[index].pair.contacts.c_points[C_num].constraint[2].accuminpulse;          
+            cs_out[index].accuminpulse[C_num][0] -= cs_input_pair[index].pair.contacts.c_points[C_num].constraint[0].accuminpulse;
+            cs_out[index].accuminpulse[C_num][1] -= cs_input_pair[index].pair.contacts.c_points[C_num].constraint[1].accuminpulse;
+            cs_out[index].accuminpulse[C_num][2] -= cs_input_pair[index].pair.contacts.c_points[C_num].constraint[2].accuminpulse;
         }
        
   

@@ -25,7 +25,7 @@ namespace Adollib
 
 	bool Rigitbody_manager::update(Scenelist Sce)
 	{
-		physics_g::timeStep = Al_Global::second_per_frame; //フレーム依存じゃない
+		//physics_g::timeStep = Al_Global::second_per_frame; //フレーム依存じゃない
 		//physics_g::timeStep = physics_g::timeStep; //フレーム依存じゃない
 
 		//DBUG : 衝突点の表示の生成 ::::::::::

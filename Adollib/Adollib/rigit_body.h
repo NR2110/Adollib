@@ -56,7 +56,7 @@ namespace Adollib {
 		float friction = 0.4;					//ñÄéCóÕ
 
 		vector3 linear_velocity = vector3();    //ï¿êië¨ìx
-		vector3 angular_velocity = vector3();   //äpë¨ìx
+		vector3 angula_velocity = vector3();   //äpë¨ìx
 
 		vector3 liner_acceleration = vector3();  //â¡ë¨
 		vector3 angular_acceleration = vector3();//äpâ¡ë¨
@@ -71,7 +71,7 @@ namespace Adollib {
 
 		Collider() :
 			local_position(0, 0, 0), local_orientation(0, 0, 0, 1),
-			linear_velocity(0, 0, 0), angular_velocity(0, 0, 0),
+			linear_velocity(0, 0, 0), angula_velocity(0, 0, 0),
 			inertial_mass(1), accumulated_force(0, 0, 0),
 			accumulated_torque(0, 0, 0), solve(nullptr)
 		{

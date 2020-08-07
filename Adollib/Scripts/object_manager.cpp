@@ -118,7 +118,7 @@ namespace Adollib
 	void object_manager::update()
 	{
 		if (input->getKeyTrigger(Key::M)) {
-			int max_c = 5;
+			int max_c = 1;
 			int num = 1;
 
 			if(num == 0) //ピラミッド
@@ -151,26 +151,34 @@ namespace Adollib
 		}
 
 		if (input->getKeyTrigger(Key::N)) {
-			int max_c = 5;
-			int num = 1;
+			int max_c = 2;
+			int num = 2;
 
 			if(num == 0) //ピラミッド
 			for (int i = 0; i < max_c; i++) {
 
 				for (int o = 0; o < max_c - i; o++) {
+
 					set_fall_sphere(vector3(2.50001 * o - (max_c - i) * 2.500001 / 2.0, 5.0 + 2.50001 * i, 0), 1, vector3(0, 1, 1));
 				}
-
 			}
+
 			if (num == 1) { //平坦
 				for (int i = 0; i < max_c; i++) {
 
 					for (int o = 0; o < max_c; o++) {
-						//set_fall_box(vector3(2.00001 * o - (max_c - i) * 2.000001 / 2.0, 1.0 + 2.00001 * i, 0), vector3(1, 1, 1), vector3(0, 0, 0), vector3(0, 1, 1));
 
-						set_fall_sphere(vector3(2.50001 * i - (max_c - i) * 2.500001 / 2.0, 10, 2.50001 * o - (max_c - o) * 2.500001 / 2.0), 1, vector3(0, 1, 1));
+						set_fall_sphere(vector3(2.50001 * i - (max_c - i) * 5.000001 / 2.0, 10, 2.50001 * o - (max_c - o) * 2.500001 / 2.0), 1, vector3(0, 1, 1));
 					}
 
+				}
+			}
+
+			if (num == 2) { //タワー
+				for (int i = 0; i < max_c; i++) {
+
+					set_fall_sphere(vector3(0, 10 + 2.50001 * i,0), 1, vector3(0, 1, 1 * i));
+					
 				}
 			}
 

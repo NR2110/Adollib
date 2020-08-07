@@ -26,8 +26,8 @@ void Collider::apply_external_force(float duration) {
 		inverse_inertia_tensor = transposed_rotation * inverse_inertia_tensor * rotation;
 		angular_acceleration += vector3_trans(accumulated_torque, inverse_inertia_tensor);
 
-		angular_velocity += angular_acceleration * duration;
-		if (angular_velocity.norm() < FLT_EPSILON)angular_velocity = vector3(0, 0, 0);
+		angula_velocity += angular_acceleration * duration;
+		if (angula_velocity.norm() < FLT_EPSILON)angula_velocity = vector3(0, 0, 0);
 
 		//QUESTION : 上の式じゃダメなの?
 		//各速度による姿勢の更新
@@ -54,7 +54,7 @@ void Collider::integrate(float duration) {
 	if (linear_velocity.norm() >= FLT_EPSILON)
 		world_position += linear_velocity * duration;
 
-	world_orientation *= quaternion_radian_axis(angular_velocity.norm_sqr() * duration * 0.5, angular_velocity.unit_vect());
+	world_orientation *= quaternion_radian_axis(angula_velocity.norm_sqr() * duration * 0.5, angula_velocity.unit_vect());
 	world_orientation = world_orientation.unit_vect();
 
 	//quaternion dAng = quaternion(0, angular_velocity.x, angular_velocity.y, angular_velocity.z) * world_orientation * 0.5f;

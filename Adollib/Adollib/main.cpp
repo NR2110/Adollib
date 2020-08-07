@@ -244,7 +244,7 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 	Systems::Release();
 
 	//memory leak 221 ` 302 ‚Í‰½‚ğ‚µ‚Ä‚ào‚é‚½‚ß–³‹
-	_CrtDumpMemoryLeaks();
+	//_CrtDumpMemoryLeaks();
 
 	return 0;
 }
