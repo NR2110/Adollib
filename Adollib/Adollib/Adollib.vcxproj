@@ -169,6 +169,7 @@
     <ClInclude Include="component_light.h" />
     <ClInclude Include="compute_shader.h" />
     <ClInclude Include="contact.h" />
+    <ClInclude Include="debug.h" />
     <ClInclude Include="DOP.h" />
     <ClInclude Include="frustum_culling.h" />
     <ClInclude Include="gameobject.h" />
@@ -184,6 +185,7 @@
     <ClInclude Include="Imgui\imstb_textedit.h" />
     <ClInclude Include="Imgui\imstb_truetype.h" />
     <ClInclude Include="imgui_all.h" />
+    <ClInclude Include="imgui_base.h" />
     <ClInclude Include="imgui_manager.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="light_types.h" />
@@ -242,6 +244,7 @@
     </ClCompile>
     <ClCompile Include="compute_shader.cpp" />
     <ClCompile Include="contact.cpp" />
+    <ClCompile Include="debug.cpp" />
     <ClCompile Include="frustum_culling.cpp" />
     <ClCompile Include="gameobject.cpp" />
     <ClCompile Include="gameobject_camera.cpp" />

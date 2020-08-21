@@ -187,11 +187,14 @@
     <ClCompile Include="Imgui\imgui_widgets.cpp">
       <Filter>00_Adollib\99_imgui</Filter>
     </ClCompile>
-    <ClCompile Include="work_meter.cpp">
-      <Filter>00_Adollib\00_main</Filter>
-    </ClCompile>
     <ClCompile Include="imgui_manager.cpp">
       <Filter>00_Adollib\99_imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="debug.cpp">
+      <Filter>00_Adollib\00_main</Filter>
+    </ClCompile>
+    <ClCompile Include="work_meter.cpp">
+      <Filter>00_Adollib\00_main</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -405,13 +408,19 @@
     <ClInclude Include="Imgui\imstb_truetype.h">
       <Filter>00_Adollib\99_imgui</Filter>
     </ClInclude>
-    <ClInclude Include="work_meter.h">
-      <Filter>00_Adollib\00_main</Filter>
-    </ClInclude>
     <ClInclude Include="imgui_manager.h">
       <Filter>00_Adollib\99_imgui</Filter>
     </ClInclude>
     <ClInclude Include="imgui_all.h">
+      <Filter>00_Adollib\99_imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="debug.h">
+      <Filter>00_Adollib\00_main</Filter>
+    </ClInclude>
+    <ClInclude Include="work_meter.h">
+      <Filter>00_Adollib\00_main</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_base.h">
       <Filter>00_Adollib\99_imgui</Filter>
     </ClInclude>
   </ItemGroup>

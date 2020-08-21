@@ -1,165 +1,111 @@
 #include "ALP_broadphase.h"
-
-#include <iostream>
-#include <thread>
-#include <mutex>
-
+#include <list>
 using namespace Adollib;
 using namespace Contacts;
 
-//:::::::::::::::::::::::::::
-#pragma region Broadphase
-//:::::::::::::::::::::::::::
-//DOP6による大雑把な当たり判定
-bool Check_insert_DOP7(const Collider* collA, const Collider* collB) {
-	//無限PlaneはDOPが作れないためnarrowに投げる?
-	if (collA->shape == Collider_shape::shape_plane || collB->shape == Collider_shape::shape_plane) return true;
-
-	vector3 dis = collA->dop7.pos - collB->dop7.pos;
-
-	for (int i = 0; i < DOP_size; i++) {
-		if (
-			vector3_dot(+DOP_7_axis[i], collA->dop7.pos - collB->dop7.pos) < collB->dop7.min[i] - collA->dop7.max[i] ||
-			vector3_dot(-DOP_7_axis[i], collA->dop7.pos - collB->dop7.pos) < collA->dop7.min[i] - collB->dop7.max[i]
-			) {
-			float AA = vector3_dot(+DOP_7_axis[i], collA->dop7.pos - collB->dop7.pos);
-			float AB = collB->dop7.min[i] - collA->dop7.max[i];
-			float BA = vector3_dot(-DOP_7_axis[i], collA->dop7.pos - collB->dop7.pos);
-			float BB = collA->dop7.min[i] - collB->dop7.max[i];
-			return false;
-		}
-	}
-
-	return true;
-}
-
-bool Check_insert_Plane(const Collider* plane, const Collider* coll) {
-	vector3 axis[6]{
-	{1,0,0},
-	{0,1,0},
-	{0,0,1},
-	{1,1,0},
-	{0,1,1},
-	{1,0,1}
-	};
-	vector3 V;
-	float plane_dis = 0, coll_dis = FLT_MAX;
-
-	V = vector3_be_rotated_by_quaternion(vector3(0, 1, 0), plane->world_orientation);
-	plane_dis = vector3_dot(V, plane->world_position);
-
-	for (int i = 0; i < DOP_size; i++) {
-		float coll_len = vector3_dot(V, coll->world_position + axis[i] * coll->dop7.max[i]);
-		if (plane_dis > coll_len)return true;
-	}
-
-	return false;
-}
-
-namespace noname {
-	std::mutex mutex_physics;
-}
-
-void add_pair(std::vector<Contacts::Contact_pair>& pairs, Contacts::Contact_pair pair) {
-	std::lock_guard<std::mutex> lock(noname::mutex_physics);
-	pairs.emplace_back(pair);
-}
-
-void Broadphase_DOP_7(std::vector<Contacts::Contact_pair>& new_pairs, Collider* collA, Collider* collB) {
-	Contact_pair new_pair;
-	// タグによる衝突の是非
-	bool hit = true;
-	for (int q = 0; q < collB->No_hit_tag.size(); q++) {
-		if (collA->No_hit_tag[q] == std::string("all")) hit = false;
-		if (collA->No_hit_tag[q] == collB->tag) hit = false;
-		if (hit == false)break;
-	}
-	if (hit == false)return;
-	for (int q = 0; q < collB->No_hit_tag.size(); q++) {
-		if (collB->No_hit_tag[q] == std::string("all")) hit = false;
-		if (collB->No_hit_tag[q] == collA->tag) hit = false;
-		if (hit == false)break;
-	}
-	if (hit == false)return;
-
-	//DOPによる大雑把な当たり判定
-	if (collA->shape != Collider_shape::shape_plane && collB->shape != Collider_shape::shape_plane) {
-		if (Check_insert_DOP7(collA, collB) == false)return;
-	}
-	else if (collA->shape == Collider_shape::shape_plane && collB->shape != Collider_shape::shape_plane) {
-		if (Check_insert_Plane(collA, collB) == false)return;
-	}
-	else if (collA->shape != Collider_shape::shape_plane && collB->shape == Collider_shape::shape_plane) {
-		if (Check_insert_Plane(collB, collA) == false)return;
-	}
-	else return;
-
-	//new_pair.body[0]にアドレスの大きいほうをしまう
-	if (collA > collB) {
-		new_pair.body[0] = collA;
-		new_pair.body[1] = collB;
-	}
-	else {
-		new_pair.body[0] = collB;
-		new_pair.body[1] = collA;
-	}
-	new_pair.type = Pairtype::new_pair;
-
-	add_pair(new_pairs, new_pair);
-}
+struct edge{
+	Collider* coll;
+	float value;
+	bool st_go; //start == true, goal == false
+};
+//
+//void swap(int* a, int* b)
+//{
+//	int t = *a;
+//	*a = *b;
+//	*b = t;
+//}
+//
+//int partition(Collider* array, int l, int r) {
+//	float pivot = array[r].world_position.x;
+//	int i = (l - 1);
+//
+//	for (int j = l; j <= r - 1; j++) {
+//		if (array[j].world_position.x <= pivot) {
+//			i++;
+//			swap(&array[i], &array[j]);
+//		}
+//	}
+//	swap(&array[i + 1], &array[r]);
+//	return (i + 1);
+//}
+//
+//void quickSort(Collider* array, int l, int r) {
+//	if (l < r) {
+//		int pivot = partition(array, l, r);
+//		quickSort(array, l, pivot - 1);
+//		quickSort(array, pivot + 1, r);
+//	}
+//}
 
 
 void physics_function::Broadphase(const std::vector<Collider*>& coll, std::vector<Contacts::Contact_pair>& pairs) {
+	//Sweep&Pruneを挿入法で実装
+	static std::list<edge>axis_list[2]; //x,y軸の分だけ用意 
 
-	//DEBUG : 適当に調整
-	const int thread_max = 7;
-	std::thread threads[thread_max];
+	if (coll.size()*2 != axis_list[0].size()) {
+		//TODO : 新しく追加されたもの,なくなったものがわかればさらに最適化できる
+		edge ed;
 
-	//DOPの更新
-	for (int i = 0; i < coll.size(); i++) {
-		coll[i]->update_dop7();
+		for (int xy = 0; xy < 2; xy++) {
+			axis_list[xy].clear();
+
+			for (int coll_num = 0; coll_num > coll.size(); coll_num++) {
+
+				ed.value = coll[coll_num]->world_position[xy];
+				ed.coll = coll[coll_num];
+
+				axis_list[xy].emplace_back(ed);
+				ed.value += coll[coll_num]->world_size[xy];
+				axis_list[xy].emplace_back(ed);
+			}
+		}
+
 	}
 
-	//DOP_8による大雑把な当たり判定
-	std::vector<Contacts::Contact_pair> new_pairs;
-	Contact_pair new_pair;
-	for (int i = 0; i < coll.size(); i++) {
-		for (int o = i + 1; o < coll.size(); o++) {
-			Broadphase_DOP_7(new_pairs, coll[i], coll[o]);
+	//挿入ソート
+	//[0]small ---- big
+	{
+		edge ed;
+
+		for (int xy = 0; xy < 2; xy++) {
+
+			std::list<edge>::iterator itr = axis_list[xy].begin();
+			std::list<edge>::iterator itr_old;
+			std::list<edge>::iterator itr_insert;
+			for (int list_num = 0; list_num < axis_list[xy].size() - 1; list_num++) {
+				itr_old = itr;
+				itr++;
+
+				if (itr_old->value > itr->value) {
+
+					itr_insert = axis_list[xy].begin();
+					for (int ins_num = 0; ins_num < axis_list[xy].size(); ins_num++) {
+						if (itr_old->value < itr_insert->value) {
+
+							axis_list[xy].insert(itr_insert, *itr_old);
+							axis_list[xy].erase(itr_old);
+							break;
+						}
+
+						itr_insert++;
+					}
+
+				}
+			}
+
 		}
 	}
 
-	//生成したpairが前のpairから存在しているかの確認
-	for (int old_num = 0; old_num < pairs.size(); old_num++) {
-		for (int new_num = 0; new_num < new_pairs.size(); new_num++) {
-			if (new_pairs[new_num].type == Pairtype::keep_pair) continue;
+	std::list<Collider*> active;
 
-			if (
-				new_pairs[new_num].body[0] == pairs[old_num].body[0] &&
-				new_pairs[new_num].body[1] == pairs[old_num].body[1]
-				) {
-				//前から存在していたらデータを引き継ぐ
-				new_pairs[new_num] = pairs[old_num];
-				new_pairs[new_num].type = Pairtype::keep_pair;
-			}
-			else {
-				new_pairs[new_num].type = Pairtype::new_pair;
-			}
-		}
-	}
 
-	//現在使用していない衝突点を削除
-	for (int i = 0; i < new_pairs.size(); i++) {
-		new_pairs[i].contacts.chack_remove_contact_point(
-			new_pairs[i].body[0]->world_position,
-			new_pairs[i].body[0]->world_orientation,
-			new_pairs[i].body[1]->world_position,
-			new_pairs[i].body[1]->world_orientation
-		);
-	}
 
-	pairs.clear();
-	pairs = new_pairs;
+
 
 }
-#pragma endregion
+
+
+
+
+

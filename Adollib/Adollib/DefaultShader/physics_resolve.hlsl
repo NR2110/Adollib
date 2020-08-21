@@ -92,7 +92,6 @@ struct CS_out
     float accuminpulse[4][3];
 };
 
-
 //:::::::::::::::::::::::::::::::::::::::::::::
 
 void function(in float friction, in Contactpoint cp, inout Solverbody out_solvb0, inout Solverbody out_solvb1, out float ac_norm, out float ac_tan1, out float ac_tan2)

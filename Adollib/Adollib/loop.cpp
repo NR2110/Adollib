@@ -18,8 +18,6 @@ bool loop::init(HWND hWnd) {
 
 bool loop::Update(MSG hMsg, HWND hWnd, int width, int height) {
 
-	Work_meter::stop(std::string("render_shader"));
-
 	Work_meter::start(std::string("update_all"));
 	Systems::inputManager->update();
 
@@ -44,7 +42,6 @@ bool loop::Render(){
 
 	Adollib::Imgui_manager::render();
 
-	Work_meter::start(std::string("render_shader"));
 	Systems::Flip();
 
 	return true;

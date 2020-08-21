@@ -115,8 +115,8 @@ void Box::update_dop7() {
 		for (int o = 0; o < 4; o++) {
 			float dis = fabsf(vector3_dot(DOP_7_axis[i], half[o]));
 			if (max_len < dis) {
-				dop7.max[i] = +dis * 1.01f;//確実にするためちょっと大きめにとる
-				dop7.min[i] = -dis * 1.01f;//確実にするためちょっと大きめにとる
+				dop7.max[i] = +dis * 1.000001f;//確実にするためちょっと大きめにとる
+				dop7.min[i] = -dis * 1.000001f;//確実にするためちょっと大きめにとる
 				max_len = dis;
 			}
 
@@ -127,8 +127,8 @@ void Box::update_dop7() {
 void Sphere::update_dop7() {
 	dop7.pos = gameobject->get_world_position();	
 	for (int i = 0; i < DOP_size; i++) {
-		dop7.max[i] = +r * 1.01 * world_size.x;
-		dop7.min[i] = -r * 1.01 * world_size.x;
+		dop7.max[i] = +r * 1.0000001 * world_size.x;
+		dop7.min[i] = -r * 1.0000001 * world_size.x;
 	}
 }
 void Plane::update_dop7() {

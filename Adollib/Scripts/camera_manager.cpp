@@ -46,8 +46,6 @@ namespace Adollib
 		DirectX::XMStoreFloat3(&XMA, DirectX::XMVector3Transform(VEA, XMmat));
 		veA = vector3_trans(veA, ma);
 
-
-
 		int adfsgdhfjgkh = 0;
 
 

@@ -196,7 +196,7 @@ bool physics_function::generate_contact_sphere_box(const Sphere& sphere, const  
 				sphere.world_size.x - distance,
 				-n,
 				closest_point,
-				sphere.world_size.x * vector3_be_rotated_by_quaternion(-n, sphere.world_orientation.conjugate())
+				sphere.world_size.x * vector3_be_rotated_by_quaternion(n, sphere.world_orientation.conjugate())
 			);
 		}
 		else {
@@ -205,7 +205,7 @@ bool physics_function::generate_contact_sphere_box(const Sphere& sphere, const  
 			pair.contacts.addcontact(
 				sphere.world_size.x - distance,
 				n,
-				sphere.world_size.x * vector3_be_rotated_by_quaternion(-n, sphere.world_orientation.conjugate()),
+				sphere.world_size.x * vector3_be_rotated_by_quaternion(n, sphere.world_orientation.conjugate()),
 				closest_point
 			);
 		}
@@ -440,6 +440,7 @@ bool physics_function::generate_contact_box_box(const Box& b0, const Box& b1, Co
 	obb0.u_axes[2].x = m._31; obb0.u_axes[2].y = m._32; obb0.u_axes[2].z = m._33;
 	obb0.half_width = b0.world_size;
 	obb0.orient = b0.world_orientation;
+	assert(!isnan(obb0.orient.norm()));
 
 	m = b1.world_orientation.get_rotate_matrix();
 	OBB obb1;
@@ -449,6 +450,7 @@ bool physics_function::generate_contact_box_box(const Box& b0, const Box& b1, Co
 	obb1.u_axes[2].x = m._31; obb1.u_axes[2].y = m._32; obb1.u_axes[2].z = m._33;
 	obb1.half_width = b1.world_size;
 	obb1.orient = b1.world_orientation;
+	assert(!isnan(obb1.orient.norm()));
 
 	float smallest_penetration = FLT_MAX;	//最小めり込み量
 	int smallest_axis[2];	//最小めり込み量を得た分離軸の作成に使用した各OBBのローカル軸番号 辺×辺用に2つ

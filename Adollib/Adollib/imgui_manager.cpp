@@ -5,6 +5,7 @@
 #include "imgui_all.h"
 
 #include "work_meter.h"
+#include "debug.h"
 
 using namespace Adollib;
 
@@ -75,7 +76,21 @@ bool Imgui_manager::update(MSG hMsg) {
 }
 
 bool Imgui_manager::render() {
+
+	static bool draw_flags[2] = { true };
+
+	ImGui::Begin("Imgui_managerÅ@"); 
+
+	ImGui::Checkbox("Work_meter", &(draw_flags[0]));
+	ImGui::Checkbox("Debug", &(draw_flags[1]));
+	
+	ImGui::End();
+
+	if(draw_flags[0])
 	Work_meter::render();
+
+	if(draw_flags[1])
+	Debug::render();
 
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());

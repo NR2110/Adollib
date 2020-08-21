@@ -1,27 +1,16 @@
-﻿  ALP_resolve_contact.cpp
+﻿  rigit_body.cpp
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(12,41): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(13,41): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(14,41): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(15,41): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\rigit_body.h(55,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\rigit_body.h(56,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(48,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.h(7,21): warning C4099: 'Adollib::physics_function::Solverbody': タイプ名は最初 'class' として使われていましたが 'struct' として使われています。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.h(7): message : 'Adollib::physics_function::Solverbody' の宣言を確認してください
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(69,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(80,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(88,28): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(206,28): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(234,30): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(324,37): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(378,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(382,37): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(389,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(402,36): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(437,30): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(547,37): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(576,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(595,36): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(628,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\vector_e.h(80): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\rigit_body.cpp(57,84): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\rigit_body.cpp(130,32): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\rigit_body.cpp(131,32): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
   Adollib.vcxproj -> C:\Users\2190072\Documents\Adollib\Adollib\Debug\Adollib.exe
