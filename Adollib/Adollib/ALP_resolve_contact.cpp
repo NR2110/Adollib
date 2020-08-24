@@ -199,10 +199,6 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 				cp.constraint[2].axis = axis;
 			}
 
-			if (isnan((cp.constraint[0].axis + cp.constraint[1].axis + cp.constraint[2].axis).norm())) {
-				int dafsgdhf = 0;
-			}
-
 		}
 	}
 
@@ -302,10 +298,6 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 						solverbody[1]->delta_AngulaVelocity -= vector3_trans(vector3_cross(rB, constraint.axis * delta_impulse), solverbody[1]->inv_inertia);
 					}
 
-				}
-
-				if (2 == pairs.size()) {
-					int ssadfsgdfhg = 0;
 				}
 			}
 		}
@@ -656,15 +648,9 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 
 	// ë¨ìxÇÃçXêV
 	for (int i = 0; i < colliders.size(); i++) {
-		assert(!isnan(colliders[i]->solve->delta_LinearVelocity.norm()) ||
-			!isnan(colliders[i]->solve->delta_AngulaVelocity.norm())
-		);
-
 		colliders[i]->linear_velocity += colliders[i]->solve->delta_LinearVelocity;
 		colliders[i]->angula_velocity += colliders[i]->solve->delta_AngulaVelocity;
 
-		//Debug::set(std::to_string(static_cast<int>(colliders[i]->shape)),"linear_velocity", colliders[i]->linear_velocity.get_XM3());
-		//Debug::set(std::to_string(static_cast<int>(colliders[i]->shape)),"angula_velocity", colliders[i]->angula_velocity.get_XM3());
 	}
 
 }

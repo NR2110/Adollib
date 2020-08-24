@@ -88,6 +88,10 @@ namespace Adollib
 		Broadphase(colls, pairs);
 		Work_meter::stop("Broadphase");
 
+		Work_meter::start("Midphase");
+		Midphase(pairs);
+		Work_meter::stop("Midphase");
+
 		// Õ“Ë¶¬
 		Work_meter::start("Narrowphase");
 		generate_contact(pairs);

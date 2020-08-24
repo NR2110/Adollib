@@ -157,6 +157,7 @@
     <ClInclude Include="ALP_broadphase.h" />
     <ClInclude Include="ALP_generate_contact.h" />
     <ClInclude Include="ALP_integrate.h" />
+    <ClInclude Include="ALP_midphase.h" />
     <ClInclude Include="ALP_resolve_contact.h" />
     <ClInclude Include="cbuffer_manager.h" />
     <ClInclude Include="closest_func.h" />
@@ -236,6 +237,7 @@
     <ClCompile Include="ALP_broadphase.cpp" />
     <ClCompile Include="ALP_generate_contact.cpp" />
     <ClCompile Include="ALP_integrate.cpp" />
+    <ClCompile Include="ALP_midphase.cpp" />
     <ClCompile Include="ALP_resolve_contact.cpp" />
     <ClCompile Include="closest_func.cpp" />
     <ClCompile Include="complex.cpp">

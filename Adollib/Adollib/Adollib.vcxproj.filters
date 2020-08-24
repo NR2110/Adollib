@@ -29,9 +29,6 @@
     <Filter Include="00_Adollib\11_math">
       <UniqueIdentifier>{eea9848d-7e6b-474f-aa58-f3a76a5c04fc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00_Adollib\11_math\physics">
-      <UniqueIdentifier>{948ff940-3127-440f-a355-36b477c57395}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00_Adollib\22_object">
       <UniqueIdentifier>{ba801f30-dc48-437a-b82e-1c30330c227f}</UniqueIdentifier>
     </Filter>
@@ -46,6 +43,9 @@
     </Filter>
     <Filter Include="00_Adollib\99_imgui">
       <UniqueIdentifier>{f686ac45-2d88-4cab-a5d5-7ca5931f6b99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Adollib\00_main\physics">
+      <UniqueIdentifier>{948ff940-3127-440f-a355-36b477c57395}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -134,13 +134,13 @@
       <Filter>ソース ファイル\scene_game\enemy</Filter>
     </ClCompile>
     <ClCompile Include="rigit_body_manager.cpp">
-      <Filter>00_Adollib\11_math\physics</Filter>
+      <Filter>00_Adollib\00_main\physics</Filter>
     </ClCompile>
     <ClCompile Include="rigit_body.cpp">
-      <Filter>00_Adollib\11_math\physics</Filter>
+      <Filter>00_Adollib\00_main\physics</Filter>
     </ClCompile>
     <ClCompile Include="contact.cpp">
-      <Filter>00_Adollib\11_math\physics</Filter>
+      <Filter>00_Adollib\00_main\physics</Filter>
     </ClCompile>
     <ClCompile Include="resource_manager.cpp">
       <Filter>00_Adollib\00_main</Filter>
@@ -155,19 +155,19 @@
       <Filter>00_Adollib\33_shader</Filter>
     </ClCompile>
     <ClCompile Include="ALP_generate_contact.cpp">
-      <Filter>00_Adollib\11_math\physics</Filter>
+      <Filter>00_Adollib\00_main\physics</Filter>
     </ClCompile>
     <ClCompile Include="ALP_resolve_contact.cpp">
-      <Filter>00_Adollib\11_math\physics</Filter>
+      <Filter>00_Adollib\00_main\physics</Filter>
     </ClCompile>
     <ClCompile Include="ALP_integrate.cpp">
-      <Filter>00_Adollib\11_math\physics</Filter>
+      <Filter>00_Adollib\00_main\physics</Filter>
     </ClCompile>
     <ClCompile Include="ALP_broadphase.cpp">
-      <Filter>00_Adollib\11_math\physics</Filter>
+      <Filter>00_Adollib\00_main\physics</Filter>
     </ClCompile>
     <ClCompile Include="physics_global.cpp">
-      <Filter>00_Adollib\11_math\physics</Filter>
+      <Filter>00_Adollib\00_main\physics</Filter>
     </ClCompile>
     <ClCompile Include="Imgui\imgui.cpp">
       <Filter>00_Adollib\99_imgui</Filter>
@@ -195,6 +195,9 @@
     </ClCompile>
     <ClCompile Include="work_meter.cpp">
       <Filter>00_Adollib\00_main</Filter>
+    </ClCompile>
+    <ClCompile Include="ALP_midphase.cpp">
+      <Filter>00_Adollib\00_main\physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -328,19 +331,19 @@
       <Filter>ソース ファイル\scene_game\enemy</Filter>
     </ClInclude>
     <ClInclude Include="rigit_body_manager.h">
-      <Filter>00_Adollib\11_math\physics</Filter>
+      <Filter>00_Adollib\00_main\physics</Filter>
     </ClInclude>
     <ClInclude Include="rigit_body.h">
-      <Filter>00_Adollib\11_math\physics</Filter>
+      <Filter>00_Adollib\00_main\physics</Filter>
     </ClInclude>
     <ClInclude Include="contact.h">
-      <Filter>00_Adollib\11_math\physics</Filter>
+      <Filter>00_Adollib\00_main\physics</Filter>
     </ClInclude>
     <ClInclude Include="resource_manager.h">
       <Filter>00_Adollib\00_main</Filter>
     </ClInclude>
     <ClInclude Include="physics_global.h">
-      <Filter>00_Adollib\11_math\physics</Filter>
+      <Filter>00_Adollib\00_main\physics</Filter>
     </ClInclude>
     <ClInclude Include="closest_func.h">
       <Filter>00_Adollib\11_math</Filter>
@@ -355,19 +358,19 @@
       <Filter>00_Adollib\33_shader</Filter>
     </ClInclude>
     <ClInclude Include="ALP_generate_contact.h">
-      <Filter>00_Adollib\11_math\physics</Filter>
+      <Filter>00_Adollib\00_main\physics</Filter>
     </ClInclude>
     <ClInclude Include="ALP_resolve_contact.h">
-      <Filter>00_Adollib\11_math\physics</Filter>
+      <Filter>00_Adollib\00_main\physics</Filter>
     </ClInclude>
     <ClInclude Include="ALP_integrate.h">
-      <Filter>00_Adollib\11_math\physics</Filter>
+      <Filter>00_Adollib\00_main\physics</Filter>
     </ClInclude>
     <ClInclude Include="ALP__physics_function.h">
-      <Filter>00_Adollib\11_math\physics</Filter>
+      <Filter>00_Adollib\00_main\physics</Filter>
     </ClInclude>
     <ClInclude Include="ALP_broadphase.h">
-      <Filter>00_Adollib\11_math\physics</Filter>
+      <Filter>00_Adollib\00_main\physics</Filter>
     </ClInclude>
     <ClInclude Include="matrix_e.h">
       <Filter>00_Adollib\11_math</Filter>
@@ -382,7 +385,7 @@
       <Filter>00_Adollib\11_math</Filter>
     </ClInclude>
     <ClInclude Include="DOP.h">
-      <Filter>00_Adollib\11_math\physics</Filter>
+      <Filter>00_Adollib\00_main\physics</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imconfig.h">
       <Filter>00_Adollib\99_imgui</Filter>
@@ -423,6 +426,9 @@
     <ClInclude Include="imgui_base.h">
       <Filter>00_Adollib\99_imgui</Filter>
     </ClInclude>
+    <ClInclude Include="ALP_midphase.h">
+      <Filter>00_Adollib\00_main\physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="DefaultShader\default.hlsli">
@@ -458,7 +464,7 @@
       <Filter>00_Adollib\33_shader\hlsli</Filter>
     </FxCompile>
     <FxCompile Include="DefaultShader\physics_resolve.hlsl">
-      <Filter>00_Adollib\11_math\physics</Filter>
+      <Filter>00_Adollib\00_main\physics</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
