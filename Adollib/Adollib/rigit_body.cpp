@@ -108,15 +108,15 @@ void Box::update_dop7() {
 		half[i] = vector3_be_rotated_by_quaternion(half[i], WO);
 	}
 
-	//DOP_6の更新
+	//DOPの更新
 	float max_len = 0;
 	for (int i = 0; i < DOP_size; i++) {
 		max_len = 0;
 		for (int o = 0; o < 4; o++) {
 			float dis = fabsf(vector3_dot(DOP_7_axis[i], half[o]));
 			if (max_len < dis) {
-				dop7.max[i] = +dis * 1.000001f;//確実にするためちょっと大きめにとる
-				dop7.min[i] = -dis * 1.000001f;//確実にするためちょっと大きめにとる
+				dop7.max[i] = +dis * 1.00000001f;//確実にするためちょっと大きめにとる
+				dop7.min[i] = -dis * 1.00000001f;//確実にするためちょっと大きめにとる
 				max_len = dis;
 			}
 

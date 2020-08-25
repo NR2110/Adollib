@@ -22,6 +22,7 @@ namespace Adollib
 	std::map<Scenelist, std::vector<Adollib::Sphere*>>Rigitbody_manager::RB_sphere_s;
 
 	std::vector<Contacts::Contact_pair> Rigitbody_manager::pairs;
+	std::vector<Contacts::Collider_2> Rigitbody_manager::coll2s;
 
 	bool Rigitbody_manager::update(Scenelist Sce)
 	{
@@ -85,11 +86,11 @@ namespace Adollib
 
 		// ‘åG”c‚È“–‚½‚è”»’è
 		Work_meter::start("Broadphase");
-		Broadphase(colls, pairs);
+		Broadphase(colls, coll2s, pairs);
 		Work_meter::stop("Broadphase");
 
 		Work_meter::start("Midphase");
-		Midphase(pairs);
+		Midphase(coll2s, pairs);
 		Work_meter::stop("Midphase");
 
 		// Õ“Ë¶¬

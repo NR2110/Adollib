@@ -301,6 +301,7 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 				}
 			}
 		}
+
 	}
 	else if (whatnum == 1) {
 

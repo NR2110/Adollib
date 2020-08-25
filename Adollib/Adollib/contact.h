@@ -7,7 +7,7 @@
 #include "physics_global.h"
 
 namespace Adollib {
-	//Contactクラス用のnamespace 他の人があまり触れないように
+	//Contactクラス用のnamespace 
 	namespace Contacts {
 
 		//拘束
@@ -129,6 +129,10 @@ namespace Adollib {
 			Collider* body[2]; //接触したobject
 			
 			Contact contacts; //衝突の情報
+		};
+
+		struct Collider_2 {
+			Collider* body[2];
 		};
 
 	}

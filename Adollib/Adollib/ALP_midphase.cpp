@@ -100,28 +100,25 @@ void Midphase_DOP_7(std::vector<Contacts::Contact_pair>& new_pairs, Collider* co
 }
 
 
-void physics_function::Midphase(std::vector<Contacts::Contact_pair>& pairs) {
-
-	static std::vector<Contacts::Contact_pair> old_pair;
+void physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std::vector<Contacts::Contact_pair>& pairs) {
 
 	//DOP_8による大雑把な当たり判定
 	std::vector<Contacts::Contact_pair> new_pairs;
-	Contact_pair new_pair;
-	for (int i = 0; i < pairs.size(); i++) {
-		Midphase_DOP_7(new_pairs, pairs[i].body[0], pairs[i].body[1]);
+	for (int i = 0; i < in_pair.size(); i++) {
+		Midphase_DOP_7(new_pairs, in_pair[i].body[0], in_pair[i].body[1]);
 	}
 
 	//生成したpairが前のpairから存在しているかの確認
-	for (int old_num = 0; old_num < old_pair.size(); old_num++) {
+	for (int old_num = 0; old_num < pairs.size(); old_num++) {
 		for (int new_num = 0; new_num < new_pairs.size(); new_num++) {
 			if (new_pairs[new_num].type == Pairtype::keep_pair) continue;
 
 			if (
-				new_pairs[new_num].body[0] == old_pair[old_num].body[0] &&
-				new_pairs[new_num].body[1] == old_pair[old_num].body[1]
+				new_pairs[new_num].body[0] == pairs[old_num].body[0] &&
+				new_pairs[new_num].body[1] == pairs[old_num].body[1]
 				) {
 				//前から存在していたらデータを引き継ぐ
-				new_pairs[new_num] = old_pair[old_num];
+				new_pairs[new_num] = pairs[old_num];
 				new_pairs[new_num].type = Pairtype::keep_pair;
 			}
 			else {
@@ -142,6 +139,5 @@ void physics_function::Midphase(std::vector<Contacts::Contact_pair>& pairs) {
 
 	pairs.clear();
 	pairs = new_pairs;
-	old_pair = new_pairs;
 }
 #pragma endregion

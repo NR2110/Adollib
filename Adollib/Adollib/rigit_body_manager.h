@@ -18,6 +18,7 @@ namespace Adollib
 		static std::map<Scenelist, std::vector<Adollib::Sphere*>> RB_sphere_s;
 
 		static std::vector<Contacts::Contact_pair> pairs;
+		static std::vector<Contacts::Collider_2> coll2s;
 
 	public:
 		//No_hit_tag‚É"all"‚ª‚ ‚é‚Æ‚·‚×‚Ä‚Ì‚à‚Ì‚ÉÕ“Ë‚µ‚È‚­‚È‚é‚æ
