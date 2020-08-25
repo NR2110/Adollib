@@ -118,8 +118,8 @@ namespace Adollib
 	void object_manager::update()
 	{
 		if (input->getKeyTrigger(Key::M)) {
-			int max_c = 3;
-			int num = 3;
+			int max_c = 10;
+			int num = 0;
 
 			if (num == 0) //ピラミッド
 				for (int i = 0; i < max_c; i++) {

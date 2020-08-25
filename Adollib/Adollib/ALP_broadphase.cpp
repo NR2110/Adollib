@@ -1,5 +1,7 @@
 #include "ALP_broadphase.h"
 #include <list>
+
+#include "work_meter.h"
 using namespace Adollib;
 using namespace Contacts;
 
@@ -144,20 +146,22 @@ struct edge{
 
 void physics_function::Broadphase(const std::vector<Collider*>& coll, std::vector<Contacts::Collider_2>&out_pair, std::vector<Contacts::Contact_pair>& pairs) {
 	//Sweep&Pruneを挿入法で実装
-	static std::list<edge>axis_list[3]; //x,z軸の分だけ使う 
+	static std::list<edge>axis_list[3];
 
 	//DOPの更新	
+
+	Work_meter::start("update_dop7");
 	int coll_size = coll.size();
 	for (int i = 0; i < coll_size; i++) {
 		coll[i]->update_dop7();
 	}
-	
+	Work_meter::stop("update_dop7");
 
 	if (coll.size() * 2 != axis_list[0].size()) {
 		//TODO : 新しく追加されたもの,なくなったものがわかればさらに最適化できる
 		edge ed;
 
-		for (int xz = 0; xz < 3; xz += 2) {
+		for (int xz = 0; xz < 3; xz ++) {
 			axis_list[xz].clear();
 
 			for (int coll_num = 0; coll_num < coll_size; coll_num++) {
@@ -178,7 +182,8 @@ void physics_function::Broadphase(const std::vector<Collider*>& coll, std::vecto
 	}
 	//valueの更新
 	else {
-		for (int xz = 0; xz < 3; xz += 2) {
+		Work_meter::start("update_Value");
+		for (int xz = 0; xz < 3; xz++) {
 			std::list<edge>::iterator itr = axis_list[xz].begin();
 			std::list<edge>::iterator itr_end = axis_list[xz].end();
 			for (; itr != itr_end; itr++) {
@@ -191,14 +196,16 @@ void physics_function::Broadphase(const std::vector<Collider*>& coll, std::vecto
 
 			}
 		}
+		Work_meter::stop("update_Value");
 	}
 
 	//挿入ソート
 	//[0]small ---- big
 	{
+		Work_meter::start("insert_sort");
 		edge ed;
 
-		for (int xy = 0; xy < 3; xy+=2) {
+		for (int xy = 0; xy < 3; xy++) {
 
 			std::list<edge>::iterator itr = axis_list[xy].begin();
 			std::list<edge>::iterator itr_next;
@@ -229,52 +236,290 @@ void physics_function::Broadphase(const std::vector<Collider*>& coll, std::vecto
 			}
 
 		}
+
+		Work_meter::stop("insert_sort");
 	}
 
-
+	Work_meter::start("Sweep&Prune");
 	//Sweep&Prune
 	std::list < Collider*> actives;
 	Contacts::Collider_2 pair;
 	out_pair.clear();
 	std::list<Collider*>::iterator ac = actives.begin();
 	std::list<Collider*>::iterator ac_end = actives.end();
-	for (int xy = 0; xy < 1; xy++) {
-		int axis_size = axis_list[xy].size();
+	{
+#if 1
+		std::unordered_map<Collider*, std::vector<Collider*>> pair_mapx;
+		std::unordered_map<Collider*, std::vector<Collider*>> pair_mapxy;
+		int xy = 0;
+		{
+			int axis_size = axis_list[xy].size();
 
-		std::list<edge>::iterator itr = axis_list[xy].begin();
-		for (int list_num = 0; list_num < axis_size; list_num++) {
-			//colliderの始点ならactivelistにあるものと衝突の可能性あり
-			if (itr->stgo == true) {
+			std::list<edge>::iterator itr = axis_list[xy].begin();
+			for (int list_num = 0; list_num < axis_size; list_num++) {
+				//colliderの始点ならactivelistにあるものと衝突の可能性あり
+				if (itr->stgo == true) {
 
-				pair.body[0] = itr->coll;
+					pair.body[0] = itr->coll;
 
-				ac = actives.begin();
-				ac_end = actives.end();
-				for (; ac != ac_end; ac++) {
-					pair.body[1] = *ac;
-					out_pair.emplace_back(pair);
+					ac = actives.begin();
+					ac_end = actives.end();
+					for (; ac != ac_end; ac++) {
+						pair.body[1] = *ac;
+
+						if (pair.body[0] < pair.body[1]) {
+							pair_mapx[pair.body[0]].emplace_back(pair.body[1]);
+						}
+						else {
+							pair_mapx[pair.body[1]].emplace_back(pair.body[0]);
+						}
+
+
+					}
+					actives.emplace_front(itr->coll);
 				}
-				actives.emplace_front(itr->coll);
-			}
-			else {
-				ac = actives.begin();
-				ac_end = actives.end();
+				else {
+					ac = actives.begin();
+					ac_end = actives.end();
 
-				for (; ac != ac_end; ac++) {
-					if (*ac == itr->coll) {
-						actives.erase(ac);
-						break;
+					for (; ac != ac_end; ac++) {
+						if (*ac == itr->coll) {
+							actives.erase(ac);
+							break;
+						}
 					}
 				}
+
+				itr++;
 			}
-
-
-			itr++;
 		}
+		xy = 1;
+		{
+			int axis_size = axis_list[xy].size();
+
+			std::list<edge>::iterator itr = axis_list[xy].begin();
+			for (int list_num = 0; list_num < axis_size; list_num++) {
+				//colliderの始点ならactivelistにあるものと衝突の可能性あり
+				if (itr->stgo == true) {
+
+					pair.body[0] = itr->coll;
+
+					ac = actives.begin();
+					ac_end = actives.end();
+					for (; ac != ac_end; ac++) {
+						pair.body[1] = *ac;
+
+						if (pair.body[0] < pair.body[1])
+							for (int mapx_num = 0; mapx_num < pair_mapx[pair.body[0]].size(); mapx_num++) {
+								if (pair_mapx[pair.body[0]][mapx_num] == pair.body[1]) {
+									pair_mapxy[pair.body[0]].emplace_back(pair.body[1]);
+									break;
+								}
+
+							}
+
+						else
+							for (int mapx_num = 0; mapx_num < pair_mapx[pair.body[1]].size(); mapx_num++) {
+								int aaa = pair_mapx[pair.body[1]].size();
+								if (pair_mapx[pair.body[1]][mapx_num] == pair.body[0]) {
+									pair_mapxy[pair.body[1]].emplace_back(pair.body[0]);
+									break;
+								}
+
+							}
+
+					}
+					actives.emplace_front(itr->coll);
+				}
+				else {
+					ac = actives.begin();
+					ac_end = actives.end();
+
+					for (; ac != ac_end; ac++) {
+						if (*ac == itr->coll) {
+							actives.erase(ac);
+							break;
+						}
+					}
+				}
+
+				itr++;
+			}
+		}
+		xy = 2;
+		{
+			int axis_size = axis_list[xy].size();
+
+			std::list<edge>::iterator itr = axis_list[xy].begin();
+			for (int list_num = 0; list_num < axis_size; list_num++) {
+				//colliderの始点ならactivelistにあるものと衝突の可能性あり
+				if (itr->stgo == true) {
+
+					pair.body[0] = itr->coll;
+
+					ac = actives.begin();
+					ac_end = actives.end();
+					for (; ac != ac_end; ac++) {
+						pair.body[1] = *ac;
+
+						if (pair.body[0] < pair.body[1])
+							for (int mapx_num = 0; mapx_num < pair_mapxy[pair.body[0]].size(); mapx_num++) {
+								if (pair_mapxy[pair.body[0]][mapx_num] == pair.body[1]) {
+									out_pair.emplace_back(pair);
+									break;
+								}
+
+							}
+
+						else
+							for (int mapx_num = 0; mapx_num < pair_mapxy[pair.body[1]].size(); mapx_num++) {
+								if (pair_mapxy[pair.body[1]][mapx_num] == pair.body[0]) {
+									out_pair.emplace_back(pair);
+									break;
+								}
+
+							}
+					}
+					actives.emplace_front(itr->coll);
+				}
+				else {
+					ac = actives.begin();
+					ac_end = actives.end();
+
+					for (; ac != ac_end; ac++) {
+						if (*ac == itr->coll) {
+							actives.erase(ac);
+							break;
+						}
+					}
+				}
+
+				itr++;
+			}
+		}
+
+#elif 1
+		int xy = 2;
+		{
+			int axis_size = axis_list[xy].size();
+
+			std::list<edge>::iterator itr = axis_list[xy].begin();
+			for (int list_num = 0; list_num < axis_size; list_num++) {
+				//colliderの始点ならactivelistにあるものと衝突の可能性あり
+				if (itr->stgo == true) {
+
+					pair.body[0] = itr->coll;
+
+					ac = actives.begin();
+					ac_end = actives.end();
+					for (; ac != ac_end; ac++) {
+						pair.body[1] = *ac;
+						unsigned int a = *(unsigned int*) & (*itr);
+						out_pair.emplace_back(pair);
+					}
+					actives.emplace_front(itr->coll);
+				}
+				else {
+					ac = actives.begin();
+					ac_end = actives.end();
+
+					for (; ac != ac_end; ac++) {
+						if (*ac == itr->coll) {
+							actives.erase(ac);
+							break;
+						}
+					}
+				}
+
+				itr++;
+			}
+		}
+#elif 0
+		std::vector<Contacts::Collider_2> coll_buf;
+		int xy = 0;
+		{
+			int axis_size = axis_list[xy].size();
+
+			std::list<edge>::iterator itr = axis_list[xy].begin();
+			for (int list_num = 0; list_num < axis_size; list_num++) {
+				//colliderの始点ならactivelistにあるものと衝突の可能性あり
+				if (itr->stgo == true) {
+
+					pair.body[0] = itr->coll;
+
+					ac = actives.begin();
+					ac_end = actives.end();
+					for (; ac != ac_end; ac++) {
+						pair.body[1] = *ac;
+						unsigned int a = *(unsigned int*) & (*itr);
+						coll_buf.emplace_back(pair);
+					}
+					actives.emplace_front(itr->coll);
+				}
+				else {
+					ac = actives.begin();
+					ac_end = actives.end();
+
+					for (; ac != ac_end; ac++) {
+						if (*ac == itr->coll) {
+							actives.erase(ac);
+							break;
+						}
+					}
+				}
+
+				itr++;
+			}
+		}
+		int buf_size = coll_buf.size();
+		xy = 2;
+		{
+			int axis_size = axis_list[xy].size();
+
+			std::list<edge>::iterator itr = axis_list[xy].begin();
+			for (int list_num = 0; list_num < axis_size; list_num++) {
+				//colliderの始点ならactivelistにあるものと衝突の可能性あり
+				if (itr->stgo == true) {
+
+					pair.body[0] = itr->coll;
+
+					ac = actives.begin();
+					ac_end = actives.end();
+					for (; ac != ac_end; ac++) {
+						pair.body[1] = *ac;
+
+						for (int bu = 0; bu < buf_size; bu++) {
+							if ((coll_buf[bu].body[0] == *ac &&
+								coll_buf[bu].body[1] == itr->coll) ||
+								(coll_buf[bu].body[1] == *ac &&
+									coll_buf[bu].body[0] == itr->coll)
+								) {
+								out_pair.emplace_back(pair);
+							}
+						}
+					}
+					actives.emplace_front(itr->coll);
+				}
+				else {
+					ac = actives.begin();
+					ac_end = actives.end();
+
+					for (; ac != ac_end; ac++) {
+						if (*ac == itr->coll) {
+							actives.erase(ac);
+							break;
+						}
+					}
+				}
+
+				itr++;
+			}
+		}
+#endif
 	}
 
 
-
+	Work_meter::stop("Sweep&Prune");
 
 
 
