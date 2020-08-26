@@ -2,6 +2,7 @@
 #include <list>
 
 #include "work_meter.h"
+#include "debug.h"
 using namespace Adollib;
 using namespace Contacts;
 
@@ -144,8 +145,10 @@ struct edge{
 	bool stgo; //true = st, false = go 
 };
 
-void physics_function::Broadphase(const std::vector<Collider*>& coll, std::vector<Contacts::Collider_2>&out_pair, std::vector<Contacts::Contact_pair>& pairs) {
+void physics_function::Broadphase(const std::vector<Collider*>& coll, std::vector<Contacts::Collider_2>& out_pair, std::vector<Contacts::Contact_pair>& pairs) {
 	//Sweep&Pruneを挿入法で実装
+	//現在x軸のみでのSweep&Pruneになっている。
+	//用調整
 	static std::list<edge>axis_list[3];
 
 	//DOPの更新	
@@ -157,11 +160,56 @@ void physics_function::Broadphase(const std::vector<Collider*>& coll, std::vecto
 	}
 	Work_meter::stop("update_dop7");
 
+	//{
+	//	Contacts::Collider_2 pair;
+	//	out_pair.clear();
+	//	for (int cnum_0 = 0; cnum_0 < coll.size(); cnum_0++) {
+	//		pair.body[0] = coll[cnum_0];
+	//		for (int cnum_1 = cnum_0 + 1; cnum_1 < coll.size(); cnum_1++) {
+	//			pair.body[1] = coll[cnum_1];
+	//			out_pair.emplace_back(pair);
+	//		}
+	//	}
+	//	return;
+	//}
+
+	//適当に20コ点を取って適当に
+	int SAP_axis = 0;
+	{
+		vector3 max;
+		vector3 min;
+		for (int num = 0; num < 20; num++) {
+
+			if (num == 0) {
+				max = min = coll[rand() % coll_size]->dop7.pos;
+			}
+			else {
+				vector3 pos = coll[rand() % coll_size]->dop7.pos;
+				for (int ax = 0; ax < 3; ax++) {
+					if(max[ax] < pos[ax])max[ax] = pos[ax];
+					if (min[ax] > pos[ax])min[ax] = pos[ax];
+				}
+			}
+		}
+
+		max -= min;
+		int max_num = 0,max_axis = 0;
+		for (int i = 0; i < 3; i++) {
+			if (max[i] > max_num) {
+				max_num = max[i];
+				max_axis = i;
+			}
+		}
+		SAP_axis = max_axis;
+	}
+	Debug::set(std::string("SAP_axis"), vector3(SAP_axis).get_XM3());
+
+
 	if (coll.size() * 2 != axis_list[0].size()) {
 		//TODO : 新しく追加されたもの,なくなったものがわかればさらに最適化できる
 		edge ed;
 
-		for (int xz = 0; xz < 3; xz ++) {
+		for (int xz = 0; xz < 3; xz++) {
 			axis_list[xz].clear();
 
 			for (int coll_num = 0; coll_num < coll_size; coll_num++) {
@@ -183,19 +231,18 @@ void physics_function::Broadphase(const std::vector<Collider*>& coll, std::vecto
 	//valueの更新
 	else {
 		Work_meter::start("update_Value");
-		for (int xz = 0; xz < 3; xz++) {
-			std::list<edge>::iterator itr = axis_list[xz].begin();
-			std::list<edge>::iterator itr_end = axis_list[xz].end();
-			for (; itr != itr_end; itr++) {
-				if (itr->stgo == false) {
-					itr->value = itr->coll->dop7.pos[xz] + itr->coll->dop7.max[xz];
-				}
-				else {
-					itr->value = itr->coll->dop7.pos[xz] + itr->coll->dop7.min[xz];
-				}
-
+		std::list<edge>::iterator itr = axis_list[SAP_axis].begin();
+		std::list<edge>::iterator itr_end = axis_list[SAP_axis].end();
+		for (; itr != itr_end; itr++) {
+			if (itr->stgo == false) {
+				itr->value = itr->coll->dop7.pos[SAP_axis] + itr->coll->dop7.max[SAP_axis];
 			}
+			else {
+				itr->value = itr->coll->dop7.pos[SAP_axis] + itr->coll->dop7.min[SAP_axis];
+			}
+
 		}
+
 		Work_meter::stop("update_Value");
 	}
 
@@ -205,35 +252,35 @@ void physics_function::Broadphase(const std::vector<Collider*>& coll, std::vecto
 		Work_meter::start("insert_sort");
 		edge ed;
 
-		for (int xy = 0; xy < 3; xy++) {
 
-			std::list<edge>::iterator itr = axis_list[xy].begin();
-			std::list<edge>::iterator itr_next;
-			std::list<edge>::iterator itr_insert;
-			int axis_size = axis_list[xy].size();
 
-			for (int list_num = 0; list_num < axis_size - 1; list_num++) {
-				itr_next = itr;
-				itr_next++;
+		std::list<edge>::iterator itr = axis_list[SAP_axis].begin();
+		std::list<edge>::iterator itr_next;
+		std::list<edge>::iterator itr_insert;
+		int axis_size = axis_list[SAP_axis].size();
 
-				if (itr_next->value < itr->value) {
+		for (int list_num = 0; list_num < axis_size - 1; list_num++) {
+			itr_next = itr;
+			itr_next++;
 
-					itr_insert = axis_list[xy].begin();
-	
-					for (int ins_num = 0; ins_num < axis_size; ins_num++) {
-						if (itr_next->value < itr_insert->value) {
+			if (itr_next->value < itr->value) {
 
-							axis_list[xy].insert(itr_insert, *itr_next);
-							axis_list[xy].erase(itr_next);
-							break;
-						}
+				itr_insert = axis_list[SAP_axis].begin();
 
-						itr_insert++;
+				for (int ins_num = 0; ins_num < axis_size; ins_num++) {
+					if (itr_next->value < itr_insert->value) {
+
+						axis_list[SAP_axis].insert(itr_insert, *itr_next);
+						axis_list[SAP_axis].erase(itr_next);
+						break;
 					}
 
+					itr_insert++;
 				}
-				else itr++;
+
 			}
+			else itr++;
+
 
 		}
 
@@ -248,9 +295,11 @@ void physics_function::Broadphase(const std::vector<Collider*>& coll, std::vecto
 	std::list<Collider*>::iterator ac = actives.begin();
 	std::list<Collider*>::iterator ac_end = actives.end();
 	{
-#if 1
+
+#if 0
 		std::unordered_map<Collider*, std::vector<Collider*>> pair_mapx;
 		std::unordered_map<Collider*, std::vector<Collider*>> pair_mapxy;
+		// 明日、x,y,zで別々に配列生成 -> 何が重いのかの確認　やる
 		int xy = 0;
 		{
 			int axis_size = axis_list[xy].size();
@@ -399,123 +448,42 @@ void physics_function::Broadphase(const std::vector<Collider*>& coll, std::vecto
 		}
 
 #elif 1
-		int xy = 2;
-		{
-			int axis_size = axis_list[xy].size();
 
-			std::list<edge>::iterator itr = axis_list[xy].begin();
-			for (int list_num = 0; list_num < axis_size; list_num++) {
-				//colliderの始点ならactivelistにあるものと衝突の可能性あり
-				if (itr->stgo == true) {
+{
+	int axis_size = axis_list[SAP_axis].size();
 
-					pair.body[0] = itr->coll;
+	std::list<edge>::iterator itr = axis_list[SAP_axis].begin();
+	for (int list_num = 0; list_num < axis_size; list_num++) {
+		//colliderの始点ならactivelistにあるものと衝突の可能性あり
+		if (itr->stgo == true) {
 
-					ac = actives.begin();
-					ac_end = actives.end();
-					for (; ac != ac_end; ac++) {
-						pair.body[1] = *ac;
-						unsigned int a = *(unsigned int*) & (*itr);
-						out_pair.emplace_back(pair);
-					}
-					actives.emplace_front(itr->coll);
+			pair.body[0] = itr->coll;
+
+			ac = actives.begin();
+			ac_end = actives.end();
+			for (; ac != ac_end; ac++) {
+				pair.body[1] = *ac;
+				out_pair.emplace_back(pair);
+			}
+			actives.emplace_front(itr->coll);
+		}
+		else {
+			ac = actives.begin();
+			ac_end = actives.end();
+
+			for (; ac != ac_end; ac++) {
+				if (*ac == itr->coll) {
+					actives.erase(ac);
+					break;
 				}
-				else {
-					ac = actives.begin();
-					ac_end = actives.end();
-
-					for (; ac != ac_end; ac++) {
-						if (*ac == itr->coll) {
-							actives.erase(ac);
-							break;
-						}
-					}
-				}
-
-				itr++;
 			}
 		}
-#elif 0
-		std::vector<Contacts::Collider_2> coll_buf;
-		int xy = 0;
-		{
-			int axis_size = axis_list[xy].size();
 
-			std::list<edge>::iterator itr = axis_list[xy].begin();
-			for (int list_num = 0; list_num < axis_size; list_num++) {
-				//colliderの始点ならactivelistにあるものと衝突の可能性あり
-				if (itr->stgo == true) {
-
-					pair.body[0] = itr->coll;
-
-					ac = actives.begin();
-					ac_end = actives.end();
-					for (; ac != ac_end; ac++) {
-						pair.body[1] = *ac;
-						unsigned int a = *(unsigned int*) & (*itr);
-						coll_buf.emplace_back(pair);
-					}
-					actives.emplace_front(itr->coll);
-				}
-				else {
-					ac = actives.begin();
-					ac_end = actives.end();
-
-					for (; ac != ac_end; ac++) {
-						if (*ac == itr->coll) {
-							actives.erase(ac);
-							break;
-						}
-					}
-				}
-
-				itr++;
-			}
-		}
-		int buf_size = coll_buf.size();
-		xy = 2;
-		{
-			int axis_size = axis_list[xy].size();
-
-			std::list<edge>::iterator itr = axis_list[xy].begin();
-			for (int list_num = 0; list_num < axis_size; list_num++) {
-				//colliderの始点ならactivelistにあるものと衝突の可能性あり
-				if (itr->stgo == true) {
-
-					pair.body[0] = itr->coll;
-
-					ac = actives.begin();
-					ac_end = actives.end();
-					for (; ac != ac_end; ac++) {
-						pair.body[1] = *ac;
-
-						for (int bu = 0; bu < buf_size; bu++) {
-							if ((coll_buf[bu].body[0] == *ac &&
-								coll_buf[bu].body[1] == itr->coll) ||
-								(coll_buf[bu].body[1] == *ac &&
-									coll_buf[bu].body[0] == itr->coll)
-								) {
-								out_pair.emplace_back(pair);
-							}
-						}
-					}
-					actives.emplace_front(itr->coll);
-				}
-				else {
-					ac = actives.begin();
-					ac_end = actives.end();
-
-					for (; ac != ac_end; ac++) {
-						if (*ac == itr->coll) {
-							actives.erase(ac);
-							break;
-						}
-					}
-				}
-
-				itr++;
-			}
-		}
+		itr++;
+	}
+}
 #endif
+
 	}
 
 
