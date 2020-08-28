@@ -1,5 +1,6 @@
 #include "ALP_resolve_contact.h"
 #include "debug.h"
+#include "work_meter.h"
 
 using namespace Adollib;
 using namespace Contacts;
@@ -224,10 +225,10 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 				solverbody[1]->delta_LinearVelocity -= deltaImpulse * solverbody[1]->inv_mass * cp.constraint[k].axis;
 				solverbody[1]->delta_AngulaVelocity -= deltaImpulse * vector3_trans(vector3_cross(rB, cp.constraint[k].axis), solverbody[1]->inv_inertia);
 			}
-		}
-	}
+	}			//‚±‚±‚©‚çGPU‚É”C‚¹‚é
+}
 
-	//‚±‚±‚©‚çGPU‚É”C‚¹‚é
+
 	int whatnum = 0;
 	if (whatnum == 0) {
 		for (int i = 0; i < physics_g::accuracy; i++) {

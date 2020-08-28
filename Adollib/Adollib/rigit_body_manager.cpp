@@ -85,22 +85,34 @@ namespace Adollib
 		applyexternalforce(colls);
 
 		// ‘åG”c‚È“–‚½‚è”»’è
+		Work_meter::start("Broad,Mid,Narrow");
+
 		Work_meter::start("Broadphase");
+		Work_meter::tag_start("Broadphase");
 		Broadphase(colls, coll2s, pairs);
+		Work_meter::tag_stop();
 		Work_meter::stop("Broadphase");
 
 		Work_meter::start("Midphase");
+		Work_meter::tag_start("Midphase");
 		Midphase(coll2s, pairs);
+		Work_meter::tag_stop();
 		Work_meter::stop("Midphase");
 
 		// Õ“Ë¶¬
 		Work_meter::start("Narrowphase");
+		Work_meter::tag_start("Narrowphase");
 		generate_contact(pairs);
+		Work_meter::tag_stop();
 		Work_meter::stop("Narrowphase");
+
+		Work_meter::stop("Broad,Mid,Narrow");
 
 		// Õ“Ë‰ğŒˆ
 		Work_meter::start("Resolve");
+		Work_meter::tag_start("Resolve");
 		resolve_contact(colls, pairs);
+		Work_meter::tag_stop();
 		Work_meter::stop("Resolve");
 
 		//ˆÊ’u‚ÌXV

@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <list>
 #include <assert.h>
 #include "quaternion.h"
 #include "matrix.h"
@@ -132,7 +133,8 @@ namespace Adollib {
 		};
 
 		struct Collider_2 {
-			Collider* body[2];
+			Collider* body;
+			std::vector<Collider*> bodylists;
 		};
 
 	}

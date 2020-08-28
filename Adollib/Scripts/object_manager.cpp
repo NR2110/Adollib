@@ -124,8 +124,8 @@ namespace Adollib
 			if (num == 0) //ピラミッド
 				for (int i = 0; i < max_c; i++) {
 					for (int o = 0; o < max_c - i; o++) {
-						//set_fall_box(vector3(2.00001 * o - (max_c - i) * 2.000001 / 2.0, 3.0 + 2.00001 * i, 0), vector3(1, 1, 1), vector3(0, 0, 0), vector3(0, 1, 1));
-						set_fall_box(vector3(0, 3.0 + 2.00001 * i, 2.00001 * o - (max_c - i) * 2.000001 / 2.0), vector3(1, 1, 1), vector3(0, 0, 0), vector3(0, 1, 1));
+						set_fall_box(vector3(2.00001 * o - (max_c - i) * 2.000001 / 2.0, 3.0 + 2.00001 * i, 0), vector3(1, 1, 1), vector3(0, 0, 0), vector3(0, 1, 1));
+						//set_fall_box(vector3(0, 3.0 + 2.00001 * i, 2.00001 * o - (max_c - i) * 2.000001 / 2.0), vector3(1, 1, 1), vector3(0, 0, 0), vector3(0, 1, 1));
 					}
 
 				}

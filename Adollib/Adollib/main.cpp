@@ -168,15 +168,15 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 
 			}
 
-			loop.Render();
 			// çXêVÅEï`âÊ
 			if (loop.Update(hMsg, hwnd, Al_Global::SCREEN_WIDTH, Al_Global::SCREEN_HEIGHT) == false)continue;
-
+			loop.Render();
 #pragma region Imgui_demo
 
 
 			//ImGui::Begin("main");
-		
+
+
 			//ImGui::End();
 
 

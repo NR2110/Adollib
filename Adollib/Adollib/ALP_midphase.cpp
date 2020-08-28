@@ -1,5 +1,6 @@
 #include "ALP_midphase.h"
-
+#include <list>
+#include "work_meter.h"
 using namespace Adollib;
 using namespace Contacts;
 
@@ -102,12 +103,19 @@ void Midphase_DOP_7(std::vector<Contacts::Contact_pair>& new_pairs, Collider* co
 
 void physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std::vector<Contacts::Contact_pair>& pairs) {
 
+	Work_meter::start("Mid_Dop7");
 	//DOP_8による大雑把な当たり判定
 	std::vector<Contacts::Contact_pair> new_pairs;
 	for (int i = 0; i < in_pair.size(); i++) {
-		Midphase_DOP_7(new_pairs, in_pair[i].body[0], in_pair[i].body[1]);
-	}
 
+		int p_size = in_pair[i].bodylists.size();
+		for (int o = 0; o < p_size; o++) {
+			Midphase_DOP_7(new_pairs, in_pair[i].body, in_pair[i].bodylists[o]);
+		}
+	}
+	Work_meter::stop("Mid_Dop7");
+
+	Work_meter::start("Mid_check_alive");
 	//生成したpairが前のpairから存在しているかの確認
 	for (int old_num = 0; old_num < pairs.size(); old_num++) {
 		for (int new_num = 0; new_num < new_pairs.size(); new_num++) {
@@ -126,7 +134,9 @@ void physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std:
 			}
 		}
 	}
+	Work_meter::stop("Mid_check_alive");
 
+	Work_meter::start("Mid_remove_contact_point");
 	//現在使用していない衝突点を削除
 	for (int i = 0; i < new_pairs.size(); i++) {
 		new_pairs[i].contacts.chack_remove_contact_point(
@@ -136,7 +146,7 @@ void physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std:
 			new_pairs[i].body[1]->world_orientation
 		);
 	}
-
+	Work_meter::stop("Mid_remove_contact_point");
 	pairs.clear();
 	pairs = new_pairs;
 }

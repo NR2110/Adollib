@@ -289,11 +289,11 @@ void physics_function::Broadphase(const std::vector<Collider*>& coll, std::vecto
 
 	Work_meter::start("Sweep&Prune");
 	//Sweep&Prune
-	std::list < Collider*> actives;
+	std::vector< Collider*> actives;
 	Contacts::Collider_2 pair;
 	out_pair.clear();
-	std::list<Collider*>::iterator ac = actives.begin();
-	std::list<Collider*>::iterator ac_end = actives.end();
+	std::vector<Collider*>::iterator ac = actives.begin();
+	std::vector<Collider*>::iterator ac_end = actives.end();
 	{
 
 #if 0
@@ -457,15 +457,11 @@ void physics_function::Broadphase(const std::vector<Collider*>& coll, std::vecto
 		//collider‚ÌŽn“_‚È‚çactivelist‚É‚ ‚é‚à‚Ì‚ÆÕ“Ë‚Ì‰Â”\«‚ ‚è
 		if (itr->stgo == true) {
 
-			pair.body[0] = itr->coll;
-
-			ac = actives.begin();
-			ac_end = actives.end();
-			for (; ac != ac_end; ac++) {
-				pair.body[1] = *ac;
-				out_pair.emplace_back(pair);
-			}
-			actives.emplace_front(itr->coll);
+			pair.body = itr->coll;
+			pair.bodylists = actives;
+			out_pair.emplace_back(pair);
+			
+			actives.emplace_back(itr->coll);
 		}
 		else {
 			ac = actives.begin();
