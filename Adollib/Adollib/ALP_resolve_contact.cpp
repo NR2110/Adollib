@@ -149,9 +149,9 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 				cp.constraint[0].jacDiagInv = 1.0f / denominator; //Baraff1997(8-18)の分母
 				cp.constraint[0].rhs = -(1.0f + restitution) * vector3_dot(axis, vrel); //Baraff1997(8-18)の分子
 
-				if (0.0f < cp.distance - physics_g::slop) {
-					cp.constraint[0].rhs += (physics_g::bias * (cp.distance - physics_g::slop)) / physics_g::timeStep; //めり込みを直す力
-				}
+				//if (0.0f < cp.distance - physics_g::slop) {
+				//	cp.constraint[0].rhs += (physics_g::bias * (cp.distance - physics_g::slop)) / physics_g::timeStep; //めり込みを直す力
+				//}
 
 				cp.constraint[0].rhs *= cp.constraint[0].jacDiagInv;
 				cp.constraint[0].lowerlimit = 0.0f;
@@ -229,7 +229,7 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 }
 
 
-	int whatnum = 0;
+	int whatnum = 2;
 	if (whatnum == 0) {
 		for (int i = 0; i < physics_g::accuracy; i++) {
 			for (int P_num = 0; P_num < pairs.size(); P_num++) {
@@ -443,13 +443,6 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 				solverbody[0] = &cs.solvs0;
 				solverbody[1] = &cs.solvs1;
 
-				if (
-					pairs[P_num].body[0]->shape == Collider_shape::shape_sphere &&
-					pairs[P_num].body[1]->shape == Collider_shape::shape_sphere
-					) {
-					int adfsdgfhg = 0;
-				}
-
 				for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 
 					//衝突点の情報　
@@ -497,7 +490,6 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 						solverbody[1]->delta_LinearVelocity -= delta_impulse * solverbody[1]->inv_mass * constraint.axis;
 						solverbody[1]->delta_AngulaVelocity -= vector3_trans(vector3_cross(rB, constraint.axis * delta_impulse), solverbody[1]->inv_inertia);
 
-
 						cs.accumes[C_num][1] = constraint.accuminpulse;
 					}
 
@@ -537,7 +529,6 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 					solverbody[1]->delta_LinearVelocity +
 					solverbody[1]->delta_AngulaVelocity
 					).norm()));
-
 
 				cs_outs.push_back(cs);
 			}
@@ -646,6 +637,154 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 
 
 		}
+	}
+	else if (whatnum == 3) {
+		for (int i = 0; i < physics_g::accuracy; i++) {
+			if (physics_g::accuracy % 2 == 0) {
+				for (int P_num = 0; P_num < pairs.size(); P_num++) {
+					Contact_pair& pair = pairs[P_num];
+
+					coll[0] = pair.body[0];
+					coll[1] = pair.body[1];
+					solverbody[0] = coll[0]->solve;
+					solverbody[1] = coll[1]->solve;
+
+					for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
+						//衝突点の情報　
+						Contactpoint& cp = pair.contacts.contactpoints[C_num];
+						vector3 rA = vector3_be_rotated_by_quaternion(cp.point[0], solverbody[0]->orientation);
+						vector3 rB = vector3_be_rotated_by_quaternion(cp.point[1], solverbody[1]->orientation);
+
+						{
+							Constraint& constraint = cp.constraint[0];
+							float delta_impulse = constraint.rhs;
+							vector3 delta_velocity[2];
+							delta_velocity[0] = solverbody[0]->delta_LinearVelocity + vector3_cross(solverbody[0]->delta_AngulaVelocity, rA);
+							delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngulaVelocity, rB);
+							delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
+							float old_impulse = constraint.accuminpulse;
+							constraint.accuminpulse = old_impulse + delta_impulse > constraint.lowerlimit ? (old_impulse + delta_impulse < constraint.upperlimit ? old_impulse + delta_impulse : constraint.upperlimit) : constraint.lowerlimit;
+							delta_impulse = constraint.accuminpulse - old_impulse;
+							solverbody[0]->delta_LinearVelocity += delta_impulse * solverbody[0]->inv_mass * constraint.axis;
+							solverbody[0]->delta_AngulaVelocity += vector3_trans(vector3_cross(rA, constraint.axis * delta_impulse), solverbody[0]->inv_inertia);
+							solverbody[1]->delta_LinearVelocity -= delta_impulse * solverbody[1]->inv_mass * constraint.axis;
+							solverbody[1]->delta_AngulaVelocity -= vector3_trans(vector3_cross(rB, constraint.axis * delta_impulse), solverbody[1]->inv_inertia);
+						}
+
+						float max_friction = pair.contacts.friction * fabsf(cp.constraint[0].accuminpulse);
+						cp.constraint[1].lowerlimit = -max_friction;
+						cp.constraint[1].upperlimit = +max_friction;
+						cp.constraint[2].lowerlimit = -max_friction;
+						cp.constraint[2].upperlimit = +max_friction;
+
+						{
+							Constraint& constraint = cp.constraint[1];
+							float delta_impulse = constraint.rhs;
+							vector3 delta_velocity[2];
+							delta_velocity[0] = solverbody[0]->delta_LinearVelocity + vector3_cross(solverbody[0]->delta_AngulaVelocity, rA);
+							delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngulaVelocity, rB);
+							delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
+							float old_impulse = constraint.accuminpulse;
+							constraint.accuminpulse = old_impulse + delta_impulse > constraint.lowerlimit ? (old_impulse + delta_impulse < constraint.upperlimit ? old_impulse + delta_impulse : constraint.upperlimit) : constraint.lowerlimit;
+							delta_impulse = constraint.accuminpulse - old_impulse;
+							solverbody[0]->delta_LinearVelocity += delta_impulse * solverbody[0]->inv_mass * constraint.axis;
+							solverbody[0]->delta_AngulaVelocity += vector3_trans(vector3_cross(rA, constraint.axis * delta_impulse), solverbody[0]->inv_inertia);
+							solverbody[1]->delta_LinearVelocity -= delta_impulse * solverbody[1]->inv_mass * constraint.axis;
+							solverbody[1]->delta_AngulaVelocity -= vector3_trans(vector3_cross(rB, constraint.axis * delta_impulse), solverbody[1]->inv_inertia);
+						}
+						{
+							Constraint& constraint = cp.constraint[2];
+							float delta_impulse = constraint.rhs;
+							vector3 delta_velocity[2];
+							delta_velocity[0] = solverbody[0]->delta_LinearVelocity + vector3_cross(solverbody[0]->delta_AngulaVelocity, rA);
+							delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngulaVelocity, rB);
+							delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
+							float old_impulse = constraint.accuminpulse;
+							constraint.accuminpulse = old_impulse + delta_impulse > constraint.lowerlimit ? (old_impulse + delta_impulse < constraint.upperlimit ? old_impulse + delta_impulse : constraint.upperlimit) : constraint.lowerlimit;
+							delta_impulse = constraint.accuminpulse - old_impulse;
+							solverbody[0]->delta_LinearVelocity += delta_impulse * solverbody[0]->inv_mass * constraint.axis;
+							solverbody[0]->delta_AngulaVelocity += vector3_trans(vector3_cross(rA, constraint.axis * delta_impulse), solverbody[0]->inv_inertia);
+							solverbody[1]->delta_LinearVelocity -= delta_impulse * solverbody[1]->inv_mass * constraint.axis;
+							solverbody[1]->delta_AngulaVelocity -= vector3_trans(vector3_cross(rB, constraint.axis * delta_impulse), solverbody[1]->inv_inertia);
+						}
+
+					}
+				}
+			}
+			else {
+				for (int P_num = pairs.size() - 1; P_num >= 0; P_num--) {
+					Contact_pair& pair = pairs[P_num];
+
+					coll[0] = pair.body[0];
+					coll[1] = pair.body[1];
+					solverbody[0] = coll[0]->solve;
+					solverbody[1] = coll[1]->solve;
+
+					for (int C_num = pair.contacts.contact_num - 1; C_num >= 0; C_num--) {
+						//衝突点の情報　
+						Contactpoint& cp = pair.contacts.contactpoints[C_num];
+						vector3 rA = vector3_be_rotated_by_quaternion(cp.point[0], solverbody[0]->orientation);
+						vector3 rB = vector3_be_rotated_by_quaternion(cp.point[1], solverbody[1]->orientation);
+
+						{
+							Constraint& constraint = cp.constraint[0];
+							float delta_impulse = constraint.rhs;
+							vector3 delta_velocity[2];
+							delta_velocity[0] = solverbody[0]->delta_LinearVelocity + vector3_cross(solverbody[0]->delta_AngulaVelocity, rA);
+							delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngulaVelocity, rB);
+							delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
+							float old_impulse = constraint.accuminpulse;
+							constraint.accuminpulse = old_impulse + delta_impulse > constraint.lowerlimit ? (old_impulse + delta_impulse < constraint.upperlimit ? old_impulse + delta_impulse : constraint.upperlimit) : constraint.lowerlimit;
+							delta_impulse = constraint.accuminpulse - old_impulse;
+							solverbody[0]->delta_LinearVelocity += delta_impulse * solverbody[0]->inv_mass * constraint.axis;
+							solverbody[0]->delta_AngulaVelocity += vector3_trans(vector3_cross(rA, constraint.axis * delta_impulse), solverbody[0]->inv_inertia);
+							solverbody[1]->delta_LinearVelocity -= delta_impulse * solverbody[1]->inv_mass * constraint.axis;
+							solverbody[1]->delta_AngulaVelocity -= vector3_trans(vector3_cross(rB, constraint.axis * delta_impulse), solverbody[1]->inv_inertia);
+						}
+
+						float max_friction = pair.contacts.friction * fabsf(cp.constraint[0].accuminpulse);
+						cp.constraint[1].lowerlimit = -max_friction;
+						cp.constraint[1].upperlimit = +max_friction;
+						cp.constraint[2].lowerlimit = -max_friction;
+						cp.constraint[2].upperlimit = +max_friction;
+
+						{
+							Constraint& constraint = cp.constraint[1];
+							float delta_impulse = constraint.rhs;
+							vector3 delta_velocity[2];
+							delta_velocity[0] = solverbody[0]->delta_LinearVelocity + vector3_cross(solverbody[0]->delta_AngulaVelocity, rA);
+							delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngulaVelocity, rB);
+							delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
+							float old_impulse = constraint.accuminpulse;
+							constraint.accuminpulse = old_impulse + delta_impulse > constraint.lowerlimit ? (old_impulse + delta_impulse < constraint.upperlimit ? old_impulse + delta_impulse : constraint.upperlimit) : constraint.lowerlimit;
+							delta_impulse = constraint.accuminpulse - old_impulse;
+							solverbody[0]->delta_LinearVelocity += delta_impulse * solverbody[0]->inv_mass * constraint.axis;
+							solverbody[0]->delta_AngulaVelocity += vector3_trans(vector3_cross(rA, constraint.axis * delta_impulse), solverbody[0]->inv_inertia);
+							solverbody[1]->delta_LinearVelocity -= delta_impulse * solverbody[1]->inv_mass * constraint.axis;
+							solverbody[1]->delta_AngulaVelocity -= vector3_trans(vector3_cross(rB, constraint.axis * delta_impulse), solverbody[1]->inv_inertia);
+						}
+						{
+							Constraint& constraint = cp.constraint[2];
+							float delta_impulse = constraint.rhs;
+							vector3 delta_velocity[2];
+							delta_velocity[0] = solverbody[0]->delta_LinearVelocity + vector3_cross(solverbody[0]->delta_AngulaVelocity, rA);
+							delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngulaVelocity, rB);
+							delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
+							float old_impulse = constraint.accuminpulse;
+							constraint.accuminpulse = old_impulse + delta_impulse > constraint.lowerlimit ? (old_impulse + delta_impulse < constraint.upperlimit ? old_impulse + delta_impulse : constraint.upperlimit) : constraint.lowerlimit;
+							delta_impulse = constraint.accuminpulse - old_impulse;
+							solverbody[0]->delta_LinearVelocity += delta_impulse * solverbody[0]->inv_mass * constraint.axis;
+							solverbody[0]->delta_AngulaVelocity += vector3_trans(vector3_cross(rA, constraint.axis * delta_impulse), solverbody[0]->inv_inertia);
+							solverbody[1]->delta_LinearVelocity -= delta_impulse * solverbody[1]->inv_mass * constraint.axis;
+							solverbody[1]->delta_AngulaVelocity -= vector3_trans(vector3_cross(rB, constraint.axis * delta_impulse), solverbody[1]->inv_inertia);
+						}
+
+					}
+				}
+			}
+
+		}
+
 	}
 
 	// 速度の更新

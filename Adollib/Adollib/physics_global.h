@@ -17,7 +17,7 @@ namespace Adollib {
 
 		static float timeStep; //delta time‚à‚Ç‚« ‚Æ‚è‚ ‚¦‚¸eplision_time
 
-		static constexpr int accuracy = 3; //Õ“Ë‰ğŒˆ‚ÌŒJ‚è•Ô‚µ‰ñ” 1`
+		static constexpr int accuracy = 10; //Õ“Ë‰ğŒˆ‚ÌŒJ‚è•Ô‚µ‰ñ” 1`
 	};
 
 }
