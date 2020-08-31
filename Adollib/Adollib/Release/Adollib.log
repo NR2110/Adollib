@@ -19,13 +19,13 @@ C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(380,3
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(387,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(400,36): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(435,30): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(554,37): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(583,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(610,36): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(644,31): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(791,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(549,37): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(578,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(598,36): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(703,31): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(850,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
   コード生成しています。
-  1 of 7235 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  1 of 7239 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     34 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
