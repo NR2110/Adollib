@@ -225,8 +225,8 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 				solverbody[1]->delta_LinearVelocity -= deltaImpulse * solverbody[1]->inv_mass * cp.constraint[k].axis;
 				solverbody[1]->delta_AngulaVelocity -= deltaImpulse * vector3_trans(vector3_cross(rB, cp.constraint[k].axis), solverbody[1]->inv_inertia);
 			}
-	}			//‚±‚±‚©‚çGPU‚É”C‚¹‚é
-}
+		}			//‚±‚±‚©‚çGPU‚É”C‚¹‚é
+	}
 
 
 	int whatnum = 2;
@@ -450,23 +450,23 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 					vector3 rA = vector3_be_rotated_by_quaternion(cp.point[0], solverbody[0]->orientation);
 					vector3 rB = vector3_be_rotated_by_quaternion(cp.point[1], solverbody[1]->orientation);
 
-						Constraint constraint = cp.constraint[0];
-						float delta_impulse = constraint.rhs;
-						vector3 delta_velocity[2];
-						delta_velocity[0] = solverbody[0]->delta_LinearVelocity + vector3_cross(solverbody[0]->delta_AngulaVelocity, rA);
-						delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngulaVelocity, rB);
-						delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
-						float old_impulse = constraint.accuminpulse;
-						constraint.accuminpulse = old_impulse + delta_impulse > constraint.lowerlimit ? (old_impulse + delta_impulse < constraint.upperlimit ? old_impulse + delta_impulse : constraint.upperlimit) : constraint.lowerlimit;
-						delta_impulse = constraint.accuminpulse - old_impulse;
+					Constraint constraint = cp.constraint[0];
+					float delta_impulse = constraint.rhs;
+					vector3 delta_velocity[2];
+					delta_velocity[0] = solverbody[0]->delta_LinearVelocity + vector3_cross(solverbody[0]->delta_AngulaVelocity, rA);
+					delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngulaVelocity, rB);
+					delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
+					float old_impulse = constraint.accuminpulse;
+					constraint.accuminpulse = old_impulse + delta_impulse > constraint.lowerlimit ? (old_impulse + delta_impulse < constraint.upperlimit ? old_impulse + delta_impulse : constraint.upperlimit) : constraint.lowerlimit;
+					delta_impulse = constraint.accuminpulse - old_impulse;
 
-						solverbody[0]->delta_LinearVelocity += delta_impulse * solverbody[0]->inv_mass * constraint.axis;
-						solverbody[0]->delta_AngulaVelocity += vector3_trans(vector3_cross(rA, constraint.axis * delta_impulse), solverbody[0]->inv_inertia);
-						solverbody[1]->delta_LinearVelocity -= delta_impulse * solverbody[1]->inv_mass * constraint.axis;
-						solverbody[1]->delta_AngulaVelocity -= vector3_trans(vector3_cross(rB, constraint.axis * delta_impulse), solverbody[1]->inv_inertia);
+					solverbody[0]->delta_LinearVelocity += delta_impulse * solverbody[0]->inv_mass * constraint.axis;
+					solverbody[0]->delta_AngulaVelocity += vector3_trans(vector3_cross(rA, constraint.axis * delta_impulse), solverbody[0]->inv_inertia);
+					solverbody[1]->delta_LinearVelocity -= delta_impulse * solverbody[1]->inv_mass * constraint.axis;
+					solverbody[1]->delta_AngulaVelocity -= vector3_trans(vector3_cross(rB, constraint.axis * delta_impulse), solverbody[1]->inv_inertia);
 
-						cs.accumes[C_num][0] = constraint.accuminpulse;
-					
+					cs.accumes[C_num][0] = constraint.accuminpulse;
+
 
 					float max_friction = pair.contacts.friction * fabsf(cs.accumes[C_num][0]);
 					cp.constraint[1].lowerlimit = -max_friction;
@@ -534,6 +534,8 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 			}
 
 
+#if 1
+
 			struct A_E {
 				vector3 sum_AngulaVelocity_A = vector3(0);
 				vector3 sum_LinearVelocity_A = vector3(0);
@@ -554,11 +556,11 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 				for (int pair_num = 0; pair_num < pairs.size(); pair_num++) {
 					// delta_‚Ì‡Œv‚ð‚Æ‚Á‚Ä‹t”‚ÉB -> Šedelta_‚Ì”ä‚ð‚Æ‚é‚½‚ß
 					for (int i = 0; i < 3; i++) {
-						cs_outs[pair_num].solvs0.delta_AngulaVelocity[i] > 0 ? 
+						cs_outs[pair_num].solvs0.delta_AngulaVelocity[i] > 0 ?
 							ae[cs_outs[pair_num].solvs0.num].sum_AngulaVelocity_A[i] += cs_outs[pair_num].solvs0.delta_AngulaVelocity[i] :
 							ae[cs_outs[pair_num].solvs0.num].sum_AngulaVelocity_D[i] += cs_outs[pair_num].solvs0.delta_AngulaVelocity[i];
 						cs_outs[pair_num].solvs0.delta_LinearVelocity[i] > 0 ?
-							ae[cs_outs[pair_num].solvs0.num].sum_LinearVelocity_A[i] += cs_outs[pair_num].solvs0.delta_LinearVelocity[i]:
+							ae[cs_outs[pair_num].solvs0.num].sum_LinearVelocity_A[i] += cs_outs[pair_num].solvs0.delta_LinearVelocity[i] :
 							ae[cs_outs[pair_num].solvs0.num].sum_LinearVelocity_D[i] += cs_outs[pair_num].solvs0.delta_LinearVelocity[i];
 
 
@@ -615,16 +617,87 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 					inv_ang[o] = cs_outs[pair_num].solvs0.delta_AngulaVelocity[o] > 0 ? ae[cs_outs[pair_num].solvs0.num].invsum_AngulaVelocity_A[o] : ae[cs_outs[pair_num].solvs0.num].invsum_AngulaVelocity_D[o];
 					inv_lin[o] = cs_outs[pair_num].solvs0.delta_LinearVelocity[o] > 0 ? ae[cs_outs[pair_num].solvs0.num].invsum_LinearVelocity_A[o] : ae[cs_outs[pair_num].solvs0.num].invsum_LinearVelocity_D[o];
 				}
-				SBs[cs_outs[pair_num].solvs0.num].delta_AngulaVelocity += cs_outs[pair_num].offset_delta_AngulaVelocity0 * cs_outs[pair_num].solvs0.delta_AngulaVelocity * inv_ang ;
-				SBs[cs_outs[pair_num].solvs0.num].delta_LinearVelocity += cs_outs[pair_num].offset_delta_LinearVelocity0 * cs_outs[pair_num].solvs0.delta_LinearVelocity * inv_lin ;
+				SBs[cs_outs[pair_num].solvs0.num].delta_AngulaVelocity += cs_outs[pair_num].offset_delta_AngulaVelocity0 * cs_outs[pair_num].solvs0.delta_AngulaVelocity * inv_ang;
+				SBs[cs_outs[pair_num].solvs0.num].delta_LinearVelocity += cs_outs[pair_num].offset_delta_LinearVelocity0 * cs_outs[pair_num].solvs0.delta_LinearVelocity * inv_lin;
 
 
 				for (int o = 0; o < 3; o++) {
 					inv_ang[o] = cs_outs[pair_num].solvs1.delta_AngulaVelocity[o] > 0 ? ae[cs_outs[pair_num].solvs1.num].invsum_AngulaVelocity_A[o] : ae[cs_outs[pair_num].solvs1.num].invsum_AngulaVelocity_D[o];
 					inv_lin[o] = cs_outs[pair_num].solvs1.delta_LinearVelocity[o] > 0 ? ae[cs_outs[pair_num].solvs1.num].invsum_LinearVelocity_A[o] : ae[cs_outs[pair_num].solvs1.num].invsum_LinearVelocity_D[o];
 				}
-				SBs[cs_outs[pair_num].solvs1.num].delta_AngulaVelocity += cs_outs[pair_num].offset_delta_AngulaVelocity1 * cs_outs[pair_num].solvs1.delta_AngulaVelocity * inv_ang ;
-				SBs[cs_outs[pair_num].solvs1.num].delta_LinearVelocity += cs_outs[pair_num].offset_delta_LinearVelocity1 * cs_outs[pair_num].solvs1.delta_LinearVelocity * inv_lin ;
+				SBs[cs_outs[pair_num].solvs1.num].delta_AngulaVelocity += cs_outs[pair_num].offset_delta_AngulaVelocity1 * cs_outs[pair_num].solvs1.delta_AngulaVelocity * inv_ang;
+				SBs[cs_outs[pair_num].solvs1.num].delta_LinearVelocity += cs_outs[pair_num].offset_delta_LinearVelocity1 * cs_outs[pair_num].solvs1.delta_LinearVelocity * inv_lin;
+
+
+				for (int C_num = 0; C_num < pairs[pair_num].contacts.contact_num; C_num++) {
+					pairs[pair_num].contacts.contactpoints[C_num].constraint[0].accuminpulse += cs_outs[pair_num].accumes[C_num][0] * 0.5;
+					pairs[pair_num].contacts.contactpoints[C_num].constraint[1].accuminpulse += cs_outs[pair_num].accumes[C_num][1] * 0.5;
+					pairs[pair_num].contacts.contactpoints[C_num].constraint[2].accuminpulse += cs_outs[pair_num].accumes[C_num][2] * 0.5;
+
+				}
+			}
+		}
+	}
+#else
+
+			struct A_E {
+				vector3 sum_AngulaVelocity = vector3(0);
+				vector3 sum_LinearVelocity = vector3(0);
+
+				vector3 invsum_AngulaVelocity = vector3(0);
+				vector3 invsum_LinearVelocity = vector3(0);
+			};
+
+			std::vector<A_E> ae;
+			{
+				ae.resize(colliders.size());
+
+				for (int pair_num = 0; pair_num < pairs.size(); pair_num++) {
+					// delta_‚Ì‡Œv‚ð‚Æ‚Á‚Ä‹t”‚ÉB -> Šedelta_‚Ì”ä‚ð‚Æ‚é‚½‚ß
+					for (int i = 0; i < 3; i++) {
+
+						ae[cs_outs[pair_num].solvs0.num].sum_AngulaVelocity[i] += fabsf(cs_outs[pair_num].solvs0.delta_AngulaVelocity[i]);
+						ae[cs_outs[pair_num].solvs0.num].sum_LinearVelocity[i] += fabsf(cs_outs[pair_num].solvs0.delta_LinearVelocity[i]);
+
+						ae[cs_outs[pair_num].solvs1.num].sum_AngulaVelocity[i] += fabsf(cs_outs[pair_num].solvs1.delta_AngulaVelocity[i]);
+						ae[cs_outs[pair_num].solvs1.num].sum_LinearVelocity[i] += fabsf(cs_outs[pair_num].solvs1.delta_LinearVelocity[i]);
+					}
+
+					for (int C_num = 0; C_num < pairs[pair_num].contacts.contact_num; C_num++) {
+						// accuminpulse‚Ìoffset‚Í‚±‚±‚Å
+						cs_outs[pair_num].accumes[C_num][0] -= pairs[pair_num].contacts.contactpoints[C_num].constraint[0].accuminpulse;
+						cs_outs[pair_num].accumes[C_num][1] -= pairs[pair_num].contacts.contactpoints[C_num].constraint[1].accuminpulse;
+						cs_outs[pair_num].accumes[C_num][2] -= pairs[pair_num].contacts.contactpoints[C_num].constraint[2].accuminpulse;
+					}
+
+				}
+
+				//sum ‚ð ‹t”‚É
+				for (int i = 0; i < colliders.size(); i++) {
+
+					for (int o = 0; o < 3; o++) {
+
+						ae[i].invsum_AngulaVelocity[o] =
+							+ae[i].sum_AngulaVelocity[o] > FLT_EPSILON ? 1.0f / ae[i].sum_AngulaVelocity[o] : 0;
+						ae[i].invsum_LinearVelocity[o] =
+							+ae[i].sum_LinearVelocity[o] > FLT_EPSILON ? 1.0f / ae[i].sum_LinearVelocity[o] : 0;
+
+					}
+				}
+			}
+
+
+
+			//offset‚ÌŒvŽZ
+			for (int pair_num = 0; pair_num < pairs.size(); pair_num++) {
+				// offset * delta_ * invsum ‚Å
+				vector3 inv_ang;
+				vector3 inv_lin;
+				SBs[cs_outs[pair_num].solvs0.num].delta_AngulaVelocity += cs_outs[pair_num].offset_delta_AngulaVelocity0 * cs_outs[pair_num].solvs0.delta_AngulaVelocity * ae[cs_outs[pair_num].solvs0.num].invsum_AngulaVelocity;
+				SBs[cs_outs[pair_num].solvs0.num].delta_LinearVelocity += cs_outs[pair_num].offset_delta_LinearVelocity0 * cs_outs[pair_num].solvs0.delta_LinearVelocity * ae[cs_outs[pair_num].solvs0.num].invsum_LinearVelocity;
+
+				SBs[cs_outs[pair_num].solvs1.num].delta_AngulaVelocity += cs_outs[pair_num].offset_delta_AngulaVelocity1 * cs_outs[pair_num].solvs1.delta_AngulaVelocity * ae[cs_outs[pair_num].solvs1.num].invsum_AngulaVelocity;
+				SBs[cs_outs[pair_num].solvs1.num].delta_LinearVelocity += cs_outs[pair_num].offset_delta_LinearVelocity1 * cs_outs[pair_num].solvs1.delta_LinearVelocity * ae[cs_outs[pair_num].solvs1.num].invsum_LinearVelocity;
 
 
 				for (int C_num = 0; C_num < pairs[pair_num].contacts.contact_num; C_num++) {
@@ -634,10 +707,10 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 
 				}
 			}
-
-
 		}
 	}
+#endif
+
 	else if (whatnum == 3) {
 		for (int i = 0; i < physics_g::accuracy; i++) {
 			if (physics_g::accuracy % 2 == 0) {

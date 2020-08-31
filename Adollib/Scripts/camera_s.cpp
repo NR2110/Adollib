@@ -60,18 +60,19 @@ namespace Adollib
 				rotate_vec.x = input->getCursorPosY() - Al_Global::SCREEN_HEIGHT / 2;
 
 				rotate *= quaternion_angle_axis(rotate_vec.y, vector3(0, 1, 0));
-				rotate *= quaternion_angle_axis(rotate_vec.x, vector3_cross(vector3(0, 1, 0), vector3_be_rotated_by_quaternion(vector3(0, 0, 1), transform->local_orient)).unit_vect());
+				rotate *= quaternion_angle_axis(rotate_vec.x, vector3_cross(vector3(0, 1, 0), vector3_be_rotated_by_quaternion(vector3(0, 0, 1), transform->local_orient)).unit_vect()) * rotate_pow;
 
 				input->setCursorPos(Al_Global::SCREEN_WIDTH / 2, Al_Global::SCREEN_HEIGHT / 2);
 			}
 			else {
-				float rotate_pow = 100 * Al_Global::second_per_frame;
+				float rotate_pow = 20 * Al_Global::second_per_frame;
 				vector3 rotate_vec = vector3(0, 0, 0);
 				if (input->getKeyState(Key::I))rotate_vec += vector3(-1, 0, 0);
 				if (input->getKeyState(Key::K))rotate_vec += vector3(+1, 0, 0);
 				if (input->getKeyState(Key::J))rotate_vec += vector3(0, -1, 0);
 				if (input->getKeyState(Key::L))rotate_vec += vector3(0, +1, 0);
 
+				rotate_vec *= rotate_pow;
 				rotate *= quaternion_angle_axis(rotate_vec.y, vector3(0, 1, 0));
 				rotate *= quaternion_angle_axis(rotate_vec.x, vector3_cross(vector3(0, 1, 0), vector3_be_rotated_by_quaternion(vector3(0, 0, 1), transform->local_orient)).unit_vect());
 
