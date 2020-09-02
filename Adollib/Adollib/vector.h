@@ -79,9 +79,19 @@ namespace Adollib {
 			};
 
 			struct {
+				DirectX::XMFLOAT3 xyz;
+			};
+
+			struct {
 				vector2 xy;
 				float z;
 			};
+
+			struct {
+				float x;
+				vector2 yz;
+			};
+
 
 		};
 	private:

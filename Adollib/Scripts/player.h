@@ -1,6 +1,6 @@
 #pragma once
 #include "../Adollib/component.h"
-#include "../Adollib/rigit_body.h"
+#include "../Adollib/collider.h"
 
 namespace Adollib
 {

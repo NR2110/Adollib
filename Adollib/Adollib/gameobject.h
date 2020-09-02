@@ -6,7 +6,7 @@
 #include "input.h"
 #include "time.h"
 #include "object.h"
-#include "rigit_body.h"
+#include "collider.h"
 #include "component.h"
 #include "transform.h"
 #include "scene_list.h"

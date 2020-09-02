@@ -161,6 +161,11 @@
     <ClInclude Include="ALP_resolve_contact.h" />
     <ClInclude Include="cbuffer_manager.h" />
     <ClInclude Include="closest_func.h" />
+    <ClInclude Include="collider_mesh.h" />
+    <ClInclude Include="collider_plane.h" />
+    <ClInclude Include="collider__base.h" />
+    <ClInclude Include="collider_box.h" />
+    <ClInclude Include="collider_sphere.h" />
     <ClInclude Include="complex.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -205,8 +210,8 @@
     <ClInclude Include="quaternion.h" />
     <ClInclude Include="quaternion_e.h" />
     <ClInclude Include="resource_manager.h" />
-    <ClInclude Include="rigit_body.h" />
-    <ClInclude Include="rigit_body_manager.h" />
+    <ClInclude Include="collider.h" />
+    <ClInclude Include="ALP__manager.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="scene_game.h" />
     <ClInclude Include="scene_list.h" />
@@ -240,6 +245,10 @@
     <ClCompile Include="ALP_midphase.cpp" />
     <ClCompile Include="ALP_resolve_contact.cpp" />
     <ClCompile Include="closest_func.cpp" />
+    <ClCompile Include="collider_box.cpp" />
+    <ClCompile Include="collider_mesh.cpp" />
+    <ClCompile Include="collider_plane.cpp" />
+    <ClCompile Include="collider_sphere.cpp" />
     <ClCompile Include="complex.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -267,8 +276,8 @@
     <ClCompile Include="mesh.cpp" />
     <ClCompile Include="physics_global.cpp" />
     <ClCompile Include="resource_manager.cpp" />
-    <ClCompile Include="rigit_body.cpp" />
-    <ClCompile Include="rigit_body_manager.cpp" />
+    <ClCompile Include="collider__base.cpp" />
+    <ClCompile Include="ALP__manager.cpp" />
     <ClCompile Include="scene.cpp" />
     <ClCompile Include="scene_game.cpp" />
     <ClCompile Include="scene_manager.cpp" />

@@ -8,21 +8,21 @@ using namespace Contacts;
 #pragma region Midphase
 //:::::::::::::::::::::::::::
 //DOP6Ç…ÇÊÇÈëÂéGîcÇ»ìñÇΩÇËîªíË
-bool Check_insert_DOP7(const Collider* collA, const Collider* collB) {
+bool Check_insert_DOP14(const Collider* collA, const Collider* collB) {
 	//ñ≥å¿PlaneÇÕDOPÇ™çÏÇÍÇ»Ç¢ÇΩÇﬂnarrowÇ…ìäÇ∞ÇÈ?
 	if (collA->shape == Collider_shape::shape_plane || collB->shape == Collider_shape::shape_plane) return true;
 
-	vector3 dis = collA->dop7.pos - collB->dop7.pos;
+	vector3 dis = collA->dop14.pos - collB->dop14.pos;
 
 	for (int i = 0; i < DOP_size; i++) {
 		if (
-			vector3_dot(+DOP_7_axis[i], collA->dop7.pos - collB->dop7.pos) < collB->dop7.min[i] - collA->dop7.max[i] ||
-			vector3_dot(-DOP_7_axis[i], collA->dop7.pos - collB->dop7.pos) < collA->dop7.min[i] - collB->dop7.max[i]
+			vector3_dot(+DOP_14_axis[i], collA->dop14.pos - collB->dop14.pos) < collB->dop14.min[i] - collA->dop14.max[i] ||
+			vector3_dot(-DOP_14_axis[i], collA->dop14.pos - collB->dop14.pos) < collA->dop14.min[i] - collB->dop14.max[i]
 			) {
-			float AA = vector3_dot(+DOP_7_axis[i], collA->dop7.pos - collB->dop7.pos);
-			float AB = collB->dop7.min[i] - collA->dop7.max[i];
-			float BA = vector3_dot(-DOP_7_axis[i], collA->dop7.pos - collB->dop7.pos);
-			float BB = collA->dop7.min[i] - collB->dop7.max[i];
+			float AA = vector3_dot(+DOP_14_axis[i], collA->dop14.pos - collB->dop14.pos);
+			float AB = collB->dop14.min[i] - collA->dop14.max[i];
+			float BA = vector3_dot(-DOP_14_axis[i], collA->dop14.pos - collB->dop14.pos);
+			float BB = collA->dop14.min[i] - collB->dop14.max[i];
 			return false;
 		}
 	}
@@ -31,14 +31,7 @@ bool Check_insert_DOP7(const Collider* collA, const Collider* collB) {
 }
 
 bool Check_insert_Plane(const Collider* plane, const Collider* coll) {
-	vector3 axis[6]{
-	{1,0,0},
-	{0,1,0},
-	{0,0,1},
-	{1,1,0},
-	{0,1,1},
-	{1,0,1}
-	};
+
 	vector3 V;
 	float plane_dis = 0, coll_dis = FLT_MAX;
 
@@ -46,7 +39,7 @@ bool Check_insert_Plane(const Collider* plane, const Collider* coll) {
 	plane_dis = vector3_dot(V, plane->world_position);
 
 	for (int i = 0; i < DOP_size; i++) {
-		float coll_len = vector3_dot(V, coll->world_position + axis[i] * coll->dop7.max[i]);
+		float coll_len = vector3_dot(V, coll->world_position + DOP_14_axis[i] * coll->dop14.max[i]);
 		if (plane_dis > coll_len)return true;
 	}
 
@@ -57,7 +50,7 @@ void add_pair(std::vector<Contacts::Contact_pair>& pairs, Contacts::Contact_pair
 	pairs.emplace_back(pair);
 }
 
-void Midphase_DOP_7(std::vector<Contacts::Contact_pair>& new_pairs, Collider* collA, Collider* collB) {
+void Midphase_DOP_14(std::vector<Contacts::Contact_pair>& new_pairs, Collider* collA, Collider* collB) {
 	Contact_pair new_pair;
 	// É^ÉOÇ…ÇÊÇÈè’ìÀÇÃê•îÒ
 	bool hit = true;
@@ -76,7 +69,7 @@ void Midphase_DOP_7(std::vector<Contacts::Contact_pair>& new_pairs, Collider* co
 
 	//DOPÇ…ÇÊÇÈëÂéGîcÇ»ìñÇΩÇËîªíË
 	if (collA->shape != Collider_shape::shape_plane && collB->shape != Collider_shape::shape_plane) {
-		if (Check_insert_DOP7(collA, collB) == false)return;
+		if (Check_insert_DOP14(collA, collB) == false)return;
 	}
 	else if (collA->shape == Collider_shape::shape_plane && collB->shape != Collider_shape::shape_plane) {
 		if (Check_insert_Plane(collA, collB) == false)return;
@@ -110,7 +103,7 @@ void physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std:
 
 		int p_size = in_pair[i].bodylists.size();
 		for (int o = 0; o < p_size; o++) {
-			Midphase_DOP_7(new_pairs, in_pair[i].body, in_pair[i].bodylists[o]);
+			Midphase_DOP_14(new_pairs, in_pair[i].body, in_pair[i].bodylists[o]);
 		}
 	}
 	Work_meter::stop("Mid_Dop7");
@@ -151,3 +144,4 @@ void physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std:
 	pairs = new_pairs;
 }
 #pragma endregion
+//:::::::::::::::::::::::::::

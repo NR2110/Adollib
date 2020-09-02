@@ -71,7 +71,7 @@ bool FrustumCulling::frustum_culling(const Mesh::mesh* mesh) {
 	for (int axi = 0; axi < DOP_size; axi++) {
 
 		//objのローカル座標系での各軸の長さ
-		P_obj_cn = DOP_7_axis[axi] * mesh->dop7.max[axi];
+		P_obj_cn = DOP_14_axis[axi] * mesh->dop7.max[axi];
 
 		//scaleの適応
 		P_obj_cn = P_obj_cn * obj_scale;
@@ -100,7 +100,7 @@ bool FrustumCulling::frustum_culling(const Mesh::mesh* mesh) {
 	for (int axi = 0; axi < 6; axi++) {
 
 		//objのローカル座標系での各軸の長さ
-		P_obj_cn = DOP_7_axis[axi] * mesh->dop7.min[axi];
+		P_obj_cn = DOP_14_axis[axi] * mesh->dop7.min[axi];
 
 		//scaleの適応
 		P_obj_cn = P_obj_cn * obj_scale;
