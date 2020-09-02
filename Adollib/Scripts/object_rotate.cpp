@@ -1,5 +1,5 @@
 #include "../Adollib/component.h"
-#include "../Adollib/rigit_body.h"
+#include "../Adollib/collider.h"
 
 #include "object_rotate.h"
 

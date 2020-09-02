@@ -4,7 +4,7 @@
 #include <memory>
 #include "mesh.h"
 #include "shader.h"
-#include "rigit_body.h"
+#include "collider.h"
 
 namespace Adollib {
 

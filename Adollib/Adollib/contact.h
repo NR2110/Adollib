@@ -4,7 +4,7 @@
 #include <assert.h>
 #include "quaternion.h"
 #include "matrix.h"
-#include "rigit_body.h"
+#include "collider.h"
 #include "physics_global.h"
 
 namespace Adollib {
@@ -133,8 +133,7 @@ namespace Adollib {
 		};
 
 		struct Collider_2 {
-			Collider* body;
-			std::vector<Collider*> bodylists;
+			Collider* body[2];
 		};
 
 	}

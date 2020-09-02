@@ -26,30 +26,6 @@ namespace Adollib
 
 	bool Rigitbody_manager::update(Scenelist Sce)
 	{
-		//physics_g::timeStep = Al_Global::second_per_frame; //フレーム依存じゃない
-		//physics_g::timeStep = physics_g::timeStep; //フレーム依存じゃない
-
-		//DBUG : 衝突点の表示の生成 ::::::::::
-		//static bool init = true;
-		//static Gameobject* S[10][4][2];
-		//if (init) {
-		//	init = false;
-		//	for (int p = 0; p < 10; p++) {
-		//		for (int i = 0; i < 4; i++) {
-		//			S[p][i][0] = Gameobject_manager::createSphere("ContactPoint_B");
-		//			S[p][i][0]->transform->local_scale = vector3(0.1);
-		//			S[p][i][0]->material->color = vector4(0, 0, 1, 1);
-		//			S[p][i][0]->material->DS_state = State_manager::DStypes::DS_FALSE;
-		//			 
-		//			S[p][i][1] = Gameobject_manager::createSphere("ContactPoint_R");
-		//			S[p][i][1]->transform->local_scale = vector3(0.1);
-		//			S[p][i][1]->material->color = vector4(1, 0, 0, 1);
-		//			S[p][i][1]->material->DS_state = State_manager::DStypes::DS_FALSE;
-		//		}
-		//	}
-		//}
-		//::::::::::::::::::::::::::::::
-
 		std::vector<Contact> contacts;
 		float resituation = Al_Global::base_resituation;
 		int object_num = RB_sphere_s[Sce].size() + RB_box_s[Sce].size() + RB_plane_s[Sce].size();
@@ -117,26 +93,6 @@ namespace Adollib
 
 		//位置の更新
 		integrate(colls);
-
-		//DBUG : 衝突点の表示 ::::::
-		//for (int p = 0; p < 10; p++) {
-		//	for (int i = 0; i < 4; i++) {
-		//		S[p][i][0]->set_active(false);
-		//		S[p][i][1]->set_active(false);
-		//	}
-		//}
-		//  for (int p = 0; p < pairs.size() &&  p < 10; p++) {
-		//	for (int i = 0; i < pairs[p].contacts.contact_num; i++) {
-
-		//		S[p][i][0]->set_active(true);
-		//		S[p][i][1]->set_active(true);
-
-		//		S[p][i][0]->transform->local_pos = vector3_be_rotated_by_quaternion(pairs[p].contacts.contactpoints[i].point[0], pairs[p].body[0]->world_orientation) + pairs[p].body[0]->world_position;
-		//		S[p][i][1]->transform->local_pos = vector3_be_rotated_by_quaternion(pairs[p].contacts.contactpoints[i].point[1], pairs[p].body[1]->world_orientation) + pairs[p].body[1]->world_position;
-		//	}
-		//}
-		//:::::::::::::::::::::::::::
-
 
 		for (int i = 0; i < colls.size(); i++) {
 			//colliderの影響をアタッチされたgoへ

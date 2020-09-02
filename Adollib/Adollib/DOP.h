@@ -3,9 +3,9 @@
 
 namespace Adollib {
 
-	static const int DOP_size = 7;
+	static const int DOP_size = 14 / 2;
 
-	static const vector3 DOP_7_axis[DOP_size] = {
+	static const vector3 DOP_14_axis[DOP_size] = {
 	vector3(1,0,0),
 	vector3(0,1,0),
 	vector3(0,0,1),
@@ -14,7 +14,7 @@ namespace Adollib {
 	vector3(+0.3333333,0.3333333,-0.3333333),
 	vector3(-0.3333333,0.3333333,-0.3333333)
 	};
-	struct DOP_7 {
+	struct DOP_14 {
 		//íÜêSç¿ïW
 		vector3 pos;
 

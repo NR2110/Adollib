@@ -1,6 +1,6 @@
 #pragma once
 #include "component.h"
-#include "rigit_body.h"
+#include "collider.h"
 #include "scene_list.h"
 #include "gameobject.h"
 #include "scene.h"

@@ -1,28 +1,11 @@
-﻿  ALP_resolve_contact.cpp
+﻿  ALP_broadphase.cpp
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(12,41): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(13,41): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(14,41): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(15,41): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\rigit_body.h(55,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\rigit_body.h(56,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(50,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.h(7,21): warning C4099: 'Adollib::physics_function::Solverbody': タイプ名は最初 'class' として使われていましたが 'struct' として使われています。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.h(7): message : 'Adollib::physics_function::Solverbody' の宣言を確認してください
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(71,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(82,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(90,28): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(207,28): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(235,30): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(322,37): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(376,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(380,37): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(387,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(400,36): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(435,30): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(549,37): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(578,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(598,36): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(703,31): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(850,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_broadphase.cpp(248,8): warning C4101: 'ed': ローカル変数は 1 度も使われていません。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\vector_e.h(80): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
   Adollib.vcxproj -> C:\Users\2190072\Documents\Adollib\Adollib\Debug\Adollib.exe
