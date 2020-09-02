@@ -154,6 +154,9 @@
     <ClCompile Include="compute_shader.cpp">
       <Filter>00_Adollib\33_shader</Filter>
     </ClCompile>
+    <ClCompile Include="physics_global.cpp">
+      <Filter>00_Adollib\00_main\physics</Filter>
+    </ClCompile>
     <ClCompile Include="Imgui\imgui.cpp">
       <Filter>00_Adollib\99_imgui</Filter>
     </ClCompile>
@@ -211,10 +214,7 @@
     <ClCompile Include="ALP_resolve_contact.cpp">
       <Filter>00_Adollib\00_main\physics\ALP</Filter>
     </ClCompile>
-    <ClCompile Include="physics_global.cpp">
-      <Filter>00_Adollib\00_main\physics\ALP</Filter>
-    </ClCompile>
-    <ClCompile Include="ALP__manager.cpp">
+    <ClCompile Include="rigit_body_manager.cpp">
       <Filter>00_Adollib\00_main\physics\ALP</Filter>
     </ClCompile>
   </ItemGroup>
@@ -354,6 +354,9 @@
     <ClInclude Include="resource_manager.h">
       <Filter>00_Adollib\00_main</Filter>
     </ClInclude>
+    <ClInclude Include="physics_global.h">
+      <Filter>00_Adollib\00_main\physics</Filter>
+    </ClInclude>
     <ClInclude Include="closest_func.h">
       <Filter>00_Adollib\11_math</Filter>
     </ClInclude>
@@ -456,10 +459,7 @@
     <ClInclude Include="ALP_resolve_contact.h">
       <Filter>00_Adollib\00_main\physics\ALP</Filter>
     </ClInclude>
-    <ClInclude Include="physics_global.h">
-      <Filter>00_Adollib\00_main\physics\ALP</Filter>
-    </ClInclude>
-    <ClInclude Include="ALP__manager.h">
+    <ClInclude Include="rigit_body_manager.h">
       <Filter>00_Adollib\00_main\physics\ALP</Filter>
     </ClInclude>
   </ItemGroup>

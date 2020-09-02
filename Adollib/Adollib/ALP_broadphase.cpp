@@ -14,7 +14,7 @@ struct edge{
 
 void physics_function::Broadphase(const std::vector<Collider*>& coll, std::vector<Contacts::Collider_2>& out_pair, std::vector<Contacts::Contact_pair>& pairs) {
 
-#if 1
+#if 0
 	//Sweep&Prune‚ð‘}“ü–@‚ÅŽÀ‘•
 	static std::list<edge>axis_list[3];
 

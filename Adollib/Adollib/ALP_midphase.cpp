@@ -101,10 +101,7 @@ void physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std:
 	std::vector<Contacts::Contact_pair> new_pairs;
 	for (int i = 0; i < in_pair.size(); i++) {
 
-		int p_size = in_pair[i].bodylists.size();
-		for (int o = 0; o < p_size; o++) {
-			Midphase_DOP_14(new_pairs, in_pair[i].body, in_pair[i].bodylists[o]);
-		}
+		Midphase_DOP_14(new_pairs, in_pair[i].body[0], in_pair[i].body[1]);
 	}
 	Work_meter::stop("Mid_Dop7");
 

@@ -211,7 +211,7 @@
     <ClInclude Include="quaternion_e.h" />
     <ClInclude Include="resource_manager.h" />
     <ClInclude Include="collider.h" />
-    <ClInclude Include="ALP__manager.h" />
+    <ClInclude Include="rigit_body_manager.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="scene_game.h" />
     <ClInclude Include="scene_list.h" />
@@ -277,7 +277,7 @@
     <ClCompile Include="physics_global.cpp" />
     <ClCompile Include="resource_manager.cpp" />
     <ClCompile Include="collider__base.cpp" />
-    <ClCompile Include="ALP__manager.cpp" />
+    <ClCompile Include="rigit_body_manager.cpp" />
     <ClCompile Include="scene.cpp" />
     <ClCompile Include="scene_game.cpp" />
     <ClCompile Include="scene_manager.cpp" />
