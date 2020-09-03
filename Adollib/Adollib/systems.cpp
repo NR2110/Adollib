@@ -39,7 +39,7 @@ bool Systems::Initialize(HWND hWnd, int width, int height)
 	time = Time::getInstancePtr();
 	time->initialize();
 	time->setFrameRate(60.0f);
-	time->isFloatFPS(false);
+	time->isFloatFPS(true);
 	/// Debugの生成
 	//Debug::create();
 	//debug = Debug::getInstancePtr();
@@ -58,7 +58,7 @@ HRESULT Systems::CreateDevice(HWND hWnd)
 	HRESULT hr = S_OK;
 
 	//::: デバイスとスワップチェインンの作成 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-	UINT creationFlags/*= D3D11_CREATE_DEVICE_BGRA_SUPPORT;*/ = 0;
+	UINT creationFlags/*= D3D11_CREATE_DEVICE_DEBUG;*/ = 0;
 
 	D3D_DRIVER_TYPE driverTypes[] = {
 		D3D_DRIVER_TYPE_UNKNOWN,

@@ -71,7 +71,7 @@ namespace Adollib{
 		sphere->local_orientation = quaternion_identity();
 		sphere->gameobject = this;
 		collider.push_back(sphere);
-		Rigitbody_manager::set_rigitbody(sphere.get(), this, tag, no_hit_tag, this_scene); //衝突判定のマネージャーに渡す
+		Rigitbody_manager::add_collider(sphere.get(), this, tag, no_hit_tag, this_scene); //衝突判定のマネージャーに渡す
 		return sphere.get();
 
 	}
@@ -88,7 +88,7 @@ namespace Adollib{
 		box->local_scale = vector3(1, 1, 1);
 		box->gameobject = this;
 		collider.push_back(box);
-		Rigitbody_manager::set_rigitbody(box.get(), this, tag, no_hit_tag, this_scene); //衝突判定のマネージャーに渡す
+		Rigitbody_manager::add_collider(box.get(), this, tag, no_hit_tag, this_scene); //衝突判定のマネージャーに渡す
 		return box.get();
 	}
 
@@ -106,7 +106,7 @@ namespace Adollib{
 		plane->local_orientation = quaternion_from_to_rotate(vector3(0, 1, 0), normal);
 		plane->local_scale = vector3(30, 0.1, 30);
 		collider.push_back(plane);
-		Rigitbody_manager::set_rigitbody(plane.get(), this, tag, no_hit_tag, this_scene); //衝突判定のマネージャーに渡す
+		Rigitbody_manager::add_collider(plane.get(), this, tag, no_hit_tag, this_scene); //衝突判定のマネージャーに渡す
 		return plane.get();
 	}
 

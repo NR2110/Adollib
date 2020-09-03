@@ -16,7 +16,7 @@ void Box::update_world_trans() {
 	update_inertial(world_size, density);
 }
 void Box::update_dop14() {
-	dop14.pos = gameobject->get_world_position();
+	dop14.pos = gameobject->get_world_position() + local_position;
 
 	//各頂点のローカル座標
 	vector3 half[4]{

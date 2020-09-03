@@ -29,28 +29,28 @@
     <Filter Include="00_Adollib\11_math">
       <UniqueIdentifier>{eea9848d-7e6b-474f-aa58-f3a76a5c04fc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00_Adollib\22_object">
-      <UniqueIdentifier>{ba801f30-dc48-437a-b82e-1c30330c227f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00_Adollib\22_object\mesh">
-      <UniqueIdentifier>{d2534fb1-3e0f-4465-bf38-05c093fa394f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00_Adollib\33_shader">
-      <UniqueIdentifier>{36de64fc-7e7c-4b76-a489-b6c226ddc5d4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00_Adollib\33_shader\hlsli">
-      <UniqueIdentifier>{2ee81938-f4b8-4424-be0e-212cafffefba}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00_Adollib\99_imgui">
       <UniqueIdentifier>{f686ac45-2d88-4cab-a5d5-7ca5931f6b99}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00_Adollib\00_main\physics">
+    <Filter Include="00_Adollib\33_object">
+      <UniqueIdentifier>{ba801f30-dc48-437a-b82e-1c30330c227f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Adollib\33_object\mesh">
+      <UniqueIdentifier>{d2534fb1-3e0f-4465-bf38-05c093fa394f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Adollib\44_shader">
+      <UniqueIdentifier>{36de64fc-7e7c-4b76-a489-b6c226ddc5d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Adollib\44_shader\hlsli">
+      <UniqueIdentifier>{2ee81938-f4b8-4424-be0e-212cafffefba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Adollib\22_physics">
       <UniqueIdentifier>{948ff940-3127-440f-a355-36b477c57395}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00_Adollib\00_main\physics\collider">
+    <Filter Include="00_Adollib\22_physics\collider">
       <UniqueIdentifier>{191c6cc4-0fed-49ce-b578-ce84509773b1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00_Adollib\00_main\physics\ALP">
+    <Filter Include="00_Adollib\22_physics\ALP">
       <UniqueIdentifier>{cd1ab3af-5ba6-4936-812a-96d396eee048}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -74,10 +74,10 @@
       <Filter>00_Adollib\11_math</Filter>
     </ClCompile>
     <ClCompile Include="gameobject_manager.cpp">
-      <Filter>00_Adollib\22_object</Filter>
+      <Filter>00_Adollib\33_object</Filter>
     </ClCompile>
     <ClCompile Include="gameobject.cpp">
-      <Filter>00_Adollib\22_object</Filter>
+      <Filter>00_Adollib\33_object</Filter>
     </ClCompile>
     <ClCompile Include="scene_manager.cpp">
       <Filter>ソース ファイル</Filter>
@@ -86,22 +86,22 @@
       <Filter>00_Adollib\00_main</Filter>
     </ClCompile>
     <ClCompile Include="shader.cpp">
-      <Filter>00_Adollib\33_shader</Filter>
+      <Filter>00_Adollib\44_shader</Filter>
     </ClCompile>
     <ClCompile Include="gameobject_light.cpp">
-      <Filter>00_Adollib\22_object</Filter>
+      <Filter>00_Adollib\33_object</Filter>
     </ClCompile>
     <ClCompile Include="gameobject_camera.cpp">
-      <Filter>00_Adollib\22_object</Filter>
+      <Filter>00_Adollib\33_object</Filter>
     </ClCompile>
     <ClCompile Include="material.cpp">
-      <Filter>00_Adollib\22_object\mesh</Filter>
+      <Filter>00_Adollib\33_object\mesh</Filter>
     </ClCompile>
     <ClCompile Include="mesh.cpp">
-      <Filter>00_Adollib\22_object\mesh</Filter>
+      <Filter>00_Adollib\33_object\mesh</Filter>
     </ClCompile>
     <ClCompile Include="texture.cpp">
-      <Filter>00_Adollib\22_object\mesh</Filter>
+      <Filter>00_Adollib\33_object\mesh</Filter>
     </ClCompile>
     <ClCompile Include="scene_game.cpp">
       <Filter>ソース ファイル\scene_game</Filter>
@@ -110,7 +110,7 @@
       <Filter>00_Adollib\00_main</Filter>
     </ClCompile>
     <ClCompile Include="material_for_collider.cpp">
-      <Filter>00_Adollib\22_object\mesh</Filter>
+      <Filter>00_Adollib\33_object\mesh</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\player.cpp">
       <Filter>ソース ファイル\scene_game\player</Filter>
@@ -140,7 +140,7 @@
       <Filter>ソース ファイル\scene_game\enemy</Filter>
     </ClCompile>
     <ClCompile Include="contact.cpp">
-      <Filter>00_Adollib\00_main\physics</Filter>
+      <Filter>00_Adollib\22_physics</Filter>
     </ClCompile>
     <ClCompile Include="resource_manager.cpp">
       <Filter>00_Adollib\00_main</Filter>
@@ -149,13 +149,10 @@
       <Filter>00_Adollib\11_math</Filter>
     </ClCompile>
     <ClCompile Include="frustum_culling.cpp">
-      <Filter>00_Adollib\22_object\mesh</Filter>
+      <Filter>00_Adollib\33_object\mesh</Filter>
     </ClCompile>
     <ClCompile Include="compute_shader.cpp">
-      <Filter>00_Adollib\33_shader</Filter>
-    </ClCompile>
-    <ClCompile Include="physics_global.cpp">
-      <Filter>00_Adollib\00_main\physics</Filter>
+      <Filter>00_Adollib\44_shader</Filter>
     </ClCompile>
     <ClCompile Include="Imgui\imgui.cpp">
       <Filter>00_Adollib\99_imgui</Filter>
@@ -185,37 +182,43 @@
       <Filter>00_Adollib\00_main</Filter>
     </ClCompile>
     <ClCompile Include="collider_sphere.cpp">
-      <Filter>00_Adollib\00_main\physics\collider</Filter>
+      <Filter>00_Adollib\22_physics\collider</Filter>
     </ClCompile>
     <ClCompile Include="collider_box.cpp">
-      <Filter>00_Adollib\00_main\physics\collider</Filter>
+      <Filter>00_Adollib\22_physics\collider</Filter>
     </ClCompile>
     <ClCompile Include="collider_plane.cpp">
-      <Filter>00_Adollib\00_main\physics\collider</Filter>
+      <Filter>00_Adollib\22_physics\collider</Filter>
     </ClCompile>
     <ClCompile Include="collider__base.cpp">
-      <Filter>00_Adollib\00_main\physics\collider</Filter>
-    </ClCompile>
-    <ClCompile Include="collider_mesh.cpp">
-      <Filter>00_Adollib\00_main\physics\collider</Filter>
+      <Filter>00_Adollib\22_physics\collider</Filter>
     </ClCompile>
     <ClCompile Include="ALP_broadphase.cpp">
-      <Filter>00_Adollib\00_main\physics\ALP</Filter>
+      <Filter>00_Adollib\22_physics\ALP</Filter>
     </ClCompile>
     <ClCompile Include="ALP_generate_contact.cpp">
-      <Filter>00_Adollib\00_main\physics\ALP</Filter>
+      <Filter>00_Adollib\22_physics\ALP</Filter>
     </ClCompile>
     <ClCompile Include="ALP_integrate.cpp">
-      <Filter>00_Adollib\00_main\physics\ALP</Filter>
+      <Filter>00_Adollib\22_physics\ALP</Filter>
     </ClCompile>
     <ClCompile Include="ALP_midphase.cpp">
-      <Filter>00_Adollib\00_main\physics\ALP</Filter>
+      <Filter>00_Adollib\22_physics\ALP</Filter>
     </ClCompile>
     <ClCompile Include="ALP_resolve_contact.cpp">
-      <Filter>00_Adollib\00_main\physics\ALP</Filter>
+      <Filter>00_Adollib\22_physics\ALP</Filter>
     </ClCompile>
-    <ClCompile Include="rigit_body_manager.cpp">
-      <Filter>00_Adollib\00_main\physics\ALP</Filter>
+    <ClCompile Include="ALP__manager.cpp">
+      <Filter>00_Adollib\22_physics\ALP</Filter>
+    </ClCompile>
+    <ClCompile Include="physics_global.cpp">
+      <Filter>00_Adollib\22_physics\ALP</Filter>
+    </ClCompile>
+    <ClCompile Include="collider_meshcoll.cpp">
+      <Filter>00_Adollib\22_physics\collider</Filter>
+    </ClCompile>
+    <ClCompile Include="meshcoll_resorce_manager.cpp">
+      <Filter>00_Adollib\22_physics\collider</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -247,19 +250,19 @@
       <Filter>00_Adollib\11_math</Filter>
     </ClInclude>
     <ClInclude Include="transform.h">
-      <Filter>00_Adollib\22_object</Filter>
+      <Filter>00_Adollib\33_object</Filter>
     </ClInclude>
     <ClInclude Include="object.h">
-      <Filter>00_Adollib\22_object</Filter>
+      <Filter>00_Adollib\33_object</Filter>
     </ClInclude>
     <ClInclude Include="gameobject_manager.h">
-      <Filter>00_Adollib\22_object</Filter>
+      <Filter>00_Adollib\33_object</Filter>
     </ClInclude>
     <ClInclude Include="gameobject.h">
-      <Filter>00_Adollib\22_object</Filter>
+      <Filter>00_Adollib\33_object</Filter>
     </ClInclude>
     <ClInclude Include="component.h">
-      <Filter>00_Adollib\22_object</Filter>
+      <Filter>00_Adollib\33_object</Filter>
     </ClInclude>
     <ClInclude Include="scene.h">
       <Filter>ソース ファイル</Filter>
@@ -271,40 +274,40 @@
       <Filter>00_Adollib\00_main</Filter>
     </ClInclude>
     <ClInclude Include="shader.h">
-      <Filter>00_Adollib\33_shader</Filter>
+      <Filter>00_Adollib\44_shader</Filter>
     </ClInclude>
     <ClInclude Include="states_manager.h">
       <Filter>00_Adollib\00_main</Filter>
     </ClInclude>
     <ClInclude Include="gameobject_light.h">
-      <Filter>00_Adollib\22_object</Filter>
+      <Filter>00_Adollib\33_object</Filter>
     </ClInclude>
     <ClInclude Include="gameobject_camera.h">
-      <Filter>00_Adollib\22_object</Filter>
+      <Filter>00_Adollib\33_object</Filter>
     </ClInclude>
     <ClInclude Include="cbuffer_manager.h">
-      <Filter>00_Adollib\33_shader</Filter>
+      <Filter>00_Adollib\44_shader</Filter>
     </ClInclude>
     <ClInclude Include="light_types.h">
-      <Filter>00_Adollib\33_shader</Filter>
+      <Filter>00_Adollib\44_shader</Filter>
     </ClInclude>
     <ClInclude Include="material.h">
-      <Filter>00_Adollib\22_object\mesh</Filter>
+      <Filter>00_Adollib\33_object\mesh</Filter>
     </ClInclude>
     <ClInclude Include="mesh.h">
-      <Filter>00_Adollib\22_object\mesh</Filter>
+      <Filter>00_Adollib\33_object\mesh</Filter>
     </ClInclude>
     <ClInclude Include="texture.h">
-      <Filter>00_Adollib\22_object\mesh</Filter>
+      <Filter>00_Adollib\33_object\mesh</Filter>
     </ClInclude>
     <ClInclude Include="scene_game.h">
       <Filter>ソース ファイル\scene_game</Filter>
     </ClInclude>
     <ClInclude Include="component_camera.h">
-      <Filter>00_Adollib\22_object</Filter>
+      <Filter>00_Adollib\33_object</Filter>
     </ClInclude>
     <ClInclude Include="component_light.h">
-      <Filter>00_Adollib\22_object</Filter>
+      <Filter>00_Adollib\33_object</Filter>
     </ClInclude>
     <ClInclude Include="input.h">
       <Filter>00_Adollib\00_main</Filter>
@@ -316,7 +319,7 @@
       <Filter>00_Adollib\00_main</Filter>
     </ClInclude>
     <ClInclude Include="material_for_collider.h">
-      <Filter>00_Adollib\22_object\mesh</Filter>
+      <Filter>00_Adollib\33_object\mesh</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\player.h">
       <Filter>ソース ファイル\scene_game\player</Filter>
@@ -349,13 +352,10 @@
       <Filter>ソース ファイル\scene_game\enemy</Filter>
     </ClInclude>
     <ClInclude Include="contact.h">
-      <Filter>00_Adollib\00_main\physics</Filter>
+      <Filter>00_Adollib\22_physics</Filter>
     </ClInclude>
     <ClInclude Include="resource_manager.h">
       <Filter>00_Adollib\00_main</Filter>
-    </ClInclude>
-    <ClInclude Include="physics_global.h">
-      <Filter>00_Adollib\00_main\physics</Filter>
     </ClInclude>
     <ClInclude Include="closest_func.h">
       <Filter>00_Adollib\11_math</Filter>
@@ -364,10 +364,10 @@
       <Filter>00_Adollib\11_math</Filter>
     </ClInclude>
     <ClInclude Include="frustum_culling.h">
-      <Filter>00_Adollib\22_object\mesh</Filter>
+      <Filter>00_Adollib\33_object\mesh</Filter>
     </ClInclude>
     <ClInclude Include="compute_shader.h">
-      <Filter>00_Adollib\33_shader</Filter>
+      <Filter>00_Adollib\44_shader</Filter>
     </ClInclude>
     <ClInclude Include="matrix_e.h">
       <Filter>00_Adollib\11_math</Filter>
@@ -382,7 +382,7 @@
       <Filter>00_Adollib\11_math</Filter>
     </ClInclude>
     <ClInclude Include="DOP.h">
-      <Filter>00_Adollib\00_main\physics</Filter>
+      <Filter>00_Adollib\22_physics</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imconfig.h">
       <Filter>00_Adollib\99_imgui</Filter>
@@ -424,80 +424,86 @@
       <Filter>00_Adollib\99_imgui</Filter>
     </ClInclude>
     <ClInclude Include="collider.h">
-      <Filter>00_Adollib\00_main\physics\collider</Filter>
+      <Filter>00_Adollib\22_physics\collider</Filter>
     </ClInclude>
     <ClInclude Include="collider_sphere.h">
-      <Filter>00_Adollib\00_main\physics\collider</Filter>
+      <Filter>00_Adollib\22_physics\collider</Filter>
     </ClInclude>
     <ClInclude Include="collider__base.h">
-      <Filter>00_Adollib\00_main\physics\collider</Filter>
+      <Filter>00_Adollib\22_physics\collider</Filter>
     </ClInclude>
     <ClInclude Include="collider_box.h">
-      <Filter>00_Adollib\00_main\physics\collider</Filter>
+      <Filter>00_Adollib\22_physics\collider</Filter>
     </ClInclude>
     <ClInclude Include="collider_plane.h">
-      <Filter>00_Adollib\00_main\physics\collider</Filter>
-    </ClInclude>
-    <ClInclude Include="collider_mesh.h">
-      <Filter>00_Adollib\00_main\physics\collider</Filter>
+      <Filter>00_Adollib\22_physics\collider</Filter>
     </ClInclude>
     <ClInclude Include="ALP__physics_function.h">
-      <Filter>00_Adollib\00_main\physics\ALP</Filter>
+      <Filter>00_Adollib\22_physics\ALP</Filter>
     </ClInclude>
     <ClInclude Include="ALP_broadphase.h">
-      <Filter>00_Adollib\00_main\physics\ALP</Filter>
+      <Filter>00_Adollib\22_physics\ALP</Filter>
     </ClInclude>
     <ClInclude Include="ALP_generate_contact.h">
-      <Filter>00_Adollib\00_main\physics\ALP</Filter>
+      <Filter>00_Adollib\22_physics\ALP</Filter>
     </ClInclude>
     <ClInclude Include="ALP_integrate.h">
-      <Filter>00_Adollib\00_main\physics\ALP</Filter>
+      <Filter>00_Adollib\22_physics\ALP</Filter>
     </ClInclude>
     <ClInclude Include="ALP_midphase.h">
-      <Filter>00_Adollib\00_main\physics\ALP</Filter>
+      <Filter>00_Adollib\22_physics\ALP</Filter>
     </ClInclude>
     <ClInclude Include="ALP_resolve_contact.h">
-      <Filter>00_Adollib\00_main\physics\ALP</Filter>
+      <Filter>00_Adollib\22_physics\ALP</Filter>
     </ClInclude>
-    <ClInclude Include="rigit_body_manager.h">
-      <Filter>00_Adollib\00_main\physics\ALP</Filter>
+    <ClInclude Include="ALP__manager.h">
+      <Filter>00_Adollib\22_physics\ALP</Filter>
+    </ClInclude>
+    <ClInclude Include="physics_global.h">
+      <Filter>00_Adollib\22_physics\ALP</Filter>
+    </ClInclude>
+    <ClInclude Include="collider_meshcoll.h">
+      <Filter>00_Adollib\22_physics\collider</Filter>
+    </ClInclude>
+    <ClInclude Include="meshcoll_resorce_manager.h">
+      <Filter>00_Adollib\22_physics\collider</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="DefaultShader\default.hlsli">
-      <Filter>00_Adollib\33_shader\hlsli</Filter>
+      <Filter>00_Adollib\44_shader\hlsli</Filter>
     </None>
     <None Include="DefaultShader\light_type.hlsli">
-      <Filter>00_Adollib\33_shader\hlsli</Filter>
+      <Filter>00_Adollib\44_shader\hlsli</Filter>
     </None>
     <None Include="DefaultShader\head.hlsli">
-      <Filter>00_Adollib\33_shader\hlsli</Filter>
+      <Filter>00_Adollib\44_shader\hlsli</Filter>
     </None>
     <None Include="DefaultShader\func.hlsli">
-      <Filter>00_Adollib\33_shader\hlsli</Filter>
+      <Filter>00_Adollib\44_shader\hlsli</Filter>
     </None>
     <None Include="DefaultShader\quaternion.hlsli">
-      <Filter>00_Adollib\33_shader\hlsli</Filter>
+      <Filter>00_Adollib\44_shader\hlsli</Filter>
     </None>
     <None Include="DefaultShader\base_math.hlsli">
-      <Filter>00_Adollib\33_shader\hlsli</Filter>
+      <Filter>00_Adollib\44_shader\hlsli</Filter>
     </None>
     <None Include="DefaultShader\math.hlsli">
-      <Filter>00_Adollib\33_shader\hlsli</Filter>
+      <Filter>00_Adollib\44_shader\hlsli</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="DefaultShader\default_ps.hlsl">
-      <Filter>00_Adollib\33_shader\hlsli</Filter>
+      <Filter>00_Adollib\44_shader\hlsli</Filter>
     </FxCompile>
     <FxCompile Include="DefaultShader\default_vs.hlsl">
-      <Filter>00_Adollib\33_shader\hlsli</Filter>
+      <Filter>00_Adollib\44_shader\hlsli</Filter>
     </FxCompile>
     <FxCompile Include="DefaultShader\default_ps_notex.hlsl">
-      <Filter>00_Adollib\33_shader\hlsli</Filter>
+      <Filter>00_Adollib\44_shader\hlsli</Filter>
     </FxCompile>
     <FxCompile Include="DefaultShader\physics_resolve.hlsl">
-      <Filter>00_Adollib\00_main\physics</Filter>
+      <Filter>00_Adollib\22_physics</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

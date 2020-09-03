@@ -133,7 +133,8 @@ namespace Adollib {
 		};
 
 		struct Collider_2 {
-			Collider* body[2];
+			Collider* body;
+			std::vector< Collider*> bodylists;
 		};
 
 	}

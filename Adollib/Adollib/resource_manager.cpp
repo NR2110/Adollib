@@ -551,24 +551,16 @@ namespace Adollib
 				subset.indexCount += 3;
 			}
 
-			//DOP_6‚Ì“o˜^
+			//DOP_14‚Ì“o˜^
 			{
-				vector3 axis[6]{
-					vector3(1,0,0),
-					vector3(0,1,0),
-					vector3(0,0,1),
-					vector3(1,1,0),
-					vector3(0,1,1),
-					vector3(1,0,1),
-				};
 
-				for (int i = 0; i < 6; i++) {
+				for (int i = 0; i < DOP_size; i++) {
 					mesh.dop7.max[i] = -FLT_MAX;
 					mesh.dop7.min[i] = +FLT_MAX;
 				}
 				for (int ver = 0; ver < vertices.size(); ver++) {
-					for (int axi = 0; axi < 6; axi++) {
-						float V = vector3_dot(axis[axi].unit_vect(), vertices[ver].position);
+					for (int axi = 0; axi < DOP_size; axi++) {
+						float V = vector3_dot(DOP_14_axis[axi].unit_vect(), vertices[ver].position);
 
 						if (mesh.dop7.max[axi] < V)mesh.dop7.max[axi] = V;
 						if (mesh.dop7.min[axi] > V)mesh.dop7.min[axi] = V;
@@ -623,8 +615,6 @@ namespace Adollib
 
 			hr = Systems::Device->CreateBuffer(&indexDesc, &indexSubResource, mesh.indexBuffer.GetAddressOf());
 			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
-
-			//swqwssssssssasfbxMesh->Destroy();
 		}
 
 #pragma endregion
