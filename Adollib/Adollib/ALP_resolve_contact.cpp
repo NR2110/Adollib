@@ -70,23 +70,31 @@ struct com_in {
 };
 
 #include "work_meter.h"
-void physics_function::resolve_contact(std::vector<Collider*> colliders, std::vector<Contacts::Contact_pair>& pairs) {
+void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collider>> colliders, std::vector<Contacts::Contact_pair>& pairs) {
 
+	std::list<std::shared_ptr<Adollib::Collider>>::iterator collitr;
+	std::list<std::shared_ptr<Adollib::Collider>>::iterator collitr_end = colliders.end();
 	//::: 解決用オブジェクトの生成 :::::::::::
 	std::vector<Solverbody> SBs;
-	for (int i = 0; i < colliders.size(); i++) {
-		Solverbody SB;
-		SB.orientation = colliders[i]->world_orientation;
-		SB.delta_LinearVelocity = vector3(0.0f);
-		SB.delta_AngulaVelocity = vector3(0.0f);
-		SB.inv_inertia = colliders[i]->inverse_inertial_tensor();
-		SB.inv_mass = colliders[i]->inverse_mass();
-		SB.num = i;
+	{
+		int count = 0;
+		for (collitr = colliders.begin(); collitr != collitr_end; collitr++) {
+			Solverbody SB;
+			SB.orientation = (*collitr)->world_orientation;
+			SB.delta_LinearVelocity = vector3(0.0f);
+			SB.delta_AngulaVelocity = vector3(0.0f);
+			SB.inv_inertia = (*collitr)->inverse_inertial_tensor();
+			SB.inv_mass = (*collitr)->inverse_mass();
+			SB.num = count;
 
-		SBs.emplace_back(SB);
-	}
-	for (int i = 0; i < colliders.size(); i++) {
-		colliders[i]->solve = &SBs[i];
+			SBs.emplace_back(SB);
+			count++;
+		}
+		count = 0;
+		for (collitr = colliders.begin(); collitr != collitr_end; collitr++) {
+			(*collitr)->solve = &SBs[count];
+			count++;
+		}
 	}
 
 	//std::vector<Balljoint> balljoints; //今回はなし
@@ -902,9 +910,9 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 	}
 
 	// 速度の更新
-	for (int i = 0; i < colliders.size(); i++) {
-		colliders[i]->linear_velocity += colliders[i]->solve->delta_LinearVelocity;
-		colliders[i]->angula_velocity += colliders[i]->solve->delta_AngulaVelocity;
+	for (collitr = colliders.begin(); collitr != collitr_end; collitr++) {
+		(*collitr)->linear_velocity += (*collitr)->solve->delta_LinearVelocity;
+		(*collitr)->angula_velocity += (*collitr)->solve->delta_AngulaVelocity;
 
 	}
 

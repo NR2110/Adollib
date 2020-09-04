@@ -6,7 +6,7 @@ namespace Adollib {
 	class Plane : public Collider {
 	public:
 		//不動オブジェクトとして生成
-		Plane(vector3 n, float d) {
+		Plane(vector3 n = vector3(0, 1, 0), float d = 0) {
 			//shapeの設定
 			shape = Collider_shape::shape_plane;
 

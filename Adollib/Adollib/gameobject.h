@@ -11,8 +11,10 @@
 #include "transform.h"
 #include "scene_list.h"
 #include "material.h"
+#include "ALP__manager.h"
 
 namespace Adollib {
+
 	class Gameobject : public object {
 	private:
 		struct ConstantBufferPerGO {
@@ -27,7 +29,7 @@ namespace Adollib {
 
 		std::shared_ptr<Material> material;
 
-		std::vector <std::shared_ptr<Collider>> collider; //アタッチされているcolliderへのポインタ
+		std::vector <Collider*> collider; //アタッチされているcolliderへのポインタ
 
 		std::list <std::shared_ptr<Component>> components; //アタッチされているConponentのポインタ
 
@@ -97,49 +99,59 @@ namespace Adollib {
 			else return transform->local_scale;
 		};
 
+		template<typename T>
+		T* add_collider() {
+
+			std::shared_ptr<T> newCom = std::make_shared<T>();
+			Collider* pCom = dynamic_cast<Collider*>(newCom.get());
+			if (pCom == nullptr)return nullptr;
+
+			T* C =  Rigitbody_manager::add_collider<T>(this_scene);
+			C->gameobject = this;
+			collider.emplace_back(C);
+
+			return C;
+		}
 
 
-		void set_collider(Sphere* S, std::string tag, std::vector<std::string> no_hit_tag);
-		void set_collider(Box* B,    std::string tag, std::vector<std::string> no_hit_tag);
-		void set_collider(Plane* P,  std::string tag, std::vector<std::string> no_hit_tag);
+		////:::::::::::::::::::::::::
+		//// pos : 描画座標からの相対座標
+		//// r : 半径
+		////:::::::::::::::::::::::::
+		//Sphere* add_collider_sphere(
+		//	vector3 pos = vector3(0, 0, 0), 
+		//	float r = 1, 
+		//	float density = 1, 
+		//	std::string tag = std::string("Sphere"), 
+		//	std::vector<std::string> no_hit_tag = std::vector<std::string>()
 
-		//:::::::::::::::::::::::::
-		// pos : 描画座標からの相対座標
-		// r : 半径
-		//:::::::::::::::::::::::::
-		Sphere* add_collider_sphere(
-			vector3 pos = vector3(0, 0, 0), 
-			float r = 1, 
-			float density = 1, 
-			std::string tag = std::string("Sphere"), 
-			std::vector<std::string> no_hit_tag = std::vector<std::string>()
-		);
+		//);
 
-		//:::::::::::::::::::::::::
-		// pos : 描画座標からの相対座標
-		// size : 描画回転からの x,y,z の相対half_size
-		// rotate : 描画回転からの相対回転
-		//:::::::::::::::::::::::::
-		Box* add_collider_box(
-			vector3 pos = vector3(0, 0, 0),
-			vector3 scale = vector3(1, 1, 1), 
-			quaternion orient = quaternion_identity(),
-			float density = 1,
-			std::string tag = std::string("Box"),
-			std::vector<std::string> no_hit_tag = std::vector<std::string>()
-		);
+		////:::::::::::::::::::::::::
+		//// pos : 描画座標からの相対座標
+		//// size : 描画回転からの x,y,z の相対half_size
+		//// rotate : 描画回転からの相対回転
+		////:::::::::::::::::::::::::
+		//Box* add_collider_box(
+		//	vector3 pos = vector3(0, 0, 0),
+		//	vector3 scale = vector3(1, 1, 1), 
+		//	quaternion orient = quaternion_identity(),
+		//	float density = 1,
+		//	std::string tag = std::string("Box"),
+		//	std::vector<std::string> no_hit_tag = std::vector<std::string>()
+		//);
 
-		//:::::::::::::::::::::::::
-		// pos : 相対座標
-		// normal : 相対法線
-		//:::::::::::::::::::::::::
-		Plane* add_collider_plane(
-			vector3 pos = vector3(0, 0, 0),
-			vector3 normal = vector3(0, 1, 0),
-			float density = 1, 
-			std::string tag = std::string("Plane"),
-			std::vector<std::string> no_hit_tag = std::vector<std::string>()
-		);
+		////:::::::::::::::::::::::::
+		//// pos : 相対座標
+		//// normal : 相対法線
+		////:::::::::::::::::::::::::
+		//Plane* add_collider_plane(
+		//	vector3 pos = vector3(0, 0, 0),
+		//	vector3 normal = vector3(0, 1, 0),
+		//	float density = 1, 
+		//	std::string tag = std::string("Plane"),
+		//	std::vector<std::string> no_hit_tag = std::vector<std::string>()
+		//);
 
 
 		//activeが変更されたときの処理を呼び出す

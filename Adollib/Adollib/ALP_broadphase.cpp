@@ -12,7 +12,7 @@ struct edge{
 	bool stgo; //true = st, false = go 
 };
 
-void physics_function::Broadphase(const std::vector<Collider*>& coll, std::vector<Contacts::Collider_2>& out_pair, std::vector<Contacts::Contact_pair>& pairs) {
+void physics_function::Broadphase(std::list<std::shared_ptr<Adollib::Collider>>& coll, std::vector<Contacts::Collider_2>& out_pair, std::vector<Contacts::Contact_pair>& pairs) {
 
 #if 1
 	//Sweep&Pruneを挿入法で実装
@@ -22,40 +22,43 @@ void physics_function::Broadphase(const std::vector<Collider*>& coll, std::vecto
 
 	Work_meter::start("update_dop14");
 	int coll_size = coll.size();
-	for (int i = 0; i < coll_size; i++) {
-		coll[i]->update_dop14();
+	std::list<std::shared_ptr<Adollib::Collider>>::iterator itr;
+	std::list<std::shared_ptr<Adollib::Collider>>::iterator itr_end = coll.end();
+
+	for (itr = coll.begin(); itr != itr_end; itr++) {
+		(*itr)->update_dop14();
 	}
 	Work_meter::stop("update_dop14");
 
 	//適当に20コ点を取って適当に
 	int SAP_axis = 0;
-	{
-		vector3 max;
-		vector3 min;
-		for (int num = 0; num < 20; num++) {
+	//{
+	//	vector3 max;
+	//	vector3 min;
+	//	for (int num = 0; num < 20; num++) {
 
-			if (num == 0) {
-				max = min = coll[rand() % coll_size]->dop14.pos;
-			}
-			else {
-				vector3 pos = coll[rand() % coll_size]->dop14.pos;
-				for (int ax = 0; ax < 3; ax++) {
-					if (max[ax] < pos[ax])max[ax] = pos[ax];
-					if (min[ax] > pos[ax])min[ax] = pos[ax];
-				}
-			}
-		}
+	//		if (num == 0) {
+	//			max = min = coll[rand() % coll_size]->dop14.pos;
+	//		}
+	//		else {
+	//			vector3 pos = coll[rand() % coll_size]->dop14.pos;
+	//			for (int ax = 0; ax < 3; ax++) {
+	//				if (max[ax] < pos[ax])max[ax] = pos[ax];
+	//				if (min[ax] > pos[ax])min[ax] = pos[ax];
+	//			}
+	//		}
+	//	}
 
-		max -= min;
-		int max_num = 0, max_axis = 0;
-		for (int i = 0; i < 3; i++) {
-			if (max[i] > max_num) {
-				max_num = max[i];
-				max_axis = i;
-			}
-		}
-		SAP_axis = max_axis;
-	}
+	//	max -= min;
+	//	int max_num = 0, max_axis = 0;
+	//	for (int i = 0; i < 3; i++) {
+	//		if (max[i] > max_num) {
+	//			max_num = max[i];
+	//			max_axis = i;
+	//		}
+	//	}
+	//	SAP_axis = max_axis;
+	//}
 	Debug::set(std::string("SAP_axis"), vector3(SAP_axis).get_XM3());
 
 
@@ -66,14 +69,14 @@ void physics_function::Broadphase(const std::vector<Collider*>& coll, std::vecto
 		for (int xz = 0; xz < 3; xz++) {
 			axis_list[xz].clear();
 
-			for (int coll_num = 0; coll_num < coll_size; coll_num++) {
+			for (itr = coll.begin(); itr != itr_end; itr++) {
 
-				ed.value = coll[coll_num]->dop14.pos[xz] + coll[coll_num]->dop14.max[xz];
-				ed.coll = coll[coll_num];
+				ed.value = (*itr)->dop14.pos[xz] + (*itr)->dop14.max[xz];
+				ed.coll =  (*itr).get();
 				ed.stgo = false;
 
 				axis_list[xz].emplace_back(ed);
-				ed.value = coll[coll_num]->dop14.pos[xz] + coll[coll_num]->dop14.min[xz];
+				ed.value = (*itr)->dop14.pos[xz] + (*itr)->dop14.min[xz];
 				ed.stgo = true;
 				axis_list[xz].emplace_back(ed);
 

@@ -61,7 +61,9 @@ namespace Adollib {
 
 		object_fall* F = GO->addComponent<object_fall>();
 
-		Collider* R =  GO->add_collider_box(vector3(0, 0.34, 0), vector3(0.50, 0.34, 0.72));
+		Box* R =  GO->add_collider<Box>();
+		R->local_position = vector3(0, 0.34, 0);
+		R->local_scale = vector3(0.50, 0.34, 0.72);
 		E->collier = R;
 		F->collier = R;
 

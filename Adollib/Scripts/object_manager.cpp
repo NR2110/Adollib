@@ -30,7 +30,8 @@ namespace Adollib
 			GO->transform->local_scale = vector3(60, 60, 60);
 			GO->material->color = vector4(1, 1, 1, 1);
 
-			Collider* R = GO->add_collider_box();
+			Box* R = GO->add_collider<Box>();
+
 			R->move = false;
 		}
 
@@ -217,7 +218,7 @@ namespace Adollib
 		object->transform->local_pos = pos;
 		object->transform->local_scale = vector3(r, r, r);
 
-		return object->add_collider_sphere();
+		return object->add_collider<Sphere>();
 	}
 
 	Box* object_manager::set_box(vector3 pos, vector3 size, vector3 rotate, vector3 color) {
@@ -231,7 +232,7 @@ namespace Adollib
 		object->transform->local_pos = pos;
 		object->transform->local_scale = size;
 
-		return object->add_collider_box();
+		return object->add_collider<Box>();
 	}
 
 	Plane* object_manager::set_plane(vector3 pos, vector3 normal, vector3 color) {
@@ -245,7 +246,7 @@ namespace Adollib
 		object->transform->local_pos = pos;
 		object->transform->local_scale = vector3(30, 0.1, 30);
 
-		return object->add_collider_plane(vector3(0, 0, 0), normal);
+		return object->add_collider<Plane>();
 	}
 
 	//
@@ -258,10 +259,10 @@ namespace Adollib
 		object->transform->local_pos = pos;
 		object->transform->local_scale = vector3(r, r, r);
 
-		Sphere* S = object->add_collider_sphere();
+		Sphere* S = object->add_collider<Sphere>();
 
 		object_fall* F = object->addComponent<object_fall>();
-		F->collier = object->collider[0].get();
+		F->collier = S;
 
 		return S;
 	}
@@ -276,27 +277,15 @@ namespace Adollib
 		object->transform->local_pos = pos;
 		object->transform->local_scale = size;
 
-		Box* B = object->add_collider_box();
+		Box* B = object->add_collider<Box>();
 		B->inertial_mass = 1;
 
 		object_fall* F = object->addComponent<object_fall>();
-		F->collier = object->collider[0].get();
+		F->collier = B;
 
 		return B;
 	}
 
-	//Gameobject* object_manager::set_nohit_plane(vector3 pos, vector3 normal, vector3 color) {
-	//	Gameobject* object = nullptr;
-	//	object = Gameobject_manager::createCube("");
-	//	vector4 C = vector4(color.x, color.y, color.z, 1);
-	//	object->material->color = C;
-
-	//	object->transform->local_orient = quaternion_from_euler(normal);
-	//	object->transform->local_pos = pos;
-	//	object->transform->local_scale = vector3(30, 30, 0.1);
-
-	//	return object;
-	//}
 	Gameobject* object_manager::set_nohit_sphere(vector3 pos, float r, vector3 color) {
 		Gameobject* object = nullptr;
 		object = Gameobject_manager::createSphere("");
@@ -322,23 +311,23 @@ namespace Adollib
 		return object;
 	}
 
-	Gameobject* object_manager::set_nohit_plane(vector3 pos, vector3 normal, vector3 color) {
-		Gameobject* object = nullptr;
-		object = Gameobject_manager::createCube("");
-		vector4 C = vector4(color.x, color.y, color.z, 1);
-		object->material->color = C;
+	//Gameobject* object_manager::set_nohit_plane(vector3 pos, vector3 normal, vector3 color) {
+	//	Gameobject* object = nullptr;
+	//	object = Gameobject_manager::createCube("");
+	//	vector4 C = vector4(color.x, color.y, color.z, 1);
+	//	object->material->color = C;
 
-		object->addComponent<object_fall>();
-		object->transform->local_orient = quaternion_from_euler(normal);
-		object->transform->local_pos = pos;
-		object->transform->local_scale = vector3(30, 30, 0.1);
+	//	object->addComponent<object_fall>();
+	//	object->transform->local_orient = quaternion_from_euler(normal);
+	//	object->transform->local_pos = pos;
+	//	object->transform->local_scale = vector3(30, 30, 0.1);
 
-		std::vector<std::string> no;
-		no.push_back("all");
-		object->add_collider_plane(pos, normal, 1, "plane", no);
+	//	std::vector<std::string> no;
+	//	no.push_back("all");
+	//	object->add_collider<Plane>(pos, normal, 1, "plane", no);
 
-		return object;
-	}
+	//	return object;
+	//}
 
 
 }

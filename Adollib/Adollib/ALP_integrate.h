@@ -1,6 +1,6 @@
 #pragma once
 #include "contact.h"
-
+#include <memory>
 namespace Adollib {
 	namespace physics_function {
 
@@ -12,9 +12,9 @@ namespace Adollib {
 		//bool check_contact_box_box(Box& S1, Box& S2);
 
 		//外力による速度などの更新
-		void applyexternalforce(std::vector<Collider*>& coll);
+		void applyexternalforce(std::list<std::shared_ptr<Adollib::Collider>>& coll);
 
-		void integrate(std::vector<Collider*>& coll);
+		void integrate(std::list<std::shared_ptr<Adollib::Collider>>& coll);
 
 
 	}

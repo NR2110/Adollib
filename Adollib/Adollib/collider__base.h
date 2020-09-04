@@ -21,7 +21,7 @@ namespace Adollib {
 		shape_plane,
 		shape_mesh,
 
-		shape_null
+		shape_size
 
 	};
 
@@ -31,7 +31,7 @@ namespace Adollib {
 
 		Gameobject* gameobject = nullptr;	//親情報
 
-		Collider_shape shape = Collider_shape::shape_null;	//形情報
+		Collider_shape shape = Collider_shape::shape_size;	//形情報
 		DOP_14 dop14; //DOP_7データ
 		physics_function::Solverbody* solve;
 
