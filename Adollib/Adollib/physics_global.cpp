@@ -6,6 +6,7 @@
 using namespace Adollib;
 
 float physics_g::timeStep = 0.016; //delta time‚à‚Ç‚« ‚Æ‚è‚ ‚¦‚¸eplision_time
+float physics_g::gravity = 8.9;
 
 
 

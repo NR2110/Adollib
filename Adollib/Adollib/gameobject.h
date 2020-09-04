@@ -115,51 +115,12 @@ namespace Adollib {
 			return ret;
 		}
 
-		void remove_collider() {
-			for (std::list<std::shared_ptr<Adollib::Collider>>::iterator itr : collider) {
-				Rigitbody_manager::remove_collider(itr, this_scene);
+		void clear_collider() {
+			for (int i = 0; i < collider.size();i++) {
+				Rigitbody_manager::remove_collider(collider[i], this_scene);
 			}
+			collider.clear();
 		}
-
-
-		////:::::::::::::::::::::::::
-		//// pos : •`‰æÀ•W‚©‚ç‚Ì‘Š‘ÎÀ•W
-		//// r : ”¼Œa
-		////:::::::::::::::::::::::::
-		//Sphere* add_collider_sphere(
-		//	vector3 pos = vector3(0, 0, 0), 
-		//	float r = 1, 
-		//	float density = 1, 
-		//	std::string tag = std::string("Sphere"), 
-		//	std::vector<std::string> no_hit_tag = std::vector<std::string>()
-
-		//);
-
-		////:::::::::::::::::::::::::
-		//// pos : •`‰æÀ•W‚©‚ç‚Ì‘Š‘ÎÀ•W
-		//// size : •`‰æ‰ñ“]‚©‚ç‚Ì x,y,z ‚Ì‘Š‘Îhalf_size
-		//// rotate : •`‰æ‰ñ“]‚©‚ç‚Ì‘Š‘Î‰ñ“]
-		////:::::::::::::::::::::::::
-		//Box* add_collider_box(
-		//	vector3 pos = vector3(0, 0, 0),
-		//	vector3 scale = vector3(1, 1, 1), 
-		//	quaternion orient = quaternion_identity(),
-		//	float density = 1,
-		//	std::string tag = std::string("Box"),
-		//	std::vector<std::string> no_hit_tag = std::vector<std::string>()
-		//);
-
-		////:::::::::::::::::::::::::
-		//// pos : ‘Š‘ÎÀ•W
-		//// normal : ‘Š‘Î–@ü
-		////:::::::::::::::::::::::::
-		//Plane* add_collider_plane(
-		//	vector3 pos = vector3(0, 0, 0),
-		//	vector3 normal = vector3(0, 1, 0),
-		//	float density = 1, 
-		//	std::string tag = std::string("Plane"),
-		//	std::vector<std::string> no_hit_tag = std::vector<std::string>()
-		//);
 
 
 		//active‚ª•ÏX‚³‚ê‚½‚Æ‚«‚Ìˆ—‚ğŒÄ‚Ño‚·
@@ -268,6 +229,7 @@ namespace Adollib {
 		//‰ğ•úˆ—
 		void destroy() {
 			clearComponent();
+			clear_collider();
 
 			collider.clear();
 		}

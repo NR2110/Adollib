@@ -97,7 +97,7 @@ void Midphase_DOP_14(std::vector<Contacts::Contact_pair>& new_pairs, Collider* c
 void physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std::vector<Contacts::Contact_pair>& pairs) {
 
 	Work_meter::start("Mid_Dop7");
-	//DOP_8‚É‚æ‚é‘åŽG”c‚È“–‚½‚è”»’è
+	//DOP_14‚É‚æ‚é‘åŽG”c‚È“–‚½‚è”»’è
 	std::vector<Contacts::Contact_pair> new_pairs;
 	for (int i = 0; i < in_pair.size(); i++) {
 

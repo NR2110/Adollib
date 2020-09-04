@@ -16,6 +16,7 @@ namespace Adollib {
 		static constexpr float slop = 0.005f; //ŠÑ’Ê‚Ì‹–—eŒë·
 
 		static float timeStep; //delta time‚à‚Ç‚« ‚Æ‚è‚ ‚¦‚¸eplision_time
+		static float gravity;  //8.9
 
 		static constexpr int accuracy = 5; //Õ“Ë‰ğŒˆ‚ÌŒJ‚è•Ô‚µ‰ñ” 1`
 	};

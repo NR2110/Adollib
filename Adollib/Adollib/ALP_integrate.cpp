@@ -17,7 +17,6 @@ void physics_function::applyexternalforce(std::list<std::shared_ptr<Adollib::Col
 	std::list<std::shared_ptr<Adollib::Collider>>::iterator collitr_end = coll.end();
 
 	for (collitr = coll.begin(); collitr != collitr_end; collitr++) {
-		//QUESTION : “n‚·’l‚ÆŠÖ”“à‚Å‚Ìˆø”‚ªˆá‚¤
 		(*collitr)->apply_external_force(physics_g::timeStep);
 	}
 }

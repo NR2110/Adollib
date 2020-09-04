@@ -14,6 +14,8 @@ using namespace Contacts;
 void Collider::apply_external_force(float duration) {
 	if (is_movable()) {
 
+		if(is_fallable()) liner_acceleration += vector3(0, -physics_g::gravity, 0); //TODO : time_stepを考慮していない
+
 		//並進移動に加える力(accumulated_force)から加速度を出して並進速度を更新する
 		liner_acceleration += accumulated_force / inertial_mass;
 		linear_velocity += liner_acceleration * duration;
@@ -63,6 +65,9 @@ void Collider::add_torque(const vector3& force) {
 
 bool Collider::is_movable() const {
 	return (move && inertial_mass > 0 && inertial_mass < FLT_MAX);
+}
+bool Collider::is_fallable() const {
+	return fall;
 }
 float Collider::inverse_mass() const {
 	if (is_movable()) return 1.0f / inertial_mass;

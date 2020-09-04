@@ -35,7 +35,6 @@ namespace Adollib
 		}
 
 		static void remove_collider(std::list<std::shared_ptr<Adollib::Collider>>::iterator itr, Scenelist Sce = Scene::now_scene) {
-
 			colliders[Sce].erase(itr);
 		}
 

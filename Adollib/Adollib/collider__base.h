@@ -28,6 +28,7 @@ namespace Adollib {
 	class Collider {
 	public:
 		bool move = true; //可動オブジェクトカどうかのフラグ
+		bool fall = true;
 
 		Gameobject* gameobject = nullptr;	//親情報
 
@@ -65,7 +66,7 @@ namespace Adollib {
 		vector3 accumulated_torque = vector3(); //角回転に加える力
 
 		Collider() :
-			local_position(0, 0, 0), local_orientation(0, 0, 0, 1),
+			local_position(0, 0, 0), local_orientation(1, 0, 0, 0), local_scale(1,1,1),
 			linear_velocity(0, 0, 0), angula_velocity(0, 0, 0),
 			inertial_mass(1), accumulated_force(0, 0, 0),
 			accumulated_torque(0, 0, 0), solve(nullptr)
@@ -92,6 +93,9 @@ namespace Adollib {
 
 		//可動オブジェクトかどうか
 		bool is_movable() const;
+
+		//落下オブジェクトかどうか
+		bool is_fallable() const;
 
 		//質量の逆数を返す(不稼働オブジェクトは0を返す)
 		float inverse_mass() const;

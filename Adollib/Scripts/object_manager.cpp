@@ -118,6 +118,16 @@ namespace Adollib
 	// 毎フレーム呼ばれる更新処理
 	void object_manager::update()
 	{
+		static std::vector<Gameobject*> GOs;
+
+		if (input->getKeyTrigger(Key::R)) {
+			for (int i = 0; i < GOs.size(); i++) {
+				GOs[i]->clear_collider();
+			}
+
+			GOs.clear();
+		}
+
 		if (input->getKeyTrigger(Key::M)) {
 			int max_c = 10;
 			int num = 0;
@@ -125,7 +135,7 @@ namespace Adollib
 			if (num == 0) //ピラミッド
 				for (int i = 0; i < max_c; i++) {
 					for (int o = 0; o < max_c - i; o++) {
-						set_fall_box(vector3(2.00001 * o - (max_c - i) * 2.000001 / 2.0, 3.0 + 2.00001 * i, 0), vector3(1, 1, 1), vector3(0, 0, 0), vector3(0, 1, 1));
+						GOs.emplace_back(set_fall_box(vector3(2.00001 * o - (max_c - i) * 2.000001 / 2.0, 3.0 + 2.00001 * i, 0), vector3(1, 1, 1), vector3(0, 0, 0), vector3(0, 1, 1)));
 						//set_fall_box(vector3(0, 3.0 + 2.00001 * i, 2.00001 * o - (max_c - i) * 2.000001 / 2.0), vector3(1, 1, 1), vector3(0, 0, 0), vector3(0, 1, 1));
 					}
 
@@ -208,7 +218,7 @@ namespace Adollib
 
 namespace Adollib
 {
-	Sphere* object_manager::set_sphere(vector3 pos, float r, vector3 color) {
+	Gameobject* object_manager::set_sphere(vector3 pos, float r, vector3 color) {
 		Gameobject* object = nullptr;
 		object = Gameobject_manager::createSphere("");
 		vector4 C = vector4(color.x, color.y, color.z, 1);
@@ -218,10 +228,12 @@ namespace Adollib
 		object->transform->local_pos = pos;
 		object->transform->local_scale = vector3(r, r, r);
 
-		return object->add_collider<Sphere>();
+		object->add_collider<Sphere>();
+
+		return object;
 	}
 
-	Box* object_manager::set_box(vector3 pos, vector3 size, vector3 rotate, vector3 color) {
+	Gameobject* object_manager::set_box(vector3 pos, vector3 size, vector3 rotate, vector3 color) {
 		Gameobject* object = nullptr;
 		object = Gameobject_manager::createCube("");
 		vector4 C = vector4(color.x, color.y, color.z, 1);
@@ -232,10 +244,12 @@ namespace Adollib
 		object->transform->local_pos = pos;
 		object->transform->local_scale = size;
 
-		return object->add_collider<Box>();
+		object->add_collider<Box>();
+
+		return object;
 	}
 
-	Plane* object_manager::set_plane(vector3 pos, vector3 normal, vector3 color) {
+	Gameobject* object_manager::set_plane(vector3 pos, vector3 normal, vector3 color) {
 		Gameobject* object = nullptr;
 		object = Gameobject_manager::createCube("");
 		vector4 C = vector4(color.x, color.y, color.z, 1);
@@ -246,11 +260,13 @@ namespace Adollib
 		object->transform->local_pos = pos;
 		object->transform->local_scale = vector3(30, 0.1, 30);
 
-		return object->add_collider<Plane>();
+		object->add_collider<Plane>();
+
+		return object;
 	}
 
 	//
-	Sphere* object_manager::set_fall_sphere(vector3 pos, float r, vector3 color) {
+	Gameobject* object_manager::set_fall_sphere(vector3 pos, float r, vector3 color) {
 		Gameobject* object = nullptr;
 		object = Gameobject_manager::createSphere("");
 		vector4 C = vector4(color.x, color.y, color.z, 1);
@@ -264,10 +280,10 @@ namespace Adollib
 		object_fall* F = object->addComponent<object_fall>();
 		F->collier = S;
 
-		return S;
+		return object;
 	}
 
-	Box* object_manager::set_fall_box(vector3 pos, vector3 size, vector3 rotate, vector3 color) {
+	Gameobject* object_manager::set_fall_box(vector3 pos, vector3 size, vector3 rotate, vector3 color) {
 		Gameobject* object = nullptr;
 		object = Gameobject_manager::createCube("");
 		vector4 C = vector4(color.x, color.y, color.z, 1);
@@ -283,7 +299,7 @@ namespace Adollib
 		object_fall* F = object->addComponent<object_fall>();
 		F->collier = B;
 
-		return B;
+		return object;
 	}
 
 	Gameobject* object_manager::set_nohit_sphere(vector3 pos, float r, vector3 color) {
