@@ -135,7 +135,7 @@ namespace Adollib
 			if (num == 0) //ピラミッド
 				for (int i = 0; i < max_c; i++) {
 					for (int o = 0; o < max_c - i; o++) {
-						GOs.emplace_back(set_fall_box(vector3(2.00001 * o - (max_c - i) * 2.000001 / 2.0, 3.0 + 2.00001 * i, 0), vector3(1, 1, 1), vector3(0, 0, 0), vector3(0, 1, 1)));
+						GOs.emplace_back(set_box(vector3(2.00001 * o - (max_c - i) * 2.000001 / 2.0, 3.0 + 2.00001 * i, 0), vector3(1, 1, 1), vector3(0, 0, 0), vector3(0, 1, 1)));
 						//set_fall_box(vector3(0, 3.0 + 2.00001 * i, 2.00001 * o - (max_c - i) * 2.000001 / 2.0), vector3(1, 1, 1), vector3(0, 0, 0), vector3(0, 1, 1));
 					}
 
@@ -144,7 +144,7 @@ namespace Adollib
 			if (num == 1) //傾いたピラミッド
 				for (int i = 0; i < max_c; i++) {
 					for (int o = 0; o < max_c - i; o++) {
-						set_fall_box(vector3(2.50001 * o - (max_c - i) * 2.500001 / 2.0, 5.0 + 2.50001 * i, 0), vector3(1, 1, 1), vector3(30, 0, 30), vector3(0, 1, 1));
+						set_box(vector3(2.50001 * o - (max_c - i) * 2.500001 / 2.0, 5.0 + 2.50001 * i, 0), vector3(1, 1, 1), vector3(30, 0, 30), vector3(0, 1, 1));
 
 					}
 
@@ -154,15 +154,15 @@ namespace Adollib
 				for (int i = 0; i < max_c; i++) {
 					for (int o = 0; o < max_c - i; o++) {
 						if ((i + o) % 2 == 0)
-							set_fall_box(vector3(2.50001 * o - (max_c - i) * 2.500001 / 2.0, 5.0 + 2.50001 * i, 0), vector3(1, 1, 1), vector3(30, 0, 30), vector3(0, 1, 1));
+							set_box(vector3(2.50001 * o - (max_c - i) * 2.500001 / 2.0, 5.0 + 2.50001 * i, 0), vector3(1, 1, 1), vector3(30, 0, 30), vector3(0, 1, 1));
 						else
-							set_fall_sphere(vector3(2.50001 * o - (max_c - i) * 2.500001 / 2.0, 5.0 + 2.50001 * i, 0), 1, vector3(0, 1, 1));
+							set_sphere(vector3(2.50001 * o - (max_c - i) * 2.500001 / 2.0, 5.0 + 2.50001 * i, 0), 1, vector3(0, 1, 1));
 					}
 
 				}
 			if (num == 3)
 				for (int i = 0; i < max_c; i++) {
-					set_fall_box(vector3(3.00001 * i, 3.0, 0), vector3(1, 1, 1), vector3(0, 0, 0), vector3(0, 1, 1));
+					set_box(vector3(3.00001 * i, 3.0, 0), vector3(1, 1, 1), vector3(0, 0, 0), vector3(0, 1, 1));
 				}
 		}
 
@@ -175,7 +175,7 @@ namespace Adollib
 
 				for (int o = 0; o < max_c - i; o++) {
 
-					set_fall_sphere(vector3(2.50001 * o - (max_c - i) * 2.500001 / 2.0, 5.0 + 2.50001 * i, 0), 1, vector3(0, 1, 1));
+					set_sphere(vector3(2.50001 * o - (max_c - i) * 2.500001 / 2.0, 5.0 + 2.50001 * i, 0), 1, vector3(0, 1, 1));
 				}
 			}
 
@@ -184,7 +184,7 @@ namespace Adollib
 
 					for (int o = 0; o < max_c; o++) {
 
-						set_fall_sphere(vector3(2.50001 * i - (max_c - i) * 5.000001 / 2.0, 10, 2.50001 * o - (max_c - o) * 2.500001 / 2.0), 1, vector3(0, 1, 1));
+						set_sphere(vector3(2.50001 * i - (max_c - i) * 5.000001 / 2.0, 10, 2.50001 * o - (max_c - o) * 2.500001 / 2.0), 1, vector3(0, 1, 1));
 					}
 
 				}
@@ -193,7 +193,7 @@ namespace Adollib
 			if (num == 2) { //タワー
 				for (int i = 0; i < max_c; i++) {
 
-					set_fall_sphere(vector3(0, 10 + 2.50001 * i,0), 1, vector3(0, 1, 1 * i));
+					set_sphere(vector3(0, 10 + 2.50001 * i,0), 1, vector3(0, 1, 1 * i));
 					
 				}
 			}
@@ -266,7 +266,7 @@ namespace Adollib
 	}
 
 	//
-	Gameobject* object_manager::set_fall_sphere(vector3 pos, float r, vector3 color) {
+	/*Gameobject* object_manager::set_fall_sphere(vector3 pos, float r, vector3 color) {
 		Gameobject* object = nullptr;
 		object = Gameobject_manager::createSphere("");
 		vector4 C = vector4(color.x, color.y, color.z, 1);
@@ -325,7 +325,7 @@ namespace Adollib
 		object->transform->local_scale = size;
 
 		return object;
-	}
+	}*/
 
 	//Gameobject* object_manager::set_nohit_plane(vector3 pos, vector3 normal, vector3 color) {
 	//	Gameobject* object = nullptr;

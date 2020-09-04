@@ -16,13 +16,13 @@ namespace Adollib
 		Gameobject* set_box(vector3 pos, vector3 size, vector3 rotate, vector3 color = vector3(1, 1, 1));
 		Gameobject* set_plane(vector3 pos, vector3 normal, vector3 color = vector3(1, 1, 1));
 
-		Gameobject* set_fall_sphere(vector3 pos, float r, vector3 color = vector3(1, 1, 1));
-		Gameobject* set_fall_box(vector3 pos, vector3 size, vector3 rotate, vector3 color = vector3(1, 1, 1));
-		Gameobject* set_fall_plane(vector3 pos, vector3 normal, vector3 color = vector3(1, 1, 1));
+		//Gameobject* set_fall_sphere(vector3 pos, float r, vector3 color = vector3(1, 1, 1));
+		//Gameobject* set_fall_box(vector3 pos, vector3 size, vector3 rotate, vector3 color = vector3(1, 1, 1));
+		//Gameobject* set_fall_plane(vector3 pos, vector3 normal, vector3 color = vector3(1, 1, 1));
 
-		Gameobject* set_nohit_sphere(vector3 pos, float r, vector3 color = vector3(1, 1, 1));
-		Gameobject* set_nohit_box(vector3 pos, vector3 size, vector3 rotate, vector3 color = vector3(1, 1, 1));
-		Gameobject* set_nohit_plane(vector3 pos, vector3 normal, vector3 color = vector3(1, 1, 1));
+		//Gameobject* set_nohit_sphere(vector3 pos, float r, vector3 color = vector3(1, 1, 1));
+		//Gameobject* set_nohit_box(vector3 pos, vector3 size, vector3 rotate, vector3 color = vector3(1, 1, 1));
+		//Gameobject* set_nohit_plane(vector3 pos, vector3 normal, vector3 color = vector3(1, 1, 1));
 
 	public:
 		void awake();
