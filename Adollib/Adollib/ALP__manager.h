@@ -20,23 +20,23 @@ namespace Adollib
 	public:
 		//No_hit_tag‚É"all"‚ª‚ ‚é‚Æ‚·‚×‚Ä‚Ì‚à‚Ì‚ÉÕ“Ë‚µ‚È‚­‚È‚é‚æ
 		template<typename T>
-		static T* add_collider(Scenelist Sce) {
+		static std::list<std::shared_ptr<Adollib::Collider>>::iterator add_collider(Scenelist Sce = Scene::now_scene) {
 
 			std::shared_ptr<T> newCom = std::make_shared<T>();
 			Collider* pCom = dynamic_cast<Collider*>(newCom.get());
 
-			if (pCom == nullptr)return nullptr;
+			if (pCom == nullptr)return colliders[Sce].end();
 
 			colliders[Sce].emplace_back(newCom);
 
-			return newCom.get();
+			auto ret = colliders[Sce].end();
+			ret--;
+			return ret;
 		}
 
-		static void remove_collider(Scenelist Sce) {
+		static void remove_collider(std::list<std::shared_ptr<Adollib::Collider>>::iterator itr, Scenelist Sce = Scene::now_scene) {
 
-			colliders[Sce].emplace_back(newCom);
-
-			return newCom.get();
+			colliders[Sce].erase(itr);
 		}
 
 		static void remove_collider(Adollib::Collider* R, Scenelist Sce = Scene::now_scene);

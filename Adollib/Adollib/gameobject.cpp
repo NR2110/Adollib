@@ -54,7 +54,7 @@ namespace Adollib{
 		if (Al_Global::render_collider_flag == false)  return;
 
 		for (int i = 0;i < collider.size();i++) {
-			Collider_renderer::render(collider[i]);
+			Collider_renderer::render((*collider[i]).get());
 		}
 		
 

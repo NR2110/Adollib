@@ -29,7 +29,7 @@ namespace Adollib {
 
 		std::shared_ptr<Material> material;
 
-		std::vector <Collider*> collider; //アタッチされているcolliderへのポインタ
+		std::vector <std::list<std::shared_ptr<Adollib::Collider>>::iterator> collider; //アタッチされているcolliderへのポインタ
 
 		std::list <std::shared_ptr<Component>> components; //アタッチされているConponentのポインタ
 
@@ -106,11 +106,19 @@ namespace Adollib {
 			Collider* pCom = dynamic_cast<Collider*>(newCom.get());
 			if (pCom == nullptr)return nullptr;
 
-			T* C =  Rigitbody_manager::add_collider<T>(this_scene);
-			C->gameobject = this;
+			std::list<std::shared_ptr<Adollib::Collider>>::iterator C =  Rigitbody_manager::add_collider<T>(this_scene);
+			(*C)->gameobject = this;
 			collider.emplace_back(C);
 
-			return C;
+			T* ret = dynamic_cast<T*>((*C).get());
+
+			return ret;
+		}
+
+		void remove_collider() {
+			for (std::list<std::shared_ptr<Adollib::Collider>>::iterator itr : collider) {
+				Rigitbody_manager::remove_collider(itr, this_scene);
+			}
 		}
 
 
