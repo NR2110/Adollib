@@ -3,6 +3,7 @@
 #include "work_meter.h"
 using namespace Adollib;
 using namespace Contacts;
+using namespace DOP;
 
 //:::::::::::::::::::::::::::
 #pragma region Midphase

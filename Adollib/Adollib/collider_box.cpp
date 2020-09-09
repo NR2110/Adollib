@@ -7,6 +7,7 @@
 
 using namespace Adollib;
 using namespace Contacts;
+using namespace DOP;
 
 void Box::update_world_trans() {
 	world_orientation = gameobject->get_world_orientate() * local_orientation;

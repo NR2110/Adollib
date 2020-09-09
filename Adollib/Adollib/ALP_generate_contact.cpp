@@ -69,7 +69,12 @@ void physics_function::generate_contact(std::vector<Contacts::Contact_pair>& pai
 				assert(shape0 != nullptr && shape1 != nullptr);
 				generate_contact_box_plane(*shape1, *shape0, pairs[i]);
 			}
-			//if (pairs[i]->body[1]->shape == Collider_shape::shape_plane) {}
+			if (pairs[i].body[0]->shape == Collider_shape::shape_plane) {
+
+
+
+
+			}
 		}
 
 
@@ -82,6 +87,7 @@ void physics_function::generate_contact(std::vector<Contacts::Contact_pair>& pai
 }
 
 //è’ìÀê∂ê¨
+#pragma region SPHERE-SPHERE
 bool physics_function::generate_contact_sphere_sphere(const Sphere& S0, const Sphere& S1, Contacts::Contact_pair& pair) {
 	vector3 p0 = S0.world_position;
 	vector3 p1 = S1.world_position;
@@ -104,6 +110,9 @@ bool physics_function::generate_contact_sphere_sphere(const Sphere& S0, const Sp
 
 	return false;
 }
+#pragma endregion
+
+#pragma region SPHERE-PLANE
 bool physics_function::generate_contact_sphere_plane(const Sphere& sphere, const Plane& plane, Contacts::Contact_pair& pair) {
 	//ãÖñ Ç∆ïΩñ ÇÃè’ìÀîªíËÇçsÇ§
 	matrix rotate, inverse_rotate;
@@ -150,6 +159,9 @@ bool physics_function::generate_contact_sphere_plane(const Sphere& sphere, const
 
 	return false;
 }
+#pragma endregion
+
+#pragma region SPHERE-BOX
 bool physics_function::generate_contact_sphere_box(const Sphere& sphere, const  Box& box, Contacts::Contact_pair& pair) {
 	//ãÖÇ∆boxÇÃè’ìÀîªíËÇçsÇ§
 	matrix rotate, inverse_rotate;
@@ -214,6 +226,16 @@ bool physics_function::generate_contact_sphere_box(const Sphere& sphere, const  
 
 	return false;
 }
+#pragma endregion
+
+#pragma region SPHERE-MESH
+bool physics_function::generate_contact_sphere_mesh(const Sphere& S1, const Meshcoll& S2, Contacts::Contact_pair& pair) {
+	return true;
+}
+#pragma endregion
+
+
+#pragma region BOX-PLANE
 bool physics_function::generate_contact_box_plane(const Box& box, const Plane& plane, Contacts::Contact_pair& pair) {
 
 	vector3 vertices[8] = {
@@ -294,6 +316,9 @@ bool physics_function::generate_contact_box_plane(const Box& box, const Plane& p
 	}
 	return false;
 }
+#pragma endregion
+
+#pragma region BOX-BOX
 
 enum SAT_TYPE {
 	POINTA_FACETB,
@@ -610,6 +635,28 @@ bool physics_function::generate_contact_box_box(const Box& b0, const Box& b1, Co
 
 	return true;
 }
+#pragma endregion
+
+#pragma region BOX-MESH
+bool physics_function::generate_contact_box_mesh(const Box& S1, const Meshcoll& S2, Contacts::Contact_pair& pair) {
+	return true;
+}
+#pragma endregion
+
+
+#pragma region MESH-PLANE
+bool physics_function::genetate_contact_mesh_plane(const Meshcoll& S1, const Plane& S2, Contacts::Contact_pair& pair) {
+	return true;
+}
+#pragma endregion
+
+#pragma region MESH-MESH
+
+bool physics_function::genetate_contact_mesh_mesh(const Meshcoll& S1, const Meshcoll& S2, Contacts::Contact_pair& pair) {
+	return true;
+}
+
+#pragma endregion
 
 #pragma endregion
 //:::::::::::::::::::::::::::

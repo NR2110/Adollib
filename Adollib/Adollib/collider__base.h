@@ -33,7 +33,7 @@ namespace Adollib {
 		Gameobject* gameobject = nullptr;	//親情報
 
 		Collider_shape shape = Collider_shape::shape_size;	//形情報
-		DOP_14 dop14; //DOP_7データ
+		DOP::DOP_14 dop14; //DOP_7データ
 		physics_function::Solverbody* solve;
 
 		std::string tag; //自身のタグ

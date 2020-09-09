@@ -3,6 +3,7 @@
 
 #include "object_manager.h"
 #include "object_fall.h"
+#include "../Adollib/scene_manager.h"
 
 #include "../Adollib/closest_func.h"
 namespace Adollib
@@ -118,15 +119,15 @@ namespace Adollib
 	// 毎フレーム呼ばれる更新処理
 	void object_manager::update()
 	{
-		static std::vector<Gameobject*> GOs;
+		//if (input->getKeyTrigger(Key::R)) {
+		//	for (int i = 0; i < GOs.size(); i++) {
+		//		GOs[i]->clear_collider();
+		//		GOs[i]->active = false;
+		//	}
 
-		if (input->getKeyTrigger(Key::R)) {
-			for (int i = 0; i < GOs.size(); i++) {
-				GOs[i]->clear_collider();
-			}
+		//	GOs.clear();
+		//}
 
-			GOs.clear();
-		}
 
 		if (input->getKeyTrigger(Key::M)) {
 			int max_c = 10;
@@ -135,7 +136,7 @@ namespace Adollib
 			if (num == 0) //ピラミッド
 				for (int i = 0; i < max_c; i++) {
 					for (int o = 0; o < max_c - i; o++) {
-						GOs.emplace_back(set_box(vector3(2.00001 * o - (max_c - i) * 2.000001 / 2.0, 3.0 + 2.00001 * i, 0), vector3(1, 1, 1), vector3(0, 0, 0), vector3(0, 1, 1)));
+						set_box(vector3(2.00001 * o - (max_c - i) * 2.000001 / 2.0, 3.0 + 2.00001 * i, 0), vector3(1, 1, 1), vector3(0, 0, 0), vector3(0, 1, 1));
 						//set_fall_box(vector3(0, 3.0 + 2.00001 * i, 2.00001 * o - (max_c - i) * 2.000001 / 2.0), vector3(1, 1, 1), vector3(0, 0, 0), vector3(0, 1, 1));
 					}
 
@@ -229,7 +230,7 @@ namespace Adollib
 		object->transform->local_scale = vector3(r, r, r);
 
 		object->add_collider<Sphere>();
-
+		GOs.emplace_back(object);
 		return object;
 	}
 
@@ -245,7 +246,7 @@ namespace Adollib
 		object->transform->local_scale = size;
 
 		object->add_collider<Box>();
-
+		GOs.emplace_back(object);
 		return object;
 	}
 
@@ -261,7 +262,7 @@ namespace Adollib
 		object->transform->local_scale = vector3(30, 0.1, 30);
 
 		object->add_collider<Plane>();
-
+		GOs.emplace_back(object);
 		return object;
 	}
 

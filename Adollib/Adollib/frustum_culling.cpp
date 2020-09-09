@@ -1,6 +1,7 @@
 #include "frustum_culling.h"
 
 using namespace Adollib;
+using namespace DOP;
 
 vector3 FrustumCulling::line[4];
 float FrustumCulling::nearZ;
