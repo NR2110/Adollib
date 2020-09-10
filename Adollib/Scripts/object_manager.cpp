@@ -169,7 +169,7 @@ namespace Adollib
 
 		if (input->getKeyTrigger(Key::N)) {
 			int max_c = 1;
-			int num = 2;
+			int num = 3;
 
 			if(num == 0) //ピラミッド
 			for (int i = 0; i < max_c; i++) {
@@ -197,6 +197,14 @@ namespace Adollib
 					set_sphere(vector3(0, 10 + 2.50001 * i,0), 1, vector3(0, 1, 1 * i));
 					
 				}
+			}
+
+
+			if (num == 3) { //板
+
+				set_box(vector3(0, 30, 0), vector3(10, 1, 10), vector3(0, 0, 0), vector3(1, 0, 0));
+
+
 			}
 
 		}
@@ -245,7 +253,8 @@ namespace Adollib
 		object->transform->local_pos = pos;
 		object->transform->local_scale = size;
 
-		object->add_collider<Box>();
+		Box* B = object->add_collider<Box>();
+		B->inertial_mass = 1;
 		GOs.emplace_back(object);
 		return object;
 	}

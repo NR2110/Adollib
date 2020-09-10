@@ -36,7 +36,7 @@ bool Check_insert_Plane(const Collider* plane, const Collider* coll) {
 	vector3 V;
 	float plane_dis = 0, coll_dis = FLT_MAX;
 
-	V = vector3_be_rotated_by_quaternion(vector3(0, 1, 0), plane->world_orientation);
+	V = vector3_Irotated_Bquaternion(vector3(0, 1, 0), plane->world_orientation);
 	plane_dis = vector3_dot(V, plane->world_position);
 
 	for (int i = 0; i < DOP_size; i++) {

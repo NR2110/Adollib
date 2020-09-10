@@ -9,9 +9,6 @@ using namespace Contacts;
 #pragma region generate_contact
 //:::::::::::::::::::::::::::
 
-//衝突生成(Narrowphase)
-//void physics_function::generate_contact(std::vector<Adollib::Plane*> planes, std::vector<Adollib::Box*> boxes, std::vector<Adollib::Sphere*> spheres, std::vector<Contacts::Contact_pair>& pairs) {
-
 void physics_function::generate_contact(std::vector<Contacts::Contact_pair>& pairs) {
 
 	//::: dynamic_cast 多用地帯 危険! 危険!
@@ -86,6 +83,20 @@ void physics_function::generate_contact(std::vector<Contacts::Contact_pair>& pai
 	//}
 }
 
+
+//分離軸判定を用いる際に使用する
+enum SAT_TYPE {
+	POINTA_FACETB,
+	POINTB_FACETA,
+	EDGE_EDGE
+};
+struct Ret_S {
+	float penetrate;
+	int smallest_axis[2];
+	SAT_TYPE smallest_case;
+	bool hit_point_to_face;
+};
+
 //衝突生成
 #pragma region SPHERE-SPHERE
 bool physics_function::generate_contact_sphere_sphere(const Sphere& S0, const Sphere& S1, Contacts::Contact_pair& pair) {
@@ -102,8 +113,8 @@ bool physics_function::generate_contact_sphere_sphere(const Sphere& S0, const Sp
 		pair.contacts.addcontact(
 			S0.world_size.x + S1.world_size.x - length,
 			n,
-			S0.world_size.x * vector3_be_rotated_by_quaternion(-n, S0.world_orientation.conjugate()),
-			S1.world_size.x * vector3_be_rotated_by_quaternion(n, S1.world_orientation.conjugate())
+			S0.world_size.x * vector3_Irotated_Bquaternion(-n, S0.world_orientation.conjugate()),
+			S1.world_size.x * vector3_Irotated_Bquaternion(n, S1.world_orientation.conjugate())
 		);
 		return true;
 	}
@@ -140,7 +151,7 @@ bool physics_function::generate_contact_sphere_plane(const Sphere& sphere, const
 				sphere.world_size.x - abs(p.y),
 				n,
 				vector3(p.x, 0, p.z),
-				sphere.world_size.x * vector3_be_rotated_by_quaternion(-n, sphere.world_orientation.conjugate())
+				sphere.world_size.x * vector3_Irotated_Bquaternion(-n, sphere.world_orientation.conjugate())
 			);
 		}
 		else {
@@ -150,7 +161,7 @@ bool physics_function::generate_contact_sphere_plane(const Sphere& sphere, const
 			pair.contacts.addcontact(
 				sphere.world_size.x - abs(p.y),
 				n,
-				sphere.world_size.x * vector3_be_rotated_by_quaternion(-n, sphere.world_orientation.conjugate()),
+				sphere.world_size.x * vector3_Irotated_Bquaternion(-n, sphere.world_orientation.conjugate()),
 				vector3(p.x, 0, p.z)
 			);
 		}
@@ -208,7 +219,7 @@ bool physics_function::generate_contact_sphere_box(const Sphere& sphere, const  
 				sphere.world_size.x - distance,
 				-n,
 				closest_point,
-				sphere.world_size.x * vector3_be_rotated_by_quaternion(n, sphere.world_orientation.conjugate())
+				sphere.world_size.x * vector3_Irotated_Bquaternion(n, sphere.world_orientation.conjugate())
 			);
 		}
 		else {
@@ -217,7 +228,7 @@ bool physics_function::generate_contact_sphere_box(const Sphere& sphere, const  
 			pair.contacts.addcontact(
 				sphere.world_size.x - distance,
 				n,
-				sphere.world_size.x * vector3_be_rotated_by_quaternion(n, sphere.world_orientation.conjugate()),
+				sphere.world_size.x * vector3_Irotated_Bquaternion(n, sphere.world_orientation.conjugate()),
 				closest_point
 			);
 		}
@@ -274,7 +285,7 @@ bool physics_function::generate_contact_box_plane(const Box& box, const Plane& p
 
 	for (int i = 0; i < 8; i++) {
 		// 頂点のワールド座標
-		vs = vector3_be_rotated_by_quaternion(vertices[i], box.world_orientation);
+		vs = vector3_Irotated_Bquaternion(vertices[i], box.world_orientation);
 
 		// -面法線の内積をとる(面方向への長さ)
 		float rA = vector3_dot(-n, vs);
@@ -320,22 +331,11 @@ bool physics_function::generate_contact_box_plane(const Box& box, const Plane& p
 
 #pragma region BOX-BOX
 
-enum SAT_TYPE {
-	POINTA_FACETB,
-	POINTB_FACETA,
-	EDGE_EDGE
-};
 struct OBB {
 	vector3 center; //中心座標
 	vector3 u_axes[3]; //軸の向き
 	quaternion orient;
 	vector3 half_width; //軸ごとの辺の長さ
-};
-struct Ret_S {
-	float penetrate;
-	int smallest_axis[2];
-	SAT_TYPE smallest_case;
-	bool hit_point_to_face;
 };
 //軸に投影した長さ
 float sum_of_projected_radii(const OBB& obb, const vector3& vec) {
@@ -373,10 +373,10 @@ bool sat_obb_obb(
 		assert(ra > 0 && rb > 0);
 
 		penetration = ra + rb - abs(vector3_dot(axis, distBtoA));
-		if (penetration < 0) return 0;
+		if (penetration < 0) return false;
 
 		if (fabsf(vector3_dot(axis, distBtoA)) + rb < ra) {
-			PA_FB.hit_point_to_face = false;
+			//PA_FB.hit_point_to_face = false;
 		}
 
 		if (PB_FA.penetrate > penetration) {
@@ -388,6 +388,7 @@ bool sat_obb_obb(
 	}
 
 	//::: obb2の軸にobb1を投影 ::::::::::::::::::::
+	if(PA_FB.hit_point_to_face == true)
 	for (int i = 0; i < 3; i++)
 	{
 		axis = obb2.u_axes[i];
@@ -395,10 +396,10 @@ bool sat_obb_obb(
 		rb = fabsf(obb2.half_width[i]);
 
 		penetration = ra + rb - abs(vector3_dot(axis, distBtoA));
-		if (penetration < 0) return 0;
+		if (penetration < 0) return false;
 
 		if (fabsf(vector3_dot(axis, distBtoA)) + ra < rb) {
-			PB_FA.hit_point_to_face = false;
+			//PB_FA.hit_point_to_face = false;
 		}
 
 		if (PA_FB.penetrate > penetration) {
@@ -410,18 +411,18 @@ bool sat_obb_obb(
 		}
 	}
 
+	if (PB_FA.hit_point_to_face && PB_FA.penetrate < smallest_penetration) {
+		smallest_penetration = PB_FA.penetrate;
+		smallest_axis[0] = PB_FA.smallest_axis[0];
+		smallest_axis[1] = PB_FA.smallest_axis[1];
+		smallest_case = PB_FA.smallest_case;
+	}
 	if (PA_FB.hit_point_to_face && PA_FB.penetrate < smallest_penetration) {
 		smallest_penetration = PA_FB.penetrate;
 		smallest_axis[0] = PA_FB.smallest_axis[0];
 		smallest_axis[1] = PA_FB.smallest_axis[1];
 		smallest_case = PA_FB.smallest_case;
 
-	}
-	if (PB_FA.hit_point_to_face && PB_FA.penetrate < smallest_penetration) {
-		smallest_penetration = PB_FA.penetrate;
-		smallest_axis[0] = PB_FA.smallest_axis[0];
-		smallest_axis[1] = PB_FA.smallest_axis[1];
-		smallest_case = PB_FA.smallest_case;
 	}
 
 
@@ -430,8 +431,7 @@ bool sat_obb_obb(
 		for (int OB2 = 0; OB2 < 3; OB2++) {
 
 			axis = vector3_cross(obb1.u_axes[OB1], obb2.u_axes[OB2]);
-			if (axis.norm() <= FLT_EPSILON * FLT_EPSILON)continue;
-			//if (L == vector3(0,0,0))continue; //外積が 0 = 平行
+			if (axis.norm() <= FLT_EPSILON * FLT_EPSILON)continue;//外積が 0 = 平行
 
 			axis = axis.unit_vect();
 
@@ -440,7 +440,7 @@ bool sat_obb_obb(
 			//if (vector3_dot(axis, distBtoA) + rb < ra)continue;
 
 			penetration = ra + rb - fabsf(vector3_dot(axis, distBtoA));
-			if (penetration < 0) return 0;
+			if (penetration < 0) return false;
 			if (smallest_penetration > penetration) {
 
 				smallest_penetration = penetration;
@@ -510,7 +510,7 @@ bool physics_function::generate_contact_box_box(const Box& b0, const Box& b1, Co
 		inverse_rotate = matrix_inverse(rotate);
 
 		//p1をobb0のローカル座標系へ
-		vector3 P = vector3_be_rotated_by_quaternion(p1, b1.world_orientation) + b1.world_position;
+		vector3 P = vector3_Irotated_Bquaternion(p1, b1.world_orientation) + b1.world_position;
 		vector3 c = vector3_trans(P, inverse_rotate);
 
 		//obb0の最近点を求める
@@ -533,7 +533,6 @@ bool physics_function::generate_contact_box_box(const Box& b0, const Box& b1, Co
 		);
 	}
 	//②obb0の頂点がobb1の面と衝突した場合
-	//Contactオブジェクトを生成し、全てのメンバ変数に値をセットし、コンテナ(contacts)に追加する
 	else if (smallest_case == POINTA_FACETB)
 	{
 		vector3 d = obb1.center - obb0.center;
@@ -558,8 +557,8 @@ bool physics_function::generate_contact_box_box(const Box& b0, const Box& b1, Co
 		rotate._44 = 1;
 		inverse_rotate = matrix_inverse(rotate);
 
-		//p1をobb0のローカル座標系へ
-		vector3 P = vector3_be_rotated_by_quaternion(p0, b0.world_orientation) + b0.world_position;
+		//p0をobb0のローカル座標系へ
+		vector3 P = vector3_Irotated_Bquaternion(p0, b0.world_orientation) + b0.world_position;
 		vector3 c = vector3_trans(P, inverse_rotate);
 
 		//obb0の最近点を求める
@@ -585,7 +584,6 @@ bool physics_function::generate_contact_box_box(const Box& b0, const Box& b1, Co
 		);
 	}
 	//③obb0の辺とobb1の辺と衝突した場合
-	//Contactオブジェクトを生成し、全てのメンバ変数に値をセットし、コンテナ(contacts)に追加する
 	else if (smallest_case == EDGE_EDGE)
 	{
 
@@ -609,9 +607,8 @@ bool physics_function::generate_contact_box_box(const Box& b0, const Box& b1, Co
 			if (vector3_dot(obb1.u_axes[2], +n) > 0) p[1].z = -p[1].z;
 		}
 
-		vector3 P0a = vector3_be_rotated_by_quaternion(p[0], obb0.orient) + obb0.center;
-		vector3 P1a = vector3_be_rotated_by_quaternion(p[1], obb1.orient) + obb1.center;
-
+		vector3 P0a = vector3_Irotated_Bquaternion(p[0], obb0.orient) + obb0.center;
+		vector3 P1a = vector3_Irotated_Bquaternion(p[1], obb1.orient) + obb1.center;
 
 		float s, t;
 		Closest_func::get_closestP_two_line(
@@ -652,7 +649,335 @@ bool physics_function::genetate_contact_mesh_plane(const Meshcoll& S1, const Pla
 
 #pragma region MESH-MESH
 
-bool physics_function::genetate_contact_mesh_mesh(const Meshcoll& S1, const Meshcoll& S2, Contacts::Contact_pair& pair) {
+float sum_of_projected_radii(float& max,float& min, const Meshcoll& meshcoll, const vector3& nor) {
+	int value;
+	max = -FLT_MAX;
+	min = +FLT_MAX;
+	for (vector3 vertex : meshcoll.vertices) {
+		value = vector3_dot(vertex, nor);
+		if (max < value)max = value;
+		if (min > value)min = value;
+	}
+
+	return max - min;
+}
+
+//どちらも凸包の場合
+bool sat_convex_mesh_mesh(const Meshcoll& collA, const Meshcoll& collB,
+	float& smallest_penetration, //最小の貫通量
+	int smallest_axis[2], //どの軸で最近になったか(edge×edge用に2つ分用意)
+	SAT_TYPE& smallest_case //どのような形で最近になっているか
+) {
+	smallest_penetration = FLT_MAX;
+
+	// Meshcoll_1の各面法線を分離軸とする
+	quaternion offset_quatBA = collB.world_orientation * collA.world_orientation.conjugate();
+	quaternion offset_quatAB = collA.world_orientation * collB.world_orientation.conjugate();
+	vector3 offset_posBA = collB.world_position - collA.world_position;
+	vector3 offset_posAB = collA.world_position - collB.world_position;
+
+	Ret_S PB_FA, PA_FB;
+	PB_FA.hit_point_to_face = PA_FB.hit_point_to_face = true;
+	PA_FB.penetrate = PB_FA.penetrate = FLT_MAX;
+	float penetration = FLT_MAX;
+
+	////::: obbAの軸にobbBを投影 :::::::::::::::::::
+		//collAの座標系で計算を行う
+	float maxA, minA, maxB, minB;
+	for (u_int f = 0; f < collA.facet_num; f++) {
+		const Facet& facet = collA.facets[f];
+		const vector3& axis = facet.normal;
+
+		// collAを分離軸に投影
+		sum_of_projected_radii(maxA, minA, collA, axis);
+		assert(maxA >= minA);
+
+		// collBを分離軸に投影
+		sum_of_projected_radii(maxB, minB, collB, vector3_Irotated_Bquaternion(axis, offset_quatAB));
+		assert(maxB >= minB);
+		float off = vector3_dot(offset_posBA, axis);
+		maxB += off;
+		minB += off;
+
+		//貫通の計算
+		float d1 = minA - maxB;
+		float d2 = minB - maxA;
+		if (d1 >= 0.0f || d2 >= 0.0f)return false;
+
+		penetration = -ALmin(d1, d2);
+
+			if (PB_FA.penetrate > penetration) {
+			PB_FA.penetrate = penetration;
+			PB_FA.smallest_axis[0] = f;
+			PB_FA.smallest_axis[1] = -1;
+			PB_FA.smallest_case = POINTB_FACETA;
+		}
+	}
+
+	////::: obbBの軸にobbAを投影 :::::::::::::::::::
+		//collBの座標系で計算を行う
+	if(PA_FB.hit_point_to_face == false)
+	for (u_int f = 0; f < collB.facet_num; f++) {
+		const Facet& facet = collB.facets[f];
+		const vector3& axis = facet.normal;
+	
+		// collBを分離軸に投影
+		sum_of_projected_radii(maxB, minB, collB, axis);
+		assert(maxB >= minB);
+
+		// collAを分離軸に投影
+		sum_of_projected_radii(maxA, minA, collA, vector3_Irotated_Bquaternion(axis, offset_quatBA));
+		assert(maxA >= minA);
+		float off = vector3_dot(offset_posAB, axis);
+		maxA += off;
+		minA += off;
+
+		//貫通の計算
+		float d1 = minA - maxB;
+		float d2 = minB - maxA;
+		if (d1 >= 0.0f || d2 >= 0.0f)return false;
+
+		penetration = -ALmin(d1, d2);
+
+		if (PA_FB.penetrate > penetration) {
+			PA_FB.penetrate = penetration;
+			PA_FB.smallest_axis[0] = -1;
+			PA_FB.smallest_axis[1] = f;
+			PA_FB.smallest_case = POINTA_FACETB;
+		}
+	}
+
+	if (PB_FA.hit_point_to_face && PB_FA.penetrate < smallest_penetration) {
+		smallest_penetration = PB_FA.penetrate;
+		smallest_axis[0] = PB_FA.smallest_axis[0];
+		smallest_axis[1] = PB_FA.smallest_axis[1];
+		smallest_case = PB_FA.smallest_case;
+	}
+	if (PA_FB.hit_point_to_face && PA_FB.penetrate < smallest_penetration) {
+		smallest_penetration = PA_FB.penetrate;
+		smallest_axis[0] = PA_FB.smallest_axis[0];
+		smallest_axis[1] = PA_FB.smallest_axis[1];
+		smallest_case = PA_FB.smallest_case;
+
+	}
+
+	//::: 外積の軸に投影(最近距離を求めるため)
+		//collAの座標系で計算を行う
+	for (u_int fA = 0; fA < collA.edge_num; fA++) {
+		const Edge& edgeA = collA.edges[fA];
+
+		const vector3& edgeVecA = collA.vertices[edgeA.vertexID[1]] - collA.vertices[edgeA.vertexID[0]];
+		for (u_int fB = 0; fB < collB.edge_num; fB++) {
+			const Edge& edgeB = collB.edges[fB];
+
+			const vector3 edgeVecB = vector3_Irotated_Bquaternion(collB.vertices[edgeB.vertexID[1]] - collB.vertices[edgeB.vertexID[0]],offset_quatBA);
+
+			vector3 axis = vector3_cross(edgeVecA, edgeVecB);
+			if (axis.norm() <= FLT_EPSILON * FLT_EPSILON) continue;
+			axis = axis.unit_vect();
+
+			sum_of_projected_radii(maxA, minA, collA, axis);		assert(maxA >= minA);
+			sum_of_projected_radii(maxB, minB, collB, axis);		assert(maxB >= minB);
+			float off = vector3_dot(offset_posBA, axis);
+			maxB += off;
+			minB += off;
+
+			//貫通の計算
+			float d1 = minA - maxB;
+			float d2 = minB - maxA;
+			if (d1 >= 0.0f || d2 >= 0.0f)return false;
+
+			penetration = -ALmin(d1, d2);
+
+			if (smallest_penetration > penetration) {
+
+				smallest_penetration = penetration;
+				smallest_axis[0] = fA;
+				smallest_axis[1] = fB;
+				smallest_case = EDGE_EDGE;
+			}
+		}
+	}
+
+	// 分離軸が見当たらない場合OBBは交差しているはず
+	return (smallest_penetration < FLT_MAX && smallest_penetration > FLT_EPSILON) ? true : false;
+}
+//
+bool GC_concave_mesh_mesh(const Meshcoll& S1, const Meshcoll& S2, int concave_num, Contacts::Contact_pair& pair) {
+	return false;
+}
+
+bool physics_function::genetate_contact_mesh_mesh(const Meshcoll& SA, const Meshcoll& SB, Contacts::Contact_pair& pair) {
+	float smallest_penetration = FLT_MAX;	//最小めり込み量
+	int smallest_facetID[2];	//最小めり込み量を得た分離軸の作成に使用した各OBBのローカル軸番号 辺×辺用に2つ
+	SAT_TYPE smallest_case;	//衝突の種類 
+
+	if (SA.is_Convex == true && SB.is_Convex == true) {
+		if (!sat_convex_mesh_mesh(SA, SB, smallest_penetration, smallest_facetID, smallest_case))return false;
+
+		quaternion offset_quatBA = SB.world_orientation * SA.world_orientation.conjugate();
+		quaternion offset_quatAB = SA.world_orientation * SB.world_orientation.conjugate();
+		vector3 offset_posBA = SB.world_position - SA.world_position;
+		vector3 offset_posAB = SA.world_position - SB.world_position;
+
+		//SBの頂点がSAの面と衝突した場合
+		if (smallest_case == POINTB_FACETA)
+		{
+			const Meshcoll& facet_coll = SA;
+			const Meshcoll& vertex_coll = SB;
+
+			quaternion offset_quatVF = vertex_coll.world_orientation * facet_coll.world_orientation.conjugate();
+			quaternion offset_quatFV = facet_coll.world_orientation * vertex_coll.world_orientation.conjugate();
+			vector3 offset_posVF = vertex_coll.world_position - facet_coll.world_position;
+			vector3 offset_posFV = facet_coll.world_position - vertex_coll.world_position;
+
+			assert(smallest_facetID[1] == -1);
+			const Facet& nerest_facet = facet_coll.facets[smallest_facetID[0]];
+
+			vector3 axisF = nerest_facet.normal;
+			axisF = axisF.unit_vect();
+
+			//vertex_collのどの頂点が最近点か求める
+			u_int nearest_pointID;
+			vector3 p0;
+			{
+				float max_len = -FLT_MAX;
+				vector3 axisV = vector3_Irotated_Bquaternion(axisF, offset_quatFV);
+
+				for (u_int v_num = 0; v_num < vertex_coll.vertex_num; v_num++) {
+
+					if (vector3_dot(vertex_coll.vertices[v_num], axisV) > max_len) {
+						max_len = vector3_dot(vertex_coll.vertices[v_num], axisV);
+						nearest_pointID = v_num;
+					}
+				}
+			}
+			p0 = vertex_coll.vertices[nearest_pointID];
+
+			//上記のp0がfacet_collの最近面上のどこにあるのか
+			vector3 p1;
+			{
+				quaternion off = quaternion_from_to_rotate(vector3(0, 1, 0), axisF);
+				p1 = vector3_Irotated_Bquaternion(vertex_coll.vertices[nearest_pointID], off.conjugate());
+				p1.y = 0;
+				p1 = vector3_Irotated_Bquaternion(p1, off);
+			}
+
+			pair.contacts.addcontact(
+				smallest_penetration,
+				vector3_Irotated_Bquaternion(axisF, facet_coll.world_orientation),
+				p0,
+				p1
+			);
+		}
+
+		//SAの頂点がSBの面と衝突した場合
+		if (smallest_case == POINTA_FACETB)
+		{
+			const Meshcoll& facet_coll = SB;
+			const Meshcoll& vertex_coll = SA;
+
+			quaternion offset_quatVF = vertex_coll.world_orientation * facet_coll.world_orientation.conjugate();
+			quaternion offset_quatFV = facet_coll.world_orientation * vertex_coll.world_orientation.conjugate();
+			vector3 offset_posVF = vertex_coll.world_position - facet_coll.world_position;
+			vector3 offset_posFV = facet_coll.world_position - vertex_coll.world_position;
+
+			assert(smallest_facetID[0] == -1);
+			const Facet& nerest_facet = facet_coll.facets[smallest_facetID[1]];
+
+			vector3 axisF = nerest_facet.normal;
+			axisF = axisF.unit_vect();
+
+			//vertex_collのどの頂点が最近点か求める
+			u_int nearest_pointID;
+			vector3 p0;
+			{
+				float max_len = -FLT_MAX;
+				vector3 axisV = vector3_Irotated_Bquaternion(axisF, offset_quatFV);
+
+				for (u_int v_num = 0; v_num < vertex_coll.vertex_num; v_num++) {
+
+					if (vector3_dot(vertex_coll.vertices[v_num], axisV) > max_len) {
+						max_len = vector3_dot(vertex_coll.vertices[v_num], axisV);
+						nearest_pointID = v_num;
+					}
+				}
+			}
+			p0 = vertex_coll.vertices[nearest_pointID];
+
+			//上記のp0がnerest_facetの最近面上のどこにあるのか
+			vector3 p1;
+			{
+				quaternion off = quaternion_from_to_rotate(vector3(0, 1, 0), axisF);
+				p1 = vector3_Irotated_Bquaternion(vertex_coll.vertices[nearest_pointID], off.conjugate());
+				p1.y = 0;
+				p1 = vector3_Irotated_Bquaternion(p1, off);
+			}
+
+			pair.contacts.addcontact(
+				smallest_penetration,
+				vector3_Irotated_Bquaternion(-axisF, facet_coll.world_orientation),
+				p1,
+				p0
+			);
+		}
+
+		//SAとSBの辺同士が衝突した場合
+		else if (smallest_case == EDGE_EDGE)
+		{
+			quaternion offset_quatAB = SA.world_orientation * SB.world_orientation.conjugate();
+			quaternion offset_quatBA = SB.world_orientation * SA.world_orientation.conjugate();
+			vector3 offset_posAB = SA.world_position - SB.world_position;
+			vector3 offset_posBA = SB.world_position - SA.world_position;
+
+			const Edge& edgeA = SA.edges[smallest_facetID[0]];
+			const Edge& edgeB = SB.edges[smallest_facetID[1]];
+
+			vector3 edgeA_p[2] = {
+				{SA.vertices[edgeA.vertexID[0]]},
+				{SA.vertices[edgeA.vertexID[1]]}
+			};
+			vector3 edgeB_p[2] = {
+				{SB.vertices[edgeB.vertexID[0]]},
+				{SB.vertices[edgeB.vertexID[1]]}
+			};
+
+
+			vector3 edgeA_vec = edgeA_p[0] - edgeA_p[1];
+			vector3 edgeB_vec = edgeB_p[0] - edgeB_p[1];
+
+			vector3 axis = vector3_cross(edgeA_vec, edgeB_vec);
+			axis = axis.unit_vect();
+
+			//axisの向きをSB->SAの向きへ
+			if (vector3_dot(axis, SA.vertices[edgeA.vertexID[0]]) < vector3_dot(axis, SB.vertices[edgeB.vertexID[1]]))
+			{
+				axis = axis * -1.0f;
+			}
+
+			//SAの座標系に持ってきて直線と直線の最近点を獲得
+			float s, t;
+			Closest_func::get_closestP_two_line(
+				edgeA_p[0], edgeA_vec,
+				edgeB_p[0], edgeB_vec,
+				s, t
+			);
+			pair.contacts.addcontact(
+				smallest_penetration,
+				axis,
+				edgeA_p[0] + s * edgeA_vec,
+				edgeB_p[0] + t * edgeB_vec
+			);
+		}
+
+	}
+	else {
+
+	}
+
+
+
+
 	return true;
 }
 

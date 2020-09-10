@@ -52,7 +52,7 @@ void Collider::integrate(float duration) {
 
 void Collider::resolve_gameobject() {
 	gameobject->co_e.orient *= local_orientation.conjugate() * gameobject->get_world_orientate().conjugate() * world_orientation;
-	gameobject->co_e.position += world_position -  vector3_be_rotated_by_quaternion(local_position * gameobject->get_world_scale(), world_orientation) - gameobject->get_world_position();
+	gameobject->co_e.position += world_position -  vector3_Irotated_Bquaternion(local_position * gameobject->get_world_scale(), world_orientation) - gameobject->get_world_position();
 	
 }
 

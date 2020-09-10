@@ -12,7 +12,7 @@ using namespace DOP;
 void Meshcoll::update_world_trans() {
 	world_orientation = gameobject->get_world_orientate() * local_orientation;
 	world_size = gameobject->get_world_scale() * local_scale * half_size;
-	world_position = gameobject->get_world_position() + vector3_be_rotated_by_quaternion((local_position + offset) * gameobject->get_world_scale(), world_orientation);
+	world_position = gameobject->get_world_position() + vector3_Irotated_Bquaternion((local_position + offset) * gameobject->get_world_scale(), world_orientation);
 	update_inertial(world_size, density);
 }
 void Meshcoll::update_dop14() {
@@ -20,7 +20,7 @@ void Meshcoll::update_dop14() {
 
 	vector3 rotated_axis[DOP_size];
 	for (int i = 0; i < DOP_size; i++) {
-		rotated_axis[i] = vector3_be_rotated_by_quaternion(DOP_14_axis[i], gameobject->get_world_orientate());
+		rotated_axis[i] = vector3_Irotated_Bquaternion(DOP_14_axis[i], gameobject->get_world_orientate());
 	}
 
 	vector3 half[DOP_size * 2];

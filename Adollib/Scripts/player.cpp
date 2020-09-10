@@ -23,7 +23,7 @@ namespace Adollib
 		float move_force = 0.1;
 		if (input->getKeyState(Key::Down))move_vec += vector3(0, 0, -1);
 		if (input->getKeyState(Key::Up))move_vec += vector3(0, 0, +1);
-		collier->add_force(vector3_be_rotated_by_quaternion(move_vec * move_force,gameobject->get_world_orientate()));
+		collier->add_force(vector3_Irotated_Bquaternion(move_vec * move_force,gameobject->get_world_orientate()));
 
 		vector3 rot_vec = vector3(0, 0, 0);
 		float rot_force = 0.2;

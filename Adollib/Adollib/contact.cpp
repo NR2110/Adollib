@@ -148,8 +148,8 @@ void Contact::chack_remove_contact_point(
 ) {
 	for (int i = 0; i < contact_num; i++) {
 		vector3& normal = contactpoints[i].normal;
-		vector3 contactpointA = pointA + vector3_be_rotated_by_quaternion(contactpoints[i].point[0], rotA);
-		vector3 contactpointB = pointB + vector3_be_rotated_by_quaternion(contactpoints[i].point[1], rotB);
+		vector3 contactpointA = pointA + vector3_Irotated_Bquaternion(contactpoints[i].point[0], rotA);
+		vector3 contactpointB = pointB + vector3_Irotated_Bquaternion(contactpoints[i].point[1], rotB);
 
 		// normal•ûŒü‚Ì‹——£‚ð”ä‚×‚é
 		float dis_N = vector3_dot(normal, contactpointA - contactpointB);

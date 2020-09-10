@@ -113,6 +113,7 @@ namespace Adollib {
 							vector3 q = vertices[facetB.vertexID[0]];
 							float d = vector3_dot(s - q, facetB.normal);
 
+							//エッジの種類を入力
 							if (d < -FLT_EPSILON) {
 								edge.type = Edgetype::EdgeConvex;
 							}
@@ -147,7 +148,7 @@ namespace Adollib {
 				}
 			}
 
-			half_size = vector3();
+			half_size = vector3(dop14.max[0] - dop14.min[0], dop14.max[1] - dop14.min[1], dop14.max[2] - dop14.min[2]);
 
 			//密度の保存
 			this->density = density;

@@ -85,7 +85,7 @@ namespace Adollib {
 	};
 
 	quaternion quaternion_identity();
-	vector3 vector3_be_rotated_by_quaternion(const vector3& V, const quaternion& Q);
+	vector3 vector3_Irotated_Bquaternion(const vector3& V, const quaternion& Q);
 
 	//axis‚ğ²‚ÉR“x‰ñ“]‚³‚¹‚équaternion‚Ìì¬
 	quaternion quaternion_angle_axis(float R, const vector3& axis);

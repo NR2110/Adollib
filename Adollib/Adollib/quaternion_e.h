@@ -180,7 +180,7 @@ inline quaternion Adollib::quaternion_identity() {
 	return quaternion(1, 0, 0, 0);
 }
 
-inline vector3 Adollib::vector3_be_rotated_by_quaternion(const vector3& V, const quaternion& Q) {
+inline vector3 Adollib::vector3_Irotated_Bquaternion(const vector3& V, const quaternion& Q) {
 #if 0
 	vector3 R;
 	R.x = 2.0f * (Q.x * V.x + Q.y * V.y + Q.z * V.z) * Q.x + (Q.w * Q.w - (Q.x * Q.x + Q.y * Q.y + Q.z * Q.z)) * V.x + 2.0f * Q.w * (Q.y * V.z - Q.z * V.y);
@@ -219,7 +219,7 @@ inline quaternion Adollib::quaternion_slerp(const quaternion& Q1, const quaterni
 	F.y = g.y * sinf(radian * R);
 	F.z = g.z * sinf(radian * R);
 
-	return quaternion(vector3_be_rotated_by_quaternion(Q1.get_NV3(), F));
+	return quaternion(vector3_Irotated_Bquaternion(Q1.get_NV3(), F));
 }
 inline quaternion Adollib::quaternion_from_euler(float x, float y, float z) {
 	quaternion Rx = quaternion_angle_axis(x, vector3(1, 0, 0));

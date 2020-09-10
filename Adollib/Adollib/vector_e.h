@@ -236,7 +236,7 @@ inline vector3 Adollib::vector3_slerp(const vector3& V1, const vector3& V2, floa
 	F.y = g.y * sinf(radian * R);
 	F.z = g.z * sinf(radian * R);
 
-	return vector3_be_rotated_by_quaternion(V1, F);
+	return vector3_Irotated_Bquaternion(V1, F);
 }
 #else
 
