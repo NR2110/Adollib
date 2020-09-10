@@ -251,11 +251,10 @@ C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,25): 
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_generate_contact.cpp(15,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_generate_contact.cpp(660,22): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_generate_contact.cpp(661,25): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_generate_contact.cpp(662,25): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_generate_contact.cpp(657,22): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_generate_contact.cpp(658,25): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
   ALP_integrate.cpp
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_generate_contact.cpp(793,51): warning C4390: ';': 制御が空の文が見つかりました。意図した記述でしょうか?
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_generate_contact.cpp(659,25): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
@@ -661,8 +660,8 @@ C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
   コード生成しています。
-  1 of 7365 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  204 of 7365 functions ( 2.8%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    34 functions had inline decision re-evaluated but remain unchanged
+    101 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   Adollib.vcxproj -> C:\Users\2190072\Documents\Adollib\Adollib\Release\Adollib.exe

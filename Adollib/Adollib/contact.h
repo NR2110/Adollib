@@ -51,7 +51,7 @@ namespace Adollib {
 			//::::::::
 			// 衝突点の追加
 			// float penetration : 貫通量
-			// vector3 normal : 衝突法線 (ワールド座標系)
+			// vector3 normal : point[0]からpoint[1]衝突法線 (ワールド座標系)
 			// vector3 contactpointA : 衝突点 (point[0]のローカル座標系)
 			// vector3 contactpointB : 衝突点 (point[1]のローカル座標系)
 			//::::::::
