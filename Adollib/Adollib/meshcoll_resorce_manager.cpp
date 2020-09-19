@@ -17,11 +17,11 @@ using namespace std;
 std::unordered_map <std::string, std::vector<int>>	Collider_ResourceManager::indexes;
 std::unordered_map <std::string, std::vector<vector3>>Collider_ResourceManager::vertexes;
 
-HRESULT Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<int>* out_indexes, std::vector<vector3>* out_vertexes) {
+HRESULT Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<int>** out_indexes, std::vector<vector3>** out_vertexes) {
 
 	if (indexes.count((string)fbxname) == 1) {
-		out_indexes = &indexes[(string)fbxname];
-		out_vertexes = &vertexes[(string)fbxname];
+		*out_indexes = &indexes[(string)fbxname];
+		*out_vertexes = &vertexes[(string)fbxname];
 		return S_OK;
 	}
 	const char* fileName = fbxname;
@@ -46,7 +46,7 @@ HRESULT Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vect
 	FbxGeometryConverter geometry_converter(manager);
 	geometry_converter.Triangulate(scene, /*replace*/true);
 
-	// ノード属性の取得　(現在はメッシュのみ)
+	// ノード属性の取得
 	vector<FbxNode*> fetched_meshes;
 	function<void(FbxNode*)> traverse = [&](FbxNode* node)
 	{
@@ -81,40 +81,18 @@ HRESULT Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vect
 	for (size_t mesh_num = 0; mesh_num < fetched_meshes.size(); mesh_num++)
 	{
 		FbxMesh* fbxMesh = fetched_meshes.at(mesh_num)->GetMesh();
-		std::vector<Subset> subset = subsets.at(mesh_num);
-
-		//FbxStringList uv_names;
-		//fbxMesh->GetUVSetNames(uv_names);
+		std::vector<Subset>& subset = subsets.at(mesh_num);
 
 		// マテリアルの取得
 		const int number_of_materials = fbxMesh->GetNode()->GetMaterialCount();
 
+		subset.resize(number_of_materials);
 		const FbxVector4* array_of_control_points = fbxMesh->GetControlPoints();
 		const int number_of_polygons = fbxMesh->GetPolygonCount();
 		indices.resize(number_of_polygons * 3);
 		for (int index_of_polygon = 0; index_of_polygon < number_of_polygons; index_of_polygon++)
 		{
 
-
-			if (number_of_materials > 0)
-			{
-				// Count the faces of each material
-				const int number_of_polygons = fbxMesh->GetPolygonCount();
-				for (int index_of_polygon = 0; index_of_polygon < number_of_polygons; ++index_of_polygon)
-				{
-					const u_int material_index = fbxMesh->GetElementMaterial()->GetIndexArray().GetAt(index_of_polygon);
-					subset.at(material_index).count += 3;
-				}
-				// Record the offset (how many vertex)
-				int offset = 0;
-				for (Subset& sb : subset)
-				{
-					sb.start = offset;
-					offset += sb.count;
-					// This will be used as counter in the following procedures, reset to zero
-					sb.count = 0;
-				}
-			}
 			// The material for current face.
 			int index_of_material = 0;
 			if (number_of_materials > 0)
@@ -142,8 +120,8 @@ HRESULT Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vect
 		vertexes[(string)fbxname] = vertices;
 		indexes[(string)fbxname] = indices;
 
-		out_indexes = &indexes[(string)fbxname];
-		out_vertexes = &vertexes[(string)fbxname];
+		*out_indexes = &indexes[(string)fbxname];
+		*out_vertexes = &vertexes[(string)fbxname];
 
 
 #pragma endregion

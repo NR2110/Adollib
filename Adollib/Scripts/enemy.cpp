@@ -111,7 +111,7 @@ namespace Adollib {
 		case Adollib::Enemy::Move_pattern::strate_update:
 			if (count <= 0)	moving = Move_pattern::tarn_init;
 			gameobject->transform->local_pos +=
-				vector3_Irotated_Bquaternion(vector3(0, 0, 1), gameobject->transform->orientation) * move_pow;
+				vector3_quatrotate(vector3(0, 0, 1), gameobject->transform->orientation) * move_pow;
 			break;
 
 		case Adollib::Enemy::Move_pattern::tarn_init:
@@ -125,7 +125,7 @@ namespace Adollib {
 				quaternion_from_euler(0, rot_pow, 0);
 
 			gameobject->transform->local_pos +=
-				vector3_Irotated_Bquaternion(vector3(0, 0, 1), gameobject->transform->orientation) * move_pow;
+				vector3_quatrotate(vector3(0, 0, 1), gameobject->transform->orientation) * move_pow;
 			break;
 
 		case Adollib::Enemy::Move_pattern::move_to_p_init:
@@ -139,7 +139,7 @@ namespace Adollib {
 				look_q(0.1);
 
 			gameobject->transform->local_pos +=
-				vector3_Irotated_Bquaternion(vector3(0, 0, 1), gameobject->transform->orientation) * move_pow;
+				vector3_quatrotate(vector3(0, 0, 1), gameobject->transform->orientation) * move_pow;
 			break;
 
 		case Adollib::Enemy::Move_pattern::Neet:
@@ -186,7 +186,7 @@ namespace Adollib {
 		case Adollib::Enemy::Move_pattern::strate_update:
 			if (count <= 0)	moving = Move_pattern::choice;
 			gameobject->transform->local_pos +=
-				vector3_Irotated_Bquaternion(vector3(0, 0, 1), gameobject->transform->orientation) * move_pow;
+				vector3_quatrotate(vector3(0, 0, 1), gameobject->transform->orientation) * move_pow;
 			break;
 
 		case Adollib::Enemy::Move_pattern::tarn_init:
@@ -198,7 +198,7 @@ namespace Adollib {
 			if (count <= 0)	moving = Move_pattern::choice;
 			gameobject->transform->local_orient *= quaternion_from_euler(0, 1 * rot_pow, 0);
 			gameobject->transform->local_pos +=
-				vector3_Irotated_Bquaternion(vector3(0, 0, 1), gameobject->transform->orientation) * move_pow;
+				vector3_quatrotate(vector3(0, 0, 1), gameobject->transform->orientation) * move_pow;
 			break;
 
 		case Adollib::Enemy::Move_pattern::move_to_p_init:
@@ -211,7 +211,7 @@ namespace Adollib {
 				look_q(0.1);
 
 			gameobject->transform->local_pos +=
-				vector3_Irotated_Bquaternion(vector3(0, 0, 1), gameobject->transform->orientation) * move_pow;
+				vector3_quatrotate(vector3(0, 0, 1), gameobject->transform->orientation) * move_pow;
 			break;
 
 		case Adollib::Enemy::Move_pattern::Neet:
@@ -259,7 +259,7 @@ namespace Adollib {
 		case Adollib::Enemy::Move_pattern::strate_update:
 			if (count <= 0)	moving = Move_pattern::choice;
 			gameobject->transform->local_pos +=
-				vector3_Irotated_Bquaternion(vector3(0, 0, 1), gameobject->transform->orientation) * move_pow;
+				vector3_quatrotate(vector3(0, 0, 1), gameobject->transform->orientation) * move_pow;
 			break;
 
 		case Adollib::Enemy::Move_pattern::tarn_init:
@@ -271,7 +271,7 @@ namespace Adollib {
 			if (count <= 0)	moving = Move_pattern::choice;
 			gameobject->transform->local_orient *= quaternion_from_euler(0, 1 * rot_pow, 0);
 			gameobject->transform->local_pos +=
-				vector3_Irotated_Bquaternion(vector3(0, 0, 1), gameobject->transform->orientation) * move_pow;
+				vector3_quatrotate(vector3(0, 0, 1), gameobject->transform->orientation) * move_pow;
 			break;
 
 		case Adollib::Enemy::Move_pattern::move_to_p_init:
@@ -285,7 +285,7 @@ namespace Adollib {
 				look_q(0.1);
 
 			gameobject->transform->local_pos +=
-				vector3_Irotated_Bquaternion(vector3(0, 0, 1), gameobject->transform->orientation) * move_pow;
+				vector3_quatrotate(vector3(0, 0, 1), gameobject->transform->orientation) * move_pow;
 			break;
 
 		case Adollib::Enemy::Move_pattern::Neet:

@@ -36,7 +36,7 @@ bool Check_insert_Plane(const Collider* plane, const Collider* coll) {
 	vector3 V;
 	float plane_dis = 0, coll_dis = FLT_MAX;
 
-	V = vector3_Irotated_Bquaternion(vector3(0, 1, 0), plane->world_orientation);
+	V = vector3_quatrotate(vector3(0, 1, 0), plane->world_orientation);
 	plane_dis = vector3_dot(V, plane->world_position);
 
 	for (int i = 0; i < DOP_size; i++) {
@@ -53,6 +53,7 @@ void add_pair(std::vector<Contacts::Contact_pair>& pairs, Contacts::Contact_pair
 
 void Midphase_DOP_14(std::vector<Contacts::Contact_pair>& new_pairs, Collider* collA, Collider* collB) {
 	Contact_pair new_pair;
+
 	// タグによる衝突の是非
 	bool hit = true;
 	for (int q = 0; q < collB->No_hit_tag.size(); q++) {
@@ -97,17 +98,20 @@ void Midphase_DOP_14(std::vector<Contacts::Contact_pair>& new_pairs, Collider* c
 
 void physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std::vector<Contacts::Contact_pair>& pairs) {
 
-	Work_meter::start("Mid_Dop7");
+	Work_meter::start("Mid_Dop14");
 	//DOP_14による大雑把な当たり判定
 	std::vector<Contacts::Contact_pair> new_pairs;
 	for (int i = 0; i < in_pair.size(); i++) {
 
 		int c_size = in_pair[i].bodylists.size();
 		for (int o = 0; o < c_size; o++) {
+
+			//DEBUG : delete
+			if (in_pair[i].body->shape != in_pair[i].bodylists[o]->shape)continue;
 			Midphase_DOP_14(new_pairs, in_pair[i].body, in_pair[i].bodylists[o]);
 		}
 	}
-	Work_meter::stop("Mid_Dop7");
+	Work_meter::stop("Mid_Dop14");
 
 	Work_meter::start("Mid_check_alive");
 	//生成したpairが前のpairから存在しているかの確認

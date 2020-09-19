@@ -1,38 +1,31 @@
 ﻿  object_manager.cpp
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(60,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(82,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(139,71): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(139,35): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(148,71): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(148,35): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(158,72): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(158,36): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(160,75): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(160,39): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(166,30): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(179,73): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(179,37): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(188,86): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(188,38): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(197,31): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(197,68): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(270,55): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(149,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(163,64): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(165,68): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(190,117): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(190,77): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(212,127): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(212,84): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(234,119): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(234,79): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(236,122): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(236,82): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(259,187): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(259,82): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(419,55): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
   Adollib.vcxproj -> C:\Users\2190072\Documents\Adollib\Adollib\Debug\Adollib.exe

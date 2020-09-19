@@ -5,16 +5,11 @@ C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: 
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(60,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(82,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
@@ -29,13 +24,8 @@ C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: 
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(60,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(82,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
@@ -49,16 +39,11 @@ C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: 
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(60,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(82,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
@@ -77,16 +62,11 @@ C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: 
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(60,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(82,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
@@ -104,16 +84,11 @@ C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: 
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(60,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(82,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
@@ -125,53 +100,41 @@ C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: 
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(60,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(82,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(139,71): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(139,35): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(148,71): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(148,35): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(158,72): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(158,36): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(160,75): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(160,39): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(166,30): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(179,73): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(179,37): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(188,86): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(188,38): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(197,31): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(197,68): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(134,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(148,64): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(150,68): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(175,117): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(175,77): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(197,127): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(197,84): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(219,119): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(219,79): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(221,122): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(221,82): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(244,187): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(244,82): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
   object_rotate.cpp
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(271,55): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(341,55): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(60,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(82,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
   player.cpp
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
@@ -181,16 +144,11 @@ C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: 
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(60,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(82,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
@@ -204,13 +162,8 @@ C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: 
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(60,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(82,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.h(7,21): warning C4099: 'Adollib::physics_function::Solverbody': タイプ名は最初 'class' として使われていましたが 'struct' として使われています。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.h(7): message : 'Adollib::physics_function::Solverbody' の宣言を確認してください
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。
@@ -227,13 +180,8 @@ C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: 
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(60,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(82,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_broadphase.cpp(62,46): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
   ALP_generate_contact.cpp
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_broadphase.cpp(110,8): warning C4101: 'ed': ローカル変数は 1 度も使われていません。
@@ -243,13 +191,8 @@ C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: 
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(60,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(82,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_generate_contact.cpp(15,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_generate_contact.cpp(657,22): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_generate_contact.cpp(658,25): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
@@ -261,27 +204,17 @@ C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: 
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(60,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(82,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
   ALP_midphase.cpp
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(60,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(82,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_midphase.cpp(58,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_midphase.cpp(64,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_midphase.cpp(103,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
@@ -295,13 +228,8 @@ C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: 
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(60,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(82,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.h(7,21): warning C4099: 'Adollib::physics_function::Solverbody': タイプ名は最初 'class' として使われていましたが 'struct' として使われています。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.h(7): message : 'Adollib::physics_function::Solverbody' の宣言を確認してください
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(104,28): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
@@ -329,16 +257,11 @@ C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: 
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(60,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(82,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
   collider_box.cpp
@@ -349,16 +272,11 @@ C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: 
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(60,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(82,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
   collider_meshcoll.cpp
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
@@ -368,16 +286,11 @@ C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: 
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(60,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(82,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
   collider_plane.cpp
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
@@ -387,16 +300,11 @@ C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: 
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(60,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(82,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
   collider_sphere.cpp
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
@@ -406,16 +314,11 @@ C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: 
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(60,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(82,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_sphere.cpp(21,33): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
@@ -427,31 +330,21 @@ C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: 
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(60,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(82,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
   コンパイル中...
   frustum_culling.cpp
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(60,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(82,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
   gameobject.cpp
@@ -462,16 +355,11 @@ C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: 
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(60,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(82,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
@@ -483,16 +371,11 @@ C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: 
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(60,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(82,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
   gameobject_light.cpp
@@ -503,16 +386,11 @@ C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: 
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(60,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(82,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
   gameobject_manager.cpp
@@ -526,13 +404,8 @@ C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: 
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(60,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(82,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
@@ -554,13 +427,8 @@ C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: 
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(60,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(82,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
@@ -575,13 +443,8 @@ C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: 
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(60,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(82,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
@@ -599,39 +462,38 @@ C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: 
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(60,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(82,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\material.cpp(47,16): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
-  physics_global.cpp
+  material_for_collider.cpp
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\material.cpp(48,16): warning C4018: '>': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.cpp(8,34): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-  scene_game.cpp
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.cpp(9,31): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(60,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(82,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
+  scene_game.cpp
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\material_for_collider.cpp(52,51): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
@@ -645,23 +507,18 @@ C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,42): warning C4305: 
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,42): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(60,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(82,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(138,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,25): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(139,1): warning C4056: 浮動小数点数の定数演算でオーバーフローしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\physics_global.h(15,36): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
   コード生成しています。
-  204 of 7365 functions ( 2.8%) were compiled, the rest were copied from previous compilation.
+  44 of 7771 functions ( 0.6%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    101 functions had inline decision re-evaluated but remain unchanged
+    55 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   Adollib.vcxproj -> C:\Users\2190072\Documents\Adollib\Adollib\Release\Adollib.exe

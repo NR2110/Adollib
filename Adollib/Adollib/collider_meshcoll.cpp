@@ -12,7 +12,7 @@ using namespace DOP;
 void Meshcoll::update_world_trans() {
 	world_orientation = gameobject->get_world_orientate() * local_orientation;
 	world_size = gameobject->get_world_scale() * local_scale * half_size;
-	world_position = gameobject->get_world_position() + vector3_Irotated_Bquaternion((local_position + offset) * gameobject->get_world_scale(), world_orientation);
+	world_position = gameobject->get_world_position() + vector3_quatrotate((local_position + offset) * gameobject->get_world_scale(), world_orientation);
 	update_inertial(world_size, density);
 }
 void Meshcoll::update_dop14() {
@@ -20,26 +20,30 @@ void Meshcoll::update_dop14() {
 
 	vector3 rotated_axis[DOP_size];
 	for (int i = 0; i < DOP_size; i++) {
-		rotated_axis[i] = vector3_Irotated_Bquaternion(DOP_14_axis[i], gameobject->get_world_orientate());
+		rotated_axis[i] = vector3_quatrotate(DOP_14_axis[i], gameobject->get_world_orientate().conjugate()).unit_vect();
+		dop14.max[i] = -FLT_MAX;
+		dop14.min[i] = +FLT_MAX;
 	}
 
 	vector3 half[DOP_size * 2];
 	int sum = 0;
 	for (int i = 0; i < DOP_size; i++) {
-		half[sum] = dopbase.max[i] * DOP_14_axis[i];
+		half[sum] = dopbase.max[i] * DOP_14_axis[i] * world_size;
 		sum++;
-		half[sum] = dopbase.min[i] * DOP_14_axis[i];
+		half[sum] = dopbase.min[i] * DOP_14_axis[i] * world_size;
 		sum++;
 	}
 
 	//DOPの更新
 	for (int i = 0; i < DOP_size; i++) {
-		for (int o = 0; o < DOP_size; o++) {
-			float dis = fabsf(vector3_dot(DOP_14_axis[i], half[o]));
+		for (int o = 0; o < DOP_size * 2; o++) {
+			float dis = vector3_dot(rotated_axis[i], half[o]);
 			if (dop14.max[i] < dis) dop14.max[i] = dis * 1.00000001f;//確実にするためちょっと大きめにとる
 			if (dop14.min[i] > dis) dop14.min[i] = dis * 1.00000001f;//確実にするためちょっと大きめにとる
 
 		}
 	}
+
+	//half_size = vector3(dop14.max[0] - dop14.min[0], dop14.max[1] - dop14.min[1], dop14.max[2] - dop14.min[2]) / 2.0f;
 
 }

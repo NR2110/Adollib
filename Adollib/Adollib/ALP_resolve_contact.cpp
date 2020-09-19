@@ -116,8 +116,8 @@ void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collid
 		for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 			Contactpoint& cp = pair.contacts.contactpoints[C_num];
 
-			vector3 rA = vector3_Irotated_Bquaternion(cp.point[0], solverbody[0]->orientation);
-			vector3 rB = vector3_Irotated_Bquaternion(cp.point[1], solverbody[1]->orientation);
+			vector3 rA = vector3_quatrotate(cp.point[0], solverbody[0]->orientation);
+			vector3 rB = vector3_quatrotate(cp.point[1], solverbody[1]->orientation);
 
 			// 反発係数の獲得
 			// 継続の衝突の場合反発係数を0にする
@@ -229,8 +229,8 @@ void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collid
 		for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 			//衝突点の情報　
 			Contactpoint& cp = pair.contacts.contactpoints[C_num];
-			vector3 rA = vector3_Irotated_Bquaternion(cp.point[0], solverbody[0]->orientation);
-			vector3 rB = vector3_Irotated_Bquaternion(cp.point[1], solverbody[1]->orientation);
+			vector3 rA = vector3_quatrotate(cp.point[0], solverbody[0]->orientation);
+			vector3 rB = vector3_quatrotate(cp.point[1], solverbody[1]->orientation);
 
 			for (int k = 0; k < 3; k++) {
 				float deltaImpulse = cp.constraint[k].accuminpulse;
@@ -257,8 +257,8 @@ void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collid
 				for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 					//衝突点の情報　
 					Contactpoint& cp = pair.contacts.contactpoints[C_num];
-					vector3 rA = vector3_Irotated_Bquaternion(cp.point[0], solverbody[0]->orientation);
-					vector3 rB = vector3_Irotated_Bquaternion(cp.point[1], solverbody[1]->orientation);
+					vector3 rA = vector3_quatrotate(cp.point[0], solverbody[0]->orientation);
+					vector3 rB = vector3_quatrotate(cp.point[1], solverbody[1]->orientation);
 
 					{
 						Constraint& constraint = cp.constraint[0];
@@ -508,8 +508,8 @@ void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collid
 
 					//衝突点の情報　
 					Contactpoint& cp = pair.contacts.contactpoints[C_num];
-					vector3 rA = vector3_Irotated_Bquaternion(cp.point[0], solverbody[0]->orientation);
-					vector3 rB = vector3_Irotated_Bquaternion(cp.point[1], solverbody[1]->orientation);
+					vector3 rA = vector3_quatrotate(cp.point[0], solverbody[0]->orientation);
+					vector3 rB = vector3_quatrotate(cp.point[1], solverbody[1]->orientation);
 
 					Constraint constraint = cp.constraint[0];
 					float delta_impulse = constraint.rhs;
@@ -774,8 +774,8 @@ void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collid
 					for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 						//衝突点の情報　
 						Contactpoint& cp = pair.contacts.contactpoints[C_num];
-						vector3 rA = vector3_Irotated_Bquaternion(cp.point[0], solverbody[0]->orientation);
-						vector3 rB = vector3_Irotated_Bquaternion(cp.point[1], solverbody[1]->orientation);
+						vector3 rA = vector3_quatrotate(cp.point[0], solverbody[0]->orientation);
+						vector3 rB = vector3_quatrotate(cp.point[1], solverbody[1]->orientation);
 
 						{
 							Constraint& constraint = cp.constraint[0];
@@ -845,8 +845,8 @@ void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collid
 					for (int C_num = pair.contacts.contact_num - 1; C_num >= 0; C_num--) {
 						//衝突点の情報　
 						Contactpoint& cp = pair.contacts.contactpoints[C_num];
-						vector3 rA = vector3_Irotated_Bquaternion(cp.point[0], solverbody[0]->orientation);
-						vector3 rB = vector3_Irotated_Bquaternion(cp.point[1], solverbody[1]->orientation);
+						vector3 rA = vector3_quatrotate(cp.point[0], solverbody[0]->orientation);
+						vector3 rB = vector3_quatrotate(cp.point[1], solverbody[1]->orientation);
 
 						{
 							Constraint& constraint = cp.constraint[0];

@@ -12,15 +12,15 @@ namespace Adollib
 		//::: X-Y‚Å•\‚·(Z‚Í0) ::::::::::::
 		vector3 ret;
 
-		vector3 Q = vector3_Irotated_Bquaternion(vector3(0,0,1), quaternion_from_euler(V.x, V.y, V.z));
+		vector3 Q = vector3_quatrotate(vector3(0,0,1), quaternion_from_euler(V.x, V.y, V.z));
 
 		ret.x = vector3_angle(vector3(Q.x, 0, Q.z).unit_vect(), vector3(0, 0, 1));
 		if (vector3_cross(vector3(Q.x, 0, Q.z), vector3(0, 0, 1)).y < 0) ret.y *= -1;
-		Q = vector3_Irotated_Bquaternion(Q, quaternion_angle_axis(-ret.y, vector3(0, 1, 0)));
+		Q = vector3_quatrotate(Q, quaternion_angle_axis(-ret.y, vector3(0, 1, 0)));
 
 		ret.y = vector3_angle(vector3(0, Q.y, Q.z).unit_vect(), vector3(0, 0, 1));
 		if (vector3_cross(vector3(0, Q.y, Q.z), vector3(0, 0, 1)).x < 0) ret.x *= -1;
-		Q = vector3_Irotated_Bquaternion(Q, quaternion_angle_axis(-ret.x, vector3(1, 0, 0)));
+		Q = vector3_quatrotate(Q, quaternion_angle_axis(-ret.x, vector3(1, 0, 0)));
 
 
 		return ret;
@@ -60,7 +60,7 @@ namespace Adollib
 				rotate_vec.x = input->getCursorPosY() - Al_Global::SCREEN_HEIGHT / 2;
 
 				rotate *= quaternion_angle_axis(rotate_vec.y, vector3(0, 1, 0));
-				rotate *= quaternion_angle_axis(rotate_vec.x, vector3_cross(vector3(0, 1, 0), vector3_Irotated_Bquaternion(vector3(0, 0, 1), transform->local_orient)).unit_vect()) * rotate_pow;
+				rotate *= quaternion_angle_axis(rotate_vec.x, vector3_cross(vector3(0, 1, 0), vector3_quatrotate(vector3(0, 0, 1), transform->local_orient)).unit_vect()) * rotate_pow;
 
 				input->setCursorPos(Al_Global::SCREEN_WIDTH / 2, Al_Global::SCREEN_HEIGHT / 2);
 			}
@@ -74,7 +74,7 @@ namespace Adollib
 
 				rotate_vec *= rotate_pow;
 				rotate *= quaternion_angle_axis(rotate_vec.y, vector3(0, 1, 0));
-				rotate *= quaternion_angle_axis(rotate_vec.x, vector3_cross(vector3(0, 1, 0), vector3_Irotated_Bquaternion(vector3(0, 0, 1), transform->local_orient)).unit_vect());
+				rotate *= quaternion_angle_axis(rotate_vec.x, vector3_cross(vector3(0, 1, 0), vector3_quatrotate(vector3(0, 0, 1), transform->local_orient)).unit_vect());
 
 			}
 
@@ -90,7 +90,7 @@ namespace Adollib
 				//‚¢‚ç‚È‚¢‰ñ“]‚ðœ‚­
 				vector3 eu = transform->local_orient.euler();
 				quaternion y_axis_rotate = quaternion_from_euler(0, eu.y, 0);
-				position += vector3_Irotated_Bquaternion(move_vec, y_axis_rotate).unit_vect() * move_pow;
+				position += vector3_quatrotate(move_vec, y_axis_rotate).unit_vect() * move_pow;
 
 				//yŽ²•ûŒü‚ÌˆÚ“®
 				if (input->getKeyState(Key::Space))position += vector3(0, 1, 0) * move_pow;

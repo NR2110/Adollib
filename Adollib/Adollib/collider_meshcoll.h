@@ -24,6 +24,28 @@ namespace Adollib {
 		vector3 normal;  // 面法線ベクトル
 	};
 
+	//class MeshColl_base : public Collider {
+	//protected:
+	//	u_int vertex_num; //頂点数
+	//	u_int edge_num; //エッジ数
+	//	u_int facet_num; //面数
+	//	bool _Convex = true;
+
+	//	std::vector<vector3>* vertices; //頂点情報
+	//	std::vector<Edge> edges; //エッジ配列
+	//	std::vector<Facet> facets; //面配列
+
+	//public:
+	//	u_int get_vertex_size() { return vertex_num; };
+	//	u_int get_edge_size() { return edge_num; };
+	//	u_int get_facet_size() { return facet_num; };
+	//	bool is_Convex() { return _Convex; };
+
+	//	const std::vector<vector3> const* get_vertexis() { return vertices; }
+	//	const std::vector<Edge>    const* get_edges() { return  &edges; }
+	//	const std::vector<Facet>   const* get_facets() { return &facets; }
+
+	//};
 
 	//Mesh colliderクラス
 	class Meshcoll : public Collider {
@@ -37,32 +59,50 @@ namespace Adollib {
 		u_int facet_num; //面数
 		bool is_Convex = true;
 
-		std::vector<vector3> vertices; //頂点情報
+		std::vector<vector3>* vertices; //頂点情報
 		std::vector<Edge> edges; //エッジ配列
 		std::vector<Facet> facets; //面配列
 
 		//不動オブジェクトとして生成
-		Meshcoll(const char* filename, float density, vector3 pos = vector3(0, 0, 0)) {
+		Meshcoll(float density = 1, vector3 pos = vector3(0, 0, 0)) {
 			//shapeの設定
 			shape = Collider_shape::shape_mesh;
 
-			std::vector<int> inde; //頂点情報
-			vertices.clear();
+			//密度の保存
+			this->density = density;
+
+			//座標
+			local_position = pos;
+
+			half_size = vector3(0, 0, 0);
+		}
+
+		void load_mesh(const char* filename) {
+			//shapeの設定
+			shape = Collider_shape::shape_mesh;
+
+			vertices = nullptr;
 			edges.clear();
 			facets.clear();
 
+			std::vector<int>* inde; //頂点情報
+
 			Collider_ResourceManager::CreateMCFromFBX(filename, &inde, &vertices);
+
+			std::vector<vector3>& vert = (*vertices);
+
+			vertex_num = vert.size();
 
 			//面情報の保存
 			{
 				facet_num = vertex_num / 3;
 				Facet F;
 				for (int i = 0; i < facet_num; i++) {
-					F.vertexID[0] = inde[i * 3];
-					F.vertexID[1] = inde[i * 3 + 1];
-					F.vertexID[2] = inde[i * 3 + 2];
+					F.vertexID[0] = (*inde)[i * 3];
+					F.vertexID[1] = (*inde)[i * 3 + 1];
+					F.vertexID[2] = (*inde)[i * 3 + 2];
 
-					F.normal = vector3_cross(vertices[F.vertexID[1]] - vertices[F.vertexID[0]], vertices[F.vertexID[2]] - vertices[F.vertexID[0]]);
+					F.normal = vector3_cross(vert[F.vertexID[1]] - vert[F.vertexID[0]], vert[F.vertexID[2]] - vert[F.vertexID[0]]);
 					F.normal = F.normal.unit_vect();
 
 					facets.emplace_back(F);
@@ -72,9 +112,9 @@ namespace Adollib {
 			//エッジ情報の保存
 			{
 				edge_num = 0;
-				std::vector<u_int>edgeID_Table;
+				std::vector<int>edgeID_Table;
 				edgeID_Table.resize(vertex_num * vertex_num / 2);
-				for (u_int& u : edgeID_Table) {
+				for (int& u : edgeID_Table) {
 					u = 0xffffff;
 				}
 
@@ -83,9 +123,9 @@ namespace Adollib {
 					Facet& facet = facets[i];
 
 					for (int o = 0; o < 3; o++) {
-						u_int vertId0 = ALmax(facet.vertexID[o % 3], facet.vertexID[(o + 1) % 3]);
-						u_int vertId1 = ALmin(facet.vertexID[o % 3], facet.vertexID[(o + 1) % 3]);
-						u_int tableId = vertId1 * (vertId1 - 1) / 2 + vertId0;
+						u_int vertId0 = ALmin(facet.vertexID[o % 3], facet.vertexID[(o + 1) % 3]);
+						u_int vertId1 = ALmax(facet.vertexID[o % 3], facet.vertexID[(o + 1) % 3]);
+						int tableId = (int)((int)vertId1 * ((int)vertId1 - 1) / (float)2 + (int)vertId0);
 
 						if (edgeID_Table[tableId] == 0xffffff) {
 							// 初回時は登録のみ
@@ -109,8 +149,8 @@ namespace Adollib {
 							assert(edge.facetID[0] == edge.facetID[1] && "Don't let the edges have 3～ facet.");
 
 							// エッジに含まれないＡ面の頂点がB面の表か裏かで判断
-							vector3 s = vertices[facet.vertexID[(o + 2) % 3]];
-							vector3 q = vertices[facetB.vertexID[0]];
+							vector3 s = vert[facet.vertexID[(o + 2) % 3]];
+							vector3 q = vert[facetB.vertexID[0]];
 							float d = vector3_dot(s - q, facetB.normal);
 
 							//エッジの種類を入力
@@ -135,26 +175,26 @@ namespace Adollib {
 
 			}
 
-			memset(dopbase.max, -FLT_MAX, DOP::DOP_size);
-			memset(dopbase.min,  FLT_MAX, DOP::DOP_size);
+			for (int i = 0; i < DOP::DOP_size; i++) {
+				dopbase.max[i] = -FLT_MAX;
+				dopbase.min[i] = +FLT_MAX;
+			}
 
 			//初期状態のDOPの保存 回転などを考慮したのDOPはこのDOPを基準にする
 			for (int i = 0; i < DOP::DOP_size; i++) {
-				for (vector3& v : vertices) {
+				for (vector3& v : vert) {
 
-					float dis = fabsf(vector3_dot(DOP::DOP_14_axis[i], v));
-					if (dopbase.max[i] < dis) dop14.max[i] = +dis * 1.00000001f;//確実にするためちょっと大きめにとる
-					if (dopbase.min[i] > dis) dop14.min[i] = +dis * 1.00000001f;
+					float dis = vector3_dot(DOP::DOP_14_axis[i], v);
+					if (dopbase.max[i] < dis) dopbase.max[i] = +dis * 1.00000001f;//確実にするためちょっと大きめにとる
+					if (dopbase.min[i] > dis) dopbase.min[i] = +dis * 1.00000001f;
+
+					if (dis < 0) {
+						int dafsdgfg = 0;
+					}
 				}
 			}
 
-			half_size = vector3(dop14.max[0] - dop14.min[0], dop14.max[1] - dop14.min[1], dop14.max[2] - dop14.min[2]);
-
-			//密度の保存
-			this->density = density;
-
-			//座標
-			local_position = pos;
+			half_size = vector3(dopbase.max[0] - dopbase.min[0], dopbase.max[1] - dopbase.min[1], dopbase.max[2] - dopbase.min[2]) / 2.0f;
 
 			//質量の計算
 			inertial_mass = (half_size.x * half_size.y * half_size.z) * 8.0f * density;

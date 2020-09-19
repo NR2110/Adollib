@@ -7,6 +7,9 @@ using namespace Adollib;
 
 float physics_g::timeStep = 0.016; //delta time‚à‚Ç‚« ‚Æ‚è‚ ‚¦‚¸eplision_time
 float physics_g::gravity = 8.9;
+int physics_g::accuracy = 5; //Õ“Ë‰ğŒˆ‚ÌŒJ‚è•Ô‚µ‰ñ” 1`
+float physics_g::bias = 0.3; //ŠÑ’Ê‰ğŒˆ‚Ég—p‚·‚é‚Î‚Ë‚Ì‹­‚³
+float physics_g::slop = 0.005f; //ŠÑ’Ê‚Ì‹–—eŒë·
 
 
 

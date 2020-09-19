@@ -226,6 +226,10 @@ namespace Adollib {
 			components.clear();
 		}
 
+		//void removeGO() {
+
+		//}
+
 		//‰ğ•úˆ—
 		void destroy() {
 			clearComponent();

@@ -12,13 +12,13 @@ namespace Adollib {
 		static constexpr float Contact_threrhold_normal = 0.004f; // 衝突点の閾値（法線方向)
 		static constexpr float Contact_threrhold_tangent = 0.02f;// 衝突点の閾値（平面上）
 
-		static constexpr float bias = 0.1; //貫通解決時に使用するばねの強さ
-		static constexpr float slop = 0.005f; //貫通の許容誤差
+		static float bias; //貫通解決時に使用するばねの強さ
+		static float slop; //貫通の許容誤差
 
 		static float timeStep; //delta timeもどき とりあえずeplision_time
 		static float gravity;  //8.9
 
-		static constexpr int accuracy = 5; //衝突解決の繰り返し回数 1～
+		static int accuracy; //衝突解決の繰り返し回数 1～
 	};
 
 }

@@ -12,7 +12,7 @@ using namespace DOP;
 void Sphere::update_world_trans() {
 	world_orientation = gameobject->get_world_orientate() * local_orientation;
 	world_size = gameobject->get_world_scale() * local_scale * r;
-	world_position = gameobject->get_world_position() + vector3_Irotated_Bquaternion(local_position * world_size, world_orientation);
+	world_position = gameobject->get_world_position() + vector3_quatrotate(local_position * world_size, world_orientation);
 	update_inertial(world_size, density);
 }
 void Sphere::update_dop14() {

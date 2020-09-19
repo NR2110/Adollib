@@ -12,7 +12,7 @@ using namespace DOP;
 void Box::update_world_trans() {
 	world_orientation = gameobject->get_world_orientate() * local_orientation;
 	world_size = gameobject->get_world_scale() * local_scale * half_size;
-	world_position = gameobject->get_world_position() + vector3_Irotated_Bquaternion(local_position * gameobject->get_world_scale(), world_orientation);
+	world_position = gameobject->get_world_position() + vector3_quatrotate(local_position * gameobject->get_world_scale(), world_orientation);
 
 	update_inertial(world_size, density);
 }
@@ -33,7 +33,7 @@ void Box::update_dop14() {
 
 	quaternion WO = gameobject->get_world_orientate();
 	for (int i = 0; i < 4; i++) {
-		half[i] = vector3_Irotated_Bquaternion(half[i], WO);
+		half[i] = vector3_quatrotate(half[i], WO);
 	}
 
 	//DOP‚ÌXV

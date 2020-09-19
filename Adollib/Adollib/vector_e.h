@@ -43,6 +43,13 @@ inline vector3 vector3::operator* (const vector3& M) const {
 	R.z = z * M.z;
 	return R;
 }
+inline vector3 vector3::operator/ (const vector3& M) const {
+	vector3 R;
+	R.x = x / M.x;
+	R.y = y / M.y;
+	R.z = z / M.z;
+	return R;
+}
 inline vector3 vector3::operator* (float S) const {
 	vector3 R;
 	R.x = x * S;
@@ -103,6 +110,18 @@ inline vector3& vector3::operator-= (const vector3& M) {
 	x = x - M.x;
 	y = y - M.y;
 	z = z - M.z;
+	return *this;
+}
+inline vector3& vector3::operator*= (const vector3& M) {
+	x = x * M.x;
+	y = y * M.y;
+	z = z * M.z;
+	return *this;
+}
+inline vector3& vector3::operator/= (const vector3& M) {
+	x = x / M.x;
+	y = y / M.y;
+	z = z / M.z;
 	return *this;
 }
 inline vector3& vector3::operator*= (float S) {
@@ -236,7 +255,7 @@ inline vector3 Adollib::vector3_slerp(const vector3& V1, const vector3& V2, floa
 	F.y = g.y * sinf(radian * R);
 	F.z = g.z * sinf(radian * R);
 
-	return vector3_Irotated_Bquaternion(V1, F);
+	return vector3_quatrotate(V1, F);
 }
 #else
 

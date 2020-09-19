@@ -109,6 +109,7 @@ namespace Adollib {
 		vector3 operator+ (const vector3& M) const;
 		vector3 operator- (const vector3& M) const;
 		vector3 operator* (const vector3& M) const;
+		vector3 operator/ (const vector3& M) const;
 		vector3 operator* (float S) const;
 		vector3 operator/ (float S) const;
 		float& operator[] (const int i);
@@ -116,6 +117,8 @@ namespace Adollib {
 
 		vector3& operator+= (const vector3& M);
 		vector3& operator-= (const vector3& M);
+		vector3& operator*= (const vector3& M);
+		vector3& operator/= (const vector3& M);
 		vector3& operator*= (float S);
 		vector3& operator/= (float S);
 

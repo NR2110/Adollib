@@ -18,8 +18,8 @@ namespace Adollib {
 		bool generate_contact_box_box(const Box& S1, const  Box& S2, Contacts::Contact_pair& pair);
 		bool generate_contact_box_mesh(const Box& S1, const Meshcoll& S2, Contacts::Contact_pair& pair);
 
-		bool genetate_contact_mesh_plane(const Meshcoll& S1, const Plane& S2, Contacts::Contact_pair& pair);
-		bool genetate_contact_mesh_mesh(const Meshcoll& S1, const Meshcoll& S2, Contacts::Contact_pair& pair);
+		bool generate_contact_mesh_plane(const Meshcoll& S1, const Plane& S2, Contacts::Contact_pair& pair);
+		bool generate_contact_mesh_mesh(const Meshcoll& S1, const Meshcoll& S2, Contacts::Contact_pair& pair);
 
 	}
 }

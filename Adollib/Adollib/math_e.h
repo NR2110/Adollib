@@ -11,7 +11,7 @@ namespace Adollib {
 		return (float)radian * 180 / 3.1415926535f;
 	}
 
-#define ALmax(a,b) a>b?a:b
-#define ALmin(a,b) a<b?a:b
+#define ALmax(a,b) (a>b?a:b)
+#define ALmin(a,b) (a<b?a:b)
 
 }

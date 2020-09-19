@@ -26,39 +26,16 @@ void physics_function::Broadphase(std::list<std::shared_ptr<Adollib::Collider>>&
 	std::list<std::shared_ptr<Adollib::Collider>>::iterator itr_end = coll.end();
 
 	for (itr = coll.begin(); itr != itr_end; itr++) {
+		if ((*itr)->move == true) {
+			int dafsdbf = 0;
+		}
 		(*itr)->update_dop14();
 	}
 	Work_meter::stop("update_dop14");
 
 	//適当に20コ点を取って適当に
 	int SAP_axis = 0;
-	//{
-	//	vector3 max;
-	//	vector3 min;
-	//	for (int num = 0; num < 20; num++) {
 
-	//		if (num == 0) {
-	//			max = min = coll[rand() % coll_size]->dop14.pos;
-	//		}
-	//		else {
-	//			vector3 pos = coll[rand() % coll_size]->dop14.pos;
-	//			for (int ax = 0; ax < 3; ax++) {
-	//				if (max[ax] < pos[ax])max[ax] = pos[ax];
-	//				if (min[ax] > pos[ax])min[ax] = pos[ax];
-	//			}
-	//		}
-	//	}
-
-	//	max -= min;
-	//	int max_num = 0, max_axis = 0;
-	//	for (int i = 0; i < 3; i++) {
-	//		if (max[i] > max_num) {
-	//			max_num = max[i];
-	//			max_axis = i;
-	//		}
-	//	}
-	//	SAP_axis = max_axis;
-	//}
 	Debug::set(std::string("SAP_axis"), vector3(SAP_axis).get_XM3());
 
 
@@ -108,8 +85,6 @@ void physics_function::Broadphase(std::list<std::shared_ptr<Adollib::Collider>>&
 	{
 		Work_meter::start("insert_sort");
 		edge ed;
-
-
 
 		std::list<edge>::iterator itr = axis_list[SAP_axis].begin();
 		std::list<edge>::iterator itr_next;

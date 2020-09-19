@@ -228,7 +228,7 @@ namespace Adollib {
 			// ƒrƒ…[s—ñ
 			vector3 pos = itr_ca->get()->transform->position;
 			quaternion orient = itr_ca->get()->transform->orientation;
-			vector3 look_pos = pos + vector3_Irotated_Bquaternion(vector3(0, 0, 1), orient);
+			vector3 look_pos = pos + vector3_quatrotate(vector3(0, 0, 1), orient);
 
 			DirectX::XMVECTOR eye   = DirectX::XMVectorSet(pos.x, pos.y, pos.z, 1.0f);
 			DirectX::XMVECTOR focus = DirectX::XMVectorSet(look_pos.x, look_pos.y, look_pos.z, 1.0f);
