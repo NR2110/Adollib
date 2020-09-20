@@ -660,7 +660,7 @@ bool physics_function::generate_contact_mesh_plane(const Meshcoll& S1, const Pla
 #pragma region MESH-MESH
 
 float sum_of_projected_radii(float& max,float& min, const Meshcoll& meshcoll, const vector3& nor) {
-	int value;
+	float value;
 	max = -FLT_MAX;
 	min = +FLT_MAX;
 	for (vector3 vertex : *meshcoll.vertices) {
@@ -703,7 +703,7 @@ bool sat_convex_mesh_mesh(const Meshcoll& collA, const Meshcoll& collB,
 		assert(maxA >= minA);
 
 		// collBを分離軸に投影
-		sum_of_projected_radii(maxB, minB, collB, vector3_quatrotate(axis, offset_quatAB));
+		sum_of_projected_radii(maxB, minB, collB, vector3_quatrotate(axis, offset_quatAB).unit_vect());
 		assert(maxB >= minB);
 		float off = vector3_dot(offset_posBA, axis);
 		maxB += off;
@@ -795,6 +795,9 @@ bool sat_convex_mesh_mesh(const Meshcoll& collA, const Meshcoll& collB,
 			sum_of_projected_radii(maxA, minA, collA, axis);		assert(maxA >= minA);
 			sum_of_projected_radii(maxB, minB, collB, axis);		assert(maxB >= minB);
 			float off = vector3_dot(offset_posBA, axis);
+			if (minA - (maxB + off) >= 0.0f || (minB + off) - maxA >= 0.0f) {
+				int adfsdf = 0;
+			}
 			maxB += off;
 			minB += off;
 
@@ -827,7 +830,7 @@ bool GC_concave_mesh_mesh(const Meshcoll& S1, const Meshcoll& S2, int concave_nu
 bool physics_function::generate_contact_mesh_mesh(const Meshcoll& SA, const Meshcoll& SB, Contacts::Contact_pair& pair) {
 	float smallest_penetration = FLT_MAX;	//最小めり込み量
 	int smallest_facetID[2];	//最小めり込み量を得た分離軸の作成に使用した各OBBのローカル軸番号 辺×辺用に2つ
-	SAT_TYPE smallest_case;	//衝突の種類 
+	SAT_TYPE smallest_case;		//衝突の種類 
 
 	if (SA.is_Convex == true && SB.is_Convex == true) {
 		if (!sat_convex_mesh_mesh(SA, SB, smallest_penetration, smallest_facetID, smallest_case))return false;
