@@ -731,7 +731,7 @@ bool sat_convex_mesh_mesh(const Meshcoll& collA, const Meshcoll& collB,
 
 	////::: obbBの軸にobbAを投影 :::::::::::::::::::
 		//collBの座標系で計算を行う
-	if(PA_FB.hit_point_to_face == false)
+	if(PA_FB.hit_point_to_face == true)
 	for (u_int f = 0; f < collB.facet_num; f++) {
 		const Facet& facet = collB.facets[f];
 		const vector3& axis = facet.normal;
@@ -779,45 +779,46 @@ bool sat_convex_mesh_mesh(const Meshcoll& collA, const Meshcoll& collB,
 
 	//::: 外積の軸に投影(最近距離を求めるため)
 		//collAの座標系で計算を行う
-	for (u_int fA = 0; fA < collA.edge_num; fA++) {
-		const Edge& edgeA = collA.edges[fA];
+	//for (u_int fA = 0; fA < collA.edge_num; fA++) {
+	//	vector3 axisA, axisB, axisW;
+	//	const Edge& edgeA = collA.edges[fA];
 
-		const vector3& edgeVecA = (*collA.vertices)[edgeA.vertexID[1]] - (*collA.vertices)[edgeA.vertexID[0]];
-		for (u_int fB = 0; fB < collB.edge_num; fB++) {
-			const Edge& edgeB = collB.edges[fB];
+	//	const vector3& edgeVecA = (*collA.vertices)[edgeA.vertexID[1]] - (*collA.vertices)[edgeA.vertexID[0]];
+	//	for (u_int fB = 0; fB < collB.edge_num; fB++) {
+	//		const Edge& edgeB = collB.edges[fB];
 
-			const vector3 edgeVecB = vector3_quatrotate((*collB.vertices)[edgeB.vertexID[1]] - (*collB.vertices)[edgeB.vertexID[0]],offset_quatBA);
+	//		const vector3 edgeVecB = vector3_quatrotate((*collB.vertices)[edgeB.vertexID[1]] - (*collB.vertices)[edgeB.vertexID[0]], offset_quatBA);
 
-			vector3 axis = vector3_cross(edgeVecA, edgeVecB);
-			if (axis.norm() <= FLT_EPSILON * FLT_EPSILON) continue;
-			axis = axis.unit_vect();
+	//		axisA = vector3_cross(edgeVecA, edgeVecB);
+	//		if (axisA.norm() <= FLT_EPSILON * FLT_EPSILON) continue;
+	//		axisA = axisA.unit_vect();
+	//		axisB = vector3_quatrotate(axisA, offset_quatAB);
 
-			sum_of_projected_radii(maxA, minA, collA, axis);		assert(maxA >= minA);
-			sum_of_projected_radii(maxB, minB, collB, axis);		assert(maxB >= minB);
-			float off = vector3_dot(offset_posBA, axis);
-			if (minA - (maxB + off) >= 0.0f || (minB + off) - maxA >= 0.0f) {
-				int adfsdf = 0;
-			}
-			maxB += off;
-			minB += off;
+	//		sum_of_projected_radii(maxA, minA, collA, axisA);		assert(maxA >= minA);
+	//		sum_of_projected_radii(maxB, minB, collB, axisB);		assert(maxB >= minB);
+	//		axisW = vector3_quatrotate(axisA, collA.world_orientation);
+	//		float off = vector3_dot(offset_posBA, axisW);
 
-			//貫通の計算
-			float d1 = minA - maxB;
-			float d2 = minB - maxA;
-			if (d1 >= 0.0f || d2 >= 0.0f)
-				return false;
+	//		maxB += off;
+	//		minB += off;
 
-			penetration = -1 * ALmax(d1, d2);
+	//		//貫通の計算
+	//		float d1 = minA - maxB;
+	//		float d2 = minB - maxA;
+	//		if (d1 >= 0.0f || d2 >= 0.0f)
+	//			return false;
 
-			if (smallest_penetration > penetration) {
+	//		penetration = -1 * ALmax(d1, d2);
 
-				smallest_penetration = penetration;
-				smallest_axis[0] = fA;
-				smallest_axis[1] = fB;
-				smallest_case = EDGE_EDGE;
-			}
-		}
-	}
+	//		if (smallest_penetration > penetration) {
+
+	//			smallest_penetration = penetration;
+	//			smallest_axis[0] = fA;
+	//			smallest_axis[1] = fB;
+	//			smallest_case = EDGE_EDGE;
+	//		}
+	//	}
+	//}
 
 	// 分離軸が見当たらない場合OBBは交差しているはず
 	return (smallest_penetration < FLT_MAX && smallest_penetration > FLT_EPSILON) ? true : false;
@@ -920,17 +921,18 @@ bool physics_function::generate_contact_mesh_mesh(const Meshcoll& SA, const Mesh
 		{
 			const Meshcoll& facet_coll = SB;
 			const Meshcoll& vertex_coll = SA;
+			vector3 DD = vertex_coll.world_orientation.euler();
 
 			quaternion offset_quatVF = vertex_coll.world_orientation * facet_coll.world_orientation.conjugate();
 			quaternion offset_quatFV = facet_coll.world_orientation * vertex_coll.world_orientation.conjugate();
 			vector3 offset_posVF = vertex_coll.world_position - facet_coll.world_position;
 			vector3 offset_posFV = facet_coll.world_position - vertex_coll.world_position;
 
-			assert(smallest_facetID[1] == -1);
-			const Facet& nerest_facet = facet_coll.facets[smallest_facetID[0]];
+			assert(smallest_facetID[0] == -1);
+			const Facet& nerest_facet = facet_coll.facets[smallest_facetID[1]];
 
 			vector3 axisF = nerest_facet.normal;
-			axisF = axisF.unit_vect();
+			axisF = -axisF.unit_vect();
 
 			//vertex_collのどの頂点が最近点か求める
 			u_int nearest_pointID;
@@ -948,12 +950,13 @@ bool physics_function::generate_contact_mesh_mesh(const Meshcoll& SA, const Mesh
 				}
 			}
 			pA = (*vertex_coll.vertices)[nearest_pointID];
+			pA *= vertex_coll.world_size;
 
-			//上記のpAがfacet_collの最近面上のどこにあるのか
+			//上記のp0がfacet_collの最近面上のどこにあるのか
 			vector3 pB;
 			{
 
-				vector3 p = vector3_quatrotate(pA, offset_quatFV) + offset_posVF;
+				vector3 p = vector3_quatrotate(pA, offset_quatVF) + offset_posVF;
 				p /= facet_coll.world_size;
 				float min_len = FLT_MAX;
 				vector3 n_pos;
@@ -983,7 +986,7 @@ bool physics_function::generate_contact_mesh_mesh(const Meshcoll& SA, const Mesh
 
 			pair.contacts.addcontact(
 				smallest_penetration,
-				vector3_quatrotate(axisF, facet_coll.world_orientation),
+				vector3_quatrotate(-axisF, facet_coll.world_orientation),
 				pA,
 				pB
 			);
