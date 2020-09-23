@@ -2,6 +2,8 @@
 
 #include "closest_func.h"
 
+#include "work_meter.h"
+
 using namespace Adollib;
 using namespace Contacts;
 
@@ -435,7 +437,6 @@ bool sat_obb_obb(
 
 	}
 
-
 	//::: ŠOÏ‚Ì²‚É“Š‰e
 	for (int OB1 = 0; OB1 < 3; OB1++) {
 		for (int OB2 = 0; OB2 < 3; OB2++) {
@@ -705,15 +706,18 @@ bool sat_convex_mesh_mesh(const Meshcoll& collA, const Meshcoll& collB,
 		// collB‚ğ•ª—£²‚É“Š‰e
 		sum_of_projected_radii(maxB, minB, collB, vector3_quatrotate(axis, offset_quatAB).unit_vect());
 		assert(maxB >= minB);
-		float off = vector3_dot(offset_posBA, axis);
+		float off = vector3_dot(offset_posBA, vector3_quatrotate(axis, collA.world_orientation).unit_vect());
 		maxB += off;
 		minB += off;
 
 		//ŠÑ’Ê‚ÌŒvZ
 		float d1 = minA - maxB;
 		float d2 = minB - maxA;
-		if (d1 >= 0.0f || d2 >= 0.0f)
+		if (d1 >= 0.0f || d2 >= 0.0f) {
+			sum_of_projected_radii(maxB, minB, collB, vector3_quatrotate(axis, offset_quatAB).unit_vect());
+
 			return false;
+		}
 
 		penetration = -1 * ALmax(d1, d2);
 
@@ -743,15 +747,18 @@ bool sat_convex_mesh_mesh(const Meshcoll& collA, const Meshcoll& collB,
 		// collA‚ğ•ª—£²‚É“Š‰e
 		sum_of_projected_radii(maxA, minA, collA, vector3_quatrotate(axis, offset_quatBA));
 		assert(maxA >= minA);
-		float off = vector3_dot(offset_posAB, axis);
+		float off = vector3_dot(offset_posAB, vector3_quatrotate(axis, collB.world_orientation).unit_vect());
 		maxA += off;
 		minA += off;
 
 		//ŠÑ’Ê‚ÌŒvZ
 		float d1 = minA - maxB;
 		float d2 = minB - maxA;
-		if (d1 >= 0.0f || d2 >= 0.0f)
+		if (d1 >= 0.0f || d2 >= 0.0f) {
+			sum_of_projected_radii(maxA, minA, collA, vector3_quatrotate(axis, offset_quatBA));
+
 			return false;
+		}
 
 		penetration = -1 * ALmax(d1, d2);
 
@@ -777,15 +784,16 @@ bool sat_convex_mesh_mesh(const Meshcoll& collA, const Meshcoll& collB,
 
 	}
 
+	Work_meter::start("generate_edge_edge");
 	//::: ŠOÏ‚Ì²‚É“Š‰e(Å‹ß‹——£‚ğ‹‚ß‚é‚½‚ß)
 		//collA‚ÌÀ•WŒn‚ÅŒvZ‚ğs‚¤
-	//for (u_int fA = 0; fA < collA.edge_num; fA++) {
+	//for (u_int eA = 0; eA < collA.edge_num; eA++) {
 	//	vector3 axisA, axisB, axisW;
-	//	const Edge& edgeA = collA.edges[fA];
+	//	const Edge& edgeA = collA.edges[eA];
 
 	//	const vector3& edgeVecA = (*collA.vertices)[edgeA.vertexID[1]] - (*collA.vertices)[edgeA.vertexID[0]];
-	//	for (u_int fB = 0; fB < collB.edge_num; fB++) {
-	//		const Edge& edgeB = collB.edges[fB];
+	//	for (u_int eB = 0; eB < collB.edge_num; eB++) {
+	//		const Edge& edgeB = collB.edges[eB];
 
 	//		const vector3 edgeVecB = vector3_quatrotate((*collB.vertices)[edgeB.vertexID[1]] - (*collB.vertices)[edgeB.vertexID[0]], offset_quatBA);
 
@@ -796,8 +804,7 @@ bool sat_convex_mesh_mesh(const Meshcoll& collA, const Meshcoll& collB,
 
 	//		sum_of_projected_radii(maxA, minA, collA, axisA);		assert(maxA >= minA);
 	//		sum_of_projected_radii(maxB, minB, collB, axisB);		assert(maxB >= minB);
-	//		axisW = vector3_quatrotate(axisA, collA.world_orientation);
-	//		float off = vector3_dot(offset_posBA, axisW);
+	//		float off = vector3_dot(offset_posBA, axisA);
 
 	//		maxB += off;
 	//		minB += off;
@@ -808,18 +815,18 @@ bool sat_convex_mesh_mesh(const Meshcoll& collA, const Meshcoll& collB,
 	//		if (d1 >= 0.0f || d2 >= 0.0f)
 	//			return false;
 
-	//		penetration = -1 * ALmax(d1, d2);
+	//		penetration = -1 * ALmax(d1, d2) * 1.001;
 
 	//		if (smallest_penetration > penetration) {
 
 	//			smallest_penetration = penetration;
-	//			smallest_axis[0] = fA;
-	//			smallest_axis[1] = fB;
+	//			smallest_axis[0] = eA;
+	//			smallest_axis[1] = eB;
 	//			smallest_case = EDGE_EDGE;
 	//		}
 	//	}
 	//}
-
+	Work_meter::stop("generate_edge_edge");
 	// •ª—£²‚ªŒ©“–‚½‚ç‚È‚¢ê‡OBB‚ÍŒğ·‚µ‚Ä‚¢‚é‚Í‚¸
 	return (smallest_penetration < FLT_MAX && smallest_penetration > FLT_EPSILON) ? true : false;
 }
@@ -856,6 +863,7 @@ bool physics_function::generate_contact_mesh_mesh(const Meshcoll& SA, const Mesh
 			const Facet& nerest_facet = facet_coll.facets[smallest_facetID[0]];
 
 			vector3 axisF = nerest_facet.normal;
+			if(vector3_dot(axisF, offset_posBA) > 0)
 			axisF = -axisF.unit_vect();
 
 			//vertex_coll‚Ì‚Ç‚Ì’¸“_‚ªÅ‹ß“_‚©‹‚ß‚é
@@ -992,6 +1000,7 @@ bool physics_function::generate_contact_mesh_mesh(const Meshcoll& SA, const Mesh
 			);
 		}
 
+		
 		//SA‚ÆSB‚Ì•Ó“¯m‚ªÕ“Ë‚µ‚½ê‡
 		else if (smallest_case == EDGE_EDGE)
 		{

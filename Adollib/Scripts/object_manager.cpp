@@ -31,9 +31,9 @@ namespace Adollib
 			//set_moveable_box(n_vector3(0, 200, 0), n_vector3(10, 10, 10), n_vector3(0, 0, 0), n_vector3(0, 1, 1));
 		{
 			Gameobject* GO = Gameobject_manager::createCube();
-			GO->transform->local_pos = vector3(0, -60, 0);
+			GO->transform->local_pos = vector3(0, -90, 0);
 			GO->transform->local_scale = vector3(60, 60, 60);
-			//GO->transform->local_orient = quaternion_from_euler(45, 45, 45);
+			GO->transform->local_orient = quaternion_from_euler(45, 0, 0);
 			GO->material->color = vector4(1, 1, 1, 1);
 
 			//Box* R = GO->add_collider<Box>();
@@ -44,9 +44,9 @@ namespace Adollib
 
 		{
 			Gameobject* GO = Gameobject_manager::createCube();
-			GO->transform->local_pos = vector3(0, -60, 0);
+			GO->transform->local_pos = vector3(0, -90, 0);
 			GO->transform->local_scale = vector3(60, 60, 60);
-			//GO->transform->local_orient = quaternion_from_euler(45, 45, 45);
+			GO->transform->local_orient = quaternion_from_euler(45, 0, 0);
 			GO->material->color = vector4(1, 1, 1, 1);
 
 			Box* R = GO->add_collider<Box>();
@@ -140,133 +140,136 @@ namespace Adollib
 	{
 		ImGuiWindowFlags flag = 0;
 		//flag |= ImGuiWindowFlags_AlwaysAutoResize;
-		ImGui::Begin("object_manage", 0, flag);
 
-		bool del = false;
-		ImGui::Checkbox("delete", &del); //objectの削除
 
-		if (del) {
-			for (int i = 0; i < GOs.size(); i++) {
-				GOs[i]->clear_collider();
-				GOs[i]->active = false;
-			}
-			GOs.clear();
-		}
+		if(ImGui::Begin("object_manage", 0, flag)) {
 
-		//重力の調整
-		ImGui::InputFloat("gravity", &physics_g::gravity, 0.001f, 1.0f, "%.3f");
+			bool del = false;
+			ImGui::Checkbox("delete", &del); //objectの削除
 
-		//正確さの調整
-		ImGui::InputInt("accuracy", &physics_g::accuracy, 1, 200);
-
-		//貫通時のばねの強さ
-		ImGui::InputFloat("bias", &physics_g::bias, 0.01, 0.1, "%.3f");
-		//貫通許容誤差
-		ImGui::InputFloat("slop", &physics_g::slop, 0.0001, 0.001, "%.4f");
-
-		ImGui::Columns(4, "columnListIDs");
-		ImGui::Separator();
-		ImGui::Text("NAME");ImGui::NextColumn();
-		ImGui::Text("SUMMON");ImGui::NextColumn();
-		ImGui::Text("POSITION");ImGui::NextColumn();
-		ImGui::Text("COUNT");ImGui::NextColumn();
-		ImGui::Separator();
-
-		int imgui_num = 0;
-		//BOXpyramid
-		{
-			static int BOX_pyramid_count = 5;
-			static float BOX_pyramid_pos[3] = { 0 };
-			bool summon = false;
-			ImGui::Separator();
-			ImGui::Text("BOX_pyramid"); ImGui::NextColumn();
-			ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
-			ImGui::InputFloat3(std::to_string(imgui_num + 200).c_str(), BOX_pyramid_pos, "%.3f"); ImGui::NextColumn();
-			ImGui::InputInt(std::to_string(imgui_num + 300).c_str(), &BOX_pyramid_count, 1, 20); ImGui::NextColumn();
-
-			if(summon == true)
-			for (int i = 0; i < BOX_pyramid_count; i++) {
-				for (int o = 0; o < BOX_pyramid_count - i; o++) {
-					set_box(vector3(2.00001 * o - (BOX_pyramid_count - i) * 2.000001 / 2.0 + BOX_pyramid_pos[0], 3.0 + 2.00001 * i + BOX_pyramid_pos[1], BOX_pyramid_pos[2]), vector3(1, 1, 1), vector3(0, 0, 0), vector3(0, 1, 1));
+			if (del) {
+				for (int i = 0; i < GOs.size(); i++) {
+					GOs[i]->clear_collider();
+					GOs[i]->active = false;
 				}
-
+				GOs.clear();
 			}
 
-			imgui_num++;
-		}
+			//重力の調整
+			ImGui::InputFloat("gravity", &physics_g::gravity, 0.001f, 1.0f, "%.3f");
 
-		//SPHEREpyramid
-		{
-			static int SPHERE_pyramid_count = 5;
-			static float SPHERE_pyramid_pos[3] = { 0 };
-			bool summon = false;
+			//正確さの調整
+			ImGui::InputInt("accuracy", &physics_g::accuracy, 1, 200);
+
+			//貫通時のばねの強さ
+			ImGui::InputFloat("bias", &physics_g::bias, 0.01, 0.1, "%.3f");
+			//貫通許容誤差
+			ImGui::InputFloat("slop", &physics_g::slop, 0.0001, 0.001, "%.4f");
+
+			ImGui::Columns(4, "columnListIDs");
 			ImGui::Separator();
-			ImGui::Text("SPHERE_pyramid"); ImGui::NextColumn();
-			ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
-			ImGui::InputFloat3(std::to_string(imgui_num + 200).c_str(), SPHERE_pyramid_pos, "%.3f"); ImGui::NextColumn();
-			ImGui::InputInt(std::to_string(imgui_num + 300).c_str(), &SPHERE_pyramid_count, 1, 20); ImGui::NextColumn();
+			ImGui::Text("NAME"); ImGui::NextColumn();
+			ImGui::Text("SUMMON"); ImGui::NextColumn();
+			ImGui::Text("POSITION"); ImGui::NextColumn();
+			ImGui::Text("COUNT"); ImGui::NextColumn();
+			ImGui::Separator();
 
-			if (summon == true)
-				for (int i = 0; i < SPHERE_pyramid_count; i++) {
-					for (int o = 0; o < SPHERE_pyramid_count - i; o++) {
-						set_sphere(vector3(2.50001 * o - (SPHERE_pyramid_count - i) * 2.500001 / 2.0 + SPHERE_pyramid_pos[0], 5.0 + 2.50001 * i + SPHERE_pyramid_pos[1], SPHERE_pyramid_pos[2]), 1, vector3(0, 1, 1));
+			int imgui_num = 0;
+			//BOXpyramid
+			{
+				static int BOX_pyramid_count = 5;
+				static float BOX_pyramid_pos[3] = { 0 };
+				bool summon = false;
+				ImGui::Separator();
+				ImGui::Text("BOX_pyramid"); ImGui::NextColumn();
+				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
+				ImGui::InputFloat3(std::to_string(imgui_num + 200).c_str(), BOX_pyramid_pos, "%.3f"); ImGui::NextColumn();
+				ImGui::InputInt(std::to_string(imgui_num + 300).c_str(), &BOX_pyramid_count, 1, 20); ImGui::NextColumn();
+
+				if (summon == true)
+					for (int i = 0; i < BOX_pyramid_count; i++) {
+						for (int o = 0; o < BOX_pyramid_count - i; o++) {
+							set_box(vector3(2.00001 * o - (BOX_pyramid_count - i) * 2.000001 / 2.0 + BOX_pyramid_pos[0], 3.0 + 2.00001 * i + BOX_pyramid_pos[1], BOX_pyramid_pos[2]), vector3(1, 1, 1), vector3(0, 0, 0), vector3(0, 1, 1));
+						}
+
 					}
 
-				}
-			imgui_num++;
-		}
+				imgui_num++;
+			}
 
-		//MIXpyramid
-		{
-			static int MIX_pyramid_count = 5;
-			static float MIX_pyramid_pos[3] = { 0 };
-			bool summon = false;
-			ImGui::Separator();
-			ImGui::Text("MIX_pyramid"); ImGui::NextColumn();
-			ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
-			ImGui::InputFloat3(std::to_string(imgui_num + 200).c_str(), MIX_pyramid_pos, "%.3f"); ImGui::NextColumn();
-			ImGui::InputInt(std::to_string(imgui_num + 300).c_str(), &MIX_pyramid_count, 1, 20); ImGui::NextColumn();
+			//SPHEREpyramid
+			{
+				static int SPHERE_pyramid_count = 5;
+				static float SPHERE_pyramid_pos[3] = { 0 };
+				bool summon = false;
+				ImGui::Separator();
+				ImGui::Text("SPHERE_pyramid"); ImGui::NextColumn();
+				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
+				ImGui::InputFloat3(std::to_string(imgui_num + 200).c_str(), SPHERE_pyramid_pos, "%.3f"); ImGui::NextColumn();
+				ImGui::InputInt(std::to_string(imgui_num + 300).c_str(), &SPHERE_pyramid_count, 1, 20); ImGui::NextColumn();
 
-			if (summon == true)
-				for (int i = 0; i < MIX_pyramid_count; i++) {
-					for (int o = 0; o < MIX_pyramid_count - i; o++) {
-						if ((i + o) % 2 == 0)
-							set_box(vector3(2.50001 * o - (MIX_pyramid_count - i) * 2.500001 / 2.0 + MIX_pyramid_pos[0], 5.0 + 2.50001 * i + MIX_pyramid_pos[1], MIX_pyramid_pos[2]), vector3(1, 1, 1), vector3(30, 0, 30), vector3(0, 1, 1));
-						else
-							set_sphere(vector3(2.50001 * o - (MIX_pyramid_count - i) * 2.500001 / 2.0 + MIX_pyramid_pos[0], 5.0 + 2.50001 * i + MIX_pyramid_pos[1], MIX_pyramid_pos[2]), 1, vector3(0, 1, 1));
+				if (summon == true)
+					for (int i = 0; i < SPHERE_pyramid_count; i++) {
+						for (int o = 0; o < SPHERE_pyramid_count - i; o++) {
+							set_sphere(vector3(2.50001 * o - (SPHERE_pyramid_count - i) * 2.500001 / 2.0 + SPHERE_pyramid_pos[0], 5.0 + 2.50001 * i + SPHERE_pyramid_pos[1], SPHERE_pyramid_pos[2]), 1, vector3(0, 1, 1));
+						}
+
 					}
+				imgui_num++;
+			}
 
-				}
-			imgui_num++;
-		}
+			//MIXpyramid
+			{
+				static int MIX_pyramid_count = 5;
+				static float MIX_pyramid_pos[3] = { 0 };
+				bool summon = false;
+				ImGui::Separator();
+				ImGui::Text("MIX_pyramid"); ImGui::NextColumn();
+				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
+				ImGui::InputFloat3(std::to_string(imgui_num + 200).c_str(), MIX_pyramid_pos, "%.3f"); ImGui::NextColumn();
+				ImGui::InputInt(std::to_string(imgui_num + 300).c_str(), &MIX_pyramid_count, 1, 20); ImGui::NextColumn();
 
-		//SPHEREplane
-		{
-			static int SPHERE_plane_count = 5;
-			static float SPHERE_plane_pos[3] = { 0 };
-			bool summon = false;
-			ImGui::Separator();
-			ImGui::Text("SPHERE_plane"); ImGui::NextColumn();
-			ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
-			ImGui::InputFloat3(std::to_string(imgui_num + 200).c_str(), SPHERE_plane_pos, "%.3f"); ImGui::NextColumn();
-			ImGui::InputInt(std::to_string(imgui_num + 300).c_str(), &SPHERE_plane_count, 1, 20); ImGui::NextColumn();
+				if (summon == true)
+					for (int i = 0; i < MIX_pyramid_count; i++) {
+						for (int o = 0; o < MIX_pyramid_count - i; o++) {
+							if ((i + o) % 2 == 0)
+								set_box(vector3(2.50001 * o - (MIX_pyramid_count - i) * 2.500001 / 2.0 + MIX_pyramid_pos[0], 5.0 + 2.50001 * i + MIX_pyramid_pos[1], MIX_pyramid_pos[2]), vector3(1, 1, 1), vector3(30, 0, 30), vector3(0, 1, 1));
+							else
+								set_sphere(vector3(2.50001 * o - (MIX_pyramid_count - i) * 2.500001 / 2.0 + MIX_pyramid_pos[0], 5.0 + 2.50001 * i + MIX_pyramid_pos[1], MIX_pyramid_pos[2]), 1, vector3(0, 1, 1));
+						}
 
-			if (summon == true)
-				for (int i = 0; i < SPHERE_plane_count; i++) {
-
-					for (int o = 0; o < SPHERE_plane_count; o++) {
-
-						set_sphere(vector3(2.50001 * i - (SPHERE_plane_count - i) * 5.000001 / 2.0 + SPHERE_plane_pos[0], 10 + SPHERE_plane_pos[1], 2.50001 * o - (SPHERE_plane_count - o) * 2.500001 / 2.0 + SPHERE_plane_pos[2]), 1, vector3(0, 1, 1));
 					}
+				imgui_num++;
+			}
 
-				}
-			imgui_num++;
+			//SPHEREplane
+			{
+				static int SPHERE_plane_count = 5;
+				static float SPHERE_plane_pos[3] = { 0 };
+				bool summon = false;
+				ImGui::Separator();
+				ImGui::Text("SPHERE_plane"); ImGui::NextColumn();
+				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
+				ImGui::InputFloat3(std::to_string(imgui_num + 200).c_str(), SPHERE_plane_pos, "%.3f"); ImGui::NextColumn();
+				ImGui::InputInt(std::to_string(imgui_num + 300).c_str(), &SPHERE_plane_count, 1, 20); ImGui::NextColumn();
+
+				if (summon == true)
+					for (int i = 0; i < SPHERE_plane_count; i++) {
+
+						for (int o = 0; o < SPHERE_plane_count; o++) {
+
+							set_sphere(vector3(2.50001 * i - (SPHERE_plane_count - i) * 5.000001 / 2.0 + SPHERE_plane_pos[0], 10 + SPHERE_plane_pos[1], 2.50001 * o - (SPHERE_plane_count - o) * 2.500001 / 2.0 + SPHERE_plane_pos[2]), 1, vector3(0, 1, 1));
+						}
+
+					}
+				imgui_num++;
+			}
+
+
+
+			ImGui::Columns(1);
+			ImGui::End();
 		}
-
-
-
-		ImGui::Columns(1);
-		ImGui::End();
 		
 		if (input->getKeyTrigger(Key::M)) {
 
@@ -277,7 +280,7 @@ namespace Adollib
 				vector4 C = vector4(1,0,0,1);
 				object->material->color = C;
 
-				object->transform->local_orient = quaternion_from_euler(45,45,45);
+				object->transform->local_orient = quaternion_from_euler(0,0,0);
 				object->transform->local_pos = vector3(0,5,0);
 				object->transform->local_scale = vector3(1,1,1);
 
@@ -322,7 +325,7 @@ namespace Adollib
 				object->material->color = C;
 
 				//object->addComponent<object_fall>();
-				object->transform->local_orient = quaternion_from_euler(45, 45, 45);
+				object->transform->local_orient = quaternion_from_euler(0, 0, 45);
 				object->transform->local_pos = vector3(0, 5, 0);
 				object->transform->local_scale = vector3(1, 1, 1);
 
@@ -340,7 +343,7 @@ namespace Adollib
 				object->material->color = C;
 
 				//object->addComponent<object_fall>();
-				object->transform->local_orient = quaternion_from_euler(45, 45, 45);
+				object->transform->local_orient = quaternion_from_euler(0, 0, 45);
 				object->transform->local_pos = vector3(0, 5, 0);
 				object->transform->local_scale = vector3(1, 1, 1);
 
