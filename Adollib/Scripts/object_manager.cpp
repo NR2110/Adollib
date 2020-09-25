@@ -29,30 +29,59 @@ namespace Adollib
 		//	set_nohit_plane(n_vector3(1000, -1, 1000), n_vector3(0, 1, 0), n_vector3(1, 0, 1));
 			//set_moveable_box(n_vector3(0, 200, 0), n_vector3(10, 10, 10), n_vector3(45, 45, 0), n_vector3(0, 1, 1));
 			//set_moveable_box(n_vector3(0, 200, 0), n_vector3(10, 10, 10), n_vector3(0, 0, 0), n_vector3(0, 1, 1));
-		{
-			Gameobject* GO = Gameobject_manager::createCube();
-			GO->transform->local_pos = vector3(0, -90, 0);
-			GO->transform->local_scale = vector3(60, 60, 60);
-			GO->transform->local_orient = quaternion_from_euler(45, 0, 0);
-			GO->material->color = vector4(1, 1, 1, 1);
+		if (0) {
+			{
+				Gameobject* GO = Gameobject_manager::createCube();
+				GO->transform->local_pos = vector3(0, -90, 0.5);
+				GO->transform->local_scale = vector3(60, 60, 60);
+				GO->transform->local_orient = quaternion_from_euler(45, 0, 0);
+				GO->material->color = vector4(1, 1, 1, 1);
 
-			//Box* R = GO->add_collider<Box>();
-			Meshcoll* R = GO->add_collider<Meshcoll>();
-			R->load_mesh("./DefaultModel/cube.fbx");
-			R->move = false;
+				//Box* R = GO->add_collider<Box>();
+				Meshcoll* R = GO->add_collider<Meshcoll>();
+				R->load_mesh("./DefaultModel/cube.fbx");
+				R->move = false;
+			}
+
+			{
+				Gameobject* GO = Gameobject_manager::createCube();
+				GO->transform->local_pos = vector3(0, -90, 0.5);
+				GO->transform->local_scale = vector3(60, 60, 60);
+				GO->transform->local_orient = quaternion_from_euler(45, 0, 0);
+				GO->material->color = vector4(1, 1, 1, 1);
+
+				Box* R = GO->add_collider<Box>();
+				//Meshcoll* R = GO->add_collider<Meshcoll>();
+				//R->load_mesh("./DefaultModel/cube.fbx");
+				R->move = false;
+			}
 		}
+		else {
+			{
+				Gameobject* GO = Gameobject_manager::createCube();
+				GO->transform->local_pos = vector3(0, -60, 0);
+				GO->transform->local_scale = vector3(60, 60, 60);
+				GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
+				GO->material->color = vector4(1, 1, 1, 1);
 
-		{
-			Gameobject* GO = Gameobject_manager::createCube();
-			GO->transform->local_pos = vector3(0, -90, 0);
-			GO->transform->local_scale = vector3(60, 60, 60);
-			GO->transform->local_orient = quaternion_from_euler(45, 0, 0);
-			GO->material->color = vector4(1, 1, 1, 1);
+				//Box* R = GO->add_collider<Box>();
+				Meshcoll* R = GO->add_collider<Meshcoll>();
+				R->load_mesh("./DefaultModel/cube.fbx");
+				R->move = false;
+			}
 
-			Box* R = GO->add_collider<Box>();
-			//Meshcoll* R = GO->add_collider<Meshcoll>();
-			//R->load_mesh("./DefaultModel/cube.fbx");
-			R->move = false;
+			{
+				Gameobject* GO = Gameobject_manager::createCube();
+				GO->transform->local_pos = vector3(0, -60, 0);
+				GO->transform->local_scale = vector3(60, 60, 60);
+				GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
+				GO->material->color = vector4(1, 1, 1, 1);
+
+				Box* R = GO->add_collider<Box>();
+				//Meshcoll* R = GO->add_collider<Meshcoll>();
+				//R->load_mesh("./DefaultModel/cube.fbx");
+				R->move = false;
+			}
 		}
 
 		//{
@@ -242,6 +271,27 @@ namespace Adollib
 				imgui_num++;
 			}
 
+			//Meshpyramid
+			{
+				static int Mesh_pyramid_count = 5;
+				static float Mesh_pyramid_pos[3] = { 0 };
+				bool summon = false;
+				ImGui::Separator();
+				ImGui::Text("Mesh_pyramid"); ImGui::NextColumn();
+				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
+				ImGui::InputFloat3(std::to_string(imgui_num + 200).c_str(), Mesh_pyramid_pos, "%.3f"); ImGui::NextColumn();
+				ImGui::InputInt(std::to_string(imgui_num + 300).c_str(), &Mesh_pyramid_count, 1, 20); ImGui::NextColumn();
+
+				if (summon == true)
+					for (int i = 0; i < Mesh_pyramid_count; i++) {
+						for (int o = 0; o < Mesh_pyramid_count - i; o++) {
+							set_meshbox(vector3(2.00001 * o - (Mesh_pyramid_count - i) * 2.000001 / 2.0 + Mesh_pyramid_pos[0], 3.0 + 2.00001 * i + Mesh_pyramid_pos[1], Mesh_pyramid_pos[2]), vector3(1, 1, 1), vector3(0, 0, 0), vector3(0, 1, 1));
+						}
+
+					}
+				imgui_num++;
+			}
+
 			//SPHEREplane
 			{
 				static int SPHERE_plane_count = 5;
@@ -304,7 +354,7 @@ namespace Adollib
 				vector4 C = vector4(0, 1, 0, 1);
 				object->material->color = C;
 
-				object->transform->local_orient = quaternion_from_euler(45, 45, 45);
+				object->transform->local_orient = quaternion_from_euler(0, 0, 0);
 				object->transform->local_pos = vector3(0, 5, 0);
 				object->transform->local_scale = vector3(1, 1, 1);
 
@@ -406,6 +456,25 @@ namespace Adollib
 		Box* M = object->add_collider<Box>();
 		//Meshcoll* M = object->add_collider<Meshcoll>();
 		//M->load_mesh("./DefaultModel/cube.fbx");
+		//M->inertial_mass = 1;
+		GOs.emplace_back(object);
+		return object;
+	}
+
+	Gameobject* object_manager::set_meshbox(vector3 pos, vector3 size, vector3 rotate, vector3 color) {
+		Gameobject* object = nullptr;
+		object = Gameobject_manager::createCube("");
+		vector4 C = vector4(color.x, color.y, color.z, 1);
+		object->material->color = C;
+
+		//object->addComponent<object_fall>();
+		object->transform->local_orient = quaternion_from_euler(rotate);
+		object->transform->local_pos = pos;
+		object->transform->local_scale = size;
+
+		//Box* M = object->add_collider<Box>();
+		Meshcoll* M = object->add_collider<Meshcoll>();
+		M->load_mesh("./DefaultModel/cube.fbx");
 		//M->inertial_mass = 1;
 		GOs.emplace_back(object);
 		return object;
