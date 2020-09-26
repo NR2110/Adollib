@@ -354,12 +354,15 @@ namespace Adollib {
 	Gameobject* Gameobject_manager::create(const std::string go_name, Scenelist Sce) {
 		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
 		gameobjects[Sce].emplace_back(Value);
-
 		Value.get()->name = go_name;
-		Value.get()->this_scene = Sce;
-		Value.get()->no_material = true;
 
+		Value.get()->this_scene = Sce;
 		Value.get()->transform = std::make_shared<Transfome>();
+
+		Value.get()->material = std::make_shared<Material>();
+		Value.get()->material->Load_VS("./DefaultShader/default_vs.cso");
+		Value.get()->material->Load_PS("./DefaultShader/default_ps.cso");
+		ResourceManager::CreateModelFromFBX(&Value.get()->material->meshes, go_name.c_str(), "");
 		Value.get()->initialize();
 		return Value.get();
 	}

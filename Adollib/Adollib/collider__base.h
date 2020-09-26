@@ -41,7 +41,7 @@ namespace Adollib {
 
 		vector3 world_position = vector3();		     //ワールド空間での座標
 		quaternion world_orientation = vector3();    //ワールド空間での姿勢
-		vector3 world_size = vector3();              //ワールド空間での大きさ
+		vector3 world_scale = vector3();              //ワールド空間での大きさ
 
 		vector3 local_position = vector3();             //goからの相対座標
 		quaternion local_orientation = quaternion_identity();       //goからの相対姿勢

@@ -11,9 +11,9 @@ using namespace DOP;
 
 void Meshcoll::update_world_trans() {
 	world_orientation = gameobject->get_world_orientate() * local_orientation;
-	world_size = gameobject->get_world_scale() * local_scale * half_size;
+	world_scale = gameobject->get_world_scale() * local_scale;
 	world_position = gameobject->get_world_position() + vector3_quatrotate((local_position + offset) * gameobject->get_world_scale(), world_orientation);
-	update_inertial(world_size, density);
+	update_inertial(world_scale, density);
 }
 void Meshcoll::update_dop14() {
 	dop14.pos = gameobject->get_world_position() + local_position;
@@ -28,9 +28,9 @@ void Meshcoll::update_dop14() {
 	vector3 half[DOP_size * 2];
 	int sum = 0;
 	for (int i = 0; i < DOP_size; i++) {
-		half[sum] = dopbase.max[i] * DOP_14_axis[i] * world_size;
+		half[sum] = dopbase.max[i] * DOP_14_axis[i] * world_scale;
 		sum++;
-		half[sum] = dopbase.min[i] * DOP_14_axis[i] * world_size;
+		half[sum] = dopbase.min[i] * DOP_14_axis[i] * world_scale;
 		sum++;
 	}
 
@@ -44,6 +44,6 @@ void Meshcoll::update_dop14() {
 		}
 	}
 
-	//half_size = vector3(dop14.max[0] - dop14.min[0], dop14.max[1] - dop14.min[1], dop14.max[2] - dop14.min[2]) / 2.0f;
+	half_size = vector3(dop14.max[0] - dop14.min[0], dop14.max[1] - dop14.min[1], dop14.max[2] - dop14.min[2]) / 2.0f;
 
 }

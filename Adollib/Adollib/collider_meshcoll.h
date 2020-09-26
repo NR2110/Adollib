@@ -187,10 +187,6 @@ namespace Adollib {
 					float dis = vector3_dot(DOP::DOP_14_axis[i], v);
 					if (dopbase.max[i] < dis) dopbase.max[i] = +dis * 1.00000001f;//ŠmŽÀ‚É‚·‚é‚½‚ß‚¿‚å‚Á‚Æ‘å‚«‚ß‚É‚Æ‚é
 					if (dopbase.min[i] > dis) dopbase.min[i] = +dis * 1.00000001f;
-
-					if (dis < 0) {
-						int dafsdgfg = 0;
-					}
 				}
 			}
 

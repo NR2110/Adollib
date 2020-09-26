@@ -49,7 +49,7 @@ namespace Adollib {
 		time++;
 		//CB : ConstantBufferPerCO_OBJ
 		ConstantBufferPerGO g_cb;
-		g_cb.world = matrix_world(R->world_size * 1.0001, R->world_orientation.get_rotate_matrix(), R->world_position).get_XMFLOAT4X4();
+		g_cb.world = matrix_world(R->world_scale * 1.0001, R->world_orientation.get_rotate_matrix(), R->world_position).get_XMFLOAT4X4();
 		Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
 		Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 		Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());

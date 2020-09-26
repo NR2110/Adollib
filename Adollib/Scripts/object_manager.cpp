@@ -285,7 +285,7 @@ namespace Adollib
 				if (summon == true)
 					for (int i = 0; i < Mesh_pyramid_count; i++) {
 						for (int o = 0; o < Mesh_pyramid_count - i; o++) {
-							set_meshbox(vector3(2.00001 * o - (Mesh_pyramid_count - i) * 2.000001 / 2.0 + Mesh_pyramid_pos[0], 3.0 + 2.00001 * i + Mesh_pyramid_pos[1], Mesh_pyramid_pos[2]), vector3(1, 1, 1), vector3(0, 0, 0), vector3(0, 1, 1));
+							set_meshbox(vector3(2.00001 * o - (Mesh_pyramid_count - i) * 2.000001 / 2.0 + Mesh_pyramid_pos[0], 3.0 + 2.00001 * i + Mesh_pyramid_pos[1], Mesh_pyramid_pos[2]), vector3(1, 1, 1), vector3(180, 0, 0), vector3(0, 1, 1));
 						}
 
 					}
@@ -463,7 +463,7 @@ namespace Adollib
 
 	Gameobject* object_manager::set_meshbox(vector3 pos, vector3 size, vector3 rotate, vector3 color) {
 		Gameobject* object = nullptr;
-		object = Gameobject_manager::createCube("");
+		object = Gameobject_manager::create("./DefaultModel/cone.fbx");
 		vector4 C = vector4(color.x, color.y, color.z, 1);
 		object->material->color = C;
 
@@ -474,7 +474,7 @@ namespace Adollib
 
 		//Box* M = object->add_collider<Box>();
 		Meshcoll* M = object->add_collider<Meshcoll>();
-		M->load_mesh("./DefaultModel/cube.fbx");
+		M->load_mesh("./DefaultModel/cone.fbx");
 		//M->inertial_mass = 1;
 		GOs.emplace_back(object);
 		return object;

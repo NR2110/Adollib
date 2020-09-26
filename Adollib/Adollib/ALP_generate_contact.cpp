@@ -120,13 +120,13 @@ bool physics_function::generate_contact_sphere_sphere(const Sphere& S0, const Sp
 	float length = n.norm_sqr();
 	n = n.unit_vect();
 
-	if (length < S0.world_size.x + S1.world_size.x) {
+	if (length < S0.world_scale.x + S1.world_scale.x) {
 		//衝突していたらContactオブジェクトを生成する
 		pair.contacts.addcontact(
-			S0.world_size.x + S1.world_size.x - length,
+			S0.world_scale.x + S1.world_scale.x - length,
 			n,
-			S0.world_size.x * vector3_quatrotate(-n, S0.world_orientation.conjugate()),
-			S1.world_size.x * vector3_quatrotate(n, S1.world_orientation.conjugate())
+			S0.world_scale.x * vector3_quatrotate(-n, S0.world_orientation.conjugate()),
+			S1.world_scale.x * vector3_quatrotate(n, S1.world_orientation.conjugate())
 		);
 		return true;
 	}
@@ -153,17 +153,17 @@ bool physics_function::generate_contact_sphere_plane(const Sphere& sphere, const
 	////平面の裏からの衝突判定
 	//if (half_space && p.y < 0)return 0;
 
-	if (abs(p.y) < sphere.world_size.x) {
+	if (abs(p.y) < sphere.world_scale.x) {
 		n = p.y > 0 ? n : -n;
 
 		if (pair.body[0]->shape == plane.shape) {
 			//body[0]　が　plane
 			//body[1]　が　sphere
 			pair.contacts.addcontact(
-				sphere.world_size.x - abs(p.y),
+				sphere.world_scale.x - abs(p.y),
 				n,
 				vector3(p.x, 0, p.z),
-				sphere.world_size.x * vector3_quatrotate(-n, sphere.world_orientation.conjugate())
+				sphere.world_scale.x * vector3_quatrotate(-n, sphere.world_orientation.conjugate())
 			);
 		}
 		else {
@@ -171,9 +171,9 @@ bool physics_function::generate_contact_sphere_plane(const Sphere& sphere, const
 			//body[0]　が　sphere
 			//body[1]　が　plane
 			pair.contacts.addcontact(
-				sphere.world_size.x - abs(p.y),
+				sphere.world_scale.x - abs(p.y),
 				n,
-				sphere.world_size.x * vector3_quatrotate(-n, sphere.world_orientation.conjugate()),
+				sphere.world_scale.x * vector3_quatrotate(-n, sphere.world_orientation.conjugate()),
 				vector3(p.x, 0, p.z)
 			);
 		}
@@ -199,12 +199,12 @@ bool physics_function::generate_contact_sphere_box(const Sphere& sphere, const  
 	vector3 center;
 	center = vector3_trans(sphere.world_position, inverse_rotate); //boxのlocal座標系での球の中心座標
 
-	vector3 box_halfsize = box.world_size;
+	vector3 box_halfsize = box.world_scale;
 
 	if (
-		abs(center.x) - sphere.world_size.x > box_halfsize.x ||
-		abs(center.y) - sphere.world_size.x > box_halfsize.y ||
-		abs(center.z) - sphere.world_size.x > box_halfsize.z
+		abs(center.x) - sphere.world_scale.x > box_halfsize.x ||
+		abs(center.y) - sphere.world_scale.x > box_halfsize.y ||
+		abs(center.z) - sphere.world_scale.x > box_halfsize.z
 		) return 0;
 
 	//box上の最近点
@@ -221,26 +221,26 @@ bool physics_function::generate_contact_sphere_box(const Sphere& sphere, const  
 	if (center.z < -box_halfsize.z)closest_point.z = -box_halfsize.z;
 
 	float distance = (closest_point - center).norm_sqr(); //最近点と球中心の距離
-	if (sphere.world_size.x - distance > FLT_EPSILON) { //float誤差も調整
+	if (sphere.world_scale.x - distance > FLT_EPSILON) { //float誤差も調整
 		vector3 n = (sphere.world_position - vector3_trans(closest_point, rotate)).unit_vect(); //boxからsphereへのベクトル
 
 		if (pair.body[0]->shape == box.shape) {
 			//body[0]　が　box
 			//body[1]　が　sphere
 			pair.contacts.addcontact(
-				sphere.world_size.x - distance,
+				sphere.world_scale.x - distance,
 				-n,
 				closest_point,
-				sphere.world_size.x * vector3_quatrotate(n, sphere.world_orientation.conjugate())
+				sphere.world_scale.x * vector3_quatrotate(n, sphere.world_orientation.conjugate())
 			);
 		}
 		else {
 			//body[0]　が　sphere
 			//body[1]　が　box
 			pair.contacts.addcontact(
-				sphere.world_size.x - distance,
+				sphere.world_scale.x - distance,
 				n,
-				sphere.world_size.x * vector3_quatrotate(n, sphere.world_orientation.conjugate()),
+				sphere.world_scale.x * vector3_quatrotate(n, sphere.world_orientation.conjugate()),
 				closest_point
 			);
 		}
@@ -263,14 +263,14 @@ bool physics_function::generate_contact_box_plane(const Box& box, const Plane& p
 
 	vector3 vertices[8] = {
 		// obb座標系での各頂点のローカル座標
-		vector3(-box.world_size.x, -box.world_size.y, -box.world_size.z),
-		vector3(-box.world_size.x, -box.world_size.y, +box.world_size.z),
-		vector3(-box.world_size.x, +box.world_size.y, -box.world_size.z),
-		vector3(-box.world_size.x, +box.world_size.y, +box.world_size.z),
-		vector3(+box.world_size.x, -box.world_size.y, -box.world_size.z),
-		vector3(+box.world_size.x, -box.world_size.y, +box.world_size.z),
-		vector3(+box.world_size.x, +box.world_size.y, -box.world_size.z),
-		vector3(+box.world_size.x, +box.world_size.y, +box.world_size.z)
+		vector3(-box.world_scale.x, -box.world_scale.y, -box.world_scale.z),
+		vector3(-box.world_scale.x, -box.world_scale.y, +box.world_scale.z),
+		vector3(-box.world_scale.x, +box.world_scale.y, -box.world_scale.z),
+		vector3(-box.world_scale.x, +box.world_scale.y, +box.world_scale.z),
+		vector3(+box.world_scale.x, -box.world_scale.y, -box.world_scale.z),
+		vector3(+box.world_scale.x, -box.world_scale.y, +box.world_scale.z),
+		vector3(+box.world_scale.x, +box.world_scale.y, -box.world_scale.z),
+		vector3(+box.world_scale.x, +box.world_scale.y, +box.world_scale.z)
 	};
 
 	//Boxと平面の衝突判定を行う
@@ -474,7 +474,7 @@ bool physics_function::generate_contact_box_box(const Box& b0, const Box& b1, Co
 	obbA.u_axes[0].x = m._11; obbA.u_axes[0].y = m._12; obbA.u_axes[0].z = m._13;
 	obbA.u_axes[1].x = m._21; obbA.u_axes[1].y = m._22; obbA.u_axes[1].z = m._23;
 	obbA.u_axes[2].x = m._31; obbA.u_axes[2].y = m._32; obbA.u_axes[2].z = m._33;
-	obbA.half_width = b0.world_size;
+	obbA.half_width = b0.world_scale;
 	obbA.orient = b0.world_orientation;
 	assert(!isnan(obbA.orient.norm()));
 
@@ -484,7 +484,7 @@ bool physics_function::generate_contact_box_box(const Box& b0, const Box& b1, Co
 	obbB.u_axes[0].x = m._11; obbB.u_axes[0].y = m._12; obbB.u_axes[0].z = m._13;
 	obbB.u_axes[1].x = m._21; obbB.u_axes[1].y = m._22; obbB.u_axes[1].z = m._23;
 	obbB.u_axes[2].x = m._31; obbB.u_axes[2].y = m._32; obbB.u_axes[2].z = m._33;
-	obbB.half_width = b1.world_size;
+	obbB.half_width = b1.world_scale;
 	obbB.orient = b1.world_orientation;
 	assert(!isnan(obbB.orient.norm()));
 
@@ -526,7 +526,7 @@ bool physics_function::generate_contact_box_box(const Box& b0, const Box& b1, Co
 
 		//obb0の最近点を求める
 		vector3 p0 = c;
-		vector3 box_halfsize = b0.world_size;
+		vector3 box_halfsize = b0.world_scale;
 		if (c.x > +box_halfsize.x)p0.x = +box_halfsize.x;
 		if (c.x < -box_halfsize.x)p0.x = -box_halfsize.x;
 
@@ -574,7 +574,7 @@ bool physics_function::generate_contact_box_box(const Box& b0, const Box& b1, Co
 
 		//obb0の最近点を求める
 		vector3 p1 = c;
-		vector3 box_halfsize = b1.world_size;
+		vector3 box_halfsize = b1.world_scale;
 		if (c.x > +box_halfsize.x)p1.x = +box_halfsize.x;
 		if (c.x < -box_halfsize.x)p1.x = -box_halfsize.x;
 
@@ -665,7 +665,7 @@ float sum_of_projected_radii(float& max,float& min, const Meshcoll& meshcoll, co
 	max = -FLT_MAX;
 	min = +FLT_MAX;
 	for (vector3 vertex : *meshcoll.vertices) {
-		value = vector3_dot(vertex * meshcoll.world_size, nor);
+		value = vector3_dot(vertex * meshcoll.world_scale, nor);
 		if (max < value)max = value;
 		if (min > value)min = value;
 	}
@@ -724,6 +724,8 @@ bool sat_convex_mesh_mesh(const Meshcoll& collA, const Meshcoll& collB,
 		//}
 
 			if (PB_FA.penetrate > penetration) {
+				sum_of_projected_radii(maxB, minB, collB, vector3_quatrotate(axis, offset_quatAB).unit_vect());
+
 			PB_FA.penetrate = penetration;
 			PB_FA.smallest_axis[0] = f;
 			PB_FA.smallest_axis[1] = -1;
@@ -759,6 +761,8 @@ bool sat_convex_mesh_mesh(const Meshcoll& collA, const Meshcoll& collB,
 		penetration = -1 * ALmax(d1, d2);
 
 		if (PA_FB.penetrate > penetration) {
+			sum_of_projected_radii(maxA, minA, collA, vector3_quatrotate(axis, offset_quatBA));
+
 			PA_FB.penetrate = penetration;
 			PA_FB.smallest_axis[0] = -1;
 			PA_FB.smallest_axis[1] = f;
@@ -902,14 +906,14 @@ bool physics_function::generate_contact_mesh_mesh(const Meshcoll& SA, const Mesh
 				}
 			}
 			pB = (*vertex_coll.vertices)[nearest_pointID];
-			pB *= vertex_coll.world_size;
+			pB *= vertex_coll.world_scale;
 
 			//上記のp0がfacet_collの最近面上のどこにあるのか
 			vector3 pA;
 			{
 				
 				vector3 p = vector3_quatrotate(vector3_quatrotate(pB, vertex_coll.world_orientation) + offset_posVF,facet_coll.world_orientation.conjugate());
-				p /= facet_coll.world_size;
+				p /= facet_coll.world_scale;
 				float min_len = FLT_MAX;
 				vector3 n_pos;
 
@@ -933,7 +937,7 @@ bool physics_function::generate_contact_mesh_mesh(const Meshcoll& SA, const Mesh
 					}
 				}
 
-				pA*= facet_coll.world_size;
+				pA*= facet_coll.world_scale;
 			}
 
 			pair.contacts.addcontact(
@@ -981,14 +985,14 @@ bool physics_function::generate_contact_mesh_mesh(const Meshcoll& SA, const Mesh
 				}
 			}
 			pB = (*vertex_coll.vertices)[nearest_pointID];
-			pB *= vertex_coll.world_size;
+			pB *= vertex_coll.world_scale;
 
 			//上記のpBがfacet_collの最近面上のどこにあるのか
 			vector3 pA;
 			{
 
 				vector3 p = vector3_quatrotate(vector3_quatrotate(pB, vertex_coll.world_orientation) + offset_posVF, facet_coll.world_orientation.conjugate());
-				p /= facet_coll.world_size;
+				p /= facet_coll.world_scale;
 				float min_len = FLT_MAX;
 				vector3 n_pos;
 
@@ -1012,7 +1016,7 @@ bool physics_function::generate_contact_mesh_mesh(const Meshcoll& SA, const Mesh
 					}
 				}
 
-				pA *= facet_coll.world_size;
+				pA *= facet_coll.world_scale;
 			}
 
 			pair.contacts.addcontact(
@@ -1036,12 +1040,12 @@ bool physics_function::generate_contact_mesh_mesh(const Meshcoll& SA, const Mesh
 			const Edge& edgeB = SB.edges[smallest_facetID[1]];
 
 			vector3 edgeA_p[2] = {
-				{(*SA.vertices)[edgeA.vertexID[0]] * SA.world_size},
-				{(*SA.vertices)[edgeA.vertexID[1]] * SA.world_size}
+				{(*SA.vertices)[edgeA.vertexID[0]] * SA.world_scale},
+				{(*SA.vertices)[edgeA.vertexID[1]] * SA.world_scale}
 			};
 			vector3 edgeB_p[2] = {
-				{(*SB.vertices)[edgeB.vertexID[0]] * SB.world_size},
-				{(*SB.vertices)[edgeB.vertexID[1]] * SB.world_size}
+				{(*SB.vertices)[edgeB.vertexID[0]] * SB.world_scale},
+				{(*SB.vertices)[edgeB.vertexID[1]] * SB.world_scale}
 			};
 
 			vector3 edgeA_vec = (edgeA_p[0] - edgeA_p[1]).unit_vect();
