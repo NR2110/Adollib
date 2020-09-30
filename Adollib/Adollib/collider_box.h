@@ -5,14 +5,7 @@ namespace Adollib {
 	//Boxクラス
 	class Box : public Collider {
 	public:
-		vector3 half_size = vector3();
-
-		//不動オブジェクトとして生成
-				//	vector3 pos = vector3(0, 0, 0),
-		//	vector3 scale = vector3(1, 1, 1), 
-		//	quaternion orient = quaternion_identity(),
-		//	float density = 1,
-		//	std::string tag = std::string("Box"),
+		vector3 half_size = vector3(); //localサイズ
 
 		//	std::vector<std::string> no_hit_tag = std::vector<std::string>()
 		Box(vector3 half_size = vector3(1), float density = 1, vector3 pos = vector3(0, 0, 0)) : half_size(half_size) {

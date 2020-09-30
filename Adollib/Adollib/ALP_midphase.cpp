@@ -56,7 +56,7 @@ void Midphase_DOP_14(std::vector<Contacts::Contact_pair>& new_pairs, Collider* c
 
 	// ƒ^ƒO‚É‚æ‚éÕ“Ë‚Ì¥”ñ
 	bool hit = true;
-	for (int q = 0; q < collB->No_hit_tag.size(); q++) {
+	for (int q = 0; q < collA->No_hit_tag.size(); q++) {
 		if (collA->No_hit_tag[q] == std::string("all")) hit = false;
 		if (collA->No_hit_tag[q] == collB->tag) hit = false;
 		if (hit == false)break;
@@ -106,8 +106,6 @@ void physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std:
 		int c_size = in_pair[i].bodylists.size();
 		for (int o = 0; o < c_size; o++) {
 
-			//DEBUG : delete
-			if (in_pair[i].body->shape != in_pair[i].bodylists[o]->shape)continue;
 			Midphase_DOP_14(new_pairs, in_pair[i].body, in_pair[i].bodylists[o]);
 		}
 	}

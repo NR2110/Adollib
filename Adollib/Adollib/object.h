@@ -23,10 +23,6 @@ namespace Adollib
 	class object
 	{
 	private:
-		struct collider_effect {
-			vector3 position = vector3(0,0,0);
-			quaternion orient = quaternion_identity();
-		};
 		virtual void update() = 0;
 	public:
 		//protected:
@@ -34,7 +30,6 @@ namespace Adollib
 
 		bool updated; 
 		std::shared_ptr<Transfome> transform; //不本意なtransform
-		collider_effect co_e; //衝突計算から受ける処理の一時的保存場所
 
 	public:
 

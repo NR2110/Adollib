@@ -99,8 +99,6 @@ namespace Adollib {
 			for (; itr != itr_end; itr++) {
 				gos.push_back(itr->get());
 				itr->get()->updated = false;
-				itr->get()->co_e.position = vector3(0, 0, 0);
-				itr->get()->co_e.orient = quaternion_identity();
 			}
 		}
 
@@ -112,8 +110,6 @@ namespace Adollib {
 			for (; itr != itr_end; itr++) {
 				gos.push_back(itr->get());
 				itr->get()->updated = false;
-				itr->get()->co_e.position = vector3(0, 0, 0);
-				itr->get()->co_e.orient = quaternion_identity();
 			}
 		}
 		{
@@ -124,8 +120,6 @@ namespace Adollib {
 			for (; itr != itr_end; itr++) {
 				gos.push_back(itr->get());
 				itr->get()->updated = false;
-				itr->get()->co_e.position = vector3(0, 0, 0);
-				itr->get()->co_e.orient = quaternion_identity();
 			}
 		}
 
@@ -157,17 +151,6 @@ namespace Adollib {
 		//}
 
 		Rigitbody_manager::update();
-
-		{
-			std::list<std::shared_ptr<Gameobject>>::iterator itr = gameobjects[Sce].begin();
-			std::list<std::shared_ptr<Gameobject>>::iterator itr_end = gameobjects[Sce].end();
-
-			for (; itr != itr_end; itr++) {
-				itr->get()->transform->local_pos += itr->get()->co_e.position;
-				itr->get()->transform->local_orient *= itr->get()->co_e.orient;
-
-			}
-		}
 
 		//親から子へワールド情報を更新
 		for (int i = 0; i < masters.size(); i++) {

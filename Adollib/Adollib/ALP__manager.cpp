@@ -72,7 +72,9 @@ namespace Adollib
 		integrate(Rigitbody_manager::colliders[Sce]);
 
 		for (collitr = Rigitbody_manager::colliders[Sce].begin(); collitr != collitr_end; collitr++) {
-			//colliderの影響をアタッチされたgoへ
+			(*collitr)->solv_resolve();
+		}
+		for (collitr = Rigitbody_manager::colliders[Sce].begin(); collitr != collitr_end; collitr++) {
 			(*collitr)->resolve_gameobject();
 		}
 

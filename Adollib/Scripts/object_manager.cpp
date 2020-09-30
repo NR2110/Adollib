@@ -58,16 +58,16 @@ namespace Adollib
 		}
 		else {
 			{
-				Gameobject* GO = Gameobject_manager::createCube();
-				GO->transform->local_pos = vector3(0, -60, 0);
-				GO->transform->local_scale = vector3(60, 60, 60);
-				GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
-				GO->material->color = vector4(1, 1, 1, 1);
+				//Gameobject* GO = Gameobject_manager::createCube();
+				//GO->transform->local_pos = vector3(0, -60, 0);
+				//GO->transform->local_scale = vector3(60, 60, 60);
+				//GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
+				//GO->material->color = vector4(1, 1, 1, 1);
 
-				//Box* R = GO->add_collider<Box>();
-				Meshcoll* R = GO->add_collider<Meshcoll>();
-				R->load_mesh("./DefaultModel/cube.fbx");
-				R->move = false;
+				////Box* R = GO->add_collider<Box>();
+				//Meshcoll* R = GO->add_collider<Meshcoll>();
+				//R->load_mesh("./DefaultModel/cube.fbx");
+				//R->move = false;
 			}
 
 			{

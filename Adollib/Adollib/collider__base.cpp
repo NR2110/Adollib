@@ -49,11 +49,14 @@ void Collider::integrate(float duration) {
 
 }
 
+void Collider::solv_resolve() {
+	offset_CollGO_quat = local_orientation.conjugate() * gameobject->get_world_orientate().conjugate() * world_orientation;
+	offset_CollGO_pos = world_position - vector3_quatrotate(local_position * gameobject->get_world_scale(), world_orientation) - gameobject->get_world_position();
+}
 
 void Collider::resolve_gameobject() {
-	gameobject->co_e.orient *= local_orientation.conjugate() * gameobject->get_world_orientate().conjugate() * world_orientation;
-	gameobject->co_e.position += world_position -  vector3_quatrotate(local_position * gameobject->get_world_scale(), world_orientation) - gameobject->get_world_position();
-	
+	gameobject->transform->local_orient *= offset_CollGO_quat;
+	gameobject->transform->local_pos += offset_CollGO_pos;
 }
 
 void Collider::add_force(const vector3& force) {

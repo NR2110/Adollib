@@ -51,6 +51,9 @@ namespace Adollib {
 		float restitution = 0.1; 						//”½”­ŒW”
 		float friction = 0.4;					//–€C—Í
 
+		quaternion offset_CollGO_quat;
+		vector3 offset_CollGO_pos;
+
 		vector3 linear_velocity = vector3();    //•Ài‘¬“x
 		vector3 angula_velocity = vector3();   //Šp‘¬“x
 
@@ -78,6 +81,9 @@ namespace Adollib {
 
 		//À•W,p¨‚ÌXV
 		void integrate(float duration = 1);
+
+		//gameobject‚Ö‚Ì•Ï‰»—Ê‚ğ‹‚ß‚é
+		void solv_resolve();
 
 		//gameobject‚Ö•Ï‰»—Ê‚ğ“n‚·
 		void resolve_gameobject();
