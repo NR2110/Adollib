@@ -5,10 +5,10 @@ namespace Adollib {
 	//Boxクラス
 	class Box : public Collider {
 	public:
-		vector3 half_size = vector3();
+		vector3 half_size = vector3(); //localサイズ
 
-		//不動オブジェクトとして生成
-		Box(vector3 half_size, float density, vector3 pos = vector3(0, 0, 0)) : half_size(half_size) {
+		//	std::vector<std::string> no_hit_tag = std::vector<std::string>()
+		Box(vector3 half_size = vector3(1), float density = 1, vector3 pos = vector3(0, 0, 0)) : half_size(half_size) {
 			//shapeの設定
 			shape = Collider_shape::shape_box;
 
@@ -17,6 +17,10 @@ namespace Adollib {
 
 			//座標
 			local_position = pos;
+
+			local_scale = vector3(1);
+
+			local_orientation = quaternion(1, 0, 0, 0);
 
 			//質量の計算
 			inertial_mass = (half_size.x * half_size.y * half_size.z) * 8.0f * density;

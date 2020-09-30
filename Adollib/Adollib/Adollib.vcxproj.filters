@@ -220,6 +220,12 @@
     <ClCompile Include="meshcoll_resorce_manager.cpp">
       <Filter>00_Adollib\22_physics\collider</Filter>
     </ClCompile>
+    <ClCompile Include="..\Scripts\player_manager.cpp">
+      <Filter>ソース ファイル\scene_game\player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\player_lead.cpp">
+      <Filter>ソース ファイル\scene_game\player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scene_title.h">
@@ -468,6 +474,15 @@
     <ClInclude Include="meshcoll_resorce_manager.h">
       <Filter>00_Adollib\22_physics\collider</Filter>
     </ClInclude>
+    <ClInclude Include="..\Scripts\player_base.h">
+      <Filter>ソース ファイル\scene_game\player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\player_manager.h">
+      <Filter>ソース ファイル\scene_game\player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\player_lead.h">
+      <Filter>ソース ファイル\scene_game\player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="DefaultShader\default.hlsli">
@@ -491,6 +506,7 @@
     <None Include="DefaultShader\math.hlsli">
       <Filter>00_Adollib\44_shader\hlsli</Filter>
     </None>
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="DefaultShader\default_ps.hlsl">

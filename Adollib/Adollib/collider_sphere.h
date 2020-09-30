@@ -8,7 +8,7 @@ namespace Adollib {
 	public:
 		float r = 1; //”¼Œa
 
-		Sphere(float r, float density, vector3 pos = vector3(0, 0, 0)) : r(r) {
+		Sphere(float r = 1, float density = 1, vector3 pos = vector3(0, 0, 0)) : r(r) {
 			//shape‚Ìİ’è
 			shape = Collider_shape::shape_sphere;
 
@@ -19,6 +19,8 @@ namespace Adollib {
 			local_position = pos;
 
 			local_orientation = quaternion_identity();
+
+			local_scale = vector3(1);
 
 			//¿—Ê‚ÌŒvZ
 			inertial_mass = 4.0f / 3.0f * r * r * r * DirectX::XM_PI * density;
@@ -44,7 +46,7 @@ namespace Adollib {
 
 			float r = size.x;
 			//¿—Ê‚ÌŒvZ
-			inertial_mass = 4.0f / 3.0f * r * r * r * DirectX::XM_PI * density;
+			//inertial_mass = 4.0f / 3.0f * r * r * r * DirectX::XM_PI * density;
 
 			//Šµ«ƒ‚[ƒƒ“ƒg‚ÌŒvZ
 			inertial_tensor = matrix_identity();

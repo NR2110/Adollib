@@ -5,7 +5,7 @@
 
 namespace Adollib
 {
-	class camera_manager_s : public Component
+	class Camera_manager_s : public Component
 	{
 	public:
 		void set_camera(vector3 pos, vector3 look_pos);

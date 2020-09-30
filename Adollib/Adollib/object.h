@@ -24,8 +24,8 @@ namespace Adollib
 	{
 	private:
 		struct collider_effect {
-			vector3 position;
-			quaternion orient;
+			vector3 position = vector3(0,0,0);
+			quaternion orient = quaternion_identity();
 		};
 		virtual void update() = 0;
 	public:

@@ -21,18 +21,19 @@ namespace Adollib {
 		shape_plane,
 		shape_mesh,
 
-		shape_null
+		shape_size
 
 	};
 
 	class Collider {
 	public:
 		bool move = true; //可動オブジェクトカどうかのフラグ
+		bool fall = true;
 
 		Gameobject* gameobject = nullptr;	//親情報
 
-		Collider_shape shape = Collider_shape::shape_null;	//形情報
-		DOP_14 dop14; //DOP_7データ
+		Collider_shape shape = Collider_shape::shape_size;	//形情報
+		DOP::DOP_14 dop14; //DOP_7データ
 		physics_function::Solverbody* solve;
 
 		std::string tag; //自身のタグ
@@ -40,7 +41,7 @@ namespace Adollib {
 
 		vector3 world_position = vector3();		     //ワールド空間での座標
 		quaternion world_orientation = vector3();    //ワールド空間での姿勢
-		vector3 world_size = vector3();              //ワールド空間での大きさ
+		vector3 world_scale = vector3();              //ワールド空間での大きさ
 
 		vector3 local_position = vector3();             //goからの相対座標
 		quaternion local_orientation = quaternion_identity();       //goからの相対姿勢
@@ -65,7 +66,7 @@ namespace Adollib {
 		vector3 accumulated_torque = vector3(); //角回転に加える力
 
 		Collider() :
-			local_position(0, 0, 0), local_orientation(0, 0, 0, 1),
+			local_position(0, 0, 0), local_orientation(1, 0, 0, 0), local_scale(1,1,1),
 			linear_velocity(0, 0, 0), angula_velocity(0, 0, 0),
 			inertial_mass(1), accumulated_force(0, 0, 0),
 			accumulated_torque(0, 0, 0), solve(nullptr)
@@ -92,6 +93,9 @@ namespace Adollib {
 
 		//可動オブジェクトかどうか
 		bool is_movable() const;
+
+		//落下オブジェクトかどうか
+		bool is_fallable() const;
 
 		//質量の逆数を返す(不稼働オブジェクトは0を返す)
 		float inverse_mass() const;

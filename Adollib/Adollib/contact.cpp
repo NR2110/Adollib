@@ -9,7 +9,7 @@ using namespace Contacts;
 //::::::::
 // 衝突点の追加
 // float penetration : 貫通量
-// vector3 normal : 衝突法線 (ワールド座標系)
+// vector3 normal : point[0]からpoint[1]への衝突法線 (ワールド座標系)
 // vector3 contactpointA : 衝突点 (point[0]のローカル座標系)
 // vector3 contactpointB : 衝突点 (point[1]のローカル座標系)
 //::::::::
@@ -148,8 +148,10 @@ void Contact::chack_remove_contact_point(
 ) {
 	for (int i = 0; i < contact_num; i++) {
 		vector3& normal = contactpoints[i].normal;
-		vector3 contactpointA = pointA + vector3_be_rotated_by_quaternion(contactpoints[i].point[0], rotA);
-		vector3 contactpointB = pointB + vector3_be_rotated_by_quaternion(contactpoints[i].point[1], rotB);
+		vector3 contactpointA = pointA + vector3_quatrotate(contactpoints[i].point[0], rotA);
+		vector3 contactpointB = pointB + vector3_quatrotate(contactpoints[i].point[1], rotB);
+
+		vector3 aaa = vector3_quatrotate(contactpoints[i].point[0], rotA);
 
 		// normal方向の距離を比べる
 		float dis_N = vector3_dot(normal, contactpointA - contactpointB);

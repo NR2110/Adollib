@@ -46,7 +46,7 @@ namespace Adollib {
 			const vector3& point, 
 			const vector3& l_point,
 			const vector3& l_dir, 
-			const vector3& closestP
+			vector3& closestP
 		);
 
 

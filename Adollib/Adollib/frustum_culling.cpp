@@ -1,6 +1,7 @@
 #include "frustum_culling.h"
 
 using namespace Adollib;
+using namespace DOP;
 
 vector3 FrustumCulling::line[4];
 float FrustumCulling::nearZ;
@@ -77,7 +78,7 @@ bool FrustumCulling::frustum_culling(const Mesh::mesh* mesh) {
 		P_obj_cn = P_obj_cn * obj_scale;
 
 		//座標と向きをcameraの座標系へ
-		vertex[axi] = P_obj_cn = vector3_be_rotated_by_quaternion(P_obj_cn + offset_pos, offset_orient);
+		vertex[axi] = P_obj_cn = vector3_quatrotate(P_obj_cn + offset_pos, offset_orient);
 
 		//nearとfarの確認
 		if (P_obj_cn.z < nearZ || P_obj_cn.z > farZ)
@@ -106,7 +107,7 @@ bool FrustumCulling::frustum_culling(const Mesh::mesh* mesh) {
 		P_obj_cn = P_obj_cn * obj_scale;
 
 		//座標と向きをcameraの座標系へ
-		vertex[6+axi] = P_obj_cn = vector3_be_rotated_by_quaternion(P_obj_cn + offset_pos, offset_orient);
+		vertex[6+axi] = P_obj_cn = vector3_quatrotate(P_obj_cn + offset_pos, offset_orient);
 
 		//nearとfarの確認
 		if (P_obj_cn.z < nearZ || P_obj_cn.z > farZ)

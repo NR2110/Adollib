@@ -3,6 +3,7 @@
 #include "work_meter.h"
 using namespace Adollib;
 using namespace Contacts;
+using namespace DOP;
 
 //:::::::::::::::::::::::::::
 #pragma region Midphase
@@ -35,7 +36,7 @@ bool Check_insert_Plane(const Collider* plane, const Collider* coll) {
 	vector3 V;
 	float plane_dis = 0, coll_dis = FLT_MAX;
 
-	V = vector3_be_rotated_by_quaternion(vector3(0, 1, 0), plane->world_orientation);
+	V = vector3_quatrotate(vector3(0, 1, 0), plane->world_orientation);
 	plane_dis = vector3_dot(V, plane->world_position);
 
 	for (int i = 0; i < DOP_size; i++) {
@@ -52,9 +53,10 @@ void add_pair(std::vector<Contacts::Contact_pair>& pairs, Contacts::Contact_pair
 
 void Midphase_DOP_14(std::vector<Contacts::Contact_pair>& new_pairs, Collider* collA, Collider* collB) {
 	Contact_pair new_pair;
+
 	// ƒ^ƒO‚É‚æ‚éÕ“Ë‚Ì¥”ñ
 	bool hit = true;
-	for (int q = 0; q < collB->No_hit_tag.size(); q++) {
+	for (int q = 0; q < collA->No_hit_tag.size(); q++) {
 		if (collA->No_hit_tag[q] == std::string("all")) hit = false;
 		if (collA->No_hit_tag[q] == collB->tag) hit = false;
 		if (hit == false)break;
@@ -96,17 +98,18 @@ void Midphase_DOP_14(std::vector<Contacts::Contact_pair>& new_pairs, Collider* c
 
 void physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std::vector<Contacts::Contact_pair>& pairs) {
 
-	Work_meter::start("Mid_Dop7");
-	//DOP_8‚É‚æ‚é‘åG”c‚È“–‚½‚è”»’è
+	Work_meter::start("Mid_Dop14");
+	//DOP_14‚É‚æ‚é‘åG”c‚È“–‚½‚è”»’è
 	std::vector<Contacts::Contact_pair> new_pairs;
 	for (int i = 0; i < in_pair.size(); i++) {
 
 		int c_size = in_pair[i].bodylists.size();
 		for (int o = 0; o < c_size; o++) {
+
 			Midphase_DOP_14(new_pairs, in_pair[i].body, in_pair[i].bodylists[o]);
 		}
 	}
-	Work_meter::stop("Mid_Dop7");
+	Work_meter::stop("Mid_Dop14");
 
 	Work_meter::start("Mid_check_alive");
 	//¶¬‚µ‚½pair‚ª‘O‚Ìpair‚©‚ç‘¶İ‚µ‚Ä‚¢‚é‚©‚ÌŠm”F

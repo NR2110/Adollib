@@ -1,16 +1,15 @@
 #pragma once
-#include "../Adollib/component.h"
-#include "../Adollib/collider.h"
+#include "player_base.h"
 
 namespace Adollib
 {
 
-	class player : public Component
+	class Player_s : public Player_base
 	{
 	private:
 
 	public:
-		Collider* collier;
+
 
 	public:
 		void awake();

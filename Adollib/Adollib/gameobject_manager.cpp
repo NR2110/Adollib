@@ -228,7 +228,7 @@ namespace Adollib {
 			// ƒrƒ…[s—ñ
 			vector3 pos = itr_ca->get()->transform->position;
 			quaternion orient = itr_ca->get()->transform->orientation;
-			vector3 look_pos = pos + vector3_be_rotated_by_quaternion(vector3(0, 0, 1), orient);
+			vector3 look_pos = pos + vector3_quatrotate(vector3(0, 0, 1), orient);
 
 			DirectX::XMVECTOR eye   = DirectX::XMVectorSet(pos.x, pos.y, pos.z, 1.0f);
 			DirectX::XMVECTOR focus = DirectX::XMVectorSet(look_pos.x, look_pos.y, look_pos.z, 1.0f);
@@ -354,12 +354,15 @@ namespace Adollib {
 	Gameobject* Gameobject_manager::create(const std::string go_name, Scenelist Sce) {
 		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
 		gameobjects[Sce].emplace_back(Value);
-
 		Value.get()->name = go_name;
-		Value.get()->this_scene = Sce;
-		Value.get()->no_material = true;
 
+		Value.get()->this_scene = Sce;
 		Value.get()->transform = std::make_shared<Transfome>();
+
+		Value.get()->material = std::make_shared<Material>();
+		Value.get()->material->Load_VS("./DefaultShader/default_vs.cso");
+		Value.get()->material->Load_PS("./DefaultShader/default_ps.cso");
+		ResourceManager::CreateModelFromFBX(&Value.get()->material->meshes, go_name.c_str(), "");
 		Value.get()->initialize();
 		return Value.get();
 	}

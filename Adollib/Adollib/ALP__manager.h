@@ -2,7 +2,6 @@
 #include "component.h"
 #include "collider.h"
 #include "scene_list.h"
-#include "gameobject.h"
 #include "scene.h"
 #include <map>
 
@@ -10,28 +9,37 @@
 
 namespace Adollib
 {
+
 	class Rigitbody_manager
 	{
 	private:
-		static std::unordered_map<Scenelist, std::vector<Adollib::Plane*>>  planes;
-		static std::unordered_map<Scenelist, std::vector<Adollib::Box*>>    boxex;
-		static std::unordered_map<Scenelist, std::vector<Adollib::Sphere*>> spheres;
-		static std::unordered_map<Scenelist, std::vector<Adollib::Meshcoll*>> meshcolls;
+		static std::unordered_map<Scenelist, std::list<std::shared_ptr<Adollib::Collider>>>  colliders;
 
 		static std::vector<Contacts::Contact_pair> pairs;
 
 	public:
 		//No_hit_tag‚É"all"‚ª‚ ‚é‚Æ‚·‚×‚Ä‚Ì‚à‚Ì‚ÉÕ“Ë‚µ‚È‚­‚È‚é‚æ
-		static void add_collider(Adollib::Sphere* R, Gameobject* for_draw, std::string tag, std::vector<std::string> No_hit_tag = std::vector<std::string>(), Scenelist Sce = Scene::now_scene);
-		//No_hit_tag‚É"all"‚ª‚ ‚é‚Æ‚·‚×‚Ä‚Ì‚à‚Ì‚ÉÕ“Ë‚µ‚È‚­‚È‚é‚æ
-		static void add_collider(Adollib::Box* R,    Gameobject* for_draw, std::string tag, std::vector<std::string> No_hit_tag = std::vector<std::string>(), Scenelist Sce = Scene::now_scene);
-		//No_hit_tag‚É"all"‚ª‚ ‚é‚Æ‚·‚×‚Ä‚Ì‚à‚Ì‚ÉÕ“Ë‚µ‚È‚­‚È‚é‚æ
-		static void add_collider(Adollib::Plane* R,  Gameobject* for_draw, std::string tag, std::vector<std::string> No_hit_tag = std::vector<std::string>(), Scenelist Sce = Scene::now_scene);
-		//No_hit_tag‚É"all"‚ª‚ ‚é‚Æ‚·‚×‚Ä‚Ì‚à‚Ì‚ÉÕ“Ë‚µ‚È‚­‚È‚é‚æ
-		static void add_collider(Adollib::Meshcoll* R, Gameobject* for_draw, std::string tag, std::vector<std::string> No_hit_tag = std::vector<std::string>(), Scenelist Sce = Scene::now_scene);
+		template<typename T>
+		static std::list<std::shared_ptr<Adollib::Collider>>::iterator add_collider(Scenelist Sce = Scene::now_scene) {
 
+			std::shared_ptr<T> newCom = std::make_shared<T>();
+			Collider* pCom = dynamic_cast<Collider*>(newCom.get());
 
+			if (pCom == nullptr)return colliders[Sce].end();
 
+			colliders[Sce].emplace_back(newCom);
+
+			auto ret = colliders[Sce].end();
+			ret--;
+			return ret;
+		}
+
+		static void remove_collider(std::list<std::shared_ptr<Adollib::Collider>>::iterator itr, Scenelist Sce = Scene::now_scene) {
+			colliders[Sce].erase(itr);
+		}
+
+		static void remove_collider(Adollib::Collider* R, Scenelist Sce = Scene::now_scene);
+		static void remove_collider_perGO(Adollib::Gameobject* GO, Scenelist Sce = Scene::now_scene);
 
 	public:
 

@@ -12,33 +12,33 @@ namespace Adollib
 		//::: X-Yで表す(Zは0) ::::::::::::
 		vector3 ret;
 
-		vector3 Q = vector3_be_rotated_by_quaternion(vector3(0,0,1), quaternion_from_euler(V.x, V.y, V.z));
+		vector3 Q = vector3_quatrotate(vector3(0,0,1), quaternion_from_euler(V.x, V.y, V.z));
 
 		ret.x = vector3_angle(vector3(Q.x, 0, Q.z).unit_vect(), vector3(0, 0, 1));
 		if (vector3_cross(vector3(Q.x, 0, Q.z), vector3(0, 0, 1)).y < 0) ret.y *= -1;
-		Q = vector3_be_rotated_by_quaternion(Q, quaternion_angle_axis(-ret.y, vector3(0, 1, 0)));
+		Q = vector3_quatrotate(Q, quaternion_angle_axis(-ret.y, vector3(0, 1, 0)));
 
 		ret.y = vector3_angle(vector3(0, Q.y, Q.z).unit_vect(), vector3(0, 0, 1));
 		if (vector3_cross(vector3(0, Q.y, Q.z), vector3(0, 0, 1)).x < 0) ret.x *= -1;
-		Q = vector3_be_rotated_by_quaternion(Q, quaternion_angle_axis(-ret.x, vector3(1, 0, 0)));
+		Q = vector3_quatrotate(Q, quaternion_angle_axis(-ret.x, vector3(1, 0, 0)));
 
 
 		return ret;
 	}
 
 	// 所属するシーンの初期化時に一度だけ呼ばれる
-	void camera_s::awake()
+	void Camera_s::awake()
 	{
 
 	}
 
-	void camera_s::start()
+	void Camera_s::start()
 	{
 //		player = Gameobject_manager::find("player")->transform;
 	}
 
 	// 毎フレーム呼ばれる更新処理
-	void camera_s::update()
+	void Camera_s::update()
 	{
 		//static int time = 0;
 		//transform->position.x = sinf(ToRadian(time));
@@ -60,9 +60,8 @@ namespace Adollib
 				rotate_vec.x = input->getCursorPosY() - Al_Global::SCREEN_HEIGHT / 2;
 
 				rotate *= quaternion_angle_axis(rotate_vec.y, vector3(0, 1, 0));
-				rotate *= quaternion_angle_axis(rotate_vec.x, vector3_cross(vector3(0, 1, 0), vector3_be_rotated_by_quaternion(vector3(0, 0, 1), transform->local_orient)).unit_vect()) * rotate_pow;
+				rotate *= quaternion_angle_axis(rotate_vec.x, vector3_cross(vector3(0, 1, 0), vector3_quatrotate(vector3(0, 0, 1), transform->local_orient)).unit_vect()) * rotate_pow;
 
-				input->setCursorPos(Al_Global::SCREEN_WIDTH / 2, Al_Global::SCREEN_HEIGHT / 2);
 			}
 			else {
 				float rotate_pow = 20 * Al_Global::second_per_frame;
@@ -74,7 +73,7 @@ namespace Adollib
 
 				rotate_vec *= rotate_pow;
 				rotate *= quaternion_angle_axis(rotate_vec.y, vector3(0, 1, 0));
-				rotate *= quaternion_angle_axis(rotate_vec.x, vector3_cross(vector3(0, 1, 0), vector3_be_rotated_by_quaternion(vector3(0, 0, 1), transform->local_orient)).unit_vect());
+				rotate *= quaternion_angle_axis(rotate_vec.x, vector3_cross(vector3(0, 1, 0), vector3_quatrotate(vector3(0, 0, 1), transform->local_orient)).unit_vect());
 
 			}
 
@@ -90,7 +89,7 @@ namespace Adollib
 				//いらない回転を除く
 				vector3 eu = transform->local_orient.euler();
 				quaternion y_axis_rotate = quaternion_from_euler(0, eu.y, 0);
-				position += vector3_be_rotated_by_quaternion(move_vec, y_axis_rotate).unit_vect() * move_pow;
+				position += vector3_quatrotate(move_vec, y_axis_rotate).unit_vect() * move_pow;
 
 				//y軸方向の移動
 				if (input->getKeyState(Key::Space))position += vector3(0, 1, 0) * move_pow;
@@ -102,8 +101,7 @@ namespace Adollib
 		}
 		else {
 
-			transform->local_orient = player->local_orient;
-			transform->local_pos = player->local_pos + vector3(0, 4, 0);
+
 		}
 
 		//if (input->getKeyTrigger(Key::P))
@@ -118,13 +116,13 @@ namespace Adollib
 	}
 
 	// このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる
-	void camera_s::onEnable()
+	void Camera_s::onEnable()
 	{
 
 	}
 
 	// このスクリプトがアタッチされているGOのactiveSelfがfalseになった時呼ばれる
-	void camera_s::onDisable()
+	void Camera_s::onDisable()
 	{
 
 	}

@@ -10,7 +10,7 @@ namespace Adollib {
 		//::: camera :::::::::
 		{
 			Gameobject* GO = Gameobject_manager::create();
-			GO->addComponent<camera_manager_s>();
+			GO->addComponent<Camera_manager_s>();
 		}
 
 		{
@@ -20,6 +20,14 @@ namespace Adollib {
 			//GO->transform->local_scale = vector3(30, 0.1, 30);
 			//GO->material->color = vector4(1, 0, 1, 1);
 			//GO->add_collider_box();
+		}
+
+		{
+			Gameobject* GO = Gameobject_manager::create();
+			GO->addComponent<Player_manager_s>();
+
+
+
 		}
 
 		//Gameobject_manager::create_camera();

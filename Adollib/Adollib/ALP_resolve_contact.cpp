@@ -70,23 +70,31 @@ struct com_in {
 };
 
 #include "work_meter.h"
-void physics_function::resolve_contact(std::vector<Collider*> colliders, std::vector<Contacts::Contact_pair>& pairs) {
+void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collider>> colliders, std::vector<Contacts::Contact_pair>& pairs) {
 
+	std::list<std::shared_ptr<Adollib::Collider>>::iterator collitr;
+	std::list<std::shared_ptr<Adollib::Collider>>::iterator collitr_end = colliders.end();
 	//::: 解決用オブジェクトの生成 :::::::::::
 	std::vector<Solverbody> SBs;
-	for (int i = 0; i < colliders.size(); i++) {
-		Solverbody SB;
-		SB.orientation = colliders[i]->world_orientation;
-		SB.delta_LinearVelocity = vector3(0.0f);
-		SB.delta_AngulaVelocity = vector3(0.0f);
-		SB.inv_inertia = colliders[i]->inverse_inertial_tensor();
-		SB.inv_mass = colliders[i]->inverse_mass();
-		SB.num = i;
+	{
+		int count = 0;
+		for (collitr = colliders.begin(); collitr != collitr_end; collitr++) {
+			Solverbody SB;
+			SB.orientation = (*collitr)->world_orientation;
+			SB.delta_LinearVelocity = vector3(0.0f);
+			SB.delta_AngulaVelocity = vector3(0.0f);
+			SB.inv_inertia = (*collitr)->inverse_inertial_tensor();
+			SB.inv_mass = (*collitr)->inverse_mass();
+			SB.num = count;
 
-		SBs.emplace_back(SB);
-	}
-	for (int i = 0; i < colliders.size(); i++) {
-		colliders[i]->solve = &SBs[i];
+			SBs.emplace_back(SB);
+			count++;
+		}
+		count = 0;
+		for (collitr = colliders.begin(); collitr != collitr_end; collitr++) {
+			(*collitr)->solve = &SBs[count];
+			count++;
+		}
 	}
 
 	//std::vector<Balljoint> balljoints; //今回はなし
@@ -108,8 +116,8 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 		for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 			Contactpoint& cp = pair.contacts.contactpoints[C_num];
 
-			vector3 rA = vector3_be_rotated_by_quaternion(cp.point[0], solverbody[0]->orientation);
-			vector3 rB = vector3_be_rotated_by_quaternion(cp.point[1], solverbody[1]->orientation);
+			vector3 rA = vector3_quatrotate(cp.point[0], solverbody[0]->orientation);
+			vector3 rB = vector3_quatrotate(cp.point[1], solverbody[1]->orientation);
 
 			// 反発係数の獲得
 			// 継続の衝突の場合反発係数を0にする
@@ -221,8 +229,8 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 		for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 			//衝突点の情報　
 			Contactpoint& cp = pair.contacts.contactpoints[C_num];
-			vector3 rA = vector3_be_rotated_by_quaternion(cp.point[0], solverbody[0]->orientation);
-			vector3 rB = vector3_be_rotated_by_quaternion(cp.point[1], solverbody[1]->orientation);
+			vector3 rA = vector3_quatrotate(cp.point[0], solverbody[0]->orientation);
+			vector3 rB = vector3_quatrotate(cp.point[1], solverbody[1]->orientation);
 
 			for (int k = 0; k < 3; k++) {
 				float deltaImpulse = cp.constraint[k].accuminpulse;
@@ -249,8 +257,8 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 				for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 					//衝突点の情報　
 					Contactpoint& cp = pair.contacts.contactpoints[C_num];
-					vector3 rA = vector3_be_rotated_by_quaternion(cp.point[0], solverbody[0]->orientation);
-					vector3 rB = vector3_be_rotated_by_quaternion(cp.point[1], solverbody[1]->orientation);
+					vector3 rA = vector3_quatrotate(cp.point[0], solverbody[0]->orientation);
+					vector3 rB = vector3_quatrotate(cp.point[1], solverbody[1]->orientation);
 
 					{
 						Constraint& constraint = cp.constraint[0];
@@ -500,8 +508,8 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 
 					//衝突点の情報　
 					Contactpoint& cp = pair.contacts.contactpoints[C_num];
-					vector3 rA = vector3_be_rotated_by_quaternion(cp.point[0], solverbody[0]->orientation);
-					vector3 rB = vector3_be_rotated_by_quaternion(cp.point[1], solverbody[1]->orientation);
+					vector3 rA = vector3_quatrotate(cp.point[0], solverbody[0]->orientation);
+					vector3 rB = vector3_quatrotate(cp.point[1], solverbody[1]->orientation);
 
 					Constraint constraint = cp.constraint[0];
 					float delta_impulse = constraint.rhs;
@@ -766,8 +774,8 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 					for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 						//衝突点の情報　
 						Contactpoint& cp = pair.contacts.contactpoints[C_num];
-						vector3 rA = vector3_be_rotated_by_quaternion(cp.point[0], solverbody[0]->orientation);
-						vector3 rB = vector3_be_rotated_by_quaternion(cp.point[1], solverbody[1]->orientation);
+						vector3 rA = vector3_quatrotate(cp.point[0], solverbody[0]->orientation);
+						vector3 rB = vector3_quatrotate(cp.point[1], solverbody[1]->orientation);
 
 						{
 							Constraint& constraint = cp.constraint[0];
@@ -837,8 +845,8 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 					for (int C_num = pair.contacts.contact_num - 1; C_num >= 0; C_num--) {
 						//衝突点の情報　
 						Contactpoint& cp = pair.contacts.contactpoints[C_num];
-						vector3 rA = vector3_be_rotated_by_quaternion(cp.point[0], solverbody[0]->orientation);
-						vector3 rB = vector3_be_rotated_by_quaternion(cp.point[1], solverbody[1]->orientation);
+						vector3 rA = vector3_quatrotate(cp.point[0], solverbody[0]->orientation);
+						vector3 rB = vector3_quatrotate(cp.point[1], solverbody[1]->orientation);
 
 						{
 							Constraint& constraint = cp.constraint[0];
@@ -902,9 +910,9 @@ void physics_function::resolve_contact(std::vector<Collider*> colliders, std::ve
 	}
 
 	// 速度の更新
-	for (int i = 0; i < colliders.size(); i++) {
-		colliders[i]->linear_velocity += colliders[i]->solve->delta_LinearVelocity;
-		colliders[i]->angula_velocity += colliders[i]->solve->delta_AngulaVelocity;
+	for (collitr = colliders.begin(); collitr != collitr_end; collitr++) {
+		(*collitr)->linear_velocity += (*collitr)->solve->delta_LinearVelocity;
+		(*collitr)->angula_velocity += (*collitr)->solve->delta_AngulaVelocity;
 
 	}
 

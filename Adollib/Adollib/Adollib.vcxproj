@@ -152,6 +152,9 @@
     <ClInclude Include="..\Scripts\object_manager.h" />
     <ClInclude Include="..\Scripts\object_rotate.h" />
     <ClInclude Include="..\Scripts\player.h" />
+    <ClInclude Include="..\Scripts\player_base.h" />
+    <ClInclude Include="..\Scripts\player_lead.h" />
+    <ClInclude Include="..\Scripts\player_manager.h" />
     <ClInclude Include="..\Scripts\scene_game_all.h" />
     <ClInclude Include="Adollib.h" />
     <ClInclude Include="ALP_broadphase.h" />
@@ -239,6 +242,8 @@
     <ClCompile Include="..\Scripts\object_manager.cpp" />
     <ClCompile Include="..\Scripts\object_rotate.cpp" />
     <ClCompile Include="..\Scripts\player.cpp" />
+    <ClCompile Include="..\Scripts\player_lead.cpp" />
+    <ClCompile Include="..\Scripts\player_manager.cpp" />
     <ClCompile Include="Adollib.cpp" />
     <ClCompile Include="ALP_broadphase.cpp" />
     <ClCompile Include="ALP_generate_contact.cpp" />
@@ -291,6 +296,7 @@
     <ClCompile Include="work_meter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
     <None Include="DefaultShader\default.hlsli">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>

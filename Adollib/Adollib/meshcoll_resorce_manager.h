@@ -9,7 +9,7 @@ namespace Adollib
 	class Collider_ResourceManager
 	{
 	public:
-		static HRESULT CreateMCFromFBX(const char* fbxname, std::vector<int>* index, std::vector<vector3>* vertex); //FBXÇ©ÇÁMeshColliderÇÃê∂ê¨
+		static HRESULT CreateMCFromFBX(const char* fbxname, std::vector<int>** index, std::vector<vector3>** vertex); //FBXÇ©ÇÁMeshColliderÇÃê∂ê¨
 		static void destroy();
 
 	private:

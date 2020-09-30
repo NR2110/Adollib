@@ -3,12 +3,13 @@
 #include "../Adollib/component_camera.h"
 #include "../Adollib/collider.h"
 
+
 namespace Adollib
 {
-	class camera_s : public Component_camera
+	class Camera_s : public Component_camera
 	{
 	public:
-		Transfome* player;
+
 
 	public:
 		void awake();

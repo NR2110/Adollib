@@ -12,6 +12,7 @@
 #include "systems.h"
 #include "resource_manager.h"
 using namespace std;
+using namespace DOP;
 
 namespace Adollib
 {

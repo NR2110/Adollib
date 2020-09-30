@@ -4,47 +4,71 @@
 
 #include "player.h"
 
-namespace Adollib
-{
+using namespace Adollib;
+
 	// 所属するシーンの初期化時に一度だけ呼ばれる
-	void player::awake() {
+void Player_s::awake() {
+	Gameobject* object = nullptr;
+	object = Gameobject_manager::createSphere("");
+	vector4 C = vector4(1, 0, 0, 1);
+	object->material->color = C;
 
-	}
+	object->transform->local_pos = vector3((rand() % 10) / 10.0f, (rand() % 10) / 10.0f, 0);
+	object->transform->local_scale = vector3(2,2,2);
 
-	void player::start()
-	{
+	collider = object->add_collider<Sphere>();
+	collider->tag = std::string("player");
+	collider->No_hit_tag.push_back(std::string("player"));
+	collider->inertial_mass = 1;
+	collider->fall = false;
 
-	}
+	pos = &object->transform->local_pos;
+	r = &object->transform->local_scale.x;
+}
+
+void Player_s::start()
+{
+
+}
 
 	// 毎フレーム呼ばれる更新処理
-	void player::update()
+void Player_s::update()
+{
+
+	//gに向かう力
 	{
-		vector3 move_vec = vector3(0, 0, 0);
-		float move_force = 0.1;
-		if (input->getKeyState(Key::Down))move_vec += vector3(0, 0, -1);
-		if (input->getKeyState(Key::Up))move_vec += vector3(0, 0, +1);
-		collier->add_force(vector3_be_rotated_by_quaternion(move_vec * move_force,gameobject->get_world_orientate()));
+		vector3 n = (*g_pos - *pos).unit_vect();
 
-		vector3 rot_vec = vector3(0, 0, 0);
-		float rot_force = 0.2;
-		if (input->getKeyState(Key::Left))rot_vec += vector3(0, -1, 0);
-		if (input->getKeyState(Key::Right))rot_vec += vector3(0, +1, 0);
-		collier->add_torque(rot_vec * rot_force);
-		//	collier->orientation * quaternion_angle_axis(1, vector3(-1, 1, 0).unit_vect());
+		float dis = fabsf((*pos - *g_pos).norm_sqr()) - (*r - 3);
 
-		//framework::debug->setString("angular_velocity : %f,%f,%f", collier->angular_velocity.x, collier->angular_velocity.y, collier->angular_velocity.z);
+		float pow = fabsf(dis) * 15;
+		if (pow > max_speed) pow = max_speed;
+
+		collider->add_force((n * pow));
 	}
+	//ボールどおし反発する力
+	for (auto sp : springs) {
+		if (sp == nullptr)continue;
+		vector3 n = (*sp->pos - *pos).unit_vect();
 
-	// このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる
-	void player::onEnable()
-	{
+		float dis = fabsf((*pos - *sp->pos).norm_sqr()) - (*r + *sp->r);
 
-	}
-
-	// このスクリプトがアタッチされているGOのactiveSelfがfalseになった時呼ばれる
-	void player::onDisable()
-	{
-
+		if(dis < 0)
+			collider->add_force((-n  * fabsf(dis)) * 500);
 	}
 
 }
+
+	// このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる
+void Player_s::onEnable()
+{
+
+}
+
+	// このスクリプトがアタッチされているGOのactiveSelfがfalseになった時呼ばれる
+void Player_s::onDisable()
+{
+
+}
+
+
