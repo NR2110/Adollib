@@ -752,9 +752,26 @@ bool physics_function::generate_contact_sphere_box(const Sphere& sphere, const  
 	if (center.z > +box_halfsize.z)closest_point.z = +box_halfsize.z;
 	if (center.z < -box_halfsize.z)closest_point.z = -box_halfsize.z;
 
+	if (closest_point == center) {
+		vector3 center_S = vector3_trans(sphere.world_position - sphere.linear_velocity, inverse_rotate); //boxのlocal座標系での球の中心座標
+		if (center_S.x > +box_halfsize.x)closest_point.x = +box_halfsize.x;
+		if (center_S.x < -box_halfsize.x)closest_point.x = -box_halfsize.x;
+
+		if (center_S.y > +box_halfsize.y)closest_point.y = +box_halfsize.y;
+		if (center_S.y < -box_halfsize.y)closest_point.y = -box_halfsize.y;
+
+		if (center_S.z > +box_halfsize.z)closest_point.z = +box_halfsize.z;
+		if (center_S.z < -box_halfsize.z)closest_point.z = -box_halfsize.z;
+
+		if (closest_point == center) {
+			int dasvdgf = 0;
+		}
+	}
+
 	float distance = (closest_point - center).norm_sqr(); //最近点と球中心の距離
 	if (sphere.world_scale.x - distance > FLT_EPSILON) { //float誤差も調整
 		vector3 n = (sphere.world_position - vector3_trans(closest_point, rotate)).unit_vect(); //boxからsphereへのベクトル
+		if (vector3_dot(n, sphere.world_position - box.world_position) < 0) n *= -1;
 
 		if (pair.body[0]->shape == box.shape) {
 			//body[0]　が　box

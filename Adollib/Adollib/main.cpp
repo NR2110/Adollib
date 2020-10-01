@@ -18,6 +18,8 @@
 #include "Imgui/imgui_impl_win32.h"
 #include "Imgui/imgui_impl_dx11.h"
 
+#include "debug.h"
+
 using namespace Adollib;
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wparam, LPARAM lparam);
@@ -167,6 +169,7 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 				fps = 0;
 
 			}
+			Debug::set("ddddd", Al_Global::second_per_frame);
 
 			// çXêVÅEï`âÊ
 			if (loop.Update(hMsg, hwnd, Al_Global::SCREEN_WIDTH, Al_Global::SCREEN_HEIGHT) == false)continue;

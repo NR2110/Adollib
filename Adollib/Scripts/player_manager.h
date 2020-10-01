@@ -9,6 +9,13 @@ namespace Adollib {
 		std::list<Player_base*> players;
 		Player_base* player_leader;
 
+
+	private:
+		void add_player(vector3 pos, float r, float max_speed, float acc,vector4 color = vector4(1, 0.2, 0.2, 1));
+		void add_player_leader(vector3 pos, float r, float max_speed, vector4 color = vector4(1, 0.2, 0.2, 1));
+
+
+
 	public:
 		void awake();
 
@@ -24,4 +31,5 @@ namespace Adollib {
 		// このスクリプトがアタッチされているGOのactiveSelfがfalseになった時呼ばれる
 		void onDisable();
 	};
+
 }

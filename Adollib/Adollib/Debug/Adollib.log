@@ -14,4 +14,5 @@ C:\Users\2190072\Documents\Adollib_debug\Adollib\Adollib\gameobject.h(50,22): wa
 C:\Users\2190072\Documents\Adollib_debug\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib_debug\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib_debug\Adollib\Adollib\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib_debug\Adollib\Scripts\player.cpp(51,43): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
   Adollib.vcxproj -> C:\Users\2190072\Documents\Adollib_debug\Adollib\Debug\Adollib.exe

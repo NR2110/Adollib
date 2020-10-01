@@ -20,9 +20,7 @@ namespace Adollib
 	std::vector<Contacts::Contact_pair> Rigitbody_manager::pairs;
 
 	bool Rigitbody_manager::update(Scenelist Sce)
-	{
-		std::vector<Contact> contacts;
-		float resituation = Al_Global::base_resituation;
+	{		
 
 		std::list<std::shared_ptr<Adollib::Collider>>::iterator collitr = Rigitbody_manager::colliders[Sce].begin();
 		std::list<std::shared_ptr<Adollib::Collider>>::iterator collitr_end = Rigitbody_manager::colliders[Sce].end();
