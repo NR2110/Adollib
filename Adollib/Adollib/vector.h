@@ -7,7 +7,7 @@
 
 namespace Adollib {
 
-	class quaternion;
+	class Quaternion;
 
 	//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	#pragma region vector2
@@ -68,7 +68,7 @@ namespace Adollib {
 	//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     #pragma region vector3
 	//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-	class vector3 {
+	class Vector3 {
 
 	public:
 		union {
@@ -96,36 +96,36 @@ namespace Adollib {
 		};
 	private:
 	public:
-		vector3() :x(0), y(0), z(0) {};
-		vector3(float x, float y, float z) :x(x), y(y), z(z) {};
-		vector3(vector2 xy, float z) :x(xy.x), y(xy.y), z(z) {};
-		explicit vector3(float v) :x(v), y(v), z(v) {};
-		vector3(DirectX::XMFLOAT3 xm) :x(xm.x), y(xm.y), z(xm.z) {};
+		Vector3() :x(0), y(0), z(0) {};
+		Vector3(float x, float y, float z) :x(x), y(y), z(z) {};
+		Vector3(vector2 xy, float z) :x(xy.x), y(xy.y), z(z) {};
+		explicit Vector3(float v) :x(v), y(v), z(v) {};
+		Vector3(DirectX::XMFLOAT3 xm) :x(xm.x), y(xm.y), z(xm.z) {};
 		//vector3(n_vector2 V) :x(V.x), y(V.y), z(0) {};
 
-		vector3 operator+ () const;
-		vector3 operator- () const;
+		Vector3 operator+ () const;
+		Vector3 operator- () const;
 
-		vector3 operator+ (const vector3& M) const;
-		vector3 operator- (const vector3& M) const;
-		vector3 operator* (const vector3& M) const;
-		vector3 operator/ (const vector3& M) const;
-		vector3 operator* (float S) const;
-		vector3 operator/ (float S) const;
+		Vector3 operator+ (const Vector3& M) const;
+		Vector3 operator- (const Vector3& M) const;
+		Vector3 operator* (const Vector3& M) const;
+		Vector3 operator/ (const Vector3& M) const;
+		Vector3 operator* (float S) const;
+		Vector3 operator/ (float S) const;
 		float& operator[] (const int i);
 		float operator[] (const int i) const;
 
-		vector3& operator+= (const vector3& M);
-		vector3& operator-= (const vector3& M);
-		vector3& operator*= (const vector3& M);
-		vector3& operator/= (const vector3& M);
-		vector3& operator*= (float S);
-		vector3& operator/= (float S);
+		Vector3& operator+= (const Vector3& M);
+		Vector3& operator-= (const Vector3& M);
+		Vector3& operator*= (const Vector3& M);
+		Vector3& operator/= (const Vector3& M);
+		Vector3& operator*= (float S);
+		Vector3& operator/= (float S);
 
-		bool operator== (const vector3& M);
-		bool operator!= (const vector3& M);
+		bool operator== (const Vector3& M);
+		bool operator!= (const Vector3& M);
 
-		friend vector3 operator*(float S, const vector3& M);
+		friend Vector3 operator*(float S, const Vector3& M);
 
 		//XMFLOAT3の変換
 		DirectX::XMFLOAT3 get_XM3();
@@ -138,35 +138,35 @@ namespace Adollib {
 		float norm() const;
 
 		// unit_vect
-		vector3 unit_vect() const;
-		vector3 unit_vect();
+		Vector3 unit_vect() const;
+		Vector3 unit_vect();
 
 	};
 
 	// 2点間の距離
-	float vector3_distance_sqr(const vector3&, const vector3&);
+	float vector3_distance_sqr(const Vector3&, const Vector3&);
 
 	// 2点間の距離^2
-	float vector3_distance(const vector3&, const vector3&);
+	float vector3_distance(const Vector3&, const Vector3&);
 
 	// 2ベクトルの内積
-	float vector3_dot(const vector3&, const vector3&);
+	float vector3_dot(const Vector3&, const Vector3&);
 
 	// 2ベクトルの外積
-	vector3 vector3_cross(const vector3&, const vector3&);
+	Vector3 vector3_cross(const Vector3&, const Vector3&);
 
 	// 2ベクトルの間の角
-	float vector3_angle(const vector3&, const vector3&);
+	float vector3_angle(const Vector3&, const Vector3&);
 	// 2ベクトルの間の角
-	float vector3_radian(const vector3&, const vector3&);
+	float vector3_radian(const Vector3&, const Vector3&);
 
 	// V1からV2へのベクトル
-	vector3 vector3_look_at(const vector3& V1, const vector3& V2);
+	Vector3 vector3_look_at(const Vector3& V1, const Vector3& V2);
 
 	//Q1からQ2への球面補間
 	//R = 0 = V1
 	//R = 1 = V2
-	vector3 vector3_slerp(const vector3& V1, const vector3& V2, float R);
+	Vector3 vector3_slerp(const Vector3& V1, const Vector3& V2, float R);
 
 #pragma endregion
 	//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -174,7 +174,7 @@ namespace Adollib {
 	//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	#pragma region vector4
 	//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-	class vector4 {
+	class Vector4 {
 
 	public:
 		union {
@@ -185,38 +185,38 @@ namespace Adollib {
 				float w;
 			};
 			struct {
-				vector3 xyz;
+				Vector3 xyz;
 				float w;
 			};
 		};
 	private:
 
 	public:
-		vector4() :x(0), y(0), z(0), w(0) {};
-		vector4(vector3 xyz, float w) :x(xyz.x), y(xyz.y), z(xyz.z), w(w) {};
-		vector4(float x, float y, float z, float w) :x(x), y(y), z(z), w(w) {};
+		Vector4() :x(0), y(0), z(0), w(0) {};
+		Vector4(Vector3 xyz, float w) :x(xyz.x), y(xyz.y), z(xyz.z), w(w) {};
+		Vector4(float x, float y, float z, float w) :x(x), y(y), z(z), w(w) {};
 		//vector3(n_vector2 V) :x(V.x), y(V.y), z(0) {};
 
-		vector4 operator+ () const;
-		vector4 operator- () const;
+		Vector4 operator+ () const;
+		Vector4 operator- () const;
 
-		vector4 operator+ (const vector4& M) const;
-		vector4 operator- (const vector4& M) const;
-		vector4 operator* (const vector4& M) const;
-		vector4 operator* (float S) const;
-		vector4 operator/ (float S) const;
+		Vector4 operator+ (const Vector4& M) const;
+		Vector4 operator- (const Vector4& M) const;
+		Vector4 operator* (const Vector4& M) const;
+		Vector4 operator* (float S) const;
+		Vector4 operator/ (float S) const;
 		float& operator[] (const int i);
 		float operator[] (const int i) const;
 
-		vector4& operator+= (const vector4& M);
-		vector4& operator-= (const vector4& M);
-		vector4& operator*= (float S);
-		vector4& operator/= (float S);
+		Vector4& operator+= (const Vector4& M);
+		Vector4& operator-= (const Vector4& M);
+		Vector4& operator*= (float S);
+		Vector4& operator/= (float S);
 
-		bool operator== (const vector4& M);
-		bool operator!= (const vector4& M);
+		bool operator== (const Vector4& M);
+		bool operator!= (const Vector4& M);
 
-		friend vector4 operator*(float S, const vector4& M);
+		friend Vector4 operator*(float S, const Vector4& M);
 
 		//XMFLOAT3の変換
 		DirectX::XMFLOAT4 get_XM4();
@@ -229,8 +229,8 @@ namespace Adollib {
 		float norm() const;
 
 		// unit_vect
-		vector4 unit_vect() const;
-		vector4 unit_vect();
+		Vector4 unit_vect() const;
+		Vector4 unit_vect();
 
 	};
 

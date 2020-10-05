@@ -288,8 +288,8 @@ inline matrix Adollib::matrix_inverse(const matrix& M) {
 	return R;
 }
 
-inline vector3 Adollib::matrix_to_euler(const matrix& M) {
-	vector3 R;
+inline Vector3 Adollib::matrix_to_euler(const matrix& M) {
+	Vector3 R;
 	if (M._32 >= 1.0f) {
 		R.x = DirectX::XM_PIDIV2;
 		R.y = 0;
@@ -311,8 +311,8 @@ inline vector3 Adollib::matrix_to_euler(const matrix& M) {
 
 	return R;
 }
-inline vector3 Adollib::matrix_to_euler_radian(const matrix& M) {
-	vector3 R;
+inline Vector3 Adollib::matrix_to_euler_radian(const matrix& M) {
+	Vector3 R;
 	if (M._32 >= 1.0f) {
 		R.x = DirectX::XM_PIDIV2;
 		R.y = 0;
@@ -331,8 +331,8 @@ inline vector3 Adollib::matrix_to_euler_radian(const matrix& M) {
 	return R;
 }
 
-inline vector3 Adollib::vector3_trans(const vector3& V, const matrix& M) {
-	vector3 R;
+inline Vector3 Adollib::vector3_trans(const Vector3& V, const matrix& M) {
+	Vector3 R;
 	R.x = M._11 * V.x + M._21 * V.y + M._31 * V.z + M._41 * 1;
 	R.y = M._12 * V.x + M._22 * V.y + M._32 * V.z + M._42 * 1;
 	R.z = M._13 * V.x + M._23 * V.y + M._33 * V.z + M._43 * 1;
@@ -344,7 +344,7 @@ inline vector3 Adollib::vector3_trans(const vector3& V, const matrix& M) {
 	return R;
 }
 
-inline matrix Adollib::matrix_world(const vector3& scale, const matrix& rotate, const vector3& trans) {
+inline matrix Adollib::matrix_world(const Vector3& scale, const matrix& rotate, const Vector3& trans) {
 	matrix ret = rotate;
 	ret._11 *= scale.x; ret._12 *= scale.x; ret._13 *= scale.x;
 	ret._21 *= scale.y; ret._22 *= scale.y; ret._23 *= scale.y;

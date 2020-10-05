@@ -39,34 +39,34 @@ namespace Adollib {
 		std::string tag; //自身のタグ
 		std::vector<std::string> No_hit_tag; //衝突しないタグ
 
-		vector3 world_position = vector3();		     //ワールド空間での座標
-		quaternion world_orientation = vector3();    //ワールド空間での姿勢
-		vector3 world_scale = vector3();              //ワールド空間での大きさ
+		Vector3 world_position = Vector3();		     //ワールド空間での座標
+		Quaternion world_orientation = Vector3();    //ワールド空間での姿勢
+		Vector3 world_scale = Vector3();              //ワールド空間での大きさ
 
-		vector3 local_position = vector3();             //goからの相対座標
-		quaternion local_orientation = quaternion_identity();       //goからの相対姿勢
-		vector3 local_scale = vector3();				//goとの相対scale
+		Vector3 local_position = Vector3();             //goからの相対座標
+		Quaternion local_orientation = quaternion_identity();       //goからの相対姿勢
+		Vector3 local_scale = Vector3();				//goとの相対scale
 
 		float density = 1;						//密度
 		float restitution = 0.1; 						//反発係数
 		float friction = 0.4;					//摩擦力
 
-		quaternion offset_CollGO_quat;
-		vector3 offset_CollGO_pos;
+		Quaternion offset_CollGO_quat;
+		Vector3 offset_CollGO_pos;
 
-		vector3 linear_velocity = vector3();    //並進速度
-		vector3 angula_velocity = vector3();   //角速度
+		Vector3 linear_velocity = Vector3();    //並進速度
+		Vector3 angula_velocity = Vector3();   //角速度
 
-		vector3 liner_acceleration = vector3();  //加速
-		vector3 angular_acceleration = vector3();//角加速
+		Vector3 liner_acceleration = Vector3();  //加速
+		Vector3 angular_acceleration = Vector3();//角加速
 
 		float inertial_mass = 0;           //慣性質量
 
-		vector3 accumulated_force = vector3();  //並進移動に加える力
+		Vector3 accumulated_force = Vector3();  //並進移動に加える力
 
 		matrix inertial_tensor = matrix();      //慣性モーメント
 
-		vector3 accumulated_torque = vector3(); //角回転に加える力
+		Vector3 accumulated_torque = Vector3(); //角回転に加える力
 
 		Collider() :
 			local_position(0, 0, 0), local_orientation(1, 0, 0, 0), local_scale(1,1,1),
@@ -110,7 +110,7 @@ namespace Adollib {
 		matrix inverse_inertial_tensor() const;
 
 		//サイズ所得関数
-		virtual quaternion get_dimension() const = 0;
+		virtual Quaternion get_dimension() const = 0;
 
 		//サイズ変更などに対応するため毎フレーム慣性テンソルなどを更新
 		virtual void update_inertial(const vector3& size, float density = 1) = 0;

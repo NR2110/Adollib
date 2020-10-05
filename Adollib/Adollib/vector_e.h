@@ -11,69 +11,69 @@ using namespace Adollib;
 //::::::::::::::::::::::::::::::::::::::::::::::::
 
 //operator
-inline vector3 vector3::operator+ () const {
+inline Vector3 Vector3::operator+ () const {
 	return *this;
 }
-inline vector3 vector3::operator- () const {
-	vector3 R = *this;
+inline Vector3 Vector3::operator- () const {
+	Vector3 R = *this;
 	R.x *= -1;
 	R.y *= -1;
 	R.z *= -1;
 	return R;
 }
 
-inline vector3 vector3::operator+ (const vector3& M) const {
-	vector3 R;
+inline Vector3 Vector3::operator+ (const Vector3& M) const {
+	Vector3 R;
 	R.x = x + M.x;
 	R.y = y + M.y;
 	R.z = z + M.z;
 	return R;
 }
-inline vector3 vector3::operator- (const vector3& M) const {
-	vector3 R;
+inline Vector3 Vector3::operator- (const Vector3& M) const {
+	Vector3 R;
 	R.x = x - M.x;
 	R.y = y - M.y;
 	R.z = z - M.z;
 	return R;
 }
-inline vector3 vector3::operator* (const vector3& M) const {
-	vector3 R;
+inline Vector3 Vector3::operator* (const Vector3& M) const {
+	Vector3 R;
 	R.x = x * M.x;
 	R.y = y * M.y;
 	R.z = z * M.z;
 	return R;
 }
-inline vector3 vector3::operator/ (const vector3& M) const {
-	vector3 R;
+inline Vector3 Vector3::operator/ (const Vector3& M) const {
+	Vector3 R;
 	R.x = x / M.x;
 	R.y = y / M.y;
 	R.z = z / M.z;
 	return R;
 }
-inline vector3 vector3::operator* (float S) const {
-	vector3 R;
+inline Vector3 Vector3::operator* (float S) const {
+	Vector3 R;
 	R.x = x * S;
 	R.y = y * S;
 	R.z = z * S;
 	return R;
 }
-inline vector3 Adollib::operator*(float S, const vector3& M) {
-	vector3 R;
+inline Vector3 Adollib::operator*(float S, const Vector3& M) {
+	Vector3 R;
 	R.x = M.x * S;
 	R.y = M.y * S;
 	R.z = M.z * S;
 	return R;
 }
 
-inline vector3 vector3::operator/ (float S) const {
-	vector3 R;
+inline Vector3 Vector3::operator/ (float S) const {
+	Vector3 R;
 	float inv_S = 1.0f / S;
 	R.x = x * inv_S;
 	R.y = y * inv_S;
 	R.z = z * inv_S;
 	return R;
 }
-inline float& vector3::operator[] (const int i) {
+inline float& Vector3::operator[] (const int i) {
 	switch (i)
 	{
 	case 0: return x;
@@ -86,7 +86,7 @@ inline float& vector3::operator[] (const int i) {
 	float R;
 	return R;
 }
-inline float vector3::operator[] (const int i) const {
+inline float Vector3::operator[] (const int i) const {
 	switch (i)
 	{
 	case 0: return x;
@@ -100,53 +100,53 @@ inline float vector3::operator[] (const int i) const {
 }
 
 
-inline vector3& vector3::operator+= (const vector3& M) {
+inline Vector3& Vector3::operator+= (const Vector3& M) {
 	x = x + M.x;
 	y = y + M.y;
 	z = z + M.z;
 	return *this;
 }
-inline vector3& vector3::operator-= (const vector3& M) {
+inline Vector3& Vector3::operator-= (const Vector3& M) {
 	x = x - M.x;
 	y = y - M.y;
 	z = z - M.z;
 	return *this;
 }
-inline vector3& vector3::operator*= (const vector3& M) {
+inline Vector3& Vector3::operator*= (const Vector3& M) {
 	x = x * M.x;
 	y = y * M.y;
 	z = z * M.z;
 	return *this;
 }
-inline vector3& vector3::operator/= (const vector3& M) {
+inline Vector3& Vector3::operator/= (const Vector3& M) {
 	x = x / M.x;
 	y = y / M.y;
 	z = z / M.z;
 	return *this;
 }
-inline vector3& vector3::operator*= (float S) {
+inline Vector3& Vector3::operator*= (float S) {
 	x = x * S;
 	y = y * S;
 	z = z * S;
 	return *this;
 }
-inline vector3& vector3::operator/= (float S) {
+inline Vector3& Vector3::operator/= (float S) {
 	x = x / S;
 	y = y / S;
 	z = z / S;
 	return *this;
 }
 
-inline bool vector3::operator== (const vector3& M) {
+inline bool Vector3::operator== (const Vector3& M) {
 	if (x == M.x && y == M.y && z == M.z)return true;
 	return false;
 }
-inline bool vector3::operator!= (const vector3& M) {
+inline bool Vector3::operator!= (const Vector3& M) {
 	if (x == M.x && y == M.y && z == M.z)return false;
 	return true;
 }
 
-inline DirectX::XMFLOAT3 vector3::get_XM3() {
+inline DirectX::XMFLOAT3 Vector3::get_XM3() {
 	DirectX::XMFLOAT3 R;
 	R.x = x;
 	R.y = y;
@@ -155,47 +155,47 @@ inline DirectX::XMFLOAT3 vector3::get_XM3() {
 }
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-inline float vector3::norm_sqr() const {
+inline float Vector3::norm_sqr() const {
 	float S = norm();
 	if (S == 1.0f) return 1.0f;
 	else return sqrtf(S);
 }
 
-inline float vector3::norm() const {
+inline float Vector3::norm() const {
 	return x * x + y * y + z * z;
 }
 
-inline vector3 vector3::unit_vect() {
+inline Vector3 Vector3::unit_vect() {
 	float V = norm_sqr();
 	if (V == 1.0f)return *this;
-	if (V == 0)return vector3(0, 0, 0);
-	vector3 R = *this;
+	if (V == 0)return Vector3(0, 0, 0);
+	Vector3 R = *this;
 	return R / V;
 }
-inline vector3 vector3::unit_vect() const {
+inline Vector3 Vector3::unit_vect() const {
 	float V = norm_sqr();
-	vector3 R = *this;
+	Vector3 R = *this;
 	return R / V;
 }
 
 #if 1
-inline float Adollib::vector3_distance_sqr(const vector3& P, const vector3& Q) {
+inline float Adollib::vector3_distance_sqr(const Vector3& P, const Vector3& Q) {
 	return
 		sqrtf((P.x - Q.x) * (P.x - Q.x) + (P.y - Q.y) * (P.y - Q.y) + (P.z - Q.z) * (P.z - Q.z));
 }
 
-inline float Adollib::vector3_distance(const vector3& P, const vector3& Q) {
+inline float Adollib::vector3_distance(const Vector3& P, const Vector3& Q) {
 	return (P.x - Q.x) * (P.x - Q.x) + (P.y - Q.y) * (P.y - Q.y) + (P.z - Q.z) * (P.z - Q.z);
 }
 
 
-inline float Adollib::vector3_dot(const vector3& P, const vector3& Q) {
+inline float Adollib::vector3_dot(const Vector3& P, const Vector3& Q) {
 	return P.x * Q.x + P.y * Q.y + P.z * Q.z;
 }
 
 
-inline vector3 Adollib::vector3_cross(const vector3& P, const vector3& Q) {
-	vector3 R;
+inline Vector3 Adollib::vector3_cross(const Vector3& P, const Vector3& Q) {
+	Vector3 R;
 	R.x = P.y * Q.z - P.z * Q.y;
 	R.y = P.z * Q.x - P.x * Q.z;
 	R.z = P.x * Q.y - P.y * Q.x;
@@ -232,24 +232,24 @@ inline vector3 Adollib::vector3_cross(const vector3& P, const vector3& Q) {
 }
 
 
-inline float Adollib::vector3_angle(const vector3& P, const vector3& Q) {
+inline float Adollib::vector3_angle(const Vector3& P, const Vector3& Q) {
 
 	return ToAngle(acosf(Adollib::vector3_dot(P.unit_vect(), Q.unit_vect())));
 }
-inline float Adollib::vector3_radian(const vector3& P, const vector3& Q) {
+inline float Adollib::vector3_radian(const Vector3& P, const Vector3& Q) {
 
 	return acosf(Adollib::vector3_dot(P.unit_vect(), Q.unit_vect()));
 }
 
-inline vector3 Adollib::vector3_look_at(const vector3& P, const vector3& Q) {
+inline Vector3 Adollib::vector3_look_at(const Vector3& P, const Vector3& Q) {
 	return Q - P;
 }
 
-inline vector3 Adollib::vector3_slerp(const vector3& V1, const vector3& V2, float R) {
-	vector3 g = vector3_cross(V1, V2);
+inline Vector3 Adollib::vector3_slerp(const Vector3& V1, const Vector3& V2, float R) {
+	Vector3 g = vector3_cross(V1, V2);
 	float radian = vector3_radian(V1, V2) / 2.0f;
 
-	quaternion F;
+	Quaternion F;
 	F.w = cosf(radian * R);
 	F.x = g.x * sinf(radian * R);
 	F.y = g.y * sinf(radian * R);
@@ -376,11 +376,11 @@ inline vector3 Adollib::vector3_slerp(const vector3& V1, const vector3& V2, floa
 //::::::::::::::::::::::::::::::::::::::::::::::::
 
 //operator
-inline vector4 vector4::operator+ () const {
+inline Vector4 Vector4::operator+ () const {
 	return *this;
 }
-inline vector4 vector4::operator- () const {
-	vector4 R = *this;
+inline Vector4 Vector4::operator- () const {
+	Vector4 R = *this;
 	R.x *= -1;
 	R.y *= -1;
 	R.z *= -1;
@@ -388,40 +388,40 @@ inline vector4 vector4::operator- () const {
 	return R;
 }
 
-inline vector4 vector4::operator+ (const vector4& M) const {
-	vector4 R;
+inline Vector4 Vector4::operator+ (const Vector4& M) const {
+	Vector4 R;
 	R.x = x + M.x;
 	R.y = y + M.y;
 	R.z = z + M.z;
 	R.w = w + M.w;
 	return R;
 }
-inline vector4 vector4::operator- (const vector4& M) const {
-	vector4 R;
+inline Vector4 Vector4::operator- (const Vector4& M) const {
+	Vector4 R;
 	R.x = x - M.x;
 	R.y = y - M.y;
 	R.z = z - M.z;
 	R.w = w - M.z;
 	return R;
 }
-inline vector4 vector4::operator* (const vector4& M) const {
-	vector4 R;
+inline Vector4 Vector4::operator* (const Vector4& M) const {
+	Vector4 R;
 	R.x = x * M.x;
 	R.y = y * M.y;
 	R.z = z * M.z;
 	R.w = w * M.w;
 	return R;
 }
-inline vector4 vector4::operator* (float S) const {
-	vector4 R;
+inline Vector4 Vector4::operator* (float S) const {
+	Vector4 R;
 	R.x = x * S;
 	R.y = y * S;
 	R.z = z * S;
 	R.w = w * S;
 	return R;
 }
-inline vector4 Adollib::operator*(float S, const vector4& M) {
-	vector4 R;
+inline Vector4 Adollib::operator*(float S, const Vector4& M) {
+	Vector4 R;
 	R.x = M.x * S;
 	R.y = M.y * S;
 	R.z = M.z * S;
@@ -429,15 +429,15 @@ inline vector4 Adollib::operator*(float S, const vector4& M) {
 	return R;
 }
 
-inline vector4 vector4::operator/ (float S) const {
-	vector4 R;
+inline Vector4 Vector4::operator/ (float S) const {
+	Vector4 R;
 	R.x = x / S;
 	R.y = y / S;
 	R.z = z / S;
 	R.w = w / S;
 	return R;
 }
-inline float& vector4::operator[] (const int i) {
+inline float& Vector4::operator[] (const int i) {
 	switch (i)
 	{
 	case 0: return x;
@@ -452,7 +452,7 @@ inline float& vector4::operator[] (const int i) {
 	float R;
 	return R;
 }
-inline float vector4::operator[] (const int i) const {
+inline float Vector4::operator[] (const int i) const {
 	switch (i)
 	{
 	case 0: return x;
@@ -468,28 +468,28 @@ inline float vector4::operator[] (const int i) const {
 }
 
 
-inline vector4& vector4::operator+= (const vector4& M) {
+inline Vector4& Vector4::operator+= (const Vector4& M) {
 	x = x + M.x;
 	y = y + M.y;
 	z = z + M.z;
 	w = w + M.w;
 	return *this;
 }
-inline vector4& vector4::operator-= (const vector4& M) {
+inline Vector4& Vector4::operator-= (const Vector4& M) {
 	x = x - M.x;
 	y = y - M.y;
 	z = z - M.z;
 	w = w - M.w;
 	return *this;
 }
-inline vector4& vector4::operator*= (float S) {
+inline Vector4& Vector4::operator*= (float S) {
 	x = x * S;
 	y = y * S;
 	z = z * S;
 	w = w * S;
 	return *this;
 }
-inline vector4& vector4::operator/= (float S) {
+inline Vector4& Vector4::operator/= (float S) {
 	x = x / S;
 	y = y / S;
 	z = z / S;
@@ -497,16 +497,16 @@ inline vector4& vector4::operator/= (float S) {
 	return *this;
 }
 
-inline bool vector4::operator== (const vector4& M) {
+inline bool Vector4::operator== (const Vector4& M) {
 	if (x == M.x && y == M.y && z == M.z && w == M.w)return true;
 	return false;
 }
-inline bool vector4::operator!= (const vector4& M) {
+inline bool Vector4::operator!= (const Vector4& M) {
 	if (x == M.x && y == M.y && z == M.z && w == M.w)return false;
 	return true;
 }
 
-inline DirectX::XMFLOAT4 vector4::get_XM4() {
+inline DirectX::XMFLOAT4 Vector4::get_XM4() {
 	DirectX::XMFLOAT4 R;
 	R.x = x;
 	R.y = y;
@@ -517,26 +517,26 @@ inline DirectX::XMFLOAT4 vector4::get_XM4() {
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 
-inline float vector4::norm_sqr() const {
+inline float Vector4::norm_sqr() const {
 	float S = norm();
 	if (S == 1.0f) return 1.0f;
 	else return sqrtf(S);
 }
 
-inline float vector4::norm() const {
+inline float Vector4::norm() const {
 	return x * x + y * y + z * z + w * w;
 }
 
-inline vector4 vector4::unit_vect() {
+inline Vector4 Vector4::unit_vect() {
 	float V = norm_sqr();
 	if (V == 1.0f)return *this;
-	if (V < FLT_EPSILON)return vector4(0, 0, 0, 0);
-	vector4 R = *this;
+	if (V < FLT_EPSILON)return Vector4(0, 0, 0, 0);
+	Vector4 R = *this;
 	return R / V;
 }
-inline vector4 vector4::unit_vect() const {
+inline Vector4 Vector4::unit_vect() const {
 	float V = norm_sqr();
-	vector4 R = *this;
+	Vector4 R = *this;
 	return R / V;
 }
 

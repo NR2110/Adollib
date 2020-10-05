@@ -4,10 +4,10 @@
 
 namespace Adollib {
 
-	class vector3;
+	class Vector3;
 	class matrix;
 
-	class quaternion {
+	class Quaternion {
 	public:
 
 		float x;
@@ -20,43 +20,43 @@ namespace Adollib {
 
 	public:
 
-		quaternion();
-		quaternion(DirectX::XMFLOAT3);
-		quaternion(vector3);
+		Quaternion();
+		Quaternion(DirectX::XMFLOAT3);
+		Quaternion(Vector3);
 		//::::::::::
 		// x, y, z
 		//::::::::::
-		quaternion(float x, float y, float z);
+		Quaternion(float x, float y, float z);
 		//::::::::::
 		// w, x, y, z
 		//::::::::::
-		quaternion(float w, float x, float y, float z);
+		Quaternion(float w, float x, float y, float z);
 
-		quaternion(const quaternion& Q);
-		~quaternion() {}
+		Quaternion(const Quaternion& Q);
+		~Quaternion() {}
 
-		quaternion operator+(const quaternion&) const;
-		quaternion operator-(const quaternion&) const;
-		quaternion operator*(float) const;
-		quaternion operator*(const quaternion&) const;
-		quaternion operator/(float) const;
+		Quaternion operator+(const Quaternion&) const;
+		Quaternion operator-(const Quaternion&) const;
+		Quaternion operator*(float) const;
+		Quaternion operator*(const Quaternion&) const;
+		Quaternion operator/(float) const;
 
-		quaternion& operator+=(const quaternion&);
-		quaternion& operator-=(const quaternion&);
-		quaternion& operator*=(float);
-		quaternion& operator*=(const quaternion&);
-		quaternion& operator/=(float);
-		bool operator==(quaternion& Q);
-		bool operator!=(quaternion& Q);
+		Quaternion& operator+=(const Quaternion&);
+		Quaternion& operator-=(const Quaternion&);
+		Quaternion& operator*=(float);
+		Quaternion& operator*=(const Quaternion&);
+		Quaternion& operator/=(float);
+		bool operator==(Quaternion& Q);
+		bool operator!=(Quaternion& Q);
 
-		quaternion operator+() const;
-		quaternion operator-() const;
+		Quaternion operator+() const;
+		Quaternion operator-() const;
 
-		friend quaternion operator* (float S, const quaternion& Q);
+		friend Quaternion operator* (float S, const Quaternion& Q);
 
 	public:
 		DirectX::XMFLOAT3 get_XM3() const;
-		vector3 get_NV3() const;
+		Vector3 get_NV3() const;
 		DirectX::XMFLOAT4 get_XM4() const;
 		matrix get_rotate_matrix() const;
 
@@ -68,56 +68,56 @@ namespace Adollib {
 
 
 		// 正規化
-		quaternion unit_vect() const;
+		Quaternion unit_vect() const;
 
 		// 共役
-		quaternion conjugate() const;
+		Quaternion conjugate() const;
 
 		// 逆元
-		quaternion inverse() const;
+		Quaternion inverse() const;
 
 		// オイラー角で返す
-		vector3 euler() const;
+		Vector3 euler() const;
 
 		// オイラー角(radian)で返す
-		vector3 euler_radian() const;
+		Vector3 euler_radian() const;
 
 	};
 
-	quaternion quaternion_identity();
-	vector3 vector3_quatrotate(const vector3& V, const quaternion& Q);
+	Quaternion quaternion_identity();
+	Vector3 vector3_quatrotate(const Vector3& V, const Quaternion& Q);
 
 	//axisを軸にR度回転させるquaternionの作成
-	quaternion quaternion_angle_axis(float R, const vector3& axis);
+	Quaternion quaternion_angle_axis(float R, const Vector3& axis);
 	//axisを軸にR度回転させるquaternionの作成
-	quaternion quaternion_radian_axis(float R, const  vector3& axis);
+	Quaternion quaternion_radian_axis(float R, const  Vector3& axis);
 
 	//Q1からQ2への球面補間
 	//R = 0 = Q1
 	//R = 1 = Q2
 	//動作未確認
-	quaternion quaternion_slerp(const quaternion& Q1, const quaternion& Q2, float R);
+	Quaternion quaternion_slerp(const Quaternion& Q1, const Quaternion& Q2, float R);
 
 	//z軸,x軸,y軸の順で回転クォータニオンの生成
-	quaternion quaternion_from_euler(float x, float y, float z);
+	Quaternion quaternion_from_euler(float x, float y, float z);
 	//z軸,x軸,y軸の順で回転クォータニオンの生成
-	quaternion quaternion_from_euler(vector3 V);
+	Quaternion quaternion_from_euler(Vector3 V);
 
 	//回転行列からクォータニオンの生成
-	quaternion quaternion_by_rotate_matrix(matrix& M);
+	Quaternion quaternion_by_rotate_matrix(matrix& M);
 
-	quaternion quaternion_look_at(vector3& me, vector3& you);
+	Quaternion quaternion_look_at(Vector3& me, Vector3& you);
 
 	//2つのquaternionの内積を返す
-	float quaternion_dot(const quaternion&, const quaternion&);
+	float quaternion_dot(const Quaternion&, const Quaternion&);
 
 	//Q1からQ2への回転quaternionを返す
-	quaternion quaternion_from_to_rotate(const vector3& V1, const vector3& V2);
+	Quaternion quaternion_from_to_rotate(const Vector3& V1, const Vector3& V2);
 
 	//2つのquaternionの間の角度を返す
-	float quaternion_angle(const quaternion& Q, const quaternion& T);
+	float quaternion_angle(const Quaternion& Q, const Quaternion& T);
 	//2つのquaternionの間の角度を返す
-	float quaternion_radian(const quaternion& Q, const quaternion& T);
+	float quaternion_radian(const Quaternion& Q, const Quaternion& T);
 };
 
 #include "quaternion_e.h"

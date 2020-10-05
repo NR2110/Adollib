@@ -4,7 +4,7 @@
 
 namespace Adollib {
 
-	class vector3;
+	class Vector3;
 
 	class matrix {
 	public:
@@ -95,15 +95,15 @@ namespace Adollib {
 	matrix matrix_inverse(const matrix& M);
 
 	//回転行列をオイラーに(z,x,y)
-	vector3 matrix_to_euler(const matrix& M);
+	Vector3 matrix_to_euler(const matrix& M);
 	//回転行列をオイラー(radian)に(z,x,y)
-	vector3 matrix_to_euler_radian(const matrix& M);
+	Vector3 matrix_to_euler_radian(const matrix& M);
 
 	//vector3に回転行列をかける
-	vector3 vector3_trans(const vector3& V, const matrix& M);
+	Vector3 vector3_trans(const Vector3& V, const matrix& M);
 
 	//world行列の生成
-	matrix matrix_world(const vector3& scale, const matrix& rotate, const vector3& trans);
+	matrix matrix_world(const Vector3& scale, const matrix& rotate, const Vector3& trans);
 
 	//matrixからXMMATRIXへの変換
 	DirectX::XMMATRIX matrix_to_XMMATRIX(const matrix& M);

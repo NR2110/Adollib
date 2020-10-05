@@ -15,18 +15,18 @@ namespace Adollib {
 		// c : (+0.3,0.3,-0.3)
 		// d : (-0.3,0.3,-0.3)
 		//:::::::::::::::::::
-		static const vector3 DOP_14_axis[DOP_size] = {
-		vector3(1,0,0),
-		vector3(0,1,0),
-		vector3(0,0,1),
-		vector3(+0.577350259,0.577350259,+0.577350259),
-		vector3(-0.577350259,0.577350259,+0.577350259),
-		vector3(+0.577350259,0.577350259,-0.577350259),
-		vector3(-0.577350259,0.577350259,-0.577350259)
+		static const Vector3 DOP_14_axis[DOP_size] = {
+		Vector3(1,0,0),
+		Vector3(0,1,0),
+		Vector3(0,0,1),
+		Vector3(+0.577350259,0.577350259,+0.577350259),
+		Vector3(-0.577350259,0.577350259,+0.577350259),
+		Vector3(+0.577350259,0.577350259,-0.577350259),
+		Vector3(-0.577350259,0.577350259,-0.577350259)
 		};
 		struct DOP_14 {
 			//中心座標
-			vector3 pos;
+			Vector3 pos;
 
 			//::::::::::::::::::
 			//Boardphase用のDOP_6
@@ -55,10 +55,10 @@ namespace Adollib {
 
 		struct AABB {
 			//中心座標
-			vector3 pos;
+			Vector3 pos;
 
-			vector3 max;
-			vector3 min;
+			Vector3 max;
+			Vector3 min;
 		};
 	}
 }

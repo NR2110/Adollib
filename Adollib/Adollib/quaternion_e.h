@@ -6,48 +6,48 @@ using namespace Adollib;
 
 #pragma region constract
 
-inline quaternion::quaternion() : x(0), y(0), z(0), w(1) {
+inline Quaternion::Quaternion() : x(0), y(0), z(0), w(1) {
 }
-inline quaternion::quaternion(float x, float y, float z) : x(x), y(y), z(z), w(0) {
+inline Quaternion::Quaternion(float x, float y, float z) : x(x), y(y), z(z), w(0) {
 }
-inline quaternion::quaternion(DirectX::XMFLOAT3 Q) : x(Q.x), y(Q.y), z(Q.z), w(0) {
+inline Quaternion::Quaternion(DirectX::XMFLOAT3 Q) : x(Q.x), y(Q.y), z(Q.z), w(0) {
 }
-inline quaternion::quaternion(vector3 Q) : x(Q.x), y(Q.y), z(Q.z), w(0) {
+inline Quaternion::Quaternion(Vector3 Q) : x(Q.x), y(Q.y), z(Q.z), w(0) {
 }
 //quaternion::quaternion(VECTOR4 Q) : x(Q.x), y(Q.y), z(Q.z), w(Q.w) {
 //}
-inline quaternion::quaternion(float w, float x, float y, float z) : x(x), y(y), z(z), w(w) {
+inline Quaternion::Quaternion(float w, float x, float y, float z) : x(x), y(y), z(z), w(w) {
 }
-inline quaternion::quaternion(const quaternion& Q) : x(Q.x), y(Q.y), z(Q.z), w(Q.w) {
+inline Quaternion::Quaternion(const Quaternion& Q) : x(Q.x), y(Q.y), z(Q.z), w(Q.w) {
 }
 #pragma endregion
 
 #if 1
 #pragma region operator
 
-inline quaternion quaternion::operator+() const
+inline Quaternion Quaternion::operator+() const
 {
-	return quaternion(w, x, y, z);
+	return Quaternion(w, x, y, z);
 }
 
-inline quaternion quaternion::operator-() const
+inline Quaternion Quaternion::operator-() const
 {
-	return quaternion(-w, -x, -y, -z);
+	return Quaternion(-w, -x, -y, -z);
 }
 
-inline quaternion quaternion::operator+(const quaternion& Q) const
+inline Quaternion Quaternion::operator+(const Quaternion& Q) const
 {
-	return quaternion(w + Q.w, x + Q.x, y + Q.y, z + Q.z);
+	return Quaternion(w + Q.w, x + Q.x, y + Q.y, z + Q.z);
 }
 
-inline quaternion quaternion::operator-(const quaternion& Q) const
+inline Quaternion Quaternion::operator-(const Quaternion& Q) const
 {
-	return quaternion(w - Q.w, x - Q.x, y - Q.y, z - Q.z);
+	return Quaternion(w - Q.w, x - Q.x, y - Q.y, z - Q.z);
 }
 
-inline quaternion quaternion::operator*(const quaternion& Q) const {
+inline Quaternion Quaternion::operator*(const Quaternion& Q) const {
 
-	quaternion R;
+	Quaternion R;
 	//R.w = w * Q.w - x * Q.x - y * Q.y - z * Q.z;
 	//R.x = x * Q.w + w * Q.x - z * Q.y + y * Q.z;
 	//R.y = y * Q.w + z * Q.x + w * Q.y - x * Q.z;
@@ -60,8 +60,8 @@ inline quaternion quaternion::operator*(const quaternion& Q) const {
 
 	return R;
 }
-inline quaternion quaternion::operator*(float S) const {
-	quaternion R;
+inline Quaternion Quaternion::operator*(float S) const {
+	Quaternion R;
 	R.w = w * S;
 	R.x = x * S;
 	R.y = y * S;
@@ -69,8 +69,8 @@ inline quaternion quaternion::operator*(float S) const {
 
 	return R;
 }
-inline quaternion Adollib::operator*(float S, const quaternion& Q) {
-	quaternion R = Q;
+inline Quaternion Adollib::operator*(float S, const Quaternion& Q) {
+	Quaternion R = Q;
 	R.w *= S;
 	R.x *= S;
 	R.y *= S;
@@ -78,8 +78,8 @@ inline quaternion Adollib::operator*(float S, const quaternion& Q) {
 
 	return R;
 }
-inline quaternion quaternion::operator/(float S) const {
-	quaternion R;
+inline Quaternion Quaternion::operator/(float S) const {
+	Quaternion R;
 	R.w = w / S;
 	R.x = x / S;
 	R.y = y / S;
@@ -89,37 +89,37 @@ inline quaternion quaternion::operator/(float S) const {
 }
 
 
-inline quaternion& quaternion::operator+=(const quaternion& Q)
+inline Quaternion& Quaternion::operator+=(const Quaternion& Q)
 {
 	(*this) = (*this) + Q;
 	return *this;
 }
 
-inline quaternion& quaternion::operator-=(const quaternion& Q)
+inline Quaternion& Quaternion::operator-=(const Quaternion& Q)
 {
 	(*this) = (*this) - Q;
 	return *this;
 }
-inline quaternion& quaternion::operator*=(const quaternion& Q) {
+inline Quaternion& Quaternion::operator*=(const Quaternion& Q) {
 	(*this) = (*this) * Q;
 	return *this;
 }
-inline quaternion& quaternion::operator*=(float S) {
+inline Quaternion& Quaternion::operator*=(float S) {
 	(*this) = (*this) * S;
 	return *this;
 }
-inline quaternion& quaternion::operator/=(float S) {
+inline Quaternion& Quaternion::operator/=(float S) {
 	(*this) = (*this) / S;
 	return *this;
 }
-inline bool quaternion::operator==(quaternion& Q) {
+inline bool Quaternion::operator==(Quaternion& Q) {
 	return (
 		x == Q.x &&
 		y == Q.y &&
 		z == Q.z
 		);
 }
-inline bool quaternion::operator!=(quaternion& Q) {
+inline bool Quaternion::operator!=(Quaternion& Q) {
 	return (
 		x != Q.x ||
 		y != Q.y ||
@@ -129,45 +129,45 @@ inline bool quaternion::operator!=(quaternion& Q) {
 
 #pragma endregion
 
-inline float quaternion::norm_sqr() const {
+inline float Quaternion::norm_sqr() const {
 	float V = norm();
 	if (V == 1.0f)	return 1.0f;
 	else return sqrtf(V);
 }
-inline float quaternion::norm() const {
+inline float Quaternion::norm() const {
 	return w * w + x * x + y * y + z * z;
 }
-inline quaternion quaternion::unit_vect() const {
+inline Quaternion Quaternion::unit_vect() const {
 	float L = norm_sqr();
-	if (L == 0)return quaternion(1, 0, 0, 0);
-	else return quaternion((*this) / L);
+	if (L == 0)return Quaternion(1, 0, 0, 0);
+	else return Quaternion((*this) / L);
 }
-inline quaternion quaternion::conjugate() const {
-	return quaternion(w, -x, -y, -z);
+inline Quaternion Quaternion::conjugate() const {
+	return Quaternion(w, -x, -y, -z);
 }
-inline quaternion quaternion::inverse() const {
+inline Quaternion Quaternion::inverse() const {
 	return conjugate() / norm_sqr();
 }
 
-inline vector3 quaternion::euler() const {
+inline Vector3 Quaternion::euler() const {
 	return matrix_to_euler(get_rotate_matrix());
 }
 
-inline vector3 quaternion::euler_radian() const {
+inline Vector3 Quaternion::euler_radian() const {
 	return matrix_to_euler_radian(get_rotate_matrix());
 }
 
 
-inline DirectX::XMFLOAT3 quaternion::get_XM3() const {
+inline DirectX::XMFLOAT3 Quaternion::get_XM3() const {
 	return DirectX::XMFLOAT3(x, y, z);
 }
-inline DirectX::XMFLOAT4 quaternion::get_XM4() const {
+inline DirectX::XMFLOAT4 Quaternion::get_XM4() const {
 	return DirectX::XMFLOAT4(x, y, z, w);
 }
-inline vector3 quaternion::get_NV3() const {
-	return vector3(x, y, z);
+inline Vector3 Quaternion::get_NV3() const {
+	return Vector3(x, y, z);
 }
-inline matrix quaternion::get_rotate_matrix() const {
+inline matrix Quaternion::get_rotate_matrix() const {
 	matrix R;
 	R._11 = 1 - 2 * y * y - 2 * z * z; 	R._12 = 2 * x * y + 2 * z * w;     R._13 = 2 * z * x - 2 * w * y;
 	R._21 = 2 * x * y - 2 * z * w;		R._22 = 1 - 2 * z * z - 2 * x * x; R._23 = 2 * y * z + 2 * x * w;
@@ -176,11 +176,11 @@ inline matrix quaternion::get_rotate_matrix() const {
 	return R;
 }
 
-inline quaternion Adollib::quaternion_identity() {
-	return quaternion(1, 0, 0, 0);
+inline Quaternion Adollib::quaternion_identity() {
+	return Quaternion(1, 0, 0, 0);
 }
 
-inline vector3 Adollib::vector3_quatrotate(const vector3& V, const quaternion& Q) {
+inline Vector3 Adollib::vector3_quatrotate(const Vector3& V, const Quaternion& Q) {
 #if 0
 	vector3 R;
 	R.x = 2.0f * (Q.x * V.x + Q.y * V.y + Q.z * V.z) * Q.x + (Q.w * Q.w - (Q.x * Q.x + Q.y * Q.y + Q.z * Q.z)) * V.x + 2.0f * Q.w * (Q.y * V.z - Q.z * V.y);
@@ -188,20 +188,20 @@ inline vector3 Adollib::vector3_quatrotate(const vector3& V, const quaternion& Q
 	R.z = 2.0f * (Q.x * V.x + Q.y * V.y + Q.z * V.z) * Q.z + (Q.w * Q.w - (Q.x * Q.x + Q.y * Q.y + Q.z * Q.z)) * V.z + 2.0f * Q.w * (Q.x * V.y - Q.y * V.x);
 	return R;
 #else
-	quaternion R(V);
+	Quaternion R(V);
 	return (Q.conjugate() * R * Q).get_NV3();
 #endif
 }
 
-inline quaternion Adollib::quaternion_angle_axis(float S, const vector3& axis) {
+inline Quaternion Adollib::quaternion_angle_axis(float S, const Vector3& axis) {
 	return quaternion_radian_axis(ToRadian(S), axis);
 }
-inline quaternion Adollib::quaternion_radian_axis(float S, const vector3& axis) {
-	if (S == 0)return quaternion(1, 0, 0, 0);
-	if (axis.norm() == 0)return quaternion(1, 0, 0, 0);
-	vector3 A = axis.unit_vect();
+inline Quaternion Adollib::quaternion_radian_axis(float S, const Vector3& axis) {
+	if (S == 0)return Quaternion(1, 0, 0, 0);
+	if (axis.norm() == 0)return Quaternion(1, 0, 0, 0);
+	Vector3 A = axis.unit_vect();
 
-	quaternion R;
+	Quaternion R;
 	R.w = cosf(S / 2.0f);
 	R.x = A.x * sinf(S / 2.0f);
 	R.y = A.y * sinf(S / 2.0f);
@@ -209,30 +209,30 @@ inline quaternion Adollib::quaternion_radian_axis(float S, const vector3& axis) 
 	return R;
 }
 
-inline quaternion Adollib::quaternion_slerp(const quaternion& Q1, const quaternion& Q2, float R) {
-	vector3 g = vector3_cross(Q1.get_NV3(), Q2.get_NV3());
+inline Quaternion Adollib::quaternion_slerp(const Quaternion& Q1, const Quaternion& Q2, float R) {
+	Vector3 g = vector3_cross(Q1.get_NV3(), Q2.get_NV3());
 	float radian = quaternion_radian(Q1, Q2) / 2.0f;
 
-	quaternion F;
+	Quaternion F;
 	F.w = cosf(radian * R);
 	F.x = g.x * sinf(radian * R);
 	F.y = g.y * sinf(radian * R);
 	F.z = g.z * sinf(radian * R);
 
-	return quaternion(vector3_quatrotate(Q1.get_NV3(), F));
+	return Quaternion(vector3_quatrotate(Q1.get_NV3(), F));
 }
-inline quaternion Adollib::quaternion_from_euler(float x, float y, float z) {
-	quaternion Rx = quaternion_angle_axis(x, vector3(1, 0, 0));
-	quaternion Ry = quaternion_angle_axis(y, vector3(0, 1, 0));
-	quaternion Rz = quaternion_angle_axis(z, vector3(0, 0, 1));
+inline Quaternion Adollib::quaternion_from_euler(float x, float y, float z) {
+	Quaternion Rx = quaternion_angle_axis(x, Vector3(1, 0, 0));
+	Quaternion Ry = quaternion_angle_axis(y, Vector3(0, 1, 0));
+	Quaternion Rz = quaternion_angle_axis(z, Vector3(0, 0, 1));
 
-	quaternion A = Rz * Rx * Ry;
+	Quaternion A = Rz * Rx * Ry;
 	return  A.unit_vect();
 }
-inline quaternion Adollib::quaternion_from_euler(vector3 V) {
-	quaternion Rx = quaternion_angle_axis(V.x, vector3(1, 0, 0));
-	quaternion Ry = quaternion_angle_axis(V.y, vector3(0, 1, 0));
-	quaternion Rz = quaternion_angle_axis(V.z, vector3(0, 0, 1));
+inline Quaternion Adollib::quaternion_from_euler(Vector3 V) {
+	Quaternion Rx = quaternion_angle_axis(V.x, Vector3(1, 0, 0));
+	Quaternion Ry = quaternion_angle_axis(V.y, Vector3(0, 1, 0));
+	Quaternion Rz = quaternion_angle_axis(V.z, Vector3(0, 0, 1));
 
 	return (Rz * Rx * Ry).unit_vect();
 }
@@ -250,29 +250,29 @@ inline quaternion Adollib::quaternion_from_euler(vector3 V) {
 //
 //	return Rz * Rx * Ry;
 //}
-inline quaternion Adollib::quaternion_by_rotate_matrix(matrix& M) {
-	vector3 V = matrix_to_euler(M);
-	quaternion Rx = quaternion_angle_axis(V.x, vector3(1, 0, 0));
-	quaternion Ry = quaternion_angle_axis(V.y, vector3(0, 1, 0));
-	quaternion Rz = quaternion_angle_axis(V.z, vector3(0, 0, 1));
+inline Quaternion Adollib::quaternion_by_rotate_matrix(matrix& M) {
+	Vector3 V = matrix_to_euler(M);
+	Quaternion Rx = quaternion_angle_axis(V.x, Vector3(1, 0, 0));
+	Quaternion Ry = quaternion_angle_axis(V.y, Vector3(0, 1, 0));
+	Quaternion Rz = quaternion_angle_axis(V.z, Vector3(0, 0, 1));
 
 	return Rz * Rx * Ry;
 }
-inline quaternion Adollib::quaternion_look_at(vector3& me, vector3& you) {
-	vector3 Q = you - me;
-	return quaternion_from_to_rotate(vector3(0, 0, 1), Q);
+inline Quaternion Adollib::quaternion_look_at(Vector3& me, Vector3& you) {
+	Vector3 Q = you - me;
+	return quaternion_from_to_rotate(Vector3(0, 0, 1), Q);
 }
 
 
-inline float Adollib::quaternion_dot(const quaternion& Q1, const quaternion& Q2) {
+inline float Adollib::quaternion_dot(const Quaternion& Q1, const Quaternion& Q2) {
 	return Q1.x * Q2.x + Q1.y * Q2.y + Q1.z * Q2.z;
 }
 
-inline quaternion Adollib::quaternion_from_to_rotate(const vector3& V1, const vector3& V2) {
-	vector3 g = vector3_cross(V1.unit_vect(), V2.unit_vect()).unit_vect();
+inline Quaternion Adollib::quaternion_from_to_rotate(const Vector3& V1, const Vector3& V2) {
+	Vector3 g = vector3_cross(V1.unit_vect(), V2.unit_vect()).unit_vect();
 	float radian = quaternion_radian(V1.unit_vect(), V2.unit_vect());
 
-	quaternion F;
+	Quaternion F;
 	F.w = cosf(radian / 2);
 	F.x = g.x * sinf(radian / 2);
 	F.y = g.y * sinf(radian / 2);
@@ -281,10 +281,10 @@ inline quaternion Adollib::quaternion_from_to_rotate(const vector3& V1, const ve
 	return F;
 }
 
-inline float Adollib::quaternion_angle(const quaternion& Q1, const quaternion& Q2) {
+inline float Adollib::quaternion_angle(const Quaternion& Q1, const Quaternion& Q2) {
 	return ToAngle(acosf(quaternion_dot(Q1.unit_vect(), Q2.unit_vect())));
 }
-inline float Adollib::quaternion_radian(const quaternion& Q1, const quaternion& Q2) {
+inline float Adollib::quaternion_radian(const Quaternion& Q1, const Quaternion& Q2) {
 	return acosf(quaternion_dot(Q1.unit_vect(), Q2.unit_vect()));
 }
 

@@ -755,6 +755,7 @@ bool physics_function::generate_contact_sphere_box(const Sphere& sphere, const  
 	float distance = (closest_point - center).norm_sqr(); //最近点と球中心の距離
 	if (sphere.world_scale.x - distance > FLT_EPSILON) { //float誤差も調整
 		vector3 n = (sphere.world_position - vector3_trans(closest_point, rotate)).unit_vect(); //boxからsphereへのベクトル
+		if (vector3_dot(n, sphere.world_position - box.world_position) < 0)n *= -1;
 
 		if (pair.body[0]->shape == box.shape) {
 			//body[0]　が　box
