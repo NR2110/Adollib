@@ -8,16 +8,18 @@
 #include "player.h"
 #include "player_lead.h"
 
+#include "../Adollib/sort_func.h"
+
 using namespace Adollib;
 
 	// 所属するシーンの初期化時に一度だけ呼ばれる
 void Player_manager_s::awake() {
-
+	player_speed_mulnum = 0.08;
 }
 
 void Player_manager_s::start(){
 	add_player_leader(
-	vector3(0,10,0),
+	vector3(0,5,100),
 		1.5,
 		10000,
 		vector4(0,1,1,1)
@@ -32,6 +34,7 @@ void Player_manager_s::update() {
 	//flag |= ImGuiWindowFlags_AlwaysAutoResize;
 	std::list<Player_base*>::iterator pitr = players.begin();
 	std::list<Player_base*>::iterator pitr_end = players.end();
+	std::list<Player_base*>::iterator pitr_save;
 
 
 	if (ImGui::Begin("player_manage", 0, flag)) {
@@ -53,44 +56,46 @@ void Player_manager_s::update() {
 		ImGui::Checkbox("add_player", &add); //objectの削除
 
 		if (add == true) {
+			//for (int i = 0; i < 550; i++) {
 			for (int i = 0; i < 10; i++) {
-				float sps = (rand() % 141);
-				sps *= sps * 0.0001;
-				sps = 2 - sps;
-
-				float pps = (rand() % 173);
-				pps *= pps * 0.0001;
-				pps = 3 - pps;
-				pps *= pps;
-
 				float aps = (rand() % 632) / 10.0f;
 				aps *= aps * 0.0001f;
 				aps = 40 - aps;
 
 				add_player(
 					vector3((rand() % 10) / 10.0f, (rand() % 10) / 10.0f + 20, 0), //pos
-					//sps + 1.0f, //scale
-					(rand() % 3) * 0.8f + 1,
-					(rand() % 12) * 100 + 100, //maxpow(1200)
-					//900,
-					aps + 10 //accel(50)
-					//50
+					(rand() % 3) * 0.8f + 1,//scale 
+					//0,//scale 
+					(rand() % 12) * 50 + 60, //maxpow(1200)
+					//aps * 1 + 8 //accel(50)
+					5000
 				);
 			}
 		}
 
 		ImGui::End();
 	}
-
-	//対象の設定
-#if 1
-	for (pitr = players.begin(); pitr != pitr_end; pitr++) {
-		(*pitr)->springs.clear();
-		(*pitr)->g_pos = player_leader->pos;
-	}
-	//他すべて
 	pitr_end = players.end();
-	std::list<Player_base*>::iterator pitr_save = players.begin();
+
+	pitr_save = players.begin();
+	if(input->getMouseState(Mouse::RBUTTON) == false)
+		for (pitr = players.begin(); pitr != pitr_end; pitr++) {
+			(*pitr)->springs.clear();
+			(*pitr)->g_pos = player_leader->pos;
+		}
+	else 
+		for (pitr = players.begin(); pitr != pitr_end; pitr++) {
+			(*pitr)->springs.clear();
+
+			if(pitr_save == pitr)
+				(*pitr)->g_pos = player_leader->pos;
+			else 
+				(*pitr)->g_pos = (*pitr_save)->pos;
+
+			pitr_save = pitr;
+		}
+	
+	//他すべて
 	for (pitr = players.begin(); pitr != pitr_end; pitr++) {
 
 		for (pitr_save = pitr; pitr_save != pitr_end; pitr_save++) {
@@ -100,40 +105,7 @@ void Player_manager_s::update() {
 
 		}
 	}
-#else
-	for (pitr = players.begin(); pitr != pitr_end; pitr++) {
-		(*pitr)->springs.clear();
-		(*pitr)->collider->linear_velocity *= 0.96;
-		(*pitr)->g_pos = player_leader->pos;
-	}
 
-	pitr_end = players.end();
-	std::list<Player_base*>::iterator pitr_save;
-	int count = 0;
-
-	for (pitr = players.begin(); pitr != pitr_end; pitr++) {
-		if (count == 0) {
-			(*pitr)->g_pos = player_leader->pos;
-			pitr_save = pitr;
-		}
-		else {
-			(*pitr)->g_pos = (*pitr_save)->pos;
-		}
-		count++;
-		if (count > 5)count = 0;
-	}
-
-	//他すべて
-	for (pitr = players.begin(); pitr != pitr_end; pitr++) {
-
-		for (pitr_save = pitr; pitr_save != pitr_end; pitr_save++) {
-
-			(*pitr_save)->springs.emplace_back(*pitr);
-			(*pitr)->springs.emplace_back(*pitr_save);
-
-		}
-	}
-#endif
 }
 
 // このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる
@@ -147,7 +119,7 @@ void Player_manager_s::onDisable() {
 }
 
 void Player_manager_s::add_player(vector3 pos, float r, float max_speed, float acc, vector4 color) {
-	Gameobject* GO = Gameobject_manager::createSphere("");
+	Gameobject* GO = Gameobject_manager::createCube("");
 	GO->material->color = color;
 	GO->transform->local_pos = pos;
 	GO->transform->local_scale = vector3(r, r, r);
@@ -160,7 +132,7 @@ void Player_manager_s::add_player(vector3 pos, float r, float max_speed, float a
 }
 
 void Player_manager_s::add_player_leader(vector3 pos, float r, float max_speed, vector4 color) {
-	Gameobject* GO = Gameobject_manager::createSphere("");
+	Gameobject* GO = Gameobject_manager::createCube("");
 	GO->material->color = color;
 	GO->transform->local_pos = pos;
 	GO->transform->local_scale = vector3(r, r, r);

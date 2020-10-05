@@ -1,4 +1,4 @@
-﻿  player_lead.cpp
+﻿  player_manager.cpp
 C:\Users\2190072\Documents\Adollib_debug\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib_debug\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib_debug\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
@@ -11,14 +11,15 @@ C:\Users\2190072\Documents\Adollib_debug\Adollib\Adollib\states_manager.h(12): w
 C:\Users\2190072\Documents\Adollib_debug\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib_debug\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib_debug\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib_debug\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib_debug\Adollib\Adollib\gameobject.h(120,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib_debug\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib_debug\Adollib\Adollib\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib_debug\Adollib\Scripts\player_lead.cpp(34,66): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib_debug\Adollib\Scripts\player_lead.cpp(35,67): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2190072\Documents\Adollib_debug\Adollib\Scripts\player_manager.h(18,104): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib_debug\Adollib\Scripts\player_manager.cpp(17,28): warning C4305: '=': 'double' から 'float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib_debug\Adollib\Scripts\player_manager.cpp(69,25): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
   コード生成しています。
-  1 of 7905 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  1 of 7550 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    39 functions had inline decision re-evaluated but remain unchanged
+    36 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   Adollib.vcxproj -> C:\Users\2190072\Documents\Adollib_debug\Adollib\Release\Adollib.exe

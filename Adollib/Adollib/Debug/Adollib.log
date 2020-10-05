@@ -1,4 +1,4 @@
-﻿  player.cpp
+﻿  player_lead.cpp
 C:\Users\2190072\Documents\Adollib_debug\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib_debug\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\2190072\Documents\Adollib_debug\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
@@ -11,8 +11,13 @@ C:\Users\2190072\Documents\Adollib_debug\Adollib\Adollib\states_manager.h(12): w
 C:\Users\2190072\Documents\Adollib_debug\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib_debug\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。
 C:\Users\2190072\Documents\Adollib_debug\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib_debug\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\2190072\Documents\Adollib_debug\Adollib\Adollib\gameobject.h(120,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib_debug\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 C:\Users\2190072\Documents\Adollib_debug\Adollib\Adollib\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib_debug\Adollib\Scripts\player.cpp(51,43): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2190072\Documents\Adollib_debug\Adollib\Scripts\player_lead.cpp(32,60): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib_debug\Adollib\Scripts\player_lead.cpp(39,60): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib_debug\Adollib\Scripts\player_lead.cpp(59,37): warning C4305: '*=': 'double' から 'float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib_debug\Adollib\Scripts\player_lead.cpp(60,37): warning C4305: '*=': 'double' から 'float' へ切り詰めます。
+C:\Users\2190072\Documents\Adollib_debug\Adollib\Scripts\player_lead.cpp(65,74): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2190072\Documents\Adollib_debug\Adollib\Scripts\player_lead.cpp(66,75): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
   Adollib.vcxproj -> C:\Users\2190072\Documents\Adollib_debug\Adollib\Debug\Adollib.exe

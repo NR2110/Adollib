@@ -53,6 +53,12 @@
     <Filter Include="00_Adollib\22_physics\ALP">
       <UniqueIdentifier>{cd1ab3af-5ba6-4936-812a-96d396eee048}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\scene_game\stage">
+      <UniqueIdentifier>{a945fbc1-631e-4e8f-97ba-176a8053029a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Adollib\11_math\func">
+      <UniqueIdentifier>{6ce573f1-45e9-4993-bf38-98c8bb56fa01}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="scene_title.cpp">
@@ -145,9 +151,6 @@
     <ClCompile Include="resource_manager.cpp">
       <Filter>00_Adollib\00_main</Filter>
     </ClCompile>
-    <ClCompile Include="closest_func.cpp">
-      <Filter>00_Adollib\11_math</Filter>
-    </ClCompile>
     <ClCompile Include="frustum_culling.cpp">
       <Filter>00_Adollib\33_object\mesh</Filter>
     </ClCompile>
@@ -225,6 +228,21 @@
     </ClCompile>
     <ClCompile Include="..\Scripts\player_lead.cpp">
       <Filter>ソース ファイル\scene_game\player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\stage_part.cpp">
+      <Filter>ソース ファイル\scene_game\stage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\stage_manager.cpp">
+      <Filter>ソース ファイル\scene_game\stage</Filter>
+    </ClCompile>
+    <ClCompile Include="closest_func.cpp">
+      <Filter>00_Adollib\11_math\func</Filter>
+    </ClCompile>
+    <ClCompile Include="lay_func.cpp">
+      <Filter>00_Adollib\11_math\func</Filter>
+    </ClCompile>
+    <ClCompile Include="sort_func.cpp">
+      <Filter>00_Adollib\11_math\func</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -363,9 +381,6 @@
     <ClInclude Include="resource_manager.h">
       <Filter>00_Adollib\00_main</Filter>
     </ClInclude>
-    <ClInclude Include="closest_func.h">
-      <Filter>00_Adollib\11_math</Filter>
-    </ClInclude>
     <ClInclude Include="math.h">
       <Filter>00_Adollib\11_math</Filter>
     </ClInclude>
@@ -482,6 +497,24 @@
     </ClInclude>
     <ClInclude Include="..\Scripts\player_lead.h">
       <Filter>ソース ファイル\scene_game\player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\stage_base.h">
+      <Filter>ソース ファイル\scene_game\stage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\stage_part.h">
+      <Filter>ソース ファイル\scene_game\stage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\stage_manager.h">
+      <Filter>ソース ファイル\scene_game\stage</Filter>
+    </ClInclude>
+    <ClInclude Include="closest_func.h">
+      <Filter>00_Adollib\11_math\func</Filter>
+    </ClInclude>
+    <ClInclude Include="lay_func.h">
+      <Filter>00_Adollib\11_math\func</Filter>
+    </ClInclude>
+    <ClInclude Include="sort_func.h">
+      <Filter>00_Adollib\11_math\func</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

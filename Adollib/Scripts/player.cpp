@@ -36,15 +36,8 @@ void Player_s::update()
 		float dis = fabsf((*pos - *sp->pos).norm_sqr()) - (*r + *sp->r);
 
 		if(dis < 0)
-			collider->add_force((-n  * (fabsf(dis) + 1)) * 500);	//ボールどおし反発する力
+			collider->add_force((-n  * (fabsf(dis) + 0)) * 500);	//ボールどおし反発する力
 
-		//else {
-		//	float pow = fabsf(dis) * 1;
-		//	if (pow > max_pow * 0.1f) pow = max_pow * 0.1f;
-
-		//	collider->add_force((n * pow));	//ボールどおし引っ張る力
-
-		//}
 	}
 
 

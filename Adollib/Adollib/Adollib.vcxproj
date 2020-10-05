@@ -156,6 +156,9 @@
     <ClInclude Include="..\Scripts\player_lead.h" />
     <ClInclude Include="..\Scripts\player_manager.h" />
     <ClInclude Include="..\Scripts\scene_game_all.h" />
+    <ClInclude Include="..\Scripts\stage_base.h" />
+    <ClInclude Include="..\Scripts\stage_manager.h" />
+    <ClInclude Include="..\Scripts\stage_part.h" />
     <ClInclude Include="Adollib.h" />
     <ClInclude Include="ALP_broadphase.h" />
     <ClInclude Include="ALP_generate_contact.h" />
@@ -198,6 +201,7 @@
     <ClInclude Include="imgui_base.h" />
     <ClInclude Include="imgui_manager.h" />
     <ClInclude Include="input.h" />
+    <ClInclude Include="lay_func.h" />
     <ClInclude Include="light_types.h" />
     <ClInclude Include="loop.h" />
     <ClInclude Include="material.h" />
@@ -223,6 +227,7 @@
     <ClInclude Include="scene_title.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="singleton.h" />
+    <ClInclude Include="sort_func.h" />
     <ClInclude Include="sprite.h" />
     <ClInclude Include="states_manager.h" />
     <ClInclude Include="systems.h" />
@@ -244,6 +249,8 @@
     <ClCompile Include="..\Scripts\player.cpp" />
     <ClCompile Include="..\Scripts\player_lead.cpp" />
     <ClCompile Include="..\Scripts\player_manager.cpp" />
+    <ClCompile Include="..\Scripts\stage_manager.cpp" />
+    <ClCompile Include="..\Scripts\stage_part.cpp" />
     <ClCompile Include="Adollib.cpp" />
     <ClCompile Include="ALP_broadphase.cpp" />
     <ClCompile Include="ALP_generate_contact.cpp" />
@@ -276,6 +283,7 @@
     <ClCompile Include="Imgui\imgui_widgets.cpp" />
     <ClCompile Include="imgui_manager.cpp" />
     <ClCompile Include="input.cpp" />
+    <ClCompile Include="lay_func.cpp" />
     <ClCompile Include="loop.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="material.cpp" />
@@ -290,6 +298,7 @@
     <ClCompile Include="scene_manager.cpp" />
     <ClCompile Include="scene_title.cpp" />
     <ClCompile Include="shader.cpp" />
+    <ClCompile Include="sort_func.cpp" />
     <ClCompile Include="sprite.cpp" />
     <ClCompile Include="systems.cpp" />
     <ClCompile Include="texture.cpp" />

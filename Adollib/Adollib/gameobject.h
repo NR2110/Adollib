@@ -99,6 +99,7 @@ namespace Adollib {
 			else return transform->local_scale;
 		};
 
+		//colliderを追加する
 		template<typename T>
 		T* add_collider() {
 
@@ -146,6 +147,24 @@ namespace Adollib {
 				}
 			}
 		};
+		//--------------------------------------------
+		// このGameObjectにアタッチされているコンポーネントを取得する
+		//--------------------------------------------
+		// IN :  typename T : 取得したいコンポーネント名
+		// OUT:  T* : Tがあればそのポインタを、なければnullptrを返す
+		template<typename T>
+		inline T* getComponent() const
+		{
+			for (auto&& com : components)
+			{
+				if (typeid(T) == typeid(*com))
+				{
+					T* component = dynamic_cast<T*>(com.get());
+					return component;
+				}
+			}
+			return nullptr;
+		}
 		// ==============================================================
 		// このGameObjectにコンポーネントをアタッチする
 		// ==============================================================

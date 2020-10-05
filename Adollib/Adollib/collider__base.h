@@ -54,8 +54,8 @@ namespace Adollib {
 		vector3 linear_velocity = vector3();    //ï¿êië¨ìx
 		vector3 angula_velocity = vector3();   //äpë¨ìx
 
-		vector3 liner_acceleration = vector3();  //â¡ë¨
-		vector3 angular_acceleration = vector3();//äpâ¡ë¨
+		vector3 linear_acceleration = vector3();  //â¡ë¨
+		vector3 angula_acceleration = vector3();//äpâ¡ë¨
 
 		float inertial_mass = 0;           //äµê´éøó 
 

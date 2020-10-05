@@ -358,11 +358,8 @@ namespace Adollib {
 
 		Value.get()->this_scene = Sce;
 		Value.get()->transform = std::make_shared<Transfome>();
+		Value.get()->no_material = true;
 
-		Value.get()->material = std::make_shared<Material>();
-		Value.get()->material->Load_VS("./DefaultShader/default_vs.cso");
-		Value.get()->material->Load_PS("./DefaultShader/default_ps.cso");
-		ResourceManager::CreateModelFromFBX(&Value.get()->material->meshes, go_name.c_str(), "");
 		Value.get()->initialize();
 		return Value.get();
 	}

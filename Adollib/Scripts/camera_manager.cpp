@@ -12,7 +12,7 @@ namespace Adollib
 {
 	// 所属するシーンの初期化時に一度だけ呼ばれる
 	void Camera_manager_s::awake() {
-			set_camera(vector3(0, 30, -50), vector3(0, 0, 1));
+			set_camera(vector3(0, 0, -50), vector3(0, 0, 1));
 			Al_Global::render_collider_flag = false;
 	}
 
@@ -25,7 +25,13 @@ namespace Adollib
 	// 毎フレーム呼ばれる更新処理
 	void Camera_manager_s::update()
 	{
-		
+		if (input->getKeyTrigger(Key::C)) {
+
+			if(Al_Global::render_collider_flag  == false)
+				Al_Global::render_collider_flag = true;
+			else
+				Al_Global::render_collider_flag = false;
+		}
 	}
 
 	// このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる
