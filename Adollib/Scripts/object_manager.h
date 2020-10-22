@@ -13,11 +13,11 @@ namespace Adollib
 
 		std::vector<Gameobject*> GOs;
 	public:
-		Gameobject* set_sphere(vector3 pos, float r, vector3 color = vector3(1, 1, 1));
-		Gameobject* set_box(vector3 pos, vector3 size, vector3 rotate, vector3 color = vector3(1, 1, 1));
-		Gameobject* set_plane(vector3 pos, vector3 normal, vector3 color = vector3(1, 1, 1));
+		Gameobject* set_sphere(Vector3 pos, float r, Vector3 color = Vector3(1, 1, 1));
+		Gameobject* set_box(Vector3 pos, Vector3 size, Vector3 rotate, Vector3 color = Vector3(1, 1, 1));
+		Gameobject* set_plane(Vector3 pos, Vector3 normal, Vector3 color = Vector3(1, 1, 1));
 
-		Gameobject* set_meshbox(vector3 pos, vector3 size, vector3 rotate, vector3 color = vector3(1, 1, 1));
+		Gameobject* set_meshbox(Vector3 pos, Vector3 size, Vector3 rotate, Vector3 color = Vector3(1, 1, 1));
 
 	public:
 		void awake();

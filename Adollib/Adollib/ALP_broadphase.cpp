@@ -36,7 +36,7 @@ void physics_function::Broadphase(std::list<std::shared_ptr<Adollib::Collider>>&
 	//適当に20コ点を取って適当に
 	int SAP_axis = 0;
 
-	Debug::set(std::string("SAP_axis"), vector3(SAP_axis).get_XM3());
+	Debug::set(std::string("SAP_axis"), Vector3(SAP_axis).get_XM3());
 
 
 	if (coll.size() * 2 != axis_list[0].size()) {

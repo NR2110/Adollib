@@ -18,14 +18,14 @@ void Meshcoll::update_world_trans() {
 void Meshcoll::update_dop14() {
 	dop14.pos = gameobject->get_world_position() + local_position;
 
-	vector3 rotated_axis[DOP_size];
+	Vector3 rotated_axis[DOP_size];
 	for (int i = 0; i < DOP_size; i++) {
 		rotated_axis[i] = vector3_quatrotate(DOP_14_axis[i], gameobject->get_world_orientate().conjugate()).unit_vect();
 		dop14.max[i] = -FLT_MAX;
 		dop14.min[i] = +FLT_MAX;
 	}
 
-	vector3 half[DOP_size * 2];
+	Vector3 half[DOP_size * 2];
 	int sum = 0;
 	for (int i = 0; i < DOP_size; i++) {
 		half[sum] = dopbase.max[i] * DOP_14_axis[i] * world_scale;
@@ -44,6 +44,6 @@ void Meshcoll::update_dop14() {
 		}
 	}
 
-	half_size = vector3(dop14.max[0] - dop14.min[0], dop14.max[1] - dop14.min[1], dop14.max[2] - dop14.min[2]) / 2.0f;
+	half_size = Vector3(dop14.max[0] - dop14.min[0], dop14.max[1] - dop14.min[1], dop14.max[2] - dop14.min[2]) / 2.0f;
 
 }

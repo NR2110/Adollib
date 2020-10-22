@@ -17,8 +17,8 @@ namespace Adollib {
 		// t : l_pB + l_vecB * t が直線B上の最近点となる値
 		//:::::::::::::::::
 		bool get_closestP_two_line(
-			const vector3& l_pA, const vector3& l_vecA,
-			const vector3& l_pB, const vector3& l_vecB,
+			const Vector3& l_pA, const Vector3& l_vecA,
+			const Vector3& l_pB, const Vector3& l_vecB,
 			float& s, float&t
 		);
 
@@ -30,9 +30,9 @@ namespace Adollib {
 		// closestP_B : 線分B上の線分Bへの最近点
 		//:::::::::::::::::
 		void get_closestP_two_segment(
-		const vector3& segAs, const vector3& segAg,
-		const vector3& segBs, const vector3& segBg,
-		vector3& closestP_A, vector3& closestP_B
+		const Vector3& segAs, const Vector3& segAg,
+		const Vector3& segBs, const Vector3& segBg,
+		Vector3& closestP_A, Vector3& closestP_B
 		);
 
 		//:::::::::::::::::
@@ -43,10 +43,10 @@ namespace Adollib {
 		// closestP : 光線上の点への最近点
 		//:::::::::::::::::
 		void get_closestP_point_line(
-			const vector3& point, 
-			const vector3& l_point,
-			const vector3& l_dir, 
-			vector3& closestP
+			const Vector3& point, 
+			const Vector3& l_point,
+			const Vector3& l_dir, 
+			Vector3& closestP
 		);
 
 
@@ -58,12 +58,12 @@ namespace Adollib {
 		// closestP     : 3頂点メッシュ上の点への最近点
 		//:::::::::::::::::
 		void get_closestP_point_triangle(
-			const vector3& point,
-			const vector3& t_point0,
-			const vector3& t_point1,
-			const vector3& t_point2,
-			const vector3& t_normal,
-			vector3& closestP
+			const Vector3& point,
+			const Vector3& t_point0,
+			const Vector3& t_point1,
+			const Vector3& t_point2,
+			const Vector3& t_normal,
+			Vector3& closestP
 		);
 
 

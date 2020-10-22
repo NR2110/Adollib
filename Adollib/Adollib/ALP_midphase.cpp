@@ -13,7 +13,7 @@ bool Check_insert_DOP14(const Collider* collA, const Collider* collB) {
 	//–³ŒÀPlane‚ÍDOP‚ªì‚ê‚È‚¢‚½‚ßnarrow‚É“Š‚°‚é?
 	if (collA->shape == Collider_shape::shape_plane || collB->shape == Collider_shape::shape_plane) return true;
 
-	vector3 dis = collA->dop14.pos - collB->dop14.pos;
+	Vector3 dis = collA->dop14.pos - collB->dop14.pos;
 
 	for (int i = 0; i < DOP_size; i++) {
 		if (
@@ -33,10 +33,10 @@ bool Check_insert_DOP14(const Collider* collA, const Collider* collB) {
 
 bool Check_insert_Plane(const Collider* plane, const Collider* coll) {
 
-	vector3 V;
+	Vector3 V;
 	float plane_dis = 0, coll_dis = FLT_MAX;
 
-	V = vector3_quatrotate(vector3(0, 1, 0), plane->world_orientation);
+	V = vector3_quatrotate(Vector3(0, 1, 0), plane->world_orientation);
 	plane_dis = vector3_dot(V, plane->world_position);
 
 	for (int i = 0; i < DOP_size; i++) {

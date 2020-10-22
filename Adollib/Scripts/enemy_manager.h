@@ -13,7 +13,7 @@ namespace Adollib {
 
 	public:
 
-		void add_enemy(Enemy::Enemy_type enemy_type, vector3 start_pos, quaternion start_orient, vector4 color = vector4(1, 0, 0, 1));
+		void add_enemy(Enemy::Enemy_type enemy_type, Vector3 start_pos, Quaternion start_orient, Vector4 color = Vector4(1, 0, 0, 1));
 
 
 

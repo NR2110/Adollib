@@ -8,7 +8,7 @@ namespace Adollib {
 	public:
 		float r = 1; //半径
 
-		Sphere(float r = 1, float density = 1, vector3 pos = vector3(0, 0, 0)) : r(r) {
+		Sphere(float r = 1, float density = 1, Vector3 pos = Vector3(0, 0, 0)) : r(r) {
 			//shapeの設定
 			shape = Collider_shape::shape_sphere;
 
@@ -20,7 +20,7 @@ namespace Adollib {
 
 			local_orientation = quaternion_identity();
 
-			local_scale = vector3(1);
+			local_scale = Vector3(1);
 
 			//質量の計算
 			inertial_mass = 4.0f / 3.0f * r * r * r * DirectX::XM_PI * density;
@@ -35,13 +35,13 @@ namespace Adollib {
 		}
 
 		//サイズの所得関数のオーバーライド
-		quaternion get_dimension() const {
-			return quaternion(r, r, r);
+		Quaternion get_dimension() const {
+			return Quaternion(r, r, r);
 		}
 		//world変換関数のオーバーライド
 		void update_world_trans();
 		//sizeや密度が変更されると質量や完成モーメントの変更が必要になるからそのために用意(球の半径 = size.x)
-		void update_inertial(const vector3& size, float density = 1) {
+		void update_inertial(const Vector3& size, float density = 1) {
 			this->density = density;
 
 			float r = size.x;

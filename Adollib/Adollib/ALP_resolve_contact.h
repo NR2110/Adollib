@@ -5,9 +5,9 @@
 namespace Adollib {
 	namespace physics_function {
 		struct Solverbody {
-			vector3 delta_LinearVelocity; // 並進速度差分
-			vector3 delta_AngulaVelocity; // 回転速度差分
-			quaternion orientation; // 姿勢
+			Vector3 delta_LinearVelocity; // 並進速度差分
+			Vector3 delta_AngulaVelocity; // 回転速度差分
+			Quaternion orientation; // 姿勢
 			matrix inv_inertia; // 慣性テンソルの逆行列
 			float  inv_mass; // 質量の逆数
 			int num;

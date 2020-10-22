@@ -4,11 +4,11 @@ using namespace Adollib;
 
 
 bool Closest_func::get_closestP_two_line(
-	const vector3& l_pA, const vector3& base_l_vecA,
-	const vector3& l_pB, const vector3& base_l_vecB,
+	const Vector3& l_pA, const Vector3& base_l_vecA,
+	const Vector3& l_pB, const Vector3& base_l_vecB,
 	float& s, float&t
 ) {
-	vector3 l_vecA, l_vecB;
+	Vector3 l_vecA, l_vecB;
 	l_vecA = base_l_vecA.unit_vect();
 	l_vecB = base_l_vecB.unit_vect();
 	float D1 = vector3_dot(l_pB - l_pA, l_vecA);
@@ -24,14 +24,14 @@ bool Closest_func::get_closestP_two_line(
 }
 
 void Closest_func::get_closestP_two_segment(
-	const vector3& segAs, const vector3& segAg,
-	const vector3& segBs, const vector3& segBg,
-	vector3& closestP_A, vector3& closestP_B
+	const Vector3& segAs, const Vector3& segAg,
+	const Vector3& segBs, const Vector3& segBg,
+	Vector3& closestP_A, Vector3& closestP_B
 ) {
 
-	vector3 v1 = segAg - segAs; //A線分のベクトル
-	vector3 v2 = segBg - segBs; //B線分のベクトル
-	vector3 r  = segAs - segBs; //各始点をつなぐベクトル
+	Vector3 v1 = segAg - segAs; //A線分のベクトル
+	Vector3 v2 = segBg - segBs; //B線分のベクトル
+	Vector3 r  = segAs - segBs; //各始点をつなぐベクトル
 
 	float a = vector3_dot(v1, v1);
 	float b = vector3_dot(v1, v2);
@@ -72,10 +72,10 @@ void Closest_func::get_closestP_two_segment(
 // closestP : 光線上の点への最近点
 //:::::::::::::::::
 void Closest_func::get_closestP_point_line(
-	const vector3& point,
-	const vector3& l_point,
-	const vector3& l_dir,
-	vector3& closestP
+	const Vector3& point,
+	const Vector3& l_point,
+	const Vector3& l_dir,
+	Vector3& closestP
 ) {
 	float s = vector3_dot(point - l_point, l_dir) / vector3_dot(l_dir, l_dir);
 	closestP = l_point + s * l_dir;
@@ -89,20 +89,20 @@ void Closest_func::get_closestP_point_line(
 // closestP     : 3頂点メッシュ上の点への最近点
 //:::::::::::::::::
 void Closest_func::get_closestP_point_triangle(
-	const vector3& point,
-	const vector3& t_point0,
-	const vector3& t_point1,
-	const vector3& t_point2,
-	const vector3& t_normal,
-	vector3& closestP
+	const Vector3& point,
+	const Vector3& t_point0,
+	const Vector3& t_point1,
+	const Vector3& t_point2,
+	const Vector3& t_normal,
+	Vector3& closestP
 ) {
 
 	// ３角形面上の投影点
-	vector3 proj = point - vector3_dot(t_normal, point - t_point0) * t_normal;
+	Vector3 proj = point - vector3_dot(t_normal, point - t_point0) * t_normal;
 
 	// エッジP0,P1のボロノイ領域
-	vector3 edgeP01 = t_point1 - t_point0;
-	vector3 edgeP01_normal = vector3_cross(edgeP01, t_normal);
+	Vector3 edgeP01 = t_point1 - t_point0;
+	Vector3 edgeP01_normal = vector3_cross(edgeP01, t_normal);
 
 	float voronoiEdgeP01_check1 = vector3_dot(proj - t_point0, edgeP01_normal);
 	float voronoiEdgeP01_check2 = vector3_dot(proj - t_point0, edgeP01);
@@ -114,8 +114,8 @@ void Closest_func::get_closestP_point_triangle(
 	}
 
 	// エッジP1,P2のボロノイ領域
-	vector3 edgeP12 = t_point2 - t_point1;
-	vector3 edgeP12_normal = vector3_cross(edgeP12, t_normal);
+	Vector3 edgeP12 = t_point2 - t_point1;
+	Vector3 edgeP12_normal = vector3_cross(edgeP12, t_normal);
 
 	float voronoiEdgeP12_check1 = vector3_dot(proj - t_point1, edgeP12_normal);
 	float voronoiEdgeP12_check2 = vector3_dot(proj - t_point1, edgeP12);
@@ -127,8 +127,8 @@ void Closest_func::get_closestP_point_triangle(
 	}
 
 	// エッジP2,P0のボロノイ領域
-	vector3 edgeP20 = t_point0 - t_point2;
-	vector3 edgeP20_normal = vector3_cross(edgeP20, t_normal);
+	Vector3 edgeP20 = t_point0 - t_point2;
+	Vector3 edgeP20_normal = vector3_cross(edgeP20, t_normal);
 
 	float voronoiEdgeP20_check1 = vector3_dot(proj - t_point2, edgeP20_normal);
 	float voronoiEdgeP20_check2 = vector3_dot(proj - t_point2, edgeP20);

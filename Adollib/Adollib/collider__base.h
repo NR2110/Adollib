@@ -92,10 +92,10 @@ namespace Adollib {
 		virtual void update_world_trans() = 0;
 
 		//並進移動に力を加える
-		void add_force(const vector3& force);
+		void add_force(const Vector3& force);
 
 		//角回転に力を加える
-		void add_torque(const vector3& force);
+		void add_torque(const Vector3& force);
 
 		//可動オブジェクトかどうか
 		bool is_movable() const;
@@ -113,7 +113,7 @@ namespace Adollib {
 		virtual Quaternion get_dimension() const = 0;
 
 		//サイズ変更などに対応するため毎フレーム慣性テンソルなどを更新
-		virtual void update_inertial(const vector3& size, float density = 1) = 0;
+		virtual void update_inertial(const Vector3& size, float density = 1) = 0;
 
 		//オブジェクトが動くたびに呼び出す　のが効率よいが適当に毎フレーム呼ぶ
 		//DOP_14データの更新

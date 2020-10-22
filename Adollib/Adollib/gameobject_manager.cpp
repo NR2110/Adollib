@@ -209,9 +209,9 @@ namespace Adollib {
 
 			//CB : ConstantBufferPerCamera
 			// ƒrƒ…[s—ñ
-			vector3 pos = itr_ca->get()->transform->position;
-			quaternion orient = itr_ca->get()->transform->orientation;
-			vector3 look_pos = pos + vector3_quatrotate(vector3(0, 0, 1), orient);
+			Vector3 pos = itr_ca->get()->transform->position;
+			Quaternion orient = itr_ca->get()->transform->orientation;
+			Vector3 look_pos = pos + vector3_quatrotate(Vector3(0, 0, 1), orient);
 
 			DirectX::XMVECTOR eye   = DirectX::XMVectorSet(pos.x, pos.y, pos.z, 1.0f);
 			DirectX::XMVECTOR focus = DirectX::XMVectorSet(look_pos.x, look_pos.y, look_pos.z, 1.0f);
@@ -305,7 +305,7 @@ namespace Adollib {
 
 		Value.get()->this_scene = Sce;
 		Value.get()->transform = std::make_shared<Transfome>();
-		Value.get()->transform->position = vector3(0, 0, 0);
+		Value.get()->transform->position = Vector3(0, 0, 0);
 		Value.get()->initialize();
 		return Value.get();
 	}

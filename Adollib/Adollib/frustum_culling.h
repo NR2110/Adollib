@@ -8,19 +8,19 @@
 namespace Adollib {
 	class FrustumCulling {
 
-		static vector3 line[4];
+		static Vector3 line[4];
 		static float nearZ;
 		static float farZ;
 
-		static vector3 camera_pos;
-		static quaternion camera_orient;
+		static Vector3 camera_pos;
+		static Quaternion camera_orient;
 
-		static vector3 obj_pos;
-		static quaternion obj_orient;
-		static vector3 obj_scale;
+		static Vector3 obj_pos;
+		static Quaternion obj_orient;
+		static Vector3 obj_scale;
 
-		static vector3 offset_pos; //obj‚ğcamera‚ÌÀ•WŒn‚É
-		static quaternion offset_orient; //obj‚ğcamera‚ÌÀ•WŒn‚É
+		static Vector3 offset_pos; //obj‚ğcamera‚ÌÀ•WŒn‚É
+		static Quaternion offset_orient; //obj‚ğcamera‚ÌÀ•WŒn‚É
 
 	public:
 		static void update_frustum(const Camera* camera);

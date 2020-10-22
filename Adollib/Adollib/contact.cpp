@@ -15,9 +15,9 @@ using namespace Contacts;
 //::::::::
 void Contact::addcontact(
 	float penetration,
-	const vector3& normal,
-	const vector3& contact_pointA,
-	const vector3& contact_pointB
+	const Vector3& normal,
+	const Vector3& contact_pointA,
+	const Vector3& contact_pointB
 ) {
 	//すでにそのpointは存在するのか
 	int num = find_contact_point(contact_pointA, contact_pointB, normal);
@@ -46,7 +46,7 @@ void Contact::addcontact(
 	contactpoints[num].point[1] = contact_pointB;
 }
 
-int Contact::find_exclusion_point(const vector3& newPoint, float newDistance) {
+int Contact::find_exclusion_point(const Vector3& newPoint, float newDistance) {
 
 	//"最大貫通している点を保持"
 	int max_penetrate_num = -1;
@@ -61,7 +61,7 @@ int Contact::find_exclusion_point(const vector3& newPoint, float newDistance) {
 	//"一番面積の大きくなる点を除外"
 	float area[4] = { 0.0 };
 
-	vector3 point[4] = {
+	Vector3 point[4] = {
 		contactpoints[0].point[0],
 		contactpoints[1].point[0],
 		contactpoints[2].point[0],
@@ -96,7 +96,7 @@ int Contact::find_exclusion_point(const vector3& newPoint, float newDistance) {
 
 }
 
-float Contact::area_4points(const vector3& p0, const vector3& p1, const vector3& p2, const vector3& p3) {
+float Contact::area_4points(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector3& p3) {
 	//対角線を総当たりで調べ
 	//外積で面積にする
 	float pat[3] = { 0.0 };
@@ -121,9 +121,9 @@ void Contact::remove_contactpoint(int i) {
 }
 
 int Contact::find_contact_point(
-	const vector3& contact_pointA,
-	const vector3& contact_pointB,
-	const vector3& normal
+	const Vector3& contact_pointA,
+	const Vector3& contact_pointB,
+	const Vector3& normal
 ) {
 	int ret = -1;
 	float min = physics_g::Allowable_error;
@@ -141,17 +141,17 @@ int Contact::find_contact_point(
 }
 
 void Contact::chack_remove_contact_point(
-	const vector3& pointA,
-	const quaternion& rotA,
-	const vector3& pointB,
-	const quaternion& rotB
+	const Vector3& pointA,
+	const Quaternion& rotA,
+	const Vector3& pointB,
+	const Quaternion& rotB
 ) {
 	for (int i = 0; i < contact_num; i++) {
-		vector3& normal = contactpoints[i].normal;
-		vector3 contactpointA = pointA + vector3_quatrotate(contactpoints[i].point[0], rotA);
-		vector3 contactpointB = pointB + vector3_quatrotate(contactpoints[i].point[1], rotB);
+		Vector3& normal = contactpoints[i].normal;
+		Vector3 contactpointA = pointA + vector3_quatrotate(contactpoints[i].point[0], rotA);
+		Vector3 contactpointB = pointB + vector3_quatrotate(contactpoints[i].point[1], rotB);
 
-		vector3 aaa = vector3_quatrotate(contactpoints[i].point[0], rotA);
+		Vector3 aaa = vector3_quatrotate(contactpoints[i].point[0], rotA);
 
 		// normal方向の距離を比べる
 		float dis_N = vector3_dot(normal, contactpointA - contactpointB);

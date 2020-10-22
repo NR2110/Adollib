@@ -14,7 +14,7 @@ using namespace Contacts;
 void Collider::apply_external_force(float duration) {
 	if (is_movable()) {
 
-		if(is_fallable()) liner_acceleration += vector3(0, -physics_g::gravity, 0); //TODO : time_stepを考慮していない
+		if(is_fallable()) liner_acceleration += Vector3(0, -physics_g::gravity, 0); //TODO : time_stepを考慮していない
 
 		//並進移動に加える力(accumulated_force)から加速度を出して並進速度を更新する
 		liner_acceleration += accumulated_force / inertial_mass;
@@ -29,15 +29,15 @@ void Collider::apply_external_force(float duration) {
 		angular_acceleration += vector3_trans(accumulated_torque, inverse_inertia_tensor);
 
 		angula_velocity += angular_acceleration * duration;
-		if (angula_velocity.norm() < FLT_EPSILON)angula_velocity = vector3(0, 0, 0);
+		if (angula_velocity.norm() < FLT_EPSILON)angula_velocity = Vector3(0, 0, 0);
 	}
 
 	//加速を0にする
-	accumulated_force = vector3(0, 0, 0);
-	accumulated_torque = vector3(0, 0, 0);
+	accumulated_force = Vector3(0, 0, 0);
+	accumulated_torque = Vector3(0, 0, 0);
 
-	liner_acceleration = vector3(0, 0, 0);
-	angular_acceleration = vector3(0, 0, 0);
+	liner_acceleration = Vector3(0, 0, 0);
+	angular_acceleration = Vector3(0, 0, 0);
 }
 void Collider::integrate(float duration) {
 	//位置の更新
@@ -59,10 +59,10 @@ void Collider::resolve_gameobject() {
 	gameobject->transform->local_pos += offset_CollGO_pos;
 }
 
-void Collider::add_force(const vector3& force) {
+void Collider::add_force(const Vector3& force) {
 	accumulated_force += force;
 }
-void Collider::add_torque(const vector3& force) {
+void Collider::add_torque(const Vector3& force) {
 	accumulated_torque += force;
 }
 

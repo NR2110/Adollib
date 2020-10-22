@@ -20,7 +20,7 @@ void Box::update_dop14() {
 	dop14.pos = gameobject->get_world_position() + local_position;
 
 	//各頂点のローカル座標
-	vector3 half[4]{
+	Vector3 half[4]{
 	{+half_size.x, -half_size.y, -half_size.z},
 	{+half_size.x, -half_size.y, +half_size.z},
 	{+half_size.x, +half_size.y, -half_size.z},
@@ -31,7 +31,7 @@ void Box::update_dop14() {
 		half[i] = half[i] * world_scale;
 	}
 
-	quaternion WO = gameobject->get_world_orientate();
+	Quaternion WO = gameobject->get_world_orientate();
 	for (int i = 0; i < 4; i++) {
 		half[i] = vector3_quatrotate(half[i], WO);
 	}

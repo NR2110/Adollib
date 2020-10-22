@@ -54,13 +54,13 @@ namespace Adollib {
 		std::vector <std::shared_ptr<POINTLIGHT>> PointLight;
 		std::vector <std::shared_ptr<SPOTLIGHT>>  SpotLight; 
 
-		void set_dirLight(vector3 dir, vector3 color);
+		void set_dirLight(Vector3 dir, Vector3 color);
 
-		void set_ambient(vector3 amb);
+		void set_ambient(Vector3 amb);
 
-		void set_pointLight(vector3 pos, vector3 color, float range);
+		void set_pointLight(Vector3 pos, Vector3 color, float range);
 
-		void set_spotLight(vector3 pos, vector3 color, vector3 dir, float range, float near, float far);
+		void set_spotLight(Vector3 pos, Vector3 color, Vector3 dir, float range, float near, float far);
 
 
 		std::string name = std::string("null"); //Ç±ÇÃgoÇÃñºëO(åüçıóp)

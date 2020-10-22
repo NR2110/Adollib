@@ -5,10 +5,10 @@ namespace Adollib {
 	//Boxクラス
 	class Box : public Collider {
 	public:
-		vector3 half_size = vector3(); //localサイズ
+		Vector3 half_size = Vector3(1,1,1); //localサイズ
 
 		//	std::vector<std::string> no_hit_tag = std::vector<std::string>()
-		Box(vector3 half_size = vector3(1), float density = 1, vector3 pos = vector3(0, 0, 0)) : half_size(half_size) {
+		Box(Vector3 half_size = Vector3(1), float density = 1, Vector3 pos = Vector3(0, 0, 0)) : half_size(half_size) {
 			//shapeの設定
 			shape = Collider_shape::shape_box;
 
@@ -18,9 +18,9 @@ namespace Adollib {
 			//座標
 			local_position = pos;
 
-			local_scale = vector3(1);
+			local_scale = Vector3(1);
 
-			local_orientation = quaternion(1, 0, 0, 0);
+			local_orientation = Quaternion(1, 0, 0, 0);
 
 			//質量の計算
 			inertial_mass = (half_size.x * half_size.y * half_size.z) * 8.0f * density;
@@ -33,14 +33,14 @@ namespace Adollib {
 		}
 
 		//サイズの所得関数のオーバーライド
-		quaternion get_dimension() const {
+		Quaternion get_dimension() const {
 			return half_size;
 		}
 		//world変換関数のオーバーライド
 		void update_world_trans();
 
 		//sizeや密度が変更されると質量や完成モーメントの変更が必要になるからそのために用意
-		void update_inertial(const vector3& half_size, float density = 1) {
+		void update_inertial(const Vector3& half_size, float density = 1) {
 			this->density = density;
 
 			//質量の計算

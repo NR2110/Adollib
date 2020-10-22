@@ -22,7 +22,7 @@ namespace Adollib
 			Neet
 		};
 
-		quaternion look_q(float max_speed = 1);
+		Quaternion look_q(float max_speed = 1);
 
 		void sample_move1();
 		void sample_move2();

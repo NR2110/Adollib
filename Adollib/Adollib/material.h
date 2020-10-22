@@ -19,7 +19,7 @@ namespace Adollib {
 
 		Shader shader;
 
-		vector4 color;
+		Vector4 color;
 
 		std::string tex_filename;
 

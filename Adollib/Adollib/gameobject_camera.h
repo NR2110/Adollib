@@ -75,15 +75,15 @@ namespace Adollib {
 	private:
 
 	public:
-		quaternion get_world_orientate() {
+		Quaternion get_world_orientate() {
 			if (pearent != nullptr) return pearent->transform->orientation * transform->local_orient;
 			else return transform->local_orient;
 		};
-		vector3 get_world_position() {
+		Vector3 get_world_position() {
 			if (pearent != nullptr) return pearent->transform->position + transform->local_pos;
 			else return transform->local_pos;
 		};
-		vector3 get_world_scale() {
+		Vector3 get_world_scale() {
 			if (pearent != nullptr) return pearent->transform->scale * transform->local_scale;
 			else return transform->local_scale;
 		};

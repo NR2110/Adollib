@@ -42,9 +42,9 @@ namespace Adollib
 		virtual object* get_pearent() = 0;//ˆê”Ô‚Ìe‚ğ•Ô‚·
 		virtual	std::list<std::shared_ptr<object>> get_children() = 0;	//‚·‚×‚Ä‚Ìq‚ğ•Ô‚·
 
-		virtual quaternion get_world_orientate() { return quaternion_identity(); };
-		virtual vector3 get_world_position() { return vector3(); };
-		virtual vector3 get_world_scale() { return vector3();	};
+		virtual Quaternion get_world_orientate() { return quaternion_identity(); };
+		virtual Vector3 get_world_position() { return Vector3(); };
+		virtual Vector3 get_world_scale() { return Vector3();	};
 
 
 	

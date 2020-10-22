@@ -15,9 +15,9 @@
 using namespace Adollib;
 using namespace std;
 std::unordered_map <std::string, std::vector<int>>	Collider_ResourceManager::indexes;
-std::unordered_map <std::string, std::vector<vector3>>Collider_ResourceManager::vertexes;
+std::unordered_map <std::string, std::vector<Vector3>>Collider_ResourceManager::vertexes;
 
-HRESULT Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<int>** out_indexes, std::vector<vector3>** out_vertexes) {
+HRESULT Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<int>** out_indexes, std::vector<Vector3>** out_vertexes) {
 
 	if (indexes.count((string)fbxname) == 1) {
 		*out_indexes = &indexes[(string)fbxname];
@@ -68,7 +68,7 @@ HRESULT Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vect
 	traverse(scene->GetRootNode());
 
 	// メッシュデータの取得
-	vector<vector3> vertices;
+	vector<Vector3> vertices;
 	vector<int> indices;
 	u_int vertex_count = 0;
 	struct Subset {
@@ -102,7 +102,7 @@ HRESULT Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vect
 			// Where should I save the vertex attribute index, according to the material
 			const int index_offset = subset[index_of_material].start + subset[index_of_material].count;
 			for (int index_of_vertex = 0; index_of_vertex < 3; index_of_vertex++) {
-				vector3 vertex;
+				Vector3 vertex;
 				// 頂点
 				const int index_of_control_point = fbxMesh->GetPolygonVertex(index_of_polygon, index_of_vertex);
 				vertex.x = static_cast<float>(array_of_control_points[index_of_control_point][0]);

@@ -9,7 +9,7 @@ namespace Adollib
 	class Collider_ResourceManager
 	{
 	public:
-		static HRESULT CreateMCFromFBX(const char* fbxname, std::vector<int>** index, std::vector<vector3>** vertex); //FBXÇ©ÇÁMeshColliderÇÃê∂ê¨
+		static HRESULT CreateMCFromFBX(const char* fbxname, std::vector<int>** index, std::vector<Vector3>** vertex); //FBXÇ©ÇÁMeshColliderÇÃê∂ê¨
 		static void destroy();
 
 	private:
@@ -17,6 +17,6 @@ namespace Adollib
 		~Collider_ResourceManager() {};
 
 		static std::unordered_map <std::string, std::vector<int>>	indexes;
-		static std::unordered_map <std::string, std::vector<vector3>> vertexes;
+		static std::unordered_map <std::string, std::vector<Vector3>> vertexes;
 	};
 }

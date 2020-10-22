@@ -17,8 +17,8 @@ struct Balljoint {
 	float bias; // 拘束の強さの調整値
 	int rigidBodyA; // 剛体Aへのインデックス
 	int rigidBodyB; // 剛体Bへのインデックス
-	vector3 anchorA; // 剛体Aのローカル座標系における接続点
-	vector3 anchorB; // 剛体Bのローカル座標系における接続点
+	Vector3 anchorA; // 剛体Aのローカル座標系における接続点
+	Vector3 anchorB; // 剛体Bのローカル座標系における接続点
 	Constraint constraint; // 拘束
 
 	// 初期化
@@ -28,13 +28,13 @@ struct Balljoint {
 		constraint.accuminpulse = 0.0f;
 	}
 };
-void CalcTangentVector(const vector3& normal, vector3& tangent1, vector3& tangent2)
+void CalcTangentVector(const Vector3& normal, Vector3& tangent1, Vector3& tangent2)
 {
-	vector3 vec(1.0f, 0.0f, 0.0f);
-	vector3 n(normal);
+	Vector3 vec(1.0f, 0.0f, 0.0f);
+	Vector3 n(normal);
 	n[0] = 0.0f;
 	if (n.norm() < FLT_EPSILON) {
-		vec = vector3(0.0f, 1.0f, 0.0f);
+		vec = Vector3(0.0f, 1.0f, 0.0f);
 	}
 	tangent1 = (vector3_cross(normal, vec)).unit_vect();
 	tangent2 = (vector3_cross(tangent1, normal)).unit_vect();
@@ -55,11 +55,11 @@ struct  com_Out
 	physics_function::Solverbody solvs1;
 	float accumes[4][3];
 
-	vector3 offset_delta_AngulaVelocity0;
-	vector3 offset_delta_LinearVelocity0;
+	Vector3 offset_delta_AngulaVelocity0;
+	Vector3 offset_delta_LinearVelocity0;
 
-	vector3 offset_delta_AngulaVelocity1;
-	vector3 offset_delta_LinearVelocity1;
+	Vector3 offset_delta_AngulaVelocity1;
+	Vector3 offset_delta_LinearVelocity1;
 };
 
 struct com_in {
@@ -81,8 +81,8 @@ void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collid
 		for (collitr = colliders.begin(); collitr != collitr_end; collitr++) {
 			Solverbody SB;
 			SB.orientation = (*collitr)->world_orientation;
-			SB.delta_LinearVelocity = vector3(0.0f);
-			SB.delta_AngulaVelocity = vector3(0.0f);
+			SB.delta_LinearVelocity = Vector3(0.0f);
+			SB.delta_AngulaVelocity = Vector3(0.0f);
 			SB.inv_inertia = (*collitr)->inverse_inertial_tensor();
 			SB.inv_mass = (*collitr)->inverse_mass();
 			SB.num = count;
@@ -116,26 +116,26 @@ void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collid
 		for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 			Contactpoint& cp = pair.contacts.contactpoints[C_num];
 
-			vector3 rA = vector3_quatrotate(cp.point[0], solverbody[0]->orientation);
-			vector3 rB = vector3_quatrotate(cp.point[1], solverbody[1]->orientation);
+			Vector3 rA = vector3_quatrotate(cp.point[0], solverbody[0]->orientation);
+			Vector3 rB = vector3_quatrotate(cp.point[1], solverbody[1]->orientation);
 
 			// 反発係数の獲得
 			// 継続の衝突の場合反発係数を0にする
 			float restitution = pair.type == Pairtype::new_pair ? 0.5f * (coll[0]->restitution + coll[1]->restitution) : 0.0f;
 
 			//衝突時のそれぞれの速度
-			vector3 pdota;
+			Vector3 pdota;
 			pdota = vector3_cross(coll[0]->angula_velocity, rA);
 			pdota += coll[0]->linear_velocity;
 
-			vector3 pdotb;
+			Vector3 pdotb;
 			pdotb = vector3_cross(coll[1]->angula_velocity, rB);
 			pdotb += coll[1]->linear_velocity;
 
 			//衝突時の衝突平面法線方向の相対速度(結局衝突に使うのは法線方向への速さ)
-			vector3 vrel = pdota - pdotb;
+			Vector3 vrel = pdota - pdotb;
 
-			vector3
+			Vector3
 				tangent1, //normalに対するz方向
 				tangent2; //normalに対するx方向
 			CalcTangentVector(cp.normal, tangent1, tangent2);
@@ -143,13 +143,13 @@ void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collid
 			//Baraff[1997]の式(8-18)の分母(denominator)を求める
 			float term1 = coll[0]->inverse_mass();
 			float term2 = coll[1]->inverse_mass();
-			vector3 tA, tB;
+			Vector3 tA, tB;
 
 			float term3, term4, denominator;
 			// Normal
 			{
 				//Baraff[1997]の式(8-18)の分母(denominator)を求める
-				vector3 axis = cp.normal;
+				Vector3 axis = cp.normal;
 				tA = vector3_cross(rA, axis);
 				tB = vector3_cross(rB, axis);
 				tA = vector3_trans(tA, coll[0]->inverse_inertial_tensor());
@@ -175,7 +175,7 @@ void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collid
 
 			// Tangent1
 			{
-				vector3 axis = tangent1;
+				Vector3 axis = tangent1;
 				tA = vector3_cross(rA, axis);
 				tB = vector3_cross(rB, axis);
 				tA = vector3_trans(tA, coll[0]->inverse_inertial_tensor());
@@ -196,7 +196,7 @@ void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collid
 
 			// Tangent2
 			{
-				vector3 axis = tangent2;
+				Vector3 axis = tangent2;
 				tA = vector3_cross(rA, axis);
 				tB = vector3_cross(rB, axis);
 				tA = vector3_trans(tA, coll[0]->inverse_inertial_tensor());
@@ -229,8 +229,8 @@ void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collid
 		for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 			//衝突点の情報　
 			Contactpoint& cp = pair.contacts.contactpoints[C_num];
-			vector3 rA = vector3_quatrotate(cp.point[0], solverbody[0]->orientation);
-			vector3 rB = vector3_quatrotate(cp.point[1], solverbody[1]->orientation);
+			Vector3 rA = vector3_quatrotate(cp.point[0], solverbody[0]->orientation);
+			Vector3 rB = vector3_quatrotate(cp.point[1], solverbody[1]->orientation);
 
 			for (int k = 0; k < 3; k++) {
 				float deltaImpulse = cp.constraint[k].accuminpulse;
@@ -257,13 +257,13 @@ void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collid
 				for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 					//衝突点の情報　
 					Contactpoint& cp = pair.contacts.contactpoints[C_num];
-					vector3 rA = vector3_quatrotate(cp.point[0], solverbody[0]->orientation);
-					vector3 rB = vector3_quatrotate(cp.point[1], solverbody[1]->orientation);
+					Vector3 rA = vector3_quatrotate(cp.point[0], solverbody[0]->orientation);
+					Vector3 rB = vector3_quatrotate(cp.point[1], solverbody[1]->orientation);
 
 					{
 						Constraint& constraint = cp.constraint[0];
 						float delta_impulse = constraint.rhs;
-						vector3 delta_velocity[2];
+						Vector3 delta_velocity[2];
 						delta_velocity[0] = solverbody[0]->delta_LinearVelocity + vector3_cross(solverbody[0]->delta_AngulaVelocity, rA);
 						delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngulaVelocity, rB);
 						delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
@@ -285,7 +285,7 @@ void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collid
 					{
 						Constraint& constraint = cp.constraint[1];
 						float delta_impulse = constraint.rhs;
-						vector3 delta_velocity[2];
+						Vector3 delta_velocity[2];
 						delta_velocity[0] = solverbody[0]->delta_LinearVelocity + vector3_cross(solverbody[0]->delta_AngulaVelocity, rA);
 						delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngulaVelocity, rB);
 						delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
@@ -300,7 +300,7 @@ void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collid
 					{
 						Constraint& constraint = cp.constraint[2];
 						float delta_impulse = constraint.rhs;
-						vector3 delta_velocity[2];
+						Vector3 delta_velocity[2];
 						delta_velocity[0] = solverbody[0]->delta_LinearVelocity + vector3_cross(solverbody[0]->delta_AngulaVelocity, rA);
 						delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngulaVelocity, rB);
 						delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
@@ -381,17 +381,17 @@ void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collid
 			com_Out* cs_outs = compute_shader.Read_UAV<com_Out>(solve_out);
 
 			struct A_E {
-				vector3 sum_AngulaVelocity_A = vector3(0);
-				vector3 sum_LinearVelocity_A = vector3(0);
+				Vector3 sum_AngulaVelocity_A = Vector3(0);
+				Vector3 sum_LinearVelocity_A = Vector3(0);
 
-				vector3 sum_AngulaVelocity_D = vector3(0);
-				vector3 sum_LinearVelocity_D = vector3(0);
+				Vector3 sum_AngulaVelocity_D = Vector3(0);
+				Vector3 sum_LinearVelocity_D = Vector3(0);
 				//--------------
-				vector3 invsum_AngulaVelocity_A = vector3(0);
-				vector3 invsum_LinearVelocity_A = vector3(0);
+				Vector3 invsum_AngulaVelocity_A = Vector3(0);
+				Vector3 invsum_LinearVelocity_A = Vector3(0);
 
-				vector3 invsum_AngulaVelocity_D = vector3(0);
-				vector3 invsum_LinearVelocity_D = vector3(0);
+				Vector3 invsum_AngulaVelocity_D = Vector3(0);
+				Vector3 invsum_LinearVelocity_D = Vector3(0);
 			};
 			std::vector<A_E> ae;
 			{
@@ -448,8 +448,8 @@ void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collid
 			//offsetの計算
 			for (int pair_num = 0; pair_num < pairs.size(); pair_num++) {
 				// offset * delta_ * invsum で
-				vector3 inv_ang;
-				vector3 inv_lin;
+				Vector3 inv_ang;
+				Vector3 inv_lin;
 				for (int o = 0; o < 3; o++) {
 					inv_ang[o] = cs_outs[pair_num].solvs0.delta_AngulaVelocity[o] > 0 ? ae[cs_outs[pair_num].solvs0.num].invsum_AngulaVelocity_A[o] : ae[cs_outs[pair_num].solvs0.num].invsum_AngulaVelocity_D[o];
 					inv_lin[o] = cs_outs[pair_num].solvs0.delta_LinearVelocity[o] > 0 ? ae[cs_outs[pair_num].solvs0.num].invsum_LinearVelocity_A[o] : ae[cs_outs[pair_num].solvs0.num].invsum_LinearVelocity_D[o];
@@ -484,11 +484,11 @@ void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collid
 				Solverbody solvs1;
 				float accumes[4][3];
 
-				vector3 offset_delta_AngulaVelocity0;
-				vector3 offset_delta_LinearVelocity0;
+				Vector3 offset_delta_AngulaVelocity0;
+				Vector3 offset_delta_LinearVelocity0;
 
-				vector3 offset_delta_AngulaVelocity1;
-				vector3 offset_delta_LinearVelocity1;
+				Vector3 offset_delta_AngulaVelocity1;
+				Vector3 offset_delta_LinearVelocity1;
 			};
 			std::vector<cs_out> cs_outs;
 			cs_out cs;
@@ -508,15 +508,15 @@ void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collid
 
 					//衝突点の情報　
 					Contactpoint& cp = pair.contacts.contactpoints[C_num];
-					vector3 rA = vector3_quatrotate(cp.point[0], solverbody[0]->orientation);
-					vector3 rB = vector3_quatrotate(cp.point[1], solverbody[1]->orientation);
+					Vector3 rA = vector3_quatrotate(cp.point[0], solverbody[0]->orientation);
+					Vector3 rB = vector3_quatrotate(cp.point[1], solverbody[1]->orientation);
 
 					Constraint constraint = cp.constraint[0];
 					float delta_impulse = constraint.rhs;
 					if (constraint.rhs < 0) {
 						int sdfghj = 0;
 					}
-					vector3 delta_velocity[2];
+					Vector3 delta_velocity[2];
 					delta_velocity[0] = solverbody[0]->delta_LinearVelocity + vector3_cross(solverbody[0]->delta_AngulaVelocity, rA);
 					delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngulaVelocity, rB);
 					delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
@@ -540,7 +540,7 @@ void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collid
 					{
 						Constraint constraint = cp.constraint[1];
 						float delta_impulse = constraint.rhs;
-						vector3 delta_velocity[2];
+						Vector3 delta_velocity[2];
 						delta_velocity[0] = solverbody[0]->delta_LinearVelocity + vector3_cross(solverbody[0]->delta_AngulaVelocity, rA);
 						delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngulaVelocity, rB);
 						delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
@@ -559,7 +559,7 @@ void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collid
 					{
 						Constraint constraint = cp.constraint[2];
 						float delta_impulse = constraint.rhs;
-						vector3 delta_velocity[2];
+						Vector3 delta_velocity[2];
 						delta_velocity[0] = solverbody[0]->delta_LinearVelocity + vector3_cross(solverbody[0]->delta_AngulaVelocity, rA);
 						delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngulaVelocity, rB);
 						delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
@@ -593,17 +593,17 @@ void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collid
 #if 1
 
 			struct A_E {
-				vector3 sum_AngulaVelocity_A = vector3(0);
-				vector3 sum_LinearVelocity_A = vector3(0);
+				Vector3 sum_AngulaVelocity_A = Vector3(0);
+				Vector3 sum_LinearVelocity_A = Vector3(0);
 
-				vector3 sum_AngulaVelocity_D = vector3(0);
-				vector3 sum_LinearVelocity_D = vector3(0);
+				Vector3 sum_AngulaVelocity_D = Vector3(0);
+				Vector3 sum_LinearVelocity_D = Vector3(0);
 				//--------------
-				vector3 invsum_AngulaVelocity_A = vector3(0);
-				vector3 invsum_LinearVelocity_A = vector3(0);
+				Vector3 invsum_AngulaVelocity_A = Vector3(0);
+				Vector3 invsum_LinearVelocity_A = Vector3(0);
 
-				vector3 invsum_AngulaVelocity_D = vector3(0);
-				vector3 invsum_LinearVelocity_D = vector3(0);
+				Vector3 invsum_AngulaVelocity_D = Vector3(0);
+				Vector3 invsum_LinearVelocity_D = Vector3(0);
 			};
 			std::vector<A_E> ae;
 			{
@@ -660,8 +660,8 @@ void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collid
 			//offsetの計算
 			for (int pair_num = 0; pair_num < pairs.size(); pair_num++) {
 				// offset * delta_ * invsum で
-				vector3 inv_ang;
-				vector3 inv_lin;
+				Vector3 inv_ang;
+				Vector3 inv_lin;
 				for (int o = 0; o < 3; o++) {
 					inv_ang[o] = cs_outs[pair_num].solvs0.delta_AngulaVelocity[o] > 0 ? ae[cs_outs[pair_num].solvs0.num].invsum_AngulaVelocity_A[o] : ae[cs_outs[pair_num].solvs0.num].invsum_AngulaVelocity_D[o];
 					inv_lin[o] = cs_outs[pair_num].solvs0.delta_LinearVelocity[o] > 0 ? ae[cs_outs[pair_num].solvs0.num].invsum_LinearVelocity_A[o] : ae[cs_outs[pair_num].solvs0.num].invsum_LinearVelocity_D[o];
@@ -690,11 +690,11 @@ void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collid
 #else
 
 			struct A_E {
-				vector3 sum_AngulaVelocity = vector3(0);
-				vector3 sum_LinearVelocity = vector3(0);
+				Vector3 sum_AngulaVelocity = Vector3(0);
+				Vector3 sum_LinearVelocity = Vector3(0);
 
-				vector3 invsum_AngulaVelocity = vector3(0);
-				vector3 invsum_LinearVelocity = vector3(0);
+				Vector3 invsum_AngulaVelocity = Vector3(0);
+				Vector3 invsum_LinearVelocity = Vector3(0);
 			};
 
 			std::vector<A_E> ae;
@@ -740,8 +740,8 @@ void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collid
 			//offsetの計算
 			for (int pair_num = 0; pair_num < pairs.size(); pair_num++) {
 				// offset * delta_ * invsum で
-				vector3 inv_ang;
-				vector3 inv_lin;
+				Vector3 inv_ang;
+				Vector3 inv_lin;
 				SBs[cs_outs[pair_num].solvs0.num].delta_AngulaVelocity += cs_outs[pair_num].offset_delta_AngulaVelocity0 * cs_outs[pair_num].solvs0.delta_AngulaVelocity * ae[cs_outs[pair_num].solvs0.num].invsum_AngulaVelocity;
 				SBs[cs_outs[pair_num].solvs0.num].delta_LinearVelocity += cs_outs[pair_num].offset_delta_LinearVelocity0 * cs_outs[pair_num].solvs0.delta_LinearVelocity * ae[cs_outs[pair_num].solvs0.num].invsum_LinearVelocity;
 
@@ -774,13 +774,13 @@ void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collid
 					for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 						//衝突点の情報　
 						Contactpoint& cp = pair.contacts.contactpoints[C_num];
-						vector3 rA = vector3_quatrotate(cp.point[0], solverbody[0]->orientation);
-						vector3 rB = vector3_quatrotate(cp.point[1], solverbody[1]->orientation);
+						Vector3 rA = vector3_quatrotate(cp.point[0], solverbody[0]->orientation);
+						Vector3 rB = vector3_quatrotate(cp.point[1], solverbody[1]->orientation);
 
 						{
 							Constraint& constraint = cp.constraint[0];
 							float delta_impulse = constraint.rhs;
-							vector3 delta_velocity[2];
+							Vector3 delta_velocity[2];
 							delta_velocity[0] = solverbody[0]->delta_LinearVelocity + vector3_cross(solverbody[0]->delta_AngulaVelocity, rA);
 							delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngulaVelocity, rB);
 							delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
@@ -802,7 +802,7 @@ void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collid
 						{
 							Constraint& constraint = cp.constraint[1];
 							float delta_impulse = constraint.rhs;
-							vector3 delta_velocity[2];
+							Vector3 delta_velocity[2];
 							delta_velocity[0] = solverbody[0]->delta_LinearVelocity + vector3_cross(solverbody[0]->delta_AngulaVelocity, rA);
 							delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngulaVelocity, rB);
 							delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
@@ -817,7 +817,7 @@ void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collid
 						{
 							Constraint& constraint = cp.constraint[2];
 							float delta_impulse = constraint.rhs;
-							vector3 delta_velocity[2];
+							Vector3 delta_velocity[2];
 							delta_velocity[0] = solverbody[0]->delta_LinearVelocity + vector3_cross(solverbody[0]->delta_AngulaVelocity, rA);
 							delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngulaVelocity, rB);
 							delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
@@ -845,13 +845,13 @@ void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collid
 					for (int C_num = pair.contacts.contact_num - 1; C_num >= 0; C_num--) {
 						//衝突点の情報　
 						Contactpoint& cp = pair.contacts.contactpoints[C_num];
-						vector3 rA = vector3_quatrotate(cp.point[0], solverbody[0]->orientation);
-						vector3 rB = vector3_quatrotate(cp.point[1], solverbody[1]->orientation);
+						Vector3 rA = vector3_quatrotate(cp.point[0], solverbody[0]->orientation);
+						Vector3 rB = vector3_quatrotate(cp.point[1], solverbody[1]->orientation);
 
 						{
 							Constraint& constraint = cp.constraint[0];
 							float delta_impulse = constraint.rhs;
-							vector3 delta_velocity[2];
+							Vector3 delta_velocity[2];
 							delta_velocity[0] = solverbody[0]->delta_LinearVelocity + vector3_cross(solverbody[0]->delta_AngulaVelocity, rA);
 							delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngulaVelocity, rB);
 							delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
@@ -873,7 +873,7 @@ void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collid
 						{
 							Constraint& constraint = cp.constraint[1];
 							float delta_impulse = constraint.rhs;
-							vector3 delta_velocity[2];
+							Vector3 delta_velocity[2];
 							delta_velocity[0] = solverbody[0]->delta_LinearVelocity + vector3_cross(solverbody[0]->delta_AngulaVelocity, rA);
 							delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngulaVelocity, rB);
 							delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
@@ -888,7 +888,7 @@ void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collid
 						{
 							Constraint& constraint = cp.constraint[2];
 							float delta_impulse = constraint.rhs;
-							vector3 delta_velocity[2];
+							Vector3 delta_velocity[2];
 							delta_velocity[0] = solverbody[0]->delta_LinearVelocity + vector3_cross(solverbody[0]->delta_AngulaVelocity, rA);
 							delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngulaVelocity, rB);
 							delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);

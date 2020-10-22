@@ -6,7 +6,7 @@ namespace Adollib {
 	class Plane : public Collider {
 	public:
 		//不動オブジェクトとして生成
-		Plane(vector3 n = vector3(0, 1, 0), float d = 0) {
+		Plane(Vector3 n = Vector3(0, 1, 0), float d = 0) {
 			//shapeの設定
 			shape = Collider_shape::shape_plane;
 
@@ -25,9 +25,9 @@ namespace Adollib {
 			n = n.unit_vect();
 			local_position = n * d;
 
-			vector3 Y(0, 1, 0);
+			Vector3 Y(0, 1, 0);
 			float angle = acosf(vector3_dot(Y, n));
-			vector3 axis;
+			Vector3 axis;
 			axis = vector3_cross(Y, n);
 			axis = axis.unit_vect();
 			local_orientation = quaternion_angle_axis(angle, axis);
@@ -35,13 +35,13 @@ namespace Adollib {
 		}
 
 		//サイズの所得関数のオーバーライド
-		quaternion get_dimension() const {
-			return quaternion(1, 0, 1);
+		Quaternion get_dimension() const {
+			return Quaternion(1, 0, 1);
 		}
 		//world変換関数のオーバーライド
 		void update_world_trans();
 		//sizeや密度が変更されると質量や完成モーメントの変更が必要になるからそのために用意(planeは処理なし)
-		void update_inertial(const vector3& size, float density = 1) {
+		void update_inertial(const Vector3& size, float density = 1) {
 			//float r = size.x;
 			////質量の計算
 			//inertial_mass = 4.0f / 3.0f * r * r * r * DirectX::XM_PI * density;

@@ -30,21 +30,21 @@ namespace Adollib {
 
 
 
-	void Light::set_dirLight(vector3 dir, vector3 color)
+	void Light::set_dirLight(Vector3 dir, Vector3 color)
 	{
 		float d = sqrtf(dir.x * dir.x + dir.y * dir.y + dir.z * dir.z);
 
 		if (d > 0) { dir.x /= d, dir.y /= d, dir.z /= d; }
-		LightDir = vector4(dir.x, dir.y, dir.z, 0);
-		DirLightColor = vector4(color.x, color.y, color.z, 1);
+		LightDir = Vector4(dir.x, dir.y, dir.z, 0);
+		DirLightColor = Vector4(color.x, color.y, color.z, 1);
 
 	}
-	void Light::set_ambient(vector3 amb)
+	void Light::set_ambient(Vector3 amb)
 	{
 		Ambient = { amb.x,amb.y,amb.z,0 };
 
 	}
-	void Light::set_pointLight(vector3 pos, vector3 color, float range)
+	void Light::set_pointLight(Vector3 pos, Vector3 color, float range)
 	{
 		std::shared_ptr<POINTLIGHT> pointlight;
 		pointlight->range = range;
@@ -56,7 +56,7 @@ namespace Adollib {
 		PointLight.push_back(pointlight);
 
 	}
-	void Light::set_spotLight(vector3 pos, vector3 color, vector3 dir,
+	void Light::set_spotLight(Vector3 pos, Vector3 color, Vector3 dir,
 		float range, float near_area, float far_area)
 	{
 		std::shared_ptr<SPOTLIGHT> spotlight;

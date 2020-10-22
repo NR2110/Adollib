@@ -21,7 +21,7 @@ namespace Adollib {
 	struct Facet {
 		u_int vertexID[3]; // 頂点インデックス
 		u_int edgeID[3];   // エッジインデックス
-		vector3 normal;  // 面法線ベクトル
+		Vector3 normal;  // 面法線ベクトル
 	};
 
 	//class MeshColl_base : public Collider {
@@ -31,7 +31,7 @@ namespace Adollib {
 	//	u_int facet_num; //面数
 	//	bool _Convex = true;
 
-	//	std::vector<vector3>* vertices; //頂点情報
+	//	std::vector<Vector3>* vertices; //頂点情報
 	//	std::vector<Edge> edges; //エッジ配列
 	//	std::vector<Facet> facets; //面配列
 
@@ -41,7 +41,7 @@ namespace Adollib {
 	//	u_int get_facet_size() { return facet_num; };
 	//	bool is_Convex() { return _Convex; };
 
-	//	const std::vector<vector3> const* get_vertexis() { return vertices; }
+	//	const std::vector<Vector3> const* get_vertexis() { return vertices; }
 	//	const std::vector<Edge>    const* get_edges() { return  &edges; }
 	//	const std::vector<Facet>   const* get_facets() { return &facets; }
 
@@ -50,8 +50,8 @@ namespace Adollib {
 	//Mesh colliderクラス
 	class Meshcoll : public Collider {
 	public:
-		vector3 half_size = vector3();
-		vector3 offset = vector3();
+		Vector3 half_size = Vector3();
+		Vector3 offset = Vector3();
 		DOP::DOP_14 dopbase;
 
 		u_int vertex_num; //頂点数
@@ -59,12 +59,12 @@ namespace Adollib {
 		u_int facet_num; //面数
 		bool is_Convex = true;
 
-		std::vector<vector3>* vertices; //頂点情報
+		std::vector<Vector3>* vertices; //頂点情報
 		std::vector<Edge> edges; //エッジ配列
 		std::vector<Facet> facets; //面配列
 
 		//不動オブジェクトとして生成
-		Meshcoll(float density = 1, vector3 pos = vector3(0, 0, 0)) {
+		Meshcoll(float density = 1, Vector3 pos = Vector3(0, 0, 0)) {
 			//shapeの設定
 			shape = Collider_shape::shape_mesh;
 
@@ -74,7 +74,7 @@ namespace Adollib {
 			//座標
 			local_position = pos;
 
-			half_size = vector3(0, 0, 0);
+			half_size = Vector3(0, 0, 0);
 		}
 
 		void load_mesh(const char* filename) {
@@ -89,7 +89,7 @@ namespace Adollib {
 
 			Collider_ResourceManager::CreateMCFromFBX(filename, &inde, &vertices);
 
-			std::vector<vector3>& vert = (*vertices);
+			std::vector<Vector3>& vert = (*vertices);
 
 			vertex_num = vert.size();
 
@@ -149,8 +149,8 @@ namespace Adollib {
 							assert(edge.facetID[0] == edge.facetID[1] && "Don't let the edges have 3～ facet.");
 
 							// エッジに含まれないＡ面の頂点がB面の表か裏かで判断
-							vector3 s = vert[facet.vertexID[(o + 2) % 3]];
-							vector3 q = vert[facetB.vertexID[0]];
+							Vector3 s = vert[facet.vertexID[(o + 2) % 3]];
+							Vector3 q = vert[facetB.vertexID[0]];
 							float d = vector3_dot(s - q, facetB.normal);
 
 							//エッジの種類を入力
@@ -182,7 +182,7 @@ namespace Adollib {
 
 			//初期状態のDOPの保存 回転などを考慮したのDOPはこのDOPを基準にする
 			for (int i = 0; i < DOP::DOP_size; i++) {
-				for (vector3& v : vert) {
+				for (Vector3& v : vert) {
 
 					float dis = vector3_dot(DOP::DOP_14_axis[i], v);
 					if (dopbase.max[i] < dis) dopbase.max[i] = +dis * 1.00000001f;//確実にするためちょっと大きめにとる
@@ -190,7 +190,7 @@ namespace Adollib {
 				}
 			}
 
-			half_size = vector3(dopbase.max[0] - dopbase.min[0], dopbase.max[1] - dopbase.min[1], dopbase.max[2] - dopbase.min[2]) / 2.0f;
+			half_size = Vector3(dopbase.max[0] - dopbase.min[0], dopbase.max[1] - dopbase.min[1], dopbase.max[2] - dopbase.min[2]) / 2.0f;
 
 			//質量の計算
 			inertial_mass = (half_size.x * half_size.y * half_size.z) * 8.0f * density;
@@ -203,14 +203,14 @@ namespace Adollib {
 		}
 
 		//サイズの所得関数のオーバーライド
-		quaternion get_dimension() const {
+		Quaternion get_dimension() const {
 			return half_size;
 		}
 		//world変換関数のオーバーライド
 		void update_world_trans();
 
 		//sizeや密度が変更されると質量や完成モーメントの変更が必要になるからそのために用意
-		void update_inertial(const vector3& half_size, float density = 1) {
+		void update_inertial(const Vector3& half_size, float density = 1) {
 			this->density = density;
 
 			//質量の計算
