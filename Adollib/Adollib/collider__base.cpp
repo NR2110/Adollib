@@ -10,15 +10,25 @@ using namespace Contacts;
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 		#pragma region Rigitbody
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+void Collider::reset_force() {
+	linear_velocity = Vector3(0, 0, 0);
+	angula_velocity = Vector3(0, 0, 0);
+
+	accumulated_force = Vector3(0, 0, 0);
+	accumulated_torque = Vector3(0, 0, 0);
+
+	linear_acceleration = Vector3(0, 0, 0);
+	angula_acceleration = Vector3(0, 0, 0);
+}
 
 void Collider::apply_external_force(float duration) {
 	if (is_movable()) {
 
-		if(is_fallable()) liner_acceleration += Vector3(0, -physics_g::gravity, 0); //TODO : time_stepを考慮していない
+		if(is_fallable()) linear_acceleration += Vector3(0, -physics_g::gravity, 0); //TODO : time_stepを考慮していない
 
 		//並進移動に加える力(accumulated_force)から加速度を出して並進速度を更新する
-		liner_acceleration += accumulated_force / inertial_mass;
-		linear_velocity += liner_acceleration * duration;
+		linear_acceleration += accumulated_force / inertial_mass;
+		linear_velocity += linear_acceleration * duration;
 		
 
 		//各回転に加える力(accumulated_torque)から加速度を出して角速度を更新する
@@ -26,9 +36,9 @@ void Collider::apply_external_force(float duration) {
 		matrix rotation = local_orientation.get_rotate_matrix();
 		matrix transposed_rotation = matrix_trans(rotation);
 		inverse_inertia_tensor = transposed_rotation * inverse_inertia_tensor * rotation;
-		angular_acceleration += vector3_trans(accumulated_torque, inverse_inertia_tensor);
+		angula_acceleration += vector3_trans(accumulated_torque, inverse_inertia_tensor);
 
-		angula_velocity += angular_acceleration * duration;
+		angula_velocity += angula_acceleration * duration;
 		if (angula_velocity.norm() < FLT_EPSILON)angula_velocity = Vector3(0, 0, 0);
 	}
 
@@ -36,8 +46,8 @@ void Collider::apply_external_force(float duration) {
 	accumulated_force = Vector3(0, 0, 0);
 	accumulated_torque = Vector3(0, 0, 0);
 
-	liner_acceleration = Vector3(0, 0, 0);
-	angular_acceleration = Vector3(0, 0, 0);
+	linear_acceleration = Vector3(0, 0, 0);
+	angula_acceleration = Vector3(0, 0, 0);
 }
 void Collider::integrate(float duration) {
 	//位置の更新

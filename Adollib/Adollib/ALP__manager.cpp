@@ -36,6 +36,8 @@ namespace Adollib
 		// ŠO—Í‚ÌXV
 		applyexternalforce(Rigitbody_manager::colliders[Sce]);
 
+		physics_g::timeStep = Al_Global::second_per_frame;
+
 		static std::vector<Contacts::Collider_2> broad_mid_pair;
 
 		// ‘åG”c‚È“–‚½‚è”»’è

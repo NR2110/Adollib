@@ -12,13 +12,13 @@ namespace Adollib
 {
 	// Š‘®‚·‚éƒV[ƒ“‚Ì‰Šú‰»Žž‚Éˆê“x‚¾‚¯ŒÄ‚Î‚ê‚é
 	void camera_manager_s::awake() {
-			set_camera(vector3(0, 30, -50), vector3(0, 0, 1));
+			set_camera(Vector3(0, 30, -50), Vector3(0, 0, 1));
 			Al_Global::render_collider_flag = false;
 	}
 
 	void camera_manager_s::start()
 	{
-		//	set_camera(vector3(0, 0, 20), vector3(0, 0, 1));
+		//	set_camera(Vector3(0, 0, 20), Vector3(0, 0, 1));
 
 	}
 
@@ -28,8 +28,8 @@ namespace Adollib
 		if (input->getKeyTrigger(Key::C))
 			Al_Global::render_collider_flag = Al_Global::render_collider_flag == false ? true : false;
 
-		vector3 veA(2, 9, 5);
-		vector3 veB(3, 5, 7);
+		Vector3 veA(2, 9, 5);
+		Vector3 veB(3, 5, 7);
 		DirectX::XMFLOAT3 XMA (2, 9, 5);
 		DirectX::XMFLOAT3 XMB (3, 5, 7);
 		DirectX::XMVECTOR VEA = DirectX::XMLoadFloat3(&XMA);
@@ -37,7 +37,7 @@ namespace Adollib
 		DirectX::XMFLOAT3 XMCross;
 
 		DirectX::XMStoreFloat3(&XMCross, DirectX::XMVector3Cross(VEA, VEB));
-		vector3 vecCross = vector3_cross(veA, veB);
+		Vector3 vecCross = vector3_cross(veA, veB);
 
 
 		matrix ma = quaternion_from_euler(32, 65, 8).get_rotate_matrix();
@@ -51,7 +51,7 @@ namespace Adollib
 
 		//quaternion A = quaternion_from_euler(180, 0, 0);
 
-		//vector3 B = A.euler();
+		//Vector3 B = A.euler();
 
 		//if (10 < fabsf(B.z)) {
 		//	int dafsgdf = 0;
@@ -61,25 +61,25 @@ namespace Adollib
 		//}
 		//quaternion C = quaternion_from_euler(B);
 
-		//quaternion X = quaternion_angle_axis(45, vector3(1, 0, 0));
-		//quaternion Y = quaternion_angle_axis(45, vector3(0, 1, 0));
-		//quaternion Z = quaternion_angle_axis(45, vector3(0, 0, 1));
+		//quaternion X = quaternion_angle_axis(45, Vector3(1, 0, 0));
+		//quaternion Y = quaternion_angle_axis(45, Vector3(0, 1, 0));
+		//quaternion Z = quaternion_angle_axis(45, Vector3(0, 0, 1));
 		//quaternion Z_X_Y = Z * X * Y;
-		//vector3 Ea = Q.euler();
+		//Vector3 Ea = Q.euler();
 
-		//vector3 n = vector3(0, 0, 1);
-		//vector3 Va = vector3_be_rotated_by_quaternion(n, Q);
+		//Vector3 n = Vector3(0, 0, 1);
+		//Vector3 Va = vector3_be_rotated_by_quaternion(n, Q);
 
 		//matrix M = Q.get_rotate_matrix();
-		//vector3 Vb = vector3_trans(n, M);
+		//Vector3 Vb = vector3_trans(n, M);
 		//M._41 = 100;
 		//M._42 = 50;
 		//M._43 = 80;
 
 		//matrix Mi = matrix_inverse(M);
 
-		//vector3 Vc = vector3_trans(n, Mi);
-		//vector3 Vd = vector3_trans(Vc, M);
+		//Vector3 Vc = vector3_trans(n, Mi);
+		//Vector3 Vd = vector3_trans(Vc, M);
 
 
 		int fff = 0;
@@ -90,10 +90,10 @@ namespace Adollib
 		DirectX::XMStoreFloat3(&AA, Q);
 
 
-		vector3 V = vector3(0, 0, 1);
+		Vector3 V = Vector3(0, 0, 1);
 		V = vector3_be_rotated_by_quaternion(V, A);
 
-		vector3 B = A.euler();
+		Vector3 B = A.euler();
 
 		DirectX::XMFLOAT3 XF = DirectX::XMFLOAT3(0, 0, 1);
 		DirectX::XMVECTOR XV;
@@ -129,7 +129,7 @@ namespace Adollib
 
 
 namespace Adollib {
-	void camera_manager_s::set_camera(vector3 pos, vector3 look_pos) {
+	void camera_manager_s::set_camera(Vector3 pos, Vector3 look_pos) {
 		Camera* camera = nullptr;
 		camera = Gameobject_manager::create_camera("camera");
 		camera->addComponent<camera_s>();
@@ -138,7 +138,7 @@ namespace Adollib {
 		camera->transform->local_orient = quaternion_look_at(pos, look_pos);
 
 		//camera->transform->local_position = pos.get_XM3();
-		//camera->transform->local_rotation = quaternion_look_at(pos, vector3(0, 0, 0)).euler().get_XM3();
+		//camera->transform->local_rotation = quaternion_look_at(pos, Vector3(0, 0, 0)).euler().get_XM3();
 		//camera->transform->position = pos.get_XM3();
 		//camera->transform->position = DirectX::XMFLOAT3(0, 0, 0);
 

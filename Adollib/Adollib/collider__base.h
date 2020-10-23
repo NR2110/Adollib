@@ -57,8 +57,8 @@ namespace Adollib {
 		Vector3 linear_velocity = Vector3();    //並進速度
 		Vector3 angula_velocity = Vector3();   //角速度
 
-		Vector3 liner_acceleration = Vector3();  //加速
-		Vector3 angular_acceleration = Vector3();//角加速
+		Vector3 linear_acceleration = Vector3();  //加速
+		Vector3 angula_acceleration = Vector3();//角加速
 
 		float inertial_mass = 0;           //慣性質量
 
@@ -78,6 +78,9 @@ namespace Adollib {
 
 		//外力の更新
 		void apply_external_force(float duration = 1);
+
+		//速度、加速度を0にする
+		void reset_force();
 
 		//座標,姿勢の更新
 		void integrate(float duration = 1);

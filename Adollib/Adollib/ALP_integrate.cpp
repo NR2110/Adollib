@@ -9,6 +9,16 @@ using namespace Contacts;
 
 using namespace physics_function;
 
+//速度などをリセット
+void physics_function::resetforce(std::list<Collider*>& coll) {
+
+	std::list<Collider*>::iterator collitr;
+	std::list<Collider*>::iterator collitr_end = coll.end();
+
+	for (collitr = coll.begin(); collitr != collitr_end; collitr++) {
+		(*collitr)->reset_force();
+	}
+}
 
 //外力による速度などの更新
 void physics_function::applyexternalforce(std::list<std::shared_ptr<Adollib::Collider>>& coll) {
