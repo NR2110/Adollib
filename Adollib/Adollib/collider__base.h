@@ -22,7 +22,6 @@ namespace Adollib {
 		shape_mesh,
 
 		shape_size
-
 	};
 
 	class Collider {
@@ -60,13 +59,13 @@ namespace Adollib {
 		Vector3 linear_acceleration = Vector3();  //‰Á‘¬
 		Vector3 angula_acceleration = Vector3();//Šp‰Á‘¬
 
-		float inertial_mass = 0;           //Šµ«¿—Ê
 
 		Vector3 accumulated_force = Vector3();  //•ÀiˆÚ“®‚É‰Á‚¦‚é—Í
+		Vector3 accumulated_torque = Vector3(); //Šp‰ñ“]‚É‰Á‚¦‚é—Í
 
 		matrix inertial_tensor = matrix();      //Šµ«ƒ‚[ƒƒ“ƒg
+		float inertial_mass = 0;           //Šµ«¿—Ê
 
-		Vector3 accumulated_torque = Vector3(); //Šp‰ñ“]‚É‰Á‚¦‚é—Í
 
 		Collider() :
 			local_position(0, 0, 0), local_orientation(1, 0, 0, 0), local_scale(1,1,1),
