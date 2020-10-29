@@ -1,0 +1,54 @@
+
+// 剛体の状態
+struct EpxState {
+	EpxVector3	m_position; // 位置
+	EpxQuat		m_orientation; // 姿勢
+	EpxVector3	m_linearVelocity; // 並進速度
+	EpxVector3	m_angularVelocity; // 回転速度
+	EpxMotionType m_motionType; // ふるまい
+}
+// モーションタイプ
+enum EpxMotionType {
+	EpxMotionTypeActive, //アクティブ
+	EpxMotionTypeStatic //固定
+};
+
+-----------------------------
+// 剛体の属性
+struct EpxRigidBody {
+	EpxMatrix3     m_inertia; // 慣性テンソル
+	EpxFloat       m_mass; // 質量
+	EpxFloat       m_restitution; // 反発係数
+	EpxFloat       m_friction; // 摩擦係数
+}
+
+----------------------------
+// 形状コンテナ
+struct EpxCollidable {
+	EpxUInt8 m_numShapes; // 保持する形状数
+	EpxShape m_shapes[EPX_NUM_SHAPES]; // 形状の配列
+	EpxVector3 m_center; // AABBの中心
+	EpxVector3 m_half; // AABBのサイズの半分
+}
+// 形状
+struct EpxShape {
+	EpxConvexMesh m_geometry; // 凸メッシュ
+	EpxVector3 m_offsetPosition; // オフセット位置
+	EpxQuat m_offsetOrientation; // オフセット姿勢
+	void *userData; // ユーザーデータ
+}
+
+----------------------------
+const int maxRigidBodies	= 500; //最大のobj数
+const int maxJoints			= 100; //最大joint数
+const int maxPairs			= 5000;//最大衝突組数
+const float timeStep		= 0.016f; //delta_timeもどき
+const float contactBias		= 0.1f;
+const float contactSlop		= 0.001f;
+const int iteration			= 10; //衝突の正確さ(1つのpairなどが1フレームに計算する回数)
+const EpxVector3 gravity(0.0f,-9.8f,0.0f);
+
+
+
+
+

@@ -1,0 +1,66 @@
+
+class Physics_manager{
+private:
+ Collider[1000]
+ RigitBody[1000]
+ Shape[1000]
+
+public:
+gravity //重力
+
+default_rigitbody //何も設定していないときのpyisicsの値
+
+bounce_threshold //跳ね返りの閾値
+sleep_threshold //sleepの閾値
+
+contact_max_per_pair //一つのpairで衝突の解散を行う最大の数
+contact_allowable_error //これ以上近いと同一衝突点とする
+contact_threrhold_normal //衝突点の閾値
+contact_threrhold_tangent //衝突点の閾値
+contact_pairs_mode //接触のpairの生成をおこなうタイプ (kinematicどおしでpairを生成したりしなかったり)
+
+bias //めり込みを直す力
+slop //衝突の許容値
+
+solver_iterations //衝突の精度
+hit_backfaces_flag //meshの後ろから衝突するか
+
+}
+
+class Colldier_base{
+public:
+local_position
+local_orientation
+local_scale
+
+private:
+Shape 
+world_position
+world_prientation
+world_scale
+}
+
+
+class RigitBody{
+public:
+mass //質量
+drag //空気抵抗
+anglar_drag //空気抵抗
+dynamic_friction //動摩擦
+static_friction //静摩擦
+bounciness 弾性
+
+is_fallable() //落ちない
+is_kinematic() //影響うけない(fallはする)
+is_moveable() //動かない
+
+private:
+speed //debugしやすいように
+linear_velocity //並進速度
+anglar_velocity //回転速度
+inertia_tensor //慣性テンソル
+
+sleep_state //sleep状態かのflag
+
+}
+

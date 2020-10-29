@@ -12,7 +12,7 @@ struct edge{
 	bool stgo; //true = st, false = go 
 };
 
-void physics_function::Broadphase(std::list<std::shared_ptr<Adollib::Collider>>& coll, std::vector<Contacts::Collider_2>& out_pair, std::vector<Contacts::Contact_pair>& pairs) {
+void physics_function::Broadphase(std::list<Adollib::Collider*>& coll, std::vector<Contacts::Collider_2>& out_pair, std::vector<Contacts::Contact_pair>& pairs) {
 
 #if 1
 	//Sweep&Prune‚ð‘}“ü–@‚ÅŽÀ‘•
@@ -22,14 +22,14 @@ void physics_function::Broadphase(std::list<std::shared_ptr<Adollib::Collider>>&
 
 	Work_meter::start("update_dop14");
 	int coll_size = coll.size();
-	std::list<std::shared_ptr<Adollib::Collider>>::iterator itr;
-	std::list<std::shared_ptr<Adollib::Collider>>::iterator itr_end = coll.end();
+	std::list<Adollib::Collider*>::iterator collitr;
+	std::list<Adollib::Collider*>::iterator collitr_end = coll.end();
 
-	for (itr = coll.begin(); itr != itr_end; itr++) {
-		if ((*itr)->move == true) {
+	for (collitr = coll.begin(); collitr != collitr_end; collitr++) {
+		if ((*collitr)->move == true) {
 			int dafsdbf = 0;
 		}
-		(*itr)->update_dop14();
+		(*collitr)->update_dop14();
 	}
 	Work_meter::stop("update_dop14");
 
@@ -46,14 +46,14 @@ void physics_function::Broadphase(std::list<std::shared_ptr<Adollib::Collider>>&
 		for (int xz = 0; xz < 3; xz++) {
 			axis_list[xz].clear();
 
-			for (itr = coll.begin(); itr != itr_end; itr++) {
+			for (collitr = coll.begin(); collitr != collitr_end; collitr++) {
 
-				ed.value = (*itr)->dop14.pos[xz] + (*itr)->dop14.max[xz];
-				ed.coll =  (*itr).get();
+				ed.value = (*collitr)->dop14.pos[xz] + (*collitr)->dop14.max[xz];
+				ed.coll =  (*collitr);
 				ed.stgo = false;
 
 				axis_list[xz].emplace_back(ed);
-				ed.value = (*itr)->dop14.pos[xz] + (*itr)->dop14.min[xz];
+				ed.value = (*collitr)->dop14.pos[xz] + (*collitr)->dop14.min[xz];
 				ed.stgo = true;
 				axis_list[xz].emplace_back(ed);
 

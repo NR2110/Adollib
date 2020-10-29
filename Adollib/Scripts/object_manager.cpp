@@ -10,6 +10,8 @@
 #include "../Adollib/imgui_all.h"
 
 #include "../Adollib/physics_global.h"
+
+#include "../Adollib/ALP__manager.h"
 namespace Adollib
 {
 	// 所属するシーンの初期化時に一度だけ呼ばれる
@@ -37,8 +39,8 @@ namespace Adollib
 				GO->transform->local_orient = quaternion_from_euler(45, 0, 0);
 				GO->material->color = Vector4(1, 1, 1, 1);
 
-				//Box* R = GO->add_collider<Box>();
-				Meshcoll* R = GO->add_collider<Meshcoll>();
+				//Box* R = GO->addComponent<Box>();
+				Meshcoll* R = GO->addComponent<Meshcoll>();
 				R->load_mesh("./DefaultModel/cube.fbx");
 				R->move = false;
 			}
@@ -50,8 +52,8 @@ namespace Adollib
 				GO->transform->local_orient = quaternion_from_euler(45, 0, 0);
 				GO->material->color = Vector4(1, 1, 1, 1);
 
-				Box* R = GO->add_collider<Box>();
-				//Meshcoll* R = GO->add_collider<Meshcoll>();
+				Box* R = GO->addComponent<Box>();
+				//Meshcoll* R = GO->addComponent<Meshcoll>();
 				//R->load_mesh("./DefaultModel/cube.fbx");
 				R->move = false;
 			}
@@ -64,8 +66,8 @@ namespace Adollib
 				//GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
 				//GO->material->color = Vector4(1, 1, 1, 1);
 
-				////Box* R = GO->add_collider<Box>();
-				//Meshcoll* R = GO->add_collider<Meshcoll>();
+				////Box* R = GO->addComponent<Box>();
+				//Meshcoll* R = GO->addComponent<Meshcoll>();
 				//R->load_mesh("./DefaultModel/cube.fbx");
 				//R->move = false;
 			}
@@ -77,8 +79,8 @@ namespace Adollib
 				GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
 				GO->material->color = Vector4(1, 1, 1, 1);
 
-				Box* R = GO->add_collider<Box>();
-				//Meshcoll* R = GO->add_collider<Meshcoll>();
+				Box* R = GO->addComponent<Box>();
+				//Meshcoll* R = GO->addComponent<Meshcoll>();
 				//R->load_mesh("./DefaultModel/cube.fbx");
 				R->move = false;
 			}
@@ -177,11 +179,11 @@ namespace Adollib
 			ImGui::Checkbox("delete", &del); //objectの削除
 
 			if (del) {
-				for (int i = 0; i < GOs.size(); i++) {
-					GOs[i]->clear_collider();
-					GOs[i]->active = false;
+				for (int i = 0; i < colls.size(); i++) {
+					colls[i]->gameobject->active = false;
+					Rigitbody_manager::remove_collider(colls[i]);
 				}
-				GOs.clear();
+				colls.clear();
 			}
 
 			//重力の調整
@@ -334,10 +336,10 @@ namespace Adollib
 				object->transform->local_pos = Vector3(0,5,0);
 				object->transform->local_scale = Vector3(1,1,1);
 
-				//Box* M = object->add_collider<Box>();
-				Meshcoll* M = object->add_collider<Meshcoll>();
+				//Box* M = object->addComponent<Box>();
+				Meshcoll* M = object->addComponent<Meshcoll>();
 				M->load_mesh("./DefaultModel/cube.fbx");
-				GOs.emplace_back(object);
+				colls.emplace_back(M);
 
 
 			}
@@ -358,8 +360,8 @@ namespace Adollib
 				object->transform->local_pos = Vector3(0, 5, 0);
 				object->transform->local_scale = Vector3(1, 1, 1);
 
-				Box* M = object->add_collider<Box>();
-				GOs.emplace_back(object);
+				Box* M = object->addComponent<Box>();
+				colls.emplace_back(M);
 
 			}
 
@@ -379,8 +381,8 @@ namespace Adollib
 				object->transform->local_pos = Vector3(0, 5, 0);
 				object->transform->local_scale = Vector3(1, 1, 1);
 
-				Box* M = object->add_collider<Box>();
-				GOs.emplace_back(object);
+				Box* M = object->addComponent<Box>();
+				colls.emplace_back(M);
 
 
 			}
@@ -397,10 +399,10 @@ namespace Adollib
 				object->transform->local_pos = Vector3(0, 5, 0);
 				object->transform->local_scale = Vector3(1, 1, 1);
 
-				//Box* M = object->add_collider<Box>();
-				Meshcoll* M = object->add_collider<Meshcoll>();
+				//Box* M = object->addComponent<Box>();
+				Meshcoll* M = object->addComponent<Meshcoll>();
 				M->load_mesh("./DefaultModel/cube.fbx");
-				GOs.emplace_back(object);
+				colls.emplace_back(M);
 
 
 			}
@@ -437,8 +439,8 @@ namespace Adollib
 		object->transform->local_pos = pos;
 		object->transform->local_scale = Vector3(r, r, r);
 
-		object->add_collider<Sphere>();
-		GOs.emplace_back(object);
+		Collider* coll = object->addComponent<Sphere>();
+		colls.emplace_back(coll);
 		return object;
 	}
 
@@ -453,11 +455,11 @@ namespace Adollib
 		object->transform->local_pos = pos;
 		object->transform->local_scale = size;
 
-		Box* M = object->add_collider<Box>();
-		//Meshcoll* M = object->add_collider<Meshcoll>();
+		Box* M = object->addComponent<Box>();
+		//Meshcoll* M = object->addComponent<Meshcoll>();
 		//M->load_mesh("./DefaultModel/cube.fbx");
 		//M->inertial_mass = 1;
-		GOs.emplace_back(object);
+		colls.emplace_back(M);
 		return object;
 	}
 
@@ -472,11 +474,11 @@ namespace Adollib
 		object->transform->local_pos = pos;
 		object->transform->local_scale = size;
 
-		//Box* M = object->add_collider<Box>();
-		Meshcoll* M = object->add_collider<Meshcoll>();
+		//Box* M = object->addComponent<Box>();
+		Meshcoll* M = object->addComponent<Meshcoll>();
 		M->load_mesh("./DefaultModel/cone.fbx");
 		//M->inertial_mass = 1;
-		GOs.emplace_back(object);
+		colls.emplace_back(M);
 		return object;
 	}
 
@@ -490,8 +492,8 @@ namespace Adollib
 		object->transform->local_pos = pos;
 		object->transform->local_scale = Vector3(30, 0.1, 30);
 
-		object->add_collider<Plane>();
-		GOs.emplace_back(object);
+		Collider* coll = object->addComponent<Plane>();
+		colls.emplace_back(coll);
 		return object;
 	}
 
@@ -505,7 +507,7 @@ namespace Adollib
 		object->transform->local_pos = pos;
 		object->transform->local_scale = Vector3(r, r, r);
 
-		Sphere* S = object->add_collider<Sphere>();
+		Sphere* S = object->addComponent<Sphere>();
 
 		object_fall* F = object->addComponent<object_fall>();
 		F->collier = S;
@@ -523,7 +525,7 @@ namespace Adollib
 		object->transform->local_pos = pos;
 		object->transform->local_scale = size;
 
-		Box* B = object->add_collider<Box>();
+		Box* B = object->addComponent<Box>();
 		B->inertial_mass = 1;
 
 		object_fall* F = object->addComponent<object_fall>();
@@ -570,7 +572,7 @@ namespace Adollib
 
 	//	std::vector<std::string> no;
 	//	no.push_back("all");
-	//	object->add_collider<Plane>(pos, normal, 1, "plane", no);
+	//	object->addComponent<Plane>(pos, normal, 1, "plane", no);
 
 	//	return object;
 	//}

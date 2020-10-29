@@ -21,22 +21,28 @@ void physics_function::resetforce(std::list<Collider*>& coll) {
 }
 
 //外力による速度などの更新
-void physics_function::applyexternalforce(std::list<std::shared_ptr<Adollib::Collider>>& coll) {
+void physics_function::applyexternalforce(std::list<Adollib::Collider*>& coll) {
 
-	std::list<std::shared_ptr<Adollib::Collider>>::iterator collitr;
-	std::list<std::shared_ptr<Adollib::Collider>>::iterator collitr_end = coll.end();
+	std::list<Adollib::Collider*>::iterator collitr;
+	std::list<Adollib::Collider*>::iterator collitr_end = coll.end();
+
 
 	for (collitr = coll.begin(); collitr != collitr_end; collitr++) {
+		//DEBUG : oncollのflagをfalseに
+		for (std::string name : (*collitr)->oncoll_enter_names) {
+			(*collitr)->oncoll_checkmap[name] = false;
+		}
+
 		(*collitr)->apply_external_force(physics_g::timeStep);
 	}
 }
 //:::::::::::::::::::::::::::
 
 
-void physics_function::integrate(std::list<std::shared_ptr<Adollib::Collider>>& coll) {
+void physics_function::integrate(std::list<Adollib::Collider*>& coll) {
 
-	std::list<std::shared_ptr<Adollib::Collider>>::iterator collitr;
-	std::list<std::shared_ptr<Adollib::Collider>>::iterator collitr_end = coll.end();
+	std::list<Adollib::Collider*>::iterator collitr;
+	std::list<Adollib::Collider*>::iterator collitr_end = coll.end();
 
 	for (collitr = coll.begin(); collitr != collitr_end; collitr++) {
 		(*collitr)->integrate(physics_g::timeStep);

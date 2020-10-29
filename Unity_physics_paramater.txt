@@ -1,0 +1,63 @@
+Collider:
+Is Trigger
+Material
+Center //相対座標
+Size //相対scale
+----------------------
+RigitBody:
+Mass
+Drag //抗力(空気抵抗 無限の時静止する)
+Angular Drag //抗力(空気抵抗 無限でも静止しない)
+Use Gravity
+Is Kinematic //物理演算の影響を受けるか(他のrigitbody空の影響を受けなくなる)
+Interpolate //補間(やらない)
+Collidion Detection //高速で動いても貫通しないようにする
+--
+Constraints:
+Freeze position
+Freeze rotation
+--
+Info : (触れられない)
+Speed
+Velocity
+Anglar Velocity
+Inertia Tensor
+Inertia Tensor Rotation
+Local Center of Mass
+World Center of Mass
+Sleep State
+--------------------------------------
+Physic Material :
+Dtnamic Friction //動摩擦
+Static Friction //静摩擦
+Bounciness //弾性
+Friction Combine //衝突するobj間の摩擦をどうするか
+Bounce Combine //衝突するobj間の跳ね返し度合いをどうするか
+------------------------------------
+global:
+Gravity
+Default Material //defaultの
+Bounce Threshold //最小の相対速度 これ以下だと跳ね返らない
+Sleep Threshold //速度がこの値以下だとsleepする
+Default Contact Offset //これ以上近いと接触指定している
+Default Solver Iterations //拘束の繰り返す数
+Default Solver Velocity Iterations //速度の繰り返す数
+Queries Hit Backfaces //meshcolliderで裏面から衝突するか
+Queries Hit Triggers //rayが交差するobjのflag
+Enable Adaptive Force //積み重なったものがなんかよくなる
+Contacts Generation //接触の生成方法(SATorPCM)
+Auto Simulation //自動的になんかよくなる
+Auto Sync Transforms //Transformが変更されたとき物理を同期させる
+Contact Pairs Mode //接触のpairの生成をおこなうタイプ (kinematicどおしでpairを生成したりしなかったり)
+Broadphase Type //Broadphaseのアルゴリズム
+World Bounds //Broadphaseをグリッドで行うときworldを囲む2Dグリッドを定義する
+World Subdivisions //Broadphaseをグリッドで行うときX,Zのセルの数
+Friction Type //摩擦の計算方法
+Enable Enhanced Determinism
+Enable Unified Heightmaps
+Layer Collision Matrix
+Cloth Inter-Collision
+Distance
+Stiffness
+
+

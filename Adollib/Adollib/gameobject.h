@@ -99,30 +99,6 @@ namespace Adollib {
 			else return transform->local_scale;
 		};
 
-		template<typename T>
-		T* add_collider() {
-
-			std::shared_ptr<T> newCom = std::make_shared<T>();
-			Collider* pCom = dynamic_cast<Collider*>(newCom.get());
-			if (pCom == nullptr)return nullptr;
-
-			std::list<std::shared_ptr<Adollib::Collider>>::iterator C =  Rigitbody_manager::add_collider<T>(this_scene);
-			(*C)->gameobject = this;
-			collider.emplace_back(C);
-
-			T* ret = dynamic_cast<T*>((*C).get());
-
-			return ret;
-		}
-
-		void clear_collider() {
-			for (int i = 0; i < collider.size();i++) {
-				Rigitbody_manager::remove_collider(collider[i], this_scene);
-			}
-			collider.clear();
-		}
-
-
 		//active‚ª•ÏX‚³‚ê‚½‚Æ‚«‚Ìˆ—‚ðŒÄ‚Ño‚·
 		void set_active(bool value) {
 			if (active == value)return;
@@ -233,7 +209,6 @@ namespace Adollib {
 		//‰ð•úˆ—
 		void destroy() {
 			clearComponent();
-			clear_collider();
 
 			collider.clear();
 		}

@@ -7,9 +7,9 @@ namespace Adollib {
 		void resetforce(std::list<Collider*>& coll);
 
 		//外力による速度などの更新
-		void applyexternalforce(std::list<std::shared_ptr<Adollib::Collider>>& coll);
+		void applyexternalforce(std::list<Adollib::Collider*>& coll);
 
-		void integrate(std::list<std::shared_ptr<Adollib::Collider>>& coll);
+		void integrate(std::list<Adollib::Collider*>& coll);
 
 
 	}

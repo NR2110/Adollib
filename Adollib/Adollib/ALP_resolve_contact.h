@@ -14,7 +14,7 @@ namespace Adollib {
 		};
 
 		//Õ“Ë‰ğŒˆ
-		void resolve_contact(std::list<std::shared_ptr<Adollib::Collider>>, std::vector<Contacts::Contact_pair>& pairs);
+		void resolve_contact(std::list<Adollib::Collider*>, std::vector<Contacts::Contact_pair>& pairs);
 
 	}
 }

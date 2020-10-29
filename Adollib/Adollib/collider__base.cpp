@@ -69,6 +69,15 @@ void Collider::resolve_gameobject() {
 	gameobject->transform->local_pos += offset_CollGO_pos;
 }
 
+bool Collider::concoll_enter(std::string tag_name) {
+	if (oncoll_checkmap.count(tag_name) == 0) {
+		oncoll_checkmap[tag_name] = false;
+		oncoll_enter_names.push_back(tag_name);
+	}
+	bool ret = oncoll_checkmap[tag_name];
+	return ret;
+}
+
 void Collider::add_force(const Vector3& force) {
 	accumulated_force += force;
 }
@@ -115,6 +124,10 @@ matrix Collider::inverse_inertial_tensor() const{
 
 #pragma endregion
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+void Collider::awake() {
+	std::list<Collider*>::iterator C = Rigitbody_manager::add_collider(this);
+}
 
 
 

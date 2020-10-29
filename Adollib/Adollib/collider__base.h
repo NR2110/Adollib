@@ -3,11 +3,12 @@
 #include <vector>
 #include <assert.h>
 #include <string>
+#include <unordered_map>
 #include "math.h"
+#include "component.h"
 
 namespace Adollib {
 
-	class Gameobject;
 	namespace  physics_function {
 		class Solverbody;
 	}
@@ -24,12 +25,14 @@ namespace Adollib {
 		shape_size
 	};
 
-	class Collider {
+	class Collider : public Component {
 	public:
+		
+		std::list<Collider*>::iterator coll_itr; //自身へのイテレータ
+
 		bool move = true; //可動オブジェクトカどうかのフラグ
 		bool fall = true;
-
-		Gameobject* gameobject = nullptr;	//親情報
+		bool onColl = false;
 
 		Collider_shape shape = Collider_shape::shape_size;	//形情報
 		DOP::DOP_14 dop14; //DOP_7データ
@@ -57,7 +60,7 @@ namespace Adollib {
 		Vector3 angula_velocity = Vector3();   //角速度
 
 		Vector3 linear_acceleration = Vector3();  //加速
-		Vector3 angula_acceleration = Vector3();//角加速
+		Vector3 angula_acceleration = Vector3();  //角加速
 
 
 		Vector3 accumulated_force = Vector3();  //並進移動に加える力
@@ -66,6 +69,8 @@ namespace Adollib {
 		matrix inertial_tensor = matrix();      //慣性モーメント
 		float inertial_mass = 0;           //慣性質量
 
+		std::unordered_map<std::string, bool> oncoll_checkmap; //oncollisiionenter用
+		std::vector<std::string> oncoll_enter_names;
 
 		Collider() :
 			local_position(0, 0, 0), local_orientation(1, 0, 0, 0), local_scale(1,1,1),
@@ -74,6 +79,9 @@ namespace Adollib {
 			accumulated_torque(0, 0, 0), solve(nullptr)
 		{
 		}
+
+	public:
+		bool concoll_enter(std::string tag_name);
 
 		//外力の更新
 		void apply_external_force(float duration = 1);
@@ -120,6 +128,8 @@ namespace Adollib {
 		//オブジェクトが動くたびに呼び出す　のが効率よいが適当に毎フレーム呼ぶ
 		//DOP_14データの更新
 		virtual void update_dop14() = 0;
+
+		void awake() override;
 
 	};
 }

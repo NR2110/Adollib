@@ -1,0 +1,57 @@
+
+bool move = true; //可動オブジェクトカどうかのフラグ
+bool fall = true;
+
+Gameobject* 	//親情報
+
+Collider_shape shape 		//形情報
+DOP_14 			//DOP_14 データ
+physics_function::Solverbody* solve; //衝突解決用
+
+tag; 		//自身のタグ
+No_hit_tag; 	//衝突しないタグ
+
+world_position 	 //ワールド空間での座標
+world_orientation	 //ワールド空間での姿勢
+world_scale            	 //ワールド空間での大きさ
+
+local_position           	//goからの相対座標
+local_orientation      	//goからの相対姿勢
+local_scale		//goとの相対scale
+
+density 		//密度
+restitution		//反発係数
+friction 		//摩擦力
+
+offset_CollGO_quat;
+offset_CollGO_pos;
+
+linear_velocity     	//並進速度
+angula_velocity  	 //角速度
+
+linear_acceleration   	//加速
+angula_acceleration 	//角加速
+
+
+accumulated_force  	//並進移動に加える力
+accumulated_torque  	//角回転に加える力
+
+inertial_tensor      	//慣性モーメント
+inertial_mass           	//慣性質量
+-----------------------
+global:
+Contact_max_per_pair //一つのpairで衝突の解散を行う最大の数
+Allowable_error //これ以上近いと同一衝突点とする
+Contact_threrhold_normal //衝突点の閾値
+Contact_threrhold_tangent //衝突点の閾値
+
+bias //めり込みを直す力
+slop //衝突の許容値
+
+timestep //delta time もどき
+gravity //8.9
+
+accuracy //衝突の精度
+
+
+

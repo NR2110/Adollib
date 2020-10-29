@@ -15,7 +15,9 @@ using namespace physics_function;
 namespace Adollib
 {
 
-	std::unordered_map<Scenelist, std::list<std::shared_ptr<Adollib::Collider>>>   Rigitbody_manager::colliders;
+	int Rigitbody_manager::flame_count = 0;
+
+	std::unordered_map<Scenelist, std::list<Collider*>>   Rigitbody_manager::colliders;
 
 	std::vector<Contacts::Contact_pair> Rigitbody_manager::pairs;
 
@@ -24,13 +26,14 @@ namespace Adollib
 		std::vector<Contact> contacts;
 		float resituation = Al_Global::base_resituation;
 
-		std::list<std::shared_ptr<Adollib::Collider>>::iterator collitr = Rigitbody_manager::colliders[Sce].begin();
-		std::list<std::shared_ptr<Adollib::Collider>>::iterator collitr_end = Rigitbody_manager::colliders[Sce].end();
+		std::list<Adollib::Collider*>::iterator collitr = Rigitbody_manager::colliders[Sce].begin();
+		std::list<Adollib::Collider*>::iterator collitr_end = Rigitbody_manager::colliders[Sce].end();
 
 
 		//world空間での情報を更新
 		for (collitr = Rigitbody_manager::colliders[Sce].begin();collitr != collitr_end; collitr++) {
 			(*collitr)->update_world_trans();
+			(*collitr)->onColl = false;
 		}
 
 		// 外力の更新

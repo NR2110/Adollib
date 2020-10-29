@@ -70,10 +70,10 @@ struct com_in {
 };
 
 #include "work_meter.h"
-void physics_function::resolve_contact(std::list<std::shared_ptr<Adollib::Collider>> colliders, std::vector<Contacts::Contact_pair>& pairs) {
+void physics_function::resolve_contact(std::list<Adollib::Collider*> colliders, std::vector<Contacts::Contact_pair>& pairs) {
 
-	std::list<std::shared_ptr<Adollib::Collider>>::iterator collitr;
-	std::list<std::shared_ptr<Adollib::Collider>>::iterator collitr_end = colliders.end();
+	std::list<Adollib::Collider*>::iterator collitr;
+	std::list<Adollib::Collider*>::iterator collitr_end = colliders.end();
 	//::: 解決用オブジェクトの生成 :::::::::::
 	std::vector<Solverbody> SBs;
 	{
