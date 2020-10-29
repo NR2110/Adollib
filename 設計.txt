@@ -38,6 +38,9 @@ Shape
 world_position
 world_prientation
 world_scale
+
+itr
+itr
 }
 
 
@@ -48,11 +51,11 @@ drag //空気抵抗
 anglar_drag //空気抵抗
 dynamic_friction //動摩擦
 static_friction //静摩擦
-bounciness 弾性
+restitution	 //反発係数
 
-is_fallable() //落ちない
-is_kinematic() //影響うけない(fallはする)
-is_moveable() //動かない
+fallable //落ちない
+kinematic //影響うけない(fallはする)
+is_moveable //動かない
 
 private:
 speed //debugしやすいように
@@ -61,6 +64,13 @@ anglar_velocity //回転速度
 inertia_tensor //慣性テンソル
 
 sleep_state //sleep状態かのflag
+
+}
+
+class Shape{
+Collider_shape shape 		//形情報
+DOP_14 			//DOP_14 データ
+physics_function::Solverbody* solve; //衝突解決用
 
 }
 
