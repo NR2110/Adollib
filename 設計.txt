@@ -41,6 +41,7 @@ world_scale
 
 itr
 itr
+map<string,bool>concollflags
 }
 
 
