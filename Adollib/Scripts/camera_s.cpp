@@ -1,8 +1,8 @@
 
-#include "../Adollib/systems.h"
-#include "../Adollib/Adollib.h"
-#include "../Adollib/transform.h"
-#include "../Adollib/gameobject_manager.h"
+#include "../Adollib/Scripts/Main/systems.h"
+#include "../Adollib/Scripts/Main/Adollib.h"
+#include "../Adollib/Scripts/Object/transform.h"
+#include "../Adollib/Scripts/Object/gameobject_manager.h"
 #include "camera_s.h"
 
 namespace Adollib

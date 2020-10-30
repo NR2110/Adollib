@@ -1,6 +1,6 @@
 
-#include "../Adollib/Adollib.h"
-#include "../Adollib/gameobject_manager.h"
+#include "../Adollib/Scripts/Main/Adollib.h"
+#include "../Adollib/Scripts/Object/gameobject_manager.h"
 
 #include "player.h"
 

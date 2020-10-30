@@ -1,17 +1,16 @@
 
-#include "../Adollib/gameobject_manager.h"
 
 #include "object_manager.h"
-#include "object_fall.h"
-#include "../Adollib/scene_manager.h"
+#include "../Adollib/Scripts/Object/gameobject_manager.h"
+#include "../Adollib/Scripts/Scene/scene_manager.h"
 
-#include "../Adollib/closest_func.h"
+#include "../Adollib/Scripts/Math/closest_func.h"
 
-#include "../Adollib/imgui_all.h"
+#include "../Adollib/Scripts/Imgui/imgui_all.h"
 
-#include "../Adollib/physics_global.h"
+#include "../Adollib/Scripts/Physics/physics_global.h"
 
-#include "../Adollib/ALP__manager.h"
+#include "../Adollib/Scripts/Physics/ALP__manager.h"
 namespace Adollib
 {
 	// 所属するシーンの初期化時に一度だけ呼ばれる
@@ -179,11 +178,11 @@ namespace Adollib
 			ImGui::Checkbox("delete", &del); //objectの削除
 
 			if (del) {
-				for (int i = 0; i < colls.size(); i++) {
-					colls[i]->gameobject->active = false;
-					Rigitbody_manager::remove_collider(colls[i]);
+				for (int i = 0; i < GOs.size(); i++) {
+					GOs[i]->active = false;
+					GOs[i]->clearComponent();
 				}
-				colls.clear();
+				GOs.clear();
 			}
 
 			//重力の調整
@@ -339,7 +338,7 @@ namespace Adollib
 				//Box* M = object->addComponent<Box>();
 				Meshcoll* M = object->addComponent<Meshcoll>();
 				M->load_mesh("./DefaultModel/cube.fbx");
-				colls.emplace_back(M);
+				GOs.emplace_back(object);
 
 
 			}
@@ -361,7 +360,7 @@ namespace Adollib
 				object->transform->local_scale = Vector3(1, 1, 1);
 
 				Box* M = object->addComponent<Box>();
-				colls.emplace_back(M);
+				GOs.emplace_back(object);
 
 			}
 
@@ -382,7 +381,7 @@ namespace Adollib
 				object->transform->local_scale = Vector3(1, 1, 1);
 
 				Box* M = object->addComponent<Box>();
-				colls.emplace_back(M);
+				GOs.emplace_back(object);
 
 
 			}
@@ -402,7 +401,7 @@ namespace Adollib
 				//Box* M = object->addComponent<Box>();
 				Meshcoll* M = object->addComponent<Meshcoll>();
 				M->load_mesh("./DefaultModel/cube.fbx");
-				colls.emplace_back(M);
+				GOs.emplace_back(object);
 
 
 			}
@@ -440,7 +439,7 @@ namespace Adollib
 		object->transform->local_scale = Vector3(r, r, r);
 
 		Collider* coll = object->addComponent<Sphere>();
-		colls.emplace_back(coll);
+		GOs.emplace_back(object);
 		return object;
 	}
 
@@ -459,7 +458,7 @@ namespace Adollib
 		//Meshcoll* M = object->addComponent<Meshcoll>();
 		//M->load_mesh("./DefaultModel/cube.fbx");
 		//M->inertial_mass = 1;
-		colls.emplace_back(M);
+		GOs.emplace_back(object);
 		return object;
 	}
 
@@ -478,7 +477,7 @@ namespace Adollib
 		Meshcoll* M = object->addComponent<Meshcoll>();
 		M->load_mesh("./DefaultModel/cone.fbx");
 		//M->inertial_mass = 1;
-		colls.emplace_back(M);
+		GOs.emplace_back(object);
 		return object;
 	}
 
@@ -493,7 +492,7 @@ namespace Adollib
 		object->transform->local_scale = Vector3(30, 0.1, 30);
 
 		Collider* coll = object->addComponent<Plane>();
-		colls.emplace_back(coll);
+		GOs.emplace_back(object);
 		return object;
 	}
 

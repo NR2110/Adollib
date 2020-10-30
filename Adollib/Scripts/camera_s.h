@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../Adollib/component_camera.h"
-#include "../Adollib/collider.h"
+#include "../Adollib/Scripts/Object/component_camera.h"
+#include "../Adollib/Scripts/Physics/collider.h"
 
 namespace Adollib
 {

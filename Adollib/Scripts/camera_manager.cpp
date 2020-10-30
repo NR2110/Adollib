@@ -1,11 +1,11 @@
 
-#include "../Adollib/gameobject_manager.h"
+#include "../Adollib/Scripts/Object/gameobject_manager.h"
 
 #include "camera_manager.h"
 #include <DirectXMath.h>
 
 #include "camera_s.h"
-#include "../Adollib/Adollib.h"
+#include "../Adollib/Scripts/Main/Adollib.h"
 
 
 namespace Adollib

@@ -1,6 +1,6 @@
 #pragma once
-#include "../Adollib/component.h"
-#include "../Adollib/collider.h"
+#include "../Adollib/Scripts/Object/component.h"
+#include "../Adollib/Scripts/Physics/collider.h"
 
 namespace Adollib
 {
@@ -11,7 +11,7 @@ namespace Adollib
 		std::vector<Box*> boxes;
 		std::vector<Box>  st_box;
 
-		std::vector<Collider*> colls;
+		std::vector<Gameobject*> GOs;
 	public:
 		Gameobject* set_sphere(Vector3 pos, float r, Vector3 color = Vector3(1, 1, 1));
 		Gameobject* set_box(Vector3 pos, Vector3 size, Vector3 rotate, Vector3 color = Vector3(1, 1, 1));
