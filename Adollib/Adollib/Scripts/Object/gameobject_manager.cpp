@@ -323,7 +323,7 @@ namespace Adollib {
 	Gameobject* Gameobject_manager::create(Scenelist Sce) {
 		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
 		gameobjects[Sce].emplace_back(Value);
-		Value.get()->name = "no_name";
+		Value.get()->tag = "no_name";
 
 		Value.get()->this_scene = Sce;
 		Value.get()->transform = std::make_shared<Transfome>();
@@ -337,7 +337,7 @@ namespace Adollib {
 	Gameobject* Gameobject_manager::create(const std::string go_name, Scenelist Sce) {
 		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
 		gameobjects[Sce].emplace_back(Value);
-		Value.get()->name = go_name;
+		Value.get()->tag = go_name;
 
 		Value.get()->this_scene = Sce;
 		Value.get()->transform = std::make_shared<Transfome>();
@@ -353,7 +353,7 @@ namespace Adollib {
 	Gameobject* Gameobject_manager::createFromFBX(const std::string& FBX_pass, const std::string& go_name, Scenelist Sce) {
 		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
 		gameobjects[Sce].emplace_back(Value);
-		Value.get()->name = go_name;
+		Value.get()->tag = go_name;
 
 		Value.get()->this_scene = Sce;
 		Value.get()->transform = std::make_shared<Transfome>();
@@ -369,7 +369,7 @@ namespace Adollib {
 	Gameobject* Gameobject_manager::createSphere(const std::string& go_name,  Scenelist Sce) {
 		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
 		gameobjects[Sce].emplace_back(Value);
-		Value.get()->name = go_name;
+		Value.get()->tag = go_name;
 
 		Value.get()->this_scene = Sce;
 		Value.get()->transform = std::make_shared<Transfome>();
@@ -385,7 +385,7 @@ namespace Adollib {
 	Gameobject* Gameobject_manager::createCube(const std::string& go_name, Scenelist Sce) {
 		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
 		gameobjects[Sce].emplace_back(Value);
-		Value.get()->name = go_name;
+		Value.get()->tag = go_name;
 
 		Value.get()->this_scene = Sce;
 		Value.get()->transform = std::make_shared<Transfome>();
@@ -403,7 +403,7 @@ namespace Adollib {
 	Gameobject* Gameobject_manager::createCylinder(const std::string& go_name, Scenelist Sce) {
 		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
 		gameobjects[Sce].emplace_back(Value);
-		Value.get()->name = go_name;
+		Value.get()->tag = go_name;
 
 		Value.get()->this_scene = Sce;
 		Value.get()->transform = std::make_shared<Transfome>();

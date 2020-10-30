@@ -2,7 +2,7 @@
 class Physics_manager{
 private:
  Collider[1000]
- RigitBody[1000]
+ Rigitbody[1000]
  Shape[1000]
 
 public:
@@ -27,17 +27,46 @@ hit_backfaces_flag //meshの後ろから衝突するか
 
 }
 
-class Colldier_base{
+//ユーザーがいじりやすい場所
+class Colldier: public Component{
 public:
 local_position
 local_orientation
 local_scale
 
+mass //質量
+drag //空気抵抗
+anglar_drag //空気抵抗
+dynamic_friction //動摩擦
+static_friction //静摩擦
+restitution	 //反発係数
+
+is_fallable //落ちない
+is_kinematic //影響うけない(fallはする)
+is_moveable //動かない
+
 private:
+itr
+
+public:
+bool Oncoll_enter();
+
+}
+
+-----------------------------
+class Collider{
+
 Shape 
+local_position
+local_orientation
+local_scale
+
 world_position
 world_prientation
 world_scale
+
+offset_CollGO_quat;
+offset_CollGO_pos;
 
 itr
 itr
@@ -54,8 +83,8 @@ dynamic_friction //動摩擦
 static_friction //静摩擦
 restitution	 //反発係数
 
-fallable //落ちない
-kinematic //影響うけない(fallはする)
+is_fallable //落ちない
+is_kinematic //影響うけない(fallはする)
 is_moveable //動かない
 
 private:
@@ -70,8 +99,16 @@ sleep_state //sleep状態かのflag
 
 class Shape{
 Collider_shape shape 		//形情報
-DOP_14 			//DOP_14 データ
+DOP_14 			//14DOP データ
 physics_function::Solverbody* solve; //衝突解決用
 
 }
+
+
+
+
+
+
+
+
 

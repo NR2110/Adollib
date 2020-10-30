@@ -6,7 +6,7 @@ namespace Adollib {
 
 	class Vector3;
 
-	class matrix {
+	class Matrix {
 	public:
 
 		union 
@@ -23,7 +23,7 @@ namespace Adollib {
 
 		};
 
-		matrix() :
+		Matrix() :
 			_11(0), _12(0), _13(0), _14(0),
 			_21(0), _22(0), _23(0), _24(0),
 			_31(0), _32(0), _33(0), _34(0),
@@ -31,7 +31,7 @@ namespace Adollib {
 		{
 		}
 
-		matrix(
+		Matrix(
 			float _11, float _12, float _13,
 			float _21, float _22, float _23,
 			float _31, float _32, float _33
@@ -43,7 +43,7 @@ namespace Adollib {
 		{
 		}
 
-		matrix(
+		Matrix(
 			float _11, float _12, float _13, float _14,
 			float _21, float _22, float _23, float _24,
 			float _31, float _32, float _33, float _34,
@@ -56,24 +56,24 @@ namespace Adollib {
 		{
 		}
 
-		matrix operator+ () const;
-		matrix operator- () const;
+		Matrix operator+ () const;
+		Matrix operator- () const;
 
-		matrix operator+ (const matrix& M) const;
-		matrix operator- (const matrix& M) const;
-		matrix operator* (const matrix& M) const;
-		matrix operator* (float S) const;
-		matrix operator/ (float S) const;
+		Matrix operator+ (const Matrix& M) const;
+		Matrix operator- (const Matrix& M) const;
+		Matrix operator* (const Matrix& M) const;
+		Matrix operator* (float S) const;
+		Matrix operator/ (float S) const;
 
-		matrix& operator+= (const matrix& M);
-		matrix& operator-= (const matrix& M);
-		matrix& operator*= (const matrix& M);
-		matrix& operator*= (float S);
-		matrix& operator/= (float S);	
-		bool operator== (const matrix& M);
-		bool operator!= (const matrix& M);
+		Matrix& operator+= (const Matrix& M);
+		Matrix& operator-= (const Matrix& M);
+		Matrix& operator*= (const Matrix& M);
+		Matrix& operator*= (float S);
+		Matrix& operator/= (float S);	
+		bool operator== (const Matrix& M);
+		bool operator!= (const Matrix& M);
 
-		friend matrix operator*(float S, const matrix& M);
+		friend Matrix operator*(float S, const Matrix& M);
 
 		DirectX::XMMATRIX get_XMMATRIX();
 		DirectX::XMFLOAT4X4 get_XMFLOAT4X4();
@@ -83,33 +83,33 @@ namespace Adollib {
 	};
 
 	//単位行列を返す
-	matrix matrix_identity();
+	Matrix matrix_identity();
 
 	//転置行列を返す
-	matrix matrix_trans(const matrix& M);
+	Matrix matrix_trans(const Matrix& M);
 
 	//行列式を返す
-	float matrix_determinant(const matrix& M);
+	float matrix_determinant(const Matrix& M);
 
 	//行列の逆元を返す
-	matrix matrix_inverse(const matrix& M);
+	Matrix matrix_inverse(const Matrix& M);
 
 	//回転行列をオイラーに(z,x,y)
-	Vector3 matrix_to_euler(const matrix& M);
+	Vector3 matrix_to_euler(const Matrix& M);
 	//回転行列をオイラー(radian)に(z,x,y)
-	Vector3 matrix_to_euler_radian(const matrix& M);
+	Vector3 matrix_to_euler_radian(const Matrix& M);
 
 	//vector3に回転行列をかける
-	Vector3 vector3_trans(const Vector3& V, const matrix& M);
+	Vector3 vector3_trans(const Vector3& V, const Matrix& M);
 
 	//world行列の生成
-	matrix matrix_world(const Vector3& scale, const matrix& rotate, const Vector3& trans);
+	Matrix matrix_world(const Vector3& scale, const Matrix& rotate, const Vector3& trans);
 
 	//matrixからXMMATRIXへの変換
-	DirectX::XMMATRIX matrix_to_XMMATRIX(const matrix& M);
+	DirectX::XMMATRIX matrix_to_XMMATRIX(const Matrix& M);
 
 	//XMMATRIXからmatrixへの変換
-	matrix XMMATRIX_to_matrix(const DirectX::XMMATRIX& M);
+	Matrix XMMATRIX_to_matrix(const DirectX::XMMATRIX& M);
 
 
 

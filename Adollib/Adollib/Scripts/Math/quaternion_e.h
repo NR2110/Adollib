@@ -167,8 +167,8 @@ inline DirectX::XMFLOAT4 Quaternion::get_XM4() const {
 inline Vector3 Quaternion::get_NV3() const {
 	return Vector3(x, y, z);
 }
-inline matrix Quaternion::get_rotate_matrix() const {
-	matrix R;
+inline Matrix Quaternion::get_rotate_matrix() const {
+	Matrix R;
 	R._11 = 1 - 2 * y * y - 2 * z * z; 	R._12 = 2 * x * y + 2 * z * w;     R._13 = 2 * z * x - 2 * w * y;
 	R._21 = 2 * x * y - 2 * z * w;		R._22 = 1 - 2 * z * z - 2 * x * x; R._23 = 2 * y * z + 2 * x * w;
 	R._31 = 2 * z * x + 2 * w * y;      R._32 = 2 * y * z - 2 * w * x;     R._33 = 1 - 2 * x * x - 2 * y * y;
@@ -250,7 +250,7 @@ inline Quaternion Adollib::quaternion_from_euler(Vector3 V) {
 //
 //	return Rz * Rx * Ry;
 //}
-inline Quaternion Adollib::quaternion_by_rotate_matrix(matrix& M) {
+inline Quaternion Adollib::quaternion_by_rotate_matrix(Matrix& M) {
 	Vector3 V = matrix_to_euler(M);
 	Quaternion Rx = quaternion_angle_axis(V.x, Vector3(1, 0, 0));
 	Quaternion Ry = quaternion_angle_axis(V.y, Vector3(0, 1, 0));

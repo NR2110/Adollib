@@ -670,7 +670,7 @@ bool physics_function::generate_contact_sphere_sphere(const Sphere& S0, const Sp
 #pragma region SPHERE-PLANE
 bool physics_function::generate_contact_sphere_plane(const Sphere& sphere, const Plane& plane, Contacts::Contact_pair& pair) {
 	//球面と平面の衝突判定を行う
-	matrix rotate, inverse_rotate;
+	Matrix rotate, inverse_rotate;
 	rotate = plane.world_orientation.get_rotate_matrix();
 	rotate._41 = plane.world_position.x; //transpseの入力
 	rotate._42 = plane.world_position.y;
@@ -719,7 +719,7 @@ bool physics_function::generate_contact_sphere_plane(const Sphere& sphere, const
 #pragma region SPHERE-BOX
 bool physics_function::generate_contact_sphere_box(const Sphere& sphere, const  Box& box, Contacts::Contact_pair& pair) {
 	//球とboxの衝突判定を行う
-	matrix rotate, inverse_rotate;
+	Matrix rotate, inverse_rotate;
 	//rotate = box.world_orientation.get_rotate_matrix();
 	//rotate._41 = box.world_position.x; //transpseの入力
 	//rotate._42 = box.world_position.y;
@@ -788,7 +788,7 @@ bool physics_function::generate_contact_sphere_box(const Sphere& sphere, const  
 bool physics_function::generate_contact_sphere_mesh(const Sphere& sphere, const Meshcoll& mesh, Contacts::Contact_pair& pair) {
 	if (mesh.is_Convex == true) {
 		//球とmeshの衝突判定を行う
-		matrix rotate, inverse_rotate;
+		Matrix rotate, inverse_rotate;
 		rotate = matrix_world(Vector3(1, 1, 1), mesh.world_orientation.get_rotate_matrix(), mesh.world_position);
 		inverse_rotate = matrix_inverse(rotate);
 
@@ -865,7 +865,7 @@ bool physics_function::generate_contact_box_plane(const Box& box, const Plane& p
 	}
 
 	//Boxと平面の衝突判定を行う
-	matrix rotate, inverse_rotate;
+	Matrix rotate, inverse_rotate;
 	rotate = plane.world_orientation.get_rotate_matrix();
 	rotate._41 = plane.world_position.x; //transpseの入力
 	rotate._42 = plane.world_position.y;
@@ -931,7 +931,7 @@ bool physics_function::generate_contact_box_plane(const Box& box, const Plane& p
 #pragma region BOX-BOX
 
 bool physics_function::generate_contact_box_box(const Box& b0, const Box& b1, Contacts::Contact_pair& pair) {
-	matrix m;
+	Matrix m;
 	m = b0.world_orientation.get_rotate_matrix();
 	OBB obbA;
 	obbA.world_position = b0.world_position;
@@ -976,7 +976,7 @@ bool physics_function::generate_contact_box_box(const Box& b0, const Box& b1, Co
 		if (vector3_dot(obbB.u_axes[2], n) > 0) p1.z = -p1.z;
 
 		//box0の逆行列の作成
-		matrix rotate, inverse_rotate;
+		Matrix rotate, inverse_rotate;
 		rotate = b0.world_orientation.get_rotate_matrix();
 		rotate._41 = b0.world_position.x; //transpseの入力
 		rotate._42 = b0.world_position.y;
@@ -1024,7 +1024,7 @@ bool physics_function::generate_contact_box_box(const Box& b0, const Box& b1, Co
 		if (vector3_dot(obbA.u_axes[2], -n) > 0) p0.z = -p0.z;
 
 		//box0の逆行列の作成
-		matrix rotate, inverse_rotate;
+		Matrix rotate, inverse_rotate;
 		rotate = b1.world_orientation.get_rotate_matrix();
 		rotate._41 = b1.world_position.x; //transpseの入力
 		rotate._42 = b1.world_position.y;

@@ -3,6 +3,11 @@
 #include "collider.h"
 #include "../Scene/scene_list.h"
 #include "../Scene/scene.h"
+
+#include "ALP_collider.h"
+#include "ALP_physics.h"
+#include "ALP_shape.h"
+
 #include <map>
 
 #include "contact.h"
@@ -16,6 +21,11 @@ namespace Adollib
 		static int flame_count;
 
 		static std::unordered_map<Scenelist, std::list<Adollib::Collider*>>  colliders;
+
+		static std::vector<Adollib::physics_function::Collider> ALP_colliders;
+		static std::vector<Adollib::physics_function::Physics> ALP_physicses;
+		static std::vector<Adollib::physics_function::Shape> ALP_shapes;
+
 
 		static std::vector<Contacts::Contact_pair> pairs;
 

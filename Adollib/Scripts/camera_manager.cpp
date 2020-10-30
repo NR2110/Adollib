@@ -40,7 +40,7 @@ namespace Adollib
 		Vector3 vecCross = vector3_cross(veA, veB);
 
 
-		matrix ma = quaternion_from_euler(32, 65, 8).get_rotate_matrix();
+		Matrix ma = quaternion_from_euler(32, 65, 8).get_rotate_matrix();
 		DirectX::XMMATRIX XMmat = ma.get_XMMATRIX();
 
 		DirectX::XMStoreFloat3(&XMA, DirectX::XMVector3Transform(VEA, XMmat));

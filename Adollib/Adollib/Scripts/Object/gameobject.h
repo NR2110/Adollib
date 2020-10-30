@@ -8,6 +8,7 @@
 #include "object.h"
 #include "component.h"
 #include "transform.h"
+#include "gameobject_tags.h"
 #include "../Scene/scene_list.h"
 #include "../Mesh/material.h"
 
@@ -23,7 +24,7 @@ namespace Adollib {
 	public:
 		bool no_material = false; //material情報を所持しているか
 
-		std::string name = std::string("null"); //このgoの名前(検索用)
+		GO_Tag tag = GO_Tag::None; //このgoの名前(検索用)
 
 		std::shared_ptr<Material> material;
 

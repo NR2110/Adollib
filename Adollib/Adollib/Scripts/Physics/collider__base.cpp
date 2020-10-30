@@ -33,9 +33,9 @@ void Collider::apply_external_force(float duration) {
 		
 
 		//各回転に加える力(accumulated_torque)から加速度を出して角速度を更新する
-		matrix inverse_inertia_tensor = matrix_inverse(inertial_tensor);
-		matrix rotation = local_orientation.get_rotate_matrix();
-		matrix transposed_rotation = matrix_trans(rotation);
+		Matrix inverse_inertia_tensor = matrix_inverse(inertial_tensor);
+		Matrix rotation = local_orientation.get_rotate_matrix();
+		Matrix transposed_rotation = matrix_trans(rotation);
 		inverse_inertia_tensor = transposed_rotation * inverse_inertia_tensor * rotation;
 		angula_acceleration += vector3_trans(accumulated_torque, inverse_inertia_tensor);
 
@@ -98,12 +98,12 @@ float Collider::inverse_mass() const {
 	else return 0;
 }
 
-matrix Collider::inverse_inertial_tensor() const{
-	matrix inverse_inertial_tensor;
+Matrix Collider::inverse_inertial_tensor() const{
+	Matrix inverse_inertial_tensor;
 	if (is_movable()) {
 		inverse_inertial_tensor = matrix_inverse(inertial_tensor);
 		if(1){
-			matrix rotation, transposed_rotation;
+			Matrix rotation, transposed_rotation;
 			rotation = world_orientation.get_rotate_matrix();
 			transposed_rotation = matrix_trans(rotation);
 			inverse_inertial_tensor = transposed_rotation * inverse_inertial_tensor * rotation;

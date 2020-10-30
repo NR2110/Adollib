@@ -96,7 +96,7 @@ namespace Adollib {
 			const auto itr_end = gameobjects[Sce].end();
 			for (auto itr = gameobjects[Sce].begin(); itr != itr_end; itr++)
 			{
-				if (itr->get()->name == name)
+				if (itr->get()->tag == name)
 				{
 					return itr->get();
 				}
