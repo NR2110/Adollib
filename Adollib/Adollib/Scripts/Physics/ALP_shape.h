@@ -3,7 +3,7 @@
 
 namespace Adollib {
 	namespace physics_function {
-		enum class Collider_shape {
+		enum class ALP_Collider_shape {
 			shape_box,
 			shape_sphere,
 			shape_plane,
@@ -12,7 +12,7 @@ namespace Adollib {
 			shape_size
 		};
 
-		struct Solverbody {
+		struct ALP_Solverbody {
 			Vector3 delta_LinearVelocity; // 並進速度差分
 			Vector3 delta_AngulaVelocity; // 回転速度差分
 			Quaternion orientation; // 姿勢
@@ -21,8 +21,8 @@ namespace Adollib {
 			int num;
 		};
 
-		class Shape {
-			Collider_shape shape; 		//形情報
+		class ALP_Shape {
+			ALP_Collider_shape shape; 		//形情報
 			DOP::DOP_14	DOP_14;			//14DOP データ
 			Solverbody* solve; //衝突解決用
 

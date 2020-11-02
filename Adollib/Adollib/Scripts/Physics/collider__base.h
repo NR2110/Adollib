@@ -11,9 +11,7 @@ namespace Adollib {
 
 	namespace  physics_function {
 		class Solverbody;
-	}
-	namespace Contacts {
-		class Contact;
+		class ALP__CollPhysicsShape_data;
 	}
 
 
@@ -34,11 +32,15 @@ namespace Adollib {
 		bool is_kinematic; //影響うけない(fallはする)
 		bool is_moveable; //動かない
 
+	private:
+
 
 	private:
-		//itr
+		std::list<physics_function::ALP__CollPhysicsShape_data>::iterator ALP_CollPhysicsShape_itr;
+
 		
 	public:
+		//on collision enter
 		bool concoll_enter(std::string tag_name);
 
 		////外力の更新
@@ -59,17 +61,11 @@ namespace Adollib {
 		////gameobjectのtransformからcolliderのworld空間での情報を更新
 		//virtual void update_world_trans() = 0;
 
-		////並進移動に力を加える
-		//void add_force(const Vector3& force);
+		//並進移動に力を加える
+		void add_force(const Vector3& force);
 
-		////角回転に力を加える
-		//void add_torque(const Vector3& force);
-
-		////可動オブジェクトかどうか
-		//bool is_movable() const;
-
-		////落下オブジェクトかどうか
-		//bool is_fallable() const;
+		//角回転に力を加える
+		void add_torque(const Vector3& force);
 
 		////質量の逆数を返す(不稼働オブジェクトは0を返す)
 		//float inverse_mass() const;
