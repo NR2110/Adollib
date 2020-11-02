@@ -22,9 +22,15 @@ namespace Adollib {
 		};
 
 		class ALP_Shape {
+		public:
 			ALP_Collider_shape shape; 		//形情報
 			DOP::DOP_14	DOP_14;			//14DOP データ
 			Solverbody* solve; //衝突解決用
+
+		public:
+			//オブジェクトが動くたびに呼び出す　のが効率よいが適当に毎フレーム呼ぶ
+			//DOP_14データの更新 ALP_Shape::dop14,ALP_Colider::scale,GOが必要なためここに記述
+			virtual void update_dop14() = 0;
 
 		};
 	}

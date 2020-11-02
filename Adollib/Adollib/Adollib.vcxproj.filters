@@ -477,7 +477,7 @@
     <ClInclude Include="Scripts\Physics\collider__base.h">
       <Filter>00_Adollib\22_physics\base</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Physics\ALP__CollPhysicsShape_data.h">
+    <ClInclude Include="Scripts\Physics\ALP_tags.h">
       <Filter>00_Adollib\22_physics\base</Filter>
     </ClInclude>
   </ItemGroup>

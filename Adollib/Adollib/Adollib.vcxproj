@@ -199,7 +199,7 @@
     <ClInclude Include="Scripts\Object\gameobject_tags.h" />
     <ClInclude Include="Scripts\Object\object.h" />
     <ClInclude Include="Scripts\Object\transform.h" />
-    <ClInclude Include="Scripts\Physics\ALP__CollPhysicsShape_data.h" />
+    <ClInclude Include="Scripts\Physics\ALP_tags.h" />
     <ClInclude Include="Scripts\Physics\ALP_physics.h" />
     <ClInclude Include="Scripts\Physics\ALP_broadphase.h" />
     <ClInclude Include="Scripts\Physics\ALP_collider.h" />

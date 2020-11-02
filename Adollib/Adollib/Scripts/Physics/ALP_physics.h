@@ -26,24 +26,34 @@ namespace Adollib {
 
 			bool sleep_state; //sleep状態かのflag
 
+			ALP_Collider* ALP_coll;
+
 		public:
-			//外力の更新
-			void apply_external_force(float duration = 1);
-
-			//速度、加速度を0にする
-			void reset_force();
-
 			//並進移動に力を加える
 			void add_force(const Vector3& force);
 
 			//角回転に力を加える
 			void add_torque(const Vector3& force);
 
+			//外力の更新
+			void apply_external_force(float duration = 1);
+
+			//速度、加速度を0にする
+			void reset_force();
+
+			//座標,姿勢の更新 ALP_collider::posとALP_Physics::vecが必要なためここに記述
+			void integrate(float duration = 1);
+
+			//サイズ変更などに対応するため毎フレーム慣性テンソルなどを更新 慣性テンソルの更新にALP_collider::scaleとALP_Physics::massが必要なためここに記述
+			void update_inertial(const Vector3& size, float mass = 1);
+
 			//可動オブジェクトかどうか
 			bool is_movable() const;
 
 			//落下オブジェクトかどうか
 			bool is_fallable() const;
+
+			bool is_kinematic() const;
 
 			//質量の逆数を返す(不稼働オブジェクトは0を返す)
 			float inverse_mass() const;

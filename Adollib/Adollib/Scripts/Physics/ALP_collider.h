@@ -25,26 +25,29 @@ namespace Adollib {
 
 			Collider* coll;
 
+
 		private:
+
+		//on collision enter
+		bool concoll_enter(GO_Tag tag_name);
 
 		//座標,姿勢の更新
 		void integrate(float duration = 1);
 
-		//gameobjectへの変化量を求める
+		//gameobjectへの変化量を求める goをALP_colliderが持っていないためここに記述
 		void solv_resolve();
 
-		//gameobjectへ変化量を渡す
+		//gameobjectへ変化量を渡す goをALP_colliderが持っていないためここに記述
 		void resolve_gameobject();
+
+		//gameobjectのtransformからcolliderのworld空間での情報を更新 goをALP_colliderが持っていないためここに記述
+		virtual void update_world_trans() = 0;
 
 		//gameobjectのtransformからcolliderのworld空間での情報を更新
 		void update_world_trans();
 
 		//サイズ変更などに対応するため毎フレーム慣性テンソルなどを更新
 		void update_inertial(const Vector3& size, float density = 1);
-
-		//オブジェクトが動くたびに呼び出す　のが効率よいが適当に毎フレーム呼ぶ
-		//DOP_14データの更新
-		void update_dop14();
 
 		};
 	}

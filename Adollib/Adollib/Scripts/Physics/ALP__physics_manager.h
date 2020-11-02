@@ -4,9 +4,7 @@
 #include "../Scene/scene_list.h"
 #include "../Scene/scene.h"
 
-#include "ALP_collider.h"
-#include "ALP_physics.h"
-#include "ALP_shape.h"
+#include "ALP__CollPhysicsShape_data.h"
 
 #include <map>
 
@@ -20,9 +18,8 @@ namespace Adollib
 	private:
 		static int flame_count;
 
-		static std::vector<Adollib::physics_function::ALP_Collider> ALP_colliders;
-		static std::vector<Adollib::physics_function::ALP_Physics> ALP_physicses;
-		static std::vector<Adollib::physics_function::Shape> ALP_shapes;
+
+		static std::list<Adollib::physics_function::ALP__CollPhysicsShape_data> ALP_colliders;
 
 
 		static std::vector<Contacts::Contact_pair> pairs;
