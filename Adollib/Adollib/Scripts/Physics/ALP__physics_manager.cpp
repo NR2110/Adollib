@@ -11,10 +11,12 @@ using namespace physics_function;
 #include "../Object/gameobject_manager.h"
 #include "../Imgui/work_meter.h"
 
+#include "collider.h"
+
 namespace Adollib
 {
 
-	int Phyisics_manager::flame_count = 0;
+	int Phyisics_manager::frame_count = 0;
 
 	std::unordered_map<Scenelist, std::list<Collider*>>   Phyisics_manager::colliders;
 
@@ -32,7 +34,6 @@ namespace Adollib
 		//world空間での情報を更新
 		for (collitr = Phyisics_manager::colliders[Sce].begin(); collitr != collitr_end; collitr++) {
 			(*collitr)->update_world_trans();
-			(*collitr)->onColl = false;
 		}
 
 		// 外力の更新

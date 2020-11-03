@@ -1,5 +1,7 @@
 #pragma once
+
 #include "../Math/math.h"
+#include "ALP_collider.h"
 
 namespace Adollib {
 	namespace physics_function {
@@ -24,13 +26,19 @@ namespace Adollib {
 		class ALP_Shape {
 		public:
 			ALP_Collider_shape shape; 		//形情報
-			DOP::DOP_14	DOP_14;			//14DOP データ
-			Solverbody* solve; //衝突解決用
+			DOP::DOP_14	dop14;			//14DOP データ
+			ALP_Solverbody* solve; //衝突解決用
 
+			ALP_Collider* ALP_coll;
 		public:
-			//オブジェクトが動くたびに呼び出す　のが効率よいが適当に毎フレーム呼ぶ
 			//DOP_14データの更新 ALP_Shape::dop14,ALP_Colider::scale,GOが必要なためここに記述
-			virtual void update_dop14() = 0;
+			void update_dop14();
+
+		private:
+			void update_dop14_as_sphere();
+			void update_dop14_as_box();
+			void update_dop14_as_plane();
+			void update_dop14_as_mesh();
 
 		};
 	}

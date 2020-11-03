@@ -214,13 +214,19 @@
     <ClCompile Include="Scripts\Physics\meshcoll_resorce_manager.cpp">
       <Filter>00_Adollib\22_physics\collider</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Physics\ALP__physics_manager.cpp">
-      <Filter>00_Adollib\22_physics\ALP</Filter>
-    </ClCompile>
     <ClCompile Include="Scripts\Physics\collider__base.cpp">
       <Filter>00_Adollib\22_physics\base</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Physics\ALP_collider.cpp">
+      <Filter>00_Adollib\22_physics\base</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Physics\ALP_physics.cpp">
+      <Filter>00_Adollib\22_physics\base</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Physics\ALP__physics_manager.cpp">
+      <Filter>00_Adollib\22_physics\base</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Physics\ALP_shape.cpp">
       <Filter>00_Adollib\22_physics\base</Filter>
     </ClCompile>
   </ItemGroup>
@@ -471,13 +477,13 @@
     <ClInclude Include="Scripts\Object\gameobject_tags.h">
       <Filter>00_Adollib\33_object</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Physics\ALP__physics_manager.h">
-      <Filter>00_Adollib\22_physics\ALP</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts\Physics\collider__base.h">
       <Filter>00_Adollib\22_physics\base</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Physics\ALP_tags.h">
+      <Filter>00_Adollib\22_physics\base</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\ALP__physics_manager.h">
       <Filter>00_Adollib\22_physics\base</Filter>
     </ClInclude>
   </ItemGroup>

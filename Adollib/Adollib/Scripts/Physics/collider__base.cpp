@@ -1,44 +1,42 @@
-#include "collider__base.h"
+#include "ALP__physics_manager.h"
 
 using namespace Adollib;
 using namespace Contacts;
 
-#include "ALP__manager.h"
+//#include "ALP__manager.h"
 #include "../Object/gameobject.h"
 #include "../Main/Adollib.h"
 #include "contact.h"
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-		#pragma region N
+#pragma region Rigitbody
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-//on collision enter
-bool Collider::concoll_enter(std::string tag_name) {
 
-	ALPcollider_itr->oncoll
-};
+bool Collider::concoll_enter(ALP_tags tag_name) {
+	ALPcollider_itr->concoll_enter(tag_name);
+}
 
-//•ÀiˆÚ“®‚É—Í‚ð‰Á‚¦‚é
 void Collider::add_force(const Vector3& force) {
-
 	ALPphysics_itr->add_force(force);
-	return;
-};
-
-//Šp‰ñ“]‚É—Í‚ð‰Á‚¦‚é
+}
 void Collider::add_torque(const Vector3& force) {
-
 	ALPphysics_itr->add_torque(force);
-	return;
-};
+}
 
 #pragma endregion
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 void Collider::awake() {
-	std::list<Collider*>::iterator C = Rigitbody_manager::add_collider(this);
+	physics_function::ColliderPhysicsShape_itrs_data data;
+
+	data = Phyisics_manager::add_collider(this);
+
+	ALPcollider_itr = data.ALPcollider_itr;
+	ALPphysics_itr = data.ALPphysics_itr;
+	ALPshape_itr = data.ALPshape_itr;
+
+	coll_itr = data.coll_itr;
 }
 void Collider::finalize() {
-	Rigitbody_manager::remove_collider(this);
+	Phyisics_manager::remove_collider(this);
 }
-
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

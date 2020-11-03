@@ -13,19 +13,31 @@
 
 namespace Adollib {
 
-	namespace  physics_function {
-		class Solverbody;
-		class ALP__CollPhysicsShape_data;
+	namespace physics_function {
+		//::: ŒvZ‚Ég‚¤î•ñ :::
+		struct Collider_data {
+			Vector3 local_position;
+			Quaternion local_orientation;
+			Vector3 local_scale;
+
+			physics_function::ALP_Collider_shape shape;
+		};
+
+		struct ColliderPhysicsShape_itrs {
+			std::list<Collider*>::iterator coll_itr;
+
+			std::list<ALP_Collider>::iterator ALPcollider_itr;
+			std::list<ALP_Physics>::iterator ALPphysics_itr;
+			std::list<ALP_Shape>::iterator ALPshape_itr;
+		};
+
 	}
 
-
 	class Collider : public Component {
-	public:
-		Vector3 local_position;
-		Vector3 local_orientation;
-		Vector3 local_scale;
 
-		float mass; //¿—Ê
+	public:
+		//::: unity‚Ìphysics•”•ª •ª‚¯‚é•K—v‚È‚ñ‚Ä‚È‚¢‚â‚ë ::::
+		float inertial_mass; //¿—Ê
 		float drag; //‹ó‹C’ïR
 		float anglar_drag; //‹ó‹C’ïR
 		float dynamic_friction; //“®–€C
@@ -37,17 +49,29 @@ namespace Adollib {
 		bool is_moveable; //“®‚©‚È‚¢
 
 	private:
-
-
-	private:
 		std::list<physics_function::ALP_Collider>::iterator ALPcollider_itr;
 		std::list<physics_function::ALP_Physics>::iterator ALPphysics_itr;
 		std::list<physics_function::ALP_Shape>::iterator ALPshape_itr;
 
+		std::list<Collider*>::iterator coll_itr;//©g‚Ö‚Ìitr
 		
 	public:
+		//©g‚Ö‚Ìitr‚ğ•Ô‚·
+		const physics_function::ColliderPhysicsShape_itrs get_itrs() const {
+			physics_function::ColliderPhysicsShape_itrs ret; 
+
+			ret.ALPcollider_itr = ALPcollider_itr;
+			ret.ALPphysics_itr = ALPphysics_itr;
+			ret.ALPshape_itr = ALPshape_itr;
+
+			ret.coll_itr = coll_itr;
+
+			return ret;
+		};
+
+	public:
 		//on collision enter
-		bool concoll_enter(std::string tag_name);
+		bool concoll_enter(ALP_tags tag_name);
 
 		//•ÀiˆÚ“®‚É—Í‚ğ‰Á‚¦‚é
 		void add_force(const Vector3& force);
@@ -55,6 +79,7 @@ namespace Adollib {
 		//Šp‰ñ“]‚É—Í‚ğ‰Á‚¦‚é
 		void add_torque(const Vector3& force);
 
+		virtual physics_function::Collider_data get_data() = 0;
 
 	public:
 		void awake() override;

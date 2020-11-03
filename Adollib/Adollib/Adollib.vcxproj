@@ -268,7 +268,9 @@
     <ClCompile Include="Scripts\Physics\ALP_generate_contact.cpp" />
     <ClCompile Include="Scripts\Physics\ALP_integrate.cpp" />
     <ClCompile Include="Scripts\Physics\ALP_midphase.cpp" />
+    <ClCompile Include="Scripts\Physics\ALP_physics.cpp" />
     <ClCompile Include="Scripts\Physics\ALP_resolve_contact.cpp" />
+    <ClCompile Include="Scripts\Physics\ALP_shape.cpp" />
     <ClCompile Include="Scripts\Physics\ALP__manager.cpp" />
     <ClCompile Include="Scripts\Physics\ALP__physics_manager.cpp" />
     <ClCompile Include="Scripts\Physics\collider_box.cpp" />

@@ -5,7 +5,7 @@
 namespace Adollib {
 
 
-	enum class ALP_tag {
+	enum class ALP_tags {
 		none,
 
 		player,
