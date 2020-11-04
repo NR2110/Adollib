@@ -9,13 +9,8 @@ using namespace physics_function;
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 #pragma region Rigitbody
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-bool ALP_Collider::concoll_enter(ALP_tags tag_name) {
-	if (oncoll_checkmap.count(tag_name) == 0) {
-		oncoll_checkmap[tag_name] = false;
-		oncoll_enter_names.push_back(tag_name);
-	}
-	bool ret = oncoll_checkmap[tag_name];
-	return ret;
+const bool ALP_Collider::concoll_enter (const unsigned int tag_name) const {
+	return (oncoll_bits & tag_name);
 }
 
 void ALP_Collider::solv_resolve() {

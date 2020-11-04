@@ -97,29 +97,29 @@ void ALP_Physics::integrate(float duration) {
 //サイズ変更などに対応するため毎フレーム慣性テンソルなどを更新
 void ALP_Physics::update_inertial() {
 
-	 Vector3 Wsize = ALP_coll->world_scale;
+	Vector3 Wsize = ALP_coll->world_scale;
 
-	 //慣性モーメントの更新
+	//慣性モーメントの更新
 	switch (ALP_coll->shape)
 	{
-	case ALP_Collider_shape::shape_sphere:
+	case ALP_Collider_shape::Sphere:
 		inertial_tensor = matrix_identity();
 		inertial_tensor._11 = 0.4f * inertial_mass * Wsize.x * Wsize.x;
 		inertial_tensor._22 = 0.4f * inertial_mass * Wsize.x * Wsize.x;
 		inertial_tensor._33 = 0.4f * inertial_mass * Wsize.x * Wsize.x;
 
 		break;
-	case ALP_Collider_shape::shape_box:
+	case ALP_Collider_shape::BOX:
 		inertial_tensor = matrix_identity();
 		inertial_tensor._11 = 0.3333333f * inertial_mass * ((Wsize.y * Wsize.y) + (Wsize.z * Wsize.z));
 		inertial_tensor._22 = 0.3333333f * inertial_mass * ((Wsize.z * Wsize.z) + (Wsize.x * Wsize.x));
 		inertial_tensor._33 = 0.3333333f * inertial_mass * ((Wsize.x * Wsize.x) + (Wsize.y * Wsize.y));
 
 		break;
-	case ALP_Collider_shape::shape_plane:
+	case ALP_Collider_shape::Plane:
 
 		break;
-	case ALP_Collider_shape::shape_mesh:
+	case ALP_Collider_shape::Mesh:
 		inertial_tensor = matrix_identity();
 		inertial_tensor._11 = 0.3333333f * inertial_mass * ((Wsize.y * Wsize.y) + (Wsize.z * Wsize.z));
 		inertial_tensor._22 = 0.3333333f * inertial_mass * ((Wsize.z * Wsize.z) + (Wsize.x * Wsize.x));

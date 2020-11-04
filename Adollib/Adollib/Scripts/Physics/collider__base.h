@@ -45,8 +45,9 @@ namespace Adollib {
 		float restitution;	 //”½”­ŒW”
 
 		bool is_fallable; //—‚¿‚È‚¢
-		bool is_kinematic; //‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
+		bool is_kinematic;//‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
 		bool is_moveable; //“®‚©‚È‚¢
+		bool is_hitable;  //Õ“Ë‚µ‚È‚¢
 
 	private:
 		std::list<physics_function::ALP_Collider>::iterator ALPcollider_itr;
@@ -57,7 +58,7 @@ namespace Adollib {
 		
 	public:
 		//©g‚Ö‚Ìitr‚ğ•Ô‚·
-		const physics_function::ColliderPhysicsShape_itrs get_itrs() const {
+		const physics_function::ColliderPhysicsShape_itrs const get_itrs() const {
 			physics_function::ColliderPhysicsShape_itrs ret; 
 
 			ret.ALPcollider_itr = ALPcollider_itr;
@@ -71,7 +72,7 @@ namespace Adollib {
 
 	public:
 		//on collision enter
-		bool concoll_enter(ALP_tags tag_name);
+		const bool concoll_enter(const unsigned int tag_name) const;
 
 		//•ÀiˆÚ“®‚É—Í‚ğ‰Á‚¦‚é
 		void add_force(const Vector3& force);
@@ -79,6 +80,7 @@ namespace Adollib {
 		//Šp‰ñ“]‚É—Í‚ğ‰Á‚¦‚é
 		void add_torque(const Vector3& force);
 
+		//ŒvZ—p‚Ìstruct‚É‚Ü‚Æ‚ß‚é
 		virtual physics_function::Collider_data get_data() = 0;
 
 	public:

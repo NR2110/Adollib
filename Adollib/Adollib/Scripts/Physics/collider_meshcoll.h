@@ -1,85 +1,34 @@
 #pragma once
 #include "collider__base.h"
 #include "meshcoll_resorce_manager.h"
+#include "ALP__meshcoll_data.h"
 
 namespace Adollib {
-
-	enum class Edgetype {
-		EdgeConvex,	// 凸エッジ
-		EdgeConcave,// 凹エッジ
-		EdgeFlat,	// 平坦エッジ
-	};
-
-	//エッジ
-	struct Edge {
-		Edgetype type; // エッジの種類
-		u_int vertexID[2]; // 端点の頂点インデックス vectorの再確保があるかもなのでIDで保存
-		u_int facetID[2]; // 共有する面インデックス 
-	};
-
-	//面
-	struct Facet {
-		u_int vertexID[3]; // 頂点インデックス
-		u_int edgeID[3];   // エッジインデックス
-		Vector3 normal;  // 面法線ベクトル
-	};
-
-	//class MeshColl_base : public Collider {
-	//protected:
-	//	u_int vertex_num; //頂点数
-	//	u_int edge_num; //エッジ数
-	//	u_int facet_num; //面数
-	//	bool _Convex = true;
-
-	//	std::vector<Vector3>* vertices; //頂点情報
-	//	std::vector<Edge> edges; //エッジ配列
-	//	std::vector<Facet> facets; //面配列
-
-	//public:
-	//	u_int get_vertex_size() { return vertex_num; };
-	//	u_int get_edge_size() { return edge_num; };
-	//	u_int get_facet_size() { return facet_num; };
-	//	bool is_Convex() { return _Convex; };
-
-	//	const std::vector<Vector3> const* get_vertexis() { return vertices; }
-	//	const std::vector<Edge>    const* get_edges() { return  &edges; }
-	//	const std::vector<Facet>   const* get_facets() { return &facets; }
-
-	//};
 
 	//Mesh colliderクラス
 	class Meshcoll : public Collider {
 	public:
-		Vector3 half_size = Vector3();
-		Vector3 offset = Vector3();
-		DOP::DOP_14 dopbase;
+		Vector3 center;
+		Vector3 rotate;
+		Vector3 size;
 
+	private:
 		u_int vertex_num; //頂点数
 		u_int edge_num; //エッジ数
 		u_int facet_num; //面数
-		bool is_Convex = true;
+		bool is_Convex = true; //convexなオブジェクトかどうか 一つでも凹なedgeがあればfalse
 
 		std::vector<Vector3>* vertices; //頂点情報
-		std::vector<Edge> edges; //エッジ配列
-		std::vector<Facet> facets; //面配列
+		std::vector<physics_function::Edge> edges; //エッジ配列
+		std::vector<physics_function::Facet> facets; //面配列
 
+	public:
 		//不動オブジェクトとして生成
-		Meshcoll(float density = 1, Vector3 pos = Vector3(0, 0, 0)) {
-			//shapeの設定
-			shape = Collider_shape::shape_mesh;
-
-			//密度の保存
-			this->density = density;
-
-			//座標
-			local_position = pos;
-
-			half_size = Vector3(0, 0, 0);
-		}
+		Meshcoll() :center(Vector3(0)), rotate(Vector3(0)), size(0) {}
 
 		void load_mesh(const char* filename) {
-			//shapeの設定
-			shape = Collider_shape::shape_mesh;
+			////shapeの設定
+			//shape = Collider_shape::shape_mesh;
 
 			vertices = nullptr;
 			edges.clear();
@@ -96,7 +45,7 @@ namespace Adollib {
 			//面情報の保存
 			{
 				facet_num = vertex_num / 3;
-				Facet F;
+				physics_function::Facet F;
 				for (int i = 0; i < facet_num; i++) {
 					F.vertexID[0] = (*inde)[i * 3];
 					F.vertexID[1] = (*inde)[i * 3 + 1];
@@ -118,9 +67,9 @@ namespace Adollib {
 					u = 0xffffff;
 				}
 
-				Edge E;
+				physics_function::Edge E;
 				for (int i = 0; i < facet_num; i++) {
-					Facet& facet = facets[i];
+					physics_function::Facet& facet = facets[i];
 
 					for (int o = 0; o < 3; o++) {
 						u_int vertId0 = ALmin(facet.vertexID[o % 3], facet.vertexID[(o + 1) % 3]);
@@ -133,7 +82,7 @@ namespace Adollib {
 							E.facetID[1] = i;
 							E.vertexID[0] = vertId0;
 							E.vertexID[1] = vertId1;
-							E.type = Edgetype::EdgeConvex; // 凸エッジで初期化
+							E.type = physics_function::Edgetype::EdgeConvex; // 凸エッジで初期化
 							edges.emplace_back(E);
 
 							facet.edgeID[o] = edge_num;
@@ -143,8 +92,8 @@ namespace Adollib {
 						}
 						else {
 							// すでに登録されていた
-							Edge& edge = edges[edgeID_Table[tableId]];
-							Facet& facetB = facets[edge.facetID[0]];
+							physics_function::Edge& edge = edges[edgeID_Table[tableId]];
+							physics_function::Facet& facetB = facets[edge.facetID[0]];
 
 							assert(edge.facetID[0] == edge.facetID[1] && "Don't let the edges have 3～ facet.");
 
@@ -155,14 +104,14 @@ namespace Adollib {
 
 							//エッジの種類を入力
 							if (d < -FLT_EPSILON) {
-								edge.type = Edgetype::EdgeConvex;
+								edge.type = physics_function::Edgetype::EdgeConvex;
 							}
 							else if (d > FLT_EPSILON) {
-								edge.type = Edgetype::EdgeConcave;
+								edge.type = physics_function::Edgetype::EdgeConcave;
 								is_Convex = false;
 							}
 							else {
-								edge.type = Edgetype::EdgeFlat;
+								edge.type = physics_function::Edgetype::EdgeFlat;
 							}
 
 							edge.facetID[1] = i;
@@ -201,30 +150,6 @@ namespace Adollib {
 			inertial_tensor._22 = 0.3333333f * inertial_mass * ((half_size.z * half_size.z) + (half_size.x * half_size.x));
 			inertial_tensor._33 = 0.3333333f * inertial_mass * ((half_size.x * half_size.x) + (half_size.y * half_size.y));
 		}
-
-		//サイズの所得関数のオーバーライド
-		Quaternion get_dimension() const {
-			return half_size;
-		}
-		//world変換関数のオーバーライド
-		void update_world_trans();
-
-		//sizeや密度が変更されると質量や完成モーメントの変更が必要になるからそのために用意
-		void update_inertial(const Vector3& half_size, float density = 1) {
-			this->density = density;
-
-			//質量の計算
-			inertial_mass = (half_size.x * half_size.y * half_size.z) * 8.0f * density;
-
-			//慣性モーメントの計算
-			inertial_tensor = matrix_identity();
-			inertial_tensor._11 = 0.3333333f * inertial_mass * ((half_size.y * half_size.y) + (half_size.z * half_size.z));
-			inertial_tensor._22 = 0.3333333f * inertial_mass * ((half_size.z * half_size.z) + (half_size.x * half_size.x));
-			inertial_tensor._33 = 0.3333333f * inertial_mass * ((half_size.x * half_size.x) + (half_size.y * half_size.y));
-		}
-
-		//dop6の更新
-		void update_dop14();
 
 	};
 }

@@ -2,7 +2,9 @@
 #include <unordered_map>
 #include <string>
 #include "../Math/math.h"
-#include "ALP_tags.h"
+#include "ALP__tags.h"
+#include "ALP__shapes.h"
+#include "ALP__meshcoll_data.h"
 
 namespace Adollib {
 
@@ -23,18 +25,18 @@ namespace Adollib {
 			Quaternion offset_CollGO_quat;
 			Vector3 offset_CollGO_pos;
 
-			std::unordered_map<ALP_tags, bool> oncoll_checkmap; //on collision enterのflag保存
-			std::vector<ALP_tags> oncoll_enter_names; //on collision enterのtag保存
+			unsigned int oncoll_bits; //oncollision enterで使用するbit情報
 
 			ALP_Collider_shape shape; //形情報
 			
 			Collider* coll;
 
+			Meshcoll_data meshcoll_data; //MeshCollider使用時に使うdata vertices,Edges,Facets
 
 		public:
 
-		//on collision enter
-		bool concoll_enter(ALP_tags tag_name);
+		//oncollision enter
+		const bool concoll_enter (const unsigned int tag_name) const;
 
 		//::: 毎フレーム呼ぶもの :::::
 		//gameobjectへの変化量を求める

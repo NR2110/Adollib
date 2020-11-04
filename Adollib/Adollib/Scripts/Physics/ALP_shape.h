@@ -5,14 +5,6 @@
 
 namespace Adollib {
 	namespace physics_function {
-		enum class ALP_Collider_shape {
-			shape_box,
-			shape_sphere,
-			shape_plane,
-			shape_mesh,
-
-			shape_size
-		};
 
 		struct ALP_Solverbody {
 			Vector3 delta_LinearVelocity; // 並進速度差分
@@ -25,8 +17,8 @@ namespace Adollib {
 
 		class ALP_Shape {
 		public:
-			ALP_Collider_shape shape; 		//形情報
 			DOP::DOP_14	dop14;			//14DOP データ
+			DOP::DOP_14	dopbase; //meshcollider用 読み込み時のdopデータ meshcoliderはこれを基準にDOPを生成
 			ALP_Solverbody* solve; //衝突解決用
 
 			ALP_Collider* ALP_coll;

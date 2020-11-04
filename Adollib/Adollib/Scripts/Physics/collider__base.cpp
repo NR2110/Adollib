@@ -12,7 +12,7 @@ using namespace Contacts;
 #pragma region Rigitbody
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-bool Collider::concoll_enter(ALP_tags tag_name) {
+const bool Collider::concoll_enter(const unsigned int tag_name) const {
 	ALPcollider_itr->concoll_enter(tag_name);
 }
 
@@ -27,7 +27,7 @@ void Collider::add_torque(const Vector3& force) {
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 void Collider::awake() {
-	physics_function::ColliderPhysicsShape_itrs_data data;
+	physics_function::ColliderPhysicsShape_itrs data;
 
 	data = Phyisics_manager::add_collider(this);
 

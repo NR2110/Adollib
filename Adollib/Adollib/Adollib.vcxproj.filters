@@ -480,10 +480,16 @@
     <ClInclude Include="Scripts\Physics\collider__base.h">
       <Filter>00_Adollib\22_physics\base</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Physics\ALP_tags.h">
+    <ClInclude Include="Scripts\Physics\ALP__physics_manager.h">
       <Filter>00_Adollib\22_physics\base</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Physics\ALP__physics_manager.h">
+    <ClInclude Include="Scripts\Physics\ALP__tags.h">
+      <Filter>00_Adollib\22_physics\base</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\ALP__shapes.h">
+      <Filter>00_Adollib\22_physics\base</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\ALP__meshcoll_data.h">
       <Filter>00_Adollib\22_physics\base</Filter>
     </ClInclude>
   </ItemGroup>
