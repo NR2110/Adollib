@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 namespace Adollib {
 	struct ALP_tags {
 		const unsigned int none = (1 << 0);

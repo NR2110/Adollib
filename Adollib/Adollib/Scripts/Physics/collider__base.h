@@ -9,18 +9,19 @@
 
 #include "ALP_collider.h"
 #include "ALP_physics.h"
-#include "ALP_shape.h"
 
 namespace Adollib {
 
 	namespace physics_function {
-		//::: 計算に使う情報 :::
+		//::: 計算などに使う情報 :::
 		struct Collider_data {
 			Vector3 local_position;
 			Quaternion local_orientation;
 			Vector3 local_scale;
 
-			physics_function::ALP_Collider_shape shape;
+			physics_function::ALP_Collider_shape shape; //形情報
+
+			DOP::DOP_14	dopbase; //MeshColliderの最初のk-dop
 		};
 
 		struct ColliderPhysicsShape_itrs {
@@ -28,7 +29,6 @@ namespace Adollib {
 
 			std::list<ALP_Collider>::iterator ALPcollider_itr;
 			std::list<ALP_Physics>::iterator ALPphysics_itr;
-			std::list<ALP_Shape>::iterator ALPshape_itr;
 		};
 
 	}
@@ -36,6 +36,10 @@ namespace Adollib {
 	class Collider : public Component {
 
 	public:
+		//::: tag関係 ::::::::
+		u_int tag; //自身のtag(bit)
+		u_int not_hitable_tags; //衝突しないtags
+
 		//::: unityのphysics部分 分ける必要なんてないやろ ::::
 		float inertial_mass; //質量
 		float drag; //空気抵抗
@@ -52,7 +56,6 @@ namespace Adollib {
 	private:
 		std::list<physics_function::ALP_Collider>::iterator ALPcollider_itr;
 		std::list<physics_function::ALP_Physics>::iterator ALPphysics_itr;
-		std::list<physics_function::ALP_Shape>::iterator ALPshape_itr;
 
 		std::list<Collider*>::iterator coll_itr;//自身へのitr
 		
@@ -63,7 +66,6 @@ namespace Adollib {
 
 			ret.ALPcollider_itr = ALPcollider_itr;
 			ret.ALPphysics_itr = ALPphysics_itr;
-			ret.ALPshape_itr = ALPshape_itr;
 
 			ret.coll_itr = coll_itr;
 

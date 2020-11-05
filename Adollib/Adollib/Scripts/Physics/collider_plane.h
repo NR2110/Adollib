@@ -23,6 +23,8 @@ namespace Adollib {
 			ret.local_scale = Vector3(FLT_MAX, 0, FLT_MAX);
 
 			ret.shape = physics_function::ALP_Collider_shape::Plane;
+
+			return ret;
 		}
 
 	};

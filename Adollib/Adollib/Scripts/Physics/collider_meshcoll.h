@@ -22,6 +22,7 @@ namespace Adollib {
 		std::vector<physics_function::Edge> edges; //エッジ配列
 		std::vector<physics_function::Facet> facets; //面配列
 
+		DOP::DOP_14	dopbase; //初期k-dopのdata
 	public:
 		//不動オブジェクトとして生成
 		Meshcoll() :center(Vector3(0)), rotate(Vector3(0)), size(0) {}
@@ -139,17 +140,22 @@ namespace Adollib {
 				}
 			}
 
-			half_size = Vector3(dopbase.max[0] - dopbase.min[0], dopbase.max[1] - dopbase.min[1], dopbase.max[2] - dopbase.min[2]) / 2.0f;
-
-			//質量の計算
-			inertial_mass = (half_size.x * half_size.y * half_size.z) * 8.0f * density;
-
-			//慣性モーメントの計算
-			inertial_tensor = matrix_identity();
-			inertial_tensor._11 = 0.3333333f * inertial_mass * ((half_size.y * half_size.y) + (half_size.z * half_size.z));
-			inertial_tensor._22 = 0.3333333f * inertial_mass * ((half_size.z * half_size.z) + (half_size.x * half_size.x));
-			inertial_tensor._33 = 0.3333333f * inertial_mass * ((half_size.x * half_size.x) + (half_size.y * half_size.y));
+			size = Vector3(dopbase.max[0] - dopbase.min[0], dopbase.max[1] - dopbase.min[1], dopbase.max[2] - dopbase.min[2]) / 2.0f;
 		}
+
+		physics_function::Collider_data get_data() override {
+			physics_function::Collider_data ret;
+
+			ret.local_position = center;
+			ret.local_orientation = quaternion_from_euler(rotate);
+			ret.local_scale = size;
+
+			ret.dopbase = dopbase;
+
+			ret.shape = physics_function::ALP_Collider_shape::Mesh;
+
+			return ret;
+		};
 
 	};
 }

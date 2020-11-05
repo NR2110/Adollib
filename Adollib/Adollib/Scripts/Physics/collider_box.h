@@ -13,11 +13,13 @@ namespace Adollib {
 
 		physics_function::Collider_data get_data() override {
 			physics_function::Collider_data ret;
+
 			ret.local_position = center;
 			ret.local_orientation = quaternion_from_euler(rotate);
 			ret.local_scale = size;
 
 			ret.shape = physics_function::ALP_Collider_shape::BOX;
+
 			return ret;
 		};
 	};

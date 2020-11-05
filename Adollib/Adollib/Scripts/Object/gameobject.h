@@ -24,7 +24,7 @@ namespace Adollib {
 	public:
 		bool no_material = false; //materialî•ñ‚ğŠ‚µ‚Ä‚¢‚é‚©
 
-		GO_Tag tag = GO_Tag::None; //‚±‚Ìgo‚Ì–¼‘O(ŒŸõ—p)
+		u_int tag = GO_tag::None; //‚±‚Ìgo‚Ìtag(bit)
 
 		std::shared_ptr<Material> material;
 

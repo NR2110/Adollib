@@ -1,7 +1,6 @@
 #include "ALP__physics_manager.h"
 
 using namespace Adollib;
-using namespace Contacts;
 
 //#include "ALP__manager.h"
 #include "../Object/gameobject.h"
@@ -13,7 +12,7 @@ using namespace Contacts;
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 const bool Collider::concoll_enter(const unsigned int tag_name) const {
-	ALPcollider_itr->concoll_enter(tag_name);
+	return ALPcollider_itr->concoll_enter(tag_name);
 }
 
 void Collider::add_force(const Vector3& force) {
@@ -33,7 +32,6 @@ void Collider::awake() {
 
 	ALPcollider_itr = data.ALPcollider_itr;
 	ALPphysics_itr = data.ALPphysics_itr;
-	ALPshape_itr = data.ALPshape_itr;
 
 	coll_itr = data.coll_itr;
 }

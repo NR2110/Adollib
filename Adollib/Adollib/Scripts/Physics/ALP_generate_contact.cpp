@@ -5,6 +5,7 @@
 #include "../Imgui/work_meter.h"
 
 using namespace Adollib;
+using namespace physics_function;
 using namespace Contacts;
 
 using namespace Closest_func;
@@ -18,87 +19,34 @@ void physics_function::generate_contact(std::vector<Contacts::Contact_pair>& pai
 	//::: dynamic_cast 多用地帯 危険! 危険!
 	for (int i = 0; i < pairs.size(); i++) {
 
-		if (pairs[i].body[0]->shape == Collider_shape::shape_sphere) {
-			Sphere* shape0 = dynamic_cast<Sphere*>(pairs[i].body[0]);
+		ALP_Collider* shape0 = pairs[i].body[0];
+		ALP_Collider* shape1 = pairs[i].body[1];
+		if (pairs[i].body[0]->shape == ALP_Collider_shape::Sphere) {
 
-			if (pairs[i].body[1]->shape == Collider_shape::shape_sphere) {
-				Sphere* shape1 = dynamic_cast<Sphere*>(pairs[i].body[1]);
-				assert(shape0 != nullptr && shape1 != nullptr);
-				generate_contact_sphere_sphere(*shape0, *shape1, pairs[i]);
-			}
-			if (pairs[i].body[1]->shape == Collider_shape::shape_box) {
-				Box* shape1 = dynamic_cast<Box*>(pairs[i].body[1]);
-				assert(shape0 != nullptr && shape1 != nullptr);
-				generate_contact_sphere_box(*shape0, *shape1, pairs[i]);
-			}
-			if (pairs[i].body[1]->shape == Collider_shape::shape_plane) {
-				Plane* shape1 = dynamic_cast<Plane*>(pairs[i].body[1]);
-				assert(shape0 != nullptr && shape1 != nullptr);
-				generate_contact_sphere_plane(*shape0, *shape1, pairs[i]);
-			}
-			if (pairs[i].body[1]->shape == Collider_shape::shape_mesh) {
-				Meshcoll* shape1 = dynamic_cast<Meshcoll*>(pairs[i].body[1]);
-				assert(shape0 != nullptr && shape1 != nullptr);
-				generate_contact_sphere_mesh(*shape0, *shape1, pairs[i]);
-			}
+			if (pairs[i].body[1]->shape == ALP_Collider_shape::Sphere)	generate_contact_sphere_sphere(*shape0, *shape1, pairs[i]);			
+			if (pairs[i].body[1]->shape == ALP_Collider_shape::BOX)		generate_contact_sphere_box(*shape0, *shape1, pairs[i]);			
+			if (pairs[i].body[1]->shape == ALP_Collider_shape::Plane)	generate_contact_sphere_plane(*shape0, *shape1, pairs[i]);			
+			if (pairs[i].body[1]->shape == ALP_Collider_shape::Mesh)	generate_contact_sphere_mesh(*shape0, *shape1, pairs[i]);		
 		}
-		if (pairs[i].body[0]->shape == Collider_shape::shape_box) {
-			Box* shape0 = dynamic_cast<Box*>(pairs[i].body[0]);
+		if (pairs[i].body[0]->shape == ALP_Collider_shape::BOX) {
 
-			if (pairs[i].body[1]->shape == Collider_shape::shape_sphere) {
-				Sphere* shape1 = dynamic_cast<Sphere*>(pairs[i].body[1]);
-				assert(shape0 != nullptr && shape1 != nullptr);
-				generate_contact_sphere_box(*shape1, *shape0, pairs[i]);
-			}
-			if (pairs[i].body[1]->shape == Collider_shape::shape_box) {
-				Box* shape1 = dynamic_cast<Box*>(pairs[i].body[1]);
-				assert(shape0 != nullptr && shape1 != nullptr);
-				generate_contact_box_box(*shape0, *shape1, pairs[i]);
-			}
-			if (pairs[i].body[1]->shape == Collider_shape::shape_plane) {
-				Plane* shape1 = dynamic_cast<Plane*>(pairs[i].body[1]);
-				assert(shape0 != nullptr && shape1 != nullptr);
-				generate_contact_box_plane(*shape0, *shape1, pairs[i]);
-			}
+			if (pairs[i].body[1]->shape == ALP_Collider_shape::Sphere)	generate_contact_sphere_box(*shape1, *shape0, pairs[i]);			
+			if (pairs[i].body[1]->shape == ALP_Collider_shape::BOX)		generate_contact_box_box(*shape0, *shape1, pairs[i]);		
+			if (pairs[i].body[1]->shape == ALP_Collider_shape::Plane)	generate_contact_box_plane(*shape0, *shape1, pairs[i]);			
 		}
-		if (pairs[i].body[0]->shape == Collider_shape::shape_plane) {
-			Plane* shape0 = dynamic_cast<Plane*>(pairs[i].body[0]);
+		if (pairs[i].body[0]->shape == ALP_Collider_shape::Plane) {
 
-			if (pairs[i].body[1]->shape == Collider_shape::shape_sphere) {
-				Sphere* shape1 = dynamic_cast<Sphere*>(pairs[i].body[1]);
-				assert(shape0 != nullptr && shape1 != nullptr);
-				generate_contact_sphere_plane(*shape1, *shape0, pairs[i]);
-			}
-
-			if (pairs[i].body[1]->shape == Collider_shape::shape_box) {
-				Box* shape1 = dynamic_cast<Box*>(pairs[i].body[1]);
-				assert(shape0 != nullptr && shape1 != nullptr);
-				generate_contact_box_plane(*shape1, *shape0, pairs[i]);
-			}
-			if (pairs[i].body[0]->shape == Collider_shape::shape_plane) {
-
-			}
+			if (pairs[i].body[1]->shape == ALP_Collider_shape::Sphere) 		generate_contact_sphere_plane(*shape1, *shape0, pairs[i]);
+			if (pairs[i].body[1]->shape == ALP_Collider_shape::BOX)		generate_contact_box_plane(*shape1, *shape0, pairs[i]);		
+			if (pairs[i].body[0]->shape == ALP_Collider_shape::Plane) {			}
 		}
+		if (pairs[i].body[0]->shape == ALP_Collider_shape::Mesh) {
 
-		if (pairs[i].body[0]->shape == Collider_shape::shape_mesh) {
-			Meshcoll* shape0 = dynamic_cast<Meshcoll*>(pairs[i].body[0]);
+			if (pairs[i].body[1]->shape == ALP_Collider_shape::Sphere)	generate_contact_sphere_mesh(*shape1, *shape0, pairs[i]);		
+			if (pairs[i].body[1]->shape == ALP_Collider_shape::Plane)	generate_contact_mesh_plane(*shape0 , *shape1, pairs[i]);			
+			if (pairs[i].body[1]->shape == ALP_Collider_shape::Mesh)	generate_contact_mesh_mesh(*shape0, *shape1, pairs[i]);
 
-			if (pairs[i].body[1]->shape == Collider_shape::shape_sphere) {
-				Sphere* shape1 = dynamic_cast<Sphere*>(pairs[i].body[1]);
-				assert(shape0 != nullptr && shape1 != nullptr);
-				generate_contact_sphere_mesh(*shape1, *shape0, pairs[i]);
-			}
-			if (pairs[i].body[1]->shape == Collider_shape::shape_plane) {
-				Plane* shape1 = dynamic_cast<Plane*>(pairs[i].body[1]);
-				assert(shape0 != nullptr && shape1 != nullptr);
-				generate_contact_mesh_plane(*shape0 , *shape1, pairs[i]);
-			}
-			if (pairs[i].body[1]->shape == Collider_shape::shape_mesh) {
-				Meshcoll* shape1 = dynamic_cast<Meshcoll*>(pairs[i].body[1]);
-				assert(shape0 != nullptr && shape1 != nullptr);
-				generate_contact_mesh_mesh(*shape0, *shape1, pairs[i]);
-
-			}
+			
 		}
 
 
@@ -136,11 +84,11 @@ float sum_of_projected_radii(const OBB& obb, const Vector3& vec) {
 		fabsf(vector3_dot(vec, obb.half_width.z * obb.u_axes[2]));
 }
 
-float sum_of_projected_radii(float& max, float& min, const Meshcoll& meshcoll, const Vector3& nor) {
+float sum_of_projected_radii(float& max, float& min, const ALP_Collider& meshcoll, const Vector3& nor) {
 	float value;
 	max = -FLT_MAX;
 	min = +FLT_MAX;
-	for (Vector3 vertex : *meshcoll.vertices) {
+	for (Vector3 vertex : *meshcoll.meshcoll_data.vertices) {
 		value = vector3_dot(vertex * meshcoll.world_scale, nor);
 		if (max < value)max = value;
 		if (min > value)min = value;
@@ -260,7 +208,7 @@ bool sat_obb_obb(
 }
 
 //どちらも凸包の場合
-bool sat_convex_mesh_mesh(const Meshcoll& collA, const Meshcoll& collB,
+bool sat_convex_mesh_mesh(const ALP_Collider& collA, const ALP_Collider& collB,
 	float& smallest_penetration, //最小の貫通量
 	int smallest_axis[2], //どの軸で最近になったか(edge×edge用に2つ分用意)
 	SAT_TYPE& smallest_case //どのような形で最近になっているか
@@ -281,8 +229,8 @@ bool sat_convex_mesh_mesh(const Meshcoll& collA, const Meshcoll& collB,
 	////::: obbAの軸にobbBを投影 :::::::::::::::::::
 		//collAの座標系で計算を行う
 	float maxA, minA, maxB, minB;
-	for (u_int f = 0; f < collA.facet_num; f++) {
-		const Facet& facet = collA.facets[f];
+	for (u_int f = 0; f < collA.meshcoll_data.facet_num; f++) {
+		const Facet& facet = collA.meshcoll_data.facets->at(f);
 		const Vector3& axis = facet.normal;
 
 		// collAを分離軸に投影
@@ -322,8 +270,8 @@ bool sat_convex_mesh_mesh(const Meshcoll& collA, const Meshcoll& collB,
 	////::: obbBの軸にobbAを投影 :::::::::::::::::::
 		//collBの座標系で計算を行う
 	if (PA_FB.hit_point_to_face == true)
-		for (u_int f = 0; f < collB.facet_num; f++) {
-			const Facet& facet = collB.facets[f];
+		for (u_int f = 0; f < collB.meshcoll_data.facet_num; f++) {
+			const Facet& facet = collB.meshcoll_data.facets->at(f);
 			const Vector3& axis = facet.normal;
 
 			// collBを分離軸に投影
@@ -376,69 +324,71 @@ bool sat_convex_mesh_mesh(const Meshcoll& collA, const Meshcoll& collB,
 	Vector3 save_axisW;
 	float save_crossnorm;
 	Vector3 axisA, axisB, axisW;
-	for (u_int eA = 0; eA < collA.edge_num; eA++) {
-		const Edge& edgeA = collA.edges[eA];
+	for (u_int eA = 0; eA < collA.meshcoll_data.edge_num; eA++) {
+		const Edge& edgeA = collA.meshcoll_data.edges->at(eA);
 		if (edgeA.type != Edgetype::EdgeConvex) continue;
 
-		const Vector3& edgeVecA = (*collA.vertices)[edgeA.vertexID[1]] - (*collA.vertices)[edgeA.vertexID[0]];
-		for (u_int eB = 0; eB < collB.edge_num; eB++) {
-			const Edge& edgeB = collB.edges[eB];
-			if (edgeB.type != Edgetype::EdgeConvex) continue;
+		const Vector3& edgeVecA = collA.meshcoll_data.vertices->at(edgeA.vertexID[1]) - collA.meshcoll_data.vertices->at(edgeA.vertexID[0]);
+			for (u_int eB = 0; eB < collB.meshcoll_data.edge_num; eB++) {
+				const Edge& edgeB = collB.meshcoll_data.edges->at(eB);
+				if (edgeB.type != Edgetype::EdgeConvex) continue;
 
-			const Vector3 edgeVecB = vector3_quatrotate((*collB.vertices)[edgeB.vertexID[1]] - (*collB.vertices)[edgeB.vertexID[0]], offset_quatBA);
+				const Vector3 edgeVecB = vector3_quatrotate(collB.meshcoll_data.vertices->at(edgeB.vertexID[1]) - collB.meshcoll_data.vertices->at(edgeB.vertexID[0]), offset_quatBA);
 
-			axisA = vector3_cross(edgeVecA, edgeVecB);
-			if (axisA.norm() <= FLT_EPSILON * FLT_EPSILON) continue;
-			axisA = axisA.unit_vect();
-			axisW = vector3_quatrotate(axisA, collA.world_orientation);
-			//axisの向きをA->Bにする
-			if (vector3_dot(axisW, collB.world_position - collA.world_position) < 0) {
-				axisA *= -1;
-				axisW *= -1;
+				axisA = vector3_cross(edgeVecA, edgeVecB);
+				if (axisA.norm() <= FLT_EPSILON * FLT_EPSILON) continue;
+				axisA = axisA.unit_vect();
+				axisW = vector3_quatrotate(axisA, collA.world_orientation);
+				//axisの向きをA->Bにする
+				if (vector3_dot(axisW, collB.world_position - collA.world_position) < 0) {
+					axisA *= -1;
+					axisW *= -1;
+				}
+				axisB = vector3_quatrotate(axisA, offset_quatAB);
+
+				sum_of_projected_radii(maxA, minA, collA, axisA);		assert(maxA >= minA);
+				sum_of_projected_radii(maxB, minB, collB, axisB);		assert(maxB >= minB);
+				float off = vector3_dot(offset_posBA, axisW);
+
+				maxB += off;
+				minB += off;
+
+				//辺と辺の距離
+				float CN = fabsf(off) - (vector3_dot(axisA, collA.meshcoll_data.vertices->at(edgeA.vertexID[0])) + -(vector3_dot(axisB, collB.meshcoll_data.vertices->at(edgeB.vertexID[0]))));
+
+				//貫通の計算
+				float d1 = minA - maxB;
+				float d2 = minB - maxA;
+				if (d1 >= 0.0f || d2 >= 0.0f)
+					return false;
+
+				penetration = -1 * ALmax(d1, d2) * 1.0001f;
+
+				if (smallest_penetration > penetration) {
+					smallest_penetration = penetration;
+					smallest_axis[0] = eA;
+					smallest_axis[1] = eB;
+					smallest_case = EDGE_EDGE;
+					save_axisW = axisW;
+					save_crossnorm = CN;
+				}
+				else if (fabsf(vector3_dot(axisW, save_axisW)) > 0.999 && CN < save_crossnorm) {
+					//分離軸は同じだがより近い軸を見つけた時の処理
+					smallest_axis[0] = eA;
+					smallest_axis[1] = eB;
+					save_axisW = axisW;
+					save_crossnorm = CN;
+				}
 			}
-			axisB = vector3_quatrotate(axisA, offset_quatAB);
 
-			sum_of_projected_radii(maxA, minA, collA, axisA);		assert(maxA >= minA);
-			sum_of_projected_radii(maxB, minB, collB, axisB);		assert(maxB >= minB);
-			float off = vector3_dot(offset_posBA, axisW);
-
-			maxB += off;
-			minB += off;
-
-			//辺と辺の距離
-			float CN = fabsf(off) - (vector3_dot(axisA, (*collA.vertices)[edgeA.vertexID[0]]) + -(vector3_dot(axisB, (*collB.vertices)[edgeB.vertexID[0]])));
-
-			//貫通の計算
-			float d1 = minA - maxB;
-			float d2 = minB - maxA;
-			if (d1 >= 0.0f || d2 >= 0.0f)
-				return false;
-
-			penetration = -1 * ALmax(d1, d2) * 1.0001f;
-
-			if (smallest_penetration > penetration) {
-				smallest_penetration = penetration;
-				smallest_axis[0] = eA;
-				smallest_axis[1] = eB;
-				smallest_case = EDGE_EDGE;
-				save_axisW = axisW;
-				save_crossnorm = CN;
-			}
-			else if (fabsf(vector3_dot(axisW, save_axisW)) > 0.999 && CN < save_crossnorm) {
-				//分離軸は同じだがより近い軸を見つけた時の処理
-				smallest_axis[0] = eA;
-				smallest_axis[1] = eB;
-				save_axisW = axisW;
-				save_crossnorm = CN;
-			}
-		}
 	}
 	Work_meter::stop("generate_edge_edge");
 	// 分離軸が見当たらない場合OBBは交差しているはず
-	return (smallest_penetration < FLT_MAX && smallest_penetration > FLT_EPSILON) ? true : false;
+	return (smallest_penetration < FLT_MAX&& smallest_penetration > FLT_EPSILON) ? true : false;
+
 }
 
-bool sat_obb_convex_mesh(const OBB& obb, const Meshcoll& mesh,
+bool sat_obb_convex_mesh(const OBB& obb, const ALP_Collider& mesh,
 	float& smallest_penetration, //最小の貫通量
 	int smallest_axis[2], //どの軸で最近になったか(edge×edge用に2つ分用意)
 	SAT_TYPE& smallest_case //どのような形で最近になっているか
@@ -492,8 +442,8 @@ bool sat_obb_convex_mesh(const OBB& obb, const Meshcoll& mesh,
 	////::: obbBの軸にobbAを投影 :::::::::::::::::::
 		//meshの座標系で計算を行う
 	if (PA_FB.hit_point_to_face == true)
-		for (u_int f = 0; f < mesh.facet_num; f++) {
-			const Facet& facet = mesh.facets[f];
+		for (u_int f = 0; f < mesh.meshcoll_data.facet_num; f++) {
+			const Facet& facet = mesh.meshcoll_data.facets->at(f);
 			const Vector3& axis = facet.normal; //meshcoord
 
 			// meshを分離軸に投影
@@ -643,7 +593,7 @@ bool sat_obb_convex_mesh(const OBB& obb, const Meshcoll& mesh,
 
 //衝突生成
 #pragma region SPHERE-SPHERE
-bool physics_function::generate_contact_sphere_sphere(const Sphere& S0, const Sphere& S1, Contacts::Contact_pair& pair) {
+bool physics_function::generate_contact_sphere_sphere(const ALP_Collider& S0, const ALP_Collider& S1, Contacts::Contact_pair& pair) {
 	Vector3 p0 = S0.world_position;
 	Vector3 p1 = S1.world_position;
 
@@ -668,7 +618,7 @@ bool physics_function::generate_contact_sphere_sphere(const Sphere& S0, const Sp
 #pragma endregion
 
 #pragma region SPHERE-PLANE
-bool physics_function::generate_contact_sphere_plane(const Sphere& sphere, const Plane& plane, Contacts::Contact_pair& pair) {
+bool physics_function::generate_contact_sphere_plane(const ALP_Collider& sphere, const ALP_Collider& plane, Contacts::Contact_pair& pair) {
 	//球面と平面の衝突判定を行う
 	Matrix rotate, inverse_rotate;
 	rotate = plane.world_orientation.get_rotate_matrix();
@@ -717,7 +667,7 @@ bool physics_function::generate_contact_sphere_plane(const Sphere& sphere, const
 #pragma endregion
 
 #pragma region SPHERE-BOX
-bool physics_function::generate_contact_sphere_box(const Sphere& sphere, const  Box& box, Contacts::Contact_pair& pair) {
+bool physics_function::generate_contact_sphere_box(const ALP_Collider& sphere, const  ALP_Collider& box, Contacts::Contact_pair& pair) {
 	//球とboxの衝突判定を行う
 	Matrix rotate, inverse_rotate;
 	//rotate = box.world_orientation.get_rotate_matrix();
@@ -731,7 +681,7 @@ bool physics_function::generate_contact_sphere_box(const Sphere& sphere, const  
 	Vector3 center;
 	center = vector3_trans(sphere.world_position, inverse_rotate); //boxのlocal座標系での球の中心座標
 
-	Vector3 box_halfsize = box.half_size * box.world_scale;
+	Vector3 box_halfsize = box.world_scale * box.half_size;
 
 	if (
 		abs(center.x) - sphere.world_scale.x > box_halfsize.x ||
@@ -785,8 +735,8 @@ bool physics_function::generate_contact_sphere_box(const Sphere& sphere, const  
 #pragma endregion
 
 #pragma region SPHERE-MESH
-bool physics_function::generate_contact_sphere_mesh(const Sphere& sphere, const Meshcoll& mesh, Contacts::Contact_pair& pair) {
-	if (mesh.is_Convex == true) {
+bool physics_function::generate_contact_sphere_mesh(const ALP_Collider& sphere, const ALP_Collider& mesh, Contacts::Contact_pair& pair) {
+	if (mesh.meshcoll_data.is_Convex == true) {
 		//球とmeshの衝突判定を行う
 		Matrix rotate, inverse_rotate;
 		rotate = matrix_world(Vector3(1, 1, 1), mesh.world_orientation.get_rotate_matrix(), mesh.world_position);
@@ -801,9 +751,9 @@ bool physics_function::generate_contact_sphere_mesh(const Sphere& sphere, const 
 		Vector3 closest_point;
 
 		closest_point = center;
-		for (int i = 0; i < mesh.facet_num; i++) {
-			const Vector3& nor = mesh.facets[i].normal.unit_vect();
-			const Vector3& pos = (*mesh.vertices)[mesh.facets[i].vertexID[0]] * mesh.world_scale;
+		for (int i = 0; i < mesh.meshcoll_data.facet_num; i++) {
+			const Vector3& nor = mesh.meshcoll_data.facets->at(i).normal.unit_vect();
+			const Vector3& pos = mesh.meshcoll_data.vertices->at(mesh.meshcoll_data.facets->at(i).vertexID[0]) * mesh.world_scale;
 			float d = vector3_dot(nor, pos) - vector3_dot(nor, closest_point);
 			if (d < 0) 
 				closest_point += d * nor;		
@@ -847,7 +797,7 @@ bool physics_function::generate_contact_sphere_mesh(const Sphere& sphere, const 
 
 
 #pragma region BOX-PLANE
-bool physics_function::generate_contact_box_plane(const Box& box, const Plane& plane, Contacts::Contact_pair& pair) {
+bool physics_function::generate_contact_box_plane(const ALP_Collider& box, const ALP_Collider& plane, Contacts::Contact_pair& pair) {
 
 	Vector3 vertices[8] = {
 		// obb座標系での各頂点のローカル座標
@@ -861,7 +811,7 @@ bool physics_function::generate_contact_box_plane(const Box& box, const Plane& p
 		Vector3(+box.world_scale.x, +box.world_scale.y, +box.world_scale.z)
 	};
 	for (int i = 0; i < 8; i++) {
-		vertices[i] *= box.half_size;
+		vertices[i] *= box.half_size[i];
 	}
 
 	//Boxと平面の衝突判定を行う
@@ -930,7 +880,7 @@ bool physics_function::generate_contact_box_plane(const Box& box, const Plane& p
 
 #pragma region BOX-BOX
 
-bool physics_function::generate_contact_box_box(const Box& b0, const Box& b1, Contacts::Contact_pair& pair) {
+bool physics_function::generate_contact_box_box(const ALP_Collider& b0, const ALP_Collider& b1, Contacts::Contact_pair& pair) {
 	Matrix m;
 	m = b0.world_orientation.get_rotate_matrix();
 	OBB obbA;
@@ -1110,30 +1060,30 @@ bool physics_function::generate_contact_box_box(const Box& b0, const Box& b1, Co
 #pragma endregion
 
 #pragma region BOX-MESH
-bool physics_function::generate_contact_box_mesh(const Box& S1, const Meshcoll& S2, Contacts::Contact_pair& pair) {
+bool physics_function::generate_contact_box_mesh(const ALP_Collider& S1, const ALP_Collider& S2, Contacts::Contact_pair& pair) {
 	return true;
 }
 #pragma endregion
 
 
 #pragma region MESH-PLANE
-bool physics_function::generate_contact_mesh_plane(const Meshcoll& S1, const Plane& S2, Contacts::Contact_pair& pair) {
+bool physics_function::generate_contact_mesh_plane(const ALP_Collider& S1, const ALP_Collider& S2, Contacts::Contact_pair& pair) {
 	return true;
 }
 #pragma endregion
 
 #pragma region MESH-MESH
 
-bool GC_concave_mesh_mesh(const Meshcoll& S1, const Meshcoll& S2, int concave_num, Contacts::Contact_pair& pair) {
+bool GC_concave_mesh_mesh(const ALP_Collider& S1, const ALP_Collider& S2, int concave_num, Contacts::Contact_pair& pair) {
 	return false;
 }
 
-bool physics_function::generate_contact_mesh_mesh(const Meshcoll& SA, const Meshcoll& SB, Contacts::Contact_pair& pair) {
+bool physics_function::generate_contact_mesh_mesh(const ALP_Collider& SA, const ALP_Collider& SB, Contacts::Contact_pair& pair) {
 	float smallest_penetration = FLT_MAX;	//最小めり込み量
 	int smallest_facetID[2];	//最小めり込み量を得た分離軸の作成に使用した各OBBのローカル軸番号 辺×辺用に2つ
 	SAT_TYPE smallest_case;		//衝突の種類 
 
-	if (SA.is_Convex == true && SB.is_Convex == true) {
+	if (SA.meshcoll_data.is_Convex == true && SB.meshcoll_data.is_Convex == true) {
 		if (!sat_convex_mesh_mesh(SA, SB, smallest_penetration, smallest_facetID, smallest_case))return false;
 
 		Quaternion offset_quatBA = SB.world_orientation * SA.world_orientation.conjugate();
@@ -1144,8 +1094,8 @@ bool physics_function::generate_contact_mesh_mesh(const Meshcoll& SA, const Mesh
 		//SBの頂点がSAの面と衝突した場合
 		if (smallest_case == POINTB_FACETA)
 		{
-			const Meshcoll& facet_coll = SA;
-			const Meshcoll& vertex_coll = SB;
+			const ALP_Collider& facet_coll = SA;
+			const ALP_Collider& vertex_coll = SB;
 
 			Quaternion offset_quatVF = vertex_coll.world_orientation * facet_coll.world_orientation.conjugate();
 			Quaternion offset_quatFV = facet_coll.world_orientation * vertex_coll.world_orientation.conjugate();
@@ -1153,7 +1103,7 @@ bool physics_function::generate_contact_mesh_mesh(const Meshcoll& SA, const Mesh
 			Vector3 offset_posFV = facet_coll.world_position - vertex_coll.world_position;
 
 			assert(smallest_facetID[1] == -1);
-			const Facet& nerest_facet = facet_coll.facets[smallest_facetID[0]];
+			const Facet& nerest_facet = facet_coll.meshcoll_data.facets->at(smallest_facetID[0]);
 
 			Vector3 axisF = nerest_facet.normal.unit_vect();
 			Vector3 axisW = vector3_quatrotate(axisF, facet_coll.world_orientation).unit_vect();
@@ -1169,15 +1119,15 @@ bool physics_function::generate_contact_mesh_mesh(const Meshcoll& SA, const Mesh
 				float max_len = -FLT_MAX;
 				Vector3 axisV = vector3_quatrotate(axisF, offset_quatFV);
 
-				for (u_int v_num = 0; v_num < vertex_coll.vertex_num; v_num++) {
+				for (u_int v_num = 0; v_num < vertex_coll.meshcoll_data.vertex_num; v_num++) {
 
-					if (vector3_dot((*vertex_coll.vertices)[v_num], axisV) > max_len) {
-						max_len = vector3_dot((*vertex_coll.vertices)[v_num], axisV);
+					if (vector3_dot(vertex_coll.meshcoll_data.vertices->at(v_num), axisV) > max_len) {
+						max_len = vector3_dot(vertex_coll.meshcoll_data.vertices->at(v_num), axisV);
 						nearest_pointID = v_num;
 					}
 				}
 			}
-			pB = (*vertex_coll.vertices)[nearest_pointID];
+			pB = vertex_coll.meshcoll_data.vertices->at(nearest_pointID);
 			pB *= vertex_coll.world_scale;
 
 			//上記のp0がfacet_collの最近面上のどこにあるのか
@@ -1190,16 +1140,16 @@ bool physics_function::generate_contact_mesh_mesh(const Meshcoll& SA, const Mesh
 				Vector3 n_pos;
 
 
-				for (u_int f_num = 0; f_num < facet_coll.facet_num; f_num++) {
+				for (u_int f_num = 0; f_num < facet_coll.meshcoll_data.facet_num; f_num++) {
 
-					if (vector3_dot(facet_coll.facets[f_num].normal, -axisF) < 0.5)continue; //衝突法線と比べて
+					if (vector3_dot(facet_coll.meshcoll_data.facets->at(f_num).normal, -axisF) < 0.5)continue; //衝突法線と比べて
 
 					//メッシュと点の最近点を求める
 					get_closestP_point_triangle(p,
-						(*facet_coll.vertices)[facet_coll.facets[f_num].vertexID[0]],
-						(*facet_coll.vertices)[facet_coll.facets[f_num].vertexID[1]],
-						(*facet_coll.vertices)[facet_coll.facets[f_num].vertexID[2]],
-						facet_coll.facets[f_num].normal,
+						facet_coll.meshcoll_data.vertices->at(facet_coll.meshcoll_data.facets->at(f_num).vertexID[0]),
+						facet_coll.meshcoll_data.vertices->at(facet_coll.meshcoll_data.facets->at(f_num).vertexID[1]),
+						facet_coll.meshcoll_data.vertices->at(facet_coll.meshcoll_data.facets->at(f_num).vertexID[2]),
+						facet_coll.meshcoll_data.facets->at(f_num).normal,
 						n_pos
 					);
 
@@ -1223,8 +1173,8 @@ bool physics_function::generate_contact_mesh_mesh(const Meshcoll& SA, const Mesh
 		//SAの頂点がSBの面と衝突した場合
 		if (smallest_case == POINTA_FACETB)
 		{
-			const Meshcoll& facet_coll = SB;
-			const Meshcoll& vertex_coll = SA;
+			const ALP_Collider& facet_coll = SB;
+			const ALP_Collider& vertex_coll = SA;
 
 			Quaternion offset_quatVF = vertex_coll.world_orientation * facet_coll.world_orientation.conjugate();
 			Quaternion offset_quatFV = facet_coll.world_orientation * vertex_coll.world_orientation.conjugate();
@@ -1232,7 +1182,7 @@ bool physics_function::generate_contact_mesh_mesh(const Meshcoll& SA, const Mesh
 			Vector3 offset_posFV = facet_coll.world_position - vertex_coll.world_position;
 
 			assert(smallest_facetID[0] == -1);
-			const Facet& nerest_facet = facet_coll.facets[smallest_facetID[1]];
+			const Facet& nerest_facet = facet_coll.meshcoll_data.facets->at(smallest_facetID[1]);
 
 			Vector3 axisF = nerest_facet.normal.unit_vect();
 			Vector3 axisW = vector3_quatrotate(axisF, facet_coll.world_orientation).unit_vect();
@@ -1248,15 +1198,15 @@ bool physics_function::generate_contact_mesh_mesh(const Meshcoll& SA, const Mesh
 				float max_len = -FLT_MAX;
 				Vector3 axisV = vector3_quatrotate(axisF, offset_quatFV);
 
-				for (u_int v_num = 0; v_num < vertex_coll.vertex_num; v_num++) {
+				for (u_int v_num = 0; v_num < vertex_coll.meshcoll_data.vertex_num; v_num++) {
 
-					if (vector3_dot((*vertex_coll.vertices)[v_num], axisV) > max_len) {
-						max_len = vector3_dot((*vertex_coll.vertices)[v_num], axisV);
+					if (vector3_dot(vertex_coll.meshcoll_data.vertices->at(v_num), axisV) > max_len) {
+						max_len = vector3_dot(vertex_coll.meshcoll_data.vertices->at(v_num), axisV);
 						nearest_pointID = v_num;
 					}
 				}
 			}
-			pB = (*vertex_coll.vertices)[nearest_pointID];
+			pB = vertex_coll.meshcoll_data.vertices->at(nearest_pointID);
 			pB *= vertex_coll.world_scale;
 
 			//上記のpBがfacet_collの最近面上のどこにあるのか
@@ -1269,16 +1219,16 @@ bool physics_function::generate_contact_mesh_mesh(const Meshcoll& SA, const Mesh
 				Vector3 n_pos;
 
 
-				for (u_int f_num = 0; f_num < facet_coll.facet_num; f_num++) {
+				for (u_int f_num = 0; f_num < facet_coll.meshcoll_data.facet_num; f_num++) {
 
-					if (vector3_dot(facet_coll.facets[f_num].normal, -axisF) < 0.5)continue; //衝突法線と比べて
+					if (vector3_dot(facet_coll.meshcoll_data.facets->at(f_num).normal, -axisF) < 0.5)continue; //衝突法線と比べて
 
 					//メッシュと点の最近点を求める
 					get_closestP_point_triangle(p,
-						(*facet_coll.vertices)[facet_coll.facets[f_num].vertexID[0]],
-						(*facet_coll.vertices)[facet_coll.facets[f_num].vertexID[1]],
-						(*facet_coll.vertices)[facet_coll.facets[f_num].vertexID[2]],
-						facet_coll.facets[f_num].normal,
+						facet_coll.meshcoll_data.vertices->at(facet_coll.meshcoll_data.facets->at(f_num).vertexID[0]),
+						facet_coll.meshcoll_data.vertices->at(facet_coll.meshcoll_data.facets->at(f_num).vertexID[1]),
+						facet_coll.meshcoll_data.vertices->at(facet_coll.meshcoll_data.facets->at(f_num).vertexID[2]),
+						facet_coll.meshcoll_data.facets->at(f_num).normal,
 						n_pos
 					);
 
@@ -1308,16 +1258,16 @@ bool physics_function::generate_contact_mesh_mesh(const Meshcoll& SA, const Mesh
 			Vector3 offset_posAB = SA.world_position - SB.world_position;
 			Vector3 offset_posBA = SB.world_position - SA.world_position;
 
-			const Edge& edgeA = SA.edges[smallest_facetID[0]];
-			const Edge& edgeB = SB.edges[smallest_facetID[1]];
+			const Edge& edgeA = SA.meshcoll_data.edges->at(smallest_facetID[0]);
+			const Edge& edgeB = SB.meshcoll_data.edges->at(smallest_facetID[1]);
 
 			Vector3 edgeA_p[2] = {
-				{(*SA.vertices)[edgeA.vertexID[0]] * SA.world_scale},
-				{(*SA.vertices)[edgeA.vertexID[1]] * SA.world_scale}
+				{SA.meshcoll_data.vertices->at(edgeA.vertexID[0]) * SA.world_scale},
+				{SA.meshcoll_data.vertices->at(edgeA.vertexID[1]) * SA.world_scale}
 			};
 			Vector3 edgeB_p[2] = {
-				{(*SB.vertices)[edgeB.vertexID[0]] * SB.world_scale},
-				{(*SB.vertices)[edgeB.vertexID[1]] * SB.world_scale}
+				{SB.meshcoll_data.vertices->at(edgeB.vertexID[0]) * SB.world_scale},
+				{SB.meshcoll_data.vertices->at(edgeB.vertexID[1]) * SB.world_scale}
 			};
 
 			Vector3 edgeA_vec = (edgeA_p[0] - edgeA_p[1]).unit_vect();

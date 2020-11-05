@@ -1,5 +1,6 @@
 #include "contact.h"
 using namespace Adollib;
+using namespace physics_function;
 using namespace Contacts;
 
 //:::::::::::::::::::::::::::::::::::::::::::::::::::

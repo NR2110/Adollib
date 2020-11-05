@@ -2,6 +2,7 @@
 #include <list>
 #include "../Imgui/work_meter.h"
 using namespace Adollib;
+using namespace physics_function;
 using namespace Contacts;
 using namespace DOP;
 
@@ -9,9 +10,9 @@ using namespace DOP;
 #pragma region Midphase
 //:::::::::::::::::::::::::::
 //DOP6Ç…ÇÊÇÈëÂéGîcÇ»ìñÇΩÇËîªíË
-bool Check_insert_DOP14(const Collider* collA, const Collider* collB) {
+bool Check_insert_DOP14(const ALP_Collider* collA, const ALP_Collider* collB) {
 	//ñ≥å¿PlaneÇÕDOPÇ™çÏÇÍÇ»Ç¢ÇΩÇﬂnarrowÇ…ìäÇ∞ÇÈ?
-	if (collA->shape == Collider_shape::shape_plane || collB->shape == Collider_shape::shape_plane) return true;
+	if (collA->shape == ALP_Collider_shape::Plane || collB->shape == ALP_Collider_shape::Plane) return true;
 
 	Vector3 dis = collA->dop14.pos - collB->dop14.pos;
 
@@ -31,7 +32,7 @@ bool Check_insert_DOP14(const Collider* collA, const Collider* collB) {
 	return true;
 }
 
-bool Check_insert_Plane(const Collider* plane, const Collider* coll) {
+bool Check_insert_Plane(const ALP_Collider* plane, const ALP_Collider* coll) {
 
 	Vector3 V;
 	float plane_dis = 0, coll_dis = FLT_MAX;
@@ -51,32 +52,28 @@ void add_pair(std::vector<Contacts::Contact_pair>& pairs, Contacts::Contact_pair
 	pairs.emplace_back(pair);
 }
 
-void Midphase_DOP_14(std::vector<Contacts::Contact_pair>& new_pairs, Collider* collA, Collider* collB) {
+void Midphase_DOP_14(std::vector<Contacts::Contact_pair>& new_pairs, ALP_Collider* collA, ALP_Collider* collB) {
 	Contact_pair new_pair;
 
 	// É^ÉOÇ…ÇÊÇÈè’ìÀÇÃê•îÒ
 	bool hit = true;
-	for (int q = 0; q < collA->No_hit_tag.size(); q++) {
-		if (collA->No_hit_tag[q] == std::string("all")) hit = false;
-		if (collA->No_hit_tag[q] == collB->tag) hit = false;
-		if (hit == false)break;
+	if (collA->tag & collB->not_hitable_tags) hit = false;
+	if (collB->tag & collA->not_hitable_tags) hit = false;
+	bool check_oncoll_only = false;
+	if (hit == false) {
+		if (collA->oncoll_check_bits & collB->tag)check_oncoll_only = true;
+		if (collB->oncoll_check_bits & collA->tag)check_oncoll_only = true;
 	}
-	if (hit == false)return;
-	for (int q = 0; q < collB->No_hit_tag.size(); q++) {
-		if (collB->No_hit_tag[q] == std::string("all")) hit = false;
-		if (collB->No_hit_tag[q] == collA->tag) hit = false;
-		if (hit == false)break;
-	}
-	if (hit == false)return;
+	if (hit == false && check_oncoll_only == false)return;
 
 	//DOPÇ…ÇÊÇÈëÂéGîcÇ»ìñÇΩÇËîªíË
-	if (collA->shape != Collider_shape::shape_plane && collB->shape != Collider_shape::shape_plane) {
+	if (collA->shape != ALP_Collider_shape::Plane && collB->shape != ALP_Collider_shape::Plane) {
 		if (Check_insert_DOP14(collA, collB) == false)return;
 	}
-	else if (collA->shape == Collider_shape::shape_plane && collB->shape != Collider_shape::shape_plane) {
+	else if (collA->shape == ALP_Collider_shape::Plane && collB->shape != ALP_Collider_shape::Plane) {
 		if (Check_insert_Plane(collA, collB) == false)return;
 	}
-	else if (collA->shape != Collider_shape::shape_plane && collB->shape == Collider_shape::shape_plane) {
+	else if (collA->shape != ALP_Collider_shape::Plane && collB->shape == ALP_Collider_shape::Plane) {
 		if (Check_insert_Plane(collB, collA) == false)return;
 	}
 	else return;
@@ -91,6 +88,7 @@ void Midphase_DOP_14(std::vector<Contacts::Contact_pair>& new_pairs, Collider* c
 		new_pair.body[1] = collA;
 	}
 	new_pair.type = Pairtype::new_pair;
+	new_pair.check_oncoll_only = check_oncoll_only;
 
 	add_pair(new_pairs, new_pair);
 }

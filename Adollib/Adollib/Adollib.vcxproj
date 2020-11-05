@@ -209,7 +209,6 @@
     <ClInclude Include="Scripts\Physics\ALP_integrate.h" />
     <ClInclude Include="Scripts\Physics\ALP_midphase.h" />
     <ClInclude Include="Scripts\Physics\ALP_resolve_contact.h" />
-    <ClInclude Include="Scripts\Physics\ALP_shape.h" />
     <ClInclude Include="Scripts\Physics\ALP__manager.h" />
     <ClInclude Include="Scripts\Physics\ALP__physics_function.h" />
     <ClInclude Include="Scripts\Physics\ALP__physics_manager.h" />
@@ -272,13 +271,8 @@
     <ClCompile Include="Scripts\Physics\ALP_midphase.cpp" />
     <ClCompile Include="Scripts\Physics\ALP_physics.cpp" />
     <ClCompile Include="Scripts\Physics\ALP_resolve_contact.cpp" />
-    <ClCompile Include="Scripts\Physics\ALP_shape.cpp" />
     <ClCompile Include="Scripts\Physics\ALP__manager.cpp" />
     <ClCompile Include="Scripts\Physics\ALP__physics_manager.cpp" />
-    <ClCompile Include="Scripts\Physics\collider_box.cpp" />
-    <ClCompile Include="Scripts\Physics\collider_meshcoll.cpp" />
-    <ClCompile Include="Scripts\Physics\collider_plane.cpp" />
-    <ClCompile Include="Scripts\Physics\collider_sphere.cpp" />
     <ClCompile Include="Scripts\Physics\collider__base.cpp" />
     <ClCompile Include="Scripts\Physics\contact.cpp" />
     <ClCompile Include="Scripts\Physics\meshcoll_resorce_manager.cpp" />

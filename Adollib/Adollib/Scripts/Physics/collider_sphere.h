@@ -17,8 +17,10 @@ namespace Adollib {
 			ret.local_orientation = center;
 			ret.local_orientation = quaternion_identity();
 			ret.local_scale = Vector3(r);
+
 			ret.shape = physics_function::ALP_Collider_shape::Sphere;
 
+			return ret;
 		};
 
 	};

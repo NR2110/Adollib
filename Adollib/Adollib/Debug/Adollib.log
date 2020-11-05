@@ -1,506 +1,342 @@
-﻿  camera_s.cpp
-  enemy.cpp
-  enemy_manager.cpp
-  object_fall.cpp
+﻿  camera_manager.cpp
+  camera_s.cpp
   object_manager.cpp
   object_rotate.cpp
   player.cpp
-  ALP__manager.cpp
+  material_for_collider.cpp
+  gameobject.cpp
+  gameobject_manager.cpp
   ALP_broadphase.cpp
+  ALP_collider.cpp
   ALP_generate_contact.cpp
   ALP_integrate.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_generate_contact.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_generate_contact.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_generate_contact.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_generate_contact.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__tags.h(10,31): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です (ソース ファイルをコンパイルしています Scripts\Physics\ALP_generate_contact.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__tags.h(10,31): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です (ソース ファイルをコンパイルしています Scripts\Physics\ALP_collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_integrate.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_integrate.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_integrate.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_integrate.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__tags.h(10,31): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です (ソース ファイルをコンパイルしています Scripts\Physics\ALP_integrate.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_broadphase.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_broadphase.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_broadphase.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_broadphase.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__tags.h(10,31): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です (ソース ファイルをコンパイルしています Scripts\Physics\ALP_broadphase.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_tags.h(9,43): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です (ソース ファイルをコンパイルしています Scripts\Object\gameobject.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(20,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(411,8): warning C4101: 'ra': ローカル変数は 1 度も使われていません。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(754,21): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_tags.h(9,43): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\camera_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\camera_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\camera_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\camera_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_tags.h(9,43): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です (ソース ファイルをコンパイルしています ..\Scripts\camera_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__tags.h(10,31): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider__base.h(64,53): warning C4114: 同じ型修飾子が 2 度以上使われています。 (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider__base.h(64,53): warning C4114: 同じ型修飾子が 2 度以上使われています。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_tags.h(9,43): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です (ソース ファイルをコンパイルしています Scripts\Physics\ALP_collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__tags.h(10,31): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider__base.h(64,53): warning C4114: 同じ型修飾子が 2 度以上使われています。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_integrate.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(61,38): warning C4305: 'return': 'bool (__cdecl *)(void)' から 'bool' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_integrate.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider__base.h(64,53): warning C4114: 同じ型修飾子が 2 度以上使われています。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider__base.h(64,53): warning C4114: 同じ型修飾子が 2 度以上使われています。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_broadphase.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(61,38): warning C4305: 'return': 'bool (__cdecl *)(void)' から 'bool' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_broadphase.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_broadphase.cpp(86,8): warning C4101: 'ed': ローカル変数は 1 度も使われていません。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_meshcoll.h(50,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_meshcoll.h(72,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_tags.h(9,43): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_meshcoll.h(50,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_meshcoll.h(72,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_tags.h(9,43): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
   ALP_midphase.cpp
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP_broadphase.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP_broadphase.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP_broadphase.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP_broadphase.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP_broadphase.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP_broadphase.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP_generate_contact.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP_generate_contact.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP_generate_contact.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP_generate_contact.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP_generate_contact.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP_generate_contact.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP__manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP_midphase.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP__manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP_midphase.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP__manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP_midphase.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP__manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP_midphase.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP__manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP__manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP_midphase.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP_midphase.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP_integrate.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP_integrate.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP_integrate.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP_integrate.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP_integrate.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP_integrate.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\enemy.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\enemy.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\enemy.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\enemy.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\enemy.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\enemy.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\enemy_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\enemy_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\enemy_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\enemy_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\enemy_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\enemy_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\object_fall.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\object_fall.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\object_fall.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\object_fall.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ALP_generate_contact.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\object_fall.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\object_fall.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ALP_generate_contact.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ALP__manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ALP__manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_generate_contact.cpp(19,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_generate_contact.cpp(461,8): warning C4101: 'ra': ローカル変数は 1 度も使われていません。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_generate_contact.cpp(804,21): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ALP_midphase.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ALP_midphase.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ALP_integrate.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ALP_integrate.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ALP_broadphase.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ALP_broadphase.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_midphase.cpp(59,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_midphase.cpp(65,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_midphase.cpp(104,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_midphase.cpp(116,32): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_midphase.cpp(117,33): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_midphase.cpp(137,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_broadphase.cpp(39,46): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\enemy.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\enemy.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_broadphase.cpp(87,8): warning C4101: 'ed': ローカル変数は 1 度も使われていません。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\enemy_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\enemy_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\object_fall.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\object_fall.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.h(7,21): warning C4099: 'Adollib::physics_function::Solverbody': タイプ名は最初 'class' として使われていましたが 'struct' として使われています。 (ソース ファイルをコンパイルしています ALP__manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.h(7): message : 'Adollib::physics_function::Solverbody' の宣言を確認してください (ソース ファイルをコンパイルしています ALP__manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\vector_e.h(87): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
+  ALP_physics.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\vector_e.h(87): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_tags.h(9,43): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です (ソース ファイルをコンパイルしています Scripts\Object\gameobject_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
   ALP_resolve_contact.cpp
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_tags.h(9,43): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_physics.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_physics.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_physics.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_physics.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_midphase.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_midphase.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_midphase.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_midphase.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__tags.h(10,31): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です (ソース ファイルをコンパイルしています Scripts\Physics\ALP_midphase.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__tags.h(10,31): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です (ソース ファイルをコンパイルしています Scripts\Physics\ALP_physics.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_resolve_contact.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_resolve_contact.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_resolve_contact.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_resolve_contact.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__tags.h(10,31): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です (ソース ファイルをコンパイルしています Scripts\Physics\ALP_resolve_contact.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject.h(47,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Mesh\material_for_collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Mesh\material_for_collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Mesh\material_for_collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Mesh\material_for_collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\camera_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\camera_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\camera_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject.h(47,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject.h(47,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\camera_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject.h(47,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__tags.h(10,31): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です (ソース ファイルをコンパイルしています Scripts\Object\gameobject.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__tags.h(10,31): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です (ソース ファイルをコンパイルしています Scripts\Mesh\material_for_collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject.h(47,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject.h(47,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\camera_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.cpp(67,33): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.cpp(68,33): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\camera_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject.h(47,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Mesh\material_for_collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Mesh\material_for_collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Mesh\material_for_collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(53,51): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject.h(47,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__tags.h(10,31): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です (ソース ファイルをコンパイルしています Scripts\Object\gameobject_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__tags.h(10,31): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__tags.h(10,31): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です (ソース ファイルをコンパイルしています ..\Scripts\camera_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider__base.h(64,53): warning C4114: 同じ型修飾子が 2 度以上使われています。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider__base.h(64,53): warning C4114: 同じ型修飾子が 2 度以上使われています。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider__base.h(64,53): warning C4114: 同じ型修飾子が 2 度以上使われています。 (ソース ファイルをコンパイルしています ..\Scripts\camera_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_meshcoll.h(50,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_meshcoll.h(50,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_meshcoll.h(72,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_meshcoll.h(72,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__manager.h(7,10): fatal error C1083: include ファイルを開けません。'ALP__CollPhysicsShape_data.h':No such file or directory (ソース ファイルをコンパイルしています Scripts\Object\gameobject_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player.cpp(23,25): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player.cpp(29,24): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_meshcoll.h(50,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\camera_manager.cpp)
+  ALP__manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__tags.h(10,31): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_meshcoll.h(72,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\camera_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider__base.h(64,53): warning C4114: 同じ型修飾子が 2 度以上使われています。 (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_meshcoll.h(50,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_meshcoll.h(72,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\camera_s.cpp(59,43): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\camera_s.cpp(60,43): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__manager.h(7,10): fatal error C1083: include ファイルを開けません。'ALP__CollPhysicsShape_data.h':No such file or directory (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
+  ALP__physics_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_midphase.cpp(102,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_midphase.cpp(114,32): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_midphase.cpp(115,33): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_midphase.cpp(135,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider__base.h(64,53): warning C4114: 同じ型修飾子が 2 度以上使われています。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_physics.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_tags.h(9,43): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です (ソース ファイルをコンパイルしています Scripts\Physics\ALP_physics.cpp)
   collider__base.cpp
-  collider_box.cpp
-  collider_meshcoll.cpp
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています collider_meshcoll.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています collider_meshcoll.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています collider_meshcoll.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています collider_meshcoll.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています collider_box.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています collider_box.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています collider_box.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています collider_box.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています collider_box.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています collider_box.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています collider_meshcoll.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています collider_meshcoll.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています collider__base.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています collider__base.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています collider__base.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています collider__base.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています collider__base.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています collider__base.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ALP__manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ALP__manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ALP__manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ALP__manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\enemy_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\enemy_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\enemy_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ALP__manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\enemy.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\enemy.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\enemy.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ALP__manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\object_fall.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\object_fall.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\object_fall.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ALP__manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\enemy_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\enemy_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\enemy_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\enemy.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\enemy.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\object_fall.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\object_fall.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\enemy_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\enemy.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\object_fall.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\enemy.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\object_fall.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\player.cpp(23,25): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\player.cpp(29,24): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\enemy.h(23): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Enemy::Move_pattern' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\enemy_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\enemy.h(36): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Enemy::Enemy_type' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\enemy_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\enemy_manager.cpp(20,112): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\enemy_manager.cpp(22,113): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\enemy_manager.cpp(65,41): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\enemy_manager.cpp(66,44): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\enemy.h(23): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Enemy::Move_pattern' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\enemy.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\enemy.h(36): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Enemy::Enemy_type' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\enemy.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\enemy.cpp(21,19): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\enemy.cpp(22,17): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\enemy.cpp(139,15): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\enemy.cpp(211,15): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\enemy.cpp(285,15): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(180,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(194,65): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(196,69): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(221,119): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(221,79): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(243,128): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(243,85): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(265,120): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(265,80): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(267,123): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(267,83): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(288,125): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(288,84): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(311,188): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(311,83): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\object_manager.cpp(491,55): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています collider_meshcoll.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\camera_s.cpp(59,43): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\camera_s.cpp(60,43): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています collider_meshcoll.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP_resolve_contact.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP_resolve_contact.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP_resolve_contact.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP_resolve_contact.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています collider__base.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP_resolve_contact.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ALP_resolve_contact.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています collider__base.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています collider_box.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています collider_box.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ALP_resolve_contact.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています ALP_resolve_contact.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.h(7,21): warning C4099: 'Adollib::physics_function::Solverbody': タイプ名は最初 'class' として使われていましたが 'struct' として使われています。 (ソース ファイルをコンパイルしています ALP_resolve_contact.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.h(7): message : 'Adollib::physics_function::Solverbody' の宣言を確認してください (ソース ファイルをコンパイルしています ALP_resolve_contact.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(104,28): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(221,28): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(249,30): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(336,37): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(400,37): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(429,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(449,36): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(470,124): warning C4244: '+=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(471,124): warning C4244: '+=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(472,124): warning C4244: '+=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(496,30): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(612,37): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(641,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(661,36): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(682,124): warning C4244: '+=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(683,124): warning C4244: '+=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(684,124): warning C4244: '+=': 'double' から 'float' への変換です。データが失われる可能性があります。
-  collider_plane.cpp
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\ALP_resolve_contact.cpp(766,31): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-  collider_sphere.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(57,31): error C2027: 認識できない型 'Adollib::Collider' が使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(11): message : 'Adollib::Collider' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(60,31): error C2027: 認識できない型 'Adollib::Collider' が使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(11): message : 'Adollib::Collider' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(61,28): error C2027: 認識できない型 'Adollib::Collider' が使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(11): message : 'Adollib::Collider' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(69,14): error C2027: 認識できない型 'Adollib::Collider' が使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(11): message : 'Adollib::Collider' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(78,28): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(81,33): error C2440: '=': 'Adollib::physics_function::ALP_Collider *' から 'Adollib::Collider *' に変換できません。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(81,32): message : 指示された型は関連がありません。変換には reinterpret_cast、C スタイル キャストまたは関数スタイルのキャストが必要です。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(82,33): error C2440: '=': 'Adollib::physics_function::ALP_Collider *' から 'Adollib::Collider *' に変換できません。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(82,32): message : 指示された型は関連がありません。変換には reinterpret_cast、C スタイル キャストまたは関数スタイルのキャストが必要です。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(83,26): error C2027: 認識できない型 'Adollib::Collider' が使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(11): message : 'Adollib::Collider' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(84,26): error C2027: 認識できない型 'Adollib::Collider' が使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(11): message : 'Adollib::Collider' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(87,41): error C2027: 認識できない型 'Adollib::Collider' が使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(11): message : 'Adollib::Collider' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(87,61): error C2027: 認識できない型 'Adollib::Collider' が使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(11): message : 'Adollib::Collider' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(98,73): error C2027: 認識できない型 'Adollib::Collider' が使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(11): message : 'Adollib::Collider' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(98,96): error C2027: 認識できない型 'Adollib::Collider' が使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(11): message : 'Adollib::Collider' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(102,33): error C2027: 認識できない型 'Adollib::Collider' が使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(11): message : 'Adollib::Collider' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(103,20): error C2027: 認識できない型 'Adollib::Collider' が使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(11): message : 'Adollib::Collider' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(106,33): error C2027: 認識できない型 'Adollib::Collider' が使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(11): message : 'Adollib::Collider' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(107,20): error C2027: 認識できない型 'Adollib::Collider' が使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(11): message : 'Adollib::Collider' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(118,25): error C2027: 認識できない型 'Adollib::Collider' が使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(11): message : 'Adollib::Collider' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(119,25): error C2027: 認識できない型 'Adollib::Collider' が使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(11): message : 'Adollib::Collider' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(129,35): error C2027: 認識できない型 'Adollib::Collider' が使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(11): message : 'Adollib::Collider' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(129,55): error C2660: 'Adollib::vector3_trans': 関数に 1 個の引数を指定できません。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\matrix_e.h(334,25): message : 'Adollib::vector3_trans' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ALP_resolve_contact.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(130,35): error C2027: 認識できない型 'Adollib::Collider' が使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(11): message : 'Adollib::Collider' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(130,55): error C2660: 'Adollib::vector3_trans': 関数に 1 個の引数を指定できません。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\matrix_e.h(334,25): message : 'Adollib::vector3_trans' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ALP_resolve_contact.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(155,35): error C2027: 認識できない型 'Adollib::Collider' が使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(11): message : 'Adollib::Collider' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(155,55): error C2660: 'Adollib::vector3_trans': 関数に 1 個の引数を指定できません。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\matrix_e.h(334,25): message : 'Adollib::vector3_trans' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ALP_resolve_contact.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(156,35): error C2027: 認識できない型 'Adollib::Collider' が使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(11): message : 'Adollib::Collider' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(156,55): error C2660: 'Adollib::vector3_trans': 関数に 1 個の引数を指定できません。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\matrix_e.h(334,25): message : 'Adollib::vector3_trans' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ALP_resolve_contact.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(176,35): error C2027: 認識できない型 'Adollib::Collider' が使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(11): message : 'Adollib::Collider' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(176,55): error C2660: 'Adollib::vector3_trans': 関数に 1 個の引数を指定できません。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\matrix_e.h(334,25): message : 'Adollib::vector3_trans' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ALP_resolve_contact.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(177,35): error C2027: 認識できない型 'Adollib::Collider' が使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(11): message : 'Adollib::Collider' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(177,55): error C2660: 'Adollib::vector3_trans': 関数に 1 個の引数を指定できません。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\matrix_e.h(334,25): message : 'Adollib::vector3_trans' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ALP_resolve_contact.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(195,28): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(198,25): error C2440: '=': 'Adollib::physics_function::ALP_Collider *' から 'Adollib::Collider *' に変換できません。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(198,24): message : 指示された型は関連がありません。変換には reinterpret_cast、C スタイル キャストまたは関数スタイルのキャストが必要です。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(199,25): error C2440: '=': 'Adollib::physics_function::ALP_Collider *' から 'Adollib::Collider *' に変換できません。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(199,24): message : 指示された型は関連がありません。変換には reinterpret_cast、C スタイル キャストまたは関数スタイルのキャストが必要です。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(200,26): error C2027: 認識できない型 'Adollib::Collider' が使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(11): message : 'Adollib::Collider' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(201,26): error C2027: 認識できない型 'Adollib::Collider' が使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(11): message : 'Adollib::Collider' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(221,29): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(224,26): error C2440: '=': 'Adollib::physics_function::ALP_Collider *' から 'Adollib::Collider *' に変換できません。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(224,25): message : 指示された型は関連がありません。変換には reinterpret_cast、C スタイル キャストまたは関数スタイルのキャストが必要です。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(225,26): error C2440: '=': 'Adollib::physics_function::ALP_Collider *' から 'Adollib::Collider *' に変換できません。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(225,25): message : 指示された型は関連がありません。変換には reinterpret_cast、C スタイル キャストまたは関数スタイルのキャストが必要です。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(226,27): error C2027: 認識できない型 'Adollib::Collider' が使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(11): message : 'Adollib::Collider' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(227,27): error C2027: 認識できない型 'Adollib::Collider' が使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(11): message : 'Adollib::Collider' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(294,13): error C2027: 認識できない型 'Adollib::Collider' が使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(11): message : 'Adollib::Collider' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(294,44): error C2027: 認識できない型 'Adollib::Collider' が使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(11): message : 'Adollib::Collider' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(295,13): error C2027: 認識できない型 'Adollib::Collider' が使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(11): message : 'Adollib::Collider' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact.cpp(295,44): error C2027: 認識できない型 'Adollib::Collider' が使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(11): message : 'Adollib::Collider' の宣言を確認してください
   contact.cpp
-  frustum_culling.cpp
-  gameobject.cpp
-  gameobject_camera.cpp
-  gameobject_light.cpp
-  gameobject_manager.cpp
-  loop.cpp
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\vector_e.h(87): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています collider_plane.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています collider_plane.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています collider_plane.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています collider_plane.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています collider_plane.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています collider_plane.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています collider_sphere.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています frustum_culling.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています collider_sphere.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています frustum_culling.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています collider_sphere.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています frustum_culling.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています collider_sphere.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています frustum_culling.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています collider_sphere.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています collider_sphere.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています contact.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています contact.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています contact.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています contact.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています contact.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています contact.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています collider_box.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています collider_box.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています collider_box.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています collider_meshcoll.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています collider_meshcoll.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています collider_meshcoll.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています collider__base.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています collider__base.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています collider__base.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています collider_box.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています collider_box.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています collider__base.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています collider_meshcoll.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています collider_meshcoll.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています collider__base.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.cpp(57,84): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています collider_plane.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています collider_plane.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています gameobject.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています gameobject.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています gameobject.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています gameobject.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています gameobject.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています gameobject.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています gameobject_camera.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています gameobject_camera.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています gameobject_camera.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています gameobject_camera.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています gameobject_light.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています gameobject_light.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています gameobject_light.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています gameobject_light.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています gameobject_camera.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています gameobject_camera.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています gameobject_light.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています gameobject_light.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています collider_sphere.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています collider_sphere.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています contact.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています contact.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています gameobject.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています gameobject.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています gameobject_light.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています gameobject_light.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています gameobject_camera.cpp)
-  main.cpp
-  material.cpp
-  material_for_collider.cpp
   scene_game.cpp
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています gameobject_camera.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています gameobject_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています gameobject_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています gameobject_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています gameobject_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています gameobject_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています gameobject_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています gameobject_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています gameobject_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています gameobject_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています gameobject_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています gameobject_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています loop.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています loop.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています loop.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています loop.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています loop.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています loop.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています loop.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています loop.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています loop.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています loop.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています loop.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています collider_plane.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています collider_plane.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています collider_plane.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています collider_plane.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています collider_plane.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています gameobject_light.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています gameobject_light.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています gameobject_light.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています collider_sphere.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています collider_sphere.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています collider_sphere.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています frustum_culling.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています frustum_culling.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています gameobject_light.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています gameobject_light.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています collider_sphere.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています collider_sphere.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています frustum_culling.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_sphere.cpp(21,33): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_sphere.cpp(22,33): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています frustum_culling.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています gameobject_light.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています gameobject.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています gameobject.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています gameobject.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています gameobject_camera.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています gameobject_camera.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています gameobject_camera.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています frustum_culling.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています frustum_culling.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています frustum_culling.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています gameobject_camera.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています gameobject.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています gameobject_camera.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています gameobject.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています frustum_culling.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています frustum_culling.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています gameobject_camera.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています frustum_culling.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています scene_game.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています scene_game.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています scene_game.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています scene_game.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています scene_game.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています scene_game.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています gameobject.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.cpp(56,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています gameobject_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています gameobject_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています gameobject_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています gameobject_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています main.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています main.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています main.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています scene_game.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています scene_game.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています main.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています main.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています main.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています main.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています loop.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています main.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています main.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています loop.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています loop.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています loop.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています main.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています main.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています material.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています material.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています material.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_manager.cpp(128,21): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_manager.cpp(136,21): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_manager.cpp(156,21): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_manager.cpp(181,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_manager.cpp(182,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_manager.cpp(189,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-  scene_manager.cpp
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_manager.cpp(207,21): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています material.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています material.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています main.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています material.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています material.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています main.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています main.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています material.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています material.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています main.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています material_for_collider.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています material_for_collider.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています material_for_collider.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています material_for_collider.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています material.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています material.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています material_for_collider.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています material_for_collider.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています material.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています scene_game.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています scene_game.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています scene_game.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています material.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています material.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています material_for_collider.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています material_for_collider.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\material.cpp(47,16): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\material.cpp(48,16): warning C4018: '>': signed と unsigned の数値を比較しようとしました。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています scene_game.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\main.cpp(135,16): warning C4101: 'now': ローカル変数は 1 度も使われていません。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\main.cpp(135,21): warning C4101: 'before': ローカル変数は 1 度も使われていません。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\main.cpp(135,29): warning C4101: 'freq': ローカル変数は 1 度も使われていません。
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています scene_game.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています scene_game.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています material_for_collider.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています material_for_collider.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています material_for_collider.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています scene_game.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\material_for_collider.cpp(52,52): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\enemy.h(23): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Enemy::Move_pattern' の左辺を無視します。 (ソース ファイルをコンパイルしています scene_game.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Scripts\enemy.h(36): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Enemy::Enemy_type' の左辺を無視します。 (ソース ファイルをコンパイルしています scene_game.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています scene_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています scene_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています scene_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています scene_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(51,26): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています scene_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider__base.h(52,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています scene_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(100,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています scene_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\collider_meshcoll.h(122,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています scene_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています scene_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています scene_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています scene_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(50,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています scene_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject.h(119,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています scene_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています scene_manager.cpp)
-C:\Users\2190072\Documents\Adollib\Adollib\Adollib\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています scene_manager.cpp)
-  LINK : 前回のインクリメンタル リンクで C:\Users\2190072\Documents\Adollib\Adollib\Debug\Adollib.exe が見つからなかったか、ビルドされませんでした。フル リンクを行います。
-  Adollib.vcxproj -> C:\Users\2190072\Documents\Adollib\Adollib\Debug\Adollib.exe
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP__manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP__manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP__manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP__manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__tags.h(10,31): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です (ソース ファイルをコンパイルしています Scripts\Physics\ALP__manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP__physics_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP__physics_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\collider__base.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP__physics_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\collider__base.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP__physics_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\collider__base.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\collider__base.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__tags.h(10,31): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です (ソース ファイルをコンパイルしています Scripts\Physics\ALP__physics_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\contact.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\contact.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\contact.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\contact.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__tags.h(10,31): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です (ソース ファイルをコンパイルしています Scripts\Physics\contact.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_physics.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_physics.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_physics.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject.h(47,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_physics.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider__base.h(64,53): warning C4114: 同じ型修飾子が 2 度以上使われています。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP__manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(61,38): warning C4305: 'return': 'bool (__cdecl *)(void)' から 'bool' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_physics.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__tags.h(10,31): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です (ソース ファイルをコンパイルしています Scripts\Physics\collider__base.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider__base.h(64,53): warning C4114: 同じ型修飾子が 2 度以上使われています。 (ソース ファイルをコンパイルしています Scripts\Physics\collider__base.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_physics.cpp(92,94): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(61,38): warning C4305: 'return': 'bool (__cdecl *)(void)' から 'bool' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\collider__base.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_tags.h(9,43): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です (ソース ファイルをコンパイルしています Scripts\Physics\collider__base.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider__base.h(64,53): warning C4114: 同じ型修飾子が 2 度以上使われています。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP__physics_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(61,38): warning C4305: 'return': 'bool (__cdecl *)(void)' から 'bool' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP__physics_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_meshcoll.h(50,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP__manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_meshcoll.h(72,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP__manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__manager.h(7,10): fatal error C1083: include ファイルを開けません。'ALP__CollPhysicsShape_data.h':No such file or directory (ソース ファイルをコンパイルしています Scripts\Physics\ALP__manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_tags.h(9,43): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です (ソース ファイルをコンパイルしています Scripts\Physics\ALP__physics_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Scene\scene_game.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Scene\scene_game.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Scene\scene_game.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Scene\scene_game.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_tags.h(9,43): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です (ソース ファイルをコンパイルしています Scripts\Scene\scene_game.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Physics\collider__base.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Physics\collider__base.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Physics\collider__base.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject.h(47,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています Scripts\Physics\collider__base.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP__physics_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP__physics_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP__physics_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject.h(47,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP__physics_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP__physics_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP__physics_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Scene\scene_game.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Scene\scene_game.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Scene\scene_game.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject.h(47,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています Scripts\Scene\scene_game.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています Scripts\Scene\scene_game.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています Scripts\Scene\scene_game.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_meshcoll.h(50,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP__physics_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_meshcoll.h(72,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP__physics_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__tags.h(10,31): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です (ソース ファイルをコンパイルしています Scripts\Scene\scene_game.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider__base.h(64,53): warning C4114: 同じ型修飾子が 2 度以上使われています。 (ソース ファイルをコンパイルしています Scripts\Scene\scene_game.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_meshcoll.h(50,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています Scripts\Scene\scene_game.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_meshcoll.h(72,23): warning C4018: '<': signed と unsigned の数値を比較しようとしました。 (ソース ファイルをコンパイルしています Scripts\Scene\scene_game.cpp)

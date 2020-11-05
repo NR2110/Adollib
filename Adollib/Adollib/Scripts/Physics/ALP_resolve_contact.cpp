@@ -1,10 +1,13 @@
 #include "ALP_resolve_contact.h"
+
 #include "../Imgui/debug.h"
 #include "../Imgui/work_meter.h"
 
+#include "ALP_physics.h"
+
 using namespace Adollib;
+using namespace physics_function;
 using namespace Contacts;
-using namespace Compute_S;
 
 //:::::::::::::::::::::::::::
 #pragma region resolve_contact
@@ -46,11 +49,11 @@ void physics_function::resolve_contact(std::list<Adollib::Collider*> colliders, 
 	std::list<Adollib::Collider*>::iterator collitr;
 	std::list<Adollib::Collider*>::iterator collitr_end = colliders.end();
 	//::: 解決用オブジェクトの生成 :::::::::::
-	std::vector<Solverbody> SBs;
+	std::vector<ALP_Solverbody> SBs;
 	{
 		int count = 0;
 		for (collitr = colliders.begin(); collitr != collitr_end; collitr++) {
-			Solverbody SB;
+			ALP_Solverbody SB;
 			SB.orientation = (*collitr)->world_orientation;
 			SB.delta_LinearVelocity = Vector3(0.0f);
 			SB.delta_AngulaVelocity = Vector3(0.0f);
@@ -70,7 +73,7 @@ void physics_function::resolve_contact(std::list<Adollib::Collider*> colliders, 
 
 	//std::vector<Balljoint> balljoints; //今回はなし
 	Collider* coll[2];
-	Solverbody* solverbody[2];
+	ALP_Solverbody* solverbody[2];
 
 	for (int P_num = 0; P_num < pairs.size(); P_num++) {
 		Contact_pair& pair = pairs[P_num];

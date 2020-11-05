@@ -3,51 +3,82 @@
 #include "../Scene/scene.h"
 #include "../Main/Adollib.h"
 
-
-using namespace Adollib;
-using namespace Contacts;
-using namespace physics_function;
-
 #include "../Object/gameobject_manager.h"
 #include "../Imgui/work_meter.h"
 
 #include "collider.h"
 
+using namespace Adollib;
+using namespace physics_function;
+using namespace Contacts;
+
+//::: staticメンバの初期化 :::::
+namespace Adollib
+{
+	float Phyisics_manager::gravity = physics_manager_default::gravity; //重力
+
+	physics_function::ALP_Physics Phyisics_manager::default_physics; //何も設定していないときのpyisicsの値
+
+	float Phyisics_manager::bounce_threshold = physics_manager_default::bounce_threshold; //跳ね返りの閾値
+	float Phyisics_manager::sleep_threshold = physics_manager_default::sleep_threshold; //sleepの閾値
+
+	float Phyisics_manager::contact_max_per_pair = physics_manager_default::contact_max_per_pair; //一つのpairで衝突の解散を行う最大の数
+	float Phyisics_manager::contact_allowable_error = physics_manager_default::contact_allowable_error; //これ以上近いと同一衝突点とする
+	float Phyisics_manager::contact_threrhold_normal = physics_manager_default::contact_threrhold_normal; //衝突点の閾値
+	float Phyisics_manager::contact_threrhold_tangent = physics_manager_default::contact_threrhold_tangent;//衝突点の閾値
+
+	float Phyisics_manager::bias = physics_manager_default::bias;//めり込みを直す力
+	float Phyisics_manager::slop = physics_manager_default::slop;//衝突の許容値
+
+	int Phyisics_manager::solver_iterations = physics_manager_default::solver_iterations; //衝突の精度
+	bool Phyisics_manager::hit_backfaces_flag = physics_manager_default::hit_backfaces_flag;//meshの後ろから衝突するか
+
+	float Phyisics_manager::timeStep = physics_manager_default::timeStep;
+}
+
+namespace Adollib
+{
+ int frame_count;
+
+	//collider_componentのポインタ配列
+	std::unordered_map<Scenelist, std::list<Collider*>> colliders;
+
+	//各dataの実態配列
+	std::unordered_map<Scenelist, std::list<physics_function::ALP_Collider>> ALP_colliders;
+	std::unordered_map<Scenelist, std::list<physics_function::ALP_Physics>> ALP_physicses;
+
+	std::vector<physics_function::Contacts::Contact_pair> pairs;
+	std::vector<physics_function::Contacts::Collider_2> broad_mid_pair;
+
+	bool is_changed_coll = false; //新たにColliderが追加された、削除された場合true
+}
+
 namespace Adollib
 {
 
-	int Phyisics_manager::frame_count = 0;
-
-	std::unordered_map<Scenelist, std::list<Collider*>>   Phyisics_manager::colliders;
-
-	std::vector<Contacts::Contact_pair> Phyisics_manager::pairs;
-
 	bool Phyisics_manager::update(Scenelist Sce)
 	{
-		std::vector<Contact> contacts;
-		float resituation = Al_Global::base_resituation;
 
-		std::list<Adollib::Collider*>::iterator collitr = Phyisics_manager::colliders[Sce].begin();
-		std::list<Adollib::Collider*>::iterator collitr_end = Phyisics_manager::colliders[Sce].end();
-
-
-		//world空間での情報を更新
-		for (collitr = Phyisics_manager::colliders[Sce].begin(); collitr != collitr_end; collitr++) {
-			(*collitr)->update_world_trans();
+		if (frame_count < 10) {
+			resetforce(ALP_physicses[Sce]);
+			frame_count++;
+			return true;
 		}
 
+		// ColliderのWorld情報の更新
+		update_world_trans(ALP_colliders[Sce]);
+
 		// 外力の更新
-		applyexternalforce(Phyisics_manager::colliders[Sce]);
+		applyexternalforce(ALP_physicses[Sce]);
 
 		physics_g::timeStep = Al_Global::second_per_frame;
 
-		static std::vector<Contacts::Collider_2> broad_mid_pair;
-
 		// 大雑把な当たり判定
 		Work_meter::start("Broad,Mid,Narrow");
+
 		Work_meter::start("Broadphase");
 		Work_meter::tag_start("Broadphase");
-		Broadphase(Phyisics_manager::colliders[Sce], broad_mid_pair, pairs);
+		Broadphase(ALP_physicses[Sce], broad_mid_pair);
 		Work_meter::tag_stop();
 		Work_meter::stop("Broadphase");
 
@@ -69,19 +100,16 @@ namespace Adollib
 		// 衝突解決
 		Work_meter::start("Resolve");
 		Work_meter::tag_start("Resolve");
-		resolve_contact(Rigitbody_manager::colliders[Sce], pairs);
+		resolve_contact(Phyisics_manager::colliders[Sce], pairs);
 		Work_meter::tag_stop();
 		Work_meter::stop("Resolve");
 
-		//位置の更新
-		integrate(Phyisics_manager::colliders[Sce]);
+		// 位置の更新
+		integrate(ALP_physicses[Sce]);
 
-		for (collitr = Phyisics_manager::colliders[Sce].begin(); collitr != collitr_end; collitr++) {
-			(*collitr)->solv_resolve();
-		}
-		for (collitr = Phyisics_manager::colliders[Sce].begin(); collitr != collitr_end; collitr++) {
-			(*collitr)->resolve_gameobject();
-		}
+		// GOへColliderの影響を渡す
+		solv_resolve(ALP_colliders[Sce]);
+		resolve_gameobject(ALP_colliders[Sce]);
 
 		return true;
 
@@ -95,34 +123,6 @@ namespace Adollib
 
 
 namespace Adollib {
-
-	//void Rigitbody_manager::remove_collider(Adollib::Collider* R, Scenelist Sce) {
-
-	//	std::list<std::shared_ptr<Adollib::Collider>>::iterator collitr = Rigitbody_manager::colliders[Sce].begin();
-	//	std::list<std::shared_ptr<Adollib::Collider>>::iterator collitr_end = Rigitbody_manager::colliders[Sce].end();
-
-	//	for (collitr = Rigitbody_manager::colliders[Sce].begin(); collitr != collitr_end; collitr++) {
-	//		if ((*collitr) == R) {
-	//			Rigitbody_manager::colliders[Sce].erase(collitr);
-	//			return;
-	//		}
-	//	}
-	//}
-
-	void Phyisics_manager::remove_collider_perGO(Adollib::Gameobject* GO, Scenelist Sce) {
-
-		//std::list<Adollib::Collider*>::iterator collitr = Rigitbody_manager::colliders[Sce].begin();
-		//std::list<Adollib::Collider*>::iterator collitr_end = Rigitbody_manager::colliders[Sce].end();
-		//int gocolsize = GO->collider.size();
-		//for (int i = 0; i < gocolsize; i++) {
-		//	for (collitr = Rigitbody_manager::colliders[Sce].begin(); collitr != collitr_end; collitr++) {
-		//		if (*collitr == GO->collider[i].) {
-		//			Rigitbody_manager::colliders[Sce].erase(collitr);
-		//			return;
-		//		}
-		//	}
-		//}
-	}
 
 
 

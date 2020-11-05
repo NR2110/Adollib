@@ -196,18 +196,6 @@
     <ClCompile Include="Scripts\Physics\ALP_resolve_contact.cpp">
       <Filter>00_Adollib\22_physics\ALP</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Physics\collider_box.cpp">
-      <Filter>00_Adollib\22_physics\collider</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Physics\collider_meshcoll.cpp">
-      <Filter>00_Adollib\22_physics\collider</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Physics\collider_plane.cpp">
-      <Filter>00_Adollib\22_physics\collider</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Physics\collider_sphere.cpp">
-      <Filter>00_Adollib\22_physics\collider</Filter>
-    </ClCompile>
     <ClCompile Include="Scripts\Physics\contact.cpp">
       <Filter>00_Adollib\22_physics\ALP</Filter>
     </ClCompile>
@@ -224,9 +212,6 @@
       <Filter>00_Adollib\22_physics\base</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Physics\ALP__physics_manager.cpp">
-      <Filter>00_Adollib\22_physics\base</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Physics\ALP_shape.cpp">
       <Filter>00_Adollib\22_physics\base</Filter>
     </ClCompile>
   </ItemGroup>
@@ -466,9 +451,6 @@
       <Filter>00_Adollib\22_physics\collider</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Physics\ALP_collider.h">
-      <Filter>00_Adollib\22_physics\base</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Physics\ALP_shape.h">
       <Filter>00_Adollib\22_physics\base</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Physics\ALP_physics.h">

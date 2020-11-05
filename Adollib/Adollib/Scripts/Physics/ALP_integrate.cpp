@@ -1,53 +1,76 @@
 #include "ALP_integrate.h"
-
+#include "ALP__physics_manager.h"
 using namespace Adollib;
+using namespace physics_function;
 using namespace Contacts;
 
 //:::::::::::::::::::::::::::::::::::::::::::::::::::
-#pragma region physics_function
+#pragma region ALP_colliders
 //:::::::::::::::::::::::::::::::::::::::::::::::::::
 
-using namespace physics_function;
+void physics_function::update_world_trans(std::list<physics_function::ALP_Collider>& ALP_colliders){
 
-//速度などをリセット
-void physics_function::resetforce(std::list<Collider*>& coll) {
-
-	std::list<Collider*>::iterator collitr;
-	std::list<Collider*>::iterator collitr_end = coll.end();
-
-	for (collitr = coll.begin(); collitr != collitr_end; collitr++) {
-		(*collitr)->reset_force();
+	for (auto& itr : ALP_colliders) {
+		itr.update_world_trans();
 	}
 }
 
-//外力による速度などの更新
-void physics_function::applyexternalforce(std::list<Adollib::Collider*>& coll) {
+void physics_function::solv_resolve(std::list<physics_function::ALP_Collider>& ALP_colliders) {
 
-	std::list<Adollib::Collider*>::iterator collitr;
-	std::list<Adollib::Collider*>::iterator collitr_end = coll.end();
-
-
-	for (collitr = coll.begin(); collitr != collitr_end; collitr++) {
-		//DEBUG : oncollのflagをfalseに
-		for (std::string name : (*collitr)->oncoll_enter_names) {
-			(*collitr)->oncoll_checkmap[name] = false;
-		}
-
-		(*collitr)->apply_external_force(physics_g::timeStep);
+	for (auto& itr : ALP_colliders) {
+		itr.solv_resolve();
 	}
 }
-//:::::::::::::::::::::::::::
 
+void physics_function::resolve_gameobject(std::list<physics_function::ALP_Collider>& ALP_colliders) {
 
-void physics_function::integrate(std::list<Adollib::Collider*>& coll) {
-
-	std::list<Adollib::Collider*>::iterator collitr;
-	std::list<Adollib::Collider*>::iterator collitr_end = coll.end();
-
-	for (collitr = coll.begin(); collitr != collitr_end; collitr++) {
-		(*collitr)->integrate(physics_g::timeStep);
+	for (auto& itr : ALP_colliders) {
+		itr.resolve_gameobject();
 	}
 }
 
 #pragma endregion
+//:::::::::::::::::::::::::::::::::::::::::::::::::::
+
+//:::::::::::::::::::::::::::::::::::::::::::::::::::
+#pragma region ALP_phyicses
+//:::::::::::::::::::::::::::::::::::::::::::::::::::
+
+//速度などをリセット
+void physics_function::resetforce(std::list<physics_function::ALP_Physics>& ALP_physics) {
+
+	for (auto& itr : ALP_physics) {
+		itr.reset_force();
+	}
+}
+
+//外力による速度などの更新
+void physics_function::applyexternalforce(std::list<physics_function::ALP_Physics>& ALP_physics) {
+
+	for (auto& itr : ALP_physics) {
+		itr.apply_external_force(Phyisics_manager::timeStep);
+	}
+}
+
+void physics_function::integrate(std::list<physics_function::ALP_Physics>& ALP_physics) {
+
+	for (auto& itr : ALP_physics) {
+		itr.integrate(Phyisics_manager::timeStep);
+	}
+}
+
+#pragma endregion
+//:::::::::::::::::::::::::::::::::::::::::::::::::::
+
+//:::::::::::::::::::::::::::::::::::::::::::::::::::
+#pragma region ALP_phyicses
+//:::::::::::::::::::::::::::::::::::::::::::::::::::
+
+void physics_function::update_dop14(std::list<physics_function::ALP_Collider>& ALP_shapes) {
+
+	for (auto& itr : ALP_shapes) {
+		itr.update_dop14();
+	}
+}
+
 //:::::::::::::::::::::::::::::::::::::::::::::::::::

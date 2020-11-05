@@ -25,9 +25,15 @@ namespace Adollib {
 		};
 
 		struct Meshcoll_data {
+			u_int vertex_num; //頂点数
+			u_int edge_num; //エッジ数
+			u_int facet_num; //面数
+
 			std::vector<Vector3>* vertices; //頂点情報
 			std::vector<Edge>* edges; //エッジ配列
 			std::vector<Facet>* facets; //面配列
+
+			bool is_Convex = true;
 		};
 
 	}

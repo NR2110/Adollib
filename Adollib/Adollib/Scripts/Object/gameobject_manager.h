@@ -91,12 +91,12 @@ namespace Adollib {
 		static Gameobject* createPlane(const std::string& go_name = "Plane", Scenelist Sce = Scene::now_scene);
 		static Gameobject* createSprite(const std::string& go_name = "Sprite", Scenelist Sce = Scene::now_scene);
 
-		static Gameobject* find(const std::string& name, Scenelist Sce = Scene::now_scene)
+		static Gameobject* find(const u_int name, Scenelist Sce = Scene::now_scene)
 		{
 			const auto itr_end = gameobjects[Sce].end();
 			for (auto itr = gameobjects[Sce].begin(); itr != itr_end; itr++)
 			{
-				if (itr->get()->tag == name)
+				if (itr->get()->tag & name)
 				{
 					return itr->get();
 				}

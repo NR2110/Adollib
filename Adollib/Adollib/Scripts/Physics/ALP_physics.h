@@ -6,8 +6,19 @@
 namespace Adollib {
 	namespace physics_function {
 
+		struct ALP_Solverbody {
+			Vector3 delta_LinearVelocity; // 並進速度差分
+			Vector3 delta_AngulaVelocity; // 回転速度差分
+			Quaternion orientation; // 姿勢
+			Matrix inv_inertia; // 慣性テンソルの逆行列
+			float  inv_mass; // 質量の逆数
+			int num;
+		};
+
 		class ALP_Physics {
 		public:
+			ALP_Physics() {};
+
 			//::: 変更可 :::::::::::::::::::::::::::::
 			float inertial_mass; //質量
 			float drag; //空気抵抗
@@ -38,6 +49,8 @@ namespace Adollib {
 
 			ALP_Collider* ALP_coll;
 
+			ALP_Solverbody* solve; //衝突解決用
+
 		public:
 			//並進移動に力を加える
 			void add_force(const Vector3& force);
@@ -61,7 +74,7 @@ namespace Adollib {
 			//外力の更新
 			void apply_external_force(float duration = 1);
 
-			//座標,姿勢の更新 ALP_collider::posとALP_Physics::vecが必要なためここに記述
+			//座標,姿勢の更新
 			void integrate(float duration = 1);
 
 			//サイズ変更などに対応するため毎フレーム慣性テンソルなどを更新 慣性テンソルの更新にALP_collider::scaleとALP_Physics::massが必要なためここに記述
