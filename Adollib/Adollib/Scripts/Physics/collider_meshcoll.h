@@ -13,12 +13,12 @@ namespace Adollib {
 		Vector3 size;
 
 	private:
-		u_int vertex_num; //頂点数
-		u_int edge_num; //エッジ数
-		u_int facet_num; //面数
+		u_int vertex_num = 0; //頂点数
+		u_int edge_num = 0; //エッジ数
+		u_int facet_num = 0; //面数
 		bool is_Convex = true; //convexなオブジェクトかどうか 一つでも凹なedgeがあればfalse
 
-		std::vector<Vector3>* vertices; //頂点情報
+		std::vector<Vector3>* vertices =nullptr; //頂点情報
 		std::vector<physics_function::Edge> edges; //エッジ配列
 		std::vector<physics_function::Facet> facets; //面配列
 

@@ -38,7 +38,7 @@ namespace Adollib {
 			// c : (1,1,-1)
 			// d : (-1,1,-1)
 			//:::::::::::::::::::
-			float max[DOP_size];
+			float max[DOP_size] = { 0 };
 
 			//::::::::::::::::::
 			//Boardphase—p‚ÌDOP_6
@@ -50,7 +50,7 @@ namespace Adollib {
 			// c : (1,1,-1)
 			// d : (-1,1,-1)
 			//:::::::::::::::::::
-			float min[DOP_size];
+			float min[DOP_size] = { 0 };
 		};
 
 		struct AABB {

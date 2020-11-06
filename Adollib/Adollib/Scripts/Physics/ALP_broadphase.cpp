@@ -12,8 +12,8 @@ using namespace Contacts;
 //‘}“ü–@‚Ì
 struct edge{
 	std::list<ALP_Collider>::iterator coll;
-	float value;
-	bool stgo; //true = st, false = go 
+	float value = 0;
+	bool stgo = false; //true = st, false = go 
 };
 
 void physics_function::Broadphase(std::list<ALP_Physics>& ALP_physicses, std::vector<Contacts::Collider_2>& out_pair) {

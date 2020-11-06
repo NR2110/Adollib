@@ -146,6 +146,4 @@ void ALP_Physics::refresh_ALP_from_data() {
 	is_kinematic = Cdata.is_kinematic;
 	is_moveable = Cdata.is_moveable;
 	is_hitable = Cdata.is_hitable;
-
-	refresh_physics_data();
 }

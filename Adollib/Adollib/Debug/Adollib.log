@@ -1,15 +1,15 @@
-﻿  ALP_collider.cpp
+﻿  main.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。
 C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__tags.h(16,48): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider__base.h(81,48): warning C4114: 同じ型修飾子が 2 度以上使われています。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_tags.h(19,48): warning C4293: '<<': シフト数が負の値であるか、大きすぎます。定義されていない動作です
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。
 C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject.h(47,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.cpp(90,33): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.cpp(91,33): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\main.cpp(135,16): warning C4101: 'now': ローカル変数は 1 度も使われていません。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\main.cpp(135,21): warning C4101: 'before': ローカル変数は 1 度も使われていません。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\main.cpp(135,29): warning C4101: 'freq': ローカル変数は 1 度も使われていません。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

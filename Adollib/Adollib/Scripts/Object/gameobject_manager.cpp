@@ -245,7 +245,6 @@ namespace Adollib {
 
 			for (; itr != itr_end; itr++) {
 				if (itr->get()->active == false)continue;	
-
 				itr->get()->render();
 			}
 		}

@@ -76,10 +76,12 @@ namespace Adollib
 			return true;
 		}
 
-		if (is_changed_coll == true) {
-			// get_data‚Ìdata‚ğCollider‚É“ü—Í 
-			refresh_ALP_from_data(ALP_colliders[Sce]);
-		}
+
+		Work_meter::start("refresh_ALP_from_data");
+		// get_data‚Ìdata‚ğCollider‚É“ü—Í 
+		refresh_ALP_from_data(ALP_colliders[Sce]);	
+		Work_meter::stop("refresh_ALP_from_data");
+
 
 		// Collider‚ÌWorldî•ñ‚ÌXV
 		update_world_trans(ALP_colliders[Sce]);

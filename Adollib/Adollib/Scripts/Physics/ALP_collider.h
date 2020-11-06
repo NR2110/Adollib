@@ -37,7 +37,7 @@ namespace Adollib {
 
 			//::: tag関係 :::::::::::::
 			u_int tag; //自身のtag(bit)
-			u_int not_hitable_tags; //衝突しないtags
+			u_int not_hitable_tags = 0; //衝突しないtags
 
 			//::: 14-DOP ::::::::::
 			DOP::DOP_14	dop14;	//14DOP データ

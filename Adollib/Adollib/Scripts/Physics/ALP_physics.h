@@ -45,26 +45,26 @@ namespace Adollib {
 			{};
 
 			//::: •ÏX‰Â :::::::::::::::::::::::::::::
-			float inertial_mass; //¿—Ê
-			float drag; //‹ó‹C’ïR
-			float anglar_drag; //‹ó‹C’ïR
-			float dynamic_friction;//“®–€C
-			float static_friction; //Ã–€C
-			float restitution;	 //”½”­ŒW”
+			float inertial_mass = 0; //¿—Ê
+			float drag = 0; //‹ó‹C’ïR
+			float anglar_drag = 0; //‹ó‹C’ïR
+			float dynamic_friction = 0;//“®–€C
+			float static_friction = 0; //Ã–€C
+			float restitution = 0;	 //”½”­ŒW”
 
-			bool is_fallable; //—‚¿‚È‚¢
-			bool is_kinematic; //‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
-			bool is_moveable;//“®‚©‚È‚¢
-			bool is_hitable;  //Õ“Ë‚µ‚È‚¢
+			bool is_fallable = false; //—‚¿‚È‚¢
+			bool is_kinematic = false; //‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
+			bool is_moveable = false;//“®‚©‚È‚¢
+			bool is_hitable = false;  //Õ“Ë‚µ‚È‚¢
 
 			//::: Œ©‚¹‚é‚¾‚¯ :::::::::::::::::::::::::
-			float speed;//debug‚µ‚â‚·‚¢‚æ‚¤‚É
+			float speed = 0;//debug‚µ‚â‚·‚¢‚æ‚¤‚É
 			Vector3 linear_velocity;//•Ài‘¬“x
 			Vector3 anglar_velocity; //‰ñ“]‘¬“x
 
 			Matrix inertial_tensor;//Šµ«ƒeƒ“ƒ\ƒ‹
 
-			bool sleep_state; //sleepó‘Ô‚©‚Ìflag
+			bool sleep_state = false; //sleepó‘Ô‚©‚Ìflag
 
 			//::: Œ©‚¹‚È‚¢ :::::::::::::::::::::::::::
 			Vector3 accumulated_force;//•Ài‘¬“x
@@ -75,7 +75,7 @@ namespace Adollib {
 
 			std::list<ALP_Collider>::iterator ALP_coll;
 
-			ALP_Solverbody* solve; //Õ“Ë‰ğŒˆ—p
+			ALP_Solverbody* solve = nullptr; //Õ“Ë‰ğŒˆ—p
 
 		public:
 			//•ÀiˆÚ“®‚É—Í‚ğ‰Á‚¦‚é

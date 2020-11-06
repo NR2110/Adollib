@@ -14,19 +14,19 @@ namespace Adollib {
 
 			//S‘©
 			struct Constraint {
-				Vector3 axis;		//S‘©²
-				float jacDiagInv;	//S‘©®‚Ì•ª•ê	
-				float rhs;			//‰ŠúS‘©—Í
-				float tangent_rhs;  //S‘©²‚ª–@ü‚Ì–Êã‚Å‚ÌS‘©—Í
-				float lowerlimit;	//S‘©—Í‚Ì‰ºŒÀ
-				float upperlimit;	//S‘©—Í‚ÌãŒÀ
-				float accuminpulse; //—İÏ‚³‚ê‚éS‘©—Í
+				Vector3 axis;			//S‘©²
+				float jacDiagInv = 0;	//S‘©®‚Ì•ª•ê	
+				float rhs = 0;			//‰ŠúS‘©—Í
+				float tangent_rhs = 0;  //S‘©²‚ª–@ü‚Ì–Êã‚Å‚ÌS‘©—Í
+				float lowerlimit = 0;	//S‘©—Í‚Ì‰ºŒÀ
+				float upperlimit = 0;	//S‘©—Í‚ÌãŒÀ
+				float accuminpulse = 0; //—İÏ‚³‚ê‚éS‘©—Í
 			};
 
 
 			//Õ“Ë“_î•ñ
 			struct Contactpoint {
-				float distance;			//Õ“Ë[“x
+				float distance = 0;		//Õ“Ë[“x
 				Vector3 point[2];		//Õ“Ë“_
 				Vector3 normal;			//Õ“Ë“_‚Ì–@üƒxƒNƒgƒ‹
 				Constraint constraint[3];  //S‘©
@@ -43,7 +43,7 @@ namespace Adollib {
 			class Contact {
 			public:
 				int contact_num = 0;    //Õ“Ë“_‚Ì”
-				float friction;		//‚»‚ÌÕ“Ë‚Ì–€C—Í
+				float friction = 0;		//‚»‚ÌÕ“Ë‚Ì–€C—Í
 				Contactpoint contactpoints[contact_max_per_pair]; //Õ“Ë“_î•ñ
 
 				Contact() {
@@ -119,7 +119,7 @@ namespace Adollib {
 				};
 			};
 
-			enum  class Pairtype {
+			enum class Pairtype {
 				new_pair, // V‹K
 				keep_pair, // ˆÛ
 			};

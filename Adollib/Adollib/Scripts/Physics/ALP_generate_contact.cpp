@@ -57,7 +57,7 @@ void physics_function::generate_contact(std::vector<Contacts::Contact_pair>& pai
 #pragma region data
 
 //分離軸判定を用いる際に使用する
-enum SAT_TYPE {
+enum class SAT_TYPE {
 	POINTA_FACETB,
 	POINTB_FACETA,
 	EDGE_EDGE
@@ -88,7 +88,7 @@ float sum_of_projected_radii(float& max, float& min, const ALP_Collider& meshcol
 	float value;
 	max = -FLT_MAX;
 	min = +FLT_MAX;
-	for (Vector3 vertex : *meshcoll.meshcoll_data.vertices) {
+	for (const Vector3& vertex : *meshcoll.meshcoll_data.vertices) {
 		value = vector3_dot(vertex * meshcoll.world_scale, nor);
 		if (max < value)max = value;
 		if (min > value)min = value;
@@ -136,7 +136,7 @@ bool sat_obb_obb(
 			PB_FA.penetrate = penetration;
 			PB_FA.smallest_axis[0] = i;
 			PB_FA.smallest_axis[1] = -1;
-			PB_FA.smallest_case = POINTB_FACETA;
+			PB_FA.smallest_case = SAT_TYPE::POINTB_FACETA;
 		}
 	}
 
@@ -160,7 +160,7 @@ bool sat_obb_obb(
 				PA_FB.penetrate = penetration;
 				PA_FB.smallest_axis[0] = -1;
 				PA_FB.smallest_axis[1] = i;
-				PA_FB.smallest_case = POINTA_FACETB;
+				PA_FB.smallest_case = SAT_TYPE::POINTA_FACETB;
 			}
 		}
 
@@ -198,7 +198,7 @@ bool sat_obb_obb(
 				smallest_penetration = penetration;
 				smallest_axis[0] = OB1;
 				smallest_axis[1] = OB2;
-				smallest_case = EDGE_EDGE;
+				smallest_case = SAT_TYPE::EDGE_EDGE;
 			}
 		}
 	}
@@ -263,7 +263,7 @@ bool sat_convex_mesh_mesh(const ALP_Collider& collA, const ALP_Collider& collB,
 			PB_FA.penetrate = penetration;
 			PB_FA.smallest_axis[0] = f;
 			PB_FA.smallest_axis[1] = -1;
-			PB_FA.smallest_case = POINTB_FACETA;
+			PB_FA.smallest_case = SAT_TYPE::POINTB_FACETA;
 		}
 	}
 
@@ -300,7 +300,7 @@ bool sat_convex_mesh_mesh(const ALP_Collider& collA, const ALP_Collider& collB,
 				PA_FB.penetrate = penetration;
 				PA_FB.smallest_axis[0] = -1;
 				PA_FB.smallest_axis[1] = f;
-				PA_FB.smallest_case = POINTA_FACETB;
+				PA_FB.smallest_case = SAT_TYPE::POINTA_FACETB;
 			}
 		}
 
@@ -322,7 +322,7 @@ bool sat_convex_mesh_mesh(const ALP_Collider& collA, const ALP_Collider& collB,
 	//::: 外積の軸に投影(最近距離を求めるため)
 		//collAの座標系で計算を行う
 	Vector3 save_axisW;
-	float save_crossnorm;
+	float save_crossnorm = 0;
 	Vector3 axisA, axisB, axisW;
 	for (u_int eA = 0; eA < collA.meshcoll_data.edge_num; eA++) {
 		const Edge& edgeA = collA.meshcoll_data.edges->at(eA);
@@ -368,7 +368,7 @@ bool sat_convex_mesh_mesh(const ALP_Collider& collA, const ALP_Collider& collB,
 					smallest_penetration = penetration;
 					smallest_axis[0] = eA;
 					smallest_axis[1] = eB;
-					smallest_case = EDGE_EDGE;
+					smallest_case = SAT_TYPE::EDGE_EDGE;
 					save_axisW = axisW;
 					save_crossnorm = CN;
 				}
@@ -435,7 +435,7 @@ bool sat_obb_convex_mesh(const OBB& obb, const ALP_Collider& mesh,
 			PB_FA.penetrate = penetration;
 			PB_FA.smallest_axis[0] = f;
 			PB_FA.smallest_axis[1] = -1;
-			PB_FA.smallest_case = POINTB_FACETA;
+			PB_FA.smallest_case = SAT_TYPE::POINTB_FACETA;
 		}
 	}
 
@@ -471,7 +471,7 @@ bool sat_obb_convex_mesh(const OBB& obb, const ALP_Collider& mesh,
 				PA_FB.penetrate = penetration;
 				PA_FB.smallest_axis[0] = -1;
 				PA_FB.smallest_axis[1] = f;
-				PA_FB.smallest_case = POINTA_FACETB;
+				PA_FB.smallest_case = SAT_TYPE::POINTA_FACETB;
 			}
 		}
 
@@ -908,7 +908,7 @@ bool physics_function::generate_contact_box_box(const ALP_Collider& b0, const AL
 	if (!sat_obb_obb(obbA, obbB, smallest_penetration, smallest_axis, smallest_case)) return false;
 
 	//obb1の頂点がobb0の面と衝突した場合
-	if (smallest_case == POINTB_FACETA)
+	if (smallest_case == SAT_TYPE::POINTB_FACETA)
 	{
 		Vector3 d = obbB.world_position - obbA.world_position;	//obb0からobb1への相対位置
 		Vector3 n = obbA.u_axes[smallest_axis[0]];	//obb0の衝突面の法線と平行のobb0のローカル軸ベクトル
@@ -958,7 +958,7 @@ bool physics_function::generate_contact_box_box(const ALP_Collider& b0, const AL
 		);
 	}
 	//②obb0の頂点がobb1の面と衝突した場合
-	else if (smallest_case == POINTA_FACETB)
+	else if (smallest_case == SAT_TYPE::POINTA_FACETB)
 	{
 		Vector3 d = obbB.world_position - obbA.world_position;
 		Vector3 n = obbB.u_axes[smallest_axis[1]];
@@ -1009,7 +1009,7 @@ bool physics_function::generate_contact_box_box(const ALP_Collider& b0, const AL
 		);
 	}
 	//③obb0の辺とobb1の辺と衝突した場合
-	else if (smallest_case == EDGE_EDGE)
+	else if (smallest_case == SAT_TYPE::EDGE_EDGE)
 	{
 
 		Vector3 d = obbB.world_position - obbA.world_position;
@@ -1092,7 +1092,7 @@ bool physics_function::generate_contact_mesh_mesh(const ALP_Collider& SA, const 
 		Vector3 offset_posAB = SA.world_position - SB.world_position;
 
 		//SBの頂点がSAの面と衝突した場合
-		if (smallest_case == POINTB_FACETA)
+		if (smallest_case == SAT_TYPE::POINTB_FACETA)
 		{
 			const ALP_Collider& facet_coll = SA;
 			const ALP_Collider& vertex_coll = SB;
@@ -1171,7 +1171,7 @@ bool physics_function::generate_contact_mesh_mesh(const ALP_Collider& SA, const 
 		}
 
 		//SAの頂点がSBの面と衝突した場合
-		if (smallest_case == POINTA_FACETB)
+		if (smallest_case == SAT_TYPE::POINTA_FACETB)
 		{
 			const ALP_Collider& facet_coll = SB;
 			const ALP_Collider& vertex_coll = SA;
@@ -1192,7 +1192,7 @@ bool physics_function::generate_contact_mesh_mesh(const ALP_Collider& SA, const 
 			}
 
 			//vertex_collのどの頂点が最近点か求める
-			u_int nearest_pointID;
+			u_int nearest_pointID = 0;
 			Vector3 pB;
 			{
 				float max_len = -FLT_MAX;
@@ -1251,7 +1251,7 @@ bool physics_function::generate_contact_mesh_mesh(const ALP_Collider& SA, const 
 
 		
 		//SAとSBの辺同士が衝突した場合
-		else if (smallest_case == EDGE_EDGE)
+		else if (smallest_case == SAT_TYPE::EDGE_EDGE)
 		{
 			Quaternion offset_quatAB = SA.world_orientation * SB.world_orientation.conjugate();
 			Quaternion offset_quatBA = SB.world_orientation * SA.world_orientation.conjugate();

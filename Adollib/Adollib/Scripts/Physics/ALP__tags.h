@@ -13,7 +13,7 @@ namespace Adollib {
 
 		//static const unsigned int Cylinder = (1 << 5);
 		//static const unsigned int Cylinder = (1 << 5);
-		static const unsigned int Tags_max = (1 << 32);
+		static const unsigned int Tags_max = (1 << 31);
 	};
 
 

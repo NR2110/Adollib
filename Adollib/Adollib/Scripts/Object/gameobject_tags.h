@@ -16,6 +16,6 @@ namespace Adollib {
 		static const unsigned int Player = (1 << 10);
 		static const unsigned int Sage = (1 << 11);
 
-		static const unsigned int Tags_max = (1 << 32);
+		static const unsigned int Tags_max = (1 << 31);
 	};
 }

@@ -124,7 +124,7 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 		);
 	ShowWindow(hwnd, cmd_show);
 
-	if (FAILED(Systems::Initialize(hwnd, Al_Global::SCREEN_WIDTH, Al_Global::SCREEN_HEIGHT))){
+	if (Systems::Initialize(hwnd, Al_Global::SCREEN_WIDTH, Al_Global::SCREEN_HEIGHT) == true){
 
 		return 0;
 	}

@@ -185,7 +185,7 @@ namespace Adollib
 			}
 
 			//ПdЧ═В╠Т▓Ро
-			ImGui::InputFloat("gravity", &Phyisics_manager::gravity, 0.001f, 1.0f, "%.3f");
+			ImGui::InputFloat("gravity", &Phyisics_manager::gravity, 0.1f, 1.0f, "%.2f");
 
 			//Р│КmВ│В╠Т▓Ро
 			ImGui::InputInt("accuracy", &Phyisics_manager::solver_iterations, 1, 200);
