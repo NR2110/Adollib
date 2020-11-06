@@ -177,7 +177,7 @@ namespace Adollib
 			ImGui::Checkbox("delete", &del); //objectÇÃçÌèú
 
 			if (del) {
-				for (int i = 0; i < GOs.size(); i++) {
+				for (u_int i = 0; i < GOs.size(); i++) {
 					GOs[i]->active = false;
 					GOs[i]->clearComponent();
 				}
@@ -191,9 +191,9 @@ namespace Adollib
 			ImGui::InputInt("accuracy", &Phyisics_manager::solver_iterations, 1, 200);
 
 			//ä—í éûÇÃÇŒÇÀÇÃã≠Ç≥
-			ImGui::InputFloat("bias", &Phyisics_manager::bias, 0.01, 0.1, "%.3f");
+			ImGui::InputFloat("bias", &Phyisics_manager::bias, 0.01f, 0.1f, "%.3f");
 			//ä—í ãñóeåÎç∑
-			ImGui::InputFloat("slop", &Phyisics_manager::slop, 0.0001, 0.001, "%.4f");
+			ImGui::InputFloat("slop", &Phyisics_manager::slop, 0.0001f, 0.001f, "%.4f");
 
 			ImGui::Columns(4, "columnListIDs");
 			ImGui::Separator();
@@ -218,7 +218,7 @@ namespace Adollib
 				if (summon == true)
 					for (int i = 0; i < BOX_pyramid_count; i++) {
 						for (int o = 0; o < BOX_pyramid_count - i; o++) {
-							set_box(Vector3(2.00001 * o - (BOX_pyramid_count - i) * 2.000001 / 2.0 + BOX_pyramid_pos[0], 3.0 + 2.00001 * i + BOX_pyramid_pos[1], BOX_pyramid_pos[2]), Vector3(1, 1, 1), Vector3(0, 0, 0), Vector3(0, 1, 1));
+							set_box(Vector3(2.00001f * o - (BOX_pyramid_count - i) * 2.000001f / 2.0f + BOX_pyramid_pos[0], 3.0f + 2.00001f * i + BOX_pyramid_pos[1], BOX_pyramid_pos[2]), Vector3(1, 1, 1), Vector3(0, 0, 0), Vector3(0, 1, 1));
 						}
 
 					}
@@ -240,7 +240,7 @@ namespace Adollib
 				if (summon == true)
 					for (int i = 0; i < SPHERE_pyramid_count; i++) {
 						for (int o = 0; o < SPHERE_pyramid_count - i; o++) {
-							set_sphere(Vector3(2.50001 * o - (SPHERE_pyramid_count - i) * 2.500001 / 2.0 + SPHERE_pyramid_pos[0], 5.0 + 2.50001 * i + SPHERE_pyramid_pos[1], SPHERE_pyramid_pos[2]), 1, Vector3(0, 1, 1));
+							set_sphere(Vector3(2.50001f * o - (SPHERE_pyramid_count - i) * 2.500001f / 2.0f + SPHERE_pyramid_pos[0], 5.0f + 2.50001f * i + SPHERE_pyramid_pos[1], SPHERE_pyramid_pos[2]), 1, Vector3(0, 1, 1));
 						}
 
 					}
@@ -262,9 +262,9 @@ namespace Adollib
 					for (int i = 0; i < MIX_pyramid_count; i++) {
 						for (int o = 0; o < MIX_pyramid_count - i; o++) {
 							if ((i + o) % 2 == 0)
-								set_box(Vector3(2.50001 * o - (MIX_pyramid_count - i) * 2.500001 / 2.0 + MIX_pyramid_pos[0], 5.0 + 2.50001 * i + MIX_pyramid_pos[1], MIX_pyramid_pos[2]), Vector3(1, 1, 1), Vector3(30, 0, 30), Vector3(0, 1, 1));
+								set_box(Vector3(2.50001f * o - (MIX_pyramid_count - i) * 2.500001f / 2.0f + MIX_pyramid_pos[0], 5.0f + 2.50001f * i + MIX_pyramid_pos[1], MIX_pyramid_pos[2]), Vector3(1, 1, 1), Vector3(30, 0, 30), Vector3(0, 1, 1));
 							else
-								set_sphere(Vector3(2.50001 * o - (MIX_pyramid_count - i) * 2.500001 / 2.0 + MIX_pyramid_pos[0], 5.0 + 2.50001 * i + MIX_pyramid_pos[1], MIX_pyramid_pos[2]), 1, Vector3(0, 1, 1));
+								set_sphere(Vector3(2.50001f * o - (MIX_pyramid_count - i) * 2.500001f / 2.0f + MIX_pyramid_pos[0], 5.0f + 2.50001f * i + MIX_pyramid_pos[1], MIX_pyramid_pos[2]), 1, Vector3(0, 1, 1));
 						}
 
 					}
@@ -285,7 +285,7 @@ namespace Adollib
 				if (summon == true)
 					for (int i = 0; i < Mesh_pyramid_count; i++) {
 						for (int o = 0; o < Mesh_pyramid_count - i; o++) {
-							set_meshbox(Vector3(2.00001 * o - (Mesh_pyramid_count - i) * 2.000001 / 2.0 + Mesh_pyramid_pos[0], 3.0 + 2.00001 * i + Mesh_pyramid_pos[1], Mesh_pyramid_pos[2]), Vector3(1, 1, 1), Vector3(180, 0, 0), Vector3(0, 1, 1));
+							set_meshbox(Vector3(2.00001f * o - (Mesh_pyramid_count - i) * 2.000001f / 2.0f + Mesh_pyramid_pos[0], 3.0f + 2.00001f * i + Mesh_pyramid_pos[1], Mesh_pyramid_pos[2]), Vector3(1, 1, 1), Vector3(180, 0, 0), Vector3(0, 1, 1));
 						}
 
 					}
@@ -308,7 +308,7 @@ namespace Adollib
 
 						for (int o = 0; o < SPHERE_plane_count; o++) {
 
-							set_sphere(Vector3(2.50001 * i - (SPHERE_plane_count - i) * 5.000001 / 2.0 + SPHERE_plane_pos[0], 10 + SPHERE_plane_pos[1], 2.50001 * o - (SPHERE_plane_count - o) * 2.500001 / 2.0 + SPHERE_plane_pos[2]), 1, Vector3(0, 1, 1));
+							set_sphere(Vector3(2.50001f * i - (SPHERE_plane_count - i) * 5.000001f / 2.0f + SPHERE_plane_pos[0], 10 + SPHERE_plane_pos[1], 2.50001f * o - (SPHERE_plane_count - o) * 2.500001f / 2.0f + SPHERE_plane_pos[2]), 1, Vector3(0, 1, 1));
 						}
 
 					}
@@ -488,7 +488,7 @@ namespace Adollib
 
 		object->transform->local_orient = quaternion_from_euler(normal);
 		object->transform->local_pos = pos;
-		object->transform->local_scale = Vector3(30, 0.1, 30);
+		object->transform->local_scale = Vector3(30, 0.1f, 30);
 
 		Collider* coll = object->addComponent<Plane>();
 		GOs.emplace_back(object);

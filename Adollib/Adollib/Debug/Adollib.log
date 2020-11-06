@@ -1,15 +1,6 @@
-﻿  main.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(12): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::DStypes' の左辺を無視します。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(21): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::RStypes' の左辺を無視します。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\states_manager.h(45): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::State_manager::BStypes' の左辺を無視します。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(22,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(23,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(24,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\DOP.h(25,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject.h(47,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_light.h(24,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_camera.h(23,22): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\main.cpp(135,16): warning C4101: 'now': ローカル変数は 1 度も使われていません。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\main.cpp(135,21): warning C4101: 'before': ローカル変数は 1 度も使われていません。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\main.cpp(135,29): warning C4101: 'freq': ローカル変数は 1 度も使われていません。
+﻿  debug.cpp
+  imgui_manager.cpp
+  work_meter.cpp
+  ALP_broadphase.cpp
+  ALP_resolve_contact.cpp
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

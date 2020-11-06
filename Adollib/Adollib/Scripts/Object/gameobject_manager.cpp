@@ -129,7 +129,7 @@ namespace Adollib {
 
 		//ツリーの親を更新
 		masters.clear();
-		for (int i = 0; i < gos.size(); i++) {
+		for (u_int i = 0; i < gos.size(); i++) {
 			object* master =  gos[i]->get_pearent();
 			if (master->updated == true)continue;
 			master->updated = true;
@@ -137,7 +137,7 @@ namespace Adollib {
 		}
 
 		//親から子へupdateを呼ぶ
-		for (int i = 0; i < masters.size(); i++) {
+		for (u_int i = 0; i < masters.size(); i++) {
 			masters[i]->update_P_to_C();
 		}
 
@@ -157,7 +157,7 @@ namespace Adollib {
 		Phyisics_manager::update();
 
 		//親から子へワールド情報を更新
-		for (int i = 0; i < masters.size(); i++) {
+		for (u_int i = 0; i < masters.size(); i++) {
 			masters[i]->update_world_trans();
 		}
 
@@ -177,20 +177,20 @@ namespace Adollib {
 		l_cb.LightColor = DirLightColor.get_XM4();
 
 		//コンスタントバッファに渡すためにpointlight,spotlightの配列を整理
-		POINTLIGHT PointLight[POINTMAX];
-		SPOTLIGHT SpotLight[SPOTMAX];
+		POINTLIGHT PointLight[POINTMAX] = { 0 };
+		SPOTLIGHT SpotLight[SPOTMAX] = { 0 };
 		{
 			int point_num = 0;
 			int spot_num = 0;
-			for (int i = 0; i < lights[Sce].size(); i++) {
-				for (int o = 0; o < itr_li->get()->PointLight.size(); o++) {
+			for (u_int i = 0; i < lights[Sce].size(); i++) {
+				for (u_int o = 0; o < itr_li->get()->PointLight.size(); o++) {
 					if (itr_li->get()->active == false)return;
 					PointLight[point_num] = *itr_li->get()->PointLight[o];
 				//	PointLight[point_num].pos = (*itr_li->get()->PointLight[o]->pos )+( *itr_li->get()->transform->position);
 					point_num++;
 				}
 
-				for (int o = 0; o < itr_li->get()->SpotLight.size(); o++) {
+				for (u_int o = 0; o < itr_li->get()->SpotLight.size(); o++) {
 					if (itr_li->get()->active == false)return;
 					SpotLight[spot_num] = *itr_li->get()->SpotLight[o];
 					spot_num++;
@@ -208,7 +208,7 @@ namespace Adollib {
 		ConstantBufferPerCamera c_cb;
 		ConstantBufferPerSystem s_sb;
 		//そのシーンのカメラの数だけ回す
-		for (int i = 0; i < cameras[Sce].size(); i++, itr_ca++) {
+		for (u_int i = 0; i < cameras[Sce].size(); i++, itr_ca++) {
 			if (itr_ca->get()->active == false)continue;
 
 			//CB : ConstantBufferPerCamera

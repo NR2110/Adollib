@@ -11,8 +11,8 @@ namespace Adollib {
 	private:
 		struct base {
 			std::string param_name;
-			DirectX::XMFLOAT4 param;
-			unsigned int param_num;
+			DirectX::XMFLOAT4 param = DirectX::XMFLOAT4(0, 0, 0, 0);
+			u_int param_num = 0;
 		};
 		static std::unordered_map<std::string, std::vector<base>> debug_params;
 		static std::vector<std::string>tags;

@@ -10,24 +10,24 @@ namespace Adollib {
 	static Vector4 Ambient = Vector4(1, 1, 1, 1);
 
 	struct SPOTLIGHT {
-		float index;
-		float range;//光の届く範囲
-		float type; //有効か無効か
-		float near_area;
-		float far_area;
-		float dumy0;
-		float dumy1;
-		float dumy2;
+		float index = 0;
+		float range = 0;//光の届く範囲
+		float type = 0; //有効か無効か
+		float near_area = 0;
+		float far_area= 0;
+		float dumy0 = 0;
+		float dumy1 = 0;
+		float dumy2 = 0;
 		DirectX::XMFLOAT4 pos;
 		DirectX::XMFLOAT4 color;
 		DirectX::XMFLOAT4 dir;
 	};
 
 	struct POINTLIGHT {
-		float index;
-		float range;//光の届く範囲
-		float type; //有効か無効か
-		float dumy;
+		float index = 0;
+		float range = 0;//光の届く範囲
+		float type = 0; //有効か無効か
+		float dumy = 0;
 		DirectX::XMFLOAT4 pos;
 		DirectX::XMFLOAT4 color;
 	};

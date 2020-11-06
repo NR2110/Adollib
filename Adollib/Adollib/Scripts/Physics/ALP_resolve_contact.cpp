@@ -74,7 +74,7 @@ void physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 	ALP_Solverbody* solverbody[2];
 	//std::vector<Balljoint> balljoints; //¡‰ñ‚Í‚È‚µ
 
-	for (int P_num = 0; P_num < pairs.size(); P_num++) {
+	for (u_int P_num = 0; P_num < pairs.size(); P_num++) {
 		Contact_pair& pair = pairs[P_num];
 
 		coll[0] = pairs[P_num].body[0];
@@ -191,7 +191,7 @@ void physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 	}
 
 	//::: •Ï‰»—Ê‚ğ‹‚ß‚é :::::::::::::::
-	for (int P_num = 0; P_num < pairs.size(); P_num++) {
+	for (u_int P_num = 0; P_num < pairs.size(); P_num++) {
 		Contact_pair& pair = pairs[P_num];
 
 		coll[0] = pair.body[0];
@@ -217,7 +217,7 @@ void physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 
 
 	for (int i = 0; i < Phyisics_manager::solver_iterations; i++) {
-		for (int P_num = 0; P_num < pairs.size(); P_num++) {
+		for (u_int P_num = 0; P_num < pairs.size(); P_num++) {
 			Contact_pair& pair = pairs[P_num];
 
 			coll[0] = pair.body[0];

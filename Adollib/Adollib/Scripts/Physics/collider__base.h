@@ -22,7 +22,7 @@ namespace Adollib {
 
 			Vector3 half_size;
 
-			physics_function::ALP_Collider_shape shape; //Œ`î•ñ
+			physics_function::ALP_Collider_shape shape = physics_function::ALP_Collider_shape::None; //Œ`î•ñ
 
 			DOP::DOP_14	dopbase; //MeshCollider‚ÌÅ‰‚Ìk-dop
 		};
@@ -54,21 +54,21 @@ namespace Adollib {
 
 	public:
 		//::: tagŠÖŒW ::::::::
-		u_int tag; //©g‚Ìtag(bit)
-		u_int not_hitable_tags; //Õ“Ë‚µ‚È‚¢tags
+		u_int tag = 0; //©g‚Ìtag(bit)
+		u_int not_hitable_tags = 0; //Õ“Ë‚µ‚È‚¢tags
 
 		//::: unity‚Ìphysics•”•ª •ª‚¯‚é•K—v‚È‚ñ‚Ä‚È‚¢‚â‚ë ::::
-		float inertial_mass; //¿—Ê
-		float drag; //‹ó‹C’ïR
-		float anglar_drag; //‹ó‹C’ïR
-		float dynamic_friction; //“®–€C
-		float static_friction; //Ã–€C
-		float restitution;	 //”½”­ŒW”
+		float inertial_mass = 0; //¿—Ê
+		float drag = 0; //‹ó‹C’ïR
+		float anglar_drag = 0; //‹ó‹C’ïR
+		float dynamic_friction = 0; //“®–€C
+		float static_friction = 0; //Ã–€C
+		float restitution = 0;	 //”½”­ŒW”
 
-		bool is_fallable; //—‚¿‚È‚¢
-		bool is_kinematic;//‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
-		bool is_moveable; //“®‚©‚È‚¢
-		bool is_hitable;  //Õ“Ë‚µ‚È‚¢
+		bool is_fallable = 0; //—‚¿‚È‚¢
+		bool is_kinematic = 0;//‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
+		bool is_moveable = 0; //“®‚©‚È‚¢
+		bool is_hitable = 0;  //Õ“Ë‚µ‚È‚¢
 
 	private:
 		std::list<physics_function::ALP_Collider>::iterator ALPcollider_itr;
@@ -78,7 +78,7 @@ namespace Adollib {
 		
 	public:
 		//©g‚Ö‚Ìitr‚ğ•Ô‚·
-		const physics_function::ColliderPhysics_itrs const get_itrs() const {
+		const physics_function::ColliderPhysics_itrs get_itrs() const {
 			physics_function::ColliderPhysics_itrs ret; 
 
 			ret.ALPcollider_itr = ALPcollider_itr;

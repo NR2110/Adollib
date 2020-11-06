@@ -37,7 +37,7 @@ void Debug::render() {
 		ImGui::Text("w"); ImGui::NextColumn();
 		ImGui::Separator();
 
-		for (int param_num = 0; param_num < notag_debug_param.size(); param_num++) {
+		for (u_int param_num = 0; param_num < notag_debug_param.size(); param_num++) {
 
 			ImGui::Text(notag_debug_param[param_num].param_name.c_str()); ImGui::NextColumn();
 
@@ -49,7 +49,7 @@ void Debug::render() {
 	}
 
 
-	for (int tab_num = 0; tab_num < tags.size(); tab_num++) {
+	for (u_int tab_num = 0; tab_num < tags.size(); tab_num++) {
 
 		if (ImGui::CollapsingHeader(tags[tab_num].c_str())) {
 
@@ -62,7 +62,7 @@ void Debug::render() {
 				ImGui::Text("w"); ImGui::NextColumn();
 				ImGui::Separator();
 
-				for (int param_num = 0; param_num < debug_params[tags[tab_num]].size(); param_num++) {
+				for (u_int param_num = 0; param_num < debug_params[tags[tab_num]].size(); param_num++) {
 
 					ImGui::Text(debug_params[tags[tab_num]][param_num].param_name.c_str()); ImGui::NextColumn();
 

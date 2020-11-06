@@ -87,8 +87,8 @@ void ALP_Collider::update_dop14() {
 void ALP_Collider::update_dop14_as_sphere() {
 	dop14.pos = world_position;
 	for (int i = 0; i < DOP::DOP_size; i++) {
-		dop14.max[i] = +world_scale.x * 1.0000001;
-		dop14.min[i] = -world_scale.x * 1.0000001;
+		dop14.max[i] = +world_scale.x * 1.0000001f;
+		dop14.min[i] = -world_scale.x * 1.0000001f;
 	}
 }
 

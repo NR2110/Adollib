@@ -4,7 +4,7 @@
 #include "../../Imgui/imgui_impl_win32.h"
 #include "../../Imgui/imgui_impl_dx11.h"
 
-#define UseRelese TRUE;
+#define UseRelese TRUE
 
 using namespace Adollib;
 
@@ -21,7 +21,7 @@ std::string Work_meter::now_tag = std::string("");
 bool Work_meter::render() {
 #if UseRelese || _DEBUG
 
-	static float max_num = 0.016;
+	static float max_num = 0.016f;
 	static int start_num = 0;
 	static float before = 0;
 
@@ -55,8 +55,8 @@ bool Work_meter::render() {
 
 
 		bool V;
-		for (int t = 0; t < tags.size(); t++) {
-			for (int i = 0; i < name_flags[tags[t]].size(); i++) {
+		for (u_int t = 0; t < tags.size(); t++) {
+			for (u_int i = 0; i < name_flags[tags[t]].size(); i++) {
 				V = name_flags[tags[t]][i];
 				ImGui::Checkbox(names[tags[t]][i].c_str(), &V);
 				name_flags[tags[t]][i] = V;
@@ -96,7 +96,7 @@ bool Work_meter::render() {
 		std::string tag, name;
 
 		tag = std::string("");
-		for (int n_num = 0; n_num < names[tag].size(); n_num++) {
+		for (u_int n_num = 0; n_num < names[tag].size(); n_num++) {
 			if (name_flags[tag][n_num] == false)continue;
 			name = names[tag][n_num];
 
@@ -121,13 +121,13 @@ bool Work_meter::render() {
 		}
 
 
-		for (int t_num = 0; t_num < tags.size(); t_num++) {
+		for (u_int t_num = 0; t_num < tags.size(); t_num++) {
 			if (tags[t_num] == std::string(""))continue;
 			tag = tags[t_num];
 
 			if (ImGui::CollapsingHeader(tags[t_num].c_str())) {
 
-				for (int n_num = 0; n_num < names[tag].size(); n_num++) {
+				for (u_int n_num = 0; n_num < names[tag].size(); n_num++) {
 					if (name_flags[tag][n_num] == false)continue;
 					name = names[tag][n_num];
 
@@ -152,7 +152,7 @@ bool Work_meter::render() {
 				}
 			}
 			else if(update_always) {
-				for (int n_num = 0; n_num < names[tag].size(); n_num++) {
+				for (u_int n_num = 0; n_num < names[tag].size(); n_num++) {
 					if (name_flags[tag][n_num] == false)continue;
 					name = names[tag][n_num];
 
@@ -175,7 +175,7 @@ bool Work_meter::render() {
 		}
 
 		if (before < 0)
-		before = 0.016;
+		before = 0.016f;
 	}
 
 	

@@ -89,7 +89,7 @@ void ALP_Physics::integrate(float duration) {
 	if (linear_velocity.norm() >= FLT_EPSILON)
 		ALP_coll->world_position += linear_velocity * duration;
 
-	ALP_coll->world_orientation *= quaternion_radian_axis(anglar_velocity.norm_sqr() * duration * 0.5, anglar_velocity.unit_vect());
+	ALP_coll->world_orientation *= quaternion_radian_axis(anglar_velocity.norm_sqr() * duration * 0.5f, anglar_velocity.unit_vect());
 	ALP_coll->world_orientation = ALP_coll->world_orientation.unit_vect();
 
 }

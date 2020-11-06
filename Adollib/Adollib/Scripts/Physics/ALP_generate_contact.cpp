@@ -17,7 +17,7 @@ using namespace Closest_func;
 void physics_function::generate_contact(std::vector<Contacts::Contact_pair>& pairs) {
 
 	//::: dynamic_cast 多用地帯 危険! 危険!
-	for (int i = 0; i < pairs.size(); i++) {
+	for (u_int i = 0; i < pairs.size(); i++) {
 
 		std::list<ALP_Collider>::iterator shape0 = pairs[i].body[0];
 		std::list<ALP_Collider>::iterator shape1 = pairs[i].body[1];
@@ -408,7 +408,7 @@ bool sat_obb_convex_mesh(const OBB& obb, const ALP_Collider& mesh,
 
 	////::: obbの軸にmeshを投影 :::::::::::::::::::
 		//obbの座標系で計算を行う
-	float ra, maxA, minA;
+	float maxA, minA;
 	for (u_int f = 0; f < 3; f++) {
 		const Vector3& axis = obb.u_axes[f]; //worldcoord
 
@@ -751,7 +751,7 @@ bool physics_function::generate_contact_sphere_mesh(const ALP_Collider& sphere, 
 		Vector3 closest_point;
 
 		closest_point = center;
-		for (int i = 0; i < mesh.meshcoll_data.facet_num; i++) {
+		for (u_int i = 0; i < mesh.meshcoll_data.facet_num; i++) {
 			const Vector3& nor = mesh.meshcoll_data.facets->at(i).normal.unit_vect();
 			const Vector3& pos = mesh.meshcoll_data.vertices->at(mesh.meshcoll_data.facets->at(i).vertexID[0]) * mesh.world_scale;
 			float d = vector3_dot(nor, pos) - vector3_dot(nor, closest_point);

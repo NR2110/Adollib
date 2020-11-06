@@ -83,8 +83,7 @@ inline float& Vector3::operator[] (const int i) {
 	case 2: return z;
 		break;
 	}
-	float R;
-	return R;
+	return x;
 }
 inline float Vector3::operator[] (const int i) const {
 	switch (i)

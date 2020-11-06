@@ -20,13 +20,13 @@ namespace Adollib
 	void player::update()
 	{
 		Vector3 move_vec = Vector3(0, 0, 0);
-		float move_force = 0.1;
+		float move_force = 0.1f;
 		if (input->getKeyState(Key::Down))move_vec += Vector3(0, 0, -1);
 		if (input->getKeyState(Key::Up))move_vec += Vector3(0, 0, +1);
 		collier->add_force(vector3_quatrotate(move_vec * move_force,gameobject->get_world_orientate()));
 
 		Vector3 rot_vec = Vector3(0, 0, 0);
-		float rot_force = 0.2;
+		float rot_force = 0.2f;
 		if (input->getKeyState(Key::Left))rot_vec += Vector3(0, -1, 0);
 		if (input->getKeyState(Key::Right))rot_vec += Vector3(0, +1, 0);
 		collier->add_torque(rot_vec * rot_force);

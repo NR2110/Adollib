@@ -99,7 +99,7 @@ void physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std:
 	Work_meter::start("Mid_Dop14");
 	//DOP_14による大雑把な当たり判定
 	std::vector<Contacts::Contact_pair> new_pairs;
-	for (int i = 0; i < in_pair.size(); i++) {
+	for (u_int i = 0; i < in_pair.size(); i++) {
 
 		int c_size = in_pair[i].bodylists.size();
 		for (int o = 0; o < c_size; o++) {
@@ -111,8 +111,8 @@ void physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std:
 
 	Work_meter::start("Mid_check_alive");
 	//生成したpairが前のpairから存在しているかの確認
-	for (int old_num = 0; old_num < pairs.size(); old_num++) {
-		for (int new_num = 0; new_num < new_pairs.size(); new_num++) {
+	for (u_int old_num = 0; old_num < pairs.size(); old_num++) {
+		for (u_int new_num = 0; new_num < new_pairs.size(); new_num++) {
 			if (new_pairs[new_num].type == Pairtype::keep_pair) continue;
 
 			if (
@@ -133,7 +133,7 @@ void physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std:
 
 	Work_meter::start("Mid_remove_contact_point");
 	//現在使用していない衝突点を削除
-	for (int i = 0; i < new_pairs.size(); i++) {
+	for (u_int i = 0; i < new_pairs.size(); i++) {
 		new_pairs[i].contacts.chack_remove_contact_point(
 			new_pairs[i].body[0]->world_position,
 			new_pairs[i].body[0]->world_orientation,

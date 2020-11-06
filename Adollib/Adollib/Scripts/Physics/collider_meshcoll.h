@@ -49,7 +49,7 @@ namespace Adollib {
 			{
 				facet_num = vertex_num / 3;
 				physics_function::Facet F;
-				for (int i = 0; i < facet_num; i++) {
+				for (u_int i = 0; i < facet_num; i++) {
 					F.vertexID[0] = (*inde)[i * 3];
 					F.vertexID[1] = (*inde)[i * 3 + 1];
 					F.vertexID[2] = (*inde)[i * 3 + 2];
@@ -71,7 +71,7 @@ namespace Adollib {
 				}
 
 				physics_function::Edge E;
-				for (int i = 0; i < facet_num; i++) {
+				for (u_int i = 0; i < facet_num; i++) {
 					physics_function::Facet& facet = facets[i];
 
 					for (int o = 0; o < 3; o++) {

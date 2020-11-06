@@ -5,11 +5,11 @@
 #include "frustum_culling.h"
 
 namespace Adollib {
-	 Material::Material() {
-		 color = Vector4(1, 1, 1, 1);
-		 DS_state = State_manager::DStypes::DS_TRUE;
-		 RS_state = State_manager::RStypes::RS_CULL_BACK;
-		 BS_state = State_manager::BStypes::BS_NONE;
+	Material::Material() {
+		color = Vector4(1, 1, 1, 1);
+		DS_state = State_manager::DStypes::DS_TRUE;
+		RS_state = State_manager::RStypes::RS_CULL_BACK;
+		BS_state = State_manager::BStypes::BS_NONE;
 
 		Systems::CreateConstantBuffer(&Mat_cb, sizeof(ConstantBufferPerMaterial));
 	}
@@ -44,8 +44,8 @@ namespace Adollib {
 				// boneTransform
 				if (mesh.skeletalAnimation.size() > 0 && mesh.skeletalAnimation[animeIndex].size() > 0)
 				{
-					int frame = mesh.skeletalAnimation.at(animeIndex).animation_tick / mesh.skeletalAnimation.at(animeIndex).sampling_time;
-					if (frame > mesh.skeletalAnimation.at(animeIndex).size() - 1)
+					int frame = (int)(mesh.skeletalAnimation.at(animeIndex).animation_tick / mesh.skeletalAnimation.at(animeIndex).sampling_time);
+					if (frame > (int)mesh.skeletalAnimation.at(animeIndex).size() - 1)
 					{
 						frame = 0;
 						mesh.skeletalAnimation.at(animeIndex).animation_tick = 0;

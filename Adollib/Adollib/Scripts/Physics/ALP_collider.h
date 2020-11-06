@@ -32,11 +32,11 @@ namespace Adollib {
 			Vector3 offset_CollGO_pos;
 
 			//::: oncoll_enter :::::::
-			u_int oncoll_bits; //oncollision enterで使用するbit情報
-			u_int oncoll_check_bits; //on collision enterを行うtagの情報(互いに衝突しないけどoncollenterが必要な場合)
+			u_int oncoll_bits = 0; //oncollision enterで使用するbit情報
+			u_int oncoll_check_bits = 0; //on collision enterを行うtagの情報(互いに衝突しないけどoncollenterが必要な場合)
 
 			//::: tag関係 :::::::::::::
-			u_int tag; //自身のtag(bit)
+			u_int tag = 0; //自身のtag(bit)
 			u_int not_hitable_tags = 0; //衝突しないtags
 
 			//::: 14-DOP ::::::::::
@@ -44,7 +44,7 @@ namespace Adollib {
 			DOP::DOP_14	dopbase; //meshcollider用 読み込み時のdopデータ meshcoliderはこれを基準にDOPを生成
 
 			//:::
-			ALP_Collider_shape shape; //形情報
+			ALP_Collider_shape shape = ALP_Collider_shape::None; //形情報
 
 			//::: ComponentがアタッチされたColliderへのイテレータ :::
 			std::list<Collider*>::iterator coll_itr;

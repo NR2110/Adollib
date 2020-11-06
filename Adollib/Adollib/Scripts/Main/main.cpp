@@ -132,7 +132,6 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 	//ƒƒCƒ“ƒ‹[ƒv
 	MSG hMsg = { 0 };
 	float Interval = 1.0f;
-	LARGE_INTEGER now, before, freq;
 	int fps = 0;
 
 	loop loop;
