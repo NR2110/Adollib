@@ -70,8 +70,9 @@ namespace Adollib {
 			// gameobjectのtransformからcolliderのworld空間での情報を更新
 			void update_world_trans();
 
+			//::: collider:Component の local_positionなどが変更されたときに呼ぶもの :::
 			// collider::get_Colliderdata()からlocal_posなどの情報を更新
-			void update_ALP_from_data();
+			void refresh_ALP_from_data();
 
 		public:
 			// DOP_14データの更新

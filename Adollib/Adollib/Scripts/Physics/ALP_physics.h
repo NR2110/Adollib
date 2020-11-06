@@ -28,7 +28,8 @@ namespace Adollib {
 
 				bool is_fallable, //落ちない
 				bool is_kinematic, //影響うけない(fallはする)
-				bool is_moveable//動かない		
+				bool is_moveable,//動かない	
+				bool is_hitable //衝突しない
 			) :
 				inertial_mass(inertial_mass), //質量
 				drag(drag), //空気抵抗
@@ -39,7 +40,8 @@ namespace Adollib {
 
 				is_fallable(is_fallable), //落ちない
 				is_kinematic(is_kinematic), //影響うけない(fallはする)
-				is_moveable(is_moveable)//動かない	
+				is_moveable(is_moveable),//動かない	
+				is_hitable(is_hitable)
 			{};
 
 			//::: 変更可 :::::::::::::::::::::::::::::
@@ -104,8 +106,10 @@ namespace Adollib {
 			//サイズ変更などに対応するため毎フレーム慣性テンソルなどを更新 慣性テンソルの更新にALP_collider::scaleとALP_Physics::massが必要なためここに記述
 			void update_inertial();
 
-			// collider::get_Physicsdata()からmassなどの情報を更新
-			void update_ALP_from_data();
+			//::: collider:Component の massなどが変更されたときに呼ぶもの :::
+			// Colliderから情報の獲得 
+			void refresh_ALP_from_data();
+
 		};
 	}
 }

@@ -121,6 +121,7 @@ void physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std:
 				) {
 				//前から存在していたらデータを引き継ぐ
 				new_pairs[new_num] = pairs[old_num];
+
 				new_pairs[new_num].type = Pairtype::keep_pair;
 			}
 			else {

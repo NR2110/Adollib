@@ -131,7 +131,7 @@ void ALP_Physics::update_inertial() {
 	}
 }
 
-void ALP_Physics::update_ALP_from_data() {
+void ALP_Physics::refresh_ALP_from_data() {
 
 	Physics_data Cdata = (*ALP_coll->coll_itr)->get_Physicsdata();
 
@@ -146,4 +146,6 @@ void ALP_Physics::update_ALP_from_data() {
 	is_kinematic = Cdata.is_kinematic;
 	is_moveable = Cdata.is_moveable;
 	is_hitable = Cdata.is_hitable;
+
+	refresh_physics_data();
 }

@@ -5,10 +5,10 @@ using namespace physics_function;
 using namespace Contacts;
 
 //::: get_data‚Ìdata‚ðCollider‚É“ü—Í :::
-void physics_function::update_ALP_from_data(std::list<physics_function::ALP_Collider>& ALP_colliders) {
+void physics_function::refresh_ALP_from_data(std::list<physics_function::ALP_Collider>& ALP_colliders) {
 
 	for (auto& itr : ALP_colliders) {
-		itr.update_ALP_from_data();
+		itr.refresh_ALP_from_data();
 	}
 }
 

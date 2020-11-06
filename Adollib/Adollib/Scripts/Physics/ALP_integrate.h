@@ -12,7 +12,7 @@ namespace Adollib {
 		void update_world_trans(std::list<physics_function::ALP_Collider>& ALP_colliders);
 
 		// get_data‚Ìdata‚ğCollider‚É“ü—Í
-		void update_ALP_from_data(std::list<physics_function::ALP_Collider>& ALP_colliders);
+		void refresh_ALP_from_data(std::list<physics_function::ALP_Collider>& ALP_colliders);
 
 		//gameobject‚Ö‚Ì•Ï‰»—Ê‚ğ‹‚ß‚é
 		void solv_resolve(std::list<physics_function::ALP_Collider>& ALP_colliders);

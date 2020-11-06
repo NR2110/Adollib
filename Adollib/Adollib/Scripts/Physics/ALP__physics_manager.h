@@ -18,7 +18,7 @@ namespace Adollib
 
 	namespace physics_function {
 		// physics_manager‚Ìstatic•Ï”‚Ì‰Šú’l
-		class physics_manager_default {
+		class Physics_manager_default {
 		public:
 
 			static constexpr float gravity = 9.8f; //d—Í

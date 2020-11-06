@@ -29,9 +29,11 @@ void ALP_Collider::update_world_trans() {
 	world_orientation = (*coll_itr)->gameobject->get_world_orientate() * local_orientation;
 	world_scale = (*coll_itr)->gameobject->get_world_scale() * local_scale;
 	world_position = (*coll_itr)->gameobject->get_world_position() + vector3_quatrotate(local_position * (*coll_itr)->gameobject->get_world_scale(), world_orientation);
+
+	ALPphysics->update_inertial();
 }
 
-void ALP_Collider::update_ALP_from_data() {
+void ALP_Collider::refresh_ALP_from_data() {
 
 	Collider_data Cdata = (*coll_itr)->get_Colliderdata();
 
@@ -48,7 +50,7 @@ void ALP_Collider::update_ALP_from_data() {
 		meshcoll_data = (*coll_itr)->get_Meshdata();
 	}
 
-	ALPphysics->update_ALP_from_data();
+	ALPphysics->refresh_ALP_from_data();
 }
 
 #pragma endregion
