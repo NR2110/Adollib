@@ -5,12 +5,12 @@
 #include "../Math/quaternion.h"
 #include "../Math/matrix.h"
 #include "ALP_collider.h"
-#include "physics_global.h"
 
 namespace Adollib {
 	namespace physics_function {
 		//Contactクラス用のnamespace 
 		namespace Contacts {
+			static const int contact_max_per_pair = 4; //一つのpairで衝突の解散を行う最大の数
 
 			//拘束
 			struct Constraint {
@@ -44,7 +44,7 @@ namespace Adollib {
 			public:
 				int contact_num = 0;    //衝突点の数
 				float friction;		//その衝突の摩擦力
-				Contactpoint contactpoints[physics_g::Contact_max_per_pair]; //衝突点情報
+				Contactpoint contactpoints[contact_max_per_pair]; //衝突点情報
 
 				Contact() {
 				}
@@ -113,7 +113,7 @@ namespace Adollib {
 				//初期化
 				void reset() {
 					contact_num = 0;
-					for (int i = 0; i < physics_g::Contact_max_per_pair; i++) {
+					for (int i = 0; i < contact_max_per_pair; i++) {
 						contactpoints[i].reset();
 					}
 				};
@@ -128,7 +128,7 @@ namespace Adollib {
 
 				Pairtype type; //衝突の種類(前フレームからある衝突かどうか)
 
-				ALP_Collider* body[2]; //接触したobject
+				std::list<ALP_Collider>::iterator body[2]; //接触したobject
 
 				Contact contacts; //衝突の情報
 
@@ -136,8 +136,8 @@ namespace Adollib {
 			};
 
 			struct Collider_2 {
-				ALP_Collider* body;
-				std::vector<ALP_Collider*> bodylists;
+				std::list<ALP_Collider>::iterator body;
+				std::vector<std::list<ALP_Collider>::iterator> bodylists;
 			};
 
 		}

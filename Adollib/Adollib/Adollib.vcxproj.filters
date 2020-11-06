@@ -175,12 +175,6 @@
     <ClCompile Include="Scripts\Imgui\debug.cpp">
       <Filter>00_Adollib\00_main\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Physics\physics_global.cpp">
-      <Filter>00_Adollib\22_physics</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Physics\ALP__manager.cpp">
-      <Filter>00_Adollib\22_physics\ALP</Filter>
-    </ClCompile>
     <ClCompile Include="Scripts\Physics\ALP_broadphase.cpp">
       <Filter>00_Adollib\22_physics\ALP</Filter>
     </ClCompile>
@@ -404,12 +398,6 @@
     </ClInclude>
     <ClInclude Include="Scripts\Imgui\debug.h">
       <Filter>00_Adollib\00_main\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Physics\physics_global.h">
-      <Filter>00_Adollib\22_physics</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Physics\ALP__manager.h">
-      <Filter>00_Adollib\22_physics\ALP</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Physics\ALP__physics_function.h">
       <Filter>00_Adollib\22_physics\ALP</Filter>

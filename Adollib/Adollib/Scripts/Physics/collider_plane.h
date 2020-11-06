@@ -15,12 +15,14 @@ namespace Adollib {
 			inertial_mass = FLT_MAX;
 		}
 
-		physics_function::Collider_data get_data() override {
+		physics_function::Collider_data get_Colliderdata() const override {
 			physics_function::Collider_data ret;
 
 			ret.local_orientation = quaternion_from_to_rotate(Vector3(0, 1, 0), normal).unit_vect();
 			ret.local_position = normal * distance;
 			ret.local_scale = Vector3(FLT_MAX, 0, FLT_MAX);
+
+			ret.half_size = Vector3(1, 1, 1);
 
 			ret.shape = physics_function::ALP_Collider_shape::Plane;
 

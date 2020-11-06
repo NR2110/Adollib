@@ -17,12 +17,22 @@ namespace Adollib
 {
 	float Phyisics_manager::gravity = physics_manager_default::gravity; //重力
 
-	physics_function::ALP_Physics Phyisics_manager::default_physics; //何も設定していないときのpyisicsの値
+	physics_function::ALP_Physics Phyisics_manager::default_physics = ALP_Physics(
+		physics_manager_default::inertial_mass, //質量
+		physics_manager_default::drag, //空気抵抗
+		physics_manager_default::anglar_drag, //空気抵抗
+		physics_manager_default::dynamic_friction,//動摩擦
+		physics_manager_default::static_friction, //静摩擦
+		physics_manager_default::restitution,	 //反発係数
+
+		physics_manager_default::is_fallable, //落ちない
+		physics_manager_default::is_kinematic, //影響うけない(fallはする)
+		physics_manager_default::is_moveable //動かない
+	); //何も設定していないときのpyisicsの値
 
 	float Phyisics_manager::bounce_threshold = physics_manager_default::bounce_threshold; //跳ね返りの閾値
 	float Phyisics_manager::sleep_threshold = physics_manager_default::sleep_threshold; //sleepの閾値
 
-	float Phyisics_manager::contact_max_per_pair = physics_manager_default::contact_max_per_pair; //一つのpairで衝突の解散を行う最大の数
 	float Phyisics_manager::contact_allowable_error = physics_manager_default::contact_allowable_error; //これ以上近いと同一衝突点とする
 	float Phyisics_manager::contact_threrhold_normal = physics_manager_default::contact_threrhold_normal; //衝突点の閾値
 	float Phyisics_manager::contact_threrhold_tangent = physics_manager_default::contact_threrhold_tangent;//衝突点の閾値
@@ -38,19 +48,19 @@ namespace Adollib
 
 namespace Adollib
 {
- int frame_count;
+	int Phyisics_manager::frame_count;
 
 	//collider_componentのポインタ配列
-	std::unordered_map<Scenelist, std::list<Collider*>> colliders;
+	std::unordered_map<Scenelist, std::list<Collider*>> Phyisics_manager::colliders;
 
 	//各dataの実態配列
-	std::unordered_map<Scenelist, std::list<physics_function::ALP_Collider>> ALP_colliders;
-	std::unordered_map<Scenelist, std::list<physics_function::ALP_Physics>> ALP_physicses;
+	std::unordered_map<Scenelist, std::list<physics_function::ALP_Collider>> Phyisics_manager::ALP_colliders;
+	std::unordered_map<Scenelist, std::list<physics_function::ALP_Physics>> Phyisics_manager::ALP_physicses;
 
-	std::vector<physics_function::Contacts::Contact_pair> pairs;
-	std::vector<physics_function::Contacts::Collider_2> broad_mid_pair;
+	std::vector<physics_function::Contacts::Contact_pair> Phyisics_manager::pairs;
+	std::vector<physics_function::Contacts::Collider_2> Phyisics_manager::broad_mid_pair;
 
-	bool is_changed_coll = false; //新たにColliderが追加された、削除された場合true
+	bool Phyisics_manager::is_changed_coll = false; //新たにColliderが追加された、削除された場合true
 }
 
 namespace Adollib
@@ -65,13 +75,18 @@ namespace Adollib
 			return true;
 		}
 
+		if (is_changed_coll == true) {
+			// get_dataのdataをColliderに入力 
+			update_ALP_from_data(ALP_colliders[Sce]);
+		}
+
 		// ColliderのWorld情報の更新
 		update_world_trans(ALP_colliders[Sce]);
 
 		// 外力の更新
 		applyexternalforce(ALP_physicses[Sce]);
 
-		physics_g::timeStep = Al_Global::second_per_frame;
+		timeStep = Al_Global::second_per_frame;
 
 		// 大雑把な当たり判定
 		Work_meter::start("Broad,Mid,Narrow");
@@ -79,6 +94,7 @@ namespace Adollib
 		Work_meter::start("Broadphase");
 		Work_meter::tag_start("Broadphase");
 		Broadphase(ALP_physicses[Sce], broad_mid_pair);
+		is_changed_coll = false;
 		Work_meter::tag_stop();
 		Work_meter::stop("Broadphase");
 
@@ -100,7 +116,7 @@ namespace Adollib
 		// 衝突解決
 		Work_meter::start("Resolve");
 		Work_meter::tag_start("Resolve");
-		resolve_contact(Phyisics_manager::colliders[Sce], pairs);
+		resolve_contact(ALP_colliders[Sce], pairs);
 		Work_meter::tag_stop();
 		Work_meter::stop("Resolve");
 

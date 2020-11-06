@@ -5,7 +5,7 @@ namespace Adollib {
 	namespace physics_function {
 
 		//Õ“Ë‰ğŒˆ
-		void resolve_contact(std::list<ALP_Collider*>, std::vector<Contacts::Contact_pair>& pairs);
+		void resolve_contact(std::list<ALP_Collider>& colliders, std::vector<Contacts::Contact_pair>& pairs);
 
 	}
 }

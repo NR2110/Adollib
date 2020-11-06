@@ -96,11 +96,17 @@ namespace Adollib {
 		};
 	private:
 	public:
-		Vector3() :x(0), y(0), z(0) {};
-		Vector3(float x, float y, float z) :x(x), y(y), z(z) {};
-		Vector3(vector2 xy, float z) :x(xy.x), y(xy.y), z(z) {};
-		explicit Vector3(float v) :x(v), y(v), z(v) {};
-		Vector3(DirectX::XMFLOAT3 xm) :x(xm.x), y(xm.y), z(xm.z) {};
+		//Vector3() :x(0), y(0), z(0) {};
+		//Vector3(float x, float y, float z) :x(x), y(y), z(z) {};
+		//Vector3(vector2 xy, float z) :x(xy.x), y(xy.y), z(z) {};
+		//explicit Vector3(float v) :x(v), y(v), z(v) {};
+		//Vector3(DirectX::XMFLOAT3 xm) :x(xm.x), y(xm.y), z(xm.z) {};
+		constexpr Vector3() :x(0), y(0), z(0) {};
+		constexpr Vector3(float x, float y, float z) :x(x), y(y), z(z) {};
+		constexpr Vector3(vector2 xy, float z) :x(xy.x), y(xy.y), z(z) {};
+		constexpr explicit Vector3(float v) :x(v), y(v), z(v) {};
+		constexpr Vector3(DirectX::XMFLOAT3 xm) :x(xm.x), y(xm.y), z(xm.z) {};
+
 		//vector3(n_vector2 V) :x(V.x), y(V.y), z(0) {};
 
 		Vector3 operator+ () const;

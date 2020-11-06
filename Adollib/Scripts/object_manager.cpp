@@ -8,9 +8,8 @@
 
 #include "../Adollib/Scripts/Imgui/imgui_all.h"
 
-#include "../Adollib/Scripts/Physics/physics_global.h"
+#include "../Adollib/Scripts/Physics/ALP__physics_manager.h"
 
-#include "../Adollib/Scripts/Physics/ALP__manager.h"
 namespace Adollib
 {
 	// 所属するシーンの初期化時に一度だけ呼ばれる
@@ -41,7 +40,7 @@ namespace Adollib
 				//Box* R = GO->addComponent<Box>();
 				Meshcoll* R = GO->addComponent<Meshcoll>();
 				R->load_mesh("./DefaultModel/cube.fbx");
-				R->move = false;
+				R->is_moveable = false;
 			}
 
 			{
@@ -54,7 +53,7 @@ namespace Adollib
 				Box* R = GO->addComponent<Box>();
 				//Meshcoll* R = GO->addComponent<Meshcoll>();
 				//R->load_mesh("./DefaultModel/cube.fbx");
-				R->move = false;
+				R->is_moveable = false;
 			}
 		}
 		else {
@@ -81,7 +80,7 @@ namespace Adollib
 				Box* R = GO->addComponent<Box>();
 				//Meshcoll* R = GO->addComponent<Meshcoll>();
 				//R->load_mesh("./DefaultModel/cube.fbx");
-				R->move = false;
+				R->is_moveable = false;
 			}
 		}
 
@@ -186,15 +185,15 @@ namespace Adollib
 			}
 
 			//重力の調整
-			ImGui::InputFloat("gravity", &physics_g::gravity, 0.001f, 1.0f, "%.3f");
+			ImGui::InputFloat("gravity", &Phyisics_manager::gravity, 0.001f, 1.0f, "%.3f");
 
 			//正確さの調整
-			ImGui::InputInt("accuracy", &physics_g::accuracy, 1, 200);
+			ImGui::InputInt("accuracy", &Phyisics_manager::solver_iterations, 1, 200);
 
 			//貫通時のばねの強さ
-			ImGui::InputFloat("bias", &physics_g::bias, 0.01, 0.1, "%.3f");
+			ImGui::InputFloat("bias", &Phyisics_manager::bias, 0.01, 0.1, "%.3f");
 			//貫通許容誤差
-			ImGui::InputFloat("slop", &physics_g::slop, 0.0001, 0.001, "%.4f");
+			ImGui::InputFloat("slop", &Phyisics_manager::slop, 0.0001, 0.001, "%.4f");
 
 			ImGui::Columns(4, "columnListIDs");
 			ImGui::Separator();
@@ -327,7 +326,7 @@ namespace Adollib
 			{ 
 
 				Gameobject* object = nullptr;
-				object = Gameobject_manager::createCube("");
+				object = Gameobject_manager::createCube(GO_tag::Mesh);
 				Vector4 C = Vector4(1,0,0,1);
 				object->material->color = C;
 
@@ -351,7 +350,7 @@ namespace Adollib
 			{ 
 
 				Gameobject* object = nullptr;
-				object = Gameobject_manager::createCube("");
+				object = Gameobject_manager::createCube(GO_tag::Box);
 				Vector4 C = Vector4(0, 1, 0, 1);
 				object->material->color = C;
 
@@ -371,7 +370,7 @@ namespace Adollib
 			{
 
 				Gameobject* object = nullptr;
-				object = Gameobject_manager::createCube("");
+				object = Gameobject_manager::createCube(GO_tag::Box);
 				Vector4 C = Vector4(0, 1, 0, 1);
 				object->material->color = C;
 
@@ -389,7 +388,7 @@ namespace Adollib
 			{
 
 				Gameobject* object = nullptr;
-				object = Gameobject_manager::createCube("");
+				object = Gameobject_manager::createCube(GO_tag::Mesh);
 				Vector4 C = Vector4(1, 0, 0, 1);
 				object->material->color = C;
 
@@ -430,7 +429,7 @@ namespace Adollib
 {
 	Gameobject* object_manager::set_sphere(Vector3 pos, float r, Vector3 color) {
 		Gameobject* object = nullptr;
-		object = Gameobject_manager::createSphere("");
+		object = Gameobject_manager::createSphere(GO_tag::Sphere);
 		Vector4 C = Vector4(color.x, color.y, color.z, 1);
 		object->material->color = C;
 
@@ -445,7 +444,7 @@ namespace Adollib
 
 	Gameobject* object_manager::set_box(Vector3 pos, Vector3 size, Vector3 rotate, Vector3 color) {
 		Gameobject* object = nullptr;
-		object = Gameobject_manager::createCube("");
+		object = Gameobject_manager::createCube(GO_tag::Box);
 		Vector4 C = Vector4(color.x, color.y, color.z, 1);
 		object->material->color = C;
 
@@ -464,7 +463,7 @@ namespace Adollib
 
 	Gameobject* object_manager::set_meshbox(Vector3 pos, Vector3 size, Vector3 rotate, Vector3 color) {
 		Gameobject* object = nullptr;
-		object = Gameobject_manager::create("./DefaultModel/cone.fbx");
+		object = Gameobject_manager::createFromFBX("./DefaultModel/cone.fbx");
 		Vector4 C = Vector4(color.x, color.y, color.z, 1);
 		object->material->color = C;
 
@@ -483,7 +482,7 @@ namespace Adollib
 
 	Gameobject* object_manager::set_plane(Vector3 pos, Vector3 normal, Vector3 color) {
 		Gameobject* object = nullptr;
-		object = Gameobject_manager::createCube("");
+		object = Gameobject_manager::createCube(GO_tag::Plane);
 		Vector4 C = Vector4(color.x, color.y, color.z, 1);
 		object->material->color = C;
 

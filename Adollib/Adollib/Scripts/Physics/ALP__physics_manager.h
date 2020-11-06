@@ -1,4 +1,5 @@
 #pragma once
+
 #include <map>
 #include "../Object/component.h"
 #include "../Scene/scene.h"
@@ -19,17 +20,17 @@ namespace Adollib
 		// physics_managerのstatic変数の初期値
 		class physics_manager_default {
 		public:
-			static constexpr float gravity = 9.8f; //重力
 
-			//static physics_function::ALP_Physics default_physics; //何も設定していないときのpyisicsの値 cppで設定
+			static constexpr float gravity = 9.8f; //重力
 
 			static constexpr float bounce_threshold = 0.01f; //跳ね返りの閾値
 			static constexpr float sleep_threshold = 0.01f; //sleepの閾値
 
-			static constexpr float contact_max_per_pair = 4; //一つのpairで衝突の解散を行う最大の数
 			static constexpr float contact_allowable_error = 0.02f; //これ以上近いと同一衝突点とする
 			static constexpr float contact_threrhold_normal = 0.004f; //衝突点の閾値
 			static constexpr float contact_threrhold_tangent = 0.02f;//衝突点の閾値
+
+
 
 			static constexpr float bias = 0.15f;//めり込みを直す力
 			static constexpr float slop = 0.003f;//衝突の許容値
@@ -38,6 +39,21 @@ namespace Adollib
 			static constexpr bool hit_backfaces_flag = false;//meshの後ろから衝突するか
 
 			static constexpr float timeStep = 0.016f;
+
+			//::: Physicsの初期値部分 :::
+			static constexpr float inertial_mass = 1.f; //質量
+			static constexpr float drag = 0.1f; //空気抵抗
+			static constexpr float anglar_drag = 0.1f; //空気抵抗
+			static constexpr float dynamic_friction = 0.4f;//動摩擦
+			static constexpr float static_friction = 0.4f; //静摩擦
+			static constexpr float restitution = 0.1f;	 //反発係数
+
+			static constexpr bool is_fallable = true; //落ちるか
+			static constexpr bool is_kinematic = true; //影響うけるか(fallはする)
+			static constexpr bool is_moveable = true;//動くか
+			static constexpr bool is_hitable = true;  //衝突しない
+
+			//::::::::
 		};
 	}
 
@@ -58,7 +74,7 @@ namespace Adollib
 
 		static bool is_changed_coll; //新たにColliderが追加された、削除された場合true
 	public:
-		static bool is_changed_colliders() { return is_changed_colliders; };
+		static bool is_changed_colliders() { return is_changed_coll; };
 
 	public:
 		static float gravity; //重力
@@ -68,7 +84,6 @@ namespace Adollib
 		static float bounce_threshold; //跳ね返りの閾値
 		static float sleep_threshold; //sleepの閾値
 
-		static float contact_max_per_pair; //一つのpairで衝突の解散を行う最大の数
 		static float contact_allowable_error; //これ以上近いと同一衝突点とする
 		static float contact_threrhold_normal; //衝突点の閾値
 		static float contact_threrhold_tangent;//衝突点の閾値
@@ -83,9 +98,11 @@ namespace Adollib
 
 	public:
 
-		static physics_function::ColliderPhysicsShape_itrs add_collider(Collider* coll, Scenelist Sce = Scene::now_scene) {
+		static physics_function::ColliderPhysics_itrs add_collider(Collider* coll, Scenelist Sce = Scene::now_scene) {
 
-			physics_function::ColliderPhysicsShape_itrs ret;
+			is_changed_coll = true;
+
+			physics_function::ColliderPhysics_itrs ret;
 			{
 				colliders[Sce].emplace_back(coll);
 				ret.coll_itr = colliders[Sce].end();
@@ -93,21 +110,41 @@ namespace Adollib
 			}
 			{
 				physics_function::ALP_Collider ALPcollider;
+
 				ALP_colliders[Sce].emplace_back(ALPcollider);
 				ret.ALPcollider_itr = ALP_colliders[Sce].end();
 				ret.ALPcollider_itr--;
 			}
 			{
 				physics_function::ALP_Physics ALPphysics;
+				ALPphysics = Phyisics_manager::default_physics;
+
 				ALP_physicses[Sce].emplace_back(ALPphysics);
 				ret.ALPphysics_itr = ALP_physicses[Sce].end();
 				ret.ALPphysics_itr--;
 			}
 
+			ret.ALPcollider_itr->ALPphysics = ret.ALPphysics_itr;
+			ret.ALPphysics_itr->ALP_coll = ret.ALPcollider_itr;
+
+			//::: 初期値をいれる :::
+			(*ret.coll_itr)->inertial_mass = Phyisics_manager::default_physics.inertial_mass; //質量
+			(*ret.coll_itr)->drag = Phyisics_manager::default_physics.drag; //空気抵抗
+			(*ret.coll_itr)->anglar_drag = Phyisics_manager::default_physics.anglar_drag; //空気抵抗
+			(*ret.coll_itr)->dynamic_friction = Phyisics_manager::default_physics.dynamic_friction; //動摩擦
+			(*ret.coll_itr)->static_friction = Phyisics_manager::default_physics.static_friction; //静摩擦
+			(*ret.coll_itr)->restitution = Phyisics_manager::default_physics.restitution;	 //反発係数
+
+			(*ret.coll_itr)->is_fallable = Phyisics_manager::default_physics.is_fallable; //落ちない
+			(*ret.coll_itr)->is_kinematic = Phyisics_manager::default_physics.is_kinematic;//影響うけない(fallはする)
+			(*ret.coll_itr)->is_moveable = Phyisics_manager::default_physics.is_moveable; //動かない
+			(*ret.coll_itr)->is_hitable = Phyisics_manager::default_physics.is_hitable;  //衝突しない
+
 			return ret;
 		}
 
 		static void remove_collider(Adollib::Collider* R, Scenelist Sce = Scene::now_scene) {
+			is_changed_coll = true;
 			ALP_colliders[Sce].erase(R->get_itrs().ALPcollider_itr);
 			ALP_physicses[Sce].erase(R->get_itrs().ALPphysics_itr);
 

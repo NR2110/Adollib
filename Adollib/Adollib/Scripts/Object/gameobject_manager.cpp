@@ -1,13 +1,17 @@
 
-#include "../Main/systems.h"
 #include "gameobject_manager.h"
-#include "../Physics/ALP__manager.h"
-#include "../Mesh/material_for_collider.h"
+
+#include "../Main/systems.h"
+
 #include "../Scene/scene.h"
 #include "../Main/resource_manager.h"
 #include "../Shader/cbuffer_manager.h"
 #include "../Shader/light_types.h"
+#include "../Physics/ALP__physics_manager.h"
+
 #include "../Mesh/frustum_culling.h"
+#include "../Mesh/material_for_collider.h"
+
 
 #include <future>
 
@@ -48,7 +52,7 @@ namespace Adollib {
 			cameras[static_cast<Scenelist>(i)] = ca_manager;
 		}
 
-		Collider_renderer::initialize(); 
+		physics_function::Collider_renderer::initialize(); 
 
 	}
 
@@ -150,7 +154,7 @@ namespace Adollib {
 		//	physics_thread.join();
 		//}
 
-		Rigitbody_manager::update();
+		Phyisics_manager::update();
 
 		//親から子へワールド情報を更新
 		for (int i = 0; i < masters.size(); i++) {
@@ -323,7 +327,7 @@ namespace Adollib {
 	Gameobject* Gameobject_manager::create(Scenelist Sce) {
 		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
 		gameobjects[Sce].emplace_back(Value);
-		Value.get()->tag = "no_name";
+		Value.get()->tag = GO_tag::None;
 
 		Value.get()->this_scene = Sce;
 		Value.get()->transform = std::make_shared<Transfome>();
@@ -334,7 +338,7 @@ namespace Adollib {
 
 
 	}
-	Gameobject* Gameobject_manager::create(const std::string go_name, Scenelist Sce) {
+	Gameobject* Gameobject_manager::create(const u_int& go_name, Scenelist Sce) {
 		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
 		gameobjects[Sce].emplace_back(Value);
 		Value.get()->tag = go_name;
@@ -342,15 +346,15 @@ namespace Adollib {
 		Value.get()->this_scene = Sce;
 		Value.get()->transform = std::make_shared<Transfome>();
 
-		Value.get()->material = std::make_shared<Material>();
-		Value.get()->material->Load_VS("./DefaultShader/default_vs.cso");
-		Value.get()->material->Load_PS("./DefaultShader/default_ps.cso");
-		ResourceManager::CreateModelFromFBX(&Value.get()->material->meshes, go_name.c_str(), "");
+		//Value.get()->material = std::make_shared<Material>();
+		//Value.get()->material->Load_VS("./DefaultShader/default_vs.cso");
+		//Value.get()->material->Load_PS("./DefaultShader/default_ps.cso");
+		//ResourceManager::CreateModelFromFBX(&Value.get()->material->meshes, go_name, "");
 		Value.get()->initialize();
 		return Value.get();
 	}
 
-	Gameobject* Gameobject_manager::createFromFBX(const std::string& FBX_pass, const std::string& go_name, Scenelist Sce) {
+	Gameobject* Gameobject_manager::createFromFBX(const std::string& FBX_pass,  u_int go_name, Scenelist Sce) {
 		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
 		gameobjects[Sce].emplace_back(Value);
 		Value.get()->tag = go_name;
@@ -366,7 +370,7 @@ namespace Adollib {
 		return Value.get();
 	}
 
-	Gameobject* Gameobject_manager::createSphere(const std::string& go_name,  Scenelist Sce) {
+	Gameobject* Gameobject_manager::createSphere( u_int go_name,  Scenelist Sce) {
 		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
 		gameobjects[Sce].emplace_back(Value);
 		Value.get()->tag = go_name;
@@ -382,7 +386,7 @@ namespace Adollib {
 		return Value.get();
 	}
 
-	Gameobject* Gameobject_manager::createCube(const std::string& go_name, Scenelist Sce) {
+	Gameobject* Gameobject_manager::createCube( u_int go_name, Scenelist Sce) {
 		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
 		gameobjects[Sce].emplace_back(Value);
 		Value.get()->tag = go_name;
@@ -397,10 +401,10 @@ namespace Adollib {
 		Value.get()->initialize();
 		return Value.get();
 	}
-	//Gameobject* Gameobject_manager::createCylinder(const std::string& go_name) {
+	//Gameobject* Gameobject_manager::createCylinder( u_int go_name) {
 
 	//}
-	Gameobject* Gameobject_manager::createCylinder(const std::string& go_name, Scenelist Sce) {
+	Gameobject* Gameobject_manager::createCylinder( u_int go_name, Scenelist Sce) {
 		std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
 		gameobjects[Sce].emplace_back(Value);
 		Value.get()->tag = go_name;
@@ -415,7 +419,7 @@ namespace Adollib {
 		Value.get()->initialize();
 		return Value.get();
 	}
-	//Gameobject* Gameobject_manager::createPlane(const std::string& go_name) {
+	//Gameobject* Gameobject_manager::createPlane( u_int go_name) {
 
 	//}
 }

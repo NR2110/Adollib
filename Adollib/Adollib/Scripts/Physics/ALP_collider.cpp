@@ -6,6 +6,7 @@
 using namespace Adollib;
 using namespace physics_function;
 
+
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 #pragma region Collider
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -15,19 +16,39 @@ const bool ALP_Collider::concoll_enter (const unsigned int tag_name) {
 }
 
 void ALP_Collider::solv_resolve() {
-	offset_CollGO_quat = local_orientation.conjugate() * coll->gameobject->get_world_orientate().conjugate() * world_orientation;
-	offset_CollGO_pos = world_position - vector3_quatrotate(local_position * coll->gameobject->get_world_scale(), world_orientation) - coll->gameobject->get_world_position();
+	offset_CollGO_quat = local_orientation.conjugate() * (*coll_itr)->gameobject->get_world_orientate().conjugate() * world_orientation;
+	offset_CollGO_pos = world_position - vector3_quatrotate(local_position * (*coll_itr)->gameobject->get_world_scale(), world_orientation) - (*coll_itr)->gameobject->get_world_position();
 }
 
 void ALP_Collider::resolve_gameobject() {
-	coll->gameobject->transform->local_orient *= offset_CollGO_quat;
-	coll->gameobject->transform->local_pos += offset_CollGO_pos;
+	(*coll_itr)->gameobject->transform->local_orient *= offset_CollGO_quat;
+	(*coll_itr)->gameobject->transform->local_pos += offset_CollGO_pos;
 }
 
 void ALP_Collider::update_world_trans() {
-	world_orientation = coll->gameobject->get_world_orientate() * local_orientation;
-	world_scale = coll->gameobject->get_world_scale() * local_scale;
-	world_position = coll->gameobject->get_world_position() + vector3_quatrotate(local_position * coll->gameobject->get_world_scale(), world_orientation);
+	world_orientation = (*coll_itr)->gameobject->get_world_orientate() * local_orientation;
+	world_scale = (*coll_itr)->gameobject->get_world_scale() * local_scale;
+	world_position = (*coll_itr)->gameobject->get_world_position() + vector3_quatrotate(local_position * (*coll_itr)->gameobject->get_world_scale(), world_orientation);
+}
+
+void ALP_Collider::update_ALP_from_data() {
+
+	Collider_data Cdata = (*coll_itr)->get_Colliderdata();
+
+	local_position = Cdata.local_position;
+	local_orientation = Cdata.local_orientation;
+	local_scale = Cdata.local_scale;
+
+	half_size = Cdata.half_size;
+
+	dopbase = Cdata.dopbase;
+	shape = Cdata.shape;
+
+	if (shape == ALP_Collider_shape::Mesh) {
+		meshcoll_data = (*coll_itr)->get_Meshdata();
+	}
+
+	ALPphysics->update_ALP_from_data();
 }
 
 #pragma endregion

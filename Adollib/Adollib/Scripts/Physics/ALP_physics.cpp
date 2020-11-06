@@ -130,3 +130,20 @@ void ALP_Physics::update_inertial() {
 		break;
 	}
 }
+
+void ALP_Physics::update_ALP_from_data() {
+
+	Physics_data Cdata = (*ALP_coll->coll_itr)->get_Physicsdata();
+
+	inertial_mass = Cdata.inertial_mass;
+	drag = Cdata.drag;
+	anglar_drag = Cdata.anglar_drag;
+	dynamic_friction = Cdata.dynamic_friction;
+	static_friction = Cdata.static_friction;
+	restitution = Cdata.restitution;
+
+	is_fallable = Cdata.is_fallable;
+	is_kinematic = Cdata.is_kinematic;
+	is_moveable = Cdata.is_moveable;
+	is_hitable = Cdata.is_hitable;
+}

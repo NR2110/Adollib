@@ -25,7 +25,7 @@ namespace Adollib {
 			Quaternion	world_orientation;
 			Vector3	world_scale;
 
-			Vector3 half_size;
+			Vector3 half_size; //実際のsize = half_size * local_scale * GO.world_scale
 
 			//::: GOに渡すためのバッファ :::::::
 			Quaternion offset_CollGO_quat;
@@ -46,11 +46,11 @@ namespace Adollib {
 			//:::
 			ALP_Collider_shape shape; //形情報
 
-			//::: ComponentがアタッチされたColliderへのポインタ :::
-			Collider* coll;
+			//::: ComponentがアタッチされたColliderへのイテレータ :::
+			std::list<Collider*>::iterator coll_itr;
 
-			//::: Physicsへのポインタ :::
-			ALP_Physics* ALPphysics;
+			//::: Physicsへのイテレータ :::
+			std::list<ALP_Physics>::iterator ALPphysics;
 
 			//:::
 			Meshcoll_data meshcoll_data; //MeshCollider使用時に使うdata vertices,Edges,Facets
@@ -69,6 +69,9 @@ namespace Adollib {
 
 			// gameobjectのtransformからcolliderのworld空間での情報を更新
 			void update_world_trans();
+
+			// collider::get_Colliderdata()からlocal_posなどの情報を更新
+			void update_ALP_from_data();
 
 		public:
 			// DOP_14データの更新

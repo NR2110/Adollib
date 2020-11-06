@@ -3,6 +3,7 @@
 #include "../Imgui/debug.h"
 #include "../Imgui/work_meter.h"
 
+#include "ALP__physics_manager.h"
 #include "ALP_physics.h"
 
 using namespace Adollib;
@@ -44,47 +45,45 @@ void CalcTangentVector(const Vector3& normal, Vector3& tangent1, Vector3& tangen
 }
 
 
-void physics_function::resolve_contact(std::list<Adollib::Collider*> colliders, std::vector<Contacts::Contact_pair>& pairs) {
+void physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::vector<Contacts::Contact_pair>& pairs) {
 
-	std::list<Adollib::Collider*>::iterator collitr;
-	std::list<Adollib::Collider*>::iterator collitr_end = colliders.end();
 	//::: 解決用オブジェクトの生成 :::::::::::
 	std::vector<ALP_Solverbody> SBs;
 	{
 		int count = 0;
-		for (collitr = colliders.begin(); collitr != collitr_end; collitr++) {
+		for (const auto& coll : colliders) {
 			ALP_Solverbody SB;
-			SB.orientation = (*collitr)->world_orientation;
+			SB.orientation = coll.world_orientation;
 			SB.delta_LinearVelocity = Vector3(0.0f);
 			SB.delta_AngulaVelocity = Vector3(0.0f);
-			SB.inv_inertia = (*collitr)->inverse_inertial_tensor();
-			SB.inv_mass = (*collitr)->inverse_mass();
+			SB.inv_inertia = coll.ALPphysics->inverse_inertial_tensor();
+			SB.inv_mass = coll.ALPphysics->inverse_mass();
 			SB.num = count;;
 
 			SBs.emplace_back(SB);
 			count++;
 		}
 		count = 0;
-		for (collitr = colliders.begin(); collitr != collitr_end; collitr++) {
-			(*collitr)->solve = &SBs[count];
+		for (auto& coll : colliders) {
+			coll.ALPphysics->solve = &SBs[count];
 			count++;
 		}
 	}
 
-	//std::vector<Balljoint> balljoints; //今回はなし
-	Collider* coll[2];
+	std::list<ALP_Collider>::iterator coll[2];
 	ALP_Solverbody* solverbody[2];
+	//std::vector<Balljoint> balljoints; //今回はなし
 
 	for (int P_num = 0; P_num < pairs.size(); P_num++) {
 		Contact_pair& pair = pairs[P_num];
 
 		coll[0] = pairs[P_num].body[0];
 		coll[1] = pairs[P_num].body[1];
-		solverbody[0] = coll[0]->solve;
-		solverbody[1] = coll[1]->solve;
+		solverbody[0] = coll[0]->ALPphysics->solve;
+		solverbody[1] = coll[1]->ALPphysics->solve;
 
 		// 摩擦の獲得
-		pair.contacts.friction = sqrtf(coll[0]->friction * coll[1]->friction);
+		pair.contacts.friction = sqrtf(coll[0]->ALPphysics->dynamic_friction * coll[1]->ALPphysics->dynamic_friction);
 
 		//::: 衝突点情報の更新 ::::::::
 		for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
@@ -95,16 +94,16 @@ void physics_function::resolve_contact(std::list<Adollib::Collider*> colliders, 
 
 			// 反発係数の獲得
 			// 継続の衝突の場合反発係数を0にする
-			float restitution = pair.type == Pairtype::new_pair ? 0.5f * (coll[0]->restitution + coll[1]->restitution) : 0.0f;
+			float restitution = (pair.type == Pairtype::new_pair ? 0.5f * (coll[0]->ALPphysics->restitution + coll[1]->ALPphysics->restitution) : 0.0f);
 
 			//衝突時のそれぞれの速度
 			Vector3 pdota;
-			pdota = vector3_cross(coll[0]->angula_velocity, rA);
-			pdota += coll[0]->linear_velocity;
+			pdota = vector3_cross(coll[0]->ALPphysics->anglar_velocity, rA);
+			pdota += coll[0]->ALPphysics->linear_velocity;
 
 			Vector3 pdotb;
-			pdotb = vector3_cross(coll[1]->angula_velocity, rB);
-			pdotb += coll[1]->linear_velocity;
+			pdotb = vector3_cross(coll[1]->ALPphysics->anglar_velocity, rB);
+			pdotb += coll[1]->ALPphysics->linear_velocity;
 
 			//衝突時の衝突平面法線方向の相対速度(結局衝突に使うのは法線方向への速さ)
 			Vector3 vrel = pdota - pdotb;
@@ -115,8 +114,8 @@ void physics_function::resolve_contact(std::list<Adollib::Collider*> colliders, 
 			CalcTangentVector(cp.normal, tangent1, tangent2);
 
 			//Baraff[1997]の式(8-18)の分母(denominator)を求める
-			float term1 = coll[0]->inverse_mass();
-			float term2 = coll[1]->inverse_mass();
+			float term1 = coll[0]->ALPphysics->inverse_mass();
+			float term2 = coll[1]->ALPphysics->inverse_mass();
 			Vector3 tA, tB;
 
 			float term3, term4, denominator;
@@ -126,8 +125,8 @@ void physics_function::resolve_contact(std::list<Adollib::Collider*> colliders, 
 				Vector3 axis = cp.normal;
 				tA = vector3_cross(rA, axis);
 				tB = vector3_cross(rB, axis);
-				tA = vector3_trans(tA, coll[0]->solve->inv_inertia);
-				tB = vector3_trans(tB, coll[1]->solve->inv_inertia);
+				tA = vector3_trans(tA, coll[0]->ALPphysics->solve->inv_inertia);
+				tB = vector3_trans(tB, coll[1]->ALPphysics->solve->inv_inertia);
 				tA = vector3_cross(tA, rA);
 				tB = vector3_cross(tB, rB);
 				term3 = vector3_dot(axis, tA);
@@ -137,8 +136,8 @@ void physics_function::resolve_contact(std::list<Adollib::Collider*> colliders, 
 				cp.constraint[0].jacDiagInv = 1.0f / denominator; //Baraff1997(8-18)の分母
 				cp.constraint[0].rhs = -(1.0f + restitution) * vector3_dot(axis, vrel); //Baraff1997(8-18)の分子
 
-				if (0.0f < cp.distance - physics_g::slop) {
-					cp.constraint[0].rhs += (physics_g::bias * (cp.distance - physics_g::slop)) / physics_g::timeStep; //めり込みを直す力
+				if (0.0f < cp.distance - Phyisics_manager::slop) {
+					cp.constraint[0].rhs += (Phyisics_manager::bias * (cp.distance - Phyisics_manager::slop)) / Phyisics_manager::timeStep; //めり込みを直す力
 				}
 
 				cp.constraint[0].rhs *= cp.constraint[0].jacDiagInv;
@@ -152,8 +151,8 @@ void physics_function::resolve_contact(std::list<Adollib::Collider*> colliders, 
 				Vector3 axis = tangent1;
 				tA = vector3_cross(rA, axis);
 				tB = vector3_cross(rB, axis);
-				tA = vector3_trans(tA, coll[0]->solve->inv_inertia);
-				tB = vector3_trans(tB, coll[1]->solve->inv_inertia);
+				tA = vector3_trans(tA, coll[0]->ALPphysics->solve->inv_inertia);
+				tB = vector3_trans(tB, coll[1]->ALPphysics->solve->inv_inertia);
 				tA = vector3_cross(tA, rA);
 				tB = vector3_cross(tB, rB);
 				term3 = vector3_dot(axis, tA);
@@ -173,8 +172,8 @@ void physics_function::resolve_contact(std::list<Adollib::Collider*> colliders, 
 				Vector3 axis = tangent2;
 				tA = vector3_cross(rA, axis);
 				tB = vector3_cross(rB, axis);
-				tA = vector3_trans(tA, coll[0]->solve->inv_inertia);
-				tB = vector3_trans(tB, coll[1]->solve->inv_inertia);
+				tA = vector3_trans(tA, coll[0]->ALPphysics->solve->inv_inertia);
+				tB = vector3_trans(tB, coll[1]->ALPphysics->solve->inv_inertia);
 				tA = vector3_cross(tA, rA);
 				tB = vector3_cross(tB, rB);
 				term3 = vector3_dot(axis, tA);
@@ -197,8 +196,8 @@ void physics_function::resolve_contact(std::list<Adollib::Collider*> colliders, 
 
 		coll[0] = pair.body[0];
 		coll[1] = pair.body[1];
-		solverbody[0] = coll[0]->solve;
-		solverbody[1] = coll[1]->solve;
+		solverbody[0] = coll[0]->ALPphysics->solve;
+		solverbody[1] = coll[1]->ALPphysics->solve;
 
 		for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 			//衝突点の情報　
@@ -217,14 +216,14 @@ void physics_function::resolve_contact(std::list<Adollib::Collider*> colliders, 
 	}
 
 
-	for (int i = 0; i < physics_g::accuracy; i++) {
+	for (int i = 0; i < Phyisics_manager::solver_iterations; i++) {
 		for (int P_num = 0; P_num < pairs.size(); P_num++) {
 			Contact_pair& pair = pairs[P_num];
 
 			coll[0] = pair.body[0];
 			coll[1] = pair.body[1];
-			solverbody[0] = coll[0]->solve;
-			solverbody[1] = coll[1]->solve;
+			solverbody[0] = coll[0]->ALPphysics->solve;
+			solverbody[1] = coll[1]->ALPphysics->solve;
 
 			for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 				//衝突点の情報　
@@ -290,9 +289,9 @@ void physics_function::resolve_contact(std::list<Adollib::Collider*> colliders, 
 	}
 
 	// 速度の更新
-	for (collitr = colliders.begin(); collitr != collitr_end; collitr++) {
-		(*collitr)->linear_velocity += (*collitr)->solve->delta_LinearVelocity;
-		(*collitr)->angula_velocity += (*collitr)->solve->delta_AngulaVelocity;
+	for (auto& coll : colliders) {
+		coll.ALPphysics->linear_velocity += coll.ALPphysics->solve->delta_LinearVelocity;
+		coll.ALPphysics->anglar_velocity += coll.ALPphysics->solve->delta_AngulaVelocity;
 
 	}
 

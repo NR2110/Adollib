@@ -11,12 +11,14 @@ namespace Adollib {
 
 		Sphere() : center(Vector3(0)), r(1) {};
 
-		physics_function::Collider_data get_data() override {
+		physics_function::Collider_data get_Colliderdata() const override {
 			physics_function::Collider_data ret;
 
 			ret.local_orientation = center;
 			ret.local_orientation = quaternion_identity();
 			ret.local_scale = Vector3(r);
+
+			ret.half_size = Vector3(1, 1, 1);
 
 			ret.shape = physics_function::ALP_Collider_shape::Sphere;
 

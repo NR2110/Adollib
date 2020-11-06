@@ -23,6 +23,8 @@ namespace Adollib {
 		std::vector<physics_function::Facet> facets; //面配列
 
 		DOP::DOP_14	dopbase; //初期k-dopのdata
+
+		Vector3 half_size = Vector3(1, 1, 1);
 	public:
 		//不動オブジェクトとして生成
 		Meshcoll() :center(Vector3(0)), rotate(Vector3(0)), size(0) {}
@@ -143,19 +145,34 @@ namespace Adollib {
 			size = Vector3(dopbase.max[0] - dopbase.min[0], dopbase.max[1] - dopbase.min[1], dopbase.max[2] - dopbase.min[2]) / 2.0f;
 		}
 
-		physics_function::Collider_data get_data() override {
+		physics_function::Collider_data get_Colliderdata() const override {
 			physics_function::Collider_data ret;
 
 			ret.local_position = center;
 			ret.local_orientation = quaternion_from_euler(rotate);
 			ret.local_scale = size;
 
+			ret.half_size = Vector3(1, 1, 1);
+
 			ret.dopbase = dopbase;
 
 			ret.shape = physics_function::ALP_Collider_shape::Mesh;
-
 			return ret;
 		};
+
+		physics_function::Meshcoll_data get_Meshdata() override {
+			physics_function::Meshcoll_data ret;
+			ret.vertices = vertices;
+			ret.edges = &edges;
+			ret.facets = &facets;
+			   
+			ret.vertex_num = vertex_num;
+			ret.edge_num = edge_num;
+			ret.facet_num = facet_num;
+
+			ret.is_Convex = is_Convex;
+			return ret;
+		}
 
 	};
 }

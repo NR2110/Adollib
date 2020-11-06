@@ -7,6 +7,7 @@
 #include "../Math/math.h"
 #include "../Object/component.h"
 
+#include "ALP__meshcoll_data.h"
 #include "ALP_collider.h"
 #include "ALP_physics.h"
 
@@ -19,12 +20,28 @@ namespace Adollib {
 			Quaternion local_orientation;
 			Vector3 local_scale;
 
+			Vector3 half_size;
+
 			physics_function::ALP_Collider_shape shape; //Œ`î•ñ
 
 			DOP::DOP_14	dopbase; //MeshCollider‚ÌÅ‰‚Ìk-dop
 		};
+		struct Physics_data {
+			float inertial_mass; //¿—Ê
+			float drag; //‹ó‹C’ïR
+			float anglar_drag; //‹ó‹C’ïR
+			float dynamic_friction;//“®–€C
+			float static_friction; //Ã–€C
+			float restitution;	 //”½”­ŒW”
 
-		struct ColliderPhysicsShape_itrs {
+			bool is_fallable; //—‚¿‚È‚¢
+			bool is_kinematic; //‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
+			bool is_moveable;//“®‚©‚È‚¢
+			bool is_hitable;  //Õ“Ë‚µ‚È‚¢
+		};
+		//:::::::::::::::::::::::::
+
+		struct ColliderPhysics_itrs {
 			std::list<Collider*>::iterator coll_itr;
 
 			std::list<ALP_Collider>::iterator ALPcollider_itr;
@@ -61,8 +78,8 @@ namespace Adollib {
 		
 	public:
 		//©g‚Ö‚Ìitr‚ğ•Ô‚·
-		const physics_function::ColliderPhysicsShape_itrs const get_itrs() const {
-			physics_function::ColliderPhysicsShape_itrs ret; 
+		const physics_function::ColliderPhysics_itrs const get_itrs() const {
+			physics_function::ColliderPhysics_itrs ret; 
 
 			ret.ALPcollider_itr = ALPcollider_itr;
 			ret.ALPphysics_itr = ALPphysics_itr;
@@ -82,8 +99,24 @@ namespace Adollib {
 		//Šp‰ñ“]‚É—Í‚ğ‰Á‚¦‚é
 		void add_torque(const Vector3& force);
 
-		//ŒvZ—p‚Ìstruct‚É‚Ü‚Æ‚ß‚é
-		virtual physics_function::Collider_data get_data() = 0;
+		//ŒvZ—p‚Ìstruct
+		virtual physics_function::Collider_data get_Colliderdata() const = 0;
+		virtual physics_function::Meshcoll_data get_Meshdata() { return physics_function::Meshcoll_data(); };
+		physics_function::Physics_data  get_Physicsdata() {
+			physics_function::Physics_data data;
+			data.inertial_mass = inertial_mass;
+			data.drag = drag;
+			data.anglar_drag = anglar_drag;
+			data.dynamic_friction = dynamic_friction;
+			data.static_friction = static_friction;
+			data.restitution = restitution;
+
+			data.is_fallable = is_fallable;
+			data.is_kinematic = is_kinematic;
+			data.is_moveable = is_moveable;
+			data.is_hitable = is_hitable;
+			return data;
+		};
 
 	public:
 		void awake() override;

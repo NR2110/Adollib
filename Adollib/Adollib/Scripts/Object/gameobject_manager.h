@@ -57,7 +57,7 @@ namespace Adollib {
 		static void destroy(Scenelist Sce = Scene::now_scene);
 
 		static Gameobject* create(Scenelist Sce = Scene::now_scene);
-		static Gameobject* create(const std::string go_name, Scenelist Sce = Scene::now_scene);
+		static Gameobject* create(const u_int& go_name, Scenelist Sce = Scene::now_scene);
 
 		static Camera* create_camera(Scenelist Sce = Scene::now_scene);
 		static Camera* create_camera(const std::string go_name, Scenelist Sce = Scene::now_scene);
@@ -65,15 +65,15 @@ namespace Adollib {
 		static Light* create_light(Scenelist Sce = Scene::now_scene);
 		static Light* create_light(const std::string go_name, Scenelist Sce = Scene::now_scene);
 
-		// =====================================================
-		// GameObjectを生成して、そのポインタを返す(名前を指定し、メッシュの参照を持つGameObjectを生成する。中でcreate(const string&)を呼ぶ)
-		// =====================================================
-		// const string&	:	GameObjectのnameに入れる名前
-		// const string&	:	使用するモデルファイルのパス
-		// =====================================================
-		// 戻り値 GameObject*
-		// =====================================================
-		static Gameobject* create(const std::string& go_name, const std::string& model_filename, Scenelist Sce = Scene::now_scene);
+		//// =====================================================
+		//// GameObjectを生成して、そのポインタを返す(名前を指定し、メッシュの参照を持つGameObjectを生成する。中でcreate(const string&)を呼ぶ)
+		//// =====================================================
+		//// const string&	:	GameObjectのnameに入れる名前
+		//// const string&	:	使用するモデルファイルのパス
+		//// =====================================================
+		//// 戻り値 GameObject*
+		//// =====================================================
+		//static Gameobject* create(const u_int& go_name, const std::string& model_filename, Scenelist Sce = Scene::now_scene);
 
 		// ==============================================================
 		// プリミティブオブジェクトと適切なコライダーを作成(Primitive.modelへのファイルパスを持つ)
@@ -84,12 +84,12 @@ namespace Adollib {
 		// 戻り値　GameObject*	:	生成したGameObject*を返す
 		// ==============================================================
 
-		static Gameobject* createFromFBX(const std::string& FBX_pass, const std::string& go_name = "FBX", Scenelist Sce = Scene::now_scene);
-		static Gameobject* createSphere(const std::string& go_name = "Sphere", Scenelist Sce = Scene::now_scene);
-		static Gameobject* createCylinder(const std::string& go_name = "Cylinder", Scenelist Sce = Scene::now_scene);
-		static Gameobject* createCube(const std::string& go_name = "Cube", Scenelist Sce = Scene::now_scene);
-		static Gameobject* createPlane(const std::string& go_name = "Plane", Scenelist Sce = Scene::now_scene);
-		static Gameobject* createSprite(const std::string& go_name = "Sprite", Scenelist Sce = Scene::now_scene);
+		static Gameobject* createFromFBX(const std::string& FBX_pass, const u_int = GO_tag::FBX, Scenelist Sce = Scene::now_scene);
+		static Gameobject* createSphere(const u_int = GO_tag::Sphere, Scenelist Sce = Scene::now_scene);
+		static Gameobject* createCylinder(const u_int = GO_tag::Cylinder, Scenelist Sce = Scene::now_scene);
+		static Gameobject* createCube(const u_int = GO_tag::Box, Scenelist Sce = Scene::now_scene);
+		static Gameobject* createPlane(const u_int = GO_tag::Plane, Scenelist Sce = Scene::now_scene);
+		static Gameobject* createSprite(const u_int = GO_tag::Sprite, Scenelist Sce = Scene::now_scene);
 
 		static Gameobject* find(const u_int name, Scenelist Sce = Scene::now_scene)
 		{

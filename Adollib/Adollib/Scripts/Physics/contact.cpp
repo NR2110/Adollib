@@ -1,4 +1,8 @@
+
 #include "contact.h"
+
+#include "ALP__physics_manager.h"
+
 using namespace Adollib;
 using namespace physics_function;
 using namespace Contacts;
@@ -24,7 +28,7 @@ void Contact::addcontact(
 	int num = find_contact_point(contact_pointA, contact_pointB, normal);
 
 	//‚µ‚Ä‚¢‚È‚©‚Á‚½‚ç’Ç‰Á
-	if (num == -1 && contact_num < physics_g::Contact_max_per_pair) {
+	if (num == -1 && contact_num < contact_max_per_pair) {
 		num = contact_num;
 		contactpoints[num].reset();
 		contact_num++;
@@ -127,7 +131,7 @@ int Contact::find_contact_point(
 	const Vector3& normal
 ) {
 	int ret = -1;
-	float min = physics_g::Allowable_error;
+	float min = Phyisics_manager::contact_allowable_error;
 	for (int i = 0; i < contact_num; i++) {
 		float lenA = (contactpoints[i].point[0] - contact_pointA).norm();
 		float lenB = (contactpoints[i].point[1] - contact_pointB).norm();
@@ -156,7 +160,7 @@ void Contact::chack_remove_contact_point(
 
 		// normal•ûŒü‚Ì‹——£‚ð”ä‚×‚é
 		float dis_N = vector3_dot(normal, contactpointA - contactpointB);
-		if (dis_N > physics_g::Contact_threrhold_normal) {
+		if (dis_N > Phyisics_manager::contact_threrhold_normal) {
 			remove_contactpoint(i);
 			i--;
 			continue;
@@ -167,7 +171,7 @@ void Contact::chack_remove_contact_point(
 		// contactpointA‚ðcontactpointB‚ÆnormalŽ²ã‚Å“¯‚¶êŠ‚ÉŽ‚Á‚Ä‚­‚é
 		contactpointA = contactpointA - contactpoints[i].distance * normal;
 		float dis_T = (contactpointA - contactpointB).norm();
-		if (dis_T > physics_g::Contact_threrhold_tangent) {
+		if (dis_T > Phyisics_manager::contact_threrhold_tangent) {
 			remove_contactpoint(i);
 			i--;
 			continue;

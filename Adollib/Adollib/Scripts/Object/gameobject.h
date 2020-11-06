@@ -192,12 +192,14 @@ namespace Adollib {
 		// ==============================================================
 		void clearComponent() {
 			auto itr = components.begin();
+			auto itr_save = itr;
 			auto end = components.end();
 			while (itr != end)
 			{
 				itr->get()->finalize();
-				components.erase(itr);
+				itr_save = itr;
 				itr++;
+				components.erase(itr_save);
 			}
 			components.clear();
 		}

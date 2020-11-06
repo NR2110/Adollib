@@ -10,7 +10,7 @@ using namespace DOP;
 #pragma region Midphase
 //:::::::::::::::::::::::::::
 //DOP6による大雑把な当たり判定
-bool Check_insert_DOP14(const ALP_Collider* collA, const ALP_Collider* collB) {
+bool Check_insert_DOP14(const std::list<ALP_Collider>::iterator collA, const std::list<ALP_Collider>::iterator collB) {
 	//無限PlaneはDOPが作れないためnarrowに投げる?
 	if (collA->shape == ALP_Collider_shape::Plane || collB->shape == ALP_Collider_shape::Plane) return true;
 
@@ -32,7 +32,7 @@ bool Check_insert_DOP14(const ALP_Collider* collA, const ALP_Collider* collB) {
 	return true;
 }
 
-bool Check_insert_Plane(const ALP_Collider* plane, const ALP_Collider* coll) {
+bool Check_insert_Plane(const std::list<ALP_Collider>::iterator plane, const std::list<ALP_Collider>::iterator coll) {
 
 	Vector3 V;
 	float plane_dis = 0, coll_dis = FLT_MAX;
@@ -52,7 +52,7 @@ void add_pair(std::vector<Contacts::Contact_pair>& pairs, Contacts::Contact_pair
 	pairs.emplace_back(pair);
 }
 
-void Midphase_DOP_14(std::vector<Contacts::Contact_pair>& new_pairs, ALP_Collider* collA, ALP_Collider* collB) {
+void Midphase_DOP_14(std::vector<Contacts::Contact_pair>& new_pairs, std::list<ALP_Collider>::iterator collA, std::list<ALP_Collider>::iterator collB) {
 	Contact_pair new_pair;
 
 	// タグによる衝突の是非
@@ -79,7 +79,7 @@ void Midphase_DOP_14(std::vector<Contacts::Contact_pair>& new_pairs, ALP_Collide
 	else return;
 
 	//new_pair.body[0]にアドレスの大きいほうをしまう
-	if (collA > collB) {
+	if (&*collA > &*collB) {
 		new_pair.body[0] = collA;
 		new_pair.body[1] = collB;
 	}

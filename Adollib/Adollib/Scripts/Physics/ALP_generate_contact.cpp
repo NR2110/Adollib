@@ -19,8 +19,8 @@ void physics_function::generate_contact(std::vector<Contacts::Contact_pair>& pai
 	//::: dynamic_cast ‘½—p’n‘Ñ ŠëŒ¯! ŠëŒ¯!
 	for (int i = 0; i < pairs.size(); i++) {
 
-		ALP_Collider* shape0 = pairs[i].body[0];
-		ALP_Collider* shape1 = pairs[i].body[1];
+		std::list<ALP_Collider>::iterator shape0 = pairs[i].body[0];
+		std::list<ALP_Collider>::iterator shape1 = pairs[i].body[1];
 		if (pairs[i].body[0]->shape == ALP_Collider_shape::Sphere) {
 
 			if (pairs[i].body[1]->shape == ALP_Collider_shape::Sphere)	generate_contact_sphere_sphere(*shape0, *shape1, pairs[i]);			
@@ -36,7 +36,7 @@ void physics_function::generate_contact(std::vector<Contacts::Contact_pair>& pai
 		}
 		if (pairs[i].body[0]->shape == ALP_Collider_shape::Plane) {
 
-			if (pairs[i].body[1]->shape == ALP_Collider_shape::Sphere) 		generate_contact_sphere_plane(*shape1, *shape0, pairs[i]);
+			if (pairs[i].body[1]->shape == ALP_Collider_shape::Sphere) 	generate_contact_sphere_plane(*shape1, *shape0, pairs[i]);
 			if (pairs[i].body[1]->shape == ALP_Collider_shape::BOX)		generate_contact_box_plane(*shape1, *shape0, pairs[i]);		
 			if (pairs[i].body[0]->shape == ALP_Collider_shape::Plane) {			}
 		}

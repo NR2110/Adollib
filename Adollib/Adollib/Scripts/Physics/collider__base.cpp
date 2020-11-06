@@ -26,14 +26,16 @@ void Collider::add_torque(const Vector3& force) {
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 void Collider::awake() {
-	physics_function::ColliderPhysicsShape_itrs data;
+	physics_function::ColliderPhysics_itrs data;
 
 	data = Phyisics_manager::add_collider(this);
 
 	ALPcollider_itr = data.ALPcollider_itr;
 	ALPphysics_itr = data.ALPphysics_itr;
-
 	coll_itr = data.coll_itr;
+
+	data.ALPcollider_itr->coll_itr = coll_itr;
+
 }
 void Collider::finalize() {
 	Phyisics_manager::remove_collider(this);

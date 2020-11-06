@@ -11,7 +11,7 @@ using namespace Contacts;
 
 //挿入法の
 struct edge{
-	ALP_Collider* coll;
+	std::list<ALP_Collider>::iterator coll;
 	float value;
 	bool stgo; //true = st, false = go 
 };
@@ -35,11 +35,11 @@ void physics_function::Broadphase(std::list<ALP_Physics>& ALP_physicses, std::ve
 	int SAP_axis = 0;
 
 	Work_meter::start("make_axis_list");
-	if (Phyisics_manager::is_changed_colliders()) {
+	if (Phyisics_manager::is_changed_colliders() == true) {
 		//TODO : 新しく追加されたもの,なくなったものがわかればさらに最適化できる
 		edge ed;
 
-		for (int xz = 0; xz < 0; xz++) {
+		for (int xz = 0; xz < 1; xz++) {
 			axis_list[xz].clear();
 
 			for (auto& itr : ALP_physicses) {
@@ -120,42 +120,43 @@ void physics_function::Broadphase(std::list<ALP_Physics>& ALP_physicses, std::ve
 
 	Work_meter::start("Sweep&Prune");
 	//Sweep&Prune
-	std::vector< ALP_Collider*> actives;
+	std::vector<std::list<ALP_Collider>::iterator> actives;
 	Contacts::Collider_2 pair;
 	out_pair.clear();
-	std::vector<ALP_Collider*>::iterator ac = actives.begin();
-	std::vector<ALP_Collider*>::iterator ac_end = actives.end();
+	std::vector<std::list<ALP_Collider>::iterator>::iterator ac = actives.begin();
+	std::vector<std::list<ALP_Collider>::iterator>::iterator ac_end = actives.end();
 	{
 
-		{
-			int axis_size = axis_list[SAP_axis].size();
 
-			std::list<edge>::iterator itr = axis_list[SAP_axis].begin();
-			for (int list_num = 0; list_num < axis_size; list_num++) {
-				//colliderの始点ならactivelistにあるものと衝突の可能性あり
-				if (itr->stgo == true) {
+		int axis_size = axis_list[SAP_axis].size();
 
-					pair.body = itr->coll;
-					pair.bodylists = actives;
-					out_pair.emplace_back(pair);
+		std::list<edge>::iterator itr = axis_list[SAP_axis].begin();
+		for (int list_num = 0; list_num < axis_size; list_num++) {
+			//colliderの始点ならactivelistにあるものと衝突の可能性あり
+			if (itr->stgo == true) {
 
-					actives.emplace_back(itr->coll);
-				}
-				else {
-					ac = actives.begin();
-					ac_end = actives.end();
+				pair.body = itr->coll;
+				pair.bodylists = actives;
+				out_pair.emplace_back(pair);
 
-					for (; ac != ac_end; ac++) {
-						if (*ac == itr->coll) {
-							actives.erase(ac);
-							break;
-						}
+				actives.emplace_back(itr->coll);
+			}
+			else {
+				ac = actives.begin();
+				ac_end = actives.end();
+
+				for (; ac != ac_end; ac++) {
+					if (*ac == itr->coll) {
+						actives.erase(ac);
+						break;
+
 					}
 				}
-
-				itr++;
 			}
+
+			itr++;
 		}
+
 
 	}
 

@@ -5,10 +5,14 @@
 namespace Adollib {
 	namespace physics_function {
 
-		//::: ALP_collidersから呼ぶ ::::::::::
+
+		//::: ALP_colliders ::::::::::
 
 		// gameobjectのtransformからcolliderのworld空間での情報を更新
 		void update_world_trans(std::list<physics_function::ALP_Collider>& ALP_colliders);
+
+		// get_dataのdataをColliderに入力
+		void update_ALP_from_data(std::list<physics_function::ALP_Collider>& ALP_colliders);
 
 		//gameobjectへの変化量を求める
 		void solv_resolve(std::list<physics_function::ALP_Collider>& ALP_colliders);
@@ -19,7 +23,7 @@ namespace Adollib {
 		// k-DOPの更新
 		void update_dop14(std::list<physics_function::ALP_Collider>& ALP_shapes);
 
-		//::: ALP_phyicsesから呼ぶ ::::::::::
+		//::: ALP_phyicses ::::::::::
 
 		// 速度、加速度を0にする
 		void resetforce(std::list<physics_function::ALP_Physics>& ALP_physics);
