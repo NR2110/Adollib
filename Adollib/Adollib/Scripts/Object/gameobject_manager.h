@@ -17,21 +17,6 @@
 namespace Adollib {
 	class Gameobject_manager{
 	private:
-		struct ConstantBufferPerLight{
-			DirectX::XMFLOAT4	LightColor;		//ライトの色
-			DirectX::XMFLOAT4	LightDir;		//ライトの方向
-			DirectX::XMFLOAT4	AmbientColor;	//環境光
-
-			POINTLIGHT  PointLight[POINTMAX];//ポイントライト
-			SPOTLIGHT  SpotLight[SPOTMAX];	//スポットライト
-		};
-		struct ConstantBufferPerCamera {
-			DirectX::XMFLOAT4X4 View;
-			DirectX::XMFLOAT4 Eyepos;
-		};
-		struct ConstantBufferPerSystem {
-			DirectX::XMFLOAT4X4 Projection;
-		};
 		static Microsoft::WRL::ComPtr<ID3D11Buffer> light_cb;
 		static Microsoft::WRL::ComPtr<ID3D11Buffer> view_cb;
 		static Microsoft::WRL::ComPtr<ID3D11Buffer> projection_cb;

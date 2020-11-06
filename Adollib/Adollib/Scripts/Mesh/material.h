@@ -54,19 +54,6 @@ namespace Adollib {
 
 	private:
 
-		// 定数バッファ
-		struct ConstantBufferPerMaterial
-		{
-			DirectX::XMFLOAT4X4 boneTransforms[MAX_BONES];
-
-			DirectX::XMFLOAT4 materialColor;
-			DirectX::XMFLOAT4 ambientColor;
-
-			float shininess;  // スペキュラ係数
-
-			//float intensity;
-		};
-
 		//頂点フォーマット
 		struct VertexFormat
 		{

@@ -45,12 +45,18 @@ void Collider_renderer::initialize() {
 		ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::Plane], "./DefaultModel/plane.fbx", "");
 	}
 
-void Collider_renderer::render(const ALP_Collider* R) {
+void Collider_renderer::render(const physics_function::ALP_Collider& R) {
+	if (!(
+		R.shape == ALP_Collider_shape::BOX ||
+		R.shape == ALP_Collider_shape::Sphere ||
+		R.shape == ALP_Collider_shape::Mesh
+		))return;
+
 	static int time = 0;
 	time++;
 	//CB : ConstantBufferPerCO_OBJ
 	ConstantBufferPerGO g_cb;
-	g_cb.world = matrix_world(R->world_scale * 1.0001, R->world_orientation.get_rotate_matrix(), R->world_position).get_XMFLOAT4X4();
+	g_cb.world = matrix_world(R.world_scale * 1.0001, R.world_orientation.get_rotate_matrix(), R.world_position).get_XMFLOAT4X4();
 	Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
 	Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 	Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
@@ -65,7 +71,7 @@ void Collider_renderer::render(const ALP_Collider* R) {
 	Systems::SetDephtStencilState(State_manager::DStypes::DS_TRUE);
 
 	std::vector<Mesh::mesh>* meshs;
-	meshs = meshes[R->shape];
+	meshs = meshes[R.shape];
 
 	//•`‰æ
 	for (Mesh::mesh mesh : *meshs)
@@ -79,7 +85,7 @@ void Collider_renderer::render(const ALP_Collider* R) {
 		ConstantBufferPerMaterial cb;
 		cb.shininess = 1;
 		cb.ambientColor = DirectX::XMFLOAT4(0.1f, 0.1f, 0.1f, 1);
-		cb.materialColor = Al_Global::get_gaming(time, 600).get_XM4();
+		cb.materialColor = Al_Global::get_gaming(time, 800).get_XM4();
 		Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
 		Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
 		Systems::DeviceContext->PSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());

@@ -173,16 +173,8 @@ namespace Adollib
 
 		if(ImGui::Begin("object_manage", 0, flag)) {
 
-			bool del = false;
-			ImGui::Checkbox("delete", &del); //object‚Ìíœ
-
-			if (del) {
-				for (u_int i = 0; i < GOs.size(); i++) {
-					GOs[i]->active = false;
-					GOs[i]->clearComponent();
-				}
-				GOs.clear();
-			}
+			//Collider‚Ì•\¦
+			ImGui::Checkbox("draw_collider", &Phyisics_manager::is_draw_collider); //object‚Ìíœ
 
 			//d—Í‚Ì’²®
 			ImGui::InputFloat("gravity", &Phyisics_manager::gravity, 0.1f, 1.0f, "%.2f");
@@ -194,6 +186,17 @@ namespace Adollib
 			ImGui::InputFloat("bias", &Phyisics_manager::bias, 0.01f, 0.1f, "%.3f");
 			//ŠÑ’Ê‹–—eŒë·
 			ImGui::InputFloat("slop", &Phyisics_manager::slop, 0.0001f, 0.001f, "%.4f");
+
+			//object‚Ìíœ
+			bool del = false;
+			ImGui::Checkbox("delete", &del); 
+			if (del) {
+				for (u_int i = 0; i < GOs.size(); i++) {
+					GOs[i]->active = false;
+					GOs[i]->clearComponent();
+				}
+				GOs.clear();
+			}
 
 			ImGui::Columns(4, "columnListIDs");
 			ImGui::Separator();

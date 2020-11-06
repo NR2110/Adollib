@@ -226,6 +226,7 @@
     <ClInclude Include="Scripts\Scene\scene_title.h" />
     <ClInclude Include="Scripts\Shader\cbuffer_manager.h" />
     <ClInclude Include="Scripts\Shader\compute_shader.h" />
+    <ClInclude Include="Scripts\Shader\constant_buffer.h" />
     <ClInclude Include="Scripts\Shader\light_types.h" />
     <ClInclude Include="Scripts\Shader\shader.h" />
   </ItemGroup>

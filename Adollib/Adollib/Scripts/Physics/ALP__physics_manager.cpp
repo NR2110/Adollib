@@ -45,6 +45,8 @@ namespace Adollib
 	bool Phyisics_manager::hit_backfaces_flag = Physics_manager_default::hit_backfaces_flag;//mesh‚ÌŒã‚ë‚©‚çÕ“Ë‚·‚é‚©
 
 	float Phyisics_manager::timeStep = Physics_manager_default::timeStep;
+
+	bool Phyisics_manager::is_draw_collider = false;
 }
 
 namespace Adollib
@@ -79,7 +81,7 @@ namespace Adollib
 
 		Work_meter::start("refresh_ALP_from_data");
 		// get_data‚Ìdata‚ğCollider‚É“ü—Í 
-		refresh_ALP_from_data(ALP_colliders[Sce]);	
+		refresh_ALP_from_data(ALP_colliders[Sce]);
 		Work_meter::stop("refresh_ALP_from_data");
 
 
@@ -133,19 +135,23 @@ namespace Adollib
 		return true;
 
 	}
+}
 
+#include "../Main/systems.h"
+#include "../Mesh/material_for_collider.h"
 
-	void Phyisics_manager::destroy(Scenelist Sce) {
-		colliders[Sce].clear();
+bool Phyisics_manager::render_collider(Scenelist Sce) {
+	if (is_draw_collider == false)return false;
+
+	for (auto& itr : ALP_colliders[Sce]) {
+		Collider_renderer::render(itr);
 	}
+
+	return true;
 }
 
+void Phyisics_manager::destroy(Scenelist Sce) {
 
-namespace Adollib {
-
-
-
-
-
-
+	colliders[Sce].clear();
 }
+

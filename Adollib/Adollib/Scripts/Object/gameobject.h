@@ -16,9 +16,6 @@ namespace Adollib {
 
 	class Gameobject : public object {
 	private:
-		struct ConstantBufferPerGO {
-			DirectX::XMFLOAT4X4 world;
-		};
 		void update();
 		ComPtr<ID3D11Buffer> world_cb; //WVP行列用バッファ
 	public:

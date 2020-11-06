@@ -1,6 +1,3 @@
-﻿  debug.cpp
-  imgui_manager.cpp
-  work_meter.cpp
-  ALP_broadphase.cpp
-  ALP_resolve_contact.cpp
+﻿  material_for_collider.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(59,50): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

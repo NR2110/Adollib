@@ -96,6 +96,8 @@ namespace Adollib
 
 		static float timeStep; 
 
+		static bool is_draw_collider;
+
 	public:
 
 		static physics_function::ColliderPhysics_itrs add_collider(Collider* coll, Scenelist Sce = Scene::now_scene) {
@@ -153,8 +155,13 @@ namespace Adollib
 
 	public:
 
+		static bool init();
+
 		// 毎フレーム呼ばれる更新処理
 		static bool update(Scenelist Sce = Scene::now_scene);
+
+		// colliderの表示
+		static bool render_collider(Scenelist Sce = Scene::now_scene);
 
 		static void destroy(Scenelist Sce = Scene::now_scene);
 
