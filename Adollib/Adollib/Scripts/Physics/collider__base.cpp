@@ -22,6 +22,12 @@ void Collider::add_torque(const Vector3& force) {
 	ALPphysics_itr->add_torque(force);
 }
 
+void Collider::remove_collider() {
+	if (removed == true)return;
+	Phyisics_manager::remove_collider(coll_itr, ALPcollider_itr, ALPphysics_itr);
+	removed = true;
+}
+
 #pragma endregion
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -38,5 +44,5 @@ void Collider::awake() {
 
 }
 void Collider::finalize() {
-	Phyisics_manager::remove_collider(this);
+	remove_collider();
 }

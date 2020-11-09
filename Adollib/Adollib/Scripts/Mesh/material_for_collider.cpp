@@ -103,21 +103,3 @@ void Collider_renderer::render(const physics_function::ALP_Collider& R) {
 
 
 }
-
-
-
-//Gameobject* Gameobject_manager::createCube(const std::string& go_name, Scenelist Sce) {
-//	std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
-//	gameobjects[Sce].push_back(Value);
-//	Value.get()->name = go_name;
-//	//Value.get()->go_iterator = gameobjects[Sce].end();
-//	Value.get()->this_scene = Sce;
-//	Value.get()->transform = new Transfome;
-//
-//	Value.get()->material = new Material;
-//	Value.get()->material->Load_VS("./DefaultShader/default_vs.cso");
-//	Value.get()->material->Load_PS("./DefaultShader/default_ps.cso");
-//	ResourceManager::CreateModelFromFBX(&Value.get()->material->meshes, "./DefaultModel/cube.fbx", "");
-//	Value.get()->initialize();
-//	return Value.get();
-//}

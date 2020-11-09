@@ -11,8 +11,8 @@ namespace Adollib {
 			Vector3 delta_AngulaVelocity; // ‰ñ“]‘¬“x·•ª
 			Quaternion orientation; // p¨
 			Matrix inv_inertia; // Šµ«ƒeƒ“ƒ\ƒ‹‚Ì‹ts—ñ
-			float  inv_mass; // ¿—Ê‚Ì‹t”
-			int num;
+			float  inv_mass = 0; // ¿—Ê‚Ì‹t”
+			int num = 0;
 		};
 
 		class ALP_Physics {

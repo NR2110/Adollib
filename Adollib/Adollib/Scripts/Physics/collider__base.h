@@ -75,9 +75,11 @@ namespace Adollib {
 		std::list<physics_function::ALP_Physics>::iterator ALPphysics_itr;
 
 		std::list<Collider*>::iterator coll_itr;//自身へのitr
+
+		bool removed = false; //二重にremoveをするのを防ぐ
 		
 	public:
-		//自身へのitrを返す
+		//自身へのitrを返す(remove_colliderにしようする)
 		const physics_function::ColliderPhysics_itrs get_itrs() const {
 			physics_function::ColliderPhysics_itrs ret; 
 
@@ -117,6 +119,9 @@ namespace Adollib {
 			data.is_hitable = is_hitable;
 			return data;
 		};
+
+		//このcolliderをmanagerから削除
+		void remove_collider();
 
 	public:
 		void awake() override;

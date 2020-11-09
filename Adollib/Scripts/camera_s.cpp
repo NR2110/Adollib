@@ -56,8 +56,8 @@ namespace Adollib
 			if (set_carsol_stop == false) {
 				float rotate_pow = 3 * Al_Global::second_per_frame;
 				Vector3 rotate_vec = Vector3(0, 0, 0);
-				rotate_vec.y = input->getCursorPosX() - Al_Global::SCREEN_WIDTH / 2;
-				rotate_vec.x = input->getCursorPosY() - Al_Global::SCREEN_HEIGHT / 2;
+				rotate_vec.y = input->getCursorPosX() - Al_Global::SCREEN_WIDTH / 2.0f;
+				rotate_vec.x = input->getCursorPosY() - Al_Global::SCREEN_HEIGHT / 2.0f;
 
 				rotate *= quaternion_angle_axis(rotate_vec.y, Vector3(0, 1, 0));
 				rotate *= quaternion_angle_axis(rotate_vec.x, vector3_cross(Vector3(0, 1, 0), vector3_quatrotate(Vector3(0, 0, 1), transform->local_orient)).unit_vect()) * rotate_pow;

@@ -145,12 +145,26 @@ namespace Adollib
 			return ret;
 		}
 
-		static void remove_collider(Adollib::Collider* R, Scenelist Sce = Scene::now_scene) {
+		static void remove_collider(
+			std::list<Collider*>::iterator coll_itr, 
+			std::list<physics_function::ALP_Collider>::iterator ALPcoll_itr, 
+			std::list<physics_function::ALP_Physics>::iterator ALPphys_itr, 
+			Scenelist Sce = Scene::now_scene) {
 			is_changed_coll = true;
-			ALP_colliders[Sce].erase(R->get_itrs().ALPcollider_itr);
-			ALP_physicses[Sce].erase(R->get_itrs().ALPphysics_itr);
+			ALP_colliders[Sce].erase(ALPcoll_itr);
+			ALP_physicses[Sce].erase(ALPphys_itr);
 
-			colliders[Sce].erase(R->get_itrs().coll_itr);
+			colliders[Sce].erase(coll_itr);
+		}
+
+		static void remove_collider(
+			std::list<Collider*>::iterator coll_itr,
+			std::list<physics_function::ALP_Collider>::iterator ALPcoll_itr,
+			Scenelist Sce = Scene::now_scene) {
+			is_changed_coll = true;
+			ALP_colliders[Sce].erase(ALPcoll_itr);
+
+			colliders[Sce].erase(coll_itr);
 		}
 
 	public:
