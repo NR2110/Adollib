@@ -51,9 +51,12 @@ namespace Adollib
 				GO->material->color = Vector4(1, 1, 1, 1);
 
 				Box* R = GO->addComponent<Box>();
-				//Meshcoll* R = GO->addComponent<Meshcoll>();
-				//R->load_mesh("./DefaultModel/cube.fbx");
 				R->is_moveable = false;
+
+				//Box* R = GO->addComponent<Box>();
+				Meshcoll* M = GO->addComponent<Meshcoll>();
+				M->load_mesh("./DefaultModel/cube.fbx");
+				M->is_moveable = false;
 			}
 		}
 		else {
@@ -64,23 +67,25 @@ namespace Adollib
 				//GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
 				//GO->material->color = Vector4(1, 1, 1, 1);
 
-				////Box* R = GO->addComponent<Box>();
-				//Meshcoll* R = GO->addComponent<Meshcoll>();
-				//R->load_mesh("./DefaultModel/cube.fbx");
-				//R->move = false;
+				Gameobject* GO = Gameobject_manager::createFromFBX("../Data/FBX/0311_collisions.fbx");
+				GO->transform->local_pos = Vector3(-10, 15, -25);
+				GO->transform->local_scale = Vector3(0.001f, 0.001f, 0.001f);
+				GO->transform->local_orient = quaternion_from_euler(0, 180, 0);
+				Meshcoll* R = GO->addComponent<Meshcoll>();
+				R->load_mesh("../Data/FBX/0311_collisions.fbx");
+				R->is_moveable = false;
+
 			}
 
 			{
-				Gameobject* GO = Gameobject_manager::createCube();
-				GO->transform->local_pos = Vector3(0, -60, 0);
-				GO->transform->local_scale = Vector3(60, 60, 60);
-				GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
-				GO->material->color = Vector4(1, 1, 1, 1);
+				//Gameobject* GO = Gameobject_manager::createCube();
+				//GO->transform->local_pos = Vector3(0, -60, 0);
+				//GO->transform->local_scale = Vector3(60, 60, 60);
+				//GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
+				//GO->material->color = Vector4(1, 1, 1, 1);
 
-				Box* R = GO->addComponent<Box>();
-				//Meshcoll* R = GO->addComponent<Meshcoll>();
-				//R->load_mesh("./DefaultModel/cube.fbx");
-				R->is_moveable = false;
+				//Box* R = GO->addComponent<Box>();
+				//R->is_moveable = false;
 			}
 		}
 

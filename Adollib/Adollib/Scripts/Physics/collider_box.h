@@ -24,5 +24,19 @@ namespace Adollib {
 
 			return ret;
 		};
+
+		void awake() override {
+			physics_function::ColliderPhysics_itrs data;
+
+			data = Phyisics_manager::add_collider(this);
+
+			ALPcollider_itr = data.ALPcollider_itr;
+			ALPphysics_itr = data.ALPphysics_itr;
+			coll_itr = data.coll_itr;
+
+			data.ALPcollider_itr->coll_itr = coll_itr;
+
+		}
 	};
+
 }

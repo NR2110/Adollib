@@ -3,20 +3,24 @@
 #include <unordered_map>
 
 #include "../Math/vector.h"
+#include "ALP__meshcoll_data.h"
 
 namespace Adollib
 {
-	class Collider_ResourceManager
-	{
-	public:
-		static HRESULT CreateMCFromFBX(const char* fbxname, std::vector<int>** index, std::vector<Vector3>** vertex); //FBXÇ©ÇÁMeshColliderÇÃê∂ê¨
-		static void destroy();
+	namespace physics_function {
 
-	private:
-		Collider_ResourceManager() {};
-		~Collider_ResourceManager() {};
+		class Collider_ResourceManager
+		{
+		private:
+			Collider_ResourceManager() {};
+			~Collider_ResourceManager() {};
 
-		static std::unordered_map <std::string, std::vector<int>>	indexes;
-		static std::unordered_map <std::string, std::vector<Vector3>> vertexes;
-	};
+			static std::unordered_map <std::string, std::vector<Meshcollider_mesh>>	meshes;
+
+		public:
+			static bool CreateMCFromFBX(const char* fbxname, std::vector<Meshcollider_mesh>* mesh); //FBXÇ©ÇÁMeshColliderÇÃê∂ê¨
+			static void destroy();
+
+		};
+	}
 }

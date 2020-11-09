@@ -230,8 +230,8 @@ bool sat_convex_mesh_mesh(const ALP_Collider& collA, const ALP_Collider& collB,
 		//collAの座標系で計算を行う
 	float maxA, minA, maxB, minB;
 	for (u_int f = 0; f < collA.meshcoll_data.facet_num; f++) {
-		const Facet& facet = collA.meshcoll_data.facets->at(f);
-		const Vector3& axis = facet.normal;
+		const Facet& facet = collA.meshcoll_data.facets->at(f); //meshcoord
+		const Vector3& axis = facet.normal; //meshcoord
 
 		// collAを分離軸に投影
 		sum_of_projected_radii(maxA, minA, collA, axis);
@@ -745,12 +745,11 @@ bool physics_function::generate_contact_sphere_mesh(const ALP_Collider& sphere, 
 		Vector3 center;
 		center = vector3_trans(sphere.world_position, inverse_rotate); //meshのlocal座標系での球の中心座標
 
-		Vector3 box_halfsize = mesh.world_scale;
-
 		//mesh上の最近点
 		Vector3 closest_point;
 
 		closest_point = center;
+		//各面の外にあれば面平面に持ってくる
 		for (u_int i = 0; i < mesh.meshcoll_data.facet_num; i++) {
 			const Vector3& nor = mesh.meshcoll_data.facets->at(i).normal.unit_vect();
 			const Vector3& pos = mesh.meshcoll_data.vertices->at(mesh.meshcoll_data.facets->at(i).vertexID[0]) * mesh.world_scale;
@@ -1083,6 +1082,7 @@ bool physics_function::generate_contact_mesh_mesh(const ALP_Collider& SA, const 
 	int smallest_facetID[2];	//最小めり込み量を得た分離軸の作成に使用した各OBBのローカル軸番号 辺×辺用に2つ
 	SAT_TYPE smallest_case;		//衝突の種類 
 
+	//どちらもconvexなobjectの場合
 	if (SA.meshcoll_data.is_Convex == true && SB.meshcoll_data.is_Convex == true) {
 		if (!sat_convex_mesh_mesh(SA, SB, smallest_penetration, smallest_facetID, smallest_case))return false;
 

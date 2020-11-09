@@ -1,2 +1,150 @@
-﻿  camera_s.cpp
-  Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe
+﻿  camera_manager.cpp
+  camera_s.cpp
+  object_manager.cpp
+  object_rotate.cpp
+  player.cpp
+  ALP_collider.cpp
+  ALP_generate_contact.cpp
+  ALP__physics_manager.cpp
+  scene_game.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(91,55): error C2039: 'vertices': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(91,2): error C2530: 'vertex': 参照が初期化されずに宣言されています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(91,29): error C2143: 構文エラー: ';' が ':' の前にありません。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(91,63): error C2143: 構文エラー: ';' が ')' の前にありません。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(232,44): error C2039: 'facet_num': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(233,44): error C2039: 'facets': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(233,22): error C2530: 'facet': 参照が初期化されずに宣言されています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(273,45): error C2039: 'facet_num': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(274,45): error C2039: 'facets': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(274,23): error C2530: 'facet': 参照が初期化されずに宣言されています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(327,46): error C2039: 'edge_num': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(328,43): error C2039: 'edges': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(328,21): error C2530: 'edgeA': 参照が初期化されずに宣言されています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(331,49): error C2039: 'vertices': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(331,103): error C2039: 'vertices': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(331,27): error C2530: 'edgeVecA': 参照が初期化されずに宣言されています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(332,48): error C2039: 'edge_num': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(333,45): error C2039: 'edges': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(333,23): error C2530: 'edgeB': 参照が初期化されずに宣言されています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(336,69): error C2039: 'vertices': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(336,123): error C2039: 'vertices': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(357,69): error C2039: 'vertices': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(357,100): error C2660: 'Adollib::vector3_dot': 関数に 1 個の引数を指定できません。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\vector_e.h(191,23): message : 'Adollib::vector3_dot' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ALP_generate_contact.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(357,145): error C2039: 'vertices': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(357,176): error C2660: 'Adollib::vector3_dot': 関数に 1 個の引数を指定できません。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\vector_e.h(191,23): message : 'Adollib::vector3_dot' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ALP_generate_contact.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(445,44): error C2039: 'facet_num': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(446,44): error C2039: 'facets': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(446,23): error C2530: 'facet': 参照が初期化されずに宣言されています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(739,25): error C2039: 'is_Convex': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(753,44): error C2039: 'facet_num': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(754,44): error C2039: 'facets': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(754,23): error C2530: 'nor': 参照が初期化されずに宣言されています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(755,44): error C2039: 'vertices': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(755,76): error C2039: 'facets': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(755,23): error C2530: 'pos': 参照が初期化されずに宣言されています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1086,23): error C2039: 'is_Convex': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1086,61): error C2039: 'is_Convex': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1106,57): error C2039: 'facets': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1106,30): error C2530: 'nerest_facet': 参照が初期化されずに宣言されています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1122,61): error C2039: 'vertex_num': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1124,48): error C2039: 'vertices': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1125,55): error C2039: 'vertices': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1130,35): error C2039: 'vertices': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1143,60): error C2039: 'facet_num': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1145,47): error C2039: 'facets': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1149,32): error C2039: 'vertices': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1149,70): error C2039: 'facets': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1150,32): error C2039: 'vertices': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1150,70): error C2039: 'facets': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1151,32): error C2039: 'vertices': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1151,70): error C2039: 'facets': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1152,32): error C2039: 'facets': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1148,6): error C2660: 'Adollib::Closest_func::get_closestP_point_triangle': 関数に 2 個の引数を指定できません。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\closest_func.h(60,8): message : 'Adollib::Closest_func::get_closestP_point_triangle' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ALP_generate_contact.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1185,57): error C2039: 'facets': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1185,30): error C2530: 'nerest_facet': 参照が初期化されずに宣言されています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1201,61): error C2039: 'vertex_num': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1203,48): error C2039: 'vertices': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1204,55): error C2039: 'vertices': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1209,35): error C2039: 'vertices': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1222,60): error C2039: 'facet_num': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1224,47): error C2039: 'facets': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1228,32): error C2039: 'vertices': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1228,70): error C2039: 'facets': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1229,32): error C2039: 'vertices': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1229,70): error C2039: 'facets': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1230,32): error C2039: 'vertices': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1230,70): error C2039: 'facets': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1231,32): error C2039: 'facets': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1227,6): error C2660: 'Adollib::Closest_func::get_closestP_point_triangle': 関数に 2 個の引数を指定できません。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\closest_func.h(60,8): message : 'Adollib::Closest_func::get_closestP_point_triangle' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ALP_generate_contact.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1261,41): error C2039: 'edges': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1261,22): error C2530: 'edgeA': 参照が初期化されずに宣言されています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1262,41): error C2039: 'edges': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1262,22): error C2530: 'edgeB': 参照が初期化されずに宣言されています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1265,23): error C2039: 'vertices': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1266,23): error C2039: 'vertices': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1269,23): error C2039: 'vertices': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1270,23): error C2039: 'vertices': 'Adollib::physics_function::Meshcoll_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(43): message : 'Adollib::physics_function::Meshcoll_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.cpp(46,18): error C2039: 'dopbase': 'Adollib::physics_function::Collider_data' のメンバーではありません
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider__base.h(18): message : 'Adollib::physics_function::Collider_data' の宣言を確認してください

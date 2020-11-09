@@ -13,19 +13,19 @@
 #include "../Main/systems.h"
 
 using namespace Adollib;
+using namespace physics_function;
 using namespace std;
-std::unordered_map <std::string, std::vector<int>>	Collider_ResourceManager::indexes;
-std::unordered_map <std::string, std::vector<Vector3>>Collider_ResourceManager::vertexes;
 
-HRESULT Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<int>** out_indexes, std::vector<Vector3>** out_vertexes) {
+std::unordered_map <std::string, std::vector<Meshcollider_mesh>> Collider_ResourceManager::meshes;
 
-	if (indexes.count((string)fbxname) == 1) {
-		*out_indexes = &indexes[(string)fbxname];
-		*out_vertexes = &vertexes[(string)fbxname];
-		return S_OK;
+bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<Meshcollider_mesh>* _mesh) {
+
+	if (meshes.count((string)fbxname) == 1) {
+		_mesh = &meshes[fbxname];
+		return true;
 	}
 	const char* fileName = fbxname;
-	HRESULT hr = S_OK;
+	bool hr = true;
 
 #pragma region Load FBX
 
@@ -68,8 +68,6 @@ HRESULT Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vect
 	traverse(scene->GetRootNode());
 
 	// メッシュデータの取得
-	vector<Vector3> vertices;
-	vector<int> indices;
 	u_int vertex_count = 0;
 	struct Subset {
 		int start;
@@ -77,11 +75,16 @@ HRESULT Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vect
 	};
 	std::vector<std::vector<Subset>> subsets;
 
+	_mesh->resize(fetched_meshes.size());
 	subsets.resize(fetched_meshes.size());
 	for (size_t mesh_num = 0; mesh_num < fetched_meshes.size(); mesh_num++)
 	{
 		FbxMesh* fbxMesh = fetched_meshes.at(mesh_num)->GetMesh();
 		std::vector<Subset>& subset = subsets.at(mesh_num);
+		Meshcollider_mesh& mesh = _mesh->at(mesh_num);
+		//::
+		vector<int>& indices = mesh.indexes;
+		vector<Vector3>& vertices = mesh.vertexes;
 
 		// マテリアルの取得
 		const int number_of_materials = fbxMesh->GetNode()->GetMaterialCount();
@@ -111,21 +114,140 @@ HRESULT Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vect
 
 				// push_back
 				vertices.push_back(vertex);
+				if (index_offset + index_of_vertex == 0) {
+					int dafsdhg = 0;
+				}
 				indices.at(index_offset + index_of_vertex) = static_cast<u_int>(vertex_count);
 				vertex_count++;
 			}
 			subset[index_of_material].count += 3;
 		}
 
-		vertexes[(string)fbxname] = vertices;
-		indexes[(string)fbxname] = indices;
+#pragma endregion
+#pragma region Set Meshcollider_mesh
+		//::
+		vector<Edge>& edges = mesh.edges;
+		vector<Facet>& facets = mesh.facets;
 
-		*out_indexes = &indexes[(string)fbxname];
-		*out_vertexes = &vertexes[(string)fbxname];
+		u_int& index_num = mesh.index_num;
+		u_int& vertex_num = mesh.vertex_num;
+		u_int& edge_num = mesh.edge_num;
+		u_int& facet_num = mesh.facet_num;
 
+		bool& is_Convex = mesh.is_Convex;
+		//::: vertexなどの情報からedge,facetの情報を計算 :::
+		{
+			vertex_num = vertices.size();
+			index_num = indices.size();
+
+			//面情報の保存
+			{
+				facet_num = index_num / 3;
+				physics_function::Facet F;
+				for (u_int i = 0; i < facet_num; i++) {
+					F.vertexID[0] = indices[i * 3];
+					F.vertexID[1] = indices[i * 3 + 1];
+					F.vertexID[2] = indices[i * 3 + 2];
+
+					F.normal = vector3_cross(vertices[F.vertexID[1]] - vertices[F.vertexID[0]], vertices[F.vertexID[2]] - vertices[F.vertexID[0]]);
+					F.normal = F.normal.unit_vect();
+
+					facets.emplace_back(F);
+				}
+			}
+
+			//エッジ情報の保存
+			{
+				edge_num = 0;
+				std::vector<int>edgeID_Table;
+				edgeID_Table.resize(vertex_num* vertex_num / 2);
+				for (int& u : edgeID_Table) {
+					u = 0xffffff;
+				}
+
+				physics_function::Edge E;
+				for (u_int i = 0; i < facet_num; i++) {
+					physics_function::Facet& facet = facets[i];
+
+					for (int o = 0; o < 3; o++) {
+						u_int vertId0 = ALmin(facet.vertexID[o % 3], facet.vertexID[(o + 1) % 3]);
+						u_int vertId1 = ALmax(facet.vertexID[o % 3], facet.vertexID[(o + 1) % 3]);
+						int tableId = (int)((int)vertId1 * ((int)vertId1 - 1) / (float)2 + (int)vertId0);
+
+						if (edgeID_Table[tableId] == 0xffffff) {
+							// 初回時は登録のみ
+							E.facetID[0] = i;
+							E.facetID[1] = i;
+							E.vertexID[0] = vertId0;
+							E.vertexID[1] = vertId1;
+							E.type = physics_function::Edgetype::EdgeConvex; // 凸エッジで初期化
+							edges.emplace_back(E);
+
+							facet.edgeID[o] = edge_num;
+							edgeID_Table[tableId] = edge_num;
+
+							edge_num++;
+						}
+						else {
+							// すでに登録されていた
+							physics_function::Edge& edge = edges[edgeID_Table[tableId]];
+							physics_function::Facet& facetB = facets[edge.facetID[0]];
+
+							assert(edge.facetID[0] == edge.facetID[1] && "Don't let the edges have 3～ facet.");
+
+							// エッジに含まれないＡ面の頂点がB面の表か裏かで判断
+							Vector3 s = vertices[facet.vertexID[(o + 2) % 3]];
+							Vector3 q = vertices[facetB.vertexID[0]];
+							float d = vector3_dot(s - q, facetB.normal);
+
+							//エッジの種類を入力
+							if (d < -FLT_EPSILON) {
+								edge.type = physics_function::Edgetype::EdgeConvex;
+							}
+							else if (d > FLT_EPSILON) {
+								edge.type = physics_function::Edgetype::EdgeConcave;
+								is_Convex = false;
+							}
+							else {
+								edge.type = physics_function::Edgetype::EdgeFlat;
+							}
+
+							edge.facetID[1] = i;
+						}
+
+					}
+
+
+				}
+			}
+		}
+#pragma endregion
+#pragma region Set Dopbase
+		DOP::DOP_14& dopbase = mesh.dopbase;
+
+		for (int i = 0; i < DOP::DOP_size; i++) {
+			dopbase.max[i] = -FLT_MAX;
+			dopbase.min[i] = +FLT_MAX;
+		}
+
+		//初期状態のDOPの保存 loop中に計算するDOPはこのDOPを基準にする
+		for (int i = 0; i < DOP::DOP_size; i++) {
+			for (Vector3& v : vertices) {
+
+				float dis = vector3_dot(DOP::DOP_14_axis[i], v);
+				if (dopbase.max[i] < dis) dopbase.max[i] = +dis * 1.00000001f;//確実にするためちょっと大きめにとる
+				if (dopbase.min[i] > dis) dopbase.min[i] = +dis * 1.00000001f;
+			}
+		}
 
 #pragma endregion
+		Vector3& halfsize = mesh.half_size;
+		halfsize = Vector3(dopbase.max[0] - dopbase.min[0], dopbase.max[1] - dopbase.min[1], dopbase.max[2] - dopbase.min[2]) / 2.0f;
 	}
+
+
+
+	return true;
 }
 
 void Collider_ResourceManager::destroy() {

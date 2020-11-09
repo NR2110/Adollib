@@ -24,16 +24,24 @@ namespace Adollib {
 			Vector3 normal;  // 面法線ベクトル
 		};
 
-		struct Meshcoll_data {
+		struct Meshcollider_mesh{
+			u_int index_num = 0;
 			u_int vertex_num = 0; //頂点数
 			u_int edge_num = 0; //エッジ数
 			u_int facet_num = 0; //面数
 
-			std::vector<Vector3>* vertices = nullptr; //頂点情報
-			std::vector<Edge>* edges = nullptr; //エッジ配列
-			std::vector<Facet>* facets = nullptr; //面配列
+			std::vector<int> indexes; //頂点情報
+			std::vector<Vector3> vertexes; //頂点情報
+			std::vector<Edge> edges; //エッジ配列
+			std::vector<Facet> facets; //面配列
 
-			bool is_Convex = true;
+			bool is_Convex = true; //convexなオブジェクトかどうか 一つでも凹なedgeがあればfalse
+			DOP::DOP_14	dopbase; //初期k-dopのdata
+			Vector3 half_size = Vector3(1, 1, 1);
+		};
+
+		struct Meshcoll_data {
+			std::vector<Meshcollider_mesh>* collider_mesh = nullptr;
 		};
 
 	}

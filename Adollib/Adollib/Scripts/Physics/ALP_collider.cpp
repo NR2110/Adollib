@@ -42,13 +42,9 @@ void ALP_Collider::refresh_ALP_from_data() {
 	local_scale = Cdata.local_scale;
 
 	half_size = Cdata.half_size;
-
-	dopbase = Cdata.dopbase;
 	shape = Cdata.shape;
 
-	if (shape == ALP_Collider_shape::Mesh) {
-		meshcoll_data = (*coll_itr)->get_Meshdata();
-	}
+	meshcoll_data = Cdata.meshcoll_data;
 
 	ALPphysics->refresh_ALP_from_data();
 }

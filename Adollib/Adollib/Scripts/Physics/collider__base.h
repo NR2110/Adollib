@@ -24,7 +24,7 @@ namespace Adollib {
 
 			physics_function::ALP_Collider_shape shape = physics_function::ALP_Collider_shape::None; //形情報
 
-			DOP::DOP_14	dopbase; //MeshColliderの最初のk-dop
+			Meshcoll_data meshcoll_data; //meshcollider用data
 		};
 		struct Physics_data {
 			float inertial_mass; //質量
@@ -42,10 +42,11 @@ namespace Adollib {
 		//:::::::::::::::::::::::::
 
 		struct ColliderPhysics_itrs {
-			std::list<Collider*>::iterator coll_itr;
-
 			std::list<ALP_Collider>::iterator ALPcollider_itr;
 			std::list<ALP_Physics>::iterator ALPphysics_itr;
+
+			std::list<Collider*>::iterator coll_itr;
+
 		};
 
 	}
@@ -70,26 +71,16 @@ namespace Adollib {
 		bool is_moveable = 0; //動かない
 		bool is_hitable = 0;  //衝突しない
 
-	private:
+	protected:
 		std::list<physics_function::ALP_Collider>::iterator ALPcollider_itr;
 		std::list<physics_function::ALP_Physics>::iterator ALPphysics_itr;
 
+	//	std::vector<physics_function::ColliderPhysics_itrs> ALP_itrs;
+
 		std::list<Collider*>::iterator coll_itr;//自身へのitr
 
+	private:
 		bool removed = false; //二重にremoveをするのを防ぐ
-		
-	public:
-		//自身へのitrを返す(remove_colliderにしようする)
-		const physics_function::ColliderPhysics_itrs get_itrs() const {
-			physics_function::ColliderPhysics_itrs ret; 
-
-			ret.ALPcollider_itr = ALPcollider_itr;
-			ret.ALPphysics_itr = ALPphysics_itr;
-
-			ret.coll_itr = coll_itr;
-
-			return ret;
-		};
 
 	public:
 		//on collision enter
@@ -124,7 +115,7 @@ namespace Adollib {
 		void remove_collider();
 
 	public:
-		void awake() override;
+		virtual  void awake() = 0;
 
 		void finalize() override;
 

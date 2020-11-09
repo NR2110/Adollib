@@ -41,7 +41,6 @@ namespace Adollib {
 
 			//::: 14-DOP ::::::::::
 			DOP::DOP_14	dop14;	//14DOP データ
-			DOP::DOP_14	dopbase; //meshcollider用 読み込み時のdopデータ meshcoliderはこれを基準にDOPを生成
 
 			//:::
 			ALP_Collider_shape shape = ALP_Collider_shape::None; //形情報
