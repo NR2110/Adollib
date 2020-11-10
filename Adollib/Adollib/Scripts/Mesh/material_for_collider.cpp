@@ -43,6 +43,9 @@ void Collider_renderer::initialize() {
 
 		meshes[ALP_Collider_shape::Plane];
 		ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::Plane], "./DefaultModel/plane.fbx", "");
+
+		meshes[ALP_Collider_shape::Mesh];
+		ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::Mesh], "../Data/FBX/0311_collisions.fbx", "");
 	}
 
 void Collider_renderer::render(const physics_function::ALP_Collider& R) {

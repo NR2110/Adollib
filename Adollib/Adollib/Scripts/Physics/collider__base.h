@@ -16,9 +16,9 @@ namespace Adollib {
 	namespace physics_function {
 		//::: åvéZÇ»Ç«Ç…égÇ§èÓïÒ :::
 		struct Collider_data {
-			Vector3 local_position;
-			Quaternion local_orientation;
-			Vector3 local_scale;
+			Vector3 local_position = Vector3(0,0,0);
+			Quaternion local_orientation = quaternion_identity();
+			Vector3 local_scale = Vector3(1, 1, 1);
 
 			Vector3 half_size;
 

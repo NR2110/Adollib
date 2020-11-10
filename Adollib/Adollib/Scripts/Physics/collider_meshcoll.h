@@ -17,7 +17,7 @@ namespace Adollib {
 
 	public:
 		//不動オブジェクトとして生成
-		Meshcoll() :center(Vector3(0)), rotate(Vector3(0)), size(0) {}
+		Meshcoll() :center(Vector3(0)), rotate(Vector3(0)), size(1) {}
 
 		void load_mesh(const char* filename) {
 			physics_function::Collider_ResourceManager::CreateMCFromFBX(filename, collider_mesh);

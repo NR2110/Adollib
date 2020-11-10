@@ -1,2 +1,8 @@
-﻿  ALP_generate_contact.cpp
+﻿  camera_manager.cpp
+  camera_s.cpp
+  object_manager.cpp
+  object_rotate.cpp
+  player.cpp
+  ALP__physics_manager.cpp
+  scene_game.cpp
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

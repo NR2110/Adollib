@@ -18,10 +18,10 @@ using namespace std;
 
 std::unordered_map <std::string, std::vector<Meshcollider_mesh>> Collider_ResourceManager::meshes;
 
-bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<Meshcollider_mesh>* _mesh) {
+bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<Meshcollider_mesh>* ret_mesh) {
 
 	if (meshes.count((string)fbxname) == 1) {
-		_mesh = &meshes[fbxname];
+		ret_mesh = &meshes[fbxname];
 		return true;
 	}
 	const char* fileName = fbxname;
@@ -73,37 +73,30 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 		int start;
 		int count;
 	};
-	std::vector<std::vector<Subset>> subsets;
+	std::vector<Subset> subsets;
+	std::vector<Meshcollider_mesh> _mesh;
+	vector<Vector3> l_vertices;
 
-	_mesh->resize(fetched_meshes.size());
+	_mesh.resize(fetched_meshes.size());
 	subsets.resize(fetched_meshes.size());
 	for (size_t mesh_num = 0; mesh_num < fetched_meshes.size(); mesh_num++)
 	{
 		FbxMesh* fbxMesh = fetched_meshes.at(mesh_num)->GetMesh();
-		std::vector<Subset>& subset = subsets.at(mesh_num);
-		Meshcollider_mesh& mesh = _mesh->at(mesh_num);
+		Subset& subset = subsets.at(mesh_num);
+		Meshcollider_mesh& mesh = _mesh.at(mesh_num);
 		//::
 		vector<int>& indices = mesh.indexes;
-		vector<Vector3>& vertices = mesh.vertices;
 
 		// マテリアルの取得
 		const int number_of_materials = fbxMesh->GetNode()->GetMaterialCount();
 
-		subset.resize(number_of_materials);
 		const FbxVector4* array_of_control_points = fbxMesh->GetControlPoints();
 		const int number_of_polygons = fbxMesh->GetPolygonCount();
 		indices.resize(number_of_polygons * 3);
 		for (int index_of_polygon = 0; index_of_polygon < number_of_polygons; index_of_polygon++)
 		{
-
-			// The material for current face.
-			int index_of_material = 0;
-			if (number_of_materials > 0)
-			{
-				index_of_material = fbxMesh->GetElementMaterial()->GetIndexArray().GetAt(index_of_polygon);
-			}
 			// Where should I save the vertex attribute index, according to the material
-			const int index_offset = subset[index_of_material].start + subset[index_of_material].count;
+			const int index_offset = subset.start + subset.count;
 			for (int index_of_vertex = 0; index_of_vertex < 3; index_of_vertex++) {
 				Vector3 vertex;
 				// 頂点
@@ -113,41 +106,49 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 				vertex.z = static_cast<float>(array_of_control_points[index_of_control_point][2]);
 
 				// push_back
-				vertices.push_back(vertex);
-				if (index_offset + index_of_vertex == 0) {
-					int dafsdhg = 0;
-				}
+				l_vertices.push_back(vertex);
 				indices.at(index_offset + index_of_vertex) = static_cast<u_int>(vertex_count);
 				vertex_count++;
 			}
-			subset[index_of_material].count += 3;
+			subset.count += 3;
 		}
 
 #pragma endregion
 #pragma region Set Meshcollider_mesh
-		//::
-		vector<Edge>& edges = mesh.edges;
-		vector<Facet>& facets = mesh.facets;
+		vector<Vector3>& vertices = mesh.vertices;
 
 		u_int& index_num = mesh.index_num;
 		u_int& vertex_num = mesh.vertex_num;
+
+		vector<Edge>& edges = mesh.edges;
+		vector<Facet>& facets = mesh.facets;
 		u_int& edge_num = mesh.edge_num;
 		u_int& facet_num = mesh.facet_num;
 
 		bool& is_Convex = mesh.is_Convex;
 		//::: vertexなどの情報からedge,facetの情報を計算 :::
 		{
-			vertex_num = vertices.size();
 			index_num = indices.size();
+			vertices.resize(index_num);
+			//頂点情報を保存
+			{
+				for (u_int i = 0; i < index_num; i++) {
+					vertices[i] = l_vertices[indices[i]];
+				}
+			}
 
+			vertex_num = vertices.size();
 			//面情報の保存
 			{
-				facet_num = index_num / 3;
+				facet_num = vertex_num / 3;
 				physics_function::Facet F;
 				for (u_int i = 0; i < facet_num; i++) {
-					F.vertexID[0] = indices[i * 3];
-					F.vertexID[1] = indices[i * 3 + 1];
-					F.vertexID[2] = indices[i * 3 + 2];
+					//F.vertexID[0] = indices[i * 3];
+					//F.vertexID[1] = indices[i * 3 + 1];
+					//F.vertexID[2] = indices[i * 3 + 2];
+					F.vertexID[0] = i * 3;
+					F.vertexID[1] = i * 3 + 1;
+					F.vertexID[2] = i * 3 + 2;
 
 					F.normal = vector3_cross(vertices[F.vertexID[1]] - vertices[F.vertexID[0]], vertices[F.vertexID[2]] - vertices[F.vertexID[0]]);
 					F.normal = F.normal.unit_vect();
@@ -223,6 +224,7 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 		}
 #pragma endregion
 #pragma region Set Dopbase
+		//::
 		DOP::DOP_14& dopbase = mesh.dopbase;
 
 		for (int i = 0; i < DOP::DOP_size; i++) {
@@ -241,10 +243,13 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 		}
 
 #pragma endregion
+		//::
 		Vector3& halfsize = mesh.half_size;
 		halfsize = Vector3(dopbase.max[0] - dopbase.min[0], dopbase.max[1] - dopbase.min[1], dopbase.max[2] - dopbase.min[2]) / 2.0f;
 	}
 
+	meshes[fbxname] = _mesh;
+	ret_mesh = &meshes[fbxname];
 
 
 	return true;
