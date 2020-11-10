@@ -11,12 +11,12 @@ using namespace Contacts;
 
 //挿入法の
 struct edge{
-	std::list<ALP_Collider>::iterator coll;
+	std::vector<ALP_Collider_mesh>::iterator coll;
 	float value = 0;
 	bool stgo = false; //true = st, false = go 
 };
 
-void physics_function::Broadphase(std::list<ALP_Physics>& ALP_physicses, std::vector<Contacts::Collider_2>& out_pair) {
+void physics_function::Broadphase(std::list<ALP_Collider>& ALP_collider, std::vector<Contacts::Collider_2>& out_pair) {
 
 	//Sweep&Pruneを挿入法で実装
 	static std::list<edge>axis_list[1];
@@ -25,8 +25,8 @@ void physics_function::Broadphase(std::list<ALP_Physics>& ALP_physicses, std::ve
 
 	Work_meter::start("update_dop14");
 
-	for (auto& itr : ALP_physicses) {
-		itr.ALP_coll->update_dop14();
+	for (auto& itr : ALP_collider) {
+		itr.update_dop14();
 	}
 
 	Work_meter::stop("update_dop14");
@@ -38,24 +38,27 @@ void physics_function::Broadphase(std::list<ALP_Physics>& ALP_physicses, std::ve
 	if (Phyisics_manager::is_changed_colliders() == true) {
 		//TODO : 新しく追加されたもの,なくなったものがわかればさらに最適化できる
 		edge ed;
-
 		for (int xz = 0; xz < 1; xz++) {
 			axis_list[xz].clear();
 
-			for (auto& itr : ALP_physicses) {
+			for(auto & phys : ALP_collider) {
+				auto& itr = phys.collider_meshes.begin();
+				auto& itr_end = phys.collider_meshes.end();
 
-				ed.value = itr.ALP_coll->dop14.pos[xz] + itr.ALP_coll->dop14.max[xz];
-				ed.coll = itr.ALP_coll;
-				ed.stgo = false;
+				for (itr = phys.collider_meshes.begin(); itr != itr_end; ++itr) {
 
-				axis_list[xz].push_back(ed);
+					ed.value = itr->dop14.pos[xz] + itr->dop14.max[xz];
+					ed.coll = itr;
+					ed.stgo = false;
 
-				ed.value = itr.ALP_coll->dop14.pos[xz] + itr.ALP_coll->dop14.min[xz];
-				ed.coll = itr.ALP_coll;
-				ed.stgo = true;
-				axis_list[xz].push_back(ed);
+					axis_list[xz].push_back(ed);
 
+					ed.value = itr->dop14.pos[xz] + itr->dop14.min[xz];
+					ed.coll = itr;
+					ed.stgo = true;
+					axis_list[xz].push_back(ed);
 
+				}
 			}
 		}
 
@@ -120,11 +123,11 @@ void physics_function::Broadphase(std::list<ALP_Physics>& ALP_physicses, std::ve
 
 	Work_meter::start("Sweep&Prune");
 	//Sweep&Prune
-	std::vector<std::list<ALP_Collider>::iterator> actives;
+	std::list<std::vector<ALP_Collider_mesh>::iterator> actives;
 	Contacts::Collider_2 pair;
 	out_pair.clear();
-	std::vector<std::list<ALP_Collider>::iterator>::iterator ac = actives.begin();
-	std::vector<std::list<ALP_Collider>::iterator>::iterator ac_end = actives.end();
+	std::list<std::vector<ALP_Collider_mesh>::iterator>::iterator ac = actives.begin();
+	std::list<std::vector<ALP_Collider_mesh>::iterator>::iterator ac_end = actives.end();
 	{
 
 

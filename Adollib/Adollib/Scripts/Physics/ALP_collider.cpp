@@ -81,82 +81,90 @@ void ALP_Collider::update_dop14() {
 }
 
 void ALP_Collider::update_dop14_as_sphere() {
-	dop14.pos = world_position;
-	for (int i = 0; i < DOP::DOP_size; i++) {
-		dop14.max[i] = +world_scale.x * 1.0000001f;
-		dop14.min[i] = -world_scale.x * 1.0000001f;
+	for (auto& mesh : collider_meshes) {
+		mesh.dop14.pos = world_position;
+		for (int i = 0; i < DOP::DOP_size; i++) {
+			mesh.dop14.max[i] = +world_scale.x * 1.0000001f;
+			mesh.dop14.min[i] = -world_scale.x * 1.0000001f;
+		}
 	}
 }
 
 void ALP_Collider::update_dop14_as_box() {
-	dop14.pos = world_position;
+	for (auto& mesh : collider_meshes) {
+		mesh.dop14.pos = world_position;
 
-	//各頂点のローカル座標
-	Vector3 half[4]{
-	{+world_scale.x, -world_scale.y, -world_scale.z},
-	{+world_scale.x, -world_scale.y, +world_scale.z},
-	{+world_scale.x, +world_scale.y, -world_scale.z},
-	{+world_scale.x, +world_scale.y, +world_scale.z}
-	};
+		//各頂点のローカル座標
+		Vector3 half[4]{
+		{+world_scale.x, -world_scale.y, -world_scale.z},
+		{+world_scale.x, -world_scale.y, +world_scale.z},
+		{+world_scale.x, +world_scale.y, -world_scale.z},
+		{+world_scale.x, +world_scale.y, +world_scale.z}
+		};
 
-	//for (int i = 0; i < 4; i++) {
-	//	half[i] = half[i];
-	//}
+		//for (int i = 0; i < 4; i++) {
+		//	half[i] = half[i];
+		//}
 
-	Quaternion WO = world_orientation;
-	for (int i = 0; i < 4; i++) {
-		half[i] = vector3_quatrotate(half[i], WO);
-	}
+		Quaternion WO = world_orientation;
+		for (int i = 0; i < 4; i++) {
+			half[i] = vector3_quatrotate(half[i], WO);
+		}
 
-	//DOPの更新
-	float max_len = 0;
-	for (int i = 0; i < DOP::DOP_size; i++) {
-		max_len = 0;
-		for (int o = 0; o < 4; o++) {
-			float dis = fabsf(vector3_dot(DOP::DOP_14_axis[i], half[o]));
-			if (max_len < dis) {
-				dop14.max[i] = +dis * 1.00000001f;//確実にするためちょっと大きめにとる
-				dop14.min[i] = -dis * 1.00000001f;//確実にするためちょっと大きめにとる
-				max_len = dis;
+		//DOPの更新
+		float max_len = 0;
+		for (int i = 0; i < DOP::DOP_size; i++) {
+			max_len = 0;
+			for (int o = 0; o < 4; o++) {
+				float dis = fabsf(vector3_dot(DOP::DOP_14_axis[i], half[o]));
+				if (max_len < dis) {
+					mesh.dop14.max[i] = +dis * 1.00000001f;//確実にするためちょっと大きめにとる
+					mesh.dop14.min[i] = -dis * 1.00000001f;//確実にするためちょっと大きめにとる
+					max_len = dis;
+				}
+
 			}
-
 		}
 	}
 }
 
 void ALP_Collider::update_dop14_as_plane() {
-	dop14.pos = world_position;
-	for (int i = 0; i < DOP::DOP_size; i++) {
-		dop14.max[i] = FLT_MAX;
+	for (auto& mesh : collider_meshes) {
+		mesh.dop14.pos = world_position;
+		for (int i = 0; i < DOP::DOP_size; i++) {
+			mesh.dop14.max[i] = FLT_MAX;
+		}
 	}
 }
 
 void ALP_Collider::update_dop14_as_mesh() {
-	dop14.pos = world_position;
+	for (auto& mesh : collider_meshes) {
+		mesh.dop14.pos = world_position;
 
-	Vector3 rotated_axis[DOP::DOP_size];
-	for (int i = 0; i < DOP::DOP_size; i++) {
-		rotated_axis[i] = vector3_quatrotate(DOP::DOP_14_axis[i], world_orientation.conjugate()).unit_vect();
-		dop14.max[i] = -FLT_MAX;
-		dop14.min[i] = +FLT_MAX;
-	}
+		Vector3 rotated_axis[DOP::DOP_size];
+		for (int i = 0; i < DOP::DOP_size; i++) {
+			rotated_axis[i] = vector3_quatrotate(DOP::DOP_14_axis[i], world_orientation.conjugate()).unit_vect();
+			mesh.dop14.max[i] = -FLT_MAX;
+			mesh.dop14.min[i] = +FLT_MAX;
+		}
 
-	Vector3 half[DOP::DOP_size * 2];
-	int sum = 0;
-	for (int i = 0; i < DOP::DOP_size; i++) {
-		half[sum] = dopbase.max[i] * DOP::DOP_14_axis[i] * world_scale;
-		sum++;
-		half[sum] = dopbase.min[i] * DOP::DOP_14_axis[i] * world_scale;
-		sum++;
-	}
+		Vector3 half[DOP::DOP_size * 2];
+		int sum = 0;
+		for (int i = 0; i < DOP::DOP_size; i++) {
+			half[sum] = mesh.mesh->dopbase.max[i] * DOP::DOP_14_axis[i] * world_scale;
+			sum++;
+			half[sum] = mesh.mesh->dopbase.min[i] * DOP::DOP_14_axis[i] * world_scale;
+			sum++;
+		}
 
-	//DOPの更新
-	for (int i = 0; i < DOP::DOP_size; i++) {
-		for (int o = 0; o < DOP::DOP_size * 2; o++) {
-			float dis = vector3_dot(rotated_axis[i], half[o]);
-			if (dop14.max[i] < dis) dop14.max[i] = dis * 1.00000001f;//確実にするためちょっと大きめにとる
-			if (dop14.min[i] > dis) dop14.min[i] = dis * 1.00000001f;//確実にするためちょっと大きめにとる
+		//DOPの更新
+		for (int i = 0; i < DOP::DOP_size; i++) {
+			for (int o = 0; o < DOP::DOP_size * 2; o++) {
+				float dis = vector3_dot(rotated_axis[i], half[o]);
+				if (mesh.dop14.max[i] < dis) mesh.dop14.max[i] = dis * 1.00000001f;//確実にするためちょっと大きめにとる
+				if (mesh.dop14.min[i] > dis) mesh.dop14.min[i] = dis * 1.00000001f;//確実にするためちょっと大きめにとる
 
+			}
 		}
 	}
 }

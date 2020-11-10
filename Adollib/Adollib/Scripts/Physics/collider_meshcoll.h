@@ -5,10 +5,6 @@
 
 namespace Adollib {
 	
-	namespace Meshcoll_data {
-
-	}
-
 	//Mesh colliderクラス
 	class Meshcoll : public Collider {
 	public:
@@ -42,20 +38,6 @@ namespace Adollib {
 			ret.meshcoll_data = data;
 			return ret;
 		};
-
-		void awake() override {
-			//TODO : 複数メッシュによりALP_Collderを複数持つ用に変更する必要がある
-			physics_function::ColliderPhysics_itrs data;
-
-			data = Phyisics_manager::add_collider(this);
-
-			ALPcollider_itr = data.ALPcollider_itr;
-			ALPphysics_itr = data.ALPphysics_itr;
-			coll_itr = data.coll_itr;
-
-			data.ALPcollider_itr->coll_itr = coll_itr;
-
-		}
 
 	};
 }

@@ -5,7 +5,7 @@
 namespace Adollib {
 	namespace physics_function {
 		//‚Æ‚Ä‚à‘åŽG”c‚È“–‚½‚è”»’è(Boardphase)
-		void Broadphase(std::list<ALP_Physics>& ALP_physicses, std::vector<Contacts::Collider_2>& out_pair);
+		void Broadphase(std::list<ALP_Collider>& ALP_physicses, std::vector<Contacts::Collider_2>& out_pair);
 
 	}
 }

@@ -13,6 +13,18 @@ namespace Adollib {
 	namespace physics_function {
 
 		class ALP_Physics;
+		class ALP_Collider;
+
+		struct ALP_Collider_mesh {
+			//14-DOP
+			DOP::DOP_14	dop14;	//14DOP データ
+
+			//meshcollider用 vertexes,Edges,Facetsなどの情報
+			Meshcollider_mesh* mesh;
+
+			//親
+			std::list<ALP_Collider>::iterator ALPcollider;
+		};
 
 		class ALP_Collider {
 		public:
@@ -39,9 +51,6 @@ namespace Adollib {
 			u_int tag = 0; //自身のtag(bit)
 			u_int not_hitable_tags = 0; //衝突しないtags
 
-			//::: 14-DOP ::::::::::
-			DOP::DOP_14	dop14;	//14DOP データ
-
 			//:::
 			ALP_Collider_shape shape = ALP_Collider_shape::None; //形情報
 
@@ -51,7 +60,10 @@ namespace Adollib {
 			//::: Physicsへのイテレータ :::
 			std::list<ALP_Physics>::iterator ALPphysics;
 
-			//:::
+			//::: 複数meshに対応 各メッシュのdop,頂点情報などがここに保存される :::
+			std::vector<ALP_Collider_mesh> collider_meshes;
+
+			//::: 
 			Meshcoll_data meshcoll_data; //MeshCollider使用時に使うdata vertices,Edges,Facets
 
 		public:

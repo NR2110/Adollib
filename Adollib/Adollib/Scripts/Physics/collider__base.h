@@ -75,8 +75,6 @@ namespace Adollib {
 		std::list<physics_function::ALP_Collider>::iterator ALPcollider_itr;
 		std::list<physics_function::ALP_Physics>::iterator ALPphysics_itr;
 
-	//	std::vector<physics_function::ColliderPhysics_itrs> ALP_itrs;
-
 		std::list<Collider*>::iterator coll_itr;//é©êgÇ÷ÇÃitr
 
 	private:
@@ -115,7 +113,7 @@ namespace Adollib {
 		void remove_collider();
 
 	public:
-		virtual  void awake() = 0;
+		void awake() override;
 
 		void finalize() override;
 
