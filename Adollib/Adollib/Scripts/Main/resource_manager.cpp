@@ -394,6 +394,11 @@ namespace Adollib
 					mesh.globalTransform.m[row][column] = static_cast<float>(global_transform[row][column]);
 				}
 			}
+			//mesh.globalTransform = DirectX::XMFLOAT4X4();
+			//mesh.globalTransform._11 = 1;
+			//mesh.globalTransform._22 = 1;
+			//mesh.globalTransform._33= 1;
+			//mesh.globalTransform._44 = 1;
 
 			FbxStringList uv_names;
 			fbxMesh->GetUVSetNames(uv_names);
