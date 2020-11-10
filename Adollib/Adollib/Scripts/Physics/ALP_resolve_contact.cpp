@@ -70,7 +70,8 @@ void physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 		}
 	}
 
-	std::list<ALP_Collider>::iterator coll[2];
+	std::vector<ALP_Collider_mesh>::iterator coll[2];
+	std::list<ALP_Physics>::iterator ALPphysics[2];
 	ALP_Solverbody* solverbody[2];
 	//std::vector<Balljoint> balljoints; //今回はなし
 
@@ -79,11 +80,13 @@ void physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 
 		coll[0] = pairs[P_num].body[0];
 		coll[1] = pairs[P_num].body[1];
-		solverbody[0] = coll[0]->ALPphysics->solve;
-		solverbody[1] = coll[1]->ALPphysics->solve;
+		ALPphysics[0] = coll[0]->ALPcollider->ALPphysics;
+		ALPphysics[1] = coll[1]->ALPcollider->ALPphysics;
+		solverbody[0] = ALPphysics[0]->solve;
+		solverbody[1] = ALPphysics[1]->solve;
 
 		// 摩擦の獲得
-		pair.contacts.friction = sqrtf(coll[0]->ALPphysics->dynamic_friction * coll[1]->ALPphysics->dynamic_friction);
+		pair.contacts.friction = sqrtf(ALPphysics[0]->dynamic_friction * ALPphysics[1]->dynamic_friction);
 
 		//::: 衝突点情報の更新 ::::::::
 		for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
@@ -94,16 +97,16 @@ void physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 
 			// 反発係数の獲得
 			// 継続の衝突の場合反発係数を0にする
-			float restitution = (pair.type == Pairtype::new_pair ? 0.5f * (coll[0]->ALPphysics->restitution + coll[1]->ALPphysics->restitution) : 0.0f);
+			float restitution = (pair.type == Pairtype::new_pair ? 0.5f * (ALPphysics[0]->restitution + ALPphysics[1]->restitution) : 0.0f);
 
 			//衝突時のそれぞれの速度
 			Vector3 pdota;
-			pdota = vector3_cross(coll[0]->ALPphysics->anglar_velocity, rA);
-			pdota += coll[0]->ALPphysics->linear_velocity;
+			pdota = vector3_cross(ALPphysics[0]->anglar_velocity, rA);
+			pdota += ALPphysics[0]->linear_velocity;
 
 			Vector3 pdotb;
-			pdotb = vector3_cross(coll[1]->ALPphysics->anglar_velocity, rB);
-			pdotb += coll[1]->ALPphysics->linear_velocity;
+			pdotb = vector3_cross(ALPphysics[1]->anglar_velocity, rB);
+			pdotb += ALPphysics[1]->linear_velocity;
 
 			//衝突時の衝突平面法線方向の相対速度(結局衝突に使うのは法線方向への速さ)
 			Vector3 vrel = pdota - pdotb;
@@ -114,8 +117,8 @@ void physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 			CalcTangentVector(cp.normal, tangent1, tangent2);
 
 			//Baraff[1997]の式(8-18)の分母(denominator)を求める
-			float term1 = coll[0]->ALPphysics->inverse_mass();
-			float term2 = coll[1]->ALPphysics->inverse_mass();
+			float term1 = ALPphysics[0]->inverse_mass();
+			float term2 = ALPphysics[1]->inverse_mass();
 			Vector3 tA, tB;
 
 			float term3, term4, denominator;
@@ -125,8 +128,8 @@ void physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 				Vector3 axis = cp.normal;
 				tA = vector3_cross(rA, axis);
 				tB = vector3_cross(rB, axis);
-				tA = vector3_trans(tA, coll[0]->ALPphysics->solve->inv_inertia);
-				tB = vector3_trans(tB, coll[1]->ALPphysics->solve->inv_inertia);
+				tA = vector3_trans(tA, ALPphysics[0]->solve->inv_inertia);
+				tB = vector3_trans(tB, ALPphysics[1]->solve->inv_inertia);
 				tA = vector3_cross(tA, rA);
 				tB = vector3_cross(tB, rB);
 				term3 = vector3_dot(axis, tA);
@@ -151,8 +154,8 @@ void physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 				Vector3 axis = tangent1;
 				tA = vector3_cross(rA, axis);
 				tB = vector3_cross(rB, axis);
-				tA = vector3_trans(tA, coll[0]->ALPphysics->solve->inv_inertia);
-				tB = vector3_trans(tB, coll[1]->ALPphysics->solve->inv_inertia);
+				tA = vector3_trans(tA, ALPphysics[0]->solve->inv_inertia);
+				tB = vector3_trans(tB, ALPphysics[1]->solve->inv_inertia);
 				tA = vector3_cross(tA, rA);
 				tB = vector3_cross(tB, rB);
 				term3 = vector3_dot(axis, tA);
@@ -172,8 +175,8 @@ void physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 				Vector3 axis = tangent2;
 				tA = vector3_cross(rA, axis);
 				tB = vector3_cross(rB, axis);
-				tA = vector3_trans(tA, coll[0]->ALPphysics->solve->inv_inertia);
-				tB = vector3_trans(tB, coll[1]->ALPphysics->solve->inv_inertia);
+				tA = vector3_trans(tA, ALPphysics[0]->solve->inv_inertia);
+				tB = vector3_trans(tB, ALPphysics[1]->solve->inv_inertia);
 				tA = vector3_cross(tA, rA);
 				tB = vector3_cross(tB, rB);
 				term3 = vector3_dot(axis, tA);
@@ -196,8 +199,8 @@ void physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 
 		coll[0] = pair.body[0];
 		coll[1] = pair.body[1];
-		solverbody[0] = coll[0]->ALPphysics->solve;
-		solverbody[1] = coll[1]->ALPphysics->solve;
+		solverbody[0] = ALPphysics[0]->solve;
+		solverbody[1] = ALPphysics[1]->solve;
 
 		for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 			//衝突点の情報　
@@ -222,8 +225,8 @@ void physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 
 			coll[0] = pair.body[0];
 			coll[1] = pair.body[1];
-			solverbody[0] = coll[0]->ALPphysics->solve;
-			solverbody[1] = coll[1]->ALPphysics->solve;
+			solverbody[0] = ALPphysics[0]->solve;
+			solverbody[1] = ALPphysics[1]->solve;
 
 			for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 				//衝突点の情報　

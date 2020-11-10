@@ -10,21 +10,17 @@ using namespace DOP;
 #pragma region Midphase
 //:::::::::::::::::::::::::::
 //DOP6による大雑把な当たり判定
-bool Check_insert_DOP14(const std::list<ALP_Collider>::iterator collA, const std::list<ALP_Collider>::iterator collB) {
+bool Check_insert_DOP14(const std::vector<ALP_Collider_mesh>::iterator meshA, const std::vector<ALP_Collider_mesh>::iterator meshB) {
 	//無限PlaneはDOPが作れないためnarrowに投げる?
-	if (collA->shape == ALP_Collider_shape::Plane || collB->shape == ALP_Collider_shape::Plane) return true;
+	//if (meshA->shape == ALP_Collider_shape::Plane || meshB->shape == ALP_Collider_shape::Plane) return true;
 
-	Vector3 dis = collA->dop14.pos - collB->dop14.pos;
+	Vector3 dis = meshA->dop14.pos - meshB->dop14.pos;
 
 	for (int i = 0; i < DOP_size; i++) {
 		if (
-			vector3_dot(+DOP_14_axis[i], collA->dop14.pos - collB->dop14.pos) < collB->dop14.min[i] - collA->dop14.max[i] ||
-			vector3_dot(-DOP_14_axis[i], collA->dop14.pos - collB->dop14.pos) < collA->dop14.min[i] - collB->dop14.max[i]
+			vector3_dot(+DOP_14_axis[i], meshA->dop14.pos - meshB->dop14.pos) < meshB->dop14.min[i] - meshA->dop14.max[i] ||
+			vector3_dot(-DOP_14_axis[i], meshA->dop14.pos - meshB->dop14.pos) < meshA->dop14.min[i] - meshB->dop14.max[i]
 			) {
-			float AA = vector3_dot(+DOP_14_axis[i], collA->dop14.pos - collB->dop14.pos);
-			float AB = collB->dop14.min[i] - collA->dop14.max[i];
-			float BA = vector3_dot(-DOP_14_axis[i], collA->dop14.pos - collB->dop14.pos);
-			float BB = collA->dop14.min[i] - collB->dop14.max[i];
 			return false;
 		}
 	}
@@ -32,16 +28,16 @@ bool Check_insert_DOP14(const std::list<ALP_Collider>::iterator collA, const std
 	return true;
 }
 
-bool Check_insert_Plane(const std::list<ALP_Collider>::iterator plane, const std::list<ALP_Collider>::iterator coll) {
+bool Check_insert_Plane(const std::vector<ALP_Collider_mesh>::iterator plane, const std::vector<ALP_Collider_mesh>::iterator mesh) {
 
 	Vector3 V;
 	float plane_dis = 0, coll_dis = FLT_MAX;
 
-	V = vector3_quatrotate(Vector3(0, 1, 0), plane->world_orientation);
-	plane_dis = vector3_dot(V, plane->world_position);
+	V = vector3_quatrotate(Vector3(0, 1, 0), plane->ALPcollider->world_orientation);
+	plane_dis = vector3_dot(V, plane->ALPcollider->world_position);
 
 	for (int i = 0; i < DOP_size; i++) {
-		float coll_len = vector3_dot(V, coll->world_position + DOP_14_axis[i] * coll->dop14.max[i]);
+		float coll_len = vector3_dot(V, mesh->ALPcollider->world_position + DOP_14_axis[i] * mesh->dop14.max[i]);
 		if (plane_dis > coll_len)return true;
 	}
 
@@ -52,8 +48,11 @@ void add_pair(std::vector<Contacts::Contact_pair>& pairs, Contacts::Contact_pair
 	pairs.emplace_back(pair);
 }
 
-void Midphase_DOP_14(std::vector<Contacts::Contact_pair>& new_pairs, std::list<ALP_Collider>::iterator collA, std::list<ALP_Collider>::iterator collB) {
+void Midphase_DOP_14(std::vector<Contacts::Contact_pair>& new_pairs, std::vector<ALP_Collider_mesh>::iterator meshA, std::vector<ALP_Collider_mesh>::iterator meshB) {
 	Contact_pair new_pair;
+
+	std::list<ALP_Collider>::iterator& collA = meshA->ALPcollider;
+	std::list<ALP_Collider>::iterator& collB = meshB->ALPcollider;
 
 	// タグによる衝突の是非
 	bool hit = true;
@@ -68,24 +67,24 @@ void Midphase_DOP_14(std::vector<Contacts::Contact_pair>& new_pairs, std::list<A
 
 	//DOPによる大雑把な当たり判定
 	if (collA->shape != ALP_Collider_shape::Plane && collB->shape != ALP_Collider_shape::Plane) {
-		if (Check_insert_DOP14(collA, collB) == false)return;
+		if (Check_insert_DOP14(meshA, meshB) == false)return;
 	}
 	else if (collA->shape == ALP_Collider_shape::Plane && collB->shape != ALP_Collider_shape::Plane) {
-		if (Check_insert_Plane(collA, collB) == false)return;
+		if (Check_insert_Plane(meshA, meshB) == false)return;
 	}
 	else if (collA->shape != ALP_Collider_shape::Plane && collB->shape == ALP_Collider_shape::Plane) {
-		if (Check_insert_Plane(collB, collA) == false)return;
+		if (Check_insert_Plane(meshB, meshA) == false)return;
 	}
 	else return;
 
 	//new_pair.body[0]にアドレスの大きいほうをしまう
-	if (&*collA > &*collB) {
-		new_pair.body[0] = collA;
-		new_pair.body[1] = collB;
+	if (&*meshA > &*meshB) {
+		new_pair.body[0] = meshA;
+		new_pair.body[1] = meshB;
 	}
 	else {
-		new_pair.body[0] = collB;
-		new_pair.body[1] = collA;
+		new_pair.body[0] = meshB;
+		new_pair.body[1] = meshA;
 	}
 	new_pair.type = Pairtype::new_pair;
 	new_pair.check_oncoll_only = check_oncoll_only;
@@ -99,48 +98,50 @@ void physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std:
 	Work_meter::start("Mid_Dop14");
 	//DOP_14による大雑把な当たり判定
 	std::vector<Contacts::Contact_pair> new_pairs;
-	for (u_int i = 0; i < in_pair.size(); i++) {
 
-		int c_size = in_pair[i].bodylists.size();
-		for (int o = 0; o < c_size; o++) {
+	for (auto& pair : in_pair) {
 
-			Midphase_DOP_14(new_pairs, in_pair[i].body, in_pair[i].bodylists[o]);
+		for(auto& meshB: pair.bodylists){
+
+			Midphase_DOP_14(new_pairs, pair.body, meshB);
 		}
 	}
 	Work_meter::stop("Mid_Dop14");
 
 	Work_meter::start("Mid_check_alive");
 	//生成したpairが前のpairから存在しているかの確認
-	for (u_int old_num = 0; old_num < pairs.size(); old_num++) {
-		for (u_int new_num = 0; new_num < new_pairs.size(); new_num++) {
-			if (new_pairs[new_num].type == Pairtype::keep_pair) continue;
+	for (auto& old_p : pairs) {
+		for (auto& new_p : new_pairs) {
+			if (new_p.type == Pairtype::keep_pair) continue;
 
 			if (
-				new_pairs[new_num].body[0] == pairs[old_num].body[0] &&
-				new_pairs[new_num].body[1] == pairs[old_num].body[1]
+				new_p.body[0] == old_p.body[0] &&
+				new_p.body[1] == old_p.body[1]
 				) {
 				//前から存在していたらデータを引き継ぐ
-				new_pairs[new_num] = pairs[old_num];
+				new_p = old_p;
 
-				new_pairs[new_num].type = Pairtype::keep_pair;
+				new_p.type = Pairtype::keep_pair;
 			}
 			else {
-				new_pairs[new_num].type = Pairtype::new_pair;
+				new_p.type = Pairtype::new_pair;
 			}
 		}
 	}
+
 	Work_meter::stop("Mid_check_alive");
 
 	Work_meter::start("Mid_remove_contact_point");
 	//現在使用していない衝突点を削除
-	for (u_int i = 0; i < new_pairs.size(); i++) {
-		new_pairs[i].contacts.chack_remove_contact_point(
-			new_pairs[i].body[0]->world_position,
-			new_pairs[i].body[0]->world_orientation,
-			new_pairs[i].body[1]->world_position,
-			new_pairs[i].body[1]->world_orientation
-		);
+	for (auto& new_p : new_pairs) {
+		new_p.contacts.chack_remove_contact_point(
+		new_p.body[0]->ALPcollider->world_position,
+		new_p.body[0]->ALPcollider->world_orientation,
+		new_p.body[1]->ALPcollider->world_position,
+		new_p.body[1]->ALPcollider->world_orientation
+	);
 	}
+
 	Work_meter::stop("Mid_remove_contact_point");
 	pairs.clear();
 	pairs = new_pairs;

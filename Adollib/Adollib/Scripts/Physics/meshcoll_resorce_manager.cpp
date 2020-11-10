@@ -84,7 +84,7 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 		Meshcollider_mesh& mesh = _mesh->at(mesh_num);
 		//::
 		vector<int>& indices = mesh.indexes;
-		vector<Vector3>& vertices = mesh.vertexes;
+		vector<Vector3>& vertices = mesh.vertices;
 
 		// ƒ}ƒeƒŠƒAƒ‹‚ÌŽæ“¾
 		const int number_of_materials = fbxMesh->GetNode()->GetMaterialCount();
