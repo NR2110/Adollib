@@ -48,15 +48,13 @@ void Collider_renderer::initialize() {
 		ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::Mesh], "../Data/FBX/0311_collisions.fbx", "");
 	}
 
-void Collider_renderer::render(const physics_function::ALP_Collider& R) {
+void Collider_renderer::render_collider(const physics_function::ALP_Collider& R) {
 	if (!(
 		R.shape == ALP_Collider_shape::BOX ||
 		R.shape == ALP_Collider_shape::Sphere ||
 		R.shape == ALP_Collider_shape::Mesh
 		))return;
 
-	static int time = 0;
-	time++;
 	//CB : ConstantBufferPerCO_OBJ
 	ConstantBufferPerGO g_cb;
 	g_cb.world = matrix_world(R.world_scale * 1.0001, R.world_orientation.get_rotate_matrix(), R.world_position).get_XMFLOAT4X4();
@@ -76,6 +74,12 @@ void Collider_renderer::render(const physics_function::ALP_Collider& R) {
 	std::vector<Mesh::mesh>* meshs;
 	meshs = meshes[R.shape];
 
+	//Vector4 color16[16];
+	int color_num = 0;
+	//for (int i = 0; i < 16; i ++ ) {
+	//	color16[i] = Al_Global::get_gaming(i, 16);
+	//}
+
 	//•`‰æ
 	for (Mesh::mesh mesh : *meshs)
 	{
@@ -88,7 +92,9 @@ void Collider_renderer::render(const physics_function::ALP_Collider& R) {
 		ConstantBufferPerMaterial cb;
 		cb.shininess = 1;
 		cb.ambientColor = DirectX::XMFLOAT4(0.1f, 0.1f, 0.1f, 1);
-		cb.materialColor = Al_Global::get_gaming(time, 800).get_XM4();
+//		cb.materialColor = Al_Global::get_gaming(Al_Global::second_per_game * 60, 800).get_XM4();
+		cb.materialColor = Al_Global::get_gaming((Al_Global::second_per_game + color_num) * 60, 600).get_XM4();
+		//cb.materialColor = color16[color_num].get_XM4();
 		Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
 		Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
 		Systems::DeviceContext->PSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
@@ -101,6 +107,76 @@ void Collider_renderer::render(const physics_function::ALP_Collider& R) {
 			Systems::DeviceContext->DrawIndexed(subset.indexCount, subset.indexStart, 0);
 
 		}
+
+
+		color_num++;
+	}
+
+
+}
+
+void Collider_renderer::render_AABB(const physics_function::ALP_Collider& coll) {
+
+
+	std::vector<Mesh::mesh>* box_mesh = meshes[ALP_Collider_shape::BOX];
+
+	Vector3 w_pos;
+	Vector3 w_scale;
+	int color_num = 0;
+	for (const auto& coll_mesh : coll.collider_meshes) {
+
+		w_pos = Vector3(
+			(coll_mesh.dop14.max[0] + coll_mesh.dop14.min[0]) / 2.0f,
+			(coll_mesh.dop14.max[1] + coll_mesh.dop14.min[1]) / 2.0f,
+			(coll_mesh.dop14.max[2] + coll_mesh.dop14.min[2]) / 2.0f
+		);
+		w_scale = Vector3(
+			(coll_mesh.dop14.max[0] - coll_mesh.dop14.min[0]) / 2.0f,
+			(coll_mesh.dop14.max[1] - coll_mesh.dop14.min[1]) / 2.0f,
+			(coll_mesh.dop14.max[2] - coll_mesh.dop14.min[2]) / 2.0f
+		);
+
+		//plane6[0] = 
+		//CB : ConstantBufferPerCO_OBJ
+		ConstantBufferPerGO g_cb;
+		g_cb.world = matrix_world(w_scale * 1.0001, matrix_identity(), w_pos + coll_mesh.dop14.pos).get_XMFLOAT4X4();
+
+		Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
+		Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
+		Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
+
+		Systems::DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		Systems::DeviceContext->IASetInputLayout(vertexLayout.Get());
+
+		for (const auto& mesh : *box_mesh) {
+
+			UINT stride = sizeof(VertexFormat);
+			UINT offset = 0;
+			Systems::DeviceContext->IASetVertexBuffers(0, 1, mesh.vertexBuffer.GetAddressOf(), &stride, &offset);
+			Systems::DeviceContext->IASetIndexBuffer(mesh.indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+
+			//CB : ConstantBufferPerCoMaterial
+			ConstantBufferPerMaterial cb;
+			cb.shininess = 1;
+			cb.ambientColor = DirectX::XMFLOAT4(0.1f, 0.1f, 0.1f, 1);
+			cb.materialColor = Vector4(Al_Global::get_gaming((Al_Global::second_per_game + color_num) * 60, 600).xyz, 0.3f).get_XM4();
+			//cb.materialColor = color16[color_num].get_XM4();
+			Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
+			Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
+			Systems::DeviceContext->PSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
+
+			for (auto& subset : mesh.subsets)
+			{
+				Systems::DeviceContext->PSSetShaderResources(0, 1, subset.diffuse.shaderResourceVirw.GetAddressOf());
+
+				// •`‰æ
+				Systems::DeviceContext->DrawIndexed(subset.indexCount, subset.indexStart, 0);
+
+			}
+
+		}
+
+		color_num++;
 
 	}
 

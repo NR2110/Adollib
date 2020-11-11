@@ -199,6 +199,8 @@ void physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 
 		coll[0] = pair.body[0];
 		coll[1] = pair.body[1];
+		ALPphysics[0] = coll[0]->ALPcollider->ALPphysics;
+		ALPphysics[1] = coll[1]->ALPcollider->ALPphysics;
 		solverbody[0] = ALPphysics[0]->solve;
 		solverbody[1] = ALPphysics[1]->solve;
 
@@ -210,10 +212,14 @@ void physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 
 			for (int k = 0; k < 3; k++) {
 				float deltaImpulse = cp.constraint[k].accuminpulse;
+				if (deltaImpulse > 1.8) {
+					int afsd = 0;
+				}
 				solverbody[0]->delta_LinearVelocity += deltaImpulse * solverbody[0]->inv_mass * cp.constraint[k].axis;
 				solverbody[0]->delta_AngulaVelocity += deltaImpulse * vector3_trans(vector3_cross(rA, cp.constraint[k].axis), solverbody[0]->inv_inertia);
 				solverbody[1]->delta_LinearVelocity -= deltaImpulse * solverbody[1]->inv_mass * cp.constraint[k].axis;
 				solverbody[1]->delta_AngulaVelocity -= deltaImpulse * vector3_trans(vector3_cross(rB, cp.constraint[k].axis), solverbody[1]->inv_inertia);
+
 			}
 		}	
 	}
@@ -225,6 +231,8 @@ void physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 
 			coll[0] = pair.body[0];
 			coll[1] = pair.body[1];
+			ALPphysics[0] = coll[0]->ALPcollider->ALPphysics;
+			ALPphysics[1] = coll[1]->ALPcollider->ALPphysics;
 			solverbody[0] = ALPphysics[0]->solve;
 			solverbody[1] = ALPphysics[1]->solve;
 
@@ -271,6 +279,8 @@ void physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 					solverbody[1]->delta_LinearVelocity -= delta_impulse * solverbody[1]->inv_mass * constraint.axis;
 					solverbody[1]->delta_AngulaVelocity -= vector3_trans(vector3_cross(rB, constraint.axis * delta_impulse), solverbody[1]->inv_inertia);
 				}
+
+
 				{
 					Constraint& constraint = cp.constraint[2];
 					float delta_impulse = constraint.rhs;
@@ -287,6 +297,7 @@ void physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 					solverbody[1]->delta_AngulaVelocity -= vector3_trans(vector3_cross(rB, constraint.axis * delta_impulse), solverbody[1]->inv_inertia);
 				}
 
+
 			}
 		}
 	}
@@ -295,7 +306,6 @@ void physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 	for (auto& coll : colliders) {
 		coll.ALPphysics->linear_velocity += coll.ALPphysics->solve->delta_LinearVelocity;
 		coll.ALPphysics->anglar_velocity += coll.ALPphysics->solve->delta_AngulaVelocity;
-
 	}
 
 }

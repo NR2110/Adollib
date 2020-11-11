@@ -48,7 +48,10 @@ namespace Adollib {
 
 
 			static void initialize();
-			static void render(const physics_function::ALP_Collider&);
+			static void render_collider(const physics_function::ALP_Collider&);
+
+			//ÀÛ‚Í14-DOP‚¾‚ª•`‰æ‚ª‚ß‚ñ‚Ç‚­‚³‚¢‚Ì‚ÅAABB‚Å•`‰æ
+			static void render_AABB(const physics_function::ALP_Collider&);
 
 		};
 

@@ -18,6 +18,7 @@ struct edge{
 
 void physics_function::Broadphase(std::list<ALP_Collider>& ALP_collider, std::vector<Contacts::Collider_2>& out_pair) {
 
+
 	//Sweep&Prune‚ð‘}“ü–@‚ÅŽÀ‘•
 	static std::list<edge>axis_list[1];
 
@@ -126,8 +127,8 @@ void physics_function::Broadphase(std::list<ALP_Collider>& ALP_collider, std::ve
 	std::list<std::vector<ALP_Collider_mesh>::iterator> actives;
 	Contacts::Collider_2 pair;
 	out_pair.clear();
-	std::list<std::vector<ALP_Collider_mesh>::iterator>::iterator ac = actives.begin();
-	std::list<std::vector<ALP_Collider_mesh>::iterator>::iterator ac_end = actives.end();
+	std::list<std::vector<ALP_Collider_mesh>::iterator>::iterator ac_itr = actives.begin();
+	std::list<std::vector<ALP_Collider_mesh>::iterator>::iterator ac_itr_end = actives.end();
 	{
 
 
@@ -145,15 +146,14 @@ void physics_function::Broadphase(std::list<ALP_Collider>& ALP_collider, std::ve
 				actives.emplace_back(itr->coll);
 			}
 			else {
-				ac = actives.begin();
-				ac_end = actives.end();
-
-				for (; ac != ac_end; ac++) {
-					if (*ac == itr->coll) {
-						actives.erase(ac);
+				ac_itr = actives.begin();
+					for (auto& ac : actives){
+					if (ac._Ptr == itr->coll._Ptr) {
+						actives.erase(ac_itr);
 						break;
 
 					}
+					++ac_itr;
 				}
 			}
 

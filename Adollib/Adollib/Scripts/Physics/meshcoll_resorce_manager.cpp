@@ -18,10 +18,10 @@ using namespace std;
 
 std::unordered_map <std::string, std::vector<Meshcollider_mesh>> Collider_ResourceManager::meshes;
 
-bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<Meshcollider_mesh>* ret_mesh) {
+bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<Meshcollider_mesh>** ret_mesh) {
 
 	if (meshes.count((string)fbxname) == 1) {
-		ret_mesh = &meshes[fbxname];
+		*ret_mesh = &meshes[fbxname];
 		return true;
 	}
 	const char* fileName = fbxname;
@@ -251,7 +251,7 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 	}
 
 	meshes[fbxname] = _mesh;
-	ret_mesh = &meshes[fbxname];
+	*ret_mesh = &meshes[fbxname];
 
 
 	return true;

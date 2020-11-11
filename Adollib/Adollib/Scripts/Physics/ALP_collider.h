@@ -16,14 +16,18 @@ namespace Adollib {
 		class ALP_Collider;
 
 		struct ALP_Collider_mesh {
+
 			//14-DOP
 			DOP::DOP_14	dop14;	//14DOP データ
 
 			//meshcollider用 vertexes,Edges,Facetsなどの情報
-			Meshcollider_mesh* mesh;
+			std::vector<physics_function::Meshcollider_mesh>::iterator mesh;
 
 			//親
 			std::list<ALP_Collider>::iterator ALPcollider;
+
+			////meshの番号(ふ)
+			//u_int mesh_num;
 		};
 
 		class ALP_Collider {

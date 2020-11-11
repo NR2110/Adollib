@@ -93,7 +93,8 @@ namespace Adollib {
 		//ŒvŽZ—p‚Ìstruct
 		virtual physics_function::Collider_data get_Colliderdata() const = 0;
 		virtual physics_function::Meshcoll_data get_Meshdata() { return physics_function::Meshcoll_data(); };
-		physics_function::Physics_data  get_Physicsdata() {
+
+		const physics_function::Physics_data get_Physicsdata() const {
 			physics_function::Physics_data data;
 			data.inertial_mass = inertial_mass;
 			data.drag = drag;

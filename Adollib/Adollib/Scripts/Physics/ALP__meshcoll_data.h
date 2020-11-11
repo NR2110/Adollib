@@ -41,7 +41,7 @@ namespace Adollib {
 		};
 
 		struct Meshcoll_data {
-			std::vector<Meshcollider_mesh>* collider_mesh = nullptr;
+			std::list<Meshcollider_mesh>::iterator collider_mesh;
 		};
 
 	}

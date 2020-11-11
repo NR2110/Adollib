@@ -9,7 +9,7 @@ using namespace DOP;
 //:::::::::::::::::::::::::::
 #pragma region Midphase
 //:::::::::::::::::::::::::::
-//DOP6‚É‚æ‚é‘åG”c‚È“–‚½‚è”»’è
+//DOP14‚É‚æ‚é‘åG”c‚È“–‚½‚è”»’è
 bool Check_insert_DOP14(const std::vector<ALP_Collider_mesh>::iterator meshA, const std::vector<ALP_Collider_mesh>::iterator meshB) {
 	//–³ŒÀPlane‚ÍDOP‚ªì‚ê‚È‚¢‚½‚ßnarrow‚É“Š‚°‚é?
 	//if (meshA->shape == ALP_Collider_shape::Plane || meshB->shape == ALP_Collider_shape::Plane) return true;
@@ -102,6 +102,7 @@ void physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std:
 	for (auto& pair : in_pair) {
 
 		for(auto& meshB: pair.bodylists){
+			if (pair.body->ALPcollider == meshB->ALPcollider)continue;
 
 			Midphase_DOP_14(new_pairs, pair.body, meshB);
 		}
@@ -115,8 +116,8 @@ void physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std:
 			if (new_p.type == Pairtype::keep_pair) continue;
 
 			if (
-				new_p.body[0] == old_p.body[0] &&
-				new_p.body[1] == old_p.body[1]
+				new_p.body[0]._Ptr == old_p.body[0]._Ptr &&
+				new_p.body[1]._Ptr == old_p.body[1]._Ptr
 				) {
 				//‘O‚©‚ç‘¶İ‚µ‚Ä‚¢‚½‚çƒf[ƒ^‚ğˆø‚«Œp‚®
 				new_p = old_p;

@@ -6,7 +6,7 @@ namespace Adollib {
 		static const int DOP_size = 14 / 2;
 
 		//::::::::::::::::::
-		//Boardphase—p‚ÌDOP_6
+		//Boardphase—p‚ÌDOP_14
 		// x : (1,0,0)
 		// y : (0,1,0)
 		// z : (0,0,1)

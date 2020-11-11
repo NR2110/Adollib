@@ -4,6 +4,7 @@
 #include "../Main/Adollib.h"
 
 #include "../Object/gameobject_manager.h"
+#include "../Imgui/imgui_all.h"
 #include "../Imgui/work_meter.h"
 
 #include "collider.h"
@@ -47,6 +48,7 @@ namespace Adollib
 	float Phyisics_manager::timeStep = Physics_manager_default::timeStep;
 
 	bool Phyisics_manager::is_draw_collider = false;
+	bool Phyisics_manager::is_draw_dop = false;
 }
 
 namespace Adollib
@@ -71,6 +73,7 @@ namespace Adollib
 
 	bool Phyisics_manager::update(Scenelist Sce)
 	{
+		update_Gui();
 
 		if (frame_count < 10) {
 			resetforce(ALP_physicses[Sce]);
@@ -137,17 +140,90 @@ namespace Adollib
 	}
 }
 
+bool Phyisics_manager::update_Gui() {
+	ImGuiWindowFlags flag = 0;
+	//flag |= ImGuiWindowFlags_AlwaysAutoResize;
+
+	if (ImGui::Begin("physics_global", 0, flag)) {
+
+		//Collider‚Ì•\Ž¦
+		ImGui::Checkbox("draw_collider", &is_draw_collider);
+		//Collider‚Ì•\Ž¦
+		ImGui::Checkbox("draw_DOP", &is_draw_dop);
+
+		//d—Í‚Ì’²®
+		ImGui::InputFloat("gravity", &gravity, 0.1f, 1.0f, "%.2f");
+
+		//³Šm‚³‚Ì’²®
+		ImGui::InputInt("accuracy", &solver_iterations, 1, 200);
+
+		//ŠÑ’ÊŽž‚Ì‚Î‚Ë‚Ì‹­‚³
+		ImGui::InputFloat("bias", &bias, 0.01f, 0.1f, "%.3f");
+		//ŠÑ’Ê‹–—eŒë·
+		ImGui::InputFloat("slop", &slop, 0.0001f, 0.001f, "%.4f");
+
+		//physics_default‚Ì•\Ž¦
+		if (ImGui::CollapsingHeader("physics_default")) {
+			static constexpr float inertial_mass = 1.f; //Ž¿—Ê
+			static constexpr float drag = 0.1f; //‹ó‹C’ïR
+			static constexpr float anglar_drag = 0.1f; //‹ó‹C’ïR
+			static constexpr float dynamic_friction = 0.4f;//“®–€ŽC
+			static constexpr float static_friction = 0.4f; //Ã–€ŽC
+			static constexpr float restitution = 0.1f;	 //”½”­ŒW”
+
+			static constexpr bool is_fallable = true; //—Ž‚¿‚é‚©
+			static constexpr bool is_kinematic = true; //‰e‹¿‚¤‚¯‚é‚©(fall‚Í‚·‚é)
+			static constexpr bool is_moveable = true;//“®‚­‚©
+			static constexpr bool is_hitable = true;  //Õ“Ë‚µ‚È‚¢
+
+			ImGui::Columns(2);
+			ImGui::Separator();
+			ImGui::Separator();
+			ImGui::Text("mass"); ImGui::NextColumn();  ImGui::Text("%f", inertial_mass); ImGui::NextColumn();
+			ImGui::Text("drag"); ImGui::NextColumn();  ImGui::Text("%f", drag); ImGui::NextColumn();
+			ImGui::Text("anglar_drag"); ImGui::NextColumn();  ImGui::Text("%f", anglar_drag); ImGui::NextColumn();
+			ImGui::Text("dynamic_friction"); ImGui::NextColumn();  ImGui::Text("%f", dynamic_friction); ImGui::NextColumn();
+			ImGui::Text("static_friction"); ImGui::NextColumn();  ImGui::Text("%f", static_friction); ImGui::NextColumn();
+			ImGui::Text("restitution"); ImGui::NextColumn();  ImGui::Text("%f", restitution); ImGui::NextColumn();
+			ImGui::Text("is_fallable"); ImGui::NextColumn();  if (is_fallable)ImGui::Text("true"); else ImGui::Text("false"); ImGui::NextColumn();
+			ImGui::Text("is_kinematic"); ImGui::NextColumn(); if (is_kinematic)ImGui::Text("true"); else ImGui::Text("false"); ImGui::NextColumn();
+			ImGui::Text("is_moveable"); ImGui::NextColumn();  if (is_moveable)ImGui::Text("true"); else ImGui::Text("false"); ImGui::NextColumn();
+			ImGui::Text("is_hitable"); ImGui::NextColumn();   if (is_hitable)ImGui::Text("true"); else ImGui::Text("false"); ImGui::NextColumn();
+			ImGui::Separator();
+
+			ImGui::Columns(1);
+		}
+
+		ImGui::End();
+	}
+
+	return true;
+}
+
 #include "../Main/systems.h"
 #include "../Mesh/material_for_collider.h"
 
 bool Phyisics_manager::render_collider(Scenelist Sce) {
+	render_dop(Sce);
+
 	if (is_draw_collider == false)return false;
 
 	for (auto& itr : ALP_colliders[Sce]) {
-		Collider_renderer::render(itr);
+		Collider_renderer::render_collider(itr);
 	}
 
 	return true;
+}
+
+bool Phyisics_manager::render_dop(Scenelist Sce) {
+	if (is_draw_dop == false)return false;
+
+	for (auto& itr : ALP_colliders[Sce]) {
+		Collider_renderer::render_AABB(itr);
+	}
+
+	return true;
+
 }
 
 void Phyisics_manager::destroy(Scenelist Sce) {

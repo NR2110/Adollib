@@ -133,17 +133,18 @@ void Gameobject_manager::update(Scenelist Sce) {
 
 	//ツリーの親を更新
 	masters.clear();
-	for (u_int i = 0; i < gos.size(); i++) {
-		object* master =  gos[i]->get_pearent();
+	for (auto& GO : gos) {
+		object* master = GO->get_pearent();
 		if (master->updated == true)continue;
 		master->updated = true;
 		masters.push_back(master);
 	}
 
 	//親から子へupdateを呼ぶ
-	for (u_int i = 0; i < masters.size(); i++) {
-		masters[i]->update_P_to_C();
-	}
+	std::for_each(masters.begin(), masters.end(), [](object* ob) {ob->update_P_to_C(); });
+	//for (u_int i = 0; i < masters.size(); i++) {
+	//	masters[i]->update_P_to_C();
+	//}
 
 	// multi thread....?
 	//static std::future<bool> ret;

@@ -42,7 +42,10 @@ void Collider::awake() {
 
 	data.ALPcollider_itr->coll_itr = coll_itr;
 
+	data.ALPcollider_itr->collider_meshes.resize(1);
+	data.ALPcollider_itr->collider_meshes.at(0).ALPcollider = data.ALPcollider_itr;
 }
+
 void Collider::finalize() {
 	remove_collider();
 }

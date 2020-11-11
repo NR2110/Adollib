@@ -29,44 +29,38 @@ namespace Adollib
 		//	set_nohit_plane(n_vector3(1000, -1, 1000), n_vector3(0, 1, 0), n_vector3(1, 0, 1));
 			//set_moveable_box(n_vector3(0, 200, 0), n_vector3(10, 10, 10), n_vector3(45, 45, 0), n_vector3(0, 1, 1));
 			//set_moveable_box(n_vector3(0, 200, 0), n_vector3(10, 10, 10), n_vector3(0, 0, 0), n_vector3(0, 1, 1));
-		if (0) {
+		if (1) {
 			{
 				Gameobject* GO = Gameobject_manager::createCube();
-				GO->transform->local_pos = Vector3(0, -90, 0.5);
+				GO->transform->local_pos = Vector3(0, -60, 0);
 				GO->transform->local_scale = Vector3(60, 60, 60);
-				GO->transform->local_orient = quaternion_from_euler(45, 0, 0);
+				GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
 				GO->material->color = Vector4(1, 1, 1, 1);
 
-				//Box* R = GO->addComponent<Box>();
-				Meshcoll* R = GO->addComponent<Meshcoll>();
-				R->load_mesh("./DefaultModel/cube.fbx");
+				Box* R = GO->addComponent<Box>();
+				//Meshcoll* R = GO->addComponent<Meshcoll>();
+				//R->load_mesh("./DefaultModel/cube.fbx");
 				R->is_moveable = false;
 			}
 
 			{
-				Gameobject* GO = Gameobject_manager::createCube();
-				GO->transform->local_pos = Vector3(0, -90, 0.5);
-				GO->transform->local_scale = Vector3(60, 60, 60);
-				GO->transform->local_orient = quaternion_from_euler(45, 0, 0);
-				GO->material->color = Vector4(1, 1, 1, 1);
-
-				Box* R = GO->addComponent<Box>();
-				R->is_moveable = false;
+				//Gameobject* GO = Gameobject_manager::createCube();
+				//GO->transform->local_pos = Vector3(0, -90, 0.5);
+				//GO->transform->local_scale = Vector3(60, 60, 60);
+				//GO->transform->local_orient = quaternion_from_euler(45, 0, 0);
+				//GO->material->color = Vector4(1, 1, 1, 1);
 
 				//Box* R = GO->addComponent<Box>();
-				Meshcoll* M = GO->addComponent<Meshcoll>();
-				M->load_mesh("./DefaultModel/cube.fbx");
-				M->is_moveable = false;
+				//R->is_moveable = false;
+
+				////Box* R = GO->addComponent<Box>();
+				//Meshcoll* M = GO->addComponent<Meshcoll>();
+				//M->load_mesh("./DefaultModel/cube.fbx");
+				//M->is_moveable = false;
 			}
 		}
 		else {
 			{
-				//Gameobject* GO = Gameobject_manager::createCube();
-				//GO->transform->local_pos = Vector3(0, -60, 0);
-				//GO->transform->local_scale = Vector3(60, 60, 60);
-				//GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
-				//GO->material->color = Vector4(1, 1, 1, 1);
-
 				Gameobject* GO = Gameobject_manager::createFromFBX("../Data/FBX/0311_collisions.fbx");
 				GO->transform->local_pos = Vector3(-10, 15, -25);
 				GO->transform->local_scale = Vector3(0.001f, 0.001f, 0.001f);
@@ -84,88 +78,13 @@ namespace Adollib
 				//GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
 				//GO->material->color = Vector4(1, 1, 1, 1);
 
-				//Box* R = GO->addComponent<Box>();
-				//R->is_moveable = false;
 			}
 		}
 
-		//{
-		//	Gameobject* GO = Gameobject_manager::createSphere();
-		//	GO->transform->local_pos = Vector3(0, -300, 0);
-		//	GO->transform->local_scale = Vector3(300, 300, 300);
-		//	GO->material->color = Vector4(1, 1, 1, 1);
-
-		//	Collider* R = GO->add_collider_sphere();
-		//	R->move = false;
-		//}
-		//{
-		//	Gameobject* GO = Gameobject_manager::createCube();
-		//	GO->transform->local_pos = Vector3(0, -35, 0);
-		//	GO->transform->local_orient = quaternion_from_euler(0, 0, 45);
-		//	GO->transform->local_scale = Vector3(30, 30, 30);
-		//	GO->material->color = Vector4(1, 1, 1, 1);
-
-		//	Collider* R = GO->add_collider_box();
-		//	R->move = false;
-		//}
-
-		//set_fall_box(Vector3(0, 4, 0), Vector3(2, 2, 2), Vector3(0, 0, 0), Vector3(0, 1, 1));
-		//set_fall_box(Vector3(0, 8, 0), Vector3(2, 2, 2), Vector3(0, 0, 0), Vector3(0, 1, 1));
-
-		for (int i = 0; i < 2; i++) {
-			//set_fall_box(Vector3(0, 5 + 10 * i, 0), Vector3(5,2,5), Vector3(0,i*45,0), Vector3(0, 1, 1));
-			//set_fall_box(Vector3(5, 5 + 10 * i, 0), Vector3(2,2,2), Vector3(0,i*45,0), Vector3(0, 1, 1));
-			//set_fall_box(Vector3(5, 5 + 10 * i, 5), Vector3(2,2,2), Vector3(0,i*45,0), Vector3(0, 1, 1));
-			//set_fall_box(Vector3(0, 5 + 10 * i, 5), Vector3(2,2,2), Vector3(0,i*45,0), Vector3(0, 1, 1));
-
-			//set_fall_sphere(Vector3(i * 0.01, 20 + 10 * i, i * 0.01), 2, Vector3(0, 1, 1));
-			//set_fall_sphere(Vector3(5, 5 + 10 * i, i * 0.01), 2, Vector3(0, 1, 1));
-			//set_fall_sphere(Vector3(5, 5 + 10 * i, 5), 2, Vector3(0, 1, 1));
-			//set_fall_sphere(Vector3(i * 0.01, 20 + 10 * i, 5), 2, Vector3(0, 1, 1));
-
-			//set_fall_sphere(Vector3(0, 5 + 10 * i, 0), 2, Vector3(0, 1, 1));
-			//set_fall_sphere(Vector3(5, 5 + 10 * i, 0), 2, Vector3(0, 1, 1));
-			//set_fall_sphere(Vector3(5, 5 + 10 * i, 5), 2, Vector3(0, 1, 1));
-			//set_fall_sphere(Vector3(0, 5 + 10 * i, 5), 2, Vector3(0, 1, 1));
-
-
-		}
-
-		//int max_c = 10;
-		//for (int i = 0; i < max_c; i++) {
-
-		//	for (int o = 0; o < max_c - i; o++) {
-		//		//set_fall_box(Vector3(2.00001 * o - (max_c - i) * 2.000001 / 2.0, 1.0 + 2.00001 * i, 0), Vector3(1, 1, 1), Vector3(0, 0, 0), Vector3(0, 1, 1));
-		//		Box* V = set_fall_box(Vector3(2.50001 * o - (max_c - i) * 2.500001 / 2.0, 5.0 + 2.50001 * i, 0), Vector3(1, 1, 1), Vector3(30, 0, 30), Vector3(0, 1, 1));
-		//		boxes.emplace_back(V);
-		//		st_box.emplace_back(*V);
-		//	}
-
-		//	//set_fall_sphere(Vector3(i * 0.01, 20 + 10 * i, i * 0.01), 2, Vector3(0, 1, 1));
-		//	//set_fall_sphere(Vector3(5, 5 + 10 * i, i * 0.01), 2, Vector3(0, 1, 1));
-		//	//set_fall_sphere(Vector3(5, 5 + 10 * i, 5), 2, Vector3(0, 1, 1));
-		//	//set_fall_sphere(Vector3(i * 0.01, 20 + 10 * i, 5), 2, Vector3(0, 1, 1));
-
-		//	//set_fall_sphere(Vector3(0, 5 + 10 * i, 0), 2, Vector3(0, 1, 1));
-		//	//set_fall_sphere(Vector3(5, 5 + 10 * i, 0), 2, Vector3(0, 1, 1));
-		//	//set_fall_sphere(Vector3(5, 5 + 10 * i, 5), 2, Vector3(0, 1, 1));
-		//	//set_fall_sphere(Vector3(0, 5 + 10 * i, 5), 2, Vector3(0, 1, 1));
-
-		//}
-
-		//set_fall_box(Vector3(0, 20, 0), Vector3(3, 3, 3), Vector3(45, 0, 0), Vector3(0, 1, 1));
-
-		//Box* B = set_fall_box(Vector3(0, 0.25, 0), Vector3(2, 0.25, 1), Vector3(0, 90, 0), Vector3(0, 0.5, 1));
-		//B->move = false;
-
-		//set_fall_box(Vector3(0, 3, 0), Vector3(2, 0.25, 1), Vector3(0, 0, 45), Vector3(0, 1, 1));
 
 #else
-		//	set_plane(n_vector3(0, -1, 0), n_vector3(0, 1, 0), n_vector3(1, 0, 1));
-		set_box(n_vector3(0, 0, 5), n_vector3(1, 1, 1), n_vector3(0, 0, 0));
 #endif
 
-		//	set_moveable_box(n_vector3(1000, 100, 1000), n_vector3(2, 2, 2), n_vector3(30, 30, 0), n_vector3(0, 1, 1));
 
 	}
 
@@ -177,20 +96,6 @@ namespace Adollib
 
 
 		if(ImGui::Begin("object_manage", 0, flag)) {
-
-			//Colliderの表示
-			ImGui::Checkbox("draw_collider", &Phyisics_manager::is_draw_collider); //objectの削除
-
-			//重力の調整
-			ImGui::InputFloat("gravity", &Phyisics_manager::gravity, 0.1f, 1.0f, "%.2f");
-
-			//正確さの調整
-			ImGui::InputInt("accuracy", &Phyisics_manager::solver_iterations, 1, 200);
-
-			//貫通時のばねの強さ
-			ImGui::InputFloat("bias", &Phyisics_manager::bias, 0.01f, 0.1f, "%.3f");
-			//貫通許容誤差
-			ImGui::InputFloat("slop", &Phyisics_manager::slop, 0.0001f, 0.001f, "%.4f");
 
 			//objectの削除
 			bool del = false;

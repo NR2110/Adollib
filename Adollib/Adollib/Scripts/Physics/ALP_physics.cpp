@@ -66,6 +66,7 @@ void ALP_Physics::apply_external_force(float duration) {
 		linear_velocity += linear_acceleration * duration;
 
 
+
 		//各回転に加える力(accumulated_torque)から加速度を出して角速度を更新する
 		Matrix inverse_inertia_tensor = matrix_inverse(inertial_tensor);
 		Matrix rotation = ALP_coll->local_orientation.get_rotate_matrix();
@@ -85,6 +86,7 @@ void ALP_Physics::apply_external_force(float duration) {
 	angula_acceleration = Vector3(0, 0, 0);
 }
 void ALP_Physics::integrate(float duration) {
+
 	//位置の更新
 	if (linear_velocity.norm() >= FLT_EPSILON)
 		ALP_coll->world_position += linear_velocity * duration;

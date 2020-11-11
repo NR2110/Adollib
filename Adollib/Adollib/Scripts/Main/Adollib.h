@@ -3,7 +3,7 @@
 #include "../Math/vector.h"
 namespace Adollib {
 
-	//絶賛いい感じの名前募集中
+	//TODO : 絶賛いい感じの名前募集中
 	class Al_Global {
 	public:
 		static int SCREEN_WIDTH;
@@ -24,7 +24,7 @@ namespace Adollib {
 		// min : 色の最小値(0 ～ 1)
 		// max : 色の最大値(0 ～ 1)
 		//::::::::::::::::::::
-		static Vector4 get_gaming(int time, float change_time = 600, float min = 0.0, float max = 1.0);
+		static Vector4 get_gaming(int time, float change_time = 800, float min = 0.0, float max = 1.0);
 	};
 
 
