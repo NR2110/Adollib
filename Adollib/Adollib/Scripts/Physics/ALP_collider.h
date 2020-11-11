@@ -89,7 +89,6 @@ namespace Adollib {
 			// collider::get_Colliderdata()からlocal_posなどの情報を更新
 			void refresh_ALP_from_data();
 
-		public:
 			// DOP_14データの更新
 			void update_dop14();
 

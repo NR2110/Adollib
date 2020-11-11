@@ -93,7 +93,7 @@ void Collider_renderer::render_collider(const physics_function::ALP_Collider& R)
 		cb.shininess = 1;
 		cb.ambientColor = DirectX::XMFLOAT4(0.1f, 0.1f, 0.1f, 1);
 //		cb.materialColor = Al_Global::get_gaming(Al_Global::second_per_game * 60, 800).get_XM4();
-		cb.materialColor = Al_Global::get_gaming((Al_Global::second_per_game + color_num) * 60, 600).get_XM4();
+		cb.materialColor = Al_Global::get_gaming((Al_Global::second_per_game + color_num * 2) * 60, 600).get_XM4();
 		//cb.materialColor = color16[color_num].get_XM4();
 		Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
 		Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
@@ -118,12 +118,61 @@ void Collider_renderer::render_collider(const physics_function::ALP_Collider& R)
 void Collider_renderer::render_AABB(const physics_function::ALP_Collider& coll) {
 
 
-	std::vector<Mesh::mesh>* box_mesh = meshes[ALP_Collider_shape::BOX];
+	const std::vector<Mesh::mesh>* box_mesh = meshes[ALP_Collider_shape::BOX];
 
 	Vector3 w_pos;
 	Vector3 w_scale;
 	int color_num = 0;
 	for (const auto& coll_mesh : coll.collider_meshes) {
+
+//’¸“_‚Ì•\Ž¦
+#if 0//Debug
+		{
+			const std::vector<Mesh::mesh>* sphere_mesh = meshes[ALP_Collider_shape::Sphere];
+
+			for (const auto& vertex : coll_mesh.mesh->vertices) {
+				//CB : ConstantBufferPerCO_OBJ
+				ConstantBufferPerGO g_cb;
+				g_cb.world = matrix_world(Vector3(0.01f), matrix_identity(), (vector3_quatrotate(vertex, coll_mesh.ALPcollider->world_orientation) * coll_mesh.ALPcollider->world_scale) + coll_mesh.ALPcollider->world_position).get_XMFLOAT4X4();
+
+				Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
+				Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
+				Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
+
+				Systems::DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+				Systems::DeviceContext->IASetInputLayout(vertexLayout.Get());
+
+				for (const auto& mesh : *sphere_mesh) {
+
+					UINT stride = sizeof(VertexFormat);
+					UINT offset = 0;
+					Systems::DeviceContext->IASetVertexBuffers(0, 1, mesh.vertexBuffer.GetAddressOf(), &stride, &offset);
+					Systems::DeviceContext->IASetIndexBuffer(mesh.indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+
+					//CB : ConstantBufferPerCoMaterial
+					ConstantBufferPerMaterial cb;
+					cb.shininess = 1;
+					cb.ambientColor = DirectX::XMFLOAT4(0.1f, 0.1f, 0.1f, 1);
+					cb.materialColor = Vector4(Al_Global::get_gaming((Al_Global::second_per_game + color_num * 2) * 60, 600).xyz, 1).get_XM4();
+					//cb.materialColor = color16[color_num].get_XM4();
+					Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
+					Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
+					Systems::DeviceContext->PSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
+
+					for (auto& subset : mesh.subsets)
+					{
+						Systems::DeviceContext->PSSetShaderResources(0, 1, subset.diffuse.shaderResourceVirw.GetAddressOf());
+
+						// •`‰æ
+						Systems::DeviceContext->DrawIndexed(subset.indexCount, subset.indexStart, 0);
+
+					}
+
+				}
+			}
+
+		}
+#endif
 
 		w_pos = Vector3(
 			(coll_mesh.dop14.max[0] + coll_mesh.dop14.min[0]) / 2.0f,
@@ -136,10 +185,9 @@ void Collider_renderer::render_AABB(const physics_function::ALP_Collider& coll) 
 			(coll_mesh.dop14.max[2] - coll_mesh.dop14.min[2]) / 2.0f
 		);
 
-		//plane6[0] = 
 		//CB : ConstantBufferPerCO_OBJ
 		ConstantBufferPerGO g_cb;
-		g_cb.world = matrix_world(w_scale * 1.0001, matrix_identity(), w_pos + coll_mesh.dop14.pos).get_XMFLOAT4X4();
+		g_cb.world = matrix_world(w_scale * 1.001, matrix_identity(), w_pos + coll_mesh.dop14.pos).get_XMFLOAT4X4();
 
 		Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
 		Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
@@ -174,6 +222,7 @@ void Collider_renderer::render_AABB(const physics_function::ALP_Collider& coll) 
 
 			}
 
+			return;
 		}
 
 		color_num++;

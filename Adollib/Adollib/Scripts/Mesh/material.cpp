@@ -13,7 +13,7 @@ Material::Material() {
 	color = Vector4(1, 1, 1, 1);
 	DS_state = State_manager::DStypes::DS_TRUE;
 	RS_state = State_manager::RStypes::RS_CULL_BACK;
-	BS_state = State_manager::BStypes::BS_NONE;
+	BS_state = State_manager::BStypes::BS_ALPHA;
 
 	Systems::CreateConstantBuffer(&Mat_cb, sizeof(ConstantBufferPerMaterial));
 }
@@ -25,7 +25,6 @@ void Material::render() {
 
 	shader.Activate();
 
-	//RS_state = State_manager::RStypes::RS_CULL_NONE;
 	if (Systems::BS_type != BS_state) Systems::SetBlendState(BS_state);
 	if (Systems::RS_type != RS_state) Systems::SetRasterizerState(RS_state);
 	if (Systems::DS_type != DS_state) Systems::SetDephtStencilState(DS_state);

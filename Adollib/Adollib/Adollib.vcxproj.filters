@@ -17,9 +17,6 @@
     <Filter Include="ソース ファイル\scene_game\player">
       <UniqueIdentifier>{5803a67c-c3e6-4d3c-82a6-90b2b6264aeb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\scene_game\enemy">
-      <UniqueIdentifier>{16cb34cf-ce56-4401-8f99-e845686d95f9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00_Adollib">
       <UniqueIdentifier>{457a0db0-78dc-4f19-9ba1-e6eb79f8abcf}</UniqueIdentifier>
     </Filter>
