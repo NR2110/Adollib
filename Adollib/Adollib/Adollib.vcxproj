@@ -175,6 +175,7 @@
     <ClInclude Include="Scripts\Main\time.h" />
     <ClInclude Include="Scripts\Math\closest_func.h" />
     <ClInclude Include="Scripts\Math\complex.h" />
+    <ClInclude Include="Scripts\Math\crossing_func.h" />
     <ClInclude Include="Scripts\Math\DOP.h" />
     <ClInclude Include="Scripts\Math\math.h" />
     <ClInclude Include="Scripts\Math\math_e.h" />
@@ -254,6 +255,7 @@
     <ClCompile Include="Scripts\Main\systems.cpp" />
     <ClCompile Include="Scripts\Math\closest_func.cpp" />
     <ClCompile Include="Scripts\Math\complex.cpp" />
+    <ClCompile Include="Scripts\Math\crossing_func.cpp" />
     <ClCompile Include="Scripts\Mesh\frustum_culling.cpp" />
     <ClCompile Include="Scripts\Mesh\material.cpp" />
     <ClCompile Include="Scripts\Mesh\material_for_collider.cpp" />

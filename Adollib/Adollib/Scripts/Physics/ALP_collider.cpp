@@ -103,10 +103,6 @@ void ALP_Collider::update_dop14_as_box() {
 		{+world_scale.x, +world_scale.y, +world_scale.z}
 		};
 
-		//for (int i = 0; i < 4; i++) {
-		//	half[i] = half[i];
-		//}
-
 		Quaternion WO = world_orientation;
 		for (int i = 0; i < 4; i++) {
 			half[i] = vector3_quatrotate(half[i], WO);
@@ -145,27 +141,33 @@ void ALP_Collider::update_dop14_as_mesh() {
 		Vector3 rotated_axis[DOP::DOP_size];
 		for (int i = 0; i < DOP::DOP_size; i++) {
 			rotated_axis[i] = vector3_quatrotate(DOP::DOP_14_axis[i], world_orientation.conjugate()).unit_vect();
-			mesh.dop14.max[i] = -FLT_MAX;
-			mesh.dop14.min[i] = +FLT_MAX;
+			mesh.dop14.max[i] = +FLT_MAX;
+			mesh.dop14.min[i] = -FLT_MAX;
 		}
 
-		Vector3 half[DOP::DOP_size * 2];
-		int sum = 0;
+		Vector3 half_max[DOP::DOP_size];
 		for (int i = 0; i < DOP::DOP_size; i++) {
-			half[sum] = mesh.mesh->dopbase.max[i] * DOP::DOP_14_axis[i] * world_scale;
-			sum++;
-			half[sum] = mesh.mesh->dopbase.min[i] * DOP::DOP_14_axis[i] * world_scale;
-			sum++;
+			half_max[i] = mesh.mesh->dopbase.max[i] * DOP::DOP_14_axis[i] * world_scale;
+		}
+		Vector3 half_min[DOP::DOP_size];
+		for (int i = 0; i < DOP::DOP_size; i++) {
+			half_min[i] = mesh.mesh->dopbase.min[i] * DOP::DOP_14_axis[i] * world_scale;
 		}
 
 		//DOPの更新
 		for (int i = 0; i < DOP::DOP_size; i++) {
-			for (int o = 0; o < DOP::DOP_size * 2; o++) {
-				float dis = vector3_dot(rotated_axis[i], half[o]);
-				if (mesh.dop14.max[i] < dis) mesh.dop14.max[i] = dis * 1.00000001f;//確実にするためちょっと大きめにとる
-				if (mesh.dop14.min[i] > dis) mesh.dop14.min[i] = dis * 1.00000001f;//確実にするためちょっと大きめにとる
+			for (int o = 0; o < DOP::DOP_size; o++) {
+				float dis = vector3_dot(rotated_axis[i], half_max[o]);
+				if (mesh.dop14.max[i] > dis) mesh.dop14.max[i] = dis * 1.00000001f;//確実にするためちょっと大きめにとる
 
 			}
+			for (int o = 0; o < DOP::DOP_size; o++) {
+				float dis = vector3_dot(rotated_axis[i], half_min[o]);
+				if (mesh.dop14.min[i] < dis) mesh.dop14.min[i] = dis * 1.00000001f;//確実にするためちょっと大きめにとる
+
+			}
+
+
 		}
 	}
 }

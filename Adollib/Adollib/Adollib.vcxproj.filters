@@ -59,6 +59,9 @@
     <Filter Include="00_Adollib\00_main\imgui">
       <UniqueIdentifier>{e300b9ac-82ee-481e-86c7-2123936d9db1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00_Adollib\11_math\functions">
+      <UniqueIdentifier>{05ee9c70-11e2-4e67-8910-c0034474c868}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Scripts\player.cpp">
@@ -136,9 +139,6 @@
     <ClCompile Include="Scripts\Scene\scene_title.cpp">
       <Filter>ソース ファイル\scene_game</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Math\closest_func.cpp">
-      <Filter>00_Adollib\11_math</Filter>
-    </ClCompile>
     <ClCompile Include="Scripts\Math\complex.cpp">
       <Filter>00_Adollib\11_math</Filter>
     </ClCompile>
@@ -204,6 +204,12 @@
     </ClCompile>
     <ClCompile Include="Scripts\Physics\collider__base.cpp">
       <Filter>00_Adollib\22_physics\collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Math\closest_func.cpp">
+      <Filter>00_Adollib\11_math\functions</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Math\crossing_func.cpp">
+      <Filter>00_Adollib\11_math\functions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -317,9 +323,6 @@
     </ClInclude>
     <ClInclude Include="Scripts\Scene\scene_title.h">
       <Filter>ソース ファイル\scene_game</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Math\closest_func.h">
-      <Filter>00_Adollib\11_math</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Math\complex.h">
       <Filter>00_Adollib\11_math</Filter>
@@ -461,6 +464,12 @@
     </ClInclude>
     <ClInclude Include="Scripts\Physics\collider__base.h">
       <Filter>00_Adollib\22_physics\collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Math\closest_func.h">
+      <Filter>00_Adollib\11_math\functions</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Math\crossing_func.h">
+      <Filter>00_Adollib\11_math\functions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
