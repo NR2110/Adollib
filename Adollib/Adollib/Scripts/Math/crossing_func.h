@@ -49,7 +49,7 @@ namespace Adollib {
 		// crossing_p : Œğ“_
 		//•½–Ê‚ª•½s‚Ìfalse‚ğ•Ô‚·
 		//:::::::::::::::::
-		const bool getCrossingLine_three_plane(
+		const bool getCrossingP_three_plane(
 			const Vector3& nA, const float& dA,
 			const Vector3& nB, const float& dB,
 			const Vector3& nC, const float& dC,

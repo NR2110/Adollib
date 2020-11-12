@@ -175,7 +175,7 @@ void Collider_renderer::render_AABB(const physics_function::ALP_Collider& coll) 
 #endif
 
 //Debug::dopbase‚Ì•\Ž¦
-#if 1
+#if 0
 		{
 			coll_mesh.mesh->dopbase;
 
@@ -190,24 +190,11 @@ void Collider_renderer::render_AABB(const physics_function::ALP_Collider& coll) 
 				(coll_mesh.mesh->dopbase.max[2] - coll_mesh.mesh->dopbase.min[2]) * 0.5f * coll_mesh.ALPcollider->world_scale.z
 			);
 
-			//w_pos = Vector3(0);
-			//w_pos += (coll_mesh.mesh->dopbase.max[3] + coll_mesh.mesh->dopbase.min[3]) * 0.5f * DOP::DOP_14_axis[3];
-			//w_pos += (coll_mesh.mesh->dopbase.max[4] + coll_mesh.mesh->dopbase.min[4]) * 0.5f * DOP::DOP_14_axis[4];
-			//w_pos += (coll_mesh.mesh->dopbase.max[5] + coll_mesh.mesh->dopbase.min[5]) * 0.5f * DOP::DOP_14_axis[5];
-			//w_pos *= coll_mesh.ALPcollider->world_scale;
-
-			//w_scale = Vector3(0);
-			//w_scale += (coll_mesh.mesh->dopbase.max[3] - coll_mesh.mesh->dopbase.min[3]) * 0.5f * DOP::DOP_14_axis[3];
-			//w_scale += (coll_mesh.mesh->dopbase.max[4] - coll_mesh.mesh->dopbase.min[4]) * 0.5f * DOP::DOP_14_axis[4];
-			//w_scale += (coll_mesh.mesh->dopbase.max[5] - coll_mesh.mesh->dopbase.min[5]) * 0.5f * DOP::DOP_14_axis[5];
-			//w_scale *= coll_mesh.ALPcollider->world_scale;
-
 			//CB : ConstantBufferPerCO_OBJ
 			ConstantBufferPerGO g_cb;
 			g_cb.world = matrix_world(
 				w_scale * 1.001,
 				matrix_identity(),
-				//quaternion_from_euler(45,45,45).get_rotate_matrix(),
 				vector3_quatrotate(w_pos, coll_mesh.ALPcollider->world_orientation) + coll_mesh.ALPcollider->world_position
 			).get_XMFLOAT4X4();
 
@@ -244,6 +231,63 @@ void Collider_renderer::render_AABB(const physics_function::ALP_Collider& coll) 
 
 				}
 
+			}
+
+
+		}
+#endif
+
+//Debug::basepos‚Ì•\Ž¦
+#if 0
+		{
+			const std::vector<Mesh::mesh>* sphere_mesh = meshes[ALP_Collider_shape::Sphere];
+
+			for (const auto& vertex : coll_mesh.mesh->base_pos) {
+				//CB : ConstantBufferPerCO_OBJ
+				ConstantBufferPerGO g_cb;
+				//g_cb.world = matrix_world(
+				//	w_scale * 1.001,
+				//	matrix_identity(),
+				//	vector3_quatrotate(w_pos, coll_mesh.ALPcollider->world_orientation) + coll_mesh.ALPcollider->world_position
+				//).get_XMFLOAT4X4();
+
+				g_cb.world = matrix_world(Vector3(0.1f), matrix_identity(), (vector3_quatrotate(vertex, coll_mesh.ALPcollider->world_orientation) * coll_mesh.ALPcollider->world_scale) + coll_mesh.ALPcollider->world_position).get_XMFLOAT4X4();
+
+
+				Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
+				Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
+				Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
+
+				Systems::DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+				Systems::DeviceContext->IASetInputLayout(vertexLayout.Get());
+
+				for (const auto& mesh : *box_mesh) {
+
+					UINT stride = sizeof(VertexFormat);
+					UINT offset = 0;
+					Systems::DeviceContext->IASetVertexBuffers(0, 1, mesh.vertexBuffer.GetAddressOf(), &stride, &offset);
+					Systems::DeviceContext->IASetIndexBuffer(mesh.indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+
+					//CB : ConstantBufferPerCoMaterial
+					ConstantBufferPerMaterial cb;
+					cb.shininess = 1;
+					cb.ambientColor = DirectX::XMFLOAT4(0.1f, 0.1f, 0.1f, 1);
+					cb.materialColor = Vector4(Al_Global::get_gaming((Al_Global::second_per_game + color_num * 2) * 60, 600).xyz, 1).get_XM4();
+					//cb.materialColor = color16[color_num].get_XM4();
+					Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
+					Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
+					Systems::DeviceContext->PSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
+
+					for (auto& subset : mesh.subsets)
+					{
+						Systems::DeviceContext->PSSetShaderResources(0, 1, subset.diffuse.shaderResourceVirw.GetAddressOf());
+
+						// •`‰æ
+						Systems::DeviceContext->DrawIndexed(subset.indexCount, subset.indexStart, 0);
+
+					}
+
+				}
 			}
 
 
@@ -298,7 +342,7 @@ void Collider_renderer::render_AABB(const physics_function::ALP_Collider& coll) 
 
 			}
 
-			return;
+			//return;
 		}
 
 		color_num++;

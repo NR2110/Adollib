@@ -145,30 +145,52 @@ void ALP_Collider::update_dop14_as_mesh() {
 			mesh.dop14.min[i] = -FLT_MAX;
 		}
 
-		Vector3 half_max[DOP::DOP_size];
-		for (int i = 0; i < DOP::DOP_size; i++) {
-			half_max[i] = mesh.mesh->dopbase.max[i] * DOP::DOP_14_axis[i] * world_scale;
-		}
-		Vector3 half_min[DOP::DOP_size];
-		for (int i = 0; i < DOP::DOP_size; i++) {
-			half_min[i] = mesh.mesh->dopbase.min[i] * DOP::DOP_14_axis[i] * world_scale;
-		}
+		for (int v_num = 0; v_num < 24; v_num++) {
+			const Vector3& pos = mesh.mesh->base_pos[v_num] * world_scale;
 
-		//DOPの更新
-		for (int i = 0; i < DOP::DOP_size; i++) {
-			for (int o = 0; o < DOP::DOP_size; o++) {
-				float dis = vector3_dot(rotated_axis[i], half_max[o]);
+			//DOPの更新
+			for (int i = 0; i < DOP::DOP_size; i++) {
+				const float dis = vector3_dot(rotated_axis[i], pos);
+				if (mesh.dop14.min[i] < dis) mesh.dop14.min[i] = dis * 1.00000001f;//確実にするためちょっと大きめにとる
 				if (mesh.dop14.max[i] > dis) mesh.dop14.max[i] = dis * 1.00000001f;//確実にするためちょっと大きめにとる
 
 			}
-			for (int o = 0; o < DOP::DOP_size; o++) {
-				float dis = vector3_dot(rotated_axis[i], half_min[o]);
-				if (mesh.dop14.min[i] < dis) mesh.dop14.min[i] = dis * 1.00000001f;//確実にするためちょっと大きめにとる
-
-			}
-
-
 		}
+
+
+		//mesh.dop14.pos = world_position;
+
+		//Vector3 rotated_axis[DOP::DOP_size];
+		//for (int i = 0; i < DOP::DOP_size; i++) {
+		//	rotated_axis[i] = vector3_quatrotate(DOP::DOP_14_axis[i], world_orientation.conjugate()).unit_vect();
+		//	mesh.dop14.max[i] = +FLT_MAX;
+		//	mesh.dop14.min[i] = -FLT_MAX;
+		//}
+
+		//Vector3 half_max[DOP::DOP_size];
+		//for (int i = 0; i < DOP::DOP_size; i++) {
+		//	half_max[i] = mesh.mesh->dopbase.max[i] * DOP::DOP_14_axis[i] * world_scale;
+		//}
+		//Vector3 half_min[DOP::DOP_size];
+		//for (int i = 0; i < DOP::DOP_size; i++) {
+		//	half_min[i] = mesh.mesh->dopbase.min[i] * DOP::DOP_14_axis[i] * world_scale;
+		//}
+
+		////DOPの更新
+		//for (int i = 0; i < DOP::DOP_size; i++) {
+		//	for (int o = 0; o < DOP::DOP_size; o++) {
+		//		float dis = vector3_dot(rotated_axis[i], half_max[o]);
+		//		if (mesh.dop14.max[i] > dis) mesh.dop14.max[i] = dis * 1.00000001f;//確実にするためちょっと大きめにとる
+
+		//	}
+		//	for (int o = 0; o < DOP::DOP_size; o++) {
+		//		float dis = vector3_dot(rotated_axis[i], half_min[o]);
+		//		if (mesh.dop14.min[i] < dis) mesh.dop14.min[i] = dis * 1.00000001f;//確実にするためちょっと大きめにとる
+
+		//	}
+
+
+		//}
 	}
 }
 

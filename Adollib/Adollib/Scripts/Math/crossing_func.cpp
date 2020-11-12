@@ -38,7 +38,7 @@ const bool Crossing_func::getCrossingP_plane_line(
 
 }
 
-const bool Crossing_func::getCrossingLine_three_plane(
+const bool Crossing_func::getCrossingP_three_plane(
 	const Vector3& nA, const float& dA,
 	const Vector3& nB, const float& dB,
 	const Vector3& nC, const float& dC,
