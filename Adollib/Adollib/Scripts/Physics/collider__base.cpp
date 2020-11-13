@@ -32,7 +32,7 @@ void Collider::remove_collider() {
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 void Collider::awake() {
-	physics_function::ColliderPhysics_itrs data;
+	Physics_function::ColliderPhysics_itrs data;
 
 	data = Phyisics_manager::add_collider(this);
 

@@ -6,7 +6,7 @@
 
 #include "ALP__physics_manager.h"
 using namespace Adollib;
-using namespace physics_function;
+using namespace Physics_function;
 using namespace Contacts;
 
 //‘}“ü–@‚Ì
@@ -16,7 +16,7 @@ struct edge{
 	bool stgo = false; //true = st, false = go 
 };
 
-void physics_function::Broadphase(std::list<ALP_Collider>& ALP_collider, std::vector<Contacts::Collider_2>& out_pair) {
+void Physics_function::Broadphase(std::list<ALP_Collider>& ALP_collider, std::vector<Contacts::Collider_2>& out_pair) {
 
 
 	//Sweep&Prune‚ð‘}“ü–@‚ÅŽÀ‘•

@@ -73,7 +73,9 @@ bool Work_meter::render() {
 	flag = 0;
 	//if (!draw_Back_ground) flag |= ImGuiWindowFlags_NoTitleBar;			// タイトルバーを非表示にします。
 	//if (!draw_Back_ground) flag |= ImGuiWindowFlags_NoBackground;		// ウィンドウ内の背景を非表示にします。
-	flag |= ImGuiWindowFlags_AlwaysAutoResize;		// 自動でウィンドウ内のコンテンツに合わせてリサ
+	//flag |= ImGuiWindowFlags_AlwaysAutoResize;		// 自動でウィンドウ内のコンテンツに合わせてリサ
+	flag |= ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize;
+	flag |= ImGuiWindowFlags_::ImGuiWindowFlags_NoDocking;
 
 	ImGui::Begin("work_meter", 0, flag);
 

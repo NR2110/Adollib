@@ -2,7 +2,7 @@
 #include <list>
 #include "../Imgui/work_meter.h"
 using namespace Adollib;
-using namespace physics_function;
+using namespace Physics_function;
 using namespace Contacts;
 using namespace DOP;
 
@@ -93,7 +93,7 @@ void Midphase_DOP_14(std::vector<Contacts::Contact_pair>& new_pairs, std::vector
 }
 
 
-void physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std::vector<Contacts::Contact_pair>& pairs) {
+void Physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std::vector<Contacts::Contact_pair>& pairs) {
 
 	Work_meter::start("Mid_Dop14");
 	//DOP_14‚É‚æ‚é‘åŽG”c‚È“–‚½‚è”»’è

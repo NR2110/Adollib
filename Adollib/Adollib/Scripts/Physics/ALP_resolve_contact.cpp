@@ -7,7 +7,7 @@
 #include "ALP_physics.h"
 
 using namespace Adollib;
-using namespace physics_function;
+using namespace Physics_function;
 using namespace Contacts;
 
 //:::::::::::::::::::::::::::
@@ -45,7 +45,7 @@ void CalcTangentVector(const Vector3& normal, Vector3& tangent1, Vector3& tangen
 }
 
 
-void physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::vector<Contacts::Contact_pair>& pairs) {
+void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::vector<Contacts::Contact_pair>& pairs) {
 
 	//::: 解決用オブジェクトの生成 :::::::::::
 	std::vector<ALP_Solverbody> SBs;

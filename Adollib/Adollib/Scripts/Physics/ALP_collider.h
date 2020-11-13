@@ -10,7 +10,7 @@ namespace Adollib {
 
 	class Collider;
 
-	namespace physics_function {
+	namespace Physics_function {
 
 		class ALP_Physics;
 		class ALP_Collider;
@@ -21,7 +21,7 @@ namespace Adollib {
 			DOP::DOP_14	dop14;	//14DOP データ
 
 			//meshcollider用 vertexes,Edges,Facetsなどの情報
-			std::vector<physics_function::Meshcollider_mesh>::iterator mesh;
+			std::vector<Physics_function::Meshcollider_mesh>::iterator mesh;
 
 			//親
 			std::list<ALP_Collider>::iterator ALPcollider;

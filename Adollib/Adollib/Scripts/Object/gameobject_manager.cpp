@@ -56,7 +56,7 @@ void Gameobject_manager::awake() {
 		cameras[static_cast<Scenelist>(i)] = ca_manager;
 	}
 
-	physics_function::Collider_renderer::initialize(); 
+	Physics_function::Collider_renderer::initialize(); 
 
 }
 

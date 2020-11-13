@@ -7,7 +7,7 @@
 
 namespace Adollib
 {
-	namespace physics_function {
+	namespace Physics_function {
 
 		class Collider_ResourceManager
 		{

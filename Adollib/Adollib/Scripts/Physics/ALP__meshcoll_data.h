@@ -2,7 +2,7 @@
 #include "../Math/math.h"
 
 namespace Adollib {
-	namespace physics_function {
+	namespace Physics_function {
 
 		enum class Edgetype {
 			EdgeConvex,	// ì ÉGÉbÉW

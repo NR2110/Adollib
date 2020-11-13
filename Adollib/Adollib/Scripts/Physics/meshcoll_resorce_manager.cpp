@@ -14,7 +14,7 @@
 #include "../Main/systems.h"
 
 using namespace Adollib;
-using namespace physics_function;
+using namespace Physics_function;
 using namespace Crossing_func;
 using namespace std;
 
@@ -145,7 +145,7 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 			//面情報の保存
 			{
 				facet_num = vertex_num / 3;
-				physics_function::Facet F;
+				Physics_function::Facet F;
 				for (u_int i = 0; i < facet_num; i++) {
 					//F.vertexID[0] = indices[i * 3];
 					//F.vertexID[1] = indices[i * 3 + 1];
@@ -170,9 +170,9 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 					u = 0xffffff;
 				}
 
-				physics_function::Edge E;
+				Physics_function::Edge E;
 				for (u_int i = 0; i < facet_num; i++) {
-					physics_function::Facet& facet = facets[i];
+					Physics_function::Facet& facet = facets[i];
 
 					for (int o = 0; o < 3; o++) {
 						u_int vertId0 = ALmin(facet.vertexID[o % 3], facet.vertexID[(o + 1) % 3]);
@@ -185,7 +185,7 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 							E.facetID[1] = i;
 							E.vertexID[0] = vertId0;
 							E.vertexID[1] = vertId1;
-							E.type = physics_function::Edgetype::EdgeConvex; // 凸エッジで初期化
+							E.type = Physics_function::Edgetype::EdgeConvex; // 凸エッジで初期化
 							edges.emplace_back(E);
 
 							facet.edgeID[o] = edge_num;
@@ -195,8 +195,8 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 						}
 						else {
 							// すでに登録されていた
-							physics_function::Edge& edge = edges[edgeID_Table[tableId]];
-							physics_function::Facet& facetB = facets[edge.facetID[0]];
+							Physics_function::Edge& edge = edges[edgeID_Table[tableId]];
+							Physics_function::Facet& facetB = facets[edge.facetID[0]];
 
 							assert(edge.facetID[0] == edge.facetID[1] && "Don't let the edges have 3～ facet.");
 
@@ -207,14 +207,14 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 
 							//エッジの種類を入力
 							if (d < -FLT_EPSILON) {
-								edge.type = physics_function::Edgetype::EdgeConvex;
+								edge.type = Physics_function::Edgetype::EdgeConvex;
 							}
 							else if (d > FLT_EPSILON) {
-								edge.type = physics_function::Edgetype::EdgeConcave;
+								edge.type = Physics_function::Edgetype::EdgeConcave;
 								is_Convex = false;
 							}
 							else {
-								edge.type = physics_function::Edgetype::EdgeFlat;
+								edge.type = Physics_function::Edgetype::EdgeFlat;
 							}
 
 							edge.facetID[1] = i;

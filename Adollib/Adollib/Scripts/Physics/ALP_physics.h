@@ -4,7 +4,7 @@
 #include "ALP_collider.h"
 
 namespace Adollib {
-	namespace physics_function {
+	namespace Physics_function {
 
 		struct ALP_Solverbody {
 			Vector3 delta_LinearVelocity; // ï¿êië¨ìxç∑ï™

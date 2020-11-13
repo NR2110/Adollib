@@ -1,7 +1,7 @@
 #pragma once
 
 namespace Adollib {
-	namespace physics_function {
+	namespace Physics_function {
 		enum class ALP_Collider_shape {
 			None,
 			BOX,

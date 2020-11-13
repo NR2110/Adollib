@@ -211,6 +211,9 @@
     <ClCompile Include="Scripts\Math\crossing_func.cpp">
       <Filter>00_Adollib\11_math\functions</Filter>
     </ClCompile>
+    <ClCompile Include="Scripts\Physics\ray.cpp">
+      <Filter>00_Adollib\22_physics\collider</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Scripts\player.h">
@@ -470,6 +473,9 @@
     </ClInclude>
     <ClInclude Include="Scripts\Math\crossing_func.h">
       <Filter>00_Adollib\11_math\functions</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\ray.h">
+      <Filter>00_Adollib\22_physics\collider</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

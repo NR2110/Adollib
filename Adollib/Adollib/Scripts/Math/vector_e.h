@@ -136,16 +136,16 @@ inline Vector3& Vector3::operator/= (float S) {
 	return *this;
 }
 
-inline bool Vector3::operator== (const Vector3& M) {
+inline bool Vector3::operator== (const Vector3& M) const {
 	if (x == M.x && y == M.y && z == M.z)return true;
 	return false;
 }
-inline bool Vector3::operator!= (const Vector3& M) {
+inline bool Vector3::operator!= (const Vector3& M) const {
 	if (x == M.x && y == M.y && z == M.z)return false;
 	return true;
 }
 
-inline DirectX::XMFLOAT3 Vector3::get_XM3() {
+inline DirectX::XMFLOAT3 Vector3::get_XM3() const {
 	DirectX::XMFLOAT3 R;
 	R.x = x;
 	R.y = y;
@@ -164,15 +164,10 @@ inline float Vector3::norm() const {
 	return x * x + y * y + z * z;
 }
 
-inline Vector3 Vector3::unit_vect() {
+inline Vector3 Vector3::unit_vect() const {
 	float V = norm_sqr();
 	if (V == 1.0f)return *this;
 	if (V == 0)return Vector3(0, 0, 0);
-	Vector3 R = *this;
-	return R / V;
-}
-inline Vector3 Vector3::unit_vect() const {
-	float V = norm_sqr();
 	Vector3 R = *this;
 	return R / V;
 }

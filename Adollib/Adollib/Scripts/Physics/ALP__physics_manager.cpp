@@ -10,7 +10,7 @@
 #include "collider.h"
 
 using namespace Adollib;
-using namespace physics_function;
+using namespace Physics_function;
 using namespace Contacts;
 
 //::: staticメンバの初期化 :::::
@@ -18,7 +18,7 @@ namespace Adollib
 {
 	float Phyisics_manager::gravity = Physics_manager_default::gravity; //重力
 
-	physics_function::ALP_Physics Phyisics_manager::default_physics = ALP_Physics(
+	Physics_function::ALP_Physics Phyisics_manager::default_physics = ALP_Physics(
 		Physics_manager_default::inertial_mass, //質量
 		Physics_manager_default::drag, //空気抵抗
 		Physics_manager_default::anglar_drag, //空気抵抗
@@ -59,11 +59,11 @@ namespace Adollib
 	std::unordered_map<Scenelist, std::list<Collider*>> Phyisics_manager::colliders;
 
 	//各dataの実態配列
-	std::unordered_map<Scenelist, std::list<physics_function::ALP_Collider>> Phyisics_manager::ALP_colliders;
-	std::unordered_map<Scenelist, std::list<physics_function::ALP_Physics>> Phyisics_manager::ALP_physicses;
+	std::unordered_map<Scenelist, std::list<Physics_function::ALP_Collider>> Phyisics_manager::ALP_colliders;
+	std::unordered_map<Scenelist, std::list<Physics_function::ALP_Physics>> Phyisics_manager::ALP_physicses;
 
-	std::vector<physics_function::Contacts::Contact_pair> Phyisics_manager::pairs;
-	std::vector<physics_function::Contacts::Collider_2> Phyisics_manager::broad_mid_pair;
+	std::vector<Physics_function::Contacts::Contact_pair> Phyisics_manager::pairs;
+	std::vector<Physics_function::Contacts::Collider_2> Phyisics_manager::broad_mid_pair;
 
 	bool Phyisics_manager::is_changed_coll = false; //新たにColliderが追加された、削除された場合true
 }
@@ -143,6 +143,8 @@ namespace Adollib
 bool Phyisics_manager::update_Gui() {
 	ImGuiWindowFlags flag = 0;
 	//flag |= ImGuiWindowFlags_AlwaysAutoResize;
+	flag |= ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize;
+	flag |= ImGuiWindowFlags_::ImGuiWindowFlags_NoDocking;
 
 	if (ImGui::Begin("physics_global", 0, flag)) {
 

@@ -14,20 +14,20 @@ namespace Adollib {
 		Vector3 size;
 
 	private:
-		std::vector<physics_function::Meshcollider_mesh>* collider_mesh;
+		std::vector<Physics_function::Meshcollider_mesh>* collider_mesh = nullptr;
 
 	public:
 		//不動オブジェクトとして生成
 		Meshcoll() :center(Vector3(0)), rotate(Vector3(0)), size(1) {}
 
 		void load_mesh(const char* filename) {
-			physics_function::Collider_ResourceManager::CreateMCFromFBX(filename, &collider_mesh);
+			Physics_function::Collider_ResourceManager::CreateMCFromFBX(filename, &collider_mesh);
 
 			ALPcollider_itr->collider_meshes.clear();
 
 			int coll_mesn_size = collider_mesh->size();
 
-			physics_function::ALP_Collider_mesh coll_mesh;
+			Physics_function::ALP_Collider_mesh coll_mesh;
 			coll_mesh.ALPcollider = ALPcollider_itr;
 			auto& itr = collider_mesh->begin();
 			for(int i = 0;i < coll_mesn_size;i++){
@@ -38,16 +38,16 @@ namespace Adollib {
 
 		}
 
-		physics_function::Collider_data get_Colliderdata() const override {
-			physics_function::Collider_data ret;
+		Physics_function::Collider_data get_Colliderdata() const override {
+			Physics_function::Collider_data ret;
 
 			ret.local_position = center;
 			ret.local_orientation = quaternion_from_euler(rotate);
 			ret.local_scale = size;
 
-			ret.shape = physics_function::ALP_Collider_shape::Mesh;
+			ret.shape = Physics_function::ALP_Collider_shape::Mesh;
 
-			physics_function::Meshcoll_data data;
+			Physics_function::Meshcoll_data data;
 			//data.collider_mesh = collider_mesh;
 
 			ret.meshcoll_data = data;

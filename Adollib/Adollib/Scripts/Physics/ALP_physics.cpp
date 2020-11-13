@@ -5,7 +5,7 @@
 #include "ALP__physics_manager.h"
 
 using namespace Adollib;
-using namespace physics_function;
+using namespace Physics_function;
 
 void ALP_Physics::add_force(const Vector3& force) {
 	accumulated_force += force;

@@ -16,7 +16,7 @@ namespace Adollib
 {
 	class Collider;
 
-	namespace physics_function {
+	namespace Physics_function {
 		// physics_managerのstatic変数の初期値
 		class Physics_manager_default {
 		public:
@@ -66,11 +66,11 @@ namespace Adollib
 		static std::unordered_map<Scenelist, std::list<Collider*>> colliders;
 
 		//各dataの実態配列
-		static std::unordered_map<Scenelist, std::list<physics_function::ALP_Collider>> ALP_colliders;
-		static std::unordered_map<Scenelist, std::list<physics_function::ALP_Physics>> ALP_physicses;
+		static std::unordered_map<Scenelist, std::list<Physics_function::ALP_Collider>> ALP_colliders;
+		static std::unordered_map<Scenelist, std::list<Physics_function::ALP_Physics>> ALP_physicses;
 
-		static std::vector<physics_function::Contacts::Contact_pair> pairs;
-		static std::vector<physics_function::Contacts::Collider_2> broad_mid_pair;
+		static std::vector<Physics_function::Contacts::Contact_pair> pairs;
+		static std::vector<Physics_function::Contacts::Collider_2> broad_mid_pair;
 
 		static bool is_changed_coll; //新たにColliderが追加された、削除された場合true
 	public:
@@ -79,7 +79,7 @@ namespace Adollib
 	public:
 		static float gravity; //重力
 
-		static physics_function::ALP_Physics default_physics; //何も設定していないときのpyisicsの値
+		static Physics_function::ALP_Physics default_physics; //何も設定していないときのpyisicsの値
 
 		static float bounce_threshold; //跳ね返りの閾値
 		static float sleep_threshold; //sleepの閾値
@@ -101,25 +101,25 @@ namespace Adollib
 
 	public:
 
-		static physics_function::ColliderPhysics_itrs add_collider(Collider* coll, Scenelist Sce = Scene::now_scene) {
+		static Physics_function::ColliderPhysics_itrs add_collider(Collider* coll, Scenelist Sce = Scene::now_scene) {
 
 			is_changed_coll = true;
 
-			physics_function::ColliderPhysics_itrs ret;
+			Physics_function::ColliderPhysics_itrs ret;
 			{
 				colliders[Sce].emplace_back(coll);
 				ret.coll_itr = colliders[Sce].end();
 				ret.coll_itr--;
 			}
 			{
-				physics_function::ALP_Collider ALPcollider;
+				Physics_function::ALP_Collider ALPcollider;
 
 				ALP_colliders[Sce].emplace_back(ALPcollider);
 				ret.ALPcollider_itr = ALP_colliders[Sce].end();
 				ret.ALPcollider_itr--;
 			}
 			{
-				physics_function::ALP_Physics ALPphysics;
+				Physics_function::ALP_Physics ALPphysics;
 				ALPphysics = Phyisics_manager::default_physics;
 
 				ALP_physicses[Sce].emplace_back(ALPphysics);
@@ -148,8 +148,8 @@ namespace Adollib
 
 		static void remove_collider(
 			std::list<Collider*>::iterator coll_itr, 
-			std::list<physics_function::ALP_Collider>::iterator ALPcoll_itr, 
-			std::list<physics_function::ALP_Physics>::iterator ALPphys_itr, 
+			std::list<Physics_function::ALP_Collider>::iterator ALPcoll_itr, 
+			std::list<Physics_function::ALP_Physics>::iterator ALPphys_itr, 
 			Scenelist Sce = Scene::now_scene) {
 			is_changed_coll = true;
 			ALP_colliders[Sce].erase(ALPcoll_itr);
@@ -160,7 +160,7 @@ namespace Adollib
 
 		static void remove_collider(
 			std::list<Collider*>::iterator coll_itr,
-			std::list<physics_function::ALP_Collider>::iterator ALPcoll_itr,
+			std::list<Physics_function::ALP_Collider>::iterator ALPcoll_itr,
 			Scenelist Sce = Scene::now_scene) {
 			is_changed_coll = true;
 			ALP_colliders[Sce].erase(ALPcoll_itr);

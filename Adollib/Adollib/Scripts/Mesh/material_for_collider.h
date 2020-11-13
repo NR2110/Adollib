@@ -7,7 +7,7 @@
 #include "../Physics/ALP_Collider.h"
 
 namespace Adollib {
-	namespace physics_function {
+	namespace Physics_function {
 
 		class Collider_renderer {
 
@@ -48,10 +48,10 @@ namespace Adollib {
 
 
 			static void initialize();
-			static void render_collider(const physics_function::ALP_Collider&);
+			static void render_collider(const Physics_function::ALP_Collider&);
 
 			//é¿ç€ÇÕ14-DOPÇæÇ™ï`âÊÇ™ÇﬂÇÒÇ«Ç≠Ç≥Ç¢ÇÃÇ≈AABBÇ≈ï`âÊ
-			static void render_AABB(const physics_function::ALP_Collider&);
+			static void render_AABB(const Physics_function::ALP_Collider&);
 
 		};
 

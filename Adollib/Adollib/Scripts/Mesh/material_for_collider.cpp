@@ -4,7 +4,7 @@
 #include "../Main/resource_manager.h"
 
 using namespace Adollib;
-using namespace physics_function;
+using namespace Physics_function;
 
 Microsoft::WRL::ComPtr<ID3D11InputLayout> Collider_renderer::vertexLayout;
 
@@ -48,7 +48,7 @@ void Collider_renderer::initialize() {
 		ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::Mesh], "../Data/FBX/0311_collisions.fbx", "");
 	}
 
-void Collider_renderer::render_collider(const physics_function::ALP_Collider& R) {
+void Collider_renderer::render_collider(const Physics_function::ALP_Collider& R) {
 	if (!(
 		R.shape == ALP_Collider_shape::BOX ||
 		R.shape == ALP_Collider_shape::Sphere ||
@@ -115,7 +115,7 @@ void Collider_renderer::render_collider(const physics_function::ALP_Collider& R)
 
 }
 
-void Collider_renderer::render_AABB(const physics_function::ALP_Collider& coll) {
+void Collider_renderer::render_AABB(const Physics_function::ALP_Collider& coll) {
 
 
 	const std::vector<Mesh::mesh>* box_mesh = meshes[ALP_Collider_shape::BOX];

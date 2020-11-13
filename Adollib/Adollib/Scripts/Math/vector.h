@@ -128,13 +128,13 @@ namespace Adollib {
 		Vector3& operator*= (float S);
 		Vector3& operator/= (float S);
 
-		bool operator== (const Vector3& M);
-		bool operator!= (const Vector3& M);
+		bool operator== (const Vector3& M) const;
+		bool operator!= (const Vector3& M) const;
 
 		friend Vector3 operator*(float S, const Vector3& M);
 
 		//XMFLOAT3‚Ì•ÏŠ·
-		DirectX::XMFLOAT3 get_XM3();
+		DirectX::XMFLOAT3 get_XM3() const;
 
 
 		// norm^2
@@ -145,7 +145,6 @@ namespace Adollib {
 
 		// unit_vect
 		Vector3 unit_vect() const;
-		Vector3 unit_vect();
 
 	};
 

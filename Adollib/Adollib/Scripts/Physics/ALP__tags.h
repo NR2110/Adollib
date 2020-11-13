@@ -1,7 +1,7 @@
 #pragma once
 
 namespace Adollib {
-	struct ALP_tags {
+	struct Collider_tags {
 		static const unsigned int None = (1 << 0);
 
 		static const unsigned int Sphere =		(1 << 1);

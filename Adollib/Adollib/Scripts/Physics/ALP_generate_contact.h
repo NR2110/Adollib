@@ -2,7 +2,7 @@
 #include "contact.h"
 
 namespace Adollib {
-	namespace physics_function {
+	namespace Physics_function {
 
 		//è’ìÀê∂ê¨(Narrowphase)
 		void generate_contact(std::vector<Contacts::Contact_pair>& pairs);

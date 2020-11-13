@@ -7,7 +7,7 @@
 #include "ALP_collider.h"
 
 namespace Adollib {
-	namespace physics_function {
+	namespace Physics_function {
 		//Contactクラス用のnamespace 
 		namespace Contacts {
 			static const int contact_max_per_pair = 4; //一つのpairで衝突の解散を行う最大の数

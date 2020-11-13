@@ -2,7 +2,7 @@
 #include "contact.h"
 #include <memory>
 namespace Adollib {
-	namespace physics_function {
+	namespace Physics_function {
 
 		//Õ“Ë‰ğŒˆ
 		void resolve_contact(std::list<ALP_Collider>& colliders, std::vector<Contacts::Contact_pair>& pairs);

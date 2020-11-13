@@ -13,7 +13,7 @@
 
 namespace Adollib {
 
-	namespace physics_function {
+	namespace Physics_function {
 		//::: 計算などに使う情報 :::
 		struct Collider_data {
 			Vector3 local_position = Vector3(0,0,0);
@@ -22,7 +22,7 @@ namespace Adollib {
 
 			Vector3 half_size;
 
-			physics_function::ALP_Collider_shape shape = physics_function::ALP_Collider_shape::None; //形情報
+			Physics_function::ALP_Collider_shape shape = Physics_function::ALP_Collider_shape::None; //形情報
 
 			Meshcoll_data meshcoll_data; //meshcollider用data
 		};
@@ -72,8 +72,8 @@ namespace Adollib {
 		bool is_hitable = 0;  //衝突しない
 
 	protected:
-		std::list<physics_function::ALP_Collider>::iterator ALPcollider_itr;
-		std::list<physics_function::ALP_Physics>::iterator ALPphysics_itr;
+		std::list<Physics_function::ALP_Collider>::iterator ALPcollider_itr;
+		std::list<Physics_function::ALP_Physics>::iterator ALPphysics_itr;
 
 		std::list<Collider*>::iterator coll_itr;//自身へのitr
 
@@ -91,11 +91,11 @@ namespace Adollib {
 		void add_torque(const Vector3& force);
 
 		//計算用のstruct
-		virtual physics_function::Collider_data get_Colliderdata() const = 0;
-		virtual physics_function::Meshcoll_data get_Meshdata() { return physics_function::Meshcoll_data(); };
+		virtual Physics_function::Collider_data get_Colliderdata() const = 0;
+		virtual Physics_function::Meshcoll_data get_Meshdata() { return Physics_function::Meshcoll_data(); };
 
-		const physics_function::Physics_data get_Physicsdata() const {
-			physics_function::Physics_data data;
+		const Physics_function::Physics_data get_Physicsdata() const {
+			Physics_function::Physics_data data;
 			data.inertial_mass = inertial_mass;
 			data.drag = drag;
 			data.anglar_drag = anglar_drag;

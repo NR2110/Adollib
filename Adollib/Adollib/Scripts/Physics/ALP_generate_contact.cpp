@@ -5,7 +5,7 @@
 #include "../Imgui/work_meter.h"
 
 using namespace Adollib;
-using namespace physics_function;
+using namespace Physics_function;
 using namespace Contacts;
 
 using namespace Closest_func;
@@ -14,7 +14,7 @@ using namespace Closest_func;
 #pragma region generate_contact
 //:::::::::::::::::::::::::::
 
-void physics_function::generate_contact(std::vector<Contacts::Contact_pair>& pairs) {
+void Physics_function::generate_contact(std::vector<Contacts::Contact_pair>& pairs) {
 
 	for(auto& pair : pairs){
 
@@ -600,7 +600,7 @@ bool sat_obb_convex_mesh(const OBB& obb, const std::vector<ALP_Collider_mesh>::i
 
 //è’ìÀê∂ê¨
 #pragma region SPHERE-SPHERE
-bool physics_function::generate_contact_sphere_sphere(const std::vector<ALP_Collider_mesh>::iterator& SA, const std::vector<ALP_Collider_mesh>::iterator& SB, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_sphere_sphere(const std::vector<ALP_Collider_mesh>::iterator& SA, const std::vector<ALP_Collider_mesh>::iterator& SB, Contacts::Contact_pair& pair) {
 	const std::list<ALP_Collider>::iterator& collA = SA->ALPcollider;
 	const std::list<ALP_Collider>::iterator& collB = SB->ALPcollider;
 	
@@ -628,7 +628,7 @@ bool physics_function::generate_contact_sphere_sphere(const std::vector<ALP_Coll
 #pragma endregion
 
 #pragma region SPHERE-PLANE
-bool physics_function::generate_contact_sphere_plane(const std::vector<ALP_Collider_mesh>::iterator& sphere_mesh, const std::vector<ALP_Collider_mesh>::iterator& plane_mesh, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_sphere_plane(const std::vector<ALP_Collider_mesh>::iterator& sphere_mesh, const std::vector<ALP_Collider_mesh>::iterator& plane_mesh, Contacts::Contact_pair& pair) {
 	const std::list<ALP_Collider>::iterator& sphere = sphere_mesh->ALPcollider;
 	const std::list<ALP_Collider>::iterator& plane = plane_mesh->ALPcollider;
 	
@@ -680,7 +680,7 @@ bool physics_function::generate_contact_sphere_plane(const std::vector<ALP_Colli
 #pragma endregion
 
 #pragma region SPHERE-BOX
-bool physics_function::generate_contact_sphere_box(const std::vector<ALP_Collider_mesh>::iterator& sphere_mesh, const std::vector<ALP_Collider_mesh>::iterator& box_mesh, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_sphere_box(const std::vector<ALP_Collider_mesh>::iterator& sphere_mesh, const std::vector<ALP_Collider_mesh>::iterator& box_mesh, Contacts::Contact_pair& pair) {
 	const std::list<ALP_Collider>::iterator& sphere = sphere_mesh->ALPcollider;
 	const std::list<ALP_Collider>::iterator& box = box_mesh->ALPcollider;
 
@@ -751,7 +751,7 @@ bool physics_function::generate_contact_sphere_box(const std::vector<ALP_Collide
 #pragma endregion
 
 #pragma region SPHERE-MESH
-bool physics_function::generate_contact_sphere_mesh(const std::vector<ALP_Collider_mesh>::iterator& sphere_mesh, const std::vector<ALP_Collider_mesh>::iterator& mesh_mesh, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_sphere_mesh(const std::vector<ALP_Collider_mesh>::iterator& sphere_mesh, const std::vector<ALP_Collider_mesh>::iterator& mesh_mesh, Contacts::Contact_pair& pair) {
 	const std::list<ALP_Collider>::iterator& sphere = sphere_mesh->ALPcollider;
 	const std::list<ALP_Collider>::iterator& mesh = mesh_mesh->ALPcollider;
 
@@ -815,7 +815,7 @@ bool physics_function::generate_contact_sphere_mesh(const std::vector<ALP_Collid
 
 
 #pragma region BOX-PLANE
-bool physics_function::generate_contact_box_plane(const std::vector<ALP_Collider_mesh>::iterator& box_mesh, const std::vector<ALP_Collider_mesh>::iterator& plane_mesh, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_box_plane(const std::vector<ALP_Collider_mesh>::iterator& box_mesh, const std::vector<ALP_Collider_mesh>::iterator& plane_mesh, Contacts::Contact_pair& pair) {
 	const std::list<ALP_Collider>::iterator& box = box_mesh->ALPcollider;
 	const std::list<ALP_Collider>::iterator& plane = plane_mesh->ALPcollider;
 
@@ -897,7 +897,7 @@ bool physics_function::generate_contact_box_plane(const std::vector<ALP_Collider
 
 #pragma region BOX-BOX
 
-bool physics_function::generate_contact_box_box(const std::vector<ALP_Collider_mesh>::iterator& bA, const std::vector<ALP_Collider_mesh>::iterator& bB, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_box_box(const std::vector<ALP_Collider_mesh>::iterator& bA, const std::vector<ALP_Collider_mesh>::iterator& bB, Contacts::Contact_pair& pair) {
 	const std::list<ALP_Collider>::iterator& boxA = bA->ALPcollider;
 	const std::list<ALP_Collider>::iterator& boxB = bB->ALPcollider;
 
@@ -1080,14 +1080,14 @@ bool physics_function::generate_contact_box_box(const std::vector<ALP_Collider_m
 #pragma endregion
 
 #pragma region BOX-MESH
-bool physics_function::generate_contact_box_mesh(const std::vector<ALP_Collider_mesh>::iterator& S1, const std::vector<ALP_Collider_mesh>::iterator& S2, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_box_mesh(const std::vector<ALP_Collider_mesh>::iterator& S1, const std::vector<ALP_Collider_mesh>::iterator& S2, Contacts::Contact_pair& pair) {
 	return true;
 }
 #pragma endregion
 
 
 #pragma region MESH-PLANE
-bool physics_function::generate_contact_mesh_plane(const std::vector<ALP_Collider_mesh>::iterator& S1, const std::vector<ALP_Collider_mesh>::iterator& S2, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_mesh_plane(const std::vector<ALP_Collider_mesh>::iterator& S1, const std::vector<ALP_Collider_mesh>::iterator& S2, Contacts::Contact_pair& pair) {
 	return true;
 }
 #pragma endregion
@@ -1098,7 +1098,7 @@ bool GC_concave_mesh_mesh(const ALP_Collider& S1, const std::vector<ALP_Collider
 	return false;
 }
 
-bool physics_function::generate_contact_mesh_mesh(const std::vector<ALP_Collider_mesh>::iterator& mA, const std::vector<ALP_Collider_mesh>::iterator& mB, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_mesh_mesh(const std::vector<ALP_Collider_mesh>::iterator& mA, const std::vector<ALP_Collider_mesh>::iterator& mB, Contacts::Contact_pair& pair) {
 	const std::list<ALP_Collider>::iterator& meshA = mA->ALPcollider;
 	const std::list<ALP_Collider>::iterator& meshB = mB->ALPcollider;
 
