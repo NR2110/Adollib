@@ -164,31 +164,20 @@ bool Phyisics_manager::update_Gui() {
 
 		//physics_defaultÇÃï\é¶
 		if (ImGui::CollapsingHeader("physics_default")) {
-			static constexpr float inertial_mass = 1.f; //éøó 
-			static constexpr float drag = 0.1f; //ãÛãCíÔçR
-			static constexpr float anglar_drag = 0.1f; //ãÛãCíÔçR
-			static constexpr float dynamic_friction = 0.4f;//ìÆñÄéC
-			static constexpr float static_friction = 0.4f; //ê√ñÄéC
-			static constexpr float restitution = 0.1f;	 //îΩî≠åWêî
-
-			static constexpr bool is_fallable = true; //óéÇøÇÈÇ©
-			static constexpr bool is_kinematic = true; //âeãøÇ§ÇØÇÈÇ©(fallÇÕÇ∑ÇÈ)
-			static constexpr bool is_moveable = true;//ìÆÇ≠Ç©
-			static constexpr bool is_hitable = true;  //è’ìÀÇµÇ»Ç¢
 
 			ImGui::Columns(2);
 			ImGui::Separator();
 			ImGui::Separator();
-			ImGui::Text("mass"); ImGui::NextColumn();  ImGui::Text("%f", inertial_mass); ImGui::NextColumn();
-			ImGui::Text("drag"); ImGui::NextColumn();  ImGui::Text("%f", drag); ImGui::NextColumn();
-			ImGui::Text("anglar_drag"); ImGui::NextColumn();  ImGui::Text("%f", anglar_drag); ImGui::NextColumn();
-			ImGui::Text("dynamic_friction"); ImGui::NextColumn();  ImGui::Text("%f", dynamic_friction); ImGui::NextColumn();
-			ImGui::Text("static_friction"); ImGui::NextColumn();  ImGui::Text("%f", static_friction); ImGui::NextColumn();
-			ImGui::Text("restitution"); ImGui::NextColumn();  ImGui::Text("%f", restitution); ImGui::NextColumn();
-			ImGui::Text("is_fallable"); ImGui::NextColumn();  if (is_fallable)ImGui::Text("true"); else ImGui::Text("false"); ImGui::NextColumn();
-			ImGui::Text("is_kinematic"); ImGui::NextColumn(); if (is_kinematic)ImGui::Text("true"); else ImGui::Text("false"); ImGui::NextColumn();
-			ImGui::Text("is_moveable"); ImGui::NextColumn();  if (is_moveable)ImGui::Text("true"); else ImGui::Text("false"); ImGui::NextColumn();
-			ImGui::Text("is_hitable"); ImGui::NextColumn();   if (is_hitable)ImGui::Text("true"); else ImGui::Text("false"); ImGui::NextColumn();
+			ImGui::Text("mass"); ImGui::NextColumn();  ImGui::Text("%f", Physics_manager_default::inertial_mass); ImGui::NextColumn();
+			ImGui::Text("drag"); ImGui::NextColumn();  ImGui::Text("%f", Physics_manager_default::drag); ImGui::NextColumn();
+			ImGui::Text("anglar_drag"); ImGui::NextColumn();  ImGui::Text("%f", Physics_manager_default::anglar_drag); ImGui::NextColumn();
+			ImGui::Text("dynamic_friction"); ImGui::NextColumn();  ImGui::Text("%f", Physics_manager_default::dynamic_friction); ImGui::NextColumn();
+			ImGui::Text("static_friction"); ImGui::NextColumn();  ImGui::Text("%f", Physics_manager_default::static_friction); ImGui::NextColumn();
+			ImGui::Text("restitution"); ImGui::NextColumn();  ImGui::Text("%f", Physics_manager_default::restitution); ImGui::NextColumn();
+			ImGui::Text("is_fallable"); ImGui::NextColumn();  if (Physics_manager_default::is_fallable)ImGui::Text("true"); else ImGui::Text("false"); ImGui::NextColumn();
+			ImGui::Text("is_kinematic"); ImGui::NextColumn(); if (Physics_manager_default::is_kinematic)ImGui::Text("true"); else ImGui::Text("false"); ImGui::NextColumn();
+			ImGui::Text("is_moveable"); ImGui::NextColumn();  if (Physics_manager_default::is_moveable)ImGui::Text("true"); else ImGui::Text("false"); ImGui::NextColumn();
+			ImGui::Text("is_hitable"); ImGui::NextColumn();   if (Physics_manager_default::is_hitable)ImGui::Text("true"); else ImGui::Text("false"); ImGui::NextColumn();
 			ImGui::Separator();
 
 			ImGui::Columns(1);

@@ -41,7 +41,8 @@ namespace Adollib {
 			std::list<std::shared_ptr<object>>::iterator itr = children.begin();
 			std::list<std::shared_ptr<object>> ret;
 
-			for (u_int i = 0; i < children.size(); i++) {
+			int c_size = children.size();
+			for (int i = 0; i < c_size; i++) {
 				ret.splice(ret.end(), itr->get()->get_children());
 				itr++;
 			}

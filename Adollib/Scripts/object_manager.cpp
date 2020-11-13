@@ -29,7 +29,7 @@ namespace Adollib
 		//	set_nohit_plane(n_vector3(1000, -1, 1000), n_vector3(0, 1, 0), n_vector3(1, 0, 1));
 			//set_moveable_box(n_vector3(0, 200, 0), n_vector3(10, 10, 10), n_vector3(45, 45, 0), n_vector3(0, 1, 1));
 			//set_moveable_box(n_vector3(0, 200, 0), n_vector3(10, 10, 10), n_vector3(0, 0, 0), n_vector3(0, 1, 1));
-		if (0) {
+		if (1) {
 			{
 				Gameobject* GO = Gameobject_manager::createCube();
 				GO->transform->local_pos = Vector3(0, -60, 0);
@@ -101,9 +101,9 @@ namespace Adollib
 			bool del = false;
 			ImGui::Checkbox("delete", &del); 
 			if (del) {
-				for (u_int i = 0; i < GOs.size(); i++) {
-					GOs[i]->active = false;
-					GOs[i]->clearComponent();
+				for(auto& GO : GOs){
+					GO->active = false;
+					GO->clearComponent();
 				}
 				GOs.clear();
 			}

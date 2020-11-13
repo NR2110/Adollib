@@ -75,11 +75,10 @@ void physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 	ALP_Solverbody* solverbody[2];
 	//std::vector<Balljoint> balljoints; //¡‰ñ‚Í‚È‚µ
 
-	for (u_int P_num = 0; P_num < pairs.size(); P_num++) {
-		Contact_pair& pair = pairs[P_num];
+	for(auto& pair : pairs){
 
-		coll[0] = pairs[P_num].body[0];
-		coll[1] = pairs[P_num].body[1];
+		coll[0] = pair.body[0];
+		coll[1] = pair.body[1];
 		ALPphysics[0] = coll[0]->ALPcollider->ALPphysics;
 		ALPphysics[1] = coll[1]->ALPcollider->ALPphysics;
 		solverbody[0] = ALPphysics[0]->solve;
@@ -194,8 +193,7 @@ void physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 	}
 
 	//::: •Ï‰»—Ê‚ğ‹‚ß‚é :::::::::::::::
-	for (u_int P_num = 0; P_num < pairs.size(); P_num++) {
-		Contact_pair& pair = pairs[P_num];
+	for (auto& pair : pairs) {
 
 		coll[0] = pair.body[0];
 		coll[1] = pair.body[1];
@@ -226,8 +224,7 @@ void physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 
 
 	for (int i = 0; i < Phyisics_manager::solver_iterations; i++) {
-		for (u_int P_num = 0; P_num < pairs.size(); P_num++) {
-			Contact_pair& pair = pairs[P_num];
+		for (auto& pair : pairs) {
 
 			coll[0] = pair.body[0];
 			coll[1] = pair.body[1];

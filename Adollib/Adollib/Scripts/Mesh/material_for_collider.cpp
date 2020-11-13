@@ -261,7 +261,7 @@ void Collider_renderer::render_AABB(const physics_function::ALP_Collider& coll) 
 				Systems::DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 				Systems::DeviceContext->IASetInputLayout(vertexLayout.Get());
 
-				for (const auto& mesh : *box_mesh) {
+				for (const auto& mesh : *sphere_mesh) {
 
 					UINT stride = sizeof(VertexFormat);
 					UINT offset = 0;
@@ -338,11 +338,9 @@ void Collider_renderer::render_AABB(const physics_function::ALP_Collider& coll) 
 				Systems::DeviceContext->PSSetShaderResources(0, 1, subset.diffuse.shaderResourceVirw.GetAddressOf());
 
 				// •`‰æ
-				 Systems::DeviceContext->DrawIndexed(subset.indexCount, subset.indexStart, 0);
+				Systems::DeviceContext->DrawIndexed(subset.indexCount, subset.indexStart, 0);
 
 			}
-
-			//return;
 		}
 
 		color_num++;

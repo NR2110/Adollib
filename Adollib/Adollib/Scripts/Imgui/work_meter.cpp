@@ -33,6 +33,8 @@ bool Work_meter::render() {
 	static bool is_true = true;
 	static bool stop = false;
 
+	int name_tags_size = 0;
+
 	//Žg‚í‚ê‚Ä‚È‚©‚Á‚½‚ç‰½‚à‚¹‚¸‚Éreturn
 	if (names.size() == 0)return true;
 
@@ -55,11 +57,12 @@ bool Work_meter::render() {
 
 
 		bool V;
-		for (u_int t = 0; t < tags.size(); t++) {
-			for (u_int i = 0; i < name_flags[tags[t]].size(); i++) {
-				V = name_flags[tags[t]][i];
-				ImGui::Checkbox(names[tags[t]][i].c_str(), &V);
-				name_flags[tags[t]][i] = V;
+		for(const auto& tag: tags){
+			name_tags_size = name_flags[tag].size();
+			for (int i = 0; i < name_tags_size; i++) {
+				V = name_flags[tag][i];
+				ImGui::Checkbox(names[tag][i].c_str(), &V);
+				name_flags[tag][i] = V;
 			}
 		}
 
@@ -96,7 +99,8 @@ bool Work_meter::render() {
 		std::string tag, name;
 
 		tag = std::string("");
-		for (u_int n_num = 0; n_num < names[tag].size(); n_num++) {
+		name_tags_size = names[tag].size();
+		for (int n_num = 0; n_num < name_tags_size; n_num++) {
 			if (name_flags[tag][n_num] == false)continue;
 			name = names[tag][n_num];
 
@@ -121,13 +125,12 @@ bool Work_meter::render() {
 		}
 
 
-		for (u_int t_num = 0; t_num < tags.size(); t_num++) {
-			if (tags[t_num] == std::string(""))continue;
-			tag = tags[t_num];
+		for(auto& tag : tags){
+			if (tag == std::string(""))continue;
 
-			if (ImGui::CollapsingHeader(tags[t_num].c_str())) {
-
-				for (u_int n_num = 0; n_num < names[tag].size(); n_num++) {
+			if (ImGui::CollapsingHeader(tag.c_str())) {
+				name_tags_size = names[tag].size();
+				for (int n_num = 0; n_num < name_tags_size; n_num++) {
 					if (name_flags[tag][n_num] == false)continue;
 					name = names[tag][n_num];
 
@@ -152,7 +155,8 @@ bool Work_meter::render() {
 				}
 			}
 			else if(update_always) {
-				for (u_int n_num = 0; n_num < names[tag].size(); n_num++) {
+				name_tags_size = names[tag].size();
+				for (int n_num = 0; n_num < name_tags_size; n_num++) {
 					if (name_flags[tag][n_num] == false)continue;
 					name = names[tag][n_num];
 

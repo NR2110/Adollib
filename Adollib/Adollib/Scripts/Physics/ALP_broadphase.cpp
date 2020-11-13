@@ -68,16 +68,13 @@ void physics_function::Broadphase(std::list<ALP_Collider>& ALP_collider, std::ve
 	//value‚ÌXV
 	if(Phyisics_manager::is_changed_colliders() == false) {
 		Work_meter::start("update_Value");
-		std::list<edge>::iterator itr = axis_list[SAP_axis].begin();
-		std::list<edge>::iterator itr_end = axis_list[SAP_axis].end();
-		for (; itr != itr_end; itr++) {
-			if (itr->stgo == false) {
-				itr->value = itr->coll->dop14.pos[SAP_axis] + itr->coll->dop14.max[SAP_axis];
+		for (auto& edge : axis_list[SAP_axis]) {
+			if (edge.stgo == false) {
+				edge.value = edge.coll->dop14.pos[SAP_axis] + edge.coll->dop14.max[SAP_axis];
 			}
 			else {
-				itr->value = itr->coll->dop14.pos[SAP_axis] + itr->coll->dop14.min[SAP_axis];
+				edge.value = edge.coll->dop14.pos[SAP_axis] + edge.coll->dop14.min[SAP_axis];
 			}
-
 		}
 
 		Work_meter::stop("update_Value");

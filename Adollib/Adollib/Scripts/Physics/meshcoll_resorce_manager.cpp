@@ -247,7 +247,7 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 		}
 
 		{
-			//角の4つのスラブを反転させるか
+			//角の4つのスラブを反転させる
 			for (int axis_inv = 0; axis_inv < 2; ++axis_inv) {
 				//角の4つのスラブ
 				for (int axis = 0; axis < 4; ++axis) {
@@ -259,9 +259,9 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 
 					//x,y,zのスラブ
 					float plane_dis_3[3]{
-						{plane_axis_A.x  * inv> 0 ? dopbase.max[0] : dopbase.min[0]},
-						{plane_axis_A.y  * inv> 0 ? dopbase.max[1] : dopbase.min[1]},
-						{plane_axis_A.z  * inv> 0 ? dopbase.max[2] : dopbase.min[2]}
+						{plane_axis_A.x * inv > 0 ? dopbase.max[0] : dopbase.min[0]},
+						{plane_axis_A.y * inv > 0 ? dopbase.max[1] : dopbase.min[1]},
+						{plane_axis_A.z * inv > 0 ? dopbase.max[2] : dopbase.min[2]}
 					};
 
 					//角のスラブとx,y,zのスラブの交点を求める

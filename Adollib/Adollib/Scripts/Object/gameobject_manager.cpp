@@ -142,28 +142,12 @@ void Gameobject_manager::update(Scenelist Sce) {
 
 	//親から子へupdateを呼ぶ
 	std::for_each(masters.begin(), masters.end(), [](object* ob) {ob->update_P_to_C(); });
-	//for (u_int i = 0; i < masters.size(); i++) {
-	//	masters[i]->update_P_to_C();
-	//}
-
-	// multi thread....?
-	//static std::future<bool> ret;
-	//static bool RRR = true;
-	//if (RRR == true)
-	//ret = std::async(std::launch::async, Rigitbody_manager::update, Scene::now_scene);
-	//RRR = ret.get();
-
-	//if (Rigitbody_manager::update_finish == true){
-	//	physics_thread = std::move(std::thread(Rigitbody_manager::update, Scene::now_scene));
-	//	Rigitbody_manager::update_finish = false;
-	//	physics_thread.join();
-	//}
 
 	Phyisics_manager::update();
 
 	//親から子へワールド情報を更新
-	for (u_int i = 0; i < masters.size(); i++) {
-		masters[i]->update_world_trans();
+	for (auto& m : masters) {
+		m->update_world_trans();
 	}
 
 
@@ -173,7 +157,6 @@ void Gameobject_manager::render(Scenelist Sce) {
 	if (Sce == Scenelist::scene_null)return;
 
 	std::list<std::shared_ptr<Light>>::iterator itr_li = lights[Sce].begin();
-	std::list<std::shared_ptr<Camera>>::iterator itr_ca = cameras[Sce].begin();
 
 	//CB : ConstantBufferPerLight
 	ConstantBufferPerLight l_cb;
@@ -213,13 +196,13 @@ void Gameobject_manager::render(Scenelist Sce) {
 	ConstantBufferPerCamera c_cb;
 	ConstantBufferPerSystem s_sb;
 	//そのシーンのカメラの数だけ回す
-	for (u_int i = 0; i < cameras[Sce].size(); i++, itr_ca++) {
-		if (itr_ca->get()->active == false)continue;
+	for(auto& camera : cameras[Sce]){
+		if (camera.get()->active == false)continue;
 
 		//CB : ConstantBufferPerCamera
 		// ビュー行列
-		Vector3 pos = itr_ca->get()->transform->position;
-		Quaternion orient = itr_ca->get()->transform->orientation;
+		Vector3 pos = camera.get()->transform->position;
+		Quaternion orient = camera.get()->transform->orientation;
 		Vector3 look_pos = pos + vector3_quatrotate(Vector3(0, 0, 1), orient);
 
 		DirectX::XMVECTOR eye   = DirectX::XMVectorSet(pos.x, pos.y, pos.z, 1.0f);
@@ -232,10 +215,10 @@ void Gameobject_manager::render(Scenelist Sce) {
 		Systems::DeviceContext->PSSetConstantBuffers(1, 1, view_cb.GetAddressOf());
 
 		//CB : ConstantBufferPerSystem
-		float fov = ToRadian(itr_ca->get()->fov);
-		float aspect = itr_ca->get()->aspect;
-		float nearZ = itr_ca->get()->nearZ;
-		float farZ = itr_ca->get()->farZ;
+		float fov = ToRadian(camera.get()->fov);
+		float aspect = camera.get()->aspect;
+		float nearZ = camera.get()->nearZ;
+		float farZ = camera.get()->farZ;
 		DirectX::XMStoreFloat4x4(&s_sb.Projection, DirectX::XMMatrixPerspectiveFovLH(fov, aspect, nearZ, farZ));
 		Systems::DeviceContext->UpdateSubresource(projection_cb.Get(), 0, NULL, &s_sb, 0, 0);
 		Systems::DeviceContext->VSSetConstantBuffers(2, 1, projection_cb.GetAddressOf());
@@ -246,7 +229,7 @@ void Gameobject_manager::render(Scenelist Sce) {
 		std::list<std::shared_ptr<Gameobject>>::iterator itr_end = gameobjects[Sce].end();
 
 		//視錐台カリングにカメラ情報のセット
-		FrustumCulling::update_frustum(itr_ca->get());
+		FrustumCulling::update_frustum(camera.get());
 
 		for (; itr != itr_end; itr++) {
 			if (itr->get()->active == false)continue;	

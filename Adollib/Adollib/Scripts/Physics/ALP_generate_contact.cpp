@@ -16,37 +16,37 @@ using namespace Closest_func;
 
 void physics_function::generate_contact(std::vector<Contacts::Contact_pair>& pairs) {
 
-	for (u_int i = 0; i < pairs.size(); i++) {
+	for(auto& pair : pairs){
 
-		const std::vector<ALP_Collider_mesh>::iterator& meshA = pairs[i].body[0];
-		const std::vector<ALP_Collider_mesh>::iterator& meshB = pairs[i].body[1];
-		const std::list<ALP_Collider>::iterator& shapeA = pairs[i].body[0]->ALPcollider;
-		const std::list<ALP_Collider>::iterator& shapeB = pairs[i].body[1]->ALPcollider;
+		const std::vector<ALP_Collider_mesh>::iterator& meshA =pair.body[0];
+		const std::vector<ALP_Collider_mesh>::iterator& meshB =pair.body[1];
+		const std::list<ALP_Collider>::iterator& shapeA = pair.body[0]->ALPcollider;
+		const std::list<ALP_Collider>::iterator& shapeB = pair.body[1]->ALPcollider;
 
 		if (shapeA->shape == ALP_Collider_shape::Sphere) {
 
-			if (shapeB->shape == ALP_Collider_shape::Sphere)generate_contact_sphere_sphere	(meshA, meshB, pairs[i]);			
-			if (shapeB->shape == ALP_Collider_shape::BOX)	generate_contact_sphere_box		(meshA, meshB, pairs[i]);			
-			if (shapeB->shape == ALP_Collider_shape::Plane)	generate_contact_sphere_plane	(meshA, meshB, pairs[i]);			
-			if (shapeB->shape == ALP_Collider_shape::Mesh)	generate_contact_sphere_mesh	(meshA, meshB, pairs[i]);		
+			if (shapeB->shape == ALP_Collider_shape::Sphere)generate_contact_sphere_sphere	(meshA, meshB, pair);			
+			if (shapeB->shape == ALP_Collider_shape::BOX)	generate_contact_sphere_box		(meshA, meshB, pair);			
+			if (shapeB->shape == ALP_Collider_shape::Plane)	generate_contact_sphere_plane	(meshA, meshB, pair);			
+			if (shapeB->shape == ALP_Collider_shape::Mesh)	generate_contact_sphere_mesh	(meshA, meshB, pair);		
 		}
 		if (shapeA->shape == ALP_Collider_shape::BOX) {
 
-			if (shapeB->shape == ALP_Collider_shape::Sphere)generate_contact_sphere_box		(meshB, meshA, pairs[i]);
-			if (shapeB->shape == ALP_Collider_shape::BOX)	generate_contact_box_box		(meshA, meshB, pairs[i]);		
-			if (shapeB->shape == ALP_Collider_shape::Plane)	generate_contact_box_plane		(meshA, meshB, pairs[i]);			
+			if (shapeB->shape == ALP_Collider_shape::Sphere)generate_contact_sphere_box		(meshB, meshA,pair);
+			if (shapeB->shape == ALP_Collider_shape::BOX)	generate_contact_box_box		(meshA, meshB,pair);		
+			if (shapeB->shape == ALP_Collider_shape::Plane)	generate_contact_box_plane		(meshA, meshB,pair);			
 		}
 		if (shapeA->shape == ALP_Collider_shape::Plane) {
 
-			if (shapeB->shape == ALP_Collider_shape::Sphere)generate_contact_sphere_plane	(meshB, meshA, pairs[i]);
-			if (shapeB->shape == ALP_Collider_shape::BOX)	generate_contact_box_plane		(meshB, meshA, pairs[i]);		
+			if (shapeB->shape == ALP_Collider_shape::Sphere)generate_contact_sphere_plane	(meshB, meshA, pair);
+			if (shapeB->shape == ALP_Collider_shape::BOX)	generate_contact_box_plane		(meshB, meshA, pair);		
 			if (shapeB->shape == ALP_Collider_shape::Plane) {			}
 		}
 		if (shapeA->shape == ALP_Collider_shape::Mesh) {
 
-			if (shapeB->shape == ALP_Collider_shape::Sphere)generate_contact_sphere_mesh	(meshB, meshA, pairs[i]);
-			if (shapeB->shape == ALP_Collider_shape::Plane)	generate_contact_mesh_plane		(meshA ,meshB, pairs[i]);			
-			if (shapeB->shape == ALP_Collider_shape::Mesh)	generate_contact_mesh_mesh		(meshA, meshB, pairs[i]);
+			if (shapeB->shape == ALP_Collider_shape::Sphere)generate_contact_sphere_mesh	(meshB, meshA, pair);
+			if (shapeB->shape == ALP_Collider_shape::Plane)	generate_contact_mesh_plane		(meshA ,meshB, pair);			
+			if (shapeB->shape == ALP_Collider_shape::Mesh)	generate_contact_mesh_mesh		(meshA, meshB, pair);
 
 			
 		}
