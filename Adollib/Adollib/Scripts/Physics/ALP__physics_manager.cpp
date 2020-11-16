@@ -9,6 +9,8 @@
 
 #include "collider.h"
 
+#include "ALP_raycast.h"
+
 using namespace Adollib;
 using namespace Physics_function;
 using namespace Contacts;
@@ -68,77 +70,75 @@ namespace Adollib
 	bool Phyisics_manager::is_changed_coll = false; //新たにColliderが追加された、削除された場合true
 }
 
-namespace Adollib
+
+
+bool Phyisics_manager::update(Scenelist Sce)
 {
+	update_Gui();
 
-	bool Phyisics_manager::update(Scenelist Sce)
-	{
-		update_Gui();
-
-		if (frame_count < 10) {
-			resetforce(ALP_physicses[Sce]);
-			frame_count++;
-			return true;
-		}
-
-
-		Work_meter::start("refresh_ALP_from_data");
-		// get_dataのdataをColliderに入力 
-		refresh_ALP_from_data(ALP_colliders[Sce]);
-		Work_meter::stop("refresh_ALP_from_data");
-
-
-		// ColliderのWorld情報の更新
-		update_world_trans(ALP_colliders[Sce]);
-
-		// 外力の更新
-		applyexternalforce(ALP_physicses[Sce]);
-
-		timeStep = Al_Global::second_per_frame;
-
-		// 大雑把な当たり判定
-		Work_meter::start("Broad,Mid,Narrow");
-
-		Work_meter::start("Broadphase");
-		Work_meter::tag_start("Broadphase");
-		Broadphase(ALP_colliders[Sce], broad_mid_pair);
-		is_changed_coll = false;
-		Work_meter::tag_stop();
-		Work_meter::stop("Broadphase");
-
-		Work_meter::start("Midphase");
-		Work_meter::tag_start("Midphase");
-		Midphase(broad_mid_pair, pairs);
-		Work_meter::tag_stop();
-		Work_meter::stop("Midphase");
-
-		// 衝突生成
-		Work_meter::start("Narrowphase");
-		Work_meter::tag_start("Narrowphase");
-		generate_contact(pairs);
-		Work_meter::tag_stop();
-		Work_meter::stop("Narrowphase");
-
-		Work_meter::stop("Broad,Mid,Narrow");
-
-		// 衝突解決
-		Work_meter::start("Resolve");
-		Work_meter::tag_start("Resolve");
-		resolve_contact(ALP_colliders[Sce], pairs);
-		Work_meter::tag_stop();
-		Work_meter::stop("Resolve");
-
-		// 位置の更新
-		integrate(ALP_physicses[Sce]);
-
-		// GOへColliderの影響を渡す
-		solv_resolve(ALP_colliders[Sce]);
-		resolve_gameobject(ALP_colliders[Sce]);
-
+	if (frame_count < 10) {
+		resetforce(ALP_physicses[Sce]);
+		frame_count++;
 		return true;
-
 	}
+
+	Work_meter::start("refresh_ALP_from_data");
+	// get_dataのdataをColliderに入力 
+	refresh_ALP_from_data(ALP_colliders[Sce]);
+	Work_meter::stop("refresh_ALP_from_data");
+
+
+	// ColliderのWorld情報の更新
+	update_world_trans(ALP_colliders[Sce]);
+
+	// 外力の更新
+	applyexternalforce(ALP_physicses[Sce]);
+
+	timeStep = Al_Global::second_per_frame;
+
+	// 大雑把な当たり判定
+	Work_meter::start("Broad,Mid,Narrow");
+
+	Work_meter::start("Broadphase");
+	Work_meter::tag_start("Broadphase");
+	Broadphase(ALP_colliders[Sce], broad_mid_pair);
+	is_changed_coll = false;
+	Work_meter::tag_stop();
+	Work_meter::stop("Broadphase");
+
+	Work_meter::start("Midphase");
+	Work_meter::tag_start("Midphase");
+	Midphase(broad_mid_pair, pairs);
+	Work_meter::tag_stop();
+	Work_meter::stop("Midphase");
+
+	// 衝突生成
+	Work_meter::start("Narrowphase");
+	Work_meter::tag_start("Narrowphase");
+	generate_contact(pairs);
+	Work_meter::tag_stop();
+	Work_meter::stop("Narrowphase");
+
+	Work_meter::stop("Broad,Mid,Narrow");
+
+	// 衝突解決
+	Work_meter::start("Resolve");
+	Work_meter::tag_start("Resolve");
+	resolve_contact(ALP_colliders[Sce], pairs);
+	Work_meter::tag_stop();
+	Work_meter::stop("Resolve");
+
+	// 位置の更新
+	integrate(ALP_physicses[Sce]);
+
+	// GOへColliderの影響を渡す
+	solv_resolve(ALP_colliders[Sce]);
+	resolve_gameobject(ALP_colliders[Sce]);
+
+	return true;
+
 }
+
 
 bool Phyisics_manager::update_Gui() {
 	ImGuiWindowFlags flag = 0;
@@ -189,6 +189,39 @@ bool Phyisics_manager::update_Gui() {
 	}
 
 	return true;
+}
+
+bool Phyisics_manager::ray_cast(
+	const Vector3& Ray_pos, const Vector3& Ray_dir,
+	u_int tag,
+	float& tmin, float& tmax,
+	Vector3& normal,
+	Collider* ret_coll,
+	Scenelist Sce) {
+
+	//tminからtmaxにかけてrayが交差している
+	tmin = +FLT_MAX;
+	tmax = -FLT_MAX;
+	float min = +FLT_MAX;
+	float max = -FLT_MAX;
+
+	bool ret = false;
+
+	for (const auto& coll : ALP_colliders[Sce]) {
+		if (!(coll.tag | tag))continue;
+
+		if (Physics_function::ray_cast(
+			Ray_pos, Ray_dir,
+			coll,
+			min, max, normal
+		) == false) continue;
+
+		ret = true;
+		tmin = ALmin(tmin, min);
+		tmax = ALmax(tmax, max);
+	}
+
+	return ret;
 }
 
 #include "../Main/systems.h"

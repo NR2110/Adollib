@@ -1,71 +1,8 @@
-﻿C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\physics_resolve.hlsl(147,9-127): warning X3206: implicit truncation of vector type
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\physics_resolve.hlsl(149,9-127): warning X3206: implicit truncation of vector type
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\physics_resolve.hlsl(162,9-125): warning X3206: implicit truncation of vector type
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\physics_resolve.hlsl(164,9-125): warning X3206: implicit truncation of vector type
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\physics_resolve.hlsl(187,9-40): warning X3203: signed/unsigned mismatch, unsigned assumed
-  
-  compilation object save succeeded; see C:\Users\waaaa\Documents\Adollib\Adollib\Release\physics_resolve.cso
-  camera_manager.cpp
-  camera_s.cpp
-  object_manager.cpp
-  object_rotate.cpp
-  player.cpp
-  imgui.cpp
-  imgui_demo.cpp
-  imgui_draw.cpp
-  imgui_impl_dx11.cpp
-  imgui_impl_win32.cpp
-  imgui_widgets.cpp
-  debug.cpp
-  imgui_manager.cpp
-  work_meter.cpp
-  Adollib.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\Adollib.cpp(23,11): warning C4244: '初期化中': 'int' から 'float' への変換です。データが失われる可能性があります。
-  input.cpp
-  loop.cpp
-  main.cpp
-  resource_manager.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(536,82): warning C4018: '>': signed と unsigned の数値を比較しようとしました。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(538,63): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(562,27): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(653,35): warning C4244: '=': 'double' から 'Adollib::u_int' への変換です。データが失われる可能性があります。
-  sprite.cpp
-  コンパイル中...
-  systems.cpp
-  closest_func.cpp
-  complex.cpp
-  frustum_culling.cpp
-  material.cpp
-  material_for_collider.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(59,50): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-  mesh.cpp
-  texture.cpp
-  gameobject.cpp
-  gameobject_camera.cpp
-  gameobject_light.cpp
-  gameobject_manager.cpp
-  ALP_broadphase.cpp
-  ALP_collider.cpp
-  ALP_generate_contact.cpp
-  ALP_integrate.cpp
-  ALP_midphase.cpp
-  ALP_physics.cpp
-  ALP_resolve_contact.cpp
-  ALP__physics_manager.cpp
-  コンパイル中...
-  collider__base.cpp
-  contact.cpp
-  meshcoll_resorce_manager.cpp
-  scene_game.cpp
-  scene_manager.cpp
-  scene_title.cpp
-  compute_shader.cpp
-  shader.cpp
+﻿  object_manager.cpp
   コード生成しています。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\meshcoll_resorce_manager.cpp(129): warning C4715: 'Adollib::Collider_ResourceManager::CreateMCFromFBX': 値を返さないコントロール パスがあります。
-  1904 of 7743 functions (24.6%) were compiled, the rest were copied from previous compilation.
-    932 functions were new in current compilation
-    400 functions had inline decision re-evaluated but remain unchanged
+  1 of 8004 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    41 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
 object_manager.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
 object_rotate.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
@@ -88,6 +25,7 @@ sprite.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\
 systems.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
 closest_func.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
 complex.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+crossing_func.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
 frustum_culling.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
 material.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
 material_for_collider.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
@@ -103,11 +41,13 @@ ALP_generate_contact.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\ad
 ALP_integrate.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
 ALP_midphase.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
 ALP_physics.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+ALP_raycast.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
 ALP_resolve_contact.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
 ALP__physics_manager.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
 collider__base.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
 contact.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
 meshcoll_resorce_manager.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+ray.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
 scene_game.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
 scene_manager.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
 scene_title.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。

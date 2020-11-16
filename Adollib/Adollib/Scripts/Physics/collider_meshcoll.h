@@ -29,7 +29,7 @@ namespace Adollib {
 
 			Physics_function::ALP_Collider_mesh coll_mesh;
 			coll_mesh.ALPcollider = ALPcollider_itr;
-			auto& itr = collider_mesh->begin();
+			auto itr = collider_mesh->begin();
 			for(int i = 0;i < coll_mesn_size;i++){
 				coll_mesh.mesh = itr;
 				ALPcollider_itr->collider_meshes.emplace_back(coll_mesh);

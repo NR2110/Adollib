@@ -9,6 +9,7 @@ namespace Adollib
 	{
 	public:
 		Transfome* player;
+		Vector3 c_pos_save;
 
 	public:
 		void awake();

@@ -27,15 +27,15 @@ namespace Adollib {
 		// 直線と平面の交点を求める
 		// plane_n	 : 平面Aの法線
 		// plane_dis : 平面Aの距離
-		// line_p	: 光線上の点
-		// line_dir : 光線の向き
-		// crossing_p : 交点
+		// ray_p	: 光線上の点
+		// ray_dir : 光線の向き
+		// crossing_t : 交差するray_t
 		//平面と光線が交わらない時falseを返す
 		//:::::::::::::::::
 		const bool getCrossingP_plane_line(
 			const Vector3& plane_n, const float& plane_dis,
 			const Vector3& line_p,  const Vector3& line_dir,
-			Vector3& crossing_p
+			float& crossing_t
 		);
 
 		//:::::::::::::::::
@@ -55,6 +55,27 @@ namespace Adollib {
 			const Vector3& nC, const float& dC,
 			Vector3& crossing_p
 		);
+
+		//:::::::::::::::::
+		// 3平面の交点を求める
+		// ray_point : 直線状の点
+		// ray_dir   : 直線の向き
+		// t_point0～2 : 3頂点
+		// t_normal    : 3頂点メッシュの法線
+		// crossingP_min  :  交点min
+		// crossingP_max  :  交点max
+		//平面が平行の時falseを返す
+		//:::::::::::::::::
+		const bool getCrossing_line_triangle(
+			const Vector3& ray_point, const Vector3& ray_dir,
+			const Vector3& t_point0,
+			const Vector3& t_point1,
+			const Vector3& t_point2,
+			const Vector3& t_normal,
+			Vector3& closestP
+		);
+
+
 
 
 	}

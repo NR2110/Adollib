@@ -1,6 +1,7 @@
 #pragma once
 #include "../Adollib/Scripts/Object/component.h"
 #include "../Adollib/Scripts/Physics/collider.h"
+#include "../Adollib/Scripts/Object/gameobject_camera.h"
 
 namespace Adollib
 {
@@ -8,10 +9,11 @@ namespace Adollib
 	class object_manager : public Component
 	{
 	private:
-		std::vector<Box*> boxes;
-		std::vector<Box>  st_box;
+		Gameobject* sphere_go;
 
 		std::vector<Gameobject*> GOs;
+
+		Camera* camera;
 	public:
 		Gameobject* set_sphere(Vector3 pos, float r, Vector3 color = Vector3(1, 1, 1));
 		Gameobject* set_box(Vector3 pos, Vector3 size, Vector3 rotate, Vector3 color = Vector3(1, 1, 1));

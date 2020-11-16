@@ -25,9 +25,6 @@ namespace Adollib {
 
 			//e
 			std::list<ALP_Collider>::iterator ALPcollider;
-
-			////mesh‚Ì”Ô†(‚Ó)
-			//u_int mesh_num;
 		};
 
 		class ALP_Collider {

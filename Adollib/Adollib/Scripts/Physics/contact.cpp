@@ -156,8 +156,6 @@ void Contact::chack_remove_contact_point(
 		Vector3 contactpointA = pointA + vector3_quatrotate(contactpoints[i].point[0], rotA);
 		Vector3 contactpointB = pointB + vector3_quatrotate(contactpoints[i].point[1], rotB);
 
-		Vector3 aaa = vector3_quatrotate(contactpoints[i].point[0], rotA);
-
 		// normal•ûŒü‚Ì‹——£‚ð”ä‚×‚é
 		float dis_N = vector3_dot(normal, contactpointA - contactpointB);
 		if (dis_N > Phyisics_manager::contact_threrhold_normal) {

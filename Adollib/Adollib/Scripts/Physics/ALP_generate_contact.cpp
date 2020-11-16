@@ -90,7 +90,7 @@ float sum_of_projected_radii(float& max, float& min, const std::vector<ALP_Colli
 	float value;
 	max = -FLT_MAX;
 	min = +FLT_MAX;
-	for (const Vector3& vertex : meshcoll->mesh->vertices) {
+	for (const Vector3& vertex : *meshcoll->mesh->vertices) {
 		value = vector3_dot(vertex * meshcoll->ALPcollider->world_scale, nor);
 		if (max < value)max = value;
 		if (min > value)min = value;
@@ -333,12 +333,12 @@ bool sat_convex_mesh_mesh(const std::vector<ALP_Collider_mesh>::iterator& meshA,
 		const Edge& edgeA = meshA->mesh->edges.at(eA);
 		if (edgeA.type != Edgetype::EdgeConvex) continue;
 
-		const Vector3& edgeVecA = meshA->mesh->vertices.at(edgeA.vertexID[1]) - meshA->mesh->vertices.at(edgeA.vertexID[0]);
+		const Vector3& edgeVecA = meshA->mesh->vertices->at(edgeA.vertexID[1]) - meshA->mesh->vertices->at(edgeA.vertexID[0]);
 			for (u_int eB = 0; eB < meshB->mesh->edge_num; eB++) {
 				const Edge& edgeB = meshB->mesh->edges.at(eB);
 				if (edgeB.type != Edgetype::EdgeConvex) continue;
 
-				const Vector3 edgeVecB = vector3_quatrotate(meshB->mesh->vertices.at(edgeB.vertexID[1]) - meshB->mesh->vertices.at(edgeB.vertexID[0]), offset_quatBA);
+				const Vector3 edgeVecB = vector3_quatrotate(meshB->mesh->vertices->at(edgeB.vertexID[1]) - meshB->mesh->vertices->at(edgeB.vertexID[0]), offset_quatBA);
 
 				axisA = vector3_cross(edgeVecA, edgeVecB);
 				if (axisA.norm() <= FLT_EPSILON * FLT_EPSILON) continue;
@@ -359,7 +359,7 @@ bool sat_convex_mesh_mesh(const std::vector<ALP_Collider_mesh>::iterator& meshA,
 				minB += off;
 
 				//辺と辺の距離
-				float CN = fabsf(off) - (vector3_dot(axisA, meshA->mesh->vertices.at(edgeA.vertexID[0])) + -(vector3_dot(axisB, meshB->mesh->vertices.at(edgeB.vertexID[0]))));
+				float CN = fabsf(off) - (vector3_dot(axisA, meshA->mesh->vertices->at(edgeA.vertexID[0])) + -(vector3_dot(axisB, meshB->mesh->vertices->at(edgeB.vertexID[0]))));
 
 				//貫通の計算
 				float d1 = minA - maxB;
@@ -771,7 +771,7 @@ bool Physics_function::generate_contact_sphere_mesh(const std::vector<ALP_Collid
 		//各面の外にあれば面平面に持ってくる
 		for (u_int i = 0; i < mesh_mesh->mesh->facet_num; i++) {
 			const Vector3& nor = mesh_mesh->mesh->facets.at(i).normal.unit_vect();
-			const Vector3& pos = mesh_mesh->mesh->vertices.at(mesh_mesh->mesh->facets.at(i).vertexID[0]) * mesh->world_scale;
+			const Vector3& pos = mesh_mesh->mesh->vertices->at(mesh_mesh->mesh->facets.at(i).vertexID[0]) * mesh->world_scale;
 			float d = vector3_dot(nor, pos) - vector3_dot(nor, closest_point);
 			if (d < 0) 
 				closest_point += d * nor;		
@@ -1148,13 +1148,13 @@ bool Physics_function::generate_contact_mesh_mesh(const std::vector<ALP_Collider
 
 				for (u_int v_num = 0; v_num < vertex_mesh->mesh->vertex_num; v_num++) {
 
-					if (vector3_dot(vertex_mesh->mesh->vertices.at(v_num), axisV) > max_len) {
-						max_len = vector3_dot(vertex_mesh->mesh->vertices.at(v_num), axisV);
+					if (vector3_dot(vertex_mesh->mesh->vertices->at(v_num), axisV) > max_len) {
+						max_len = vector3_dot(vertex_mesh->mesh->vertices->at(v_num), axisV);
 						nearest_pointID = v_num;
 					}
 				}
 			}
-			pB = vertex_mesh->mesh->vertices.at(nearest_pointID);
+			pB = vertex_mesh->mesh->vertices->at(nearest_pointID);
 			pB *= vertex_coll->world_scale;
 
 			//上記のp0がfacet_collの最近面上のどこにあるのか
@@ -1173,9 +1173,9 @@ bool Physics_function::generate_contact_mesh_mesh(const std::vector<ALP_Collider
 
 					//メッシュと点の最近点を求める
 					get_closestP_point_triangle(p,
-						facet_mesh->mesh->vertices.at(facet_mesh->mesh->facets.at(f_num).vertexID[0]),
-						facet_mesh->mesh->vertices.at(facet_mesh->mesh->facets.at(f_num).vertexID[1]),
-						facet_mesh->mesh->vertices.at(facet_mesh->mesh->facets.at(f_num).vertexID[2]),
+						facet_mesh->mesh->vertices->at(facet_mesh->mesh->facets.at(f_num).vertexID[0]),
+						facet_mesh->mesh->vertices->at(facet_mesh->mesh->facets.at(f_num).vertexID[1]),
+						facet_mesh->mesh->vertices->at(facet_mesh->mesh->facets.at(f_num).vertexID[2]),
 						facet_mesh->mesh->facets.at(f_num).normal,
 						n_pos
 					);
@@ -1230,13 +1230,13 @@ bool Physics_function::generate_contact_mesh_mesh(const std::vector<ALP_Collider
 
 				for (u_int v_num = 0; v_num < vertex_mesh->mesh->vertex_num; v_num++) {
 
-					if (vector3_dot(vertex_mesh->mesh->vertices.at(v_num), axisV) > max_len) {
-						max_len = vector3_dot(vertex_mesh->mesh->vertices.at(v_num), axisV);
+					if (vector3_dot(vertex_mesh->mesh->vertices->at(v_num), axisV) > max_len) {
+						max_len = vector3_dot(vertex_mesh->mesh->vertices->at(v_num), axisV);
 						nearest_pointID = v_num;
 					}
 				}
 			}
-			pB = vertex_mesh->mesh->vertices.at(nearest_pointID);
+			pB = vertex_mesh->mesh->vertices->at(nearest_pointID);
 			pB *= vertex_coll->world_scale;
 
 			//上記のpBがfacet_collの最近面上のどこにあるのか
@@ -1255,9 +1255,9 @@ bool Physics_function::generate_contact_mesh_mesh(const std::vector<ALP_Collider
 
 					//メッシュと点の最近点を求める
 					get_closestP_point_triangle(p,
-						facet_mesh->mesh->vertices.at(facet_mesh->mesh->facets.at(f_num).vertexID[0]),
-						facet_mesh->mesh->vertices.at(facet_mesh->mesh->facets.at(f_num).vertexID[1]),
-						facet_mesh->mesh->vertices.at(facet_mesh->mesh->facets.at(f_num).vertexID[2]),
+						facet_mesh->mesh->vertices->at(facet_mesh->mesh->facets.at(f_num).vertexID[0]),
+						facet_mesh->mesh->vertices->at(facet_mesh->mesh->facets.at(f_num).vertexID[1]),
+						facet_mesh->mesh->vertices->at(facet_mesh->mesh->facets.at(f_num).vertexID[2]),
 						facet_mesh->mesh->facets.at(f_num).normal,
 						n_pos
 					);
@@ -1292,12 +1292,12 @@ bool Physics_function::generate_contact_mesh_mesh(const std::vector<ALP_Collider
 			const Edge& edgeB = mB->mesh->edges.at(smallest_facetID[1]);
 
 			Vector3 edgeA_p[2] = {
-				{mA->mesh->vertices.at(edgeA.vertexID[0]) * meshA->world_scale},
-				{mA->mesh->vertices.at(edgeA.vertexID[1]) * meshA->world_scale}
+				{mA->mesh->vertices->at(edgeA.vertexID[0]) * meshA->world_scale},
+				{mA->mesh->vertices->at(edgeA.vertexID[1]) * meshA->world_scale}
 			};
 			Vector3 edgeB_p[2] = {
-				{mB->mesh->vertices.at(edgeB.vertexID[0]) * meshB->world_scale},
-				{mB->mesh->vertices.at(edgeB.vertexID[1]) * meshB->world_scale}
+				{mB->mesh->vertices->at(edgeB.vertexID[0]) * meshB->world_scale},
+				{mB->mesh->vertices->at(edgeB.vertexID[1]) * meshB->world_scale}
 			};
 
 			Vector3 edgeA_vec = (edgeA_p[0] - edgeA_p[1]).unit_vect();

@@ -214,6 +214,9 @@
     <ClCompile Include="Scripts\Physics\ray.cpp">
       <Filter>00_Adollib\22_physics\collider</Filter>
     </ClCompile>
+    <ClCompile Include="Scripts\Physics\ALP_raycast.cpp">
+      <Filter>00_Adollib\22_physics\base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Scripts\player.h">
@@ -476,6 +479,9 @@
     </ClInclude>
     <ClInclude Include="Scripts\Physics\ray.h">
       <Filter>00_Adollib\22_physics\collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\ALP_raycast.h">
+      <Filter>00_Adollib\22_physics\base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

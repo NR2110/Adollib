@@ -31,7 +31,7 @@ namespace Adollib {
 			u_int facet_num = 0; //面数
 
 			std::vector<int> indexes; //頂点情報
-			std::vector<Vector3> vertices; //頂点情報
+			std::vector<Vector3>* vertices; //頂点情報
 			std::vector<Edge> edges; //エッジ配列
 			std::vector<Facet> facets; //面配列
 

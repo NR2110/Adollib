@@ -43,8 +43,8 @@ void Physics_function::Broadphase(std::list<ALP_Collider>& ALP_collider, std::ve
 			axis_list[xz].clear();
 
 			for(auto & phys : ALP_collider) {
-				auto& itr = phys.collider_meshes.begin();
-				auto& itr_end = phys.collider_meshes.end();
+				auto itr = phys.collider_meshes.begin();
+				auto itr_end = phys.collider_meshes.end();
 
 				for (itr = phys.collider_meshes.begin(); itr != itr_end; ++itr) {
 

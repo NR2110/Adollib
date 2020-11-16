@@ -18,6 +18,7 @@ namespace Adollib
 			static std::unordered_map <std::string, std::vector<Meshcollider_mesh>>	meshes;
 
 		public:
+			static std::unordered_map <std::string, std::vector<Vector3>> vertices_;
 			static bool CreateMCFromFBX(const char* fbxname, std::vector<Meshcollider_mesh>** mesh); //FBXÇ©ÇÁMeshColliderÇÃê∂ê¨
 			static void destroy();
 

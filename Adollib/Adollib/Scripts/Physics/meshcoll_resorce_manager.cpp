@@ -19,6 +19,7 @@ using namespace Crossing_func;
 using namespace std;
 
 std::unordered_map <std::string, std::vector<Meshcollider_mesh>> Collider_ResourceManager::meshes;
+std::unordered_map <std::string, std::vector<Vector3>> Collider_ResourceManager::vertices_;
 
 bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<Meshcollider_mesh>** ret_mesh) {
 
@@ -26,6 +27,9 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 		*ret_mesh = &meshes[fbxname];
 		return true;
 	}
+	vector<Vector3>& vertices = vertices_[fbxname];
+	vertices.clear();
+
 	const char* fileName = fbxname;
 	bool hr = true;
 
@@ -77,22 +81,19 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 	};
 	std::vector<Subset> subsets;
 	std::vector<Meshcollider_mesh> _mesh;
-	vector<Vector3> l_vertices;
 
 	//TODO : FBX内のgloabal_transformを考慮していない 
 
 	_mesh.resize(fetched_meshes.size());
 	subsets.resize(fetched_meshes.size());
-	for (size_t mesh_num = 0; mesh_num < fetched_meshes.size(); mesh_num++)
+	//for (size_t mesh_num = 0; mesh_num < fetched_meshes.size(); mesh_num++)
+	for (size_t mesh_num = 0; mesh_num < 1; mesh_num++)
 	{
 		FbxMesh* fbxMesh = fetched_meshes.at(mesh_num)->GetMesh();
 		Subset& subset = subsets.at(mesh_num);
 		Meshcollider_mesh& mesh = _mesh.at(mesh_num);
 		//::
 		vector<int>& indices = mesh.indexes;
-
-		// マテリアルの取得
-		const int number_of_materials = fbxMesh->GetNode()->GetMaterialCount();
 
 		const FbxVector4* array_of_control_points = fbxMesh->GetControlPoints();
 		const int number_of_polygons = fbxMesh->GetPolygonCount();
@@ -110,7 +111,7 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 				vertex.z = static_cast<float>(array_of_control_points[index_of_control_point][2]);
 
 				// push_back
-				l_vertices.push_back(vertex);
+				vertices.push_back(vertex);
 				indices.at(index_offset + index_of_vertex) = static_cast<u_int>(vertex_count);
 				vertex_count++;
 			}
@@ -119,10 +120,9 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 
 #pragma endregion
 #pragma region Set Meshcollider_mesh
-		vector<Vector3>& vertices = mesh.vertices;
 
 		u_int& index_num = mesh.index_num;
-		u_int& vertex_num = mesh.vertex_num;
+		//u_int& vertex_num = mesh.vertex_num;
 
 		vector<Edge>& edges = mesh.edges;
 		vector<Facet>& facets = mesh.facets;
@@ -133,18 +133,9 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 		//::: vertexなどの情報からedge,facetの情報を計算 :::
 		{
 			index_num = indices.size();
-			vertices.resize(index_num);
-			//頂点情報を保存
-			{
-				for (u_int i = 0; i < index_num; i++) {
-					vertices[i] = l_vertices[indices[i]];
-				}
-			}
-
-			vertex_num = vertices.size();
 			//面情報の保存
 			{
-				facet_num = vertex_num / 3;
+				facet_num = index_num / 3;
 				Physics_function::Facet F;
 				for (u_int i = 0; i < facet_num; i++) {
 					//F.vertexID[0] = indices[i * 3];
@@ -165,7 +156,7 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 			{
 				edge_num = 0;
 				std::vector<int>edgeID_Table;
-				edgeID_Table.resize(vertex_num * vertex_num / 2);
+				edgeID_Table.resize(index_num* index_num / 2);
 				for (int& u : edgeID_Table) {
 					u = 0xffffff;
 				}
@@ -238,9 +229,9 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 
 		//初期状態のDOPの保存 loop中に計算するDOPはこのDOPを基準にする
 		for (int i = 0; i < DOP::DOP_size; i++) {
-			for (Vector3& v : vertices) {
+			for (int& ind : indices) {
 
-				float dis = vector3_dot(DOP::DOP_14_axis[i], v);
+				float dis = vector3_dot(DOP::DOP_14_axis[i], vertices.at(ind));
 				if (dopbase.max[i] < dis) dopbase.max[i] = +dis * 1.00000001f;//確実にするためちょっと大きめにとる
 				if (dopbase.min[i] > dis) dopbase.min[i] = +dis * 1.00000001f;
 			}
@@ -291,6 +282,14 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 	}
 
 	meshes[fbxname] = _mesh;
+
+	//頂点情報を保存
+	for (auto& ver : meshes[fbxname]) {
+		ver.vertices = &vertices_[fbxname];
+	}
+
+
+
 	*ret_mesh = &meshes[fbxname];
 
 

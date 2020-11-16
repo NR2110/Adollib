@@ -5,10 +5,10 @@
 #include "../Adollib/Scripts/Scene/scene_manager.h"
 
 #include "../Adollib/Scripts/Math/closest_func.h"
-
 #include "../Adollib/Scripts/Imgui/imgui_all.h"
-
 #include "../Adollib/Scripts/Physics/ALP__physics_manager.h"
+
+#include "../Adollib/Scripts/Physics/ray.h"
 
 namespace Adollib
 {
@@ -19,17 +19,10 @@ namespace Adollib
 
 	void object_manager::start()
 	{
+		camera = Gameobject_manager::find_camera("camera");
+		sphere_go = Gameobject_manager::createSphere();
 #if 1
-		//set_sphere(n_vector3(0, 0, 50), 10);
-		//set_sphere(n_vector3(0, 0, 0), 10);
-		//set_moveable_sphere(n_vector3(0, 30, 0), 5);
-		//set_moveable_sphere(n_vector3(0, 50, 0), 0.1);
-
-		//set_plane(Vector3(0, 0, 0), Vector3(0, 1, 0), Vector3(1, 0, 1));
-		//	set_nohit_plane(n_vector3(1000, -1, 1000), n_vector3(0, 1, 0), n_vector3(1, 0, 1));
-			//set_moveable_box(n_vector3(0, 200, 0), n_vector3(10, 10, 10), n_vector3(45, 45, 0), n_vector3(0, 1, 1));
-			//set_moveable_box(n_vector3(0, 200, 0), n_vector3(10, 10, 10), n_vector3(0, 0, 0), n_vector3(0, 1, 1));
-		if (1) {
+		if (0) {
 			{
 				Gameobject* GO = Gameobject_manager::createCube();
 				GO->transform->local_pos = Vector3(0, -60, 0);
@@ -43,42 +36,22 @@ namespace Adollib
 				R->is_moveable = false;
 			}
 
-			{
-				//Gameobject* GO = Gameobject_manager::createCube();
-				//GO->transform->local_pos = Vector3(0, -90, 0.5);
-				//GO->transform->local_scale = Vector3(60, 60, 60);
-				//GO->transform->local_orient = quaternion_from_euler(45, 0, 0);
-				//GO->material->color = Vector4(1, 1, 1, 1);
-
-				//Box* R = GO->addComponent<Box>();
-				//R->is_moveable = false;
-
-				////Box* R = GO->addComponent<Box>();
-				//Meshcoll* M = GO->addComponent<Meshcoll>();
-				//M->load_mesh("./DefaultModel/cube.fbx");
-				//M->is_moveable = false;
-			}
 		}
 		else {
 			{
 				Gameobject* GO = Gameobject_manager::createFromFBX("../Data/FBX/0311_collisions.fbx");
+				//Gameobject* GO = Gameobject_manager::createFromFBX("../Adollib/DefaultModel/cylinder.fbx");
 				GO->transform->local_pos = Vector3(-10, 15, -25);
 				GO->transform->local_scale = Vector3(0.001f, 0.001f, 0.001f);
 				GO->transform->local_orient = quaternion_from_euler(0, 180, 0);
+				//GO->transform->local_scale = Vector3(0.1f, 0.1f, 0.1f);
 				Meshcoll* R = GO->addComponent<Meshcoll>();
 				R->load_mesh("../Data/FBX/0311_collisions.fbx");
+				//R->load_mesh("../Adollib/DefaultModel/cylinder.fbx");
 				R->is_moveable = false;
 
 			}
-
-			{
-				//Gameobject* GO = Gameobject_manager::createCube();
-				//GO->transform->local_pos = Vector3(0, -60, 0);
-				//GO->transform->local_scale = Vector3(60, 60, 60);
-				//GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
-				//GO->material->color = Vector4(1, 1, 1, 1);
-
-			}
+			
 		}
 
 
@@ -94,6 +67,7 @@ namespace Adollib
 		ImGuiWindowFlags flag = 0;
 		//flag |= ImGuiWindowFlags_AlwaysAutoResize;
 
+		#pragma region IMGUI
 
 		if(ImGui::Begin("object_manage", 0, flag)) {
 
@@ -233,95 +207,25 @@ namespace Adollib
 			ImGui::Columns(1);
 			ImGui::End();
 		}
+
+#pragma endregion
+
 		
-		if (input->getKeyTrigger(Key::M)) {
+		Ray ray;
+		ray.position = camera->transform->local_pos;
+		ray.direction = vector3_quatrotate(Vector3(0, 0, 1), camera->transform->local_orient);
 
-			{ 
+		float tmin = 0, tmax = 0;
+		ray.ray_cast(tmin, tmax);
 
-				Gameobject* object = nullptr;
-				object = Gameobject_manager::createCube(GO_tag::Mesh);
-				Vector4 C = Vector4(1,0,0,1);
-				object->material->color = C;
-
-				object->transform->local_orient = quaternion_from_euler(0,0,0);
-				object->transform->local_pos = Vector3(0,5,0);
-				object->transform->local_scale = Vector3(1,1,1);
-
-				//Box* M = object->addComponent<Box>();
-				Meshcoll* M = object->addComponent<Meshcoll>();
-				M->load_mesh("./DefaultModel/cube.fbx");
-				GOs.emplace_back(object);
-
-
-			}
-
-		}
-
-
-		if (input->getKeyTrigger(Key::N)) {
-
-			{ 
-
-				Gameobject* object = nullptr;
-				object = Gameobject_manager::createCube(GO_tag::Box);
-				Vector4 C = Vector4(0, 1, 0, 1);
-				object->material->color = C;
-
-				object->transform->local_orient = quaternion_from_euler(0, 0, 0);
-				object->transform->local_pos = Vector3(0, 5, 0);
-				object->transform->local_scale = Vector3(1, 1, 1);
-
-				Box* M = object->addComponent<Box>();
-				GOs.emplace_back(object);
-
-			}
-
-		}
-
-		if (input->getKeyTrigger(Key::B)) {
-
-			{
-
-				Gameobject* object = nullptr;
-				object = Gameobject_manager::createCube(GO_tag::Box);
-				Vector4 C = Vector4(0, 1, 0, 1);
-				object->material->color = C;
-
-				//object->addComponent<object_fall>();
-				object->transform->local_orient = quaternion_from_euler(0, 0, 45);
-				object->transform->local_pos = Vector3(0, 5, 0);
-				object->transform->local_scale = Vector3(1, 1, 1);
-
-				Box* M = object->addComponent<Box>();
-				GOs.emplace_back(object);
-
-
-			}
-
-			{
-
-				Gameobject* object = nullptr;
-				object = Gameobject_manager::createCube(GO_tag::Mesh);
-				Vector4 C = Vector4(1, 0, 0, 1);
-				object->material->color = C;
-
-				//object->addComponent<object_fall>();
-				object->transform->local_orient = quaternion_from_euler(0, 0, 45);
-				object->transform->local_pos = Vector3(0, 5, 0);
-				object->transform->local_scale = Vector3(1, 1, 1);
-
-				//Box* M = object->addComponent<Box>();
-				Meshcoll* M = object->addComponent<Meshcoll>();
-				M->load_mesh("./DefaultModel/cube.fbx");
-				GOs.emplace_back(object);
-
-
-			}
-
-		}
+		sphere_go->transform->local_pos = ray.position + tmin * ray.direction;
+		//sphere_go->transform->local_scale = Vector3(10, 10, 10);
+		sphere_go->transform->local_scale = Vector3(0.1f, 0.1f, 0.1f);
 
 
 	}
+
+
 
 
 	// このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる

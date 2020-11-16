@@ -168,6 +168,15 @@ namespace Adollib
 			colliders[Sce].erase(coll_itr);
 		}
 
+		public:
+			static bool ray_cast(
+				const Vector3& Ray_pos, const Vector3& Ray_dir,
+				u_int tag,
+				float& tmin, float& tmax,
+				Vector3& normal,
+				Collider* coll,
+				Scenelist Sce = Scene::now_scene);
+
 	public:
 
 		static bool init();

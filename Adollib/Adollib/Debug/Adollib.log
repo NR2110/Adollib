@@ -1,26 +1,4 @@
-﻿  camera_manager.cpp
-  camera_s.cpp
-  object_manager.cpp
-  object_rotate.cpp
-  player.cpp
-  material_for_collider.cpp
-  gameobject.cpp
-  gameobject_manager.cpp
-  ALP__physics_manager.cpp
-  ALP_broadphase.cpp
-  ALP_collider.cpp
-  ALP_generate_contact.cpp
-  ALP_integrate.cpp
-  ALP_midphase.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(60,50): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(96,89): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(310,44): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(330,94): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-  ALP_physics.cpp
-  ALP_resolve_contact.cpp
-  collider__base.cpp
-  contact.cpp
-  meshcoll_resorce_manager.cpp
-  ray.cpp
-  scene_game.cpp
+﻿  camera_s.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\camera_s.cpp(76,39): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\camera_s.cpp(77,39): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe
