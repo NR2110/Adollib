@@ -44,8 +44,8 @@ void Collider_renderer::initialize() {
 		meshes[ALP_Collider_shape::Plane];
 		ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::Plane], "./DefaultModel/plane.fbx", "");
 
-		meshes[ALP_Collider_shape::Mesh];
-		ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::Mesh], "../Data/FBX/0311_collisions.fbx", "");
+		//meshes[ALP_Collider_shape::Mesh];
+		//ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::Mesh], "../Data/FBX/0311_collisions.fbx", "");
 		//ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::Mesh], "../Adollib/DefaultModel/cylinder.fbx", "");
 	}
 
@@ -73,6 +73,10 @@ void Collider_renderer::render_collider(const Physics_function::ALP_Collider& R)
 	Systems::SetDephtStencilState(State_manager::DStypes::DS_TRUE);
 
 	std::vector<Mesh::mesh>* meshs;
+	if (R.shape == ALP_Collider_shape::Mesh) {
+		ResourceManager::CreateModelFromFBX(&meshs, R.collider_meshes[0].mesh->FBX_pass.c_str(), "");
+	}
+	else
 	meshs = meshes[R.shape];
 
 	//Vector4 color16[16];

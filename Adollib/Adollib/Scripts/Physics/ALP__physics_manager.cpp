@@ -202,8 +202,9 @@ bool Phyisics_manager::ray_cast(
 	//tmin‚©‚çtmax‚É‚©‚¯‚Äray‚ªŒð·‚µ‚Ä‚¢‚é
 	tmin = +FLT_MAX;
 	tmax = -FLT_MAX;
-	float min = +FLT_MAX;
-	float max = -FLT_MAX;
+	float min = -FLT_MAX;
+	float max = +FLT_MAX;
+	Vector3 norm;
 
 	bool ret = false;
 
@@ -213,11 +214,15 @@ bool Phyisics_manager::ray_cast(
 		if (Physics_function::ray_cast(
 			Ray_pos, Ray_dir,
 			coll,
-			min, max, normal
+			min, max, norm
 		) == false) continue;
 
 		ret = true;
-		tmin = ALmin(tmin, min);
+		if(tmin > min){
+			tmin  = min;
+			normal = norm;
+		}
+		//tmin = ALmin(tmin, min);
 		tmax = ALmax(tmax, max);
 	}
 

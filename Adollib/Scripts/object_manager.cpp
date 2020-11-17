@@ -10,6 +10,8 @@
 
 #include "../Adollib/Scripts/Physics/ray.h"
 
+#include "../Adollib/Scripts/Imgui/debug.h"
+
 namespace Adollib
 {
 	// 所属するシーンの初期化時に一度だけ呼ばれる
@@ -20,9 +22,25 @@ namespace Adollib
 	void object_manager::start()
 	{
 		camera = Gameobject_manager::find_camera("camera");
+
 		sphere_go = Gameobject_manager::createSphere();
+		sphere_go->transform->local_scale = Vector3(1) * 0.05f;
+		sphere_go->material->color = Vector4(1, 0, 0, 1);
+
+		sphere_go3[0] = Gameobject_manager::createSphere();
+		sphere_go3[0]->transform->local_scale = Vector3(1) * 0.05f;
+		sphere_go3[0]->material->color = Vector4(1, 0, 0, 1);
+
+		sphere_go3[1] = Gameobject_manager::createSphere();
+		sphere_go3[1]->transform->local_scale = Vector3(1) * 0.05f;
+		sphere_go3[1]->material->color = Vector4(1, 0, 0, 1);
+
+		sphere_go3[2] = Gameobject_manager::createSphere();
+		sphere_go3[2]->transform->local_scale = Vector3(1) * 0.05f;
+		sphere_go3[2]->material->color = Vector4(1, 0, 0, 1);
+
 #if 1
-		if (0) {
+		if (1) {
 			{
 				Gameobject* GO = Gameobject_manager::createCube();
 				GO->transform->local_pos = Vector3(0, -60, 0);
@@ -40,11 +58,12 @@ namespace Adollib
 		else if(1){
 			{
 				objGO = Gameobject_manager::createFromFBX("../Data/FBX/0311_collisions.fbx");
+				//objGO = Gameobject_manager::create();
 				//objGO = Gameobject_manager::createFromFBX("../Adollib/DefaultModel/cylinder.fbx");
-				objGO->transform->local_pos = Vector3(-10, 15, -25);
-				objGO->transform->local_scale = Vector3(0.001f, 0.002f, 0.003f);
+				//objGO->transform->local_pos = Vector3(-10, 15, -25);
+				objGO->transform->local_scale = Vector3(0.001f, 0.001f, 0.001f);
 				//objGO->transform->local_scale = Vector3(1, 2, 3);
-				objGO->transform->local_orient = quaternion_from_euler(0, 180, 0);
+				//objGO->transform->local_orient = quaternion_from_euler(0, 180, 0);
 				//objGO->transform->local_orient = quaternion_from_euler(45, 45, 0);
 				Meshcoll* R = objGO->addComponent<Meshcoll>();
 				R->load_mesh("../Data/FBX/0311_collisions.fbx");
@@ -58,16 +77,16 @@ namespace Adollib
 			{
 				//objGO = Gameobject_manager::createFromFBX("../Data/FBX/0311_collisions.fbx");
 				objGO = Gameobject_manager::createFromFBX("../Adollib/DefaultModel/sphere.fbx");
-				objGO->transform->local_pos = Vector3(-10, 15, -25);
+				//objGO->transform->local_pos = Vector3(-10, 15, -25);
 				//objGO->transform->local_scale = Vector3(0.001f, 0.002f, 0.003f);
 				objGO->transform->local_scale = Vector3(1, 2, 3);
 				//GO->transform->local_orient = quaternion_from_euler(0, 180, 0);
 				//objGO->transform->local_orient = quaternion_from_euler(45, 45, 0);
 				//GO->transform->local_scale = Vector3(0.1f, 0.1f, 0.1f);
 				Meshcoll* R = objGO->addComponent<Meshcoll>();
-				//R->load_mesh("../Data/FBX/0311_collisions.fbx");
-				R->center = Vector3(1, 1, 1);
-				R->load_mesh("../Adollib/DefaultModel/sphere.fbx");
+				R->load_mesh("../Data/FBX/0311_collisions.fbx");
+				//R->center = Vector3(1, 1, 1);
+				//R->load_mesh("../Adollib/DefaultModel/sphere.fbx");
 				R->is_moveable = false;
 
 			}
@@ -84,7 +103,6 @@ namespace Adollib
 	// 毎フレーム呼ばれる更新処理
 	void object_manager::update()
 	{
-		//objGO->transform->local_orient *= quaternion_angle_axis(0.3f, Vector3(0, 1, 0));
 
 		ImGuiWindowFlags flag = 0;
 		//flag |= ImGuiWindowFlags_AlwaysAutoResize;
@@ -238,11 +256,12 @@ namespace Adollib
 		ray.direction = vector3_quatrotate(Vector3(0, 0, 1), camera->transform->local_orient);
 
 		float tmin = 0, tmax = 0;
-		ray.ray_cast(tmin, tmax);
+		Vector3 nor;
+		ray.ray_cast(UINT_MAX, tmin, tmax, nor);
+
+		Debug::set("", nor.get_XM3());
 
 		sphere_go->transform->local_pos = ray.position + tmin * ray.direction;
-		//sphere_go->transform->local_scale = Vector3(10, 10, 10);
-		sphere_go->transform->local_scale = Vector3(0.1f, 0.1f, 0.1f);
 
 
 	}

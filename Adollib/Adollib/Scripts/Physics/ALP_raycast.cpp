@@ -285,45 +285,7 @@ bool ray_cast_mesh(const Vector3& Ray_pos, const Vector3& Ray_dir,
 	const std::vector<Vector3>& vertices = *mesh.mesh->vertices;
 	auto& A = Collider_ResourceManager::vertices_;
 
-	//for (auto& facet : mesh.mesh->facets) {
-
-	//	const Vector3& n = facet.normal;
-	//	Vector3 PA = vertices[facet.vertexID[0]];
-	//	Vector3 PB = vertices[facet.vertexID[1]];
-	//	Vector3 PC = vertices[facet.vertexID[2]];
-
-	//	float d = vector3_dot(vertices[facet.vertexID[0]], n);
-	//	float t = 0;
-	//	if (Crossing_func::getCrossingP_plane_line(n, d, Ray_pos, Ray_dir, t) == false) continue;
-
-	//	//if (tmin < t)continue; RayÇ™îºíºê¸ÇÃèÍçá
-
-	//	//ì_Ç™É|ÉäÉSÉìì‡Ç…Ç†ÇÈÇ©Ç«Ç§Ç©ÇÃîªíË
-	//	Vector3 crossing_p = Ray_pos + t * Ray_dir;
-
-	//	Vector3 QA = vertices[facet.vertexID[0]] - crossing_p;
-	//	Vector3 QB = vertices[facet.vertexID[1]] - crossing_p;
-	//	Vector3 QC = vertices[facet.vertexID[2]] - crossing_p;
-
-	//	Vector3 NA = vector3_cross(QA, QB);
-	//	Vector3 NB = vector3_cross(QB, QC);
-	//	Vector3 NC = vector3_cross(QC, QA);
-
-	//	if (vector3_dot(NA, NB) < 1)continue;
-	//	if (vector3_dot(NB, NC) < 1)continue;
-
-	//	crossing = true;
-	//	if (tmin > t) {
-	//		tmin = t;
-	//		normal = n;
-	//	}
-	//	tmax = ALmax(tmax, t);
-
-	//}
-
 	for (auto& facet : mesh.mesh->facets) {
-
-		//Debug::set("", mesh.ALPcollider->world_orientation.get_XM4());
 
 		const Vector3& n = facet.normal;
 		Vector3 PA = vector3_quatrotate(vertices.at(facet.vertexID[0]) * mesh.ALPcollider->world_scale, mesh.ALPcollider->world_orientation) + mesh.ALPcollider->world_position;
@@ -381,12 +343,12 @@ bool Physics_function::ray_cast(const Vector3& Ray_pos, const Vector3& Ray_dir,
 ) {
 
 	//tminÇ©ÇÁtmaxÇ…Ç©ÇØÇƒrayÇ™åç∑ÇµÇƒÇ¢ÇÈ
-	tmin = +FLT_MAX;
-	tmax = -FLT_MAX;
+	tmin = -FLT_MAX;
+	tmax = +FLT_MAX;
 
 	bool ret = false;
 	for (const auto& mesh : coll.collider_meshes) {
-	//	if (ray_cast_14DOP(Ray_pos, Ray_dir, mesh.dop14) == false)continue;
+		//if (ray_cast_14DOP(Ray_pos, Ray_dir, mesh.dop14) == false)continue;
 
 		if (coll.shape == ALP_Collider_shape::Sphere)
 			if (ray_cast_sphere(Ray_pos, Ray_dir, coll, tmin, tmax, normal)) ret = true;

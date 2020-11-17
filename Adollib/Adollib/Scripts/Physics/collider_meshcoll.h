@@ -15,6 +15,7 @@ namespace Adollib {
 
 	private:
 		std::vector<Physics_function::Meshcollider_mesh>* collider_mesh = nullptr;
+		std::string FBX_pass;
 
 	public:
 		//不動オブジェクトとして生成
@@ -22,6 +23,7 @@ namespace Adollib {
 
 		void load_mesh(const char* filename) {
 			Physics_function::Collider_ResourceManager::CreateMCFromFBX(filename, &collider_mesh);
+			FBX_pass = filename;
 
 			ALPcollider_itr->collider_meshes.clear();
 

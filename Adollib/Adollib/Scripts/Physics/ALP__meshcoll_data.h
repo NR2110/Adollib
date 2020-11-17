@@ -25,6 +25,8 @@ namespace Adollib {
 		};
 
 		struct Meshcollider_mesh{
+			std::string FBX_pass;
+
 			u_int index_num = 0;
 			u_int vertex_num = 0; //頂点数
 			u_int edge_num = 0; //エッジ数

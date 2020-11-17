@@ -86,12 +86,13 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 
 	_mesh.resize(fetched_meshes.size());
 	subsets.resize(fetched_meshes.size());
-	//for (size_t mesh_num = 0; mesh_num < fetched_meshes.size(); mesh_num++)
-	for (size_t mesh_num = 0; mesh_num < 1; mesh_num++)
+	for (size_t mesh_num = 0; mesh_num < fetched_meshes.size(); mesh_num++)
+	//for (size_t mesh_num = 0; mesh_num < 1; mesh_num++)
 	{
 		FbxMesh* fbxMesh = fetched_meshes.at(mesh_num)->GetMesh();
 		Subset& subset = subsets.at(mesh_num);
 		Meshcollider_mesh& mesh = _mesh.at(mesh_num);
+		mesh.FBX_pass = fbxname;
 		//::
 		vector<int>& indices = mesh.indexes;
 
