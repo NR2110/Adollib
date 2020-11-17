@@ -3,7 +3,7 @@
 
 namespace Adollib {
 	namespace DOP {
-		static const int DOP14_size = 14 / 2;
+		static const int DOP14_size = 6 / 2;
 
 		//::::::::::::::::::
 		//BoardphaseópÇÃDOP_14
@@ -18,11 +18,11 @@ namespace Adollib {
 		static const Vector3 DOP_14_axis[DOP14_size] = {
 		Vector3(1,0,0),
 		Vector3(0,1,0),
-		Vector3(0,0,1),
+		Vector3(0,0,1)/*,
 		Vector3(+0.577350269f,0.577350269f,+0.577350269f),
 		Vector3(-0.577350269f,0.577350269f,+0.577350269f),
 		Vector3(+0.577350269f,0.577350269f,-0.577350269f),
-		Vector3(-0.577350269f,0.577350269f,-0.577350269f)
+		Vector3(-0.577350269f,0.577350269f,-0.577350269f)*/
 		};
 		struct DOP_14 {
 			//íÜêSç¿ïW

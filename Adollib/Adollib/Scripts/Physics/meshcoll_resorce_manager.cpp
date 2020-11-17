@@ -237,80 +237,80 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 			}
 		}
 
-		{
-			//角の4つのスラブを反転させる
-			for (int axis_inv = 0; axis_inv < 2; ++axis_inv) {
-				//角の4つのスラブ
-				for (int axis = 0; axis < 4; ++axis) {
-					int inv = axis_inv * -2 + 1;
-
-					//角のスラブ
-					const Vector3& plane_axis_A = DOP::DOP_14_axis[axis + 3];
-					float plane_dis_A = (inv == 1 ? dopbase.max[axis + 3] : dopbase.min[axis + 3]);
-					//plane_dis_A*= 0.5f;
-
-					//x,y,zのスラブ
-					float plane_dis_3[3]{
-						{plane_axis_A.x * inv > 0 ? dopbase.max[0] : dopbase.min[0]},
-						{plane_axis_A.y * inv > 0 ? dopbase.max[1] : dopbase.min[1]},
-						{plane_axis_A.z * inv > 0 ? dopbase.max[2] : dopbase.min[2]}
-					};
-
-					//角のスラブとx,y,zのスラブの交点を求める
-					for (int xyz = 0; xyz < 3; ++xyz) {
-						getCrossingP_three_plane(
-							DOP::DOP_14_axis[(0 + xyz) % 3], plane_dis_3[(0 + xyz) % 3],
-							DOP::DOP_14_axis[(1 + xyz) % 3], plane_dis_3[(1 + xyz) % 3],
-							plane_axis_A, plane_dis_A,
-							mesh.base_pos[axis_inv * 12 + axis * 3 + xyz]
-						);
-						if (
-							mesh.base_pos[axis_inv * 12 + axis * 3 + xyz].y > -200
-							) {
-							auto asd = DOP::DOP_14_axis[axis + 3].unit_vect();
-							getCrossingP_three_plane(
-								DOP::DOP_14_axis[(0 + xyz) % 3], plane_dis_3[(0 + xyz) % 3],
-								DOP::DOP_14_axis[(1 + xyz) % 3], plane_dis_3[(1 + xyz) % 3],
-								plane_axis_A, plane_dis_A,
-								mesh.base_pos[axis_inv * 12 + axis * 3 + xyz]
-							);
-						}
-
-					}
-
-
-
-				}
-
-			}
-
-
-
-		}
-
 		//{
-		//	for (int x_ = 0; x_ < 2; x_ ++) {
-		//		float x_dis = (x_ == 0 ? dopbase.max[0] : dopbase.min[0]);
+		//	//角の4つのスラブを反転させる
+		//	for (int axis_inv = 0; axis_inv < 2; ++axis_inv) {
+		//		//角の4つのスラブ
+		//		for (int axis = 0; axis < 4; ++axis) {
+		//			int inv = axis_inv * -2 + 1;
 
-		//		for (int y_ = 0; y_ < 2; y_++) {
-		//			float y_dis = (y_ == 0 ? dopbase.max[1] : dopbase.min[1]);
+		//			//角のスラブ
+		//			const Vector3& plane_axis_A = DOP::DOP_14_axis[axis + 3];
+		//			float plane_dis_A = (inv == 1 ? dopbase.max[axis + 3] : dopbase.min[axis + 3]);
+		//			//plane_dis_A*= 0.5f;
 
-		//			for (int z_ = 0; z_ < 2; z_++) {
-		//				float z_dis = (z_ == 0 ? dopbase.max[2] : dopbase.min[2]);
+		//			//x,y,zのスラブ
+		//			float plane_dis_3[3]{
+		//				{plane_axis_A.x * inv > 0 ? dopbase.max[0] : dopbase.min[0]},
+		//				{plane_axis_A.y * inv > 0 ? dopbase.max[1] : dopbase.min[1]},
+		//				{plane_axis_A.z * inv > 0 ? dopbase.max[2] : dopbase.min[2]}
+		//			};
 
+		//			//角のスラブとx,y,zのスラブの交点を求める
+		//			for (int xyz = 0; xyz < 3; ++xyz) {
 		//				getCrossingP_three_plane(
-		//					DOP::DOP_14_axis[0], x_dis,
-		//					DOP::DOP_14_axis[1], y_dis,
-		//					DOP::DOP_14_axis[2], z_dis,
-		//					mesh.base_pos[z_ + y_ * 2 + x_ * 4]
+		//					DOP::DOP_14_axis[(0 + xyz) % 3], plane_dis_3[(0 + xyz) % 3],
+		//					DOP::DOP_14_axis[(1 + xyz) % 3], plane_dis_3[(1 + xyz) % 3],
+		//					plane_axis_A, plane_dis_A,
+		//					mesh.base_pos[axis_inv * 12 + axis * 3 + xyz]
 		//				);
-
-
+		//				if (
+		//					mesh.base_pos[axis_inv * 12 + axis * 3 + xyz].y > -200
+		//					) {
+		//					auto asd = DOP::DOP_14_axis[axis + 3].unit_vect();
+		//					getCrossingP_three_plane(
+		//						DOP::DOP_14_axis[(0 + xyz) % 3], plane_dis_3[(0 + xyz) % 3],
+		//						DOP::DOP_14_axis[(1 + xyz) % 3], plane_dis_3[(1 + xyz) % 3],
+		//						plane_axis_A, plane_dis_A,
+		//						mesh.base_pos[axis_inv * 12 + axis * 3 + xyz]
+		//					);
+		//				}
 
 		//			}
+
+
+
 		//		}
+
 		//	}
+
+
+
 		//}
+
+		{
+			for (int x_ = 0; x_ < 2; x_ ++) {
+				float x_dis = (x_ == 0 ? dopbase.max[0] : dopbase.min[0]);
+
+				for (int y_ = 0; y_ < 2; y_++) {
+					float y_dis = (y_ == 0 ? dopbase.max[1] : dopbase.min[1]);
+
+					for (int z_ = 0; z_ < 2; z_++) {
+						float z_dis = (z_ == 0 ? dopbase.max[2] : dopbase.min[2]);
+
+						getCrossingP_three_plane(
+							DOP::DOP_14_axis[0], x_dis,
+							DOP::DOP_14_axis[1], y_dis,
+							DOP::DOP_14_axis[2], z_dis,
+							mesh.base_pos[z_ + y_ * 2 + x_ * 4]
+						);
+
+
+
+					}
+				}
+			}
+		}
 
 
 

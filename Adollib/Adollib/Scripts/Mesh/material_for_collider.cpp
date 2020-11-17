@@ -130,7 +130,7 @@ void Collider_renderer::render_AABB(const Physics_function::ALP_Collider& coll) 
 
 		if (Systems::RS_type != State_manager::RStypes::RS_CULL_FRONT) Systems::SetRasterizerState(State_manager::RStypes::RS_CULL_FRONT);
 //Debug::dopbase‚Ì•\Ž¦
-#if 1
+#if 0
 		{
 			coll_mesh.mesh->dopbase;
 
@@ -310,7 +310,7 @@ void Collider_renderer::render_AABB(const Physics_function::ALP_Collider& coll) 
 		}
 #endif
 
-		if (Systems::RS_type != State_manager::RStypes::RS_CULL_FRONT) Systems::SetRasterizerState(State_manager::RStypes::RS_CULL_FRONT);
+		if (Systems::RS_type != State_manager::RStypes::RS_CULL_BACK) Systems::SetRasterizerState(State_manager::RStypes::RS_CULL_BACK);
 
 
 		w_pos = Vector3(

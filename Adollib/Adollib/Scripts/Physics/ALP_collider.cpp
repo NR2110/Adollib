@@ -145,7 +145,7 @@ void ALP_Collider::update_dop14_as_mesh() {
 			mesh.dop14.min[i] = -FLT_MAX;
 		}
 
-		for (int v_num = 0; v_num < 24; v_num++) {
+		for (int v_num = 0; v_num < 8; v_num++) {
 			const Vector3& pos = mesh.mesh->base_pos[v_num] * world_scale;
 
 			//DOPÇÃçXêV
