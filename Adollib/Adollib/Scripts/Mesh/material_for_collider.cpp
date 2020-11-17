@@ -251,7 +251,7 @@ void Collider_renderer::render_AABB(const Physics_function::ALP_Collider& coll) 
 #endif
 
 //Debug::basepos‚Ì•\Ž¦
-#if 1
+#if 0
 		{
 			const std::vector<Mesh::mesh>* sphere_mesh = meshes[ALP_Collider_shape::Sphere];
 

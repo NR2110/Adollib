@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DEFECTS>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\</FILEPATH>
+      <FILENAME>contact.h</FILENAME>
+      <LINE>136</LINE>
+      <COLUMN>3</COLUMN>
+    </SFA>
+    <DEFECTCODE>26495</DEFECTCODE>
+    <DESCRIPTION>変数 'Adollib::Physics_function::Contacts::Contact_pair::check_oncoll_only' が初期化されていません。メンバー変数は必ず初期化してください (type.6)。</DESCRIPTION>
+    <FUNCTION>Adollib::Physics_function::Contacts::Contact_pair::{ctor}</FUNCTION>
+    <DECORATED>??0Contact_pair@Contacts@Physics_function@Adollib@@QAE@XZ</DECORATED>
+    <FUNCLINE>136</FUNCLINE>
+    <ADDITIONALINFO>
+      <targetSymbol>Adollib::Physics_function::Contacts::Contact_pair::check_oncoll_only</targetSymbol>
+    </ADDITIONALINFO>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\</FILEPATH>
+      <FILENAME>contact.h</FILENAME>
+      <LINE>136</LINE>
+      <COLUMN>3</COLUMN>
+    </SFA>
+    <DEFECTCODE>26495</DEFECTCODE>
+    <DESCRIPTION>変数 'Adollib::Physics_function::Contacts::Contact_pair::type' が初期化されていません。メンバー変数は必ず初期化してください (type.6)。</DESCRIPTION>
+    <FUNCTION>Adollib::Physics_function::Contacts::Contact_pair::{ctor}</FUNCTION>
+    <DECORATED>??0Contact_pair@Contacts@Physics_function@Adollib@@QAE@XZ</DECORATED>
+    <FUNCLINE>136</FUNCLINE>
+    <ADDITIONALINFO>
+      <targetSymbol>Adollib::Physics_function::Contacts::Contact_pair::type</targetSymbol>
+    </ADDITIONALINFO>
+    <PATH></PATH>
+  </DEFECT>
+</DEFECTS>

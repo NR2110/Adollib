@@ -194,6 +194,7 @@ bool Phyisics_manager::update_Gui() {
 bool Phyisics_manager::ray_cast(
 	const Vector3& Ray_pos, const Vector3& Ray_dir,
 	u_int tag,
+	const float ray_min,
 	float& tmin, float& tmax,
 	Vector3& normal,
 	Collider* ret_coll,
@@ -214,6 +215,7 @@ bool Phyisics_manager::ray_cast(
 		if (Physics_function::ray_cast(
 			Ray_pos, Ray_dir,
 			coll,
+			ray_min,
 			min, max, norm
 		) == false) continue;
 

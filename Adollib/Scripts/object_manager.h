@@ -10,6 +10,7 @@ namespace Adollib
 	{
 	private:
 		Gameobject* sphere_go;
+		Gameobject* normal_go;
 
 		Gameobject* objGO;
 

@@ -9,12 +9,13 @@ using namespace Physics_function;
 
 //slabによるraycast
 bool ray_cast_14DOP(const Vector3& Ray_pos, const Vector3& Ray_dir,
-	const DOP::DOP_14& dop
+	const DOP::DOP_14& dop,
+	float& tmin, float& tmax
 	) {
 
 	//tminからtmaxにかけてrayがslabと交差している
-	float tmin = -FLT_MAX;
-	float tmax = +FLT_MAX;
+	tmin = -FLT_MAX;
+	tmax = +FLT_MAX;
 
 	for (int i = 0; i < DOP::DOP14_size; i++) {
 		float D = vector3_dot(DOP::DOP_14_axis[i], Ray_dir);
@@ -43,6 +44,7 @@ bool ray_cast_14DOP(const Vector3& Ray_pos, const Vector3& Ray_dir,
 
 bool ray_cast_sphere(const Vector3& Ray_pos, const Vector3& Ray_dir,
 	const ALP_Collider& coll,
+	const float ray_min,
 	float& tmin, float& tmax,
 	Vector3& normal
 ) {
@@ -55,6 +57,8 @@ bool ray_cast_sphere(const Vector3& Ray_pos, const Vector3& Ray_dir,
 	if (D < 0)return false;
 
 	tmin = -b - sqrtf(D);
+	if (tmin < ray_min)return false;//最低値より小さければfalse
+
 	tmax = -b + sqrtf(D);
 
 	normal = (Ray_pos + tmin * Ray_dir) - coll.world_position;
@@ -65,10 +69,14 @@ bool ray_cast_sphere(const Vector3& Ray_pos, const Vector3& Ray_dir,
 
 bool ray_cast_box(const Vector3& Ray_pos, const Vector3& Ray_dir,
 	const ALP_Collider& coll,
+	const float ray_min,
 	float& tmin, float& tmax,
 	Vector3& normal
 ) {
+	tmin = -FLT_MAX;
+	tmax = +FLT_MAX;
 
+	//slabの向き
 	Vector3 xyz[3] = {
 		vector3_quatrotate(Vector3(1, 0, 0), coll.world_orientation),
 		vector3_quatrotate(Vector3(0, 1, 0), coll.world_orientation),
@@ -83,8 +91,8 @@ bool ray_cast_box(const Vector3& Ray_pos, const Vector3& Ray_dir,
 		{
 			//各軸の二つのslabにrayが交差するtを求める
 			float ood = 1.0f / D;
-			float t1 = (vector3_dot(+coll.world_scale, xyz[i]) - P) * ood;
-			float t2 = (vector3_dot(-coll.world_scale, xyz[i]) - P) * ood;
+			float t1 = (+coll.world_scale[i] - P) * ood;
+			float t2 = (-coll.world_scale[i] - P) * ood;
 
 			//もしtsのほうに大きい方を保存
 			int reverce = 1;
@@ -107,15 +115,21 @@ bool ray_cast_box(const Vector3& Ray_pos, const Vector3& Ray_dir,
 
 	}
 
+	if (tmin < ray_min)return false;//最低値より小さければfalse
+
 	return true;
 
 }
 
 bool ray_cast_plane(const Vector3& Ray_pos, const Vector3& Ray_dir,
 	const ALP_Collider& coll,
+	const float ray_min,
 	float& tmin, float& tmax,
 	Vector3& normal
 ) {
+	tmin = +FLT_MAX;
+	tmax = -FLT_MAX;
+
 	normal = vector3_quatrotate(Vector3(0, 1, 0), coll.world_orientation);
 	if (Crossing_func::getCrossingP_plane_line(
 		normal,
@@ -277,9 +291,12 @@ bool ray_cast_plane(const Vector3& Ray_pos, const Vector3& Ray_dir,
 #include "meshcoll_resorce_manager.h"
 bool ray_cast_mesh(const Vector3& Ray_pos, const Vector3& Ray_dir,
 	const ALP_Collider_mesh& mesh,
+	const float ray_min,
 	float& tmin, float& tmax,
 	Vector3& normal
 ) {
+	tmin = +FLT_MAX;
+	tmax = -FLT_MAX;
 
 	bool crossing = false; //どこかが交差していたらtrueに変更
 	const std::vector<Vector3>& vertices = *mesh.mesh->vertices;
@@ -304,6 +321,12 @@ bool ray_cast_mesh(const Vector3& Ray_pos, const Vector3& Ray_dir,
 
 		//点がポリゴン内にあるかどうかの判定
 		Vector3 crossing_p = Ray_pos + t * Ray_dir;
+
+		Vector3 DDV = Ray_dir.unit_vect();
+		float DDD = vector3_dot(crossing_p, n) - d;
+		if (fabsf(DDD) > FLT_EPSILON) {
+			int adfsdgfv = 0;
+		}
 
 		Vector3 QA = PA - crossing_p;
 		Vector3 QB = PB - crossing_p;
@@ -338,29 +361,82 @@ bool ray_cast_mesh(const Vector3& Ray_pos, const Vector3& Ray_dir,
 
 bool Physics_function::ray_cast(const Vector3& Ray_pos, const Vector3& Ray_dir,
 	const ALP_Collider& coll,
+	const float ray_min,
 	float& tmin, float& tmax,
 	Vector3& normal
 ) {
 
 	//tminからtmaxにかけてrayが交差している
-	tmin = -FLT_MAX;
-	tmax = +FLT_MAX;
+	tmin = +FLT_MAX;
+	tmax = -FLT_MAX;
 
+	Vector3 normal_;
+
+	float DOPtmin = 0,DOPtmax = 0;
 	bool ret = false;
+
 	for (const auto& mesh : coll.collider_meshes) {
-		//if (ray_cast_14DOP(Ray_pos, Ray_dir, mesh.dop14) == false)continue;
+		if (ray_cast_14DOP(Ray_pos, Ray_dir, mesh.dop14, DOPtmin, DOPtmax) == false)continue;
+		if (DOPtmax < ray_min)continue;
+
+		float tmin_ = 0;
+		float tmax_ = 0;
+		bool hit = false;
 
 		if (coll.shape == ALP_Collider_shape::Sphere)
-			if (ray_cast_sphere(Ray_pos, Ray_dir, coll, tmin, tmax, normal)) ret = true;
+			hit = ray_cast_sphere(Ray_pos, Ray_dir, coll, ray_min, tmin_, tmax_, normal_);
 
 		if (coll.shape == ALP_Collider_shape::BOX)
-			if (ray_cast_box(Ray_pos, Ray_dir, coll, tmin, tmax, normal)) ret = true;
+			hit = ray_cast_box(Ray_pos, Ray_dir, coll, ray_min, tmin_, tmax_, normal_);
 
 		if (coll.shape == ALP_Collider_shape::Plane)
-			if (ray_cast_plane(Ray_pos, Ray_dir, coll, tmin, tmax, normal)) ret = true;
+			hit = ray_cast_plane(Ray_pos, Ray_dir, coll, ray_min, tmin_, tmax_, normal_);
 
 		if (coll.shape == ALP_Collider_shape::Mesh)
-			if (ray_cast_mesh(Ray_pos, Ray_dir, mesh, tmin, tmax, normal)) ret = true;
+			hit = ray_cast_mesh(Ray_pos, Ray_dir, mesh, ray_min, tmin_, tmax_, normal_);
+
+		if (hit == false)continue;
+		ret = true;
+
+		if (tmin > tmin_) {
+			tmin = tmin_;
+			normal = normal_;
+		}
+		tmax = ALmax(tmax, tmax_);
 	}
 	return ret;
+
+
+	////tminからtmaxにかけてrayが交差している
+	//tmin = -FLT_MAX;
+	//tmax = +FLT_MAX;
+
+	//float min_ABB_dis = FLT_MAX;
+	//ALP_Collider_mesh const* min_AABB_mesh = nullptr;
+
+	//for (auto& mesh : coll.collider_meshes) {
+	//	float min_AABB_ = 0;
+	//	if (ray_cast_14DOP(Ray_pos, Ray_dir, mesh.dop14, min_AABB_) == false)continue;
+	//	if (min_ABB_dis > min_AABB_) {
+	//		min_ABB_dis = min_AABB_;
+	//		min_AABB_mesh = &mesh;
+	//	}
+	//}
+
+	//if (min_AABB_mesh == nullptr)return false;
+
+
+	//if (coll.shape == ALP_Collider_shape::Sphere)
+	//	if (ray_cast_sphere(Ray_pos, Ray_dir, coll, tmin, tmax, normal)) return false;
+
+	//if (coll.shape == ALP_Collider_shape::BOX)
+	//	if (ray_cast_box(Ray_pos, Ray_dir, coll, tmin, tmax, normal)) return false;
+
+	//if (coll.shape == ALP_Collider_shape::Plane)
+	//	if (ray_cast_plane(Ray_pos, Ray_dir, coll, tmin, tmax, normal)) return false;
+
+	//if (coll.shape == ALP_Collider_shape::Mesh)
+	//	if (ray_cast_mesh(Ray_pos, Ray_dir, *min_AABB_mesh, tmin, tmax, normal)) return false;
+
+	//return true;
 }

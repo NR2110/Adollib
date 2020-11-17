@@ -27,25 +27,17 @@ namespace Adollib
 		sphere_go->transform->local_scale = Vector3(1) * 0.05f;
 		sphere_go->material->color = Vector4(1, 0, 0, 1);
 
-		sphere_go3[0] = Gameobject_manager::createSphere();
-		sphere_go3[0]->transform->local_scale = Vector3(1) * 0.05f;
-		sphere_go3[0]->material->color = Vector4(1, 0, 0, 1);
-
-		sphere_go3[1] = Gameobject_manager::createSphere();
-		sphere_go3[1]->transform->local_scale = Vector3(1) * 0.05f;
-		sphere_go3[1]->material->color = Vector4(1, 0, 0, 1);
-
-		sphere_go3[2] = Gameobject_manager::createSphere();
-		sphere_go3[2]->transform->local_scale = Vector3(1) * 0.05f;
-		sphere_go3[2]->material->color = Vector4(1, 0, 0, 1);
+		normal_go = Gameobject_manager::createCube();
+		normal_go->transform->local_scale = Vector3(1,1,20) * 0.025f;
+		normal_go->material->color = Vector4(1, 0, 0, 1);
 
 #if 1
-		if (1) {
+		if (0) {
 			{
 				Gameobject* GO = Gameobject_manager::createCube();
 				GO->transform->local_pos = Vector3(0, -60, 0);
 				GO->transform->local_scale = Vector3(60, 60, 60);
-				GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
+				GO->transform->local_orient = quaternion_from_euler(0, 45, 0);
 				GO->material->color = Vector4(1, 1, 1, 1);
 
 				Box* R = GO->addComponent<Box>();
@@ -60,8 +52,8 @@ namespace Adollib
 				objGO = Gameobject_manager::createFromFBX("../Data/FBX/0311_collisions.fbx");
 				//objGO = Gameobject_manager::create();
 				//objGO = Gameobject_manager::createFromFBX("../Adollib/DefaultModel/cylinder.fbx");
-				//objGO->transform->local_pos = Vector3(-10, 15, -25);
-				objGO->transform->local_scale = Vector3(0.001f, 0.001f, 0.001f);
+				objGO->transform->local_pos = Vector3(-10, 15, -25);
+				objGO->transform->local_scale = Vector3(0.01f, 0.01f, 0.01f);
 				//objGO->transform->local_scale = Vector3(1, 2, 3);
 				//objGO->transform->local_orient = quaternion_from_euler(0, 180, 0);
 				//objGO->transform->local_orient = quaternion_from_euler(45, 45, 0);
@@ -253,15 +245,18 @@ namespace Adollib
 		
 		Ray ray;
 		ray.position = camera->transform->local_pos;
-		ray.direction = vector3_quatrotate(Vector3(0, 0, 1), camera->transform->local_orient);
+		ray.direction = vector3_quatrotate(Vector3(0, 0, 1), camera->transform->orientation);
 
 		float tmin = 0, tmax = 0;
 		Vector3 nor;
-		ray.ray_cast(UINT_MAX, tmin, tmax, nor);
+		float ray_min = 0;
+		ray.ray_cast(UINT_MAX, ray_min, tmin, tmax, nor);
 
 		Debug::set("", nor.get_XM3());
 
 		sphere_go->transform->local_pos = ray.position + tmin * ray.direction;
+		normal_go->transform->local_orient = quaternion_from_to_rotate(Vector3(0, 0, 1), nor);
+		normal_go->transform->local_pos = sphere_go->transform->local_pos + nor * (sphere_go->transform->scale.x + normal_go->transform->scale.z);
 
 
 	}

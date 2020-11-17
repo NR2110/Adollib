@@ -172,6 +172,7 @@ namespace Adollib
 			static bool ray_cast(
 				const Vector3& Ray_pos, const Vector3& Ray_dir,
 				u_int tag,
+				const float ray_min,
 				float& tmin, float& tmax,
 				Vector3& normal,
 				Collider* coll,
