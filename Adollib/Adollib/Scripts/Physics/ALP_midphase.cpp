@@ -16,7 +16,7 @@ bool Check_insert_DOP14(const std::vector<ALP_Collider_mesh>::iterator meshA, co
 
 	Vector3 dis = meshA->dop14.pos - meshB->dop14.pos;
 
-	for (int i = 0; i < DOP_size; i++) {
+	for (int i = 0; i < DOP14_size; i++) {
 		if (
 			vector3_dot(+DOP_14_axis[i], meshA->dop14.pos - meshB->dop14.pos) < meshB->dop14.min[i] - meshA->dop14.max[i] ||
 			vector3_dot(-DOP_14_axis[i], meshA->dop14.pos - meshB->dop14.pos) < meshA->dop14.min[i] - meshB->dop14.max[i]
@@ -36,7 +36,7 @@ bool Check_insert_Plane(const std::vector<ALP_Collider_mesh>::iterator plane, co
 	V = vector3_quatrotate(Vector3(0, 1, 0), plane->ALPcollider->world_orientation);
 	plane_dis = vector3_dot(V, plane->ALPcollider->world_position);
 
-	for (int i = 0; i < DOP_size; i++) {
+	for (int i = 0; i < DOP14_size; i++) {
 		float coll_len = vector3_dot(V, mesh->ALPcollider->world_position + DOP_14_axis[i] * mesh->dop14.max[i]);
 		if (plane_dis > coll_len)return true;
 	}

@@ -3,7 +3,7 @@
 
 namespace Adollib {
 	namespace DOP {
-		static const int DOP_size = 14 / 2;
+		static const int DOP14_size = 14 / 2;
 
 		//::::::::::::::::::
 		//Boardphase用のDOP_14
@@ -15,14 +15,14 @@ namespace Adollib {
 		// c : (+0.3,0.3,-0.3)
 		// d : (-0.3,0.3,-0.3)
 		//:::::::::::::::::::
-		static const Vector3 DOP_14_axis[DOP_size] = {
+		static const Vector3 DOP_14_axis[DOP14_size] = {
 		Vector3(1,0,0),
 		Vector3(0,1,0),
 		Vector3(0,0,1),
-		Vector3(+0.577350259f,0.577350259f,+0.577350259f),
-		Vector3(-0.577350259f,0.577350259f,+0.577350259f),
-		Vector3(+0.577350259f,0.577350259f,-0.577350259f),
-		Vector3(-0.577350259f,0.577350259f,-0.577350259f)
+		Vector3(+0.577350269f,0.577350269f,+0.577350269f),
+		Vector3(-0.577350269f,0.577350269f,+0.577350269f),
+		Vector3(+0.577350269f,0.577350269f,-0.577350269f),
+		Vector3(-0.577350269f,0.577350269f,-0.577350269f)
 		};
 		struct DOP_14 {
 			//中心座標
@@ -38,7 +38,7 @@ namespace Adollib {
 			// c : (1,1,-1)
 			// d : (-1,1,-1)
 			//:::::::::::::::::::
-			float max[DOP_size] = { 0 };
+			float max[DOP14_size] = { 0 };
 
 			//::::::::::::::::::
 			//Boardphase用のDOP_6
@@ -50,7 +50,7 @@ namespace Adollib {
 			// c : (1,1,-1)
 			// d : (-1,1,-1)
 			//:::::::::::::::::::
-			float min[DOP_size] = { 0 };
+			float min[DOP14_size] = { 0 };
 		};
 
 		struct AABB {

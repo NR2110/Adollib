@@ -11,6 +11,8 @@ namespace Adollib
 	private:
 		Gameobject* sphere_go;
 
+		Gameobject* objGO;
+
 		std::vector<Gameobject*> GOs;
 
 		Camera* camera;

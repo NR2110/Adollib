@@ -14,10 +14,11 @@ const bool Crossing_func::getCrossingLine_two_plane(
 	float N = vector3_dot(nA, nB);
 	if (fabsf(fabsf(N) - 1) < FLT_EPSILON)return false;//•½–Ê‚ª•½s‚ÌŽžfalse‚ð•Ô‚·
 
-	float denom= 1 / (1 - (N * N));
+	float denom = 1.f / (1 - (N * N));
 
 	ray_P = nA * ((dA - dB * N) * denom) + nB * ((-dA * N + dB) * denom);
 	ray_d = vector3_cross(nA, nB);
+	ray_d = ray_d.unit_vect();
 
 	return true;
 }
@@ -46,10 +47,23 @@ const bool Crossing_func::getCrossingP_three_plane(
 	Vector3 ray_P, ray_d;
 	//2•½–Ê‚ÌŒðü‚ð‹‚ß‚Ä
 	if (getCrossingLine_two_plane(nA, dA, nB, dB, ray_P, ray_d) == false)return false;
+
+	float A1 = vector3_dot(ray_P, nA) - dA;
+	float B1 = vector3_dot(ray_P, nB) - dB;
+
+	float A2 = vector3_dot(ray_P + ray_d * 100, nA) - dA;
+	float B2 = vector3_dot(ray_P + ray_d * 100, nB) - dB;
+
+
+
 	//Œðü‚Æ•½–Ê‚ÌŒð·”»’è‚ðs‚¤
 	float t = 0;
 	if (getCrossingP_plane_line(nC, dC, ray_P, ray_d, t) == false)return false;
 	crossing_p = ray_P + t * ray_d;
+
+	float A = vector3_dot(crossing_p, nA) - dA;
+	float B = vector3_dot(crossing_p, nB) - dB;
+	float C = vector3_dot(crossing_p, nC) - dC;
 
 	return true;
 }

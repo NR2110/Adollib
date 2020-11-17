@@ -37,21 +37,41 @@ namespace Adollib
 			}
 
 		}
-		else {
+		else if(1){
 			{
-				Gameobject* GO = Gameobject_manager::createFromFBX("../Data/FBX/0311_collisions.fbx");
-				//Gameobject* GO = Gameobject_manager::createFromFBX("../Adollib/DefaultModel/cylinder.fbx");
-				GO->transform->local_pos = Vector3(-10, 15, -25);
-				GO->transform->local_scale = Vector3(0.001f, 0.001f, 0.001f);
-				GO->transform->local_orient = quaternion_from_euler(0, 180, 0);
-				//GO->transform->local_scale = Vector3(0.1f, 0.1f, 0.1f);
-				Meshcoll* R = GO->addComponent<Meshcoll>();
+				objGO = Gameobject_manager::createFromFBX("../Data/FBX/0311_collisions.fbx");
+				//objGO = Gameobject_manager::createFromFBX("../Adollib/DefaultModel/cylinder.fbx");
+				objGO->transform->local_pos = Vector3(-10, 15, -25);
+				objGO->transform->local_scale = Vector3(0.001f, 0.002f, 0.003f);
+				//objGO->transform->local_scale = Vector3(1, 2, 3);
+				objGO->transform->local_orient = quaternion_from_euler(0, 180, 0);
+				//objGO->transform->local_orient = quaternion_from_euler(45, 45, 0);
+				Meshcoll* R = objGO->addComponent<Meshcoll>();
 				R->load_mesh("../Data/FBX/0311_collisions.fbx");
 				//R->load_mesh("../Adollib/DefaultModel/cylinder.fbx");
 				R->is_moveable = false;
 
 			}
 			
+		}
+		else if (1) {
+			{
+				//objGO = Gameobject_manager::createFromFBX("../Data/FBX/0311_collisions.fbx");
+				objGO = Gameobject_manager::createFromFBX("../Adollib/DefaultModel/sphere.fbx");
+				objGO->transform->local_pos = Vector3(-10, 15, -25);
+				//objGO->transform->local_scale = Vector3(0.001f, 0.002f, 0.003f);
+				objGO->transform->local_scale = Vector3(1, 2, 3);
+				//GO->transform->local_orient = quaternion_from_euler(0, 180, 0);
+				//objGO->transform->local_orient = quaternion_from_euler(45, 45, 0);
+				//GO->transform->local_scale = Vector3(0.1f, 0.1f, 0.1f);
+				Meshcoll* R = objGO->addComponent<Meshcoll>();
+				//R->load_mesh("../Data/FBX/0311_collisions.fbx");
+				R->center = Vector3(1, 1, 1);
+				R->load_mesh("../Adollib/DefaultModel/sphere.fbx");
+				R->is_moveable = false;
+
+			}
+
 		}
 
 
@@ -64,6 +84,8 @@ namespace Adollib
 	// 毎フレーム呼ばれる更新処理
 	void object_manager::update()
 	{
+		//objGO->transform->local_orient *= quaternion_angle_axis(0.3f, Vector3(0, 1, 0));
+
 		ImGuiWindowFlags flag = 0;
 		//flag |= ImGuiWindowFlags_AlwaysAutoResize;
 

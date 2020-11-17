@@ -16,7 +16,7 @@ bool ray_cast_14DOP(const Vector3& Ray_pos, const Vector3& Ray_dir,
 	float tmin = -FLT_MAX;
 	float tmax = +FLT_MAX;
 
-	for (int i = 0; i < DOP::DOP_size; i++) {
+	for (int i = 0; i < DOP::DOP14_size; i++) {
 		float D = vector3_dot(DOP::DOP_14_axis[i], Ray_dir);
 		float P = vector3_dot(DOP::DOP_14_axis[i], Ray_pos - dop.pos);
 		{
@@ -323,15 +323,16 @@ bool ray_cast_mesh(const Vector3& Ray_pos, const Vector3& Ray_dir,
 
 	for (auto& facet : mesh.mesh->facets) {
 
-		Debug::set("", mesh.ALPcollider->world_orientation.get_XM4());
-		const Vector3& n = facet.normal;
-		Vector3 PA = vector3_quatrotate(vertices[facet.vertexID[0]], mesh.ALPcollider->world_orientation) * mesh.ALPcollider->world_scale + mesh.ALPcollider->world_position;
-		Vector3 PB = vector3_quatrotate(vertices[facet.vertexID[1]], mesh.ALPcollider->world_orientation) * mesh.ALPcollider->world_scale + mesh.ALPcollider->world_position;
-		Vector3 PC = vector3_quatrotate(vertices[facet.vertexID[2]], mesh.ALPcollider->world_orientation) * mesh.ALPcollider->world_scale + mesh.ALPcollider->world_position;
+		//Debug::set("", mesh.ALPcollider->world_orientation.get_XM4());
 
-			//Vector3 PA = vertices[facet.vertexID[0]];
-			//Vector3 PB = vertices[facet.vertexID[1]];
-			//Vector3 PC = vertices[facet.vertexID[2]];
+		const Vector3& n = facet.normal;
+		Vector3 PA = vector3_quatrotate(vertices.at(facet.vertexID[0]) * mesh.ALPcollider->world_scale, mesh.ALPcollider->world_orientation) + mesh.ALPcollider->world_position;
+		Vector3 PB = vector3_quatrotate(vertices.at(facet.vertexID[1]) * mesh.ALPcollider->world_scale, mesh.ALPcollider->world_orientation) + mesh.ALPcollider->world_position;
+		Vector3 PC = vector3_quatrotate(vertices.at(facet.vertexID[2]) * mesh.ALPcollider->world_scale, mesh.ALPcollider->world_orientation) + mesh.ALPcollider->world_position;
+
+		//Vector3 PA = vertices[facet.vertexID[0]];
+		//Vector3 PB = vertices[facet.vertexID[1]];
+		//Vector3 PC = vertices[facet.vertexID[2]];
 
 		float d = vector3_dot(PA, n);
 		float t = 0;

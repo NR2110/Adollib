@@ -84,7 +84,7 @@ void ALP_Collider::update_dop14() {
 void ALP_Collider::update_dop14_as_sphere() {
 	for (auto& mesh : collider_meshes) {
 		mesh.dop14.pos = world_position;
-		for (int i = 0; i < DOP::DOP_size; i++) {
+		for (int i = 0; i < DOP::DOP14_size; i++) {
 			mesh.dop14.max[i] = +world_scale.x * 1.0000001f;
 			mesh.dop14.min[i] = -world_scale.x * 1.0000001f;
 		}
@@ -110,7 +110,7 @@ void ALP_Collider::update_dop14_as_box() {
 
 		//DOPの更新
 		float max_len = 0;
-		for (int i = 0; i < DOP::DOP_size; i++) {
+		for (int i = 0; i < DOP::DOP14_size; i++) {
 			max_len = 0;
 			for (int o = 0; o < 4; o++) {
 				float dis = fabsf(vector3_dot(DOP::DOP_14_axis[i], half[o]));
@@ -128,7 +128,7 @@ void ALP_Collider::update_dop14_as_box() {
 void ALP_Collider::update_dop14_as_plane() {
 	for (auto& mesh : collider_meshes) {
 		mesh.dop14.pos = world_position;
-		for (int i = 0; i < DOP::DOP_size; i++) {
+		for (int i = 0; i < DOP::DOP14_size; i++) {
 			mesh.dop14.max[i] = FLT_MAX;
 		}
 	}
@@ -138,8 +138,8 @@ void ALP_Collider::update_dop14_as_mesh() {
 	for (auto& mesh : collider_meshes) {
 		mesh.dop14.pos = world_position;
 
-		Vector3 rotated_axis[DOP::DOP_size];
-		for (int i = 0; i < DOP::DOP_size; i++) {
+		Vector3 rotated_axis[DOP::DOP14_size];
+		for (int i = 0; i < DOP::DOP14_size; i++) {
 			rotated_axis[i] = vector3_quatrotate(DOP::DOP_14_axis[i], world_orientation.conjugate()).unit_vect();
 			mesh.dop14.max[i] = +FLT_MAX;
 			mesh.dop14.min[i] = -FLT_MAX;
@@ -149,13 +149,26 @@ void ALP_Collider::update_dop14_as_mesh() {
 			const Vector3& pos = mesh.mesh->base_pos[v_num] * world_scale;
 
 			//DOPの更新
-			for (int i = 0; i < DOP::DOP_size; i++) {
+			for (int i = 0; i < DOP::DOP14_size; i++) {
 				const float dis = vector3_dot(rotated_axis[i], pos);
 				if (mesh.dop14.min[i] < dis) mesh.dop14.min[i] = dis * 1.00000001f;//確実にするためちょっと大きめにとる
 				if (mesh.dop14.max[i] > dis) mesh.dop14.max[i] = dis * 1.00000001f;//確実にするためちょっと大きめにとる
 
 			}
 		}
+
+
+		//for (int v_num = 0; v_num < 24; v_num++) {
+		//	const Vector3& pos = mesh.mesh->base_pos[v_num] * world_scale;
+
+		//	//DOPの更新
+		//	for (int i = 0; i < DOP::DOP_size; i++) {
+		//		const float dis = vector3_dot(DOP::DOP_14_axis[i], vector3_quatrotate(pos, world_orientation));
+		//		if (mesh.dop14.min[i] < dis) mesh.dop14.min[i] = dis * 1.00000001f;//確実にするためちょっと大きめにとる
+		//		if (mesh.dop14.max[i] > dis) mesh.dop14.max[i] = dis * 1.00000001f;//確実にするためちょっと大きめにとる
+
+		//	}
+		//}
 
 	}
 }

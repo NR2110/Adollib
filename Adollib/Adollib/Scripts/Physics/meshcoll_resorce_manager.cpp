@@ -222,18 +222,18 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 		//::
 		DOP::DOP_14& dopbase = mesh.dopbase;
 
-		for (int i = 0; i < DOP::DOP_size; i++) {
+		for (int i = 0; i < DOP::DOP14_size; i++) {
 			dopbase.max[i] = -FLT_MAX;
 			dopbase.min[i] = +FLT_MAX;
 		}
 
 		//初期状態のDOPの保存 loop中に計算するDOPはこのDOPを基準にする
-		for (int i = 0; i < DOP::DOP_size; i++) {
+		for (int i = 0; i < DOP::DOP14_size; i++) {
 			for (int& ind : indices) {
 
 				float dis = vector3_dot(DOP::DOP_14_axis[i], vertices.at(ind));
-				if (dopbase.max[i] < dis) dopbase.max[i] = +dis * 1.00000001f;//確実にするためちょっと大きめにとる
-				if (dopbase.min[i] > dis) dopbase.min[i] = +dis * 1.00000001f;
+				dopbase.max[i] = ALmax(dopbase.max[i], dis);
+				dopbase.min[i] = ALmin(dopbase.min[i], dis);
 			}
 		}
 
@@ -247,6 +247,7 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 					//角のスラブ
 					const Vector3& plane_axis_A = DOP::DOP_14_axis[axis + 3];
 					float plane_dis_A = (inv == 1 ? dopbase.max[axis + 3] : dopbase.min[axis + 3]);
+					//plane_dis_A*= 0.5f;
 
 					//x,y,zのスラブ
 					float plane_dis_3[3]{
@@ -258,11 +259,22 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 					//角のスラブとx,y,zのスラブの交点を求める
 					for (int xyz = 0; xyz < 3; ++xyz) {
 						getCrossingP_three_plane(
-							plane_axis_A, plane_dis_A,
 							DOP::DOP_14_axis[(0 + xyz) % 3], plane_dis_3[(0 + xyz) % 3],
 							DOP::DOP_14_axis[(1 + xyz) % 3], plane_dis_3[(1 + xyz) % 3],
+							plane_axis_A, plane_dis_A,
 							mesh.base_pos[axis_inv * 12 + axis * 3 + xyz]
 						);
+						if (
+							mesh.base_pos[axis_inv * 12 + axis * 3 + xyz].y > -200
+							) {
+							auto asd = DOP::DOP_14_axis[axis + 3].unit_vect();
+							getCrossingP_three_plane(
+								DOP::DOP_14_axis[(0 + xyz) % 3], plane_dis_3[(0 + xyz) % 3],
+								DOP::DOP_14_axis[(1 + xyz) % 3], plane_dis_3[(1 + xyz) % 3],
+								plane_axis_A, plane_dis_A,
+								mesh.base_pos[axis_inv * 12 + axis * 3 + xyz]
+							);
+						}
 
 					}
 
@@ -271,11 +283,40 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 				}
 
 			}
+
+
+
 		}
+
+		//{
+		//	for (int x_ = 0; x_ < 2; x_ ++) {
+		//		float x_dis = (x_ == 0 ? dopbase.max[0] : dopbase.min[0]);
+
+		//		for (int y_ = 0; y_ < 2; y_++) {
+		//			float y_dis = (y_ == 0 ? dopbase.max[1] : dopbase.min[1]);
+
+		//			for (int z_ = 0; z_ < 2; z_++) {
+		//				float z_dis = (z_ == 0 ? dopbase.max[2] : dopbase.min[2]);
+
+		//				getCrossingP_three_plane(
+		//					DOP::DOP_14_axis[0], x_dis,
+		//					DOP::DOP_14_axis[1], y_dis,
+		//					DOP::DOP_14_axis[2], z_dis,
+		//					mesh.base_pos[z_ + y_ * 2 + x_ * 4]
+		//				);
+
+
+
+		//			}
+		//		}
+		//	}
+		//}
 
 
 
 #pragma endregion
+
+
 		//::
 		Vector3& halfsize = mesh.half_size;
 		halfsize = Vector3(dopbase.max[0] - dopbase.min[0], dopbase.max[1] - dopbase.min[1], dopbase.max[2] - dopbase.min[2]) / 2.0f;

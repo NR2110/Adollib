@@ -43,7 +43,7 @@ namespace Adollib
 	void camera_s::update()
 	{
 		static float rotate_speed = 0.5f;
-		static float linear_speed = 400;
+		static float linear_speed = 30;
 
 		ImGuiWindowFlags flag = 0;
 		//flag |= ImGuiWindowFlags_AlwaysAutoResize;
