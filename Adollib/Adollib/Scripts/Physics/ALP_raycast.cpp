@@ -300,33 +300,22 @@ bool ray_cast_mesh(const Vector3& Ray_pos, const Vector3& Ray_dir,
 
 	bool crossing = false; //‚Ç‚±‚©‚ªŒğ·‚µ‚Ä‚¢‚½‚çtrue‚É•ÏX
 	const std::vector<Vector3>& vertices = *mesh.mesh->vertices;
-	auto& A = Collider_ResourceManager::vertices_;
 
 	for (auto& facet : mesh.mesh->facets) {
 
-		const Vector3& n = facet.normal;
+		const Vector3& n = vector3_quatrotate(facet.normal, mesh.ALPcollider->world_orientation);
 		Vector3 PA = vector3_quatrotate(vertices.at(facet.vertexID[0]) * mesh.ALPcollider->world_scale, mesh.ALPcollider->world_orientation) + mesh.ALPcollider->world_position;
 		Vector3 PB = vector3_quatrotate(vertices.at(facet.vertexID[1]) * mesh.ALPcollider->world_scale, mesh.ALPcollider->world_orientation) + mesh.ALPcollider->world_position;
 		Vector3 PC = vector3_quatrotate(vertices.at(facet.vertexID[2]) * mesh.ALPcollider->world_scale, mesh.ALPcollider->world_orientation) + mesh.ALPcollider->world_position;
 
-		//Vector3 PA = vertices[facet.vertexID[0]];
-		//Vector3 PB = vertices[facet.vertexID[1]];
-		//Vector3 PC = vertices[facet.vertexID[2]];
-
 		float d = vector3_dot(PA, n);
 		float t = 0;
-		if (Crossing_func::getCrossingP_plane_line(n, d, Ray_pos, Ray_dir, t) == false) continue;
+		if (Crossing_func::getCrossingP_plane_line(n, d, Ray_pos, Ray_dir.unit_vect(), t) == false) continue;
 
-		//if (tmin < t)continue; Ray‚ª”¼’¼ü‚Ìê‡
+		if (ray_min > t)continue; // Ray‚ª”¼’¼ü‚Ìê‡
 
 		//“_‚ªƒ|ƒŠƒSƒ““à‚É‚ ‚é‚©‚Ç‚¤‚©‚Ì”»’è
-		Vector3 crossing_p = Ray_pos + t * Ray_dir;
-
-		Vector3 DDV = Ray_dir.unit_vect();
-		float DDD = vector3_dot(crossing_p, n) - d;
-		if (fabsf(DDD) > FLT_EPSILON) {
-			int adfsdgfv = 0;
-		}
+		Vector3 crossing_p = Ray_pos + t * Ray_dir.unit_vect();
 
 		Vector3 QA = PA - crossing_p;
 		Vector3 QB = PB - crossing_p;
@@ -405,6 +394,11 @@ bool Physics_function::ray_cast(const Vector3& Ray_pos, const Vector3& Ray_dir,
 		tmax = ALmax(tmax, tmax_);
 	}
 	return ret;
+
+		//if (tmin > DOPtmin)tmin = DOPtmin;
+	//}
+	//normal = Vector3(0, 1, 0);
+	//return true;
 
 
 	////tmin‚©‚çtmax‚É‚©‚¯‚Äray‚ªŒğ·‚µ‚Ä‚¢‚é

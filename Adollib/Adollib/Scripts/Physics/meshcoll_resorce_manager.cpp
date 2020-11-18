@@ -76,8 +76,8 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 	// メッシュデータの取得
 	u_int vertex_count = 0;
 	struct Subset {
-		int start;
-		int count;
+		int start = 0;
+		int count = 0;
 	};
 	std::vector<Subset> subsets;
 	std::vector<Meshcollider_mesh> _mesh;
@@ -142,9 +142,9 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 					//F.vertexID[0] = indices[i * 3];
 					//F.vertexID[1] = indices[i * 3 + 1];
 					//F.vertexID[2] = indices[i * 3 + 2];
-					F.vertexID[0] = i * 3;
-					F.vertexID[1] = i * 3 + 1;
-					F.vertexID[2] = i * 3 + 2;
+					F.vertexID[0] = indices.at(i * 3 + 0);
+					F.vertexID[1] = indices.at(i * 3 + 1);
+					F.vertexID[2] = indices.at(i * 3 + 2);
 
 					F.normal = vector3_cross(vertices[F.vertexID[1]] - vertices[F.vertexID[0]], vertices[F.vertexID[2]] - vertices[F.vertexID[0]]);
 					F.normal = F.normal.unit_vect();
@@ -156,11 +156,7 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 			//エッジ情報の保存
 			{
 				edge_num = 0;
-				std::vector<int>edgeID_Table;
-				edgeID_Table.resize(index_num* index_num / 2);
-				for (int& u : edgeID_Table) {
-					u = 0xffffff;
-				}
+				std::unordered_map<int,int> edgeID_Table;
 
 				Physics_function::Edge E;
 				for (u_int i = 0; i < facet_num; i++) {
@@ -171,7 +167,7 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 						u_int vertId1 = ALmax(facet.vertexID[o % 3], facet.vertexID[(o + 1) % 3]);
 						int tableId = (int)((int)vertId1 * ((int)vertId1 - 1) / (float)2 + (int)vertId0);
 
-						if (edgeID_Table[tableId] == 0xffffff) {
+						if (edgeID_Table.count(tableId) == 0) {
 							// 初回時は登録のみ
 							E.facetID[0] = i;
 							E.facetID[1] = i;

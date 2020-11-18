@@ -52,10 +52,10 @@ namespace Adollib
 				objGO = Gameobject_manager::createFromFBX("../Data/FBX/0311_collisions.fbx");
 				//objGO = Gameobject_manager::create();
 				//objGO = Gameobject_manager::createFromFBX("../Adollib/DefaultModel/cylinder.fbx");
-				objGO->transform->local_pos = Vector3(-10, 15, -25);
+				//objGO->transform->local_pos = Vector3(-10, 15, -25);
 				objGO->transform->local_scale = Vector3(0.01f, 0.01f, 0.01f);
 				//objGO->transform->local_scale = Vector3(1, 2, 3);
-				//objGO->transform->local_orient = quaternion_from_euler(0, 180, 0);
+				objGO->transform->local_orient = quaternion_from_euler(0, 180, 0);
 				//objGO->transform->local_orient = quaternion_from_euler(45, 45, 0);
 				Meshcoll* R = objGO->addComponent<Meshcoll>();
 				R->load_mesh("../Data/FBX/0311_collisions.fbx");
@@ -244,7 +244,7 @@ namespace Adollib
 
 		
 		Ray ray;
-		ray.position = camera->transform->local_pos;
+		ray.position = camera->transform->position;
 		ray.direction = vector3_quatrotate(Vector3(0, 0, 1), camera->transform->orientation);
 
 		float tmin = 0, tmax = 0;
