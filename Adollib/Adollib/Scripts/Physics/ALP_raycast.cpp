@@ -289,7 +289,7 @@ bool ray_cast_plane(const Vector3& Ray_pos, const Vector3& Ray_dir,
 //	return index_of_intersected_triangle;
 //}
 #include "meshcoll_resorce_manager.h"
-bool ray_cast_mesh(const Vector3& Ray_pos, const Vector3& Ray_dir,
+bool ray_cast_mesh(const Vector3& l_Ray_pos, const Vector3& l_Ray_dir,
 	const ALP_Collider_mesh& mesh,
 	const float ray_min,
 	float& tmin, float& tmax,
@@ -301,21 +301,31 @@ bool ray_cast_mesh(const Vector3& Ray_pos, const Vector3& Ray_dir,
 	bool crossing = false; //どこかが交差していたらtrueに変更
 	const std::vector<Vector3>& vertices = *mesh.mesh->vertices;
 
+	//Rayの情報をmeshの座標系にに持ってくる
+	const Vector3 Ray_pos = vector3_quatrotate(l_Ray_pos / mesh.ALPcollider->world_scale, mesh.ALPcollider->world_orientation.conjugate()) - mesh.ALPcollider->world_position;
+	const Vector3 Ray_dir = vector3_quatrotate(l_Ray_dir, mesh.ALPcollider->world_orientation.conjugate());
+
 	for (auto& facet : mesh.mesh->facets) {
 
-		const Vector3& n = vector3_quatrotate(facet.normal, mesh.ALPcollider->world_orientation);
-		Vector3 PA = vector3_quatrotate(vertices.at(facet.vertexID[0]) * mesh.ALPcollider->world_scale, mesh.ALPcollider->world_orientation) + mesh.ALPcollider->world_position;
-		Vector3 PB = vector3_quatrotate(vertices.at(facet.vertexID[1]) * mesh.ALPcollider->world_scale, mesh.ALPcollider->world_orientation) + mesh.ALPcollider->world_position;
-		Vector3 PC = vector3_quatrotate(vertices.at(facet.vertexID[2]) * mesh.ALPcollider->world_scale, mesh.ALPcollider->world_orientation) + mesh.ALPcollider->world_position;
+		//const Vector3& n = vector3_quatrotate(facet.normal, mesh.ALPcollider->world_orientation);
+		//Vector3 PA = vector3_quatrotate(vertices.at(facet.vertexID[0]) * mesh.ALPcollider->world_scale, mesh.ALPcollider->world_orientation) + mesh.ALPcollider->world_position;
+		//Vector3 PB = vector3_quatrotate(vertices.at(facet.vertexID[1]) * mesh.ALPcollider->world_scale, mesh.ALPcollider->world_orientation) + mesh.ALPcollider->world_position;
+		//Vector3 PC = vector3_quatrotate(vertices.at(facet.vertexID[2]) * mesh.ALPcollider->world_scale, mesh.ALPcollider->world_orientation) + mesh.ALPcollider->world_position;
+
+		const Vector3& n = facet.normal;
+
+		const Vector3& PA = vertices.at(facet.vertexID[0]);
+		const Vector3& PB = vertices.at(facet.vertexID[1]);
+		const Vector3& PC = vertices.at(facet.vertexID[2]);
 
 		float d = vector3_dot(PA, n);
 		float t = 0;
 		if (Crossing_func::getCrossingP_plane_line(n, d, Ray_pos, Ray_dir.unit_vect(), t) == false) continue;
 
-		if (ray_min > t)continue; // Rayが半直線の場合
+		if (ray_min > t) continue; // Rayが半直線の場合
 
 		//点がポリゴン内にあるかどうかの判定
-		Vector3 crossing_p = Ray_pos + t * Ray_dir.unit_vect();
+		Vector3 crossing_p = Ray_pos + t * Ray_dir;
 
 		Vector3 QA = PA - crossing_p;
 		Vector3 QB = PB - crossing_p;
@@ -337,8 +347,14 @@ bool ray_cast_mesh(const Vector3& Ray_pos, const Vector3& Ray_dir,
 
 	}
 
+	Vector3 tmin_wpos = (l_Ray_pos + tmin * Ray_dir) * mesh.ALPcollider->world_scale; //worldcoord
+	Vector3 tmax_wpos = (l_Ray_pos + tmax * Ray_dir) * mesh.ALPcollider->world_scale;
+	tmin = (tmin_wpos - l_Ray_pos).norm_sqr();
+	tmax = (tmax_wpos - l_Ray_pos).norm_sqr();
 
+	tmin = 10;
 
+	normal = vector3_quatrotate(normal, mesh.ALPcollider->world_orientation);
 
 	return crossing;
 }
