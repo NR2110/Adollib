@@ -301,26 +301,23 @@ bool ray_cast_mesh(const Vector3& l_Ray_pos, const Vector3& l_Ray_dir,
 	bool crossing = false; //‚Ç‚±‚©‚ªŒğ·‚µ‚Ä‚¢‚½‚çtrue‚É•ÏX
 	const std::vector<Vector3>& vertices = *mesh.mesh->vertices;
 
+	Matrix mat = matrix_world(mesh.ALPcollider->world_scale, mesh.ALPcollider->world_orientation.get_rotate_matrix(), mesh.ALPcollider->world_position);
+	Matrix mat_inv = matrix_inverse(mat);
+
 	//Ray‚Ìî•ñ‚ğmesh‚ÌÀ•WŒn‚É‚É‚Á‚Ä‚­‚é
-	const Vector3 Ray_pos = vector3_quatrotate(l_Ray_pos / mesh.ALPcollider->world_scale, mesh.ALPcollider->world_orientation.conjugate()) - mesh.ALPcollider->world_position;
-	const Vector3 Ray_dir = vector3_quatrotate(l_Ray_dir, mesh.ALPcollider->world_orientation.conjugate());
+	const Vector3 Ray_pos = vector3_trans(l_Ray_pos, mat_inv);
+	const Vector3 Ray_dir = vector3_quatrotate(l_Ray_dir, mesh.ALPcollider->world_orientation.conjugate()) / mesh.ALPcollider->world_scale;
 
 	for (auto& facet : mesh.mesh->facets) {
 
-		//const Vector3& n = vector3_quatrotate(facet.normal, mesh.ALPcollider->world_orientation);
-		//Vector3 PA = vector3_quatrotate(vertices.at(facet.vertexID[0]) * mesh.ALPcollider->world_scale, mesh.ALPcollider->world_orientation) + mesh.ALPcollider->world_position;
-		//Vector3 PB = vector3_quatrotate(vertices.at(facet.vertexID[1]) * mesh.ALPcollider->world_scale, mesh.ALPcollider->world_orientation) + mesh.ALPcollider->world_position;
-		//Vector3 PC = vector3_quatrotate(vertices.at(facet.vertexID[2]) * mesh.ALPcollider->world_scale, mesh.ALPcollider->world_orientation) + mesh.ALPcollider->world_position;
-
 		const Vector3& n = facet.normal;
-
 		const Vector3& PA = vertices.at(facet.vertexID[0]);
 		const Vector3& PB = vertices.at(facet.vertexID[1]);
 		const Vector3& PC = vertices.at(facet.vertexID[2]);
 
 		float d = vector3_dot(PA, n);
 		float t = 0;
-		if (Crossing_func::getCrossingP_plane_line(n, d, Ray_pos, Ray_dir.unit_vect(), t) == false) continue;
+		if (Crossing_func::getCrossingP_plane_line(n, d, Ray_pos, Ray_dir, t) == false) continue;
 
 		if (ray_min > t) continue; // Ray‚ª”¼’¼ü‚Ìê‡
 
@@ -347,12 +344,11 @@ bool ray_cast_mesh(const Vector3& l_Ray_pos, const Vector3& l_Ray_dir,
 
 	}
 
-	Vector3 tmin_wpos = (l_Ray_pos + tmin * Ray_dir) * mesh.ALPcollider->world_scale; //worldcoord
-	Vector3 tmax_wpos = (l_Ray_pos + tmax * Ray_dir) * mesh.ALPcollider->world_scale;
-	tmin = (tmin_wpos - l_Ray_pos).norm_sqr();
-	tmax = (tmax_wpos - l_Ray_pos).norm_sqr();
+	//Vector3 tmin_wpos = vector3_trans(Ray_pos + tmin * Ray_dir, mat); //worldcoord
+	//Vector3 tmax_wpos = vector3_trans(Ray_pos + tmax * Ray_dir, mat);
 
-	tmin = 10;
+	//tmin = (tmin_wpos - l_Ray_pos).norm_sqr();
+	//tmax = (tmax_wpos - l_Ray_pos).norm_sqr();
 
 	normal = vector3_quatrotate(normal, mesh.ALPcollider->world_orientation);
 

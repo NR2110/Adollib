@@ -28,8 +28,8 @@ const bool Crossing_func::getCrossingP_plane_line(
 	const Vector3& line_p,  const Vector3& l_line_dir,
 	float& crossing_t
 ) {
-	Vector3 plane_n = l_plane_n.unit_vect();
-	Vector3 line_dir = l_line_dir.unit_vect();
+	Vector3 plane_n = l_plane_n;
+	Vector3 line_dir = l_line_dir;
 	if (fabsf(vector3_dot(plane_n, line_dir)) < FLT_EPSILON)return false; //•½–Ê‚ÆŒõü‚ªŒð‚í‚ç‚È‚¢Žžfalse‚ð•Ô‚·
 
 	crossing_t = (plane_dis - vector3_dot(line_p, plane_n)) / vector3_dot(plane_n, line_dir);

@@ -24,7 +24,7 @@ namespace Adollib
 		camera = Gameobject_manager::find_camera("camera");
 
 		sphere_go = Gameobject_manager::createSphere();
-		sphere_go->transform->local_scale = Vector3(1) * 0.05f;
+		sphere_go->transform->local_scale = Vector3(1) * 0.05f ;
 		sphere_go->material->color = Vector4(1, 0, 0, 1);
 
 		normal_go = Gameobject_manager::createCube();
@@ -52,11 +52,10 @@ namespace Adollib
 				objGO = Gameobject_manager::createFromFBX("../Data/FBX/0311_collisions.fbx");
 				//objGO = Gameobject_manager::create();
 				//objGO = Gameobject_manager::createFromFBX("../Adollib/DefaultModel/cylinder.fbx");
-				//objGO->transform->local_pos = Vector3(-10, 15, -25);
-				objGO->transform->local_scale = Vector3(0.01f, 0.01f, 0.01f);
-				//objGO->transform->local_scale = Vector3(1, 2, 3);
-				objGO->transform->local_orient = quaternion_from_euler(0, 180, 0);
-				//objGO->transform->local_orient = quaternion_from_euler(45, 45, 0);
+				objGO->transform->local_pos = Vector3(-10, 15, -25);
+				objGO->transform->local_scale = Vector3(0.01f, 0.02f, 0.03f);
+				//objGO->transform->local_scale = Vector3(0.01f, 0.01f, 0.01f);
+				objGO->transform->local_orient = quaternion_from_euler(45, 45, 45);
 				Meshcoll* R = objGO->addComponent<Meshcoll>();
 				R->load_mesh("../Data/FBX/0311_collisions.fbx");
 				//R->load_mesh("../Adollib/DefaultModel/cylinder.fbx");
