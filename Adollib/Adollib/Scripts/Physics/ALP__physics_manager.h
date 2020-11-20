@@ -131,17 +131,17 @@ namespace Adollib
 			ret.ALPphysics_itr->ALP_coll = ret.ALPcollider_itr;
 
 			//::: ‰Šú’l‚ğ‚¢‚ê‚é :::
-			(*ret.coll_itr)->inertial_mass = Phyisics_manager::default_physics.inertial_mass; //¿—Ê
-			(*ret.coll_itr)->drag = Phyisics_manager::default_physics.drag; //‹ó‹C’ïR
-			(*ret.coll_itr)->anglar_drag = Phyisics_manager::default_physics.anglar_drag; //‹ó‹C’ïR
-			(*ret.coll_itr)->dynamic_friction = Phyisics_manager::default_physics.dynamic_friction; //“®–€C
-			(*ret.coll_itr)->static_friction = Phyisics_manager::default_physics.static_friction; //Ã–€C
-			(*ret.coll_itr)->restitution = Phyisics_manager::default_physics.restitution;	 //”½”­ŒW”
+			(*ret.coll_itr)->physics_data.inertial_mass = Phyisics_manager::default_physics.inertial_mass; //¿—Ê
+			(*ret.coll_itr)->physics_data.drag = Phyisics_manager::default_physics.drag; //‹ó‹C’ïR
+			(*ret.coll_itr)->physics_data.anglar_drag = Phyisics_manager::default_physics.anglar_drag; //‹ó‹C’ïR
+			(*ret.coll_itr)->physics_data.dynamic_friction = Phyisics_manager::default_physics.dynamic_friction; //“®–€C
+			(*ret.coll_itr)->physics_data.static_friction = Phyisics_manager::default_physics.static_friction; //Ã–€C
+			(*ret.coll_itr)->physics_data.restitution = Phyisics_manager::default_physics.restitution;	 //”½”­ŒW”
 
-			(*ret.coll_itr)->is_fallable = Phyisics_manager::default_physics.is_fallable; //—‚¿‚È‚¢
-			(*ret.coll_itr)->is_kinematic = Phyisics_manager::default_physics.is_kinematic;//‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
-			(*ret.coll_itr)->is_moveable = Phyisics_manager::default_physics.is_moveable; //“®‚©‚È‚¢
-			(*ret.coll_itr)->is_hitable = Phyisics_manager::default_physics.is_hitable;  //Õ“Ë‚µ‚È‚¢
+			(*ret.coll_itr)->physics_data.is_fallable = Phyisics_manager::default_physics.is_fallable; //—‚¿‚È‚¢
+			(*ret.coll_itr)->physics_data.is_kinematic = Phyisics_manager::default_physics.is_kinematic;//‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
+			(*ret.coll_itr)->physics_data.is_moveable = Phyisics_manager::default_physics.is_moveable; //“®‚©‚È‚¢
+			(*ret.coll_itr)->physics_data.is_hitable = Phyisics_manager::default_physics.is_hitable;  //Õ“Ë‚µ‚È‚¢
 
 			return ret;
 		}

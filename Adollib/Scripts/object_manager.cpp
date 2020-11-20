@@ -43,7 +43,7 @@ namespace Adollib
 				Box* R = GO->addComponent<Box>();
 				//Meshcoll* R = GO->addComponent<Meshcoll>();
 				//R->load_mesh("./DefaultModel/cube.fbx");
-				R->is_moveable = false;
+				R->physics_data.is_moveable = false;
 			}
 
 		}
@@ -53,13 +53,14 @@ namespace Adollib
 				//objGO = Gameobject_manager::create();
 				//objGO = Gameobject_manager::createFromFBX("../Adollib/DefaultModel/cylinder.fbx");
 				objGO->transform->local_pos = Vector3(-10, 15, -25);
-				objGO->transform->local_scale = Vector3(0.01f, 0.02f, 0.03f);
-				//objGO->transform->local_scale = Vector3(0.01f, 0.01f, 0.01f);
-				objGO->transform->local_orient = quaternion_from_euler(45, 45, 45);
+				//objGO->transform->local_scale = Vector3(0.01f, 0.02f, 0.03f);
+				objGO->transform->local_scale = Vector3(0.01f, 0.01f, 0.01f);
+				//objGO->transform->local_orient = quaternion_from_euler(45, 45, 45);
+				objGO->transform->local_orient = quaternion_from_euler(0, 180, 0);
 				Meshcoll* R = objGO->addComponent<Meshcoll>();
 				R->load_mesh("../Data/FBX/0311_collisions.fbx");
 				//R->load_mesh("../Adollib/DefaultModel/cylinder.fbx");
-				R->is_moveable = false;
+				R->physics_data.is_moveable = false;
 
 			}
 			
@@ -78,7 +79,7 @@ namespace Adollib
 				R->load_mesh("../Data/FBX/0311_collisions.fbx");
 				//R->center = Vector3(1, 1, 1);
 				//R->load_mesh("../Adollib/DefaultModel/sphere.fbx");
-				R->is_moveable = false;
+				R->physics_data.is_moveable = false;
 
 			}
 

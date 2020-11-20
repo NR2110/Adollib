@@ -11,8 +11,8 @@ namespace Adollib {
 		//不動オブジェクトとして生成
 		Plane():normal(Vector3(0,1,0)),distance(0)
 		{
-			is_moveable = false;
-			inertial_mass = FLT_MAX;
+			physics_data.is_moveable = false;
+			physics_data.inertial_mass = FLT_MAX;
 		}
 
 		Physics_function::Collider_data get_Colliderdata() const override {

@@ -344,12 +344,6 @@ bool ray_cast_mesh(const Vector3& l_Ray_pos, const Vector3& l_Ray_dir,
 
 	}
 
-	//Vector3 tmin_wpos = vector3_trans(Ray_pos + tmin * Ray_dir, mat); //worldcoord
-	//Vector3 tmax_wpos = vector3_trans(Ray_pos + tmax * Ray_dir, mat);
-
-	//tmin = (tmin_wpos - l_Ray_pos).norm_sqr();
-	//tmax = (tmax_wpos - l_Ray_pos).norm_sqr();
-
 	normal = vector3_quatrotate(normal, mesh.ALPcollider->world_orientation);
 
 	return crossing;
