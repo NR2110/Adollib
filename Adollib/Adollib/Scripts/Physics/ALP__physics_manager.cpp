@@ -185,8 +185,8 @@ bool Phyisics_manager::update_Gui() {
 			ImGui::Columns(1);
 		}
 
-		ImGui::End();
 	}
+	ImGui::End();
 
 	return true;
 }
