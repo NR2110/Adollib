@@ -9,12 +9,12 @@ namespace Adollib {
 
 		//::: camera :::::::::
 		{
-			Gameobject* GO = Gameobject_manager::create();
+			Gameobject* GO = Gameobject_manager::create("camera_manager");
 			GO->addComponent<camera_manager_s>();
 		}
 
 		{
-			Gameobject* GO = Gameobject_manager::create();
+			Gameobject* GO = Gameobject_manager::create("object_manager");
 			GO->addComponent<object_manager>();
 			//GO->transform->local_pos = vector3(0, -5, 0);
 			//GO->transform->local_scale = vector3(30, 0.1, 30);

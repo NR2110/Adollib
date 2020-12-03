@@ -7,6 +7,7 @@ namespace Adollib {
 			BOX,
 			Sphere,
 			Plane,
+			Capsule,
 			Mesh,
 
 			shapes_size

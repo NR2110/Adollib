@@ -1,6 +1,8 @@
 #include "ALP_midphase.h"
 #include <list>
 #include "../Imgui/work_meter.h"
+
+#include "ALP_physics.h"
 using namespace Adollib;
 using namespace Physics_function;
 using namespace Contacts;
@@ -56,8 +58,8 @@ void Midphase_DOP_14(std::vector<Contacts::Contact_pair>& new_pairs, std::vector
 
 	// タグによる衝突の是非
 	bool hit = true;
-	if (collA->tag & collB->not_hitable_tags) hit = false;
-	if (collB->tag & collA->not_hitable_tags) hit = false;
+	if (collA->ALPphysics->is_hitable == false|| (collA->tag & collB->not_hitable_tags)) hit = false;
+	if (collB->ALPphysics->is_hitable == false|| (collA->not_hitable_tags)) hit = false;
 	bool check_oncoll_only = false;
 	if (hit == false) {
 		if (collA->oncoll_check_bits & collB->tag)check_oncoll_only = true;
@@ -78,7 +80,7 @@ void Midphase_DOP_14(std::vector<Contacts::Contact_pair>& new_pairs, std::vector
 	else return;
 
 	//new_pair.body[0]にアドレスの大きいほうをしまう
-	if (&*meshA > &*meshB) {
+	if (&*meshA > & *meshB) {
 		new_pair.body[0] = meshA;
 		new_pair.body[1] = meshB;
 	}
@@ -101,7 +103,7 @@ void Physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std:
 
 	for (auto& pair : in_pair) {
 
-		for(auto& meshB: pair.bodylists){
+		for (auto& meshB : pair.bodylists) {
 			if (pair.body->ALPcollider == meshB->ALPcollider)continue;
 
 			Midphase_DOP_14(new_pairs, pair.body, meshB);
@@ -136,11 +138,11 @@ void Physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std:
 	//現在使用していない衝突点を削除
 	for (auto& new_p : new_pairs) {
 		new_p.contacts.chack_remove_contact_point(
-		new_p.body[0]->ALPcollider->world_position,
-		new_p.body[0]->ALPcollider->world_orientation,
-		new_p.body[1]->ALPcollider->world_position,
-		new_p.body[1]->ALPcollider->world_orientation
-	);
+			new_p.body[0]->ALPcollider->world_position,
+			new_p.body[0]->ALPcollider->world_orientation,
+			new_p.body[1]->ALPcollider->world_position,
+			new_p.body[1]->ALPcollider->world_orientation
+		);
 	}
 
 	Work_meter::stop("Mid_remove_contact_point");

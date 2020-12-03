@@ -82,7 +82,7 @@ bool Work_meter::render() {
 	//更新
 	ImGui::Checkbox("stop", &stop);
 	////背景描画
-	//ImGui::Checkbox("draw_Back_ground", &draw_Back_ground); 
+	//ImGui::Checkbox("draw_Back_ground", &draw_Back_ground);
 	//タブを閉じても更新するか
 	ImGui::Checkbox("update_always", &update_always);
 
@@ -117,10 +117,9 @@ bool Work_meter::render() {
 			// 値の記入
 			if (before < 0)
 				meters[tag][name][start_num + max_] = (float)(start_stop[tag][name].stop.QuadPart - start_stop[tag][name].start.QuadPart) * F;
-			
 
 				// 描画
-				ImGui::PlotLines("", &meters[tag][name][start_num], max_, 0, name.c_str(), 0.0f, max_num, ImVec2(500, 50));		
+				ImGui::PlotLines("", &meters[tag][name][start_num], max_, 0, name.c_str(), 0.0f, max_num, ImVec2(500, 50));
 
 			start_stop[tag][name].stop.QuadPart = 0;
 			start_stop[tag][name].start.QuadPart = 0;
@@ -147,11 +146,11 @@ bool Work_meter::render() {
 					// 値の記入
 					if (before < 0)
 						meters[tag][name][start_num + max_] = (float)(start_stop[tag][name].stop.QuadPart - start_stop[tag][name].start.QuadPart) * F;
-					
+
 
 						// 描画
 						ImGui::PlotLines("", &meters[tag][name][start_num], 120, 0, name.c_str(), 0.0f, max_num, ImVec2(500, 50));
-					
+
 					start_stop[tag][name].stop.QuadPart = 0;
 					start_stop[tag][name].start.QuadPart = 0;
 				}
@@ -184,7 +183,7 @@ bool Work_meter::render() {
 		before = 0.016f;
 	}
 
-	
+
 
 	// work_meter_managerの表示の切り替え
 	ImGui::Checkbox("draw_work_meter_manager", &draw_work_meter_manager);

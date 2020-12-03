@@ -83,7 +83,7 @@ bool Phyisics_manager::update(Scenelist Sce)
 	}
 
 	Work_meter::start("refresh_ALP_from_data");
-	// get_data‚Ìdata‚ðCollider‚É“ü—Í 
+	// get_data‚Ìdata‚ðCollider‚É“ü—Í
 	refresh_ALP_from_data(ALP_colliders[Sce]);
 	Work_meter::stop("refresh_ALP_from_data");
 

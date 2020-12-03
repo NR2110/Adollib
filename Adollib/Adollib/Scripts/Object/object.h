@@ -28,7 +28,7 @@ namespace Adollib
 		//protected:
 		//std::string name;	// オブジェクト名
 
-		bool updated; 
+		bool updated;
 		std::shared_ptr<Transfome> transform; //不本意なtransform
 
 	public:
@@ -38,6 +38,7 @@ namespace Adollib
 		virtual void destroy() {};
 
 		virtual void update_P_to_C() {}; //親から子へupdateを呼ぶ
+		virtual void update_imgui_P_to_C() {};
 		virtual void update_world_trans() {};
 		virtual object* get_pearent() = 0;//一番の親を返す
 		virtual	std::list<std::shared_ptr<object>> get_children() = 0;	//すべての子を返す
@@ -47,7 +48,7 @@ namespace Adollib
 		virtual Vector3 get_world_scale() { return Vector3();	};
 
 
-	
+
 
 		object() = default;
 		virtual ~object()

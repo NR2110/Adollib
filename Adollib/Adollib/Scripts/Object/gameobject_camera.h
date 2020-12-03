@@ -16,40 +16,6 @@ namespace Adollib {
 	private:
 		void update();
 	public:
-		std::list<std::shared_ptr<object>> get_children() {		//すべての子を返す
-			std::list<std::shared_ptr<object>>::iterator itr = children.begin();
-			std::list<std::shared_ptr<object>> ret;
-
-			for (u_int i = 0; i < children.size(); i++) {
-				ret.splice(ret.end(), itr->get()->get_children());
-				itr++;
-			}
-			return ret;
-		};
-		object* get_pearent() {		//一番の親を返す
-			object* P = this;
-			for (; P == nullptr;) {
-				P = pearent;
-			}
-			return P;
-		};
-		void update_P_to_C() {
-			if(active == true)
-			update();
-			transform->local_orient = transform->local_orient.unit_vect();
-			std::list<std::shared_ptr<object>>::iterator itr = children.begin();
-			std::list<std::shared_ptr<object>>::iterator itr_end = children.end();
-			for (; itr != itr_end;) {
-				itr->get()->update_P_to_C();
-				itr++;
-			}
-		}
-		void update_world_trans() {
-			transform->orientation = get_world_orientate();
-			transform->position = get_world_position();
-			transform->scale = get_world_scale();
-		}
-
 		std::string name = std::string("null"); //このgoの名前(検索用)
 
 		std::list <std::shared_ptr<Component_camera>> components; //アタッチされているConponentのポインタ
@@ -67,6 +33,42 @@ namespace Adollib {
 		float aspect = 1280 / 720.0f;
 		float nearZ = 0.1f;
 		float farZ = 1000000.0f;
+
+		std::list<std::shared_ptr<object>> get_children() {		//すべての子を返す
+			std::list<std::shared_ptr<object>>::iterator itr = children.begin();
+			std::list<std::shared_ptr<object>> ret;
+
+			for (u_int i = 0; i < children.size(); i++) {
+				ret.splice(ret.end(), itr->get()->get_children());
+				itr++;
+			}
+			return ret;
+		};
+		object* get_pearent() {		//一番の親を返す
+			object* P = this;
+			for (; P == nullptr;) {
+				P = pearent;
+			}
+			return P;
+		};
+		void update_imgui_P_to_C() override;
+		void update_P_to_C() override{
+			if(active == true)
+			update();
+			transform->local_orient = transform->local_orient.unit_vect();
+			std::list<std::shared_ptr<object>>::iterator itr = children.begin();
+			std::list<std::shared_ptr<object>>::iterator itr_end = children.end();
+			for (; itr != itr_end;) {
+				itr->get()->update_P_to_C();
+				itr++;
+			}
+		}
+		void update_world_trans() override {
+			transform->orientation = get_world_orientate();
+			transform->position = get_world_position();
+			transform->scale = get_world_scale();
+		}
+
 
 		//アタッチされたコンポーネントの処理
 		void initialize();

@@ -23,12 +23,14 @@ namespace Adollib {
 
 		u_int tag = GO_tag::None; //このgoのtag(bit)
 
-		std::shared_ptr<Material> material;
+		std::string name; //このgoの名前
+
+		std::shared_ptr<Material> material; //このGOのマテリアル
 
 		std::list <std::shared_ptr<Component>> components; //アタッチされているConponentのポインタ
 
 		object* pearent = nullptr; //親へのポインタ
-		object* get_pearent() {		//一番の親を返す
+		object* get_pearent() override {		//一番の親を返す
 			object* P = this;
 			for (; P == nullptr;) {
 				P = pearent;
@@ -37,7 +39,7 @@ namespace Adollib {
 		};
 
 		std::list<std::shared_ptr<object>> children; //個へのポインタ
-		std::list<std::shared_ptr<object>> get_children() {		//すべての子を返す
+		std::list<std::shared_ptr<object>> get_children()override {		//すべての子を返す
 			std::list<std::shared_ptr<object>>::iterator itr = children.begin();
 			std::list<std::shared_ptr<object>> ret;
 
@@ -56,20 +58,20 @@ namespace Adollib {
 		std::list<std::shared_ptr<object>>::iterator go_iterator; //自身へのイテレーター(いつ使うの?)
 
 		//アタッチされたコンポーネントの処理
-		void initialize();
-		void render();
-		void update_P_to_C() {
+		void initialize()override;
+		void render()override;
+		void update_P_to_C() override {
 			if (active == true)
 			update();
 			transform->local_orient = transform->local_orient.unit_vect();
-			std::list<std::shared_ptr<object>>::iterator itr = children.begin();
-			std::list<std::shared_ptr<object>>::iterator itr_end = children.end();
-			for (; itr != itr_end;) {
-				itr->get()->update_P_to_C();
-				itr++;
+
+			for (auto& itr : children) {
+				itr->update_P_to_C();
 			}
 		}
-		void update_world_trans() {
+
+		void update_imgui_P_to_C() override;
+		void update_world_trans() override {
 			transform->orientation = get_world_orientate();
 			transform->position = get_world_position();
 			transform->scale = get_world_scale();
@@ -79,17 +81,17 @@ namespace Adollib {
 
 	public:
 		//goのworld空間上でのの姿勢を返す
-		Quaternion get_world_orientate() {
+		Quaternion get_world_orientate()override {
 			if (pearent != nullptr) return pearent->transform->orientation * transform->local_orient;
 			else return transform->local_orient;
 		};
 		//goのworld空間上での座標を返す
-		Vector3 get_world_position() {
+		Vector3 get_world_position()override {
 			if (pearent != nullptr) return pearent->transform->position + transform->local_pos;
 			else return transform->local_pos;
 		};
 		//goのworld空間上でのscaleを返す
-		Vector3 get_world_scale() {
+		Vector3 get_world_scale() override {
 			if (pearent != nullptr) return pearent->transform->scale * transform->local_scale;
 			else return transform->local_scale;
 		};

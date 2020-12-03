@@ -77,6 +77,7 @@ void ALP_Physics::apply_external_force(float duration) {
 		anglar_velocity += angula_acceleration * duration;
 		if (anglar_velocity.norm() < FLT_EPSILON)anglar_velocity = Vector3(0, 0, 0);
 	}
+	else reset_force();
 
 	//‰Á‘¬‚ð0‚É‚·‚é
 	accumulated_force = Vector3(0, 0, 0);
@@ -87,12 +88,14 @@ void ALP_Physics::apply_external_force(float duration) {
 }
 void ALP_Physics::integrate(float duration) {
 
+	if(is_movable() == false)return;
+
 	//ˆÊ’u‚ÌXV
 	if (linear_velocity.norm() >= FLT_EPSILON)
 		ALP_coll->world_position += linear_velocity * duration;
 
-	ALP_coll->world_orientation *= quaternion_radian_axis(anglar_velocity.norm_sqr() * duration * 0.5f, anglar_velocity.unit_vect());
-	ALP_coll->world_orientation = ALP_coll->world_orientation.unit_vect();
+		ALP_coll->world_orientation *= quaternion_radian_axis(anglar_velocity.norm_sqr() * duration * 0.5f, anglar_velocity.unit_vect());
+		ALP_coll->world_orientation = ALP_coll->world_orientation.unit_vect();
 
 }
 

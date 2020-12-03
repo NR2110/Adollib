@@ -14,7 +14,7 @@ namespace Adollib
 	// ****************************************************
 	// gameobjectにアタッチされるすべてに対するベースクラス // TODO : インターフェースにしてもよいかも？
 	// ****************************************************
-	class Component 
+	class Component
 	{
 	public:
 		std::list <std::shared_ptr<Component>>::iterator com_itr; //自身へのイテレータ
@@ -24,6 +24,8 @@ namespace Adollib
 
 		MonoInput* input = nullptr;
 		Time* time = nullptr;
+
+		std::string name; //Hierarchyに表示する名前
 
 	public:
 		Component(const Component&) = delete;
@@ -39,6 +41,9 @@ namespace Adollib
 		// 所属するシーンの初期化時に一度だけ呼ばれる
 		virtual void start() {};
 
+		// Hierarchyの表示(Imguiの関数 Imgui::begin,Imgui::endはいらない)
+		virtual void Update_hierarchy() {};
+
 		// 毎フレーム呼ばれる更新処理
 		virtual void update() {};
 
@@ -49,7 +54,7 @@ namespace Adollib
 		virtual void onDisable() {};
 
 		// removeComponent()、clear()時に呼ぶ
-		virtual void finalize() {};	
+		virtual void finalize() {};
 
 	};
 

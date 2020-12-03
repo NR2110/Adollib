@@ -198,6 +198,7 @@
     <ClInclude Include="Scripts\Object\gameobject_light.h" />
     <ClInclude Include="Scripts\Object\gameobject_manager.h" />
     <ClInclude Include="Scripts\Object\gameobject_tags.h" />
+    <ClInclude Include="Scripts\Object\hierarchy.h" />
     <ClInclude Include="Scripts\Object\object.h" />
     <ClInclude Include="Scripts\Object\transform.h" />
     <ClInclude Include="Scripts\Physics\ALP_raycast.h" />
@@ -215,6 +216,7 @@
     <ClInclude Include="Scripts\Physics\ALP__physics_manager.h" />
     <ClInclude Include="Scripts\Physics\collider.h" />
     <ClInclude Include="Scripts\Physics\collider_box.h" />
+    <ClInclude Include="Scripts\Physics\collider_capsule.h" />
     <ClInclude Include="Scripts\Physics\collider_meshcoll.h" />
     <ClInclude Include="Scripts\Physics\collider_plane.h" />
     <ClInclude Include="Scripts\Physics\collider_sphere.h" />
@@ -267,6 +269,7 @@
     <ClCompile Include="Scripts\Object\gameobject_camera.cpp" />
     <ClCompile Include="Scripts\Object\gameobject_light.cpp" />
     <ClCompile Include="Scripts\Object\gameobject_manager.cpp" />
+    <ClCompile Include="Scripts\Object\hierarchy.cpp" />
     <ClCompile Include="Scripts\Physics\ALP_broadphase.cpp" />
     <ClCompile Include="Scripts\Physics\ALP_collider.cpp" />
     <ClCompile Include="Scripts\Physics\ALP_generate_contact.cpp" />

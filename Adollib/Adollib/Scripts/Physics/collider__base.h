@@ -11,6 +11,8 @@
 #include "ALP_collider.h"
 #include "ALP_physics.h"
 
+#include "../Imgui/imgui_all.h"
+
 namespace Adollib {
 
 	namespace Physics_function {
@@ -85,19 +87,6 @@ namespace Adollib {
 		virtual Physics_function::Meshcoll_data get_Meshdata() { return Physics_function::Meshcoll_data(); };
 
 		const Physics_function::Physics_data get_Physicsdata() const {
-			//Physics_function::Physics_data data;
-			//data.inertial_mass = inertial_mass;
-			//data.drag = drag;
-			//data.anglar_drag = anglar_drag;
-			//data.dynamic_friction = dynamic_friction;
-			//data.static_friction = static_friction;
-			//data.restitution = restitution;
-
-			//data.is_fallable = is_fallable;
-			//data.is_kinematic = is_kinematic;
-			//data.is_moveable = is_moveable;
-			//data.is_hitable = is_hitable;
-			//return data;
 			return physics_data;
 		};
 

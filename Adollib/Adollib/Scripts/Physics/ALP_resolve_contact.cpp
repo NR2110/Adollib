@@ -301,8 +301,10 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 
 	// ‘¬“x‚ÌXV
 	for (auto& coll : colliders) {
-		coll.ALPphysics->linear_velocity += coll.ALPphysics->solve->delta_LinearVelocity;
-		coll.ALPphysics->anglar_velocity += coll.ALPphysics->solve->delta_AngulaVelocity;
+		if (coll.ALPphysics->is_kinematic == true) {
+			coll.ALPphysics->linear_velocity += coll.ALPphysics->solve->delta_LinearVelocity;
+			coll.ALPphysics->anglar_velocity += coll.ALPphysics->solve->delta_AngulaVelocity;
+		}
 	}
 
 }

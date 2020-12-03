@@ -23,21 +23,21 @@ namespace Adollib
 	{
 		camera = Gameobject_manager::find_camera("camera");
 
-		sphere_go = Gameobject_manager::createSphere();
+		sphere_go = Gameobject_manager::createSphere(std::string("render_notmal_s"));
 		sphere_go->transform->local_scale = Vector3(1) * 0.05f ;
 		sphere_go->material->color = Vector4(1, 0, 0, 1);
 
-		normal_go = Gameobject_manager::createCube();
+		normal_go = Gameobject_manager::createCube(std::string("render_normal"));
 		normal_go->transform->local_scale = Vector3(1,1,20) * 0.025f;
 		normal_go->material->color = Vector4(1, 0, 0, 1);
 
 #if 1
-		if (0) {
+		if (1) {
 			{
-				Gameobject* GO = Gameobject_manager::createCube();
+				Gameobject* GO = Gameobject_manager::createCube("stage");
 				GO->transform->local_pos = Vector3(0, -60, 0);
 				GO->transform->local_scale = Vector3(60, 60, 60);
-				GO->transform->local_orient = quaternion_from_euler(0, 45, 0);
+				//GO->transform->local_orient = quaternion_from_euler(0, 45, 0);
 				GO->material->color = Vector4(1, 1, 1, 1);
 
 				Box* R = GO->addComponent<Box>();
@@ -54,7 +54,7 @@ namespace Adollib
 				//objGO = Gameobject_manager::createFromFBX("../Adollib/DefaultModel/cylinder.fbx");
 				objGO->transform->local_pos = Vector3(-10, 15, -25);
 				//objGO->transform->local_scale = Vector3(0.01f, 0.02f, 0.03f);
-				objGO->transform->local_scale = Vector3(0.01f, 0.01f, 0.01f);
+				objGO->transform->local_scale = Vector3(0.01, 0.01, 0.01);
 				//objGO->transform->local_orient = quaternion_from_euler(45, 45, 45);
 				objGO->transform->local_orient = quaternion_from_euler(0, 180, 0);
 				Meshcoll* R = objGO->addComponent<Meshcoll>();
@@ -63,7 +63,7 @@ namespace Adollib
 				R->physics_data.is_moveable = false;
 
 			}
-			
+
 		}
 		else if (1) {
 			{
@@ -105,7 +105,7 @@ namespace Adollib
 
 			//object�̍폜
 			bool del = false;
-			ImGui::Checkbox("delete", &del); 
+			ImGui::Checkbox("delete", &del);
 			if (del) {
 				for(auto& GO : GOs){
 					GO->active = false;
@@ -242,7 +242,7 @@ namespace Adollib
 
 #pragma endregion
 
-		
+
 		Ray ray;
 		ray.position = camera->transform->position;
 		ray.direction = vector3_quatrotate(Vector3(0, 0, 1), camera->transform->orientation);

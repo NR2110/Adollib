@@ -34,6 +34,7 @@ namespace Adollib {
 			}
 			return P;
 		};
+		void update_imgui_P_to_C() override;
 		void update_P_to_C() {
 			if (active == true)
 			update();
@@ -52,7 +53,7 @@ namespace Adollib {
 		}
 
 		std::vector <std::shared_ptr<POINTLIGHT>> PointLight;
-		std::vector <std::shared_ptr<SPOTLIGHT>>  SpotLight; 
+		std::vector <std::shared_ptr<SPOTLIGHT>>  SpotLight;
 
 		void set_dirLight(Vector3 dir, Vector3 color);
 

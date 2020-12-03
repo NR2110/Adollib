@@ -94,7 +94,7 @@ namespace Adollib
 		static int solver_iterations; //衝突の精度
 		static bool hit_backfaces_flag;//meshの後ろから衝突するか
 
-		static float timeStep; 
+		static float timeStep;
 
 		static bool is_draw_collider; //COlliderの表示
 		static bool is_draw_dop; //dopの表示(14-DOPを表示するのがめんどくさいためAABBを表示する)

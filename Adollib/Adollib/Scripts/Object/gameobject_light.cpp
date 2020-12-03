@@ -1,6 +1,8 @@
 #include "gameobject_light.h"
 #include <d3d11.h>
 
+#include "../Imgui/imgui_all.h"
+
 namespace Adollib {
 
 	void Light::initialize() {
@@ -28,7 +30,53 @@ namespace Adollib {
 
 	}
 
+	void Light::update_imgui_P_to_C() {
+		//if (ImGui::CollapsingHeader(name.c_str())) {
+		//	//transforme‚Ì•\Ž¦
+		//	ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+		//	if (ImGui::TreeNode("Transforme")) {
+		//		float ave = (transform->local_scale.x + transform->local_scale.y + transform->local_scale.z) * 0.333333333f;
+		//		//position
+		//		{
+		//			float vec3[3] = { transform->local_pos.x, transform->local_pos.y, transform->local_pos.z };
+		//			ImGui::DragFloat3("position", vec3, ave * 0.01f, 0, 0, "%.2f");
+		//			transform->local_pos = Vector3(vec3[0], vec3[1], vec3[2]);
+		//		}
+		//		//rotate
+		//		{
+		//			Vector3 rotate = transform->local_orient.euler();
+		//			float vec3[3] = { rotate.x, rotate.y, rotate.z };
+		//			ImGui::DragFloat3("rotate", vec3, 0.1f, 0, 0, "%.2f");
+		//			rotate = Vector3(vec3[0], vec3[1], vec3[2]);
+		//			transform->local_orient = quaternion_from_euler(rotate);
+		//		}
+		//		//scale
+		//		{
+		//			float vec3[3] = { transform->local_scale.x, transform->local_scale.y, transform->local_scale.z };
+		//			ImGui::DragFloat3("scale", vec3, ave * 0.01f, 0, 0, "%.2f");
+		//			transform->local_scale = Vector3(vec3[0], vec3[1], vec3[2]);
+		//		}
 
+		//		ImGui::TreePop();
+		//	}
+
+		//	int script_count = 0;
+		//	//Šecomponent‚Å•`‰æ‚·‚éŠÖ”
+		//	for (auto& comp : components) {
+		//		if (ImGui::TreeNode(comp->name.c_str())) {
+		//			comp->Update_hierarchy();
+		//			ImGui::TreePop();
+		//		}
+		//	}
+
+		//	//Žq‚Ìgo
+		//	for (auto& itr : children) {
+		//		itr->update_imgui_P_to_C();
+		//	}
+
+		//}
+
+	}
 
 	void Light::set_dirLight(Vector3 dir, Vector3 color)
 	{

@@ -15,6 +15,7 @@
 #include "../Shader/constant_buffer.h"
 #include "../Physics/ALP__physics_manager.h"
 
+#include "hierarchy.h"
 
 #include <future>
 
@@ -29,6 +30,8 @@ std::vector<object*> Gameobject_manager::gos;     //GOを1つの配列に保存
 
 std::thread Gameobject_manager::physics_thread;
 bool Gameobject_manager::physics_thread_finish = true;
+
+int Gameobject_manager::go_count = 0;
 
 ComPtr<ID3D11Buffer> Gameobject_manager::light_cb;
 ComPtr<ID3D11Buffer> Gameobject_manager::view_cb;
@@ -56,7 +59,7 @@ void Gameobject_manager::awake() {
 		cameras[static_cast<Scenelist>(i)] = ca_manager;
 	}
 
-	Physics_function::Collider_renderer::initialize(); 
+	Physics_function::Collider_renderer::initialize();
 
 }
 
@@ -140,10 +143,14 @@ void Gameobject_manager::update(Scenelist Sce) {
 		masters.push_back(master);
 	}
 
+
 	//親から子へupdateを呼ぶ
 	std::for_each(masters.begin(), masters.end(), [](object* ob) {ob->update_P_to_C(); });
 
 	Phyisics_manager::update();
+
+	//ヒエラルキー
+	Hierarchy::update_hierarchy(masters);
 
 	//親から子へワールド情報を更新
 	for (auto& m : masters) {
@@ -232,7 +239,7 @@ void Gameobject_manager::render(Scenelist Sce) {
 		FrustumCulling::update_frustum(camera.get());
 
 		for (; itr != itr_end; itr++) {
-			if (itr->get()->active == false)continue;	
+			if (itr->get()->active == false)continue;
 			itr->get()->render();
 		}
 
@@ -275,14 +282,6 @@ void Gameobject_manager::destroy(Scenelist Sce) {
 
 }
 
-Light* Gameobject_manager::create_light(Scenelist Sce) {
-	std::shared_ptr <Light> Value = std::make_shared<Light>();
-	lights[Sce].emplace_back(Value);
-
-	Value.get()->this_scene = Sce;
-	Value.get()->initialize();
-	return Value.get();
-}
 Light* Gameobject_manager::create_light(const std::string go_name, Scenelist Sce) {
 	std::shared_ptr <Light> Value = std::make_shared<Light>();
 	lights[Sce].emplace_back(Value);
@@ -290,19 +289,10 @@ Light* Gameobject_manager::create_light(const std::string go_name, Scenelist Sce
 
 	Value.get()->this_scene = Sce;
 	Value.get()->initialize();
+	Value.get()->name = std::string("light");
 	return Value.get();
 }
 
-Camera* Gameobject_manager::create_camera(Scenelist Sce) {
-	std::shared_ptr <Camera> Value = std::make_shared<Camera>();
-	cameras[Sce].emplace_back(Value);
-
-	Value.get()->this_scene = Sce;
-	Value.get()->transform = std::make_shared<Transfome>();
-	Value.get()->transform->position = Vector3(0, 0, 0);
-	Value.get()->initialize();
-	return Value.get();
-}
 Camera* Gameobject_manager::create_camera(const std::string go_name, Scenelist Sce) {
 	std::shared_ptr <Camera> Value = std::make_shared<Camera>();
 	cameras[Sce].emplace_back(Value);
@@ -314,40 +304,26 @@ Camera* Gameobject_manager::create_camera(const std::string go_name, Scenelist S
 	return Value.get();
 }
 
-Gameobject* Gameobject_manager::create(Scenelist Sce) {
+Gameobject* Gameobject_manager::create(const std::string& go_name, const u_int& tag, Scenelist Sce) {
 	std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
 	gameobjects[Sce].emplace_back(Value);
-	Value.get()->tag = GO_tag::None;
+	Value.get()->tag = tag;
+	Value.get()->name = go_name;
 
 	Value.get()->this_scene = Sce;
 	Value.get()->transform = std::make_shared<Transfome>();
 	Value.get()->no_material = true;
-
 	Value.get()->initialize();
-	return Value.get();
-
-
-}
-Gameobject* Gameobject_manager::create(const u_int& go_name, Scenelist Sce) {
-	std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
-	gameobjects[Sce].emplace_back(Value);
-	Value.get()->tag = go_name;
-
-	Value.get()->this_scene = Sce;
-	Value.get()->transform = std::make_shared<Transfome>();
-
-	//Value.get()->material = std::make_shared<Material>();
-	//Value.get()->material->Load_VS("./DefaultShader/default_vs.cso");
-	//Value.get()->material->Load_PS("./DefaultShader/default_ps.cso");
-	//ResourceManager::CreateModelFromFBX(&Value.get()->material->meshes, go_name, "");
-	Value.get()->initialize();
+	++go_count;
 	return Value.get();
 }
 
-Gameobject* Gameobject_manager::createFromFBX(const std::string& FBX_pass,  u_int go_name, Scenelist Sce) {
+
+Gameobject* Gameobject_manager::createFromFBX(const std::string go_name, const std::string& FBX_pass,  u_int tag, Scenelist Sce) {
 	std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
 	gameobjects[Sce].emplace_back(Value);
-	Value.get()->tag = go_name;
+	Value.get()->tag = tag;
+	Value.get()->name = go_name;
 
 	Value.get()->this_scene = Sce;
 	Value.get()->transform = std::make_shared<Transfome>();
@@ -357,13 +333,15 @@ Gameobject* Gameobject_manager::createFromFBX(const std::string& FBX_pass,  u_in
 	Value.get()->material->Load_PS("./DefaultShader/default_ps.cso");
 	ResourceManager::CreateModelFromFBX(&Value.get()->material->meshes, FBX_pass.c_str(), "");
 	Value.get()->initialize();
+	++go_count;
 	return Value.get();
 }
 
-Gameobject* Gameobject_manager::createSphere( u_int go_name,  Scenelist Sce) {
+Gameobject* Gameobject_manager::createSphere(const std::string go_name, u_int tag,  Scenelist Sce) {
 	std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
 	gameobjects[Sce].emplace_back(Value);
-	Value.get()->tag = go_name;
+	Value.get()->tag = tag;
+	Value.get()->name = go_name;
 
 	Value.get()->this_scene = Sce;
 	Value.get()->transform = std::make_shared<Transfome>();
@@ -373,13 +351,15 @@ Gameobject* Gameobject_manager::createSphere( u_int go_name,  Scenelist Sce) {
 	Value.get()->material->Load_PS("./DefaultShader/default_ps.cso");
 	ResourceManager::CreateModelFromFBX(&Value.get()->material->meshes, "./DefaultModel/sphere.fbx", "");
 	Value.get()->initialize();
+	++go_count;
 	return Value.get();
 }
 
-Gameobject* Gameobject_manager::createCube( u_int go_name, Scenelist Sce) {
+Gameobject* Gameobject_manager::createCube(const std::string go_name, u_int tag, Scenelist Sce) {
 	std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
 	gameobjects[Sce].emplace_back(Value);
-	Value.get()->tag = go_name;
+	Value.get()->tag = tag;
+	Value.get()->name = go_name;
 
 	Value.get()->this_scene = Sce;
 	Value.get()->transform = std::make_shared<Transfome>();
@@ -388,16 +368,18 @@ Gameobject* Gameobject_manager::createCube( u_int go_name, Scenelist Sce) {
 	Value.get()->material->Load_VS("./DefaultShader/default_vs.cso");
 	Value.get()->material->Load_PS("./DefaultShader/default_ps.cso");
 	ResourceManager::CreateModelFromFBX(&Value.get()->material->meshes, "./DefaultModel/cube.fbx", "");
+	++go_count;
 	Value.get()->initialize();
 	return Value.get();
 }
 //Gameobject* Gameobject_manager::createCylinder( u_int go_name) {
 
 //}
-Gameobject* Gameobject_manager::createCylinder( u_int go_name, Scenelist Sce) {
+Gameobject* Gameobject_manager::createCylinder(const std::string go_name, u_int tag, Scenelist Sce) {
 	std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
 	gameobjects[Sce].emplace_back(Value);
-	Value.get()->tag = go_name;
+	Value.get()->tag = tag;
+	Value.get()->name = go_name;
 
 	Value.get()->this_scene = Sce;
 	Value.get()->transform = std::make_shared<Transfome>();
@@ -407,6 +389,7 @@ Gameobject* Gameobject_manager::createCylinder( u_int go_name, Scenelist Sce) {
 	Value.get()->material->Load_PS("./DefaultShader/default_ps.cso");
 	ResourceManager::CreateModelFromFBX(&Value.get()->material->meshes, "./DefaultModel/cylinder.fbx", "");
 	Value.get()->initialize();
+	++go_count;
 	return Value.get();
 }
 //Gameobject* Gameobject_manager::createPlane( u_int go_name) {
