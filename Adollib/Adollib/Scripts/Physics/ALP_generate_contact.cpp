@@ -25,30 +25,30 @@ void Physics_function::generate_contact(std::vector<Contacts::Contact_pair>& pai
 
 		if (shapeA->shape == ALP_Collider_shape::Sphere) {
 
-			if (shapeB->shape == ALP_Collider_shape::Sphere)generate_contact_sphere_sphere	(meshA, meshB, pair);			
-			if (shapeB->shape == ALP_Collider_shape::BOX)	generate_contact_sphere_box		(meshA, meshB, pair);			
-			if (shapeB->shape == ALP_Collider_shape::Plane)	generate_contact_sphere_plane	(meshA, meshB, pair);			
-			if (shapeB->shape == ALP_Collider_shape::Mesh)	generate_contact_sphere_mesh	(meshA, meshB, pair);		
+			if (shapeB->shape == ALP_Collider_shape::Sphere)generate_contact_sphere_sphere	(meshA, meshB, pair);
+			if (shapeB->shape == ALP_Collider_shape::BOX)	generate_contact_sphere_box		(meshA, meshB, pair);
+			if (shapeB->shape == ALP_Collider_shape::Plane)	generate_contact_sphere_plane	(meshA, meshB, pair);
+			if (shapeB->shape == ALP_Collider_shape::Mesh)	generate_contact_sphere_mesh	(meshA, meshB, pair);
 		}
 		if (shapeA->shape == ALP_Collider_shape::BOX) {
 
 			if (shapeB->shape == ALP_Collider_shape::Sphere)generate_contact_sphere_box		(meshB, meshA,pair);
-			if (shapeB->shape == ALP_Collider_shape::BOX)	generate_contact_box_box		(meshA, meshB,pair);		
-			if (shapeB->shape == ALP_Collider_shape::Plane)	generate_contact_box_plane		(meshA, meshB,pair);			
+			if (shapeB->shape == ALP_Collider_shape::BOX)	generate_contact_box_box		(meshA, meshB,pair);
+			if (shapeB->shape == ALP_Collider_shape::Plane)	generate_contact_box_plane		(meshA, meshB,pair);
 		}
 		if (shapeA->shape == ALP_Collider_shape::Plane) {
 
 			if (shapeB->shape == ALP_Collider_shape::Sphere)generate_contact_sphere_plane	(meshB, meshA, pair);
-			if (shapeB->shape == ALP_Collider_shape::BOX)	generate_contact_box_plane		(meshB, meshA, pair);		
+			if (shapeB->shape == ALP_Collider_shape::BOX)	generate_contact_box_plane		(meshB, meshA, pair);
 			if (shapeB->shape == ALP_Collider_shape::Plane) {			}
 		}
 		if (shapeA->shape == ALP_Collider_shape::Mesh) {
 
 			if (shapeB->shape == ALP_Collider_shape::Sphere)generate_contact_sphere_mesh	(meshB, meshA, pair);
-			if (shapeB->shape == ALP_Collider_shape::Plane)	generate_contact_mesh_plane		(meshA ,meshB, pair);			
+			if (shapeB->shape == ALP_Collider_shape::Plane)	generate_contact_mesh_plane		(meshA ,meshB, pair);
 			if (shapeB->shape == ALP_Collider_shape::Mesh)	generate_contact_mesh_mesh		(meshA, meshB, pair);
 
-			
+
 		}
 
 
@@ -398,7 +398,7 @@ bool sat_obb_convex_mesh(const OBB& obb, const std::vector<ALP_Collider_mesh>::i
 	int smallest_axis[2], //どの軸で最近になったか(edge×edge用に2つ分用意)
 	SAT_TYPE& smallest_case //どのような形で最近になっているか
 ) {
-	smallest_penetration = FLT_MAX;	
+	smallest_penetration = FLT_MAX;
 
 	const std::list<ALP_Collider>::iterator& mesh_coll = mesh->ALPcollider;
 
@@ -603,7 +603,7 @@ bool sat_obb_convex_mesh(const OBB& obb, const std::vector<ALP_Collider_mesh>::i
 bool Physics_function::generate_contact_sphere_sphere(const std::vector<ALP_Collider_mesh>::iterator& SA, const std::vector<ALP_Collider_mesh>::iterator& SB, Contacts::Contact_pair& pair) {
 	const std::list<ALP_Collider>::iterator& collA = SA->ALPcollider;
 	const std::list<ALP_Collider>::iterator& collB = SB->ALPcollider;
-	
+
 	Vector3 pA = collA->world_position;
 	Vector3 pB = collB->world_position;
 
@@ -631,7 +631,7 @@ bool Physics_function::generate_contact_sphere_sphere(const std::vector<ALP_Coll
 bool Physics_function::generate_contact_sphere_plane(const std::vector<ALP_Collider_mesh>::iterator& sphere_mesh, const std::vector<ALP_Collider_mesh>::iterator& plane_mesh, Contacts::Contact_pair& pair) {
 	const std::list<ALP_Collider>::iterator& sphere = sphere_mesh->ALPcollider;
 	const std::list<ALP_Collider>::iterator& plane = plane_mesh->ALPcollider;
-	
+
 	//球面と平面の衝突判定を行う
 	Matrix rotate, inverse_rotate;
 	rotate = plane->world_orientation.get_rotate_matrix();
@@ -773,8 +773,8 @@ bool Physics_function::generate_contact_sphere_mesh(const std::vector<ALP_Collid
 			const Vector3& nor = mesh_mesh->mesh->facets.at(i).normal.unit_vect();
 			const Vector3& pos = mesh_mesh->mesh->vertices->at(mesh_mesh->mesh->facets.at(i).vertexID[0]) * mesh->world_scale;
 			float d = vector3_dot(nor, pos) - vector3_dot(nor, closest_point);
-			if (d < 0) 
-				closest_point += d * nor;		
+			if (d < 0)
+				closest_point += d * nor;
 		}
 
 		float distance = (closest_point - center).norm_sqr(); //最近点と球中心の距離
@@ -924,7 +924,7 @@ bool Physics_function::generate_contact_box_box(const std::vector<ALP_Collider_m
 
 	float smallest_penetration = FLT_MAX;	//最小めり込み量
 	int smallest_axis[2];	//最小めり込み量を得た分離軸の作成に使用した各OBBのローカル軸番号 辺×辺用に2つ
-	SAT_TYPE smallest_case;	//衝突の種類 
+	SAT_TYPE smallest_case;	//衝突の種類
 	if (!sat_obb_obb(obbA, obbB, smallest_penetration, smallest_axis, smallest_case)) return false;
 
 	//obb1の頂点がobb0の面と衝突した場合
@@ -1104,7 +1104,7 @@ bool Physics_function::generate_contact_mesh_mesh(const std::vector<ALP_Collider
 
 	float smallest_penetration = FLT_MAX;	//最小めり込み量
 	int smallest_facetID[2];	//最小めり込み量を得た分離軸の作成に使用した各OBBのローカル軸番号 辺×辺用に2つ
-	SAT_TYPE smallest_case;		//衝突の種類 
+	SAT_TYPE smallest_case;		//衝突の種類
 
 	//どちらもconvexなobjectの場合
 	if (mA->mesh->is_Convex == true && mB->mesh->is_Convex == true) {
@@ -1160,7 +1160,7 @@ bool Physics_function::generate_contact_mesh_mesh(const std::vector<ALP_Collider
 			//上記のp0がfacet_collの最近面上のどこにあるのか
 			Vector3 pA;
 			{
-				
+
 				Vector3 p = vector3_quatrotate(vector3_quatrotate(pB, vertex_coll->world_orientation) + offset_posVF,facet_coll->world_orientation.conjugate());
 				p /= facet_coll->world_scale;
 				float min_len = FLT_MAX;
@@ -1279,7 +1279,7 @@ bool Physics_function::generate_contact_mesh_mesh(const std::vector<ALP_Collider
 			);
 		}
 
-		
+
 		//SAとSBの辺同士が衝突した場合
 		else if (smallest_case == SAT_TYPE::EDGE_EDGE)
 		{

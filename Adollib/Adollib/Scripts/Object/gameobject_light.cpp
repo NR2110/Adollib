@@ -31,6 +31,7 @@ namespace Adollib {
 	}
 
 	void Light::update_imgui_P_to_C() {
+		ImGui::Checkbox("active", &active);
 		//if (ImGui::CollapsingHeader(name.c_str())) {
 		//	//transforme‚Ì•\Ž¦
 		//	ImGui::SetNextItemOpen(true, ImGuiCond_Once);

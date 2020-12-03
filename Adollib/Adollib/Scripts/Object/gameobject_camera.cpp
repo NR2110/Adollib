@@ -16,6 +16,7 @@ namespace Adollib {
 
 	void Camera::update_imgui_P_to_C() {
 		if (ImGui::CollapsingHeader(name.c_str())) {
+			ImGui::Checkbox("active", &active);
 			//transforme‚Ì•\Ž¦
 			ImGui::SetNextItemOpen(true, ImGuiCond_Once);
 			if (ImGui::TreeNode("camera_Transforme")) {

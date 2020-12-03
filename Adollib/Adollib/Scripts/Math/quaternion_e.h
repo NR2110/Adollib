@@ -210,16 +210,28 @@ inline Quaternion Adollib::quaternion_radian_axis(float S, const Vector3& axis) 
 }
 
 inline Quaternion Adollib::quaternion_slerp(const Quaternion& Q1, const Quaternion& Q2, float R) {
-	Vector3 g = vector3_cross(Q1.get_NV3(), Q2.get_NV3());
-	float radian = quaternion_radian(Q1, Q2) / 2.0f;
+	float dotproduct = Q1.x * Q2.x + Q1.y * Q2.y + Q1.z * Q2.z + Q1.w * Q2.w;
+	float theta, st, sut, sout, coeff1, coeff2;
 
-	Quaternion F;
-	F.w = cosf(radian * R);
-	F.x = g.x * sinf(radian * R);
-	F.y = g.y * sinf(radian * R);
-	F.z = g.z * sinf(radian * R);
+	// algorithm adapted from Shoemake's paper
+	R = R * 0.5f;
+	dotproduct = ALmax(1, ALmin(-1, dotproduct));
+	theta = (float)acos(dotproduct);
+	if (theta == 0)theta = FLT_EPSILON;
 
-	return Quaternion(vector3_quatrotate(Q1.get_NV3(), F));
+	st = (float)sin(theta);
+	sut = (float)sin(R * theta);
+	sout = (float)sin((1 - R) * theta);
+	coeff1 = sout / st;
+	coeff2 = sut / st;
+
+	Quaternion ret;
+	ret.x = coeff1 * Q1.x + coeff2 * Q2.x;
+	ret.y = coeff1 * Q1.y + coeff2 * Q2.y;
+	ret.z = coeff1 * Q1.z + coeff2 * Q2.z;
+	ret.w = coeff1 * Q1.w + coeff2 * Q2.w;
+
+	return ret.unit_vect();
 }
 inline Quaternion Adollib::quaternion_from_euler(float x, float y, float z) {
 	Quaternion Rx = quaternion_angle_axis(x, Vector3(1, 0, 0));
@@ -288,7 +300,7 @@ inline float Adollib::quaternion_radian(const Quaternion& Q1, const Quaternion& 
 	return acosf(quaternion_dot(Q1.unit_vect(), Q2.unit_vect()));
 }
 
-#else 
+#else
 #pragma region operator
 
 inline quaternion quaternion::operator+() const
