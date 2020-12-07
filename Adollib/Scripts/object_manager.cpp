@@ -24,12 +24,10 @@ namespace Adollib
 		camera = Gameobject_manager::find_camera("camera");
 
 		sphere_go = Gameobject_manager::createSphere(std::string("render_notmal_s"));
-		gameobject->add_child(sphere_go);
 		sphere_go->transform->local_scale = Vector3(1) * 0.05f ;
 		sphere_go->material->color = Vector4(1, 0, 0, 1);
 
 		normal_go = Gameobject_manager::createCube(std::string("render_normal"));
-		gameobject->add_child(normal_go);
 		normal_go->transform->local_scale = Vector3(1,1,20) * 0.025f;
 		normal_go->material->color = Vector4(1, 0, 0, 1);
 
@@ -37,7 +35,6 @@ namespace Adollib
 		if (1) {
 			{
 				Gameobject* GO = Gameobject_manager::createCube("stage");
-				gameobject->add_child(GO);
 				GO->transform->local_pos = Vector3(0, -60, 0);
 				GO->transform->local_scale = Vector3(60, 60, 60);
 				//GO->transform->local_orient = quaternion_from_euler(0, 45, 0);
