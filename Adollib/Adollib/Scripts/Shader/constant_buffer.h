@@ -7,9 +7,9 @@ namespace Adollib {
 	namespace ConstantBuffer {
 		//light
 		struct ConstantBufferPerLight {
-			DirectX::XMFLOAT4	LightColor;		//ライトの色
-			DirectX::XMFLOAT4	LightDir;		//ライトの方向
-			DirectX::XMFLOAT4	AmbientColor;	//環境光
+			DirectX::XMFLOAT4	LightColor = DirectX::XMFLOAT4(1,1,1,1);		//ライトの色
+			DirectX::XMFLOAT4	LightDir = DirectX::XMFLOAT4(1, 1, 1, 1);		//ライトの方向
+			DirectX::XMFLOAT4	AmbientColor = DirectX::XMFLOAT4(1, 1, 1, 1);	//環境光
 
 			POINTLIGHT  PointLight[POINTMAX];//ポイントライト
 			SPOTLIGHT  SpotLight[SPOTMAX];	//スポットライト
@@ -17,7 +17,7 @@ namespace Adollib {
 		//camera
 		struct ConstantBufferPerCamera {
 			DirectX::XMFLOAT4X4 View;
-			DirectX::XMFLOAT4 Eyepos;
+			DirectX::XMFLOAT4 Eyepos = DirectX::XMFLOAT4(1, 1, 1, 1);
 		};
 		//system
 		struct ConstantBufferPerSystem {
@@ -32,10 +32,10 @@ namespace Adollib {
 		{
 			DirectX::XMFLOAT4X4 boneTransforms[MAX_BONES];
 
-			DirectX::XMFLOAT4 materialColor;
-			DirectX::XMFLOAT4 ambientColor;
+			DirectX::XMFLOAT4 materialColor = DirectX::XMFLOAT4(1, 1, 1, 1);
+			DirectX::XMFLOAT4 ambientColor = DirectX::XMFLOAT4(1, 1, 1, 1);
 
-			float shininess;  // スペキュラ係数
+			float shininess = 1;  // スペキュラ係数
 
 			//float intensity;
 		};

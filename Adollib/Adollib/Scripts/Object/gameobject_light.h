@@ -17,35 +17,16 @@ namespace Adollib {
 	private:
 		void update();
 	public:
-		std::list<std::shared_ptr<object>> get_children() {		//すべての子を返す
-			std::list<std::shared_ptr<object>>::iterator itr = children.begin();
-			std::list<std::shared_ptr<object>> ret;
+		std::string name = std::string("null"); //このgoの名前(検索用)
 
-			for (u_int i = 0; i < children.size(); i++) {
-				ret.splice(ret.end(), itr->get()->get_children());
-				itr++;
-			}
-			return ret;
-		};
-		object* get_pearent() {		//一番の親を返す
-			object* P = this;
-			for (; P == nullptr;) {
-				P = pearent;
-			}
-			return P;
-		};
+		std::list <std::shared_ptr<Component_light>> components; //アタッチされているConponentのポインタ
+
+		Scenelist this_scene = Scenelist::scene_null; //このgoのあるscene
+
+		std::list<std::shared_ptr<Light>>::iterator go_iterator; //自身へのイテレーター(いつ使うの?)B
+
 		void update_imgui_P_to_C() override;
-		void update_P_to_C() {
-			if (active == true)
-			update();
-			transform->local_orient = transform->local_orient.unit_vect();
-			std::list<std::shared_ptr<object>>::iterator itr = children.begin();
-			std::list<std::shared_ptr<object>>::iterator itr_end = children.end();
-			for (; itr != itr_end;) {
-				itr->get()->update_P_to_C();
-				itr++;
-			}
-		}
+
 		void update_world_trans() {
 			//transform->orientation = get_world_orientate();
 			//transform->position = get_world_position();
@@ -62,20 +43,6 @@ namespace Adollib {
 		void set_pointLight(Vector3 pos, Vector3 color, float range);
 
 		void set_spotLight(Vector3 pos, Vector3 color, Vector3 dir, float range, float near, float far);
-
-
-		std::string name = std::string("null"); //このgoの名前(検索用)
-
-		std::list <std::shared_ptr<Component_light>> components; //アタッチされているConponentのポインタ
-
-		object* pearent = nullptr; //親へのポインタ
-		std::list<std::shared_ptr<object>> children; //個へのポインタ
-
-		bool active = true; //falseなら更新、描画を止める
-
-		Scenelist this_scene = Scenelist::scene_null; //このgoのあるscene
-
-		std::list<std::shared_ptr<Light>>::iterator go_iterator; //自身へのイテレーター(いつ使うの?)
 
 		//アタッチされたコンポーネントの処理
 		void initialize();

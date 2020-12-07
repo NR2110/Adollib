@@ -15,7 +15,7 @@ namespace Adollib
 	// ****************************************************
 	// gameobject_cameraにアタッチされるすべてに対するベースクラス // TODO : インターフェースにしてもよいかも？
 	// ****************************************************
-	class Component_light 
+	class Component_light
 	{
 	public:
 		Light* gameobject;	// このコンポーネントがアタッチされているGameObject

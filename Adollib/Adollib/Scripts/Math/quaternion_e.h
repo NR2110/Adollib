@@ -219,9 +219,9 @@ inline Quaternion Adollib::quaternion_slerp(const Quaternion& Q1, const Quaterni
 	theta = (float)acos(dotproduct);
 	if (theta == 0)theta = FLT_EPSILON;
 
-	st = (float)sin(theta);
-	sut = (float)sin(R * theta);
-	sout = (float)sin((1 - R) * theta);
+	st = (float)sinf(theta);
+	sut = (float)sinf(R * theta);
+	sout = (float)sinf((1 - R) * theta);
 	coeff1 = sout / st;
 	coeff2 = sut / st;
 

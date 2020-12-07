@@ -162,6 +162,7 @@
     <ClInclude Include="Scripts\Imgui\imgui_all.h" />
     <ClInclude Include="Scripts\Imgui\imgui_base.h" />
     <ClInclude Include="Scripts\Imgui\imgui_manager.h" />
+    <ClInclude Include="Scripts\Imgui\inspector.h" />
     <ClInclude Include="Scripts\Imgui\work_meter.h" />
     <ClInclude Include="Scripts\Main\Adollib.h" />
     <ClInclude Include="Scripts\Main\input.h" />
@@ -249,6 +250,7 @@
     <ClCompile Include="Imgui\imgui_widgets.cpp" />
     <ClCompile Include="Scripts\Imgui\debug.cpp" />
     <ClCompile Include="Scripts\Imgui\imgui_manager.cpp" />
+    <ClCompile Include="Scripts\Imgui\inspector.cpp" />
     <ClCompile Include="Scripts\Imgui\work_meter.cpp" />
     <ClCompile Include="Scripts\Main\Adollib.cpp" />
     <ClCompile Include="Scripts\Main\input.cpp" />

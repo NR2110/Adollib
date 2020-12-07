@@ -109,7 +109,6 @@ void Gameobject_manager::update(Scenelist Sce) {
 
 		for (; itr != itr_end; itr++) {
 			gos.push_back(itr->get());
-			itr->get()->updated = false;
 		}
 	}
 
@@ -120,7 +119,6 @@ void Gameobject_manager::update(Scenelist Sce) {
 
 		for (; itr != itr_end; itr++) {
 			gos.push_back(itr->get());
-			itr->get()->updated = false;
 		}
 	}
 	{
@@ -130,17 +128,18 @@ void Gameobject_manager::update(Scenelist Sce) {
 
 		for (; itr != itr_end; itr++) {
 			gos.push_back(itr->get());
-			itr->get()->updated = false;
 		}
 	}
 
 	//ツリーの親を更新
 	masters.clear();
+	std::unordered_map<object*,bool> masters_manag;
 	for (auto& GO : gos) {
-		object* master = GO->get_pearent();
-		if (master->updated == true)continue;
-		master->updated = true;
-		masters.push_back(master);
+		object* master = GO->top_pearent();
+		if (masters_manag.count(master) == 0) {
+			masters.push_back(master);
+		}
+		masters_manag[master] = true;
 	}
 
 

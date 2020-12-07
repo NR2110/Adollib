@@ -29,30 +29,6 @@ namespace Adollib {
 
 		std::list <std::shared_ptr<Component>> components; //アタッチされているConponentのポインタ
 
-		object* pearent = nullptr; //親へのポインタ
-		object* get_pearent() override {		//一番の親を返す
-			object* P = this;
-			for (; P == nullptr;) {
-				P = pearent;
-			}
-			return P;
-		};
-
-		std::list<std::shared_ptr<object>> children; //個へのポインタ
-		std::list<std::shared_ptr<object>> get_children()override {		//すべての子を返す
-			std::list<std::shared_ptr<object>>::iterator itr = children.begin();
-			std::list<std::shared_ptr<object>> ret;
-
-			int c_size = children.size();
-			for (int i = 0; i < c_size; i++) {
-				ret.splice(ret.end(), itr->get()->get_children());
-				itr++;
-			}
-			return ret;
-		};
-
-		bool active = true; //falseなら更新、描画を止める
-
 		Scenelist this_scene = Scenelist::scene_null; //このgoのあるscene
 
 		std::list<std::shared_ptr<object>>::iterator go_iterator; //自身へのイテレーター(いつ使うの?)
@@ -60,15 +36,6 @@ namespace Adollib {
 		//アタッチされたコンポーネントの処理
 		void initialize()override;
 		void render()override;
-		void update_P_to_C() override {
-			if (active == true)
-			update();
-			transform->local_orient = transform->local_orient.unit_vect();
-
-			for (auto& itr : children) {
-				itr->update_P_to_C();
-			}
-		}
 
 		void update_imgui_P_to_C() override;
 		void update_world_trans() override {
@@ -82,17 +49,17 @@ namespace Adollib {
 	public:
 		//goのworld空間上でのの姿勢を返す
 		Quaternion get_world_orientate()override {
-			if (pearent != nullptr) return pearent->transform->orientation * transform->local_orient;
+			if (pearent() != nullptr) return pearent()->transform->orientation * transform->local_orient;
 			else return transform->local_orient;
 		};
 		//goのworld空間上での座標を返す
 		Vector3 get_world_position()override {
-			if (pearent != nullptr) return pearent->transform->position + transform->local_pos;
+			if (pearent() != nullptr) return pearent()->transform->position + transform->local_pos;
 			else return transform->local_pos;
 		};
 		//goのworld空間上でのscaleを返す
 		Vector3 get_world_scale() override {
-			if (pearent != nullptr) return pearent->transform->scale * transform->local_scale;
+			if (pearent() != nullptr) return pearent()->transform->scale * transform->local_scale;
 			else return transform->local_scale;
 		};
 

@@ -14,13 +14,13 @@ namespace Adollib {
 		float range = 0;//Œõ‚Ì“Í‚­”ÍˆÍ
 		float type = 0; //—LŒø‚©–³Œø‚©
 		float near_area = 0;
-		float far_area= 0;
+		float far_area = 0;
 		float dumy0 = 0;
 		float dumy1 = 0;
 		float dumy2 = 0;
-		DirectX::XMFLOAT4 pos;
-		DirectX::XMFLOAT4 color;
-		DirectX::XMFLOAT4 dir;
+		DirectX::XMFLOAT4 pos = DirectX::XMFLOAT4(0, 0, 0, 1);
+		DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(1, 1, 1, 1);
+		DirectX::XMFLOAT4 dir = DirectX::XMFLOAT4(0, 0, 1, 1);
 	};
 
 	struct POINTLIGHT {
@@ -28,8 +28,8 @@ namespace Adollib {
 		float range = 0;//Œõ‚Ì“Í‚­”ÍˆÍ
 		float type = 0; //—LŒø‚©–³Œø‚©
 		float dumy = 0;
-		DirectX::XMFLOAT4 pos;
-		DirectX::XMFLOAT4 color;
+		DirectX::XMFLOAT4 pos = DirectX::XMFLOAT4(0, 0, 0, 1);;
+		DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(1, 1, 1, 1);;
 	};
 
 

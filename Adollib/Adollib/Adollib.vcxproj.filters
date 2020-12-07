@@ -220,6 +220,9 @@
     <ClCompile Include="Scripts\Object\hierarchy.cpp">
       <Filter>00_Adollib\33_object</Filter>
     </ClCompile>
+    <ClCompile Include="Scripts\Imgui\inspector.cpp">
+      <Filter>00_Adollib\33_object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Scripts\player.h">
@@ -490,6 +493,9 @@
       <Filter>00_Adollib\22_physics\collider</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Object\hierarchy.h">
+      <Filter>00_Adollib\33_object</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Imgui\inspector.h">
       <Filter>00_Adollib\33_object</Filter>
     </ClInclude>
   </ItemGroup>

@@ -66,7 +66,7 @@ void Gameobject::update_imgui_P_to_C() {
 		}
 
 		//q‚Ìgo
-		for (auto& itr : children) {
+		for (auto& itr : *children()) {
 			itr->update_imgui_P_to_C();
 		}
 

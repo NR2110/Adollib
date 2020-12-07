@@ -47,7 +47,7 @@ namespace Adollib {
 			int script_count = 0;
 
 			//q‚Ìgo
-			for (auto& itr : children) {
+			for (auto& itr : *children()) {
 				itr->update_imgui_P_to_C();
 			}
 

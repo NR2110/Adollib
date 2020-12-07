@@ -73,8 +73,8 @@ namespace Adollib
 				rotate *= quaternion_angle_axis(+rotate_vec.y * rotate_pow, Vector3(0, 1, 0));
 				rotate *= quaternion_angle_axis(+rotate_vec.x * rotate_pow, vector3_cross(Vector3(0, 1, 0), vector3_quatrotate(Vector3(0, 0, 1), transform->local_orient)).unit_vect());
 			}
-			c_pos_save.x = input->getCursorPosX();
-			c_pos_save.y = input->getCursorPosY();
+			c_pos_save.x = (float)input->getCursorPosX();
+			c_pos_save.y = (float)input->getCursorPosY();
 
 			//ƒJƒƒ‰‚ÌˆÚ“®
 			{
@@ -98,7 +98,7 @@ namespace Adollib
 
 			transform->local_pos += position;
 			transform->local_orient *= rotate;
-		
+
 
 	}
 
