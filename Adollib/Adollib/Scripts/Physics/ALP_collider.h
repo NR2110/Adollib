@@ -92,6 +92,7 @@ namespace Adollib {
 		private:
 			void update_dop14_as_sphere();
 			void update_dop14_as_box();
+			void update_dop14_as_capsule();
 			void update_dop14_as_plane();
 			void update_dop14_as_mesh();
 		};

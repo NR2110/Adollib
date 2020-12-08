@@ -12,11 +12,17 @@ namespace Adollib {
 		bool generate_contact_sphere_plane	(const std::vector<ALP_Collider_mesh>::iterator& S1, const std::vector<ALP_Collider_mesh>::iterator& S2, Contacts::Contact_pair& pair);
 		bool generate_contact_sphere_sphere	(const std::vector<ALP_Collider_mesh>::iterator& S1, const std::vector<ALP_Collider_mesh>::iterator& S2, Contacts::Contact_pair& pair);
 		bool generate_contact_sphere_box	(const std::vector<ALP_Collider_mesh>::iterator& S1, const std::vector<ALP_Collider_mesh>::iterator& S2, Contacts::Contact_pair& pair);
+		bool generate_contact_sphere_capsule(const std::vector<ALP_Collider_mesh>::iterator& S1, const std::vector<ALP_Collider_mesh>::iterator& S2, Contacts::Contact_pair& pair);
 		bool generate_contact_sphere_mesh	(const std::vector<ALP_Collider_mesh>::iterator& S1, const std::vector<ALP_Collider_mesh>::iterator& S2, Contacts::Contact_pair& pair);
 
 		bool generate_contact_box_plane		(const std::vector<ALP_Collider_mesh>::iterator& S1, const std::vector<ALP_Collider_mesh>::iterator& S2, Contacts::Contact_pair& pair);
 		bool generate_contact_box_box		(const std::vector<ALP_Collider_mesh>::iterator& S1, const std::vector<ALP_Collider_mesh>::iterator& S2, Contacts::Contact_pair& pair);
+		bool generate_contact_box_capsule	(const std::vector<ALP_Collider_mesh>::iterator& S1, const std::vector<ALP_Collider_mesh>::iterator& S2, Contacts::Contact_pair& pair);
 		bool generate_contact_box_mesh		(const std::vector<ALP_Collider_mesh>::iterator& S1, const std::vector<ALP_Collider_mesh>::iterator& S2, Contacts::Contact_pair& pair);
+
+		bool generate_contact_capsule_plane		(const std::vector<ALP_Collider_mesh>::iterator& S1, const std::vector<ALP_Collider_mesh>::iterator& S2, Contacts::Contact_pair& pair);
+		bool generate_contact_capsule_capsule	(const std::vector<ALP_Collider_mesh>::iterator& S1, const std::vector<ALP_Collider_mesh>::iterator& S2, Contacts::Contact_pair& pair);
+		bool generate_contact_capsule_mesh		(const std::vector<ALP_Collider_mesh>::iterator& S1, const std::vector<ALP_Collider_mesh>::iterator& S2, Contacts::Contact_pair& pair);
 
 		bool generate_contact_mesh_plane	(const std::vector<ALP_Collider_mesh>::iterator& S1, const std::vector<ALP_Collider_mesh>::iterator& S2, Contacts::Contact_pair& pair);
 		bool generate_contact_mesh_mesh		(const std::vector<ALP_Collider_mesh>::iterator& S1, const std::vector<ALP_Collider_mesh>::iterator& S2, Contacts::Contact_pair& pair);

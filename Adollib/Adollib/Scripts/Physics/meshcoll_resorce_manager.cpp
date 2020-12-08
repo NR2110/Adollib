@@ -82,7 +82,7 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 	std::vector<Subset> subsets;
 	std::vector<Meshcollider_mesh> _mesh;
 
-	//TODO : FBX“à‚Ìgloabal_transform‚ğl—¶‚µ‚Ä‚¢‚È‚¢ 
+	//TODO : FBX“à‚Ìgloabal_transform‚ğl—¶‚µ‚Ä‚¢‚È‚¢
 
 	_mesh.resize(fetched_meshes.size());
 	subsets.resize(fetched_meshes.size());

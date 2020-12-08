@@ -53,6 +53,11 @@ namespace Adollib {
 			//é¿ç€ÇÕ14-DOPÇæÇ™ï`âÊÇ™ÇﬂÇÒÇ«Ç≠Ç≥Ç¢ÇÃÇ≈AABBÇ≈ï`âÊ
 			static void render_AABB(const Physics_function::ALP_Collider&);
 
+			static void render_box(const Physics_function::ALP_Collider& R);
+			static void render_sphere(const Physics_function::ALP_Collider& R);
+			static void render_meshcoll(const Physics_function::ALP_Collider& R);
+			static void render_capsule(const Physics_function::ALP_Collider& R);
+
 		};
 
 	}

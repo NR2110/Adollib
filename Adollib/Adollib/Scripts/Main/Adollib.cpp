@@ -25,10 +25,10 @@ namespace Adollib {
 
 		color.x = fabsf(get_P_by_f(T, change_time * 2) - change_time) / change_time;
 
-		T += change_time / 3.0f;
+		T += change_time * 0.33333333f;
 		color.y = fabsf(get_P_by_f(T, change_time * 2) - change_time) / change_time;
 
-		T += change_time / 3.0f;
+		T += change_time * 0.3333333f;
 		color.z = fabsf(get_P_by_f(T, change_time * 2) - change_time) / change_time;
 
 		color = color * 3 - Vector4(1, 1, 1, 0);

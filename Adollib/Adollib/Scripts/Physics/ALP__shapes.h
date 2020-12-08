@@ -9,6 +9,7 @@ namespace Adollib {
 			Plane,
 			Capsule,
 			Mesh,
+			Cylinder,
 
 			shapes_size
 		};

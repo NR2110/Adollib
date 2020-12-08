@@ -43,10 +43,23 @@ namespace Adollib {
 		// closestP : 光線上の点への最近点
 		//:::::::::::::::::
 		void get_closestP_point_line(
-			const Vector3& point, 
+			const Vector3& point,
 			const Vector3& l_point,
-			const Vector3& l_dir, 
+			const Vector3& l_dir,
 			Vector3& closestP
+		);
+		//:::::::::::::::::
+		// 光線と点の最近点を求める
+		// point    : 点
+		// l_point  : 光線上の一点
+		// l_dir    : 光線の向き
+		// closests : 光線上の点へのスカラ
+		//:::::::::::::::::
+		void get_closestP_point_line(
+			const Vector3& point,
+			const Vector3& l_point,
+			const Vector3& l_dir,
+			float& closests
 		);
 
 

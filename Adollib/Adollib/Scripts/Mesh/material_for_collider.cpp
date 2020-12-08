@@ -44,18 +44,24 @@ void Collider_renderer::initialize() {
 		meshes[ALP_Collider_shape::Plane];
 		ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::Plane], "./DefaultModel/plane.fbx", "");
 
+		meshes[ALP_Collider_shape::Cylinder];
+		ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::Cylinder], "./DefaultModel/cylinder.fbx", "");
+
 		//meshes[ALP_Collider_shape::Mesh];
 		//ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::Mesh], "../Data/FBX/0311_collisions.fbx", "");
 		//ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::Mesh], "../Adollib/DefaultModel/cylinder.fbx", "");
 	}
 
 void Collider_renderer::render_collider(const Physics_function::ALP_Collider& R) {
-	if (!(
-		R.shape == ALP_Collider_shape::BOX ||
-		R.shape == ALP_Collider_shape::Sphere ||
-		R.shape == ALP_Collider_shape::Mesh
-		))return;
 
+	if (R.shape == ALP_Collider_shape::BOX)render_box(R);
+	if (R.shape == ALP_Collider_shape::Sphere)render_sphere(R);
+	if (R.shape == ALP_Collider_shape::Mesh)render_meshcoll(R);
+	if (R.shape == ALP_Collider_shape::Capsule)render_capsule(R);
+
+}
+
+void Collider_renderer::render_box(const Physics_function::ALP_Collider& R) {
 	//CB : ConstantBufferPerCO_OBJ
 	ConstantBufferPerGO g_cb;
 	g_cb.world = matrix_world(R.world_scale * 1.0001, R.world_orientation.get_rotate_matrix(), R.world_position).get_XMFLOAT4X4();
@@ -73,17 +79,9 @@ void Collider_renderer::render_collider(const Physics_function::ALP_Collider& R)
 	Systems::SetDephtStencilState(State_manager::DStypes::DS_TRUE);
 
 	std::vector<Mesh::mesh>* meshs;
-	if (R.shape == ALP_Collider_shape::Mesh) {
-		ResourceManager::CreateModelFromFBX(&meshs, R.collider_meshes[0].mesh->FBX_pass.c_str(), "");
-	}
-	else
 	meshs = meshes[R.shape];
 
-	//Vector4 color16[16];
 	int color_num = 0;
-	//for (int i = 0; i < 16; i ++ ) {
-	//	color16[i] = Al_Global::get_gaming(i, 16);
-	//}
 
 	//•`‰æ
 	for (Mesh::mesh mesh : *meshs)
@@ -97,7 +95,7 @@ void Collider_renderer::render_collider(const Physics_function::ALP_Collider& R)
 		ConstantBufferPerMaterial cb;
 		cb.shininess = 1;
 		cb.ambientColor = DirectX::XMFLOAT4(0.1f, 0.1f, 0.1f, 1);
-//		cb.materialColor = Al_Global::get_gaming(Al_Global::second_per_game * 60, 800).get_XM4();
+		//		cb.materialColor = Al_Global::get_gaming(Al_Global::second_per_game * 60, 800).get_XM4();
 		cb.materialColor = Al_Global::get_gaming((Al_Global::second_per_game + color_num * 2) * 60, 600).get_XM4();
 		//cb.materialColor = color16[color_num].get_XM4();
 		Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
@@ -117,7 +115,278 @@ void Collider_renderer::render_collider(const Physics_function::ALP_Collider& R)
 		color_num++;
 	}
 
+}
+void Collider_renderer::render_sphere(const Physics_function::ALP_Collider& R) {
+	//CB : ConstantBufferPerCO_OBJ
+	ConstantBufferPerGO g_cb;
+	g_cb.world = matrix_world(R.world_scale * 1.0001, R.world_orientation.get_rotate_matrix(), R.world_position).get_XMFLOAT4X4();
+	Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
+	Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
+	Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 
+	Systems::DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	Systems::DeviceContext->IASetInputLayout(vertexLayout.Get());
+
+	shader.Activate();
+
+	Systems::SetBlendState(State_manager::BStypes::BS_NONE);
+	Systems::SetRasterizerState(State_manager::RStypes::RS_WIRE);
+	Systems::SetDephtStencilState(State_manager::DStypes::DS_TRUE);
+
+	std::vector<Mesh::mesh>* meshs;
+	meshs = meshes[R.shape];
+
+	int color_num = 0;
+
+	//•`‰æ
+	for (Mesh::mesh mesh : *meshs)
+	{
+		UINT stride = sizeof(VertexFormat);
+		UINT offset = 0;
+		Systems::DeviceContext->IASetVertexBuffers(0, 1, mesh.vertexBuffer.GetAddressOf(), &stride, &offset);
+		Systems::DeviceContext->IASetIndexBuffer(mesh.indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+
+		//CB : ConstantBufferPerCoMaterial
+		ConstantBufferPerMaterial cb;
+		cb.shininess = 1;
+		cb.ambientColor = DirectX::XMFLOAT4(0.1f, 0.1f, 0.1f, 1);
+		//		cb.materialColor = Al_Global::get_gaming(Al_Global::second_per_game * 60, 800).get_XM4();
+		cb.materialColor = Al_Global::get_gaming((Al_Global::second_per_game + color_num * 2) * 60, 600).get_XM4();
+		//cb.materialColor = color16[color_num].get_XM4();
+		Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
+		Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
+		Systems::DeviceContext->PSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
+
+		for (auto& subset : mesh.subsets)
+		{
+			Systems::DeviceContext->PSSetShaderResources(0, 1, subset.diffuse.shaderResourceVirw.GetAddressOf());
+
+			// •`‰æ
+			Systems::DeviceContext->DrawIndexed(subset.indexCount, subset.indexStart, 0);
+
+		}
+
+
+		color_num++;
+	}
+
+}
+void Collider_renderer::render_meshcoll(const Physics_function::ALP_Collider& R) {
+	//CB : ConstantBufferPerCO_OBJ
+	ConstantBufferPerGO g_cb;
+	g_cb.world = matrix_world(R.world_scale * 1.0001, R.world_orientation.get_rotate_matrix(), R.world_position).get_XMFLOAT4X4();
+	Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
+	Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
+	Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
+
+	Systems::DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	Systems::DeviceContext->IASetInputLayout(vertexLayout.Get());
+
+	shader.Activate();
+
+	Systems::SetBlendState(State_manager::BStypes::BS_NONE);
+	Systems::SetRasterizerState(State_manager::RStypes::RS_WIRE);
+	Systems::SetDephtStencilState(State_manager::DStypes::DS_TRUE);
+
+	std::vector<Mesh::mesh>* meshs;
+	ResourceManager::CreateModelFromFBX(&meshs, R.collider_meshes[0].mesh->FBX_pass.c_str(), "");
+
+	int color_num = 0;
+
+	//•`‰æ
+	for (Mesh::mesh mesh : *meshs)
+	{
+		UINT stride = sizeof(VertexFormat);
+		UINT offset = 0;
+		Systems::DeviceContext->IASetVertexBuffers(0, 1, mesh.vertexBuffer.GetAddressOf(), &stride, &offset);
+		Systems::DeviceContext->IASetIndexBuffer(mesh.indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+
+		//CB : ConstantBufferPerCoMaterial
+		ConstantBufferPerMaterial cb;
+		cb.shininess = 1;
+		cb.ambientColor = DirectX::XMFLOAT4(0.1f, 0.1f, 0.1f, 1);
+		//		cb.materialColor = Al_Global::get_gaming(Al_Global::second_per_game * 60, 800).get_XM4();
+		cb.materialColor = Al_Global::get_gaming((Al_Global::second_per_game + color_num * 2) * 60, 600).get_XM4();
+		//cb.materialColor = color16[color_num].get_XM4();
+		Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
+		Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
+		Systems::DeviceContext->PSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
+
+		for (auto& subset : mesh.subsets)
+		{
+			Systems::DeviceContext->PSSetShaderResources(0, 1, subset.diffuse.shaderResourceVirw.GetAddressOf());
+
+			// •`‰æ
+			Systems::DeviceContext->DrawIndexed(subset.indexCount, subset.indexStart, 0);
+
+		}
+
+
+		color_num++;
+	}
+}
+void Collider_renderer::render_capsule(const Physics_function::ALP_Collider& R) {
+	//CB : ConstantBufferPerCO_OBJ
+
+	std::vector<Mesh::mesh>* meshs;
+	meshs = meshes[ALP_Collider_shape::Cylinder];
+	{
+		ConstantBufferPerGO g_cb;
+		g_cb.world = matrix_world(Vector3(R.world_scale.x, R.world_scale.y, R.world_scale.x) * 1.0001, R.world_orientation.get_rotate_matrix(), R.world_position).get_XMFLOAT4X4();
+		Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
+		Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
+		Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
+
+		Systems::DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		Systems::DeviceContext->IASetInputLayout(vertexLayout.Get());
+
+		shader.Activate();
+
+		Systems::SetBlendState(State_manager::BStypes::BS_NONE);
+		Systems::SetRasterizerState(State_manager::RStypes::RS_WIRE);
+		Systems::SetDephtStencilState(State_manager::DStypes::DS_TRUE);
+
+		int color_num = 0;
+
+		//•`‰æ
+		for (Mesh::mesh mesh : *meshs)
+		{
+			UINT stride = sizeof(VertexFormat);
+			UINT offset = 0;
+			Systems::DeviceContext->IASetVertexBuffers(0, 1, mesh.vertexBuffer.GetAddressOf(), &stride, &offset);
+			Systems::DeviceContext->IASetIndexBuffer(mesh.indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+
+			//CB : ConstantBufferPerCoMaterial
+			ConstantBufferPerMaterial cb;
+			cb.shininess = 1;
+			cb.ambientColor = DirectX::XMFLOAT4(0.1f, 0.1f, 0.1f, 1);
+			//		cb.materialColor = Al_Global::get_gaming(Al_Global::second_per_game * 60, 800).get_XM4();
+			cb.materialColor = Al_Global::get_gaming((Al_Global::second_per_game + color_num * 2) * 60, 600).get_XM4();
+			//cb.materialColor = color16[color_num].get_XM4();
+			Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
+			Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
+			Systems::DeviceContext->PSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
+
+			for (auto& subset : mesh.subsets)
+			{
+				Systems::DeviceContext->PSSetShaderResources(0, 1, subset.diffuse.shaderResourceVirw.GetAddressOf());
+
+				// •`‰æ
+				Systems::DeviceContext->DrawIndexed(subset.indexCount, subset.indexStart, 0);
+
+			}
+
+
+			color_num++;
+		}
+
+	}
+
+	meshs = meshes[ALP_Collider_shape::Sphere];
+	{
+		ConstantBufferPerGO g_cb;
+		g_cb.world = matrix_world(Vector3(R.world_scale.x) * 1.0001, R.world_orientation.get_rotate_matrix(),R.world_position + vector3_quatrotate(Vector3(0, R.world_scale.y, 0),R.world_orientation)).get_XMFLOAT4X4();
+		Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
+		Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
+		Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
+
+		Systems::DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		Systems::DeviceContext->IASetInputLayout(vertexLayout.Get());
+
+		shader.Activate();
+
+		Systems::SetBlendState(State_manager::BStypes::BS_NONE);
+		Systems::SetRasterizerState(State_manager::RStypes::RS_WIRE);
+		Systems::SetDephtStencilState(State_manager::DStypes::DS_TRUE);
+
+		int color_num = 0;
+
+		//•`‰æ
+		for (Mesh::mesh mesh : *meshs)
+		{
+			UINT stride = sizeof(VertexFormat);
+			UINT offset = 0;
+			Systems::DeviceContext->IASetVertexBuffers(0, 1, mesh.vertexBuffer.GetAddressOf(), &stride, &offset);
+			Systems::DeviceContext->IASetIndexBuffer(mesh.indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+
+			//CB : ConstantBufferPerCoMaterial
+			ConstantBufferPerMaterial cb;
+			cb.shininess = 1;
+			cb.ambientColor = DirectX::XMFLOAT4(0.1f, 0.1f, 0.1f, 1);
+			//		cb.materialColor = Al_Global::get_gaming(Al_Global::second_per_game * 60, 800).get_XM4();
+			cb.materialColor = Al_Global::get_gaming((Al_Global::second_per_game + color_num * 2) * 60, 600).get_XM4();
+			//cb.materialColor = color16[color_num].get_XM4();
+			Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
+			Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
+			Systems::DeviceContext->PSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
+
+			for (auto& subset : mesh.subsets)
+			{
+				Systems::DeviceContext->PSSetShaderResources(0, 1, subset.diffuse.shaderResourceVirw.GetAddressOf());
+
+				// •`‰æ
+				Systems::DeviceContext->DrawIndexed(subset.indexCount, subset.indexStart, 0);
+
+			}
+
+
+			color_num++;
+		}
+
+	}
+
+	meshs = meshes[ALP_Collider_shape::Sphere];
+	{
+		ConstantBufferPerGO g_cb;
+		g_cb.world = matrix_world(Vector3(R.world_scale.x) * 1.0001, R.world_orientation.get_rotate_matrix(), R.world_position - vector3_quatrotate(Vector3(0, R.world_scale.y, 0), R.world_orientation)).get_XMFLOAT4X4();
+		Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
+		Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
+		Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
+
+		Systems::DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		Systems::DeviceContext->IASetInputLayout(vertexLayout.Get());
+
+		shader.Activate();
+
+		Systems::SetBlendState(State_manager::BStypes::BS_NONE);
+		Systems::SetRasterizerState(State_manager::RStypes::RS_WIRE);
+		Systems::SetDephtStencilState(State_manager::DStypes::DS_TRUE);
+
+		int color_num = 0;
+
+		//•`‰æ
+		for (Mesh::mesh mesh : *meshs)
+		{
+			UINT stride = sizeof(VertexFormat);
+			UINT offset = 0;
+			Systems::DeviceContext->IASetVertexBuffers(0, 1, mesh.vertexBuffer.GetAddressOf(), &stride, &offset);
+			Systems::DeviceContext->IASetIndexBuffer(mesh.indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+
+			//CB : ConstantBufferPerCoMaterial
+			ConstantBufferPerMaterial cb;
+			cb.shininess = 1;
+			cb.ambientColor = DirectX::XMFLOAT4(0.1f, 0.1f, 0.1f, 1);
+			//		cb.materialColor = Al_Global::get_gaming(Al_Global::second_per_game * 60, 800).get_XM4();
+			cb.materialColor = Al_Global::get_gaming((Al_Global::second_per_game + color_num * 2) * 60, 600).get_XM4();
+			//cb.materialColor = color16[color_num].get_XM4();
+			Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
+			Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
+			Systems::DeviceContext->PSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
+
+			for (auto& subset : mesh.subsets)
+			{
+				Systems::DeviceContext->PSSetShaderResources(0, 1, subset.diffuse.shaderResourceVirw.GetAddressOf());
+
+				// •`‰æ
+				Systems::DeviceContext->DrawIndexed(subset.indexCount, subset.indexStart, 0);
+
+			}
+
+
+			color_num++;
+		}
+
+	}
 }
 
 #include "../Physics/collider.h"
@@ -207,7 +476,7 @@ void Collider_renderer::render_AABB(const Physics_function::ALP_Collider& coll) 
 				ConstantBufferPerGO g_cb;
 				g_cb.world = matrix_world(
 					Vector3(0.01f),
-					matrix_identity(), 
+					matrix_identity(),
 					(vector3_quatrotate(vertex * coll_mesh.ALPcollider->world_scale, coll_mesh.ALPcollider->world_orientation)) + coll_mesh.ALPcollider->world_position
 				).get_XMFLOAT4X4();
 
@@ -268,7 +537,7 @@ void Collider_renderer::render_AABB(const Physics_function::ALP_Collider& coll) 
 				//).get_XMFLOAT4X4();
 
 				g_cb.world = matrix_world(
-					Vector3(0.1f), 
+					Vector3(0.1f),
 					matrix_identity(),
 					(vector3_quatrotate(vertex * coll_mesh.ALPcollider->world_scale, coll_mesh.ALPcollider->world_orientation)) + coll_mesh.ALPcollider->world_position
 				).get_XMFLOAT4X4();

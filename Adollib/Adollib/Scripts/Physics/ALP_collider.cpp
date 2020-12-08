@@ -10,7 +10,7 @@ using namespace Physics_function;
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 #pragma region Collider
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-const bool ALP_Collider::concoll_enter (const unsigned int tag_name) {
+const bool ALP_Collider::concoll_enter(const unsigned int tag_name) {
 	oncoll_check_bits |= tag_name;
 	return (oncoll_bits & tag_name);
 }
@@ -67,6 +67,9 @@ void ALP_Collider::update_dop14() {
 	case ALP_Collider_shape::BOX:
 		ALP_Collider::update_dop14_as_box();
 
+	case ALP_Collider_shape::Capsule:
+		ALP_Collider::update_dop14_as_capsule();
+
 		break;
 	case ALP_Collider_shape::Plane:
 		ALP_Collider::update_dop14_as_plane();
@@ -121,6 +124,22 @@ void ALP_Collider::update_dop14_as_box() {
 				}
 
 			}
+		}
+	}
+}
+
+void ALP_Collider::update_dop14_as_capsule() {
+	for (auto& mesh : collider_meshes) {
+		Vector3 p = vector3_quatrotate(Vector3(0, world_scale.y, 0), world_orientation);
+		mesh.dop14.pos = world_position;
+		for (int i = 0; i < DOP::DOP14_size; i++) {
+			float v0, v1, v2, v3;
+			v0 = vector3_dot(+p, DOP::DOP_14_axis[i]) + +world_scale.x * 1.0000001f;
+			v1 = vector3_dot(+p, DOP::DOP_14_axis[i]) + -world_scale.x * 1.0000001f;
+			v2 = vector3_dot(-p, DOP::DOP_14_axis[i]) + +world_scale.x * 1.0000001f;
+			v3 = vector3_dot(-p, DOP::DOP_14_axis[i]) + -world_scale.x * 1.0000001f;
+			mesh.dop14.max[i] = ALmax(ALmax(v0, v1), ALmax(v2, v3));
+			mesh.dop14.min[i] = ALmin(ALmin(v0, v1), ALmin(v2, v3));
 		}
 	}
 }

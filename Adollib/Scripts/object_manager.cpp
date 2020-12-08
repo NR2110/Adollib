@@ -23,15 +23,18 @@ namespace Adollib
 	{
 		camera = Gameobject_manager::find_camera("camera");
 
-		sphere_go = Gameobject_manager::createSphere(std::string("render_notmal_s"));
-		sphere_go->transform->local_scale = Vector3(1) * 0.05f ;
-		sphere_go->material->color = Vector4(1, 0, 0, 1);
+		{
+			sphere_go = Gameobject_manager::createSphere(std::string("render_notmal_s"));
+			sphere_go->transform->local_scale = Vector3(1) * 0.05f;
+			sphere_go->material->color = Vector4(1, 0, 0, 1);
+		}
+		{
+			normal_go = Gameobject_manager::createCube(std::string("render_normal"));
+			normal_go->transform->local_scale = Vector3(1, 1, 20) * 0.025f;
+			normal_go->material->color = Vector4(1, 0, 0, 1);
+		}
 
-		normal_go = Gameobject_manager::createCube(std::string("render_normal"));
-		normal_go->transform->local_scale = Vector3(1,1,20) * 0.025f;
-		normal_go->material->color = Vector4(1, 0, 0, 1);
-
-#if 1
+#if 0
 		if (1) {
 			{
 				Gameobject* GO = Gameobject_manager::createCube("stage");
@@ -87,6 +90,16 @@ namespace Adollib
 
 
 #else
+		{
+			Gameobject* GO = Gameobject_manager::createSphere("stage");
+			GO->transform->local_pos = Vector3(0, -120, 0);
+			GO->transform->local_scale = Vector3(60, 60, 60);
+			//GO->transform->local_orient = quaternion_from_euler(90, 0, 0);
+			GO->material->color = Vector4(1, 1, 1, 1);
+
+			Capsule* R = GO->addComponent<Capsule>();
+			R->physics_data.is_moveable = false;
+		}
 #endif
 
 

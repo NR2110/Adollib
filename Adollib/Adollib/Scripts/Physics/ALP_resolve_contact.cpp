@@ -203,7 +203,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 		solverbody[1] = ALPphysics[1]->solve;
 
 		for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
-			//衝突点の情報　
+			//衝突点の情報
 			Contactpoint& cp = pair.contacts.contactpoints[C_num];
 			Vector3 rA = vector3_quatrotate(cp.point[0], solverbody[0]->orientation);
 			Vector3 rB = vector3_quatrotate(cp.point[1], solverbody[1]->orientation);
@@ -219,7 +219,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 				solverbody[1]->delta_AngulaVelocity -= deltaImpulse * vector3_trans(vector3_cross(rB, cp.constraint[k].axis), solverbody[1]->inv_inertia);
 
 			}
-		}	
+		}
 	}
 
 
@@ -234,7 +234,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 			solverbody[1] = ALPphysics[1]->solve;
 
 			for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
-				//衝突点の情報　
+				//衝突点の情報
 				Contactpoint& cp = pair.contacts.contactpoints[C_num];
 				Vector3 rA = vector3_quatrotate(cp.point[0], solverbody[0]->orientation);
 				Vector3 rB = vector3_quatrotate(cp.point[1], solverbody[1]->orientation);

@@ -13,7 +13,7 @@ using namespace Contacts;
 struct edge{
 	std::vector<ALP_Collider_mesh>::iterator coll;
 	float value = 0;
-	bool stgo = false; //true = st, false = go 
+	bool stgo = false; //true = st, false = go
 };
 
 void Physics_function::Broadphase(std::list<ALP_Collider>& ALP_collider, std::vector<Contacts::Collider_2>& out_pair) {
@@ -22,7 +22,7 @@ void Physics_function::Broadphase(std::list<ALP_Collider>& ALP_collider, std::ve
 	//Sweep&Pruneを挿入法で実装
 	static std::list<edge>axis_list[1];
 
-	//DOPの更新	
+	//DOPの更新
 
 	Work_meter::start("update_dop14");
 
