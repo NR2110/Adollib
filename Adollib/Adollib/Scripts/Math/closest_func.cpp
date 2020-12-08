@@ -63,6 +63,46 @@ void Closest_func::get_closestP_two_segment(
 	closestP_B = segBs + t * v2;
 
 }
+void Closest_func::get_closestP_two_segment(
+	const Vector3& segAs, const Vector3& segAg,
+	const Vector3& segBs, const Vector3& segBg,
+	float& s, float& t
+) {
+
+	Vector3 v1 = segAg - segAs; //A線分のベクトル
+	Vector3 v2 = segBg - segBs; //B線分のベクトル
+	Vector3 r = segAs - segBs; //各始点をつなぐベクトル
+
+	float a = vector3_dot(v1, v1);
+	float b = vector3_dot(v1, v2);
+	float c = vector3_dot(v2, v2);
+	float d = vector3_dot(v1, r);
+	float e = vector3_dot(v2, r);
+	float det = -a * c + b * b;
+	//float s = 0.0f, t = 0.0f; //最近点の場所 s=0 : segAs
+
+
+	// 逆行列のチェック
+	if (det * det > FLT_EPSILON) {
+		s = (c * d - b * e) / det;
+	}
+
+	// sを0～1にクランプ
+	s = s < 0.0f ? 0.0f : s > 1.0f ? 1.0f : s;
+
+	t = (e + s * b) / c;
+
+	// tを0～1にクランプ
+	t = t < 0.0f ? 0.0f : t > 1.0f ? 1.0f : t;
+
+	// 再度sを求める
+	s = (-d + t * b) / a;
+	s = s < 0.0f ? 0.0f : s > 1.0f ? 1.0f : s;
+
+	//closestP_A = segAs + s * v1;
+	//closestP_B = segBs + t * v2;
+
+}
 
 //:::::::::::::::::
 // 光線と点の最近点を求める

@@ -34,6 +34,19 @@ namespace Adollib {
 		const Vector3& segBs, const Vector3& segBg,
 		Vector3& closestP_A, Vector3& closestP_B
 		);
+		//:::::::::::::::::
+		// 2線分の最近点を求める
+		// segA_s - segA_g : 線分Aの始点終点
+		// segB_s - segB_g : 線分Bの始点終点
+		// s : 線分Aの最近点へのスカラ
+		// t : 線分Bの最近点へのスカラ
+		//:::::::::::::::::
+		void get_closestP_two_segment(
+			const Vector3& segAs, const Vector3& segAg,
+			const Vector3& segBs, const Vector3& segBg,
+			float& s, float& t
+		);
+
 
 		//:::::::::::::::::
 		// 光線と点の最近点を求める

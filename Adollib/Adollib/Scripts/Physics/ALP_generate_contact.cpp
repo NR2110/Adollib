@@ -35,10 +35,12 @@ void Physics_function::generate_contact(std::vector<Contacts::Contact_pair>& pai
 
 			if (shapeB->shape == ALP_Collider_shape::Sphere)generate_contact_sphere_box(meshB, meshA, pair);
 			if (shapeB->shape == ALP_Collider_shape::BOX)	generate_contact_box_box(meshA, meshB, pair);
+			if (shapeB->shape == ALP_Collider_shape::Capsule)generate_contact_box_capsule(meshA, meshB, pair);
 			if (shapeB->shape == ALP_Collider_shape::Plane)	generate_contact_box_plane(meshA, meshB, pair);
 		}
 		if (shapeA->shape == ALP_Collider_shape::Capsule) {
 			if (shapeB->shape == ALP_Collider_shape::Sphere)generate_contact_sphere_capsule(meshB, meshA, pair);
+			if (shapeB->shape == ALP_Collider_shape::BOX)generate_contact_box_capsule(meshB, meshA, pair);
 		}
 		if (shapeA->shape == ALP_Collider_shape::Plane) {
 
@@ -639,7 +641,7 @@ bool Physics_function::generate_contact_sphere_box(const std::vector<ALP_Collide
 			//body[1]　が　box
 			pair.contacts.addcontact(
 				sphere->world_scale.x - distance,
-				n,
+				+n,
 				sphere->world_scale.x * vector3_quatrotate(-n, sphere->world_orientation.conjugate()),
 				closest_point
 			);
@@ -679,13 +681,23 @@ bool Physics_function::generate_contact_sphere_capsule(const std::vector<ALP_Col
 	if (length < sphere->world_scale.x + capsule->world_scale.x) {
 		Vector3 Wn = vector3_quatrotate(n, capsule->world_orientation); //nをcapsuleからワールドに
 
-		//衝突していたらContactオブジェクトを生成する
-		pair.contacts.addcontact(
-			sphere->world_scale.x + capsule->world_scale.x - length,
-			Wn,
-			sphere->world_scale.x * vector3_quatrotate(-Wn, sphere->world_orientation.conjugate()),
-			capsule->world_scale.x * n + sphere_pos_capcoord
-		);
+		if (pair.body[0]->ALPcollider->shape == sphere->shape) {
+			//衝突していたらContactオブジェクトを生成する
+			pair.contacts.addcontact(
+				sphere->world_scale.x + capsule->world_scale.x - length,
+				+Wn,
+				sphere->world_scale.x * vector3_quatrotate(-Wn, sphere->world_orientation.conjugate()),
+				capsule->world_scale.x * n + sphere_pos_capcoord
+			);
+		}
+		else {
+			pair.contacts.addcontact(
+				sphere->world_scale.x + capsule->world_scale.x - length,
+				-Wn,
+				capsule->world_scale.x * n + sphere_pos_capcoord,
+				sphere->world_scale.x * vector3_quatrotate(-Wn, sphere->world_orientation.conjugate())
+			);
+		}
 		return true;
 	}
 
@@ -1022,9 +1034,74 @@ bool Physics_function::generate_contact_box_box(const std::vector<ALP_Collider_m
 }
 #pragma endregion
 
-#pragma region BOX-MESH
-bool Physics_function::generate_contact_box_capsule(const std::vector<ALP_Collider_mesh>::iterator& S1, const std::vector<ALP_Collider_mesh>::iterator& S2, Contacts::Contact_pair& pair) {
+#pragma region BOX-Capsule
+bool Physics_function::generate_contact_box_capsule(const std::vector<ALP_Collider_mesh>::iterator& box_mesh, const std::vector<ALP_Collider_mesh>::iterator& capsule_mesh, Contacts::Contact_pair& pair) {
+	const std::list<ALP_Collider>::iterator& capsule = capsule_mesh->ALPcollider;
+	const std::list<ALP_Collider>::iterator& box = box_mesh->ALPcollider;
 
+	//boxの座標系で計算
+	Vector3 closest_box, closest_cap;
+		float dis_save = FLT_MAX;
+	{
+		//box座標系でのcapsuleの情報
+		Vector3 cuppos_boxcoord = vector3_quatrotate(capsule->world_position - box->world_position, box->world_orientation.conjugate());
+		Vector3 cupsca_boxcoord = vector3_quatrotate(Vector3(0, capsule->world_scale.y, 0), capsule->world_orientation * box->world_orientation.conjugate());
+
+		//boxのすべての辺とカプセルの線分の総当たりで最近点を求める
+		Vector3 vertex[4] = {
+			{+box->world_position.x, +box->world_position.y, +box->world_position.z },
+			{-box->world_position.x, +box->world_position.y, -box->world_position.z },
+			{-box->world_position.x, -box->world_position.y, +box->world_position.z },
+			{+box->world_position.x, -box->world_position.y, -box->world_position.z }
+		};
+		for (int i = 0; i < 4; i++) {
+			Vector3 closest_P, closest_Q;
+			Closest_func::get_closestP_two_segment(vertex[i], Vector3(-vertex[i].x, +vertex[i].y, +vertex[i].z), cuppos_boxcoord - cupsca_boxcoord, cuppos_boxcoord + cupsca_boxcoord, closest_P, closest_Q);
+			if ((closest_P - closest_Q).norm() < dis_save) {
+				closest_box = closest_P;
+				closest_cap = closest_Q;
+			}
+			Closest_func::get_closestP_two_segment(vertex[i], Vector3(+vertex[i].x, -vertex[i].y, +vertex[i].z), cuppos_boxcoord - cupsca_boxcoord, cuppos_boxcoord + cupsca_boxcoord, closest_P, closest_Q);
+			if ((closest_P - closest_Q).norm() < dis_save) {
+				closest_box = closest_P;
+				closest_cap = closest_Q;
+			}
+			Closest_func::get_closestP_two_segment(vertex[i], Vector3(+vertex[i].x, +vertex[i].y, -vertex[i].z), cuppos_boxcoord - cupsca_boxcoord, cuppos_boxcoord + cupsca_boxcoord, closest_P, closest_Q);
+			if ((closest_P - closest_Q).norm() < dis_save) {
+				closest_box = closest_P;
+				closest_cap = closest_Q;
+			}
+		}
+	}
+	//衝突していなければfalseを返す
+	if ((closest_box - closest_cap).norm() > capsule->world_scale.x * capsule->world_scale.x)return false;
+	float leng = capsule->world_scale.x - (closest_box - closest_cap).norm_sqr(); //貫通量
+
+	Vector3 n = (closest_cap - closest_box).unit_vect(); //boxからsphereへのベクトル boxcoord
+	Vector3 Wn = vector3_quatrotate(n, box->world_orientation); //worldcoord
+
+	if (pair.body[0]->ALPcollider->shape == box->shape) {
+		//body[0]　が　box
+		//body[1]　が　sphere
+		pair.contacts.addcontact(
+			leng,
+			-Wn,
+			closest_box,
+			vector3_quatrotate(closest_cap + -n * capsule->world_scale.x,box->world_orientation * capsule->world_orientation.conjugate())
+			//sphere->world_scale.x * vector3_quatrotate(-n, sphere->world_orientation.conjugate())
+		);
+	}
+	else {
+		//body[0]　が　sphere
+		//body[1]　が　box
+		pair.contacts.addcontact(
+			leng,
+			+Wn,
+			vector3_quatrotate(closest_cap + -n * capsule->world_scale.x, box->world_orientation * capsule->world_orientation.conjugate()),
+			closest_box
+		);
+	}
+	return true;
 }
 #pragma endregion
 

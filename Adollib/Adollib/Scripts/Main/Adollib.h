@@ -19,7 +19,7 @@ namespace Adollib {
 		static float gravity;
 
 		//::::::::::::::::::::
-		// time : 
+		// time :
 		// change_time : 色が変化する間隔
 		// min : 色の最小値(0 ～ 1)
 		// max : 色の最大値(0 ～ 1)

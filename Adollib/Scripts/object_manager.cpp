@@ -92,8 +92,8 @@ namespace Adollib
 #else
 		{
 			Gameobject* GO = Gameobject_manager::createSphere("stage");
-			GO->transform->local_pos = Vector3(0, -120, 0);
-			GO->transform->local_scale = Vector3(60, 60, 60);
+			GO->transform->local_pos = Vector3(0, -61, 0);
+			GO->transform->local_scale = Vector3(60, 1, 60);
 			//GO->transform->local_orient = quaternion_from_euler(90, 0, 0);
 			GO->material->color = Vector4(1, 1, 1, 1);
 
