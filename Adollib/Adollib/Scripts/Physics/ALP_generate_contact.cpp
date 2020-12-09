@@ -1083,51 +1083,7 @@ bool Physics_function::generate_contact_box_capsule(const std::vector<ALP_Collid
 			}
 		}
 	}
-	//if ((closest_box - closest_cap).norm() > capsule->world_scale.x * capsule->world_scale.x)return false;
 
-	if (capsule_t > -0.9999999) {
-		//{
-			float dis_save = FLT_MAX;
-		//	//box座標系でのcapsuleの情報
-		//	Vector3 cuppos_boxcoord = vector3_quatrotate(capsule->world_position - box->world_position, box->world_orientation.conjugate());
-		//	Vector3 cupsca_boxcoord = vector3_quatrotate(Vector3(0, capsule->world_scale.y, 0), capsule->world_orientation * box->world_orientation.conjugate());
-
-		//	//boxのすべての辺とカプセルの線分の総当たりで最近点を求める
-		//	Vector3 vertex[4] = {
-		//		{+box_halfsize.x, +box_halfsize.y, +box_halfsize.z },
-		//		{-box_halfsize.x, +box_halfsize.y, -box_halfsize.z },
-		//		{-box_halfsize.x, -box_halfsize.y, +box_halfsize.z },
-		//		{+box_halfsize.x, -box_halfsize.y, -box_halfsize.z }
-		//	};
-		//	for (int i = 0; i < 4; i++) {
-		//		Vector3 closest_P, closest_Q;
-		//		float s, t;
-		//		Closest_func::get_closestP_two_segment(vertex[i], Vector3(-vertex[i].x, +vertex[i].y, +vertex[i].z), cuppos_boxcoord - cupsca_boxcoord, cuppos_boxcoord + cupsca_boxcoord, closest_P, closest_Q, s, t);
-		//		if ((closest_P - closest_Q).norm() < dis_save) {
-		//			dis_save = (closest_P - closest_Q).norm();
-		//			closest_box = closest_P;
-		//			closest_cap = closest_Q;
-		//			capsule_t = t * 2 - 1;
-		//		}
-		//		Closest_func::get_closestP_two_segment(vertex[i], Vector3(+vertex[i].x, -vertex[i].y, +vertex[i].z), cuppos_boxcoord - cupsca_boxcoord, cuppos_boxcoord + cupsca_boxcoord, closest_P, closest_Q, s, t);
-		//		if ((closest_P - closest_Q).norm() < dis_save) {
-		//			dis_save = (closest_P - closest_Q).norm();
-		//			closest_box = closest_P;
-		//			closest_cap = closest_Q;
-		//			capsule_t = t * 2 - 1;
-		//		}
-		//		Closest_func::get_closestP_two_segment(vertex[i], Vector3(+vertex[i].x, +vertex[i].y, -vertex[i].z), cuppos_boxcoord - cupsca_boxcoord, cuppos_boxcoord + cupsca_boxcoord, closest_P, closest_Q, s, t);
-		//		if ((closest_P - closest_Q).norm() < dis_save) {
-		//			Closest_func::get_closestP_two_segment(vertex[i], Vector3(+vertex[i].x, +vertex[i].y, -vertex[i].z), cuppos_boxcoord - cupsca_boxcoord, cuppos_boxcoord + cupsca_boxcoord, closest_P, closest_Q, s, t);
-
-		//			dis_save = (closest_P - closest_Q).norm();
-		//			closest_box = closest_P;
-		//			closest_cap = closest_Q;
-		//			capsule_t = t * 2 - 1;
-		//		}
-		//	}
-		//}
-	}
 	//衝突していなければfalseを返す
 	if (
 		abs(closest_cap.x) - capsule->world_scale.x > box_halfsize.x ||
@@ -1159,10 +1115,7 @@ bool Physics_function::generate_contact_box_capsule(const std::vector<ALP_Collid
 			leng,
 			-Wn,
 			closest_box,
-			//vector3_quatrotate(closest_cap + -n * capsule->world_scale.x,box->world_orientation * capsule->world_orientation.conjugate())
-			//vector3_quatrotate(vector3_quatrotate(closest_cap, box->world_orientation) + box->world_position - capsule->world_position, capsule->world_orientation.conjugate()) + -n * capsule->world_scale.x
-			(Vector3(0, capsule->world_scale.y, 0) * capsule_t) + vector3_quatrotate(Wn, capsule->world_orientation.conjugate()) * capsule->world_scale.x
-			//sphere->world_scale.x * vector3_quatrotate(-n, sphere->world_orientation.conjugate())
+			(Vector3(0, capsule->world_scale.y, 0) * capsule_t) + vector3_quatrotate(-Wn, capsule->world_orientation.conjugate()) * capsule->world_scale.x
 		);
 	}
 	else {
@@ -1171,8 +1124,7 @@ bool Physics_function::generate_contact_box_capsule(const std::vector<ALP_Collid
 		pair.contacts.addcontact(
 			leng,
 			+Wn,
-			//vector3_quatrotate(vector3_quatrotate(closest_cap, box->world_orientation) + box->world_position - capsule->world_position, capsule->world_orientation.conjugate()) + -n * capsule->world_scale.x,
-			(Vector3(0, 1, 0) * capsule->world_scale.y) * capsule_t + vector3_quatrotate(Wn, capsule->world_orientation.conjugate()) * capsule->world_scale.x,
+			(Vector3(0, capsule->world_scale.y, 0)) * capsule_t + vector3_quatrotate(-Wn, capsule->world_orientation.conjugate()) * capsule->world_scale.x,
 			closest_box
 		);
 	}
