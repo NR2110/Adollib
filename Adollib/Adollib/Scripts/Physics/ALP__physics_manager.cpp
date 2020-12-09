@@ -135,6 +135,35 @@ bool Phyisics_manager::update(Scenelist Sce)
 	solv_resolve(ALP_colliders[Sce]);
 	resolve_gameobject(ALP_colliders[Sce]);
 
+	static bool init = true;
+	static const int size = 100;
+	static Gameobject* debug_go[size];
+	if (init) {
+		for (int i = 0; i < size; i++) {
+			debug_go[i] = Gameobject_manager::createSphere();
+			debug_go[i]->transform->local_scale = Vector3(1) * 0.3f;
+			if (i % 2 == 0)debug_go[i]->material->color = Vector4(1, 0.5f, 0.5f, 1);
+			else debug_go[i]->material->color = Vector4(0.5f, 1, 0.5f, 1);
+		}
+		init = false;
+	}
+
+	for (int i = 0; i < size; i++) {
+		debug_go[i]->transform->local_pos = Vector3(1000000, 1000000, 1000000);
+	}
+
+	int count = 0;
+	for (const auto& p : pairs) {
+		count += 2;
+		if (count > size)break;
+		const auto* coll0 = (*p.body[0]->ALPcollider->coll_itr)->transform;
+		const auto* coll1 = (*p.body[1]->ALPcollider->coll_itr)->transform;
+
+		debug_go[count - 1]->transform->local_pos = vector3_quatrotate((p.contacts.contactpoints->point[0]/* * coll0->scale*/), coll0->orientation) + coll0->position;
+		debug_go[count - 2]->transform->local_pos = vector3_quatrotate((p.contacts.contactpoints->point[1]/* * coll1->scale*/), coll1->orientation) + coll1->position;
+		int adfsdg = 0;
+	}
+
 	return true;
 
 }

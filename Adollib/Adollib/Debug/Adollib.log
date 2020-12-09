@@ -1,2 +1,3 @@
-﻿  ALP_generate_contact.cpp
+﻿  object_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(60,61): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

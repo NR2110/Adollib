@@ -121,6 +121,13 @@ void ALP_Physics::update_inertial() {
 		inertial_tensor._33 = 0.3333333f * inertial_mass * ((Wsize.x * Wsize.x) + (Wsize.y * Wsize.y));
 
 		break;
+	case ALP_Collider_shape::Capsule:
+		inertial_tensor = matrix_identity();
+		inertial_tensor._11 = 0.25f * inertial_mass * Wsize.x * Wsize.x + 0.08333333333f * inertial_mass * Wsize.y * Wsize.y * 4;
+		inertial_tensor._22 = 0.25f * inertial_mass * Wsize.x * Wsize.x + 0.08333333333f * inertial_mass * Wsize.y * Wsize.y * 4;
+		inertial_tensor._33 = 0.5f * inertial_mass * Wsize.x * Wsize.x;
+
+		break;
 	case ALP_Collider_shape::Plane:
 
 		break;

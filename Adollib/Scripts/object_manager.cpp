@@ -34,7 +34,7 @@ namespace Adollib
 			normal_go->material->color = Vector4(1, 0, 0, 1);
 		}
 
-#if 0
+#if 1
 		if (1) {
 			{
 				Gameobject* GO = Gameobject_manager::createCube("stage");
@@ -50,7 +50,7 @@ namespace Adollib
 			}
 
 		}
-		else if(1){
+		else if(0){
 			{
 				objGO = Gameobject_manager::createFromFBX("../Data/FBX/0311_collisions.fbx");
 				//objGO = Gameobject_manager::create();
@@ -70,16 +70,11 @@ namespace Adollib
 		}
 		else if (1) {
 			{
-				//objGO = Gameobject_manager::createFromFBX("../Data/FBX/0311_collisions.fbx");
-				objGO = Gameobject_manager::createFromFBX("../Adollib/DefaultModel/sphere.fbx");
-				//objGO->transform->local_pos = Vector3(-10, 15, -25);
-				//objGO->transform->local_scale = Vector3(0.001f, 0.002f, 0.003f);
-				objGO->transform->local_scale = Vector3(1, 2, 3);
-				//GO->transform->local_orient = quaternion_from_euler(0, 180, 0);
-				//objGO->transform->local_orient = quaternion_from_euler(45, 45, 0);
-				//GO->transform->local_scale = Vector3(0.1f, 0.1f, 0.1f);
-				Meshcoll* R = objGO->addComponent<Meshcoll>();
-				R->load_mesh("../Data/FBX/0311_collisions.fbx");
+				Gameobject* GO = Gameobject_manager::createSphere("stage");
+				GO->transform->local_pos = Vector3(0, -60, 0);
+				GO->transform->local_scale = Vector3(60, 60, 60);
+				GO->material->color = Vector4(1, 1, 1, 1);
+				Sphere* R = GO->addComponent<Sphere>();
 				//R->center = Vector3(1, 1, 1);
 				//R->load_mesh("../Adollib/DefaultModel/sphere.fbx");
 				R->physics_data.is_moveable = false;
@@ -91,11 +86,11 @@ namespace Adollib
 
 #else
 		{
-			Gameobject* GO = Gameobject_manager::createSphere("stage");
+			Gameobject* GO = Gameobject_manager::create("stage");
 			GO->transform->local_pos = Vector3(0, -61, 0);
 			GO->transform->local_scale = Vector3(60, 1, 60);
 			//GO->transform->local_orient = quaternion_from_euler(90, 0, 0);
-			GO->material->color = Vector4(1, 1, 1, 1);
+			//GO->material->color = Vector4(1, 1, 1, 1);
 
 			Capsule* R = GO->addComponent<Capsule>();
 			R->physics_data.is_moveable = false;
@@ -173,6 +168,27 @@ namespace Adollib
 					for (int i = 0; i < SPHERE_pyramid_count; i++) {
 						for (int o = 0; o < SPHERE_pyramid_count - i; o++) {
 							set_sphere(Vector3(2.50001f * o - (SPHERE_pyramid_count - i) * 2.500001f / 2.0f + SPHERE_pyramid_pos[0], 5.0f + 2.50001f * i + SPHERE_pyramid_pos[1], SPHERE_pyramid_pos[2]), 1, Vector3(0, 1, 1));
+						}
+
+					}
+				imgui_num++;
+			}
+
+			//CAPSULEpyramid
+			{
+				static int CAPSULE_pyramid_count = 5;
+				static float CAPSULE_pyramid_pos[3] = { 0 };
+				bool summon = false;
+				ImGui::Separator();
+				ImGui::Text("CAPSULE_pyramid"); ImGui::NextColumn();
+				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
+				ImGui::InputFloat3(std::to_string(imgui_num + 200).c_str(), CAPSULE_pyramid_pos, "%.3f"); ImGui::NextColumn();
+				ImGui::InputInt(std::to_string(imgui_num + 300).c_str(), &CAPSULE_pyramid_count, 1, 20); ImGui::NextColumn();
+
+				if (summon == true)
+					for (int i = 0; i < CAPSULE_pyramid_count; i++) {
+						for (int o = 0; o < CAPSULE_pyramid_count - i; o++) {
+							set_capsule(Vector3(2.50001f * o - (CAPSULE_pyramid_count - i) * 2.500001f / 2.0f + CAPSULE_pyramid_pos[0], 5.0f + 2.50001f * i + CAPSULE_pyramid_pos[1], CAPSULE_pyramid_pos[2]), 1, 1, Vector3(0, 1, 1));
 						}
 
 					}
@@ -320,6 +336,25 @@ namespace Adollib
 		object->transform->local_scale = size;
 
 		Box* M = object->addComponent<Box>();
+		//Meshcoll* M = object->addComponent<Meshcoll>();
+		//M->load_mesh("./DefaultModel/cube.fbx");
+		//M->inertial_mass = 1;
+		GOs.emplace_back(object);
+		return object;
+	}
+	Gameobject* object_manager::set_capsule(Vector3 pos, float r, float length, Vector3 rotate, Vector3 color) {
+		Gameobject* object = nullptr;
+		object = Gameobject_manager::create(GO_tag::Box);
+		Vector4 C = Vector4(color.x, color.y, color.z, 1);
+		//object->material->color = C;
+
+		//object->addComponent<object_fall>();
+		object->transform->local_orient = quaternion_from_euler(rotate);
+		object->transform->local_pos = pos;
+
+		Capsule* M = object->addComponent<Capsule>();
+		M->r = r;
+		M->length = length;
 		//Meshcoll* M = object->addComponent<Meshcoll>();
 		//M->load_mesh("./DefaultModel/cube.fbx");
 		//M->inertial_mass = 1;
