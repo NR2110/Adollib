@@ -1,7 +1,5 @@
 #include "ALP_generate_contact.h"
 
-#include "../Math/closest_func.h"
-
 #include "../Imgui/work_meter.h"
 
 using namespace Adollib;
@@ -1043,12 +1041,18 @@ bool Physics_function::generate_contact_box_capsule(const std::vector<ALP_Collid
 
 	//boxの座標系で計算
 	Vector3 closest_box, closest_cap;
-		float capsule_t;
+	float capsule_t;
+
+	//box座標系でのcapsuleの情報
+	Vector3 cuppos_boxcoord = vector3_quatrotate(capsule->world_position - box->world_position, box->world_orientation.conjugate());
+	Vector3 cupsca_boxcoord = vector3_quatrotate(Vector3(0, capsule->world_scale.y, 0), capsule->world_orientation * box->world_orientation.conjugate());
+	{
+		//capsuleのrayがboxに交差しているか
+		Crossing_func::getCrossingP_plane_line(Vector3(0, 1, 0), box->world_scale.x, cuppos_boxcoord, cupsca_boxcoord, t);
+	}
+
 	{
 		float dis_save = FLT_MAX;
-		//box座標系でのcapsuleの情報
-		Vector3 cuppos_boxcoord = vector3_quatrotate(capsule->world_position - box->world_position, box->world_orientation.conjugate());
-		Vector3 cupsca_boxcoord = vector3_quatrotate(Vector3(0, capsule->world_scale.y, 0), capsule->world_orientation * box->world_orientation.conjugate());
 
 		//boxのすべての辺とカプセルの線分の総当たりで最近点を求める
 		Vector3 vertex[4] = {

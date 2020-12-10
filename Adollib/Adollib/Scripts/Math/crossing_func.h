@@ -75,6 +75,38 @@ namespace Adollib {
 			Vector3& closestP
 		);
 
+		//:::::::::::::::::::
+		// AABBとRayの交差点を求める
+		// AABB_min ,AABB_max : AABBの対角2点
+		// ray_p : rayの始点
+		// ray_dir : rayの向き
+		// float :交差する最近点ray_p + ray_dir * min_t
+		// float :交差する最遠点ray_p + ray_dir * max_t
+		//交差しないときfalseを返す
+		//:::::::::::::::::::
+		const bool getCrossingP_AABB_ray(
+			const Vector3& AABB_min, const  Vector3& AABB_max,
+			const Vector3& ray_p, const  Vector3& ray_dir,
+			float& t_max,float& t_min
+		);
+
+		//:::::::::::::::::::
+		// OBBとRayの交差点を求める
+		// OBB_s , OBB_g : OBBの対角2点
+		// OBB_orient : OBBの向き
+		// ray_p : rayの始点
+		// ray_dir : rayの向き
+		// float :交差する最近点ray_p + ray_dir * min_t
+		// float :交差する最遠点ray_p + ray_dir * max_t
+		//交差しないときfalseを返す
+		//:::::::::::::::::::
+		const bool getCrossingP_AABB_ray(
+			const Vector3& OBB_s, const  Vector3& OBB_g,
+			const Quaternion& OBB_orient,
+			const Vector3& ray_p, const  Vector3& ray_dir,
+			float& t_max, float& t_min
+		);
+
 
 
 

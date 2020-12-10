@@ -67,3 +67,14 @@ const bool Crossing_func::getCrossingP_three_plane(
 
 	return true;
 }
+
+const bool getCrossingP_AABB_ray(
+	const Vector3& AABB_min, const  Vector3& AABB_max,
+	const Vector3& ray_p, const  Vector3& ray_dir,
+	float& t_max, float& t_min
+){
+
+
+
+
+}
