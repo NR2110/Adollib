@@ -381,6 +381,25 @@ inline Matrix Adollib::XMMATRIX_to_matrix(const DirectX::XMMATRIX& X) {
 	return V;
 }
 
+inline Matrix Adollib::matrix_cross(const Vector3& vec){
+	return Matrix(
+		0.0f, vec.z, -vec.y, 0,
+		-vec.z, 0.0f, vec.x, 0,
+		vec.y, -vec.x, 0.0f, 0,
+		0, 0, 0, 1
+	);
+}
+
+inline Matrix Adollib::matrix_scale(const Vector3& vec) {
+	return Matrix(
+		vec.x, 0, 0, 0,
+		0, vec.y, 0, 0,
+		0, 0, vec.z, 0,
+		0, 0, 0, 1
+	);
+}
+
+
 #else
 
 #pragma region operator

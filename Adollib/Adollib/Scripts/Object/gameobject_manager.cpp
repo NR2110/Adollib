@@ -146,10 +146,11 @@ void Gameobject_manager::update(Scenelist Sce) {
 	//親から子へupdateを呼ぶ
 	std::for_each(masters.begin(), masters.end(), [](object* ob) {ob->update_P_to_C(); });
 
-	Phyisics_manager::update();
-
 	//ヒエラルキー
 	Hierarchy::update_hierarchy(masters);
+
+	Phyisics_manager::update();
+
 
 	//親から子へワールド情報を更新
 	for (auto& m : masters) {

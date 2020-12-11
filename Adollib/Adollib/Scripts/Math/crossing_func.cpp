@@ -68,13 +68,41 @@ const bool Crossing_func::getCrossingP_three_plane(
 	return true;
 }
 
-const bool getCrossingP_AABB_ray(
-	const Vector3& AABB_min, const  Vector3& AABB_max,
+const bool Crossing_func::getCrossingP_AABB_ray(
+	const Vector3& AABB_pos, const Vector3& AABB_size,
 	const Vector3& ray_p, const  Vector3& ray_dir,
-	float& t_max, float& t_min
+	float& tmin, float& tmax
 ){
+	tmin = -FLT_MAX;
+	tmax = +FLT_MAX;
 
+	Vector3 axis[3] = {
+		{Vector3(1,0,0)},
+		{Vector3(0,1,0)},
+		{Vector3(0,0,1)}
+	};
 
+	for (int i = 0; i < 3; i++) {
+		float D = vector3_dot(axis[i], ray_dir);
+		float P = vector3_dot(axis[i], ray_p - AABB_pos);
+		{
+			//各軸の二つのslabにrayが交差するtを求める
+			float ood = 1.0f / D;
+			float t1 = (-AABB_size[i] - P) * ood;
+			float t2 = (+AABB_size[i] - P) * ood;
 
+			//もしt2のほうに大きい方を保存
+			if (t1 > t2) std::swap(t1, t2);
+
+			//tmin,tmaxを更新
+			tmin = std::max<float>(tmin, t1);
+			tmax = std::min<float>(tmax, t2);
+
+			//もしtmaxがtminより小さくなった時、rayはDOPと交差していない
+			if (tmin > tmax) return false;
+		}
+	}
+
+	return true;
 
 }

@@ -28,7 +28,7 @@ namespace Adollib {
 
 				bool is_fallable, //—‚¿‚È‚¢
 				bool is_kinematic, //‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
-				bool is_moveable,//“®‚©‚È‚¢	
+				bool is_moveable,//“®‚©‚È‚¢
 				bool is_hitable //Õ“Ë‚µ‚È‚¢
 			) :
 				inertial_mass(inertial_mass), //¿—Ê
@@ -40,7 +40,7 @@ namespace Adollib {
 
 				is_fallable(is_fallable), //—‚¿‚È‚¢
 				is_kinematic(is_kinematic), //‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
-				is_moveable(is_moveable),//“®‚©‚È‚¢	
+				is_moveable(is_moveable),//“®‚©‚È‚¢
 				is_hitable(is_hitable)
 			{};
 
@@ -107,7 +107,7 @@ namespace Adollib {
 			void update_inertial();
 
 			//::: collider:Component ‚Ì mass‚È‚Ç‚ª•ÏX‚³‚ê‚½‚Æ‚«‚ÉŒÄ‚Ô‚à‚Ì :::
-			// Collider‚©‚çî•ñ‚ÌŠl“¾ 
+			// Collider‚©‚çî•ñ‚ÌŠl“¾
 			void refresh_ALP_from_data();
 
 		};

@@ -9,7 +9,7 @@ namespace Adollib {
 	class Matrix {
 	public:
 
-		union 
+		union
 		{
 			struct {
 				float
@@ -69,7 +69,7 @@ namespace Adollib {
 		Matrix& operator-= (const Matrix& M);
 		Matrix& operator*= (const Matrix& M);
 		Matrix& operator*= (float S);
-		Matrix& operator/= (float S);	
+		Matrix& operator/= (float S);
 		bool operator== (const Matrix& M);
 		bool operator!= (const Matrix& M);
 
@@ -110,6 +110,10 @@ namespace Adollib {
 
 	//XMMATRIX‚©‚çmatrix‚Ö‚Ì•ÏŠ·
 	Matrix XMMATRIX_to_matrix(const DirectX::XMMATRIX& M);
+
+	Matrix matrix_cross(const Vector3& vec);
+
+	Matrix matrix_scale(const Vector3& vec);
 
 
 

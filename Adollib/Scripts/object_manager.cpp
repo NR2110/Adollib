@@ -71,8 +71,8 @@ namespace Adollib
 		else if (1) {
 			{
 				Gameobject* GO = Gameobject_manager::createSphere("stage");
-				GO->transform->local_pos = Vector3(0, -60, 0);
-				GO->transform->local_scale = Vector3(60, 60, 60);
+				GO->transform->local_pos = Vector3(0, -6000, 0);
+				GO->transform->local_scale = Vector3(6000, 6000, 6000);
 				GO->material->color = Vector4(1, 1, 1, 1);
 				Sphere* R = GO->addComponent<Sphere>();
 				//R->center = Vector3(1, 1, 1);

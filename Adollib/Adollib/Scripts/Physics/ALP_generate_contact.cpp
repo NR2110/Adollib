@@ -2,6 +2,8 @@
 
 #include "../Imgui/work_meter.h"
 
+#include "../Imgui/imgui_all.h"
+
 using namespace Adollib;
 using namespace Physics_function;
 using namespace Contacts;
@@ -620,34 +622,32 @@ bool Physics_function::generate_contact_sphere_box(const std::vector<ALP_Collide
 	if (center.z < -box_halfsize.z)closest_point.z = -box_halfsize.z;
 
 	float distance = (closest_point - center).norm_sqr(); //最近点と球中心の距離
-	if (sphere->world_scale.x - distance > FLT_EPSILON) { //float誤差も調整
-		Vector3 n = (sphere->world_position - vector3_trans(closest_point, rotate)).unit_vect(); //boxからsphereへのベクトル
-		if (vector3_dot(n, sphere->world_position - box->world_position) < 0)n *= -1;
+	if (sphere->world_scale.x - distance < FLT_EPSILON) return false; //衝突していなかったらfalse
 
-		if (pair.body[0]->ALPcollider->shape == box->shape) {
-			//body[0]　が　box
-			//body[1]　が　sphere
-			pair.contacts.addcontact(
-				sphere->world_scale.x - distance,
-				-n,
-				closest_point,
-				sphere->world_scale.x * vector3_quatrotate(-n, sphere->world_orientation.conjugate())
-			);
-		}
-		else {
-			//body[0]　が　sphere
-			//body[1]　が　box
-			pair.contacts.addcontact(
-				sphere->world_scale.x - distance,
-				+n,
-				sphere->world_scale.x * vector3_quatrotate(-n, sphere->world_orientation.conjugate()),
-				closest_point
-			);
-		}
-		return true;
+	Vector3 n = (sphere->world_position - vector3_trans(closest_point, rotate)).unit_vect(); //boxからsphereへのベクトル
+	if (vector3_dot(n, sphere->world_position - box->world_position) < 0)n *= -1;
+
+	if (pair.body[0]->ALPcollider->shape == box->shape) {
+		//body[0]　が　box
+		//body[1]　が　sphere
+		pair.contacts.addcontact(
+			sphere->world_scale.x - distance,
+			-n,
+			closest_point,
+			sphere->world_scale.x * vector3_quatrotate(-n, sphere->world_orientation.conjugate())
+		);
 	}
-
-	return false;
+	else {
+		//body[0]　が　sphere
+		//body[1]　が　box
+		pair.contacts.addcontact(
+			sphere->world_scale.x - distance,
+			+n,
+			sphere->world_scale.x * vector3_quatrotate(-n, sphere->world_orientation.conjugate()),
+			closest_point
+		);
+	}
+	return true;
 }
 #pragma endregion
 
@@ -880,25 +880,25 @@ bool Physics_function::generate_contact_box_box(const std::vector<ALP_Collider_m
 	SAT_TYPE smallest_case;	//衝突の種類
 	if (!sat_obb_obb(obbA, obbB, smallest_penetration, smallest_axis, smallest_case)) return false;
 
-	//obb1の頂点がobb0の面と衝突した場合
+	//obbBの頂点がobbAの面と衝突した場合
 	if (smallest_case == SAT_TYPE::POINTB_FACETA)
 	{
-		Vector3 d = obbB.world_position - obbA.world_position;	//obb0からobb1への相対位置
-		Vector3 n = obbA.u_axes[smallest_axis[0]];	//obb0の衝突面の法線と平行のobb0のローカル軸ベクトル
-		if (vector3_dot(n, d) < 0)	//obb0とobb1の位置関係より衝突面の法線ベクトルを決定する
+		Vector3 d = obbB.world_position - obbA.world_position;	//obbAからobbBへの相対位置
+		Vector3 Wn = obbA.u_axes[smallest_axis[0]];	//obbAの衝突面の法線と平行のobbAのローカル軸ベクトル
+		if (vector3_dot(Wn, d) < 0)	//obbAとobbBの位置関係より衝突面の法線ベクトルを決定する
 		{
-			n = n * -1.0f;
+			Wn = Wn * -1.0f;
 		}
-		n = n.unit_vect();
+		Wn = Wn.unit_vect();
 
-		//box1のローカル座標系での最近点(p1) obb1の8頂点のうちのどれか
+		//boxBのローカル座標系での最近点(p1) obb1の8頂点のうちのどれか
 		Vector3 p1 = obbB.half_width;	//obb1の各辺の長さは、obb1の重心から接触点(p)への相対位置の手がかりになる
 		//obb0とobb1の位置関係(d)より接触点(p)を求める
-		if (vector3_dot(obbB.u_axes[0], n) > 0) p1.x = -p1.x;
-		if (vector3_dot(obbB.u_axes[1], n) > 0) p1.y = -p1.y;
-		if (vector3_dot(obbB.u_axes[2], n) > 0) p1.z = -p1.z;
+		if (vector3_dot(obbB.u_axes[0], +Wn) > 0) p1.x = -p1.x;
+		if (vector3_dot(obbB.u_axes[1], +Wn) > 0) p1.y = -p1.y;
+		if (vector3_dot(obbB.u_axes[2], +Wn) > 0) p1.z = -p1.z;
 
-		//box0の逆行列の作成
+		//boxAの逆行列の作成
 		Matrix rotate, inverse_rotate;
 		rotate = boxA->world_orientation.get_rotate_matrix();
 		rotate._41 = boxA->world_position.x; //transpseの入力
@@ -907,11 +907,11 @@ bool Physics_function::generate_contact_box_box(const std::vector<ALP_Collider_m
 		rotate._44 = 1;
 		inverse_rotate = matrix_inverse(rotate);
 
-		//p1をobb0のローカル座標系へ
+		//p1をobbAのローカル座標系へ
 		Vector3 P = vector3_quatrotate(p1, boxB->world_orientation) + boxB->world_position;
 		Vector3 c = vector3_trans(P, inverse_rotate);
 
-		//obb0の最近点を求める
+		//obbAの最近点を求める
 		Vector3 p0 = c;
 		Vector3 box_halfsize = boxA->half_size * boxA->world_scale;
 		if (c.x > +box_halfsize.x)p0.x = +box_halfsize.x;
@@ -925,26 +925,27 @@ bool Physics_function::generate_contact_box_box(const std::vector<ALP_Collider_m
 
 		pair.contacts.addcontact(
 			smallest_penetration,
-			-n,
+			-Wn,
 			p0,
 			p1
 		);
 	}
-	//②obb0の頂点がobb1の面と衝突した場合
+	//obbAの頂点がobbBの面と衝突した場合
 	else if (smallest_case == SAT_TYPE::POINTA_FACETB)
 	{
 		Vector3 d = obbB.world_position - obbA.world_position;
-		Vector3 n = obbB.u_axes[smallest_axis[1]];
-		if (vector3_dot(n, d) < 0)
+		Vector3 Wn = obbB.u_axes[smallest_axis[1]];
+		if (vector3_dot(Wn, d) < 0)
 		{
-			n = n * -1.0f;
+			Wn = Wn * -1.0f;
 		}
-		n = n.unit_vect();
+		Wn = Wn.unit_vect();
 
 		Vector3 p0 = obbA.half_width;
-		if (vector3_dot(obbA.u_axes[0], -n) > 0) p0.x = -p0.x;
-		if (vector3_dot(obbA.u_axes[1], -n) > 0) p0.y = -p0.y;
-		if (vector3_dot(obbA.u_axes[2], -n) > 0) p0.z = -p0.z;
+		//obb0とobb1の位置関係(d)より接触点(p)を求める
+		if (vector3_dot(obbA.u_axes[0], -Wn) > 0) p0.x = -p0.x;
+		if (vector3_dot(obbA.u_axes[1], -Wn) > 0) p0.y = -p0.y;
+		if (vector3_dot(obbA.u_axes[2], -Wn) > 0) p0.z = -p0.z;
 
 		//box0の逆行列の作成
 		Matrix rotate, inverse_rotate;
@@ -976,7 +977,7 @@ bool Physics_function::generate_contact_box_box(const std::vector<ALP_Collider_m
 		}
 		pair.contacts.addcontact(
 			smallest_penetration,
-			-n,
+			-Wn,
 			p0,
 			p1
 		);
@@ -1041,16 +1042,35 @@ bool Physics_function::generate_contact_box_capsule(const std::vector<ALP_Collid
 
 	//boxの座標系で計算
 	Vector3 closest_box, closest_cap;
-	float capsule_t;
+	float capsule_t = FLT_MAX;
 
 	//box座標系でのcapsuleの情報
 	Vector3 cuppos_boxcoord = vector3_quatrotate(capsule->world_position - box->world_position, box->world_orientation.conjugate());
 	Vector3 cupsca_boxcoord = vector3_quatrotate(Vector3(0, capsule->world_scale.y, 0), capsule->world_orientation * box->world_orientation.conjugate());
+
+
+	static float LL_save = 0;
+	if (ImGui::Begin("NR_debug")) {
+		ImGui::Text("%f", LL_save);
+	}
+	ImGui::End();
+
+	bool is_crossing = false;
 	{
-		//capsuleのrayがboxに交差しているか
-		Crossing_func::getCrossingP_plane_line(Vector3(0, 1, 0), box->world_scale.x, cuppos_boxcoord, cupsca_boxcoord, t);
+		float tmax;
+		is_crossing = Crossing_func::getCrossingP_AABB_ray(
+			Vector3(0, 0, 0), box_halfsize,
+			cuppos_boxcoord, cupsca_boxcoord,
+			capsule_t, tmax
+		);
+		if (is_crossing) {
+			capsule_t = ALClamp(capsule_t, -1, 1);
+			closest_cap = cuppos_boxcoord + cupsca_boxcoord * capsule_t;
+		}
 	}
 
+	//線分がBoxと交差していなかったらBoxとCapsuleの最近点を求める
+	if (is_crossing == false)
 	{
 		float dis_save = FLT_MAX;
 
@@ -1112,6 +1132,7 @@ bool Physics_function::generate_contact_box_capsule(const std::vector<ALP_Collid
 	Vector3 n = (closest_cap - closest_box).unit_vect(); //boxからsphereへのベクトル boxcoord
 	Vector3 Wn = vector3_quatrotate(n, box->world_orientation); //worldcoord
 
+	LL_save = leng;
 	if (pair.body[0]->ALPcollider->shape == box->shape) {
 		//body[0]　が　box
 		//body[1]　が　sphere
@@ -1120,6 +1141,7 @@ bool Physics_function::generate_contact_box_capsule(const std::vector<ALP_Collid
 			-Wn,
 			closest_box,
 			(Vector3(0, capsule->world_scale.y, 0) * capsule_t) + vector3_quatrotate(-Wn, capsule->world_orientation.conjugate()) * capsule->world_scale.x
+			//vector3_quatrotate(vector3_quatrotate(closest_cap - n * capsule->world_scale.x, box->world_orientation.conjugate()) + box->world_position - capsule->world_position, capsule->world_orientation.conjugate())
 		);
 	}
 	else {
@@ -1128,7 +1150,8 @@ bool Physics_function::generate_contact_box_capsule(const std::vector<ALP_Collid
 		pair.contacts.addcontact(
 			leng,
 			+Wn,
-			(Vector3(0, capsule->world_scale.y, 0)) * capsule_t + vector3_quatrotate(-Wn, capsule->world_orientation.conjugate()) * capsule->world_scale.x,
+			//vector3_quatrotate(vector3_quatrotate(closest_cap - n * capsule->world_scale.x, box->world_orientation.conjugate()) + box->world_position - capsule->world_position, capsule->world_orientation.conjugate()),
+			(Vector3(0, capsule->world_scale.y, 0)* capsule_t) + vector3_quatrotate(-Wn, capsule->world_orientation.conjugate()) * capsule->world_scale.x,
 			closest_box
 		);
 	}

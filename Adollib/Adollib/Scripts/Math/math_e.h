@@ -13,6 +13,7 @@ namespace Adollib {
 
 #define ALmax(a,b) (a>b?a:b)
 #define ALmin(a,b) (a<b?a:b)
+#define ALClamp(a,min_,max_) (ALmin(ALmax(a,min_),max_))
 
 typedef unsigned char   u_char;
 typedef unsigned short  u_short;

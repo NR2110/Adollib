@@ -28,12 +28,11 @@ Matrix ALP_Physics::inverse_inertial_tensor() const {
 	Matrix inverse_inertial_tensor;
 	if (is_movable()) {
 		inverse_inertial_tensor = matrix_inverse(inertial_tensor);
-		if (1) {
-			Matrix rotation, transposed_rotation;
-			rotation = ALP_coll->world_orientation.get_rotate_matrix();
-			transposed_rotation = matrix_trans(rotation);
-			inverse_inertial_tensor = transposed_rotation * inverse_inertial_tensor * rotation;
-		}
+
+		Matrix rotation, transposed_rotation;
+		rotation = ALP_coll->world_orientation.get_rotate_matrix();
+		transposed_rotation = matrix_trans(rotation);
+		inverse_inertial_tensor = rotation * inverse_inertial_tensor * transposed_rotation;
 	}
 	else {
 		inverse_inertial_tensor = matrix_identity();
@@ -65,8 +64,6 @@ void ALP_Physics::apply_external_force(float duration) {
 		linear_acceleration += accumulated_force / inertial_mass;
 		linear_velocity += linear_acceleration * duration;
 
-
-
 		//各回転に加える力(accumulated_torque)から加速度を出して角速度を更新する
 		Matrix inverse_inertia_tensor = matrix_inverse(inertial_tensor);
 		Matrix rotation = ALP_coll->local_orientation.get_rotate_matrix();
@@ -88,14 +85,14 @@ void ALP_Physics::apply_external_force(float duration) {
 }
 void ALP_Physics::integrate(float duration) {
 
-	if(is_movable() == false)return;
+	if (is_movable() == false)return;
 
 	//位置の更新
 	if (linear_velocity.norm() >= FLT_EPSILON)
 		ALP_coll->world_position += linear_velocity * duration;
 
-		ALP_coll->world_orientation *= quaternion_radian_axis(anglar_velocity.norm_sqr() * duration * 0.5f, anglar_velocity.unit_vect());
-		ALP_coll->world_orientation = ALP_coll->world_orientation.unit_vect();
+	ALP_coll->world_orientation *= quaternion_radian_axis(anglar_velocity.norm_sqr() * duration * 0.5f, anglar_velocity.unit_vect());
+	ALP_coll->world_orientation = ALP_coll->world_orientation.unit_vect();
 
 }
 
@@ -123,8 +120,8 @@ void ALP_Physics::update_inertial() {
 		break;
 	case ALP_Collider_shape::Capsule:
 		inertial_tensor = matrix_identity();
-		inertial_tensor._11 = 0.25f * inertial_mass * Wsize.x * Wsize.x + 0.08333333333f * inertial_mass * Wsize.y * Wsize.y * 4;
-		inertial_tensor._22 = 0.25f * inertial_mass * Wsize.x * Wsize.x + 0.08333333333f * inertial_mass * Wsize.y * Wsize.y * 4;
+		inertial_tensor._11 = 0.25f * inertial_mass * Wsize.x * Wsize.x + 0.08333333333f * inertial_mass * (Wsize.y) * (Wsize.y) * 4;
+		inertial_tensor._22 = 0.25f * inertial_mass * Wsize.x * Wsize.x + 0.08333333333f * inertial_mass * (Wsize.y) * (Wsize.y) * 4;
 		inertial_tensor._33 = 0.5f * inertial_mass * Wsize.x * Wsize.x;
 
 		break;

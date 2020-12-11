@@ -52,6 +52,7 @@ void Gameobject::update_imgui_P_to_C() {
 				ImGui::DragFloat3("scale", vec3, ave * 0.01f, 0, 0, "%.2f");
 				transform->local_scale = Vector3(vec3[0], vec3[1], vec3[2]);
 			}
+			ImGui::Text("Quaternion : %f,%f,%f,%f", transform->local_orient.x, transform->local_orient.y, transform->local_orient.z, transform->local_orient.w);
 
 			ImGui::TreePop();
 		}

@@ -85,9 +85,9 @@ namespace Adollib {
 		//Œğ·‚µ‚È‚¢‚Æ‚«false‚ğ•Ô‚·
 		//:::::::::::::::::::
 		const bool getCrossingP_AABB_ray(
-			const Vector3& AABB_min, const  Vector3& AABB_max,
+			const Vector3& AABB_pos, const  Vector3& AABB_size,
 			const Vector3& ray_p, const  Vector3& ray_dir,
-			float& t_max,float& t_min
+			float& tmin,float& tmax
 		);
 
 		//:::::::::::::::::::
@@ -100,11 +100,11 @@ namespace Adollib {
 		// float :Œğ·‚·‚éÅ‰““_ray_p + ray_dir * max_t
 		//Œğ·‚µ‚È‚¢‚Æ‚«false‚ğ•Ô‚·
 		//:::::::::::::::::::
-		const bool getCrossingP_AABB_ray(
+		const bool getCrossingP_OBB_ray(
 			const Vector3& OBB_s, const  Vector3& OBB_g,
 			const Quaternion& OBB_orient,
 			const Vector3& ray_p, const  Vector3& ray_dir,
-			float& t_max, float& t_min
+			float& tmin, float& tmax
 		);
 
 

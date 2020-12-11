@@ -15,6 +15,8 @@ using namespace Adollib;
 using namespace Physics_function;
 using namespace Contacts;
 
+#define Draw_Contact
+
 //::: staticƒƒ“ƒo‚Ì‰Šú‰» :::::
 namespace Adollib
 {
@@ -47,7 +49,7 @@ namespace Adollib
 	int Phyisics_manager::solver_iterations = Physics_manager_default::solver_iterations; //Õ“Ë‚Ì¸“x
 	bool Phyisics_manager::hit_backfaces_flag = Physics_manager_default::hit_backfaces_flag;//mesh‚ÌŒã‚ë‚©‚çÕ“Ë‚·‚é‚©
 
-	float Phyisics_manager::timeStep = Physics_manager_default::timeStep;
+	float Phyisics_manager::timeStep = 0.016f;
 
 	bool Phyisics_manager::is_draw_collider = false;
 	bool Phyisics_manager::is_draw_dop = false;
@@ -135,6 +137,7 @@ bool Phyisics_manager::update(Scenelist Sce)
 	solv_resolve(ALP_colliders[Sce]);
 	resolve_gameobject(ALP_colliders[Sce]);
 
+#ifdef Draw_Contact
 	static bool init = true;
 	static const int size = 100;
 	static Gameobject* debug_go[size];
@@ -154,16 +157,19 @@ bool Phyisics_manager::update(Scenelist Sce)
 
 	int count = 0;
 	for (const auto& p : pairs) {
-		count += 2;
-		if (count > size)break;
-		const auto* coll0 = (*p.body[0]->ALPcollider->coll_itr)->transform;
-		const auto* coll1 = (*p.body[1]->ALPcollider->coll_itr)->transform;
+		for (int i = 0; i < p.contacts.contact_num; i++) {
+			count += 2;
+			if (count > size)break;
+			const auto* coll0 = (*p.body[0]->ALPcollider->coll_itr)->transform;
+			const auto* coll1 = (*p.body[1]->ALPcollider->coll_itr)->transform;
 
-		debug_go[count - 1]->transform->local_pos = vector3_quatrotate((p.contacts.contactpoints->point[0]/* * coll0->scale*/), coll0->orientation) + coll0->position;
-		debug_go[count - 2]->transform->local_pos = vector3_quatrotate((p.contacts.contactpoints->point[1]/* * coll1->scale*/), coll1->orientation) + coll1->position;
-		int adfsdg = 0;
+			debug_go[count - 1]->transform->local_pos = vector3_quatrotate((p.contacts.contactpoints[i].point[0]/* * coll0->scale*/), coll0->orientation) + coll0->position;
+			debug_go[count - 2]->transform->local_pos = vector3_quatrotate((p.contacts.contactpoints[i].point[1]/* * coll1->scale*/), coll1->orientation) + coll1->position;
+			int adfsdg = 0;
+		}
 	}
 
+#endif // DEBUG
 	return true;
 
 }

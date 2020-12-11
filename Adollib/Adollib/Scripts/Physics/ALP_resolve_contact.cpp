@@ -98,6 +98,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 			// 継続の衝突の場合反発係数を0にする
 			float restitution = (pair.type == Pairtype::new_pair ? 0.5f * (ALPphysics[0]->restitution + ALPphysics[1]->restitution) : 0.0f);
 
+#if 1
 			//衝突時のそれぞれの速度
 			Vector3 pdota;
 			pdota = vector3_cross(ALPphysics[0]->anglar_velocity, rA);
@@ -138,9 +139,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 				cp.constraint[0].jacDiagInv = 1.0f / denominator; //Baraff1997(8-18)の分母
 				cp.constraint[0].rhs = -(1.0f + restitution) * vector3_dot(axis, vrel); //Baraff1997(8-18)の分子
 
-				if (0.0f < cp.distance - Phyisics_manager::slop) {
+				if (0.0f < cp.distance - Phyisics_manager::slop)
 					cp.constraint[0].rhs += (Phyisics_manager::bias * (cp.distance - Phyisics_manager::slop)) / Phyisics_manager::timeStep; //めり込みを直す力
-				}
 
 				cp.constraint[0].rhs *= cp.constraint[0].jacDiagInv;
 				cp.constraint[0].lowerlimit = 0.0f;
@@ -162,10 +162,10 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 				denominator = term1 + term2 + term3 + term4;
 
 				cp.constraint[1].jacDiagInv = 1.0f / denominator; //Baraff1997(8-18)の分母
-				cp.constraint[1].rhs = -(1.0f + restitution) * vector3_dot(axis, vrel); //Baraff1997(8-18)の分子
+				cp.constraint[1].rhs = -vector3_dot(axis, vrel); //Baraff1997(8-18)の分子
 				cp.constraint[1].rhs *= cp.constraint[1].jacDiagInv;
 				cp.constraint[1].lowerlimit = 0.0f;
-				cp.constraint[1].upperlimit = FLT_MAX;
+				cp.constraint[1].upperlimit = 0;
 				cp.constraint[1].axis = axis;
 			}
 
@@ -182,12 +182,80 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 				term4 = vector3_dot(axis, tB);
 				denominator = term1 + term2 + term3 + term4;
 				cp.constraint[2].jacDiagInv = 1.0f / denominator; //Baraff1997(8-18)の分母?
-				cp.constraint[2].rhs = -(1.0f + restitution) * vector3_dot(axis, vrel); //Baraff1997(8-18)の分子
+				cp.constraint[2].rhs = -vector3_dot(axis, vrel); //Baraff1997(8-18)の分子
 				cp.constraint[2].rhs *= cp.constraint[2].jacDiagInv;
 				cp.constraint[2].lowerlimit = 0.0f;
-				cp.constraint[2].upperlimit = FLT_MAX;
+				cp.constraint[2].upperlimit = 0;
 				cp.constraint[2].axis = axis;
 			}
+#endif
+#if 0
+			float L = solverbody[0]->inv_mass + solverbody[1]->inv_mass;
+			Matrix K = matrix_scale(Vector3(L))-(
+				matrix_cross(rA) * solverbody[0]->inv_inertia * matrix_cross(rA) +
+				matrix_cross(rB) * solverbody[1]->inv_inertia * matrix_cross(rB)
+				);
+
+			Vector3 velocityA = ALPphysics[0]->linear_velocity + vector3_cross(ALPphysics[0]->anglar_velocity, rA);
+			Vector3 velocityB = ALPphysics[1]->linear_velocity + vector3_cross(ALPphysics[1]->anglar_velocity, rB);
+			Vector3 relativeVelocity = velocityA - velocityB; //相対速度
+
+			//Vector3
+			//	tangent1, //normalに対するz方向
+			//	tangent2; //normalに対するx方向
+
+			CalcTangentVector(cp.normal, tangent1, tangent2);
+
+			// Normal
+			{
+				Vector3 axis = cp.normal;
+				float denom =  + vector3_dot(vector3_trans(axis, K), axis);
+				if (fabsf(1 - denom * cp.constraint[2].jacDiagInv) > FLT_EPSILON) {
+					int dafsgdf = 0;
+				}
+				cp.constraint[0].jacDiagInv = 1.0f / denom;
+				cp.constraint[0].rhs = -(1.0f + restitution) * vector3_dot(relativeVelocity, axis);
+
+				if (0.0f < cp.distance - Phyisics_manager::slop) {
+					cp.constraint[0].rhs += (Phyisics_manager::bias * (cp.distance - Phyisics_manager::slop)) / Phyisics_manager::timeStep; //めり込みを直す力
+				}
+
+				cp.constraint[0].rhs *= cp.constraint[0].jacDiagInv;
+				cp.constraint[0].lowerlimit = 0.0f;
+				cp.constraint[0].upperlimit = FLT_MAX;
+				cp.constraint[0].axis = axis;
+			}
+
+			// Tangent1
+			{
+				Vector3 axis = tangent1;
+				float denom =  + vector3_dot(vector3_trans(axis, K), axis);
+				if (fabsf(1 - denom * cp.constraint[2].jacDiagInv) > FLT_EPSILON) {
+					int dafsgdf = 0;
+				}
+				cp.constraint[1].jacDiagInv = 1.0f / denom;
+				cp.constraint[1].rhs = -vector3_dot(relativeVelocity, axis);
+				cp.constraint[1].rhs *= cp.constraint[1].jacDiagInv;
+				cp.constraint[1].lowerlimit = 0.0f;
+				cp.constraint[1].upperlimit = 0.0f;
+				cp.constraint[1].axis = axis;
+			}
+
+			// Tangent2
+			{
+				Vector3 axis = tangent2;
+				float denom =  + vector3_dot(vector3_trans(axis, K), axis);
+				if (fabsf(1 - denom * cp.constraint[2].jacDiagInv) > FLT_EPSILON) {
+					int dafsgdf = 0;
+				}
+				cp.constraint[2].jacDiagInv = 1.0f / denom;
+				cp.constraint[2].rhs = -vector3_dot(relativeVelocity, axis);
+				cp.constraint[2].rhs *= cp.constraint[2].jacDiagInv;
+				cp.constraint[2].lowerlimit = 0.0f;
+				cp.constraint[2].upperlimit = 0.0f;
+				cp.constraint[2].axis = axis;
+			}
+#endif
 
 		}
 	}
@@ -210,9 +278,6 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 
 			for (int k = 0; k < 3; k++) {
 				float deltaImpulse = cp.constraint[k].accuminpulse;
-				if (deltaImpulse > 1.8) {
-					int afsd = 0;
-				}
 				solverbody[0]->delta_LinearVelocity += deltaImpulse * solverbody[0]->inv_mass * cp.constraint[k].axis;
 				solverbody[0]->delta_AngulaVelocity += deltaImpulse * vector3_trans(vector3_cross(rA, cp.constraint[k].axis), solverbody[0]->inv_inertia);
 				solverbody[1]->delta_LinearVelocity -= deltaImpulse * solverbody[1]->inv_mass * cp.constraint[k].axis;
@@ -247,12 +312,12 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 					delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngulaVelocity, rB);
 					delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
 					float old_impulse = constraint.accuminpulse;
-					constraint.accuminpulse = old_impulse + delta_impulse > constraint.lowerlimit ? (old_impulse + delta_impulse < constraint.upperlimit ? old_impulse + delta_impulse : constraint.upperlimit) : constraint.lowerlimit;
+					constraint.accuminpulse = ALClamp(old_impulse + delta_impulse, constraint.lowerlimit, constraint.upperlimit);
 					delta_impulse = constraint.accuminpulse - old_impulse;
 					solverbody[0]->delta_LinearVelocity += delta_impulse * solverbody[0]->inv_mass * constraint.axis;
-					solverbody[0]->delta_AngulaVelocity += vector3_trans(vector3_cross(rA, constraint.axis * delta_impulse), solverbody[0]->inv_inertia);
+					solverbody[0]->delta_AngulaVelocity += delta_impulse * vector3_trans(vector3_cross(rA, constraint.axis), solverbody[0]->inv_inertia);
 					solverbody[1]->delta_LinearVelocity -= delta_impulse * solverbody[1]->inv_mass * constraint.axis;
-					solverbody[1]->delta_AngulaVelocity -= vector3_trans(vector3_cross(rB, constraint.axis * delta_impulse), solverbody[1]->inv_inertia);
+					solverbody[1]->delta_AngulaVelocity -= delta_impulse * vector3_trans(vector3_cross(rB, constraint.axis), solverbody[1]->inv_inertia);
 				}
 
 				float max_friction = pair.contacts.friction * fabsf(cp.constraint[0].accuminpulse);
@@ -269,12 +334,12 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 					delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngulaVelocity, rB);
 					delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
 					float old_impulse = constraint.accuminpulse;
-					constraint.accuminpulse = old_impulse + delta_impulse > constraint.lowerlimit ? (old_impulse + delta_impulse < constraint.upperlimit ? old_impulse + delta_impulse : constraint.upperlimit) : constraint.lowerlimit;
+					constraint.accuminpulse = ALClamp(old_impulse + delta_impulse, constraint.lowerlimit, constraint.upperlimit);
 					delta_impulse = constraint.accuminpulse - old_impulse;
 					solverbody[0]->delta_LinearVelocity += delta_impulse * solverbody[0]->inv_mass * constraint.axis;
-					solverbody[0]->delta_AngulaVelocity += vector3_trans(vector3_cross(rA, constraint.axis * delta_impulse), solverbody[0]->inv_inertia);
+					solverbody[0]->delta_AngulaVelocity += delta_impulse * vector3_trans(vector3_cross(rA, constraint.axis), solverbody[0]->inv_inertia);
 					solverbody[1]->delta_LinearVelocity -= delta_impulse * solverbody[1]->inv_mass * constraint.axis;
-					solverbody[1]->delta_AngulaVelocity -= vector3_trans(vector3_cross(rB, constraint.axis * delta_impulse), solverbody[1]->inv_inertia);
+					solverbody[1]->delta_AngulaVelocity -= delta_impulse * vector3_trans(vector3_cross(rB, constraint.axis), solverbody[1]->inv_inertia);
 				}
 
 
@@ -286,12 +351,12 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 					delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngulaVelocity, rB);
 					delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
 					float old_impulse = constraint.accuminpulse;
-					constraint.accuminpulse = old_impulse + delta_impulse > constraint.lowerlimit ? (old_impulse + delta_impulse < constraint.upperlimit ? old_impulse + delta_impulse : constraint.upperlimit) : constraint.lowerlimit;
+					constraint.accuminpulse = ALClamp(old_impulse + delta_impulse, constraint.lowerlimit, constraint.upperlimit);
 					delta_impulse = constraint.accuminpulse - old_impulse;
 					solverbody[0]->delta_LinearVelocity += delta_impulse * solverbody[0]->inv_mass * constraint.axis;
-					solverbody[0]->delta_AngulaVelocity += vector3_trans(vector3_cross(rA, constraint.axis * delta_impulse), solverbody[0]->inv_inertia);
+					solverbody[0]->delta_AngulaVelocity += delta_impulse * vector3_trans(vector3_cross(rA, constraint.axis), solverbody[0]->inv_inertia);
 					solverbody[1]->delta_LinearVelocity -= delta_impulse * solverbody[1]->inv_mass * constraint.axis;
-					solverbody[1]->delta_AngulaVelocity -= vector3_trans(vector3_cross(rB, constraint.axis * delta_impulse), solverbody[1]->inv_inertia);
+					solverbody[1]->delta_AngulaVelocity -= delta_impulse * vector3_trans(vector3_cross(rB, constraint.axis), solverbody[1]->inv_inertia);
 				}
 
 
