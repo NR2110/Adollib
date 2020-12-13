@@ -7,32 +7,32 @@ namespace Adollib {
 	class Vector3;
 	class Matrix;
 
-	class Quaternion {
-	public:
+	class Quaternion : public DirectX::XMFLOAT4 {
+		//public:
 
-		float x;
-		float y;
-		float z;
-		float w;
+		//	float x;
+		//	float y;
+		//	float z;
+		//	float w;
 
 
 	private:
 
 	public:
 
-		Quaternion();
-		Quaternion(DirectX::XMFLOAT3);
-		Quaternion(Vector3);
+		Quaternion()noexcept;
+		Quaternion(DirectX::XMFLOAT3)noexcept;
+		Quaternion(Vector3)noexcept;
 		//::::::::::
 		// x, y, z
 		//::::::::::
-		Quaternion(float x, float y, float z);
+		Quaternion(float x, float y, float z)noexcept;
 		//::::::::::
 		// w, x, y, z
 		//::::::::::
-		Quaternion(float w, float x, float y, float z);
+		Quaternion(float w, float x, float y, float z)noexcept;
 
-		Quaternion(const Quaternion& Q);
+		Quaternion(const Quaternion& Q)noexcept;
 		~Quaternion() {}
 
 		Quaternion operator+(const Quaternion&) const;

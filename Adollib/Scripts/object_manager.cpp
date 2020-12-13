@@ -34,7 +34,7 @@ namespace Adollib
 			normal_go->material->color = Vector4(1, 0, 0, 1);
 		}
 
-#if 1
+#if 0
 		if (1) {
 			{
 				Gameobject* GO = Gameobject_manager::createCube("stage");

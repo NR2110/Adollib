@@ -18,10 +18,9 @@ namespace Adollib {
 		return M - i * F;
 	};
 
-	Vector4 Al_Global::get_gaming(int time, float change_time, float min, float max ) {
-		Vector4 color;
+	Vector3 Al_Global::get_gaming(int time, float change_time, float min, float max ) {
+		Vector3 color;
 		float T = time;
-		color.w = 1;
 
 		color.x = fabsf(get_P_by_f(T, change_time * 2) - change_time) / change_time;
 
@@ -31,11 +30,11 @@ namespace Adollib {
 		T += change_time * 0.3333333f;
 		color.z = fabsf(get_P_by_f(T, change_time * 2) - change_time) / change_time;
 
-		color = color * 3 - Vector4(1, 1, 1, 0);
+		color = color * 3 - Vector3(1, 1, 1);
 		color.y = 1 - color.y;
 
 		color *= (max - min);
-		color += Vector4(min, min, min, 0);
+		color += Vector3(min, min, min);
 
 		return color;
 

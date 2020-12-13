@@ -41,6 +41,7 @@ void Physics_function::generate_contact(std::vector<Contacts::Contact_pair>& pai
 		if (shapeA->shape == ALP_Collider_shape::Capsule) {
 			if (shapeB->shape == ALP_Collider_shape::Sphere)generate_contact_sphere_capsule(meshB, meshA, pair);
 			if (shapeB->shape == ALP_Collider_shape::BOX)generate_contact_box_capsule(meshB, meshA, pair);
+			if (shapeB->shape == ALP_Collider_shape::Capsule)generate_contact_capsule_capsule(meshA, meshB, pair);
 		}
 		if (shapeA->shape == ALP_Collider_shape::Plane) {
 
@@ -848,6 +849,7 @@ bool Physics_function::generate_contact_box_plane(const std::vector<ALP_Collider
 }
 #pragma endregion
 
+//TODO:なぜかバグる
 #pragma region BOX-BOX
 
 bool Physics_function::generate_contact_box_box(const std::vector<ALP_Collider_mesh>::iterator& bA, const std::vector<ALP_Collider_mesh>::iterator& bB, Contacts::Contact_pair& pair) {
@@ -1151,7 +1153,7 @@ bool Physics_function::generate_contact_box_capsule(const std::vector<ALP_Collid
 			leng,
 			+Wn,
 			//vector3_quatrotate(vector3_quatrotate(closest_cap - n * capsule->world_scale.x, box->world_orientation.conjugate()) + box->world_position - capsule->world_position, capsule->world_orientation.conjugate()),
-			(Vector3(0, capsule->world_scale.y, 0)* capsule_t) + vector3_quatrotate(-Wn, capsule->world_orientation.conjugate()) * capsule->world_scale.x,
+			(Vector3(0, capsule->world_scale.y, 0) * capsule_t) + vector3_quatrotate(-Wn, capsule->world_orientation.conjugate()) * capsule->world_scale.x,
 			closest_box
 		);
 	}
@@ -1165,6 +1167,46 @@ bool Physics_function::generate_contact_box_mesh(const std::vector<ALP_Collider_
 }
 #pragma endregion
 
+
+#pragma region Capsule-Capsule
+bool Physics_function::generate_contact_capsule_capsule(const std::vector<ALP_Collider_mesh>::iterator& SA, const std::vector<ALP_Collider_mesh>::iterator& SB, Contacts::Contact_pair& pair) {
+	const std::list<ALP_Collider>::iterator& collA = SA->ALPcollider;
+	const std::list<ALP_Collider>::iterator& collB = SB->ALPcollider;
+
+	Vector3 Avec_Wco = vector3_quatrotate(Vector3(0, 1, 0), collA->world_orientation) * collA->world_scale.y;
+	Vector3 Bvec_Wco = vector3_quatrotate(Vector3(0, 1, 0), collB->world_orientation) * collB->world_scale.y;
+
+	float t, s;
+	Closest_func::get_closestP_two_segment(
+		collA->world_position - Avec_Wco,
+		collA->world_position + Avec_Wco,
+		collB->world_position - Bvec_Wco,
+		collB->world_position + Bvec_Wco,
+		s, t
+	);
+
+	Vector3 pA_Wco = collA->world_position + Avec_Wco * (s * 2 - 1);
+	Vector3 pB_Wco = collB->world_position + Bvec_Wco * (t * 2 - 1);
+
+	//pB から pA　方向への法線 Acoord
+	Vector3 Wn = pA_Wco - pB_Wco;
+	float length = Wn.norm_sqr();
+	Wn = Wn.unit_vect();
+
+	if (length < collA->world_scale.x + collB->world_scale.x) {
+		//衝突していたらContactオブジェクトを生成する
+		pair.contacts.addcontact(
+			collA->world_scale.x + collB->world_scale.x - length,
+			Wn,
+			Vector3(0, 1, 0) * collA->world_scale.y * (s * 2 - 1) + collA->world_scale.x * vector3_quatrotate(-Wn, collA->world_orientation.conjugate()),
+			Vector3(0, 1, 0) * collB->world_scale.y * (t * 2 - 1) + collB->world_scale.x * vector3_quatrotate(+Wn, collB->world_orientation.conjugate())
+		);
+		return true;
+	}
+
+	return false;
+}
+#pragma endregion
 
 #pragma region MESH-PLANE
 bool Physics_function::generate_contact_mesh_plane(const std::vector<ALP_Collider_mesh>::iterator& S1, const std::vector<ALP_Collider_mesh>::iterator& S2, Contacts::Contact_pair& pair) {

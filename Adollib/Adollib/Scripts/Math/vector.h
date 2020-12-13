@@ -10,8 +10,8 @@ namespace Adollib {
 	class Quaternion;
 
 	//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-	#pragma region vector2
-	//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+#pragma region vector2
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	class vector2 {
 	private:
 		// îÒconstÇÃåvéZÇµÇΩÇÁïœçXÇ™Ç†ÇÈÇ‹Ç≈sqrtÇégÇÌÇ»Ç≠ÇƒçœÇﬁ
@@ -66,34 +66,10 @@ namespace Adollib {
 	//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 	//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-    #pragma region vector3
-	//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-	class Vector3 {
+#pragma region vector3
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+	class Vector3 : public DirectX::XMFLOAT3 {
 
-	public:
-		union {
-			struct {
-				float x;
-				float y;
-				float z;
-			};
-
-			struct {
-				DirectX::XMFLOAT3 xyz;
-			};
-
-			struct {
-				vector2 xy;
-				float z;
-			};
-
-			struct {
-				float x;
-				vector2 yz;
-			};
-
-
-		};
 	private:
 	public:
 		//Vector3() :x(0), y(0), z(0) {};
@@ -101,11 +77,11 @@ namespace Adollib {
 		//Vector3(vector2 xy, float z) :x(xy.x), y(xy.y), z(z) {};
 		//explicit Vector3(float v) :x(v), y(v), z(v) {};
 		//Vector3(DirectX::XMFLOAT3 xm) :x(xm.x), y(xm.y), z(xm.z) {};
-		constexpr Vector3() :x(0), y(0), z(0) {};
-		constexpr Vector3(float x, float y, float z) :x(x), y(y), z(z) {};
-		constexpr Vector3(vector2 xy, float z) :x(xy.x), y(xy.y), z(z) {};
-		constexpr explicit Vector3(float v) :x(v), y(v), z(v) {};
-		constexpr Vector3(DirectX::XMFLOAT3 xm) :x(xm.x), y(xm.y), z(xm.z) {};
+		constexpr Vector3() noexcept :XMFLOAT3(0, 0, 0) {};
+		constexpr Vector3(float x, float y, float z) noexcept :XMFLOAT3(x, y, z) {};
+		constexpr Vector3(vector2 xy, float z) noexcept :XMFLOAT3(xy.x, xy.y, z) {};
+		constexpr explicit Vector3(float v) noexcept :XMFLOAT3(v, v, v) {};
+		constexpr Vector3(DirectX::XMFLOAT3 xm) noexcept :XMFLOAT3(xm.x, xm.y, xm.z) {};
 
 		//vector3(n_vector2 V) :x(V.x), y(V.y), z(0) {};
 
@@ -177,29 +153,16 @@ namespace Adollib {
 	//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 	//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-	#pragma region vector4
-	//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-	class Vector4 {
+#pragma region vector4
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+	class Vector4 : public DirectX::XMFLOAT4 {
 
-	public:
-		union {
-			struct {
-				float x;
-				float y;
-				float z;
-				float w;
-			};
-			struct {
-				Vector3 xyz;
-				float w;
-			};
-		};
 	private:
 
 	public:
-		Vector4() :x(0), y(0), z(0), w(0) {};
-		Vector4(Vector3 xyz, float w) :x(xyz.x), y(xyz.y), z(xyz.z), w(w) {};
-		Vector4(float x, float y, float z, float w) :x(x), y(y), z(z), w(w) {};
+		Vector4() noexcept :XMFLOAT4(0, 0, 0, 0) {};
+		Vector4(Vector3 xyz, float w)noexcept :XMFLOAT4(xyz.x, xyz.y, xyz.z, w) {};
+		Vector4(float x, float y, float z, float w)noexcept :XMFLOAT4(x, y, z, w) {};
 		//vector3(n_vector2 V) :x(V.x), y(V.y), z(0) {};
 
 		Vector4 operator+ () const;
