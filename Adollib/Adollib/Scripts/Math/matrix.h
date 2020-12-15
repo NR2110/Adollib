@@ -120,4 +120,8 @@ namespace Adollib {
 
 }
 
+#if _DEBUG
 #include "matrix_e.h"
+#else
+#include "matrixSIM_e.h"
+#endif

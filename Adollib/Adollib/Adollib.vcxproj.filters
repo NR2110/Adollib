@@ -498,6 +498,15 @@
     <ClInclude Include="Scripts\Imgui\inspector.h">
       <Filter>00_Adollib\33_object</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Math\vectorSIM_e.h">
+      <Filter>00_Adollib\11_math</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Math\quaternionSIM_e.h">
+      <Filter>00_Adollib\11_math</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Math\matrixSIM_e.h">
+      <Filter>00_Adollib\11_math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="DefaultShader\default.hlsli">

@@ -172,7 +172,6 @@ inline Vector3 Vector3::unit_vect() const {
 	return R / V;
 }
 
-#if 1
 inline float Adollib::vector3_distance_sqr(const Vector3& P, const Vector3& Q) {
 	return
 		sqrtf((P.x - Q.x) * (P.x - Q.x) + (P.y - Q.y) * (P.y - Q.y) + (P.z - Q.z) * (P.z - Q.z));
@@ -241,7 +240,7 @@ inline Vector3 Adollib::vector3_look_at(const Vector3& P, const Vector3& Q) {
 
 inline Vector3 Adollib::vector3_slerp(const Vector3& V1, const Vector3& V2, float R) {
 	Vector3 g = vector3_cross(V1, V2);
-	float radian = vector3_radian(V1, V2) / 2.0f;
+	float radian = vector3_radian(V1, V2) * 0.5f;
 
 	Quaternion F;
 	F.w = cosf(radian * R);
@@ -251,116 +250,6 @@ inline Vector3 Adollib::vector3_slerp(const Vector3& V1, const Vector3& V2, floa
 
 	return vector3_quatrotate(V1, F);
 }
-#else
-
-inline float Adollib::vector3_distance_sqr(const vector3& P, const vector3& Q) {
-	__m128 Psim = _mm_set_ps(P.x, P.y, P.z, 0);
-	__m128 Qsim = _mm_set_ps(Q.x, Q.y, Q.z, 0);
-	__declspec(align(16)) float value[4];
-
-	_mm_store_ps(value, _mm_mul_ps(_mm_sub_ps(Psim, Qsim), _mm_sub_ps(Psim, Qsim)));
-
-	return sqrtf(value[3] + value[2] + value[1] + value[0]);
-}
-
-inline float Adollib::vector3_distance(const vector3& P, const vector3& Q) {
-	__m128 Psim = _mm_set_ps(P.x, P.y, P.z, 0);
-	__m128 Qsim = _mm_set_ps(Q.x, Q.y, Q.z, 0);
-	__declspec(align(16)) float value[4];
-
-	_mm_store_ps(value, _mm_mul_ps(_mm_sub_ps(Psim, Qsim), _mm_sub_ps(Psim, Qsim)));
-
-	return (value[3] + value[2] + value[1] + value[0]);
-}
-
-
-inline float Adollib::vector3_dot(const vector3& P, const vector3& Q) {
-	__m128 Psim = _mm_set_ps(P.x, P.y, P.z, 0);
-	__m128 Qsim = _mm_set_ps(Q.x, Q.y, Q.z, 0);
-	__declspec(align(16)) float value[4];
-
-	_mm_store_ps(value, _mm_mul_ps(Psim, Qsim));
-
-	return (value[3] + value[2] + value[1] + value[0]);
-}
-
-
-inline vector3 Adollib::vector3_cross(const vector3& P, const vector3& Q) {
-	vector3 R;
-
-	__m128 Psim = _mm_set_ps(P.x, P.y, P.z, 0);
-	__m128 Qsim = _mm_set_ps(Q.x, Q.y, Q.z, 0);
-	__declspec(align(16)) float value1[4];
-	__declspec(align(16)) float value2[4];
-
-	_mm_store_ps(value2, _mm_mul_ps(Psim, _mm_shuffle_ps(Qsim, Qsim, _MM_SHUFFLE(1, 3, 2, 0))));
-	_mm_store_ps(value1, _mm_mul_ps(Psim, _mm_shuffle_ps(Qsim, Qsim, _MM_SHUFFLE(2, 1, 3, 0))));
-
-	R.x = value1[2] - value2[1];
-	R.y = value1[1] - value2[3];
-	R.z = value1[3] - value2[2];
-
-	if (isnan(R.x)) {
-		float A = P.y * Q.z;
-		float B = P.z * Q.y;
-		if (isinf(A)) (A = A > 0 ? FLT_MAX : -FLT_MAX);
-		if (isinf(B)) (B = B > 0 ? FLT_MAX : -FLT_MAX);
-
-		R.x = A - B;
-	}
-	if (isnan(R.y)) {
-		float A = P.z * Q.x;
-		float B = P.x * Q.z;
-		if (isinf(A)) (A = A > 0 ? FLT_MAX : -FLT_MAX);
-		if (isinf(B)) (B = B > 0 ? FLT_MAX : -FLT_MAX);
-
-		R.y = A - B;
-	}
-	if (isnan(R.z)) {
-		float A = P.x * Q.y;
-		float B = P.y * Q.x;
-		if (isinf(A)) (A = A > 0 ? FLT_MAX : -FLT_MAX);
-		if (isinf(B)) (B = B > 0 ? FLT_MAX : -FLT_MAX);
-
-		R.z = A - B;
-	}
-	if (isinf(R.x)) R.x = R.x > 0 ? R.x = FLT_MAX : -FLT_MAX;
-	if (isinf(R.y)) R.y = R.y > 0 ? R.y = FLT_MAX : -FLT_MAX;
-	if (isinf(R.z)) R.z = R.z > 0 ? R.z = FLT_MAX : -FLT_MAX;
-
-	return R;
-}
-
-
-inline float Adollib::vector3_angle(const vector3& P, const vector3& Q) {
-
-	return ToAngle(acosf(Adollib::vector3_dot(P.unit_vect(), Q.unit_vect())));
-}
-inline float Adollib::vector3_radian(const vector3& P, const vector3& Q) {
-
-	return acosf(Adollib::vector3_dot(P.unit_vect(), Q.unit_vect()));
-}
-
-inline vector3 Adollib::vector3_look_at(const vector3& P, const vector3& Q) {
-	return Q - P;
-}
-
-inline vector3 Adollib::vector3_slerp(const vector3& V1, const vector3& V2, float R) {
-	vector3 g = vector3_cross(V1, V2);
-	float radian = vector3_radian(V1, V2) / 2.0f;
-
-	quaternion F;
-	F.w = cosf(radian * R);
-	F.x = g.x * sinf(radian * R);
-	F.y = g.y * sinf(radian * R);
-	F.z = g.z * sinf(radian * R);
-
-	return vector3_be_rotated_by_quaternion(V1, F);
-}
-
-
-#endif
-
 
 #pragma endregion
 //::::::::::::::::::::::::::::::::::::::::::::::::

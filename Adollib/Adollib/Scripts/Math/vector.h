@@ -205,8 +205,12 @@ namespace Adollib {
 #pragma endregion
 	//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+
 }
 
 
-
+#if _DEBUG
 #include "vector_e.h"
+#else
+#include "vectorSIM_e.h"
+#endif

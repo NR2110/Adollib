@@ -7,16 +7,16 @@ namespace Adollib {
 	namespace Physics_function {
 
 		struct ALP_Solverbody {
-#if _DEBUG
+#if 1 || _DEBUG
 			Vector3 delta_LinearVelocity; // 並進速度差分
 			Vector3 delta_AngulaVelocity; // 回転速度差分
 			Quaternion orientation; // 姿勢
 			Matrix inv_inertia; // 慣性テンソルの逆行列
 #else
-			Vector3 delta_LinearVelocity; // 並進速度差分
-			Vector3 delta_AngulaVelocity; // 回転速度差分
-			Quaternion orientation; // 姿勢
-			Matrix inv_inertia; // 慣性テンソルの逆行列
+			DirectX::XMVECTOR delta_LinearVelocity; // 並進速度差分
+			DirectX::XMVECTOR delta_AngulaVelocity; // 回転速度差分
+			DirectX::XMVECTOR orientation; // 姿勢
+			DirectX::XMMATRIX inv_inertia; // 慣性テンソルの逆行列
 #endif
 			float  inv_mass = 0; // 質量の逆数
 			int num = 0;

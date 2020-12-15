@@ -120,4 +120,8 @@ namespace Adollib {
 	float quaternion_radian(const Quaternion& Q, const Quaternion& T);
 };
 
+#if _DEBUG
 #include "quaternion_e.h"
+#else
+#include "quaternionSIM_e.h"
+#endif

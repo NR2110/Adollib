@@ -181,10 +181,13 @@
     <ClInclude Include="Scripts\Math\math.h" />
     <ClInclude Include="Scripts\Math\math_e.h" />
     <ClInclude Include="Scripts\Math\matrix.h" />
+    <ClInclude Include="Scripts\Math\matrixSIM_e.h" />
     <ClInclude Include="Scripts\Math\matrix_e.h" />
     <ClInclude Include="Scripts\Math\quaternion.h" />
+    <ClInclude Include="Scripts\Math\quaternionSIM_e.h" />
     <ClInclude Include="Scripts\Math\quaternion_e.h" />
     <ClInclude Include="Scripts\Math\vector.h" />
+    <ClInclude Include="Scripts\Math\vectorSIM_e.h" />
     <ClInclude Include="Scripts\Math\vector_e.h" />
     <ClInclude Include="Scripts\Mesh\frustum_culling.h" />
     <ClInclude Include="Scripts\Mesh\material.h" />
