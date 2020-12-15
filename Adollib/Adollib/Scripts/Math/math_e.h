@@ -1,5 +1,6 @@
 #pragma once
 
+#define USE_SIMD 0
 
 namespace Adollib {
 
@@ -15,9 +16,9 @@ namespace Adollib {
 #define ALmin(a,b) (a<b?a:b)
 #define ALClamp(a,min_,max_) (ALmin(ALmax(a,min_),max_))
 
-typedef unsigned char   u_char;
-typedef unsigned short  u_short;
-typedef unsigned int    u_int;
-typedef unsigned long   u_long;
+	typedef unsigned char   u_char;
+	typedef unsigned short  u_short;
+	typedef unsigned int    u_int;
+	typedef unsigned long   u_long;
 
 }

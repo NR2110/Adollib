@@ -1,6 +1,7 @@
 #pragma once
 
 #include <DirectXMath.h>
+#include "math_e.h"
 
 namespace Adollib {
 
@@ -120,7 +121,7 @@ namespace Adollib {
 
 }
 
-#if _DEBUG
+#if _DEBUG || !USE_SIMD
 #include "matrix_e.h"
 #else
 #include "matrixSIM_e.h"

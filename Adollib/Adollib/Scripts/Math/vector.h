@@ -209,7 +209,7 @@ namespace Adollib {
 }
 
 
-#if _DEBUG
+#if _DEBUG || !USE_SIMD
 #include "vector_e.h"
 #else
 #include "vectorSIM_e.h"

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <DirectXMath.h>
+#include "math_e.h"
 
 namespace Adollib {
 
@@ -120,7 +121,7 @@ namespace Adollib {
 	float quaternion_radian(const Quaternion& Q, const Quaternion& T);
 };
 
-#if _DEBUG
+#if _DEBUG || !USE_SIMD
 #include "quaternion_e.h"
 #else
 #include "quaternionSIM_e.h"
