@@ -35,7 +35,7 @@ namespace Adollib
 		}
 
 #if 1
-		if (1) {
+		if (0) {
 			{
 				Gameobject* GO = Gameobject_manager::createCube("stage");
 				GO->transform->local_pos = Vector3(0, -60, 0);
@@ -50,7 +50,7 @@ namespace Adollib
 			}
 
 		}
-		else if(0){
+		else if(1){
 			{
 				objGO = Gameobject_manager::createFromFBX("../Data/FBX/0311_collisions.fbx");
 				//objGO = Gameobject_manager::create();

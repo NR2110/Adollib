@@ -1208,6 +1208,11 @@ bool Physics_function::generate_contact_capsule_capsule(const std::vector<ALP_Co
 }
 #pragma endregion
 
+#pragma region Capsule-Capsule
+bool Physics_function::generate_contact_capsule_mesh(const std::vector<ALP_Collider_mesh>::iterator& SA, const std::vector<ALP_Collider_mesh>::iterator& SB, Contacts::Contact_pair& pair) {
+	return true;
+}
+#pragma endregion
 #pragma region MESH-PLANE
 bool Physics_function::generate_contact_mesh_plane(const std::vector<ALP_Collider_mesh>::iterator& S1, const std::vector<ALP_Collider_mesh>::iterator& S2, Contacts::Contact_pair& pair) {
 	return true;
