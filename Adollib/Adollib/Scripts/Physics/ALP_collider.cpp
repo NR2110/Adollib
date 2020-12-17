@@ -160,8 +160,8 @@ void ALP_Collider::update_dop14_as_mesh() {
 		Vector3 rotated_axis[DOP::DOP14_size];
 		for (int i = 0; i < DOP::DOP14_size; i++) {
 			rotated_axis[i] = vector3_quatrotate(DOP::DOP_14_axis[i], world_orientation.conjugate()).unit_vect();
-			mesh.dop14.max[i] = +FLT_MAX;
-			mesh.dop14.min[i] = -FLT_MAX;
+			mesh.dop14.max[i] = -FLT_MAX;
+			mesh.dop14.min[i] = +FLT_MAX;
 		}
 
 		for (int v_num = 0; v_num < 8; v_num++) {
@@ -170,8 +170,8 @@ void ALP_Collider::update_dop14_as_mesh() {
 			//DOPの更新
 			for (int i = 0; i < DOP::DOP14_size; i++) {
 				const float dis = vector3_dot(rotated_axis[i], pos);
-				if (mesh.dop14.min[i] < dis) mesh.dop14.min[i] = dis * 1.00000001f;//確実にするためちょっと大きめにとる
-				if (mesh.dop14.max[i] > dis) mesh.dop14.max[i] = dis * 1.00000001f;//確実にするためちょっと大きめにとる
+				if (mesh.dop14.min[i] > dis) mesh.dop14.min[i] = dis * 1.00000001f;//確実にするためちょっと大きめにとる
+				if (mesh.dop14.max[i] < dis) mesh.dop14.max[i] = dis * 1.00000001f;//確実にするためちょっと大きめにとる
 
 			}
 		}

@@ -14,9 +14,9 @@ using namespace Contacts;
 //::::::::
 // 衝突点の追加
 // float penetration : 貫通量
-// vector3 normal : point[1]からpoint[0]への衝突法線 (ワールド座標系)
-// vector3 contactpointA : 衝突点 (point[0]のローカル座標系)
-// vector3 contactpointB : 衝突点 (point[1]のローカル座標系)
+// vector3 normal : pointBからpointAへの衝突法線 (ワールド座標系)
+// vector3 contactpointA : 衝突点 (pointAのローカル座標系)
+// vector3 contactpointB : 衝突点 (pointBのローカル座標系)
 //::::::::
 void Contact::addcontact(
 	float penetration,

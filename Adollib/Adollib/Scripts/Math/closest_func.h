@@ -107,6 +107,23 @@ namespace Adollib {
 			Vector3& closestP
 		);
 
+		////:::::::::::::::::
+		//// planeとRayの最近点を求める
+		//// plane_normal		: planeの法線
+		//// plane_distance	: planeの距離
+		//// ray_pos			: ray上の点
+		//// ray_dir			: rayの向き
+		//// closestP			: ray上の最近点
+		////:::::::::::::::::
+		//void get_closestP_point_triangle(
+		//	const Vector3& point,
+		//	const Vector3& t_point0,
+		//	const Vector3& t_point1,
+		//	const Vector3& t_point2,
+		//	const Vector3& t_normal,
+		//	Vector3& closestP
+		//);
+
 
 
 

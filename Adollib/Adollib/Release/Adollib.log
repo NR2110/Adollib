@@ -1,71 +1,7 @@
-﻿  camera_manager.cpp
-  camera_s.cpp
-  object_manager.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(60,61): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-  object_rotate.cpp
-  player.cpp
-  imgui_manager.cpp
-  Adollib.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\Adollib.cpp(23,11): warning C4244: '初期化中': 'int' から 'float' への変換です。データが失われる可能性があります。
-  input.cpp
-  loop.cpp
-  main.cpp
-  resource_manager.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(541,82): warning C4018: '>': signed と unsigned の数値を比較しようとしました。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(543,63): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(567,27): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(658,35): warning C4244: '=': 'double' から 'Adollib::u_int' への変換です。データが失われる可能性があります。
-  systems.cpp
-  closest_func.cpp
-  crossing_func.cpp
-  frustum_culling.cpp
-  material.cpp
-  material_for_collider.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(67,50): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(99,97): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(122,50): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(154,97): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(177,50): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(209,97): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(235,96): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(264,98): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(288,62): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(317,98): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(341,62): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(370,98): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(602,44): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(622,94): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-  mesh.cpp
-  texture.cpp
-  gameobject.cpp
-  コンパイル中...
-  gameobject_camera.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_camera.cpp(41,84): warning C4305: '引数': 'unsigned __int64' から 'float' へ切り詰めます。
-  gameobject_light.cpp
-  gameobject_manager.cpp
-  hierarchy.cpp
-  ALP__physics_manager.cpp
-  ALP_broadphase.cpp
-  ALP_collider.cpp
-  ALP_generate_contact.cpp
-  ALP_integrate.cpp
-  ALP_midphase.cpp
-  ALP_physics.cpp
-  ALP_raycast.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(107,23): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-  ALP_resolve_contact.cpp
-  collider__base.cpp
-  contact.cpp
-  meshcoll_resorce_manager.cpp
-  ray.cpp
-  scene_game.cpp
-  scene_manager.cpp
-  compute_shader.cpp
-  コンパイル中...
-  shader.cpp
+﻿  ALP_generate_contact.cpp
   コード生成しています。
-  7 of 8361 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  3 of 8362 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    44 functions had inline decision re-evaluated but remain unchanged
+    64 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Release\Adollib.exe

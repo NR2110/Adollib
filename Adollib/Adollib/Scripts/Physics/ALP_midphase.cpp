@@ -16,12 +16,12 @@ bool Check_insert_DOP14(const std::vector<ALP_Collider_mesh>::iterator meshA, co
 	//–³ŒÀPlane‚ÍDOP‚ªì‚ê‚È‚¢‚½‚ßnarrow‚É“Š‚°‚é?
 	//if (meshA->shape == ALP_Collider_shape::Plane || meshB->shape == ALP_Collider_shape::Plane) return true;
 
-	Vector3 dis = meshA->dop14.pos - meshB->dop14.pos;
-
 	for (int i = 0; i < DOP14_size; i++) {
+		float dis = vector3_dot(DOP_14_axis[i], meshA->dop14.pos - meshB->dop14.pos);
+
 		if (
-			vector3_dot(+DOP_14_axis[i], meshA->dop14.pos - meshB->dop14.pos) < meshB->dop14.min[i] - meshA->dop14.max[i] ||
-			vector3_dot(-DOP_14_axis[i], meshA->dop14.pos - meshB->dop14.pos) < meshA->dop14.min[i] - meshB->dop14.max[i]
+			0 > +dis + meshA->dop14.max[i] - meshB->dop14.min[i] ||
+			0 > -dis + meshB->dop14.max[i] - meshA->dop14.min[i]
 			) {
 			return false;
 		}

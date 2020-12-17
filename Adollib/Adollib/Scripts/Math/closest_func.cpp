@@ -208,7 +208,7 @@ void Closest_func::get_closestP_point_triangle(
 	float voronoiEdgeP01_check3 = vector3_dot(proj - t_point1, -edgeP01);
 
 	if (voronoiEdgeP01_check1 > 0.0f && voronoiEdgeP01_check2 > 0.0f && voronoiEdgeP01_check3 > 0.0f) {
-		Closest_func::get_closestP_point_line(t_point0, edgeP01, proj, closestP);
+		Closest_func::get_closestP_point_line(proj, t_point0, edgeP01, closestP);
 		return;
 	}
 
@@ -221,7 +221,7 @@ void Closest_func::get_closestP_point_triangle(
 	float voronoiEdgeP12_check3 = vector3_dot(proj - t_point2, -edgeP12);
 
 	if (voronoiEdgeP12_check1 > 0.0f && voronoiEdgeP12_check2 > 0.0f && voronoiEdgeP12_check3 > 0.0f) {
-		Closest_func::get_closestP_point_line(t_point1, edgeP12, proj, closestP);
+		Closest_func::get_closestP_point_line(proj, t_point1, edgeP12, closestP);
 		return;
 	}
 
@@ -234,7 +234,7 @@ void Closest_func::get_closestP_point_triangle(
 	float voronoiEdgeP20_check3 = vector3_dot(proj - t_point0, -edgeP20);
 
 	if (voronoiEdgeP20_check1 > 0.0f && voronoiEdgeP20_check2 > 0.0f && voronoiEdgeP20_check3 > 0.0f) {
-		Closest_func::get_closestP_point_line(t_point2, edgeP20, proj, closestP);
+		Closest_func::get_closestP_point_line(proj, t_point2, edgeP20, closestP);
 		return;
 	}
 

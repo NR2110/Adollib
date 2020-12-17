@@ -35,7 +35,8 @@ namespace Adollib {
 		const bool getCrossingP_plane_line(
 			const Vector3& plane_n, const float& plane_dis,
 			const Vector3& line_p,  const Vector3& line_dir,
-			float& crossing_t
+			float& crossing_t,
+			bool Consider_sp = true
 		);
 
 		//:::::::::::::::::

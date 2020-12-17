@@ -42,6 +42,7 @@ void Physics_function::generate_contact(std::vector<Contacts::Contact_pair>& pai
 			if (shapeB->shape == ALP_Collider_shape::Sphere)generate_contact_sphere_capsule(meshB, meshA, pair);
 			if (shapeB->shape == ALP_Collider_shape::BOX)generate_contact_box_capsule(meshB, meshA, pair);
 			if (shapeB->shape == ALP_Collider_shape::Capsule)generate_contact_capsule_capsule(meshA, meshB, pair);
+			if (shapeB->shape == ALP_Collider_shape::Mesh)generate_contact_capsule_mesh(meshA, meshB, pair);
 		}
 		if (shapeA->shape == ALP_Collider_shape::Plane) {
 
@@ -52,6 +53,7 @@ void Physics_function::generate_contact(std::vector<Contacts::Contact_pair>& pai
 		if (shapeA->shape == ALP_Collider_shape::Mesh) {
 
 			if (shapeB->shape == ALP_Collider_shape::Sphere)generate_contact_sphere_mesh(meshB, meshA, pair);
+			if (shapeB->shape == ALP_Collider_shape::Capsule)generate_contact_capsule_mesh(meshB, meshA, pair);
 			if (shapeB->shape == ALP_Collider_shape::Plane)	generate_contact_mesh_plane(meshA, meshB, pair);
 			if (shapeB->shape == ALP_Collider_shape::Mesh)	generate_contact_mesh_mesh(meshA, meshB, pair);
 		}
@@ -759,7 +761,75 @@ bool Physics_function::generate_contact_sphere_mesh(const std::vector<ALP_Collid
 		}
 	}
 	else {
-		return false;
+		//球とmeshの衝突判定を行う
+
+		Vector3 sphere_pos_meshcoord = vector3_quatrotate(sphere->world_position - mesh->world_position, mesh->world_orientation.conjugate()); //mesh座標系でのsphereのpos
+
+		float min_dis = sphere->world_scale.x;//最低距離をsphereの半径に
+		Vector3 closest_point; //mesh上の最近点
+		bool is_hit = false; //衝突していたらtrue
+		Vector3 nor_meshcoord;
+		//球とmeshの判定
+		for (const auto& faset : mesh_mesh->mesh->facets) {
+			const Vector3& nor = (faset.normal * mesh->world_scale).unit_vect();
+			const Vector3& mesh_pos0 = mesh_mesh->mesh->vertices->at(faset.vertexID[0]) * mesh->world_scale;
+
+			//mesh平面の"d"
+			float dis = vector3_dot(nor, mesh_pos0);
+			float dis_sp = vector3_dot(nor, sphere_pos_meshcoord);
+
+			//mesh平面とsphereの距離がmin_disより大きければ衝突しない
+			if (fabsf(dis_sp - dis) > min_dis) continue;
+
+			const Vector3& mesh_pos1 = mesh_mesh->mesh->vertices->at(faset.vertexID[1]) * mesh->world_scale;
+			const Vector3& mesh_pos2 = mesh_mesh->mesh->vertices->at(faset.vertexID[2]) * mesh->world_scale;
+
+			Vector3 closest_p;
+			Closest_func::get_closestP_point_triangle(
+				sphere_pos_meshcoord,
+				mesh_pos0,
+				mesh_pos1,
+				mesh_pos2,
+				nor,
+				closest_p
+			);
+
+			if ((sphere_pos_meshcoord - closest_p).norm() > min_dis * min_dis)continue; //保存されている距離より大きければcontinue
+
+			//min_dis,最近点の更新
+			closest_point = closest_p;
+			min_dis = (sphere_pos_meshcoord - closest_point).norm_sqr();
+			is_hit = true;
+			nor_meshcoord = nor;
+		}
+		//交差していなければfalseを返す
+		if (is_hit == false)return false;
+
+		Vector3 Wn = vector3_quatrotate((sphere_pos_meshcoord - closest_point), mesh->world_orientation).unit_vect();//meshからsphereへのベクトル
+		if (vector3_dot(sphere_pos_meshcoord - closest_point, nor_meshcoord) < 0)Wn *= -1;
+
+
+		if (pair.body[0]->ALPcollider->shape == mesh->shape) {
+			//body[0]　が　mesh
+			//body[1]　が　sphere
+			pair.contacts.addcontact(
+				sphere->world_scale.x - min_dis,
+				-Wn,
+				closest_point,
+				sphere->world_scale.x * vector3_quatrotate(-Wn, sphere->world_orientation.conjugate())
+			);
+		}
+		else {
+			//body[0]　が　sphere
+			//body[1]　が　mesh
+			pair.contacts.addcontact(
+				sphere->world_scale.x - min_dis,
+				+Wn,
+				sphere->world_scale.x * vector3_quatrotate(-Wn, sphere->world_orientation.conjugate()),
+				closest_point
+			);
+		}
+		return true;
 
 	}
 
@@ -849,7 +919,6 @@ bool Physics_function::generate_contact_box_plane(const std::vector<ALP_Collider
 }
 #pragma endregion
 
-//TODO:なぜかバグる
 #pragma region BOX-BOX
 
 bool Physics_function::generate_contact_box_box(const std::vector<ALP_Collider_mesh>::iterator& bA, const std::vector<ALP_Collider_mesh>::iterator& bB, Contacts::Contact_pair& pair) {
@@ -1159,7 +1228,7 @@ bool Physics_function::generate_contact_box_capsule(const std::vector<ALP_Collid
 	}
 	return true;
 }
-#pragma endregion
+#pragma endregion //TODO:なぜかバグる
 
 #pragma region BOX-MESH
 bool Physics_function::generate_contact_box_mesh(const std::vector<ALP_Collider_mesh>::iterator& S1, const std::vector<ALP_Collider_mesh>::iterator& S2, Contacts::Contact_pair& pair) {
@@ -1208,11 +1277,152 @@ bool Physics_function::generate_contact_capsule_capsule(const std::vector<ALP_Co
 }
 #pragma endregion
 
-#pragma region Capsule-Capsule
-bool Physics_function::generate_contact_capsule_mesh(const std::vector<ALP_Collider_mesh>::iterator& SA, const std::vector<ALP_Collider_mesh>::iterator& SB, Contacts::Contact_pair& pair) {
-	return true;
+#pragma region Capsule-Mesh
+bool Physics_function::generate_contact_capsule_mesh(const std::vector<ALP_Collider_mesh>::iterator& capsule_mesh, const std::vector<ALP_Collider_mesh>::iterator& mesh_mesh, Contacts::Contact_pair& pair) {
+	const std::list<ALP_Collider>::iterator& capsule = capsule_mesh->ALPcollider;
+	const std::list<ALP_Collider>::iterator& mesh = mesh_mesh->ALPcollider;
+
+	if (0 && mesh_mesh->mesh->is_Convex == true) {
+		////球とmeshの衝突判定を行う
+		//Matrix rotate, inverse_rotate;
+		//rotate = matrix_world(Vector3(1, 1, 1), mesh->world_orientation.get_rotate_matrix(), mesh->world_position);
+		//inverse_rotate = matrix_inverse(rotate);
+
+		//Vector3 center;
+		//center = vector3_trans(sphere->world_position, inverse_rotate); //meshのlocal座標系での球の中心座標
+
+		////mesh上の最近点
+		//Vector3 closest_point;
+
+		//closest_point = center;
+		////各面の外にあれば面平面に持ってくる
+		//for (u_int i = 0; i < mesh_mesh->mesh->facet_num; i++) {
+		//	const Vector3& nor = mesh_mesh->mesh->facets.at(i).normal.unit_vect();
+		//	const Vector3& pos = mesh_mesh->mesh->vertices->at(mesh_mesh->mesh->facets.at(i).vertexID[0]) * mesh->world_scale;
+		//	float d = vector3_dot(nor, pos) - vector3_dot(nor, closest_point);
+		//	if (d < 0)
+		//		closest_point += d * nor;
+		//}
+
+		//float distance = (closest_point - center).norm_sqr(); //最近点と球中心の距離
+		//if (sphere->world_scale.x - distance > FLT_EPSILON) { //float誤差も調整
+		//	Vector3 n = (sphere->world_position - vector3_trans(closest_point, rotate)).unit_vect(); //meshからsphereへのベクトル
+
+		//	if (pair.body[0]->ALPcollider->shape == mesh->shape) {
+		//		//body[0]　が　mesh
+		//		//body[1]　が　sphere
+		//		pair.contacts.addcontact(
+		//			sphere->world_scale.x - distance,
+		//			-n,
+		//			closest_point,
+		//			sphere->world_scale.x * vector3_quatrotate(n, sphere->world_orientation.conjugate())
+		//		);
+		//	}
+		//	else {
+		//		//body[0]　が　sphere
+		//		//body[1]　が　mesh
+		//		pair.contacts.addcontact(
+		//			sphere->world_scale.x - distance,
+		//			n,
+		//			sphere->world_scale.x * vector3_quatrotate(n, sphere->world_orientation.conjugate()),
+		//			closest_point
+		//		);
+		//	}
+		//	return true;
+		//}
+	}
+	else {
+		//球とmeshの衝突判定を行う
+		Vector3 capsule_pos_meshcoord = vector3_quatrotate(capsule->world_position - mesh->world_position, mesh->world_orientation.conjugate()); //mesh座標系でのsphereのpos
+		Vector3 capsule_dir_meshcoord = vector3_quatrotate(Vector3(0, 1, 0), capsule->world_orientation * mesh->world_orientation.conjugate()) * capsule->world_scale.y; //mesh座標系でのsphereのpos
+
+		float min_dis = capsule->world_scale.x;//最低距離をsphereの半径に
+		Vector3 closest_point; //mesh上の最近点
+		bool is_hit = false; //衝突していたらtrue
+		Vector3 nor_meshcoord; //衝突点での法線
+		float min_t; //衝突点のt
+		Vector3 min_sphere_pos_meshcoord; //衝突点のcapsuleのsphereのpos
+		//capsuleとmeshの判定
+		for (const auto& faset : mesh_mesh->mesh->facets) {
+			const Vector3& nor = (faset.normal * mesh->world_scale).unit_vect();
+			const Vector3& mesh_pos0 = mesh_mesh->mesh->vertices->at(faset.vertexID[0]) * mesh->world_scale;
+			//mesh平面の"d"
+			float dis = vector3_dot(nor, mesh_pos0);
+
+			float Crossing_t;
+			Crossing_func::getCrossingP_plane_line(
+				nor,
+				dis,
+				capsule_pos_meshcoord,
+				capsule_dir_meshcoord,
+				Crossing_t, false
+			);
+			Crossing_t = ALClamp(Crossing_t, -1, 1);
+
+			const Vector3& sphere_pos_meshcoord = capsule_pos_meshcoord + capsule_dir_meshcoord * Crossing_t;
+			float dis_sp = vector3_dot(nor, sphere_pos_meshcoord);
+
+			//mesh平面とsphereの距離がmin_disより大きければ衝突しない
+			if (fabsf(dis_sp - dis) > min_dis) continue;
+
+			const Vector3& mesh_pos1 = mesh_mesh->mesh->vertices->at(faset.vertexID[1]) * mesh->world_scale;
+			const Vector3& mesh_pos2 = mesh_mesh->mesh->vertices->at(faset.vertexID[2]) * mesh->world_scale;
+
+			Vector3 closest_p;
+			Closest_func::get_closestP_point_triangle(
+				sphere_pos_meshcoord,
+				mesh_pos0,
+				mesh_pos1,
+				mesh_pos2,
+				nor,
+				closest_p
+			);
+
+			if ((sphere_pos_meshcoord - closest_p).norm() > min_dis * min_dis)continue; //保存されている距離より大きければcontinue
+
+			//min_dis,最近点の更新
+			closest_point = closest_p;
+			min_dis = (sphere_pos_meshcoord - closest_point).norm_sqr();
+			nor_meshcoord = nor;
+			min_t = Crossing_t;
+			min_sphere_pos_meshcoord = sphere_pos_meshcoord;
+			is_hit = true;
+		}
+		//交差していなければfalseを返す
+		if (is_hit == false)return false;
+
+		Vector3 Wn = vector3_quatrotate((min_sphere_pos_meshcoord - closest_point), mesh->world_orientation).unit_vect();//meshからsphereへのベクトル
+		if (vector3_dot(min_sphere_pos_meshcoord - closest_point, nor_meshcoord) < 0)Wn *= -1;
+
+
+		if (pair.body[0]->ALPcollider->shape == mesh->shape) {
+			//body[0]　が　mesh
+			//body[1]　が　sphere
+			pair.contacts.addcontact(
+				capsule->world_scale.x - min_dis,
+				-Wn,
+				closest_point,
+				Vector3(0, capsule->world_scale.y, 0) * min_t + capsule->world_scale.x * vector3_quatrotate(-Wn, capsule->world_orientation.conjugate())
+			);
+		}
+		else {
+			//body[0]　が　sphere
+			//body[1]　が　mesh
+			pair.contacts.addcontact(
+				capsule->world_scale.x - min_dis,
+				+Wn,
+				Vector3(0, capsule->world_scale.y, 0) * min_t + capsule->world_scale.x * vector3_quatrotate(-Wn, capsule->world_orientation.conjugate()),
+				closest_point
+			);
+		}
+		return true;
+
+	}
+
+	return false;
 }
 #pragma endregion
+
 #pragma region MESH-PLANE
 bool Physics_function::generate_contact_mesh_plane(const std::vector<ALP_Collider_mesh>::iterator& S1, const std::vector<ALP_Collider_mesh>::iterator& S2, Contacts::Contact_pair& pair) {
 	return true;
