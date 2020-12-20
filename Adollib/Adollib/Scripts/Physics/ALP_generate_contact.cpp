@@ -1359,9 +1359,6 @@ bool Physics_function::generate_contact_capsule_mesh(const std::vector<ALP_Colli
 				capsule_dir_meshcoord,
 				Crossing_t, false
 			);
-			if (faset.vertexID[0] == 23733) {
-				int dafsgdhfg = 0;
-			}
 
 			Crossing_t = ALClamp(Crossing_t, -1, 1);
 
