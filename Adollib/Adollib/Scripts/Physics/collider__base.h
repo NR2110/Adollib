@@ -38,6 +38,8 @@ namespace Adollib {
 
 			bool is_fallable = 0; //—‚¿‚È‚¢
 			bool is_kinematic = 0;//‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
+			bool is_kinmatic_anglar = 0; //‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å‰ñ“]‘¬“x‚ª•Ï‰»‚µ‚È‚¢
+			bool is_kinmatic_linear = 0; //‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å•Ài‘¬“x‚ª•Ï‰»‚µ‚È‚¢
 			bool is_moveable = 0; //“®‚©‚È‚¢
 			bool is_hitable = 0;  //Õ“Ë‚µ‚È‚¢
 		};

@@ -58,6 +58,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 			SB.delta_AngulaVelocity = Vector3(0.0f);
 			SB.inv_inertia = coll.ALPphysics->inverse_inertial_tensor();
 			SB.inv_mass = coll.ALPphysics->inverse_mass();
+
 			SB.num = count;
 
 			SBs.emplace_back(SB);
@@ -366,9 +367,9 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 
 	// ‘¬“x‚ÌXV
 	for (auto& coll : colliders) {
-		if (coll.ALPphysics->is_kinematic == true) {
-			coll.ALPphysics->linear_velocity += coll.ALPphysics->solve->delta_LinearVelocity;
-			coll.ALPphysics->anglar_velocity += coll.ALPphysics->solve->delta_AngulaVelocity;
+		if (coll.ALPphysics->is_kinematic) {
+			if (coll.ALPphysics->is_kinmatic_linear) coll.ALPphysics->linear_velocity += coll.ALPphysics->solve->delta_LinearVelocity;
+			if (coll.ALPphysics->is_kinmatic_anglar) coll.ALPphysics->anglar_velocity += coll.ALPphysics->solve->delta_AngulaVelocity;
 		}
 	}
 

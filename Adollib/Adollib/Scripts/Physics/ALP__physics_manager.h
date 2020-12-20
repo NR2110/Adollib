@@ -50,6 +50,8 @@ namespace Adollib
 
 			static constexpr bool is_fallable = true; //óéÇøÇÈÇ©
 			static constexpr bool is_kinematic = true; //âeãøÇ§ÇØÇÈÇ©(fallÇÕÇ∑ÇÈ)
+			static constexpr bool is_kinmatic_anglar = true; //ÇŸÇ©ÇÃï®ëÃÇ©ÇÁÇÃâeãøÇ≈âÒì]ë¨ìxÇ™ïœâªÇµÇ»Ç¢
+			static constexpr bool is_kinmatic_linear = true; //ÇŸÇ©ÇÃï®ëÃÇ©ÇÁÇÃâeãøÇ≈ï¿êië¨ìxÇ™ïœâªÇµÇ»Ç¢
 			static constexpr bool is_moveable = true;//ìÆÇ≠Ç©
 			static constexpr bool is_hitable = true;  //è’ìÀÇµÇ»Ç¢
 
@@ -132,7 +134,7 @@ namespace Adollib
 
 			//::: èâä˙ílÇÇ¢ÇÍÇÈ :::
 			(*ret.coll_itr)->physics_data.inertial_mass = Phyisics_manager::default_physics.inertial_mass; //éøó 
-			(*ret.coll_itr)->physics_data.drag = Phyisics_manager::default_physics.drag; //ãÛãCíÔçR
+			(*ret.coll_itr)->physics_data.drag = Phyisics_manager::default_physics.linear_drag; //ãÛãCíÔçR
 			(*ret.coll_itr)->physics_data.anglar_drag = Phyisics_manager::default_physics.anglar_drag; //ãÛãCíÔçR
 			(*ret.coll_itr)->physics_data.dynamic_friction = Phyisics_manager::default_physics.dynamic_friction; //ìÆñÄéC
 			(*ret.coll_itr)->physics_data.static_friction = Phyisics_manager::default_physics.static_friction; //ê√ñÄéC
@@ -140,6 +142,8 @@ namespace Adollib
 
 			(*ret.coll_itr)->physics_data.is_fallable = Phyisics_manager::default_physics.is_fallable; //óéÇøÇ»Ç¢
 			(*ret.coll_itr)->physics_data.is_kinematic = Phyisics_manager::default_physics.is_kinematic;//âeãøÇ§ÇØÇ»Ç¢(fallÇÕÇ∑ÇÈ)
+			(*ret.coll_itr)->physics_data.is_kinmatic_anglar = Phyisics_manager::default_physics.is_kinmatic_anglar;//âeãøÇ§ÇØÇ»Ç¢(fallÇÕÇ∑ÇÈ)
+			(*ret.coll_itr)->physics_data.is_kinmatic_linear = Phyisics_manager::default_physics.is_kinmatic_linear;//âeãøÇ§ÇØÇ»Ç¢(fallÇÕÇ∑ÇÈ)
 			(*ret.coll_itr)->physics_data.is_moveable = Phyisics_manager::default_physics.is_moveable; //ìÆÇ©Ç»Ç¢
 			(*ret.coll_itr)->physics_data.is_hitable = Phyisics_manager::default_physics.is_hitable;  //è’ìÀÇµÇ»Ç¢
 
@@ -147,9 +151,9 @@ namespace Adollib
 		}
 
 		static void remove_collider(
-			std::list<Collider*>::iterator coll_itr, 
-			std::list<Physics_function::ALP_Collider>::iterator ALPcoll_itr, 
-			std::list<Physics_function::ALP_Physics>::iterator ALPphys_itr, 
+			std::list<Collider*>::iterator coll_itr,
+			std::list<Physics_function::ALP_Collider>::iterator ALPcoll_itr,
+			std::list<Physics_function::ALP_Physics>::iterator ALPphys_itr,
 			Scenelist Sce = Scene::now_scene) {
 			is_changed_coll = true;
 			ALP_colliders[Sce].erase(ALPcoll_itr);

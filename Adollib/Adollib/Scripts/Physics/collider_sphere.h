@@ -42,6 +42,8 @@ namespace Adollib {
 				ImGui::Checkbox("moveable", &physics_data.is_moveable);
 				ImGui::Checkbox("fallable", &physics_data.is_fallable);
 				ImGui::Checkbox("kinematic", &physics_data.is_kinematic);
+				ImGui::Checkbox("is_kinmatic_anglar", &physics_data.is_kinmatic_anglar);
+				ImGui::Checkbox("is_kinmatic_linear", &physics_data.is_kinmatic_linear);
 				ImGui::Checkbox("hitable", &physics_data.is_hitable);
 
 				ImGui::DragFloat("mass", &physics_data.inertial_mass, 0.001f, 0, 0);

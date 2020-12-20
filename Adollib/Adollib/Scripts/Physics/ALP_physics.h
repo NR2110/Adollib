@@ -35,11 +35,13 @@ namespace Adollib {
 
 				bool is_fallable, //—‚¿‚È‚¢
 				bool is_kinematic, //‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
+				bool is_kinmatic_anglar,
+				bool is_kinmatic_linear,
 				bool is_moveable,//“®‚©‚È‚¢
 				bool is_hitable //Õ“Ë‚µ‚È‚¢
 			) :
 				inertial_mass(inertial_mass), //¿—Ê
-				drag(drag), //‹ó‹C’ïR
+				linear_drag(drag), //‹ó‹C’ïR
 				anglar_drag(anglar_drag), //‹ó‹C’ïR
 				dynamic_friction(dynamic_friction),//“®–€C
 				static_friction(static_friction), //Ã–€C
@@ -47,13 +49,15 @@ namespace Adollib {
 
 				is_fallable(is_fallable), //—‚¿‚È‚¢
 				is_kinematic(is_kinematic), //‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
+				is_kinmatic_anglar(is_kinmatic_anglar), //‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å‰ñ“]‘¬“x‚ª•Ï‰»‚µ‚È‚¢
+				is_kinmatic_linear(is_kinmatic_linear), //‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å•Ài‘¬“x‚ª•Ï‰»‚µ‚È‚¢
 				is_moveable(is_moveable),//“®‚©‚È‚¢
 				is_hitable(is_hitable)
 			{};
 
 			//::: •ÏX‰Â :::::::::::::::::::::::::::::
 			float inertial_mass = 0; //¿—Ê
-			float drag = 0; //‹ó‹C’ïR
+			float linear_drag = 0; //‹ó‹C’ïR
 			float anglar_drag = 0; //‹ó‹C’ïR
 			float dynamic_friction = 0;//“®–€C
 			float static_friction = 0; //Ã–€C
@@ -61,6 +65,8 @@ namespace Adollib {
 
 			bool is_fallable = false; //—‚¿‚È‚¢
 			bool is_kinematic = false; //‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
+			bool is_kinmatic_anglar = false; //‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å‰ñ“]‘¬“x‚ª•Ï‰»‚µ‚È‚¢
+			bool is_kinmatic_linear = false; //‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å•Ài‘¬“x‚ª•Ï‰»‚µ‚È‚¢
 			bool is_moveable = false;//“®‚©‚È‚¢
 			bool is_hitable = false;  //Õ“Ë‚µ‚È‚¢
 

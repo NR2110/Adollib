@@ -32,6 +32,8 @@ namespace Adollib
 
 		Physics_manager_default::is_fallable, //—‚¿‚È‚¢
 		Physics_manager_default::is_kinematic, //‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
+		Physics_manager_default::is_kinmatic_anglar, //‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å‰ñ“]‘¬“x‚ª•Ï‰»‚µ‚È‚¢
+		Physics_manager_default::is_kinmatic_linear, //‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å•Ài‘¬“x‚ª•Ï‰»‚µ‚È‚¢
 		Physics_manager_default::is_moveable, //“®‚©‚È‚¢
 		Physics_manager_default::is_hitable //Õ“Ë‚µ‚È‚¢
 	); //‰½‚àİ’è‚µ‚Ä‚¢‚È‚¢‚Æ‚«‚Ìpyisics‚Ì’l

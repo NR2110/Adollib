@@ -62,6 +62,19 @@ namespace Adollib {
 			float& s, float& t
 		);
 
+		//:::::::::::::::::
+		// 直線と線分の最近点を求める
+		// line_p, line_d : 直線の始点と向き
+		// segB_s - segB_g : 線分の始点終点
+		// s : 直線の最近点へのスカラ
+		// t : 線分の最近点へのスカラ
+		//:::::::::::::::::
+		void get_closestP_line_segment(
+			const Vector3& segAs, const Vector3& segAg,
+			const Vector3& segBs, const Vector3& segBg,
+			float& s, float& t
+		);
+
 
 		//:::::::::::::::::
 		// 光線と点の最近点を求める
@@ -107,22 +120,23 @@ namespace Adollib {
 			Vector3& closestP
 		);
 
-		////:::::::::::::::::
-		//// planeとRayの最近点を求める
-		//// plane_normal		: planeの法線
-		//// plane_distance	: planeの距離
-		//// ray_pos			: ray上の点
-		//// ray_dir			: rayの向き
-		//// closestP			: ray上の最近点
-		////:::::::::::::::::
-		//void get_closestP_point_triangle(
-		//	const Vector3& point,
-		//	const Vector3& t_point0,
-		//	const Vector3& t_point1,
-		//	const Vector3& t_point2,
-		//	const Vector3& t_normal,
-		//	Vector3& closestP
-		//);
+		//:::::::::::::::::
+		// 線分とMeshの最近点を求める
+		// segS ～ segG : 線分の始点終点
+		// t_point0～2 : 3頂点
+		// t_normal     : 3頂点メッシュの法線
+		// closest_t	: 線分上の最近点への実数t segS + closest_t * (segS - segG)
+		// closest_p     : 3頂点メッシュ上の線分への最近点
+		//:::::::::::::::::
+		void get_closestP_segment_triangle(
+			const Vector3& segS, const Vector3& segG,
+			const Vector3& t_point0,
+			const Vector3& t_point1,
+			const Vector3& t_point2,
+			const Vector3& t_normal,
+			float& closest_t,
+			Vector3& closest_p
+		);
 
 
 

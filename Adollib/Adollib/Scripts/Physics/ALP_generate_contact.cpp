@@ -1332,7 +1332,7 @@ bool Physics_function::generate_contact_capsule_mesh(const std::vector<ALP_Colli
 		//}
 	}
 	else {
-		//球とmeshの衝突判定を行う
+		//球とmeshの衝突判定を行う 球がゆがむと面倒なのでscaleはworldのままで
 		Vector3 capsule_pos_meshcoord = vector3_quatrotate(capsule->world_position - mesh->world_position, mesh->world_orientation.conjugate()); //mesh座標系でのsphereのpos
 		Vector3 capsule_dir_meshcoord = vector3_quatrotate(Vector3(0, 1, 0), capsule->world_orientation * mesh->world_orientation.conjugate()) * capsule->world_scale.y; //mesh座標系でのsphereのpos
 
@@ -1344,12 +1344,14 @@ bool Physics_function::generate_contact_capsule_mesh(const std::vector<ALP_Colli
 		Vector3 min_sphere_pos_meshcoord; //衝突点のcapsuleのsphereのpos
 		//capsuleとmeshの判定
 		for (const auto& faset : mesh_mesh->mesh->facets) {
-			const Vector3& nor = (faset.normal * mesh->world_scale).unit_vect();
-			const Vector3& mesh_pos0 = mesh_mesh->mesh->vertices->at(faset.vertexID[0]) * mesh->world_scale;
+			const Vector3 nor = (faset.normal * mesh->world_scale).unit_vect();
+			const Vector3 mesh_pos0 = mesh_mesh->mesh->vertices->at(faset.vertexID[0]) * mesh->world_scale;
 			//mesh平面の"d"
 			float dis = vector3_dot(nor, mesh_pos0);
 
 			float Crossing_t;
+
+			//capsule光線上の最近点をだいたい求める 正確ではないため求めなおす
 			Crossing_func::getCrossingP_plane_line(
 				nor,
 				dis,
@@ -1357,28 +1359,34 @@ bool Physics_function::generate_contact_capsule_mesh(const std::vector<ALP_Colli
 				capsule_dir_meshcoord,
 				Crossing_t, false
 			);
+			if (faset.vertexID[0] == 23733) {
+				int dafsgdhfg = 0;
+			}
+
 			Crossing_t = ALClamp(Crossing_t, -1, 1);
 
-			const Vector3& sphere_pos_meshcoord = capsule_pos_meshcoord + capsule_dir_meshcoord * Crossing_t;
+			Vector3 sphere_pos_meshcoord = capsule_pos_meshcoord + capsule_dir_meshcoord * Crossing_t;
 			float dis_sp = vector3_dot(nor, sphere_pos_meshcoord);
 
-			//mesh平面とsphereの距離がmin_disより大きければ衝突しない
-			if (fabsf(dis_sp - dis) > min_dis) continue;
+			//sphereがMeshの裏にいる または mesh平面とsphereの距離がmin_disより大きければ衝突しない
+			if (dis_sp - dis < 0 || dis_sp - dis > min_dis) continue;
 
-			const Vector3& mesh_pos1 = mesh_mesh->mesh->vertices->at(faset.vertexID[1]) * mesh->world_scale;
-			const Vector3& mesh_pos2 = mesh_mesh->mesh->vertices->at(faset.vertexID[2]) * mesh->world_scale;
+			const Vector3 mesh_pos1 = mesh_mesh->mesh->vertices->at(faset.vertexID[1]) * mesh->world_scale;
+			const Vector3 mesh_pos2 = mesh_mesh->mesh->vertices->at(faset.vertexID[2]) * mesh->world_scale;
 
 			Vector3 closest_p;
-			Closest_func::get_closestP_point_triangle(
-				sphere_pos_meshcoord,
-				mesh_pos0,
-				mesh_pos1,
-				mesh_pos2,
-				nor,
-				closest_p
+			Closest_func::get_closestP_segment_triangle(
+				capsule_pos_meshcoord - capsule_dir_meshcoord, capsule_pos_meshcoord + capsule_dir_meshcoord,
+				mesh_pos0, mesh_pos1, mesh_pos2, nor,
+				Crossing_t, closest_p
 			);
 
-			if ((sphere_pos_meshcoord - closest_p).norm() > min_dis * min_dis)continue; //保存されている距離より大きければcontinue
+			Crossing_t = Crossing_t * 2 - 1;
+			Crossing_t = ALClamp(Crossing_t, -1, 1);
+
+			sphere_pos_meshcoord = capsule_pos_meshcoord + capsule_dir_meshcoord * Crossing_t;
+
+			if ((sphere_pos_meshcoord - closest_p).norm() > min_dis * min_dis) continue;
 
 			//min_dis,最近点の更新
 			closest_point = closest_p;
@@ -1387,6 +1395,7 @@ bool Physics_function::generate_contact_capsule_mesh(const std::vector<ALP_Colli
 			min_t = Crossing_t;
 			min_sphere_pos_meshcoord = sphere_pos_meshcoord;
 			is_hit = true;
+
 		}
 		//交差していなければfalseを返す
 		if (is_hit == false)return false;

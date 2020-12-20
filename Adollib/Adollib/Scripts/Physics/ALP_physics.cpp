@@ -145,7 +145,7 @@ void ALP_Physics::refresh_ALP_from_data() {
 	Physics_data Cdata = (*ALP_coll->coll_itr)->get_Physicsdata();
 
 	inertial_mass = Cdata.inertial_mass;
-	drag = Cdata.drag;
+	linear_drag = Cdata.drag;
 	anglar_drag = Cdata.anglar_drag;
 	dynamic_friction = Cdata.dynamic_friction;
 	static_friction = Cdata.static_friction;
@@ -153,6 +153,8 @@ void ALP_Physics::refresh_ALP_from_data() {
 
 	is_fallable = Cdata.is_fallable;
 	is_kinematic = Cdata.is_kinematic;
+	is_kinmatic_anglar = Cdata.is_kinmatic_anglar; //‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å‰ñ“]‘¬“x‚ª•Ï‰»‚µ‚È‚¢
+	is_kinmatic_linear = Cdata.is_kinmatic_linear; //‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å•Ài‘¬“x‚ª•Ï‰»‚µ‚È‚¢
 	is_moveable = Cdata.is_moveable;
 	is_hitable = Cdata.is_hitable;
 }
