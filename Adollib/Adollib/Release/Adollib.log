@@ -1,7 +1,19 @@
-﻿  ALP_generate_contact.cpp
+﻿  object_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(60,61): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+  gameobject_manager.cpp
+  ALP__physics_manager.cpp
+  ALP_broadphase.cpp
+  ALP_generate_contact.cpp
+  ALP_integrate.cpp
+  ALP_midphase.cpp
+  ALP_physics.cpp
+  ALP_resolve_contact.cpp
+  collider__base.cpp
+  contact.cpp
+  ray.cpp
   コード生成しています。
-  1 of 8364 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  3 of 8366 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    51 functions had inline decision re-evaluated but remain unchanged
+    46 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Release\Adollib.exe

@@ -8,14 +8,14 @@
 
 namespace Adollib {
 	namespace Physics_function {
-		//Contactクラス用のnamespace 
+		//Contactクラス用のnamespace
 		namespace Contacts {
 			static const int contact_max_per_pair = 4; //一つのpairで衝突の解散を行う最大の数
 
 			//拘束
 			struct Constraint {
 				Vector3 axis;			//拘束軸
-				float jacDiagInv = 0;	//拘束式の分母	
+				float jacDiagInv = 0;	//拘束式の分母
 				float rhs = 0;			//初期拘束力
 				float tangent_rhs = 0;  //拘束軸が法線の面上での拘束力
 				float lowerlimit = 0;	//拘束力の下限
@@ -66,9 +66,9 @@ namespace Adollib {
 				//:::::::
 				// 衝突点の衝突が今も存在するかの確認
 				// vector3 pointA : Rigitbody[0]の位置
-				// vector3 rotA : Rigitbody[0]の姿勢	
-				// vector3 pointB : Rigitbody[1]の位置	
-				// vector3 rotB : Rigitbody[1]の姿勢	
+				// vector3 rotA : Rigitbody[0]の姿勢
+				// vector3 pointB : Rigitbody[1]の位置
+				// vector3 rotB : Rigitbody[1]の姿勢
 				//:::::::
 				void chack_remove_contact_point(
 					const Vector3& pointA,
@@ -126,13 +126,13 @@ namespace Adollib {
 
 			struct Contact_pair {
 
-				Pairtype type; //衝突の種類(前フレームからある衝突かどうか)
+				Pairtype type = Pairtype::new_pair; //衝突の種類(前フレームからある衝突かどうか)
 
 				std::vector<ALP_Collider_mesh>::iterator body[2]; //接触したobject
 
 				Contact contacts; //衝突の情報
 
-				bool check_oncoll_only;
+				bool check_oncoll_only = false;
 			};
 
 			struct Collider_2 {

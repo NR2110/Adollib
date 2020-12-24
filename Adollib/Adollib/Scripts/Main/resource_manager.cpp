@@ -12,6 +12,8 @@
 #include "systems.h"
 #include "resource_manager.h"
 using namespace std;
+
+using namespace Adollib;
 using namespace DOP;
 
 namespace Adollib
@@ -289,7 +291,7 @@ namespace Adollib
 
 	HRESULT ResourceManager::LoadTextureFromFile(
 		const wchar_t* fileName,
-		ID3D11ShaderResourceView** pSRV, 
+		ID3D11ShaderResourceView** pSRV,
 		D3D11_TEXTURE2D_DESC* pTex2dDesc
 	)
 	{
@@ -321,7 +323,7 @@ namespace Adollib
 		return hr;
 	}
 #pragma endregion
-	
+
 	// モデルの読み込み
 	HRESULT ResourceManager::CreateModelFromFBX(vector<Mesh::mesh>** ret_mesh, const char* fileName, const char* filePath)
 	{
@@ -477,13 +479,13 @@ namespace Adollib
 							hr = ResourceManager::LoadTextureFromFile(texName, mesh.subsets.at(index_of_material).diffuse.shaderResourceVirw.GetAddressOf(), &texture2D_Desc);
 							_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 
-							// ピクセルシェーダーオブジェクトの生成 
+							// ピクセルシェーダーオブジェクトの生成
 						//	ResourceManager::CreatePsFromCso("./DefaultShader/default_ps.cso", mesh.subsets.at(index_of_material).pixelShader.GetAddressOf());
 						}
 					}
 					else
 					{
-						// ピクセルシェーダーオブジェクトの生成 
+						// ピクセルシェーダーオブジェクトの生成
 					//	ResourceManager::CreatePsFromCso("./DefaultShader/default_ps.cso", mesh.subsets.at(index_of_material).pixelShader.GetAddressOf());
 					}
 				}
@@ -582,7 +584,7 @@ namespace Adollib
 
 		// 頂点バッファの設定
 			D3D11_BUFFER_DESC vertexDesc = {};
-			vertexDesc.ByteWidth = sizeof(Mesh::VertexFormat) * vertices.size();   // バッファのサイズ	
+			vertexDesc.ByteWidth = sizeof(Mesh::VertexFormat) * vertices.size();   // バッファのサイズ
 			vertexDesc.Usage = D3D11_USAGE_IMMUTABLE;	        // バッファの読み書き法
 			vertexDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;    // パイプラインにどうバインドするか指定
 			vertexDesc.CPUAccessFlags = 0;                      // CPUのアクセスフラグ　0でアクセスしない
@@ -607,7 +609,7 @@ namespace Adollib
 			//CreateIndices(fbxMesh, &indices);
 
 			D3D11_BUFFER_DESC indexDesc = {};
-			indexDesc.ByteWidth = indices.size() * sizeof(u_int);          // バッファのサイズ	
+			indexDesc.ByteWidth = indices.size() * sizeof(u_int);          // バッファのサイズ
 			indexDesc.Usage = D3D11_USAGE_IMMUTABLE;	          // バッファの読み書き法
 			indexDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;    // パイプラインにどうバインドするか指定
 			indexDesc.CPUAccessFlags = 0;                    // CPUのアクセスフラグ　0でアクセスしない
