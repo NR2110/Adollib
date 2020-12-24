@@ -64,7 +64,7 @@ namespace Adollib {
 			//::: 複数meshに対応 各メッシュのdop,頂点情報などがここに保存される :::
 			std::vector<ALP_Collider_mesh> collider_meshes;
 
-			//::: 
+			//:::
 			Meshcoll_data meshcoll_data; //MeshCollider使用時に使うdata vertices,Edges,Facets
 
 		public:

@@ -91,6 +91,8 @@ bool Phyisics_manager::update(Scenelist Sce)
 	refresh_ALP_from_data(ALP_colliders[Sce]);
 	Work_meter::stop("refresh_ALP_from_data");
 
+	// Collider‚Ìoncoll_bit‚Ìreset
+	reset_oncoll_bits(ALP_colliders[Sce]);
 
 	// Collider‚ÌWorldî•ñ‚ÌXV
 	update_world_trans(ALP_colliders[Sce]);

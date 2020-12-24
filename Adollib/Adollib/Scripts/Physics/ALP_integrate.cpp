@@ -50,6 +50,11 @@ void Physics_function::update_dop14(std::list<Physics_function::ALP_Collider>& A
 	);
 }
 
+void Physics_function::reset_oncoll_bits(std::list<Physics_function::ALP_Collider>& ALP_colliders) {
+
+	for (auto& coll : ALP_colliders)coll.oncoll_bits = 0;
+}
+
 #pragma endregion
 //:::::::::::::::::::::::::::::::::::::::::::::::::::
 

@@ -14,14 +14,17 @@ namespace Adollib {
 		// get_dataのdataをColliderに入力
 		void refresh_ALP_from_data(std::list<Physics_function::ALP_Collider>& ALP_colliders);
 
-		//gameobjectへの変化量を求める
+		// gameobjectへの変化量を求める
 		void solv_resolve(std::list<Physics_function::ALP_Collider>& ALP_colliders);
 
-		//gameobjectへ変化量を渡す
+		// gameobjectへ変化量を渡す
 		void resolve_gameobject(std::list<Physics_function::ALP_Collider>& ALP_colliders);
 
 		// k-DOPの更新
 		void update_dop14(std::list<Physics_function::ALP_Collider>& ALP_shapes);
+
+		// oncoll_bitsのリセット
+		void reset_oncoll_bits(std::list<Physics_function::ALP_Collider>& ALP_colliders);
 
 		//::: ALP_phyicses ::::::::::
 
