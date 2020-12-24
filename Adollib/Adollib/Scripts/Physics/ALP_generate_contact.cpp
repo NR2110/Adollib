@@ -518,23 +518,44 @@ bool Physics_function::generate_contact_sphere_sphere(const std::vector<ALP_Coll
 	Vector3 pA = collA->world_position;
 	Vector3 pB = collB->world_position;
 
+	//AddContact用の変数
+	bool is_AC = false;
+	float ACpenetration = 0;
+	Vector3 ACnormal;
+	Vector3 ACcontact_pointA;
+	Vector3 ACcontact_pointB;
+
 	//p1 から p0　方向への法線
 	Vector3 n = pA - pB;
 	float length = n.norm_sqr();
 	n = n.unit_vect();
 
 	if (length < collA->world_scale.x + collB->world_scale.x) {
-		//衝突していたらContactオブジェクトを生成する
-		pair.contacts.addcontact(
-			collA->world_scale.x + collB->world_scale.x - length,
-			n,
-			collA->world_scale.x * vector3_quatrotate(-n, collA->world_orientation.conjugate()),
-			collB->world_scale.x * vector3_quatrotate(+n, collB->world_orientation.conjugate())
-		);
-		return true;
+		//衝突していたらContactオブジェクトを生成用に準備する
+		is_AC = true;
+		ACpenetration = collA->world_scale.x + collB->world_scale.x - length;
+		ACnormal = n;
+		ACcontact_pointA = collA->world_scale.x * vector3_quatrotate(-n, collA->world_orientation.conjugate());
+		ACcontact_pointB = collB->world_scale.x * vector3_quatrotate(+n, collB->world_orientation.conjugate());
 	}
 
-	return false;
+	if (is_AC)
+	{
+		//oncoll_enterのみの場合addcontactせずにreturn
+		if (pair.check_oncoll_only == true) {
+			SA->ALPcollider->oncoll_bits |= SB->ALPcollider->tag;
+			SB->ALPcollider->oncoll_bits |= SA->ALPcollider->tag;
+			return false;
+		}
+
+		pair.contacts.addcontact(
+			ACpenetration,
+			ACnormal,
+			ACcontact_pointA,
+			ACcontact_pointB
+		);
+	}
+	return is_AC;
 }
 #pragma endregion
 
@@ -542,6 +563,13 @@ bool Physics_function::generate_contact_sphere_sphere(const std::vector<ALP_Coll
 bool Physics_function::generate_contact_sphere_plane(const std::vector<ALP_Collider_mesh>::iterator& sphere_mesh, const std::vector<ALP_Collider_mesh>::iterator& plane_mesh, Contacts::Contact_pair& pair) {
 	const std::list<ALP_Collider>::iterator& sphere = sphere_mesh->ALPcollider;
 	const std::list<ALP_Collider>::iterator& plane = plane_mesh->ALPcollider;
+
+	//AddContact用の変数
+	bool is_AC = false;
+	float ACpenetration = 0;
+	Vector3 ACnormal;
+	Vector3 ACcontact_pointA;
+	Vector3 ACcontact_pointB;
 
 	//球面と平面の衝突判定を行う
 	Matrix rotate, inverse_rotate;
@@ -560,33 +588,41 @@ bool Physics_function::generate_contact_sphere_plane(const std::vector<ALP_Colli
 	//if (half_space && p.y < 0)return 0;
 
 	if (abs(p.y) < sphere->world_scale.x) {
+		//oncoll_enterのみの場合ここでreturn
+		if (pair.check_oncoll_only == true) {
+			sphere_mesh->ALPcollider->oncoll_bits |= plane_mesh->ALPcollider->tag;
+			plane_mesh->ALPcollider->oncoll_bits |= sphere_mesh->ALPcollider->tag;
+			return false;
+		}
+
 		n = p.y > 0 ? n : -n;
 
-		if (pair.body[0]->ALPcollider->shape == plane->shape) {
-			//body[0]　が　plane
-			//body[1]　が　sphere
-			pair.contacts.addcontact(
-				sphere->world_scale.x - abs(p.y),
-				n,
-				Vector3(p.x, 0, p.z),
-				sphere->world_scale.x * vector3_quatrotate(-n, sphere->world_orientation.conjugate())
-			);
-		}
-		else {
+		//衝突していたらContactオブジェクトを生成用に準備する
+		is_AC = true;
+		ACpenetration = sphere->world_scale.x - abs(p.y);
+		ACnormal = n;
+		ACcontact_pointA = Vector3(p.x, 0, p.z);
+		ACcontact_pointB = sphere->world_scale.x * vector3_quatrotate(-n, sphere->world_orientation.conjugate());
 
-			//body[0]　が　sphere
-			//body[1]　が　plane
-			pair.contacts.addcontact(
-				sphere->world_scale.x - abs(p.y),
-				n,
-				sphere->world_scale.x * vector3_quatrotate(-n, sphere->world_orientation.conjugate()),
-				Vector3(p.x, 0, p.z)
-			);
-		}
-		return true;
 	}
 
-	return false;
+	if (is_AC)
+	{
+		//oncoll_enterのみの場合ここでreturn
+		if (pair.check_oncoll_only == true) {
+			sphere_mesh->ALPcollider->oncoll_bits |= plane_mesh->ALPcollider->tag;
+			plane_mesh->ALPcollider->oncoll_bits |= sphere_mesh->ALPcollider->tag;
+			return false;
+		}
+
+		pair.contacts.addcontact(
+			ACpenetration,
+			ACnormal,
+			ACcontact_pointA,
+			ACcontact_pointB
+		);
+	}
+	return is_AC;
 }
 #pragma endregion
 
@@ -594,6 +630,13 @@ bool Physics_function::generate_contact_sphere_plane(const std::vector<ALP_Colli
 bool Physics_function::generate_contact_sphere_box(const std::vector<ALP_Collider_mesh>::iterator& sphere_mesh, const std::vector<ALP_Collider_mesh>::iterator& box_mesh, Contacts::Contact_pair& pair) {
 	const std::list<ALP_Collider>::iterator& sphere = sphere_mesh->ALPcollider;
 	const std::list<ALP_Collider>::iterator& box = box_mesh->ALPcollider;
+
+	//AddContact用の変数
+	bool is_AC = false;
+	float ACpenetration = 0;
+	Vector3 ACnormal;
+	Vector3 ACcontact_pointA;
+	Vector3 ACcontact_pointB;
 
 	//球とboxの衝突判定を行う
 	Matrix rotate, inverse_rotate;
@@ -630,27 +673,39 @@ bool Physics_function::generate_contact_sphere_box(const std::vector<ALP_Collide
 	Vector3 n = (sphere->world_position - vector3_trans(closest_point, rotate)).unit_vect(); //boxからsphereへのベクトル
 	if (vector3_dot(n, sphere->world_position - box->world_position) < 0)n *= -1;
 
-	if (pair.body[0]->ALPcollider->shape == box->shape) {
-		//body[0]　が　box
-		//body[1]　が　sphere
-		pair.contacts.addcontact(
-			sphere->world_scale.x - distance,
-			-n,
-			closest_point,
-			sphere->world_scale.x * vector3_quatrotate(-n, sphere->world_orientation.conjugate())
-		);
+	//衝突していたらContactオブジェクトを生成用に準備する
+	is_AC = true;
+	ACpenetration = sphere->world_scale.x - distance;
+	ACnormal = -n;
+	ACcontact_pointA = closest_point;
+	ACcontact_pointB = sphere->world_scale.x * vector3_quatrotate(-n, sphere->world_orientation.conjugate());
+
+
+	if (is_AC)
+	{
+		//oncoll_enterのみの場合ここでreturn
+		if (pair.check_oncoll_only == true) {
+			sphere_mesh->ALPcollider->oncoll_bits |= box_mesh->ALPcollider->tag;
+			box_mesh->ALPcollider->oncoll_bits |= sphere_mesh->ALPcollider->tag;
+			return false;
+		}
+
+		if (pair.body[0]->ALPcollider->shape == box->shape)
+			pair.contacts.addcontact(
+				ACpenetration,
+				ACnormal,
+				ACcontact_pointA,
+				ACcontact_pointB
+			);
+		else
+			pair.contacts.addcontact(
+				ACpenetration,
+				-ACnormal,
+				ACcontact_pointB,
+				ACcontact_pointA
+			);
 	}
-	else {
-		//body[0]　が　sphere
-		//body[1]　が　box
-		pair.contacts.addcontact(
-			sphere->world_scale.x - distance,
-			+n,
-			sphere->world_scale.x * vector3_quatrotate(-n, sphere->world_orientation.conjugate()),
-			closest_point
-		);
-	}
-	return true;
+	return is_AC;
 }
 #pragma endregion
 
@@ -659,6 +714,13 @@ bool Physics_function::generate_contact_sphere_capsule(const std::vector<ALP_Col
 
 	const std::list<ALP_Collider>::iterator& sphere = sphere_mesh->ALPcollider;
 	const std::list<ALP_Collider>::iterator& capsule = capsule_mesh->ALPcollider;
+
+	//AddContact用の変数
+	bool is_AC = false;
+	float ACpenetration = 0;
+	Vector3 ACnormal;
+	Vector3 ACcontact_pointA;
+	Vector3 ACcontact_pointB;
 
 	//capsuleの座標系で計算する(scaleは変更しない)
 
@@ -682,27 +744,40 @@ bool Physics_function::generate_contact_sphere_capsule(const std::vector<ALP_Col
 	if (length < sphere->world_scale.x + capsule->world_scale.x) {
 		Vector3 Wn = vector3_quatrotate(n, capsule->world_orientation); //nをcapsuleからワールドに
 
-		if (pair.body[0]->ALPcollider->shape == sphere->shape) {
-			//衝突していたらContactオブジェクトを生成する
-			pair.contacts.addcontact(
-				sphere->world_scale.x + capsule->world_scale.x - length,
-				+Wn,
-				sphere->world_scale.x * vector3_quatrotate(-Wn, sphere->world_orientation.conjugate()),
-				capsule->world_scale.x * n + pB
-			);
-		}
-		else {
-			pair.contacts.addcontact(
-				sphere->world_scale.x + capsule->world_scale.x - length,
-				-Wn,
-				capsule->world_scale.x * n + pB,
-				sphere->world_scale.x * vector3_quatrotate(-Wn, sphere->world_orientation.conjugate())
-			);
-		}
-		return true;
+		//衝突していたらContactオブジェクトを生成用に入力
+		is_AC = true;
+		ACpenetration = sphere->world_scale.x + capsule->world_scale.x - length;
+		ACnormal = +Wn;
+		ACcontact_pointA = sphere->world_scale.x * vector3_quatrotate(-Wn, sphere->world_orientation.conjugate());
+		ACcontact_pointB = capsule->world_scale.x * n + pB;
+
 	}
 
-	return false;
+	if (is_AC)
+	{
+		//oncoll_enterのみの場合ここでreturn
+		if (pair.check_oncoll_only == true) {
+			sphere_mesh->ALPcollider->oncoll_bits |= capsule_mesh->ALPcollider->tag;
+			capsule_mesh->ALPcollider->oncoll_bits |= sphere_mesh->ALPcollider->tag;
+			return false;
+		}
+
+		if (pair.body[0]->ALPcollider->shape == sphere->shape)
+			pair.contacts.addcontact(
+				ACpenetration,
+				ACnormal,
+				ACcontact_pointA,
+				ACcontact_pointB
+			);
+		else
+			pair.contacts.addcontact(
+				ACpenetration,
+				-ACnormal,
+				ACcontact_pointB,
+				ACcontact_pointA
+			);
+	}
+	return is_AC;
 }
 #pragma endregion
 
@@ -710,6 +785,13 @@ bool Physics_function::generate_contact_sphere_capsule(const std::vector<ALP_Col
 bool Physics_function::generate_contact_sphere_mesh(const std::vector<ALP_Collider_mesh>::iterator& sphere_mesh, const std::vector<ALP_Collider_mesh>::iterator& mesh_mesh, Contacts::Contact_pair& pair) {
 	const std::list<ALP_Collider>::iterator& sphere = sphere_mesh->ALPcollider;
 	const std::list<ALP_Collider>::iterator& mesh = mesh_mesh->ALPcollider;
+
+	//AddContact用の変数
+	bool is_AC = false;
+	float ACpenetration = 0;
+	Vector3 ACnormal;
+	Vector3 ACcontact_pointA;
+	Vector3 ACcontact_pointB;
 
 	if (mesh_mesh->mesh->is_Convex == true) {
 		//球とmeshの衝突判定を行う
@@ -737,28 +819,14 @@ bool Physics_function::generate_contact_sphere_mesh(const std::vector<ALP_Collid
 		if (sphere->world_scale.x - distance > FLT_EPSILON) { //float誤差も調整
 			Vector3 n = (sphere->world_position - vector3_trans(closest_point, rotate)).unit_vect(); //meshからsphereへのベクトル
 
-			if (pair.body[0]->ALPcollider->shape == mesh->shape) {
-				//body[0]　が　mesh
-				//body[1]　が　sphere
-				pair.contacts.addcontact(
-					sphere->world_scale.x - distance,
-					-n,
-					closest_point,
-					sphere->world_scale.x * vector3_quatrotate(n, sphere->world_orientation.conjugate())
-				);
-			}
-			else {
-				//body[0]　が　sphere
-				//body[1]　が　mesh
-				pair.contacts.addcontact(
-					sphere->world_scale.x - distance,
-					n,
-					sphere->world_scale.x * vector3_quatrotate(n, sphere->world_orientation.conjugate()),
-					closest_point
-				);
-			}
-			return true;
+			//衝突していたらContactオブジェクトを生成用に入力
+			is_AC = true;
+			ACpenetration = sphere->world_scale.x - distance;
+			ACnormal = -n;
+			ACcontact_pointA = closest_point;
+			ACcontact_pointB = sphere->world_scale.x * vector3_quatrotate(n, sphere->world_orientation.conjugate());
 		}
+
 	}
 	else {
 		//球とmeshの衝突判定を行う
@@ -808,32 +876,38 @@ bool Physics_function::generate_contact_sphere_mesh(const std::vector<ALP_Collid
 		Vector3 Wn = vector3_quatrotate((sphere_pos_meshcoord - closest_point), mesh->world_orientation).unit_vect();//meshからsphereへのベクトル
 		if (vector3_dot(sphere_pos_meshcoord - closest_point, nor_meshcoord) < 0)Wn *= -1;
 
-
-		if (pair.body[0]->ALPcollider->shape == mesh->shape) {
-			//body[0]　が　mesh
-			//body[1]　が　sphere
-			pair.contacts.addcontact(
-				sphere->world_scale.x - min_dis,
-				-Wn,
-				closest_point,
-				sphere->world_scale.x * vector3_quatrotate(-Wn, sphere->world_orientation.conjugate())
-			);
-		}
-		else {
-			//body[0]　が　sphere
-			//body[1]　が　mesh
-			pair.contacts.addcontact(
-				sphere->world_scale.x - min_dis,
-				+Wn,
-				sphere->world_scale.x * vector3_quatrotate(-Wn, sphere->world_orientation.conjugate()),
-				closest_point
-			);
-		}
-		return true;
-
+		is_AC = true;
+		ACpenetration = sphere->world_scale.x - min_dis;
+		ACnormal = +Wn;
+		ACcontact_pointA = sphere->world_scale.x * vector3_quatrotate(-Wn, sphere->world_orientation.conjugate());
+		ACcontact_pointB = closest_point;
 	}
 
-	return false;
+	if (is_AC)
+	{
+		//oncoll_enterのみの場合ここでreturn
+		if (pair.check_oncoll_only == true) {
+			sphere_mesh->ALPcollider->oncoll_bits |= mesh_mesh->ALPcollider->tag;
+			mesh_mesh->ALPcollider->oncoll_bits |= sphere_mesh->ALPcollider->tag;
+			return false;
+		}
+
+		if (pair.body[0]->ALPcollider->shape == sphere->shape)
+			pair.contacts.addcontact(
+				ACpenetration,
+				ACnormal,
+				ACcontact_pointA,
+				ACcontact_pointB
+			);
+		else
+			pair.contacts.addcontact(
+				ACpenetration,
+				-ACnormal,
+				ACcontact_pointB,
+				ACcontact_pointA
+			);
+	}
+	return is_AC;
 }
 #pragma endregion
 
@@ -842,6 +916,13 @@ bool Physics_function::generate_contact_sphere_mesh(const std::vector<ALP_Collid
 bool Physics_function::generate_contact_box_plane(const std::vector<ALP_Collider_mesh>::iterator& box_mesh, const std::vector<ALP_Collider_mesh>::iterator& plane_mesh, Contacts::Contact_pair& pair) {
 	const std::list<ALP_Collider>::iterator& box = box_mesh->ALPcollider;
 	const std::list<ALP_Collider>::iterator& plane = plane_mesh->ALPcollider;
+
+	//AddContact用の変数
+	bool is_AC = false;
+	float ACpenetration = 0;
+	Vector3 ACnormal;
+	Vector3 ACcontact_pointA;
+	Vector3 ACcontact_pointB;
 
 	Vector3 vertices[8] = {
 		// obb座標系での各頂点のローカル座標
@@ -892,30 +973,39 @@ bool Physics_function::generate_contact_box_plane(const std::vector<ALP_Collider
 	}
 
 	if (max_penetrate != 0) {
-		if (pair.body[0]->ALPcollider->shape == plane->shape) {
-			//body[0]　が　plane
-			//body[1]　が　box
-			pair.contacts.addcontact(
-				max_penetrate,
-				-n,
-				pointplane,
-				pointbox
-			);
-		}
-		else {
-			//body[0]　が　box
-			//body[1]　が　plane
-			pair.contacts.addcontact(
-				max_penetrate,
-				n,
-				pointbox,
-				pointplane
-			);
+		is_AC = true;
+
+		ACpenetration = max_penetrate;
+		ACnormal = -n;
+		ACcontact_pointA = pointplane;
+		ACcontact_pointB = pointbox;
+	}
+
+	if (is_AC)
+	{
+		//oncoll_enterのみの場合ここでreturn
+		if (pair.check_oncoll_only == true) {
+			box_mesh->ALPcollider->oncoll_bits |= plane_mesh->ALPcollider->tag;
+			plane_mesh->ALPcollider->oncoll_bits |= box_mesh->ALPcollider->tag;
+			return false;
 		}
 
-		return true;
+		if (pair.body[0]->ALPcollider->shape == box->shape)
+			pair.contacts.addcontact(
+				ACpenetration,
+				ACnormal,
+				ACcontact_pointA,
+				ACcontact_pointB
+			);
+		else
+			pair.contacts.addcontact(
+				ACpenetration,
+				-ACnormal,
+				ACcontact_pointB,
+				ACcontact_pointA
+			);
 	}
-	return false;
+	return is_AC;
 }
 #pragma endregion
 
@@ -924,6 +1014,13 @@ bool Physics_function::generate_contact_box_plane(const std::vector<ALP_Collider
 bool Physics_function::generate_contact_box_box(const std::vector<ALP_Collider_mesh>::iterator& bA, const std::vector<ALP_Collider_mesh>::iterator& bB, Contacts::Contact_pair& pair) {
 	const std::list<ALP_Collider>::iterator& boxA = bA->ALPcollider;
 	const std::list<ALP_Collider>::iterator& boxB = bB->ALPcollider;
+
+	//AddContact用の変数
+	bool is_AC = false;
+	float ACpenetration = 0;
+	Vector3 ACnormal;
+	Vector3 ACcontact_pointA;
+	Vector3 ACcontact_pointB;
 
 	Matrix m;
 	m = boxA->world_orientation.get_rotate_matrix();
@@ -994,12 +1091,11 @@ bool Physics_function::generate_contact_box_box(const std::vector<ALP_Collider_m
 		if (c.z > +box_halfsize.z)p0.z = +box_halfsize.z;
 		if (c.z < -box_halfsize.z)p0.z = -box_halfsize.z;
 
-		pair.contacts.addcontact(
-			smallest_penetration,
-			-Wn,
-			p0,
-			p1
-		);
+		is_AC = true;
+		ACpenetration = smallest_penetration;
+		ACnormal = -Wn;
+		ACcontact_pointA = p0;
+		ACcontact_pointB = p1;
 	}
 	//obbAの頂点がobbBの面と衝突した場合
 	else if (smallest_case == SAT_TYPE::POINTA_FACETB)
@@ -1043,15 +1139,11 @@ bool Physics_function::generate_contact_box_box(const std::vector<ALP_Collider_m
 		if (c.z > +box_halfsize.z)p1.z = +box_halfsize.z;
 		if (c.z < -box_halfsize.z)p1.z = -box_halfsize.z;
 
-		if (p0.y > 1) {
-			int dafsgdf = 0;
-		}
-		pair.contacts.addcontact(
-			smallest_penetration,
-			-Wn,
-			p0,
-			p1
-		);
+		is_AC = true;
+		ACpenetration = smallest_penetration;
+		ACnormal = -Wn;
+		ACcontact_pointA = p0;
+		ACcontact_pointB = p1;
 	}
 	//③obb0の辺とobb1の辺と衝突した場合
 	else if (smallest_case == SAT_TYPE::EDGE_EDGE)
@@ -1091,16 +1183,32 @@ bool Physics_function::generate_contact_box_box(const std::vector<ALP_Collider_m
 			Vector3(0,1,0),
 			Vector3(0,0,1)
 		};
-		pair.contacts.addcontact(
-			smallest_penetration,
-			-n,
-			p[0] + s * b_axis[smallest_axis[0]],
-			p[1] + t * b_axis[smallest_axis[1]]
-		);
+
+		is_AC = true;
+		ACpenetration = smallest_penetration;
+		ACnormal = -n;
+		ACcontact_pointA = p[0] + s * b_axis[smallest_axis[0]];
+		ACcontact_pointB = p[1] + t * b_axis[smallest_axis[1]];
 	}
 	else assert(0);
 
-	return true;
+	if (is_AC)
+	{
+		//oncoll_enterのみの場合ここでreturn
+		if (pair.check_oncoll_only == true) {
+			bA->ALPcollider->oncoll_bits |= bB->ALPcollider->tag;
+			bB->ALPcollider->oncoll_bits |= bA->ALPcollider->tag;
+			return false;
+		}
+
+		pair.contacts.addcontact(
+			ACpenetration,
+			ACnormal,
+			ACcontact_pointA,
+			ACcontact_pointB
+		);
+	}
+	return is_AC;
 }
 #pragma endregion
 
@@ -1108,6 +1216,14 @@ bool Physics_function::generate_contact_box_box(const std::vector<ALP_Collider_m
 bool Physics_function::generate_contact_box_capsule(const std::vector<ALP_Collider_mesh>::iterator& box_mesh, const std::vector<ALP_Collider_mesh>::iterator& capsule_mesh, Contacts::Contact_pair& pair) {
 	const std::list<ALP_Collider>::iterator& capsule = capsule_mesh->ALPcollider;
 	const std::list<ALP_Collider>::iterator& box = box_mesh->ALPcollider;
+
+	//AddContact用の変数
+	bool is_AC = false;
+	float ACpenetration = 0;
+	Vector3 ACnormal;
+	Vector3 ACcontact_pointA;
+	Vector3 ACcontact_pointB;
+
 
 	Vector3 box_halfsize = box->world_scale * box->half_size;
 
@@ -1118,13 +1234,6 @@ bool Physics_function::generate_contact_box_capsule(const std::vector<ALP_Collid
 	//box座標系でのcapsuleの情報
 	Vector3 cuppos_boxcoord = vector3_quatrotate(capsule->world_position - box->world_position, box->world_orientation.conjugate());
 	Vector3 cupsca_boxcoord = vector3_quatrotate(Vector3(0, capsule->world_scale.y, 0), capsule->world_orientation * box->world_orientation.conjugate());
-
-
-	static float LL_save = 0;
-	if (ImGui::Begin("NR_debug")) {
-		ImGui::Text("%f", LL_save);
-	}
-	ImGui::End();
 
 	bool is_crossing = false;
 	{
@@ -1203,30 +1312,42 @@ bool Physics_function::generate_contact_box_capsule(const std::vector<ALP_Collid
 	Vector3 n = (closest_cap - closest_box).unit_vect(); //boxからsphereへのベクトル boxcoord
 	Vector3 Wn = vector3_quatrotate(n, box->world_orientation); //worldcoord
 
-	LL_save = leng;
-	if (pair.body[0]->ALPcollider->shape == box->shape) {
-		//body[0]　が　box
-		//body[1]　が　sphere
-		pair.contacts.addcontact(
-			leng,
-			-Wn,
-			closest_box,
-			(Vector3(0, capsule->world_scale.y, 0) * capsule_t) + vector3_quatrotate(-Wn, capsule->world_orientation.conjugate()) * capsule->world_scale.x
-			//vector3_quatrotate(vector3_quatrotate(closest_cap - n * capsule->world_scale.x, box->world_orientation.conjugate()) + box->world_position - capsule->world_position, capsule->world_orientation.conjugate())
-		);
+	//
+	is_AC = true;
+	ACpenetration = leng;
+	ACnormal = -Wn;
+	ACcontact_pointA = closest_box;
+	ACcontact_pointB = (Vector3(0, capsule->world_scale.y, 0) * capsule_t) + vector3_quatrotate(-Wn, capsule->world_orientation.conjugate()) * capsule->world_scale.x;
+	//vector3_quatrotate(vector3_quatrotate(closest_cap - n * capsule->world_scale.x, box->world_orientation.conjugate()) + box->world_position - capsule->world_position, capsule->world_orientation.conjugate())
+
+
+	if (is_AC)
+	{
+		//oncoll_enterのみの場合ここでreturn
+		if (pair.check_oncoll_only == true) {
+			box_mesh->ALPcollider->oncoll_bits |= capsule_mesh->ALPcollider->tag;
+			capsule_mesh->ALPcollider->oncoll_bits |= box_mesh->ALPcollider->tag;
+			return false;
+		}
+
+		if (pair.body[0]->ALPcollider->shape == box->shape)
+			pair.contacts.addcontact(
+				ACpenetration,
+				ACnormal,
+				ACcontact_pointA,
+				ACcontact_pointB
+			);
+		else
+			pair.contacts.addcontact(
+				ACpenetration,
+				-ACnormal,
+				ACcontact_pointB,
+				ACcontact_pointA
+			);
+
 	}
-	else {
-		//body[0]　が　sphere
-		//body[1]　が　box
-		pair.contacts.addcontact(
-			leng,
-			+Wn,
-			//vector3_quatrotate(vector3_quatrotate(closest_cap - n * capsule->world_scale.x, box->world_orientation.conjugate()) + box->world_position - capsule->world_position, capsule->world_orientation.conjugate()),
-			(Vector3(0, capsule->world_scale.y, 0) * capsule_t) + vector3_quatrotate(-Wn, capsule->world_orientation.conjugate()) * capsule->world_scale.x,
-			closest_box
-		);
-	}
-	return true;
+	return is_AC;
+
 }
 #pragma endregion //TODO:なぜかバグる
 
@@ -1241,6 +1362,13 @@ bool Physics_function::generate_contact_box_mesh(const std::vector<ALP_Collider_
 bool Physics_function::generate_contact_capsule_capsule(const std::vector<ALP_Collider_mesh>::iterator& SA, const std::vector<ALP_Collider_mesh>::iterator& SB, Contacts::Contact_pair& pair) {
 	const std::list<ALP_Collider>::iterator& collA = SA->ALPcollider;
 	const std::list<ALP_Collider>::iterator& collB = SB->ALPcollider;
+
+	//AddContact用の変数
+	bool is_AC = false;
+	float ACpenetration = 0;
+	Vector3 ACnormal;
+	Vector3 ACcontact_pointA;
+	Vector3 ACcontact_pointB;
 
 	Vector3 Avec_Wco = vector3_quatrotate(Vector3(0, 1, 0), collA->world_orientation) * collA->world_scale.y;
 	Vector3 Bvec_Wco = vector3_quatrotate(Vector3(0, 1, 0), collB->world_orientation) * collB->world_scale.y;
@@ -1263,17 +1391,40 @@ bool Physics_function::generate_contact_capsule_capsule(const std::vector<ALP_Co
 	Wn = Wn.unit_vect();
 
 	if (length < collA->world_scale.x + collB->world_scale.x) {
-		//衝突していたらContactオブジェクトを生成する
-		pair.contacts.addcontact(
-			collA->world_scale.x + collB->world_scale.x - length,
-			Wn,
-			Vector3(0, 1, 0) * collA->world_scale.y * (s * 2 - 1) + collA->world_scale.x * vector3_quatrotate(-Wn, collA->world_orientation.conjugate()),
-			Vector3(0, 1, 0) * collB->world_scale.y * (t * 2 - 1) + collB->world_scale.x * vector3_quatrotate(+Wn, collB->world_orientation.conjugate())
-		);
-		return true;
+
+		//衝突していたらContactオブジェクトを生成用に準備する
+		is_AC = true;
+		ACpenetration = collA->world_scale.x + collB->world_scale.x - length;
+		ACnormal = Wn;
+		ACcontact_pointA = Vector3(0, 1, 0) * collA->world_scale.y * (s * 2 - 1) + collA->world_scale.x * vector3_quatrotate(-Wn, collA->world_orientation.conjugate());
+		ACcontact_pointB = Vector3(0, 1, 0) * collB->world_scale.y * (t * 2 - 1) + collB->world_scale.x * vector3_quatrotate(+Wn, collB->world_orientation.conjugate());
 	}
 
-	return false;
+
+	if (is_AC)
+	{
+		//oncoll_enterのみの場合ここでreturn
+		if (pair.check_oncoll_only == true) {
+			SA->ALPcollider->oncoll_bits |= SB->ALPcollider->tag;
+			SB->ALPcollider->oncoll_bits |= SA->ALPcollider->tag;
+			return false;
+		}
+		if (pair.body[0]->ALPcollider->shape == collA->shape)
+			pair.contacts.addcontact(
+				ACpenetration,
+				ACnormal,
+				ACcontact_pointA,
+				ACcontact_pointB
+			);
+		else
+			pair.contacts.addcontact(
+				ACpenetration,
+				-ACnormal,
+				ACcontact_pointB,
+				ACcontact_pointA
+			);
+	}
+	return is_AC;
 }
 #pragma endregion
 
@@ -1281,6 +1432,13 @@ bool Physics_function::generate_contact_capsule_capsule(const std::vector<ALP_Co
 bool Physics_function::generate_contact_capsule_mesh(const std::vector<ALP_Collider_mesh>::iterator& capsule_mesh, const std::vector<ALP_Collider_mesh>::iterator& mesh_mesh, Contacts::Contact_pair& pair) {
 	const std::list<ALP_Collider>::iterator& capsule = capsule_mesh->ALPcollider;
 	const std::list<ALP_Collider>::iterator& mesh = mesh_mesh->ALPcollider;
+
+	//AddContact用の変数
+	bool is_AC = false;
+	float ACpenetration = 0;
+	Vector3 ACnormal;
+	Vector3 ACcontact_pointA;
+	Vector3 ACcontact_pointB;
 
 	if (0 && mesh_mesh->mesh->is_Convex == true) {
 		////球とmeshの衝突判定を行う
@@ -1400,34 +1558,40 @@ bool Physics_function::generate_contact_capsule_mesh(const std::vector<ALP_Colli
 		Vector3 Wn = vector3_quatrotate((min_sphere_pos_meshcoord - closest_point), mesh->world_orientation).unit_vect();//meshからsphereへのベクトル
 		if (vector3_dot(min_sphere_pos_meshcoord - closest_point, nor_meshcoord) < 0)Wn *= -1;
 
-
-		if (pair.body[0]->ALPcollider->shape == mesh->shape) {
-			//body[0]　が　mesh
-			//body[1]　が　sphere
-			pair.contacts.addcontact(
-				capsule->world_scale.x - min_dis,
-				-Wn,
-				closest_point,
-				Vector3(0, capsule->world_scale.y, 0) * min_t + capsule->world_scale.x * vector3_quatrotate(-Wn, capsule->world_orientation.conjugate())
-			);
-		}
-		else {
-			//body[0]　が　sphere
-			//body[1]　が　mesh
-			pair.contacts.addcontact(
-				capsule->world_scale.x - min_dis,
-				+Wn,
-				Vector3(0, capsule->world_scale.y, 0) * min_t + capsule->world_scale.x * vector3_quatrotate(-Wn, capsule->world_orientation.conjugate()),
-				closest_point
-			);
-		}
-		return true;
-
+		is_AC = true;
+		ACpenetration = capsule->world_scale.x - min_dis;
+		ACnormal = -Wn;
+		ACcontact_pointA = closest_point;
+		ACcontact_pointB = Vector3(0, capsule->world_scale.y, 0) * min_t + capsule->world_scale.x * vector3_quatrotate(-Wn, capsule->world_orientation.conjugate());
 	}
 
-	return false;
+	if (is_AC)
+	{
+		//oncoll_enterのみの場合ここでreturn
+		if (pair.check_oncoll_only == true) {
+			mesh_mesh->ALPcollider->oncoll_bits |= capsule_mesh->ALPcollider->tag;
+			capsule_mesh->ALPcollider->oncoll_bits |= mesh_mesh->ALPcollider->tag;
+			return false;
+		}
+		if (pair.body[0]->ALPcollider->shape == mesh->shape)
+			pair.contacts.addcontact(
+				ACpenetration,
+				ACnormal,
+				ACcontact_pointA,
+				ACcontact_pointB
+			);
+		else
+			pair.contacts.addcontact(
+				ACpenetration,
+				-ACnormal,
+				ACcontact_pointB,
+				ACcontact_pointA
+			);
+	}
+	return is_AC;
 }
 #pragma endregion
+
 
 #pragma region MESH-PLANE
 bool Physics_function::generate_contact_mesh_plane(const std::vector<ALP_Collider_mesh>::iterator& S1, const std::vector<ALP_Collider_mesh>::iterator& S2, Contacts::Contact_pair& pair) {

@@ -176,19 +176,6 @@ void ALP_Collider::update_dop14_as_mesh() {
 			}
 		}
 
-
-		//for (int v_num = 0; v_num < 24; v_num++) {
-		//	const Vector3& pos = mesh.mesh->base_pos[v_num] * world_scale;
-
-		//	//DOPの更新
-		//	for (int i = 0; i < DOP::DOP_size; i++) {
-		//		const float dis = vector3_dot(DOP::DOP_14_axis[i], vector3_quatrotate(pos, world_orientation));
-		//		if (mesh.dop14.min[i] < dis) mesh.dop14.min[i] = dis * 1.00000001f;//確実にするためちょっと大きめにとる
-		//		if (mesh.dop14.max[i] > dis) mesh.dop14.max[i] = dis * 1.00000001f;//確実にするためちょっと大きめにとる
-
-		//	}
-		//}
-
 	}
 }
 

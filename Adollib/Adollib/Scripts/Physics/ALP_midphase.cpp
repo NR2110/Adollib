@@ -59,7 +59,7 @@ void Midphase_DOP_14(std::vector<Contacts::Contact_pair>& new_pairs, std::vector
 	// ƒ^ƒO‚É‚æ‚éÕ“Ë‚Ì¥”ñ
 	bool hit = true;
 	if (collA->ALPphysics->is_hitable == false|| (collA->tag & collB->not_hitable_tags)) hit = false;
-	if (collB->ALPphysics->is_hitable == false|| (collA->not_hitable_tags)) hit = false;
+	if (collB->ALPphysics->is_hitable == false|| (collB->tag & collA->not_hitable_tags)) hit = false;
 	bool check_oncoll_only = false;
 	if (hit == false) {
 		if (collA->oncoll_check_bits & collB->tag)check_oncoll_only = true;
