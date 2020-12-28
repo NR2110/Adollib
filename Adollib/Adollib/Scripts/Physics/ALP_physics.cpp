@@ -61,6 +61,17 @@ void ALP_Physics::apply_external_force(float duration) {
 		float inv_mass = 1 / inertial_mass;
 		if (is_fallable) linear_acceleration += Vector3(0, -Phyisics_manager::gravity, 0); //落下
 
+		//空気抵抗の求め方
+		// k は流体の密度やらなんやらを考慮した定数
+		//F(t) = 1/2 * k * v
+		//F(t) = m * a(t)
+		//a(t) = dv/dt = - * k * v(t) / m
+		//∫1 / v(t) * dv/dt * dt = ∫ -k / m * dt
+		//ln v(t) = -k / m * t + C
+		//v(t) = exp(-k / m * t + C)
+		//v(t) = C´ * exp(-k / m * t)
+		//t=の時 C´ = V(0)より
+		//v(t) = V(0) * exp(-k / m * t)
 		float k = linear_drag * inv_mass; //空気抵抗やらなんやらを考慮した値 のはずだけど適当に簡略化
 		linear_acceleration += linear_velocity * exp(-k * duration) - linear_velocity; // 空気抵抗
 
