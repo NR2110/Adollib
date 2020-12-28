@@ -541,12 +541,12 @@ bool Physics_function::generate_contact_sphere_sphere(const std::vector<ALP_Coll
 
 	if (is_AC)
 	{
+		SA->ALPcollider->oncoll_bits |= SB->ALPcollider->tag;
+		SB->ALPcollider->oncoll_bits |= SA->ALPcollider->tag;
+
 		//oncoll_enter‚Ì‚Ý‚Ìê‡addcontact‚¹‚¸‚Éreturn
-		if (pair.check_oncoll_only == true) {
-			SA->ALPcollider->oncoll_bits |= SB->ALPcollider->tag;
-			SB->ALPcollider->oncoll_bits |= SA->ALPcollider->tag;
-			return false;
-		}
+		if (pair.check_oncoll_only == true) return false;
+
 
 		pair.contacts.addcontact(
 			ACpenetration,
@@ -608,12 +608,11 @@ bool Physics_function::generate_contact_sphere_plane(const std::vector<ALP_Colli
 
 	if (is_AC)
 	{
+		sphere_mesh->ALPcollider->oncoll_bits |= plane_mesh->ALPcollider->tag;
+		plane_mesh->ALPcollider->oncoll_bits |= sphere_mesh->ALPcollider->tag;
+
 		//oncoll_enter‚Ì‚Ý‚Ìê‡‚±‚±‚Åreturn
-		if (pair.check_oncoll_only == true) {
-			sphere_mesh->ALPcollider->oncoll_bits |= plane_mesh->ALPcollider->tag;
-			plane_mesh->ALPcollider->oncoll_bits |= sphere_mesh->ALPcollider->tag;
-			return false;
-		}
+		if (pair.check_oncoll_only == true) return false;
 
 		pair.contacts.addcontact(
 			ACpenetration,
@@ -683,12 +682,11 @@ bool Physics_function::generate_contact_sphere_box(const std::vector<ALP_Collide
 
 	if (is_AC)
 	{
+		sphere_mesh->ALPcollider->oncoll_bits |= box_mesh->ALPcollider->tag;
+		box_mesh->ALPcollider->oncoll_bits |= sphere_mesh->ALPcollider->tag;
+
 		//oncoll_enter‚Ì‚Ý‚Ìê‡‚±‚±‚Åreturn
-		if (pair.check_oncoll_only == true) {
-			sphere_mesh->ALPcollider->oncoll_bits |= box_mesh->ALPcollider->tag;
-			box_mesh->ALPcollider->oncoll_bits |= sphere_mesh->ALPcollider->tag;
-			return false;
-		}
+		if (pair.check_oncoll_only == true) return false;
 
 		if (pair.body[0]->ALPcollider->shape == box->shape)
 			pair.contacts.addcontact(
@@ -755,12 +753,11 @@ bool Physics_function::generate_contact_sphere_capsule(const std::vector<ALP_Col
 
 	if (is_AC)
 	{
+		sphere_mesh->ALPcollider->oncoll_bits |= capsule_mesh->ALPcollider->tag;
+		capsule_mesh->ALPcollider->oncoll_bits |= sphere_mesh->ALPcollider->tag;
+
 		//oncoll_enter‚Ì‚Ý‚Ìê‡‚±‚±‚Åreturn
-		if (pair.check_oncoll_only == true) {
-			sphere_mesh->ALPcollider->oncoll_bits |= capsule_mesh->ALPcollider->tag;
-			capsule_mesh->ALPcollider->oncoll_bits |= sphere_mesh->ALPcollider->tag;
-			return false;
-		}
+		if (pair.check_oncoll_only == true) return false;
 
 		if (pair.body[0]->ALPcollider->shape == sphere->shape)
 			pair.contacts.addcontact(
@@ -885,12 +882,11 @@ bool Physics_function::generate_contact_sphere_mesh(const std::vector<ALP_Collid
 
 	if (is_AC)
 	{
+		sphere_mesh->ALPcollider->oncoll_bits |= mesh_mesh->ALPcollider->tag;
+		mesh_mesh->ALPcollider->oncoll_bits |= sphere_mesh->ALPcollider->tag;
+
 		//oncoll_enter‚Ì‚Ý‚Ìê‡‚±‚±‚Åreturn
-		if (pair.check_oncoll_only == true) {
-			sphere_mesh->ALPcollider->oncoll_bits |= mesh_mesh->ALPcollider->tag;
-			mesh_mesh->ALPcollider->oncoll_bits |= sphere_mesh->ALPcollider->tag;
-			return false;
-		}
+		if (pair.check_oncoll_only == true) return false;
 
 		if (pair.body[0]->ALPcollider->shape == sphere->shape)
 			pair.contacts.addcontact(
@@ -983,12 +979,11 @@ bool Physics_function::generate_contact_box_plane(const std::vector<ALP_Collider
 
 	if (is_AC)
 	{
+		box_mesh->ALPcollider->oncoll_bits |= plane_mesh->ALPcollider->tag;
+		plane_mesh->ALPcollider->oncoll_bits |= box_mesh->ALPcollider->tag;
+
 		//oncoll_enter‚Ì‚Ý‚Ìê‡‚±‚±‚Åreturn
-		if (pair.check_oncoll_only == true) {
-			box_mesh->ALPcollider->oncoll_bits |= plane_mesh->ALPcollider->tag;
-			plane_mesh->ALPcollider->oncoll_bits |= box_mesh->ALPcollider->tag;
-			return false;
-		}
+		if (pair.check_oncoll_only == true) return false;
 
 		if (pair.body[0]->ALPcollider->shape == box->shape)
 			pair.contacts.addcontact(
@@ -1194,12 +1189,11 @@ bool Physics_function::generate_contact_box_box(const std::vector<ALP_Collider_m
 
 	if (is_AC)
 	{
+		bA->ALPcollider->oncoll_bits |= bB->ALPcollider->tag;
+		bB->ALPcollider->oncoll_bits |= bA->ALPcollider->tag;
+
 		//oncoll_enter‚Ì‚Ý‚Ìê‡‚±‚±‚Åreturn
-		if (pair.check_oncoll_only == true) {
-			bA->ALPcollider->oncoll_bits |= bB->ALPcollider->tag;
-			bB->ALPcollider->oncoll_bits |= bA->ALPcollider->tag;
-			return false;
-		}
+		if (pair.check_oncoll_only == true) return false;
 
 		pair.contacts.addcontact(
 			ACpenetration,
@@ -1323,12 +1317,11 @@ bool Physics_function::generate_contact_box_capsule(const std::vector<ALP_Collid
 
 	if (is_AC)
 	{
+		box_mesh->ALPcollider->oncoll_bits |= capsule_mesh->ALPcollider->tag;
+		capsule_mesh->ALPcollider->oncoll_bits |= box_mesh->ALPcollider->tag;
+
 		//oncoll_enter‚Ì‚Ý‚Ìê‡‚±‚±‚Åreturn
-		if (pair.check_oncoll_only == true) {
-			box_mesh->ALPcollider->oncoll_bits |= capsule_mesh->ALPcollider->tag;
-			capsule_mesh->ALPcollider->oncoll_bits |= box_mesh->ALPcollider->tag;
-			return false;
-		}
+		if (pair.check_oncoll_only == true) return false;
 
 		if (pair.body[0]->ALPcollider->shape == box->shape)
 			pair.contacts.addcontact(
@@ -1403,12 +1396,12 @@ bool Physics_function::generate_contact_capsule_capsule(const std::vector<ALP_Co
 
 	if (is_AC)
 	{
+		SA->ALPcollider->oncoll_bits |= SB->ALPcollider->tag;
+		SB->ALPcollider->oncoll_bits |= SA->ALPcollider->tag;
+
 		//oncoll_enter‚Ì‚Ý‚Ìê‡‚±‚±‚Åreturn
-		if (pair.check_oncoll_only == true) {
-			SA->ALPcollider->oncoll_bits |= SB->ALPcollider->tag;
-			SB->ALPcollider->oncoll_bits |= SA->ALPcollider->tag;
-			return false;
-		}
+		if (pair.check_oncoll_only == true) return false;
+
 		if (pair.body[0]->ALPcollider->shape == collA->shape)
 			pair.contacts.addcontact(
 				ACpenetration,
@@ -1567,12 +1560,12 @@ bool Physics_function::generate_contact_capsule_mesh(const std::vector<ALP_Colli
 
 	if (is_AC)
 	{
+		mesh_mesh->ALPcollider->oncoll_bits |= capsule_mesh->ALPcollider->tag;
+		capsule_mesh->ALPcollider->oncoll_bits |= mesh_mesh->ALPcollider->tag;
+
 		//oncoll_enter‚Ì‚Ý‚Ìê‡‚±‚±‚Åreturn
-		if (pair.check_oncoll_only == true) {
-			mesh_mesh->ALPcollider->oncoll_bits |= capsule_mesh->ALPcollider->tag;
-			capsule_mesh->ALPcollider->oncoll_bits |= mesh_mesh->ALPcollider->tag;
-			return false;
-		}
+		if (pair.check_oncoll_only == true) return false;
+
 		if (pair.body[0]->ALPcollider->shape == mesh->shape)
 			pair.contacts.addcontact(
 				ACpenetration,

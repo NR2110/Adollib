@@ -73,7 +73,7 @@ void ALP_Physics::apply_external_force(float duration) {
 		//t=の時 C´ = V(0)より
 		//v(t) = V(0) * exp(-k / m * t)
 		const float k = linear_drag * inv_mass; //空気抵抗やらなんやらを考慮した値 のはずだけど適当に簡略化
-		linear_acceleration = linear_velocity * exp(-k * duration); // 空気抵抗
+		linear_velocity = linear_velocity * exp(-k * duration); // 空気抵抗
 
 		//並進移動に加える力(accumulated_force)から加速度を出して並進速度を更新する
 		linear_acceleration += accumulated_force * inv_mass;
