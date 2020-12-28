@@ -61,10 +61,6 @@ void ALP_Physics::apply_external_force(float duration) {
 		const float inv_mass = 1 / inertial_mass;
 		if (is_fallable) linear_acceleration += Vector3(0, -Phyisics_manager::gravity, 0); //落下
 
-		//並進移動に加える力(accumulated_force)から加速度を出して並進速度を更新する
-		linear_acceleration += accumulated_force * inv_mass;
-		linear_velocity += linear_acceleration * duration;
-
 		//空気抵抗の求め方
 		// k は流体の密度やらなんやらを考慮した定数
 		//F(t) = 1/2 * k * v
@@ -78,6 +74,10 @@ void ALP_Physics::apply_external_force(float duration) {
 		//v(t) = V(0) * exp(-k / m * t)
 		const float k = linear_drag * inv_mass; //空気抵抗やらなんやらを考慮した値 のはずだけど適当に簡略化
 		linear_acceleration = linear_velocity * exp(-k * duration); // 空気抵抗
+
+		//並進移動に加える力(accumulated_force)から加速度を出して並進速度を更新する
+		linear_acceleration += accumulated_force * inv_mass;
+		linear_velocity += linear_acceleration * duration;
 
 		//各回転に加える力(accumulated_torque)から加速度を出して角速度を更新する
 		Matrix inverse_inertia_tensor = matrix_inverse(inertial_tensor);
