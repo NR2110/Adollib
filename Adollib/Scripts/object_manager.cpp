@@ -35,7 +35,7 @@ namespace Adollib
 		}
 
 #if 1
-		if (0) {
+		if (1) {
 			{
 				Gameobject* GO = Gameobject_manager::createCube("stage");
 				GO->transform->local_pos = Vector3(0, -60, 0);

@@ -18,7 +18,7 @@ namespace Adollib
 
 	namespace Physics_function {
 		// physics_manager‚Ìstatic•Ï”‚Ì‰Šú’l
-		class Physics_manager_default {
+		struct Physics_manager_default {
 		public:
 
 			static constexpr float gravity = 9.8f; //d—Í
@@ -41,8 +41,9 @@ namespace Adollib
 			static constexpr float timeStep = 0.016f;
 
 			//::: Physics‚Ì‰Šú’l•”•ª :::
+
 			static constexpr float inertial_mass = 1.f; //¿—Ê
-			static constexpr float drag = 0.1f; //‹ó‹C’ïR
+			static constexpr float linear_drag = 0.1f; //‹ó‹C’ïR
 			static constexpr float anglar_drag = 0.1f; //‹ó‹C’ïR
 			static constexpr float dynamic_friction = 0.4f;//“®–€C
 			static constexpr float static_friction = 0.4f; //Ã–€C
@@ -54,7 +55,6 @@ namespace Adollib
 			static constexpr bool is_kinmatic_linear = true; //‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å•Ài‘¬“x‚ª•Ï‰»‚µ‚È‚¢
 			static constexpr bool is_moveable = true;//“®‚­‚©
 			static constexpr bool is_hitable = true;  //Õ“Ë‚µ‚È‚¢
-
 			//::::::::
 		};
 	}
@@ -172,15 +172,15 @@ namespace Adollib
 			colliders[Sce].erase(coll_itr);
 		}
 
-		public:
-			static bool ray_cast(
-				const Vector3& Ray_pos, const Vector3& Ray_dir,
-				u_int tag,
-				const float ray_min,
-				float& tmin, float& tmax,
-				Vector3& normal,
-				Collider* coll,
-				Scenelist Sce = Scene::now_scene);
+	public:
+		static bool ray_cast(
+			const Vector3& Ray_pos, const Vector3& Ray_dir,
+			u_int tag,
+			const float ray_min,
+			float& tmin, float& tmax,
+			Vector3& normal,
+			Collider* coll,
+			Scenelist Sce = Scene::now_scene);
 
 	public:
 

@@ -15,7 +15,11 @@ using namespace Adollib;
 using namespace Physics_function;
 using namespace Contacts;
 
-#define Draw_Contact
+//ContactPoint‚Ì•\¦
+//#define Draw_Contact
+
+//Addforce‚Ì‰e‹¿‚ª1frame’x‚ê‚é‚ªVelocity‚É‘¬“x§ŒÀ‚ğ‚Â‚¯‚é‚±‚Æ‚ª‚Å‚«‚é
+//#define Allow_delay
 
 //::: staticƒƒ“ƒo‚Ì‰Šú‰» :::::
 namespace Adollib
@@ -24,7 +28,7 @@ namespace Adollib
 
 	Physics_function::ALP_Physics Phyisics_manager::default_physics = ALP_Physics(
 		Physics_manager_default::inertial_mass, //¿—Ê
-		Physics_manager_default::drag, //‹ó‹C’ïR
+		Physics_manager_default::linear_drag, //‹ó‹C’ïR
 		Physics_manager_default::anglar_drag, //‹ó‹C’ïR
 		Physics_manager_default::dynamic_friction,//“®–€C
 		Physics_manager_default::static_friction, //Ã–€C
@@ -97,8 +101,11 @@ bool Phyisics_manager::update(Scenelist Sce)
 	// Collider‚ÌWorldî•ñ‚ÌXV
 	update_world_trans(ALP_colliders[Sce]);
 
+#ifdef Allow_delay
+#else
 	// ŠO—Í‚ÌXV
 	applyexternalforce(ALP_physicses[Sce]);
+#endif
 
 	timeStep = Al_Global::second_per_frame;
 
@@ -136,6 +143,11 @@ bool Phyisics_manager::update(Scenelist Sce)
 
 	// ˆÊ’u‚ÌXV
 	integrate(ALP_physicses[Sce]);
+
+#ifdef Allow_delay
+	// ŠO—Í‚ÌXV
+	applyexternalforce(ALP_physicses[Sce]);
+#endif
 
 	// GO‚ÖCollider‚Ì‰e‹¿‚ğ“n‚·
 	solv_resolve(ALP_colliders[Sce]);
@@ -206,22 +218,16 @@ bool Phyisics_manager::update_Gui() {
 		//physics_default‚Ì•\¦
 		if (ImGui::CollapsingHeader("physics_default")) {
 
-			ImGui::Columns(2);
-			ImGui::Separator();
-			ImGui::Separator();
-			ImGui::Text("mass"); ImGui::NextColumn();  ImGui::Text("%f", Physics_manager_default::inertial_mass); ImGui::NextColumn();
-			ImGui::Text("drag"); ImGui::NextColumn();  ImGui::Text("%f", Physics_manager_default::drag); ImGui::NextColumn();
-			ImGui::Text("anglar_drag"); ImGui::NextColumn();  ImGui::Text("%f", Physics_manager_default::anglar_drag); ImGui::NextColumn();
-			ImGui::Text("dynamic_friction"); ImGui::NextColumn();  ImGui::Text("%f", Physics_manager_default::dynamic_friction); ImGui::NextColumn();
-			ImGui::Text("static_friction"); ImGui::NextColumn();  ImGui::Text("%f", Physics_manager_default::static_friction); ImGui::NextColumn();
-			ImGui::Text("restitution"); ImGui::NextColumn();  ImGui::Text("%f", Physics_manager_default::restitution); ImGui::NextColumn();
-			ImGui::Text("is_fallable"); ImGui::NextColumn();  if (Physics_manager_default::is_fallable)ImGui::Text("true"); else ImGui::Text("false"); ImGui::NextColumn();
-			ImGui::Text("is_kinematic"); ImGui::NextColumn(); if (Physics_manager_default::is_kinematic)ImGui::Text("true"); else ImGui::Text("false"); ImGui::NextColumn();
-			ImGui::Text("is_moveable"); ImGui::NextColumn();  if (Physics_manager_default::is_moveable)ImGui::Text("true"); else ImGui::Text("false"); ImGui::NextColumn();
-			ImGui::Text("is_hitable"); ImGui::NextColumn();   if (Physics_manager_default::is_hitable)ImGui::Text("true"); else ImGui::Text("false"); ImGui::NextColumn();
-			ImGui::Separator();
-
-			ImGui::Columns(1);
+			ImGui::DragFloat("mass", &Phyisics_manager::default_physics.inertial_mass, 0.1f);
+			ImGui::DragFloat("linear_drag", &Phyisics_manager::default_physics.linear_drag, 0.01f);
+			ImGui::DragFloat("anglar_drag", &Phyisics_manager::default_physics.anglar_drag, 0.01f);
+			ImGui::DragFloat("dynamic_friction", &Phyisics_manager::default_physics.dynamic_friction, 0.01f);
+			ImGui::DragFloat("static_friction", &Phyisics_manager::default_physics.static_friction, 0.01f);
+			ImGui::DragFloat("restitution", &Phyisics_manager::default_physics.restitution, 0.01f);
+			ImGui::Checkbox("is_fallable", &Phyisics_manager::default_physics.is_fallable);
+			ImGui::Checkbox("is_kinematic", &Phyisics_manager::default_physics.is_kinematic);
+			ImGui::Checkbox("is_moveable", &Phyisics_manager::default_physics.is_moveable);
+			ImGui::Checkbox("is_hitable", &Phyisics_manager::default_physics.is_hitable);
 		}
 
 	}
@@ -259,8 +265,8 @@ bool Phyisics_manager::ray_cast(
 		) == false) continue;
 
 		ret = true;
-		if(tmin > min){
-			tmin  = min;
+		if (tmin > min) {
+			tmin = min;
 			normal = norm;
 		}
 		//tmin = ALmin(tmin, min);

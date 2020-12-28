@@ -25,9 +25,10 @@ namespace Adollib {
 		class ALP_Physics {
 		public:
 			ALP_Physics() {};
+
 			ALP_Physics(
 				float inertial_mass, //¿—Ê
-				float drag, //‹ó‹C’ïR
+				float linear_drag, //‹ó‹C’ïR
 				float anglar_drag, //‹ó‹C’ïR
 				float dynamic_friction,//“®–€C
 				float static_friction, //Ã–€C
@@ -41,7 +42,7 @@ namespace Adollib {
 				bool is_hitable //Õ“Ë‚µ‚È‚¢
 			) :
 				inertial_mass(inertial_mass), //¿—Ê
-				linear_drag(drag), //‹ó‹C’ïR
+				linear_drag(linear_drag), //‹ó‹C’ïR
 				anglar_drag(anglar_drag), //‹ó‹C’ïR
 				dynamic_friction(dynamic_friction),//“®–€C
 				static_friction(static_friction), //Ã–€C
@@ -56,19 +57,19 @@ namespace Adollib {
 			{};
 
 			//::: •ÏX‰Â :::::::::::::::::::::::::::::
-			float inertial_mass = 0; //¿—Ê
-			float linear_drag = 0; //‹ó‹C’ïR
-			float anglar_drag = 0; //‹ó‹C’ïR
-			float dynamic_friction = 0;//“®–€C
-			float static_friction = 0; //Ã–€C
-			float restitution = 0;	 //”½”­ŒW”
+			float inertial_mass; //¿—Ê
+			float linear_drag; //‹ó‹C’ïR
+			float anglar_drag; //‹ó‹C’ïR
+			float dynamic_friction;//“®–€C
+			float static_friction; //Ã–€C
+			float restitution;	 //”½”­ŒW”
 
-			bool is_fallable = false; //—‚¿‚È‚¢
-			bool is_kinematic = false; //‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
-			bool is_kinmatic_anglar = false; //‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å‰ñ“]‘¬“x‚ª•Ï‰»‚µ‚È‚¢
-			bool is_kinmatic_linear = false; //‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å•Ài‘¬“x‚ª•Ï‰»‚µ‚È‚¢
-			bool is_moveable = false;//“®‚©‚È‚¢
-			bool is_hitable = false;  //Õ“Ë‚µ‚È‚¢
+			bool is_fallable; //—‚¿‚È‚¢
+			bool is_kinematic; //‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
+			bool is_kinmatic_anglar; //‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å‰ñ“]‘¬“x‚ª•Ï‰»‚µ‚È‚¢
+			bool is_kinmatic_linear; //‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å•Ài‘¬“x‚ª•Ï‰»‚µ‚È‚¢
+			bool is_moveable;//“®‚©‚È‚¢
+			bool is_hitable;  //Õ“Ë‚µ‚È‚¢
 
 			//::: Œ©‚¹‚é‚¾‚¯ :::::::::::::::::::::::::
 			float speed = 0;//debug‚µ‚â‚·‚¢‚æ‚¤‚É

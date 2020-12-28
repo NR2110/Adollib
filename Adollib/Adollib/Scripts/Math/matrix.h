@@ -25,7 +25,12 @@ namespace Adollib {
 		//};
 
 		Matrix() noexcept :
-			XMFLOAT4X4()
+			XMFLOAT4X4(
+				0,0,0,0,
+				0,0,0,0,
+				0,0,0,0,
+				0,0,0,0
+			)
 		{
 		}
 
@@ -86,6 +91,9 @@ namespace Adollib {
 
 	//単位行列を返す
 	Matrix matrix_identity();
+
+	//全部zeroの行列を返す
+	Matrix matrix_zero();
 
 	//転置行列を返す
 	Matrix matrix_trans(const Matrix& M);

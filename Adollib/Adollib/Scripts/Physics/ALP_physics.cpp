@@ -58,7 +58,9 @@ void ALP_Physics::reset_force() {
 void ALP_Physics::apply_external_force(float duration) {
 	if (is_movable()) {
 
-		if (is_fallable) linear_acceleration += Vector3(0, -Phyisics_manager::gravity, 0);
+		accumulated_force -= linear_velocity.unit_vect() * linear_drag * linear_velocity.norm(); // 空気抵抗
+
+		if (is_fallable) linear_acceleration += Vector3(0, -Phyisics_manager::gravity, 0); //落下
 
 		//並進移動に加える力(accumulated_force)から加速度を出して並進速度を更新する
 		linear_acceleration += accumulated_force / inertial_mass;

@@ -140,6 +140,11 @@ namespace Adollib {
 		return M;
 	}
 
+	inline Matrix Adollib::matrix_zero() {
+		Matrix M;
+		return M;
+	}
+
 	inline Matrix Adollib::matrix_trans(const Matrix& M) {
 		Matrix R = M;
 		std::swap(R._21, R._12);

@@ -56,7 +56,10 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 			SB.orientation = coll.world_orientation;
 			SB.delta_LinearVelocity = Vector3(0.0f);
 			SB.delta_AngulaVelocity = Vector3(0.0f);
-			SB.inv_inertia = coll.ALPphysics->inverse_inertial_tensor();
+
+			if(coll.ALPphysics->is_kinmatic_anglar) SB.inv_inertia = coll.ALPphysics->inverse_inertial_tensor();
+			else SB.inv_inertia = matrix_zero();
+
 			SB.inv_mass = coll.ALPphysics->inverse_mass();
 
 			SB.num = count;
