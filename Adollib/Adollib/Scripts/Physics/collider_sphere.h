@@ -14,7 +14,7 @@ namespace Adollib {
 		Physics_function::Collider_data get_Colliderdata() const override {
 			Physics_function::Collider_data ret;
 
-			ret.local_orientation = center;
+			ret.local_position = center;
 			ret.local_orientation = quaternion_identity();
 			ret.local_scale = Vector3(r);
 
