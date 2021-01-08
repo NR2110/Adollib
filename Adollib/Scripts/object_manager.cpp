@@ -12,6 +12,8 @@
 
 #include "../Adollib/Scripts/Imgui/debug.h"
 
+#include "player.h"
+
 namespace Adollib
 {
 	// 所属するシーンの初期化時に一度だけ呼ばれる
@@ -35,7 +37,7 @@ namespace Adollib
 		}
 
 #if 1
-		if (1) {
+		if (0) {
 			{
 				Gameobject* GO = Gameobject_manager::createCube("stage");
 				GO->transform->local_pos = Vector3(0, -60, 0);
@@ -97,13 +99,11 @@ namespace Adollib
 		}
 #endif
 
-
 	}
 
 	// 毎フレーム呼ばれる更新処理
 	void object_manager::update()
 	{
-
 		ImGuiWindowFlags flag = 0;
 		//flag |= ImGuiWindowFlags_AlwaysAutoResize;
 
@@ -271,7 +271,6 @@ namespace Adollib
 
 #pragma endregion
 
-
 		Ray ray;
 		ray.position = camera->transform->position;
 		ray.direction = vector3_quatrotate(Vector3(0, 0, 1), camera->transform->orientation);
@@ -358,6 +357,7 @@ namespace Adollib
 		//Meshcoll* M = object->addComponent<Meshcoll>();
 		//M->load_mesh("./DefaultModel/cube.fbx");
 		//M->inertial_mass = 1;
+
 		GOs.emplace_back(object);
 		return object;
 	}

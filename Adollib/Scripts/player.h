@@ -5,12 +5,26 @@
 namespace Adollib
 {
 
-	class player : public Component
+	class Player : public Component
 	{
+	private:
+		float walking_speed = 3 * 5;
+		float running_speed = 7 * 5;
+		float max_move_y_speed = 8;
+		float turn_speed = 0.4;
+
+		float linear_drag_xz = 0.4;
+		float move_speed = 100;
+		float jump_power = 7.5f;
+
+	private:
+		bool is_running = false;
+
 	private:
 
 	public:
-		Collider* collier;
+		Collider* collider;
+		Camera* camera;
 
 	public:
 		void awake();

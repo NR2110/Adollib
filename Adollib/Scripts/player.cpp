@@ -7,42 +7,67 @@
 namespace Adollib
 {
 	// 所属するシーンの初期化時に一度だけ呼ばれる
-	void player::awake() {
+	void Player::awake() {
 
 	}
 
-	void player::start()
+	void Player::start()
 	{
-
 	}
 
 	// 毎フレーム呼ばれる更新処理
-	void player::update()
+	void Player::update()
 	{
 		Vector3 move_vec = Vector3(0, 0, 0);
-		float move_force = 0.1f;
-		if (input->getKeyState(Key::Down))move_vec += Vector3(0, 0, -1);
-		if (input->getKeyState(Key::Up))move_vec += Vector3(0, 0, +1);
-		collier->add_force(vector3_quatrotate(move_vec * move_force,gameobject->get_world_orientate()));
+		if (input->getKeyState(Key::W))move_vec += Vector3(0, 0, +1);
+		if (input->getKeyState(Key::S))move_vec += Vector3(0, 0, -1);
+		if (input->getKeyState(Key::D))move_vec += Vector3(+1, 0, 0);
+		if (input->getKeyState(Key::A))move_vec += Vector3(-1, 0, 0);
+		Vector3 rot = camera->transform->orientation.euler();
+		rot.x = rot.z = 0;
+		move_vec = vector3_quatrotate(move_vec, quaternion_from_euler(rot));
+		collider->add_force(move_vec * move_speed);
 
-		Vector3 rot_vec = Vector3(0, 0, 0);
-		float rot_force = 0.2f;
-		if (input->getKeyState(Key::Left))rot_vec += Vector3(0, -1, 0);
-		if (input->getKeyState(Key::Right))rot_vec += Vector3(0, +1, 0);
-		collier->add_torque(rot_vec * rot_force);
-		//	collier->orientation * quaternion_angle_axis(1, vector3(-1, 1, 0).unit_vect());
+		if (input->getKeyTrigger(Key::Space))collider->add_force(Vector3(0, 1, 0) * jump_power);
 
-		//framework::debug->setString("angular_velocity : %f,%f,%f", collier->angular_velocity.x, collier->angular_velocity.y, collier->angular_velocity.z);
+		is_running = input->getKeyTrigger(Key::LeftShift);
+
+		{
+			float k = linear_drag_xz / collider->physics_data.inertial_mass; //空気抵抗やらなんやらを考慮した値 のはずだけど適当に簡略化
+
+			Vector3 linearvec_xz_save = collider->linear_velocity();
+			float linearvec_y_save = linearvec_xz_save.y;
+			linearvec_xz_save.y = 0;
+
+			Vector3 Vel = linearvec_xz_save * exp(-k * time->deltaTime()); // 水平方向のみ空気抵抗を考慮した速度
+
+			// 速度を最大値で
+			if (is_running) { if (Vel.norm() > running_speed * running_speed) { Vel = Vel.unit_vect() * running_speed; } }
+			else { if (Vel.norm() > walking_speed * walking_speed) { Vel = Vel.unit_vect() * walking_speed; } }
+
+			if (linearvec_y_save > max_move_y_speed) { linearvec_y_save = max_move_y_speed; }
+
+			Vel.y = linearvec_y_save;
+
+			collider->linear_velocity(Vel);
+		}
+
+		if(ImGui::Begin("Player_debug")) {
+			ImGui::DragFloat("walking_speed", &walking_speed, 0.1f);
+			ImGui::DragFloat("running_speed", &running_speed, 0.1f);
+			ImGui::DragFloat("jump_pow", &jump_power, 0.1f);
+		}
+		ImGui::End();
 	}
 
 	// このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる
-	void player::onEnable()
+	void Player::onEnable()
 	{
 
 	}
 
 	// このスクリプトがアタッチされているGOのactiveSelfがfalseになった時呼ばれる
-	void player::onDisable()
+	void Player::onDisable()
 	{
 
 	}

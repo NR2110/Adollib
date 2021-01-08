@@ -223,6 +223,9 @@
     <ClCompile Include="Scripts\Imgui\inspector.cpp">
       <Filter>00_Adollib\33_object</Filter>
     </ClCompile>
+    <ClCompile Include="..\Scripts\player_manager.cpp">
+      <Filter>ソース ファイル\scene_game\player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Scripts\player.h">
@@ -506,6 +509,9 @@
     </ClInclude>
     <ClInclude Include="Scripts\Math\matrixSIM_e.h">
       <Filter>00_Adollib\11_math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\player_manager.h">
+      <Filter>ソース ファイル\scene_game\player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

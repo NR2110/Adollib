@@ -21,6 +21,10 @@ namespace Adollib {
 			//GO->material->color = vector4(1, 0, 1, 1);
 			//GO->add_collider_box();
 		}
+		{
+			Gameobject* GO = Gameobject_manager::create("player_manager");
+			GO->addComponent<Player_manager>();
+		}
 
 		//Gameobject_manager::create_camera();
 

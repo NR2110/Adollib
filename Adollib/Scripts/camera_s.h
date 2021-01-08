@@ -7,8 +7,11 @@ namespace Adollib
 {
 	class camera_s : public Component_camera
 	{
+	private:
+		bool follow_player = false;
+		float dis = 10;
 	public:
-		Transfome* player;
+		std::shared_ptr<Transfome> player;
 		Vector3 c_pos_save;
 
 	public:

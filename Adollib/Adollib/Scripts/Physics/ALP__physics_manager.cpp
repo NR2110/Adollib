@@ -19,7 +19,7 @@ using namespace Contacts;
 //#define Draw_Contact
 
 //Addforceの影響が1frame遅れるがVelocityに速度制限をつけることができる
-//#define Allow_delay
+#define Allow_delay
 
 //::: staticメンバの初期化 :::::
 namespace Adollib
@@ -105,9 +105,9 @@ bool Phyisics_manager::update(Scenelist Sce)
 #else
 	// 外力の更新
 	applyexternalforce(ALP_physicses[Sce]);
+	timeStep = Al_Global::second_per_frame;
 #endif
 
-	timeStep = Al_Global::second_per_frame;
 
 	// 大雑把な当たり判定
 	Work_meter::start("Broad,Mid,Narrow");
@@ -145,6 +145,7 @@ bool Phyisics_manager::update(Scenelist Sce)
 	integrate(ALP_physicses[Sce]);
 
 #ifdef Allow_delay
+	timeStep = Al_Global::second_per_frame;
 	// 外力の更新
 	applyexternalforce(ALP_physicses[Sce]);
 #endif
@@ -226,6 +227,8 @@ bool Phyisics_manager::update_Gui() {
 			ImGui::DragFloat("restitution", &Phyisics_manager::default_physics.restitution, 0.01f);
 			ImGui::Checkbox("is_fallable", &Phyisics_manager::default_physics.is_fallable);
 			ImGui::Checkbox("is_kinematic", &Phyisics_manager::default_physics.is_kinematic);
+			ImGui::Checkbox("is_kinmatic_anglar", &Phyisics_manager::default_physics.is_kinmatic_anglar);
+			ImGui::Checkbox("is_kinmatic_linear", &Phyisics_manager::default_physics.is_kinmatic_linear);
 			ImGui::Checkbox("is_moveable", &Phyisics_manager::default_physics.is_moveable);
 			ImGui::Checkbox("is_hitable", &Phyisics_manager::default_physics.is_hitable);
 		}

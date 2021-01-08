@@ -75,6 +75,19 @@ namespace Adollib {
 		bool removed = false; //“ñd‚Éremove‚ð‚·‚é‚Ì‚ð–h‚®
 
 	public:
+		//::: Œã‚Å•ÏX‚·‚é :::
+		const Vector3 linear_velocity() const { return ALPphysics_itr->linear_velocity; }
+		const Vector3 linear_velocity(Vector3 v) {
+			ALPphysics_itr->linear_velocity = v;
+			return ALPphysics_itr->linear_velocity;
+		}
+		const Vector3 linear_anglar_velocity() const { return ALPphysics_itr->anglar_velocity; }
+		const Vector3 linear_anglar_velocity(Vector3 v) {
+			ALPphysics_itr->anglar_velocity = v;
+			return ALPphysics_itr->anglar_velocity;
+		}
+
+	public:
 		//on collision enter
 		const bool concoll_enter(const unsigned int tag_name) const;
 

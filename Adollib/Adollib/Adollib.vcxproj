@@ -149,6 +149,7 @@
     <ClInclude Include="..\Scripts\object_manager.h" />
     <ClInclude Include="..\Scripts\object_rotate.h" />
     <ClInclude Include="..\Scripts\player.h" />
+    <ClInclude Include="..\Scripts\player_manager.h" />
     <ClInclude Include="..\Scripts\scene_game_all.h" />
     <ClInclude Include="Imgui\imconfig.h" />
     <ClInclude Include="Imgui\imgui.h" />
@@ -245,6 +246,7 @@
     <ClCompile Include="..\Scripts\object_manager.cpp" />
     <ClCompile Include="..\Scripts\object_rotate.cpp" />
     <ClCompile Include="..\Scripts\player.cpp" />
+    <ClCompile Include="..\Scripts\player_manager.cpp" />
     <ClCompile Include="Imgui\imgui.cpp" />
     <ClCompile Include="Imgui\imgui_demo.cpp" />
     <ClCompile Include="Imgui\imgui_draw.cpp" />
