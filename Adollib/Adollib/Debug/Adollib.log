@@ -1,4 +1,117 @@
-﻿  object_manager.cpp
-  ALP_generate_contact.cpp
+﻿  camera_manager.cpp
+  camera_s.cpp
+  object_manager.cpp
+  object_rotate.cpp
+  player.cpp
+  debug.cpp
+  imgui_manager.cpp
+  inspector.cpp
+  work_meter.cpp
+  Adollib.cpp
+  input.cpp
+  loop.cpp
+  main.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\Adollib.cpp(23,11): warning C4244: '初期化中': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています ..\Scripts\camera_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています ..\Scripts\camera_manager.cpp)
+  resource_manager.cpp
+  systems.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Main\loop.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Main\loop.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Main\main.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Main\main.cpp)
+  closest_func.cpp
+  crossing_func.cpp
+  frustum_culling.cpp
+  material.cpp
+  material_for_collider.cpp
 C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(60,61): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+  mesh.cpp
+  texture.cpp
+  gameobject.cpp
+  gameobject_camera.cpp
+  gameobject_light.cpp
+  gameobject_manager.cpp
+  hierarchy.cpp
+  ALP__physics_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(543,82): warning C4018: '>': signed と unsigned の数値を比較しようとしました。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(545,63): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(569,27): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(660,35): warning C4244: '=': 'double' から 'Adollib::u_int' への変換です。データが失われる可能性があります。
+  ALP_broadphase.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Mesh\frustum_culling.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Mesh\frustum_culling.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP__physics_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ALP__physics_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Object\gameobject.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject_camera.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Object\gameobject_camera.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject_light.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Object\gameobject_light.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Object\gameobject_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Mesh\material.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Mesh\material.cpp)
+  ALP_collider.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(67,50): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(99,97): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(122,50): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(154,97): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(177,50): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(209,97): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(235,96): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(264,98): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(288,62): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(317,98): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(341,62): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(370,98): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Mesh\material_for_collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Mesh\material_for_collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(602,44): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(622,94): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+  ALP_generate_contact.cpp
+  ALP_integrate.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_broadphase.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ALP_broadphase.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ALP_collider.cpp)
+  ALP_midphase.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_camera.cpp(41,84): warning C4305: '引数': 'unsigned __int64' から 'float' へ切り詰めます。
+  ALP_physics.cpp
+  ALP_raycast.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_integrate.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ALP_integrate.cpp)
+  ALP_resolve_contact.cpp
+  collider__base.cpp
+  contact.cpp
+  meshcoll_resorce_manager.cpp
+  ray.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_physics.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ALP_physics.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Physics\collider__base.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\collider__base.cpp)
+  scene_game.cpp
+  scene_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Physics\ray.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ray.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Physics\contact.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\contact.cpp)
+  compute_shader.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(107,23): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_resolve_contact.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ALP_resolve_contact.cpp)
+  shader.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Scene\scene_game.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Scene\scene_game.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Scene\scene_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Scene\scene_manager.cpp)
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe
