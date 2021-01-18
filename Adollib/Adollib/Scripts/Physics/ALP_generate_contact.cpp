@@ -98,7 +98,7 @@ float sum_of_projected_radii(float& max, float& min, const std::vector<ALP_Colli
 	max = -FLT_MAX;
 	min = +FLT_MAX;
 	for (const Vector3& vertex : *meshcoll->mesh->vertices) {
-		value = vector3_dot(vertex * meshcoll->ALPcollider->world_scale, nor);
+		value = vector3_dot(vertex * meshcoll->ALPcollider->world_scale(), nor);
 		if (max < value)max = value;
 		if (min > value)min = value;
 	}
@@ -228,10 +228,10 @@ bool sat_convex_mesh_mesh(const std::vector<ALP_Collider_mesh>::iterator& meshA,
 	std::list<ALP_Collider>::iterator collB = meshB->ALPcollider;
 
 	// Meshcoll_1の各面法線を分離軸とする
-	Quaternion offset_quatBA = collB->world_orientation * collA->world_orientation.conjugate();
-	Quaternion offset_quatAB = collA->world_orientation * collB->world_orientation.conjugate();
-	Vector3 offset_posBA = collB->world_position - collA->world_position;
-	Vector3 offset_posAB = collA->world_position - collB->world_position;
+	Quaternion offset_quatBA = collB->world_orientation() * collA->world_orientation().conjugate();
+	Quaternion offset_quatAB = collA->world_orientation() * collB->world_orientation().conjugate();
+	Vector3 offset_posBA = collB->world_position() - collA->world_position();
+	Vector3 offset_posAB = collA->world_position() - collB->world_position();
 
 	Ret_S PB_FA, PA_FB;
 	PB_FA.hit_point_to_face = PA_FB.hit_point_to_face = true;
@@ -252,7 +252,7 @@ bool sat_convex_mesh_mesh(const std::vector<ALP_Collider_mesh>::iterator& meshA,
 		// collBを分離軸に投影
 		sum_of_projected_radii(maxB, minB, meshB, vector3_quatrotate(axis, offset_quatAB).unit_vect());
 		assert(maxB >= minB);
-		float off = vector3_dot(offset_posBA, vector3_quatrotate(axis, collA->world_orientation).unit_vect());
+		float off = vector3_dot(offset_posBA, vector3_quatrotate(axis, collA->world_orientation()).unit_vect());
 		maxB += off;
 		minB += off;
 
@@ -293,7 +293,7 @@ bool sat_convex_mesh_mesh(const std::vector<ALP_Collider_mesh>::iterator& meshA,
 			// collAを分離軸に投影
 			sum_of_projected_radii(maxA, minA, meshA, vector3_quatrotate(axis, offset_quatBA));
 			assert(maxA >= minA);
-			float off = vector3_dot(offset_posAB, vector3_quatrotate(axis, meshB->ALPcollider->world_orientation).unit_vect());
+			float off = vector3_dot(offset_posAB, vector3_quatrotate(axis, meshB->ALPcollider->world_orientation()).unit_vect());
 			maxA += off;
 			minA += off;
 
@@ -350,9 +350,9 @@ bool sat_convex_mesh_mesh(const std::vector<ALP_Collider_mesh>::iterator& meshA,
 			axisA = vector3_cross(edgeVecA, edgeVecB);
 			if (axisA.norm() <= FLT_EPSILON * FLT_EPSILON) continue;
 			axisA = axisA.unit_vect();
-			axisW = vector3_quatrotate(axisA, meshA->ALPcollider->world_orientation);
+			axisW = vector3_quatrotate(axisA, meshA->ALPcollider->world_orientation());
 			//axisの向きをA->Bにする
-			if (vector3_dot(axisW, meshB->ALPcollider->world_position - meshA->ALPcollider->world_position) < 0) {
+			if (vector3_dot(axisW, meshB->ALPcollider->world_position() - meshA->ALPcollider->world_position()) < 0) {
 				axisA *= -1;
 				axisW *= -1;
 			}
@@ -410,10 +410,10 @@ bool sat_obb_convex_mesh(const OBB& obb, const std::vector<ALP_Collider_mesh>::i
 	const std::list<ALP_Collider>::iterator& mesh_coll = mesh->ALPcollider;
 
 	// Meshcoll_1の各面法線を分離軸とする
-	Quaternion offset_quatBA = mesh_coll->world_orientation * obb.world_orientation.conjugate();
-	Quaternion offset_quatAB = obb.world_orientation * mesh_coll->world_orientation.conjugate();
-	Vector3 offset_posBA = mesh_coll->world_position - obb.world_position;
-	Vector3 offset_posAB = obb.world_position - mesh_coll->world_position;
+	Quaternion offset_quatBA = mesh_coll->world_orientation() * obb.world_orientation.conjugate();
+	Quaternion offset_quatAB = obb.world_orientation * mesh_coll->world_orientation().conjugate();
+	Vector3 offset_posBA = mesh_coll->world_position() - obb.world_position;
+	Vector3 offset_posAB = obb.world_position - mesh_coll->world_position();
 
 	Ret_S PB_FA, PA_FB;
 	PB_FA.hit_point_to_face = PA_FB.hit_point_to_face = true;
@@ -430,7 +430,7 @@ bool sat_obb_convex_mesh(const OBB& obb, const std::vector<ALP_Collider_mesh>::i
 		float ra = obb.half_width[f];
 
 		// meshを分離軸に投影
-		sum_of_projected_radii(maxA, minA, mesh, vector3_quatrotate(axis, mesh_coll->world_orientation.conjugate()).unit_vect());
+		sum_of_projected_radii(maxA, minA, mesh, vector3_quatrotate(axis, mesh_coll->world_orientation().conjugate()).unit_vect());
 		assert(maxA >= minA);
 		float off = vector3_dot(offset_posBA, axis);
 		maxA += off;
@@ -465,9 +465,9 @@ bool sat_obb_convex_mesh(const OBB& obb, const std::vector<ALP_Collider_mesh>::i
 			assert(maxA >= minA);
 
 			// obbを分離軸に投影
-			float ra = sum_of_projected_radii(obb, vector3_quatrotate(axis, mesh_coll->world_orientation));
+			float ra = sum_of_projected_radii(obb, vector3_quatrotate(axis, mesh_coll->world_orientation()));
 
-			float off = vector3_dot(offset_posAB, vector3_quatrotate(axis, mesh_coll->world_orientation).unit_vect());
+			float off = vector3_dot(offset_posAB, vector3_quatrotate(axis, mesh_coll->world_orientation()).unit_vect());
 			maxA += off;
 			minA += off;
 
@@ -515,8 +515,8 @@ bool Physics_function::generate_contact_sphere_sphere(const std::vector<ALP_Coll
 	const std::list<ALP_Collider>::iterator& collA = SA->ALPcollider;
 	const std::list<ALP_Collider>::iterator& collB = SB->ALPcollider;
 
-	Vector3 pA = collA->world_position;
-	Vector3 pB = collB->world_position;
+	Vector3 pA = collA->world_position();
+	Vector3 pB = collB->world_position();
 
 	//AddContact用の変数
 	bool is_AC = false;
@@ -530,13 +530,13 @@ bool Physics_function::generate_contact_sphere_sphere(const std::vector<ALP_Coll
 	float length = n.norm_sqr();
 	n = n.unit_vect();
 
-	if (length < collA->world_scale.x + collB->world_scale.x) {
+	if (length < collA->world_scale().x + collB->world_scale().x) {
 		//衝突していたらContactオブジェクトを生成用に準備する
 		is_AC = true;
-		ACpenetration = collA->world_scale.x + collB->world_scale.x - length;
+		ACpenetration = collA->world_scale().x + collB->world_scale().x - length;
 		ACnormal = n;
-		ACcontact_pointA = collA->world_scale.x * vector3_quatrotate(-n, collA->world_orientation.conjugate());
-		ACcontact_pointB = collB->world_scale.x * vector3_quatrotate(+n, collB->world_orientation.conjugate());
+		ACcontact_pointA = collA->world_scale().x * vector3_quatrotate(-n, collA->world_orientation().conjugate());
+		ACcontact_pointB = collB->world_scale().x * vector3_quatrotate(+n, collB->world_orientation().conjugate());
 	}
 
 	if (is_AC)
@@ -573,21 +573,21 @@ bool Physics_function::generate_contact_sphere_plane(const std::vector<ALP_Colli
 
 	//球面と平面の衝突判定を行う
 	Matrix rotate, inverse_rotate;
-	rotate = plane->world_orientation.get_rotate_matrix();
-	rotate._41 = plane->world_position.x; //transpseの入力
-	rotate._42 = plane->world_position.y;
-	rotate._43 = plane->world_position.z;
+	rotate = plane->world_orientation().get_rotate_matrix();
+	rotate._41 = plane->world_position().x; //transpseの入力
+	rotate._42 = plane->world_position().y;
+	rotate._43 = plane->world_position().z;
 	rotate._44 = 1;
 	Vector3 n(rotate._21, rotate._22, rotate._23);
 	inverse_rotate = matrix_inverse(rotate);
 
 	Vector3 p;
-	p = vector3_trans(sphere->world_position, inverse_rotate); //平面が"原点を通り"法線が(0,1,0)"の状態の時の球の中心座標
+	p = vector3_trans(sphere->world_position(), inverse_rotate); //平面が"原点を通り"法線が(0,1,0)"の状態の時の球の中心座標
 
 	////平面の裏からの衝突判定
 	//if (half_space && p.y < 0)return 0;
 
-	if (abs(p.y) < sphere->world_scale.x) {
+	if (abs(p.y) < sphere->world_scale().x) {
 		//oncoll_enterのみの場合ここでreturn
 		if (pair.check_oncoll_only == true) {
 			sphere_mesh->ALPcollider->oncoll_bits |= plane_mesh->ALPcollider->tag;
@@ -599,10 +599,10 @@ bool Physics_function::generate_contact_sphere_plane(const std::vector<ALP_Colli
 
 		//衝突していたらContactオブジェクトを生成用に準備する
 		is_AC = true;
-		ACpenetration = sphere->world_scale.x - abs(p.y);
+		ACpenetration = sphere->world_scale().x - abs(p.y);
 		ACnormal = n;
 		ACcontact_pointA = Vector3(p.x, 0, p.z);
-		ACcontact_pointB = sphere->world_scale.x * vector3_quatrotate(-n, sphere->world_orientation.conjugate());
+		ACcontact_pointB = sphere->world_scale().x * vector3_quatrotate(-n, sphere->world_orientation().conjugate());
 
 	}
 
@@ -639,18 +639,18 @@ bool Physics_function::generate_contact_sphere_box(const std::vector<ALP_Collide
 
 	//球とboxの衝突判定を行う
 	Matrix rotate, inverse_rotate;
-	rotate = matrix_world(Vector3(1, 1, 1), box->world_orientation.get_rotate_matrix(), box->world_position);
+	rotate = matrix_world(Vector3(1, 1, 1), box->world_orientation().get_rotate_matrix(), box->world_position());
 	inverse_rotate = matrix_inverse(rotate);
 
 	Vector3 center;
-	center = vector3_trans(sphere->world_position, inverse_rotate); //boxのlocal座標系での球の中心座標
+	center = vector3_trans(sphere->world_position(), inverse_rotate); //boxのlocal座標系での球の中心座標
 
-	Vector3 box_halfsize = box->world_scale * box->half_size;
+	Vector3 box_halfsize = box->world_scale() * box->half_size;
 
 	if (
-		abs(center.x) - sphere->world_scale.x > box_halfsize.x ||
-		abs(center.y) - sphere->world_scale.x > box_halfsize.y ||
-		abs(center.z) - sphere->world_scale.x > box_halfsize.z
+		abs(center.x) - sphere->world_scale().x > box_halfsize.x ||
+		abs(center.y) - sphere->world_scale().x > box_halfsize.y ||
+		abs(center.z) - sphere->world_scale().x > box_halfsize.z
 		) return 0;
 
 	//box上の最近点
@@ -667,17 +667,17 @@ bool Physics_function::generate_contact_sphere_box(const std::vector<ALP_Collide
 	if (center.z < -box_halfsize.z)closest_point.z = -box_halfsize.z;
 
 	float distance = (closest_point - center).norm_sqr(); //最近点と球中心の距離
-	if (sphere->world_scale.x - distance < FLT_EPSILON) return false; //衝突していなかったらfalse
+	if (sphere->world_scale().x - distance < FLT_EPSILON) return false; //衝突していなかったらfalse
 
-	Vector3 n = (sphere->world_position - vector3_trans(closest_point, rotate)).unit_vect(); //boxからsphereへのベクトル
-	if (vector3_dot(n, sphere->world_position - box->world_position) < 0)n *= -1;
+	Vector3 n = (sphere->world_position() - vector3_trans(closest_point, rotate)).unit_vect(); //boxからsphereへのベクトル
+	if (vector3_dot(n, sphere->world_position() - box->world_position()) < 0)n *= -1;
 
 	//衝突していたらContactオブジェクトを生成用に準備する
 	is_AC = true;
-	ACpenetration = sphere->world_scale.x - distance;
+	ACpenetration = sphere->world_scale().x - distance;
 	ACnormal = -n;
 	ACcontact_pointA = closest_point;
-	ACcontact_pointB = sphere->world_scale.x * vector3_quatrotate(-n, sphere->world_orientation.conjugate());
+	ACcontact_pointB = sphere->world_scale().x * vector3_quatrotate(-n, sphere->world_orientation().conjugate());
 
 
 	if (is_AC)
@@ -723,11 +723,11 @@ bool Physics_function::generate_contact_sphere_capsule(const std::vector<ALP_Col
 	//capsuleの座標系で計算する(scaleは変更しない)
 
 	//capsule coord
-	Vector3 sphere_pos_capcoord = vector3_quatrotate(sphere->world_position - capsule->world_position, capsule->world_orientation.conjugate());
+	Vector3 sphere_pos_capcoord = vector3_quatrotate(sphere->world_position() - capsule->world_position(), capsule->world_orientation().conjugate());
 
 	float s;
 	Closest_func::get_closestP_point_line(sphere_pos_capcoord, Vector3(0), Vector3(0, 1, 0), s);
-	s = ALmax(ALmin(s, +capsule->world_scale.y), -capsule->world_scale.y); //capsuleの長さにクランプ
+	s = ALmax(ALmin(s, +capsule->world_scale().y), -capsule->world_scale().y); //capsuleの長さにクランプ
 
 
 	//capsuleの座標系でsphere-sphereの判定を行う
@@ -739,15 +739,15 @@ bool Physics_function::generate_contact_sphere_capsule(const std::vector<ALP_Col
 	float length = n.norm_sqr();
 	n = n.unit_vect();
 
-	if (length < sphere->world_scale.x + capsule->world_scale.x) {
-		Vector3 Wn = vector3_quatrotate(n, capsule->world_orientation); //nをcapsuleからワールドに
+	if (length < sphere->world_scale().x + capsule->world_scale().x) {
+		Vector3 Wn = vector3_quatrotate(n, capsule->world_orientation()); //nをcapsuleからワールドに
 
 		//衝突していたらContactオブジェクトを生成用に入力
 		is_AC = true;
-		ACpenetration = sphere->world_scale.x + capsule->world_scale.x - length;
+		ACpenetration = sphere->world_scale().x + capsule->world_scale().x - length;
 		ACnormal = +Wn;
-		ACcontact_pointA = sphere->world_scale.x * vector3_quatrotate(-Wn, sphere->world_orientation.conjugate());
-		ACcontact_pointB = capsule->world_scale.x * n + pB;
+		ACcontact_pointA = sphere->world_scale().x * vector3_quatrotate(-Wn, sphere->world_orientation().conjugate());
+		ACcontact_pointB = capsule->world_scale().x * n + pB;
 
 	}
 
@@ -793,11 +793,11 @@ bool Physics_function::generate_contact_sphere_mesh(const std::vector<ALP_Collid
 	if (mesh_mesh->mesh->is_Convex == true) {
 		//球とmeshの衝突判定を行う
 		Matrix rotate, inverse_rotate;
-		rotate = matrix_world(Vector3(1, 1, 1), mesh->world_orientation.get_rotate_matrix(), mesh->world_position);
+		rotate = matrix_world(Vector3(1, 1, 1), mesh->world_orientation().get_rotate_matrix(), mesh->world_position());
 		inverse_rotate = matrix_inverse(rotate);
 
 		Vector3 center;
-		center = vector3_trans(sphere->world_position, inverse_rotate); //meshのlocal座標系での球の中心座標
+		center = vector3_trans(sphere->world_position(), inverse_rotate); //meshのlocal座標系での球の中心座標
 
 		//mesh上の最近点
 		Vector3 closest_point;
@@ -806,38 +806,38 @@ bool Physics_function::generate_contact_sphere_mesh(const std::vector<ALP_Collid
 		//各面の外にあれば面平面に持ってくる
 		for (u_int i = 0; i < mesh_mesh->mesh->facet_num; i++) {
 			const Vector3& nor = mesh_mesh->mesh->facets.at(i).normal.unit_vect();
-			const Vector3& pos = mesh_mesh->mesh->vertices->at(mesh_mesh->mesh->facets.at(i).vertexID[0]) * mesh->world_scale;
+			const Vector3& pos = mesh_mesh->mesh->vertices->at(mesh_mesh->mesh->facets.at(i).vertexID[0]) * mesh->world_scale();
 			float d = vector3_dot(nor, pos) - vector3_dot(nor, closest_point);
 			if (d < 0)
 				closest_point += d * nor;
 		}
 
 		float distance = (closest_point - center).norm_sqr(); //最近点と球中心の距離
-		if (sphere->world_scale.x - distance > FLT_EPSILON) { //float誤差も調整
-			Vector3 n = (sphere->world_position - vector3_trans(closest_point, rotate)).unit_vect(); //meshからsphereへのベクトル
+		if (sphere->world_scale().x - distance > FLT_EPSILON) { //float誤差も調整
+			Vector3 n = (sphere->world_position() - vector3_trans(closest_point, rotate)).unit_vect(); //meshからsphereへのベクトル
 
 			//衝突していたらContactオブジェクトを生成用に入力
 			is_AC = true;
-			ACpenetration = sphere->world_scale.x - distance;
+			ACpenetration = sphere->world_scale().x - distance;
 			ACnormal = -n;
 			ACcontact_pointA = closest_point;
-			ACcontact_pointB = sphere->world_scale.x * vector3_quatrotate(n, sphere->world_orientation.conjugate());
+			ACcontact_pointB = sphere->world_scale().x * vector3_quatrotate(n, sphere->world_orientation().conjugate());
 		}
 
 	}
 	else {
 		//球とmeshの衝突判定を行う
 
-		Vector3 sphere_pos_meshcoord = vector3_quatrotate(sphere->world_position - mesh->world_position, mesh->world_orientation.conjugate()); //mesh座標系でのsphereのpos
+		Vector3 sphere_pos_meshcoord = vector3_quatrotate(sphere->world_position() - mesh->world_position(), mesh->world_orientation().conjugate()); //mesh座標系でのsphereのpos
 
-		float min_dis = sphere->world_scale.x;//最低距離をsphereの半径に
+		float min_dis = sphere->world_scale().x;//最低距離をsphereの半径に
 		Vector3 closest_point; //mesh上の最近点
 		bool is_hit = false; //衝突していたらtrue
 		Vector3 nor_meshcoord;
 		//球とmeshの判定
 		for (const auto& faset : mesh_mesh->mesh->facets) {
-			const Vector3& nor = (faset.normal * mesh->world_scale).unit_vect();
-			const Vector3& mesh_pos0 = mesh_mesh->mesh->vertices->at(faset.vertexID[0]) * mesh->world_scale;
+			const Vector3& nor = (faset.normal * mesh->world_scale()).unit_vect();
+			const Vector3& mesh_pos0 = mesh_mesh->mesh->vertices->at(faset.vertexID[0]) * mesh->world_scale();
 
 			//mesh平面の"d"
 			float dis = vector3_dot(nor, mesh_pos0);
@@ -846,8 +846,8 @@ bool Physics_function::generate_contact_sphere_mesh(const std::vector<ALP_Collid
 			//mesh平面とsphereの距離がmin_disより大きければ衝突しない
 			if (fabsf(dis_sp - dis) > min_dis) continue;
 
-			const Vector3& mesh_pos1 = mesh_mesh->mesh->vertices->at(faset.vertexID[1]) * mesh->world_scale;
-			const Vector3& mesh_pos2 = mesh_mesh->mesh->vertices->at(faset.vertexID[2]) * mesh->world_scale;
+			const Vector3& mesh_pos1 = mesh_mesh->mesh->vertices->at(faset.vertexID[1]) * mesh->world_scale();
+			const Vector3& mesh_pos2 = mesh_mesh->mesh->vertices->at(faset.vertexID[2]) * mesh->world_scale();
 
 			Vector3 closest_p;
 			Closest_func::get_closestP_point_triangle(
@@ -870,13 +870,13 @@ bool Physics_function::generate_contact_sphere_mesh(const std::vector<ALP_Collid
 		//交差していなければfalseを返す
 		if (is_hit == false)return false;
 
-		Vector3 Wn = vector3_quatrotate((sphere_pos_meshcoord - closest_point), mesh->world_orientation).unit_vect();//meshからsphereへのベクトル
+		Vector3 Wn = vector3_quatrotate((sphere_pos_meshcoord - closest_point), mesh->world_orientation()).unit_vect();//meshからsphereへのベクトル
 		if (vector3_dot(sphere_pos_meshcoord - closest_point, nor_meshcoord) < 0)Wn *= -1;
 
 		is_AC = true;
-		ACpenetration = sphere->world_scale.x - min_dis;
+		ACpenetration = sphere->world_scale().x - min_dis;
 		ACnormal = +Wn;
-		ACcontact_pointA = sphere->world_scale.x * vector3_quatrotate(-Wn, sphere->world_orientation.conjugate());
+		ACcontact_pointA = sphere->world_scale().x * vector3_quatrotate(-Wn, sphere->world_orientation().conjugate());
 		ACcontact_pointB = closest_point;
 	}
 
@@ -922,28 +922,28 @@ bool Physics_function::generate_contact_box_plane(const std::vector<ALP_Collider
 
 	Vector3 vertices[8] = {
 		// obb座標系での各頂点のローカル座標
-		Vector3(-box->world_scale.x, -box->world_scale.y, -box->world_scale.z),
-		Vector3(-box->world_scale.x, -box->world_scale.y, +box->world_scale.z),
-		Vector3(-box->world_scale.x, +box->world_scale.y, -box->world_scale.z),
-		Vector3(-box->world_scale.x, +box->world_scale.y, +box->world_scale.z),
-		Vector3(+box->world_scale.x, -box->world_scale.y, -box->world_scale.z),
-		Vector3(+box->world_scale.x, -box->world_scale.y, +box->world_scale.z),
-		Vector3(+box->world_scale.x, +box->world_scale.y, -box->world_scale.z),
-		Vector3(+box->world_scale.x, +box->world_scale.y, +box->world_scale.z)
+		Vector3(-box->world_scale().x, -box->world_scale().y, -box->world_scale().z),
+		Vector3(-box->world_scale().x, -box->world_scale().y, +box->world_scale().z),
+		Vector3(-box->world_scale().x, +box->world_scale().y, -box->world_scale().z),
+		Vector3(-box->world_scale().x, +box->world_scale().y, +box->world_scale().z),
+		Vector3(+box->world_scale().x, -box->world_scale().y, -box->world_scale().z),
+		Vector3(+box->world_scale().x, -box->world_scale().y, +box->world_scale().z),
+		Vector3(+box->world_scale().x, +box->world_scale().y, -box->world_scale().z),
+		Vector3(+box->world_scale().x, +box->world_scale().y, +box->world_scale().z)
 	};
 
 	//Boxと平面の衝突判定を行う
 	Matrix rotate, inverse_rotate;
-	rotate = plane->world_orientation.get_rotate_matrix();
-	rotate._41 = plane->world_position.x; //transpseの入力
-	rotate._42 = plane->world_position.y;
-	rotate._43 = plane->world_position.z;
+	rotate = plane->world_orientation().get_rotate_matrix();
+	rotate._41 = plane->world_position().x; //transpseの入力
+	rotate._42 = plane->world_position().y;
+	rotate._43 = plane->world_position().z;
 	rotate._44 = 1;
 	Vector3 n(rotate._21, rotate._22, rotate._23);
 	inverse_rotate = matrix_inverse(rotate);
 
 	Vector3 p;
-	p = vector3_trans(box->world_position, inverse_rotate); //平面が"原点を通り"法線が(0,1,0)"の状態の時のBoxの中心座標(p.yが距離になる)
+	p = vector3_trans(box->world_position(), inverse_rotate); //平面が"原点を通り"法線が(0,1,0)"の状態の時のBoxの中心座標(p.yが距離になる)
 	//n = p.y > 0 ? n : -n; //ボックスが平面下にあったら法線を反対にする
 
 	float max_penetrate = 0.0f;
@@ -952,7 +952,7 @@ bool Physics_function::generate_contact_box_plane(const std::vector<ALP_Collider
 
 	for (int i = 0; i < 8; i++) {
 		// 頂点のワールド座標
-		vs = vector3_quatrotate(vertices[i], box->world_orientation);
+		vs = vector3_quatrotate(vertices[i], box->world_orientation());
 
 		// -面法線の内積をとる(面方向への長さ)
 		float rA = vector3_dot(-n, vs);
@@ -962,7 +962,7 @@ bool Physics_function::generate_contact_box_plane(const std::vector<ALP_Collider
 			pointbox = vertices[i];
 
 			// 頂点をplane空間に
-			vs = vector3_trans(vs + box->world_position, inverse_rotate);
+			vs = vector3_trans(vs + box->world_position(), inverse_rotate);
 			pointplane = vs;
 			pointplane.y = 0;
 		}
@@ -1018,24 +1018,24 @@ bool Physics_function::generate_contact_box_box(const std::vector<ALP_Collider_m
 	Vector3 ACcontact_pointB;
 
 	Matrix m;
-	m = boxA->world_orientation.get_rotate_matrix();
+	m = boxA->world_orientation().get_rotate_matrix();
 	OBB obbA;
-	obbA.world_position = boxA->world_position;
+	obbA.world_position = boxA->world_position();
 	obbA.u_axes[0].x = m._11; obbA.u_axes[0].y = m._12; obbA.u_axes[0].z = m._13;
 	obbA.u_axes[1].x = m._21; obbA.u_axes[1].y = m._22; obbA.u_axes[1].z = m._23;
 	obbA.u_axes[2].x = m._31; obbA.u_axes[2].y = m._32; obbA.u_axes[2].z = m._33;
-	obbA.half_width = boxA->half_size * boxA->world_scale;
-	obbA.world_orientation = boxA->world_orientation;
+	obbA.half_width = boxA->half_size * boxA->world_scale();
+	obbA.world_orientation = boxA->world_orientation();
 	assert(!isnan(obbA.world_orientation.norm()));
 
-	m = boxB->world_orientation.get_rotate_matrix();
+	m = boxB->world_orientation().get_rotate_matrix();
 	OBB obbB;
-	obbB.world_position = boxB->world_position;
+	obbB.world_position = boxB->world_position();
 	obbB.u_axes[0].x = m._11; obbB.u_axes[0].y = m._12; obbB.u_axes[0].z = m._13;
 	obbB.u_axes[1].x = m._21; obbB.u_axes[1].y = m._22; obbB.u_axes[1].z = m._23;
 	obbB.u_axes[2].x = m._31; obbB.u_axes[2].y = m._32; obbB.u_axes[2].z = m._33;
-	obbB.half_width = boxB->half_size * boxB->world_scale;
-	obbB.world_orientation = boxB->world_orientation;
+	obbB.half_width = boxB->half_size * boxB->world_scale();
+	obbB.world_orientation = boxB->world_orientation();
 	assert(!isnan(obbB.world_orientation.norm()));
 
 	float smallest_penetration = FLT_MAX;	//最小めり込み量
@@ -1063,20 +1063,20 @@ bool Physics_function::generate_contact_box_box(const std::vector<ALP_Collider_m
 
 		//boxAの逆行列の作成
 		Matrix rotate, inverse_rotate;
-		rotate = boxA->world_orientation.get_rotate_matrix();
-		rotate._41 = boxA->world_position.x; //transpseの入力
-		rotate._42 = boxA->world_position.y;
-		rotate._43 = boxA->world_position.z;
+		rotate = boxA->world_orientation().get_rotate_matrix();
+		rotate._41 = boxA->world_position().x; //transpseの入力
+		rotate._42 = boxA->world_position().y;
+		rotate._43 = boxA->world_position().z;
 		rotate._44 = 1;
 		inverse_rotate = matrix_inverse(rotate);
 
 		//p1をobbAのローカル座標系へ
-		Vector3 P = vector3_quatrotate(p1, boxB->world_orientation) + boxB->world_position;
+		Vector3 P = vector3_quatrotate(p1, boxB->world_orientation()) + boxB->world_position();
 		Vector3 c = vector3_trans(P, inverse_rotate);
 
 		//obbAの最近点を求める
 		Vector3 p0 = c;
-		Vector3 box_halfsize = boxA->half_size * boxA->world_scale;
+		Vector3 box_halfsize = boxA->half_size * boxA->world_scale();
 		if (c.x > +box_halfsize.x)p0.x = +box_halfsize.x;
 		if (c.x < -box_halfsize.x)p0.x = -box_halfsize.x;
 
@@ -1111,20 +1111,20 @@ bool Physics_function::generate_contact_box_box(const std::vector<ALP_Collider_m
 
 		//box0の逆行列の作成
 		Matrix rotate, inverse_rotate;
-		rotate = boxB->world_orientation.get_rotate_matrix();
-		rotate._41 = boxB->world_position.x; //transpseの入力
-		rotate._42 = boxB->world_position.y;
-		rotate._43 = boxB->world_position.z;
+		rotate = boxB->world_orientation().get_rotate_matrix();
+		rotate._41 = boxB->world_position().x; //transpseの入力
+		rotate._42 = boxB->world_position().y;
+		rotate._43 = boxB->world_position().z;
 		rotate._44 = 1;
 		inverse_rotate = matrix_inverse(rotate);
 
 		//p0をobb0のローカル座標系へ
-		Vector3 P = vector3_quatrotate(p0, boxA->world_orientation) + boxA->world_position;
+		Vector3 P = vector3_quatrotate(p0, boxA->world_orientation()) + boxA->world_position();
 		Vector3 c = vector3_trans(P, inverse_rotate);
 
 		//obb0の最近点を求める
 		Vector3 p1 = c;
-		Vector3 box_halfsize = boxB->half_size * boxB->world_scale;
+		Vector3 box_halfsize = boxB->half_size * boxB->world_scale();
 		if (c.x > +box_halfsize.x)p1.x = +box_halfsize.x;
 		if (c.x < -box_halfsize.x)p1.x = -box_halfsize.x;
 
@@ -1219,15 +1219,15 @@ bool Physics_function::generate_contact_box_capsule(const std::vector<ALP_Collid
 	Vector3 ACcontact_pointB;
 
 
-	Vector3 box_halfsize = box->world_scale * box->half_size;
+	Vector3 box_halfsize = box->world_scale() * box->half_size;
 
 	//boxの座標系で計算
 	Vector3 closest_box, closest_cap;
 	float capsule_t = FLT_MAX;
 
 	//box座標系でのcapsuleの情報
-	Vector3 cuppos_boxcoord = vector3_quatrotate(capsule->world_position - box->world_position, box->world_orientation.conjugate());
-	Vector3 cupsca_boxcoord = vector3_quatrotate(Vector3(0, capsule->world_scale.y, 0), capsule->world_orientation * box->world_orientation.conjugate());
+	Vector3 cuppos_boxcoord = vector3_quatrotate(capsule->world_position() - box->world_position(), box->world_orientation().conjugate());
+	Vector3 cupsca_boxcoord = vector3_quatrotate(Vector3(0, capsule->world_scale().y, 0), capsule->world_orientation() * box->world_orientation().conjugate());
 
 	bool is_crossing = false;
 	{
@@ -1284,9 +1284,9 @@ bool Physics_function::generate_contact_box_capsule(const std::vector<ALP_Collid
 
 	//衝突していなければfalseを返す
 	if (
-		abs(closest_cap.x) - capsule->world_scale.x > box_halfsize.x ||
-		abs(closest_cap.y) - capsule->world_scale.x > box_halfsize.y ||
-		abs(closest_cap.z) - capsule->world_scale.x > box_halfsize.z
+		abs(closest_cap.x) - capsule->world_scale().x > box_halfsize.x ||
+		abs(closest_cap.y) - capsule->world_scale().x > box_halfsize.y ||
+		abs(closest_cap.z) - capsule->world_scale().x > box_halfsize.z
 		) return false;
 
 	//box上の最近点
@@ -1300,19 +1300,19 @@ bool Physics_function::generate_contact_box_capsule(const std::vector<ALP_Collid
 	if (closest_cap.z > +box_halfsize.z)closest_box.z = +box_halfsize.z;
 	if (closest_cap.z < -box_halfsize.z)closest_box.z = -box_halfsize.z;
 
-	float leng = capsule->world_scale.x - (closest_box - closest_cap).norm_sqr(); //貫通量
+	float leng = capsule->world_scale().x - (closest_box - closest_cap).norm_sqr(); //貫通量
 	if (leng < FLT_EPSILON)return false;
 
 	Vector3 n = (closest_cap - closest_box).unit_vect(); //boxからsphereへのベクトル boxcoord
-	Vector3 Wn = vector3_quatrotate(n, box->world_orientation); //worldcoord
+	Vector3 Wn = vector3_quatrotate(n, box->world_orientation()); //worldcoord
 
 	//
 	is_AC = true;
 	ACpenetration = leng;
 	ACnormal = -Wn;
 	ACcontact_pointA = closest_box;
-	ACcontact_pointB = (Vector3(0, capsule->world_scale.y, 0) * capsule_t) + vector3_quatrotate(-Wn, capsule->world_orientation.conjugate()) * capsule->world_scale.x;
-	//vector3_quatrotate(vector3_quatrotate(closest_cap - n * capsule->world_scale.x, box->world_orientation.conjugate()) + box->world_position - capsule->world_position, capsule->world_orientation.conjugate())
+	ACcontact_pointB = (Vector3(0, capsule->world_scale().y, 0) * capsule_t) + vector3_quatrotate(-Wn, capsule->world_orientation().conjugate()) * capsule->world_scale().x;
+	//vector3_quatrotate(vector3_quatrotate(closest_cap - n * capsule->world_scale().x, box->world_orientation().conjugate()) + box->world_position() - capsule->world_position(), capsule->world_orientation().conjugate())
 
 
 	if (is_AC)
@@ -1363,34 +1363,34 @@ bool Physics_function::generate_contact_capsule_capsule(const std::vector<ALP_Co
 	Vector3 ACcontact_pointA;
 	Vector3 ACcontact_pointB;
 
-	Vector3 Avec_Wco = vector3_quatrotate(Vector3(0, 1, 0), collA->world_orientation) * collA->world_scale.y;
-	Vector3 Bvec_Wco = vector3_quatrotate(Vector3(0, 1, 0), collB->world_orientation) * collB->world_scale.y;
+	Vector3 Avec_Wco = vector3_quatrotate(Vector3(0, 1, 0), collA->world_orientation()) * collA->world_scale().y;
+	Vector3 Bvec_Wco = vector3_quatrotate(Vector3(0, 1, 0), collB->world_orientation()) * collB->world_scale().y;
 
 	float t, s;
 	Closest_func::get_closestP_two_segment(
-		collA->world_position - Avec_Wco,
-		collA->world_position + Avec_Wco,
-		collB->world_position - Bvec_Wco,
-		collB->world_position + Bvec_Wco,
+		collA->world_position() - Avec_Wco,
+		collA->world_position() + Avec_Wco,
+		collB->world_position() - Bvec_Wco,
+		collB->world_position() + Bvec_Wco,
 		s, t
 	);
 
-	Vector3 pA_Wco = collA->world_position + Avec_Wco * (s * 2 - 1);
-	Vector3 pB_Wco = collB->world_position + Bvec_Wco * (t * 2 - 1);
+	Vector3 pA_Wco = collA->world_position() + Avec_Wco * (s * 2 - 1);
+	Vector3 pB_Wco = collB->world_position() + Bvec_Wco * (t * 2 - 1);
 
 	//pB から pA　方向への法線 Acoord
 	Vector3 Wn = pA_Wco - pB_Wco;
 	float length = Wn.norm_sqr();
 	Wn = Wn.unit_vect();
 
-	if (length < collA->world_scale.x + collB->world_scale.x) {
+	if (length < collA->world_scale().x + collB->world_scale().x) {
 
 		//衝突していたらContactオブジェクトを生成用に準備する
 		is_AC = true;
-		ACpenetration = collA->world_scale.x + collB->world_scale.x - length;
+		ACpenetration = collA->world_scale().x + collB->world_scale().x - length;
 		ACnormal = Wn;
-		ACcontact_pointA = Vector3(0, 1, 0) * collA->world_scale.y * (s * 2 - 1) + collA->world_scale.x * vector3_quatrotate(-Wn, collA->world_orientation.conjugate());
-		ACcontact_pointB = Vector3(0, 1, 0) * collB->world_scale.y * (t * 2 - 1) + collB->world_scale.x * vector3_quatrotate(+Wn, collB->world_orientation.conjugate());
+		ACcontact_pointA = Vector3(0, 1, 0) * collA->world_scale().y * (s * 2 - 1) + collA->world_scale().x * vector3_quatrotate(-Wn, collA->world_orientation().conjugate());
+		ACcontact_pointB = Vector3(0, 1, 0) * collB->world_scale().y * (t * 2 - 1) + collB->world_scale().x * vector3_quatrotate(+Wn, collB->world_orientation().conjugate());
 	}
 
 
@@ -1436,11 +1436,11 @@ bool Physics_function::generate_contact_capsule_mesh(const std::vector<ALP_Colli
 	if (0 && mesh_mesh->mesh->is_Convex == true) {
 		////球とmeshの衝突判定を行う
 		//Matrix rotate, inverse_rotate;
-		//rotate = matrix_world(Vector3(1, 1, 1), mesh->world_orientation.get_rotate_matrix(), mesh->world_position);
+		//rotate = matrix_world(Vector3(1, 1, 1), mesh->world_orientation().get_rotate_matrix(), mesh->world_position());
 		//inverse_rotate = matrix_inverse(rotate);
 
 		//Vector3 center;
-		//center = vector3_trans(sphere->world_position, inverse_rotate); //meshのlocal座標系での球の中心座標
+		//center = vector3_trans(sphere->world_position(), inverse_rotate); //meshのlocal座標系での球の中心座標
 
 		////mesh上の最近点
 		//Vector3 closest_point;
@@ -1449,33 +1449,33 @@ bool Physics_function::generate_contact_capsule_mesh(const std::vector<ALP_Colli
 		////各面の外にあれば面平面に持ってくる
 		//for (u_int i = 0; i < mesh_mesh->mesh->facet_num; i++) {
 		//	const Vector3& nor = mesh_mesh->mesh->facets.at(i).normal.unit_vect();
-		//	const Vector3& pos = mesh_mesh->mesh->vertices->at(mesh_mesh->mesh->facets.at(i).vertexID[0]) * mesh->world_scale;
+		//	const Vector3& pos = mesh_mesh->mesh->vertices->at(mesh_mesh->mesh->facets.at(i).vertexID[0]) * mesh->world_scale();
 		//	float d = vector3_dot(nor, pos) - vector3_dot(nor, closest_point);
 		//	if (d < 0)
 		//		closest_point += d * nor;
 		//}
 
 		//float distance = (closest_point - center).norm_sqr(); //最近点と球中心の距離
-		//if (sphere->world_scale.x - distance > FLT_EPSILON) { //float誤差も調整
-		//	Vector3 n = (sphere->world_position - vector3_trans(closest_point, rotate)).unit_vect(); //meshからsphereへのベクトル
+		//if (sphere->world_scale().x - distance > FLT_EPSILON) { //float誤差も調整
+		//	Vector3 n = (sphere->world_position() - vector3_trans(closest_point, rotate)).unit_vect(); //meshからsphereへのベクトル
 
 		//	if (pair.body[0]->ALPcollider->shape == mesh->shape) {
 		//		//body[0]　が　mesh
 		//		//body[1]　が　sphere
 		//		pair.contacts.addcontact(
-		//			sphere->world_scale.x - distance,
+		//			sphere->world_scale().x - distance,
 		//			-n,
 		//			closest_point,
-		//			sphere->world_scale.x * vector3_quatrotate(n, sphere->world_orientation.conjugate())
+		//			sphere->world_scale().x * vector3_quatrotate(n, sphere->world_orientation().conjugate())
 		//		);
 		//	}
 		//	else {
 		//		//body[0]　が　sphere
 		//		//body[1]　が　mesh
 		//		pair.contacts.addcontact(
-		//			sphere->world_scale.x - distance,
+		//			sphere->world_scale().x - distance,
 		//			n,
-		//			sphere->world_scale.x * vector3_quatrotate(n, sphere->world_orientation.conjugate()),
+		//			sphere->world_scale().x * vector3_quatrotate(n, sphere->world_orientation().conjugate()),
 		//			closest_point
 		//		);
 		//	}
@@ -1484,10 +1484,10 @@ bool Physics_function::generate_contact_capsule_mesh(const std::vector<ALP_Colli
 	}
 	else {
 		//球とmeshの衝突判定を行う 球がゆがむと面倒なのでscaleはworldのままで
-		Vector3 capsule_pos_meshcoord = vector3_quatrotate(capsule->world_position - mesh->world_position, mesh->world_orientation.conjugate()); //mesh座標系でのsphereのpos
-		Vector3 capsule_dir_meshcoord = vector3_quatrotate(Vector3(0, 1, 0), capsule->world_orientation * mesh->world_orientation.conjugate()) * capsule->world_scale.y; //mesh座標系でのsphereのpos
+		Vector3 capsule_pos_meshcoord = vector3_quatrotate(capsule->world_position() - mesh->world_position(), mesh->world_orientation().conjugate()); //mesh座標系でのsphereのpos
+		Vector3 capsule_dir_meshcoord = vector3_quatrotate(Vector3(0, 1, 0), capsule->world_orientation() * mesh->world_orientation().conjugate()) * capsule->world_scale().y; //mesh座標系でのsphereのpos
 
-		float min_dis = capsule->world_scale.x;//最低距離をsphereの半径に
+		float min_dis = capsule->world_scale().x;//最低距離をsphereの半径に
 		Vector3 closest_point; //mesh上の最近点
 		bool is_hit = false; //衝突していたらtrue
 		Vector3 nor_meshcoord; //衝突点での法線
@@ -1495,8 +1495,8 @@ bool Physics_function::generate_contact_capsule_mesh(const std::vector<ALP_Colli
 		Vector3 min_sphere_pos_meshcoord; //衝突点のcapsuleのsphereのpos
 		//capsuleとmeshの判定
 		for (const auto& faset : mesh_mesh->mesh->facets) {
-			const Vector3 nor = (faset.normal * mesh->world_scale).unit_vect();
-			const Vector3 mesh_pos0 = mesh_mesh->mesh->vertices->at(faset.vertexID[0]) * mesh->world_scale;
+			const Vector3 nor = (faset.normal * mesh->world_scale()).unit_vect();
+			const Vector3 mesh_pos0 = mesh_mesh->mesh->vertices->at(faset.vertexID[0]) * mesh->world_scale();
 			//mesh平面の"d"
 			float dis = vector3_dot(nor, mesh_pos0);
 
@@ -1519,8 +1519,8 @@ bool Physics_function::generate_contact_capsule_mesh(const std::vector<ALP_Colli
 			//sphereがMeshの裏にいる または mesh平面とsphereの距離がmin_disより大きければ衝突しない
 			if (dis_sp - dis < 0 || dis_sp - dis > min_dis) continue;
 
-			const Vector3 mesh_pos1 = mesh_mesh->mesh->vertices->at(faset.vertexID[1]) * mesh->world_scale;
-			const Vector3 mesh_pos2 = mesh_mesh->mesh->vertices->at(faset.vertexID[2]) * mesh->world_scale;
+			const Vector3 mesh_pos1 = mesh_mesh->mesh->vertices->at(faset.vertexID[1]) * mesh->world_scale();
+			const Vector3 mesh_pos2 = mesh_mesh->mesh->vertices->at(faset.vertexID[2]) * mesh->world_scale();
 
 			Vector3 closest_p;
 			Closest_func::get_closestP_segment_triangle(
@@ -1548,14 +1548,14 @@ bool Physics_function::generate_contact_capsule_mesh(const std::vector<ALP_Colli
 		//交差していなければfalseを返す
 		if (is_hit == false)return false;
 
-		Vector3 Wn = vector3_quatrotate((min_sphere_pos_meshcoord - closest_point), mesh->world_orientation).unit_vect();//meshからsphereへのベクトル
+		Vector3 Wn = vector3_quatrotate((min_sphere_pos_meshcoord - closest_point), mesh->world_orientation()).unit_vect();//meshからsphereへのベクトル
 		if (vector3_dot(min_sphere_pos_meshcoord - closest_point, nor_meshcoord) < 0)Wn *= -1;
 
 		is_AC = true;
-		ACpenetration = capsule->world_scale.x - min_dis;
+		ACpenetration = capsule->world_scale().x - min_dis;
 		ACnormal = -Wn;
 		ACcontact_pointA = closest_point;
-		ACcontact_pointB = Vector3(0, capsule->world_scale.y, 0) * min_t + capsule->world_scale.x * vector3_quatrotate(-Wn, capsule->world_orientation.conjugate());
+		ACcontact_pointB = Vector3(0, capsule->world_scale().y, 0) * min_t + capsule->world_scale().x * vector3_quatrotate(-Wn, capsule->world_orientation().conjugate());
 	}
 
 	if (is_AC)
@@ -1610,10 +1610,10 @@ bool Physics_function::generate_contact_mesh_mesh(const std::vector<ALP_Collider
 	if (mA->mesh->is_Convex == true && mB->mesh->is_Convex == true) {
 		if (!sat_convex_mesh_mesh(mA, mB, smallest_penetration, smallest_facetID, smallest_case))return false;
 
-		Quaternion offset_quatBA = meshB->world_orientation * meshA->world_orientation.conjugate();
-		Quaternion offset_quatAB = meshA->world_orientation * meshB->world_orientation.conjugate();
-		Vector3 offset_posBA = meshB->world_position - meshA->world_position;
-		Vector3 offset_posAB = meshA->world_position - meshB->world_position;
+		Quaternion offset_quatBA = meshB->world_orientation() * meshA->world_orientation().conjugate();
+		Quaternion offset_quatAB = meshA->world_orientation() * meshB->world_orientation().conjugate();
+		Vector3 offset_posBA = meshB->world_position() - meshA->world_position();
+		Vector3 offset_posAB = meshA->world_position() - meshB->world_position();
 
 		//SBの頂点がSAの面と衝突した場合
 		if (smallest_case == SAT_TYPE::POINTB_FACETA)
@@ -1624,16 +1624,16 @@ bool Physics_function::generate_contact_mesh_mesh(const std::vector<ALP_Collider
 			const std::list<ALP_Collider>::iterator& facet_coll = facet_mesh->ALPcollider;
 			const std::list<ALP_Collider>::iterator& vertex_coll = vertex_mesh->ALPcollider;
 
-			Quaternion offset_quatVF = vertex_coll->world_orientation * facet_coll->world_orientation.conjugate();
-			Quaternion offset_quatFV = facet_coll->world_orientation * vertex_coll->world_orientation.conjugate();
-			Vector3 offset_posVF = vertex_coll->world_position - facet_coll->world_position;
-			Vector3 offset_posFV = facet_coll->world_position - vertex_coll->world_position;
+			Quaternion offset_quatVF = vertex_coll->world_orientation() * facet_coll->world_orientation().conjugate();
+			Quaternion offset_quatFV = facet_coll->world_orientation() * vertex_coll->world_orientation().conjugate();
+			Vector3 offset_posVF = vertex_coll->world_position() - facet_coll->world_position();
+			Vector3 offset_posFV = facet_coll->world_position() - vertex_coll->world_position();
 
 			assert(smallest_facetID[1] == -1);
 			const Facet& nerest_facet = facet_mesh->mesh->facets.at(smallest_facetID[0]);
 
 			Vector3 axisF = nerest_facet.normal.unit_vect();
-			Vector3 axisW = vector3_quatrotate(axisF, facet_coll->world_orientation).unit_vect();
+			Vector3 axisW = vector3_quatrotate(axisF, facet_coll->world_orientation()).unit_vect();
 			if (vector3_dot(axisW, offset_posAB) < 0) {
 				axisF = -axisF;
 				axisW = -axisW;
@@ -1655,14 +1655,14 @@ bool Physics_function::generate_contact_mesh_mesh(const std::vector<ALP_Collider
 				}
 			}
 			pB = vertex_mesh->mesh->vertices->at(nearest_pointID);
-			pB *= vertex_coll->world_scale;
+			pB *= vertex_coll->world_scale();
 
 			//上記のp0がfacet_collの最近面上のどこにあるのか
 			Vector3 pA;
 			{
 
-				Vector3 p = vector3_quatrotate(vector3_quatrotate(pB, vertex_coll->world_orientation) + offset_posVF, facet_coll->world_orientation.conjugate());
-				p /= facet_coll->world_scale;
+				Vector3 p = vector3_quatrotate(vector3_quatrotate(pB, vertex_coll->world_orientation()) + offset_posVF, facet_coll->world_orientation().conjugate());
+				p /= facet_coll->world_scale();
 				float min_len = FLT_MAX;
 				Vector3 n_pos;
 
@@ -1686,7 +1686,7 @@ bool Physics_function::generate_contact_mesh_mesh(const std::vector<ALP_Collider
 					}
 				}
 
-				pA *= facet_coll->world_scale;
+				pA *= facet_coll->world_scale();
 			}
 
 			pair.contacts.addcontact(
@@ -1706,16 +1706,16 @@ bool Physics_function::generate_contact_mesh_mesh(const std::vector<ALP_Collider
 			const std::list<ALP_Collider>::iterator& facet_coll = facet_mesh->ALPcollider;
 			const std::list<ALP_Collider>::iterator& vertex_coll = vertex_mesh->ALPcollider;
 
-			Quaternion offset_quatVF = vertex_coll->world_orientation * facet_coll->world_orientation.conjugate();
-			Quaternion offset_quatFV = facet_coll->world_orientation * vertex_coll->world_orientation.conjugate();
-			Vector3 offset_posVF = vertex_coll->world_position - facet_coll->world_position;
-			Vector3 offset_posFV = facet_coll->world_position - vertex_coll->world_position;
+			Quaternion offset_quatVF = vertex_coll->world_orientation() * facet_coll->world_orientation().conjugate();
+			Quaternion offset_quatFV = facet_coll->world_orientation() * vertex_coll->world_orientation().conjugate();
+			Vector3 offset_posVF = vertex_coll->world_position() - facet_coll->world_position();
+			Vector3 offset_posFV = facet_coll->world_position() - vertex_coll->world_position();
 
 			assert(smallest_facetID[0] == -1);
 			const Facet& nerest_facet = facet_mesh->mesh->facets.at(smallest_facetID[1]);
 
 			Vector3 axisF = nerest_facet.normal.unit_vect();
-			Vector3 axisW = vector3_quatrotate(axisF, facet_coll->world_orientation).unit_vect();
+			Vector3 axisW = vector3_quatrotate(axisF, facet_coll->world_orientation()).unit_vect();
 			if (vector3_dot(axisW, offset_posBA) < 0) {
 				axisF = -axisF;
 				axisW = -axisW;
@@ -1737,14 +1737,14 @@ bool Physics_function::generate_contact_mesh_mesh(const std::vector<ALP_Collider
 				}
 			}
 			pB = vertex_mesh->mesh->vertices->at(nearest_pointID);
-			pB *= vertex_coll->world_scale;
+			pB *= vertex_coll->world_scale();
 
 			//上記のpBがfacet_collの最近面上のどこにあるのか
 			Vector3 pA;
 			{
 
-				Vector3 p = vector3_quatrotate(vector3_quatrotate(pB, vertex_coll->world_orientation) + offset_posVF, facet_coll->world_orientation.conjugate());
-				p /= facet_coll->world_scale;
+				Vector3 p = vector3_quatrotate(vector3_quatrotate(pB, vertex_coll->world_orientation()) + offset_posVF, facet_coll->world_orientation().conjugate());
+				p /= facet_coll->world_scale();
 				float min_len = FLT_MAX;
 				Vector3 n_pos;
 
@@ -1768,7 +1768,7 @@ bool Physics_function::generate_contact_mesh_mesh(const std::vector<ALP_Collider
 					}
 				}
 
-				pA *= facet_coll->world_scale;
+				pA *= facet_coll->world_scale();
 			}
 
 			pair.contacts.addcontact(
@@ -1783,21 +1783,21 @@ bool Physics_function::generate_contact_mesh_mesh(const std::vector<ALP_Collider
 		//SAとSBの辺同士が衝突した場合
 		else if (smallest_case == SAT_TYPE::EDGE_EDGE)
 		{
-			Quaternion offset_quatAB = meshA->world_orientation * meshB->world_orientation.conjugate();
-			Quaternion offset_quatBA = meshB->world_orientation * meshA->world_orientation.conjugate();
-			Vector3 offset_posAB = meshA->world_position - meshB->world_position;
-			Vector3 offset_posBA = meshB->world_position - meshA->world_position;
+			Quaternion offset_quatAB = meshA->world_orientation() * meshB->world_orientation().conjugate();
+			Quaternion offset_quatBA = meshB->world_orientation() * meshA->world_orientation().conjugate();
+			Vector3 offset_posAB = meshA->world_position() - meshB->world_position();
+			Vector3 offset_posBA = meshB->world_position() - meshA->world_position();
 
 			const Edge& edgeA = mA->mesh->edges.at(smallest_facetID[0]);
 			const Edge& edgeB = mB->mesh->edges.at(smallest_facetID[1]);
 
 			Vector3 edgeA_p[2] = {
-				{mA->mesh->vertices->at(edgeA.vertexID[0]) * meshA->world_scale},
-				{mA->mesh->vertices->at(edgeA.vertexID[1]) * meshA->world_scale}
+				{mA->mesh->vertices->at(edgeA.vertexID[0]) * meshA->world_scale()},
+				{mA->mesh->vertices->at(edgeA.vertexID[1]) * meshA->world_scale()}
 			};
 			Vector3 edgeB_p[2] = {
-				{mB->mesh->vertices->at(edgeB.vertexID[0]) * meshB->world_scale},
-				{mB->mesh->vertices->at(edgeB.vertexID[1]) * meshB->world_scale}
+				{mB->mesh->vertices->at(edgeB.vertexID[0]) * meshB->world_scale()},
+				{mB->mesh->vertices->at(edgeB.vertexID[1]) * meshB->world_scale()}
 			};
 
 			Vector3 edgeA_vec = (edgeA_p[0] - edgeA_p[1]).unit_vect();
@@ -1805,7 +1805,7 @@ bool Physics_function::generate_contact_mesh_mesh(const std::vector<ALP_Collider
 
 			//SBの情報をSAの座標系に持ってきた
 			//Vector3 edgeB_p_A = vector3_quatrotate(edgeB_p[0], offset_quatBA) + offset_posBA;
-			Vector3 edgeB_p_A = vector3_quatrotate(vector3_quatrotate(edgeB_p[0], meshB->world_orientation) + offset_posBA, meshA->world_orientation.conjugate());
+			Vector3 edgeB_p_A = vector3_quatrotate(vector3_quatrotate(edgeB_p[0], meshB->world_orientation()) + offset_posBA, meshA->world_orientation().conjugate());
 			Vector3 edgeB_v_A = vector3_quatrotate(edgeB_vec, offset_quatBA);
 
 			//SAの座標系でaxisの生成
@@ -1813,7 +1813,7 @@ bool Physics_function::generate_contact_mesh_mesh(const std::vector<ALP_Collider
 			axisA = axisA.unit_vect();
 
 			//axisをworld座標系へ
-			Vector3 axisW = vector3_quatrotate(axisA, meshA->world_orientation);
+			Vector3 axisW = vector3_quatrotate(axisA, meshA->world_orientation());
 
 			//axisの向きをSB->SAの向きへ
 			if (vector3_dot(axisW, offset_posAB) < 0)

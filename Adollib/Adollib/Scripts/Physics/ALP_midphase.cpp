@@ -35,11 +35,11 @@ bool Check_insert_Plane(const std::vector<ALP_Collider_mesh>::iterator plane, co
 	Vector3 V;
 	float plane_dis = 0, coll_dis = FLT_MAX;
 
-	V = vector3_quatrotate(Vector3(0, 1, 0), plane->ALPcollider->world_orientation);
-	plane_dis = vector3_dot(V, plane->ALPcollider->world_position);
+	V = vector3_quatrotate(Vector3(0, 1, 0), plane->ALPcollider->world_orientation());
+	plane_dis = vector3_dot(V, plane->ALPcollider->world_position());
 
 	for (int i = 0; i < DOP14_size; i++) {
-		float coll_len = vector3_dot(V, mesh->ALPcollider->world_position + DOP_14_axis[i] * mesh->dop14.max[i]);
+		float coll_len = vector3_dot(V, mesh->ALPcollider->world_position() + DOP_14_axis[i] * mesh->dop14.max[i]);
 		if (plane_dis > coll_len)return true;
 	}
 
@@ -138,10 +138,10 @@ void Physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std:
 	//Œ»ÝŽg—p‚µ‚Ä‚¢‚È‚¢Õ“Ë“_‚ðíœ
 	for (auto& new_p : new_pairs) {
 		new_p.contacts.chack_remove_contact_point(
-			new_p.body[0]->ALPcollider->world_position,
-			new_p.body[0]->ALPcollider->world_orientation,
-			new_p.body[1]->ALPcollider->world_position,
-			new_p.body[1]->ALPcollider->world_orientation
+			new_p.body[0]->ALPcollider->world_position(),
+			new_p.body[0]->ALPcollider->world_orientation(),
+			new_p.body[1]->ALPcollider->world_position(),
+			new_p.body[1]->ALPcollider->world_orientation()
 		);
 	}
 

@@ -57,19 +57,19 @@ namespace Adollib {
 			{};
 
 			//::: 変更可 :::::::::::::::::::::::::::::
-			float inertial_mass; //質量
-			float linear_drag; //空気抵抗
-			float anglar_drag; //空気抵抗
-			float dynamic_friction;//動摩擦
-			float static_friction; //静摩擦
-			float restitution;	 //反発係数
+			float inertial_mass = 0; //質量
+			float linear_drag = 0; //空気抵抗
+			float anglar_drag = 0; //空気抵抗
+			float dynamic_friction = 0;//動摩擦
+			float static_friction = 0; //静摩擦
+			float restitution = 0;	 //反発係数
 
-			bool is_fallable; //落ちない
-			bool is_kinematic; //影響うけない(fallはする)
-			bool is_kinmatic_anglar; //ほかの物体からの影響で回転速度が変化しない
-			bool is_kinmatic_linear; //ほかの物体からの影響で並進速度が変化しない
-			bool is_moveable;//動かない
-			bool is_hitable;  //衝突しない
+			bool is_fallable = false; //落ちない
+			bool is_kinematic = false; //影響うけない(fallはする)
+			bool is_kinmatic_anglar = false; //ほかの物体からの影響で回転速度が変化しない
+			bool is_kinmatic_linear = false; //ほかの物体からの影響で並進速度が変化しない
+			bool is_moveable = false;//動かない
+			bool is_hitable = false;  //衝突しない
 
 			//::: 見せるだけ :::::::::::::::::::::::::
 			float speed = 0;//debugしやすいように
@@ -87,7 +87,10 @@ namespace Adollib {
 			Vector3 linear_acceleration;//並進加速度
 			Vector3 angula_acceleration; //回転加速度
 
-			std::list<ALP_Collider>::iterator ALP_coll;
+			//::: Colliderへのイテレータ :::
+			std::list<ALP_Collider>::iterator ALPcollider;
+			//::: 自身へのイテレータ :::
+			std::list<ALP_Physics>::iterator ALPphysics;
 
 			ALP_Solverbody* solve = nullptr; //衝突解決用
 

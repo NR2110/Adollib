@@ -11,8 +11,8 @@ namespace Adollib {
 		Vector3 direction;
 
 	public:
-		bool ray_cast(u_int tag, 
-			const float ray_min,	
+		bool ray_cast(u_int tag,
+			const float ray_min,
 			float& tmin, float& tmax, Vector3& normal, Collider* coll = nullptr);
 
 		bool ray_cast(float ray_min, float& tmin, float& tmax, Collider* coll = nullptr) {
@@ -24,7 +24,7 @@ namespace Adollib {
 			float tmin = 0, tmax = 0;
 			float ray_min = -FLT_MAX;
 			Vector3 normal;
-			Collider* coll;
+			Collider* coll = nullptr;
 			return ray_cast(UINT_MAX, ray_min, tmin, tmax, normal, coll);
 		}
 

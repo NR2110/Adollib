@@ -53,7 +53,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 		int count = 0;
 		for (const auto& coll : colliders) {
 			ALP_Solverbody SB;
-			SB.orientation = coll.world_orientation;
+			SB.orientation = coll.world_orientation();
 			SB.delta_LinearVelocity = Vector3(0.0f);
 			SB.delta_AngulaVelocity = Vector3(0.0f);
 
@@ -386,7 +386,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 		int count = 0;
 		for (const auto& coll : colliders) {
 			ALP_Solverbody SB;
-			SB.orientation = DirectX::XMLoadFloat4(&coll.world_orientation);
+			SB.orientation = DirectX::XMLoadFloat4(&coll.world_orientation());
 			SB.delta_LinearVelocity = DirectX::XMVECTOR();
 			SB.delta_AngulaVelocity = DirectX::XMVECTOR();
 			SB.inv_inertia = DirectX::XMLoadFloat4x4(&coll.ALPphysics->inverse_inertial_tensor());

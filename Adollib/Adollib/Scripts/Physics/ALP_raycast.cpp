@@ -49,9 +49,9 @@ bool ray_cast_sphere(const Vector3& Ray_pos, const Vector3& Ray_dir,
 	Vector3& normal
 ) {
 
-	Vector3 m = Ray_pos - coll.world_position;
+	Vector3 m = Ray_pos - coll.world_position();
 	float b = vector3_dot(m, Ray_dir);
-	float c = vector3_dot(m, m) - coll.world_scale.x * coll.world_scale.x;
+	float c = vector3_dot(m, m) - coll.world_scale().x * coll.world_scale().x;
 
 	float D = b * b - c;
 	if (D < 0)return false;
@@ -61,7 +61,7 @@ bool ray_cast_sphere(const Vector3& Ray_pos, const Vector3& Ray_dir,
 
 	tmax = -b + sqrtf(D);
 
-	normal = (Ray_pos + tmin * Ray_dir) - coll.world_position;
+	normal = (Ray_pos + tmin * Ray_dir) - coll.world_position();
 	normal = normal.unit_vect();
 
 	return true;
@@ -78,21 +78,21 @@ bool ray_cast_box(const Vector3& Ray_pos, const Vector3& Ray_dir,
 
 	//slab‚ÌŒü‚«
 	Vector3 xyz[3] = {
-		vector3_quatrotate(Vector3(1, 0, 0), coll.world_orientation),
-		vector3_quatrotate(Vector3(0, 1, 0), coll.world_orientation),
-		vector3_quatrotate(Vector3(0, 0, 1), coll.world_orientation)
+		vector3_quatrotate(Vector3(1, 0, 0), coll.world_orientation()),
+		vector3_quatrotate(Vector3(0, 1, 0), coll.world_orientation()),
+		vector3_quatrotate(Vector3(0, 0, 1), coll.world_orientation())
 	};
 
 	for (int i = 0; i < 3; i++) {
 		float D = vector3_dot(xyz[i], Ray_dir);
-		float P = vector3_dot(xyz[i], Ray_pos - coll.world_position);
+		float P = vector3_dot(xyz[i], Ray_pos - coll.world_position());
 
 
 		{
 			//ŠeŽ²‚Ì“ñ‚Â‚Ìslab‚Éray‚ªŒð·‚·‚ét‚ð‹‚ß‚é
 			float ood = 1.0f / D;
-			float t1 = (+coll.world_scale[i] - P) * ood;
-			float t2 = (-coll.world_scale[i] - P) * ood;
+			float t1 = (+coll.world_scale()[i] - P) * ood;
+			float t2 = (-coll.world_scale()[i] - P) * ood;
 
 			//‚à‚µts‚Ì‚Ù‚¤‚É‘å‚«‚¢•û‚ð•Û‘¶
 			int reverce = 1;
@@ -130,10 +130,10 @@ bool ray_cast_plane(const Vector3& Ray_pos, const Vector3& Ray_dir,
 	tmin = +FLT_MAX;
 	tmax = -FLT_MAX;
 
-	normal = vector3_quatrotate(Vector3(0, 1, 0), coll.world_orientation);
+	normal = vector3_quatrotate(Vector3(0, 1, 0), coll.world_orientation());
 	if (Crossing_func::getCrossingP_plane_line(
 		normal,
-		coll.world_position.y,
+		coll.world_position().y,
 		Ray_pos,
 		Ray_dir,
 		tmin
@@ -301,12 +301,12 @@ bool ray_cast_mesh(const Vector3& l_Ray_pos, const Vector3& l_Ray_dir,
 	bool crossing = false; //‚Ç‚±‚©‚ªŒð·‚µ‚Ä‚¢‚½‚çtrue‚É•ÏX
 	const std::vector<Vector3>& vertices = *mesh.mesh->vertices;
 
-	Matrix mat = matrix_world(mesh.ALPcollider->world_scale, mesh.ALPcollider->world_orientation.get_rotate_matrix(), mesh.ALPcollider->world_position);
+	Matrix mat = matrix_world(mesh.ALPcollider->world_scale(), mesh.ALPcollider->world_orientation().get_rotate_matrix(), mesh.ALPcollider->world_position());
 	Matrix mat_inv = matrix_inverse(mat);
 
 	//Ray‚Ìî•ñ‚ðmesh‚ÌÀ•WŒn‚É‚ÉŽ‚Á‚Ä‚­‚é
 	const Vector3 Ray_pos = vector3_trans(l_Ray_pos, mat_inv);
-	const Vector3 Ray_dir = vector3_quatrotate(l_Ray_dir, mesh.ALPcollider->world_orientation.conjugate()) / mesh.ALPcollider->world_scale;
+	const Vector3 Ray_dir = vector3_quatrotate(l_Ray_dir, mesh.ALPcollider->world_orientation().conjugate()) / mesh.ALPcollider->world_scale();
 
 	for (auto& facet : mesh.mesh->facets) {
 
@@ -344,7 +344,7 @@ bool ray_cast_mesh(const Vector3& l_Ray_pos, const Vector3& l_Ray_dir,
 
 	}
 
-	normal = vector3_quatrotate(normal, mesh.ALPcollider->world_orientation);
+	normal = vector3_quatrotate(normal, mesh.ALPcollider->world_orientation());
 
 	return crossing;
 }

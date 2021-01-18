@@ -12,29 +12,31 @@ namespace Adollib {
 	//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 #pragma region vector2
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-	class vector2 {
+	class Vector2 : public DirectX::XMFLOAT2 {
 	private:
 		// 非constの計算したら変更があるまでsqrtを使わなくて済む
 
 	public:
-		float x;
-		float y;
+		constexpr Vector2() noexcept :XMFLOAT2(0, 0) {};
+		constexpr Vector2(float x, float y) noexcept :XMFLOAT2(x, y) {};
+		constexpr explicit Vector2(float v) noexcept :XMFLOAT2(v, v) {};
+		constexpr Vector2(DirectX::XMFLOAT2 xm) noexcept :XMFLOAT2(xm.x, xm.y) {};
 
-		vector2 operator+ () const;
-		vector2 operator- () const;
+		Vector2 operator+ () const;
+		Vector2 operator- () const;
 
-		vector2 operator+ (const vector2& M) const;
-		vector2 operator- (const vector2& M) const;
-		vector2 operator* (const vector2& M) const;
-		vector2 operator* (float S) const;
-		vector2 operator/ (float S) const;
+		Vector2 operator+ (const Vector2& M) const;
+		Vector2 operator- (const Vector2& M) const;
+		Vector2 operator* (const Vector2& M) const;
+		Vector2 operator* (float S) const;
+		Vector2 operator/ (float S) const;
 
-		vector2& operator+= (const vector2& M);
-		vector2& operator-= (const vector2& M);
-		vector2& operator*= (float S);
-		vector2& operator/= (float S);
+		Vector2& operator+= (const Vector2& M);
+		Vector2& operator-= (const Vector2& M);
+		Vector2& operator*= (float S);
+		Vector2& operator/= (float S);
 
-		friend vector2 operator*(float S, const vector2& M);
+		friend Vector2 operator*(float S, const Vector2& M);
 
 
 		// norm^2
@@ -44,24 +46,24 @@ namespace Adollib {
 		float norm() const;
 
 		// unit_vect
-		vector2 unit_vect() const;
+		Vector2 unit_vect() const;
 
 
 	};
 	// 2点間の距離
-	float vector2_distance_sqr(const vector2&, const vector2&);
+	float vector2_distance_sqr(const Vector2&, const Vector2&);
 
 	// 2点間の距離^2
-	float vector2_distance(const vector2&, const vector2&);
+	float vector2_distance(const Vector2&, const Vector2&);
 
 	// 2ベクトルの内積
-	float vector2_dot(const vector2&, const vector2&);
+	float vector2_dot(const Vector2&, const Vector2&);
 
 	// 2ベクトルの間の角
-	float vector2_angle(const vector2&, const vector2&);
+	float vector2_angle(const Vector2&, const Vector2&);
 
 	// V1からV2へのベクトル
-	vector2 vector2_look_at(const vector2& V1, const vector2& V2);
+	Vector2 vector2_look_at(const Vector2& V1, const Vector2& V2);
 #pragma endregion
 	//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -79,7 +81,7 @@ namespace Adollib {
 		//Vector3(DirectX::XMFLOAT3 xm) :x(xm.x), y(xm.y), z(xm.z) {};
 		constexpr Vector3() noexcept :XMFLOAT3(0, 0, 0) {};
 		constexpr Vector3(float x, float y, float z) noexcept :XMFLOAT3(x, y, z) {};
-		constexpr Vector3(vector2 xy, float z) noexcept :XMFLOAT3(xy.x, xy.y, z) {};
+		constexpr Vector3(Vector2 xy, float z) noexcept :XMFLOAT3(xy.x, xy.y, z) {};
 		constexpr explicit Vector3(float v) noexcept :XMFLOAT3(v, v, v) {};
 		constexpr Vector3(DirectX::XMFLOAT3 xm) noexcept :XMFLOAT3(xm.x, xm.y, xm.z) {};
 

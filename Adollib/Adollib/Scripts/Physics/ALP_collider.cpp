@@ -3,6 +3,8 @@
 #include "collider__base.h"
 #include "../Object/gameobject.h"
 
+#include "ALP__physics_manager.h"
+
 using namespace Adollib;
 using namespace Physics_function;
 
@@ -16,8 +18,8 @@ const bool ALP_Collider::concoll_enter(const unsigned int tag_name) {
 }
 
 void ALP_Collider::solv_resolve() {
-	offset_CollGO_quat = local_orientation.conjugate() * (*coll_itr)->gameobject->get_world_orientate().conjugate() * world_orientation;
-	offset_CollGO_pos = world_position - vector3_quatrotate(local_position * (*coll_itr)->gameobject->get_world_scale(), world_orientation) - (*coll_itr)->gameobject->get_world_position();
+	offset_CollGO_quat = local_orientation.conjugate() * (*coll_itr)->gameobject->get_world_orientate().conjugate() * world_orientation();
+	offset_CollGO_pos = world_position() - vector3_quatrotate(local_position * (*coll_itr)->gameobject->get_world_scale(), world_orientation()) - (*coll_itr)->gameobject->get_world_position();
 
 }
 
@@ -27,9 +29,9 @@ void ALP_Collider::resolve_gameobject() {
 }
 
 void ALP_Collider::update_world_trans() {
-	world_orientation = (*coll_itr)->gameobject->get_world_orientate() * local_orientation;
-	world_scale = (*coll_itr)->gameobject->get_world_scale() * local_scale;
-	world_position = (*coll_itr)->gameobject->get_world_position() + vector3_quatrotate(local_position * (*coll_itr)->gameobject->get_world_scale(), world_orientation);
+	world_orientation_ = (*coll_itr)->gameobject->get_world_orientate() * local_orientation;
+	world_scale_ = (*coll_itr)->gameobject->get_world_scale() * local_scale;
+	world_position_ = (*coll_itr)->gameobject->get_world_position() + vector3_quatrotate(local_position * (*coll_itr)->gameobject->get_world_scale(), world_orientation());
 
 	ALPphysics->update_inertial();
 }
@@ -86,27 +88,27 @@ void ALP_Collider::update_dop14() {
 
 void ALP_Collider::update_dop14_as_sphere() {
 	for (auto& mesh : collider_meshes) {
-		mesh.dop14.pos = world_position;
+		mesh.dop14.pos = world_position();
 		for (int i = 0; i < DOP::DOP14_size; i++) {
-			mesh.dop14.max[i] = +world_scale.x * 1.0000001f;
-			mesh.dop14.min[i] = -world_scale.x * 1.0000001f;
+			mesh.dop14.max[i] = +world_scale().x * 1.0000001f;
+			mesh.dop14.min[i] = -world_scale().x * 1.0000001f;
 		}
 	}
 }
 
 void ALP_Collider::update_dop14_as_box() {
 	for (auto& mesh : collider_meshes) {
-		mesh.dop14.pos = world_position;
+		mesh.dop14.pos = world_position();
 
 		//各頂点のローカル座標
 		Vector3 half[4]{
-		{+world_scale.x, -world_scale.y, -world_scale.z},
-		{+world_scale.x, -world_scale.y, +world_scale.z},
-		{+world_scale.x, +world_scale.y, -world_scale.z},
-		{+world_scale.x, +world_scale.y, +world_scale.z}
+		{+world_scale().x, -world_scale().y, -world_scale().z},
+		{+world_scale().x, -world_scale().y, +world_scale().z},
+		{+world_scale().x, +world_scale().y, -world_scale().z},
+		{+world_scale().x, +world_scale().y, +world_scale().z}
 		};
 
-		Quaternion WO = world_orientation;
+		Quaternion WO = world_orientation();
 		for (int i = 0; i < 4; i++) {
 			half[i] = vector3_quatrotate(half[i], WO);
 		}
@@ -130,14 +132,14 @@ void ALP_Collider::update_dop14_as_box() {
 
 void ALP_Collider::update_dop14_as_capsule() {
 	for (auto& mesh : collider_meshes) {
-		Vector3 p = vector3_quatrotate(Vector3(0, world_scale.y, 0), world_orientation);
-		mesh.dop14.pos = world_position;
+		Vector3 p = vector3_quatrotate(Vector3(0, world_scale().y, 0), world_orientation());
+		mesh.dop14.pos = world_position();
 		for (int i = 0; i < DOP::DOP14_size; i++) {
 			float v0, v1, v2, v3;
-			v0 = vector3_dot(+p, DOP::DOP_14_axis[i]) + +world_scale.x * 1.0000001f;
-			v1 = vector3_dot(+p, DOP::DOP_14_axis[i]) + -world_scale.x * 1.0000001f;
-			v2 = vector3_dot(-p, DOP::DOP_14_axis[i]) + +world_scale.x * 1.0000001f;
-			v3 = vector3_dot(-p, DOP::DOP_14_axis[i]) + -world_scale.x * 1.0000001f;
+			v0 = vector3_dot(+p, DOP::DOP_14_axis[i]) + +world_scale().x * 1.0000001f;
+			v1 = vector3_dot(+p, DOP::DOP_14_axis[i]) + -world_scale().x * 1.0000001f;
+			v2 = vector3_dot(-p, DOP::DOP_14_axis[i]) + +world_scale().x * 1.0000001f;
+			v3 = vector3_dot(-p, DOP::DOP_14_axis[i]) + -world_scale().x * 1.0000001f;
 			mesh.dop14.max[i] = ALmax(ALmax(v0, v1), ALmax(v2, v3));
 			mesh.dop14.min[i] = ALmin(ALmin(v0, v1), ALmin(v2, v3));
 		}
@@ -146,7 +148,7 @@ void ALP_Collider::update_dop14_as_capsule() {
 
 void ALP_Collider::update_dop14_as_plane() {
 	for (auto& mesh : collider_meshes) {
-		mesh.dop14.pos = world_position;
+		mesh.dop14.pos = world_position();
 		for (int i = 0; i < DOP::DOP14_size; i++) {
 			mesh.dop14.max[i] = FLT_MAX;
 		}
@@ -155,17 +157,17 @@ void ALP_Collider::update_dop14_as_plane() {
 
 void ALP_Collider::update_dop14_as_mesh() {
 	for (auto& mesh : collider_meshes) {
-		mesh.dop14.pos = world_position;
+		mesh.dop14.pos = world_position();
 
 		Vector3 rotated_axis[DOP::DOP14_size];
 		for (int i = 0; i < DOP::DOP14_size; i++) {
-			rotated_axis[i] = vector3_quatrotate(DOP::DOP_14_axis[i], world_orientation.conjugate()).unit_vect();
+			rotated_axis[i] = vector3_quatrotate(DOP::DOP_14_axis[i], world_orientation().conjugate()).unit_vect();
 			mesh.dop14.max[i] = -FLT_MAX;
 			mesh.dop14.min[i] = +FLT_MAX;
 		}
 
 		for (int v_num = 0; v_num < 8; v_num++) {
-			const Vector3& pos = mesh.mesh->base_pos[v_num] * world_scale;
+			const Vector3& pos = mesh.mesh->base_pos[v_num] * world_scale();
 
 			//DOPの更新
 			for (int i = 0; i < DOP::DOP14_size; i++) {
@@ -181,3 +183,17 @@ void ALP_Collider::update_dop14_as_mesh() {
 
 #pragma endregion
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+void ALP_Collider::integrate(float duration, Vector3 linear_velocity, Vector3 anglar_velocity) {
+	if (linear_velocity.norm() == 0 && anglar_velocity.norm() == 0)return;
+
+	//位置の更新
+	if (linear_velocity.norm() >= FLT_EPSILON)
+	world_position_ += linear_velocity * duration;
+
+	world_orientation_ *= quaternion_radian_axis(anglar_velocity.norm_sqr() * duration * 0.5f, anglar_velocity.unit_vect());
+	world_orientation_ = world_orientation().unit_vect();
+
+	Phyisics_manager::add_moved(ALPcollider);
+}

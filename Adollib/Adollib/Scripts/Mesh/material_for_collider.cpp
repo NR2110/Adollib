@@ -64,7 +64,7 @@ void Collider_renderer::render_collider(const Physics_function::ALP_Collider& R)
 void Collider_renderer::render_box(const Physics_function::ALP_Collider& R) {
 	//CB : ConstantBufferPerCO_OBJ
 	ConstantBufferPerGO g_cb;
-	g_cb.world = matrix_world(R.world_scale * 1.0001, R.world_orientation.get_rotate_matrix(), R.world_position).get_XMFLOAT4X4();
+	g_cb.world = matrix_world(R.world_scale() * 1.0001, R.world_orientation().get_rotate_matrix(), R.world_position()).get_XMFLOAT4X4();
 	Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
 	Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 	Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
@@ -119,7 +119,7 @@ void Collider_renderer::render_box(const Physics_function::ALP_Collider& R) {
 void Collider_renderer::render_sphere(const Physics_function::ALP_Collider& R) {
 	//CB : ConstantBufferPerCO_OBJ
 	ConstantBufferPerGO g_cb;
-	g_cb.world = matrix_world(R.world_scale * 1.0001, R.world_orientation.get_rotate_matrix(), R.world_position).get_XMFLOAT4X4();
+	g_cb.world = matrix_world(R.world_scale() * 1.0001, R.world_orientation().get_rotate_matrix(), R.world_position()).get_XMFLOAT4X4();
 	Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
 	Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 	Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
@@ -174,7 +174,7 @@ void Collider_renderer::render_sphere(const Physics_function::ALP_Collider& R) {
 void Collider_renderer::render_meshcoll(const Physics_function::ALP_Collider& R) {
 	//CB : ConstantBufferPerCO_OBJ
 	ConstantBufferPerGO g_cb;
-	g_cb.world = matrix_world(R.world_scale * 1.0001, R.world_orientation.get_rotate_matrix(), R.world_position).get_XMFLOAT4X4();
+	g_cb.world = matrix_world(R.world_scale() * 1.0001, R.world_orientation().get_rotate_matrix(), R.world_position()).get_XMFLOAT4X4();
 	Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
 	Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 	Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
@@ -232,7 +232,7 @@ void Collider_renderer::render_capsule(const Physics_function::ALP_Collider& R) 
 	meshs = meshes[ALP_Collider_shape::Cylinder];
 	{
 		ConstantBufferPerGO g_cb;
-		g_cb.world = matrix_world(Vector3(R.world_scale.x, R.world_scale.y, R.world_scale.x) * 1.0001, R.world_orientation.get_rotate_matrix(), R.world_position).get_XMFLOAT4X4();
+		g_cb.world = matrix_world(Vector3(R.world_scale().x, R.world_scale().y, R.world_scale().x) * 1.0001, R.world_orientation().get_rotate_matrix(), R.world_position()).get_XMFLOAT4X4();
 		Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
 		Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 		Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
@@ -285,7 +285,7 @@ void Collider_renderer::render_capsule(const Physics_function::ALP_Collider& R) 
 	meshs = meshes[ALP_Collider_shape::Sphere];
 	{
 		ConstantBufferPerGO g_cb;
-		g_cb.world = matrix_world(Vector3(R.world_scale.x) * 1.0001, R.world_orientation.get_rotate_matrix(),R.world_position + vector3_quatrotate(Vector3(0, R.world_scale.y, 0),R.world_orientation)).get_XMFLOAT4X4();
+		g_cb.world = matrix_world(Vector3(R.world_scale().x) * 1.0001, R.world_orientation().get_rotate_matrix(),R.world_position() + vector3_quatrotate(Vector3(0, R.world_scale().y, 0),R.world_orientation())).get_XMFLOAT4X4();
 		Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
 		Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 		Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
@@ -338,7 +338,7 @@ void Collider_renderer::render_capsule(const Physics_function::ALP_Collider& R) 
 	meshs = meshes[ALP_Collider_shape::Sphere];
 	{
 		ConstantBufferPerGO g_cb;
-		g_cb.world = matrix_world(Vector3(R.world_scale.x) * 1.0001, R.world_orientation.get_rotate_matrix(), R.world_position - vector3_quatrotate(Vector3(0, R.world_scale.y, 0), R.world_orientation)).get_XMFLOAT4X4();
+		g_cb.world = matrix_world(Vector3(R.world_scale().x) * 1.0001, R.world_orientation().get_rotate_matrix(), R.world_position() - vector3_quatrotate(Vector3(0, R.world_scale().y, 0), R.world_orientation())).get_XMFLOAT4X4();
 		Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
 		Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 		Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
@@ -408,22 +408,22 @@ void Collider_renderer::render_AABB(const Physics_function::ALP_Collider& coll) 
 			coll_mesh.mesh->dopbase;
 
 			w_pos = Vector3(
-				(coll_mesh.mesh->dopbase.max[0] + coll_mesh.mesh->dopbase.min[0]) * 0.5f * coll_mesh.ALPcollider->world_scale.x,
-				(coll_mesh.mesh->dopbase.max[1] + coll_mesh.mesh->dopbase.min[1]) * 0.5f * coll_mesh.ALPcollider->world_scale.y,
-				(coll_mesh.mesh->dopbase.max[2] + coll_mesh.mesh->dopbase.min[2]) * 0.5f * coll_mesh.ALPcollider->world_scale.z
+				(coll_mesh.mesh->dopbase.max[0] + coll_mesh.mesh->dopbase.min[0]) * 0.5f * coll_mesh.ALPcollider->world_scale().x,
+				(coll_mesh.mesh->dopbase.max[1] + coll_mesh.mesh->dopbase.min[1]) * 0.5f * coll_mesh.ALPcollider->world_scale().y,
+				(coll_mesh.mesh->dopbase.max[2] + coll_mesh.mesh->dopbase.min[2]) * 0.5f * coll_mesh.ALPcollider->world_scale().z
 			);
 			w_scale = Vector3(
-				(coll_mesh.mesh->dopbase.max[0] - coll_mesh.mesh->dopbase.min[0]) * 0.5f * coll_mesh.ALPcollider->world_scale.x,
-				(coll_mesh.mesh->dopbase.max[1] - coll_mesh.mesh->dopbase.min[1]) * 0.5f * coll_mesh.ALPcollider->world_scale.y,
-				(coll_mesh.mesh->dopbase.max[2] - coll_mesh.mesh->dopbase.min[2]) * 0.5f * coll_mesh.ALPcollider->world_scale.z
+				(coll_mesh.mesh->dopbase.max[0] - coll_mesh.mesh->dopbase.min[0]) * 0.5f * coll_mesh.ALPcollider->world_scale().x,
+				(coll_mesh.mesh->dopbase.max[1] - coll_mesh.mesh->dopbase.min[1]) * 0.5f * coll_mesh.ALPcollider->world_scale().y,
+				(coll_mesh.mesh->dopbase.max[2] - coll_mesh.mesh->dopbase.min[2]) * 0.5f * coll_mesh.ALPcollider->world_scale().z
 			);
 
 			//CB : ConstantBufferPerCO_OBJ
 			ConstantBufferPerGO g_cb;
 			g_cb.world = matrix_world(
 				w_scale * 1.001,
-				coll_mesh.ALPcollider->world_orientation.get_rotate_matrix(),
-				vector3_quatrotate(w_pos, coll_mesh.ALPcollider->world_orientation) + coll_mesh.ALPcollider->world_position
+				coll_mesh.ALPcollider->world_orientation().get_rotate_matrix(),
+				vector3_quatrotate(w_pos, coll_mesh.ALPcollider->world_orientation()) + coll_mesh.ALPcollider->world_position()
 			).get_XMFLOAT4X4();
 
 			Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
@@ -477,7 +477,7 @@ void Collider_renderer::render_AABB(const Physics_function::ALP_Collider& coll) 
 				g_cb.world = matrix_world(
 					Vector3(0.01f),
 					matrix_identity(),
-					(vector3_quatrotate(vertex * coll_mesh.ALPcollider->world_scale, coll_mesh.ALPcollider->world_orientation)) + coll_mesh.ALPcollider->world_position
+					(vector3_quatrotate(vertex * coll_mesh.ALPcollider->world_scale(), coll_mesh.ALPcollider->world_orientation())) + coll_mesh.ALPcollider->world_position()
 				).get_XMFLOAT4X4();
 
 				Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
@@ -533,13 +533,13 @@ void Collider_renderer::render_AABB(const Physics_function::ALP_Collider& coll) 
 				//g_cb.world = matrix_world(
 				//	w_scale * 1.001,
 				//	matrix_identity(),
-				//	vector3_quatrotate(w_pos, coll_mesh.ALPcollider->world_orientation) + coll_mesh.ALPcollider->world_position
+				//	vector3_quatrotate(w_pos, coll_mesh.ALPcollider->world_orientation()) + coll_mesh.ALPcollider->world_position()
 				//).get_XMFLOAT4X4();
 
 				g_cb.world = matrix_world(
 					Vector3(0.1f),
 					matrix_identity(),
-					(vector3_quatrotate(vertex * coll_mesh.ALPcollider->world_scale, coll_mesh.ALPcollider->world_orientation)) + coll_mesh.ALPcollider->world_position
+					(vector3_quatrotate(vertex * coll_mesh.ALPcollider->world_scale(), coll_mesh.ALPcollider->world_orientation())) + coll_mesh.ALPcollider->world_position()
 				).get_XMFLOAT4X4();
 
 

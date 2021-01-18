@@ -30,7 +30,7 @@ Matrix ALP_Physics::inverse_inertial_tensor() const {
 		inverse_inertial_tensor = matrix_inverse(inertial_tensor);
 
 		Matrix rotation, transposed_rotation;
-		rotation = ALP_coll->world_orientation.get_rotate_matrix();
+		rotation = ALPcollider->world_orientation().get_rotate_matrix();
 		transposed_rotation = matrix_trans(rotation);
 		inverse_inertial_tensor = rotation * inverse_inertial_tensor * transposed_rotation;
 	}
@@ -81,7 +81,7 @@ void ALP_Physics::apply_external_force(float duration) {
 
 		//各回転に加える力(accumulated_torque)から加速度を出して角速度を更新する
 		Matrix inverse_inertia_tensor = matrix_inverse(inertial_tensor);
-		Matrix rotation = ALP_coll->local_orientation.get_rotate_matrix();
+		Matrix rotation = ALPcollider->local_orientation.get_rotate_matrix();
 		Matrix transposed_rotation = matrix_trans(rotation);
 		inverse_inertia_tensor = transposed_rotation * inverse_inertia_tensor * rotation;
 		angula_acceleration += vector3_trans(accumulated_torque, inverse_inertia_tensor);
@@ -100,24 +100,35 @@ void ALP_Physics::apply_external_force(float duration) {
 }
 void ALP_Physics::integrate(float duration) {
 
+	//if (is_movable() == false)return;
+
+	////位置の更新
+	//if (linear_velocity.norm() >= FLT_EPSILON)
+	//	ALP_coll->offset_CollGO_pos += linear_velocity * duration;
+
+	//ALP_coll->offset_CollGO_quat *= quaternion_radian_axis(anglar_velocity.norm_sqr() * duration * 0.5f, anglar_velocity.unit_vect());
+	//ALP_coll->offset_CollGO_quat = ALP_coll->world_orientation().unit_vect();
+
 	if (is_movable() == false)return;
 
-	//位置の更新
-	if (linear_velocity.norm() >= FLT_EPSILON)
-		ALP_coll->world_position += linear_velocity * duration;
+	////位置の更新
+	//if (linear_velocity.norm() >= FLT_EPSILON)
+	//	ALP_coll->world_position_ += linear_velocity * duration;
 
-	ALP_coll->world_orientation *= quaternion_radian_axis(anglar_velocity.norm_sqr() * duration * 0.5f, anglar_velocity.unit_vect());
-	ALP_coll->world_orientation = ALP_coll->world_orientation.unit_vect();
+	//ALP_coll->world_orientation_ *= quaternion_radian_axis(anglar_velocity.norm_sqr() * duration * 0.5f, anglar_velocity.unit_vect());
+	//ALP_coll->world_orientation_ = ALP_coll->world_orientation().unit_vect();
+
+	ALPcollider->integrate(duration, linear_velocity, anglar_velocity);
 
 }
 
 //サイズ変更などに対応するため毎フレーム慣性テンソルなどを更新
 void ALP_Physics::update_inertial() {
 
-	Vector3 Wsize = ALP_coll->world_scale;
+	Vector3 Wsize = ALPcollider->world_scale();
 
 	//慣性モーメントの更新
-	switch (ALP_coll->shape)
+	switch (ALPcollider->shape)
 	{
 	case ALP_Collider_shape::Sphere:
 		inertial_tensor = matrix_identity();
@@ -157,7 +168,7 @@ void ALP_Physics::update_inertial() {
 
 void ALP_Physics::refresh_ALP_from_data() {
 
-	Physics_data Cdata = (*ALP_coll->coll_itr)->get_Physicsdata();
+	Physics_data Cdata = (*ALPcollider->coll_itr)->get_Physicsdata();
 
 	inertial_mass = Cdata.inertial_mass;
 	linear_drag = Cdata.drag;

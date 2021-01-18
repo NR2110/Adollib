@@ -6,6 +6,8 @@
 #include "ALP__shapes.h"
 #include "ALP__meshcoll_data.h"
 
+#include "../Scene/scene_list.h"
+
 namespace Adollib {
 
 	class Collider;
@@ -29,20 +31,27 @@ namespace Adollib {
 
 		class ALP_Collider {
 		public:
+			u_int index = 0; //このcolliderの番号
+			Scenelist scene = Scenelist::scene_null; //このcolldierが存在するscene
+
+		public:
 			//::: Collider :::::
 			Vector3 local_position;
 			Quaternion local_orientation;
 			Vector3 local_scale;
 
-			Vector3	world_position;
-			Quaternion	world_orientation;
-			Vector3	world_scale;
+		private:
+			Vector3	world_position_;
+			Quaternion	world_orientation_;
+			Vector3	world_scale_;
+
+		public:
+			const Vector3	world_position()const { return world_position_; };
+			const Quaternion	world_orientation()const {return world_orientation_;};
+			const Vector3	world_scale()const { return world_scale_; };
+		public:
 
 			Vector3 half_size; //実際のsize = half_size * local_scale * GO.world_scale
-
-			//::: GOに渡すためのバッファ :::::::
-			Quaternion offset_CollGO_quat;
-			Vector3 offset_CollGO_pos;
 
 			//::: oncoll_enter :::::::
 			u_int oncoll_bits = 0; //oncollision enterで使用するbit情報
@@ -55,18 +64,24 @@ namespace Adollib {
 			//:::
 			ALP_Collider_shape shape = ALP_Collider_shape::None; //形情報
 
+			//::: 複数meshに対応 各メッシュのdop,頂点情報などがここに保存される :::
+			std::vector<ALP_Collider_mesh> collider_meshes;
+
+			//::: GOに渡すためのバッファ :::::::
+			Quaternion offset_CollGO_quat;
+			Vector3 offset_CollGO_pos;
+
+			//:::
+			Meshcoll_data meshcoll_data; //MeshCollider使用時に使うdata vertices,Edges,Facets
+
 			//::: ComponentがアタッチされたColliderへのイテレータ :::
 			std::list<Collider*>::iterator coll_itr;
 
 			//::: Physicsへのイテレータ :::
 			std::list<ALP_Physics>::iterator ALPphysics;
 
-			//::: 複数meshに対応 各メッシュのdop,頂点情報などがここに保存される :::
-			std::vector<ALP_Collider_mesh> collider_meshes;
-
-			//:::
-			Meshcoll_data meshcoll_data; //MeshCollider使用時に使うdata vertices,Edges,Facets
-
+			//::: 自身へのイテレータ :::
+			std::list<ALP_Collider>::iterator ALPcollider;
 		public:
 
 			//oncollision enter
@@ -82,12 +97,15 @@ namespace Adollib {
 			// gameobjectのtransformからcolliderのworld空間での情報を更新
 			void update_world_trans();
 
-			//::: collider:Component の local_positionなどが変更されたときに呼ぶもの :::
 			// collider::get_Colliderdata()からlocal_posなどの情報を更新
 			void refresh_ALP_from_data();
 
+			//::: collider:Component の local_positionなどが変更されたときに呼ぶもの :::
 			// DOP_14データの更新
 			void update_dop14();
+
+			//座標,姿勢によるworld情報の更新
+			void integrate(float duration , Vector3 linear_velocity, Vector3 anglar_velocity);
 
 		private:
 			void update_dop14_as_sphere();

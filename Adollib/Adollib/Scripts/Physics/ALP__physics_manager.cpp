@@ -22,6 +22,8 @@ using namespace Contacts;
 #define Allow_delay
 
 //::: staticメンバの初期化 :::::
+#pragma region static_initialize
+
 namespace Adollib
 {
 	float Phyisics_manager::gravity = Physics_manager_default::gravity; //重力
@@ -75,10 +77,13 @@ namespace Adollib
 	std::vector<Physics_function::Contacts::Contact_pair> Phyisics_manager::pairs;
 	std::vector<Physics_function::Contacts::Collider_2> Phyisics_manager::broad_mid_pair;
 
-	bool Phyisics_manager::is_changed_coll = false; //新たにColliderが追加された、削除された場合true
+	std::unordered_map<Scenelist, std::vector<std::list<Physics_function::ALP_Collider>::iterator>> Phyisics_manager::moved_collider;   //動いた
+	std::unordered_map<Scenelist, std::vector<std::list<Physics_function::ALP_Collider>::iterator>> Phyisics_manager::added_collider;   //追加された
+
+	std::unordered_map<Scenelist, u_int> Phyisics_manager::collider_index_count;
 }
 
-
+#pragma endregion
 
 bool Phyisics_manager::update(Scenelist Sce)
 {
@@ -108,14 +113,20 @@ bool Phyisics_manager::update(Scenelist Sce)
 	timeStep = Al_Global::second_per_frame;
 #endif
 
+	//TODO : resolve_contactの後に持ってくる
+	// 位置の更新
+	integrate(ALP_physicses[Sce]);
+
 
 	// 大雑把な当たり判定
 	Work_meter::start("Broad,Mid,Narrow");
 
 	Work_meter::start("Broadphase");
 	Work_meter::tag_start("Broadphase");
-	Broadphase(ALP_colliders[Sce], broad_mid_pair);
-	is_changed_coll = false;
+	Broadphase(Sce,
+		ALP_colliders[Sce], broad_mid_pair,
+		moved_collider[Sce], added_collider[Sce]
+		);
 	Work_meter::tag_stop();
 	Work_meter::stop("Broadphase");
 
@@ -141,8 +152,6 @@ bool Phyisics_manager::update(Scenelist Sce)
 	Work_meter::tag_stop();
 	Work_meter::stop("Resolve");
 
-	// 位置の更新
-	integrate(ALP_physicses[Sce]);
 
 #ifdef Allow_delay
 	timeStep = Al_Global::second_per_frame;
@@ -190,7 +199,6 @@ bool Phyisics_manager::update(Scenelist Sce)
 	return true;
 
 }
-
 
 bool Phyisics_manager::update_Gui() {
 	ImGuiWindowFlags flag = 0;
@@ -277,6 +285,35 @@ bool Phyisics_manager::ray_cast(
 	}
 
 	return ret;
+}
+
+void Phyisics_manager::remove_collider(
+	std::list<Collider*>::iterator coll_itr,
+	std::list<Physics_function::ALP_Collider>::iterator ALPcoll_itr,
+	std::list<Physics_function::ALP_Physics>::iterator ALPphys_itr,
+	Scenelist Sce) {
+
+	//削除されたcolider
+	remove_collider_broad_phase(ALPcoll_itr);
+
+	ALP_colliders[Sce].erase(ALPcoll_itr);
+	ALP_physicses[Sce].erase(ALPphys_itr);
+
+	colliders[Sce].erase(coll_itr);
+
+}
+
+void Phyisics_manager::remove_collider(
+	std::list<Collider*>::iterator coll_itr,
+	std::list<Physics_function::ALP_Collider>::iterator ALPcoll_itr,
+	Scenelist Sce) {
+
+	//削除されたcolider
+	remove_collider_broad_phase(ALPcoll_itr);
+
+	ALP_colliders[Sce].erase(ALPcoll_itr);
+
+	colliders[Sce].erase(coll_itr);
 }
 
 #include "../Main/systems.h"

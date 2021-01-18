@@ -430,70 +430,70 @@ namespace Adollib {
 #pragma region vector2
 //::::::::::::::::::::::::::::::::::::::::::::::::
 //operator
-	inline vector2 vector2::operator+ () const {
+	inline Vector2 Vector2::operator+ () const {
 		return *this;
 	}
-	inline vector2 vector2::operator- () const {
-		vector2 R = *this;
+	inline Vector2 Vector2::operator- () const {
+		Vector2 R = *this;
 		R.x *= -1;
 		R.y *= -1;
 		return R;
 	}
 
-	inline vector2 vector2::operator+ (const vector2& M) const {
-		vector2 R;
+	inline Vector2 Vector2::operator+ (const Vector2& M) const {
+		Vector2 R;
 		R.x = x + M.x;
 		R.y = y + M.y;
 		return R;
 	}
-	inline vector2 vector2::operator- (const vector2& M) const {
-		vector2 R;
+	inline Vector2 Vector2::operator- (const Vector2& M) const {
+		Vector2 R;
 		R.x = x - M.x;
 		R.y = y - M.y;
 		return R;
 	}
-	inline vector2 vector2::operator* (const vector2& M) const {
-		vector2 R;
+	inline Vector2 Vector2::operator* (const Vector2& M) const {
+		Vector2 R;
 		R.x = x * M.x;
 		R.y = y * M.y;
 		return R;
 	}
-	inline vector2 vector2::operator* (float S) const {
-		vector2 R;
+	inline Vector2 Vector2::operator* (float S) const {
+		Vector2 R;
 		R.x = x * S;
 		R.y = y * S;
 		return R;
 	}
-	inline vector2 Adollib::operator*(float S, const vector2& M) {
-		vector2 R;
+	inline Vector2 Adollib::operator*(float S, const Vector2& M) {
+		Vector2 R;
 		R.x = M.x * S;
 		R.y = M.y * S;
 		return R;
 	}
 
-	inline vector2 vector2::operator/ (float S) const {
-		vector2 R;
+	inline Vector2 Vector2::operator/ (float S) const {
+		Vector2 R;
 		R.x = x / S;
 		R.y = y / S;
 		return R;
 	}
 
-	inline vector2& vector2::operator+= (const vector2& M) {
+	inline Vector2& Vector2::operator+= (const Vector2& M) {
 		x = x + M.x;
 		y = y + M.y;
 		return *this;
 	}
-	inline vector2& vector2::operator-= (const vector2& M) {
+	inline Vector2& Vector2::operator-= (const Vector2& M) {
 		x = x - M.x;
 		y = y - M.y;
 		return *this;
 	}
-	inline vector2& vector2::operator*= (float S) {
+	inline Vector2& Vector2::operator*= (float S) {
 		x = x * S;
 		y = y * S;
 		return *this;
 	}
-	inline vector2& vector2::operator/= (float S) {
+	inline Vector2& Vector2::operator/= (float S) {
 		x = x / S;
 		y = y / S;
 		return *this;
@@ -501,41 +501,41 @@ namespace Adollib {
 
 	//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-	inline float vector2::norm_sqr() const {
+	inline float Vector2::norm_sqr() const {
 		float S = norm();
 		if (S == 1.0f) return 1.0f;
 		else return sqrtf(S);
 	}
 
-	inline float vector2::norm() const {
+	inline float Vector2::norm() const {
 		return x * x + y * y;
 	}
 
-	inline vector2 vector2::unit_vect() const {
+	inline Vector2 Vector2::unit_vect() const {
 		float V = norm_sqr();
-		vector2 R = *this;
+		Vector2 R = *this;
 		return R / V;
 	}
-	inline float Adollib::vector2_distance_sqr(const vector2& P, const vector2& Q) {
+	inline float Adollib::vector2_distance_sqr(const Vector2& P, const Vector2& Q) {
 		return
 			sqrtf((P.x - Q.x) * (P.x - Q.x) + (P.y - Q.y) * (P.y - Q.y));
 	}
 
-	inline float Adollib::vector2_distance(const vector2& P, const vector2& Q) {
+	inline float Adollib::vector2_distance(const Vector2& P, const Vector2& Q) {
 		return (P.x - Q.x) * (P.x - Q.x) + (P.y - Q.y) * (P.y - Q.y);
 	}
 
 
-	inline float Adollib::vector2_dot(const vector2& P, const vector2& Q) {
+	inline float Adollib::vector2_dot(const Vector2& P, const Vector2& Q) {
 		return P.x * Q.x + P.y * Q.y;
 	}
 
-	inline float Adollib::vector2_angle(const vector2& P, const vector2& Q) {
+	inline float Adollib::vector2_angle(const Vector2& P, const Vector2& Q) {
 
 		return ToAngle(acosf(Adollib::vector2_dot(P.unit_vect(), Q.unit_vect())));
 	}
 
-	inline vector2 Adollib::vector2_look_at(const vector2& P, const vector2& Q) {
+	inline Vector2 Adollib::vector2_look_at(const Vector2& P, const Vector2& Q) {
 		return Q - P;
 	}
 

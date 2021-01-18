@@ -67,6 +67,8 @@ namespace Adollib
 		//collider_componentのポインタ配列
 		static std::unordered_map<Scenelist, std::list<Collider*>> colliders;
 
+		static std::unordered_map<Scenelist, u_int> collider_index_count;
+
 		//各dataの実態配列
 		static std::unordered_map<Scenelist, std::list<Physics_function::ALP_Collider>> ALP_colliders;
 		static std::unordered_map<Scenelist, std::list<Physics_function::ALP_Physics>> ALP_physicses;
@@ -74,9 +76,9 @@ namespace Adollib
 		static std::vector<Physics_function::Contacts::Contact_pair> pairs;
 		static std::vector<Physics_function::Contacts::Collider_2> broad_mid_pair;
 
-		static bool is_changed_coll; //新たにColliderが追加された、削除された場合true
-	public:
-		static bool is_changed_colliders() { return is_changed_coll; };
+		//そのフレーム間で変化したもの(broad_phase用)
+		static std::unordered_map<Scenelist, std::vector<std::list<Physics_function::ALP_Collider>::iterator>> moved_collider;   //動いた
+		static std::unordered_map<Scenelist, std::vector<std::list<Physics_function::ALP_Collider>::iterator>> added_collider;   //追加された
 
 	public:
 		static float gravity; //重力
@@ -105,8 +107,6 @@ namespace Adollib
 
 		static Physics_function::ColliderPhysics_itrs add_collider(Collider* coll, Scenelist Sce = Scene::now_scene) {
 
-			is_changed_coll = true;
-
 			Physics_function::ColliderPhysics_itrs ret;
 			{
 				colliders[Sce].emplace_back(coll);
@@ -119,6 +119,9 @@ namespace Adollib
 				ALP_colliders[Sce].emplace_back(ALPcollider);
 				ret.ALPcollider_itr = ALP_colliders[Sce].end();
 				ret.ALPcollider_itr--;
+
+				ret.ALPcollider_itr->scene = Sce;
+				ret.ALPcollider_itr->index = collider_index_count[Sce];
 			}
 			{
 				Physics_function::ALP_Physics ALPphysics;
@@ -129,8 +132,14 @@ namespace Adollib
 				ret.ALPphysics_itr--;
 			}
 
+			ret.ALPphysics_itr->ALPphysics = ret.ALPphysics_itr;
 			ret.ALPcollider_itr->ALPphysics = ret.ALPphysics_itr;
-			ret.ALPphysics_itr->ALP_coll = ret.ALPcollider_itr;
+
+			ret.ALPphysics_itr->ALPcollider = ret.ALPcollider_itr;
+			ret.ALPcollider_itr->ALPcollider = ret.ALPcollider_itr;
+
+			//追加されたcollider
+			added_collider[Sce].emplace_back(ret.ALPcollider_itr);
 
 			//::: 初期値をいれる :::
 			(*ret.coll_itr)->physics_data.inertial_mass = Phyisics_manager::default_physics.inertial_mass; //質量
@@ -147,6 +156,7 @@ namespace Adollib
 			(*ret.coll_itr)->physics_data.is_moveable = Phyisics_manager::default_physics.is_moveable; //動かない
 			(*ret.coll_itr)->physics_data.is_hitable = Phyisics_manager::default_physics.is_hitable;  //衝突しない
 
+			collider_index_count[Sce]++;
 			return ret;
 		}
 
@@ -154,23 +164,13 @@ namespace Adollib
 			std::list<Collider*>::iterator coll_itr,
 			std::list<Physics_function::ALP_Collider>::iterator ALPcoll_itr,
 			std::list<Physics_function::ALP_Physics>::iterator ALPphys_itr,
-			Scenelist Sce = Scene::now_scene) {
-			is_changed_coll = true;
-			ALP_colliders[Sce].erase(ALPcoll_itr);
-			ALP_physicses[Sce].erase(ALPphys_itr);
+			Scenelist Sce = Scene::now_scene);
 
-			colliders[Sce].erase(coll_itr);
-		}
 
 		static void remove_collider(
 			std::list<Collider*>::iterator coll_itr,
 			std::list<Physics_function::ALP_Collider>::iterator ALPcoll_itr,
-			Scenelist Sce = Scene::now_scene) {
-			is_changed_coll = true;
-			ALP_colliders[Sce].erase(ALPcoll_itr);
-
-			colliders[Sce].erase(coll_itr);
-		}
+			Scenelist Sce = Scene::now_scene);
 
 	public:
 		static bool ray_cast(
@@ -181,6 +181,10 @@ namespace Adollib
 			Vector3& normal,
 			Collider* coll,
 			Scenelist Sce = Scene::now_scene);
+
+		static void add_moved(const std::list<Physics_function::ALP_Collider>::iterator& coll, Scenelist Sce = Scene::now_scene) {
+			moved_collider[Sce].push_back(coll);
+		}
 
 	public:
 
