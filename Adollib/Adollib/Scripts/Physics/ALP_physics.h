@@ -35,7 +35,6 @@ namespace Adollib {
 				float restitution,	 //”½”­ŒW”
 
 				bool is_fallable, //—‚¿‚È‚¢
-				bool is_kinematic, //‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
 				bool is_kinmatic_anglar,
 				bool is_kinmatic_linear,
 				bool is_moveable,//“®‚©‚È‚¢
@@ -49,7 +48,6 @@ namespace Adollib {
 				restitution(restitution),	 //”½”­ŒW”
 
 				is_fallable(is_fallable), //—‚¿‚È‚¢
-				is_kinematic(is_kinematic), //‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
 				is_kinmatic_anglar(is_kinmatic_anglar), //‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å‰ñ“]‘¬“x‚ª•Ï‰»‚µ‚È‚¢
 				is_kinmatic_linear(is_kinmatic_linear), //‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å•Ài‘¬“x‚ª•Ï‰»‚µ‚È‚¢
 				is_moveable(is_moveable),//“®‚©‚È‚¢
@@ -65,7 +63,6 @@ namespace Adollib {
 			float restitution = 0;	 //”½”­ŒW”
 
 			bool is_fallable = false; //—‚¿‚È‚¢
-			bool is_kinematic = false; //‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
 			bool is_kinmatic_anglar = false; //‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å‰ñ“]‘¬“x‚ª•Ï‰»‚µ‚È‚¢
 			bool is_kinmatic_linear = false; //‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å•Ài‘¬“x‚ª•Ï‰»‚µ‚È‚¢
 			bool is_moveable = false;//“®‚©‚È‚¢

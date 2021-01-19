@@ -14,7 +14,7 @@ namespace Adollib {
 		struct Edge {
 			Edgetype type = Edgetype::EdgeConvex; // エッジの種類
 			u_int vertexID[2] = { 0 }; // 端点の頂点インデックス vectorの再確保があるかもなのでIDで保存
-			u_int facetID[2] = { 0 }; // 共有する面インデックス 
+			u_int facetID[2] = { 0 }; // 共有する面インデックス
 		};
 
 		//面

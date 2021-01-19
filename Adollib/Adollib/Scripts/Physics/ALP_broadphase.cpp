@@ -57,7 +57,7 @@ void Physics_function::Broadphase(Scenelist Sce,
 
 	//::: ’Ç‰Á‚³‚ê‚½‚à‚Ì‚ğaxis_list‚É’Ç‰Á :::
 	{
-		edge ed;
+		Insert_edge ed;
 		for (const auto& added : added_collider) {
 			auto itr = added->collider_meshes.begin();
 			u_int index_count = 0;
@@ -114,12 +114,12 @@ void Physics_function::Broadphase(Scenelist Sce,
 	//small ----> big
 	{
 		Work_meter::start("insert_sort");
-		edge ed;
+		Insert_edge ed;
 
-		std::list<edge>::iterator itr = axis_list.begin();
-		std::list<edge>::iterator itr_next;
-		std::list<edge>::iterator itr_insert;
-		std::list<edge>::iterator itr_end = axis_list.end();
+		std::list<Insert_edge>::iterator itr = axis_list.begin();
+		std::list<Insert_edge>::iterator itr_next;
+		std::list<Insert_edge>::iterator itr_insert;
+		std::list<Insert_edge>::iterator itr_end = axis_list.end();
 
 
 		while (true) {
@@ -154,41 +154,62 @@ void Physics_function::Broadphase(Scenelist Sce,
 	Work_meter::start("Sweep&Prune");
 	//Sweep&Prune
 	std::list<std::vector<ALP_Collider_mesh>::iterator> actives;
+	std::list<std::vector<ALP_Collider_mesh>::iterator> static_actives;
 	Contacts::Collider_2 pair;
 	out_pair.clear();
-	std::list<std::vector<ALP_Collider_mesh>::iterator>::iterator ac_itr = actives.begin();
-	std::list<std::vector<ALP_Collider_mesh>::iterator>::iterator ac_itr_end = actives.end();
+	std::list<std::vector<ALP_Collider_mesh>::iterator>::iterator ac_itr;
 	{
-
-
-		int axis_size = axis_list.size();
-
-		std::list<edge>::iterator itr = axis_list.begin();
-		for (int list_num = 0; list_num < axis_size; list_num++) {
+		for (auto& insert_edge : axis_list) {
 			//collider‚Ìn“_‚È‚çactivelist‚É‚ ‚é‚à‚Ì‚ÆÕ“Ë‚Ì‰Â”\«‚ ‚è
-			if (itr->stgo == true) {
+			if (insert_edge.stgo == true) {
 
-				pair.body = itr->mesh;
-				pair.bodylists = actives;
-				out_pair.emplace_back(pair);
+				if ((*insert_edge.mesh->ALPcollider->coll_itr)->is_static == true) {
 
-				actives.emplace_back(itr->mesh);
+					pair.body = insert_edge.mesh;
+					pair.bodylists = actives;
+					out_pair.emplace_back(pair);
+
+					static_actives.emplace_back(insert_edge.mesh);
+				}
+				else {
+
+					pair.body = insert_edge.mesh;
+					pair.bodylists = actives;
+					out_pair.emplace_back(pair);
+					pair.bodylists = static_actives;
+					out_pair.emplace_back(pair);
+
+					actives.emplace_back(insert_edge.mesh);
+				}
+
 			}
 			else {
-				ac_itr = actives.begin();
-				for (auto& ac : actives) {
-					if (ac._Ptr == itr->mesh._Ptr) {
-						actives.erase(ac_itr);
-						break;
+				if ((*insert_edge.mesh->ALPcollider->coll_itr)->is_static == true) {
+					ac_itr = static_actives.begin();
+					for (auto& ac : static_actives) {
+						if (ac._Ptr == insert_edge.mesh._Ptr) {
+							static_actives.erase(ac_itr);
+							break;
 
+						}
+						++ac_itr;
 					}
-					++ac_itr;
 				}
+				else {
+					ac_itr = actives.begin();
+					for (auto& ac : actives) {
+						if (ac._Ptr == insert_edge.mesh._Ptr) {
+							actives.erase(ac_itr);
+							break;
+
+						}
+						++ac_itr;
+					}
+				}
+
+
 			}
-
-			itr++;
 		}
-
 
 	}
 
@@ -201,8 +222,8 @@ void Physics_function::Broadphase(Scenelist Sce,
 void Physics_function::remove_collider_broad_phase(std::list<Physics_function::ALP_Collider>::iterator removed) {
 	//::: íœ‚³‚ê‚½‚à‚Ì‚ğaxis_list‚©‚çíœ‚·‚é :::
 	{
-		std::vector<std::list<edge>::iterator> itrs;
-		std::list<edge>::iterator itr;
+		std::vector<std::list<Insert_edge>::iterator> itrs;
+		std::list<Insert_edge>::iterator itr;
 
 		if (Broadphase_static::axis_list_edge_pS.count(removed->scene) == 0)return;
 		if (Broadphase_static::axis_list_edge_pS[removed->scene].count(removed->index) == 0)return;

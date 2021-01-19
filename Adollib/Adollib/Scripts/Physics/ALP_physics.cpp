@@ -150,6 +150,11 @@ void ALP_Physics::update_inertial() {
 		inertial_tensor._22 = 0.25f * inertial_mass * Wsize.x * Wsize.x + 0.08333333333f * inertial_mass * (Wsize.y) * (Wsize.y) * 4;
 		inertial_tensor._33 = 0.5f * inertial_mass * Wsize.x * Wsize.x;
 
+		//inertial_tensor = matrix_identity();
+		//inertial_tensor._11 = 0.3333333f * inertial_mass * ((Wsize.y * Wsize.y) + (Wsize.x * Wsize.x));
+		//inertial_tensor._22 = 0.3333333f * inertial_mass * ((Wsize.x * Wsize.x) + (Wsize.x * Wsize.x));
+		//inertial_tensor._33 = 0.3333333f * inertial_mass * ((Wsize.x * Wsize.x) + (Wsize.y * Wsize.y));
+
 		break;
 	case ALP_Collider_shape::Plane:
 
@@ -178,7 +183,6 @@ void ALP_Physics::refresh_ALP_from_data() {
 	restitution = Cdata.restitution;
 
 	is_fallable = Cdata.is_fallable;
-	is_kinematic = Cdata.is_kinematic;
 	is_kinmatic_anglar = Cdata.is_kinmatic_anglar; //‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å‰ñ“]‘¬“x‚ª•Ï‰»‚µ‚È‚¢
 	is_kinmatic_linear = Cdata.is_kinmatic_linear; //‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å•Ài‘¬“x‚ª•Ï‰»‚µ‚È‚¢
 	is_moveable = Cdata.is_moveable;

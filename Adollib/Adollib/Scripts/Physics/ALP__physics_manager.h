@@ -50,7 +50,6 @@ namespace Adollib
 			static constexpr float restitution = 0.1f;	 //”½”­ŒW”
 
 			static constexpr bool is_fallable = true; //—Ž‚¿‚é‚©
-			static constexpr bool is_kinematic = true; //‰e‹¿‚¤‚¯‚é‚©(fall‚Í‚·‚é)
 			static constexpr bool is_kinmatic_anglar = true; //‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å‰ñ“]‘¬“x‚ª•Ï‰»‚µ‚È‚¢
 			static constexpr bool is_kinmatic_linear = true; //‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å•Ài‘¬“x‚ª•Ï‰»‚µ‚È‚¢
 			static constexpr bool is_moveable = true;//“®‚­‚©
@@ -150,7 +149,6 @@ namespace Adollib
 			(*ret.coll_itr)->physics_data.restitution = Phyisics_manager::default_physics.restitution;	 //”½”­ŒW”
 
 			(*ret.coll_itr)->physics_data.is_fallable = Phyisics_manager::default_physics.is_fallable; //—Ž‚¿‚È‚¢
-			(*ret.coll_itr)->physics_data.is_kinematic = Phyisics_manager::default_physics.is_kinematic;//‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
 			(*ret.coll_itr)->physics_data.is_kinmatic_anglar = Phyisics_manager::default_physics.is_kinmatic_anglar;//‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
 			(*ret.coll_itr)->physics_data.is_kinmatic_linear = Phyisics_manager::default_physics.is_kinmatic_linear;//‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
 			(*ret.coll_itr)->physics_data.is_moveable = Phyisics_manager::default_physics.is_moveable; //“®‚©‚È‚¢

@@ -37,7 +37,6 @@ namespace Adollib
 		Physics_manager_default::restitution,	 //”½”­ŒW”
 
 		Physics_manager_default::is_fallable, //—‚¿‚È‚¢
-		Physics_manager_default::is_kinematic, //‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
 		Physics_manager_default::is_kinmatic_anglar, //‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å‰ñ“]‘¬“x‚ª•Ï‰»‚µ‚È‚¢
 		Physics_manager_default::is_kinmatic_linear, //‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å•Ài‘¬“x‚ª•Ï‰»‚µ‚È‚¢
 		Physics_manager_default::is_moveable, //“®‚©‚È‚¢
@@ -234,7 +233,6 @@ bool Phyisics_manager::update_Gui() {
 			ImGui::DragFloat("static_friction", &Phyisics_manager::default_physics.static_friction, 0.01f);
 			ImGui::DragFloat("restitution", &Phyisics_manager::default_physics.restitution, 0.01f);
 			ImGui::Checkbox("is_fallable", &Phyisics_manager::default_physics.is_fallable);
-			ImGui::Checkbox("is_kinematic", &Phyisics_manager::default_physics.is_kinematic);
 			ImGui::Checkbox("is_kinmatic_anglar", &Phyisics_manager::default_physics.is_kinmatic_anglar);
 			ImGui::Checkbox("is_kinmatic_linear", &Phyisics_manager::default_physics.is_kinmatic_linear);
 			ImGui::Checkbox("is_moveable", &Phyisics_manager::default_physics.is_moveable);
