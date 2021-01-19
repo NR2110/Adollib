@@ -68,9 +68,6 @@ void Physics_function::Broadphase(Scenelist Sce,
 				ed.stgo = false;
 				ed.mesh_index = index_count;
 				axis_list_pS[added->scene].push_back(ed);
-				auto a = axis_list_pS[added->scene].end();
-				a--;
-				axis_list_edge_pS[added->scene][added->index].push_back(a);
 				index_count++;
 
 				ed.value = mesh.dop14.pos[0] + mesh.dop14.min[0];
@@ -78,10 +75,18 @@ void Physics_function::Broadphase(Scenelist Sce,
 				ed.stgo = true;
 				ed.mesh_index = index_count;
 				axis_list_pS[added->scene].push_back(ed);
-				auto b = axis_list_pS[added->scene].end();
-				b--;
-				axis_list_edge_pS[added->scene][added->index].push_back(b);
 				index_count++;
+
+				auto itr_G = axis_list_pS[added->scene].end();
+				--itr_G;
+				auto itr_S = itr_G;
+				--itr_S;
+
+				itr_S->axis_list_pair_itr = itr_G;
+				itr_G->axis_list_pair_itr = itr_S;
+
+				axis_list_edge_pS[added->scene][added->index].push_back(itr_S);
+				axis_list_edge_pS[added->scene][added->index].push_back(itr_G);
 
 				itr++;
 			}
@@ -97,12 +102,11 @@ void Physics_function::Broadphase(Scenelist Sce,
 			u_int index_count = 0;
 
 			for (auto& edge : axis_list_edge_pS[moved->scene][moved->index]) {
-				if (edge->stgo == false) {
+				if (edge->stgo == false)
 					edge->value = edge->mesh->dop14.pos[SAP_axis] + edge->mesh->dop14.max[SAP_axis];
-				}
-				else {
+				else
 					edge->value = edge->mesh->dop14.pos[SAP_axis] + edge->mesh->dop14.min[SAP_axis];
-				}
+
 			}
 
 		}
@@ -135,8 +139,9 @@ void Physics_function::Broadphase(Scenelist Sce,
 
 						axis_list.insert(itr_insert, *itr_next);
 						axis_list.erase(itr_next);
-						itr_insert--;
 
+						itr_insert--;
+						itr_insert->axis_list_pair_itr->axis_list_pair_itr = itr_insert;
 						axis_list_edge[itr_insert->mesh->ALPcollider->index][itr_insert->mesh_index] = itr_insert;
 						break;
 					}
@@ -170,6 +175,10 @@ void Physics_function::Broadphase(Scenelist Sce,
 					out_pair.emplace_back(pair);
 
 					static_actives.emplace_back(insert_edge.mesh);
+
+					auto pair_itr = static_actives.end();
+					--pair_itr;
+					insert_edge.axis_list_pair_itr->active_list_pair_itr = pair_itr;
 				}
 				else {
 
@@ -180,34 +189,18 @@ void Physics_function::Broadphase(Scenelist Sce,
 					out_pair.emplace_back(pair);
 
 					actives.emplace_back(insert_edge.mesh);
+
+					auto pair_itr = actives.end();
+					--pair_itr;
+					insert_edge.axis_list_pair_itr->active_list_pair_itr = pair_itr;
 				}
 
 			}
 			else {
-				if ((*insert_edge.mesh->ALPcollider->coll_itr)->is_static == true) {
-					ac_itr = static_actives.begin();
-					for (auto& ac : static_actives) {
-						if (ac._Ptr == insert_edge.mesh._Ptr) {
-							static_actives.erase(ac_itr);
-							break;
-
-						}
-						++ac_itr;
-					}
-				}
-				else {
-					ac_itr = actives.begin();
-					for (auto& ac : actives) {
-						if (ac._Ptr == insert_edge.mesh._Ptr) {
-							actives.erase(ac_itr);
-							break;
-
-						}
-						++ac_itr;
-					}
-				}
-
-
+				if ((*insert_edge.mesh->ALPcollider->coll_itr)->is_static == true)
+					static_actives.erase(insert_edge.active_list_pair_itr);
+				else
+					actives.erase(insert_edge.active_list_pair_itr);
 			}
 		}
 

@@ -49,6 +49,7 @@ namespace Adollib
 				//Meshcoll* R = GO->addComponent<Meshcoll>();
 				//R->load_mesh("./DefaultModel/cube.fbx");
 				R->physics_data.is_moveable = false;
+				R->is_static = true;
 			}
 
 		}

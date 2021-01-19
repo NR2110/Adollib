@@ -13,6 +13,8 @@ namespace Adollib {
 			float value = 0;
 			bool stgo = false; //true = st, false = go
 			u_int mesh_index = 0;
+			std::list<Insert_edge>::iterator axis_list_pair_itr;
+			std::list<std::vector<ALP_Collider_mesh>::iterator>::iterator active_list_pair_itr;
 		};
 
 		namespace Broadphase_static {
