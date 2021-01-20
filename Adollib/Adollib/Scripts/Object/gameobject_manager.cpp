@@ -197,8 +197,8 @@ void Gameobject_manager::render(Scenelist Sce) {
 	memcpy(l_cb.PointLight, PointLight, sizeof(POINTLIGHT) * POINTMAX);
 	memcpy(l_cb.SpotLight, SpotLight, sizeof(SPOTLIGHT) * SPOTMAX);
 	Systems::DeviceContext->UpdateSubresource(light_cb.Get(), 0, NULL, &l_cb, 0, 0);
-	Systems::DeviceContext->VSSetConstantBuffers(3, 1, light_cb.GetAddressOf());
-	Systems::DeviceContext->PSSetConstantBuffers(3, 1, light_cb.GetAddressOf());
+	Systems::DeviceContext->VSSetConstantBuffers(4, 1, light_cb.GetAddressOf());
+	Systems::DeviceContext->PSSetConstantBuffers(4, 1, light_cb.GetAddressOf());
 
 	ConstantBufferPerCamera c_cb;
 	ConstantBufferPerSystem s_sb;

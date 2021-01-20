@@ -74,7 +74,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 		}
 	}
 
-	std::vector<ALP_Collider_mesh>::iterator coll[2];
+	ALP_Collider_mesh* coll[2];
 	std::list<ALP_Physics>::iterator ALPphysics[2];
 	ALP_Solverbody* solverbody[2];
 	//std::vector<Balljoint> balljoints; //ç°âÒÇÕÇ»Çµ

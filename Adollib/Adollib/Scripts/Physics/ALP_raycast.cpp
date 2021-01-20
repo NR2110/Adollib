@@ -152,8 +152,8 @@ bool ray_cast_plane(const Vector3& Ray_pos, const Vector3& Ray_dir,
 //	const unsigned int* indices,
 //	const size_t number_of_indices,
 //	const XMFLOAT3& ray_position, // model space
-//	const XMFLOAT3& ray_direction, // model space 
-//	float ray_length_limit, // model space 
+//	const XMFLOAT3& ray_direction, // model space
+//	float ray_length_limit, // model space
 //	XMFLOAT3* intersection // model space
 //)
 //{
@@ -163,7 +163,7 @@ bool ray_cast_plane(const Vector3& Ray_pos, const Vector3& Ray_dir,
 //	const int c1 = CCW ? 1 : 2;
 //	const int c2 = CCW ? 2 : 1;
 //
-//	// Ray-triangle intersection 
+//	// Ray-triangle intersection
 //	// In this handout, we explore the steps needed to compute the intersection of a ray with a triangle, and then to
 //	// compute the barycentric coordinates of that intersection.First, we consider the geometry of such an intersection :
 //	//
@@ -317,7 +317,7 @@ bool ray_cast_mesh(const Vector3& l_Ray_pos, const Vector3& l_Ray_dir,
 
 		float d = vector3_dot(PA, n);
 		float t = 0;
-		if (Crossing_func::getCrossingP_plane_line(n, d, Ray_pos, Ray_dir, t) == false) continue;
+		if (Crossing_func::getCrossingP_plane_line(n, d, Ray_pos, Ray_dir, t, false) == false) continue;
 
 		if (ray_min > t) continue; // Ray‚ª”¼’¼ü‚Ìê‡
 

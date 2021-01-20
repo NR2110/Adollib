@@ -11,6 +11,7 @@
 #include "misc.h"
 #include "systems.h"
 #include "resource_manager.h"
+#include "../Shader/constant_buffer.h"
 using namespace std;
 
 using namespace Adollib;
@@ -298,27 +299,28 @@ namespace Adollib
 		HRESULT hr = S_OK;
 		Microsoft::WRL::ComPtr<ID3D11Resource> resource;
 
-		if(texturs.count((std::wstring)fileName) == 1)
-		{
-			pSRV = texturs[(std::wstring)fileName].ShaderResourceView.GetAddressOf();
-		}
-		else
-		{
-			Texture& tex = texturs[(std::wstring)fileName];
+		pSRV = texturs[(std::wstring)fileName].ShaderResourceView.GetAddressOf();
+		//if(texturs.count((std::wstring)fileName) == 1)
+		//{
+		//	pSRV = texturs[(std::wstring)fileName].ShaderResourceView.GetAddressOf();
+		//}
+		//else
+		//{
+		//	Texture& tex = texturs[(std::wstring)fileName];
 
-			// 見つからなかった場合は生成する
-			hr = DirectX::CreateWICTextureFromFile(Systems::Device.Get(), fileName, resource.GetAddressOf(), &tex.ShaderResourceView);
-			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
-			pSRV = &tex.ShaderResourceView;
+		//	// 見つからなかった場合は生成する
+		//	hr = DirectX::CreateWICTextureFromFile(Systems::Device.Get(), fileName, resource.GetAddressOf(), &tex.ShaderResourceView);
+		//	_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
+		//	pSRV = &tex.ShaderResourceView;
 
-			Microsoft::WRL::ComPtr<ID3D11Texture2D> texture2d;
-			hr = resource.Get()->QueryInterface<ID3D11Texture2D>(texture2d.GetAddressOf());
-			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
+		//	Microsoft::WRL::ComPtr<ID3D11Texture2D> texture2d;
+		//	hr = resource.Get()->QueryInterface<ID3D11Texture2D>(texture2d.GetAddressOf());
+		//	_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 
-			// テクスチャリースのプロパティを取得する
-			texture2d->GetDesc(&tex.texture2d_desc);
-			pTex2dDesc = &tex.texture2d_desc;
-		}
+		//	// テクスチャリースのプロパティを取得する
+		//	texture2d->GetDesc(&tex.texture2d_desc);
+		//	pTex2dDesc = &tex.texture2d_desc;
+		//}
 
 		return hr;
 	}
@@ -381,11 +383,15 @@ namespace Adollib
 		vector<u_int> indices;
 		u_int vertex_count = 0;
 
+		//skinMeshes.resize(1);
+		//for (size_t mesh_num = 0; mesh_num < 1; mesh_num++)
 		skinMeshes.resize(fetched_meshes.size());
 		for (size_t mesh_num = 0; mesh_num < fetched_meshes.size(); mesh_num++)
 		{
 			FbxMesh* fbxMesh = fetched_meshes.at(mesh_num)->GetMesh();
 			Mesh::mesh& mesh = skinMeshes.at(mesh_num);
+
+			Systems::CreateConstantBuffer(&mesh.mesh_cb, sizeof(ConstantBuffer::ConstantBufferPerMesh));
 
 			// globalTransform
 			FbxAMatrix global_transform = fbxMesh->GetNode()->EvaluateGlobalTransform(0);

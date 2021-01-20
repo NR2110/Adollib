@@ -36,7 +36,7 @@ namespace Adollib
 
 	void camera_s::start()
 	{
-		player = Gameobject_manager::find("player")->transform;
+		//player = Gameobject_manager::find("player")->transform;
 	}
 
 	// 毎フレーム呼ばれる更新処理

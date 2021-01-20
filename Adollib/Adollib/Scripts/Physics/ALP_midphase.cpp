@@ -12,7 +12,7 @@ using namespace DOP;
 #pragma region Midphase
 //:::::::::::::::::::::::::::
 //DOP14‚É‚æ‚é‘åG”c‚È“–‚½‚è”»’è
-bool Check_insert_DOP14(const std::vector<ALP_Collider_mesh>::iterator meshA, const std::vector<ALP_Collider_mesh>::iterator meshB) {
+bool Check_insert_DOP14(const ALP_Collider_mesh* meshA, const ALP_Collider_mesh* meshB) {
 	//–³ŒÀPlane‚ÍDOP‚ªì‚ê‚È‚¢‚½‚ßnarrow‚É“Š‚°‚é?
 	//if (meshA->shape == ALP_Collider_shape::Plane || meshB->shape == ALP_Collider_shape::Plane) return true;
 
@@ -30,7 +30,7 @@ bool Check_insert_DOP14(const std::vector<ALP_Collider_mesh>::iterator meshA, co
 	return true;
 }
 
-bool Check_insert_Plane(const std::vector<ALP_Collider_mesh>::iterator plane, const std::vector<ALP_Collider_mesh>::iterator mesh) {
+bool Check_insert_Plane(const ALP_Collider_mesh* plane, const ALP_Collider_mesh* mesh) {
 
 	Vector3 V;
 	float plane_dis = 0, coll_dis = FLT_MAX;
@@ -50,7 +50,7 @@ void add_pair(std::vector<Contacts::Contact_pair>& pairs, Contacts::Contact_pair
 	pairs.emplace_back(pair);
 }
 
-void Midphase_DOP_14(std::vector<Contacts::Contact_pair>& new_pairs, std::vector<ALP_Collider_mesh>::iterator meshA, std::vector<ALP_Collider_mesh>::iterator meshB) {
+void Midphase_DOP_14(std::vector<Contacts::Contact_pair>& new_pairs, ALP_Collider_mesh* meshA, ALP_Collider_mesh* meshB) {
 	Contact_pair new_pair;
 
 	std::list<ALP_Collider>::iterator& collA = meshA->ALPcollider;
@@ -118,8 +118,8 @@ void Physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std:
 			if (new_p.type == Pairtype::keep_pair) continue;
 
 			if (
-				new_p.body[0]._Ptr == old_p.body[0]._Ptr &&
-				new_p.body[1]._Ptr == old_p.body[1]._Ptr
+				new_p.body[0] == old_p.body[0] &&
+				new_p.body[1] == old_p.body[1]
 				) {
 				//‘O‚©‚ç‘¶İ‚µ‚Ä‚¢‚½‚çƒf[ƒ^‚ğˆø‚«Œp‚®
 				new_p = old_p;

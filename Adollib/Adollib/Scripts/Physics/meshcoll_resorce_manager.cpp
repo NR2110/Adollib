@@ -21,7 +21,7 @@ using namespace std;
 std::unordered_map <std::string, std::vector<Meshcollider_mesh>> Collider_ResourceManager::meshes;
 std::unordered_map <std::string, std::vector<Vector3>> Collider_ResourceManager::vertices_;
 
-bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<Meshcollider_mesh>** ret_mesh) {
+bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<Meshcollider_mesh>** ret_mesh, bool Right_triangle) {
 
 	if (meshes.count((string)fbxname) == 1) {
 		*ret_mesh = &meshes[fbxname];
@@ -84,15 +84,29 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 
 	//TODO : FBX“à‚Ìgloabal_transform‚ðl—¶‚µ‚Ä‚¢‚È‚¢
 
+	//_mesh.resize(1);
+	//subsets.resize(1);
+	//for (size_t mesh_num = 0; mesh_num < 1; mesh_num++)
 	_mesh.resize(fetched_meshes.size());
 	subsets.resize(fetched_meshes.size());
 	for (size_t mesh_num = 0; mesh_num < fetched_meshes.size(); mesh_num++)
-	//for (size_t mesh_num = 0; mesh_num < 1; mesh_num++)
 	{
 		FbxMesh* fbxMesh = fetched_meshes.at(mesh_num)->GetMesh();
 		Subset& subset = subsets.at(mesh_num);
 		Meshcollider_mesh& mesh = _mesh.at(mesh_num);
 		mesh.FBX_pass = fbxname;
+		//::
+
+		Matrix mesh_globalTransform = matrix_identity();
+		// globalTransform
+		FbxAMatrix global_transform = fbxMesh->GetNode()->EvaluateGlobalTransform(0);
+		for (int row = 0; row < 4; row++)
+		{
+			for (int column = 0; column < 4; column++)
+			{
+				mesh_globalTransform.m[row][column] = static_cast<float>(global_transform[row][column]);
+			}
+		}
 		//::
 		vector<int>& indices = mesh.indexes;
 
@@ -111,6 +125,7 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 				vertex.y = static_cast<float>(array_of_control_points[index_of_control_point][1]);
 				vertex.z = static_cast<float>(array_of_control_points[index_of_control_point][2]);
 
+				vertex = vector3_trans(vertex, mesh_globalTransform);
 				// push_back
 				vertices.push_back(vertex);
 				indices.at(index_offset + index_of_vertex) = static_cast<u_int>(vertex_count);
@@ -139,15 +154,20 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 				facet_num = index_num / 3;
 				Physics_function::Facet F;
 				for (u_int i = 0; i < facet_num; i++) {
-					//F.vertexID[0] = indices[i * 3];
-					//F.vertexID[1] = indices[i * 3 + 1];
-					//F.vertexID[2] = indices[i * 3 + 2];
-					F.vertexID[0] = indices.at(i * 3 + 0);
-					F.vertexID[1] = indices.at(i * 3 + 1);
-					F.vertexID[2] = indices.at(i * 3 + 2);
-
-					F.normal = vector3_cross(vertices[F.vertexID[1]] - vertices[F.vertexID[0]], vertices[F.vertexID[2]] - vertices[F.vertexID[0]]);
-					F.normal = F.normal.unit_vect();
+					if (Right_triangle) {
+						F.vertexID[0] = indices.at(i * 3 + 0);
+						F.vertexID[1] = indices.at(i * 3 + 1);
+						F.vertexID[2] = indices.at(i * 3 + 2);
+						F.normal = vector3_cross(vertices[F.vertexID[1]] - vertices[F.vertexID[0]], vertices[F.vertexID[2]] - vertices[F.vertexID[0]]);
+						F.normal = F.normal.unit_vect();
+					}
+					else {
+						F.vertexID[0] = indices.at(i * 3 + 0);
+						F.vertexID[1] = indices.at(i * 3 + 1);
+						F.vertexID[2] = indices.at(i * 3 + 2);
+						F.normal = vector3_cross(vertices[F.vertexID[1]] - vertices[F.vertexID[0]], vertices[F.vertexID[2]] - vertices[F.vertexID[0]]);
+						F.normal = F.normal.unit_vect();
+					}
 
 					facets.emplace_back(F);
 				}

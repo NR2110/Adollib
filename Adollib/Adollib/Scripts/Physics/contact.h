@@ -128,7 +128,7 @@ namespace Adollib {
 
 				Pairtype type = Pairtype::new_pair; //Õ“Ë‚Ìí—Ş(‘OƒtƒŒ[ƒ€‚©‚ç‚ ‚éÕ“Ë‚©‚Ç‚¤‚©)
 
-				std::vector<ALP_Collider_mesh>::iterator body[2]; //ÚG‚µ‚½object
+				ALP_Collider_mesh* body[2]; //ÚG‚µ‚½object
 
 				Contact contacts; //Õ“Ë‚Ìî•ñ
 
@@ -136,8 +136,8 @@ namespace Adollib {
 			};
 
 			struct Collider_2 {
-				std::vector<ALP_Collider_mesh>::iterator body;
-				std::list<std::vector<ALP_Collider_mesh>::iterator> bodylists;
+				ALP_Collider_mesh* body;
+				std::list<ALP_Collider_mesh*> bodylists;
 			};
 
 		}

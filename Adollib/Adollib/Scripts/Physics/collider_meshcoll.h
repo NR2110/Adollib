@@ -22,7 +22,10 @@ namespace Adollib {
 		Meshcoll() :center(Vector3(0)), rotate(Vector3(0)), size(1) { name = std::string("Meshcoll"); }
 
 		void load_mesh(const char* filename) {
-			Physics_function::Collider_ResourceManager::CreateMCFromFBX(filename, &collider_mesh);
+			load_mesh(filename, true);
+		}
+		void load_mesh(const char* filename,bool Right_triangle) {
+			Physics_function::Collider_ResourceManager::CreateMCFromFBX(filename, &collider_mesh, Right_triangle);
 			FBX_pass = filename;
 
 			ALPcollider_itr->collider_meshes.clear();

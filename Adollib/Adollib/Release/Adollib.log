@@ -1,9 +1,7 @@
-﻿  player.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player.h(14,20): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player.h(16,24): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+﻿  meshcoll_resorce_manager.cpp
   コード生成しています。
-  2 of 8403 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  2 of 9090 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    46 functions had inline decision re-evaluated but remain unchanged
+    52 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Release\Adollib.exe

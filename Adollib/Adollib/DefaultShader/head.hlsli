@@ -26,8 +26,12 @@ cbuffer CBPerSystem : register(b2)
 	row_major float4x4  Projection;
 };
 
+cbuffer CBPerMesh : register(b3)
+{
+    row_major float4x4 Mesh_World;
+};
 
-cbuffer CBPerLight : register(b3)
+cbuffer CBPerLight : register(b4)
 {
 	float4  LightColor;		//ライトの色
 	float4	LightDir;		//ライトの方向

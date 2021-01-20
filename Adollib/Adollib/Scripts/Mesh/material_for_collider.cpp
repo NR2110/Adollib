@@ -3,6 +3,8 @@
 #include "../Main/systems.h"
 #include "../Main/resource_manager.h"
 
+#include "../Shader/constant_buffer.h"
+
 using namespace Adollib;
 using namespace Physics_function;
 
@@ -102,6 +104,15 @@ void Collider_renderer::render_box(const Physics_function::ALP_Collider& R) {
 		Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
 		Systems::DeviceContext->PSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
 
+		//CB : ConstantBufferPerMesh
+		{
+			ConstantBuffer::ConstantBufferPerMesh g_cb;
+			g_cb.Mesh_world = matrix_identity();
+			Systems::DeviceContext->UpdateSubresource(mesh.mesh_cb.Get(), 0, NULL, &g_cb, 0, 0);
+			Systems::DeviceContext->VSSetConstantBuffers(3, 1, mesh.mesh_cb.GetAddressOf());
+			Systems::DeviceContext->PSSetConstantBuffers(3, 1, mesh.mesh_cb.GetAddressOf());
+		}
+
 		for (auto& subset : mesh.subsets)
 		{
 			Systems::DeviceContext->PSSetShaderResources(0, 1, subset.diffuse.shaderResourceVirw.GetAddressOf());
@@ -157,6 +168,14 @@ void Collider_renderer::render_sphere(const Physics_function::ALP_Collider& R) {
 		Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
 		Systems::DeviceContext->PSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
 
+		//CB : ConstantBufferPerMesh
+		{
+			ConstantBuffer::ConstantBufferPerMesh g_cb;
+			g_cb.Mesh_world = matrix_identity();
+			Systems::DeviceContext->UpdateSubresource(mesh.mesh_cb.Get(), 0, NULL, &g_cb, 0, 0);
+			Systems::DeviceContext->VSSetConstantBuffers(3, 1, mesh.mesh_cb.GetAddressOf());
+			Systems::DeviceContext->PSSetConstantBuffers(3, 1, mesh.mesh_cb.GetAddressOf());
+		}
 		for (auto& subset : mesh.subsets)
 		{
 			Systems::DeviceContext->PSSetShaderResources(0, 1, subset.diffuse.shaderResourceVirw.GetAddressOf());
@@ -172,6 +191,8 @@ void Collider_renderer::render_sphere(const Physics_function::ALP_Collider& R) {
 
 }
 void Collider_renderer::render_meshcoll(const Physics_function::ALP_Collider& R) {
+	render_AABB(R);
+
 	//CB : ConstantBufferPerCO_OBJ
 	ConstantBufferPerGO g_cb;
 	g_cb.world = matrix_world(R.world_scale() * 1.0001, R.world_orientation().get_rotate_matrix(), R.world_position()).get_XMFLOAT4X4();
@@ -212,6 +233,14 @@ void Collider_renderer::render_meshcoll(const Physics_function::ALP_Collider& R)
 		Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
 		Systems::DeviceContext->PSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
 
+		//CB : ConstantBufferPerMesh
+		{
+			ConstantBuffer::ConstantBufferPerMesh g_cb;
+			g_cb.Mesh_world = mesh.globalTransform;
+			Systems::DeviceContext->UpdateSubresource(mesh.mesh_cb.Get(), 0, NULL, &g_cb, 0, 0);
+			Systems::DeviceContext->VSSetConstantBuffers(3, 1, mesh.mesh_cb.GetAddressOf());
+			Systems::DeviceContext->PSSetConstantBuffers(3, 1, mesh.mesh_cb.GetAddressOf());
+		}
 		for (auto& subset : mesh.subsets)
 		{
 			Systems::DeviceContext->PSSetShaderResources(0, 1, subset.diffuse.shaderResourceVirw.GetAddressOf());
@@ -225,6 +254,7 @@ void Collider_renderer::render_meshcoll(const Physics_function::ALP_Collider& R)
 		color_num++;
 	}
 }
+
 void Collider_renderer::render_capsule(const Physics_function::ALP_Collider& R) {
 	//CB : ConstantBufferPerCO_OBJ
 
@@ -267,6 +297,14 @@ void Collider_renderer::render_capsule(const Physics_function::ALP_Collider& R) 
 			Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
 			Systems::DeviceContext->PSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
 
+			//CB : ConstantBufferPerMesh
+			{
+				ConstantBuffer::ConstantBufferPerMesh g_cb;
+				g_cb.Mesh_world = matrix_identity();
+				Systems::DeviceContext->UpdateSubresource(mesh.mesh_cb.Get(), 0, NULL, &g_cb, 0, 0);
+				Systems::DeviceContext->VSSetConstantBuffers(3, 1, mesh.mesh_cb.GetAddressOf());
+				Systems::DeviceContext->PSSetConstantBuffers(3, 1, mesh.mesh_cb.GetAddressOf());
+			}
 			for (auto& subset : mesh.subsets)
 			{
 				Systems::DeviceContext->PSSetShaderResources(0, 1, subset.diffuse.shaderResourceVirw.GetAddressOf());
@@ -320,6 +358,14 @@ void Collider_renderer::render_capsule(const Physics_function::ALP_Collider& R) 
 			Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
 			Systems::DeviceContext->PSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
 
+			//CB : ConstantBufferPerMesh
+			{
+				ConstantBuffer::ConstantBufferPerMesh g_cb;
+				g_cb.Mesh_world = matrix_identity();
+				Systems::DeviceContext->UpdateSubresource(mesh.mesh_cb.Get(), 0, NULL, &g_cb, 0, 0);
+				Systems::DeviceContext->VSSetConstantBuffers(3, 1, mesh.mesh_cb.GetAddressOf());
+				Systems::DeviceContext->PSSetConstantBuffers(3, 1, mesh.mesh_cb.GetAddressOf());
+			}
 			for (auto& subset : mesh.subsets)
 			{
 				Systems::DeviceContext->PSSetShaderResources(0, 1, subset.diffuse.shaderResourceVirw.GetAddressOf());
@@ -373,6 +419,14 @@ void Collider_renderer::render_capsule(const Physics_function::ALP_Collider& R) 
 			Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
 			Systems::DeviceContext->PSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
 
+			//CB : ConstantBufferPerMesh
+			{
+				ConstantBuffer::ConstantBufferPerMesh g_cb;
+				g_cb.Mesh_world = matrix_identity();
+				Systems::DeviceContext->UpdateSubresource(mesh.mesh_cb.Get(), 0, NULL, &g_cb, 0, 0);
+				Systems::DeviceContext->VSSetConstantBuffers(3, 1, mesh.mesh_cb.GetAddressOf());
+				Systems::DeviceContext->PSSetConstantBuffers(3, 1, mesh.mesh_cb.GetAddressOf());
+			}
 			for (auto& subset : mesh.subsets)
 			{
 				Systems::DeviceContext->PSSetShaderResources(0, 1, subset.diffuse.shaderResourceVirw.GetAddressOf());
@@ -467,11 +521,15 @@ void Collider_renderer::render_AABB(const Physics_function::ALP_Collider& coll) 
 
 		if (Systems::RS_type != State_manager::RStypes::RS_CULL_BACK) Systems::SetRasterizerState(State_manager::RStypes::RS_CULL_BACK);
 //Debug::’¸“_‚Ì•\Ž¦
-#if 0
+#if 1
 		{
 			const std::vector<Mesh::mesh>* sphere_mesh = meshes[ALP_Collider_shape::Sphere];
 
+			int max_c = 0;
 			for (const auto& vertex : *coll_mesh.mesh->vertices) {
+				if (max_c > 50)break;
+				max_c++;
+
 				//CB : ConstantBufferPerCO_OBJ
 				ConstantBufferPerGO g_cb;
 				g_cb.world = matrix_world(
@@ -498,12 +556,20 @@ void Collider_renderer::render_AABB(const Physics_function::ALP_Collider& coll) 
 					ConstantBufferPerMaterial cb;
 					cb.shininess = 1;
 					cb.ambientColor = DirectX::XMFLOAT4(0.1f, 0.1f, 0.1f, 1);
-					cb.materialColor = Vector4(Al_Global::get_gaming((Al_Global::second_per_game + color_num * 2) * 60, 600).xyz, 1).get_XM4();
+					cb.materialColor = Vector4(Al_Global::get_gaming((Al_Global::second_per_game + color_num) * 60, 600), 0.3f).get_XM4();
 					//cb.materialColor = color16[color_num].get_XM4();
 					Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
 					Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
 					Systems::DeviceContext->PSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
 
+					//CB : ConstantBufferPerMesh
+					{
+						ConstantBuffer::ConstantBufferPerMesh g_cb;
+						g_cb.Mesh_world = matrix_identity();
+						Systems::DeviceContext->UpdateSubresource(mesh.mesh_cb.Get(), 0, NULL, &g_cb, 0, 0);
+						Systems::DeviceContext->VSSetConstantBuffers(3, 1, mesh.mesh_cb.GetAddressOf());
+						Systems::DeviceContext->PSSetConstantBuffers(3, 1, mesh.mesh_cb.GetAddressOf());
+					}
 					for (auto& subset : mesh.subsets)
 					{
 						Systems::DeviceContext->PSSetShaderResources(0, 1, subset.diffuse.shaderResourceVirw.GetAddressOf());

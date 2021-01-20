@@ -37,7 +37,7 @@ namespace Adollib
 		}
 
 #if 1
-		if (1) {
+		if (0) {
 			{
 				Gameobject* GO = Gameobject_manager::createCube("stage");
 				GO->transform->local_pos = Vector3(0, -60, 0);
@@ -53,25 +53,26 @@ namespace Adollib
 			}
 
 		}
-		else if(1){
+		else if (1) {
 			{
-				objGO = Gameobject_manager::createFromFBX("../Data/FBX/0311_collisions.fbx");
+				objGO = Gameobject_manager::createFromFBX("../Data/FBX/stage_col.fbx");
 				//objGO = Gameobject_manager::create();
 				//objGO = Gameobject_manager::createFromFBX("../Adollib/DefaultModel/cylinder.fbx");
-				objGO->transform->local_pos = Vector3(-10, 15, -25);
+				objGO->transform->local_pos = Vector3(-10, 0, -25);
 				//objGO->transform->local_scale = Vector3(0.01f, 0.02f, 0.03f);
-				objGO->transform->local_scale = Vector3(0.01, 0.01, 0.01);
+				objGO->transform->local_scale = Vector3(1, 1, 1);
 				//objGO->transform->local_orient = quaternion_from_euler(45, 45, 45);
-				objGO->transform->local_orient = quaternion_from_euler(0, 180, 0);
+				objGO->transform->local_orient = quaternion_from_euler(0, 0, 0);
 				Meshcoll* R = objGO->addComponent<Meshcoll>();
-				R->load_mesh("../Data/FBX/0311_collisions.fbx");
+				R->load_mesh("../Data/FBX/stage_col.fbx",false);
 				//R->load_mesh("../Adollib/DefaultModel/cylinder.fbx");
 				R->physics_data.is_moveable = false;
+				R->is_static = true;
 
 			}
 
 		}
-		else if (1) {
+		else if (0) {
 			{
 				Gameobject* GO = Gameobject_manager::createSphere("stage");
 				GO->transform->local_pos = Vector3(0, -6000, 0);
@@ -85,6 +86,27 @@ namespace Adollib
 			}
 
 		}
+		else if (1) {
+			{
+				objGO = Gameobject_manager::createFromFBX("../Data/FBX/0311_collisions.fbx");
+				//objGO = Gameobject_manager::create();
+				//objGO = Gameobject_manager::createFromFBX("../Adollib/DefaultModel/cylinder.fbx");
+				objGO->transform->local_pos = Vector3(-10, 15, -25);
+				//objGO->transform->local_scale = Vector3(0.01f, 0.02f, 0.03f);
+				objGO->transform->local_scale = Vector3(0.01, 0.01, 0.01);
+				//objGO->transform->local_orient = quaternion_from_euler(45, 45, 45);
+				objGO->transform->local_orient = quaternion_from_euler(0, 180, 0);
+				Meshcoll* R = objGO->addComponent<Meshcoll>();
+				R->load_mesh("../Data/FBX/0311_collisions.fbx");
+				//R->load_mesh("../Adollib/DefaultModel/cylinder.fbx");
+				R->physics_data.is_moveable = false;
+				R->is_static = true;
+			}
+		}
+
+
+
+
 
 
 #else
@@ -108,15 +130,15 @@ namespace Adollib
 		ImGuiWindowFlags flag = 0;
 		//flag |= ImGuiWindowFlags_AlwaysAutoResize;
 
-		#pragma region IMGUI
+#pragma region IMGUI
 
-		if(ImGui::Begin("object_manage", 0, flag)) {
+		if (ImGui::Begin("object_manage", 0, flag)) {
 
 			//object�̍폜
 			bool del = false;
 			ImGui::Checkbox("delete", &del);
 			if (del) {
-				for(auto& GO : GOs){
+				for (auto& GO : GOs) {
 					GO->active = false;
 					GO->clearComponent();
 				}

@@ -36,7 +36,7 @@ void Material::render() {
 		UINT stride = sizeof(VertexFormat);
 		UINT offset = 0;
 		Systems::DeviceContext->IASetVertexBuffers(0, 1, mesh.vertexBuffer.GetAddressOf(), &stride, &offset);
-		Systems::DeviceContext->IASetIndexBuffer  (mesh.indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+		Systems::DeviceContext->IASetIndexBuffer(mesh.indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 
 		//CB : ConstantBufferPerMaterial
 		ConstantBufferPerMaterial cb;
@@ -71,7 +71,16 @@ void Material::render() {
 		Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
 		Systems::DeviceContext->PSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
 
-		for (auto& subset :mesh.subsets)
+		//CB : ConstantBufferPerMesh
+		{
+			ConstantBuffer::ConstantBufferPerMesh g_cb;
+			g_cb.Mesh_world = mesh.globalTransform;
+			Systems::DeviceContext->UpdateSubresource(mesh.mesh_cb.Get(), 0, NULL, &g_cb, 0, 0);
+			Systems::DeviceContext->VSSetConstantBuffers(3, 1, mesh.mesh_cb.GetAddressOf());
+			Systems::DeviceContext->PSSetConstantBuffers(3, 1, mesh.mesh_cb.GetAddressOf());
+		}
+
+		for (auto& subset : mesh.subsets)
 		{
 			Systems::DeviceContext->PSSetShaderResources(0, 1, subset.diffuse.shaderResourceVirw.GetAddressOf());
 

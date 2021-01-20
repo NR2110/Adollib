@@ -27,6 +27,10 @@ namespace Adollib {
 		struct ConstantBufferPerGO {
 			DirectX::XMFLOAT4X4 world;
 		};
+		//Mesh
+		struct ConstantBufferPerMesh {
+			DirectX::XMFLOAT4X4 Mesh_world;
+		};
 		//material
 		struct ConstantBufferPerMaterial
 		{

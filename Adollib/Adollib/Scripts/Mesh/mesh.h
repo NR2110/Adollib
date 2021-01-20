@@ -7,6 +7,12 @@
 #include <fbxsdk.h>
 #include "../Math/math.h"
 
+#include <d3dcompiler.h>
+#include <memory>
+#include <wrl.h>
+using Microsoft::WRL::ComPtr;
+#include <assert.h>
+
 #define MAX_BONES (4)
 
 namespace Adollib
@@ -15,8 +21,9 @@ namespace Adollib
 	class Mesh
 	{
 	private:
-		Microsoft::WRL::ComPtr<ID3D11InputLayout> vertexLayout;
+		//Microsoft::WRL::ComPtr<ID3D11InputLayout> vertexLayout;
 
+		//ComPtr<ID3D11Buffer> mesh_cb; //mesh_world行列用バッファ
 	public:
 
 		// 頂点フォーマット
@@ -71,6 +78,7 @@ namespace Adollib
 		// メッシュ
 		struct mesh
 		{
+			ComPtr<ID3D11Buffer> mesh_cb; //mesh_world行列用バッファ
 			Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer = nullptr;
 			Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer = nullptr;
 			std::vector<subset> subsets;
@@ -81,6 +89,8 @@ namespace Adollib
 
 	public:
 		Mesh() {};
+		//void initialize();
+		//void set_constant_buffer(const DirectX::XMFLOAT4X4& globalTransform);
 
 		//Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer = nullptr;
 		//Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer = nullptr;

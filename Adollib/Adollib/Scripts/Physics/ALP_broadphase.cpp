@@ -27,6 +27,7 @@ void Physics_function::Broadphase(Scenelist Sce,
 	Work_meter::start("update_dop14");
 
 	for (auto& itr : ALP_collider) {
+
 		itr.update_dop14();
 	}
 
@@ -59,20 +60,20 @@ void Physics_function::Broadphase(Scenelist Sce,
 	{
 		Insert_edge ed;
 		for (const auto& added : added_collider) {
-			auto itr = added->collider_meshes.begin();
+			//auto itr = added->collider_meshes.begin();
 			u_int index_count = 0;
 			axis_list_edge_pS[added->scene][added->index].clear();
-			for (const auto& mesh : added->collider_meshes) {
+			for (auto& mesh : added->collider_meshes) {
 				ed.value = mesh.dop14.pos[0] + mesh.dop14.max[0];
-				ed.mesh = itr;
-				ed.stgo = false;
+				ed.mesh = &mesh;
+				ed.edge_start = false;
 				ed.mesh_index = index_count;
 				axis_list_pS[added->scene].push_back(ed);
 				index_count++;
 
 				ed.value = mesh.dop14.pos[0] + mesh.dop14.min[0];
-				ed.mesh = itr;
-				ed.stgo = true;
+				ed.mesh = &mesh;
+				ed.edge_start = true;
 				ed.mesh_index = index_count;
 				axis_list_pS[added->scene].push_back(ed);
 				index_count++;
@@ -88,7 +89,7 @@ void Physics_function::Broadphase(Scenelist Sce,
 				axis_list_edge_pS[added->scene][added->index].push_back(itr_S);
 				axis_list_edge_pS[added->scene][added->index].push_back(itr_G);
 
-				itr++;
+				//itr++;
 			}
 		}
 	}
@@ -102,7 +103,20 @@ void Physics_function::Broadphase(Scenelist Sce,
 			u_int index_count = 0;
 
 			for (auto& edge : axis_list_edge_pS[moved->scene][moved->index]) {
-				if (edge->stgo == false)
+				if (edge->edge_start == false)
+					edge->value = edge->mesh->dop14.pos[SAP_axis] + edge->mesh->dop14.max[SAP_axis];
+				else
+					edge->value = edge->mesh->dop14.pos[SAP_axis] + edge->mesh->dop14.min[SAP_axis];
+
+			}
+
+		}
+
+		for (auto& moved : added_collider) {
+			u_int index_count = 0;
+
+			for (auto& edge : axis_list_edge_pS[moved->scene][moved->index]) {
+				if (edge->edge_start == false)
 					edge->value = edge->mesh->dop14.pos[SAP_axis] + edge->mesh->dop14.max[SAP_axis];
 				else
 					edge->value = edge->mesh->dop14.pos[SAP_axis] + edge->mesh->dop14.min[SAP_axis];
@@ -158,15 +172,15 @@ void Physics_function::Broadphase(Scenelist Sce,
 
 	Work_meter::start("Sweep&Prune");
 	//Sweep&Prune
-	std::list<std::vector<ALP_Collider_mesh>::iterator> actives;
-	std::list<std::vector<ALP_Collider_mesh>::iterator> static_actives;
+	std::list<ALP_Collider_mesh*> actives;
+	std::list<ALP_Collider_mesh*> static_actives;
 	Contacts::Collider_2 pair;
 	out_pair.clear();
-	std::list<std::vector<ALP_Collider_mesh>::iterator>::iterator ac_itr;
+	std::list<ALP_Collider_mesh*>::iterator ac_itr;
 	{
 		for (auto& insert_edge : axis_list) {
 			//collider‚ÌŽn“_‚È‚çactivelist‚É‚ ‚é‚à‚Ì‚ÆÕ“Ë‚Ì‰Â”\«‚ ‚è
-			if (insert_edge.stgo == true) {
+			if (insert_edge.edge_start == true) {
 
 				if ((*insert_edge.mesh->ALPcollider->coll_itr)->is_static == true) {
 
@@ -187,7 +201,6 @@ void Physics_function::Broadphase(Scenelist Sce,
 					out_pair.emplace_back(pair);
 					pair.bodylists = static_actives;
 					out_pair.emplace_back(pair);
-
 					actives.emplace_back(insert_edge.mesh);
 
 					auto pair_itr = actives.end();

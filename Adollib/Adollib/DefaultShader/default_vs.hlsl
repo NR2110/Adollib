@@ -20,13 +20,14 @@ PSInput main(VSInput input)
 	//input.Normal = float4(n, 1);
 
 	float4 P = float4(input.Position, 1.0);
+    float4x4 W = mul(Mesh_World, World);
 	// ワールド変換座標
-	float4 worldPos = mul(World, P);
+    float4 worldPos = mul(W, P);
 	// 射影空間に変換(列優先)
-	row_major float4x4 matWVP = mul(World, mul(View, Projection));
+    row_major float4x4 matWVP = mul(W, mul(View, Projection));
 	P = mul(P, matWVP);
 	// ワールド法線算出
-	float3 N = mul(input.Normal, (float3x3)World);
+    float3 N = mul(input.Normal, (float3x3) W);
 	N = normalize(N);//正規化
 
 	// // 視線ベクトル算出
