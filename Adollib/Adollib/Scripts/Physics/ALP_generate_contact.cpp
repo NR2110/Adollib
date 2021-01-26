@@ -1549,7 +1549,7 @@ bool Physics_function::generate_contact_capsule_mesh(const ALP_Collider_mesh* ca
 		if (is_hit == false)return false;
 
 		Vector3 Wn = vector3_quatrotate((min_sphere_pos_meshcoord - closest_point), mesh->world_orientation()).unit_vect();//meshからsphereへのベクトル
-		if (vector3_dot(min_sphere_pos_meshcoord - closest_point, nor_meshcoord) < 0)Wn *= -1;
+		//if (vector3_dot(min_sphere_pos_meshcoord - closest_point, nor_meshcoord) < 0)Wn *= -1; //バグの原因
 
 		is_AC = true;
 		ACpenetration = capsule->world_scale().x - min_dis;

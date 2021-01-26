@@ -63,7 +63,7 @@ void ALP_Physics::apply_external_force(float duration) {
 
 		//‹ó‹C’ïR‚Ì‹‚ß•û
 		// k ‚Í—¬‘Ì‚Ì–§“x‚â‚ç‚È‚ñ‚â‚ç‚ğl—¶‚µ‚½’è”
-		//F(t) = 1/2 * k * v
+		//F(t) = 1/2 * k * v(t)
 		//F(t) = m * a(t)
 		//a(t) = dv/dt = - * k * v(t) / m
 		//ç1 / v(t) * dv/dt * dt = ç -k / m * dt
