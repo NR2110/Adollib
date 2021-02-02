@@ -135,18 +135,19 @@ namespace Adollib {
 		else return sqrtf(V);
 	}
 	inline float Quaternion::norm() const {
-		return w * w + x * x + y * y + z * z;
+		//return w * w + x * x + y * y + z * z;
+		return ((*this) * conjugate()).w;
 	}
 	inline Quaternion Quaternion::unit_vect() const {
 		float L = norm_sqr();
 		if (L == 0)return Quaternion(1, 0, 0, 0);
 		else return Quaternion((*this) / L);
 	}
+	inline Quaternion Quaternion::inverse() const {
+		return conjugate() / norm();
+	}
 	inline Quaternion Quaternion::conjugate() const {
 		return Quaternion(w, -x, -y, -z);
-	}
-	inline Quaternion Quaternion::inverse() const {
-		return conjugate() / norm_sqr();
 	}
 
 	inline Vector3 Quaternion::euler() const {
@@ -189,7 +190,7 @@ namespace Adollib {
 		return R;
 #else
 		Quaternion R(V);
-		return (Q.conjugate() * R * Q).get_NV3();
+		return (Q.inverse() * R * Q).get_NV3();
 #endif
 	}
 

@@ -228,8 +228,8 @@ bool sat_convex_mesh_mesh(const ALP_Collider_mesh* meshA, const ALP_Collider_mes
 	std::list<ALP_Collider>::iterator collB = meshB->ALPcollider;
 
 	// Meshcoll_1ÇÃäeñ ñ@ê¸Çï™ó£é≤Ç∆Ç∑ÇÈ
-	Quaternion offset_quatBA = collB->world_orientation() * collA->world_orientation().conjugate();
-	Quaternion offset_quatAB = collA->world_orientation() * collB->world_orientation().conjugate();
+	Quaternion offset_quatBA = collB->world_orientation() * collA->world_orientation().inverse();
+	Quaternion offset_quatAB = collA->world_orientation() * collB->world_orientation().inverse();
 	Vector3 offset_posBA = collB->world_position() - collA->world_position();
 	Vector3 offset_posAB = collA->world_position() - collB->world_position();
 
@@ -410,8 +410,8 @@ bool sat_obb_convex_mesh(const OBB& obb, const ALP_Collider_mesh* mesh,
 	const std::list<ALP_Collider>::iterator& mesh_coll = mesh->ALPcollider;
 
 	// Meshcoll_1ÇÃäeñ ñ@ê¸Çï™ó£é≤Ç∆Ç∑ÇÈ
-	Quaternion offset_quatBA = mesh_coll->world_orientation() * obb.world_orientation.conjugate();
-	Quaternion offset_quatAB = obb.world_orientation * mesh_coll->world_orientation().conjugate();
+	Quaternion offset_quatBA = mesh_coll->world_orientation() * obb.world_orientation.inverse();
+	Quaternion offset_quatAB = obb.world_orientation * mesh_coll->world_orientation().inverse();
 	Vector3 offset_posBA = mesh_coll->world_position() - obb.world_position;
 	Vector3 offset_posAB = obb.world_position - mesh_coll->world_position();
 
@@ -430,7 +430,7 @@ bool sat_obb_convex_mesh(const OBB& obb, const ALP_Collider_mesh* mesh,
 		float ra = obb.half_width[f];
 
 		// meshÇï™ó£é≤Ç…ìäâe
-		sum_of_projected_radii(maxA, minA, mesh, vector3_quatrotate(axis, mesh_coll->world_orientation().conjugate()).unit_vect());
+		sum_of_projected_radii(maxA, minA, mesh, vector3_quatrotate(axis, mesh_coll->world_orientation().inverse()).unit_vect());
 		assert(maxA >= minA);
 		float off = vector3_dot(offset_posBA, axis);
 		maxA += off;
@@ -535,8 +535,8 @@ bool Physics_function::generate_contact_sphere_sphere(const ALP_Collider_mesh* S
 		is_AC = true;
 		ACpenetration = collA->world_scale().x + collB->world_scale().x - length;
 		ACnormal = n;
-		ACcontact_pointA = collA->world_scale().x * vector3_quatrotate(-n, collA->world_orientation().conjugate());
-		ACcontact_pointB = collB->world_scale().x * vector3_quatrotate(+n, collB->world_orientation().conjugate());
+		ACcontact_pointA = collA->world_scale().x * vector3_quatrotate(-n, collA->world_orientation().inverse());
+		ACcontact_pointB = collB->world_scale().x * vector3_quatrotate(+n, collB->world_orientation().inverse());
 	}
 
 	if (is_AC)
@@ -602,7 +602,7 @@ bool Physics_function::generate_contact_sphere_plane(const ALP_Collider_mesh* sp
 		ACpenetration = sphere->world_scale().x - abs(p.y);
 		ACnormal = n;
 		ACcontact_pointA = Vector3(p.x, 0, p.z);
-		ACcontact_pointB = sphere->world_scale().x * vector3_quatrotate(-n, sphere->world_orientation().conjugate());
+		ACcontact_pointB = sphere->world_scale().x * vector3_quatrotate(-n, sphere->world_orientation().inverse());
 
 	}
 
@@ -677,7 +677,7 @@ bool Physics_function::generate_contact_sphere_box(const ALP_Collider_mesh* sphe
 	ACpenetration = sphere->world_scale().x - distance;
 	ACnormal = -n;
 	ACcontact_pointA = closest_point;
-	ACcontact_pointB = sphere->world_scale().x * vector3_quatrotate(-n, sphere->world_orientation().conjugate());
+	ACcontact_pointB = sphere->world_scale().x * vector3_quatrotate(-n, sphere->world_orientation().inverse());
 
 
 	if (is_AC)
@@ -723,7 +723,7 @@ bool Physics_function::generate_contact_sphere_capsule(const ALP_Collider_mesh* 
 	//capsuleÇÃç¿ïWånÇ≈åvéZÇ∑ÇÈ(scaleÇÕïœçXÇµÇ»Ç¢)
 
 	//capsule coord
-	Vector3 sphere_pos_capcoord = vector3_quatrotate(sphere->world_position() - capsule->world_position(), capsule->world_orientation().conjugate());
+	Vector3 sphere_pos_capcoord = vector3_quatrotate(sphere->world_position() - capsule->world_position(), capsule->world_orientation().inverse());
 
 	float s;
 	Closest_func::get_closestP_point_line(sphere_pos_capcoord, Vector3(0), Vector3(0, 1, 0), s);
@@ -746,7 +746,7 @@ bool Physics_function::generate_contact_sphere_capsule(const ALP_Collider_mesh* 
 		is_AC = true;
 		ACpenetration = sphere->world_scale().x + capsule->world_scale().x - length;
 		ACnormal = +Wn;
-		ACcontact_pointA = sphere->world_scale().x * vector3_quatrotate(-Wn, sphere->world_orientation().conjugate());
+		ACcontact_pointA = sphere->world_scale().x * vector3_quatrotate(-Wn, sphere->world_orientation().inverse());
 		ACcontact_pointB = capsule->world_scale().x * n + pB;
 
 	}
@@ -821,14 +821,14 @@ bool Physics_function::generate_contact_sphere_mesh(const ALP_Collider_mesh* sph
 			ACpenetration = sphere->world_scale().x - distance;
 			ACnormal = -n;
 			ACcontact_pointA = closest_point;
-			ACcontact_pointB = sphere->world_scale().x * vector3_quatrotate(n, sphere->world_orientation().conjugate());
+			ACcontact_pointB = sphere->world_scale().x * vector3_quatrotate(n, sphere->world_orientation().inverse());
 		}
 
 	}
 	else {
 		//ãÖÇ∆meshÇÃè’ìÀîªíËÇçsÇ§
 
-		Vector3 sphere_pos_meshcoord = vector3_quatrotate(sphere->world_position() - mesh->world_position(), mesh->world_orientation().conjugate()); //meshç¿ïWånÇ≈ÇÃsphereÇÃpos
+		Vector3 sphere_pos_meshcoord = vector3_quatrotate(sphere->world_position() - mesh->world_position(), mesh->world_orientation().inverse()); //meshç¿ïWånÇ≈ÇÃsphereÇÃpos
 
 		float min_dis = sphere->world_scale().x;//ç≈í·ãóó£ÇsphereÇÃîºåaÇ…
 		Vector3 closest_point; //meshè„ÇÃç≈ãﬂì_
@@ -876,7 +876,7 @@ bool Physics_function::generate_contact_sphere_mesh(const ALP_Collider_mesh* sph
 		is_AC = true;
 		ACpenetration = sphere->world_scale().x - min_dis;
 		ACnormal = +Wn;
-		ACcontact_pointA = sphere->world_scale().x * vector3_quatrotate(-Wn, sphere->world_orientation().conjugate());
+		ACcontact_pointA = sphere->world_scale().x * vector3_quatrotate(-Wn, sphere->world_orientation().inverse());
 		ACcontact_pointB = closest_point;
 	}
 
@@ -1226,8 +1226,8 @@ bool Physics_function::generate_contact_box_capsule(const ALP_Collider_mesh* box
 	float capsule_t = FLT_MAX;
 
 	//boxç¿ïWånÇ≈ÇÃcapsuleÇÃèÓïÒ
-	Vector3 cuppos_boxcoord = vector3_quatrotate(capsule->world_position() - box->world_position(), box->world_orientation().conjugate());
-	Vector3 cupsca_boxcoord = vector3_quatrotate(Vector3(0, capsule->world_scale().y, 0), capsule->world_orientation() * box->world_orientation().conjugate());
+	Vector3 cuppos_boxcoord = vector3_quatrotate(capsule->world_position() - box->world_position(), box->world_orientation().inverse());
+	Vector3 cupsca_boxcoord = vector3_quatrotate(Vector3(0, capsule->world_scale().y, 0), capsule->world_orientation() * box->world_orientation().inverse());
 
 	bool is_crossing = false;
 	{
@@ -1311,7 +1311,7 @@ bool Physics_function::generate_contact_box_capsule(const ALP_Collider_mesh* box
 	ACpenetration = leng;
 	ACnormal = -Wn;
 	ACcontact_pointA = closest_box;
-	ACcontact_pointB = (Vector3(0, capsule->world_scale().y, 0) * capsule_t) + vector3_quatrotate(-Wn, capsule->world_orientation().conjugate()) * capsule->world_scale().x;
+	ACcontact_pointB = (Vector3(0, capsule->world_scale().y, 0) * capsule_t) + vector3_quatrotate(-Wn, capsule->world_orientation().inverse()) * capsule->world_scale().x;
 	//vector3_quatrotate(vector3_quatrotate(closest_cap - n * capsule->world_scale().x, box->world_orientation().conjugate()) + box->world_position() - capsule->world_position(), capsule->world_orientation().conjugate())
 
 
@@ -1389,8 +1389,8 @@ bool Physics_function::generate_contact_capsule_capsule(const ALP_Collider_mesh*
 		is_AC = true;
 		ACpenetration = collA->world_scale().x + collB->world_scale().x - length;
 		ACnormal = Wn;
-		ACcontact_pointA = Vector3(0, 1, 0) * collA->world_scale().y * (s * 2 - 1) + collA->world_scale().x * vector3_quatrotate(-Wn, collA->world_orientation().conjugate());
-		ACcontact_pointB = Vector3(0, 1, 0) * collB->world_scale().y * (t * 2 - 1) + collB->world_scale().x * vector3_quatrotate(+Wn, collB->world_orientation().conjugate());
+		ACcontact_pointA = Vector3(0, 1, 0) * collA->world_scale().y * (s * 2 - 1) + collA->world_scale().x * vector3_quatrotate(-Wn, collA->world_orientation().inverse());
+		ACcontact_pointB = Vector3(0, 1, 0) * collB->world_scale().y * (t * 2 - 1) + collB->world_scale().x * vector3_quatrotate(+Wn, collB->world_orientation().inverse());
 	}
 
 
@@ -1484,8 +1484,8 @@ bool Physics_function::generate_contact_capsule_mesh(const ALP_Collider_mesh* ca
 	}
 	else {
 		//ãÖÇ∆meshÇÃè’ìÀîªíËÇçsÇ§ ãÖÇ™Ç‰Ç™ÇﬁÇ∆ñ ì|Ç»ÇÃÇ≈scaleÇÕworldÇÃÇ‹Ç‹Ç≈
-		Vector3 capsule_pos_meshcoord = vector3_quatrotate(capsule->world_position() - mesh->world_position(), mesh->world_orientation().conjugate()); //meshç¿ïWånÇ≈ÇÃsphereÇÃpos
-		Vector3 capsule_dir_meshcoord = vector3_quatrotate(Vector3(0, 1, 0), capsule->world_orientation() * mesh->world_orientation().conjugate()) * capsule->world_scale().y; //meshç¿ïWånÇ≈ÇÃsphereÇÃpos
+		Vector3 capsule_pos_meshcoord = vector3_quatrotate(capsule->world_position() - mesh->world_position(), mesh->world_orientation().inverse()); //meshç¿ïWånÇ≈ÇÃsphereÇÃpos
+		Vector3 capsule_dir_meshcoord = vector3_quatrotate(Vector3(0, 1, 0), capsule->world_orientation() * mesh->world_orientation().inverse()) * capsule->world_scale().y; //meshç¿ïWånÇ≈ÇÃsphereÇÃpos
 
 		float min_dis = capsule->world_scale().x;//ç≈í·ãóó£ÇsphereÇÃîºåaÇ…
 		Vector3 closest_point; //meshè„ÇÃç≈ãﬂì_
@@ -1555,7 +1555,7 @@ bool Physics_function::generate_contact_capsule_mesh(const ALP_Collider_mesh* ca
 		ACpenetration = capsule->world_scale().x - min_dis;
 		ACnormal = -Wn;
 		ACcontact_pointA = closest_point;
-		ACcontact_pointB = Vector3(0, capsule->world_scale().y, 0) * min_t + capsule->world_scale().x * vector3_quatrotate(-Wn, capsule->world_orientation().conjugate());
+		ACcontact_pointB = Vector3(0, capsule->world_scale().y, 0) * min_t + capsule->world_scale().x * vector3_quatrotate(-Wn, capsule->world_orientation().inverse());
 	}
 
 	if (is_AC)
@@ -1610,8 +1610,8 @@ bool Physics_function::generate_contact_mesh_mesh(const ALP_Collider_mesh* mA, c
 	if (mA->mesh->is_Convex == true && mB->mesh->is_Convex == true) {
 		if (!sat_convex_mesh_mesh(mA, mB, smallest_penetration, smallest_facetID, smallest_case))return false;
 
-		Quaternion offset_quatBA = meshB->world_orientation() * meshA->world_orientation().conjugate();
-		Quaternion offset_quatAB = meshA->world_orientation() * meshB->world_orientation().conjugate();
+		Quaternion offset_quatBA = meshB->world_orientation() * meshA->world_orientation().inverse();
+		Quaternion offset_quatAB = meshA->world_orientation() * meshB->world_orientation().inverse();
 		Vector3 offset_posBA = meshB->world_position() - meshA->world_position();
 		Vector3 offset_posAB = meshA->world_position() - meshB->world_position();
 
@@ -1624,8 +1624,8 @@ bool Physics_function::generate_contact_mesh_mesh(const ALP_Collider_mesh* mA, c
 			const std::list<ALP_Collider>::iterator& facet_coll = facet_mesh->ALPcollider;
 			const std::list<ALP_Collider>::iterator& vertex_coll = vertex_mesh->ALPcollider;
 
-			Quaternion offset_quatVF = vertex_coll->world_orientation() * facet_coll->world_orientation().conjugate();
-			Quaternion offset_quatFV = facet_coll->world_orientation() * vertex_coll->world_orientation().conjugate();
+			Quaternion offset_quatVF = vertex_coll->world_orientation() * facet_coll->world_orientation().inverse();
+			Quaternion offset_quatFV = facet_coll->world_orientation() * vertex_coll->world_orientation().inverse();
 			Vector3 offset_posVF = vertex_coll->world_position() - facet_coll->world_position();
 			Vector3 offset_posFV = facet_coll->world_position() - vertex_coll->world_position();
 
@@ -1661,7 +1661,7 @@ bool Physics_function::generate_contact_mesh_mesh(const ALP_Collider_mesh* mA, c
 			Vector3 pA;
 			{
 
-				Vector3 p = vector3_quatrotate(vector3_quatrotate(pB, vertex_coll->world_orientation()) + offset_posVF, facet_coll->world_orientation().conjugate());
+				Vector3 p = vector3_quatrotate(vector3_quatrotate(pB, vertex_coll->world_orientation()) + offset_posVF, facet_coll->world_orientation().inverse());
 				p /= facet_coll->world_scale();
 				float min_len = FLT_MAX;
 				Vector3 n_pos;
@@ -1706,8 +1706,8 @@ bool Physics_function::generate_contact_mesh_mesh(const ALP_Collider_mesh* mA, c
 			const std::list<ALP_Collider>::iterator& facet_coll = facet_mesh->ALPcollider;
 			const std::list<ALP_Collider>::iterator& vertex_coll = vertex_mesh->ALPcollider;
 
-			Quaternion offset_quatVF = vertex_coll->world_orientation() * facet_coll->world_orientation().conjugate();
-			Quaternion offset_quatFV = facet_coll->world_orientation() * vertex_coll->world_orientation().conjugate();
+			Quaternion offset_quatVF = vertex_coll->world_orientation() * facet_coll->world_orientation().inverse();
+			Quaternion offset_quatFV = facet_coll->world_orientation() * vertex_coll->world_orientation().inverse();
 			Vector3 offset_posVF = vertex_coll->world_position() - facet_coll->world_position();
 			Vector3 offset_posFV = facet_coll->world_position() - vertex_coll->world_position();
 
@@ -1743,7 +1743,7 @@ bool Physics_function::generate_contact_mesh_mesh(const ALP_Collider_mesh* mA, c
 			Vector3 pA;
 			{
 
-				Vector3 p = vector3_quatrotate(vector3_quatrotate(pB, vertex_coll->world_orientation()) + offset_posVF, facet_coll->world_orientation().conjugate());
+				Vector3 p = vector3_quatrotate(vector3_quatrotate(pB, vertex_coll->world_orientation()) + offset_posVF, facet_coll->world_orientation().inverse());
 				p /= facet_coll->world_scale();
 				float min_len = FLT_MAX;
 				Vector3 n_pos;
@@ -1783,8 +1783,8 @@ bool Physics_function::generate_contact_mesh_mesh(const ALP_Collider_mesh* mA, c
 		//SAÇ∆SBÇÃï”ìØémÇ™è’ìÀÇµÇΩèÍçá
 		else if (smallest_case == SAT_TYPE::EDGE_EDGE)
 		{
-			Quaternion offset_quatAB = meshA->world_orientation() * meshB->world_orientation().conjugate();
-			Quaternion offset_quatBA = meshB->world_orientation() * meshA->world_orientation().conjugate();
+			Quaternion offset_quatAB = meshA->world_orientation() * meshB->world_orientation().inverse();
+			Quaternion offset_quatBA = meshB->world_orientation() * meshA->world_orientation().inverse();
 			Vector3 offset_posAB = meshA->world_position() - meshB->world_position();
 			Vector3 offset_posBA = meshB->world_position() - meshA->world_position();
 
@@ -1805,7 +1805,7 @@ bool Physics_function::generate_contact_mesh_mesh(const ALP_Collider_mesh* mA, c
 
 			//SBÇÃèÓïÒÇSAÇÃç¿ïWånÇ…éùÇ¡ÇƒÇ´ÇΩ
 			//Vector3 edgeB_p_A = vector3_quatrotate(edgeB_p[0], offset_quatBA) + offset_posBA;
-			Vector3 edgeB_p_A = vector3_quatrotate(vector3_quatrotate(edgeB_p[0], meshB->world_orientation()) + offset_posBA, meshA->world_orientation().conjugate());
+			Vector3 edgeB_p_A = vector3_quatrotate(vector3_quatrotate(edgeB_p[0], meshB->world_orientation()) + offset_posBA, meshA->world_orientation().inverse());
 			Vector3 edgeB_v_A = vector3_quatrotate(edgeB_vec, offset_quatBA);
 
 			//SAÇÃç¿ïWånÇ≈axisÇÃê∂ê¨

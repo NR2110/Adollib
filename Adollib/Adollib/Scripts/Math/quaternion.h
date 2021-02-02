@@ -72,10 +72,10 @@ namespace Adollib {
 		Quaternion unit_vect() const;
 
 		// ‹¤–ğ
-		Quaternion conjugate() const;
+		Quaternion inverse() const;
 
 		// ‹tŒ³
-		Quaternion inverse() const;
+		Quaternion conjugate() const;
 
 		// ƒIƒCƒ‰[Šp‚Å•Ô‚·
 		Vector3 euler() const;

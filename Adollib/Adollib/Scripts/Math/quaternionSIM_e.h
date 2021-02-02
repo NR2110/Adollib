@@ -136,11 +136,11 @@ namespace Adollib {
 		if (L == 0)return Quaternion(1, 0, 0, 0);
 		else return Quaternion((*this) / L);
 	}
-	inline Quaternion Quaternion::conjugate() const {
+	inline Quaternion Quaternion::inverse() const {
 		return Quaternion(w, -x, -y, -z);
 	}
-	inline Quaternion Quaternion::inverse() const {
-		return conjugate() / norm_sqr();
+	inline Quaternion Quaternion::conjugate() const {
+		return inverse() / norm_sqr();
 	}
 
 	inline Vector3 Quaternion::euler() const {
@@ -182,7 +182,7 @@ namespace Adollib {
 		return R;
 #else
 		Quaternion R(V);
-		return (Q.conjugate() * R * Q).get_NV3();
+		return (Q.inverse() * R * Q).get_NV3();
 #endif
 	}
 

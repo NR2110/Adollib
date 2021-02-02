@@ -50,7 +50,7 @@ void FrustumCulling::frustum_culling_init() {
 	//offset_orient = camera_orient * obj_orient.conjugate();
 
 	offset_pos =  obj_pos - camera_pos ; //objÇ©ÇÁcameraç¿ïWånÇ÷ÇÃoffset
-	offset_orient = obj_orient * camera_orient.conjugate();
+	offset_orient = obj_orient * camera_orient.inverse();
 }
 
 

@@ -18,7 +18,7 @@ const bool ALP_Collider::concoll_enter(const unsigned int tag_name) {
 }
 
 void ALP_Collider::solv_resolve() {
-	offset_CollGO_quat = local_orientation.conjugate() * (*coll_itr)->gameobject->get_world_orientate().conjugate() * world_orientation();
+	offset_CollGO_quat = local_orientation.inverse() * (*coll_itr)->gameobject->get_world_orientate().inverse() * world_orientation();
 	offset_CollGO_pos = world_position() - vector3_quatrotate(local_position * (*coll_itr)->gameobject->get_world_scale(), world_orientation()) - (*coll_itr)->gameobject->get_world_position();
 
 }
@@ -161,7 +161,7 @@ void ALP_Collider::update_dop14_as_mesh() {
 
 		Vector3 rotated_axis[DOP::DOP14_size];
 		for (int i = 0; i < DOP::DOP14_size; i++) {
-			rotated_axis[i] = vector3_quatrotate(DOP::DOP_14_axis[i], world_orientation().conjugate()).unit_vect();
+			rotated_axis[i] = vector3_quatrotate(DOP::DOP_14_axis[i], world_orientation().inverse()).unit_vect();
 			mesh.dop14.max[i] = -FLT_MAX;
 			mesh.dop14.min[i] = +FLT_MAX;
 		}

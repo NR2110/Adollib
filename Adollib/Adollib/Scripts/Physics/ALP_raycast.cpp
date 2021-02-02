@@ -306,7 +306,7 @@ bool ray_cast_mesh(const Vector3& l_Ray_pos, const Vector3& l_Ray_dir,
 
 	//Ray‚Ìî•ñ‚ðmesh‚ÌÀ•WŒn‚É‚ÉŽ‚Á‚Ä‚­‚é
 	const Vector3 Ray_pos = vector3_trans(l_Ray_pos, mat_inv);
-	const Vector3 Ray_dir = vector3_quatrotate(l_Ray_dir, mesh.ALPcollider->world_orientation().conjugate()) / mesh.ALPcollider->world_scale();
+	const Vector3 Ray_dir = vector3_quatrotate(l_Ray_dir, mesh.ALPcollider->world_orientation().inverse()) / mesh.ALPcollider->world_scale();
 
 	for (auto& facet : mesh.mesh->facets) {
 
