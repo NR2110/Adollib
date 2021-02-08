@@ -32,6 +32,7 @@ struct Balljoint {
 		constraint.accuminpulse = 0.0f;
 	}
 };
+#ifndef PHYICSE_USED_SIMD
 void CalcTangentVector(const Vector3& normal, Vector3& tangent1, Vector3& tangent2)
 {
 	Vector3 vec(1.0f, 0.0f, 0.0f);
@@ -40,13 +41,29 @@ void CalcTangentVector(const Vector3& normal, Vector3& tangent1, Vector3& tangen
 	if (n.norm() < FLT_EPSILON) {
 		vec = Vector3(0.0f, 1.0f, 0.0f);
 	}
-	tangent1 = (vector3_cross(normal, vec)).unit_vect();
-	tangent2 = (vector3_cross(tangent1, normal)).unit_vect();
-}
 
-#if 1 || _DEBUG
+	tangent1 = vector3_cross(normal, vec).unit_vect();
+	tangent2 = vector3_cross(tangent1, normal).unit_vect();
+}
+#else
+void CalcTangentVector(const Vector3& normal, DirectX::XMVECTOR& tangent1, DirectX::XMVECTOR& tangent2)
+{
+	Vector3 vec(1.0f, 0.0f, 0.0f);
+	Vector3 n(normal);
+	n[0] = 0.0f;
+	if (n.norm() < FLT_EPSILON) {
+		vec = Vector3(0.0f, 1.0f, 0.0f);
+	}
+
+	DirectX::XMVECTOR xmnorm = DirectX::XMLoadFloat3(&normal);
+	tangent1 = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(xmnorm, DirectX::XMLoadFloat3(&vec)));
+	tangent2 = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(tangent1, xmnorm));
+}
+#endif
+
 void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::vector<Contacts::Contact_pair>& pairs) {
 
+#ifndef PHYICSE_USED_SIMD
 	//::: 解決用オブジェクトの生成 :::::::::::
 	std::vector<ALP_Solverbody> SBs;
 	{
@@ -57,12 +74,10 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 			SB.delta_LinearVelocity = Vector3(0.0f);
 			SB.delta_AngulaVelocity = Vector3(0.0f);
 
-			if(coll.ALPphysics->is_kinmatic_anglar) SB.inv_inertia = coll.ALPphysics->inverse_inertial_tensor();
+			if (coll.ALPphysics->is_kinmatic_anglar) SB.inv_inertia = coll.ALPphysics->inverse_inertial_tensor();
 			else SB.inv_inertia = matrix_zero();
 
 			SB.inv_mass = coll.ALPphysics->inverse_mass();
-
-			SB.num = count;
 
 			SBs.emplace_back(SB);
 			count++;
@@ -79,7 +94,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 	ALP_Solverbody* solverbody[2];
 	//std::vector<Balljoint> balljoints; //今回はなし
 
-	for(auto& pair : pairs){
+	for (auto& pair : pairs) {
 
 		coll[0] = pair.body[0];
 		coll[1] = pair.body[1];
@@ -102,7 +117,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 			// 継続の衝突の場合反発係数を0にする
 			float restitution = (pair.type == Pairtype::new_pair ? 0.5f * (ALPphysics[0]->restitution + ALPphysics[1]->restitution) : 0.0f);
 
-#if 1
+
 			//衝突時のそれぞれの速度
 			Vector3 pdota;
 			pdota = vector3_cross(ALPphysics[0]->anglar_velocity, rA);
@@ -192,74 +207,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 				cp.constraint[2].upperlimit = 0;
 				cp.constraint[2].axis = axis;
 			}
-#endif
-#if 0
-			float L = solverbody[0]->inv_mass + solverbody[1]->inv_mass;
-			Matrix K = matrix_scale(Vector3(L))-(
-				matrix_cross(rA) * solverbody[0]->inv_inertia * matrix_cross(rA) +
-				matrix_cross(rB) * solverbody[1]->inv_inertia * matrix_cross(rB)
-				);
 
-			Vector3 velocityA = ALPphysics[0]->linear_velocity + vector3_cross(ALPphysics[0]->anglar_velocity, rA);
-			Vector3 velocityB = ALPphysics[1]->linear_velocity + vector3_cross(ALPphysics[1]->anglar_velocity, rB);
-			Vector3 relativeVelocity = velocityA - velocityB; //相対速度
-
-			//Vector3
-			//	tangent1, //normalに対するz方向
-			//	tangent2; //normalに対するx方向
-
-			CalcTangentVector(cp.normal, tangent1, tangent2);
-
-			// Normal
-			{
-				Vector3 axis = cp.normal;
-				float denom =  + vector3_dot(vector3_trans(axis, K), axis);
-				if (fabsf(1 - denom * cp.constraint[2].jacDiagInv) > FLT_EPSILON) {
-					int dafsgdf = 0;
-				}
-				cp.constraint[0].jacDiagInv = 1.0f / denom;
-				cp.constraint[0].rhs = -(1.0f + restitution) * vector3_dot(relativeVelocity, axis);
-
-				if (0.0f < cp.distance - Phyisics_manager::slop) {
-					cp.constraint[0].rhs += (Phyisics_manager::bias * (cp.distance - Phyisics_manager::slop)) / Phyisics_manager::timeStep; //めり込みを直す力
-				}
-
-				cp.constraint[0].rhs *= cp.constraint[0].jacDiagInv;
-				cp.constraint[0].lowerlimit = 0.0f;
-				cp.constraint[0].upperlimit = FLT_MAX;
-				cp.constraint[0].axis = axis;
-			}
-
-			// Tangent1
-			{
-				Vector3 axis = tangent1;
-				float denom =  + vector3_dot(vector3_trans(axis, K), axis);
-				if (fabsf(1 - denom * cp.constraint[2].jacDiagInv) > FLT_EPSILON) {
-					int dafsgdf = 0;
-				}
-				cp.constraint[1].jacDiagInv = 1.0f / denom;
-				cp.constraint[1].rhs = -vector3_dot(relativeVelocity, axis);
-				cp.constraint[1].rhs *= cp.constraint[1].jacDiagInv;
-				cp.constraint[1].lowerlimit = 0.0f;
-				cp.constraint[1].upperlimit = 0.0f;
-				cp.constraint[1].axis = axis;
-			}
-
-			// Tangent2
-			{
-				Vector3 axis = tangent2;
-				float denom =  + vector3_dot(vector3_trans(axis, K), axis);
-				if (fabsf(1 - denom * cp.constraint[2].jacDiagInv) > FLT_EPSILON) {
-					int dafsgdf = 0;
-				}
-				cp.constraint[2].jacDiagInv = 1.0f / denom;
-				cp.constraint[2].rhs = -vector3_dot(relativeVelocity, axis);
-				cp.constraint[2].rhs *= cp.constraint[2].jacDiagInv;
-				cp.constraint[2].lowerlimit = 0.0f;
-				cp.constraint[2].upperlimit = 0.0f;
-				cp.constraint[2].axis = axis;
-			}
-#endif
 
 		}
 	}
@@ -370,41 +318,41 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 
 	// 速度の更新
 	for (auto& coll : colliders) {
-			if (coll.ALPphysics->is_kinmatic_linear) coll.ALPphysics->linear_velocity += coll.ALPphysics->solve->delta_LinearVelocity;
-			if (coll.ALPphysics->is_kinmatic_anglar) coll.ALPphysics->anglar_velocity += coll.ALPphysics->solve->delta_AngulaVelocity;
+		if (coll.ALPphysics->is_kinmatic_linear) coll.ALPphysics->linear_velocity += coll.ALPphysics->solve->delta_LinearVelocity;
+		if (coll.ALPphysics->is_kinmatic_anglar) coll.ALPphysics->anglar_velocity += coll.ALPphysics->solve->delta_AngulaVelocity;
 
 	}
 
-}
 #else
-void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::vector<Contacts::Contact_pair>& pairs) {
-
 	//::: 解決用オブジェクトの生成 :::::::::::
-	std::vector<ALP_Solverbody> SBs;
+	std::list<ALP_Solverbody> SBs;
 	{
-		int count = 0;
+		std::list<ALP_Solverbody>::iterator itr;
+		SBs.resize(colliders.size());
+		itr = SBs.begin();
 		for (const auto& coll : colliders) {
-			ALP_Solverbody SB;
-			SB.orientation = DirectX::XMLoadFloat4(&coll.world_orientation());
-			SB.delta_LinearVelocity = DirectX::XMVECTOR();
-			SB.delta_AngulaVelocity = DirectX::XMVECTOR();
-			SB.inv_inertia = DirectX::XMLoadFloat4x4(&coll.ALPphysics->inverse_inertial_tensor());
-			SB.inv_mass = coll.ALPphysics->inverse_mass();
-			SB.num = count;
+			itr->orientation = DirectX::XMLoadFloat4(&coll.world_orientation());
+			itr->delta_LinearVelocity = DirectX::XMLoadFloat3(&vector3_zero());
+			itr->delta_AngulaVelocity = DirectX::XMLoadFloat3(&vector3_zero());
 
-			SBs.emplace_back(SB);
-			count++;
+			if (coll.ALPphysics->is_kinmatic_anglar) itr->inv_inertia = DirectX::XMLoadFloat4x4(&coll.ALPphysics->inverse_inertial_tensor());
+			else itr->inv_inertia = DirectX::XMLoadFloat4x4(&matrix_zero());
+
+			itr->inv_mass = coll.ALPphysics->inverse_mass();
+
+			++itr;
 		}
-		count = 0;
+
+		itr = SBs.begin();
 		for (auto& coll : colliders) {
-			coll.ALPphysics->solve = &SBs[count];
-			count++;
+			coll.ALPphysics->solve = itr;
+			++itr;
 		}
 	}
 
-	std::vector<ALP_Collider_mesh>::iterator coll[2];
+	ALP_Collider_mesh* coll[2];
 	std::list<ALP_Physics>::iterator ALPphysics[2];
-	ALP_Solverbody* solverbody[2];
+	std::list < ALP_Solverbody>::iterator solverbody[2];
 	//std::vector<Balljoint> balljoints; //今回はなし
 
 	for (auto& pair : pairs) {
@@ -423,27 +371,27 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 		for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 			Contactpoint& cp = pair.contacts.contactpoints[C_num];
 
-			Vector3 rA = vector3_quatrotate(cp.point[0], solverbody[0]->orientation);
-			Vector3 rB = vector3_quatrotate(cp.point[1], solverbody[1]->orientation);
+			DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[0]), solverbody[0]->orientation);
+			DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[1]), solverbody[1]->orientation);
 
 			// 反発係数の獲得
 			// 継続の衝突の場合反発係数を0にする
 			float restitution = (pair.type == Pairtype::new_pair ? 0.5f * (ALPphysics[0]->restitution + ALPphysics[1]->restitution) : 0.0f);
 
-#if 1
-			//衝突時のそれぞれの速度
-			Vector3 pdota;
-			pdota = vector3_cross(ALPphysics[0]->anglar_velocity, rA);
-			pdota += ALPphysics[0]->linear_velocity;
 
-			Vector3 pdotb;
-			pdotb = vector3_cross(ALPphysics[1]->anglar_velocity, rB);
-			pdotb += ALPphysics[1]->linear_velocity;
+			//衝突時のそれぞれの速度
+			DirectX::XMVECTOR pdota;
+			pdota = DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&ALPphysics[0]->anglar_velocity), rA);
+			pdota = DirectX::XMVectorAdd(pdota, DirectX::XMLoadFloat3(&ALPphysics[0]->linear_velocity));
+
+			DirectX::XMVECTOR pdotb;
+			pdotb = DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&ALPphysics[1]->anglar_velocity), rB);
+			pdotb = DirectX::XMVectorAdd(pdotb, DirectX::XMLoadFloat3(&ALPphysics[1]->linear_velocity));
 
 			//衝突時の衝突平面法線方向の相対速度(結局衝突に使うのは法線方向への速さ)
-			Vector3 vrel = pdota - pdotb;
+			DirectX::XMVECTOR vrel = DirectX::XMVectorSubtract(pdota, pdotb);
 
-			Vector3
+			DirectX::XMVECTOR
 				tangent1, //normalに対するz方向
 				tangent2; //normalに対するx方向
 			CalcTangentVector(cp.normal, tangent1, tangent2);
@@ -451,25 +399,26 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 			//Baraff[1997]の式(8-18)の分母(denominator)を求める
 			float term1 = ALPphysics[0]->inverse_mass();
 			float term2 = ALPphysics[1]->inverse_mass();
-			Vector3 tA, tB;
+			DirectX::XMVECTOR tA, tB;
 
 			float term3, term4, denominator;
+			DirectX::XMVECTOR axis;
 			// Normal
 			{
 				//Baraff[1997]の式(8-18)の分母(denominator)を求める
-				Vector3 axis = cp.normal;
-				tA = vector3_cross(rA, axis);
-				tB = vector3_cross(rB, axis);
-				tA = vector3_trans(tA, ALPphysics[0]->solve->inv_inertia);
-				tB = vector3_trans(tB, ALPphysics[1]->solve->inv_inertia);
-				tA = vector3_cross(tA, rA);
-				tB = vector3_cross(tB, rB);
-				term3 = vector3_dot(axis, tA);
-				term4 = vector3_dot(axis, tB);
+				axis = DirectX::XMLoadFloat3(&cp.normal);
+				tA = DirectX::XMVector3Cross(rA, axis);
+				tB = DirectX::XMVector3Cross(rB, axis);
+				tA = DirectX::XMVector3Transform(tA, ALPphysics[0]->solve->inv_inertia);
+				tB = DirectX::XMVector3Transform(tB, ALPphysics[1]->solve->inv_inertia);
+				tA = DirectX::XMVector3Cross(tA, rA);
+				tB = DirectX::XMVector3Cross(tB, rB);
+				term3 = DirectX::XMVectorGetX(DirectX::XMVector3Dot(axis, tA));
+				term4 = DirectX::XMVectorGetX(DirectX::XMVector3Dot(axis, tB));
 				denominator = term1 + term2 + term3 + term4;
 
 				cp.constraint[0].jacDiagInv = 1.0f / denominator; //Baraff1997(8-18)の分母
-				cp.constraint[0].rhs = -(1.0f + restitution) * vector3_dot(axis, vrel); //Baraff1997(8-18)の分子
+				cp.constraint[0].rhs = -(1.0f + restitution) * DirectX::XMVectorGetX(DirectX::XMVector3Dot(axis, vrel)); //Baraff1997(8-18)の分子
 
 				if (0.0f < cp.distance - Phyisics_manager::slop)
 					cp.constraint[0].rhs += (Phyisics_manager::bias * (cp.distance - Phyisics_manager::slop)) / Phyisics_manager::timeStep; //めり込みを直す力
@@ -477,122 +426,57 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 				cp.constraint[0].rhs *= cp.constraint[0].jacDiagInv;
 				cp.constraint[0].lowerlimit = 0.0f;
 				cp.constraint[0].upperlimit = FLT_MAX;
-				cp.constraint[0].axis = axis;
+				DirectX::XMStoreFloat3(&cp.constraint[0].axis, axis);
 			}
 
 			// Tangent1
 			{
-				Vector3 axis = tangent1;
-				tA = vector3_cross(rA, axis);
-				tB = vector3_cross(rB, axis);
-				tA = vector3_trans(tA, ALPphysics[0]->solve->inv_inertia);
-				tB = vector3_trans(tB, ALPphysics[1]->solve->inv_inertia);
-				tA = vector3_cross(tA, rA);
-				tB = vector3_cross(tB, rB);
-				term3 = vector3_dot(axis, tA);
-				term4 = vector3_dot(axis, tB);
+				axis = tangent1;
+				tA = DirectX::XMVector3Cross(rA, axis);
+				tB = DirectX::XMVector3Cross(rB, axis);
+				tA = DirectX::XMVector3Transform(tA, ALPphysics[0]->solve->inv_inertia);
+				tB = DirectX::XMVector3Transform(tB, ALPphysics[1]->solve->inv_inertia);
+				tA = DirectX::XMVector3Cross(tA, rA);
+				tB = DirectX::XMVector3Cross(tB, rB);
+				term3 = DirectX::XMVectorGetX(DirectX::XMVector3Dot(axis, tA));
+				term4 = DirectX::XMVectorGetX(DirectX::XMVector3Dot(axis, tB));
 				denominator = term1 + term2 + term3 + term4;
 
 				cp.constraint[1].jacDiagInv = 1.0f / denominator; //Baraff1997(8-18)の分母
-				cp.constraint[1].rhs = -vector3_dot(axis, vrel); //Baraff1997(8-18)の分子
+				cp.constraint[1].rhs = -DirectX::XMVectorGetX(DirectX::XMVector3Dot(axis, vrel)); //Baraff1997(8-18)の分子
 				cp.constraint[1].rhs *= cp.constraint[1].jacDiagInv;
 				cp.constraint[1].lowerlimit = 0.0f;
 				cp.constraint[1].upperlimit = 0;
-				cp.constraint[1].axis = axis;
+				DirectX::XMStoreFloat3(&cp.constraint[1].axis, axis);
 			}
 
 			// Tangent2
 			{
-				Vector3 axis = tangent2;
-				tA = vector3_cross(rA, axis);
-				tB = vector3_cross(rB, axis);
-				tA = vector3_trans(tA, ALPphysics[0]->solve->inv_inertia);
-				tB = vector3_trans(tB, ALPphysics[1]->solve->inv_inertia);
-				tA = vector3_cross(tA, rA);
-				tB = vector3_cross(tB, rB);
-				term3 = vector3_dot(axis, tA);
-				term4 = vector3_dot(axis, tB);
+				axis = tangent2;
+				tA = DirectX::XMVector3Cross(rA, axis);
+				tB = DirectX::XMVector3Cross(rB, axis);
+				tA = DirectX::XMVector3Transform(tA, ALPphysics[0]->solve->inv_inertia);
+				tB = DirectX::XMVector3Transform(tB, ALPphysics[1]->solve->inv_inertia);
+				tA = DirectX::XMVector3Cross(tA, rA);
+				tB = DirectX::XMVector3Cross(tB, rB);
+				term3 = DirectX::XMVectorGetX(DirectX::XMVector3Dot(axis, tA));
+				term4 = DirectX::XMVectorGetX(DirectX::XMVector3Dot(axis, tB));
 				denominator = term1 + term2 + term3 + term4;
+
 				cp.constraint[2].jacDiagInv = 1.0f / denominator; //Baraff1997(8-18)の分母?
-				cp.constraint[2].rhs = -vector3_dot(axis, vrel); //Baraff1997(8-18)の分子
+				cp.constraint[2].rhs = -DirectX::XMVectorGetX(DirectX::XMVector3Dot(axis, vrel)); //Baraff1997(8-18)の分子
 				cp.constraint[2].rhs *= cp.constraint[2].jacDiagInv;
 				cp.constraint[2].lowerlimit = 0.0f;
 				cp.constraint[2].upperlimit = 0;
-				cp.constraint[2].axis = axis;
-			}
-#endif
-#if 0
-			float L = solverbody[0]->inv_mass + solverbody[1]->inv_mass;
-			Matrix K = matrix_scale(Vector3(L)) - (
-				matrix_cross(rA) * solverbody[0]->inv_inertia * matrix_cross(rA) +
-				matrix_cross(rB) * solverbody[1]->inv_inertia * matrix_cross(rB)
-				);
-
-			Vector3 velocityA = ALPphysics[0]->linear_velocity + vector3_cross(ALPphysics[0]->anglar_velocity, rA);
-			Vector3 velocityB = ALPphysics[1]->linear_velocity + vector3_cross(ALPphysics[1]->anglar_velocity, rB);
-			Vector3 relativeVelocity = velocityA - velocityB; //相対速度
-
-			//Vector3
-			//	tangent1, //normalに対するz方向
-			//	tangent2; //normalに対するx方向
-
-			CalcTangentVector(cp.normal, tangent1, tangent2);
-
-			// Normal
-			{
-				Vector3 axis = cp.normal;
-				float denom = +vector3_dot(vector3_trans(axis, K), axis);
-				if (fabsf(1 - denom * cp.constraint[2].jacDiagInv) > FLT_EPSILON) {
-					int dafsgdf = 0;
-				}
-				cp.constraint[0].jacDiagInv = 1.0f / denom;
-				cp.constraint[0].rhs = -(1.0f + restitution) * vector3_dot(relativeVelocity, axis);
-
-				if (0.0f < cp.distance - Phyisics_manager::slop) {
-					cp.constraint[0].rhs += (Phyisics_manager::bias * (cp.distance - Phyisics_manager::slop)) / Phyisics_manager::timeStep; //めり込みを直す力
-				}
-
-				cp.constraint[0].rhs *= cp.constraint[0].jacDiagInv;
-				cp.constraint[0].lowerlimit = 0.0f;
-				cp.constraint[0].upperlimit = FLT_MAX;
-				cp.constraint[0].axis = axis;
+				DirectX::XMStoreFloat3(&cp.constraint[2].axis, axis);
 			}
 
-			// Tangent1
-			{
-				Vector3 axis = tangent1;
-				float denom = +vector3_dot(vector3_trans(axis, K), axis);
-				if (fabsf(1 - denom * cp.constraint[2].jacDiagInv) > FLT_EPSILON) {
-					int dafsgdf = 0;
-				}
-				cp.constraint[1].jacDiagInv = 1.0f / denom;
-				cp.constraint[1].rhs = -vector3_dot(relativeVelocity, axis);
-				cp.constraint[1].rhs *= cp.constraint[1].jacDiagInv;
-				cp.constraint[1].lowerlimit = 0.0f;
-				cp.constraint[1].upperlimit = 0.0f;
-				cp.constraint[1].axis = axis;
-			}
-
-			// Tangent2
-			{
-				Vector3 axis = tangent2;
-				float denom = +vector3_dot(vector3_trans(axis, K), axis);
-				if (fabsf(1 - denom * cp.constraint[2].jacDiagInv) > FLT_EPSILON) {
-					int dafsgdf = 0;
-				}
-				cp.constraint[2].jacDiagInv = 1.0f / denom;
-				cp.constraint[2].rhs = -vector3_dot(relativeVelocity, axis);
-				cp.constraint[2].rhs *= cp.constraint[2].jacDiagInv;
-				cp.constraint[2].lowerlimit = 0.0f;
-				cp.constraint[2].upperlimit = 0.0f;
-				cp.constraint[2].axis = axis;
-			}
-#endif
 
 		}
 	}
 
 	//::: 変化量を求める :::::::::::::::
+	int count_Debg = 0;
 	for (auto& pair : pairs) {
 
 		coll[0] = pair.body[0];
@@ -605,18 +489,29 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 		for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 			//衝突点の情報
 			Contactpoint& cp = pair.contacts.contactpoints[C_num];
-			Vector3 rA = vector3_quatrotate(cp.point[0], solverbody[0]->orientation);
-			Vector3 rB = vector3_quatrotate(cp.point[1], solverbody[1]->orientation);
+			DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[0]), solverbody[0]->orientation);
+			DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[1]), solverbody[1]->orientation);
 
 			for (int k = 0; k < 3; k++) {
 				float deltaImpulse = cp.constraint[k].accuminpulse;
-				solverbody[0]->delta_LinearVelocity += deltaImpulse * solverbody[0]->inv_mass * cp.constraint[k].axis;
-				solverbody[0]->delta_AngulaVelocity += deltaImpulse * vector3_trans(vector3_cross(rA, cp.constraint[k].axis), solverbody[0]->inv_inertia);
-				solverbody[1]->delta_LinearVelocity -= deltaImpulse * solverbody[1]->inv_mass * cp.constraint[k].axis;
-				solverbody[1]->delta_AngulaVelocity -= deltaImpulse * vector3_trans(vector3_cross(rB, cp.constraint[k].axis), solverbody[1]->inv_inertia);
+				DirectX::XMVECTOR axis = DirectX::XMLoadFloat3(&cp.constraint[k].axis);
+
+				//auto F_0 = deltaImpulse * solverbody[0]->inv_mass * count_Debg;
+				//auto F_1 = deltaImpulse * solverbody[1]->inv_mass * count_Debg;
+				//solverbody[0]->delta_LinearVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_LinearVelocity, DirectX::XMVectorScale(axis, F_0));
+				//solverbody[0]->delta_AngulaVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rA, axis), solverbody[0]->inv_inertia), deltaImpulse));
+				//solverbody[1]->delta_LinearVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_LinearVelocity, DirectX::XMVectorScale(axis, F_1));
+				//solverbody[1]->delta_AngulaVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rB, axis), solverbody[1]->inv_inertia), deltaImpulse));
+
+				solverbody[0]->delta_LinearVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_LinearVelocity, DirectX::XMVectorScale(axis, deltaImpulse * solverbody[0]->inv_mass));
+				solverbody[0]->delta_AngulaVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rA, axis), solverbody[0]->inv_inertia), deltaImpulse));
+				solverbody[1]->delta_LinearVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_LinearVelocity, DirectX::XMVectorScale(axis, deltaImpulse * solverbody[1]->inv_mass));
+				solverbody[1]->delta_AngulaVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rB, axis), solverbody[1]->inv_inertia), deltaImpulse));
 
 			}
 		}
+
+		count_Debg++;
 	}
 
 
@@ -633,23 +528,25 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 			for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 				//衝突点の情報
 				Contactpoint& cp = pair.contacts.contactpoints[C_num];
-				Vector3 rA = vector3_quatrotate(cp.point[0], solverbody[0]->orientation);
-				Vector3 rB = vector3_quatrotate(cp.point[1], solverbody[1]->orientation);
+				DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[0]), solverbody[0]->orientation);
+				DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[1]), solverbody[1]->orientation);
 
 				{
 					Constraint& constraint = cp.constraint[0];
+					DirectX::XMVECTOR axis = DirectX::XMLoadFloat3(&constraint.axis);
+
 					float delta_impulse = constraint.rhs;
-					Vector3 delta_velocity[2];
-					delta_velocity[0] = solverbody[0]->delta_LinearVelocity + vector3_cross(solverbody[0]->delta_AngulaVelocity, rA);
-					delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngulaVelocity, rB);
-					delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
+					DirectX::XMVECTOR delta_velocity[2];
+					delta_velocity[0] = DirectX::XMVectorAdd(solverbody[0]->delta_LinearVelocity, DirectX::XMVector3Cross(solverbody[0]->delta_AngulaVelocity, rA));
+					delta_velocity[1] = DirectX::XMVectorAdd(solverbody[1]->delta_LinearVelocity, DirectX::XMVector3Cross(solverbody[1]->delta_AngulaVelocity, rB));
+					delta_impulse -= constraint.jacDiagInv * DirectX::XMVectorGetX(DirectX::XMVector3Dot(axis, DirectX::XMVectorSubtract(delta_velocity[0], delta_velocity[1])));
 					float old_impulse = constraint.accuminpulse;
 					constraint.accuminpulse = ALClamp(old_impulse + delta_impulse, constraint.lowerlimit, constraint.upperlimit);
 					delta_impulse = constraint.accuminpulse - old_impulse;
-					solverbody[0]->delta_LinearVelocity += delta_impulse * solverbody[0]->inv_mass * constraint.axis;
-					solverbody[0]->delta_AngulaVelocity += delta_impulse * vector3_trans(vector3_cross(rA, constraint.axis), solverbody[0]->inv_inertia);
-					solverbody[1]->delta_LinearVelocity -= delta_impulse * solverbody[1]->inv_mass * constraint.axis;
-					solverbody[1]->delta_AngulaVelocity -= delta_impulse * vector3_trans(vector3_cross(rB, constraint.axis), solverbody[1]->inv_inertia);
+					solverbody[0]->delta_LinearVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_LinearVelocity, DirectX::XMVectorScale(axis, delta_impulse * solverbody[0]->inv_mass));
+					solverbody[0]->delta_AngulaVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rA, axis), solverbody[0]->inv_inertia), delta_impulse));
+					solverbody[1]->delta_LinearVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_LinearVelocity, DirectX::XMVectorScale(axis, delta_impulse * solverbody[1]->inv_mass));
+					solverbody[1]->delta_AngulaVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rB, axis), solverbody[1]->inv_inertia), delta_impulse));
 				}
 
 				float max_friction = pair.contacts.friction * fabsf(cp.constraint[0].accuminpulse);
@@ -660,35 +557,39 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 
 				{
 					Constraint& constraint = cp.constraint[1];
+					DirectX::XMVECTOR axis = DirectX::XMLoadFloat3(&constraint.axis);
+
 					float delta_impulse = constraint.rhs;
-					Vector3 delta_velocity[2];
-					delta_velocity[0] = solverbody[0]->delta_LinearVelocity + vector3_cross(solverbody[0]->delta_AngulaVelocity, rA);
-					delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngulaVelocity, rB);
-					delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
+					DirectX::XMVECTOR delta_velocity[2];
+					delta_velocity[0] = DirectX::XMVectorAdd(solverbody[0]->delta_LinearVelocity, DirectX::XMVector3Cross(solverbody[0]->delta_AngulaVelocity, rA));
+					delta_velocity[1] = DirectX::XMVectorAdd(solverbody[1]->delta_LinearVelocity, DirectX::XMVector3Cross(solverbody[1]->delta_AngulaVelocity, rB));
+					delta_impulse -= constraint.jacDiagInv * DirectX::XMVectorGetX(DirectX::XMVector3Dot(axis, DirectX::XMVectorSubtract(delta_velocity[0], delta_velocity[1])));
 					float old_impulse = constraint.accuminpulse;
 					constraint.accuminpulse = ALClamp(old_impulse + delta_impulse, constraint.lowerlimit, constraint.upperlimit);
 					delta_impulse = constraint.accuminpulse - old_impulse;
-					solverbody[0]->delta_LinearVelocity += delta_impulse * solverbody[0]->inv_mass * constraint.axis;
-					solverbody[0]->delta_AngulaVelocity += delta_impulse * vector3_trans(vector3_cross(rA, constraint.axis), solverbody[0]->inv_inertia);
-					solverbody[1]->delta_LinearVelocity -= delta_impulse * solverbody[1]->inv_mass * constraint.axis;
-					solverbody[1]->delta_AngulaVelocity -= delta_impulse * vector3_trans(vector3_cross(rB, constraint.axis), solverbody[1]->inv_inertia);
+					solverbody[0]->delta_LinearVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_LinearVelocity, DirectX::XMVectorScale(axis, delta_impulse * solverbody[0]->inv_mass));
+					solverbody[0]->delta_AngulaVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rA, axis), solverbody[0]->inv_inertia), delta_impulse));
+					solverbody[1]->delta_LinearVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_LinearVelocity, DirectX::XMVectorScale(axis, delta_impulse * solverbody[1]->inv_mass));
+					solverbody[1]->delta_AngulaVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rB, axis), solverbody[1]->inv_inertia), delta_impulse));
 				}
 
 
 				{
 					Constraint& constraint = cp.constraint[2];
+					DirectX::XMVECTOR axis = DirectX::XMLoadFloat3(&constraint.axis);
+
 					float delta_impulse = constraint.rhs;
-					Vector3 delta_velocity[2];
-					delta_velocity[0] = solverbody[0]->delta_LinearVelocity + vector3_cross(solverbody[0]->delta_AngulaVelocity, rA);
-					delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngulaVelocity, rB);
-					delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
+					DirectX::XMVECTOR delta_velocity[2];
+					delta_velocity[0] = DirectX::XMVectorAdd(solverbody[0]->delta_LinearVelocity, DirectX::XMVector3Cross(solverbody[0]->delta_AngulaVelocity, rA));
+					delta_velocity[1] = DirectX::XMVectorAdd(solverbody[1]->delta_LinearVelocity, DirectX::XMVector3Cross(solverbody[1]->delta_AngulaVelocity, rB));
+					delta_impulse -= constraint.jacDiagInv * DirectX::XMVectorGetX(DirectX::XMVector3Dot(axis, DirectX::XMVectorSubtract(delta_velocity[0], delta_velocity[1])));
 					float old_impulse = constraint.accuminpulse;
 					constraint.accuminpulse = ALClamp(old_impulse + delta_impulse, constraint.lowerlimit, constraint.upperlimit);
 					delta_impulse = constraint.accuminpulse - old_impulse;
-					solverbody[0]->delta_LinearVelocity += delta_impulse * solverbody[0]->inv_mass * constraint.axis;
-					solverbody[0]->delta_AngulaVelocity += delta_impulse * vector3_trans(vector3_cross(rA, constraint.axis), solverbody[0]->inv_inertia);
-					solverbody[1]->delta_LinearVelocity -= delta_impulse * solverbody[1]->inv_mass * constraint.axis;
-					solverbody[1]->delta_AngulaVelocity -= delta_impulse * vector3_trans(vector3_cross(rB, constraint.axis), solverbody[1]->inv_inertia);
+					solverbody[0]->delta_LinearVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_LinearVelocity, DirectX::XMVectorScale(axis, delta_impulse * solverbody[0]->inv_mass));
+					solverbody[0]->delta_AngulaVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rA, axis), solverbody[0]->inv_inertia), delta_impulse));
+					solverbody[1]->delta_LinearVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_LinearVelocity, DirectX::XMVectorScale(axis, delta_impulse * solverbody[1]->inv_mass));
+					solverbody[1]->delta_AngulaVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rB, axis), solverbody[1]->inv_inertia), delta_impulse));
 				}
 
 
@@ -698,13 +599,21 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 
 	// 速度の更新
 	for (auto& coll : colliders) {
-		if (coll.ALPphysics->is_kinematic == true) {
-			coll.ALPphysics->linear_velocity += coll.ALPphysics->solve->delta_LinearVelocity;
-			coll.ALPphysics->anglar_velocity += coll.ALPphysics->solve->delta_AngulaVelocity;
+		if (coll.ALPphysics->is_kinmatic_linear) {
+			Vector3 linervec;
+			DirectX::XMStoreFloat3(&linervec, coll.ALPphysics->solve->delta_LinearVelocity);
+			coll.ALPphysics->linear_velocity += linervec;
 		}
+		if (coll.ALPphysics->is_kinmatic_anglar) {
+			Vector3 anglvec;
+			DirectX::XMStoreFloat3(&anglvec, coll.ALPphysics->solve->delta_AngulaVelocity);
+			coll.ALPphysics->anglar_velocity += anglvec;
+		}
+
 	}
+#endif
 
 }
-#endif
+
 #pragma endregion
 //:::::::::::::::::::::::::::

@@ -151,6 +151,8 @@ namespace Adollib {
 	//R = 1 = V2
 	Vector3 vector3_slerp(const Vector3& V1, const Vector3& V2, float R);
 
+	Vector3 vector3_zero();
+
 #pragma endregion
 	//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 

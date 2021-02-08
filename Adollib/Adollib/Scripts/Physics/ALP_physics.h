@@ -3,11 +3,14 @@
 #include "../Math/math.h"
 #include "ALP_collider.h"
 
+//SIMDを使うかどうか バグっているため使用不可
+//#define PHYICSE_USED_SIMD
+
 namespace Adollib {
 	namespace Physics_function {
 
 		struct ALP_Solverbody {
-#if 1 || _DEBUG
+#ifndef PHYICSE_USED_SIMD
 			Vector3 delta_LinearVelocity; // 並進速度差分
 			Vector3 delta_AngulaVelocity; // 回転速度差分
 			Quaternion orientation; // 姿勢
@@ -19,7 +22,7 @@ namespace Adollib {
 			DirectX::XMMATRIX inv_inertia; // 慣性テンソルの逆行列
 #endif
 			float  inv_mass = 0; // 質量の逆数
-			int num = 0;
+			//int num = 0;
 		};
 
 		class ALP_Physics {
@@ -89,7 +92,7 @@ namespace Adollib {
 			//::: 自身へのイテレータ :::
 			std::list<ALP_Physics>::iterator ALPphysics;
 
-			ALP_Solverbody* solve = nullptr; //衝突解決用
+			ALP_Solverbody* solve; //衝突解決用
 
 		public:
 			//並進移動に力を加える

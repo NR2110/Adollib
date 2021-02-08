@@ -250,6 +250,9 @@ namespace Adollib {
 		return vector3_quatrotate(V1, F);
 	}
 
+	inline Vector3 vector3_zero() {
+		return Vector3(0);
+	};
 #pragma endregion
 	//::::::::::::::::::::::::::::::::::::::::::::::::
 
