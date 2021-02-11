@@ -22,6 +22,9 @@ namespace Adollib {
 
 			ret.shape = Physics_function::ALP_Collider_shape::Sphere;
 
+			ret.tag = tag;
+			ret.nohit_tag = nohit_tag;
+
 			return ret;
 		};
 

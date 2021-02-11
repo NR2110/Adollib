@@ -52,6 +52,9 @@ namespace Adollib {
 
 			ret.shape = Physics_function::ALP_Collider_shape::Mesh;
 
+			ret.tag = tag;
+			ret.nohit_tag = nohit_tag;
+
 			Physics_function::Meshcoll_data data;
 			//data.collider_mesh = collider_mesh;
 

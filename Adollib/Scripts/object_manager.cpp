@@ -361,6 +361,8 @@ namespace Adollib
 		//Meshcoll* M = object->addComponent<Meshcoll>();
 		//M->load_mesh("./DefaultModel/cube.fbx");
 		//M->inertial_mass = 1;
+		M->tag = Collider_tags::Box;
+		M->nohit_tag = Collider_tags::Box;
 		GOs.emplace_back(object);
 		return object;
 	}

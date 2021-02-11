@@ -24,9 +24,13 @@ namespace Adollib {
 
 			Vector3 half_size;
 
+			u_int tag = 0;
+			u_int nohit_tag = 0;
+
 			Physics_function::ALP_Collider_shape shape = Physics_function::ALP_Collider_shape::None; //形情報
 
 			Meshcoll_data meshcoll_data; //meshcollider用data
+
 		};
 		struct Physics_data {
 			float inertial_mass = 0; //質量
@@ -60,7 +64,7 @@ namespace Adollib {
 	public:
 		//::: tag関係 ::::::::
 		u_int tag = 0; //自身のtag(bit)
-		u_int not_hitable_tags = 0; //衝突しないtags
+		u_int nohit_tag = 0; //衝突しないtags
 
 		//::: unityのphysics部分 分ける必要なんてないやろ ::::
 		Physics_function::Physics_data physics_data;

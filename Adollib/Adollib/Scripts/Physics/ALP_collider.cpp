@@ -47,6 +47,9 @@ void ALP_Collider::refresh_ALP_from_data() {
 	half_size = Cdata.half_size;
 	shape = Cdata.shape;
 
+	tag = Cdata.tag;
+	nohit_tag = Cdata.nohit_tag;
+
 	meshcoll_data = Cdata.meshcoll_data;
 
 	ALPphysics->refresh_ALP_from_data();

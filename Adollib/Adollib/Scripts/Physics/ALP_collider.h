@@ -59,7 +59,7 @@ namespace Adollib {
 
 			//::: tagŠÖŒW :::::::::::::
 			u_int tag = 0; //©g‚Ìtag(bit)
-			u_int not_hitable_tags = 0; //Õ“Ë‚µ‚È‚¢tags
+			u_int nohit_tag = 0; //Õ“Ë‚µ‚È‚¢tags
 
 			//:::
 			ALP_Collider_shape shape = ALP_Collider_shape::None; //Œ`î•ñ
