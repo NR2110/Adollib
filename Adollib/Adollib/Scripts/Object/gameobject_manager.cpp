@@ -372,6 +372,24 @@ Gameobject* Gameobject_manager::createCube(const std::string go_name, u_int tag,
 	Value.get()->initialize();
 	return Value.get();
 }
+
+Gameobject* Gameobject_manager::createCapsule(const std::string go_name, u_int tag, Scenelist Sce) {
+	std::shared_ptr <Gameobject> Value = std::make_shared<Gameobject>();
+	gameobjects[Sce].emplace_back(Value);
+	Value.get()->tag = tag;
+	Value.get()->name = go_name;
+
+	Value.get()->this_scene = Sce;
+	Value.get()->transform = std::make_shared<Transfome>();
+
+	Value.get()->material = std::make_shared<Material>();
+	Value.get()->material->Load_VS("./DefaultShader/default_vs.cso");
+	Value.get()->material->Load_PS("./DefaultShader/default_ps.cso");
+	ResourceManager::CreateModelFromFBX(&Value.get()->material->meshes, "./DefaultModel/cube.fbx", "");
+	++go_count;
+	Value.get()->initialize();
+	return Value.get();
+}
 //Gameobject* Gameobject_manager::createCylinder( u_int go_name) {
 
 //}

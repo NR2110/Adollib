@@ -1,7 +1,7 @@
-#define _CRTDBG_MAP_ALLOC  
+#define _CRTDBG_MAP_ALLOC
 
-#include <stdlib.h>  
-#include <crtdbg.h> 
+#include <stdlib.h>
+#include <crtdbg.h>
 
 #include <Windows.h>
 #include <tchar.h>
@@ -109,17 +109,17 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 
 	RECT rc = { 0, 0, Al_Global::SCREEN_WIDTH, Al_Global::SCREEN_HEIGHT };
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
-	HWND hwnd = 
+	HWND hwnd =
 		CreateWindow(
 			szWindowClass,
 			szWindowClass,
-			WS_OVERLAPPEDWINDOW ^ WS_MAXIMIZEBOX ^ WS_THICKFRAME | WS_VISIBLE, 
-			CW_USEDEFAULT, 
+			WS_OVERLAPPEDWINDOW ^ WS_MAXIMIZEBOX ^ WS_THICKFRAME | WS_VISIBLE,
 			CW_USEDEFAULT,
-			rc.right - rc.left, 
+			CW_USEDEFAULT,
+			rc.right - rc.left,
 			rc.bottom - rc.top,
-			NULL, NULL, 
-			instance, 
+			NULL, NULL,
+			instance,
 			NULL
 		);
 	ShowWindow(hwnd, cmd_show);

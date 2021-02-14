@@ -264,7 +264,7 @@ bool Phyisics_manager::ray_cast(
 	bool ret = false;
 
 	for (const auto& coll : ALP_colliders[Sce]) {
-		if (!(coll.tag | tag))continue;
+		if (!(coll.tag & tag))continue;
 
 		if (Physics_function::ray_cast(
 			Ray_pos, Ray_dir,

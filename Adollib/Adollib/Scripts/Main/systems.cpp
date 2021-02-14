@@ -21,10 +21,13 @@ MonoInput* Systems::inputManager = nullptr;
 //MonoAudio* Systems::audioManager = nullptr;
 //Debug* framework::debug = nullptr;
 Time* Systems::time = nullptr;
+Vector4 Systems::clear_color = Vector4(0, 0.5f, 0.5f, 1);
 
 State_manager::DStypes Systems::DS_type = State_manager::DStypes::DS_TRUE;
 State_manager::RStypes Systems::RS_type = State_manager::RStypes::RS_CULL_BACK;
 State_manager::BStypes Systems::BS_type = State_manager::BStypes::BS_ADD;
+
+#include "../Imgui/imgui_all.h"
 
 #pragma region Initialize
 
@@ -102,7 +105,7 @@ HRESULT Systems::CreateDevice(HWND hWnd)
 			}
 			continue;
 		}
-		
+
 		break;
 	}
 
@@ -653,7 +656,8 @@ void Systems::Clear(DWORD color)
 {
 
 
-	float clearColor[4] = { 0.0f, 0.5f, 0.5f, 1.0f };
+	float clearColor[4] = { clear_color.x,  clear_color.y,  clear_color.z,  clear_color.w };
+	//float clearColor[4] = { 0.5, 0.5, 1, 1.0f };
 	//for (int i = 3; i >= 0; i--) {
 	//	clearColor[i] = ((color >> 8 * (3 - i)) & 0x000000FF) / 255.0f;
 	//}

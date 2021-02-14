@@ -15,8 +15,12 @@ namespace Adollib
 		Gameobject* objGO;
 
 		std::vector<Gameobject*> GOs;
+		std::vector <Collider*> boxes;
 
 		Camera* camera;
+
+		bool is_draw_raycast = true;
+
 	public:
 		Gameobject* set_sphere(Vector3 pos, float r, Vector3 color = Vector3(1, 1, 1));
 		Gameobject* set_box(Vector3 pos, Vector3 size, Vector3 rotate, Vector3 color = Vector3(1, 1, 1));

@@ -12,6 +12,8 @@
 
 #include "../Adollib/Scripts/Imgui/debug.h"
 
+#include "../Adollib/Scripts/Main/systems.h"
+
 #include "player.h"
 
 namespace Adollib
@@ -128,11 +130,15 @@ namespace Adollib
 	void object_manager::update()
 	{
 		ImGuiWindowFlags flag = 0;
+
 		//flag |= ImGuiWindowFlags_AlwaysAutoResize;
 
 #pragma region IMGUI
 
 		if (ImGui::Begin("object_manage", 0, flag)) {
+
+			ImGui::InputFloat3(std::string("clear_color").c_str(), &Systems::clear_color[0], "%.3f"); ImGui::NextColumn();
+			ImGui::Checkbox("is_draw_raycast", &is_draw_raycast);
 
 			//object�̍폜
 			bool del = false;
@@ -141,15 +147,17 @@ namespace Adollib
 				for (auto& GO : GOs) {
 					GO->active = false;
 					GO->clearComponent();
+					boxes.clear();
 				}
 				GOs.clear();
 			}
 
-			ImGui::Columns(4, "columnListIDs");
+			ImGui::Columns(5, "columnListIDs");
 			ImGui::Separator();
 			ImGui::Text("NAME"); ImGui::NextColumn();
 			ImGui::Text("SUMMON"); ImGui::NextColumn();
 			ImGui::Text("POSITION"); ImGui::NextColumn();
+			ImGui::Text("SIZE"); ImGui::NextColumn();
 			ImGui::Text("COUNT"); ImGui::NextColumn();
 			ImGui::Separator();
 
@@ -158,17 +166,23 @@ namespace Adollib
 			{
 				static int BOX_pyramid_count = 5;
 				static float BOX_pyramid_pos[3] = { 0 };
+				static float BOX_pyramid_size[3] = { 1,1,1 };
 				bool summon = false;
 				ImGui::Separator();
 				ImGui::Text("BOX_pyramid"); ImGui::NextColumn();
 				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
 				ImGui::InputFloat3(std::to_string(imgui_num + 200).c_str(), BOX_pyramid_pos, "%.3f"); ImGui::NextColumn();
+				ImGui::InputFloat3(std::to_string(imgui_num + 250).c_str(), BOX_pyramid_size, "%.3f"); ImGui::NextColumn();
 				ImGui::InputInt(std::to_string(imgui_num + 300).c_str(), &BOX_pyramid_count, 1, 20); ImGui::NextColumn();
 
 				if (summon == true)
 					for (int i = 0; i < BOX_pyramid_count; i++) {
 						for (int o = 0; o < BOX_pyramid_count - i; o++) {
-							set_box(Vector3(2.00001f * o - (BOX_pyramid_count - i) * 2.000001f / 2.0f + BOX_pyramid_pos[0], 3.0f + 2.00001f * i + BOX_pyramid_pos[1], BOX_pyramid_pos[2]), Vector3(1, 1, 1), Vector3(0, 0, 0), Vector3(0, 1, 1));
+							set_box(Vector3(
+								BOX_pyramid_size[0] * 2.0f * 1.2f * o - (BOX_pyramid_count - i) * 2.300001f / 2.0f + BOX_pyramid_pos[0],
+								3.0f + BOX_pyramid_size[1] * 2 * i + BOX_pyramid_pos[1],
+								BOX_pyramid_pos[2]),
+								Vector3(BOX_pyramid_size[0], BOX_pyramid_size[1], BOX_pyramid_size[2]), Vector3(0, 10, 0), Vector3(0, 1, 1));
 						}
 
 					}
@@ -184,7 +198,7 @@ namespace Adollib
 				ImGui::Separator();
 				ImGui::Text("SPHERE_pyramid"); ImGui::NextColumn();
 				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
-				ImGui::InputFloat3(std::to_string(imgui_num + 200).c_str(), SPHERE_pyramid_pos, "%.3f"); ImGui::NextColumn();
+				ImGui::InputFloat3(std::to_string(imgui_num + 200).c_str(), SPHERE_pyramid_pos, "%.3f"); ImGui::NextColumn(); ImGui::NextColumn();
 				ImGui::InputInt(std::to_string(imgui_num + 300).c_str(), &SPHERE_pyramid_count, 1, 20); ImGui::NextColumn();
 
 				if (summon == true)
@@ -205,7 +219,7 @@ namespace Adollib
 				ImGui::Separator();
 				ImGui::Text("CAPSULE_pyramid"); ImGui::NextColumn();
 				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
-				ImGui::InputFloat3(std::to_string(imgui_num + 200).c_str(), CAPSULE_pyramid_pos, "%.3f"); ImGui::NextColumn();
+				ImGui::InputFloat3(std::to_string(imgui_num + 200).c_str(), CAPSULE_pyramid_pos, "%.3f"); ImGui::NextColumn(); ImGui::NextColumn();
 				ImGui::InputInt(std::to_string(imgui_num + 300).c_str(), &CAPSULE_pyramid_count, 1, 20); ImGui::NextColumn();
 
 				if (summon == true)
@@ -226,7 +240,7 @@ namespace Adollib
 				ImGui::Separator();
 				ImGui::Text("MIX_pyramid"); ImGui::NextColumn();
 				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
-				ImGui::InputFloat3(std::to_string(imgui_num + 200).c_str(), MIX_pyramid_pos, "%.3f"); ImGui::NextColumn();
+				ImGui::InputFloat3(std::to_string(imgui_num + 200).c_str(), MIX_pyramid_pos, "%.3f"); ImGui::NextColumn(); ImGui::NextColumn();
 				ImGui::InputInt(std::to_string(imgui_num + 300).c_str(), &MIX_pyramid_count, 1, 20); ImGui::NextColumn();
 
 				if (summon == true)
@@ -250,7 +264,7 @@ namespace Adollib
 				ImGui::Separator();
 				ImGui::Text("Mesh_pyramid"); ImGui::NextColumn();
 				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
-				ImGui::InputFloat3(std::to_string(imgui_num + 200).c_str(), Mesh_pyramid_pos, "%.3f"); ImGui::NextColumn();
+				ImGui::InputFloat3(std::to_string(imgui_num + 200).c_str(), Mesh_pyramid_pos, "%.3f"); ImGui::NextColumn(); ImGui::NextColumn();
 				ImGui::InputInt(std::to_string(imgui_num + 300).c_str(), &Mesh_pyramid_count, 1, 20); ImGui::NextColumn();
 
 				if (summon == true)
@@ -271,7 +285,7 @@ namespace Adollib
 				ImGui::Separator();
 				ImGui::Text("SPHERE_plane"); ImGui::NextColumn();
 				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
-				ImGui::InputFloat3(std::to_string(imgui_num + 200).c_str(), SPHERE_plane_pos, "%.3f"); ImGui::NextColumn();
+				ImGui::InputFloat3(std::to_string(imgui_num + 200).c_str(), SPHERE_plane_pos, "%.3f"); ImGui::NextColumn(); ImGui::NextColumn();
 				ImGui::InputInt(std::to_string(imgui_num + 300).c_str(), &SPHERE_plane_count, 1, 20); ImGui::NextColumn();
 
 				if (summon == true)
@@ -294,22 +308,26 @@ namespace Adollib
 
 #pragma endregion
 
-		Ray ray;
-		ray.position = camera->transform->position;
-		ray.direction = vector3_quatrotate(Vector3(0, 0, 1), camera->transform->orientation);
+		if (is_draw_raycast) {
+			Ray ray;
+			ray.position = camera->transform->position;
+			ray.direction = vector3_quatrotate(Vector3(0, 0, 1), camera->transform->orientation);
 
-		float tmin = 0, tmax = 0;
-		Vector3 nor;
-		float ray_min = 0;
-		ray.ray_cast(UINT_MAX, ray_min, tmin, tmax, nor);
+			float tmin = 0, tmax = 0;
+			Vector3 nor;
+			float ray_min = 0;
+			ray.ray_cast(UINT_MAX, ray_min, tmin, tmax, nor);
 
-		Debug::set("", nor.get_XM3());
+			Debug::set("", nor.get_XM3());
 
-		sphere_go->transform->local_pos = ray.position + tmin * ray.direction;
-		normal_go->transform->local_orient = quaternion_from_to_rotate(Vector3(0, 0, 1), nor);
-		normal_go->transform->local_pos = sphere_go->transform->local_pos + nor * (sphere_go->transform->scale.x + normal_go->transform->scale.z);
-
-
+			sphere_go->transform->local_pos = ray.position + tmin * ray.direction;
+			normal_go->transform->local_orient = quaternion_from_to_rotate(Vector3(0, 0, 1), nor);
+			normal_go->transform->local_pos = sphere_go->transform->local_pos + nor * (sphere_go->transform->scale.x + normal_go->transform->scale.z);
+		}
+		else {
+			normal_go->transform->local_pos = Vector3(10000, 10000, 10000);
+			sphere_go->transform->local_pos = Vector3(10000, 10000, 10000);
+		}
 	}
 
 
@@ -341,7 +359,9 @@ namespace Adollib
 		object->transform->local_pos = pos;
 		object->transform->local_scale = Vector3(r, r, r);
 
+
 		Collider* coll = object->addComponent<Sphere>();
+		coll->tag = Collider_tags::Sphere;
 		GOs.emplace_back(object);
 		return object;
 	}
@@ -362,8 +382,9 @@ namespace Adollib
 		//M->load_mesh("./DefaultModel/cube.fbx");
 		//M->inertial_mass = 1;
 		M->tag = Collider_tags::Box;
-		M->nohit_tag = Collider_tags::Box;
+		//M->nohit_tag = Collider_tags::Box;
 		GOs.emplace_back(object);
+		boxes.emplace_back(M);
 		return object;
 	}
 	Gameobject* object_manager::set_capsule(Vector3 pos, float r, float length, Vector3 rotate, Vector3 color) {
@@ -382,7 +403,7 @@ namespace Adollib
 		//Meshcoll* M = object->addComponent<Meshcoll>();
 		//M->load_mesh("./DefaultModel/cube.fbx");
 		//M->inertial_mass = 1;
-
+		M->tag = Collider_tags::Cylinder;
 		GOs.emplace_back(object);
 		return object;
 	}

@@ -51,6 +51,7 @@ namespace Adollib {
 	public:
 		static MonoInput* inputManager;
 		static Time* time;
+		static Vector4 clear_color;
 		//static MonoAudio* audioManager;
 		//static Debug* debug;
 
@@ -75,8 +76,8 @@ namespace Adollib {
 		static ID3D11RasterizerState* GetRasterizerState(State_manager::RStypes state)	   {	return RasterizerState[static_cast<int>(state)].Get(); 	}
 		static ID3D11BlendState* GetBlendState(State_manager::BStypes state)			   { 	return BlendState[static_cast<int>(state)].Get();			}
 
-		static void SetDephtStencilState(State_manager::DStypes state) { 
-			DeviceContext->OMSetDepthStencilState(GetDephtStencilState(state), 1); 
+		static void SetDephtStencilState(State_manager::DStypes state) {
+			DeviceContext->OMSetDepthStencilState(GetDephtStencilState(state), 1);
 			DS_type = state;
 		}
 		static void SetRasterizerState(State_manager::RStypes state) {

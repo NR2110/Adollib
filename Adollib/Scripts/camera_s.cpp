@@ -7,6 +7,8 @@
 
 #include "../Adollib/Imgui/imgui.h"
 
+#include "../Adollib/Scripts/Object/component_camera.h"
+
 namespace Adollib
 {
 	Vector3 eular_xy(Vector3 V) {
@@ -44,6 +46,8 @@ namespace Adollib
 	{
 		static float rotate_speed = 0.5f;
 		static float linear_speed = 30;
+
+		//gameobject->aspect = (float)Al_Global::SCREEN_WIDTH / Al_Global::SCREEN_HEIGHT;
 
 		ImGuiWindowFlags flag = 0;
 		//flag |= ImGuiWindowFlags_AlwaysAutoResize;

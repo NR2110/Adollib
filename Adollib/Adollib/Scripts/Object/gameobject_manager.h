@@ -90,6 +90,10 @@ namespace Adollib {
 		static Gameobject* createCube(const u_int tag = GO_tag::Box, Scenelist Sce = Scene::now_scene) {
 			return createCube(std::string("GO_" + std::to_string(go_count)), tag, Sce);
 		}
+		static Gameobject* createCapsule(const std::string go_name, const u_int = GO_tag::Box, Scenelist Sce = Scene::now_scene);
+		static Gameobject* createCapsule(const u_int tag = GO_tag::Box, Scenelist Sce = Scene::now_scene) {
+			return createCube(std::string("GO_" + std::to_string(go_count)), tag, Sce);
+		}
 		static Gameobject* createPlane(const std::string go_name, const u_int = GO_tag::Plane, Scenelist Sce = Scene::now_scene);
 		static Gameobject* createPlane(const u_int tag = GO_tag::Plane, Scenelist Sce = Scene::now_scene) {
 			return createPlane(std::string("GO_" + std::to_string(go_count)), tag, Sce);
