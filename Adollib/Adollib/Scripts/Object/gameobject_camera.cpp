@@ -1,9 +1,12 @@
 #include "gameobject_camera.h"
+#include "../Main/Adollib.h"
 
 #include "../Imgui/imgui_all.h"
 namespace Adollib {
 
 	void Camera::initialize() {
+
+		aspect = (float)Al_Global::SCREEN_WIDTH / Al_Global::SCREEN_HEIGHT;
 
 		std::list <std::shared_ptr<Component_camera>>::iterator itr = components.begin();
 		std::list <std::shared_ptr<Component_camera>>::iterator itr_end = components.end();

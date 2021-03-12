@@ -138,6 +138,8 @@ namespace Adollib {
 			Vector3& closest_p
 		);
 
+	//	void gt_closestP_plane_OBB();
+
 
 
 

@@ -191,7 +191,7 @@ void Collider_renderer::render_sphere(const Physics_function::ALP_Collider& R) {
 
 }
 void Collider_renderer::render_meshcoll(const Physics_function::ALP_Collider& R) {
-	render_AABB(R);
+//	render_AABB(R);
 
 	//CB : ConstantBufferPerCO_OBJ
 	ConstantBufferPerGO g_cb;
@@ -521,7 +521,7 @@ void Collider_renderer::render_AABB(const Physics_function::ALP_Collider& coll) 
 
 		if (Systems::RS_type != State_manager::RStypes::RS_CULL_BACK) Systems::SetRasterizerState(State_manager::RStypes::RS_CULL_BACK);
 //Debug::’¸“_‚Ì•\Ž¦
-#if 1
+#if 0
 		{
 			const std::vector<Mesh::mesh>* sphere_mesh = meshes[ALP_Collider_shape::Sphere];
 
