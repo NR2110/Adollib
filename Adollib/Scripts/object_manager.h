@@ -12,8 +12,6 @@ namespace Adollib
 		Gameobject* sphere_go;
 		Gameobject* normal_go;
 
-		Gameobject* objGO;
-
 		std::vector<Gameobject*> GOs;
 		std::vector <Collider*> boxes;
 

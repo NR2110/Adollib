@@ -16,7 +16,7 @@ using namespace Physics_function;
 using namespace Contacts;
 
 //ContactPoint‚Ì•\¦
-//#define Draw_Contact
+#define Draw_Contact
 
 //Addforce‚Ì‰e‹¿‚ª1frame’x‚ê‚é‚ªVelocity‚É‘¬“x§ŒÀ‚ğ‚Â‚¯‚é‚±‚Æ‚ª‚Å‚«‚é
 #define Allow_delay

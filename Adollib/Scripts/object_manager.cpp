@@ -39,9 +39,22 @@ namespace Adollib
 		}
 
 #if 1
-		if (0) {
+		enum class Stage_types {
+
+			Cube,
+			Sphere,
+			Capsule,
+			Mesh_Cube,
+			Shaclo,
+			Teach
+		};
+
+		Stage_types stage_type = Stage_types::Mesh_Cube;
+		Gameobject* GO = nullptr;
+
+		if (stage_type == Stage_types::Cube) {
 			{
-				Gameobject* GO = Gameobject_manager::createCube("stage");
+				GO = Gameobject_manager::createCube("stage");
 				GO->transform->local_pos = Vector3(0, -60, 0);
 				GO->transform->local_scale = Vector3(60, 60, 60);
 				//GO->transform->local_orient = quaternion_from_euler(0, 45, 0);
@@ -55,28 +68,27 @@ namespace Adollib
 			}
 
 		}
-		else if (1) {
+		if (stage_type == Stage_types::Mesh_Cube) {
 			{
-				objGO = Gameobject_manager::createFromFBX("../Data/FBX/stage_col.fbx");
-				//objGO = Gameobject_manager::create();
-				//objGO = Gameobject_manager::createFromFBX("../Adollib/DefaultModel/cylinder.fbx");
-				objGO->transform->local_pos = Vector3(-10, 0, -25);
-				//objGO->transform->local_scale = Vector3(0.01f, 0.02f, 0.03f);
-				objGO->transform->local_scale = Vector3(1, 1, 1);
-				//objGO->transform->local_orient = quaternion_from_euler(45, 45, 45);
-				objGO->transform->local_orient = quaternion_from_euler(0, 0, 0);
-				Meshcoll* R = objGO->addComponent<Meshcoll>();
-				R->load_mesh("../Data/FBX/stage_col.fbx",false);
-				//R->load_mesh("../Adollib/DefaultModel/cylinder.fbx");
+			//C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultModel
+				GO = Gameobject_manager::createFromFBX("../Adollib/DefaultModel/cube.fbx");
+				GO->transform->local_pos = Vector3(0, -60, 0);
+				GO->transform->local_scale = Vector3(60, 60, 60);
+				//GO->transform->local_orient = quaternion_from_euler(0, 45, 0);
+				GO->material->color = Vector4(1, 1, 1, 1);
+
+				Meshcoll* R = GO->addComponent<Meshcoll>();
+				R->load_mesh("../Adollib/DefaultModel/cube.fbx");
+				//Meshcoll* R = GO->addComponent<Meshcoll>();
+				//R->load_mesh("./DefaultModel/cube.fbx");
 				R->physics_data.is_moveable = false;
 				R->is_static = true;
-
 			}
 
 		}
-		else if (0) {
+		else if (stage_type == Stage_types::Sphere) {
 			{
-				Gameobject* GO = Gameobject_manager::createSphere("stage");
+				GO = Gameobject_manager::createSphere("stage");
 				GO->transform->local_pos = Vector3(0, -6000, 0);
 				GO->transform->local_scale = Vector3(6000, 6000, 6000);
 				GO->material->color = Vector4(1, 1, 1, 1);
@@ -88,17 +100,52 @@ namespace Adollib
 			}
 
 		}
-		else if (1) {
+		else if (stage_type == Stage_types::Capsule) {
 			{
-				objGO = Gameobject_manager::createFromFBX("../Data/FBX/0311_collisions.fbx");
+				GO = Gameobject_manager::createCapsule("stage");
+				GO->transform->local_pos = Vector3(0, -6000, 0);
+				GO->transform->local_scale = Vector3(6000, 6000, 6000);
+				GO->material->color = Vector4(1, 1, 1, 1);
+				Sphere* R = GO->addComponent<Sphere>();
+				//R->center = Vector3(1, 1, 1);
+				//R->load_mesh("../Adollib/DefaultModel/sphere.fbx");
+				R->physics_data.is_moveable = false;
+
+			}
+
+		}
+		else if (stage_type == Stage_types::Shaclo) {
+			{
+				//objGO = Gameobject_manager::createFromFBX("../Data/FBX/big_plane.fbx");
+				GO = Gameobject_manager::createFromFBX("../Data/FBX/stage_col.fbx");
+				//objGO = Gameobject_manager::createFromFBX("../Data/FBX/0311_collisions.fbx");
 				//objGO = Gameobject_manager::create();
 				//objGO = Gameobject_manager::createFromFBX("../Adollib/DefaultModel/cylinder.fbx");
-				objGO->transform->local_pos = Vector3(-10, 15, -25);
+				GO->transform->local_pos = Vector3(-10, 0, -25);
 				//objGO->transform->local_scale = Vector3(0.01f, 0.02f, 0.03f);
-				objGO->transform->local_scale = Vector3(0.01, 0.01, 0.01);
+				GO->transform->local_scale = Vector3(1, 1, 1);
 				//objGO->transform->local_orient = quaternion_from_euler(45, 45, 45);
-				objGO->transform->local_orient = quaternion_from_euler(0, 180, 0);
-				Meshcoll* R = objGO->addComponent<Meshcoll>();
+				GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
+				Meshcoll* R = GO->addComponent<Meshcoll>();
+				R->load_mesh("../Data/FBX/stage_col.fbx",false);
+				//R->load_mesh("../Adollib/DefaultModel/cylinder.fbx");
+				R->physics_data.is_moveable = false;
+				R->is_static = true;
+
+			}
+
+		}
+		else if (stage_type == Stage_types::Teach) {
+			{
+				GO = Gameobject_manager::createFromFBX("../Data/FBX/0311_collisions.fbx");
+				//objGO = Gameobject_manager::create();
+				//objGO = Gameobject_manager::createFromFBX("../Adollib/DefaultModel/cylinder.fbx");
+				GO->transform->local_pos = Vector3(-10, 15, -25);
+				//objGO->transform->local_scale = Vector3(0.01f, 0.02f, 0.03f);
+				GO->transform->local_scale = Vector3(0.01, 0.01, 0.01);
+				//objGO->transform->local_orient = quaternion_from_euler(45, 45, 45);
+				GO->transform->local_orient = quaternion_from_euler(0, 180, 0);
+				Meshcoll* R = GO->addComponent<Meshcoll>();
 				R->load_mesh("../Data/FBX/0311_collisions.fbx");
 				//R->load_mesh("../Adollib/DefaultModel/cylinder.fbx");
 				R->physics_data.is_moveable = false;
@@ -171,9 +218,9 @@ namespace Adollib
 				ImGui::Separator();
 				ImGui::Text("BOX_pyramid"); ImGui::NextColumn();
 				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
-				ImGui::InputFloat3(std::to_string(imgui_num + 200).c_str(), BOX_pyramid_pos, "%.3f"); ImGui::NextColumn();
-				ImGui::InputFloat3(std::to_string(imgui_num + 250).c_str(), BOX_pyramid_size, "%.3f"); ImGui::NextColumn();
-				ImGui::InputInt(std::to_string(imgui_num + 300).c_str(), &BOX_pyramid_count, 1, 20); ImGui::NextColumn();
+				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), BOX_pyramid_pos, 0.1f); ImGui::NextColumn();
+				ImGui::DragFloat3(std::to_string(imgui_num + 250).c_str(), BOX_pyramid_size, 0.1f); ImGui::NextColumn();
+				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &BOX_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
 
 				if (summon == true)
 					for (int i = 0; i < BOX_pyramid_count; i++) {
@@ -198,8 +245,8 @@ namespace Adollib
 				ImGui::Separator();
 				ImGui::Text("SPHERE_pyramid"); ImGui::NextColumn();
 				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
-				ImGui::InputFloat3(std::to_string(imgui_num + 200).c_str(), SPHERE_pyramid_pos, "%.3f"); ImGui::NextColumn(); ImGui::NextColumn();
-				ImGui::InputInt(std::to_string(imgui_num + 300).c_str(), &SPHERE_pyramid_count, 1, 20); ImGui::NextColumn();
+				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), SPHERE_pyramid_pos, 0.1f); ImGui::NextColumn(); ImGui::NextColumn();
+				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &SPHERE_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
 
 				if (summon == true)
 					for (int i = 0; i < SPHERE_pyramid_count; i++) {
@@ -219,8 +266,8 @@ namespace Adollib
 				ImGui::Separator();
 				ImGui::Text("CAPSULE_pyramid"); ImGui::NextColumn();
 				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
-				ImGui::InputFloat3(std::to_string(imgui_num + 200).c_str(), CAPSULE_pyramid_pos, "%.3f"); ImGui::NextColumn(); ImGui::NextColumn();
-				ImGui::InputInt(std::to_string(imgui_num + 300).c_str(), &CAPSULE_pyramid_count, 1, 20); ImGui::NextColumn();
+				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), CAPSULE_pyramid_pos, 0.1f); ImGui::NextColumn(); ImGui::NextColumn();
+				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &CAPSULE_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
 
 				if (summon == true)
 					for (int i = 0; i < CAPSULE_pyramid_count; i++) {
@@ -240,8 +287,8 @@ namespace Adollib
 				ImGui::Separator();
 				ImGui::Text("MIX_pyramid"); ImGui::NextColumn();
 				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
-				ImGui::InputFloat3(std::to_string(imgui_num + 200).c_str(), MIX_pyramid_pos, "%.3f"); ImGui::NextColumn(); ImGui::NextColumn();
-				ImGui::InputInt(std::to_string(imgui_num + 300).c_str(), &MIX_pyramid_count, 1, 20); ImGui::NextColumn();
+				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), MIX_pyramid_pos, 0.1f); ImGui::NextColumn(); ImGui::NextColumn();
+				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &MIX_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
 
 				if (summon == true)
 					for (int i = 0; i < MIX_pyramid_count; i++) {
@@ -264,8 +311,8 @@ namespace Adollib
 				ImGui::Separator();
 				ImGui::Text("Mesh_pyramid"); ImGui::NextColumn();
 				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
-				ImGui::InputFloat3(std::to_string(imgui_num + 200).c_str(), Mesh_pyramid_pos, "%.3f"); ImGui::NextColumn(); ImGui::NextColumn();
-				ImGui::InputInt(std::to_string(imgui_num + 300).c_str(), &Mesh_pyramid_count, 1, 20); ImGui::NextColumn();
+				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), Mesh_pyramid_pos, 0.1f); ImGui::NextColumn(); ImGui::NextColumn();
+				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &Mesh_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
 
 				if (summon == true)
 					for (int i = 0; i < Mesh_pyramid_count; i++) {
@@ -285,8 +332,8 @@ namespace Adollib
 				ImGui::Separator();
 				ImGui::Text("SPHERE_plane"); ImGui::NextColumn();
 				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
-				ImGui::InputFloat3(std::to_string(imgui_num + 200).c_str(), SPHERE_plane_pos, "%.3f"); ImGui::NextColumn(); ImGui::NextColumn();
-				ImGui::InputInt(std::to_string(imgui_num + 300).c_str(), &SPHERE_plane_count, 1, 20); ImGui::NextColumn();
+				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), SPHERE_plane_pos, 0.1f); ImGui::NextColumn(); ImGui::NextColumn();
+				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &SPHERE_plane_count, 1, 1, 100000); ImGui::NextColumn();
 
 				if (summon == true)
 					for (int i = 0; i < SPHERE_plane_count; i++) {

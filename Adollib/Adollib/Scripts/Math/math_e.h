@@ -13,7 +13,10 @@ namespace Adollib {
 	}
 
 #define ALmax(a,b) (a>b?a:b)
+#define ALmax3(a,b,c) (ALmax(ALmax(a,b),c))
 #define ALmin(a,b) (a<b?a:b)
+#define ALmin3(a,b,c) (ALmin(ALmin(a,b),c))
+
 #define ALClamp(a,min_,max_) (ALmin(ALmax(a,min_),max_))
 #define ALCover(a,b,c) (((a - b) * (c - b)) < 0)
 #define ALEasing(start,goal,speed,delta_time) goal + (start - goal) * pow(1 - speed, delta_time * 60)

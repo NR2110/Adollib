@@ -29,6 +29,8 @@ void ALP_Collider::resolve_gameobject() {
 }
 
 void ALP_Collider::update_world_trans() {
+	old_world_position_ = world_position_;
+
 	world_orientation_ = (*coll_itr)->gameobject->get_world_orientate() * local_orientation;
 	world_scale_ = (*coll_itr)->gameobject->get_world_scale() * local_scale;
 	world_position_ = (*coll_itr)->gameobject->get_world_position() + vector3_quatrotate(local_position * (*coll_itr)->gameobject->get_world_scale(), world_orientation());
