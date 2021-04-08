@@ -65,6 +65,8 @@ void ALP_Collider::refresh_ALP_from_data() {
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 void ALP_Collider::update_dop14() {
 
+	collider_meshes[0].dop14.max[2];
+
 	switch (shape)
 	{
 	case ALP_Collider_shape::Sphere:
@@ -74,6 +76,7 @@ void ALP_Collider::update_dop14() {
 	case ALP_Collider_shape::BOX:
 		ALP_Collider::update_dop14_as_box();
 
+		break;
 	case ALP_Collider_shape::Capsule:
 		ALP_Collider::update_dop14_as_capsule();
 
