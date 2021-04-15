@@ -17,6 +17,7 @@ namespace Adollib
 	private:
 		virtual void update() = 0;
 	public:
+		bool is_hierarchy = true;
 		bool active = true; //falseなら更新、描画を止める
 		std::shared_ptr<Transfome> transform; //不本意なtransform
 

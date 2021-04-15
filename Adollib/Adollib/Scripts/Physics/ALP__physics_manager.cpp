@@ -172,6 +172,8 @@ bool Phyisics_manager::update(Scenelist Sce)
 			debug_go[i]->transform->local_scale = Vector3(1) * 0.3f;
 			if (i % 2 == 0)debug_go[i]->material->color = Vector4(1, 0.5f, 0.5f, 1);
 			else debug_go[i]->material->color = Vector4(0.5f, 1, 0.5f, 1);
+
+			debug_go[i]->is_hierarchy = false;
 		}
 		init = false;
 	}

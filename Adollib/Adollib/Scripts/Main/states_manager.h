@@ -6,36 +6,36 @@ namespace Adollib {
 
 	public:
 		//DepthStencilState
-		enum class DStypes { 
+		enum class DStypes {
 			DS_FALSE,
-			DS_TRUE 
+			DS_TRUE
 		};
 
 		//RasterizerState
-		enum class RStypes { 
+		enum class RStypes {
 			RS_CULL_BACK,
-			RS_WIRE, 
+			RS_WIRE,
 			RS_CULL_FRONT,
-			RS_CULL_NONE, 
-			RS_SIZE 
+			RS_CULL_NONE,
+			RS_SIZE
 		};
 		////RasterizerState
-		//static enum class RStypes { 
+		//static enum class RStypes {
 		//	RS_CULL_NONE,
 		//	RS_CULL_BACK,
 		//	RS_CULL_FRONT,
 		//	RS_WIRE_NONE,
 		//	RS_WIRE_BACK,
 		//	RS_WIRE_FRONT,
-		//	RS_SIZE 
+		//	RS_SIZE
 		//};
 
 		//BlendState
-		enum class BStypes { 
+		enum class BStypes {
 			BS_NONE,  //ñ≥
 			BS_ALPHA, //èÊéZ
 			BS_ADD,   //
-			BS_SUBTRACT,// 
+			BS_SUBTRACT,//
 			BS_REPLACE, //
 			BS_MULTIPLY, //
 			BS_LIGHTEN, //

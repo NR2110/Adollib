@@ -13,6 +13,8 @@ void Hierarchy::update_hierarchy(std::vector<object*>& masters) {
 		//e‚©‚çŽq‚ÖHierarchy‚Ìupdate‚ðŒÄ‚Ô
 		int ID = 0;
 		for (auto& obj : masters) {
+			if (obj->is_hierarchy == false)continue;
+
 			ImGui::PushID(ID);
 			obj->update_imgui_P_to_C();
 			ImGui::PopID();
