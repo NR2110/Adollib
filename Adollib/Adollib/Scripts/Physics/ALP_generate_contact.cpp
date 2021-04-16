@@ -333,7 +333,7 @@ bool sat_obb_Triangle(
 		}
 
 		{
-			axis = triangle_world_normal;
+			axis = -triangle_world_normal;
 			ra = fabsf(sum_of_projected_radii(obb, axis));
 			//fabsf(vector3_dot(axis, triangle.vertex_position[0])); //もし裏からの衝突を検知しないのであればここを変える
 
@@ -343,7 +343,7 @@ bool sat_obb_Triangle(
 			const float off = vector3_dot(axis, offset_tri_obb);
 
 			penetration = FLT_MAX;
-			//penetration = ALmin(penetration, ra - (trimin + off)); //裏からの衝突は検知しない
+			penetration = ALmin(penetration, ra - (trimin + off)); //裏からの衝突は検知しない
 			penetration = ALmin(penetration, (trimax + off) - (-ra));
 
 			if (PA_FB.penetrate > penetration) {
@@ -383,7 +383,7 @@ bool sat_obb_Triangle(
 			axis = axis.unit_vect();
 			if (axis.norm() < 1) axis *= (1 + FLT_EPSILON);
 
-			if (vector3_dot(axis, triangle.world_normal) < 0)axis *= -1; //meshの裏からは衝突しない
+			//if (vector3_dot(axis, triangle.world_normal) < 0)axis *= -1; //meshの裏からは衝突しない
 
 			//Vector3 obb_vertex_pos;
 			//if (vector3_dot(triangle.world_vertex_position[OB2],axis) < vector3_dot(obb.))
@@ -422,11 +422,7 @@ bool sat_obb_Triangle(
 				ra = fabsf(sum_of_projected_radii(obb, axis));
 
 				//triangleの軸方向の各長さ
-				//float trimin, trimax;
 				sum_of_projected_radii(triangle, axis, trimin, trimax);
-
-				//距離の軸方向への長さ
-				//const float off = vector3_dot(axis, offset_tri_obb);
 
 				//軸に投影した貫通量を求める
 				penetration = FLT_MAX;
@@ -1272,7 +1268,7 @@ bool Physics_function::generate_contact_box_box(const ALP_Collider_mesh* bA, con
 	//obbBの頂点がobbAの面と衝突した場合
 	if (smallest_case == SAT_TYPE::POINTB_FACETA)
 	{
-		Vector3 d = obbB.world_position - obbA.world_position;	//obbAからobbBへの相対位置
+		Vector3 d =  obbA.world_position - obbB.world_position;	//BからA方向
 		Vector3 Wn = obbA.u_axes[smallest_axis[0]];	//obbAの衝突面の法線と平行のobbAのローカル軸ベクトル
 		if (vector3_dot(Wn, d) < 0)	//obbAとobbBの位置関係より衝突面の法線ベクトルを決定する
 		{
@@ -1283,9 +1279,9 @@ bool Physics_function::generate_contact_box_box(const ALP_Collider_mesh* bA, con
 		//boxBのローカル座標系での最近点(p1) obb1の8頂点のうちのどれか
 		Vector3 p1 = obbB.half_width;	//obb1の各辺の長さは、obb1の重心から接触点(p)への相対位置の手がかりになる
 		//obb0とobb1の位置関係(d)より接触点(p)を求める
-		if (vector3_dot(obbB.u_axes[0], +Wn) > 0) p1.x = -p1.x;
-		if (vector3_dot(obbB.u_axes[1], +Wn) > 0) p1.y = -p1.y;
-		if (vector3_dot(obbB.u_axes[2], +Wn) > 0) p1.z = -p1.z;
+		if (vector3_dot(obbB.u_axes[0], -Wn) > 0) p1.x = -p1.x;
+		if (vector3_dot(obbB.u_axes[1], -Wn) > 0) p1.y = -p1.y;
+		if (vector3_dot(obbB.u_axes[2], -Wn) > 0) p1.z = -p1.z;
 
 		//boxAの逆行列の作成
 		Matrix rotate, inverse_rotate;
@@ -1312,18 +1308,20 @@ bool Physics_function::generate_contact_box_box(const ALP_Collider_mesh* bA, con
 		if (c.z > +box_halfsize.z)p0.z = +box_halfsize.z;
 		if (c.z < -box_halfsize.z)p0.z = -box_halfsize.z;
 
+		p0 += vector3_quatrotate(-Wn, boxA->world_orientation().inverse()) * smallest_penetration;
+
 		is_AC = true;
 		ACpenetration = smallest_penetration;
-		ACnormal = -Wn;
+		ACnormal = Wn;
 		ACcontact_pointA = p0;
 		ACcontact_pointB = p1;
 	}
 	//obbAの頂点がobbBの面と衝突した場合
 	else if (smallest_case == SAT_TYPE::POINTA_FACETB)
 	{
-		Vector3 d = obbB.world_position - obbA.world_position;
+		Vector3 d =  obbA.world_position - obbB.world_position; //BからA方向
 		Vector3 Wn = obbB.u_axes[smallest_axis[1]];
-		if (vector3_dot(Wn, d) < 0)
+		if (vector3_dot(Wn, d) < 0) //BからA方向でなければ-1をかける
 		{
 			Wn = Wn * -1.0f;
 		}
@@ -1331,9 +1329,9 @@ bool Physics_function::generate_contact_box_box(const ALP_Collider_mesh* bA, con
 
 		Vector3 p0 = obbA.half_width;
 		//obb0とobb1の位置関係(d)より接触点(p)を求める
-		if (vector3_dot(obbA.u_axes[0], -Wn) > 0) p0.x = -p0.x;
-		if (vector3_dot(obbA.u_axes[1], -Wn) > 0) p0.y = -p0.y;
-		if (vector3_dot(obbA.u_axes[2], -Wn) > 0) p0.z = -p0.z;
+		if (vector3_dot(obbA.u_axes[0], Wn) > 0) p0.x = -p0.x;
+		if (vector3_dot(obbA.u_axes[1], Wn) > 0) p0.y = -p0.y;
+		if (vector3_dot(obbA.u_axes[2], Wn) > 0) p0.z = -p0.z;
 
 		//box0の逆行列の作成
 		Matrix rotate, inverse_rotate;
@@ -1360,9 +1358,11 @@ bool Physics_function::generate_contact_box_box(const ALP_Collider_mesh* bA, con
 		if (c.z > +box_halfsize.z)p1.z = +box_halfsize.z;
 		if (c.z < -box_halfsize.z)p1.z = -box_halfsize.z;
 
+		p1 += vector3_quatrotate(Wn, boxB->world_orientation().inverse()) * smallest_penetration;
+
 		is_AC = true;
 		ACpenetration = smallest_penetration;
-		ACnormal = -Wn;
+		ACnormal = Wn;
 		ACcontact_pointA = p0;
 		ACcontact_pointB = p1;
 	}
@@ -1719,13 +1719,8 @@ bool Physics_function::generate_contact_box_mesh(const ALP_Collider_mesh* box_me
 			else if (smallest_case == SAT_TYPE::POINTA_FACETB)
 			{
 				Vector3 Wn;
-				if (smallest_axis[1] == 3)Wn = vector3_quatrotate(smallest_triangle.normal, smallest_triangle.world_orientation);
+				if (smallest_axis[1] == 3)Wn = vector3_quatrotate(smallest_triangle.normal, smallest_triangle.world_orientation); //meshからboxに向けての法線(BからA)
 				else Wn = vector3_quatrotate(vector3_cross(smallest_triangle.vertex_position[smallest_axis[1]], smallest_triangle.vertex_position[(smallest_axis[1] + 1) % 3]), smallest_triangle.world_orientation);
-				//Vector3 Wn = obbB.u_axes[smallest_axis[1]];
-				//if (vector3_dot(Wn, d) < 0)
-				//{
-				//	Wn = Wn * -1.0f;
-				//}
 				Wn = Wn.unit_vect();
 
 				Vector3 p0 = obb.half_width;
@@ -1735,31 +1730,35 @@ bool Physics_function::generate_contact_box_mesh(const ALP_Collider_mesh* box_me
 				if (vector3_dot(obb.u_axes[2], Wn) > 0) p0.z = -p0.z;
 
 				//boxBの逆行列の作成
-				Matrix rotate, inverse_rotate;
-				rotate = matrix_world(mesh->world_scale(), mesh->world_orientation().get_rotate_matrix(), mesh->world_position());
-				//rotate = mesh->world_orientation().get_rotate_matrix();
-				//rotate._41 = mesh->world_position().x; //transpseの入力
-				//rotate._42 = mesh->world_position().y;
-				//rotate._43 = mesh->world_position().z;
-				//rotate._44 = 1;
-				inverse_rotate = matrix_inverse(rotate);
+				//Matrix rotate, inverse_rotate;
+				//rotate = matrix_world(mesh->world_scale(), mesh->world_orientation().get_rotate_matrix(), mesh->world_position());
+				//inverse_rotate = matrix_inverse(rotate);
 
 				//p0をobbBのローカル座標系へ
-				Vector3 P = vector3_quatrotate(p0, box->world_orientation()) + box->world_position();
-				Vector3 c = vector3_trans(P, inverse_rotate);
+				Vector3 WP = vector3_quatrotate(p0, box->world_orientation()) + box->world_position();
+				Vector3 c = vector3_quatrotate(WP - mesh->world_position(), mesh->world_orientation().inverse());
 
 				//obbBの最近点を求める
 				Vector3 p1;
-				Closest_func::get_closestP_point_triangle(
-					c,
-					smallest_triangle.vertex_position[0],
-					smallest_triangle.vertex_position[1],
-					smallest_triangle.vertex_position[2],
-					smallest_triangle.normal,
-					p1
-				);
+				if (1) {
+					//meshと点の最近点を求める方法
+					c /= mesh->world_scale();
+					Closest_func::get_closestP_point_triangle(
+						c,
+						smallest_triangle.vertex_position[0],
+						smallest_triangle.vertex_position[1],
+						smallest_triangle.vertex_position[2],
+						smallest_triangle.normal,
+						p1
+					);
 
-				p1 *= mesh->world_scale();
+					p1 *= mesh->world_scale();
+				}
+				else {
+					//法線とめり込み量から求める方法 //こっちのほうが圧倒的に早い けど少し不正確
+					p1 = c;
+					p1 += Wn * smallest_penetration;
+				}
 
 				is_AC = true;
 				ACpenetration = smallest_penetration;
@@ -1817,6 +1816,7 @@ bool Physics_function::generate_contact_box_mesh(const ALP_Collider_mesh* box_me
 				ACcontact_pointA = p[0] + s * b_axis[smallest_axis[0]];
 				ACcontact_pointB = (p[1] + t * triangle_edge_dir) * smallest_triangle.world_scale;
 			}
+
 			else assert(0);
 		}
 
@@ -1830,7 +1830,7 @@ bool Physics_function::generate_contact_box_mesh(const ALP_Collider_mesh* box_me
 			if (pair.check_oncoll_only == true) return false;
 
 			pair.contacts.addcontact(
-				-ACpenetration,
+				ACpenetration,
 				ACnormal,
 				ACcontact_pointA,
 				ACcontact_pointB
