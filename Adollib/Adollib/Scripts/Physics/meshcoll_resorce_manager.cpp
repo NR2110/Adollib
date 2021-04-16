@@ -162,9 +162,9 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 						F.normal = F.normal.unit_vect();
 					}
 					else {
-						F.vertexID[0] = indices.at(i * 3 + 0);
+						F.vertexID[2] = indices.at(i * 3 + 0);
 						F.vertexID[1] = indices.at(i * 3 + 1);
-						F.vertexID[2] = indices.at(i * 3 + 2);
+						F.vertexID[0] = indices.at(i * 3 + 2);
 						F.normal = vector3_cross(vertices[F.vertexID[1]] - vertices[F.vertexID[0]], vertices[F.vertexID[2]] - vertices[F.vertexID[0]]);
 						F.normal = F.normal.unit_vect();
 					}
@@ -176,7 +176,7 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 			//ƒGƒbƒWî•ñ‚Ì•Û‘¶
 			{
 				edge_num = 0;
-				std::unordered_map<int,int> edgeID_Table;
+				std::unordered_map<int, int> edgeID_Table;
 
 				Physics_function::Edge E;
 				for (u_int i = 0; i < facet_num; i++) {
@@ -185,7 +185,15 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 					for (int o = 0; o < 3; o++) {
 						u_int vertId0 = ALmin(facet.vertexID[o % 3], facet.vertexID[(o + 1) % 3]);
 						u_int vertId1 = ALmax(facet.vertexID[o % 3], facet.vertexID[(o + 1) % 3]);
-						int tableId = (int)((int)vertId1 * ((int)vertId1 - 1) / (float)2 + (int)vertId0);
+
+	/*					int intId0 = (int)vertId0;
+						int intId1 = (int)vertId1;*/
+
+						double b = vertId1 * vertId1 - vertId1;
+
+						////int tableId = (vertId1 * vertId1 - vertId1) * 0.5f + vertId0;
+						//float tableId_ = (intId1 * (intId1 - 1)) * 0.5f + intId0;
+						int tableId = (int)(b * 0.5 + vertId0);
 
 						if (edgeID_Table.count(tableId) == 0) {
 							// ‰‰ñŽž‚Í“o˜^‚Ì‚Ý
@@ -226,6 +234,8 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 							}
 
 							edge.facetID[1] = i;
+
+							facet.edgeID[o] = edgeID_Table[tableId];
 						}
 
 					}
@@ -306,7 +316,7 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 		//}
 
 		{
-			for (int x_ = 0; x_ < 2; x_ ++) {
+			for (int x_ = 0; x_ < 2; x_++) {
 				float x_dis = (x_ == 0 ? dopbase.max[0] : dopbase.min[0]);
 
 				for (int y_ = 0; y_ < 2; y_++) {

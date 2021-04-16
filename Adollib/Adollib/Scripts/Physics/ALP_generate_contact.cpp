@@ -297,8 +297,8 @@ bool sat_obb_Triangle(
 		{
 			//辺と法線の外積で分離軸を行う
 			axis = vector3_cross(triangle_world_normal, (triangle.world_vertex_position[i] - triangle.world_vertex_position[(i + 1) % 3]).unit_vect());
-
-			//axis = vector3_cross(triangle.normal, (triangle.vertex_position[i] - triangle.vertex_position[(i + 1) % 3]).unit_vect());
+			if (vector3_dot(axis, triangle.world_position) > vector3_dot(axis, triangle.world_vertex_position[i]))
+				axis *= -1;
 
 			if (vector3_dot(axis, triangle.world_vertex_position[i]) > vector3_dot(axis, triangle.world_vertex_position[(i + 2) % 3])) axis *= -1; //axisはtriangle辺から中心に向けて
 
@@ -333,7 +333,7 @@ bool sat_obb_Triangle(
 		}
 
 		{
-			axis = -triangle_world_normal;
+			axis = triangle_world_normal;
 			ra = fabsf(sum_of_projected_radii(obb, axis));
 			//fabsf(vector3_dot(axis, triangle.vertex_position[0])); //もし裏からの衝突を検知しないのであればここを変える
 
@@ -343,8 +343,10 @@ bool sat_obb_Triangle(
 			const float off = vector3_dot(axis, offset_tri_obb);
 
 			penetration = FLT_MAX;
-			penetration = ALmin(penetration, ra - (trimin + off)); //裏からの衝突は検知しない
+			//penetration = ALmin(penetration, ra - (trimin + off)); //裏からの衝突は検知しない
 			penetration = ALmin(penetration, (trimax + off) - (-ra));
+
+			if (penetration < 0) return false; //分離している
 
 			if (PA_FB.penetrate > penetration) {
 
@@ -373,7 +375,6 @@ bool sat_obb_Triangle(
 	//::: 外積の軸に投影 Waxis
 	for (int OB1 = 0; OB1 < 3; OB1++) {
 		for (int OB2 = 0; OB2 < 3; OB2++) {
-
 			if (mesh->edges[triangle.Edge_num[OB2]].type == Edgetype::EdgeConcave) break; //へこみのEdgeは判定しない
 			if (mesh->edges[triangle.Edge_num[OB2]].type == Edgetype::EdgeFlat) break; //平面のEdgeは判定しない
 
@@ -383,7 +384,9 @@ bool sat_obb_Triangle(
 			axis = axis.unit_vect();
 			if (axis.norm() < 1) axis *= (1 + FLT_EPSILON);
 
-			//if (vector3_dot(axis, triangle.world_normal) < 0)axis *= -1; //meshの裏からは衝突しない
+			if (vector3_dot(axis, triangle.world_normal) < 0)axis *= -1; //meshの裏からは衝突しない
+
+
 
 			//Vector3 obb_vertex_pos;
 			//if (vector3_dot(triangle.world_vertex_position[OB2],axis) < vector3_dot(obb.))
@@ -426,7 +429,7 @@ bool sat_obb_Triangle(
 
 				//軸に投影した貫通量を求める
 				penetration = FLT_MAX;
-				penetration = ALmin(penetration, ra - (trimin + off));
+				//penetration = ALmin(penetration, ra - (trimin + off));
 				penetration = ALmin(penetration, (trimax + off) - (-ra));
 
 				if (penetration < 0) return false; //分離してる
@@ -1729,18 +1732,13 @@ bool Physics_function::generate_contact_box_mesh(const ALP_Collider_mesh* box_me
 				if (vector3_dot(obb.u_axes[1], Wn) > 0) p0.y = -p0.y;
 				if (vector3_dot(obb.u_axes[2], Wn) > 0) p0.z = -p0.z;
 
-				//boxBの逆行列の作成
-				//Matrix rotate, inverse_rotate;
-				//rotate = matrix_world(mesh->world_scale(), mesh->world_orientation().get_rotate_matrix(), mesh->world_position());
-				//inverse_rotate = matrix_inverse(rotate);
-
 				//p0をobbBのローカル座標系へ
 				Vector3 WP = vector3_quatrotate(p0, box->world_orientation()) + box->world_position();
 				Vector3 c = vector3_quatrotate(WP - mesh->world_position(), mesh->world_orientation().inverse());
 
 				//obbBの最近点を求める
 				Vector3 p1;
-				if (1) {
+				if (0) {
 					//meshと点の最近点を求める方法
 					c /= mesh->world_scale();
 					Closest_func::get_closestP_point_triangle(
@@ -1776,7 +1774,7 @@ bool Physics_function::generate_contact_box_mesh(const ALP_Collider_mesh* box_me
 
 				Vector3 Wn;
 				Wn = vector3_cross(obb.u_axes[smallest_axis[0]], world_triangle_edge_dir);
-				if (vector3_dot(Wn, (box->world_position() - mesh->world_position())) > 0)	//meshの前の位置を考慮して 押し出すように
+				if (vector3_dot(Wn, (box->world_position() - mesh->world_position())) < 0)	//meshの前の位置を考慮して 押し出すように
 				{
 					Wn = Wn * -1.0f;
 				}
@@ -1784,11 +1782,9 @@ bool Physics_function::generate_contact_box_mesh(const ALP_Collider_mesh* box_me
 
 				Vector3 p[2] = { obb.half_width ,smallest_triangle.vertex_position[smallest_axis[1]] };
 				{
-					if (vector3_dot(obb.u_axes[0], -Wn) > 0) p[0].x = -p[0].x;
-					if (vector3_dot(obb.u_axes[1], -Wn) > 0) p[0].y = -p[0].y;
-					if (vector3_dot(obb.u_axes[2], -Wn) > 0) p[0].z = -p[0].z;
-
-
+					if (vector3_dot(obb.u_axes[0], Wn) > 0) p[0].x = -p[0].x;
+					if (vector3_dot(obb.u_axes[1], Wn) > 0) p[0].y = -p[0].y;
+					if (vector3_dot(obb.u_axes[2], Wn) > 0) p[0].z = -p[0].z;
 				}
 
 				//world座標系でedgeとedgeの最近点を求める
@@ -1812,7 +1808,7 @@ bool Physics_function::generate_contact_box_mesh(const ALP_Collider_mesh* box_me
 
 				is_AC = true;
 				ACpenetration = smallest_penetration;
-				ACnormal = -Wn;
+				ACnormal = Wn;
 				ACcontact_pointA = p[0] + s * b_axis[smallest_axis[0]];
 				ACcontact_pointB = (p[1] + t * triangle_edge_dir) * smallest_triangle.world_scale;
 			}

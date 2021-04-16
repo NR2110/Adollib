@@ -49,7 +49,7 @@ namespace Adollib
 			Teach
 		};
 
-		Stage_types stage_type = Stage_types::Mesh_Cube;
+		Stage_types stage_type = Stage_types::Teach;
 		Gameobject* GO = nullptr;
 
 		if (stage_type == Stage_types::Cube) {
@@ -78,7 +78,7 @@ namespace Adollib
 				GO->material->color = Vector4(1, 1, 1, 1);
 
 				Meshcoll* R = GO->addComponent<Meshcoll>();
-				R->load_mesh("../Adollib/DefaultModel/cube.fbx");
+				R->load_mesh("../Adollib/DefaultModel/cube.fbx",true);
 				//Meshcoll* R = GO->addComponent<Meshcoll>();
 				//R->load_mesh("./DefaultModel/cube.fbx");
 				R->physics_data.is_moveable = false;
@@ -127,7 +127,7 @@ namespace Adollib
 				//objGO->transform->local_orient = quaternion_from_euler(45, 45, 45);
 				GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
 				Meshcoll* R = GO->addComponent<Meshcoll>();
-				R->load_mesh("../Data/FBX/stage_col.fbx",false);
+				R->load_mesh("../Data/FBX/stage_col.fbx",true);
 				//R->load_mesh("../Adollib/DefaultModel/cylinder.fbx");
 				R->physics_data.is_moveable = false;
 				R->is_static = true;
@@ -146,7 +146,7 @@ namespace Adollib
 				//objGO->transform->local_orient = quaternion_from_euler(45, 45, 45);
 				GO->transform->local_orient = quaternion_from_euler(0, 180, 0);
 				Meshcoll* R = GO->addComponent<Meshcoll>();
-				R->load_mesh("../Data/FBX/0311_collisions.fbx");
+				R->load_mesh("../Data/FBX/0311_collisions.fbx",true);
 				//R->load_mesh("../Adollib/DefaultModel/cylinder.fbx");
 				R->physics_data.is_moveable = false;
 				R->is_static = true;
