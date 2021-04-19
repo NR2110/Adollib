@@ -24,7 +24,7 @@ void Contact::addcontact(
 	const Vector3& contact_pointA,
 	const Vector3& contact_pointB
 ) {
-	//‚·‚Å‚É‚»‚Ìpoint‚Í‘¶İ‚·‚é‚Ì‚©
+	//‚·‚Å‚É‚»‚Ìpoint‚Í‘¶İ‚·‚é‚Ì‚©   
 	int num = find_contact_point(contact_pointA, contact_pointB, normal);
 
 	//‚µ‚Ä‚¢‚È‚©‚Á‚½‚ç’Ç‰Á

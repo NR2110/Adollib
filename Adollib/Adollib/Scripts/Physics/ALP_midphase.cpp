@@ -126,6 +126,15 @@ void Physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std:
 
 				new_p.type = Pairtype::keep_pair;
 			}
+			//else if (
+			//	new_p.body[0] == old_p.body[1] &&
+			//	new_p.body[1] == old_p.body[0]
+			//	) {
+			//	//前から存在していたらデータを引き継ぐ
+			//	new_p = old_p;
+
+			//	new_p.type = Pairtype::keep_pair;
+			//}
 			else {
 				new_p.type = Pairtype::new_pair;
 			}

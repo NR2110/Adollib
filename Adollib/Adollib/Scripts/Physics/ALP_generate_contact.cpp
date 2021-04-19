@@ -375,8 +375,8 @@ bool sat_obb_Triangle(
 	//::: 外積の軸に投影 Waxis
 	for (int OB1 = 0; OB1 < 3; OB1++) {
 		for (int OB2 = 0; OB2 < 3; OB2++) {
-			if (mesh->edges[triangle.Edge_num[OB2]].type == Edgetype::EdgeConcave) break; //へこみのEdgeは判定しない
-			if (mesh->edges[triangle.Edge_num[OB2]].type == Edgetype::EdgeFlat) break; //平面のEdgeは判定しない
+			if (mesh->edges[triangle.Edge_num[OB2]].type == Edgetype::EdgeConcave) continue; //へこみのEdgeは判定しない
+			if (mesh->edges[triangle.Edge_num[OB2]].type == Edgetype::EdgeFlat) continue; //平面のEdgeは判定しない
 
 			axis = vector3_cross(obb.u_axes[OB1], (triangle.world_vertex_position[OB2] - triangle.world_vertex_position[(OB2 + 1) % 3]).unit_vect());
 			if (axis.norm() <= FLT_EPSILON * FLT_EPSILON)continue;//外積が 0 = 平行
@@ -1643,23 +1643,28 @@ bool Physics_function::generate_contact_box_mesh(const ALP_Collider_mesh* box_me
 			//assert(!(isnan((obb.u_axes[0] + obb.u_axes[1] + obb.u_axes[2]).norm())));
 			if (!sat_obb_Triangle(obb, triangle, mesh_mesh->mesh, penetration, axis, s_case)) continue;
 
-			if (smallest_case == SAT_TYPE::EDGE_EDGE ||
-				s_case != SAT_TYPE::EDGE_EDGE) {
+			//if (smallest_case == SAT_TYPE::EDGE_EDGE ||
+			//	s_case != SAT_TYPE::EDGE_EDGE) {
 
-				if ((
-					smallest_case == SAT_TYPE::EDGE_EDGE &&
-					s_case != SAT_TYPE::EDGE_EDGE //Edgeの衝突の優先度を下げる
-					) || (
-					smallest_penetration > penetration //一番短い衝突
-				)) {
+			//	if ((
+			//		smallest_case == SAT_TYPE::EDGE_EDGE &&
+			//		s_case != SAT_TYPE::EDGE_EDGE //Edgeの衝突の優先度を下げる
+			//		) || (
+			//			smallest_penetration > penetration //一番短い衝突
+			//			)) {
 
-					smallest_triangle = triangle;
-					smallest_penetration = penetration;
-					smallest_axis[0] = axis[0];
-					smallest_axis[1] = axis[1];
-					smallest_case = s_case;
-				}
-			}
+			//		smallest_triangle = triangle;
+			//		smallest_penetration = penetration;
+			//		smallest_axis[0] = axis[0];
+			//		smallest_axis[1] = axis[1];
+			//		smallest_case = s_case;
+			//	}
+			//}
+			smallest_triangle = triangle;
+			smallest_penetration = penetration;
+			smallest_axis[0] = axis[0];
+			smallest_axis[1] = axis[1];
+			smallest_case = s_case;
 
 
 			if (smallest_axis[0] == -1 && smallest_axis[1] == -1) continue;
@@ -1774,7 +1779,7 @@ bool Physics_function::generate_contact_box_mesh(const ALP_Collider_mesh* box_me
 
 				Vector3 Wn;
 				Wn = vector3_cross(obb.u_axes[smallest_axis[0]], world_triangle_edge_dir);
-				if (vector3_dot(Wn, (box->world_position() - mesh->world_position())) < 0)	//meshの前の位置を考慮して 押し出すように
+				if (vector3_dot(Wn, box->world_position() - (smallest_triangle.world_vertex_position[smallest_axis[1]] + smallest_triangle.world_position)) < 0)	//
 				{
 					Wn = Wn * -1.0f;
 				}
@@ -1814,23 +1819,33 @@ bool Physics_function::generate_contact_box_mesh(const ALP_Collider_mesh* box_me
 			}
 
 			else assert(0);
-		}
 
 
-		if (is_AC)
-		{
-			box_mesh->ALPcollider->oncoll_bits |= mesh_mesh->ALPcollider->tag;
-			mesh_mesh->ALPcollider->oncoll_bits |= box_mesh->ALPcollider->tag;
 
-			//oncoll_enterのみの場合ここでreturn
-			if (pair.check_oncoll_only == true) return false;
+			if (is_AC)
+			{
+				box_mesh->ALPcollider->oncoll_bits |= mesh_mesh->ALPcollider->tag;
+				mesh_mesh->ALPcollider->oncoll_bits |= box_mesh->ALPcollider->tag;
 
-			pair.contacts.addcontact(
-				ACpenetration,
-				ACnormal,
-				ACcontact_pointA,
-				ACcontact_pointB
-			);
+				//oncoll_enterのみの場合ここでreturn
+				if (pair.check_oncoll_only == true) return false;
+
+				if (pair.body[0]->ALPcollider->shape == box->shape)
+					pair.contacts.addcontact(
+						ACpenetration,
+						ACnormal,
+						ACcontact_pointA,
+						ACcontact_pointB
+					);
+				else
+					pair.contacts.addcontact(
+						ACpenetration,
+						-ACnormal,
+						ACcontact_pointB,
+						ACcontact_pointA
+					);
+			}
+
 		}
 		return is_AC;
 

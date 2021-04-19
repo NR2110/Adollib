@@ -76,8 +76,10 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 	// メッシュデータの取得
 	u_int vertex_count = 0;
 	struct Subset {
-		int start = 0;
-		int count = 0;
+		int index_start = 0;
+		int index_count = 0;
+		int vertex_start = 0;
+		int vertex_count = 0;
 	};
 	std::vector<Subset> subsets;
 	std::vector<Meshcollider_mesh> _mesh;
@@ -116,7 +118,7 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 		for (int index_of_polygon = 0; index_of_polygon < number_of_polygons; index_of_polygon++)
 		{
 			// Where should I save the vertex attribute index, according to the material
-			const int index_offset = subset.start + subset.count;
+			const int index_offset = subset.index_start + subset.index_count;
 			for (int index_of_vertex = 0; index_of_vertex < 3; index_of_vertex++) {
 				Vector3 vertex;
 				// 頂点
@@ -131,10 +133,32 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 				indices.at(index_offset + index_of_vertex) = static_cast<u_int>(vertex_count);
 				vertex_count++;
 			}
-			subset.count += 3;
+			subset.index_count += 3;
 		}
+		//vertices.resize(fbxMesh->GetControlPointsCount());
+		//for (int index_of_polygon = 0; index_of_polygon < number_of_polygons; index_of_polygon++)
+		//{
+		//	// Where should I save the vertex attribute index, according to the material
+		//	const int index_offset = subset.index_start + subset.index_count;
+		//	for (int index_of_vertex = 0; index_of_vertex < 3; index_of_vertex++) {
+		//		Vector3 vertex;
+		//		// 頂点
+		//		const int index_of_control_point = fbxMesh->GetPolygonVertex(index_of_polygon, index_of_vertex);
+		//		vertex.x = static_cast<float>(array_of_control_points[index_of_control_point][0]);
+		//		vertex.y = static_cast<float>(array_of_control_points[index_of_control_point][1]);
+		//		vertex.z = static_cast<float>(array_of_control_points[index_of_control_point][2]);
+
+		//		vertex = vector3_trans(vertex, mesh_globalTransform);
+		//		// push_back
+		//		vertices.at(index_of_control_point) = vertex;
+		//		indices.at(index_offset + index_of_vertex) = index_of_control_point;
+		//		vertex_count++;
+		//	}
+		//	subset.index_count += 3;
+		//}
 
 #pragma endregion
+
 #pragma region Set Meshcollider_mesh
 
 		u_int& index_num = mesh.index_num;
