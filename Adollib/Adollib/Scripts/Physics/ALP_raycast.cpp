@@ -299,7 +299,7 @@ bool ray_cast_mesh(const Vector3& l_Ray_pos, const Vector3& l_Ray_dir,
 	tmax = -FLT_MAX;
 
 	bool crossing = false; //‚Ç‚±‚©‚ªŒğ·‚µ‚Ä‚¢‚½‚çtrue‚É•ÏX
-	const std::vector<Vector3>& vertices = *mesh.mesh->vertices;
+	const std::vector<Vector3>& vertices = mesh.mesh->vertices;
 
 	Matrix mat = matrix_world(mesh.ALPcollider->world_scale(), mesh.ALPcollider->world_orientation().get_rotate_matrix(), mesh.ALPcollider->world_position());
 	Matrix mat_inv = matrix_inverse(mat);

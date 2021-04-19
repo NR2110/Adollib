@@ -24,7 +24,7 @@ void Contact::addcontact(
 	const Vector3& contact_pointA,
 	const Vector3& contact_pointB
 ) {
-	//Ç∑Ç≈Ç…ÇªÇÃpointÇÕë∂ç›Ç∑ÇÈÇÃÇ©   
+	//Ç∑Ç≈Ç…ÇªÇÃpointÇÕë∂ç›Ç∑ÇÈÇÃÇ©
 	int num = find_contact_point(contact_pointA, contact_pointB, normal);
 
 	//ÇµÇƒÇ¢Ç»Ç©Ç¡ÇΩÇÁí«â¡
@@ -151,7 +151,7 @@ void Contact::chack_remove_contact_point(
 	const Vector3& pointB,
 	const Quaternion& rotB
 ) {
-	for (int i = 0; i < contact_num; i++) {
+	for (int i = 0; i < contact_num;) {
 		Vector3& normal = contactpoints[i].normal;
 		Vector3 contactpointA = pointA + vector3_quatrotate(contactpoints[i].point[0], rotA);
 		Vector3 contactpointB = pointB + vector3_quatrotate(contactpoints[i].point[1], rotB);
@@ -160,7 +160,6 @@ void Contact::chack_remove_contact_point(
 		float dis_N = vector3_dot(normal, contactpointA - contactpointB);
 		if (dis_N > Phyisics_manager::contact_threrhold_normal) {
 			remove_contactpoint(i);
-			i--;
 			continue;
 		}
 		contactpoints[i].distance = dis_N;
@@ -171,9 +170,10 @@ void Contact::chack_remove_contact_point(
 		float dis_T = (contactpointA - contactpointB).norm();
 		if (dis_T > Phyisics_manager::contact_threrhold_tangent) {
 			remove_contactpoint(i);
-			i--;
 			continue;
 		}
+
+		i++;
 	}
 
 }

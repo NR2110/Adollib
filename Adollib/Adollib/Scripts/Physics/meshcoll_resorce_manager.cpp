@@ -19,7 +19,6 @@ using namespace Crossing_func;
 using namespace std;
 
 std::unordered_map <std::string, std::vector<Meshcollider_mesh>> Collider_ResourceManager::meshes;
-std::unordered_map <std::string, std::vector<Vector3>> Collider_ResourceManager::vertices_;
 
 bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<Meshcollider_mesh>** ret_mesh, bool Right_triangle) {
 
@@ -27,8 +26,8 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 		*ret_mesh = &meshes[fbxname];
 		return true;
 	}
-	vector<Vector3>& vertices = vertices_[fbxname];
-	vertices.clear();
+	//vector<Vector3>& vertices = vertices_[fbxname];
+	//vertices.clear();
 
 	const char* fileName = fbxname;
 	bool hr = true;
@@ -86,9 +85,6 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 
 	//TODO : FBX内のgloabal_transformを考慮していない
 
-	//_mesh.resize(1);
-	//subsets.resize(1);
-	//for (size_t mesh_num = 0; mesh_num < 1; mesh_num++)
 	_mesh.resize(fetched_meshes.size());
 	subsets.resize(fetched_meshes.size());
 	for (size_t mesh_num = 0; mesh_num < fetched_meshes.size(); mesh_num++)
@@ -111,14 +107,17 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 		}
 		//::
 		vector<int>& indices = mesh.indexes;
+		vector<Vector3>& vertices = mesh.vertices;
 
 		const FbxVector4* array_of_control_points = fbxMesh->GetControlPoints();
 		const int number_of_polygons = fbxMesh->GetPolygonCount();
+
 		indices.resize(number_of_polygons * 3);
+		vertices.resize(fbxMesh->GetControlPointsCount());
+
 		for (int index_of_polygon = 0; index_of_polygon < number_of_polygons; index_of_polygon++)
 		{
 			// Where should I save the vertex attribute index, according to the material
-			const int index_offset = subset.index_start + subset.index_count;
 			for (int index_of_vertex = 0; index_of_vertex < 3; index_of_vertex++) {
 				Vector3 vertex;
 				// 頂点
@@ -129,33 +128,12 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 
 				vertex = vector3_trans(vertex, mesh_globalTransform);
 				// push_back
-				vertices.push_back(vertex);
-				indices.at(index_offset + index_of_vertex) = static_cast<u_int>(vertex_count);
+				vertices.at(index_of_control_point) = vertex;
+				indices.at(subset.index_start + index_of_vertex) = index_of_control_point;
 				vertex_count++;
 			}
-			subset.index_count += 3;
+			subset.index_start += 3;
 		}
-		//vertices.resize(fbxMesh->GetControlPointsCount());
-		//for (int index_of_polygon = 0; index_of_polygon < number_of_polygons; index_of_polygon++)
-		//{
-		//	// Where should I save the vertex attribute index, according to the material
-		//	const int index_offset = subset.index_start + subset.index_count;
-		//	for (int index_of_vertex = 0; index_of_vertex < 3; index_of_vertex++) {
-		//		Vector3 vertex;
-		//		// 頂点
-		//		const int index_of_control_point = fbxMesh->GetPolygonVertex(index_of_polygon, index_of_vertex);
-		//		vertex.x = static_cast<float>(array_of_control_points[index_of_control_point][0]);
-		//		vertex.y = static_cast<float>(array_of_control_points[index_of_control_point][1]);
-		//		vertex.z = static_cast<float>(array_of_control_points[index_of_control_point][2]);
-
-		//		vertex = vector3_trans(vertex, mesh_globalTransform);
-		//		// push_back
-		//		vertices.at(index_of_control_point) = vertex;
-		//		indices.at(index_offset + index_of_vertex) = index_of_control_point;
-		//		vertex_count++;
-		//	}
-		//	subset.index_count += 3;
-		//}
 
 #pragma endregion
 
@@ -374,11 +352,6 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 	}
 
 	meshes[fbxname] = _mesh;
-
-	//頂点情報を保存
-	for (auto& ver : meshes[fbxname]) {
-		ver.vertices = &vertices_[fbxname];
-	}
 
 
 

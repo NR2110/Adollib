@@ -122,7 +122,7 @@ float sum_of_projected_radii(float& max, float& min, const ALP_Collider_mesh* me
 	float value;
 	max = -FLT_MAX;
 	min = +FLT_MAX;
-	for (const Vector3& vertex : *meshcoll->mesh->vertices) {
+	for (const Vector3& vertex : meshcoll->mesh->vertices) {
 		value = vector3_dot(vertex * meshcoll->ALPcollider->world_scale(), nor);
 		if (max < value)max = value;
 		if (min > value)min = value;
@@ -278,12 +278,16 @@ bool sat_obb_Triangle(
 		penetration = ALmin(penetration, ra - (trimin + off));
 		penetration = ALmin(penetration, (trimax + off) - (-ra));
 
+		//axis* mul_valueがmesh->obbの方向になるように値を保存
+		int mul_value = 1;
+		if (ra - (trimin + off) < (trimax + off) - (-ra)) mul_value *= -1;
+
 		if (penetration < 0) return false; //分離してる
 
 		if (PB_FA.penetrate > penetration) {
 			PB_FA.penetrate = penetration;
 			PB_FA.smallest_axis[0] = i;
-			PB_FA.smallest_axis[1] = -1;
+			PB_FA.smallest_axis[1] = mul_value; //ずるいけどここを使ってデータを渡す
 			PB_FA.smallest_case = SAT_TYPE::POINTB_FACETA;
 		}
 	}
@@ -343,7 +347,7 @@ bool sat_obb_Triangle(
 			const float off = vector3_dot(axis, offset_tri_obb);
 
 			penetration = FLT_MAX;
-			//penetration = ALmin(penetration, ra - (trimin + off)); //裏からの衝突は検知しない
+			//penetration = ALmin(penetration, ra - (trimin + off));   //裏からの衝突は検知しない
 			penetration = ALmin(penetration, (trimax + off) - (-ra));
 
 			if (penetration < 0) return false; //分離している
@@ -375,16 +379,17 @@ bool sat_obb_Triangle(
 	//::: 外積の軸に投影 Waxis
 	for (int OB1 = 0; OB1 < 3; OB1++) {
 		for (int OB2 = 0; OB2 < 3; OB2++) {
-			if (mesh->edges[triangle.Edge_num[OB2]].type == Edgetype::EdgeConcave) continue; //へこみのEdgeは判定しない
-			if (mesh->edges[triangle.Edge_num[OB2]].type == Edgetype::EdgeFlat) continue; //平面のEdgeは判定しない
 
 			axis = vector3_cross(obb.u_axes[OB1], (triangle.world_vertex_position[OB2] - triangle.world_vertex_position[(OB2 + 1) % 3]).unit_vect());
 			if (axis.norm() <= FLT_EPSILON * FLT_EPSILON)continue;//外積が 0 = 平行
 
+			//meshからobbの向きにaxisを変更(裏から衝突しないようにするため)
+			if (vector3_dot(axis, obb.world_position - (triangle.world_vertex_position[OB2] + triangle.world_position)) < 0)//めり込んでいることを忘れずに!!!!
+			{
+				axis = axis * -1.0f;
+			}
 			axis = axis.unit_vect();
-			if (axis.norm() < 1) axis *= (1 + FLT_EPSILON);
-
-			if (vector3_dot(axis, triangle.world_normal) < 0)axis *= -1; //meshの裏からは衝突しない
+			if (axis.norm() <= 1) axis *= (1 - FLT_EPSILON);
 
 
 
@@ -402,10 +407,14 @@ bool sat_obb_Triangle(
 
 			//軸に投影した貫通量を求める
 			penetration = FLT_MAX;
-			penetration = ALmin(penetration, ra - (trimin + off));
+			//penetration = ALmin(penetration, ra - (trimin + off));  //裏からは衝突しない
 			penetration = ALmin(penetration, (trimax + off) - (-ra));
 
 			if (penetration < 0) return false; //分離してる
+
+			if (vector3_dot(axis, triangle.world_normal) < 0)continue; //裏からは衝突しない
+			if (mesh->edges[triangle.Edge_num[OB2]].type == Edgetype::EdgeConcave) continue; //へこみのEdgeは衝突しない
+			if (mesh->edges[triangle.Edge_num[OB2]].type == Edgetype::EdgeFlat) continue; //平面のEdgeは衝突しない
 
 			if (smallest_penetration - penetration > FLT_EPSILON) {
 
@@ -413,24 +422,6 @@ bool sat_obb_Triangle(
 				smallest_axis[0] = OB1;
 				smallest_axis[1] = OB2;
 				smallest_case = SAT_TYPE::EDGE_EDGE;
-
-				Vector3 AAA = vector3_quatrotate(triangle.normal, triangle.world_orientation);
-
-				axis = vector3_cross(obb.u_axes[OB1], (triangle.world_vertex_position[OB2] - triangle.world_vertex_position[(OB2 + 1) % 3]).unit_vect());
-				if (axis.norm() <= FLT_EPSILON * FLT_EPSILON)continue;//外積が 0 = 平行
-
-				axis = axis.unit_vect();
-				if (axis.norm() < 1) axis *= (1 + FLT_EPSILON);
-
-				ra = fabsf(sum_of_projected_radii(obb, axis));
-
-				//triangleの軸方向の各長さ
-				sum_of_projected_radii(triangle, axis, trimin, trimax);
-
-				//軸に投影した貫通量を求める
-				penetration = FLT_MAX;
-				//penetration = ALmin(penetration, ra - (trimin + off));
-				penetration = ALmin(penetration, (trimax + off) - (-ra));
 
 				if (penetration < 0) return false; //分離してる
 			}
@@ -565,12 +556,12 @@ bool sat_convex_mesh_mesh(const ALP_Collider_mesh* meshA, const ALP_Collider_mes
 		const Edge& edgeA = meshA->mesh->edges.at(eA);
 		if (edgeA.type != Edgetype::EdgeConvex) continue;
 
-		const Vector3& edgeVecA = meshA->mesh->vertices->at(edgeA.vertexID[1]) - meshA->mesh->vertices->at(edgeA.vertexID[0]);
+		const Vector3& edgeVecA = meshA->mesh->vertices.at(edgeA.vertexID[1]) - meshA->mesh->vertices.at(edgeA.vertexID[0]);
 		for (u_int eB = 0; eB < meshB->mesh->edge_num; eB++) {
 			const Edge& edgeB = meshB->mesh->edges.at(eB);
 			if (edgeB.type != Edgetype::EdgeConvex) continue;
 
-			const Vector3 edgeVecB = vector3_quatrotate(meshB->mesh->vertices->at(edgeB.vertexID[1]) - meshB->mesh->vertices->at(edgeB.vertexID[0]), offset_quatBA);
+			const Vector3 edgeVecB = vector3_quatrotate(meshB->mesh->vertices.at(edgeB.vertexID[1]) - meshB->mesh->vertices.at(edgeB.vertexID[0]), offset_quatBA);
 
 			axisA = vector3_cross(edgeVecA, edgeVecB);
 			if (axisA.norm() <= FLT_EPSILON * FLT_EPSILON) continue;
@@ -591,7 +582,7 @@ bool sat_convex_mesh_mesh(const ALP_Collider_mesh* meshA, const ALP_Collider_mes
 			minB += off;
 
 			//辺と辺の距離
-			float CN = fabsf(off) - (vector3_dot(axisA, meshA->mesh->vertices->at(edgeA.vertexID[0])) + -(vector3_dot(axisB, meshB->mesh->vertices->at(edgeB.vertexID[0]))));
+			float CN = fabsf(off) - (vector3_dot(axisA, meshA->mesh->vertices.at(edgeA.vertexID[0])) + -(vector3_dot(axisB, meshB->mesh->vertices.at(edgeB.vertexID[0]))));
 
 			//貫通の計算
 			float d1 = minA - maxB;
@@ -1031,7 +1022,7 @@ bool Physics_function::generate_contact_sphere_mesh(const ALP_Collider_mesh* sph
 		//各面の外にあれば面平面に持ってくる
 		for (u_int i = 0; i < mesh_mesh->mesh->facet_num; i++) {
 			const Vector3& nor = mesh_mesh->mesh->facets.at(i).normal.unit_vect();
-			const Vector3& pos = mesh_mesh->mesh->vertices->at(mesh_mesh->mesh->facets.at(i).vertexID[0]) * mesh->world_scale();
+			const Vector3& pos = mesh_mesh->mesh->vertices.at(mesh_mesh->mesh->facets.at(i).vertexID[0]) * mesh->world_scale();
 			float d = vector3_dot(nor, pos) - vector3_dot(nor, closest_point);
 			if (d < 0)
 				closest_point += d * nor;
@@ -1062,7 +1053,7 @@ bool Physics_function::generate_contact_sphere_mesh(const ALP_Collider_mesh* sph
 		//球とmeshの判定
 		for (const auto& faset : mesh_mesh->mesh->facets) {
 			const Vector3& nor = (faset.normal * mesh->world_scale()).unit_vect();
-			const Vector3& mesh_pos0 = mesh_mesh->mesh->vertices->at(faset.vertexID[0]) * mesh->world_scale();
+			const Vector3& mesh_pos0 = mesh_mesh->mesh->vertices.at(faset.vertexID[0]) * mesh->world_scale();
 
 			//mesh平面の"d"
 			float dis = vector3_dot(nor, mesh_pos0);
@@ -1071,8 +1062,8 @@ bool Physics_function::generate_contact_sphere_mesh(const ALP_Collider_mesh* sph
 			//mesh平面とsphereの距離がmin_disより大きければ衝突しない
 			if (fabsf(dis_sp - dis) > min_dis) continue;
 
-			const Vector3& mesh_pos1 = mesh_mesh->mesh->vertices->at(faset.vertexID[1]) * mesh->world_scale();
-			const Vector3& mesh_pos2 = mesh_mesh->mesh->vertices->at(faset.vertexID[2]) * mesh->world_scale();
+			const Vector3& mesh_pos1 = mesh_mesh->mesh->vertices.at(faset.vertexID[1]) * mesh->world_scale();
+			const Vector3& mesh_pos2 = mesh_mesh->mesh->vertices.at(faset.vertexID[2]) * mesh->world_scale();
 
 			Vector3 closest_p;
 			Closest_func::get_closestP_point_triangle(
@@ -1271,7 +1262,7 @@ bool Physics_function::generate_contact_box_box(const ALP_Collider_mesh* bA, con
 	//obbBの頂点がobbAの面と衝突した場合
 	if (smallest_case == SAT_TYPE::POINTB_FACETA)
 	{
-		Vector3 d =  obbA.world_position - obbB.world_position;	//BからA方向
+		Vector3 d = obbA.world_position - obbB.world_position;	//BからA方向
 		Vector3 Wn = obbA.u_axes[smallest_axis[0]];	//obbAの衝突面の法線と平行のobbAのローカル軸ベクトル
 		if (vector3_dot(Wn, d) < 0)	//obbAとobbBの位置関係より衝突面の法線ベクトルを決定する
 		{
@@ -1322,7 +1313,7 @@ bool Physics_function::generate_contact_box_box(const ALP_Collider_mesh* bA, con
 	//obbAの頂点がobbBの面と衝突した場合
 	else if (smallest_case == SAT_TYPE::POINTA_FACETB)
 	{
-		Vector3 d =  obbA.world_position - obbB.world_position; //BからA方向
+		Vector3 d = obbA.world_position - obbB.world_position; //BからA方向
 		Vector3 Wn = obbB.u_axes[smallest_axis[1]];
 		if (vector3_dot(Wn, d) < 0) //BからA方向でなければ-1をかける
 		{
@@ -1620,9 +1611,9 @@ bool Physics_function::generate_contact_box_mesh(const ALP_Collider_mesh* box_me
 			debug_conut++;
 
 			auto& vertices = mesh_mesh->mesh->vertices;
-			triangle.vertex_position[0] = (*vertices)[faset.vertexID[0]];
-			triangle.vertex_position[1] = (*vertices)[faset.vertexID[1]];
-			triangle.vertex_position[2] = (*vertices)[faset.vertexID[2]];
+			triangle.vertex_position[0] = (vertices)[faset.vertexID[0]];
+			triangle.vertex_position[1] = (vertices)[faset.vertexID[1]];
+			triangle.vertex_position[2] = (vertices)[faset.vertexID[2]];
 
 			triangle.world_vertex_position[0] = vector3_quatrotate(triangle.vertex_position[0] * triangle.world_scale, triangle.world_orientation);
 			triangle.world_vertex_position[1] = vector3_quatrotate(triangle.vertex_position[1] * triangle.world_scale, triangle.world_orientation);
@@ -1643,52 +1634,56 @@ bool Physics_function::generate_contact_box_mesh(const ALP_Collider_mesh* box_me
 			//assert(!(isnan((obb.u_axes[0] + obb.u_axes[1] + obb.u_axes[2]).norm())));
 			if (!sat_obb_Triangle(obb, triangle, mesh_mesh->mesh, penetration, axis, s_case)) continue;
 
-			//if (smallest_case == SAT_TYPE::EDGE_EDGE ||
-			//	s_case != SAT_TYPE::EDGE_EDGE) {
+			if (!sat_obb_Triangle(obb, triangle, mesh_mesh->mesh, penetration, axis, s_case)) continue;
 
-			//	if ((
-			//		smallest_case == SAT_TYPE::EDGE_EDGE &&
-			//		s_case != SAT_TYPE::EDGE_EDGE //Edgeの衝突の優先度を下げる
-			//		) || (
-			//			smallest_penetration > penetration //一番短い衝突
-			//			)) {
+			if (0) {
+				if (smallest_case == SAT_TYPE::EDGE_EDGE ||
+					s_case != SAT_TYPE::EDGE_EDGE) {
 
-			//		smallest_triangle = triangle;
-			//		smallest_penetration = penetration;
-			//		smallest_axis[0] = axis[0];
-			//		smallest_axis[1] = axis[1];
-			//		smallest_case = s_case;
-			//	}
-			//}
-			smallest_triangle = triangle;
-			smallest_penetration = penetration;
-			smallest_axis[0] = axis[0];
-			smallest_axis[1] = axis[1];
-			smallest_case = s_case;
+					if ((
+						smallest_case == SAT_TYPE::EDGE_EDGE &&
+						s_case != SAT_TYPE::EDGE_EDGE //Edgeの衝突の優先度を下げる
+						) || (
+							smallest_penetration > penetration //一番短い衝突
+							)) {
 
+						smallest_triangle = triangle;
+						smallest_penetration = penetration;
+						smallest_axis[0] = axis[0];
+						smallest_axis[1] = axis[1];
+						smallest_case = s_case;
+					}
+				}
+			}
+			else {
+				smallest_triangle = triangle;
+				smallest_penetration = penetration;
+				smallest_axis[0] = axis[0];
+				smallest_axis[1] = axis[1];
+				smallest_case = s_case;
+			}
 
 			if (smallest_axis[0] == -1 && smallest_axis[1] == -1) continue;
-
+		//}
+		//{
+		//if (smallest_axis[0] == -1 && smallest_axis[1] == -1) return false;
 
 
 			//obbBの頂点がobbAの面と衝突した場合
 			if (smallest_case == SAT_TYPE::POINTB_FACETA)
 			{
-				Vector3 Wn = obb.u_axes[smallest_axis[0]];	//obbの衝突面の法線と平行のobbのローカル軸ベクトル
-				if (vector3_dot(Wn, triangle_relative_movement_from_box) > 0)	//meshの前の位置を考慮して 押し出すように
-				{
-					Wn = Wn * -1.0f;
-				}
+				Vector3 Wn = obb.u_axes[smallest_axis[0]]; //衝突法線
+				Wn *= smallest_axis[1]; //衝突法線をmeshからobbの方向に
 				Wn = Wn.unit_vect();
 
 				//triangleのローカル座標系での最近点(p1) triangleの3頂点のうちのどれか
-				float save_dis = FLT_MAX;
+				float save_dis = -FLT_MAX;
 				Vector3 p1; //meshの座標系
-				Vector3 normal_meshcoord = vector3_quatrotate(Wn, smallest_triangle.world_orientation.inverse());
 
-				if (vector3_dot(smallest_triangle.vertex_position[0], +normal_meshcoord) < save_dis) { save_dis = vector3_dot(smallest_triangle.vertex_position[0], +normal_meshcoord);  p1 = smallest_triangle.vertex_position[0]; };
-				if (vector3_dot(smallest_triangle.vertex_position[1], +normal_meshcoord) < save_dis) { save_dis = vector3_dot(smallest_triangle.vertex_position[1], +normal_meshcoord);  p1 = smallest_triangle.vertex_position[1]; };
-				if (vector3_dot(smallest_triangle.vertex_position[2], +normal_meshcoord) < save_dis) { save_dis = vector3_dot(smallest_triangle.vertex_position[2], +normal_meshcoord);  p1 = smallest_triangle.vertex_position[2]; };
+				if (vector3_dot(smallest_triangle.world_vertex_position[0], +Wn) > save_dis) { save_dis = vector3_dot(smallest_triangle.world_vertex_position[0], +Wn);  p1 = smallest_triangle.vertex_position[0]; };
+				if (vector3_dot(smallest_triangle.world_vertex_position[1], +Wn) > save_dis) { save_dis = vector3_dot(smallest_triangle.world_vertex_position[1], +Wn);  p1 = smallest_triangle.vertex_position[1]; };
+				if (vector3_dot(smallest_triangle.world_vertex_position[2], +Wn) > save_dis) { save_dis = vector3_dot(smallest_triangle.world_vertex_position[2], +Wn);  p1 = smallest_triangle.vertex_position[2]; };
+				p1 *= smallest_triangle.world_scale;
 
 				//boxAの逆行列の作成
 				Matrix rotate, inverse_rotate;
@@ -1700,7 +1695,7 @@ bool Physics_function::generate_contact_box_mesh(const ALP_Collider_mesh* box_me
 				inverse_rotate = matrix_inverse(rotate);
 
 				//p1をobbAのローカル座標系へ
-				Vector3 Wp1 = vector3_quatrotate(p1 * smallest_triangle.world_scale, smallest_triangle.world_orientation) + smallest_triangle.world_position;
+				Vector3 Wp1 = vector3_quatrotate(p1, smallest_triangle.world_orientation) + smallest_triangle.world_position;
 				//Vector3 P = vector3_quatrotate(Wp1, box->world_orientation()) + box->world_position();
 				Vector3 c = vector3_trans(Wp1, inverse_rotate);
 
@@ -1716,9 +1711,11 @@ bool Physics_function::generate_contact_box_mesh(const ALP_Collider_mesh* box_me
 				if (c.z > +box_halfsize.z)p0.z = +box_halfsize.z;
 				if (c.z < -box_halfsize.z)p0.z = -box_halfsize.z;
 
+				p0 += vector3_quatrotate(-Wn, obb.world_orientation.inverse()) * smallest_penetration;
+
 				is_AC = true;
 				ACpenetration = smallest_penetration;
-				ACnormal = -Wn;
+				ACnormal = Wn;
 				ACcontact_pointA = p0;
 				ACcontact_pointB = p1;
 			}
@@ -1727,8 +1724,16 @@ bool Physics_function::generate_contact_box_mesh(const ALP_Collider_mesh* box_me
 			else if (smallest_case == SAT_TYPE::POINTA_FACETB)
 			{
 				Vector3 Wn;
-				if (smallest_axis[1] == 3)Wn = vector3_quatrotate(smallest_triangle.normal, smallest_triangle.world_orientation); //meshからboxに向けての法線(BからA)
-				else Wn = vector3_quatrotate(vector3_cross(smallest_triangle.vertex_position[smallest_axis[1]], smallest_triangle.vertex_position[(smallest_axis[1] + 1) % 3]), smallest_triangle.world_orientation);
+				if (smallest_axis[1] == 3)
+				{
+					Wn = vector3_quatrotate(smallest_triangle.normal, smallest_triangle.world_orientation); //meshからboxに向けての法線(BからA)
+				}
+				else
+				{
+					Wn = vector3_quatrotate(vector3_cross(smallest_triangle.vertex_position[smallest_axis[1]], smallest_triangle.vertex_position[(smallest_axis[1] + 1) % 3]), smallest_triangle.world_orientation);
+
+					if (vector3_dot(Wn, smallest_triangle.vertex_position[smallest_axis[1]]) < vector3_dot(Wn, smallest_triangle.vertex_position[(smallest_axis[1] + 2) % 3]))Wn *= -1;
+				}
 				Wn = Wn.unit_vect();
 
 				Vector3 p0 = obb.half_width;
@@ -1956,7 +1961,7 @@ bool Physics_function::generate_contact_capsule_mesh(const ALP_Collider_mesh* ca
 		////各面の外にあれば面平面に持ってくる
 		//for (u_int i = 0; i < mesh_mesh->mesh->facet_num; i++) {
 		//	const Vector3& nor = mesh_mesh->mesh->facets.at(i).normal.unit_vect();
-		//	const Vector3& pos = mesh_mesh->mesh->vertices->at(mesh_mesh->mesh->facets.at(i).vertexID[0]) * mesh->world_scale();
+		//	const Vector3& pos = mesh_mesh->mesh->vertices.at(mesh_mesh->mesh->facets.at(i).vertexID[0]) * mesh->world_scale();
 		//	float d = vector3_dot(nor, pos) - vector3_dot(nor, closest_point);
 		//	if (d < 0)
 		//		closest_point += d * nor;
@@ -2003,7 +2008,7 @@ bool Physics_function::generate_contact_capsule_mesh(const ALP_Collider_mesh* ca
 		//capsuleとmeshの判定
 		for (const auto& faset : mesh_mesh->mesh->facets) {
 			const Vector3 nor = (faset.normal * mesh->world_scale()).unit_vect();
-			const Vector3 mesh_pos0 = mesh_mesh->mesh->vertices->at(faset.vertexID[0]) * mesh->world_scale();
+			const Vector3 mesh_pos0 = mesh_mesh->mesh->vertices.at(faset.vertexID[0]) * mesh->world_scale();
 			//mesh平面の"d"
 			float dis = vector3_dot(nor, mesh_pos0);
 
@@ -2026,8 +2031,8 @@ bool Physics_function::generate_contact_capsule_mesh(const ALP_Collider_mesh* ca
 			//sphereがMeshの裏にいる または mesh平面とsphereの距離がmin_disより大きければ衝突しない
 			if (dis_sp - dis < 0 || dis_sp - dis > min_dis) continue;
 
-			const Vector3 mesh_pos1 = mesh_mesh->mesh->vertices->at(faset.vertexID[1]) * mesh->world_scale();
-			const Vector3 mesh_pos2 = mesh_mesh->mesh->vertices->at(faset.vertexID[2]) * mesh->world_scale();
+			const Vector3 mesh_pos1 = mesh_mesh->mesh->vertices.at(faset.vertexID[1]) * mesh->world_scale();
+			const Vector3 mesh_pos2 = mesh_mesh->mesh->vertices.at(faset.vertexID[2]) * mesh->world_scale();
 
 			Vector3 closest_p;
 			Closest_func::get_closestP_segment_triangle(
@@ -2155,13 +2160,13 @@ bool Physics_function::generate_contact_mesh_mesh(const ALP_Collider_mesh* mA, c
 
 				for (u_int v_num = 0; v_num < vertex_mesh->mesh->vertex_num; v_num++) {
 
-					if (vector3_dot(vertex_mesh->mesh->vertices->at(v_num), axisV) > max_len) {
-						max_len = vector3_dot(vertex_mesh->mesh->vertices->at(v_num), axisV);
+					if (vector3_dot(vertex_mesh->mesh->vertices.at(v_num), axisV) > max_len) {
+						max_len = vector3_dot(vertex_mesh->mesh->vertices.at(v_num), axisV);
 						nearest_pointID = v_num;
 					}
 				}
 			}
-			pB = vertex_mesh->mesh->vertices->at(nearest_pointID);
+			pB = vertex_mesh->mesh->vertices.at(nearest_pointID);
 			pB *= vertex_coll->world_scale();
 
 			//上記のp0がfacet_collの最近面上のどこにあるのか
@@ -2180,9 +2185,9 @@ bool Physics_function::generate_contact_mesh_mesh(const ALP_Collider_mesh* mA, c
 
 					//メッシュと点の最近点を求める
 					get_closestP_point_triangle(p,
-						facet_mesh->mesh->vertices->at(facet_mesh->mesh->facets.at(f_num).vertexID[0]),
-						facet_mesh->mesh->vertices->at(facet_mesh->mesh->facets.at(f_num).vertexID[1]),
-						facet_mesh->mesh->vertices->at(facet_mesh->mesh->facets.at(f_num).vertexID[2]),
+						facet_mesh->mesh->vertices.at(facet_mesh->mesh->facets.at(f_num).vertexID[0]),
+						facet_mesh->mesh->vertices.at(facet_mesh->mesh->facets.at(f_num).vertexID[1]),
+						facet_mesh->mesh->vertices.at(facet_mesh->mesh->facets.at(f_num).vertexID[2]),
 						facet_mesh->mesh->facets.at(f_num).normal,
 						n_pos
 					);
@@ -2237,13 +2242,13 @@ bool Physics_function::generate_contact_mesh_mesh(const ALP_Collider_mesh* mA, c
 
 				for (u_int v_num = 0; v_num < vertex_mesh->mesh->vertex_num; v_num++) {
 
-					if (vector3_dot(vertex_mesh->mesh->vertices->at(v_num), axisV) > max_len) {
-						max_len = vector3_dot(vertex_mesh->mesh->vertices->at(v_num), axisV);
+					if (vector3_dot(vertex_mesh->mesh->vertices.at(v_num), axisV) > max_len) {
+						max_len = vector3_dot(vertex_mesh->mesh->vertices.at(v_num), axisV);
 						nearest_pointID = v_num;
 					}
 				}
 			}
-			pB = vertex_mesh->mesh->vertices->at(nearest_pointID);
+			pB = vertex_mesh->mesh->vertices.at(nearest_pointID);
 			pB *= vertex_coll->world_scale();
 
 			//上記のpBがfacet_collの最近面上のどこにあるのか
@@ -2262,9 +2267,9 @@ bool Physics_function::generate_contact_mesh_mesh(const ALP_Collider_mesh* mA, c
 
 					//メッシュと点の最近点を求める
 					get_closestP_point_triangle(p,
-						facet_mesh->mesh->vertices->at(facet_mesh->mesh->facets.at(f_num).vertexID[0]),
-						facet_mesh->mesh->vertices->at(facet_mesh->mesh->facets.at(f_num).vertexID[1]),
-						facet_mesh->mesh->vertices->at(facet_mesh->mesh->facets.at(f_num).vertexID[2]),
+						facet_mesh->mesh->vertices.at(facet_mesh->mesh->facets.at(f_num).vertexID[0]),
+						facet_mesh->mesh->vertices.at(facet_mesh->mesh->facets.at(f_num).vertexID[1]),
+						facet_mesh->mesh->vertices.at(facet_mesh->mesh->facets.at(f_num).vertexID[2]),
 						facet_mesh->mesh->facets.at(f_num).normal,
 						n_pos
 					);
@@ -2299,12 +2304,12 @@ bool Physics_function::generate_contact_mesh_mesh(const ALP_Collider_mesh* mA, c
 			const Edge& edgeB = mB->mesh->edges.at(smallest_facetID[1]);
 
 			Vector3 edgeA_p[2] = {
-				{mA->mesh->vertices->at(edgeA.vertexID[0]) * meshA->world_scale()},
-				{mA->mesh->vertices->at(edgeA.vertexID[1]) * meshA->world_scale()}
+				{mA->mesh->vertices.at(edgeA.vertexID[0]) * meshA->world_scale()},
+				{mA->mesh->vertices.at(edgeA.vertexID[1]) * meshA->world_scale()}
 			};
 			Vector3 edgeB_p[2] = {
-				{mB->mesh->vertices->at(edgeB.vertexID[0]) * meshB->world_scale()},
-				{mB->mesh->vertices->at(edgeB.vertexID[1]) * meshB->world_scale()}
+				{mB->mesh->vertices.at(edgeB.vertexID[0]) * meshB->world_scale()},
+				{mB->mesh->vertices.at(edgeB.vertexID[1]) * meshB->world_scale()}
 			};
 
 			Vector3 edgeA_vec = (edgeA_p[0] - edgeA_p[1]).unit_vect();
