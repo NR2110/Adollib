@@ -46,6 +46,8 @@ namespace Adollib {
 			Vector3	world_scale_;
 
 			Vector3 old_world_position_;
+			Quaternion old_world_orientation_;
+			Vector3 old_world_scale_;
 
 		public:
 			const Vector3	world_position()const { return world_position_; };
@@ -53,6 +55,8 @@ namespace Adollib {
 			const Vector3	world_scale()const { return world_scale_; };
 
 			const Vector3	old_world_position()const { return old_world_position_; };
+			const Quaternion	old_world_orientation()const { return old_world_orientation_; };
+			const Vector3	old_world_scale()const { return old_world_scale_; };
 		public:
 
 			Vector3 half_size; //é¿ç€ÇÃsize = half_size * local_scale * GO.world_scale

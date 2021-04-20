@@ -71,12 +71,13 @@ void Physics_function::generate_contact(std::vector<Contacts::Contact_pair>& pai
 enum class SAT_TYPE {
 	POINTA_FACETB,
 	POINTB_FACETA,
-	EDGE_EDGE
+	EDGE_EDGE,
+	NONE
 };
 struct Ret_S {
 	float penetrate = FLT_MAX;
 	int smallest_axis[2] = { -1,-1 };
-	SAT_TYPE smallest_case = SAT_TYPE::EDGE_EDGE;
+	SAT_TYPE smallest_case = SAT_TYPE::NONE;
 	bool hit_point_to_face = true;
 };
 
@@ -331,8 +332,8 @@ bool sat_obb_Triangle(
 
 				PA_FB.penetrate = penetration;
 				PA_FB.smallest_axis[0] = -1;
-				PA_FB.smallest_axis[1] = i;
-				PA_FB.smallest_case = SAT_TYPE::POINTA_FACETB;
+				PA_FB.smallest_axis[1] = -1;
+				PA_FB.smallest_case = SAT_TYPE::NONE;
 			}
 		}
 
@@ -380,11 +381,18 @@ bool sat_obb_Triangle(
 	for (int OB1 = 0; OB1 < 3; OB1++) {
 		for (int OB2 = 0; OB2 < 3; OB2++) {
 
-			axis = vector3_cross(obb.u_axes[OB1], (triangle.world_vertex_position[OB2] - triangle.world_vertex_position[(OB2 + 1) % 3]).unit_vect());
+			const Vector3& tri_vertex_p0 = mesh->vertices[mesh->edges[triangle.Edge_num[OB2]].vertexID[0]];
+			const Vector3& tri_vertex_p1 = mesh->vertices[mesh->edges[triangle.Edge_num[OB2]].vertexID[1]];
+
+			const Vector3& world_tri_vertex_p0 = vector3_quatrotate(tri_vertex_p0 * triangle.world_scale, triangle.world_orientation);
+			const Vector3& world_tri_vertex_p1 = vector3_quatrotate(tri_vertex_p1 * triangle.world_scale, triangle.world_orientation);
+
+
+			axis = vector3_cross(obb.u_axes[OB1], (world_tri_vertex_p0 - world_tri_vertex_p1).unit_vect());
 			if (axis.norm() <= FLT_EPSILON * FLT_EPSILON)continue;//ŠOÏ‚ª 0 = •½s
 
 			//mesh‚©‚çobb‚ÌŒü‚«‚Éaxis‚ð•ÏX(— ‚©‚çÕ“Ë‚µ‚È‚¢‚æ‚¤‚É‚·‚é‚½‚ß)
-			if (vector3_dot(axis, obb.world_position - (triangle.world_vertex_position[OB2] + triangle.world_position)) < 0)//‚ß‚èž‚ñ‚Å‚¢‚é‚±‚Æ‚ð–Y‚ê‚¸‚É!!!!
+			if (vector3_dot(axis, obb.world_position - (world_tri_vertex_p0 + triangle.world_position)) < 0)//‚ß‚èž‚ñ‚Å‚¢‚é‚±‚Æ‚ð–Y‚ê‚¸‚É!!!!
 			{
 				axis = axis * -1.0f;
 			}
@@ -423,10 +431,23 @@ bool sat_obb_Triangle(
 				smallest_axis[1] = OB2;
 				smallest_case = SAT_TYPE::EDGE_EDGE;
 
+//				axis = vector3_cross(obb.u_axes[OB1], (world_tri_vertex_p0 - world_tri_vertex_p1).unit_vect());
+//				if (axis.norm() <= FLT_EPSILON * FLT_EPSILON)continue;//ŠOÏ‚ª 0 = •½s
+//
+////mesh‚©‚çobb‚ÌŒü‚«‚Éaxis‚ð•ÏX(— ‚©‚çÕ“Ë‚µ‚È‚¢‚æ‚¤‚É‚·‚é‚½‚ß)
+//				if (vector3_dot(axis, obb.world_position - (world_tri_vertex_p0 + triangle.world_position)) < 0)//‚ß‚èž‚ñ‚Å‚¢‚é‚±‚Æ‚ð–Y‚ê‚¸‚É!!!!
+//				{
+//					axis = axis * -1.0f;
+//				}
+//				axis = axis.unit_vect();
+//				if (axis.norm() <= 1) axis *= (1 - FLT_EPSILON);
+
 				if (penetration < 0) return false; //•ª—£‚µ‚Ä‚é
 			}
 		}
 	}
+
+	if (smallest_case == SAT_TYPE::NONE)return false;
 
 	// •ª—£Ž²‚ªŒ©“–‚½‚ç‚È‚¢ê‡OBB‚ÍŒð·‚µ‚Ä‚¢‚é‚Í‚¸
 	return (smallest_penetration < FLT_MAX&& smallest_penetration > FLT_EPSILON) ? true : false;
@@ -1779,18 +1800,24 @@ bool Physics_function::generate_contact_box_mesh(const ALP_Collider_mesh* box_me
 			{
 				//Vector3 d = obbB.world_position - obbA.world_position;
 
-				Vector3 triangle_edge_dir = (smallest_triangle.vertex_position[smallest_axis[1]] - smallest_triangle.vertex_position[(smallest_axis[1] + 1) % 3]).unit_vect();
+				const Vector3& tri_vertex_p0 = mesh_mesh->mesh->vertices[mesh_mesh->mesh->edges[smallest_triangle.Edge_num[smallest_axis[1]]].vertexID[0]];
+				const Vector3& tri_vertex_p1 = mesh_mesh->mesh->vertices[mesh_mesh->mesh->edges[smallest_triangle.Edge_num[smallest_axis[1]]].vertexID[1]];
+
+				const Vector3& world_tri_vertex_p0 = vector3_quatrotate(tri_vertex_p0 * triangle.world_scale, triangle.world_orientation);
+				const Vector3& world_tri_vertex_p1 = vector3_quatrotate(tri_vertex_p1 * triangle.world_scale, triangle.world_orientation);
+
+				Vector3 triangle_edge_dir = (tri_vertex_p0 - tri_vertex_p1).unit_vect();
 				Vector3 world_triangle_edge_dir = vector3_quatrotate(triangle_edge_dir, smallest_triangle.world_orientation);
 
 				Vector3 Wn;
 				Wn = vector3_cross(obb.u_axes[smallest_axis[0]], world_triangle_edge_dir);
-				if (vector3_dot(Wn, box->world_position() - (smallest_triangle.world_vertex_position[smallest_axis[1]] + smallest_triangle.world_position)) < 0)	//
+				if (vector3_dot(Wn, box->world_position() - (world_tri_vertex_p0 + smallest_triangle.world_position)) < 0)	//
 				{
 					Wn = Wn * -1.0f;
 				}
 				Wn = Wn.unit_vect();
 
-				Vector3 p[2] = { obb.half_width ,smallest_triangle.vertex_position[smallest_axis[1]] };
+				Vector3 p[2] = { obb.half_width ,tri_vertex_p0 };
 				{
 					if (vector3_dot(obb.u_axes[0], Wn) > 0) p[0].x = -p[0].x;
 					if (vector3_dot(obb.u_axes[1], Wn) > 0) p[0].y = -p[0].y;

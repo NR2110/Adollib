@@ -30,10 +30,18 @@ void ALP_Collider::resolve_gameobject() {
 
 void ALP_Collider::update_world_trans() {
 	old_world_position_ = world_position_;
+	old_world_orientation_ = world_orientation_;
+	old_world_scale_ = world_scale_;
 
 	world_orientation_ = (*coll_itr)->gameobject->get_world_orientate() * local_orientation;
 	world_scale_ = (*coll_itr)->gameobject->get_world_scale() * local_scale;
 	world_position_ = (*coll_itr)->gameobject->get_world_position() + vector3_quatrotate(local_position * (*coll_itr)->gameobject->get_world_scale(), world_orientation());
+
+	if (old_world_position_ != world_position_ ||
+		old_world_orientation_ != world_orientation_ ||
+		old_world_scale_ != world_scale_
+		)
+		Phyisics_manager::add_moved(ALPcollider);
 
 	ALPphysics->update_inertial();
 }
@@ -202,6 +210,4 @@ void ALP_Collider::integrate(float duration, Vector3 linear_velocity, Vector3 an
 
 	world_orientation_ *= quaternion_radian_axis(anglar_velocity.norm_sqr() * duration * 0.5f, anglar_velocity.unit_vect());
 	world_orientation_ = world_orientation().unit_vect();
-
-	Phyisics_manager::add_moved(ALPcollider);
 }
