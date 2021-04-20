@@ -143,17 +143,25 @@ void ALP_Physics::update_inertial() {
 		inertial_tensor._22 = 0.3333333f * inertial_mass * ((Wsize.z * Wsize.z) + (Wsize.x * Wsize.x));
 		inertial_tensor._33 = 0.3333333f * inertial_mass * ((Wsize.x * Wsize.x) + (Wsize.y * Wsize.y));
 
+		//EpxVector3 sqrSz = halfExtent * 2.0f;
+		//sqrSz = mulPerElem(sqrSz, sqrSz);
+		//EpxMatrix3 inertia = EpxMatrix3::identity();
+		//inertia[0][0] = (mass * (sqrSz[1] + sqrSz[2])) / 12.0f;
+		//inertia[1][1] = (mass * (sqrSz[0] + sqrSz[2])) / 12.0f;
+		//inertia[2][2] = (mass * (sqrSz[0] + sqrSz[1])) / 12.0f;
+		//return inertia;
+
 		break;
 	case ALP_Collider_shape::Capsule:
-		inertial_tensor = matrix_identity();
-		inertial_tensor._11 = 0.25f * inertial_mass * Wsize.x * Wsize.x + 0.08333333333f * inertial_mass * (Wsize.y) * (Wsize.y) * 4;
-		inertial_tensor._22 = 0.25f * inertial_mass * Wsize.x * Wsize.x + 0.08333333333f * inertial_mass * (Wsize.y) * (Wsize.y) * 4;
-		inertial_tensor._33 = 0.5f * inertial_mass * Wsize.x * Wsize.x;
-
 		//inertial_tensor = matrix_identity();
-		//inertial_tensor._11 = 0.3333333f * inertial_mass * ((Wsize.y * Wsize.y) + (Wsize.x * Wsize.x));
-		//inertial_tensor._22 = 0.3333333f * inertial_mass * ((Wsize.x * Wsize.x) + (Wsize.x * Wsize.x));
-		//inertial_tensor._33 = 0.3333333f * inertial_mass * ((Wsize.x * Wsize.x) + (Wsize.y * Wsize.y));
+		//inertial_tensor._11 = 0.25f * inertial_mass * Wsize.x * Wsize.x + 0.08333333333f * inertial_mass * (Wsize.y) * (Wsize.y) * 4;
+		//inertial_tensor._22 = 0.25f * inertial_mass * Wsize.x * Wsize.x + 0.08333333333f * inertial_mass * (Wsize.y) * (Wsize.y) * 4;
+		//inertial_tensor._33 = 0.5f * inertial_mass * Wsize.x * Wsize.x;
+
+		inertial_tensor = matrix_identity();
+		inertial_tensor._11 = 0.3333333f * inertial_mass * ((Wsize.y * Wsize.y) + (Wsize.x * Wsize.x));
+		inertial_tensor._22 = 0.3333333f * inertial_mass * ((Wsize.x * Wsize.x) + (Wsize.x * Wsize.x));
+		inertial_tensor._33 = 0.3333333f * inertial_mass * ((Wsize.x * Wsize.x) + (Wsize.y * Wsize.y));
 
 		break;
 	case ALP_Collider_shape::Plane:
