@@ -290,7 +290,7 @@ bool ray_cast_plane(const Vector3& Ray_pos, const Vector3& Ray_dir,
 //}
 #include "meshcoll_resorce_manager.h"
 bool ray_cast_mesh(const Vector3& l_Ray_pos, const Vector3& l_Ray_dir,
-	const ALP_Collider_mesh& mesh,
+	const ALP_Collider_part& mesh,
 	const float ray_min,
 	float& tmin, float& tmax,
 	Vector3& normal
@@ -299,7 +299,7 @@ bool ray_cast_mesh(const Vector3& l_Ray_pos, const Vector3& l_Ray_dir,
 	tmax = -FLT_MAX;
 
 	bool crossing = false; //‚Ç‚±‚©‚ªŒğ·‚µ‚Ä‚¢‚½‚çtrue‚É•ÏX
-	const std::vector<Vector3>& vertices = mesh.mesh->vertices;
+	const std::vector<Vector3>& vertices = mesh.mesh_data->vertices;
 
 	Matrix mat = matrix_world(mesh.ALPcollider->world_scale(), mesh.ALPcollider->world_orientation().get_rotate_matrix(), mesh.ALPcollider->world_position());
 	Matrix mat_inv = matrix_inverse(mat);
@@ -308,7 +308,7 @@ bool ray_cast_mesh(const Vector3& l_Ray_pos, const Vector3& l_Ray_dir,
 	const Vector3 Ray_pos = vector3_trans(l_Ray_pos, mat_inv);
 	const Vector3 Ray_dir = vector3_quatrotate(l_Ray_dir, mesh.ALPcollider->world_orientation().inverse()) / mesh.ALPcollider->world_scale();
 
-	for (auto& facet : mesh.mesh->facets) {
+	for (auto& facet : mesh.mesh_data->facets) {
 
 		const Vector3& n = facet.normal;
 		const Vector3& PA = vertices.at(facet.vertexID[0]);

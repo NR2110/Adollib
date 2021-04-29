@@ -41,7 +41,7 @@ bool Work_meter::render() {
 
 	// delta_time‚ÌŠ“¾(multisled‚É‘Î‰‚·‚é‚½‚ß)
 	QueryPerformanceFrequency(&freq);
-	float F = (float)((double)1000 / freq.QuadPart * 0.001f);
+	const float F = (float)((double)1000 / freq.QuadPart * 0.001f);
 
 	QueryPerformanceCounter(&now);
 	if (stop == false) before -= ((float)((now.QuadPart - bef.QuadPart)) * F);
@@ -195,7 +195,7 @@ bool Work_meter::render() {
 	return true;
 }
 
-bool Work_meter::start(std::string name) {
+bool Work_meter::start(const std::string& name) {
 
 #if UseRelese || _DEBUG
 	if (meters[now_tag].count(name) == 0) {
@@ -209,7 +209,7 @@ bool Work_meter::start(std::string name) {
 	return true;
 }
 
-bool Work_meter::stop(std::string name) {
+bool Work_meter::stop(const std::string& name) {
 #if UseRelese || _DEBUG
 	if (meters[now_tag].count(name) == 0) {
 		names[now_tag].push_back(name);
@@ -222,7 +222,7 @@ bool Work_meter::stop(std::string name) {
 	return true;
 }
 
-bool Work_meter::tag_start(std::string tag) {
+bool Work_meter::tag_start(const std::string& tag) {
 	if (meters.count(tag) == 0) {
 		tags.push_back(tag);
 		meters[tag];

@@ -210,7 +210,7 @@ void Collider_renderer::render_meshcoll(const Physics_function::ALP_Collider& R)
 	Systems::SetDephtStencilState(State_manager::DStypes::DS_TRUE);
 
 	std::vector<Mesh::mesh>* meshs;
-	ResourceManager::CreateModelFromFBX(&meshs, R.collider_meshes[0].mesh->FBX_pass.c_str(), "");
+	ResourceManager::CreateModelFromFBX(&meshs, R.collider_meshes[0].mesh_data->FBX_pass.c_str(), "");
 
 	int color_num = 0;
 

@@ -60,8 +60,6 @@ void ALP_Collider::refresh_ALP_from_data() {
 	tag = Cdata.tag;
 	nohit_tag = Cdata.nohit_tag;
 
-	meshcoll_data = Cdata.meshcoll_data;
-
 	ALPphysics->refresh_ALP_from_data();
 }
 
@@ -183,7 +181,7 @@ void ALP_Collider::update_dop14_as_mesh() {
 		}
 
 		for (int v_num = 0; v_num < 8; v_num++) {
-			const Vector3& pos = mesh.mesh->base_pos[v_num] * world_scale();
+			const Vector3& pos = mesh.mesh_data->base_pos[v_num] * world_scale();
 
 			//DOPÇÃçXêV
 			for (int i = 0; i < DOP::DOP14_size; i++) {

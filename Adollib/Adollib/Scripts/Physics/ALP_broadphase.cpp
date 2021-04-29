@@ -172,11 +172,11 @@ void Physics_function::Broadphase(Scenelist Sce,
 
 	Work_meter::start("Sweep&Prune");
 	//Sweep&Prune
-	std::list<ALP_Collider_mesh*> actives;
-	std::list<ALP_Collider_mesh*> static_actives;
+	std::list<ALP_Collider_part*> actives;
+	std::list<ALP_Collider_part*> static_actives;
 	Contacts::Collider_2 pair;
 	out_pair.clear();
-	std::list<ALP_Collider_mesh*>::iterator ac_itr;
+	std::list<ALP_Collider_part*>::iterator ac_itr;
 	{
 		for (auto& insert_edge : axis_list) {
 			//collider‚Ìn“_‚È‚çactivelist‚É‚ ‚é‚à‚Ì‚ÆÕ“Ë‚Ì‰Â”\«‚ ‚è

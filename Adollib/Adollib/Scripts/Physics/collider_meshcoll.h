@@ -14,7 +14,7 @@ namespace Adollib {
 		Vector3 size;
 
 	private:
-		std::vector<Physics_function::Meshcollider_mesh>* collider_mesh = nullptr;
+		Physics_function::Meshcollider_data* collider_mesh = nullptr;
 		std::string FBX_pass;
 
 	public:
@@ -25,20 +25,20 @@ namespace Adollib {
 			load_mesh(filename, true);
 		}
 		void load_mesh(const char* filename,bool Right_triangle) {
-			Physics_function::Collider_ResourceManager::CreateMCFromFBX(filename, &collider_mesh, Right_triangle);
-			FBX_pass = filename;
+			//FBXÇÃLoadÇçsÇ§
+			std::vector<Physics_function::Meshcollider_data>* meshcoll_data = nullptr;
+			Physics_function::Collider_ResourceManager::CreateMCFromFBX(filename, meshcoll_data, Right_triangle);
+			FBX_pass = filename; //é©êgÇÃfilepassÇÃï€ë∂
 
+			//ALP_ColliderÇ…ï€ë∂
 			ALPcollider_itr->collider_meshes.clear();
 
-			int coll_mesn_size = collider_mesh->size();
-
-			Physics_function::ALP_Collider_mesh coll_mesh;
+			Physics_function::ALP_Collider_part coll_mesh;
 			coll_mesh.ALPcollider = ALPcollider_itr;
-			auto itr = collider_mesh->begin();
-			for(int i = 0;i < coll_mesn_size;i++){
-				coll_mesh.mesh = itr;
+
+			for (auto& data : *meshcoll_data) {
+				coll_mesh.mesh_data = &data;
 				ALPcollider_itr->collider_meshes.emplace_back(coll_mesh);
-				itr++;
 			}
 
 		}
@@ -55,10 +55,10 @@ namespace Adollib {
 			ret.tag = tag;
 			ret.nohit_tag = nohit_tag;
 
-			Physics_function::Meshcoll_data data;
+			//Physics_function::Meshcoll_data data;
 			//data.collider_mesh = collider_mesh;
 
-			ret.meshcoll_data = data;
+			//ret.meshcoll_data = data;
 			return ret;
 		};
 

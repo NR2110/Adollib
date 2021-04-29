@@ -29,8 +29,6 @@ namespace Adollib {
 
 			Physics_function::ALP_Collider_shape shape = Physics_function::ALP_Collider_shape::None; //形情報
 
-			Meshcoll_data meshcoll_data; //meshcollider用data
-
 		};
 		struct Physics_data {
 			float inertial_mass = 0; //質量
@@ -106,7 +104,7 @@ namespace Adollib {
 
 		//計算用のstruct
 		virtual Physics_function::Collider_data get_Colliderdata() const = 0;
-		virtual Physics_function::Meshcoll_data get_Meshdata() { return Physics_function::Meshcoll_data(); };
+		//virtual Physics_function::Meshcoll_data get_Meshdata() { return Physics_function::Meshcoll_data(); };
 
 		const Physics_function::Physics_data get_Physicsdata() const {
 			return physics_data;

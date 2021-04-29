@@ -17,13 +17,13 @@ namespace Adollib {
 		class ALP_Physics;
 		class ALP_Collider;
 
-		struct ALP_Collider_mesh {
+		struct ALP_Collider_part {
 
 			//14-DOP
 			DOP::DOP_14	dop14;	//14DOP データ
 
-			//meshcollider用 vertexes,Edges,Facetsなどの情報
-			std::vector<Physics_function::Meshcollider_mesh>::iterator mesh;
+			//meshcollider用 vertexes,Edges,Facetsなどの情報 resorce_managerの中にある情報へのポインタ
+			Physics_function::Meshcollider_data* mesh_data;
 
 			//親
 			std::list<ALP_Collider>::iterator ALPcollider;
@@ -69,18 +69,16 @@ namespace Adollib {
 			u_int tag = 0; //自身のtag(bit)
 			u_int nohit_tag = 0; //衝突しないtags
 
-			//:::
-			ALP_Collider_shape shape = ALP_Collider_shape::None; //形情報
-
-			//::: 複数meshに対応 各メッシュのdop,頂点情報などがここに保存される :::
-			std::vector<ALP_Collider_mesh> collider_meshes;
+			//::: 複数meshに対応 各メッシュのdop,shapeなどがここに保存される :::
+			std::vector<ALP_Collider_part> collider_meshes;
 
 			//::: GOに渡すためのバッファ :::::::
 			Quaternion offset_CollGO_quat;
 			Vector3 offset_CollGO_pos;
 
 			//:::
-			Meshcoll_data meshcoll_data; //MeshCollider使用時に使うdata vertices,Edges,Facets
+			ALP_Collider_shape shape = ALP_Collider_shape::None; //形情報
+
 
 			//::: ComponentがアタッチされたColliderへのイテレータ :::
 			std::list<Collider*>::iterator coll_itr;

@@ -18,8 +18,8 @@ void Physics_function::generate_contact(std::vector<Contacts::Contact_pair>& pai
 
 	for (auto& pair : pairs) {
 
-		const ALP_Collider_mesh* meshA = pair.body[0];
-		const ALP_Collider_mesh* meshB = pair.body[1];
+		const ALP_Collider_part* meshA = pair.body[0];
+		const ALP_Collider_part* meshB = pair.body[1];
 		const std::list<ALP_Collider>::iterator& shapeA = pair.body[0]->ALPcollider;
 		const std::list<ALP_Collider>::iterator& shapeB = pair.body[1]->ALPcollider;
 
@@ -119,11 +119,11 @@ float sum_of_projected_radii(const Triangle& tri, const Vector3& Wvec, float& mi
 
 	return min;
 }
-float sum_of_projected_radii(float& max, float& min, const ALP_Collider_mesh* meshcoll, const Vector3& nor) {
+float sum_of_projected_radii(float& max, float& min, const ALP_Collider_part* meshcoll, const Vector3& nor) {
 	float value;
 	max = -FLT_MAX;
 	min = +FLT_MAX;
-	for (const Vector3& vertex : meshcoll->mesh->vertices) {
+	for (const Vector3& vertex : meshcoll->mesh_data->vertices) {
 		value = vector3_dot(vertex * meshcoll->ALPcollider->world_scale(), nor);
 		if (max < value)max = value;
 		if (min > value)min = value;
@@ -246,7 +246,7 @@ bool sat_obb_obb(
 
 //OBBとTriangleの分離軸判定 交差していればtrueを返す ついでに色々引数に入れる
 bool sat_obb_Triangle(
-	const OBB& obb, const Triangle& triangle, const std::vector<Physics_function::Meshcollider_mesh>::iterator& mesh,
+	const OBB& obb, const Triangle& triangle, const Physics_function::Meshcollider_data* mesh,
 	float& smallest_penetration, //最小の貫通量
 	int smallest_axis[2], //どの軸で最近になったか(edge×edge用に2つ分用意)
 	SAT_TYPE& smallest_case //どのような形で最近になっているか
@@ -454,7 +454,7 @@ bool sat_obb_Triangle(
 }
 
 //どちらも凸包の場合
-bool sat_convex_mesh_mesh(const ALP_Collider_mesh* meshA, const ALP_Collider_mesh* meshB,
+bool sat_convex_mesh_mesh(const ALP_Collider_part* meshA, const ALP_Collider_part* meshB,
 	float& smallest_penetration, //最小の貫通量
 	int smallest_axis[2], //どの軸で最近になったか(edge×edge用に2つ分用意)
 	SAT_TYPE& smallest_case //どのような形で最近になっているか
@@ -478,8 +478,8 @@ bool sat_convex_mesh_mesh(const ALP_Collider_mesh* meshA, const ALP_Collider_mes
 	////::: obbAの軸にobbBを投影 :::::::::::::::::::
 		//collAの座標系で計算を行う
 	float maxA, minA, maxB, minB;
-	for (u_int f = 0; f < meshA->mesh->facet_num; f++) {
-		const Facet& facet = meshA->mesh->facets.at(f); //meshcoord
+	for (u_int f = 0; f < meshA->mesh_data->facet_num; f++) {
+		const Facet& facet = meshA->mesh_data->facets.at(f); //meshcoord
 		const Vector3& axis = facet.normal; //meshcoord
 
 		// collAを分離軸に投影
@@ -519,8 +519,8 @@ bool sat_convex_mesh_mesh(const ALP_Collider_mesh* meshA, const ALP_Collider_mes
 	////::: obbBの軸にobbAを投影 :::::::::::::::::::
 		//collBの座標系で計算を行う
 	if (PA_FB.hit_point_to_face == true)
-		for (u_int f = 0; f < meshB->mesh->facet_num; f++) {
-			const Facet& facet = meshB->mesh->facets.at(f);
+		for (u_int f = 0; f < meshB->mesh_data->facet_num; f++) {
+			const Facet& facet = meshB->mesh_data->facets.at(f);
 			const Vector3& axis = facet.normal;
 
 			// collBを分離軸に投影
@@ -573,16 +573,16 @@ bool sat_convex_mesh_mesh(const ALP_Collider_mesh* meshA, const ALP_Collider_mes
 	Vector3 save_axisW;
 	float save_crossnorm = 0;
 	Vector3 axisA, axisB, axisW;
-	for (u_int eA = 0; eA < meshA->mesh->edge_num; eA++) {
-		const Edge& edgeA = meshA->mesh->edges.at(eA);
+	for (u_int eA = 0; eA < meshA->mesh_data->edge_num; eA++) {
+		const Edge& edgeA = meshA->mesh_data->edges.at(eA);
 		if (edgeA.type != Edgetype::EdgeConvex) continue;
 
-		const Vector3& edgeVecA = meshA->mesh->vertices.at(edgeA.vertexID[1]) - meshA->mesh->vertices.at(edgeA.vertexID[0]);
-		for (u_int eB = 0; eB < meshB->mesh->edge_num; eB++) {
-			const Edge& edgeB = meshB->mesh->edges.at(eB);
+		const Vector3& edgeVecA = meshA->mesh_data->vertices.at(edgeA.vertexID[1]) - meshA->mesh_data->vertices.at(edgeA.vertexID[0]);
+		for (u_int eB = 0; eB < meshB->mesh_data->edge_num; eB++) {
+			const Edge& edgeB = meshB->mesh_data->edges.at(eB);
 			if (edgeB.type != Edgetype::EdgeConvex) continue;
 
-			const Vector3 edgeVecB = vector3_quatrotate(meshB->mesh->vertices.at(edgeB.vertexID[1]) - meshB->mesh->vertices.at(edgeB.vertexID[0]), offset_quatBA);
+			const Vector3 edgeVecB = vector3_quatrotate(meshB->mesh_data->vertices.at(edgeB.vertexID[1]) - meshB->mesh_data->vertices.at(edgeB.vertexID[0]), offset_quatBA);
 
 			axisA = vector3_cross(edgeVecA, edgeVecB);
 			if (axisA.norm() <= FLT_EPSILON * FLT_EPSILON) continue;
@@ -603,7 +603,7 @@ bool sat_convex_mesh_mesh(const ALP_Collider_mesh* meshA, const ALP_Collider_mes
 			minB += off;
 
 			//辺と辺の距離
-			float CN = fabsf(off) - (vector3_dot(axisA, meshA->mesh->vertices.at(edgeA.vertexID[0])) + -(vector3_dot(axisB, meshB->mesh->vertices.at(edgeB.vertexID[0]))));
+			float CN = fabsf(off) - (vector3_dot(axisA, meshA->mesh_data->vertices.at(edgeA.vertexID[0])) + -(vector3_dot(axisB, meshB->mesh_data->vertices.at(edgeB.vertexID[0]))));
 
 			//貫通の計算
 			float d1 = minA - maxB;
@@ -637,7 +637,7 @@ bool sat_convex_mesh_mesh(const ALP_Collider_mesh* meshA, const ALP_Collider_mes
 
 }
 
-bool sat_obb_convex_mesh(const OBB& obb, const ALP_Collider_mesh* mesh,
+bool sat_obb_convex_mesh(const OBB& obb, const ALP_Collider_part* mesh,
 	float& smallest_penetration, //最小の貫通量
 	int smallest_axis[2], //どの軸で最近になったか(edge×edge用に2つ分用意)
 	SAT_TYPE& smallest_case //どのような形で最近になっているか
@@ -693,8 +693,8 @@ bool sat_obb_convex_mesh(const OBB& obb, const ALP_Collider_mesh* mesh,
 	////::: obbBの軸にobbAを投影 :::::::::::::::::::
 		//meshの座標系で計算を行う
 	if (PA_FB.hit_point_to_face == true)
-		for (u_int f = 0; f < mesh->mesh->facet_num; f++) {
-			const Facet& facet = mesh->mesh->facets.at(f);
+		for (u_int f = 0; f < mesh->mesh_data->facet_num; f++) {
+			const Facet& facet = mesh->mesh_data->facets.at(f);
 			const Vector3& axis = facet.normal; //meshcoord
 
 			// meshを分離軸に投影
@@ -748,7 +748,7 @@ bool sat_obb_convex_mesh(const OBB& obb, const ALP_Collider_mesh* mesh,
 
 //衝突生成
 #pragma region SPHERE-SPHERE
-bool Physics_function::generate_contact_sphere_sphere(const ALP_Collider_mesh* SA, const ALP_Collider_mesh* SB, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_sphere_sphere(const ALP_Collider_part* SA, const ALP_Collider_part* SB, Contacts::Contact_pair& pair) {
 	const std::list<ALP_Collider>::iterator& collA = SA->ALPcollider;
 	const std::list<ALP_Collider>::iterator& collB = SB->ALPcollider;
 
@@ -797,7 +797,7 @@ bool Physics_function::generate_contact_sphere_sphere(const ALP_Collider_mesh* S
 #pragma endregion
 
 #pragma region SPHERE-PLANE
-bool Physics_function::generate_contact_sphere_plane(const ALP_Collider_mesh* sphere_mesh, const ALP_Collider_mesh* plane_mesh, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_sphere_plane(const ALP_Collider_part* sphere_mesh, const ALP_Collider_part* plane_mesh, Contacts::Contact_pair& pair) {
 	const std::list<ALP_Collider>::iterator& sphere = sphere_mesh->ALPcollider;
 	const std::list<ALP_Collider>::iterator& plane = plane_mesh->ALPcollider;
 
@@ -863,9 +863,9 @@ bool Physics_function::generate_contact_sphere_plane(const ALP_Collider_mesh* sp
 #pragma endregion
 
 #pragma region SPHERE-BOX
-bool Physics_function::generate_contact_sphere_box(const ALP_Collider_mesh* sphere_mesh, const ALP_Collider_mesh* box_mesh, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_sphere_box(const ALP_Collider_part* sphere_mesh, const ALP_Collider_part* box_part, Contacts::Contact_pair& pair) {
 	const std::list<ALP_Collider>::iterator& sphere = sphere_mesh->ALPcollider;
-	const std::list<ALP_Collider>::iterator& box = box_mesh->ALPcollider;
+	const std::list<ALP_Collider>::iterator& box = box_part->ALPcollider;
 
 	//AddContact用の変数
 	bool is_AC = false;
@@ -919,8 +919,8 @@ bool Physics_function::generate_contact_sphere_box(const ALP_Collider_mesh* sphe
 
 	if (is_AC)
 	{
-		sphere_mesh->ALPcollider->oncoll_bits |= box_mesh->ALPcollider->tag;
-		box_mesh->ALPcollider->oncoll_bits |= sphere_mesh->ALPcollider->tag;
+		sphere_mesh->ALPcollider->oncoll_bits |= box_part->ALPcollider->tag;
+		box_part->ALPcollider->oncoll_bits |= sphere_mesh->ALPcollider->tag;
 
 		//oncoll_enterのみの場合ここでreturn
 		if (pair.check_oncoll_only == true) return false;
@@ -945,7 +945,7 @@ bool Physics_function::generate_contact_sphere_box(const ALP_Collider_mesh* sphe
 #pragma endregion
 
 #pragma region SPHERE-Capsule
-bool Physics_function::generate_contact_sphere_capsule(const ALP_Collider_mesh* sphere_mesh, const ALP_Collider_mesh* capsule_mesh, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_sphere_capsule(const ALP_Collider_part* sphere_mesh, const ALP_Collider_part* capsule_mesh, Contacts::Contact_pair& pair) {
 
 	const std::list<ALP_Collider>::iterator& sphere = sphere_mesh->ALPcollider;
 	const std::list<ALP_Collider>::iterator& capsule = capsule_mesh->ALPcollider;
@@ -1016,9 +1016,9 @@ bool Physics_function::generate_contact_sphere_capsule(const ALP_Collider_mesh* 
 #pragma endregion
 
 #pragma region SPHERE-MESH
-bool Physics_function::generate_contact_sphere_mesh(const ALP_Collider_mesh* sphere_mesh, const ALP_Collider_mesh* mesh_mesh, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_sphere_mesh(const ALP_Collider_part* sphere_mesh, const ALP_Collider_part* mesh_part, Contacts::Contact_pair& pair) {
 	const std::list<ALP_Collider>::iterator& sphere = sphere_mesh->ALPcollider;
-	const std::list<ALP_Collider>::iterator& mesh = mesh_mesh->ALPcollider;
+	const std::list<ALP_Collider>::iterator& mesh = mesh_part->ALPcollider;
 
 	//AddContact用の変数
 	bool is_AC = false;
@@ -1027,7 +1027,7 @@ bool Physics_function::generate_contact_sphere_mesh(const ALP_Collider_mesh* sph
 	Vector3 ACcontact_pointA;
 	Vector3 ACcontact_pointB;
 
-	if (false && mesh_mesh->mesh->is_Convex == true) {
+	if (false && mesh_part->mesh_data->is_Convex == true) {
 		//球とmeshの衝突判定を行う
 		Matrix rotate, inverse_rotate;
 		rotate = matrix_world(Vector3(1, 1, 1), mesh->world_orientation().get_rotate_matrix(), mesh->world_position());
@@ -1041,9 +1041,9 @@ bool Physics_function::generate_contact_sphere_mesh(const ALP_Collider_mesh* sph
 
 		closest_point = center;
 		//各面の外にあれば面平面に持ってくる
-		for (u_int i = 0; i < mesh_mesh->mesh->facet_num; i++) {
-			const Vector3& nor = mesh_mesh->mesh->facets.at(i).normal.unit_vect();
-			const Vector3& pos = mesh_mesh->mesh->vertices.at(mesh_mesh->mesh->facets.at(i).vertexID[0]) * mesh->world_scale();
+		for (u_int i = 0; i < mesh_part->mesh_data->facet_num; i++) {
+			const Vector3& nor = mesh_part->mesh_data->facets.at(i).normal.unit_vect();
+			const Vector3& pos = mesh_part->mesh_data->vertices.at(mesh_part->mesh_data->facets.at(i).vertexID[0]) * mesh->world_scale();
 			float d = vector3_dot(nor, pos) - vector3_dot(nor, closest_point);
 			if (d < 0)
 				closest_point += d * nor;
@@ -1072,9 +1072,9 @@ bool Physics_function::generate_contact_sphere_mesh(const ALP_Collider_mesh* sph
 		bool is_hit = false; //衝突していたらtrue
 		Vector3 nor_meshcoord;
 		//球とmeshの判定
-		for (const auto& faset : mesh_mesh->mesh->facets) {
+		for (const auto& faset : mesh_part->mesh_data->facets) {
 			const Vector3& nor = (faset.normal * mesh->world_scale()).unit_vect();
-			const Vector3& mesh_pos0 = mesh_mesh->mesh->vertices.at(faset.vertexID[0]) * mesh->world_scale();
+			const Vector3& mesh_pos0 = mesh_part->mesh_data->vertices.at(faset.vertexID[0]) * mesh->world_scale();
 
 			//mesh平面の"d"
 			float dis = vector3_dot(nor, mesh_pos0);
@@ -1083,8 +1083,8 @@ bool Physics_function::generate_contact_sphere_mesh(const ALP_Collider_mesh* sph
 			//mesh平面とsphereの距離がmin_disより大きければ衝突しない
 			if (fabsf(dis_sp - dis) > min_dis) continue;
 
-			const Vector3& mesh_pos1 = mesh_mesh->mesh->vertices.at(faset.vertexID[1]) * mesh->world_scale();
-			const Vector3& mesh_pos2 = mesh_mesh->mesh->vertices.at(faset.vertexID[2]) * mesh->world_scale();
+			const Vector3& mesh_pos1 = mesh_part->mesh_data->vertices.at(faset.vertexID[1]) * mesh->world_scale();
+			const Vector3& mesh_pos2 = mesh_part->mesh_data->vertices.at(faset.vertexID[2]) * mesh->world_scale();
 
 			Vector3 closest_p;
 			Closest_func::get_closestP_point_triangle(
@@ -1119,8 +1119,8 @@ bool Physics_function::generate_contact_sphere_mesh(const ALP_Collider_mesh* sph
 
 	if (is_AC)
 	{
-		sphere_mesh->ALPcollider->oncoll_bits |= mesh_mesh->ALPcollider->tag;
-		mesh_mesh->ALPcollider->oncoll_bits |= sphere_mesh->ALPcollider->tag;
+		sphere_mesh->ALPcollider->oncoll_bits |= mesh_part->ALPcollider->tag;
+		mesh_part->ALPcollider->oncoll_bits |= sphere_mesh->ALPcollider->tag;
 
 		//oncoll_enterのみの場合ここでreturn
 		if (pair.check_oncoll_only == true) return false;
@@ -1146,8 +1146,8 @@ bool Physics_function::generate_contact_sphere_mesh(const ALP_Collider_mesh* sph
 
 
 #pragma region BOX-PLANE
-bool Physics_function::generate_contact_box_plane(const ALP_Collider_mesh* box_mesh, const ALP_Collider_mesh* plane_mesh, Contacts::Contact_pair& pair) {
-	const std::list<ALP_Collider>::iterator& box = box_mesh->ALPcollider;
+bool Physics_function::generate_contact_box_plane(const ALP_Collider_part* box_part, const ALP_Collider_part* plane_mesh, Contacts::Contact_pair& pair) {
+	const std::list<ALP_Collider>::iterator& box = box_part->ALPcollider;
 	const std::list<ALP_Collider>::iterator& plane = plane_mesh->ALPcollider;
 
 	//AddContact用の変数
@@ -1216,8 +1216,8 @@ bool Physics_function::generate_contact_box_plane(const ALP_Collider_mesh* box_m
 
 	if (is_AC)
 	{
-		box_mesh->ALPcollider->oncoll_bits |= plane_mesh->ALPcollider->tag;
-		plane_mesh->ALPcollider->oncoll_bits |= box_mesh->ALPcollider->tag;
+		box_part->ALPcollider->oncoll_bits |= plane_mesh->ALPcollider->tag;
+		plane_mesh->ALPcollider->oncoll_bits |= box_part->ALPcollider->tag;
 
 		//oncoll_enterのみの場合ここでreturn
 		if (pair.check_oncoll_only == true) return false;
@@ -1243,7 +1243,7 @@ bool Physics_function::generate_contact_box_plane(const ALP_Collider_mesh* box_m
 
 #pragma region BOX-BOX
 
-bool Physics_function::generate_contact_box_box(const ALP_Collider_mesh* bA, const ALP_Collider_mesh* bB, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_box_box(const ALP_Collider_part* bA, const ALP_Collider_part* bB, Contacts::Contact_pair& pair) {
 	const std::list<ALP_Collider>::iterator& boxA = bA->ALPcollider;
 	const std::list<ALP_Collider>::iterator& boxB = bB->ALPcollider;
 
@@ -1448,9 +1448,9 @@ bool Physics_function::generate_contact_box_box(const ALP_Collider_mesh* bA, con
 #pragma endregion
 
 #pragma region BOX-Capsule
-bool Physics_function::generate_contact_box_capsule(const ALP_Collider_mesh* box_mesh, const ALP_Collider_mesh* capsule_mesh, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_box_capsule(const ALP_Collider_part* box_part, const ALP_Collider_part* capsule_mesh, Contacts::Contact_pair& pair) {
 	const std::list<ALP_Collider>::iterator& capsule = capsule_mesh->ALPcollider;
-	const std::list<ALP_Collider>::iterator& box = box_mesh->ALPcollider;
+	const std::list<ALP_Collider>::iterator& box = box_part->ALPcollider;
 
 	//AddContact用の変数
 	bool is_AC = false;
@@ -1558,8 +1558,8 @@ bool Physics_function::generate_contact_box_capsule(const ALP_Collider_mesh* box
 
 	if (is_AC)
 	{
-		box_mesh->ALPcollider->oncoll_bits |= capsule_mesh->ALPcollider->tag;
-		capsule_mesh->ALPcollider->oncoll_bits |= box_mesh->ALPcollider->tag;
+		box_part->ALPcollider->oncoll_bits |= capsule_mesh->ALPcollider->tag;
+		capsule_mesh->ALPcollider->oncoll_bits |= box_part->ALPcollider->tag;
 
 		//oncoll_enterのみの場合ここでreturn
 		if (pair.check_oncoll_only == true) return false;
@@ -1587,9 +1587,9 @@ bool Physics_function::generate_contact_box_capsule(const ALP_Collider_mesh* box
 
 #pragma region BOX-MESH
 
-bool Physics_function::generate_contact_box_mesh(const ALP_Collider_mesh* box_mesh, const ALP_Collider_mesh* mesh_mesh, Contacts::Contact_pair& pair) {
-	const std::list<ALP_Collider>::iterator& box = box_mesh->ALPcollider;
-	const std::list<ALP_Collider>::iterator& mesh = mesh_mesh->ALPcollider;
+bool Physics_function::generate_contact_box_mesh(const ALP_Collider_part* box_part, const ALP_Collider_part* mesh_part, Contacts::Contact_pair& pair) {
+	const std::list<ALP_Collider>::iterator& box = box_part->ALPcollider;
+	const std::list<ALP_Collider>::iterator& mesh = mesh_part->ALPcollider;
 
 	//AddContact用の変数
 	bool is_AC = false;
@@ -1598,7 +1598,7 @@ bool Physics_function::generate_contact_box_mesh(const ALP_Collider_mesh* box_me
 	Vector3 ACcontact_pointA;
 	Vector3 ACcontact_pointB;
 
-	if (0 && mesh_mesh->mesh->is_Convex == true) {}
+	if (0 && mesh_part->mesh_data->is_Convex == true) {}
 	else {
 		//boxとmeshの判定
 		Matrix m;
@@ -1628,10 +1628,10 @@ bool Physics_function::generate_contact_box_mesh(const ALP_Collider_mesh* box_me
 		triangle.world_scale = mesh->world_scale();
 
 		int debug_conut = 0;
-		for (const auto& faset : mesh_mesh->mesh->facets) {
+		for (const auto& faset : mesh_part->mesh_data->facets) {
 			debug_conut++;
 
-			auto& vertices = mesh_mesh->mesh->vertices;
+			auto& vertices = mesh_part->mesh_data->vertices;
 			triangle.vertex_position[0] = (vertices)[faset.vertexID[0]];
 			triangle.vertex_position[1] = (vertices)[faset.vertexID[1]];
 			triangle.vertex_position[2] = (vertices)[faset.vertexID[2]];
@@ -1653,9 +1653,9 @@ bool Physics_function::generate_contact_box_mesh(const ALP_Collider_mesh* box_me
 			int axis[2];	//最小めり込み量を得た分離軸の作成に使用した各OBBのローカル軸番号 辺×辺用に2つ
 			SAT_TYPE s_case;	//衝突の種類
 			//assert(!(isnan((obb.u_axes[0] + obb.u_axes[1] + obb.u_axes[2]).norm())));
-			if (!sat_obb_Triangle(obb, triangle, mesh_mesh->mesh, penetration, axis, s_case)) continue;
+			if (!sat_obb_Triangle(obb, triangle, mesh_part->mesh_data, penetration, axis, s_case)) continue;
 
-			if (!sat_obb_Triangle(obb, triangle, mesh_mesh->mesh, penetration, axis, s_case)) continue;
+			if (!sat_obb_Triangle(obb, triangle, mesh_part->mesh_data, penetration, axis, s_case)) continue;
 
 			if (0) {
 				if (smallest_case == SAT_TYPE::EDGE_EDGE ||
@@ -1800,8 +1800,8 @@ bool Physics_function::generate_contact_box_mesh(const ALP_Collider_mesh* box_me
 			{
 				//Vector3 d = obbB.world_position - obbA.world_position;
 
-				const Vector3& tri_vertex_p0 = mesh_mesh->mesh->vertices[mesh_mesh->mesh->edges[smallest_triangle.Edge_num[smallest_axis[1]]].vertexID[0]];
-				const Vector3& tri_vertex_p1 = mesh_mesh->mesh->vertices[mesh_mesh->mesh->edges[smallest_triangle.Edge_num[smallest_axis[1]]].vertexID[1]];
+				const Vector3& tri_vertex_p0 = mesh_part->mesh_data->vertices[mesh_part->mesh_data->edges[smallest_triangle.Edge_num[smallest_axis[1]]].vertexID[0]];
+				const Vector3& tri_vertex_p1 = mesh_part->mesh_data->vertices[mesh_part->mesh_data->edges[smallest_triangle.Edge_num[smallest_axis[1]]].vertexID[1]];
 
 				const Vector3& world_tri_vertex_p0 = vector3_quatrotate(tri_vertex_p0 * triangle.world_scale, triangle.world_orientation);
 				const Vector3& world_tri_vertex_p1 = vector3_quatrotate(tri_vertex_p1 * triangle.world_scale, triangle.world_orientation);
@@ -1856,8 +1856,8 @@ bool Physics_function::generate_contact_box_mesh(const ALP_Collider_mesh* box_me
 
 			if (is_AC)
 			{
-				box_mesh->ALPcollider->oncoll_bits |= mesh_mesh->ALPcollider->tag;
-				mesh_mesh->ALPcollider->oncoll_bits |= box_mesh->ALPcollider->tag;
+				box_part->ALPcollider->oncoll_bits |= mesh_part->ALPcollider->tag;
+				mesh_part->ALPcollider->oncoll_bits |= box_part->ALPcollider->tag;
 
 				//oncoll_enterのみの場合ここでreturn
 				if (pair.check_oncoll_only == true) return false;
@@ -1891,7 +1891,7 @@ bool Physics_function::generate_contact_box_mesh(const ALP_Collider_mesh* box_me
 
 
 #pragma region Capsule-Capsule
-bool Physics_function::generate_contact_capsule_capsule(const ALP_Collider_mesh* SA, const ALP_Collider_mesh* SB, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_capsule_capsule(const ALP_Collider_part* SA, const ALP_Collider_part* SB, Contacts::Contact_pair& pair) {
 	const std::list<ALP_Collider>::iterator& collA = SA->ALPcollider;
 	const std::list<ALP_Collider>::iterator& collB = SB->ALPcollider;
 
@@ -1961,9 +1961,9 @@ bool Physics_function::generate_contact_capsule_capsule(const ALP_Collider_mesh*
 #pragma endregion
 
 #pragma region Capsule-Mesh
-bool Physics_function::generate_contact_capsule_mesh(const ALP_Collider_mesh* capsule_mesh, const ALP_Collider_mesh* mesh_mesh, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_capsule_mesh(const ALP_Collider_part* capsule_mesh, const ALP_Collider_part* mesh_part, Contacts::Contact_pair& pair) {
 	const std::list<ALP_Collider>::iterator& capsule = capsule_mesh->ALPcollider;
-	const std::list<ALP_Collider>::iterator& mesh = mesh_mesh->ALPcollider;
+	const std::list<ALP_Collider>::iterator& mesh = mesh_part->ALPcollider;
 
 	//AddContact用の変数
 	bool is_AC = false;
@@ -1972,7 +1972,7 @@ bool Physics_function::generate_contact_capsule_mesh(const ALP_Collider_mesh* ca
 	Vector3 ACcontact_pointA;
 	Vector3 ACcontact_pointB;
 
-	if (0 && mesh_mesh->mesh->is_Convex == true) {
+	if (0 && mesh_part->mesh_data->is_Convex == true) {
 		////球とmeshの衝突判定を行う
 		//Matrix rotate, inverse_rotate;
 		//rotate = matrix_world(Vector3(1, 1, 1), mesh->world_orientation().get_rotate_matrix(), mesh->world_position());
@@ -1986,9 +1986,9 @@ bool Physics_function::generate_contact_capsule_mesh(const ALP_Collider_mesh* ca
 
 		//closest_point = center;
 		////各面の外にあれば面平面に持ってくる
-		//for (u_int i = 0; i < mesh_mesh->mesh->facet_num; i++) {
-		//	const Vector3& nor = mesh_mesh->mesh->facets.at(i).normal.unit_vect();
-		//	const Vector3& pos = mesh_mesh->mesh->vertices.at(mesh_mesh->mesh->facets.at(i).vertexID[0]) * mesh->world_scale();
+		//for (u_int i = 0; i < mesh_part->mesh->facet_num; i++) {
+		//	const Vector3& nor = mesh_part->mesh->facets.at(i).normal.unit_vect();
+		//	const Vector3& pos = mesh_part->mesh->vertices.at(mesh_part->mesh->facets.at(i).vertexID[0]) * mesh->world_scale();
 		//	float d = vector3_dot(nor, pos) - vector3_dot(nor, closest_point);
 		//	if (d < 0)
 		//		closest_point += d * nor;
@@ -2033,9 +2033,9 @@ bool Physics_function::generate_contact_capsule_mesh(const ALP_Collider_mesh* ca
 		float min_t; //衝突点のt
 		Vector3 min_sphere_pos_meshcoord; //衝突点のcapsuleのsphereのpos
 		//capsuleとmeshの判定
-		for (const auto& faset : mesh_mesh->mesh->facets) {
+		for (const auto& faset : mesh_part->mesh_data->facets) {
 			const Vector3 nor = (faset.normal * mesh->world_scale()).unit_vect();
-			const Vector3 mesh_pos0 = mesh_mesh->mesh->vertices.at(faset.vertexID[0]) * mesh->world_scale();
+			const Vector3 mesh_pos0 = mesh_part->mesh_data->vertices.at(faset.vertexID[0]) * mesh->world_scale();
 			//mesh平面の"d"
 			float dis = vector3_dot(nor, mesh_pos0);
 
@@ -2058,8 +2058,8 @@ bool Physics_function::generate_contact_capsule_mesh(const ALP_Collider_mesh* ca
 			//sphereがMeshの裏にいる または mesh平面とsphereの距離がmin_disより大きければ衝突しない
 			if (dis_sp - dis < 0 || dis_sp - dis > min_dis) continue;
 
-			const Vector3 mesh_pos1 = mesh_mesh->mesh->vertices.at(faset.vertexID[1]) * mesh->world_scale();
-			const Vector3 mesh_pos2 = mesh_mesh->mesh->vertices.at(faset.vertexID[2]) * mesh->world_scale();
+			const Vector3 mesh_pos1 = mesh_part->mesh_data->vertices.at(faset.vertexID[1]) * mesh->world_scale();
+			const Vector3 mesh_pos2 = mesh_part->mesh_data->vertices.at(faset.vertexID[2]) * mesh->world_scale();
 
 			Vector3 closest_p;
 			Closest_func::get_closestP_segment_triangle(
@@ -2099,8 +2099,8 @@ bool Physics_function::generate_contact_capsule_mesh(const ALP_Collider_mesh* ca
 
 	if (is_AC)
 	{
-		mesh_mesh->ALPcollider->oncoll_bits |= capsule_mesh->ALPcollider->tag;
-		capsule_mesh->ALPcollider->oncoll_bits |= mesh_mesh->ALPcollider->tag;
+		mesh_part->ALPcollider->oncoll_bits |= capsule_mesh->ALPcollider->tag;
+		capsule_mesh->ALPcollider->oncoll_bits |= mesh_part->ALPcollider->tag;
 
 		//oncoll_enterのみの場合ここでreturn
 		if (pair.check_oncoll_only == true) return false;
@@ -2126,18 +2126,18 @@ bool Physics_function::generate_contact_capsule_mesh(const ALP_Collider_mesh* ca
 
 
 #pragma region MESH-PLANE
-bool Physics_function::generate_contact_mesh_plane(const ALP_Collider_mesh* S1, const ALP_Collider_mesh* S2, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_mesh_plane(const ALP_Collider_part* S1, const ALP_Collider_part* S2, Contacts::Contact_pair& pair) {
 	return true;
 }
 #pragma endregion
 
 #pragma region MESH-MESH
 
-bool GC_concave_mesh_mesh(const ALP_Collider& S1, const ALP_Collider_mesh* S2, int concave_num, Contacts::Contact_pair& pair) {
+bool GC_concave_mesh_mesh(const ALP_Collider& S1, const ALP_Collider_part* S2, int concave_num, Contacts::Contact_pair& pair) {
 	return false;
 }
 
-bool Physics_function::generate_contact_mesh_mesh(const ALP_Collider_mesh* mA, const ALP_Collider_mesh* mB, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_mesh_mesh(const ALP_Collider_part* mA, const ALP_Collider_part* mB, Contacts::Contact_pair& pair) {
 	const std::list<ALP_Collider>::iterator& meshA = mA->ALPcollider;
 	const std::list<ALP_Collider>::iterator& meshB = mB->ALPcollider;
 
@@ -2146,7 +2146,7 @@ bool Physics_function::generate_contact_mesh_mesh(const ALP_Collider_mesh* mA, c
 	SAT_TYPE smallest_case;		//衝突の種類
 
 	//どちらもconvexなobjectの場合
-	if (mA->mesh->is_Convex == true && mB->mesh->is_Convex == true) {
+	if (mA->mesh_data->is_Convex == true && mB->mesh_data->is_Convex == true) {
 		if (!sat_convex_mesh_mesh(mA, mB, smallest_penetration, smallest_facetID, smallest_case))return false;
 
 		Quaternion offset_quatBA = meshB->world_orientation() * meshA->world_orientation().inverse();
@@ -2157,8 +2157,8 @@ bool Physics_function::generate_contact_mesh_mesh(const ALP_Collider_mesh* mA, c
 		//SBの頂点がSAの面と衝突した場合
 		if (smallest_case == SAT_TYPE::POINTB_FACETA)
 		{
-			const ALP_Collider_mesh* facet_mesh = mA;
-			const ALP_Collider_mesh* vertex_mesh = mB;
+			const ALP_Collider_part* facet_mesh = mA;
+			const ALP_Collider_part* vertex_mesh = mB;
 
 			const std::list<ALP_Collider>::iterator& facet_coll = facet_mesh->ALPcollider;
 			const std::list<ALP_Collider>::iterator& vertex_coll = vertex_mesh->ALPcollider;
@@ -2169,7 +2169,7 @@ bool Physics_function::generate_contact_mesh_mesh(const ALP_Collider_mesh* mA, c
 			Vector3 offset_posFV = facet_coll->world_position() - vertex_coll->world_position();
 
 			assert(smallest_facetID[1] == -1);
-			const Facet& nerest_facet = facet_mesh->mesh->facets.at(smallest_facetID[0]);
+			const Facet& nerest_facet = facet_mesh->mesh_data->facets.at(smallest_facetID[0]);
 
 			Vector3 axisF = nerest_facet.normal.unit_vect();
 			Vector3 axisW = vector3_quatrotate(axisF, facet_coll->world_orientation()).unit_vect();
@@ -2185,15 +2185,15 @@ bool Physics_function::generate_contact_mesh_mesh(const ALP_Collider_mesh* mA, c
 				float max_len = -FLT_MAX;
 				Vector3 axisV = vector3_quatrotate(axisF, offset_quatFV);
 
-				for (u_int v_num = 0; v_num < vertex_mesh->mesh->vertex_num; v_num++) {
+				for (u_int v_num = 0; v_num < vertex_mesh->mesh_data->vertex_num; v_num++) {
 
-					if (vector3_dot(vertex_mesh->mesh->vertices.at(v_num), axisV) > max_len) {
-						max_len = vector3_dot(vertex_mesh->mesh->vertices.at(v_num), axisV);
+					if (vector3_dot(vertex_mesh->mesh_data->vertices.at(v_num), axisV) > max_len) {
+						max_len = vector3_dot(vertex_mesh->mesh_data->vertices.at(v_num), axisV);
 						nearest_pointID = v_num;
 					}
 				}
 			}
-			pB = vertex_mesh->mesh->vertices.at(nearest_pointID);
+			pB = vertex_mesh->mesh_data->vertices.at(nearest_pointID);
 			pB *= vertex_coll->world_scale();
 
 			//上記のp0がfacet_collの最近面上のどこにあるのか
@@ -2206,16 +2206,16 @@ bool Physics_function::generate_contact_mesh_mesh(const ALP_Collider_mesh* mA, c
 				Vector3 n_pos;
 
 
-				for (u_int f_num = 0; f_num < facet_mesh->mesh->facet_num; f_num++) {
+				for (u_int f_num = 0; f_num < facet_mesh->mesh_data->facet_num; f_num++) {
 
-					if (vector3_dot(facet_mesh->mesh->facets.at(f_num).normal, -axisF) < 0.5)continue; //衝突法線と比べて
+					if (vector3_dot(facet_mesh->mesh_data->facets.at(f_num).normal, -axisF) < 0.5)continue; //衝突法線と比べて
 
 					//メッシュと点の最近点を求める
 					get_closestP_point_triangle(p,
-						facet_mesh->mesh->vertices.at(facet_mesh->mesh->facets.at(f_num).vertexID[0]),
-						facet_mesh->mesh->vertices.at(facet_mesh->mesh->facets.at(f_num).vertexID[1]),
-						facet_mesh->mesh->vertices.at(facet_mesh->mesh->facets.at(f_num).vertexID[2]),
-						facet_mesh->mesh->facets.at(f_num).normal,
+						facet_mesh->mesh_data->vertices.at(facet_mesh->mesh_data->facets.at(f_num).vertexID[0]),
+						facet_mesh->mesh_data->vertices.at(facet_mesh->mesh_data->facets.at(f_num).vertexID[1]),
+						facet_mesh->mesh_data->vertices.at(facet_mesh->mesh_data->facets.at(f_num).vertexID[2]),
+						facet_mesh->mesh_data->facets.at(f_num).normal,
 						n_pos
 					);
 
@@ -2239,8 +2239,8 @@ bool Physics_function::generate_contact_mesh_mesh(const ALP_Collider_mesh* mA, c
 		//SAの頂点がSBの面と衝突した場合
 		if (smallest_case == SAT_TYPE::POINTA_FACETB)
 		{
-			const ALP_Collider_mesh* facet_mesh = mB;
-			const ALP_Collider_mesh* vertex_mesh = mA;
+			const ALP_Collider_part* facet_mesh = mB;
+			const ALP_Collider_part* vertex_mesh = mA;
 
 			const std::list<ALP_Collider>::iterator& facet_coll = facet_mesh->ALPcollider;
 			const std::list<ALP_Collider>::iterator& vertex_coll = vertex_mesh->ALPcollider;
@@ -2251,7 +2251,7 @@ bool Physics_function::generate_contact_mesh_mesh(const ALP_Collider_mesh* mA, c
 			Vector3 offset_posFV = facet_coll->world_position() - vertex_coll->world_position();
 
 			assert(smallest_facetID[0] == -1);
-			const Facet& nerest_facet = facet_mesh->mesh->facets.at(smallest_facetID[1]);
+			const Facet& nerest_facet = facet_mesh->mesh_data->facets.at(smallest_facetID[1]);
 
 			Vector3 axisF = nerest_facet.normal.unit_vect();
 			Vector3 axisW = vector3_quatrotate(axisF, facet_coll->world_orientation()).unit_vect();
@@ -2267,15 +2267,15 @@ bool Physics_function::generate_contact_mesh_mesh(const ALP_Collider_mesh* mA, c
 				float max_len = -FLT_MAX;
 				Vector3 axisV = vector3_quatrotate(axisF, offset_quatFV);
 
-				for (u_int v_num = 0; v_num < vertex_mesh->mesh->vertex_num; v_num++) {
+				for (u_int v_num = 0; v_num < vertex_mesh->mesh_data->vertex_num; v_num++) {
 
-					if (vector3_dot(vertex_mesh->mesh->vertices.at(v_num), axisV) > max_len) {
-						max_len = vector3_dot(vertex_mesh->mesh->vertices.at(v_num), axisV);
+					if (vector3_dot(vertex_mesh->mesh_data->vertices.at(v_num), axisV) > max_len) {
+						max_len = vector3_dot(vertex_mesh->mesh_data->vertices.at(v_num), axisV);
 						nearest_pointID = v_num;
 					}
 				}
 			}
-			pB = vertex_mesh->mesh->vertices.at(nearest_pointID);
+			pB = vertex_mesh->mesh_data->vertices.at(nearest_pointID);
 			pB *= vertex_coll->world_scale();
 
 			//上記のpBがfacet_collの最近面上のどこにあるのか
@@ -2288,16 +2288,16 @@ bool Physics_function::generate_contact_mesh_mesh(const ALP_Collider_mesh* mA, c
 				Vector3 n_pos;
 
 
-				for (u_int f_num = 0; f_num < facet_mesh->mesh->facet_num; f_num++) {
+				for (u_int f_num = 0; f_num < facet_mesh->mesh_data->facet_num; f_num++) {
 
-					if (vector3_dot(facet_mesh->mesh->facets.at(f_num).normal, -axisF) < 0.5)continue; //衝突法線と比べて
+					if (vector3_dot(facet_mesh->mesh_data->facets.at(f_num).normal, -axisF) < 0.5)continue; //衝突法線と比べて
 
 					//メッシュと点の最近点を求める
 					get_closestP_point_triangle(p,
-						facet_mesh->mesh->vertices.at(facet_mesh->mesh->facets.at(f_num).vertexID[0]),
-						facet_mesh->mesh->vertices.at(facet_mesh->mesh->facets.at(f_num).vertexID[1]),
-						facet_mesh->mesh->vertices.at(facet_mesh->mesh->facets.at(f_num).vertexID[2]),
-						facet_mesh->mesh->facets.at(f_num).normal,
+						facet_mesh->mesh_data->vertices.at(facet_mesh->mesh_data->facets.at(f_num).vertexID[0]),
+						facet_mesh->mesh_data->vertices.at(facet_mesh->mesh_data->facets.at(f_num).vertexID[1]),
+						facet_mesh->mesh_data->vertices.at(facet_mesh->mesh_data->facets.at(f_num).vertexID[2]),
+						facet_mesh->mesh_data->facets.at(f_num).normal,
 						n_pos
 					);
 
@@ -2327,16 +2327,16 @@ bool Physics_function::generate_contact_mesh_mesh(const ALP_Collider_mesh* mA, c
 			Vector3 offset_posAB = meshA->world_position() - meshB->world_position();
 			Vector3 offset_posBA = meshB->world_position() - meshA->world_position();
 
-			const Edge& edgeA = mA->mesh->edges.at(smallest_facetID[0]);
-			const Edge& edgeB = mB->mesh->edges.at(smallest_facetID[1]);
+			const Edge& edgeA = mA->mesh_data->edges.at(smallest_facetID[0]);
+			const Edge& edgeB = mB->mesh_data->edges.at(smallest_facetID[1]);
 
 			Vector3 edgeA_p[2] = {
-				{mA->mesh->vertices.at(edgeA.vertexID[0]) * meshA->world_scale()},
-				{mA->mesh->vertices.at(edgeA.vertexID[1]) * meshA->world_scale()}
+				{mA->mesh_data->vertices.at(edgeA.vertexID[0]) * meshA->world_scale()},
+				{mA->mesh_data->vertices.at(edgeA.vertexID[1]) * meshA->world_scale()}
 			};
 			Vector3 edgeB_p[2] = {
-				{mB->mesh->vertices.at(edgeB.vertexID[0]) * meshB->world_scale()},
-				{mB->mesh->vertices.at(edgeB.vertexID[1]) * meshB->world_scale()}
+				{mB->mesh_data->vertices.at(edgeB.vertexID[0]) * meshB->world_scale()},
+				{mB->mesh_data->vertices.at(edgeB.vertexID[1]) * meshB->world_scale()}
 			};
 
 			Vector3 edgeA_vec = (edgeA_p[0] - edgeA_p[1]).unit_vect();

@@ -9,12 +9,12 @@ namespace Adollib {
 	namespace Physics_function {
 		//‘}“ü–@‚Ì
 		struct Insert_edge {
-			ALP_Collider_mesh* mesh;
+			ALP_Collider_part* mesh;
 			float value = 0;
 			bool edge_start = false; //true = st, false = go
 			u_int mesh_index = 0;
 			std::list<Insert_edge>::iterator axis_list_pair_itr;
-			std::list<ALP_Collider_mesh*>::iterator active_list_pair_itr;
+			std::list<ALP_Collider_part*>::iterator active_list_pair_itr;
 		};
 
 		namespace Broadphase_static {

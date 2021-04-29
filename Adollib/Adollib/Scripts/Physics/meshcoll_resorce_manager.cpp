@@ -18,16 +18,18 @@ using namespace Physics_function;
 using namespace Crossing_func;
 using namespace std;
 
-std::unordered_map <std::string, std::vector<Meshcollider_mesh>> Collider_ResourceManager::meshes;
+std::unordered_map <std::string, std::vector<Meshcollider_data>> Collider_ResourceManager::meshcoll_datas;
 
-bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<Meshcollider_mesh>** ret_mesh, bool Right_triangle) {
+bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<Meshcollider_data>* ret_mesh, bool Right_triangle) {
 
-	if (meshes.count((string)fbxname) == 1) {
-		*ret_mesh = &meshes[fbxname];
+	//すでに同名ファイルをLoadしていれば
+	if (meshcoll_datas.count((string)fbxname) == 1) {
+		//for (auto& data : meshcoll_datas[fbxname]) {
+		//	ret_mesh->collider_meshes.emplace_back(&data);
+		//}
+		ret_mesh = &meshcoll_datas[fbxname];
 		return true;
 	}
-	//vector<Vector3>& vertices = vertices_[fbxname];
-	//vertices.clear();
 
 	const char* fileName = fbxname;
 	bool hr = true;
@@ -81,7 +83,7 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 		int vertex_count = 0;
 	};
 	std::vector<Subset> subsets;
-	std::vector<Meshcollider_mesh> _mesh;
+	std::vector<Meshcollider_data> _mesh;
 
 	//TODO : FBX内のgloabal_transformを考慮していない
 
@@ -91,7 +93,7 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 	{
 		FbxMesh* fbxMesh = fetched_meshes.at(mesh_num)->GetMesh();
 		Subset& subset = subsets.at(mesh_num);
-		Meshcollider_mesh& mesh = _mesh.at(mesh_num);
+		Meshcollider_data& mesh = _mesh.at(mesh_num);
 		mesh.FBX_pass = fbxname;
 		//::
 
@@ -351,12 +353,14 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 		halfsize = Vector3(dopbase.max[0] - dopbase.min[0], dopbase.max[1] - dopbase.min[1], dopbase.max[2] - dopbase.min[2]) / 2.0f;
 	}
 
-	meshes[fbxname] = _mesh;
+	meshcoll_datas[fbxname] = _mesh;
 
 
-
-	*ret_mesh = &meshes[fbxname];
-
+	//for (auto& data : meshcoll_datas[fbxname]) {
+	//	ret_mesh->collider_meshes.emplace_back(&data);
+	//}
+	//*ret_mesh = &meshcoll_datas[fbxname];
+	ret_mesh = &meshcoll_datas[fbxname];
 
 	return true;
 }

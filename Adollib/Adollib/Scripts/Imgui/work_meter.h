@@ -14,10 +14,10 @@ namespace Adollib {
 
 		static const int max_ = 120;
 
-		static std::unordered_map<std::string, std::unordered_map<std::string, meter>> start_stop;
+		static std::unordered_map<std::string, std::unordered_map<std::string, meter>> start_stop; //<tag名前,<meter名前,meter>> メーター名からstopを呼べるように
 		static std::unordered_map<std::string, std::unordered_map<std::string, float[max_ * 2]>> meters;
 
-		static std::unordered_map<std::string,std::vector<std::string>> names;
+		static std::unordered_map<std::string,std::vector<std::string>> names; //mapを回すために保存
 		static std::unordered_map < std::string, std::vector<bool>> name_flags;
 		static std::vector<std::string> tags;
 
@@ -25,10 +25,10 @@ namespace Adollib {
 	public:
 
 		static bool render();
-		static bool start(std::string);
-		static bool stop(std::string);
+		static bool start(const std::string&);
+		static bool stop(const std::string&);
 
-		static bool tag_start(std::string); //tag
+		static bool tag_start(const std::string&); //tag
 		static bool tag_stop (); //tag
 
 

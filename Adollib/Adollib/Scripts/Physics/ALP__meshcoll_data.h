@@ -1,4 +1,4 @@
-#pragma once
+														#pragma once
 #include "../Math/math.h"
 
 namespace Adollib {
@@ -24,7 +24,7 @@ namespace Adollib {
 			Vector3 normal;  // 面法線ベクトル
 		};
 
-		struct Meshcollider_mesh{
+		struct Meshcollider_data{
 			std::string FBX_pass;
 
 			u_int index_num = 0;
@@ -43,9 +43,9 @@ namespace Adollib {
 			Vector3 half_size = Vector3(1, 1, 1);
 		};
 
-		struct Meshcoll_data {
-			std::list<Meshcollider_mesh>::iterator collider_mesh;
-		};
+		//struct Meshcoll_data {
+		//	std::list<Meshcollider_data>::iterator collider_mesh;
+		//};
 
 	}
 }
