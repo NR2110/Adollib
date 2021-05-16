@@ -82,7 +82,8 @@ void ALP_Physics::apply_external_force(float duration) {
 
 		//各回転に加える力(accumulated_torque)から加速度を出して角速度を更新する
 		Matrix inverse_inertia_tensor = matrix_inverse(inertial_tensor);
-		Matrix rotation = ALPcollider->local_orientation.get_rotate_matrix();
+		//Matrix rotation = ALPcollider->local_orientation.get_rotate_matrix();
+		Matrix rotation = ALPcollider->world_orientation().get_rotate_matrix();
 		Matrix transposed_rotation = matrix_trans(rotation);
 		inverse_inertia_tensor = transposed_rotation * inverse_inertia_tensor * rotation;
 		angula_acceleration += vector3_trans(accumulated_torque, inverse_inertia_tensor);

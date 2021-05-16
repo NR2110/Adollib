@@ -19,14 +19,24 @@ const bool ALP_Collider::concoll_enter(const unsigned int tag_name) {
 
 void ALP_Collider::solv_resolve() {
 	//offset_CollGO_quat = world_orientation() * (*coll_itr)->gameobject->get_world_orientate().inverse() * local_orientation.inverse();
-	offset_CollGO_quat = world_orientation() * (local_orientation * (*coll_itr)->gameobject->get_world_orientate()).inverse();
+	//offset_CollGO_quat = world_orientation() * (local_orientation * (*coll_itr)->gameobject->get_world_orientate()).inverse();
+	offset_CollGO_quat = (local_orientation * (*coll_itr)->gameobject->get_world_orientate()).inverse() * world_orientation();
 	//offset_CollGO_quat = local_orientation.inverse() * (*coll_itr)->gameobject->get_world_orientate().inverse() * world_orientation();
 	offset_CollGO_pos = world_position() - vector3_quatrotate(local_position * (*coll_itr)->gameobject->get_world_scale(), world_orientation()) - (*coll_itr)->gameobject->get_world_position();
 
+	//auto aaa = world_orientation() * (local_orientation * (*coll_itr)->gameobject->get_world_orientate()).inverse();
+	Quaternion save_a = local_orientation * (*coll_itr)->gameobject->get_world_orientate();
+	Quaternion aaa =  (local_orientation * (*coll_itr)->gameobject->get_world_orientate()).inverse() * save_a * Quaternion(0, 0, 1, 1).unit_vect();
+
+
+	auto save = (*coll_itr)->gameobject->get_world_position() + vector3_quatrotate(local_position * (*coll_itr)->gameobject->get_world_scale(), world_orientation());
+	auto bbb = (save + Vector3(0,1,0)) - vector3_quatrotate(local_position * (*coll_itr)->gameobject->get_world_scale(), world_orientation()) - (*coll_itr)->gameobject->get_world_position();
+
+	int dafsd = 0;
 }
 
 void ALP_Collider::resolve_gameobject() {
-	(*coll_itr)->gameobject->transform->local_orient = offset_CollGO_quat * (*coll_itr)->gameobject->transform->local_orient;
+	(*coll_itr)->gameobject->transform->local_orient = (*coll_itr)->gameobject->transform->local_orient * offset_CollGO_quat;
 	(*coll_itr)->gameobject->transform->local_pos += offset_CollGO_pos;
 }
 
