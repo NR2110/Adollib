@@ -20,14 +20,14 @@ using namespace std;
 
 std::unordered_map <std::string, std::vector<Meshcollider_data>> Collider_ResourceManager::meshcoll_datas;
 
-bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<Meshcollider_data>* ret_mesh, bool Right_triangle) {
+bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<Meshcollider_data>** ret_mesh, bool Right_triangle) {
 
 	//‚·‚Å‚É“¯–¼ƒtƒ@ƒCƒ‹‚ðLoad‚µ‚Ä‚¢‚ê‚Î
 	if (meshcoll_datas.count((string)fbxname) == 1) {
 		//for (auto& data : meshcoll_datas[fbxname]) {
 		//	ret_mesh->collider_meshes.emplace_back(&data);
 		//}
-		ret_mesh = &meshcoll_datas[fbxname];
+		*ret_mesh = &meshcoll_datas[fbxname];
 		return true;
 	}
 
@@ -360,7 +360,7 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 	//	ret_mesh->collider_meshes.emplace_back(&data);
 	//}
 	//*ret_mesh = &meshcoll_datas[fbxname];
-	ret_mesh = &meshcoll_datas[fbxname];
+	*ret_mesh = &meshcoll_datas[fbxname];
 
 	return true;
 }

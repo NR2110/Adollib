@@ -27,9 +27,7 @@ namespace Adollib
 		virtual void render() {};
 		virtual void destroy() {};
 
-		//virtual void update_P_to_C() {}; //親から子へupdateを呼ぶ
-		virtual void update_imgui_P_to_C() {};
-		virtual void update_world_trans() {};
+		virtual void update_worldtrans() {};
 		//virtual object* get_top_pearent() = 0;//一番の親を返す
 
 		virtual Quaternion get_world_orientate() { return quaternion_identity(); };
@@ -39,10 +37,11 @@ namespace Adollib
 	private:
 		object* pearent_ = nullptr; //親へのポインタ
 		std::list<object*> children_; //子へのポインタ
+
 	public:
 		object* pearent() const{ return pearent_;}
-		void pearent(object* obj) { pearent_ = obj; }
-		const std::list<object*>* children() { return &children_; }
+		void set_pearent(object* obj) { pearent_ = obj; }
+		std::list<object*>* children() { return &children_; }
 
 		//一番の親を返す
 		object* top_pearent() {
@@ -53,8 +52,8 @@ namespace Adollib
 		//thisの子にする
 		void add_child(object* obj) {
 			if (obj->pearent() == this) return; //すでにこのGOが親として登録されていた
-			if (obj->pearent() != nullptr)obj->pearent()->remove_child(this);  //前の親から削除
-			obj->pearent(this);
+			if (obj->pearent() != nullptr)obj->pearent()->remove_child(obj);  //前の親から削除
+			obj->set_pearent(this);
 			children_.emplace_back(obj);
 		};
 
@@ -68,12 +67,23 @@ namespace Adollib
 			}
 		}
 
+		//virtual void update_P_to_C() {}; //親から子へupdateを呼ぶ
+		virtual void update_imgui_toChildren() {};
+
 		//自身のupdateしてから子のupdateを呼ぶ
-		void update_P_to_C() {
+		void update_to_children() {
 			if (active == true)
 				update();
-			transform->local_orient = transform->local_orient.unit_vect();
-			std::for_each(children_.begin(), children_.end(), [](object* obj) {obj->update_P_to_C(); });
+			//transform->local_orient = transform->local_orient.unit_vect();
+			std::for_each(children_.begin(), children_.end(), [](object* obj) {obj->update_to_children(); });
+		}
+
+		//自身のupdateしてから子のupdateを呼ぶ
+		void update_world_trans_to_children() {
+			if (active == true)
+				update_worldtrans();
+			//transform->local_orient = transform->local_orient.unit_vect();
+			std::for_each(children_.begin(), children_.end(), [](object* obj) {obj->update_world_trans_to_children(); });
 		}
 
 

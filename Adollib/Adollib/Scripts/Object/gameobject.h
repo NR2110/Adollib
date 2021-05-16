@@ -17,6 +17,12 @@ namespace Adollib {
 	class Gameobject : public object {
 	private:
 		void update();
+		void update_worldtrans() override {
+			transform->orientation = get_world_orientate();
+			transform->position = get_world_position();
+			transform->scale = get_world_scale();
+		}
+
 		ComPtr<ID3D11Buffer> world_cb; //WVP行列用バッファ
 	public:
 		bool no_material = false; //material情報を所持しているか
@@ -37,29 +43,30 @@ namespace Adollib {
 		void initialize()override;
 		void render()override;
 
-		void update_imgui_P_to_C() override;
-		void update_world_trans() override {
-			transform->orientation = get_world_orientate();
-			transform->position = get_world_position();
-			transform->scale = get_world_scale();
-		}
+		void update_imgui_toChildren() override;
 	private:
 
 
 	public:
 		//goのworld空間上でのの姿勢を返す
 		Quaternion get_world_orientate()override {
-			if (pearent() != nullptr) return pearent()->transform->orientation * transform->local_orient;
+			if (pearent() != nullptr) {
+				return transform->local_orient * pearent()->transform->orientation ;
+			}
 			else return transform->local_orient;
 		};
 		//goのworld空間上での座標を返す
 		Vector3 get_world_position()override {
-			if (pearent() != nullptr) return pearent()->transform->position + transform->local_pos;
+			if (pearent() != nullptr) {
+				return pearent()->transform->position + vector3_quatrotate(transform->local_pos * pearent()->transform->scale, pearent()->transform->orientation);
+			}
 			else return transform->local_pos;
 		};
 		//goのworld空間上でのscaleを返す
 		Vector3 get_world_scale() override {
-			if (pearent() != nullptr) return pearent()->transform->scale * transform->local_scale;
+			if (pearent() != nullptr) {
+				return pearent()->transform->scale * transform->local_scale;
+			}
 			else return transform->local_scale;
 		};
 

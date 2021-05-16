@@ -29,9 +29,9 @@ namespace Adollib {
 		float nearZ = 0.1f;
 		float farZ = 1000000.0f;
 
-		void update_imgui_P_to_C() override;
+		void update_imgui_toChildren() override;
 
-		void update_world_trans() override {
+		void update_worldtrans() override {
 			transform->orientation = get_world_orientate();
 			transform->position = get_world_position();
 			transform->scale = get_world_scale();

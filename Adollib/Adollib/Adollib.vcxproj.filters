@@ -62,6 +62,9 @@
     <Filter Include="00_Adollib\11_math\functions">
       <UniqueIdentifier>{05ee9c70-11e2-4e67-8910-c0034474c868}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00_Adollib\00_main\natvis">
+      <UniqueIdentifier>{aee142de-7b15-4eea-88fc-128ef08de0e9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Scripts\player.cpp">
@@ -551,5 +554,10 @@
     <FxCompile Include="DefaultShader\physics_resolve.hlsl">
       <Filter>00_Adollib\22_physics</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="native\value.natvis">
+      <Filter>00_Adollib\00_main\natvis</Filter>
+    </Natvis>
   </ItemGroup>
 </Project>

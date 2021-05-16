@@ -25,9 +25,9 @@ namespace Adollib {
 
 		std::list<std::shared_ptr<Light>>::iterator go_iterator; //自身へのイテレーター(いつ使うの?)B
 
-		void update_imgui_P_to_C() override;
+		void update_imgui_toChildren() override;
 
-		void update_world_trans() {
+		void update_worldtrans() {
 			//transform->orientation = get_world_orientate();
 			//transform->position = get_world_position();
 			//transform->scale = get_world_scale();

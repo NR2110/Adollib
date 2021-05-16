@@ -16,7 +16,7 @@ void Hierarchy::update_hierarchy(std::vector<object*>& masters) {
 			if (obj->is_hierarchy == false)continue;
 
 			ImGui::PushID(ID);
-			obj->update_imgui_P_to_C();
+			obj->update_imgui_toChildren();
 			ImGui::PopID();
 			++ID;
 		}

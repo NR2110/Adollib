@@ -30,7 +30,7 @@ namespace Adollib {
 
 	}
 
-	void Light::update_imgui_P_to_C() {
+	void Light::update_imgui_toChildren() {
 		ImGui::Checkbox("active", &active);
 		//if (ImGui::CollapsingHeader(name.c_str())) {
 		//	//transforme‚Ì•\Ž¦

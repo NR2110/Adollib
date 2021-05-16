@@ -57,9 +57,10 @@ void ALP_Physics::reset_force() {
 
 void ALP_Physics::apply_external_force(float duration) {
 	if (is_movable()) {
+		//inv_rotate = Quaternion(1, 0, 0, 0);
 
 		const float inv_mass = 1 / inertial_mass;
-		if (is_fallable) linear_acceleration += Vector3(0, -Phyisics_manager::gravity, 0); //—‰º
+		if (is_fallable) accumulated_force += Vector3(0, -Phyisics_manager::gravity, 0) * inertial_mass; //—‰º
 
 		//‹ó‹C’ïR‚Ì‹‚ß•û
 		// k ‚Í—¬‘Ì‚Ì–§“x‚â‚ç‚È‚ñ‚â‚ç‚ğl—¶‚µ‚½’è”

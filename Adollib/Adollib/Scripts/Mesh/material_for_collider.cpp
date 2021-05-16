@@ -16,49 +16,54 @@ ComPtr<ID3D11Buffer> Collider_renderer::Mat_cb; //material用バッファ
 std::map<ALP_Collider_shape, std::vector<Mesh::mesh>*> Collider_renderer::meshes; //mesh
 Shader Collider_renderer::shader; //shader
 
+//カプセルを描画し、ほかのollider表示をoffにする
+//#define draw_cupsule_cullback
 
 void Collider_renderer::initialize() {
-		//::: コンスタントバッファ :::
-		Systems::CreateConstantBuffer(&world_cb, sizeof(ConstantBufferPerGO));    //枠確保
-		Systems::CreateConstantBuffer(&Mat_cb, sizeof(ConstantBufferPerMaterial));//枠確保
+	//::: コンスタントバッファ :::
+	Systems::CreateConstantBuffer(&world_cb, sizeof(ConstantBufferPerGO));    //枠確保
+	Systems::CreateConstantBuffer(&Mat_cb, sizeof(ConstantBufferPerMaterial));//枠確保
 
-		//::: vertexbuffer & shaderload :::::::
-		D3D11_INPUT_ELEMENT_DESC layout[] = {
-			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,    0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT,    0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,       0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "WEIGHTS",  0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "BONES"  ,  0, DXGI_FORMAT_R32G32B32A32_UINT,  0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		};
-		UINT numElements = ARRAYSIZE(layout);
+	//::: vertexbuffer & shaderload :::::::
+	D3D11_INPUT_ELEMENT_DESC layout[] = {
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,    0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT,    0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,       0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "WEIGHTS",  0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "BONES"  ,  0, DXGI_FORMAT_R32G32B32A32_UINT,  0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	};
+	UINT numElements = ARRAYSIZE(layout);
 
-		shader.Load_VS("./DefaultShader/default_vs.cso", &vertexLayout, layout, numElements);
-		shader.Load_PS("./DefaultShader/default_ps.cso");
+	shader.Load_VS("./DefaultShader/default_vs.cso", &vertexLayout, layout, numElements);
+	shader.Load_PS("./DefaultShader/default_ps.cso");
 
 
-		//::: 描画用modelの読み込み :::::::
-		meshes[ALP_Collider_shape::BOX];
-		ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::BOX], "./DefaultModel/cube.fbx", "");
+	//::: 描画用modelの読み込み :::::::
+	meshes[ALP_Collider_shape::BOX];
+	ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::BOX], "./DefaultModel/cube.fbx", "");
 
-		meshes[ALP_Collider_shape::Sphere];
-		ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::Sphere], "./DefaultModel/sphere.fbx", "");
+	meshes[ALP_Collider_shape::Sphere];
+	ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::Sphere], "./DefaultModel/sphere.fbx", "");
 
-		meshes[ALP_Collider_shape::Plane];
-		ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::Plane], "./DefaultModel/plane.fbx", "");
+	meshes[ALP_Collider_shape::Plane];
+	ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::Plane], "./DefaultModel/plane.fbx", "");
 
-		meshes[ALP_Collider_shape::Cylinder];
-		ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::Cylinder], "./DefaultModel/cylinder.fbx", "");
+	meshes[ALP_Collider_shape::Cylinder];
+	ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::Cylinder], "./DefaultModel/cylinder.fbx", "");
 
-		//meshes[ALP_Collider_shape::Mesh];
-		//ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::Mesh], "../Data/FBX/0311_collisions.fbx", "");
-		//ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::Mesh], "../Adollib/DefaultModel/cylinder.fbx", "");
-	}
+	//meshes[ALP_Collider_shape::Mesh];
+	//ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::Mesh], "../Data/FBX/0311_collisions.fbx", "");
+	//ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::Mesh], "../Adollib/DefaultModel/cylinder.fbx", "");
+}
 
 void Collider_renderer::render_collider(const Physics_function::ALP_Collider& R) {
 
+#ifndef draw_cupsule_cullback
 	if (R.shape == ALP_Collider_shape::BOX)render_box(R);
 	if (R.shape == ALP_Collider_shape::Sphere)render_sphere(R);
 	if (R.shape == ALP_Collider_shape::Mesh)render_meshcoll(R);
+
+#endif // draw_cupsule_cullback
 	if (R.shape == ALP_Collider_shape::Capsule)render_capsule(R);
 
 }
@@ -191,9 +196,9 @@ void Collider_renderer::render_sphere(const Physics_function::ALP_Collider& R) {
 
 }
 void Collider_renderer::render_meshcoll(const Physics_function::ALP_Collider& R) {
-//	render_AABB(R);
+	//	render_AABB(R);
 
-	//CB : ConstantBufferPerCO_OBJ
+		//CB : ConstantBufferPerCO_OBJ
 	ConstantBufferPerGO g_cb;
 	g_cb.world = matrix_world(R.world_scale() * 1.0001, R.world_orientation().get_rotate_matrix(), R.world_position()).get_XMFLOAT4X4();
 	Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
@@ -273,7 +278,11 @@ void Collider_renderer::render_capsule(const Physics_function::ALP_Collider& R) 
 		shader.Activate();
 
 		Systems::SetBlendState(State_manager::BStypes::BS_NONE);
+#ifndef draw_cupsule_cullback
 		Systems::SetRasterizerState(State_manager::RStypes::RS_WIRE);
+#else
+		Systems::SetRasterizerState(State_manager::RStypes::RS_CULL_BACK);
+#endif
 		Systems::SetDephtStencilState(State_manager::DStypes::DS_TRUE);
 
 		int color_num = 0;
@@ -292,6 +301,7 @@ void Collider_renderer::render_capsule(const Physics_function::ALP_Collider& R) 
 			cb.ambientColor = DirectX::XMFLOAT4(0.1f, 0.1f, 0.1f, 1);
 			//		cb.materialColor = Al_Global::get_gaming(Al_Global::second_per_game * 60, 800).get_XM4();
 			cb.materialColor = Vector4(Al_Global::get_gaming((Al_Global::second_per_game + color_num * 2) * 60, 600), 1);
+			//cb.materialColor = Vector4(1, 1, 0, 1);
 			//cb.materialColor = color16[color_num].get_XM4();
 			Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
 			Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
@@ -323,7 +333,7 @@ void Collider_renderer::render_capsule(const Physics_function::ALP_Collider& R) 
 	meshs = meshes[ALP_Collider_shape::Sphere];
 	{
 		ConstantBufferPerGO g_cb;
-		g_cb.world = matrix_world(Vector3(R.world_scale().x) * 1.0001, R.world_orientation().get_rotate_matrix(),R.world_position() + vector3_quatrotate(Vector3(0, R.world_scale().y, 0),R.world_orientation())).get_XMFLOAT4X4();
+		g_cb.world = matrix_world(Vector3(R.world_scale().x) * 1.0001, R.world_orientation().get_rotate_matrix(), R.world_position() + vector3_quatrotate(Vector3(0, R.world_scale().y, 0), R.world_orientation())).get_XMFLOAT4X4();
 		Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
 		Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 		Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
@@ -334,7 +344,11 @@ void Collider_renderer::render_capsule(const Physics_function::ALP_Collider& R) 
 		shader.Activate();
 
 		Systems::SetBlendState(State_manager::BStypes::BS_NONE);
+#ifndef draw_cupsule_cullback
 		Systems::SetRasterizerState(State_manager::RStypes::RS_WIRE);
+#else
+		Systems::SetRasterizerState(State_manager::RStypes::RS_CULL_BACK);
+#endif
 		Systems::SetDephtStencilState(State_manager::DStypes::DS_TRUE);
 
 		int color_num = 0;
@@ -353,6 +367,7 @@ void Collider_renderer::render_capsule(const Physics_function::ALP_Collider& R) 
 			cb.ambientColor = DirectX::XMFLOAT4(0.1f, 0.1f, 0.1f, 1);
 			//		cb.materialColor = Al_Global::get_gaming(Al_Global::second_per_game * 60, 800).get_XM4();
 			cb.materialColor = Vector4(Al_Global::get_gaming((Al_Global::second_per_game + color_num * 2) * 60, 600), 1);
+			//cb.materialColor = Vector4(1, 1, 0, 1);
 			//cb.materialColor = color16[color_num].get_XM4();
 			Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
 			Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
@@ -395,7 +410,11 @@ void Collider_renderer::render_capsule(const Physics_function::ALP_Collider& R) 
 		shader.Activate();
 
 		Systems::SetBlendState(State_manager::BStypes::BS_NONE);
+#ifndef draw_cupsule_cullback
 		Systems::SetRasterizerState(State_manager::RStypes::RS_WIRE);
+#else
+		Systems::SetRasterizerState(State_manager::RStypes::RS_CULL_BACK);
+#endif
 		Systems::SetDephtStencilState(State_manager::DStypes::DS_TRUE);
 
 		int color_num = 0;
@@ -414,6 +433,7 @@ void Collider_renderer::render_capsule(const Physics_function::ALP_Collider& R) 
 			cb.ambientColor = DirectX::XMFLOAT4(0.1f, 0.1f, 0.1f, 1);
 			//		cb.materialColor = Al_Global::get_gaming(Al_Global::second_per_game * 60, 800).get_XM4();
 			cb.materialColor = Vector4(Al_Global::get_gaming((Al_Global::second_per_game + color_num * 2) * 60, 600), 1);
+			//cb.materialColor = Vector4(1, 1, 0, 1);
 			//cb.materialColor = color16[color_num].get_XM4();
 			Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
 			Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
@@ -456,7 +476,7 @@ void Collider_renderer::render_AABB(const Physics_function::ALP_Collider& coll) 
 	for (const auto& coll_mesh : coll.collider_meshes) {
 
 		if (Systems::RS_type != State_manager::RStypes::RS_CULL_FRONT) Systems::SetRasterizerState(State_manager::RStypes::RS_CULL_FRONT);
-//Debug::dopbaseの表示
+		//Debug::dopbaseの表示
 #if 0
 		{
 			coll_mesh.mesh->dopbase;
@@ -520,7 +540,7 @@ void Collider_renderer::render_AABB(const Physics_function::ALP_Collider& coll) 
 #endif
 
 		if (Systems::RS_type != State_manager::RStypes::RS_CULL_BACK) Systems::SetRasterizerState(State_manager::RStypes::RS_CULL_BACK);
-//Debug::頂点の表示
+		//Debug::頂点の表示
 #if 0
 		{
 			const std::vector<Mesh::mesh>* sphere_mesh = meshes[ALP_Collider_shape::Sphere];
@@ -585,7 +605,7 @@ void Collider_renderer::render_AABB(const Physics_function::ALP_Collider& coll) 
 		}
 #endif
 
-//Debug::baseposの表示
+		//Debug::baseposの表示
 #if 0
 		{
 			const std::vector<Mesh::mesh>* sphere_mesh = meshes[ALP_Collider_shape::Sphere];

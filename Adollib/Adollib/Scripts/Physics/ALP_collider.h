@@ -76,9 +76,11 @@ namespace Adollib {
 			Quaternion offset_CollGO_quat;
 			Vector3 offset_CollGO_pos;
 
-			//:::
-			ALP_Collider_shape shape = ALP_Collider_shape::None; //形情報
+			//::: 型情報 :::
+			ALP_Collider_shape shape = ALP_Collider_shape::None;
 
+			//::: 子オブジェクトの影響を受けるか 影響を受ける場合,子オブジェクトの相対座標などは変更されない :::
+			bool is_chiled_relative_fixed = false;
 
 			//::: ComponentがアタッチされたColliderへのイテレータ :::
 			std::list<Collider*>::iterator coll_itr;

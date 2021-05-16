@@ -144,7 +144,7 @@ void Gameobject_manager::update(Scenelist Sce) {
 
 
 	//親から子へupdateを呼ぶ
-	std::for_each(masters.begin(), masters.end(), [](object* ob) {ob->update_P_to_C(); });
+	std::for_each(masters.begin(), masters.end(), [](object* ob) {ob->update_to_children(); });
 
 	//ヒエラルキー
 	Hierarchy::update_hierarchy(masters);
@@ -154,7 +154,7 @@ void Gameobject_manager::update(Scenelist Sce) {
 
 	//親から子へワールド情報を更新
 	for (auto& m : masters) {
-		m->update_world_trans();
+		m->update_world_trans_to_children();
 	}
 
 

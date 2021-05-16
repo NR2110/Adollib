@@ -25,12 +25,14 @@ void Gameobject::initialize() {
 
 }
 
-void Gameobject::update_imgui_P_to_C() {
-	if (ImGui::CollapsingHeader(name.c_str())) {
+void Gameobject::update_imgui_toChildren() {
+	if (ImGui::CollapsingHeader((name + std::string("##") + std::to_string((int)this)).c_str())) {
 		ImGui::Checkbox("active", &active);
+
+		ImGuiTreeNodeFlags f = 0;
 		//transforme‚Ì•\¦
 		ImGui::SetNextItemOpen(true, ImGuiCond_Once);
-		if (ImGui::TreeNode("Transforme")) {
+		if (ImGui::TreeNodeEx((void*)(int)this, f, "Transforme")) {
 			float ave = (transform->local_scale.x + transform->local_scale.y + transform->local_scale.z) * 0.333333333f;
 			//position
 			{
@@ -68,7 +70,7 @@ void Gameobject::update_imgui_P_to_C() {
 
 		//q‚Ìgo
 		for (auto& itr : *children()) {
-			itr->update_imgui_P_to_C();
+			itr->update_imgui_toChildren();
 		}
 
 	}

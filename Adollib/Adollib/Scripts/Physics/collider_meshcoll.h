@@ -27,7 +27,7 @@ namespace Adollib {
 		void load_mesh(const char* filename,bool Right_triangle) {
 			//FBX‚ÌLoad‚ğs‚¤
 			std::vector<Physics_function::Meshcollider_data>* meshcoll_data = nullptr;
-			Physics_function::Collider_ResourceManager::CreateMCFromFBX(filename, meshcoll_data, Right_triangle);
+			Physics_function::Collider_ResourceManager::CreateMCFromFBX(filename, &meshcoll_data, Right_triangle);
 			FBX_pass = filename; //©g‚Ìfilepass‚Ì•Û‘¶
 
 			//ALP_Collider‚É•Û‘¶

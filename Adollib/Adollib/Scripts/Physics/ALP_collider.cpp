@@ -18,13 +18,15 @@ const bool ALP_Collider::concoll_enter(const unsigned int tag_name) {
 }
 
 void ALP_Collider::solv_resolve() {
-	offset_CollGO_quat = local_orientation.inverse() * (*coll_itr)->gameobject->get_world_orientate().inverse() * world_orientation();
+	//offset_CollGO_quat = world_orientation() * (*coll_itr)->gameobject->get_world_orientate().inverse() * local_orientation.inverse();
+	offset_CollGO_quat = world_orientation() * (local_orientation * (*coll_itr)->gameobject->get_world_orientate()).inverse();
+	//offset_CollGO_quat = local_orientation.inverse() * (*coll_itr)->gameobject->get_world_orientate().inverse() * world_orientation();
 	offset_CollGO_pos = world_position() - vector3_quatrotate(local_position * (*coll_itr)->gameobject->get_world_scale(), world_orientation()) - (*coll_itr)->gameobject->get_world_position();
 
 }
 
 void ALP_Collider::resolve_gameobject() {
-	(*coll_itr)->gameobject->transform->local_orient *= offset_CollGO_quat;
+	(*coll_itr)->gameobject->transform->local_orient = offset_CollGO_quat * (*coll_itr)->gameobject->transform->local_orient;
 	(*coll_itr)->gameobject->transform->local_pos += offset_CollGO_pos;
 }
 
@@ -33,7 +35,8 @@ void ALP_Collider::update_world_trans() {
 	old_world_orientation_ = world_orientation_;
 	old_world_scale_ = world_scale_;
 
-	world_orientation_ = (*coll_itr)->gameobject->get_world_orientate() * local_orientation;
+	world_orientation_ = local_orientation * (*coll_itr)->gameobject->get_world_orientate();
+	//world_orientation_ = (*coll_itr)->gameobject->get_world_orientate() * local_orientation;
 	world_scale_ = (*coll_itr)->gameobject->get_world_scale() * local_scale;
 	world_position_ = (*coll_itr)->gameobject->get_world_position() + vector3_quatrotate(local_position * (*coll_itr)->gameobject->get_world_scale(), world_orientation());
 

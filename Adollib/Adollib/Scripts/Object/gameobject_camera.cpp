@@ -17,7 +17,7 @@ namespace Adollib {
 
 	}
 
-	void Camera::update_imgui_P_to_C() {
+	void Camera::update_imgui_toChildren() {
 		if (ImGui::CollapsingHeader(name.c_str())) {
 			ImGui::Checkbox("active", &active);
 			//transforme‚Ì•\¦
@@ -51,7 +51,7 @@ namespace Adollib {
 
 			//q‚Ìgo
 			for (auto& itr : *children()) {
-				itr->update_imgui_P_to_C();
+				itr->update_imgui_toChildren();
 			}
 
 		}

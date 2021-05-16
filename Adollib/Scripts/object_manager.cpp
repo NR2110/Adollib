@@ -38,7 +38,6 @@ namespace Adollib
 			normal_go->material->color = Vector4(1, 0, 0, 1);
 		}
 
-#if 1
 		enum class Stage_types {
 
 			Cube,
@@ -49,7 +48,7 @@ namespace Adollib
 			Teach
 		};
 
-		Stage_types stage_type = Stage_types::Cube;
+		Stage_types stage_type = Stage_types::Mesh_Cube;
 		Gameobject* GO = nullptr;
 
 		if (stage_type == Stage_types::Cube) {
@@ -153,24 +152,6 @@ namespace Adollib
 			}
 		}
 
-
-
-
-
-
-#else
-		{
-			Gameobject* GO = Gameobject_manager::create("stage");
-			GO->transform->local_pos = Vector3(0, -61, 0);
-			GO->transform->local_scale = Vector3(60, 1, 60);
-			//GO->transform->local_orient = quaternion_from_euler(90, 0, 0);
-			//GO->material->color = Vector4(1, 1, 1, 1);
-
-			Capsule* R = GO->addComponent<Capsule>();
-			R->physics_data.is_moveable = false;
-		}
-#endif
-
 	}
 
 	// 毎フレーム呼ばれる更新処理
@@ -222,18 +203,20 @@ namespace Adollib
 				ImGui::DragFloat3(std::to_string(imgui_num + 250).c_str(), BOX_pyramid_size, 0.1f); ImGui::NextColumn();
 				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &BOX_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
 
-				if (summon == true)
+				if (summon == true) {
+					Gameobject* pearent =  Gameobject_manager::create("BOXpyramid");
 					for (int i = 0; i < BOX_pyramid_count; i++) {
 						for (int o = 0; o < BOX_pyramid_count - i; o++) {
-							set_box(Vector3(
+							pearent->add_child(set_box(Vector3(
 								BOX_pyramid_size[0] * 2.0f * 1.2f * o - (BOX_pyramid_count - i) * 2.300001f / 2.0f + BOX_pyramid_pos[0],
 								3.0f + BOX_pyramid_size[1] * 2 * i + BOX_pyramid_pos[1],
 								BOX_pyramid_pos[2]),
-								Vector3(BOX_pyramid_size[0], BOX_pyramid_size[1], BOX_pyramid_size[2]), Vector3(0, 10, 0), Vector3(0, 1, 1));
+								Vector3(BOX_pyramid_size[0], BOX_pyramid_size[1], BOX_pyramid_size[2]), Vector3(0, 10, 0), Vector3(0, 1, 1))
+								);
 						}
 
 					}
-
+				}
 				imgui_num++;
 			}
 
@@ -399,7 +382,8 @@ namespace Adollib
 	Gameobject* object_manager::set_sphere(Vector3 pos, float r, Vector3 color) {
 		Gameobject* object = nullptr;
 		object = Gameobject_manager::createSphere(GO_tag::Sphere);
-		Vector4 C = Vector4(color.x, color.y, color.z, 1);
+		//Vector4 C = Vector4(color.x, color.y, color.z, 1);
+		Vector4 C = Vector4(1, 0, 1, 1);
 		object->material->color = C;
 
 		//object->addComponent<object_fall>();
@@ -425,11 +409,8 @@ namespace Adollib
 		object->transform->local_scale = size;
 
 		Box* M = object->addComponent<Box>();
-		//Meshcoll* M = object->addComponent<Meshcoll>();
-		//M->load_mesh("./DefaultModel/cube.fbx");
-		//M->inertial_mass = 1;
 		M->tag = Collider_tags::Box;
-		//M->nohit_tag = Collider_tags::Box;
+
 		GOs.emplace_back(object);
 		boxes.emplace_back(M);
 		return object;

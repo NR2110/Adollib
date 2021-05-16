@@ -187,11 +187,11 @@ bool Phyisics_manager::update(Scenelist Sce)
 		for (int i = 0; i < p.contacts.contact_num; i++) {
 			count += 2;
 			if (count > size)break;
-			const auto* coll0 = (*p.body[0]->ALPcollider->coll_itr)->transform;
-			const auto* coll1 = (*p.body[1]->ALPcollider->coll_itr)->transform;
+			const auto coll0 = *p.body[0]->ALPcollider;
+			const auto coll1 = *p.body[1]->ALPcollider;
 
-			debug_go[count - 1]->transform->local_pos = vector3_quatrotate((p.contacts.contactpoints[i].point[0]/* * coll0->scale*/), coll0->orientation) + coll0->position;
-			debug_go[count - 2]->transform->local_pos = vector3_quatrotate((p.contacts.contactpoints[i].point[1]/* * coll1->scale*/), coll1->orientation) + coll1->position;
+			debug_go[count - 1]->transform->local_pos = vector3_quatrotate((p.contacts.contactpoints[i].point[0]), coll0.world_orientation()) + coll0.world_position();
+			debug_go[count - 2]->transform->local_pos = vector3_quatrotate((p.contacts.contactpoints[i].point[1]), coll1.world_orientation()) + coll1.world_position();
 			int adfsdg = 0;
 		}
 	}

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+
+
+  <Type Name="Adollib::Vector4">
+    <DisplayString>{{ Vector4 = {x}, {y}, {z}, {w}}}</DisplayString>
+    <Expand>
+      <Item Name="x">x</Item>
+      <Item Name="y">y</Item>
+      <Item Name="z">z</Item>
+      <Item Name="w">w</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="Adollib::Vector3">
+    <DisplayString>{{ Vector3 = {x}, {y}, {z}}}</DisplayString>
+    <Expand>
+      <Item Name="x">x</Item>
+      <Item Name="y">y</Item>
+      <Item Name="z">z</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="Adollib::Vector2">
+    <DisplayString>{{ Vector2 = {x}, {y}}}</DisplayString>
+    <Expand>
+      <Item Name="x">x</Item>
+      <Item Name="y">y</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="Adollib::Quaternion">
+    <DisplayString>{{ Quaternion = {x}, {y}, {z}, {w}}}</DisplayString>
+    <Expand>
+      <Item Name="x">x</Item>
+      <Item Name="y">y</Item>
+      <Item Name="z">z</Item>
+      <Item Name="w">w</Item>
+    </Expand>
+  </Type>
+
+
+</AutoVisualizer>
