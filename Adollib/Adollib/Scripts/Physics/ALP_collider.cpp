@@ -23,16 +23,6 @@ void ALP_Collider::solv_resolve() {
 	offset_CollGO_quat = (local_orientation * (*coll_itr)->gameobject->get_world_orientate()).inverse() * world_orientation();
 	//offset_CollGO_quat = local_orientation.inverse() * (*coll_itr)->gameobject->get_world_orientate().inverse() * world_orientation();
 	offset_CollGO_pos = world_position() - vector3_quatrotate(local_position * (*coll_itr)->gameobject->get_world_scale(), world_orientation()) - (*coll_itr)->gameobject->get_world_position();
-
-	//auto aaa = world_orientation() * (local_orientation * (*coll_itr)->gameobject->get_world_orientate()).inverse();
-	Quaternion save_a = local_orientation * (*coll_itr)->gameobject->get_world_orientate();
-	Quaternion aaa =  (local_orientation * (*coll_itr)->gameobject->get_world_orientate()).inverse() * save_a * Quaternion(0, 0, 1, 1).unit_vect();
-
-
-	auto save = (*coll_itr)->gameobject->get_world_position() + vector3_quatrotate(local_position * (*coll_itr)->gameobject->get_world_scale(), world_orientation());
-	auto bbb = (save + Vector3(0,1,0)) - vector3_quatrotate(local_position * (*coll_itr)->gameobject->get_world_scale(), world_orientation()) - (*coll_itr)->gameobject->get_world_position();
-
-	int dafsd = 0;
 }
 
 void ALP_Collider::resolve_gameobject() {
@@ -215,10 +205,20 @@ void ALP_Collider::update_dop14_as_mesh() {
 void ALP_Collider::integrate(float duration, Vector3 linear_velocity, Vector3 anglar_velocity) {
 	if (linear_velocity.norm() == 0 && anglar_velocity.norm() == 0)return;
 
-	//位置の更新
-	if (linear_velocity.norm() >= FLT_EPSILON)
-	world_position_ += linear_velocity * duration;
+	Quaternion pearent_orientate_inv = Quaternion(1, 0, 0, 0);
+	if ((*ALPcollider->coll_itr)->gameobject->pearent() != nullptr) {
+		pearent_orientate_inv = (*ALPcollider->coll_itr)->gameobject->pearent()->get_world_orientate();
+		pearent_orientate_inv = pearent_orientate_inv.inverse();
+	}
 
-	world_orientation_ *= quaternion_radian_axis(anglar_velocity.norm_sqr() * duration * 0.5f, anglar_velocity.unit_vect());
+	//位置の更新
+	//if (linear_velocity.norm() >= FLT_EPSILON)
+
+	Vector3 local_linear_velocity = vector3_quatrotate(linear_velocity, pearent_orientate_inv);
+	Vector3 local_anglar_velocity = vector3_quatrotate(anglar_velocity, pearent_orientate_inv);
+
+	world_position_ += local_linear_velocity * duration;
+
+	world_orientation_ *= quaternion_radian_axis(local_anglar_velocity.norm_sqr() * duration * 0.5f, local_anglar_velocity.unit_vect());
 	world_orientation_ = world_orientation().unit_vect();
 }
