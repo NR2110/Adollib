@@ -74,8 +74,6 @@ void ALP_Collider::refresh_ALP_from_data() {
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 void ALP_Collider::update_dop14() {
 
-	collider_meshes[0].dop14.max[2];
-
 	switch (shape)
 	{
 	case ALP_Collider_shape::Sphere:
@@ -176,6 +174,7 @@ void ALP_Collider::update_dop14_as_mesh() {
 	for (auto& mesh : collider_meshes) {
 		mesh.dop14.pos = world_position();
 
+		//各軸のmin,maxのリセット
 		Vector3 rotated_axis[DOP::DOP14_size];
 		for (int i = 0; i < DOP::DOP14_size; i++) {
 			rotated_axis[i] = vector3_quatrotate(DOP::DOP_14_axis[i], world_orientation().inverse()).unit_vect();
@@ -205,6 +204,7 @@ void ALP_Collider::update_dop14_as_mesh() {
 void ALP_Collider::integrate(float duration, Vector3 linear_velocity, Vector3 anglar_velocity) {
 	if (linear_velocity.norm() == 0 && anglar_velocity.norm() == 0)return;
 
+	//親のorienattionの逆をとる
 	Quaternion pearent_orientate_inv = Quaternion(1, 0, 0, 0);
 	if ((*ALPcollider->coll_itr)->gameobject->pearent() != nullptr) {
 		pearent_orientate_inv = (*ALPcollider->coll_itr)->gameobject->pearent()->get_world_orientate();
@@ -214,6 +214,7 @@ void ALP_Collider::integrate(float duration, Vector3 linear_velocity, Vector3 an
 	//位置の更新
 	//if (linear_velocity.norm() >= FLT_EPSILON)
 
+	//アタッチされているGOの親子関係に対応 親が回転していても落下は"下"方向に
 	Vector3 local_linear_velocity = vector3_quatrotate(linear_velocity, pearent_orientate_inv);
 	Vector3 local_anglar_velocity = vector3_quatrotate(anglar_velocity, pearent_orientate_inv);
 

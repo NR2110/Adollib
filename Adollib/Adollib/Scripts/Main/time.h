@@ -18,15 +18,15 @@ namespace Adollib
 
 		void initialize()
 		{
-			
+
 		}
 
-		float timeStamp() const 
+		float timeStamp() const
 		{
 			// If we are stopped, do not count the time that has passed since we stopped.
-			// Moreover, if we previously already had a pause, the distance 
+			// Moreover, if we previously already had a pause, the distance
 			// stopTime - baseTime includes paused time, which we do not want to count.
-			// To correct this, we can subtract the paused time from mStopTime:  
+			// To correct this, we can subtract the paused time from mStopTime:
 			//
 			//                     |<--pausedTime-->|
 			// ----*---------------*-----------------*------------*------------*------> time
@@ -38,10 +38,10 @@ namespace Adollib
 			}
 
 			// The distance thisTime - mBaseTime includes paused time,
-			// which we do not want to count.  To correct this, we can subtract 
-			// the paused time from thisTime:  
+			// which we do not want to count.  To correct this, we can subtract
+			// the paused time from thisTime:
 			//
-			//  (thisTime - pausedTime) - baseTime 
+			//  (thisTime - pausedTime) - baseTime
 			//
 			//                     |<--pausedTime-->|
 			// ----*---------------*-----------------*------------*------> time
@@ -71,7 +71,7 @@ namespace Adollib
 			//
 			//                     |<-------d------->|
 			// ----*---------------*-----------------*------------> time
-			//  baseTime       stopTime        start_time     
+			//  baseTime       stopTime        start_time
 			if (stopped)
 			{
 				paused_count += (start_time - stop_count);
@@ -116,7 +116,7 @@ namespace Adollib
 			// Prepare for next frame.
 			last_count = this_count;
 
-			// Force nonnegative.  The DXSDK's CDXUTTimer mentions that if the 
+			// Force nonnegative.  The DXSDK's CDXUTTimer mentions that if the
 			// processor goes into a power save mode or we get shuffled to another
 			// processor, then mdelta_time can be negative.
 			if (delta_time < 0.0)
@@ -148,6 +148,7 @@ namespace Adollib
 		// delta_time‚ðŽæ“¾‚·‚é
 		float deltaTime() const
 		{
+			if (stopped)return 0;
 			return static_cast<float>(delta_time);
 		}
 

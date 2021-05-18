@@ -5,13 +5,14 @@ namespace Adollib {
 
 	//TODO : 絶賛いい感じの名前募集中
 	class Al_Global {
+
 	public:
 		static int SCREEN_WIDTH;
 		static int SCREEN_HEIGHT;
 
 		static bool render_collider_flag; //colliderを表示するかのフラグ
 
-		static float second_per_frame;
+		static float second_per_frame();
 		static float second_per_game;
 
 		static float base_Coefficient_of_friction; //物体の摩擦力の初期値

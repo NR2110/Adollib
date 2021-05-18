@@ -115,6 +115,8 @@ namespace Adollib {
 			//À•W,p¨‚É‚æ‚éworldî•ñ‚ÌXV
 			void integrate(float duration , Vector3 linear_velocity, Vector3 anglar_velocity);
 
+			//void add_shape();
+
 		private:
 			void update_dop14_as_sphere();
 			void update_dop14_as_box();

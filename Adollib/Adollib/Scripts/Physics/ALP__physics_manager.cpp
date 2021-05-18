@@ -153,7 +153,7 @@ bool Phyisics_manager::update(Scenelist Sce)
 
 
 #ifdef Allow_delay
-	timeStep = Al_Global::second_per_frame;
+	timeStep = Al_Global::second_per_frame();
 	// ŠO—Í‚ÌXV
 	applyexternalforce(ALP_physicses[Sce]);
 #endif

@@ -48,7 +48,7 @@ namespace Adollib
 			Teach
 		};
 
-		Stage_types stage_type = Stage_types::Mesh_Cube;
+		Stage_types stage_type = Stage_types::Cube;
 		Gameobject* GO = nullptr;
 
 		if (stage_type == Stage_types::Cube) {

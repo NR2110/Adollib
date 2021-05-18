@@ -1,5 +1,7 @@
 #include "Adollib.h"
 #include "time.h"
+#include "systems.h"
+
 namespace Adollib {
 
 	//int Al_Global::SCREEN_WIDTH = 1280;
@@ -9,11 +11,14 @@ namespace Adollib {
 
 	bool Al_Global::render_collider_flag = true;
 
-	float Al_Global::second_per_frame = 0;
-	float Al_Global::second_per_game = 0;
-
 	float Al_Global::base_Coefficient_of_friction = 0.6f;
 	float Al_Global::base_resituation = 0.2f;
+
+	float Al_Global::second_per_frame() {
+		return Systems::time->deltaTime();
+
+	}
+	float Al_Global::second_per_game = 0;
 
 	float get_P_by_f(float M, float F) {
 		int i = (int)(M / F);

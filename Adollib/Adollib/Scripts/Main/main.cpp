@@ -151,11 +151,11 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 
 			Systems::time->tick();
 
-			Al_Global::second_per_frame = Systems::time->deltaTime();
-			Al_Global::second_per_game += Al_Global::second_per_frame;
+			//Al_Global::second_per_frame = Systems::time->deltaTime();
+			Al_Global::second_per_game += Systems::time->deltaTime();
 			float mspf = 1000.0f / fps;
 
-			Interval -= Al_Global::second_per_frame;
+			Interval -= Systems::time->deltaTime();
 			fps++;
 			if (Interval < 0) {
 				std::ostringstream outs;

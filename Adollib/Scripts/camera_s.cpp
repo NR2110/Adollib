@@ -87,8 +87,8 @@ namespace Adollib
 			//ƒJƒƒ‰‚ÌˆÚ“®
 			{
 				Vector3 move_vec = Vector3(0, 0, 0);
-				float   move_pow = linear_speed * Al_Global::second_per_frame;
-				if (input->getKeyState(Key::LeftShift)) move_pow = linear_speed * 2 * Al_Global::second_per_frame;
+				float   move_pow = linear_speed * Al_Global::second_per_frame();
+				if (input->getKeyState(Key::LeftShift)) move_pow = linear_speed * 2 * Al_Global::second_per_frame();
 				if (input->getKeyState(Key::W))move_vec += Vector3(0, 0, +1);
 				if (input->getKeyState(Key::S))move_vec += Vector3(0, 0, -1);
 				if (input->getKeyState(Key::D))move_vec += Vector3(+1, 0, 0);
