@@ -285,7 +285,9 @@
     <ClCompile Include="Scripts\Physics\ALP_physics.cpp" />
     <ClCompile Include="Scripts\Physics\ALP_raycast.cpp" />
     <ClCompile Include="Scripts\Physics\ALP_resolve_contact.cpp" />
+    <ClCompile Include="Scripts\Physics\ALP_shape.cpp" />
     <ClCompile Include="Scripts\Physics\ALP__physics_manager.cpp" />
+    <ClCompile Include="Scripts\Physics\collider.cpp" />
     <ClCompile Include="Scripts\Physics\collider__base.cpp" />
     <ClCompile Include="Scripts\Physics\contact.cpp" />
     <ClCompile Include="Scripts\Physics\meshcoll_resorce_manager.cpp" />

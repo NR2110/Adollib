@@ -12,16 +12,16 @@ using namespace DOP;
 #pragma region Midphase
 //:::::::::::::::::::::::::::
 //DOP14‚É‚æ‚é‘åŽG”c‚È“–‚½‚è”»’è
-bool Check_insert_DOP14(const ALP_Collider_part* meshA, const ALP_Collider_part* meshB) {
+bool Check_insert_DOP14(const ALP_shape* meshA, const ALP_shape* meshB) {
 	//–³ŒÀPlane‚ÍDOP‚ªì‚ê‚È‚¢‚½‚ßnarrow‚É“Š‚°‚é?
 	//if (meshA->shape == ALP_Collider_shape::Plane || meshB->shape == ALP_Collider_shape::Plane) return true;
 
 	for (int i = 0; i < DOP14_size; i++) {
-		float dis = vector3_dot(DOP_14_axis[i], meshA->dop14.pos - meshB->dop14.pos);
+		float dis = vector3_dot(DOP_14_axis[i], meshA->get_DOP().pos - meshB->get_DOP().pos);
 
 		if (
-			0 > +dis + meshA->dop14.max[i] - meshB->dop14.min[i] ||
-			0 > -dis + meshB->dop14.max[i] - meshA->dop14.min[i]
+			0 > +dis + meshA->get_DOP().max[i] - meshB->get_DOP().min[i] ||
+			0 > -dis + meshB->get_DOP().max[i] - meshA->get_DOP().min[i]
 			) {
 			return false;
 		}
@@ -30,16 +30,16 @@ bool Check_insert_DOP14(const ALP_Collider_part* meshA, const ALP_Collider_part*
 	return true;
 }
 
-bool Check_insert_Plane(const ALP_Collider_part* plane, const ALP_Collider_part* mesh) {
+bool Check_insert_Plane(const ALP_shape* plane, const ALP_shape* mesh) {
 
 	Vector3 V;
 	float plane_dis = 0, coll_dis = FLT_MAX;
 
-	V = vector3_quatrotate(Vector3(0, 1, 0), plane->ALPcollider->world_orientation());
-	plane_dis = vector3_dot(V, plane->ALPcollider->world_position());
+	V = vector3_quatrotate(Vector3(0, 1, 0), plane->world_orientation());
+	plane_dis = vector3_dot(V, plane->world_position());
 
 	for (int i = 0; i < DOP14_size; i++) {
-		float coll_len = vector3_dot(V, mesh->ALPcollider->world_position() + DOP_14_axis[i] * mesh->dop14.max[i]);
+		float coll_len = vector3_dot(V, mesh->world_position() + DOP_14_axis[i] * mesh->get_DOP().max[i]);
 		if (plane_dis > coll_len)return true;
 	}
 
@@ -50,31 +50,40 @@ void add_pair(std::vector<Contacts::Contact_pair>& pairs, Contacts::Contact_pair
 	pairs.emplace_back(pair);
 }
 
-void Midphase_DOP_14(std::vector<Contacts::Contact_pair>& new_pairs, ALP_Collider_part* meshA, ALP_Collider_part* meshB) {
+void Midphase_DOP_14(std::vector<Contacts::Contact_pair>& new_pairs, ALP_shape* meshA, ALP_shape* meshB) {
 	Contact_pair new_pair;
 
-	std::list<ALP_Collider>::iterator& collA = meshA->ALPcollider;
-	std::list<ALP_Collider>::iterator& collB = meshB->ALPcollider;
+	const ALP_Collider* collA = meshA->get_ALPcollider();
+	const ALP_Collider* collB = meshB->get_ALPcollider();
 
 	// ƒ^ƒO‚É‚æ‚éÕ“Ë‚Ì¥”ñ
+	//bool hit = true;
+	//if (collA->ALPphysics->is_hitable == false|| (collA->tag & collB->nohit_tag)) hit = false;
+	//if (collB->ALPphysics->is_hitable == false|| (collB->tag & collA->nohit_tag)) hit = false;
+	//bool check_oncoll_only = false;
+	//if (hit == false) {
+	//	if (collA->oncoll_check_bits & collB->tag)check_oncoll_only = true;
+	//	if (collB->oncoll_check_bits & collA->tag)check_oncoll_only = true;
+	//}
+	//if (hit == false && check_oncoll_only == false)return;
 	bool hit = true;
-	if (collA->ALPphysics->is_hitable == false|| (collA->tag & collB->nohit_tag)) hit = false;
-	if (collB->ALPphysics->is_hitable == false|| (collB->tag & collA->nohit_tag)) hit = false;
+	if (collA->ALPphysics->is_hitable == false || (meshA->tag & meshB->ignore_tags)) hit = false;
+	if (collB->ALPphysics->is_hitable == false || (meshB->tag & meshA->ignore_tags)) hit = false;
 	bool check_oncoll_only = false;
 	if (hit == false) {
-		if (collA->oncoll_check_bits & collB->tag)check_oncoll_only = true;
-		if (collB->oncoll_check_bits & collA->tag)check_oncoll_only = true;
+		if (collA->oncoll_check_bits & meshB->tag)check_oncoll_only = true;
+		if (collB->oncoll_check_bits & meshA->tag)check_oncoll_only = true;
 	}
 	if (hit == false && check_oncoll_only == false)return;
 
 	//DOP‚É‚æ‚é‘åŽG”c‚È“–‚½‚è”»’è
-	if (collA->shape != ALP_Collider_shape::Plane && collB->shape != ALP_Collider_shape::Plane) {
+	if (meshA->get_shape_tag() != ALP_Collider_shape_tag::Plane && meshB->get_shape_tag() != ALP_Collider_shape_tag::Plane) {
 		if (Check_insert_DOP14(meshA, meshB) == false)return;
 	}
-	else if (collA->shape == ALP_Collider_shape::Plane && collB->shape != ALP_Collider_shape::Plane) {
+	else if (meshA->get_shape_tag() == ALP_Collider_shape_tag::Plane && meshB->get_shape_tag() != ALP_Collider_shape_tag::Plane) {
 		if (Check_insert_Plane(meshA, meshB) == false)return;
 	}
-	else if (collA->shape != ALP_Collider_shape::Plane && collB->shape == ALP_Collider_shape::Plane) {
+	else if (meshA->get_shape_tag() != ALP_Collider_shape_tag::Plane && meshB->get_shape_tag() == ALP_Collider_shape_tag::Plane) {
 		if (Check_insert_Plane(meshB, meshA) == false)return;
 	}
 	else return;
@@ -104,7 +113,7 @@ void Physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std:
 	for (auto& pair : in_pair) {
 
 		for (auto& meshB : pair.bodylists) {
-			if (pair.body->ALPcollider == meshB->ALPcollider)continue;
+			if (pair.body->get_ALPcollider() == meshB->get_ALPcollider())continue;
 
 			Midphase_DOP_14(new_pairs, pair.body, meshB);
 		}
@@ -147,10 +156,10 @@ void Physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std:
 	//Œ»ÝŽg—p‚µ‚Ä‚¢‚È‚¢Õ“Ë“_‚ðíœ
 	for (auto& new_p : new_pairs) {
 		new_p.contacts.chack_remove_contact_point(
-			new_p.body[0]->ALPcollider->world_position(),
-			new_p.body[0]->ALPcollider->world_orientation(),
-			new_p.body[1]->ALPcollider->world_position(),
-			new_p.body[1]->ALPcollider->world_orientation()
+			new_p.body[0]->world_position(),
+			new_p.body[0]->world_orientation(),
+			new_p.body[1]->world_position(),
+			new_p.body[1]->world_orientation()
 		);
 	}
 

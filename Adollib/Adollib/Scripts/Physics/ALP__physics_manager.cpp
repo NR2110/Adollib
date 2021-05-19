@@ -24,43 +24,28 @@ using namespace Contacts;
 //::: staticメンバの初期化 :::::
 #pragma region static_initialize
 
-namespace Adollib
-{
-	float Phyisics_manager::gravity = Physics_manager_default::gravity; //重力
-
-	Physics_function::ALP_Physics Phyisics_manager::default_physics = ALP_Physics(
-		Physics_manager_default::inertial_mass, //質量
-		Physics_manager_default::linear_drag, //空気抵抗
-		Physics_manager_default::anglar_drag, //空気抵抗
-		Physics_manager_default::dynamic_friction,//動摩擦
-		Physics_manager_default::static_friction, //静摩擦
-		Physics_manager_default::restitution,	 //反発係数
-
-		Physics_manager_default::is_fallable, //落ちない
-		Physics_manager_default::is_kinmatic_anglar, //ほかの物体からの影響で回転速度が変化しない
-		Physics_manager_default::is_kinmatic_linear, //ほかの物体からの影響で並進速度が変化しない
-		Physics_manager_default::is_moveable, //動かない
-		Physics_manager_default::is_hitable //衝突しない
-	); //何も設定していないときのpyisicsの値
-
-	float Phyisics_manager::bounce_threshold = Physics_manager_default::bounce_threshold; //跳ね返りの閾値
-	float Phyisics_manager::sleep_threshold = Physics_manager_default::sleep_threshold; //sleepの閾値
-
-	float Phyisics_manager::contact_allowable_error = Physics_manager_default::contact_allowable_error; //これ以上近いと同一衝突点とする
-	float Phyisics_manager::contact_threrhold_normal = Physics_manager_default::contact_threrhold_normal; //衝突点の閾値
-	float Phyisics_manager::contact_threrhold_tangent = Physics_manager_default::contact_threrhold_tangent;//衝突点の閾値
-
-	float Phyisics_manager::bias = Physics_manager_default::bias;//めり込みを直す力
-	float Phyisics_manager::slop = Physics_manager_default::slop;//衝突の許容値
-
-	int Phyisics_manager::solver_iterations = Physics_manager_default::solver_iterations; //衝突の精度
-	bool Phyisics_manager::hit_backfaces_flag = Physics_manager_default::hit_backfaces_flag;//meshの後ろから衝突するか
-
-	float Phyisics_manager::timeStep = 0.016f;
-
-	bool Phyisics_manager::is_draw_collider = false;
-	bool Phyisics_manager::is_draw_dop = false;
-}
+//namespace Adollib
+//{
+//	float Phyisics_manager::gravity = PhysicsParams_default::gravity; //重力
+//
+//	float Phyisics_manager::bounce_threshold = PhysicsParams_default::bounce_threshold; //跳ね返りの閾値
+//	float Phyisics_manager::sleep_threshold = PhysicsParams_default::sleep_threshold; //sleepの閾値
+//
+//	float Phyisics_manager::contact_allowable_error = PhysicsParams_default::contact_allowable_error; //これ以上近いと同一衝突点とする
+//	float Phyisics_manager::contact_threrhold_normal = PhysicsParams_default::contact_threrhold_normal; //衝突点の閾値
+//	float Phyisics_manager::contact_threrhold_tangent = PhysicsParams_default::contact_threrhold_tangent;//衝突点の閾値
+//
+//	float Phyisics_manager::bias = PhysicsParams_default::bias;//めり込みを直す力
+//	float Phyisics_manager::slop = PhysicsParams_default::slop;//衝突の許容値
+//
+//	int Phyisics_manager::solver_iterations = PhysicsParams_default::solver_iterations; //衝突の精度
+//	bool Phyisics_manager::hit_backfaces_flag = PhysicsParams_default::hit_backfaces_flag;//meshの後ろから衝突するか
+//
+//	float Phyisics_manager::timeStep = 0.016f;
+//
+//	bool Phyisics_manager::is_draw_collider = false;
+//	bool Phyisics_manager::is_draw_dop = false;
+//}
 
 namespace Adollib
 {
@@ -70,16 +55,21 @@ namespace Adollib
 	std::unordered_map<Scenelist, std::list<Collider*>> Phyisics_manager::colliders;
 
 	//各dataの実態配列
-	std::unordered_map<Scenelist, std::list<Physics_function::ALP_Collider>> Phyisics_manager::ALP_colliders;
-	std::unordered_map<Scenelist, std::list<Physics_function::ALP_Physics>> Phyisics_manager::ALP_physicses;
+	std::unordered_map<Scenelist, std::list<Physics_function::ALP_Collider*>> Phyisics_manager::ALP_colliders;
+	std::unordered_map<Scenelist, std::list<Physics_function::ALP_Physics*>> Phyisics_manager::ALP_physicses;
 
 	std::vector<Physics_function::Contacts::Contact_pair> Phyisics_manager::pairs;
 	std::vector<Physics_function::Contacts::Collider_2> Phyisics_manager::broad_mid_pair;
 
-	std::unordered_map<Scenelist, std::vector<std::list<Physics_function::ALP_Collider>::iterator>> Phyisics_manager::moved_collider;   //動いた
-	std::unordered_map<Scenelist, std::vector<std::list<Physics_function::ALP_Collider>::iterator>> Phyisics_manager::added_collider;   //追加された
+	std::unordered_map<Scenelist, std::vector<Physics_function::ALP_Collider*>> Phyisics_manager::moved_collider;   //動いた
+	std::unordered_map<Scenelist, std::vector<Physics_function::ALP_Collider*>> Phyisics_manager::added_collider;   //追加された
 
 	std::unordered_map<Scenelist, u_int> Phyisics_manager::collider_index_count;
+
+	Physics_function::PhysicsParams Phyisics_manager::physicsParams;
+
+	bool Phyisics_manager::is_draw_collider = false;
+	bool Phyisics_manager::is_draw_dop = false;
 }
 
 #pragma endregion
@@ -105,16 +95,11 @@ bool Phyisics_manager::update(Scenelist Sce)
 	// ColliderのWorld情報の更新
 	update_world_trans(ALP_colliders[Sce]);
 
-#ifdef Allow_delay
-#else
 	// 外力の更新
 	applyexternalforce(ALP_physicses[Sce]);
-	timeStep = Al_Global::second_per_frame;
-#endif
 
-	//TODO : resolve_contactの後に持ってくる
-	// 位置の更新
-	integrate(ALP_physicses[Sce]);
+
+	physicsParams.timeStep = Al_Global::second_per_frame();
 
 
 	// 大雑把な当たり判定
@@ -151,16 +136,13 @@ bool Phyisics_manager::update(Scenelist Sce)
 	Work_meter::tag_stop();
 	Work_meter::stop("Resolve");
 
-
-#ifdef Allow_delay
-	timeStep = Al_Global::second_per_frame();
-	// 外力の更新
-	applyexternalforce(ALP_physicses[Sce]);
-#endif
-
 	// GOへColliderの影響を渡す
 	solv_resolve(ALP_colliders[Sce]);
 	resolve_gameobject(ALP_colliders[Sce]);
+
+	// 位置の更新
+	integrate(ALP_physicses[Sce]);
+
 
 #ifdef Draw_Contact
 	static bool init = true;
@@ -187,11 +169,11 @@ bool Phyisics_manager::update(Scenelist Sce)
 		for (int i = 0; i < p.contacts.contact_num; i++) {
 			count += 2;
 			if (count > size)break;
-			const auto coll0 = *p.body[0]->ALPcollider;
-			const auto coll1 = *p.body[1]->ALPcollider;
+			const auto coll0 = *p.body[0]->get_ALPcollider();
+			const auto coll1 = *p.body[1]->get_ALPcollider();
 
-			debug_go[count - 1]->transform->local_pos = vector3_quatrotate((p.contacts.contactpoints[i].point[0]), coll0.world_orientation()) + coll0.world_position();
-			debug_go[count - 2]->transform->local_pos = vector3_quatrotate((p.contacts.contactpoints[i].point[1]), coll1.world_orientation()) + coll1.world_position();
+			debug_go[count - 1]->transform->local_pos = vector3_quatrotate((p.contacts.contactpoints[i].point[0]), coll0.gameobject->world_orientate()) + coll0.gameobject->world_position();
+			debug_go[count - 2]->transform->local_pos = vector3_quatrotate((p.contacts.contactpoints[i].point[1]), coll1.gameobject->world_orientate()) + coll1.gameobject->world_position();
 			int adfsdg = 0;
 		}
 	}
@@ -215,30 +197,30 @@ bool Phyisics_manager::update_Gui() {
 		ImGui::Checkbox("draw_DOP", &is_draw_dop);
 
 		//重力の調整
-		ImGui::InputFloat("gravity", &gravity, 0.1f, 1.0f, "%.2f");
+		ImGui::InputFloat("gravity", &physicsParams.gravity, 0.1f, 1.0f, "%.2f");
 
 		//正確さの調整
-		ImGui::InputInt("accuracy", &solver_iterations, 1, 200);
+		ImGui::InputInt("accuracy", &physicsParams.solver_iterations, 1, 200);
 
 		//貫通時のばねの強さ
-		ImGui::InputFloat("bias", &bias, 0.01f, 0.1f, "%.3f");
+		ImGui::InputFloat("bias", &physicsParams.bias, 0.01f, 0.1f, "%.3f");
 		//貫通許容誤差
-		ImGui::InputFloat("slop", &slop, 0.0001f, 0.001f, "%.4f");
+		ImGui::InputFloat("slop", &physicsParams.slop, 0.0001f, 0.001f, "%.4f");
 
 		//physics_defaultの表示
 		if (ImGui::CollapsingHeader("physics_default")) {
 
-			ImGui::DragFloat("mass", &Phyisics_manager::default_physics.inertial_mass, 0.1f);
-			ImGui::DragFloat("linear_drag", &Phyisics_manager::default_physics.linear_drag, 0.01f);
-			ImGui::DragFloat("anglar_drag", &Phyisics_manager::default_physics.anglar_drag, 0.01f);
-			ImGui::DragFloat("dynamic_friction", &Phyisics_manager::default_physics.dynamic_friction, 0.01f);
-			ImGui::DragFloat("static_friction", &Phyisics_manager::default_physics.static_friction, 0.01f);
-			ImGui::DragFloat("restitution", &Phyisics_manager::default_physics.restitution, 0.01f);
-			ImGui::Checkbox("is_fallable", &Phyisics_manager::default_physics.is_fallable);
-			ImGui::Checkbox("is_kinmatic_anglar", &Phyisics_manager::default_physics.is_kinmatic_anglar);
-			ImGui::Checkbox("is_kinmatic_linear", &Phyisics_manager::default_physics.is_kinmatic_linear);
-			ImGui::Checkbox("is_moveable", &Phyisics_manager::default_physics.is_moveable);
-			ImGui::Checkbox("is_hitable", &Phyisics_manager::default_physics.is_hitable);
+			ImGui::DragFloat("mass", &physicsParams.inertial_mass, 0.1f);
+			ImGui::DragFloat("linear_drag", &physicsParams.linear_drag, 0.01f);
+			ImGui::DragFloat("anglar_drag", &physicsParams.anglar_drag, 0.01f);
+			ImGui::DragFloat("dynamic_friction", &physicsParams.dynamic_friction, 0.01f);
+			ImGui::DragFloat("static_friction", &physicsParams.static_friction, 0.01f);
+			ImGui::DragFloat("restitution", &physicsParams.restitution, 0.01f);
+			ImGui::Checkbox("is_fallable", &physicsParams.is_fallable);
+			ImGui::Checkbox("is_kinmatic_anglar", &physicsParams.is_kinmatic_anglar);
+			ImGui::Checkbox("is_kinmatic_linear", &physicsParams.is_kinmatic_linear);
+			ImGui::Checkbox("is_moveable", &physicsParams.is_moveable);
+			ImGui::Checkbox("is_hitable", &physicsParams.is_hitable);
 		}
 
 	}
@@ -265,8 +247,8 @@ bool Phyisics_manager::ray_cast(
 
 	bool ret = false;
 
-	for (const auto& coll : ALP_colliders[Sce]) {
-		if (!(coll.tag & tag))continue;
+	for (const auto coll : ALP_colliders[Sce]) {
+		if (!(coll->tag & tag))continue;
 
 		if (Physics_function::ray_cast(
 			Ray_pos, Ray_dir,
@@ -287,34 +269,37 @@ bool Phyisics_manager::ray_cast(
 	return ret;
 }
 
-void Phyisics_manager::remove_collider(
-	std::list<Collider*>::iterator coll_itr,
-	std::list<Physics_function::ALP_Collider>::iterator ALPcoll_itr,
-	std::list<Physics_function::ALP_Physics>::iterator ALPphys_itr,
-	Scenelist Sce) {
 
-	//削除されたcolider
-	remove_collider_broad_phase(ALPcoll_itr);
 
-	ALP_colliders[Sce].erase(ALPcoll_itr);
-	ALP_physicses[Sce].erase(ALPphys_itr);
-
-	colliders[Sce].erase(coll_itr);
-
-}
-
-void Phyisics_manager::remove_collider(
-	std::list<Collider*>::iterator coll_itr,
-	std::list<Physics_function::ALP_Collider>::iterator ALPcoll_itr,
-	Scenelist Sce) {
-
-	//削除されたcolider
-	remove_collider_broad_phase(ALPcoll_itr);
-
-	ALP_colliders[Sce].erase(ALPcoll_itr);
-
-	colliders[Sce].erase(coll_itr);
-}
+//void Phyisics_manager::remove_collider(
+//	std::list<Collider*>::iterator coll_itr,
+//	Physics_function::ALP_Collider* ALPcoll_itr,
+//	Physics_function::ALP_Physics* ALPphys_itr,
+//	Scenelist Sce) {
+//
+//	//削除されたcolider
+//	remove_collider_broad_phase(ALPcoll_itr);
+//
+//	ALPcoll_itr->destroy();
+//	ALP_colliders[Sce].erase(ALPcoll_itr);
+//	ALP_physicses[Sce].erase(ALPphys_itr);
+//
+//	colliders[Sce].erase(coll_itr);
+//
+//}
+//
+//void Phyisics_manager::remove_collider(
+//	std::list<Collider*>::iterator coll_itr,
+//	std::list<Physics_function::ALP_Collider>::iterator ALPcoll_itr,
+//	Scenelist Sce) {
+//
+//	//削除されたcolider
+//	remove_collider_broad_phase(ALPcoll_itr);
+//
+//	ALP_colliders[Sce].erase(ALPcoll_itr);
+//
+//	colliders[Sce].erase(coll_itr);
+//}
 
 #include "../Main/systems.h"
 #include "../Mesh/material_for_collider.h"

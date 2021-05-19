@@ -30,9 +30,9 @@ namespace Adollib
 		virtual void update_worldtrans() {};
 		//virtual object* get_top_pearent() = 0;//一番の親を返す
 
-		virtual Quaternion get_world_orientate() { return quaternion_identity(); };
-		virtual Vector3 get_world_position() { return Vector3(); };
-		virtual Vector3 get_world_scale() { return Vector3();	};
+		virtual Quaternion world_orientate() { return quaternion_identity(); };
+		virtual Vector3 world_position() { return Vector3(); };
+		virtual Vector3 world_scale() { return Vector3();	};
 
 	private:
 		object* pearent_ = nullptr; //親へのポインタ

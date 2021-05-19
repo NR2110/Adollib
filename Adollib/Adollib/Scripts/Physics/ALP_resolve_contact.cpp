@@ -61,7 +61,7 @@ void CalcTangentVector(const Vector3& normal, DirectX::XMVECTOR& tangent1, Direc
 }
 #endif
 
-void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::vector<Contacts::Contact_pair>& pairs) {
+void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std::vector<Contacts::Contact_pair>& pairs) {
 
 #ifndef PHYICSE_USED_SIMD
 	//::: 解決用オブジェクトの生成 :::::::::::
@@ -70,27 +70,27 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 		int count = 0;
 		for (const auto& coll : colliders) {
 			ALP_Solverbody SB;
-			SB.orientation = coll.world_orientation();
+			//SB.orientation = coll.world_orientation();
 			SB.delta_LinearVelocity = Vector3(0.0f);
 			SB.delta_AngulaVelocity = Vector3(0.0f);
 
-			if (coll.ALPphysics->is_kinmatic_anglar) SB.inv_inertia = coll.ALPphysics->inverse_inertial_tensor();
+			if (coll->ALPphysics->is_kinmatic_anglar) SB.inv_inertia = coll->ALPphysics->inverse_inertial_tensor();
 			else SB.inv_inertia = matrix_zero();
 
-			SB.inv_mass = coll.ALPphysics->inverse_mass();
+			SB.inv_mass = coll->ALPphysics->inverse_mass();
 
 			SBs.emplace_back(SB);
 			count++;
 		}
 		count = 0;
 		for (auto& coll : colliders) {
-			coll.ALPphysics->solve = &SBs[count];
+			coll->ALPphysics->solve = &SBs[count];
 			count++;
 		}
 	}
 
-	ALP_Collider_part* coll[2];
-	std::list<ALP_Physics>::iterator ALPphysics[2];
+	ALP_shape* coll[2];
+	ALP_Physics* ALPphysics[2];
 	ALP_Solverbody* solverbody[2];
 	//std::vector<Balljoint> balljoints; //今回はなし
 
@@ -98,8 +98,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 
 		coll[0] = pair.body[0];
 		coll[1] = pair.body[1];
-		ALPphysics[0] = coll[0]->ALPcollider->ALPphysics;
-		ALPphysics[1] = coll[1]->ALPcollider->ALPphysics;
+		ALPphysics[0] = coll[0]->get_ALPcollider()->ALPphysics;
+		ALPphysics[1] = coll[1]->get_ALPcollider()->ALPphysics;
 		solverbody[0] = ALPphysics[0]->solve;
 		solverbody[1] = ALPphysics[1]->solve;
 
@@ -110,8 +110,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 		for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 			Contactpoint& cp = pair.contacts.contactpoints[C_num];
 
-			Vector3 rA = vector3_quatrotate(cp.point[0], solverbody[0]->orientation);
-			Vector3 rB = vector3_quatrotate(cp.point[1], solverbody[1]->orientation);
+			Vector3 rA = vector3_quatrotate(cp.point[0], coll[0]->world_orientation());
+			Vector3 rB = vector3_quatrotate(cp.point[1], coll[1]->world_orientation());
 
 			// 反発係数の獲得
 			// 継続の衝突の場合反発係数を0にする
@@ -158,8 +158,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 				cp.constraint[0].jacDiagInv = 1.0f / denominator; //Baraff1997(8-18)の分母
 				cp.constraint[0].rhs = -(1.0f + restitution) * vector3_dot(axis, vrel); //Baraff1997(8-18)の分子
 
-				if (0.0f < cp.distance - Phyisics_manager::slop)
-					cp.constraint[0].rhs += (Phyisics_manager::bias * (cp.distance - Phyisics_manager::slop)) / Phyisics_manager::timeStep; //めり込みを直す力
+				if (0.0f < cp.distance - Phyisics_manager::physicsParams.slop)
+					cp.constraint[0].rhs += (Phyisics_manager::physicsParams.bias * (cp.distance - Phyisics_manager::physicsParams.slop)) / Phyisics_manager::physicsParams.timeStep; //めり込みを直す力
 
 				cp.constraint[0].rhs *= cp.constraint[0].jacDiagInv;
 				cp.constraint[0].lowerlimit = 0.0f;
@@ -217,16 +217,16 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 
 		coll[0] = pair.body[0];
 		coll[1] = pair.body[1];
-		ALPphysics[0] = coll[0]->ALPcollider->ALPphysics;
-		ALPphysics[1] = coll[1]->ALPcollider->ALPphysics;
+		ALPphysics[0] = coll[0]->get_ALPcollider()->ALPphysics;
+		ALPphysics[1] = coll[1]->get_ALPcollider()->ALPphysics;
 		solverbody[0] = ALPphysics[0]->solve;
 		solverbody[1] = ALPphysics[1]->solve;
 
 		for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 			//衝突点の情報
 			Contactpoint& cp = pair.contacts.contactpoints[C_num];
-			Vector3 rA = vector3_quatrotate(cp.point[0], solverbody[0]->orientation);
-			Vector3 rB = vector3_quatrotate(cp.point[1], solverbody[1]->orientation);
+			Vector3 rA = vector3_quatrotate(cp.point[0], coll[0]->world_orientation());
+			Vector3 rB = vector3_quatrotate(cp.point[1], coll[1]->world_orientation());
 
 			for (int k = 0; k < 3; k++) {
 				float deltaImpulse = cp.constraint[k].accuminpulse;
@@ -240,21 +240,21 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 	}
 
 
-	for (int i = 0; i < Phyisics_manager::solver_iterations; i++) {
+	for (int i = 0; i < Phyisics_manager::physicsParams.solver_iterations; i++) {
 		for (auto& pair : pairs) {
 
 			coll[0] = pair.body[0];
 			coll[1] = pair.body[1];
-			ALPphysics[0] = coll[0]->ALPcollider->ALPphysics;
-			ALPphysics[1] = coll[1]->ALPcollider->ALPphysics;
+			ALPphysics[0] = coll[0]->get_ALPcollider()->ALPphysics;
+			ALPphysics[1] = coll[1]->get_ALPcollider()->ALPphysics;
 			solverbody[0] = ALPphysics[0]->solve;
 			solverbody[1] = ALPphysics[1]->solve;
 
 			for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 				//衝突点の情報
 				Contactpoint& cp = pair.contacts.contactpoints[C_num];
-				Vector3 rA = vector3_quatrotate(cp.point[0], solverbody[0]->orientation);
-				Vector3 rB = vector3_quatrotate(cp.point[1], solverbody[1]->orientation);
+				Vector3 rA = vector3_quatrotate(cp.point[0], coll[0]->world_orientation());
+				Vector3 rB = vector3_quatrotate(cp.point[1], coll[1]->world_orientation());
 
 				{
 					Constraint& constraint = cp.constraint[0];
@@ -318,8 +318,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider>& colliders, std::
 
 	// 速度の更新
 	for (auto& coll : colliders) {
-		if (coll.ALPphysics->is_kinmatic_linear) coll.ALPphysics->linear_velocity += coll.ALPphysics->solve->delta_LinearVelocity;
-		if (coll.ALPphysics->is_kinmatic_anglar) coll.ALPphysics->anglar_velocity += coll.ALPphysics->solve->delta_AngulaVelocity;
+		if (coll->ALPphysics->is_kinmatic_linear) coll->ALPphysics->linear_velocity += coll->ALPphysics->solve->delta_LinearVelocity;
+		if (coll->ALPphysics->is_kinmatic_anglar) coll->ALPphysics->anglar_velocity += coll->ALPphysics->solve->delta_AngulaVelocity;
 
 	}
 

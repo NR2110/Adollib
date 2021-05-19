@@ -4,9 +4,11 @@
 #include "../Object/component.h"
 #include "../Scene/scene.h"
 
-#include "collider__base.h"
+#include "collider.h"
 #include "ALP_collider.h"
 #include "ALP_physics.h"
+
+#include "ALP_broadphase.h"
 
 #include "contact.h"
 
@@ -18,7 +20,7 @@ namespace Adollib
 
 	namespace Physics_function {
 		// physics_managerのstatic変数の初期値
-		struct Physics_manager_default {
+		struct PhysicsParams_default {
 		public:
 
 			static constexpr float gravity = 9.8f; //重力
@@ -56,6 +58,43 @@ namespace Adollib
 			static constexpr bool is_hitable = true;  //衝突しない
 			//::::::::
 		};
+
+		struct PhysicsParams {
+		public:
+			float gravity = 9.8f; //重力
+
+			float bounce_threshold = 0.01f; //跳ね返りの閾値
+			float sleep_threshold = 0.01f; //sleepの閾値
+
+			float contact_allowable_error = 0.02f; //これ以上近いと同一衝突点とする
+			float contact_threrhold_normal = 0.004f; //衝突点の閾値
+			float contact_threrhold_tangent = 0.02f;//衝突点の閾値
+
+
+
+			float bias = 0.15f;//めり込みを直す力
+			float slop = 0.003f;//衝突の許容値
+
+			int solver_iterations = 5; //衝突の精度
+			bool hit_backfaces_flag = false;//meshの後ろから衝突するか
+
+			float timeStep = 0.016f;
+
+			//::: Physicsの初期値部分 :::
+
+			float inertial_mass = 1.f; //質量
+			float linear_drag = 0.1f; //空気抵抗
+			float anglar_drag = 0.1f; //空気抵抗
+			float dynamic_friction = 0.4f;//動摩擦
+			float static_friction = 0.4f; //静摩擦
+			float restitution = 0.1f;	 //反発係数
+
+			bool is_fallable = true; //落ちるか
+			bool is_kinmatic_anglar = true; //ほかの物体からの影響で回転速度が変化しない
+			bool is_kinmatic_linear = true; //ほかの物体からの影響で並進速度が変化しない
+			bool is_moveable = true;//動くか
+			bool is_hitable = true;  //衝突しない
+		};
 	}
 
 	class Phyisics_manager
@@ -69,106 +108,150 @@ namespace Adollib
 		static std::unordered_map<Scenelist, u_int> collider_index_count;
 
 		//各dataの実態配列
-		static std::unordered_map<Scenelist, std::list<Physics_function::ALP_Collider>> ALP_colliders;
-		static std::unordered_map<Scenelist, std::list<Physics_function::ALP_Physics>> ALP_physicses;
+		static std::unordered_map<Scenelist, std::list<Physics_function::ALP_Collider*>> ALP_colliders;
+		static std::unordered_map<Scenelist, std::list<Physics_function::ALP_Physics*>> ALP_physicses;
 
 		static std::vector<Physics_function::Contacts::Contact_pair> pairs;
 		static std::vector<Physics_function::Contacts::Collider_2> broad_mid_pair;
 
 		//そのフレーム間で変化したもの(broad_phase用)
-		static std::unordered_map<Scenelist, std::vector<std::list<Physics_function::ALP_Collider>::iterator>> moved_collider;   //動いた
-		static std::unordered_map<Scenelist, std::vector<std::list<Physics_function::ALP_Collider>::iterator>> added_collider;   //追加された
+		static std::unordered_map<Scenelist, std::vector<Physics_function::ALP_Collider*>> moved_collider;   //動いた
+		static std::unordered_map<Scenelist, std::vector<Physics_function::ALP_Collider*>> added_collider;   //追加された
 
 	public:
-		static float gravity; //重力
+		//生成時のphysicsの値
+		static Physics_function::PhysicsParams physicsParams;
 
-		static Physics_function::ALP_Physics default_physics; //何も設定していないときのpyisicsの値
+		//static float gravity; //重力
 
-		static float bounce_threshold; //跳ね返りの閾値
-		static float sleep_threshold; //sleepの閾値
+		//static float bounce_threshold; //跳ね返りの閾値
+		//static float sleep_threshold; //sleepの閾値
 
-		static float contact_allowable_error; //これ以上近いと同一衝突点とする
-		static float contact_threrhold_normal; //衝突点の閾値
-		static float contact_threrhold_tangent;//衝突点の閾値
+		//static float contact_allowable_error; //これ以上近いと同一衝突点とする
+		//static float contact_threrhold_normal; //衝突点の閾値
+		//static float contact_threrhold_tangent;//衝突点の閾値
 
-		static float bias;//めり込みを直す力
-		static float slop;//衝突の許容値
+		//static float bias;//めり込みを直す力
+		//static float slop;//衝突の許容値
 
-		static int solver_iterations; //衝突の精度
-		static bool hit_backfaces_flag;//meshの後ろから衝突するか
+		//static int solver_iterations; //衝突の精度
+		//static bool hit_backfaces_flag;//meshの後ろから衝突するか
 
-		static float timeStep;
+		//static float timeStep;
+
+		//static float inertial_mass; //質量
+		//static float linear_drag; //空気抵抗
+		//static float anglar_drag; //空気抵抗
+		//static float dynamic_friction;//動摩擦
+		//static float static_friction; //静摩擦
+		//static float restitution;	 //反発係数
+
+		//static bool is_fallable; //落ちるか
+		//static bool is_kinmatic_anglar; //ほかの物体からの影響で回転速度が変化しない
+		//static bool is_kinmatic_linear; //ほかの物体からの影響で並進速度が変化しない
+		//static bool is_moveable;//動くか
+		//static bool is_hitable;  //衝突しない
+
 
 		static bool is_draw_collider; //COlliderの表示
 		static bool is_draw_dop; //dopの表示(14-DOPを表示するのがめんどくさいためAABBを表示する)
 
 	public:
 
-		static Physics_function::ColliderPhysics_itrs add_collider(Collider* coll, Scenelist Sce = Scene::now_scene) {
+		static Physics_function::ColliderPhysics_ptrs add_collider(Collider* coll, Scenelist Sce = Scene::now_scene) {
 
-			Physics_function::ColliderPhysics_itrs ret;
+			Physics_function::ColliderPhysics_ptrs ret;
 			{
 				colliders[Sce].emplace_back(coll);
 				ret.coll_itr = colliders[Sce].end();
 				ret.coll_itr--;
 			}
 			{
-				Physics_function::ALP_Collider ALPcollider;
+				//itrがほしいため空のポインタで枠だけ取る
+				Physics_function::ALP_Collider* null = nullptr;
+				ALP_colliders[Sce].emplace_back(null);
 
-				ALP_colliders[Sce].emplace_back(ALPcollider);
-				ret.ALPcollider_itr = ALP_colliders[Sce].end();
-				ret.ALPcollider_itr--;
+				auto itr = ALP_colliders[Sce].end();
+				itr--;
 
-				ret.ALPcollider_itr->scene = Sce;
-				ret.ALPcollider_itr->index = collider_index_count[Sce];
+				//中身を入れつつ生成
+				*itr = new Physics_function::ALP_Collider(itr, Sce, collider_index_count[Sce]);
 			}
 			{
-				Physics_function::ALP_Physics ALPphysics;
-				ALPphysics = Phyisics_manager::default_physics;
+				//itrがほしいため空のポインタで枠だけ取る
+				Physics_function::ALP_Physics* null = nullptr;
+				ALP_physicses[Sce].emplace_back(null);
 
-				ALP_physicses[Sce].emplace_back(ALPphysics);
-				ret.ALPphysics_itr = ALP_physicses[Sce].end();
-				ret.ALPphysics_itr--;
+				auto itr = ALP_physicses[Sce].end();
+				itr--;
+
+				//中身を入れつつ生成
+				*itr = new Physics_function::ALP_Physics(itr, Sce, collider_index_count[Sce]);
+
+				//phsicsの初期値の入力
+				(*itr)->set_default();
 			}
 
-			ret.ALPphysics_itr->ALPphysics = ret.ALPphysics_itr;
-			ret.ALPcollider_itr->ALPphysics = ret.ALPphysics_itr;
+			ret.ALPphysics_ptr->ALPphysics = ret.ALPphysics_ptr;
+			ret.ALPcollider_ptr->ALPphysics = ret.ALPphysics_ptr;
 
-			ret.ALPphysics_itr->ALPcollider = ret.ALPcollider_itr;
-			ret.ALPcollider_itr->ALPcollider = ret.ALPcollider_itr;
+			ret.ALPphysics_ptr->ALPcollider = ret.ALPcollider_ptr;
+			ret.ALPcollider_ptr->ALPcollider = ret.ALPcollider_ptr;
 
 			//追加されたcollider
-			added_collider[Sce].emplace_back(ret.ALPcollider_itr);
+			added_collider[Sce].emplace_back(ret.ALPcollider_ptr);
 
 			//::: 初期値をいれる :::
-			(*ret.coll_itr)->physics_data.inertial_mass = Phyisics_manager::default_physics.inertial_mass; //質量
-			(*ret.coll_itr)->physics_data.drag = Phyisics_manager::default_physics.linear_drag; //空気抵抗
-			(*ret.coll_itr)->physics_data.anglar_drag = Phyisics_manager::default_physics.anglar_drag; //空気抵抗
-			(*ret.coll_itr)->physics_data.dynamic_friction = Phyisics_manager::default_physics.dynamic_friction; //動摩擦
-			(*ret.coll_itr)->physics_data.static_friction = Phyisics_manager::default_physics.static_friction; //静摩擦
-			(*ret.coll_itr)->physics_data.restitution = Phyisics_manager::default_physics.restitution;	 //反発係数
+			(*ret.coll_itr)->physics_data.inertial_mass =	physicsParams.inertial_mass; //質量
+			(*ret.coll_itr)->physics_data.drag =			physicsParams.linear_drag; //空気抵抗
+			(*ret.coll_itr)->physics_data.anglar_drag =		physicsParams.anglar_drag; //空気抵抗
+			(*ret.coll_itr)->physics_data.dynamic_friction = physicsParams.dynamic_friction; //動摩擦
+			(*ret.coll_itr)->physics_data.static_friction = physicsParams.static_friction; //静摩擦
+			(*ret.coll_itr)->physics_data.restitution =		physicsParams.restitution;	 //反発係数
 
-			(*ret.coll_itr)->physics_data.is_fallable = Phyisics_manager::default_physics.is_fallable; //落ちない
-			(*ret.coll_itr)->physics_data.is_kinmatic_anglar = Phyisics_manager::default_physics.is_kinmatic_anglar;//影響うけない(fallはする)
-			(*ret.coll_itr)->physics_data.is_kinmatic_linear = Phyisics_manager::default_physics.is_kinmatic_linear;//影響うけない(fallはする)
-			(*ret.coll_itr)->physics_data.is_moveable = Phyisics_manager::default_physics.is_moveable; //動かない
-			(*ret.coll_itr)->physics_data.is_hitable = Phyisics_manager::default_physics.is_hitable;  //衝突しない
+			(*ret.coll_itr)->physics_data.is_fallable =		physicsParams.is_fallable; //落ちない
+			(*ret.coll_itr)->physics_data.is_kinmatic_anglar = physicsParams.is_kinmatic_anglar;//影響うけない(fallはする)
+			(*ret.coll_itr)->physics_data.is_kinmatic_linear = physicsParams.is_kinmatic_linear;//影響うけない(fallはする)
+			(*ret.coll_itr)->physics_data.is_moveable =		physicsParams.is_moveable; //動かない
+			(*ret.coll_itr)->physics_data.is_hitable =		physicsParams.is_hitable;  //衝突しない
 
 			collider_index_count[Sce]++;
 			return ret;
 		}
 
-		static void remove_collider(
-			std::list<Collider*>::iterator coll_itr,
-			std::list<Physics_function::ALP_Collider>::iterator ALPcoll_itr,
-			std::list<Physics_function::ALP_Physics>::iterator ALPphys_itr,
-			Scenelist Sce = Scene::now_scene);
+		//static void remove_collider(
+		//	std::list<Collider*>::iterator coll_itr,
+		//	Physics_function::ALP_Collider* ALPcoll_itr,
+		//	Physics_function::ALP_Physics* ALPphys_itr,
+		//	Scenelist Sce = Scene::now_scene);
 
 
-		static void remove_collider(
-			std::list<Collider*>::iterator coll_itr,
-			std::list<Physics_function::ALP_Collider>::iterator ALPcoll_itr,
-			Scenelist Sce = Scene::now_scene);
+		//static void remove_collider(
+		//	std::list<Collider*>::iterator coll_itr,
+		//	Physics_function::ALP_Collider* ALPcoll_itr,
+		//	Scenelist Sce = Scene::now_scene);
+
+		static void remove_Collider(
+			const Scenelist Sce,
+			std::list<Collider*>::iterator coll_itr)
+		{
+			colliders[Sce].erase(coll_itr);
+		}
+
+		static void remove_ALPcollider(
+			const Scenelist Sce,
+			std::list<Physics_function::ALP_Collider*>::iterator ALPcoll_itr
+		) {
+			remove_collider_broad_phase(*ALPcoll_itr);
+			ALP_colliders[Sce].erase(ALPcoll_itr);
+		}
+
+		static void remove_ALPphysics(
+			const Scenelist Sce,
+			std::list<Physics_function::ALP_Physics*>::iterator ALPphs_itr
+		) {
+			ALP_physicses[Sce].erase(ALPphs_itr);
+		}
 
 	public:
 		static bool ray_cast(
@@ -180,7 +263,7 @@ namespace Adollib
 			Collider* coll,
 			Scenelist Sce = Scene::now_scene);
 
-		static void add_moved(const std::list<Physics_function::ALP_Collider>::iterator& coll, Scenelist Sce = Scene::now_scene) {
+		static void add_moved(Physics_function::ALP_Collider* coll, Scenelist Sce = Scene::now_scene) {
 			moved_collider[Sce].push_back(coll);
 		}
 

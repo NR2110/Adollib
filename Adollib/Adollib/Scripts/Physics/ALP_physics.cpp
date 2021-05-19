@@ -9,6 +9,23 @@
 using namespace Adollib;
 using namespace Physics_function;
 
+void ALP_Physics::set_default() {
+
+	inertial_mass = PhysicsParams_default::inertial_mass; //質量
+	linear_drag = PhysicsParams_default::linear_drag;//空気抵抗
+	anglar_drag = PhysicsParams_default::anglar_drag;//空気抵抗
+	dynamic_friction = PhysicsParams_default::dynamic_friction;//動摩擦
+	static_friction = PhysicsParams_default::static_friction;//静摩擦
+	restitution = PhysicsParams_default::restitution; //反発係数
+
+	is_fallable = PhysicsParams_default::is_fallable;//落ちない
+	is_kinmatic_anglar = PhysicsParams_default::is_kinmatic_anglar;//ほかの物体からの影響で回転速度が変化しない
+	is_kinmatic_linear = PhysicsParams_default::is_kinmatic_linear;//ほかの物体からの影響で並進速度が変化しない
+	is_moveable = PhysicsParams_default::is_moveable;//動かない
+	is_hitable = PhysicsParams_default::is_hitable;
+
+};
+
 void ALP_Physics::add_force(const Vector3& force) {
 	accumulated_force += force;
 }
@@ -32,7 +49,7 @@ Matrix ALP_Physics::inverse_inertial_tensor() const {
 		inverse_inertial_tensor = matrix_inverse(inertial_tensor);
 
 		Matrix rotation, transposed_rotation;
-		rotation = ALPcollider->world_orientation().get_rotate_matrix();
+		rotation = gameobject->world_orientate().get_rotate_matrix();
 		transposed_rotation = matrix_trans(rotation);
 		inverse_inertial_tensor = rotation * inverse_inertial_tensor * transposed_rotation;
 	}
@@ -62,7 +79,7 @@ void ALP_Physics::apply_external_force(float duration) {
 		//inv_rotate = Quaternion(1, 0, 0, 0);
 
 		const float inv_mass = 1 / inertial_mass;
-		if (is_fallable) accumulated_force += Vector3(0, -Phyisics_manager::gravity, 0) * inertial_mass; //落下
+		if (is_fallable) accumulated_force += Vector3(0, -Phyisics_manager::physicsParams.gravity, 0) * inertial_mass; //落下
 
 		//空気抵抗の求め方
 		// k は流体の密度やらなんやらを考慮した定数
@@ -85,7 +102,7 @@ void ALP_Physics::apply_external_force(float duration) {
 		//各回転に加える力(accumulated_torque)から加速度を出して角速度を更新する
 		Matrix inverse_inertia_tensor = matrix_inverse(inertial_tensor);
 		//Matrix rotation = ALPcollider->local_orientation.get_rotate_matrix();
-		Matrix rotation = ALPcollider->world_orientation().get_rotate_matrix();
+		Matrix rotation = gameobject->world_orientate().get_rotate_matrix();
 		Matrix transposed_rotation = matrix_trans(rotation);
 		inverse_inertia_tensor = transposed_rotation * inverse_inertia_tensor * rotation;
 		angula_acceleration += vector3_trans(accumulated_torque, inverse_inertia_tensor);
@@ -129,63 +146,30 @@ void ALP_Physics::integrate(float duration) {
 //サイズ変更などに対応するため毎フレーム慣性テンソルなどを更新
 void ALP_Physics::update_inertial() {
 
-	Vector3 Wsize = ALPcollider->world_scale();
+	Vector3 Wsize = gameobject->world_scale();
 
 	//慣性モーメントの更新
 	switch (ALPcollider->shape)
 	{
-	case ALP_Collider_shape::Sphere:
+	case ALP_Collider_inertial_shape::box:
+		inertial_tensor = matrix_identity();
+		inertial_tensor._11 = 0.3333333f * inertial_mass * ((Wsize.y * Wsize.y) + (Wsize.z * Wsize.z));
+		inertial_tensor._22 = 0.3333333f * inertial_mass * ((Wsize.z * Wsize.z) + (Wsize.x * Wsize.x));
+		inertial_tensor._33 = 0.3333333f * inertial_mass * ((Wsize.x * Wsize.x) + (Wsize.y * Wsize.y));
+		break;
+
+	case ALP_Collider_inertial_shape::sphere:
 		inertial_tensor = matrix_identity();
 		inertial_tensor._11 = 0.4f * inertial_mass * Wsize.x * Wsize.x;
 		inertial_tensor._22 = 0.4f * inertial_mass * Wsize.x * Wsize.x;
 		inertial_tensor._33 = 0.4f * inertial_mass * Wsize.x * Wsize.x;
-
-		break;
-	case ALP_Collider_shape::BOX:
-		inertial_tensor = matrix_identity();
-		inertial_tensor._11 = 0.3333333f * inertial_mass * ((Wsize.y * Wsize.y) + (Wsize.z * Wsize.z));
-		inertial_tensor._22 = 0.3333333f * inertial_mass * ((Wsize.z * Wsize.z) + (Wsize.x * Wsize.x));
-		inertial_tensor._33 = 0.3333333f * inertial_mass * ((Wsize.x * Wsize.x) + (Wsize.y * Wsize.y));
-
-		//EpxVector3 sqrSz = halfExtent * 2.0f;
-		//sqrSz = mulPerElem(sqrSz, sqrSz);
-		//EpxMatrix3 inertia = EpxMatrix3::identity();
-		//inertia[0][0] = (mass * (sqrSz[1] + sqrSz[2])) / 12.0f;
-		//inertia[1][1] = (mass * (sqrSz[0] + sqrSz[2])) / 12.0f;
-		//inertia[2][2] = (mass * (sqrSz[0] + sqrSz[1])) / 12.0f;
-		//return inertia;
-
-		break;
-	case ALP_Collider_shape::Capsule:
-		//inertial_tensor = matrix_identity();
-		//inertial_tensor._11 = 0.25f * inertial_mass * Wsize.x * Wsize.x + 0.08333333333f * inertial_mass * (Wsize.y) * (Wsize.y) * 4;
-		//inertial_tensor._22 = 0.25f * inertial_mass * Wsize.x * Wsize.x + 0.08333333333f * inertial_mass * (Wsize.y) * (Wsize.y) * 4;
-		//inertial_tensor._33 = 0.5f * inertial_mass * Wsize.x * Wsize.x;
-
-		inertial_tensor = matrix_identity();
-		inertial_tensor._11 = 0.3333333f * inertial_mass * ((Wsize.y * Wsize.y) + (Wsize.x * Wsize.x));
-		inertial_tensor._22 = 0.3333333f * inertial_mass * ((Wsize.x * Wsize.x) + (Wsize.x * Wsize.x));
-		inertial_tensor._33 = 0.3333333f * inertial_mass * ((Wsize.x * Wsize.x) + (Wsize.y * Wsize.y));
-
-		break;
-	case ALP_Collider_shape::Plane:
-
-		break;
-	case ALP_Collider_shape::Mesh:
-		inertial_tensor = matrix_identity();
-		inertial_tensor._11 = 0.3333333f * inertial_mass * ((Wsize.y * Wsize.y) + (Wsize.z * Wsize.z));
-		inertial_tensor._22 = 0.3333333f * inertial_mass * ((Wsize.z * Wsize.z) + (Wsize.x * Wsize.x));
-		inertial_tensor._33 = 0.3333333f * inertial_mass * ((Wsize.x * Wsize.x) + (Wsize.y * Wsize.y));
-
-		break;
-	default:
 		break;
 	}
 }
 
-void ALP_Physics::refresh_ALP_from_data() {
+void ALP_Physics::update_physics_data() {
 
-	Physics_data Cdata = (*ALPcollider->coll_itr)->get_Physicsdata();
+	Physics_data Cdata = (*ALPcollider->coll_itr)->physics_data;
 
 	inertial_mass = Cdata.inertial_mass;
 	linear_drag = Cdata.drag;
@@ -199,4 +183,8 @@ void ALP_Physics::refresh_ALP_from_data() {
 	is_kinmatic_linear = Cdata.is_kinmatic_linear; //ほかの物体からの影響で並進速度が変化しない
 	is_moveable = Cdata.is_moveable;
 	is_hitable = Cdata.is_hitable;
+}
+
+void ALP_Physics::destroy() {
+	Phyisics_manager::remove_ALPphysics(scene, this_itr);
 }

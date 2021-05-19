@@ -4,28 +4,17 @@
 namespace Adollib {
 
 	//球体用クラス
-	class Sphere : public Collider {
+	class Sphere : public ALP_shape {
 	public:
 		Vector3 center; //中心座標
 		float r = 1; //半径
 
-		Sphere() : center(Vector3(0)), r(1) { name = std::string("Sphere"); };
+		Sphere() : center(Vector3(0)), r(1) { shape_tag = Physics_function::ALP_Collider_shape_tag::Sphere; };
 
-		Physics_function::Collider_data get_Colliderdata() const override {
-			Physics_function::Collider_data ret;
-
-			ret.local_position = center;
-			ret.local_orientation = quaternion_identity();
-			ret.local_scale = Vector3(r);
-
-			ret.half_size = Vector3(1, 1, 1);
-
-			ret.shape = Physics_function::ALP_Collider_shape::Sphere;
-
-			ret.tag = tag;
-			ret.nohit_tag = nohit_tag;
-
-			return ret;
+		void adapt_Colliderdata() override {
+			local_position = center;
+			local_orientation = quaternion_identity();
+			local_scale = Vector3(r);
 		};
 
 		void Update_hierarchy() override {
@@ -40,24 +29,18 @@ namespace Adollib {
 			{
 				ImGui::DragFloat3("radias", &r, ave * 0.001f, 0, 0, "%.2f");
 			}
-
-			if (ImGui::BeginTabBar("Physics")) {
-				ImGui::Checkbox("moveable", &physics_data.is_moveable);
-				ImGui::Checkbox("fallable", &physics_data.is_fallable);
-				ImGui::Checkbox("kinematic", &physics_data.is_kinematic);
-				ImGui::Checkbox("is_kinmatic_anglar", &physics_data.is_kinmatic_anglar);
-				ImGui::Checkbox("is_kinmatic_linear", &physics_data.is_kinmatic_linear);
-				ImGui::Checkbox("hitable", &physics_data.is_hitable);
-
-				ImGui::DragFloat("mass", &physics_data.inertial_mass, 0.001f, 0, 0);
-
-				ImGui::DragFloat("restitution", &physics_data.restitution, 0.001f, 0, 0);
-
-				ImGui::DragFloat("friction", &physics_data.dynamic_friction, 0.001f, 0, 100000000.f);
-
-				ImGui::EndTabBar();
-			}
 		};
+
+
+		void update_dop14() override {
+			dop14.pos = world_position();
+			for (int i = 0; i < DOP::DOP14_size; i++) {
+				dop14.max[i] = +world_scale().x * 1.0000001f;
+				dop14.min[i] = -world_scale().x * 1.0000001f;
+			}
+
+		};
+
 
 	};
 

@@ -5,6 +5,7 @@
 #include "mesh.h"
 #include "../Shader/shader.h"
 #include "../Physics/ALP_Collider.h"
+#include "../Physics/ALP__shapes.h"
 
 namespace Adollib {
 	namespace Physics_function {
@@ -42,21 +43,21 @@ namespace Adollib {
 			static ComPtr<ID3D11Buffer> world_cb; //WVP行列用バッファ
 			static ComPtr<ID3D11Buffer> Mat_cb; //material用バッファ
 
-			static std::map<ALP_Collider_shape, std::vector<Mesh::mesh>*> meshes; //mesh
+			static std::map<ALP_Collider_shape_tag, std::vector<Mesh::mesh>*> meshes; //mesh
 			static Shader shader; //shader
 		public:
 
 
 			static void initialize();
-			static void render_collider(const Physics_function::ALP_Collider&);
+			static void render_collider(const Physics_function::ALP_Collider*);
 
 			//実際は14-DOPだが描画がめんどくさいのでAABBで描画
-			static void render_AABB(const Physics_function::ALP_Collider&);
+			static void render_AABB(const Physics_function::ALP_Collider*);
 
-			static void render_box(const Physics_function::ALP_Collider& R);
-			static void render_sphere(const Physics_function::ALP_Collider& R);
-			static void render_meshcoll(const Physics_function::ALP_Collider& R);
-			static void render_capsule(const Physics_function::ALP_Collider& R);
+			static void render_box(const ALP_shape* R);
+			static void render_sphere(const ALP_shape* R);
+			static void render_meshcoll(const ALP_shape* R);
+			static void render_capsule(const ALP_shape* R);
 
 		};
 

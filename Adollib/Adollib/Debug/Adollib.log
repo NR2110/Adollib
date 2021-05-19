@@ -1,6 +1,4 @@
-﻿  object_manager.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player.h(14,20): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player.h(16,24): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(144,58): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\vector_e.h(338): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
+﻿  ALP__physics_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__shapes.h(36,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(27): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

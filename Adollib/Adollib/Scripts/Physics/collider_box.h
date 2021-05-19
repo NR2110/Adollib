@@ -1,31 +1,22 @@
 #pragma once
 #include "collider__base.h"
+#include "ALP__shapes.h"
 
 namespace Adollib {
 	//Boxクラス
-	class Box : public Collider {
+	class Box : public ALP_shape {
 	public:
 		Vector3	center;//中心座標
 		Vector3	rotate;//回転
 		Vector3	size;//大きさ
 
-		Box() : center(Vector3(0)), rotate(Vector3(0)), size(Vector3(1)) { name = std::string("Box"); };
+		Box() : center(Vector3(0)), rotate(Vector3(0)), size(Vector3(1)) { shape_tag = Physics_function::ALP_Collider_shape_tag::BOX; };
 
-		Physics_function::Collider_data get_Colliderdata() const override {
-			Physics_function::Collider_data ret;
+		void adapt_Colliderdata() override {
+			local_position = center;
+			local_orientation = quaternion_from_euler(rotate);
+			local_scale = size;
 
-			ret.local_position = center;
-			ret.local_orientation = quaternion_from_euler(rotate);
-			ret.local_scale = size;
-
-			ret.half_size = Vector3(1, 1, 1);
-
-			ret.shape = Physics_function::ALP_Collider_shape::BOX;
-
-			ret.tag = tag;
-			ret.nohit_tag = nohit_tag;
-
-			return ret;
 		};
 
 		void Update_hierarchy() override {
@@ -48,25 +39,45 @@ namespace Adollib {
 				ImGui::DragFloat3("size", vec3, ave * 0.001f, 0, 0, "%.2f");
 				size = Vector3(vec3[0], vec3[1], vec3[2]);
 			}
+		};
 
-			if (ImGui::BeginTabBar("Physics")) {
-				ImGui::Checkbox("moveable", &physics_data.is_moveable);
-				ImGui::Checkbox("fallable", &physics_data.is_fallable);
-				ImGui::Checkbox("kinematic", &physics_data.is_kinematic);
-				ImGui::Checkbox("is_kinmatic_anglar", &physics_data.is_kinmatic_anglar);
-				ImGui::Checkbox("is_kinmatic_linear", &physics_data.is_kinmatic_linear);
-				ImGui::Checkbox("hitable", &physics_data.is_hitable);
 
-				ImGui::DragFloat("mass", &physics_data.inertial_mass, 0.001f, 0, 0);
+		void update_dop14() override {
+			dop14.pos = world_position();
 
-				ImGui::DragFloat("restitution", &physics_data.restitution, 0.001f, 0, 0);
+			//各頂点のローカル座標
+			Vector3 half[4]{
+			{+world_scale().x, -world_scale().y, -world_scale().z},
+			{+world_scale().x, -world_scale().y, +world_scale().z},
+			{+world_scale().x, +world_scale().y, -world_scale().z},
+			{+world_scale().x, +world_scale().y, +world_scale().z}
+			};
 
-				ImGui::DragFloat("friction", &physics_data.dynamic_friction, 0.001f, 0, 100000000.f);
+			Quaternion WO = world_orientation();
+			for (int i = 0; i < 4; i++) {
+				half[i] = vector3_quatrotate(half[i], WO);
+			}
 
-				ImGui::EndTabBar();
+			//DOPの更新
+			float max_len = 0;
+			for (int i = 0; i < DOP::DOP14_size; i++) {
+				max_len = 0;
+				for (int o = 0; o < 4; o++) {
+					float dis = fabsf(vector3_dot(DOP::DOP_14_axis[i], half[o]));
+					if (max_len < dis) {
+						dop14.max[i] = +dis * 1.00000001f;//確実にするためちょっと大きめにとる
+						dop14.min[i] = -dis * 1.00000001f;//確実にするためちょっと大きめにとる
+						max_len = dis;
+					}
+				}
+
 			}
 		};
 
 	};
+
+
+
+
 
 }

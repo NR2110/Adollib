@@ -229,6 +229,12 @@
     <ClCompile Include="..\Scripts\player_manager.cpp">
       <Filter>ソース ファイル\scene_game\player</Filter>
     </ClCompile>
+    <ClCompile Include="Scripts\Physics\collider.cpp">
+      <Filter>00_Adollib\22_physics\collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Physics\ALP_shape.cpp">
+      <Filter>00_Adollib\22_physics\collider</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Scripts\player.h">
@@ -471,9 +477,6 @@
     <ClInclude Include="Scripts\Physics\ALP__tags.h">
       <Filter>00_Adollib\22_physics\base</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Physics\ALP__shapes.h">
-      <Filter>00_Adollib\22_physics\base</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts\Physics\ALP__meshcoll_data.h">
       <Filter>00_Adollib\22_physics\base</Filter>
     </ClInclude>
@@ -515,6 +518,9 @@
     </ClInclude>
     <ClInclude Include="..\Scripts\player_manager.h">
       <Filter>ソース ファイル\scene_game\player</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\ALP__shapes.h">
+      <Filter>00_Adollib\22_physics\collider</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

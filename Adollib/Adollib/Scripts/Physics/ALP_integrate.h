@@ -2,6 +2,9 @@
 #include <memory>
 #include "../Scene/scene.h"
 #include "ALP_collider.h"
+#include "ALP__shapes.h"
+
+
 namespace Adollib {
 	namespace Physics_function {
 
@@ -9,33 +12,33 @@ namespace Adollib {
 		//::: ALP_colliders ::::::::::
 
 		// gameobjectのtransformからcolliderのworld空間での情報を更新
-		void update_world_trans(std::list<Physics_function::ALP_Collider>& ALP_colliders);
+		void update_world_trans(std::list<Physics_function::ALP_Collider*>& ALP_colliders);
 
 		// get_dataのdataをColliderに入力
-		void refresh_ALP_from_data(std::list<Physics_function::ALP_Collider>& ALP_colliders);
+		void refresh_ALP_from_data(std::list<Physics_function::ALP_Collider*>& ALP_colliders);
 
 		// gameobjectへの変化量を求める
-		void solv_resolve(std::list<Physics_function::ALP_Collider>& ALP_colliders);
+		void solv_resolve(std::list<Physics_function::ALP_Collider*>& ALP_colliders);
 
 		// gameobjectへ変化量を渡す
-		void resolve_gameobject(std::list<Physics_function::ALP_Collider>& ALP_colliders);
+		void resolve_gameobject(std::list<Physics_function::ALP_Collider*>& ALP_colliders);
 
 		// k-DOPの更新
-		void update_dop14(std::list<Physics_function::ALP_Collider>& ALP_shapes);
+		void update_dop14(std::list<Physics_function::ALP_Collider*>& ALP_shapes);
 
 		// oncoll_bitsのリセット
-		void reset_oncoll_bits(std::list<Physics_function::ALP_Collider>& ALP_colliders);
+		void reset_oncoll_bits(std::list<Physics_function::ALP_Collider*>& ALP_colliders);
 
 		//::: ALP_phyicses ::::::::::
 
 		// 速度、加速度を0にする
-		void resetforce(std::list<Physics_function::ALP_Physics>& ALP_physics);
+		void resetforce(std::list<Physics_function::ALP_Physics*>& ALP_physics);
 
 		// 外力による速度などの更新
-		void applyexternalforce(std::list<Physics_function::ALP_Physics>& ALP_physics);
+		void applyexternalforce(std::list<Physics_function::ALP_Physics*>& ALP_physics);
 
 		// 座標,姿勢の更新
-		void integrate(std::list<Physics_function::ALP_Physics>& ALP_physics);
+		void integrate(std::list<Physics_function::ALP_Physics*>& ALP_physics);
 
 
 	}

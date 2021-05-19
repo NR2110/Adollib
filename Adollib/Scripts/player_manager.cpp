@@ -18,10 +18,10 @@ namespace Adollib
 {
 	// Š‘®‚·‚éƒV[ƒ“‚Ì‰Šú‰»Žž‚Éˆê“x‚¾‚¯ŒÄ‚Î‚ê‚é
 	void Player_manager::awake() {
-		auto player_go = Gameobject_manager::create(std::string("player"));
-		auto C = player_go->addComponent<Capsule>();
-		player = player_go->addComponent<Player>();
-		player->collider = C;
+		//auto player_go = Gameobject_manager::create(std::string("player"));
+		//auto C = player_go->addComponent<Capsule>();
+		//player = player_go->addComponent<Player>();
+		//player->collider = C;
 
 	}
 

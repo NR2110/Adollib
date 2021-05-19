@@ -59,11 +59,12 @@ namespace Adollib
 				//GO->transform->local_orient = quaternion_from_euler(0, 45, 0);
 				GO->material->color = Vector4(1, 1, 1, 1);
 
-				Box* R = GO->addComponent<Box>();
+				Collider* coll = GO->addComponent<Collider>();
+				Box* box = coll->add_shape<Box>();
 				//Meshcoll* R = GO->addComponent<Meshcoll>();
 				//R->load_mesh("./DefaultModel/cube.fbx");
-				R->physics_data.is_moveable = false;
-				R->is_static = true;
+				coll->physics_data.is_moveable = false;
+				coll->is_static = true;
 			}
 
 		}
@@ -76,12 +77,10 @@ namespace Adollib
 				//GO->transform->local_orient = quaternion_from_euler(0, 45, 0);
 				GO->material->color = Vector4(1, 1, 1, 1);
 
-				Meshcoll* R = GO->addComponent<Meshcoll>();
-				R->load_mesh("../Adollib/DefaultModel/cube.fbx",true);
-				//Meshcoll* R = GO->addComponent<Meshcoll>();
-				//R->load_mesh("./DefaultModel/cube.fbx");
-				R->physics_data.is_moveable = false;
-				R->is_static = true;
+				Collider* coll = GO->addComponent<Collider>();
+				coll->add_shape("../Adollib/DefaultModel/cube.fbx", true);
+				coll->physics_data.is_moveable = false;
+				coll->is_static = true;
 			}
 
 		}
@@ -91,10 +90,12 @@ namespace Adollib
 				GO->transform->local_pos = Vector3(0, -6000, 0);
 				GO->transform->local_scale = Vector3(6000, 6000, 6000);
 				GO->material->color = Vector4(1, 1, 1, 1);
-				Sphere* R = GO->addComponent<Sphere>();
-				//R->center = Vector3(1, 1, 1);
-				//R->load_mesh("../Adollib/DefaultModel/sphere.fbx");
-				R->physics_data.is_moveable = false;
+				Collider* coll = GO->addComponent<Collider>();
+				Sphere* sphere = coll->add_shape<Sphere>();
+				//Meshcoll* R = GO->addComponent<Meshcoll>();
+				//R->load_mesh("./DefaultModel/cube.fbx");
+				coll->physics_data.is_moveable = false;
+				coll->is_static = true;
 
 			}
 
@@ -105,10 +106,13 @@ namespace Adollib
 				GO->transform->local_pos = Vector3(0, -6000, 0);
 				GO->transform->local_scale = Vector3(6000, 6000, 6000);
 				GO->material->color = Vector4(1, 1, 1, 1);
-				Sphere* R = GO->addComponent<Sphere>();
-				//R->center = Vector3(1, 1, 1);
-				//R->load_mesh("../Adollib/DefaultModel/sphere.fbx");
-				R->physics_data.is_moveable = false;
+
+				Collider* coll = GO->addComponent<Collider>();
+				Capsule* capsule = coll->add_shape<Capsule>();
+				//Meshcoll* R = GO->addComponent<Meshcoll>();
+				//R->load_mesh("./DefaultModel/cube.fbx");
+				coll->physics_data.is_moveable = false;
+				coll->is_static = true;
 
 			}
 
@@ -125,11 +129,12 @@ namespace Adollib
 				GO->transform->local_scale = Vector3(1, 1, 1);
 				//objGO->transform->local_orient = quaternion_from_euler(45, 45, 45);
 				GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
-				Meshcoll* R = GO->addComponent<Meshcoll>();
-				R->load_mesh("../Data/FBX/stage_col.fbx",true);
+
+				Collider* coll = GO->addComponent<Collider>();
+				coll->add_shape("../Data/FBX/stage_col.fbx", true);
 				//R->load_mesh("../Adollib/DefaultModel/cylinder.fbx");
-				R->physics_data.is_moveable = false;
-				R->is_static = true;
+				coll->physics_data.is_moveable = false;
+				coll->is_static = true;
 
 			}
 
@@ -144,11 +149,12 @@ namespace Adollib
 				GO->transform->local_scale = Vector3(0.01, 0.01, 0.01);
 				//objGO->transform->local_orient = quaternion_from_euler(45, 45, 45);
 				GO->transform->local_orient = quaternion_from_euler(0, 180, 0);
-				Meshcoll* R = GO->addComponent<Meshcoll>();
-				R->load_mesh("../Data/FBX/0311_collisions.fbx",true);
+
+				Collider* coll = GO->addComponent<Collider>();
+				coll->add_shape("../Data/FBX/0311_collisions.fbx", true);
 				//R->load_mesh("../Adollib/DefaultModel/cylinder.fbx");
-				R->physics_data.is_moveable = false;
-				R->is_static = true;
+				coll->physics_data.is_moveable = false;
+				coll->is_static = true;
 			}
 		}
 
@@ -391,7 +397,9 @@ namespace Adollib
 		object->transform->local_scale = Vector3(r, r, r);
 
 
-		Collider* coll = object->addComponent<Sphere>();
+		Collider* coll = object->addComponent<Collider>();
+		coll->add_shape<Sphere>();
+
 		coll->tag = Collider_tags::Sphere;
 		GOs.emplace_back(object);
 		return object;
@@ -408,11 +416,13 @@ namespace Adollib
 		object->transform->local_pos = pos;
 		object->transform->local_scale = size;
 
-		Box* M = object->addComponent<Box>();
-		M->tag = Collider_tags::Box;
+		Collider* coll = object->addComponent<Collider>();
+		Box* box = coll->add_shape<Box>();
+
+		coll->tag = Collider_tags::Box;
 
 		GOs.emplace_back(object);
-		boxes.emplace_back(M);
+		boxes.emplace_back(coll);
 		return object;
 	}
 	Gameobject* object_manager::set_capsule(Vector3 pos, float r, float length, Vector3 rotate, Vector3 color) {
@@ -425,13 +435,14 @@ namespace Adollib
 		object->transform->local_orient = quaternion_from_euler(rotate);
 		object->transform->local_pos = pos;
 
-		Capsule* M = object->addComponent<Capsule>();
-		M->r = r;
-		M->length = length;
+		Collider* coll = object->addComponent<Collider>();
+		Capsule* capsule = coll->add_shape<Capsule>();
+		capsule->r = r;
+		capsule->length = length;
 		//Meshcoll* M = object->addComponent<Meshcoll>();
 		//M->load_mesh("./DefaultModel/cube.fbx");
 		//M->inertial_mass = 1;
-		M->tag = Collider_tags::Cylinder;
+		coll->tag = Collider_tags::Cylinder;
 		GOs.emplace_back(object);
 		return object;
 	}
@@ -448,8 +459,9 @@ namespace Adollib
 		object->transform->local_scale = size;
 
 		//Box* M = object->addComponent<Box>();
-		Meshcoll* M = object->addComponent<Meshcoll>();
-		M->load_mesh("./DefaultModel/cone.fbx");
+		Collider* coll = object->addComponent<Collider>();
+		coll->add_shape("./DefaultModel/cone.fbx");
+
 		//M->inertial_mass = 1;
 		GOs.emplace_back(object);
 		return object;
@@ -465,7 +477,9 @@ namespace Adollib
 		object->transform->local_pos = pos;
 		object->transform->local_scale = Vector3(30, 0.1f, 30);
 
-		Collider* coll = object->addComponent<Plane>();
+		Collider* coll = object->addComponent<Collider>();
+		Plane* plane = coll->add_shape<Plane>();
+
 		GOs.emplace_back(object);
 		return object;
 	}

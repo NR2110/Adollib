@@ -3,30 +3,20 @@
 
 namespace Adollib {
 	//Boxクラス
-	class Capsule : public Collider {
+	class Capsule : public ALP_shape {
 	public:
 		Vector3	center;	//中心座標
 		Vector3	rotate;	//回転
 		float r;		//半径
 		float length;	//長さ
 
-		Capsule() : center(Vector3(0)), rotate(Vector3(0)), r(1), length(1) { name = std::string("Capsule"); };
+		Capsule() : center(Vector3(0)), rotate(Vector3(0)), r(1), length(1) { shape_tag = Physics_function::ALP_Collider_shape_tag::Capsule; };
 
-		Physics_function::Collider_data get_Colliderdata() const override {
-			Physics_function::Collider_data ret;
+		void adapt_Colliderdata() override {
+			local_position = center;
+			local_orientation = quaternion_from_euler(rotate);
+			local_scale = Vector3(r, length, r);
 
-			ret.local_position = center;
-			ret.local_orientation = quaternion_from_euler(rotate);
-			ret.local_scale = Vector3(r, length, r);
-
-			ret.half_size = Vector3(1, 1, 1);
-
-			ret.shape = Physics_function::ALP_Collider_shape::Capsule;
-
-			ret.tag = tag;
-			ret.nohit_tag = nohit_tag;
-
-			return ret;
 		};
 
 		void Update_hierarchy() override {
@@ -52,21 +42,19 @@ namespace Adollib {
 				ImGui::DragFloat("length", &length, ave * 0.001f, 0, 0, "%.2f");
 			}
 
-			if (ImGui::BeginTabBar("Physics")) {
-				ImGui::Checkbox("moveable", &physics_data.is_moveable);
-				ImGui::Checkbox("fallable", &physics_data.is_fallable);
-				ImGui::Checkbox("kinematic", &physics_data.is_kinematic);
-				ImGui::Checkbox("is_kinmatic_anglar", &physics_data.is_kinmatic_anglar);
-				ImGui::Checkbox("is_kinmatic_linear", &physics_data.is_kinmatic_linear);
-				ImGui::Checkbox("hitable", &physics_data.is_hitable);
+		};
 
-				ImGui::DragFloat("mass", &physics_data.inertial_mass, 0.001f, 0, 0);
-
-				ImGui::DragFloat("restitution", &physics_data.restitution, 0.001f, 0, 0);
-
-				ImGui::DragFloat("friction", &physics_data.dynamic_friction, 0.001f, 0, 100000000.f);
-
-				ImGui::EndTabBar();
+		void update_dop14() override {
+			Vector3 p = vector3_quatrotate(Vector3(0, world_scale().y, 0), world_orientation());
+			dop14.pos = world_position();
+			for (int i = 0; i < DOP::DOP14_size; i++) {
+				float v0, v1, v2, v3;
+				v0 = vector3_dot(+p, DOP::DOP_14_axis[i]) + +world_scale().x * 1.0000001f;
+				v1 = vector3_dot(+p, DOP::DOP_14_axis[i]) + -world_scale().x * 1.0000001f;
+				v2 = vector3_dot(-p, DOP::DOP_14_axis[i]) + +world_scale().x * 1.0000001f;
+				v3 = vector3_dot(-p, DOP::DOP_14_axis[i]) + -world_scale().x * 1.0000001f;
+				dop14.max[i] = ALmax(ALmax(v0, v1), ALmax(v2, v3));
+				dop14.min[i] = ALmin(ALmin(v0, v1), ALmin(v2, v3));
 			}
 		};
 

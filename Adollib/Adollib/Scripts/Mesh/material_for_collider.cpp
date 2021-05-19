@@ -13,7 +13,7 @@ Microsoft::WRL::ComPtr<ID3D11InputLayout> Collider_renderer::vertexLayout;
 ComPtr<ID3D11Buffer> Collider_renderer::world_cb; //WVP行列用バッファ
 ComPtr<ID3D11Buffer> Collider_renderer::Mat_cb; //material用バッファ
 
-std::map<ALP_Collider_shape, std::vector<Mesh::mesh>*> Collider_renderer::meshes; //mesh
+std::map<ALP_Collider_shape_tag, std::vector<Mesh::mesh>*> Collider_renderer::meshes; //mesh
 Shader Collider_renderer::shader; //shader
 
 //カプセルを描画し、ほかのollider表示をoffにする
@@ -39,39 +39,40 @@ void Collider_renderer::initialize() {
 
 
 	//::: 描画用modelの読み込み :::::::
-	meshes[ALP_Collider_shape::BOX];
-	ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::BOX], "./DefaultModel/cube.fbx", "");
+	meshes[ALP_Collider_shape_tag::BOX];
+	ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape_tag::BOX], "./DefaultModel/cube.fbx", "");
 
-	meshes[ALP_Collider_shape::Sphere];
-	ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::Sphere], "./DefaultModel/sphere.fbx", "");
+	meshes[ALP_Collider_shape_tag::Sphere];
+	ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape_tag::Sphere], "./DefaultModel/sphere.fbx", "");
 
-	meshes[ALP_Collider_shape::Plane];
-	ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::Plane], "./DefaultModel/plane.fbx", "");
+	meshes[ALP_Collider_shape_tag::Plane];
+	ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape_tag::Plane], "./DefaultModel/plane.fbx", "");
 
-	meshes[ALP_Collider_shape::Cylinder];
-	ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::Cylinder], "./DefaultModel/cylinder.fbx", "");
+	meshes[ALP_Collider_shape_tag::Cylinder];
+	ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape_tag::Cylinder], "./DefaultModel/cylinder.fbx", "");
 
 	//meshes[ALP_Collider_shape::Mesh];
 	//ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::Mesh], "../Data/FBX/0311_collisions.fbx", "");
 	//ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::Mesh], "../Adollib/DefaultModel/cylinder.fbx", "");
 }
 
-void Collider_renderer::render_collider(const Physics_function::ALP_Collider& R) {
+void Collider_renderer::render_collider(const Physics_function::ALP_Collider* coll) {
 
+	for (const auto shape : coll->shapes) {
 #ifndef draw_cupsule_cullback
-	if (R.shape == ALP_Collider_shape::BOX)render_box(R);
-	if (R.shape == ALP_Collider_shape::Sphere)render_sphere(R);
-	if (R.shape == ALP_Collider_shape::Mesh)render_meshcoll(R);
+		if (shape->get_shape_tag() == ALP_Collider_shape_tag::BOX)render_box(shape);
+		if (shape->get_shape_tag() == ALP_Collider_shape_tag::Sphere)render_sphere(shape);
+		if (shape->get_shape_tag() == ALP_Collider_shape_tag::Mesh)render_meshcoll(shape);
 
 #endif // draw_cupsule_cullback
-	if (R.shape == ALP_Collider_shape::Capsule)render_capsule(R);
-
+		if (shape->get_shape_tag() == ALP_Collider_shape_tag::Capsule)render_capsule(shape);
+	}
 }
 
-void Collider_renderer::render_box(const Physics_function::ALP_Collider& R) {
+void Collider_renderer::render_box(const ALP_shape* shape) {
 	//CB : ConstantBufferPerCO_OBJ
 	ConstantBufferPerGO g_cb;
-	g_cb.world = matrix_world(R.world_scale() * 1.0001, R.world_orientation().get_rotate_matrix(), R.world_position()).get_XMFLOAT4X4();
+	g_cb.world = matrix_world(shape->world_scale() * 1.0001, shape->world_orientation().get_rotate_matrix(), shape->world_position()).get_XMFLOAT4X4();
 	Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
 	Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 	Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
@@ -86,7 +87,7 @@ void Collider_renderer::render_box(const Physics_function::ALP_Collider& R) {
 	Systems::SetDephtStencilState(State_manager::DStypes::DS_TRUE);
 
 	std::vector<Mesh::mesh>* meshs;
-	meshs = meshes[R.shape];
+	meshs = meshes[shape->get_shape_tag()];
 
 	int color_num = 0;
 
@@ -132,10 +133,10 @@ void Collider_renderer::render_box(const Physics_function::ALP_Collider& R) {
 	}
 
 }
-void Collider_renderer::render_sphere(const Physics_function::ALP_Collider& R) {
+void Collider_renderer::render_sphere(const ALP_shape* shape) {
 	//CB : ConstantBufferPerCO_OBJ
 	ConstantBufferPerGO g_cb;
-	g_cb.world = matrix_world(R.world_scale() * 1.0001, R.world_orientation().get_rotate_matrix(), R.world_position()).get_XMFLOAT4X4();
+	g_cb.world = matrix_world(shape->world_scale() * 1.0001, shape->world_orientation().get_rotate_matrix(), shape->world_position()).get_XMFLOAT4X4();
 	Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
 	Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 	Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
@@ -150,7 +151,7 @@ void Collider_renderer::render_sphere(const Physics_function::ALP_Collider& R) {
 	Systems::SetDephtStencilState(State_manager::DStypes::DS_TRUE);
 
 	std::vector<Mesh::mesh>* meshs;
-	meshs = meshes[R.shape];
+	meshs = meshes[shape->get_shape_tag()];
 
 	int color_num = 0;
 
@@ -195,12 +196,12 @@ void Collider_renderer::render_sphere(const Physics_function::ALP_Collider& R) {
 	}
 
 }
-void Collider_renderer::render_meshcoll(const Physics_function::ALP_Collider& R) {
-	//	render_AABB(R);
+void Collider_renderer::render_meshcoll(const ALP_shape* shape) {
+	//	render_AABB(shape);
 
 		//CB : ConstantBufferPerCO_OBJ
 	ConstantBufferPerGO g_cb;
-	g_cb.world = matrix_world(R.world_scale() * 1.0001, R.world_orientation().get_rotate_matrix(), R.world_position()).get_XMFLOAT4X4();
+	g_cb.world = matrix_world(shape->world_scale() * 1.0001, shape->world_orientation().get_rotate_matrix(), shape->world_position()).get_XMFLOAT4X4();
 	Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
 	Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 	Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
@@ -215,7 +216,7 @@ void Collider_renderer::render_meshcoll(const Physics_function::ALP_Collider& R)
 	Systems::SetDephtStencilState(State_manager::DStypes::DS_TRUE);
 
 	std::vector<Mesh::mesh>* meshs;
-	ResourceManager::CreateModelFromFBX(&meshs, R.collider_meshes[0].mesh_data->FBX_pass.c_str(), "");
+	ResourceManager::CreateModelFromFBX(&meshs, shape->get_mesh_data()->FBX_pass.c_str(), "");
 
 	int color_num = 0;
 
@@ -260,14 +261,14 @@ void Collider_renderer::render_meshcoll(const Physics_function::ALP_Collider& R)
 	}
 }
 
-void Collider_renderer::render_capsule(const Physics_function::ALP_Collider& R) {
+void Collider_renderer::render_capsule(const ALP_shape* shape) {
 	//CB : ConstantBufferPerCO_OBJ
 
 	std::vector<Mesh::mesh>* meshs;
-	meshs = meshes[ALP_Collider_shape::Cylinder];
+	meshs = meshes[ALP_Collider_shape_tag::Cylinder];
 	{
 		ConstantBufferPerGO g_cb;
-		g_cb.world = matrix_world(Vector3(R.world_scale().x, R.world_scale().y, R.world_scale().x) * 1.0001, R.world_orientation().get_rotate_matrix(), R.world_position()).get_XMFLOAT4X4();
+		g_cb.world = matrix_world(Vector3(shape->world_scale().x, shape->world_scale().y, shape->world_scale().x) * 1.0001, shape->world_orientation().get_rotate_matrix(), shape->world_position()).get_XMFLOAT4X4();
 		Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
 		Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 		Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
@@ -330,10 +331,10 @@ void Collider_renderer::render_capsule(const Physics_function::ALP_Collider& R) 
 
 	}
 
-	meshs = meshes[ALP_Collider_shape::Sphere];
+	meshs = meshes[ALP_Collider_shape_tag::Sphere];
 	{
 		ConstantBufferPerGO g_cb;
-		g_cb.world = matrix_world(Vector3(R.world_scale().x) * 1.0001, R.world_orientation().get_rotate_matrix(), R.world_position() + vector3_quatrotate(Vector3(0, R.world_scale().y, 0), R.world_orientation())).get_XMFLOAT4X4();
+		g_cb.world = matrix_world(Vector3(shape->world_scale().x) * 1.0001, shape->world_orientation().get_rotate_matrix(), shape->world_position() + vector3_quatrotate(Vector3(0, shape->world_scale().y, 0), shape->world_orientation())).get_XMFLOAT4X4();
 		Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
 		Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 		Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
@@ -396,10 +397,10 @@ void Collider_renderer::render_capsule(const Physics_function::ALP_Collider& R) 
 
 	}
 
-	meshs = meshes[ALP_Collider_shape::Sphere];
+	meshs = meshes[ALP_Collider_shape_tag::Sphere];
 	{
 		ConstantBufferPerGO g_cb;
-		g_cb.world = matrix_world(Vector3(R.world_scale().x) * 1.0001, R.world_orientation().get_rotate_matrix(), R.world_position() - vector3_quatrotate(Vector3(0, R.world_scale().y, 0), R.world_orientation())).get_XMFLOAT4X4();
+		g_cb.world = matrix_world(Vector3(shape->world_scale().x) * 1.0001, shape->world_orientation().get_rotate_matrix(), shape->world_position() - vector3_quatrotate(Vector3(0, shape->world_scale().y, 0), shape->world_orientation())).get_XMFLOAT4X4();
 		Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
 		Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 		Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
@@ -466,38 +467,38 @@ void Collider_renderer::render_capsule(const Physics_function::ALP_Collider& R) 
 #include "../Physics/collider.h"
 #include "../Main/states_manager.h"
 
-void Collider_renderer::render_AABB(const Physics_function::ALP_Collider& coll) {
+void Collider_renderer::render_AABB(const  Physics_function::ALP_Collider* coll) {
 
-	const std::vector<Mesh::mesh>* box_mesh = meshes[ALP_Collider_shape::BOX];
+	const std::vector<Mesh::mesh>* box_mesh = meshes[ALP_Collider_shape_tag::BOX];
 
 	Vector3 w_pos;
 	Vector3 w_scale;
 	int color_num = 0;
-	for (const auto& coll_mesh : coll.collider_meshes) {
+	for (const auto& shape : coll->shapes) {
 
 		if (Systems::RS_type != State_manager::RStypes::RS_CULL_FRONT) Systems::SetRasterizerState(State_manager::RStypes::RS_CULL_FRONT);
 		//Debug::dopbaseの表示
 #if 0
 		{
-			coll_mesh.mesh->dopbase;
+			shape.mesh->dopbase;
 
 			w_pos = Vector3(
-				(coll_mesh.mesh->dopbase.max[0] + coll_mesh.mesh->dopbase.min[0]) * 0.5f * coll_mesh.ALPcollider->world_scale().x,
-				(coll_mesh.mesh->dopbase.max[1] + coll_mesh.mesh->dopbase.min[1]) * 0.5f * coll_mesh.ALPcollider->world_scale().y,
-				(coll_mesh.mesh->dopbase.max[2] + coll_mesh.mesh->dopbase.min[2]) * 0.5f * coll_mesh.ALPcollider->world_scale().z
+				(shape.mesh->dopbase.max[0] + shape.mesh->dopbase.min[0]) * 0.5f * shape.ALPcollider->world_scale().x,
+				(shape.mesh->dopbase.max[1] + shape.mesh->dopbase.min[1]) * 0.5f * shape.ALPcollider->world_scale().y,
+				(shape.mesh->dopbase.max[2] + shape.mesh->dopbase.min[2]) * 0.5f * shape.ALPcollider->world_scale().z
 			);
 			w_scale = Vector3(
-				(coll_mesh.mesh->dopbase.max[0] - coll_mesh.mesh->dopbase.min[0]) * 0.5f * coll_mesh.ALPcollider->world_scale().x,
-				(coll_mesh.mesh->dopbase.max[1] - coll_mesh.mesh->dopbase.min[1]) * 0.5f * coll_mesh.ALPcollider->world_scale().y,
-				(coll_mesh.mesh->dopbase.max[2] - coll_mesh.mesh->dopbase.min[2]) * 0.5f * coll_mesh.ALPcollider->world_scale().z
+				(shape.mesh->dopbase.max[0] - shape.mesh->dopbase.min[0]) * 0.5f * shape.ALPcollider->world_scale().x,
+				(shape.mesh->dopbase.max[1] - shape.mesh->dopbase.min[1]) * 0.5f * shape.ALPcollider->world_scale().y,
+				(shape.mesh->dopbase.max[2] - shape.mesh->dopbase.min[2]) * 0.5f * shape.ALPcollider->world_scale().z
 			);
 
 			//CB : ConstantBufferPerCO_OBJ
 			ConstantBufferPerGO g_cb;
 			g_cb.world = matrix_world(
 				w_scale * 1.001,
-				coll_mesh.ALPcollider->world_orientation().get_rotate_matrix(),
-				vector3_quatrotate(w_pos, coll_mesh.ALPcollider->world_orientation()) + coll_mesh.ALPcollider->world_position()
+				shape.ALPcollider->world_orientation().get_rotate_matrix(),
+				vector3_quatrotate(w_pos, shape.ALPcollider->world_orientation()) + shape.ALPcollider->world_position()
 			).get_XMFLOAT4X4();
 
 			Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
@@ -546,7 +547,7 @@ void Collider_renderer::render_AABB(const Physics_function::ALP_Collider& coll) 
 			const std::vector<Mesh::mesh>* sphere_mesh = meshes[ALP_Collider_shape::Sphere];
 
 			int max_c = 0;
-			for (const auto& vertex : *coll_mesh.mesh->vertices) {
+			for (const auto& vertex : *shape.mesh->vertices) {
 				if (max_c > 50)break;
 				max_c++;
 
@@ -555,7 +556,7 @@ void Collider_renderer::render_AABB(const Physics_function::ALP_Collider& coll) 
 				g_cb.world = matrix_world(
 					Vector3(0.01f),
 					matrix_identity(),
-					(vector3_quatrotate(vertex * coll_mesh.ALPcollider->world_scale(), coll_mesh.ALPcollider->world_orientation())) + coll_mesh.ALPcollider->world_position()
+					(vector3_quatrotate(vertex * shape.ALPcollider->world_scale(), shape.ALPcollider->world_orientation())) + shape.ALPcollider->world_position()
 				).get_XMFLOAT4X4();
 
 				Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
@@ -611,7 +612,7 @@ void Collider_renderer::render_AABB(const Physics_function::ALP_Collider& coll) 
 			const std::vector<Mesh::mesh>* sphere_mesh = meshes[ALP_Collider_shape::Sphere];
 
 			int cou = 0;
-			for (const auto& vertex : coll_mesh.mesh->base_pos) {
+			for (const auto& vertex : shape.mesh->base_pos) {
 				//cou++;
 				//if (cou < 12)continue;
 				//CB : ConstantBufferPerCO_OBJ
@@ -619,13 +620,13 @@ void Collider_renderer::render_AABB(const Physics_function::ALP_Collider& coll) 
 				//g_cb.world = matrix_world(
 				//	w_scale * 1.001,
 				//	matrix_identity(),
-				//	vector3_quatrotate(w_pos, coll_mesh.ALPcollider->world_orientation()) + coll_mesh.ALPcollider->world_position()
+				//	vector3_quatrotate(w_pos, shape.ALPcollider->world_orientation()) + shape.ALPcollider->world_position()
 				//).get_XMFLOAT4X4();
 
 				g_cb.world = matrix_world(
 					Vector3(0.1f),
 					matrix_identity(),
-					(vector3_quatrotate(vertex * coll_mesh.ALPcollider->world_scale(), coll_mesh.ALPcollider->world_orientation())) + coll_mesh.ALPcollider->world_position()
+					(vector3_quatrotate(vertex * shape.ALPcollider->world_scale(), shape.ALPcollider->world_orientation())) + shape.ALPcollider->world_position()
 				).get_XMFLOAT4X4();
 
 
@@ -673,19 +674,19 @@ void Collider_renderer::render_AABB(const Physics_function::ALP_Collider& coll) 
 
 
 		w_pos = Vector3(
-			(coll_mesh.dop14.max[0] + coll_mesh.dop14.min[0]) * 0.5f,
-			(coll_mesh.dop14.max[1] + coll_mesh.dop14.min[1]) * 0.5f,
-			(coll_mesh.dop14.max[2] + coll_mesh.dop14.min[2]) * 0.5f
+			(shape->get_DOP().max[0] + shape->get_DOP().min[0]) * 0.5f,
+			(shape->get_DOP().max[1] + shape->get_DOP().min[1]) * 0.5f,
+			(shape->get_DOP().max[2] + shape->get_DOP().min[2]) * 0.5f
 		);
 		w_scale = Vector3(
-			(coll_mesh.dop14.max[0] - coll_mesh.dop14.min[0]) * 0.5f,
-			(coll_mesh.dop14.max[1] - coll_mesh.dop14.min[1]) * 0.5f,
-			(coll_mesh.dop14.max[2] - coll_mesh.dop14.min[2]) * 0.5f
+			(shape->get_DOP().max[0] - shape->get_DOP().min[0]) * 0.5f,
+			(shape->get_DOP().max[1] - shape->get_DOP().min[1]) * 0.5f,
+			(shape->get_DOP().max[2] - shape->get_DOP().min[2]) * 0.5f
 		);
 
 		//CB : ConstantBufferPerCO_OBJ
 		ConstantBufferPerGO g_cb;
-		g_cb.world = matrix_world(w_scale * 1.001, matrix_identity(), w_pos + coll_mesh.dop14.pos).get_XMFLOAT4X4();
+		g_cb.world = matrix_world(w_scale * 1.001, matrix_identity(), w_pos + shape->get_DOP().pos).get_XMFLOAT4X4();
 
 		Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
 		Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());

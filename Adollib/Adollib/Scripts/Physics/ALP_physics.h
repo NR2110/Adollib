@@ -13,12 +13,12 @@ namespace Adollib {
 #ifndef PHYICSE_USED_SIMD
 			Vector3 delta_LinearVelocity; // 並進速度差分
 			Vector3 delta_AngulaVelocity; // 回転速度差分
-			Quaternion orientation; // 姿勢
+			//Quaternion orientation; // 姿勢
 			Matrix inv_inertia; // 慣性テンソルの逆行列
 #else
 			DirectX::XMVECTOR delta_LinearVelocity; // 並進速度差分
 			DirectX::XMVECTOR delta_AngulaVelocity; // 回転速度差分
-			DirectX::XMVECTOR orientation; // 姿勢
+			//DirectX::XMVECTOR orientation; // 姿勢
 			DirectX::XMMATRIX inv_inertia; // 慣性テンソルの逆行列
 #endif
 			float  inv_mass = 0; // 質量の逆数
@@ -27,35 +27,19 @@ namespace Adollib {
 
 		class ALP_Physics {
 		public:
-			ALP_Physics() {};
+			//コンストラクタ
+			ALP_Physics(std::list<ALP_Physics*>::iterator l_itr, Scenelist l_scene, u_int l_index)
+				: this_itr(l_itr), scene(l_scene), index(l_index) {};
 
-			ALP_Physics(
-				float inertial_mass, //質量
-				float linear_drag, //空気抵抗
-				float anglar_drag, //空気抵抗
-				float dynamic_friction,//動摩擦
-				float static_friction, //静摩擦
-				float restitution,	 //反発係数
+		private:
+			//::: 自身へのイテレータ(remove用) :::
+			std::list<ALP_Physics*>::iterator this_itr;
 
-				bool is_fallable, //落ちない
-				bool is_kinmatic_anglar,
-				bool is_kinmatic_linear,
-				bool is_moveable,//動かない
-				bool is_hitable //衝突しない
-			) :
-				inertial_mass(inertial_mass), //質量
-				linear_drag(linear_drag), //空気抵抗
-				anglar_drag(anglar_drag), //空気抵抗
-				dynamic_friction(dynamic_friction),//動摩擦
-				static_friction(static_friction), //静摩擦
-				restitution(restitution),	 //反発係数
+			u_int index = 0; //このcolliderの番号
+			Scenelist scene = Scenelist::scene_null; //このcolldierが存在するscene
+		public:
 
-				is_fallable(is_fallable), //落ちない
-				is_kinmatic_anglar(is_kinmatic_anglar), //ほかの物体からの影響で回転速度が変化しない
-				is_kinmatic_linear(is_kinmatic_linear), //ほかの物体からの影響で並進速度が変化しない
-				is_moveable(is_moveable),//動かない
-				is_hitable(is_hitable)
-			{};
+			void set_default();
 
 			//::: 変更可 :::::::::::::::::::::::::::::
 			float inertial_mass = 0; //質量
@@ -87,12 +71,17 @@ namespace Adollib {
 			Vector3 linear_acceleration;//並進加速度
 			Vector3 angula_acceleration; //回転加速度
 
-			//::: Colliderへのイテレータ :::
-			std::list<ALP_Collider>::iterator ALPcollider;
-			//::: 自身へのイテレータ :::
-			std::list<ALP_Physics>::iterator ALPphysics;
+			//::: Colliderへのポインタ :::
+			ALP_Collider* ALPcollider = nullptr;
 
-			ALP_Solverbody* solve; //衝突解決用
+			//::: 自身へのポインタ :::
+			ALP_Physics* ALPphysics = nullptr;
+
+			//::: アタッチされたGOへのポインタ :::
+			Gameobject* gameobject = nullptr;
+
+
+			ALP_Solverbody* solve = nullptr; //衝突解決用
 
 		public:
 			//並進移動に力を加える
@@ -125,7 +114,10 @@ namespace Adollib {
 
 			//::: collider:Component の massなどが変更されたときに呼ぶもの :::
 			// Colliderから情報の獲得
-			void refresh_ALP_from_data();
+			void update_physics_data();
+
+			//マネージャーからこのクラスの削除
+			void destroy();
 
 		};
 	}

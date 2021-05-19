@@ -5,6 +5,8 @@
 
 namespace Adollib {
 
+	class Collider;
+
 	class Ray {
 	public:
 		Vector3 position;
