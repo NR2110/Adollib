@@ -28,8 +28,10 @@ namespace Adollib {
 		class ALP_Physics {
 		public:
 			//コンストラクタ
-			ALP_Physics(std::list<ALP_Physics*>::iterator l_itr, Scenelist l_scene, u_int l_index)
-				: this_itr(l_itr), scene(l_scene), index(l_index) {};
+			ALP_Physics(
+				Gameobject* l_go, std::list<ALP_Physics*>::iterator l_itr, Scenelist l_scene, u_int l_index
+			) :
+				gameobject(l_go), this_itr(l_itr), scene(l_scene), index(l_index) {};
 
 		private:
 			//::: 自身へのイテレータ(remove用) :::
@@ -73,9 +75,6 @@ namespace Adollib {
 
 			//::: Colliderへのポインタ :::
 			ALP_Collider* ALPcollider = nullptr;
-
-			//::: 自身へのポインタ :::
-			ALP_Physics* ALPphysics = nullptr;
 
 			//::: アタッチされたGOへのポインタ :::
 			Gameobject* gameobject = nullptr;

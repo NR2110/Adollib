@@ -2,6 +2,7 @@
 
 #include <map>
 #include "../Object/component.h"
+#include "../Object/gameobject.h"
 #include "../Scene/scene.h"
 
 #include "collider.h"
@@ -158,7 +159,9 @@ namespace Adollib
 
 	public:
 
-		static Physics_function::ColliderPhysics_ptrs add_collider(Collider* coll, Scenelist Sce = Scene::now_scene) {
+		static Physics_function::ColliderPhysics_ptrs add_collider(Collider* coll) {
+
+			Scenelist Sce = coll->gameobject->this_scene;
 
 			Physics_function::ColliderPhysics_ptrs ret;
 			{
@@ -175,8 +178,11 @@ namespace Adollib
 				itr--;
 
 				//中身を入れつつ生成
-				*itr = new Physics_function::ALP_Collider(itr, Sce, collider_index_count[Sce]);
+				*itr = new Physics_function::ALP_Collider(coll->gameobject, itr, Sce, collider_index_count[Sce]);
+
+				ret.ALPcollider_ptr = *itr;
 			}
+
 			{
 				//itrがほしいため空のポインタで枠だけ取る
 				Physics_function::ALP_Physics* null = nullptr;
@@ -186,17 +192,16 @@ namespace Adollib
 				itr--;
 
 				//中身を入れつつ生成
-				*itr = new Physics_function::ALP_Physics(itr, Sce, collider_index_count[Sce]);
+				*itr = new Physics_function::ALP_Physics(coll->gameobject, itr, Sce, collider_index_count[Sce]);
 
 				//phsicsの初期値の入力
 				(*itr)->set_default();
+
+				ret.ALPphysics_ptr = *itr;
 			}
 
-			ret.ALPphysics_ptr->ALPphysics = ret.ALPphysics_ptr;
 			ret.ALPcollider_ptr->ALPphysics = ret.ALPphysics_ptr;
-
 			ret.ALPphysics_ptr->ALPcollider = ret.ALPcollider_ptr;
-			ret.ALPcollider_ptr->ALPcollider = ret.ALPcollider_ptr;
 
 			//追加されたcollider
 			added_collider[Sce].emplace_back(ret.ALPcollider_ptr);

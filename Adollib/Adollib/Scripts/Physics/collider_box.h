@@ -10,7 +10,10 @@ namespace Adollib {
 		Vector3	rotate;//‰ñ“]
 		Vector3	size;//‘å‚«‚³
 
-		Box() : center(Vector3(0)), rotate(Vector3(0)), size(Vector3(1)) { shape_tag = Physics_function::ALP_Collider_shape_tag::BOX; };
+		Box(Physics_function::ALP_Collider* l_ALPcollider_ptr) : center(Vector3(0)), rotate(Vector3(0)), size(Vector3(1)) {
+			shape_tag = Physics_function::ALP_Collider_shape_tag::BOX;
+			ALPcollider_ptr = l_ALPcollider_ptr;
+		};
 
 		void adapt_Colliderdata() override {
 			local_position = center;

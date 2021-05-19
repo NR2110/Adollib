@@ -37,6 +37,7 @@ namespace Adollib {
 		class ALP_Collider;
 	}
 	class ALP_shape {
+	public:
 
 	public:
 		Vector3 local_position;

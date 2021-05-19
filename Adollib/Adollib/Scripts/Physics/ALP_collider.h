@@ -29,8 +29,10 @@ namespace Adollib {
 		class ALP_Collider {
 		public:
 			//コンストラクタ
-			ALP_Collider(std::list<ALP_Collider*>::iterator l_itr, Scenelist l_scene, u_int l_index)
-				: this_itr(l_itr), scene(l_scene), index(l_index) {};
+			ALP_Collider(
+				Gameobject* l_go, std::list<ALP_Collider*>::iterator l_itr, Scenelist l_scene, u_int l_index
+			):
+				gameobject(l_go), this_itr(l_itr), scene(l_scene), index(l_index) {};
 
 		private:
 			//::: GOに渡すためのバッファ :::::::
@@ -68,14 +70,13 @@ namespace Adollib {
 			//::: 子オブジェクトの影響を受けるか 影響を受ける場合,子オブジェクトの相対座標などは変更されない :::
 			bool is_chiled_relative_fixed = false;
 
+
 			//::: ComponentがアタッチされたColliderへのイテレータ :::
 			std::list<Collider*>::iterator coll_itr;
 
-			//::: Physicsへのポインタ :::
-			ALP_Physics* ALPphysics;
 
-			//::: 自身へのポインタ :::
-			ALP_Collider* ALPcollider;
+			//::: Physicsへのポインタ :::
+			ALP_Physics* ALPphysics = nullptr;
 
 			//::: アタッチされたGOへのポインタ :::
 			Gameobject* gameobject = nullptr;
@@ -112,7 +113,7 @@ namespace Adollib {
 			T* add_shape() {
 				//if (dynamic_cast<ALP_shape>(T) == nullptr) assert("ALP_shapeを継承したclassをアタッチしてください");
 
-				T* shape = new T;
+				T* shape = new T(this);
 
 				shapes.emplace_back(shape);
 				return shape;

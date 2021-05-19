@@ -9,9 +9,10 @@ namespace Adollib {
 		float distance; //平面の距離
 
 		//不動オブジェクトとして生成
-		Plane() :rotate(Vector3(0, 0, 0)), distance(0)
+		Plane(Physics_function::ALP_Collider* l_ALPcollider_ptr) :rotate(Vector3(0, 0, 0)), distance(0)
 		{
 			shape_tag = Physics_function::ALP_Collider_shape_tag::Plane;
+			ALPcollider_ptr = l_ALPcollider_ptr;
 			//name = std::string("Plane");
 			//physics_data.is_moveable = false;
 			//physics_data.inertial_mass = FLT_MAX;

@@ -1,4 +1,82 @@
-﻿  ALP__physics_manager.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__shapes.h(36,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(27): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください
+﻿  camera_manager.cpp
+  camera_s.cpp
+  object_manager.cpp
+  object_rotate.cpp
+  player.cpp
+  player_manager.cpp
+  material_for_collider.cpp
+  gameobject_manager.cpp
+  ALP_broadphase.cpp
+  ALP_collider.cpp
+  ALP_integrate.cpp
+  ALP_physics.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__shapes.h(36,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(27): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ALP_collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__shapes.h(36,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_broadphase.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(27): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ALP_broadphase.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__shapes.h(36,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_physics.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(27): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ALP_physics.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__shapes.h(36,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_integrate.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(27): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ALP_integrate.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__shapes.h(36,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(27): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__shapes.h(36,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています ..\Scripts\player_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(27): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください (ソース ファイルをコンパイルしています ..\Scripts\player_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__shapes.h(36,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(27): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__shapes.h(36,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています Scripts\Mesh\material_for_collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(27): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Mesh\material_for_collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(75,57): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(107,97): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(139,57): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(171,97): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(204,57): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(236,97): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(271,117): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(304,98): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(337,69): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(370,98): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(403,69): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player.h(14,20): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\player_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(436,98): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player.h(16,24): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\player_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__shapes.h(36,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(27): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__shapes.h(36,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(27): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(689,44): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(709,94): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__shapes.h(36,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(27): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Object\gameobject_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player.h(14,20): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player.h(16,24): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__shapes.h(36,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています ..\Scripts\camera_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(27): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください (ソース ファイルをコンパイルしています ..\Scripts\camera_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player.h(14,20): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player.h(16,24): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(149,58): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+  ALP_resolve_contact.cpp
+  ALP_shape.cpp
+  ALP__physics_manager.cpp
+  collider.cpp
+  contact.cpp
+  ray.cpp
+  scene_game.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\vector_e.h(338): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__shapes.h(36,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_resolve_contact.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(27): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ALP_resolve_contact.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__shapes.h(36,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP__physics_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(27): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ALP__physics_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__shapes.h(36,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています Scripts\Physics\contact.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(27): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\contact.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(27,27): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'class' として使われていましたが 'struct' として使われています。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_shape.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(27): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ALP_shape.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__shapes.h(36,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています Scripts\Physics\collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(27): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__shapes.h(36,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています Scripts\Physics\ray.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(27): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ray.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__shapes.h(36,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています Scripts\Scene\scene_game.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(27): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Scene\scene_game.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player.h(14,20): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Scene\scene_game.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player.h(16,24): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Scene\scene_game.cpp)
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

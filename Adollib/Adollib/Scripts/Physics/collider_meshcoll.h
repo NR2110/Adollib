@@ -51,7 +51,11 @@ namespace Adollib {
 
 		public:
 			//不動オブジェクトとして生成
-			Meshcoll_part(std::string FBX_pass, Meshcollider_data* data) :center(Vector3(0)), rotate(Vector3(0)), size(1) { shape_tag = Physics_function::ALP_Collider_shape_tag::Mesh; };
+			Meshcoll_part(Physics_function::ALP_Collider* l_ALPcollider_ptr, std::string FBX_pass, Meshcollider_data* data)
+				:center(Vector3(0)), rotate(Vector3(0)), size(1) {
+				shape_tag = Physics_function::ALP_Collider_shape_tag::Mesh;
+				ALPcollider_ptr = l_ALPcollider_ptr;
+			};
 
 			void adapt_Colliderdata() override {
 				local_position = center;

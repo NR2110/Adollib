@@ -36,7 +36,7 @@ void Collider::awake() {
 
 	data.ALPcollider_ptr->coll_itr = coll_itr;
 
-	data.ALPcollider_ptr->shapes.resize(1);
+	//data.ALPcollider_ptr->shapes.resize(1);
 	//data.ALPcollider_itr->shapes.at(0).ALPcollider = data.ALPcollider_itr;
 }
 

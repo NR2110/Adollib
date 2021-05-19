@@ -9,7 +9,10 @@ namespace Adollib {
 		Vector3 center; //íÜêSç¿ïW
 		float r = 1; //îºåa
 
-		Sphere() : center(Vector3(0)), r(1) { shape_tag = Physics_function::ALP_Collider_shape_tag::Sphere; };
+		Sphere(Physics_function::ALP_Collider* l_ALPcollider_ptr) : center(Vector3(0)), r(1) {
+			shape_tag = Physics_function::ALP_Collider_shape_tag::Sphere;
+			ALPcollider_ptr = l_ALPcollider_ptr;
+		};
 
 		void adapt_Colliderdata() override {
 			local_position = center;
