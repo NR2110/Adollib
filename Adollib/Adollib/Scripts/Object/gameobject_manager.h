@@ -31,11 +31,11 @@ namespace Adollib {
 
 	public:
 		//実体はすべてここで保存する
-		static std::map<Scenelist, std::list<std::shared_ptr<Gameobject>>> gameobjects;
+		static std::map<Scenelist, std::list<Gameobject*>> gameobjects;
 		//light
-		static std::map<Scenelist, std::list<std::shared_ptr<Light>>> lights;
+		static std::map<Scenelist, std::list<Light*>> lights;
 		//camera
-		static std::map<Scenelist, std::list<std::shared_ptr<Camera>>> cameras;
+		static std::map<Scenelist, std::list<Camera*>> cameras;
 
 		void awake();
 		static void initialize(Scenelist Sce = Scene::now_scene);
@@ -54,24 +54,6 @@ namespace Adollib {
 		static Light* create_light(const std::string go_name, Scenelist Sce = Scene::now_scene);
 		static Light* create_light(Scenelist Sce = Scene::now_scene) { create_light(std::string("light"), Sce); };
 
-		//// =====================================================
-		//// GameObjectを生成して、そのポインタを返す(名前を指定し、メッシュの参照を持つGameObjectを生成する。中でcreate(const string&)を呼ぶ)
-		//// =====================================================
-		//// const string&	:	GameObjectのnameに入れる名前
-		//// const string&	:	使用するモデルファイルのパス
-		//// =====================================================
-		//// 戻り値 GameObject*
-		//// =====================================================
-		//static Gameobject* create(const u_int& go_name, const std::string& model_filename, Scenelist Sce = Scene::now_scene);
-
-		// ==============================================================
-		// プリミティブオブジェクトと適切なコライダーを作成(Primitive.modelへのファイルパスを持つ)
-		// ==============================================================
-		// const string&		:	GameObjectのnameに入れる名前(省略可)
-		// bool					:	同じ名前を許可する
-		// ==============================================================
-		// 戻り値　GameObject*	:	生成したGameObject*を返す
-		// ==============================================================
 
 
 		static Gameobject* createFromFBX(const std::string go_name, const std::string& FBX_pass, const u_int = GO_tag::FBX, Scenelist Sce = Scene::now_scene);
@@ -103,40 +85,48 @@ namespace Adollib {
 			return createSprite(std::string("GO_" + std::to_string(go_count)), tag, Sce);
 		}
 
+		static void removeGameobject(Scenelist Sce,std::list<Gameobject*>::iterator itr) { gameobjects[Sce].erase(itr); };
+		static void removeCamera(Scenelist Sce, std::list<Camera*>::iterator itr) { cameras[Sce].erase(itr); };
+		static void removeLight(Scenelist Sce, std::list<Light*>::iterator itr) { lights[Sce].erase(itr); };
+
+		//GOの削除を行う
+		static void deleteGameobject(Gameobject* gameobject) {
+			gameobject->destroy();
+			delete gameobject;
+		};
+		static void deleteCamera(Camera* gameobject) {
+			gameobject->destroy();
+			delete gameobject;
+		};
+		static void deleteLight(Light* gameobject) {
+			gameobject->destroy();
+			delete gameobject;
+		};
+
 
 		static Gameobject* find(const std::string name, Scenelist Sce = Scene::now_scene)
 		{
-			const auto itr_end = gameobjects[Sce].end();
-			for (auto itr = gameobjects[Sce].begin(); itr != itr_end; itr++)
+			for (auto& go : gameobjects[Sce])
 			{
-				if (itr->get()->name == name)
-				{
-					return itr->get();
-				}
+				if (go->name == name) return go;
 			}
 			return nullptr;
 		}
 		static Camera* find_camera(const std::string& name, Scenelist Sce = Scene::now_scene)
 		{
 			const auto itr_end = cameras[Sce].end();
-			for (auto itr = cameras[Sce].begin(); itr != itr_end; itr++)
+			for (auto& go : cameras[Sce])
 			{
-				if (itr->get()->name == name)
-				{
-					return itr->get();
-				}
+				if (go->name == name) return go;
 			}
 			return nullptr;
 		}
 		static Light* find_light(const std::string& name, Scenelist Sce = Scene::now_scene)
 		{
 			const auto itr_end = lights[Sce].end();
-			for (auto itr = lights[Sce].begin(); itr != itr_end; itr++)
+			for (auto& go : lights[Sce])
 			{
-				if (itr->get()->name == name)
-				{
-					return itr->get();
-				}
+				if (go->name == name) return go;
 			}
 			return nullptr;
 		}

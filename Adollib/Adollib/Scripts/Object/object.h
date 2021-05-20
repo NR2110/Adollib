@@ -62,8 +62,10 @@ namespace Adollib
 			auto itr = children_.begin();
 			auto itr_end = children_.end();
 			for (; itr != itr_end; ++itr) {
-				if (*itr == obj)
+				if (*itr == obj) {
 					children_.erase(itr);
+					break;
+				}
 			}
 		}
 

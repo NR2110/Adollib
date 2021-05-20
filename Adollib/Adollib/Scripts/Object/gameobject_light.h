@@ -14,16 +14,24 @@
 namespace Adollib {
 
 	class Light : public object {
+	public:
+		Light(Scenelist l_this_scene, std::list<Light*>::iterator l_this_itr) :
+			this_scene(l_this_scene),
+			this_itr(l_this_itr)
+		{};
+
 	private:
 		void update();
-	public:
-		std::string name = std::string("null"); //このgoの名前(検索用)
+
 
 		std::list <std::shared_ptr<Component_light>> components; //アタッチされているConponentのポインタ
 
+		std::list<Light*>::iterator this_itr; //自身へのイテレーター(いつ使うの?)B
+
 		Scenelist this_scene = Scenelist::scene_null; //このgoのあるscene
 
-		std::list<std::shared_ptr<Light>>::iterator go_iterator; //自身へのイテレーター(いつ使うの?)B
+	public:
+		std::string name = std::string("null"); //このgoの名前(検索用)
 
 		void update_imgui_toChildren() override;
 
@@ -154,9 +162,7 @@ namespace Adollib {
 		}
 
 		//解放処理
-		void destroy() {
-			clearComponent();
-		}
+		void destroy();
 	};
 
 }

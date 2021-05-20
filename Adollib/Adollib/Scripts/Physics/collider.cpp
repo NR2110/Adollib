@@ -42,8 +42,13 @@ void Collider::awake() {
 
 void Collider::finalize() {
 
+	//アタッチされたALP_Collider,ALP_Physicsの終了処理
 	ALPcollider_ptr->destroy();
 	ALPphysics_ptr->destroy();
+
+	//削除
+	delete ALPcollider_ptr;
+	delete ALPphysics_ptr;
 }
 
 

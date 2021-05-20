@@ -2,17 +2,17 @@
 #include "../Main/Adollib.h"
 
 #include "../Imgui/imgui_all.h"
+
+#include "gameobject_manager.h"
 namespace Adollib {
 
 	void Camera::initialize() {
 
 		aspect = (float)Al_Global::SCREEN_WIDTH / Al_Global::SCREEN_HEIGHT;
 
-		std::list <std::shared_ptr<Component_camera>>::iterator itr = components.begin();
-		std::list <std::shared_ptr<Component_camera>>::iterator itr_end = components.end();
-
-		for (; itr != itr_end; itr++) {
-			itr->get()->start();
+		//componentの終了処理を行う
+		for (auto& comp : components){
+			comp->start();
 		}
 
 	}
@@ -41,7 +41,7 @@ namespace Adollib {
 					ImGui::DragFloat("nearZ", &nearZ, 0.01f, 0, 0, "%.2f");
 					ImGui::DragFloat("farZ", &farZ, 0.01f, 0, 0, "%.2f");
 					ImGui::DragFloat("fov", &fov, 0.01f, 0, 0, "%.2f");
-					ImGui::DragFloat("aspect", &aspect, 0.01f, 0.01f, 10000000000000000000, "%.2f");
+					ImGui::DragFloat("aspect", &aspect, 0.01f, 0.01f, 1000000000000.0f, "%.2f");
 				}
 
 				ImGui::TreePop();
@@ -60,14 +60,17 @@ namespace Adollib {
 
 	void Camera::update() {
 
-		std::list <std::shared_ptr<Component_camera>>::iterator itr = components.begin();
-		std::list <std::shared_ptr<Component_camera>>::iterator itr_end = components.end();
-
-		for (; itr != itr_end; itr++) {
-			itr->get()->update();
+		//componentの終了処理を行う
+		for (auto& comp : components){
+			comp->update();
 		}
 
 	}
 
+	void Camera::destroy() {
+		clearComponent();
+		Gameobject_manager::removeCamera(this_scene, this_itr);
+
+	}
 
 }

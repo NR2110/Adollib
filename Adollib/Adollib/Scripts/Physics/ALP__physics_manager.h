@@ -161,7 +161,7 @@ namespace Adollib
 
 		static Physics_function::ColliderPhysics_ptrs add_collider(Collider* coll) {
 
-			Scenelist Sce = coll->gameobject->this_scene;
+			Scenelist Sce = coll->gameobject->get_scene();
 
 			Physics_function::ColliderPhysics_ptrs ret;
 			{
@@ -178,7 +178,7 @@ namespace Adollib
 				itr--;
 
 				//’†g‚ð“ü‚ê‚Â‚Â¶¬
-				*itr = new Physics_function::ALP_Collider(coll->gameobject, itr, Sce, collider_index_count[Sce]);
+				*itr = DBG_NEW Physics_function::ALP_Collider(coll->gameobject, itr, Sce, collider_index_count[Sce]);
 
 				ret.ALPcollider_ptr = *itr;
 			}
@@ -192,7 +192,7 @@ namespace Adollib
 				itr--;
 
 				//’†g‚ð“ü‚ê‚Â‚Â¶¬
-				*itr = new Physics_function::ALP_Physics(coll->gameobject, itr, Sce, collider_index_count[Sce]);
+				*itr = DBG_NEW Physics_function::ALP_Physics(coll->gameobject, itr, Sce, collider_index_count[Sce]);
 
 				//phsics‚Ì‰Šú’l‚Ì“ü—Í
 				(*itr)->set_default();
@@ -243,6 +243,7 @@ namespace Adollib
 			colliders[Sce].erase(coll_itr);
 		}
 
+		//delete‚Í‚µ‚È‚¢
 		static void remove_ALPcollider(
 			const Scenelist Sce,
 			std::list<Physics_function::ALP_Collider*>::iterator ALPcoll_itr
@@ -251,6 +252,7 @@ namespace Adollib
 			ALP_colliders[Sce].erase(ALPcoll_itr);
 		}
 
+		//delete‚Í‚µ‚È‚¢
 		static void remove_ALPphysics(
 			const Scenelist Sce,
 			std::list<Physics_function::ALP_Physics*>::iterator ALPphs_itr

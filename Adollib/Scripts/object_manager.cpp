@@ -179,10 +179,9 @@ namespace Adollib
 			ImGui::Checkbox("delete", &del);
 			if (del) {
 				for (auto& GO : GOs) {
-					GO->active = false;
-					GO->clearComponent();
-					boxes.clear();
+					Gameobject_manager::deleteGameobject(GO);
 				}
+				boxes.clear();
 				GOs.clear();
 			}
 

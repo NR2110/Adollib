@@ -27,7 +27,7 @@ namespace Adollib {
 
 		//‚Æ‚Ä‚à‘åŽG”c‚È“–‚½‚è”»’è(Boardphase)
 		void Broadphase(Scenelist Sce,
-			std::list<ALP_Collider*>& ALP_collider,
+			const std::list<ALP_Collider*>& ALP_collider,
 			std::vector<Contacts::Collider_2>& out_pair,
 			std::vector<Physics_function::ALP_Collider*>& moved_collider, //“®‚¢‚½‚à‚Ì
 			std::vector<Physics_function::ALP_Collider*>& added_collider //’Ç‰Á‚³‚ê‚½‚à‚Ì

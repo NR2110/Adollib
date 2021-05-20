@@ -73,6 +73,7 @@ namespace Adollib {
 			Vector3 linear_acceleration;//並進加速度
 			Vector3 angula_acceleration; //回転加速度
 
+
 			//::: Colliderへのポインタ :::
 			ALP_Collider* ALPcollider = nullptr;
 

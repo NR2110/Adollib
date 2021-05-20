@@ -17,7 +17,7 @@ namespace Adollib
 	class Component
 	{
 	public:
-		std::list <std::shared_ptr<Component>>::iterator com_itr; //自身へのイテレータ
+		std::list<Component*>::iterator com_itr; //自身へのイテレータ
 
 		Gameobject* gameobject = nullptr;	// このコンポーネントがアタッチされているGameObject
 		Transfome*  transform = nullptr;	// GameObjectのTransformへのポインタ

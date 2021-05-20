@@ -1,4 +1,7 @@
 #include "gameobject.h"
+
+#include "gameobject_manager.h"
+
 #include "../Main/systems.h"
 
 #include "../Mesh/material_for_collider.h"
@@ -14,13 +17,10 @@ using namespace ConstantBuffer;
 
 void Gameobject::initialize() {
 
-	std::list <std::shared_ptr<Component>>::iterator itr = components.begin();
-	std::list <std::shared_ptr<Component>>::iterator itr_end = components.end();
-
 	Systems::CreateConstantBuffer(&world_cb, sizeof(ConstantBufferPerGO));
 
-	for (; itr != itr_end; itr++) {
-		itr->get()->start();
+	for (auto& comp : components) {
+		comp->start();
 	}
 
 }
@@ -78,7 +78,7 @@ void Gameobject::update_imgui_toChildren() {
 }
 
 void Gameobject::update() {
-	std::for_each(components.begin(), components.end(), [](std::shared_ptr<Component> com) {com->update(); });
+	std::for_each(components.begin(), components.end(), [](Component* com) {com->update(); });
 }
 
 void Gameobject::render() {
@@ -100,3 +100,12 @@ void Gameobject::render() {
 
 }
 
+
+void Gameobject::destroy() {
+	clearComponent();
+	Gameobject_manager::removeGameobject(this_scene, this_itr);
+
+	if (pearent() != nullptr)
+		pearent()->remove_child(this);
+
+}

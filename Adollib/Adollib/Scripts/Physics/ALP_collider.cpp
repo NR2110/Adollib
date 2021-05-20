@@ -45,20 +45,12 @@ void ALP_Collider::resolve_gameobject() {
 void ALP_Collider::update_world_trans() {
 	for (auto& shape : shapes) {
 
+		//world情報の更新
 		shape->update_world_trans(gameobject->world_position(), gameobject->world_orientate(), gameobject->world_scale());
 
+		//DOPの更新
+		shape->update_dop14();
 	}
-
-	//world_orientation_ = local_orientation * gameobject->get_world_orientate();
-	////world_orientation_ = gameobject->get_world_orientate() * local_orientation;
-	//world_scale_ = gameobject->get_world_scale() * local_scale;
-	//world_position_ = gameobject->get_world_position() + vector3_quatrotate(local_position * gameobject->get_world_scale(), world_orientation());
-
-	//if (old_world_position_ != world_position_ ||
-	//	old_world_orientation_ != world_orientation_ ||
-	//	old_world_scale_ != world_scale_
-	//	)
-	//	Phyisics_manager::add_moved(ALPcollider);
 
 	ALPphysics->update_inertial();
 }

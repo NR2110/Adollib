@@ -15,6 +15,13 @@
 namespace Adollib {
 
 	class Gameobject : public object {
+	public:
+		Gameobject(bool l_no_material, Scenelist l_this_scene, std::list<Gameobject*>::iterator l_this_itr) :
+			no_material(l_no_material),
+			this_scene(l_this_scene),
+			this_itr(l_this_itr)
+		{};
+
 	private:
 		void update();
 		void update_worldtrans() override {
@@ -24,8 +31,18 @@ namespace Adollib {
 		}
 
 		ComPtr<ID3D11Buffer> world_cb; //WVP行列用バッファ
-	public:
+
 		bool no_material = false; //material情報を所持しているか
+
+
+		std::list <Component*> components; //アタッチされているConponentのポインタ
+
+		Scenelist this_scene = Scenelist::scene_null; //このgoのあるscene
+
+		std::list<Gameobject*>::iterator this_itr; //自身へのイテレーター(いつ使うの?)
+	public:
+		//このGOが存在するシーンを返す
+		Scenelist get_scene() { return this_scene; };
 
 		u_int tag = GO_tag::None; //このgoのtag(bit)
 
@@ -33,14 +50,12 @@ namespace Adollib {
 
 		std::shared_ptr<Material> material; //このGOのマテリアル
 
-		std::list <std::shared_ptr<Component>> components; //アタッチされているConponentのポインタ
 
-		Scenelist this_scene = Scenelist::scene_null; //このgoのあるscene
-
-		std::list<std::shared_ptr<object>>::iterator go_iterator; //自身へのイテレーター(いつ使うの?)
+	public:
 
 		//アタッチされたコンポーネントの処理
 		void initialize()override;
+
 		void render()override;
 
 		void update_imgui_toChildren() override;
@@ -51,7 +66,7 @@ namespace Adollib {
 		//goのworld空間上でのの姿勢を返す
 		Quaternion world_orientate()override {
 			if (pearent() != nullptr) {
-				return transform->local_orient * pearent()->transform->orientation ;
+				return transform->local_orient * pearent()->transform->orientation;
 			}
 			else return transform->local_orient;
 		};
@@ -75,22 +90,11 @@ namespace Adollib {
 			if (active == value)return;
 			active = value;
 			if (value == false) {
-				auto itr = components.begin();
-				auto end = components.end();
-				while (itr != end)
-				{
-					itr->get()->onDisable();
-					itr++;
-				}
+				for (auto& comp : components)comp->onDisable();
 			}
 			else if (value == true) {
-				auto itr = components.begin();
-				auto end = components.end();
-				while (itr != end)
-				{
-					itr->get()->onEnable();
-					itr++;
-				}
+				for (auto& comp : components)comp->onEnable();
+
 			}
 		};
 		// ==============================================================
@@ -119,10 +123,11 @@ namespace Adollib {
 
 			// Componentクラスから派生したものかチェック
 			Component* pCom = dynamic_cast<Component*>(newCom);
+			if (pCom == nullptr)assert("Componentを継承しているclassをアタッチしてください");
 			if (pCom != nullptr)
 			{
-				components.emplace_back(std::shared_ptr<Component>(pCom));
-				std::list <std::shared_ptr<Component>>::iterator itr = components.end();
+				components.emplace_back(pCom);
+				std::list<Component*>::iterator itr = components.end();
 				itr--;
 				pCom->com_itr = itr;
 				pCom->transform = this->transform.get();
@@ -165,15 +170,11 @@ namespace Adollib {
 		// このGameObjectにアタッチされているコンポーネントをすべて開放する
 		// ==============================================================
 		void clearComponent() {
-			auto itr = components.begin();
-			auto itr_save = itr;
-			auto end = components.end();
-			while (itr != end)
+			//componentの終了処理を行う
+			for (auto& comp : components)
 			{
-				itr->get()->finalize();
-				itr_save = itr;
-				itr++;
-				components.erase(itr_save);
+				comp->finalize();
+				delete comp;
 			}
 			components.clear();
 		}
@@ -183,9 +184,7 @@ namespace Adollib {
 		//}
 
 		//解放処理
-		void destroy() {
-			clearComponent();
-		}
+		void destroy();
 	};
 
 }

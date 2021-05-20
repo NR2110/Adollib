@@ -90,6 +90,9 @@ LRESULT CALLBACK fnWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 
 INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line, INT cmd_show)
 {
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
+
 	//window
 	TCHAR szWindowClass[] = TEXT("Adollib_sample");
 	WNDCLASSEX wcex;
@@ -190,7 +193,7 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 	Systems::Release();
 
 	//memory leak 221 Å` 302 ÇÕâΩÇÇµÇƒÇ‡èoÇÈÇΩÇﬂñ≥éã
-	//_CrtDumpMemoryLeaks();
+	_CrtDumpMemoryLeaks();
 
 	return 0;
 }

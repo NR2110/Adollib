@@ -33,7 +33,7 @@ namespace Adollib {
 			shapes_size
 		};
 
-		class Meshcollider_data;
+		struct Meshcollider_data;
 		class ALP_Collider;
 	}
 	class ALP_shape {

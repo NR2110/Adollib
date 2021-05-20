@@ -17,7 +17,7 @@ using namespace Broadphase_static;
 //std::unordered_map <Scenelist, std::unordered_map<u_int, std::list<std::list<edge>::iterator>>> Broadphase_static::axis_list_edge_pS;
 
 void Physics_function::Broadphase(Scenelist Sce,
-	std::list<ALP_Collider*>& ALP_collider,
+	const std::list<ALP_Collider*>& ALP_collider,
 	std::vector<Contacts::Collider_2>& out_pair,
 	std::vector<Physics_function::ALP_Collider*>& moved_collider, //“®‚¢‚½‚à‚Ì
 	std::vector<Physics_function::ALP_Collider*>& added_collider //’Ç‰Á‚³‚ê‚½‚à‚Ì
@@ -28,11 +28,6 @@ void Physics_function::Broadphase(Scenelist Sce,
 
 	//DOP‚ÌXV
 	Work_meter::start("update_dop14");
-
-	for (auto& itr : ALP_collider) {
-
-		itr->update_dop14();
-	}
 
 	Work_meter::stop("update_dop14");
 

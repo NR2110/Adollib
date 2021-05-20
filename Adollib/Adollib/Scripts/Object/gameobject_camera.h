@@ -13,16 +13,23 @@
 namespace Adollib {
 
 	class Camera : public object {
+	public:
+		Camera(Scenelist l_this_scene, std::list<Camera*>::iterator l_this_itr) :
+			this_scene(l_this_scene),
+			this_itr(l_this_itr)
+		{};
+
 	private:
 		void update();
+
+		std::list<Camera*>::iterator this_itr; //自身へのイテレーター(いつ使うの?)
+
+		std::list <Component_camera*> components; //アタッチされているConponentのポインタ
+
+		Scenelist this_scene = Scenelist::scene_null; //このgoのあるscene
 	public:
 		std::string name = std::string("null"); //このgoの名前(検索用)
 
-		std::list <std::shared_ptr<Component_camera>> components; //アタッチされているConponentのポインタ
-
-		Scenelist this_scene = Scenelist::scene_null; //このgoのあるscene
-
-		std::list<std::shared_ptr<Camera>>::iterator go_iterator; //自身へのイテレーター(いつ使うの?)
 
 		float fov = 60.0f;
 		float aspect = 1280 / 720.0f;
@@ -64,23 +71,13 @@ namespace Adollib {
 			active = value;
 
 			if (value == false) {
-				auto itr = components.begin();
-				auto end = components.end();
-				while (itr != end)
-				{
-					itr->get()->onDisable();
-					itr++;
-				}
+				for (auto& comp : components)comp->onDisable();
 			}
 			else if (value == true) {
-				auto itr = components.begin();
-				auto end = components.end();
-				while (itr != end)
-				{
-					itr->get()->onEnable();
-					itr++;
-				}
+				for (auto& comp : components)comp->onEnable();
+
 			}
+
 		};
 		// ==============================================================
 		// このGameObjectにコンポーネントをアタッチする
@@ -110,7 +107,7 @@ namespace Adollib {
 			Component_camera* pCom = dynamic_cast<Component_camera*>(newCom);
 			if (pCom != nullptr)
 			{
-				components.emplace_back(std::shared_ptr<Component_camera>(pCom));
+				components.emplace_back(pCom);
 				pCom->transform = this->transform.get();
 				pCom->gameobject = this;
 				pCom->input = MonoInput::getInstancePtr();
@@ -151,21 +148,17 @@ namespace Adollib {
 		// このGameObjectにアタッチされているコンポーネントをすべて開放する
 		// ==============================================================
 		void clearComponent() {
-			auto itr = components.begin();
-			auto end = components.end();
-			while (itr != end)
+			//componentの終了処理を行う
+			for (auto& comp : components)
 			{
-				itr->get()->finalize();
-				if (itr->get()) delete itr->get();
-				itr = components.erase(itr);
+				comp->finalize();
+				delete comp;
 			}
-			//components.clear();
+			components.clear();
 		}
 
 		//解放処理
-		void destroy() {
-			clearComponent();
-		}
+		void destroy();
 	};
 
 }

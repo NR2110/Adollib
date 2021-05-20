@@ -22,4 +22,6 @@ void ALP_shape::update_world_trans(const Vector3& GO_Wposiiton, const Quaternion
 		old_world_scale_ != world_scale_
 		)
 		Phyisics_manager::add_moved(ALPcollider_ptr);
+
+
 };

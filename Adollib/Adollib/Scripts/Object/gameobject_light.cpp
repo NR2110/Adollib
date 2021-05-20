@@ -3,6 +3,8 @@
 
 #include "../Imgui/imgui_all.h"
 
+#include "gameobject_manager.h"
+
 namespace Adollib {
 
 	void Light::initialize() {
@@ -129,5 +131,9 @@ namespace Adollib {
 		SpotLight.push_back(spotlight);
 	}
 
+	void Light::destroy() {
+		clearComponent();
+		Gameobject_manager::removeLight(this_scene, this_itr);
 
+	}
 }

@@ -39,8 +39,8 @@ namespace Adollib {
 
 		//physics_manager‚Ìadd_collider‚µ‚½‚Æ‚«‚Ì•Ô‚è’l
 		struct ColliderPhysics_ptrs {
-			ALP_Collider* ALPcollider_ptr;
-			ALP_Physics* ALPphysics_ptr;
+			ALP_Collider* ALPcollider_ptr = nullptr;
+			ALP_Physics* ALPphysics_ptr = nullptr;
 
 			std::list<Collider*>::iterator coll_itr;
 		};
