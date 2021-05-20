@@ -137,7 +137,7 @@ void ALP_Collider::Update_hierarchy()
 };
 
 Meshcoll_part* ALP_Collider::add_mesh_shape(const char* filepass, Physics_function::Meshcollider_data* mesh_data) {
-	Meshcoll_part* shape = new Meshcoll_part(this, filepass, mesh_data);
+	Meshcoll_part* shape = D_new Meshcoll_part(this, filepass, mesh_data);
 
 	shapes.emplace_back(shape);
 	return shape;

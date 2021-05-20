@@ -146,7 +146,7 @@ namespace Adollib
 				//objGO = Gameobject_manager::createFromFBX("../Adollib/DefaultModel/cylinder.fbx");
 				GO->transform->local_pos = Vector3(-10, 15, -25);
 				//objGO->transform->local_scale = Vector3(0.01f, 0.02f, 0.03f);
-				GO->transform->local_scale = Vector3(0.01, 0.01, 0.01);
+				GO->transform->local_scale = Vector3(0.01f, 0.01f, 0.01f);
 				//objGO->transform->local_orient = quaternion_from_euler(45, 45, 45);
 				GO->transform->local_orient = quaternion_from_euler(0, 180, 0);
 

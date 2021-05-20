@@ -248,7 +248,7 @@ Light* Gameobject_manager::create_light(const std::string go_name, Scenelist Sce
 	lights[Sce].emplace_back(null);
 	auto itr = lights[Sce].end();
 	itr--;
-	*itr = DBG_NEW Light(Sce,itr);
+	*itr = D_new Light(Sce,itr);
 	Light* Value = *itr;
 
 	Value->name = go_name;
@@ -263,7 +263,7 @@ Camera* Gameobject_manager::create_camera(const std::string go_name, Scenelist S
 	cameras[Sce].emplace_back(null);
 	auto itr = cameras[Sce].end();
 	itr--;
-	*itr = DBG_NEW Camera(Sce, itr);
+	*itr = D_new Camera(Sce, itr);
 	Camera* Value = *itr;
 
 	Value->name = go_name;
@@ -278,7 +278,7 @@ Gameobject* Gameobject_manager::create(const std::string& go_name, const u_int& 
 	gameobjects[Sce].emplace_back(null);
 	auto itr = gameobjects[Sce].end();
 	itr--;
-	*itr = DBG_NEW Gameobject(true, Sce, itr);
+	*itr = D_new Gameobject(true, Sce, itr);
 	Gameobject* Value = *itr;
 
 	Value->tag = tag;
@@ -296,7 +296,7 @@ Gameobject* Gameobject_manager::createFromFBX(const std::string go_name, const s
 	gameobjects[Sce].emplace_back(null);
 	auto itr = gameobjects[Sce].end();
 	itr--;
-	*itr = DBG_NEW Gameobject(false, Sce, itr);
+	*itr = D_new Gameobject(false, Sce, itr);
 	Gameobject* Value = *itr;
 
 	Value->tag = tag;
@@ -317,7 +317,7 @@ Gameobject* Gameobject_manager::createSphere(const std::string go_name, u_int ta
 	gameobjects[Sce].emplace_back(null);
 	auto itr = gameobjects[Sce].end();
 	itr--;
-	*itr = DBG_NEW Gameobject(false, Sce, itr);
+	*itr = D_new Gameobject(false, Sce, itr);
 	Gameobject* Value = *itr;
 
 	Value->tag = tag;
@@ -338,7 +338,7 @@ Gameobject* Gameobject_manager::createCube(const std::string go_name, u_int tag,
 	gameobjects[Sce].emplace_back(null);
 	auto itr = gameobjects[Sce].end();
 	itr--;
-	*itr = DBG_NEW Gameobject(false, Sce, itr);
+	*itr = D_new Gameobject(false, Sce, itr);
 	Gameobject* Value = *itr;
 
 	Value->tag = tag;
@@ -359,7 +359,7 @@ Gameobject* Gameobject_manager::createCapsule(const std::string go_name, u_int t
 	gameobjects[Sce].emplace_back(null);
 	auto itr = gameobjects[Sce].end();
 	itr--;
-	*itr = DBG_NEW Gameobject(false, Sce, itr);
+	*itr = D_new Gameobject(false, Sce, itr);
 	Gameobject* Value = *itr;
 
 	Value->tag = tag;
@@ -382,7 +382,7 @@ Gameobject* Gameobject_manager::createCylinder(const std::string go_name, u_int 
 	gameobjects[Sce].emplace_back(null);
 	auto itr = gameobjects[Sce].end();
 	itr--;
-	*itr = DBG_NEW Gameobject(false, Sce, itr);
+	*itr = D_new Gameobject(false, Sce, itr);
 	Gameobject* Value = *itr;
 
 	Value->tag = tag;

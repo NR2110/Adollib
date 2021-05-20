@@ -27,7 +27,7 @@ namespace Adollib {
 
 	Vector3 Al_Global::get_gaming(int time, float change_time, float min, float max ) {
 		Vector3 color;
-		float T = time;
+		float T = (float)time;
 
 		color.x = fabsf(get_P_by_f(T, change_time * 2) - change_time) / change_time;
 

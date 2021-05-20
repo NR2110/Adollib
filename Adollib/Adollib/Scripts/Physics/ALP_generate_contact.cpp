@@ -16,23 +16,6 @@ using namespace Closest_func;
 #pragma region generate_contact
 //:::::::::::::::::::::::::::
 
-struct Matrix_debug
-{
-	Matrix_debug(size_t xsize, size_t ysize) : mSize{ xsize, ysize }, mPtr(new double[xsize * ysize]) {}
-	Matrix_debug(size_t xsize, size_t ysize, double init)
-		: mSize{ xsize, ysize }, mPtr(new double[xsize * ysize])
-	{
-		size_t size = mSize[0] * mSize[1];
-		for (size_t i = 0; i < size; ++i) mPtr[i] = init;
-	}
-	~Matrix_debug() { delete[] mPtr; }
-	double& operator()(size_t x, size_t y) { return mPtr[x * mSize[1] + y]; }
-	const double& operator()(size_t x, size_t y) const { return mPtr[x * mSize[1] + y]; }
-private:
-	double* mPtr;
-	size_t mSize[2];
-};
-
 void Physics_function::generate_contact(std::vector<Contacts::Contact_pair>& pairs) {
 
 	for (auto& pair : pairs) {

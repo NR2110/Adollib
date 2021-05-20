@@ -334,7 +334,7 @@ namespace Adollib {
 		case 3: return w;
 			break;
 		}
-		float R;
+		float R = 0;
 		return R;
 	}
 	inline float Vector4::operator[] (const int i) const {

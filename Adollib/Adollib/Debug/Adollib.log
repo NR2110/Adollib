@@ -1,77 +1,21 @@
-﻿  compilation object save succeeded; see C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\default_ps.cso
-  compilation object save succeeded; see C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\default_ps_notex.cso
-  compilation object save succeeded; see C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\default_vs.cso
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\physics_resolve.hlsl(147,9-127): warning X3206: implicit truncation of vector type
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\physics_resolve.hlsl(149,9-127): warning X3206: implicit truncation of vector type
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\physics_resolve.hlsl(162,9-125): warning X3206: implicit truncation of vector type
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\physics_resolve.hlsl(164,9-125): warning X3206: implicit truncation of vector type
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\physics_resolve.hlsl(187,9-40): warning X3203: signed/unsigned mismatch, unsigned assumed
-  
-  compilation object save succeeded; see C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\physics_resolve.cso
-  camera_manager.cpp
+﻿  camera_manager.cpp
   camera_s.cpp
   object_manager.cpp
   object_rotate.cpp
   player.cpp
   player_manager.cpp
-  imgui.cpp
-  imgui_demo.cpp
-  imgui_draw.cpp
-  imgui_impl_dx11.cpp
-  imgui_impl_win32.cpp
-  imgui_widgets.cpp
-  debug.cpp
-  imgui_manager.cpp
-  inspector.cpp
-  work_meter.cpp
-  Adollib.cpp
-  input.cpp
-  loop.cpp
-  main.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\Adollib.cpp(30,11): warning C4244: '初期化中': 'int' から 'float' への変換です。データが失われる可能性があります。
-  resource_manager.cpp
-  sprite.cpp
-  systems.cpp
-  closest_func.cpp
-  complex.cpp
-  crossing_func.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player.h(14,20): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\player_manager.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player.h(16,24): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\player_manager.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player.h(14,20): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player.h(16,24): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player.h(14,20): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player.h(16,24): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(149,58): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-  frustum_culling.cpp
-  material.cpp
   material_for_collider.cpp
-  mesh.cpp
-  texture.cpp
   gameobject.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\vector_e.h(338): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
-  gameobject_camera.cpp
-  gameobject_light.cpp
   gameobject_manager.cpp
-  hierarchy.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(549,82): warning C4018: '>': signed と unsigned の数値を比較しようとしました。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(551,63): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(575,27): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(666,35): warning C4244: '=': 'double' から 'Adollib::u_int' への変換です。データが失われる可能性があります。
+  ALP__physics_manager.cpp
   ALP_broadphase.cpp
   ALP_collider.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(75,57): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(107,97): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(139,57): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(171,97): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(204,57): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(236,97): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(271,117): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(304,98): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(337,69): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(370,98): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(403,69): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(436,98): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(689,44): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(709,94): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
   ALP_generate_contact.cpp
   ALP_integrate.cpp
@@ -80,19 +24,11 @@ C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_colli
   ALP_raycast.cpp
   ALP_resolve_contact.cpp
   ALP_shape.cpp
-  ALP__physics_manager.cpp
   collider.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1711,26): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-  collider__base.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\vector_e.h(338): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
   contact.cpp
-  meshcoll_resorce_manager.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(108,23): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
   ray.cpp
   scene_game.cpp
-  scene_manager.cpp
-  scene_title.cpp
-  compute_shader.cpp
-  shader.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player.h(14,20): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Scene\scene_game.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player.h(16,24): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。 (ソース ファイルをコンパイルしています Scripts\Scene\scene_game.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(1694,26): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(108,23): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

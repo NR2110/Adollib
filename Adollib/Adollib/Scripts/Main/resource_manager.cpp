@@ -676,7 +676,7 @@ namespace Adollib
 				FbxTime end_time = take_info->mLocalTimeSpan.GetStop();
 				FbxTime sampling_step;
 				sampling_step.SetTime(0, 0, 1, 0, 0, time_mode);
-				sampling_step = static_cast<FbxLongLong>(sampling_step.Get() * (FbxLongLong)sampling_time);
+				sampling_step = static_cast<FbxLongLong>(sampling_step.Get() * sampling_time);
 				for (FbxTime current_time = start_time; current_time < end_time; current_time += sampling_step)
 				{
 					Mesh::skeletal skeletal;

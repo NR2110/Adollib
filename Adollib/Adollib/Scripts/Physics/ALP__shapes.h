@@ -70,10 +70,10 @@ namespace Adollib {
 		DOP::DOP_14	dop14;	//14DOP データ
 
 		//meshcollider用 vertexes,Edges,Facetsなどの情報 resorce_managerの中にある情報へのポインタ
-		Physics_function::Meshcollider_data* mesh_data;
+		Physics_function::Meshcollider_data* mesh_data= nullptr;
 
 		//このshapeがアタッチされたcolliderへのイテレータ
-		Physics_function::ALP_Collider* ALPcollider_ptr;
+		Physics_function::ALP_Collider* ALPcollider_ptr = nullptr;
 
 	public:
 

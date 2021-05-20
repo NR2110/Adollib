@@ -178,7 +178,7 @@ namespace Adollib
 				itr--;
 
 				//’†g‚ğ“ü‚ê‚Â‚Â¶¬
-				*itr = DBG_NEW Physics_function::ALP_Collider(coll->gameobject, itr, Sce, collider_index_count[Sce]);
+				*itr = D_new Physics_function::ALP_Collider(coll->gameobject, itr, Sce, collider_index_count[Sce]);
 
 				ret.ALPcollider_ptr = *itr;
 			}
@@ -192,7 +192,7 @@ namespace Adollib
 				itr--;
 
 				//’†g‚ğ“ü‚ê‚Â‚Â¶¬
-				*itr = DBG_NEW Physics_function::ALP_Physics(coll->gameobject, itr, Sce, collider_index_count[Sce]);
+				*itr = D_new Physics_function::ALP_Physics(coll->gameobject, itr, Sce, collider_index_count[Sce]);
 
 				//phsics‚Ì‰Šú’l‚Ì“ü—Í
 				(*itr)->set_default();

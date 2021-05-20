@@ -113,7 +113,7 @@ namespace Adollib {
 			T* add_shape() {
 				//if (dynamic_cast<ALP_shape>(T) == nullptr) assert("ALP_shapeを継承したclassをアタッチしてください");
 
-				T* shape = new T(this);
+				T* shape = D_new T(this);
 
 				shapes.emplace_back(shape);
 				return shape;

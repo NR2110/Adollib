@@ -18,6 +18,8 @@
 #include "../../Imgui/imgui_impl_win32.h"
 #include "../../Imgui/imgui_impl_dx11.h"
 
+#include "../Math/math.h"
+
 using namespace Adollib;
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wparam, LPARAM lparam);
@@ -91,7 +93,7 @@ LRESULT CALLBACK fnWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line, INT cmd_show)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
+	//_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
 
 	//window
 	TCHAR szWindowClass[] = TEXT("Adollib_sample");
@@ -173,6 +175,7 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 			// 更新・描画
 			if (loop.Update(hMsg, hwnd, Al_Global::SCREEN_WIDTH, Al_Global::SCREEN_HEIGHT) == false)continue;
 			loop.Render();
+
 #pragma region Imgui_demo
 
 
@@ -193,7 +196,9 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 	Systems::Release();
 
 	//memory leak 221 ～ 302 は何をしても出るため無視
-	_CrtDumpMemoryLeaks();
+	//char* memory_leak = DBG_NEW char;
+
+	//_CrtDumpMemoryLeaks();
 
 	return 0;
 }
