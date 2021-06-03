@@ -37,23 +37,14 @@ namespace Adollib {
 		};
 		//:::::::::::::::::::::::::
 
-		//physics_managerのadd_colliderしたときの返り値
-		struct ColliderPhysics_ptrs {
-			ALP_Collider* ALPcollider_ptr = nullptr;
-			ALP_Physics* ALPphysics_ptr = nullptr;
-
-			std::list<Collider*>::iterator coll_itr;
-		};
-
 	}
 
 	class Collider : public Component {
 
 	public:
-
-		//::: tagの初期値 ::::::::
-		u_int tag = 0; //自身のtag(bit)
-		u_int ignore_tags = 0; //衝突しないtags
+		//::: tag ::::::::
+		Collider_tagbit tag = 0; //自身のtag(bit)
+		Collider_tagbit ignore_tags = 0; //衝突しないtags(bit)
 
 		//::: unityのphysics部分 分ける必要なんてないやろ ::::
 		Physics_function::Physics_data physics_data;
@@ -86,6 +77,7 @@ namespace Adollib {
 		}
 
 	public:
+
 		//on collision enter
 		const bool concoll_enter(const unsigned int tag_name) const;
 

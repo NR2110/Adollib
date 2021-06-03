@@ -64,7 +64,7 @@ void Physics_function::Broadphase(Scenelist Sce,
 			//auto itr = added->collider_meshes.begin();
 			u_int index_count = 0;
 			axis_list_edge_pS[added->get_scene()][index].clear();
-			for (auto& shape : added->shapes) {
+			for (const auto& shape : added->get_shapes()) {
 				ed.value = shape->get_DOP().pos[0] + shape->get_DOP().max[0];
 				ed.shape = shape;
 				ed.edge_start = false;
@@ -171,17 +171,17 @@ void Physics_function::Broadphase(Scenelist Sce,
 
 	Work_meter::start("Sweep&Prune");
 	//Sweep&Prune
-	std::list<ALP_shape*> actives;
-	std::list<ALP_shape*> static_actives;
+	std::list<Collider_shape*> actives;
+	std::list<Collider_shape*> static_actives;
 	Contacts::Collider_2 pair;
 	out_pair.clear();
-	std::list<ALP_shape*>::iterator ac_itr;
+	std::list<Collider_shape*>::iterator ac_itr;
 	{
 		for (auto& insert_edge : axis_list) {
 			//collider‚Ìn“_‚È‚çactivelist‚É‚ ‚é‚à‚Ì‚ÆÕ“Ë‚Ì‰Â”\«‚ ‚è
 			if (insert_edge.edge_start == true) {
 
-				if ((*insert_edge.shape->get_ALPcollider()->coll_itr)->is_static == true) {
+				if ((*insert_edge.shape->get_ALPcollider()->get_collitr())->is_static == true) {
 
 					pair.body = insert_edge.shape;
 					pair.bodylists = actives;
@@ -209,7 +209,7 @@ void Physics_function::Broadphase(Scenelist Sce,
 
 			}
 			else {
-				if ((*insert_edge.shape->get_ALPcollider()->coll_itr)->is_static == true)
+				if ((*insert_edge.shape->get_ALPcollider()->get_collitr())->is_static == true)
 					static_actives.erase(insert_edge.active_list_pair_itr);
 				else
 					actives.erase(insert_edge.active_list_pair_itr);

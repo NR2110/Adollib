@@ -292,7 +292,7 @@ namespace Adollib {
 		}
 
 		Vector3 g = vector3_cross(V1.unit_vect(), V2.unit_vect()).unit_vect();
-		float radian = quaternion_radian(V1.unit_vect(), V2.unit_vect());
+		float radian = vector3_radian(V1.unit_vect(), V2.unit_vect());
 
 		Quaternion F;
 		F.w = cosf(radian / 2);

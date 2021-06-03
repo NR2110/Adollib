@@ -20,16 +20,15 @@
 #include <future>
 
 using namespace Adollib;
+using namespace Physics_function;
 using namespace ConstantBuffer;
 
 std::map<Scenelist, std::list<Gameobject*>> Gameobject_manager::gameobjects;
 std::map<Scenelist, std::list<Light*>> Gameobject_manager::lights;
 std::map<Scenelist, std::list<Camera*>> Gameobject_manager::cameras;
-std::vector<object*> Gameobject_manager::masters; //GO親子ツリーの頂点を保存
-std::vector<object*> Gameobject_manager::gos;     //GOを1つの配列に保存
-
-std::thread Gameobject_manager::physics_thread;
-bool Gameobject_manager::physics_thread_finish = true;
+std::vector<Gameobject*>	Gameobject_manager::save_delete_gameobject;
+std::vector<Camera*>		Gameobject_manager::save_delete_camera;
+std::vector<Light*>			Gameobject_manager::save_delete_light;
 
 int Gameobject_manager::go_count = 0;
 
@@ -82,7 +81,7 @@ void Gameobject_manager::initialize(Scenelist Sce) {
 void Gameobject_manager::update(Scenelist Sce) {
 	if (Sce == Scenelist::scene_null)return;
 
-	gos.clear();
+	std::vector<object*> gos;
 
 	//扱いやすいように一つの配列に保存
 	for (auto& GO : gameobjects[Sce]) {
@@ -98,19 +97,22 @@ void Gameobject_manager::update(Scenelist Sce) {
 	}
 
 
-	//ツリーの親を更新
+	//一番上のの親を保存
+	std::vector<object*> masters; //GO親子ツリーの頂点を保存
 	masters.clear();
-	std::unordered_map<object*, bool> masters_manag;
-	for (auto& GO : gos) {
-		object* master = GO->top_pearent();
-		if (masters_manag.count(master) == 0) {
-			masters.push_back(master);
+	{
+		std::unordered_map<object*, bool> masters_manag;
+		for (auto& GO : gos) {
+			object* master = GO->top_pearent();
+			if (masters_manag.count(master) == 0) {
+				masters.emplace_back(master);
+			}
+			masters_manag[master] = true;
 		}
-		masters_manag[master] = true;
 	}
 
 
-	//親から子へupdateを呼ぶ
+	//親から子へupdateを呼ぶ update中に、親objectが削除されたときに対応できないためNG
 	std::for_each(masters.begin(), masters.end(), [](object* ob) {ob->update_to_children(); });
 
 	//ヒエラルキー
@@ -119,10 +121,19 @@ void Gameobject_manager::update(Scenelist Sce) {
 	Phyisics_manager::update();
 
 
-	//親から子へワールド情報を更新
-	for (auto& m : masters) {
-		m->update_world_trans_to_children();
+	//親から子に座標の更新を行う
+	{
+		std::unordered_map<object*, bool> masters_manag;
+		for (auto& GO : gos) {
+			object* master = GO->top_pearent();
+			if (masters_manag.count(master) == 0) {
+				master->update_world_trans_to_children();
+			}
+			masters_manag[master] = true;
+		}
 	}
+
+	delete_gameobjects();
 
 
 }
@@ -208,7 +219,7 @@ void Gameobject_manager::render(Scenelist Sce) {
 		}
 
 
-		Adollib::Phyisics_manager::render_collider(Sce);
+		Phyisics_manager::render_collider(Sce);
 	}
 
 }
@@ -248,7 +259,7 @@ Light* Gameobject_manager::create_light(const std::string go_name, Scenelist Sce
 	lights[Sce].emplace_back(null);
 	auto itr = lights[Sce].end();
 	itr--;
-	*itr = D_new Light(Sce,itr);
+	*itr = newD Light(Sce,itr);
 	Light* Value = *itr;
 
 	Value->name = go_name;
@@ -263,7 +274,7 @@ Camera* Gameobject_manager::create_camera(const std::string go_name, Scenelist S
 	cameras[Sce].emplace_back(null);
 	auto itr = cameras[Sce].end();
 	itr--;
-	*itr = D_new Camera(Sce, itr);
+	*itr = newD Camera(Sce, itr);
 	Camera* Value = *itr;
 
 	Value->name = go_name;
@@ -278,7 +289,7 @@ Gameobject* Gameobject_manager::create(const std::string& go_name, const u_int& 
 	gameobjects[Sce].emplace_back(null);
 	auto itr = gameobjects[Sce].end();
 	itr--;
-	*itr = D_new Gameobject(true, Sce, itr);
+	*itr = newD Gameobject(true, Sce, itr);
 	Gameobject* Value = *itr;
 
 	Value->tag = tag;
@@ -296,7 +307,7 @@ Gameobject* Gameobject_manager::createFromFBX(const std::string go_name, const s
 	gameobjects[Sce].emplace_back(null);
 	auto itr = gameobjects[Sce].end();
 	itr--;
-	*itr = D_new Gameobject(false, Sce, itr);
+	*itr = newD Gameobject(false, Sce, itr);
 	Gameobject* Value = *itr;
 
 	Value->tag = tag;
@@ -317,7 +328,7 @@ Gameobject* Gameobject_manager::createSphere(const std::string go_name, u_int ta
 	gameobjects[Sce].emplace_back(null);
 	auto itr = gameobjects[Sce].end();
 	itr--;
-	*itr = D_new Gameobject(false, Sce, itr);
+	*itr = newD Gameobject(false, Sce, itr);
 	Gameobject* Value = *itr;
 
 	Value->tag = tag;
@@ -338,7 +349,7 @@ Gameobject* Gameobject_manager::createCube(const std::string go_name, u_int tag,
 	gameobjects[Sce].emplace_back(null);
 	auto itr = gameobjects[Sce].end();
 	itr--;
-	*itr = D_new Gameobject(false, Sce, itr);
+	*itr = newD Gameobject(false, Sce, itr);
 	Gameobject* Value = *itr;
 
 	Value->tag = tag;
@@ -359,7 +370,7 @@ Gameobject* Gameobject_manager::createCapsule(const std::string go_name, u_int t
 	gameobjects[Sce].emplace_back(null);
 	auto itr = gameobjects[Sce].end();
 	itr--;
-	*itr = D_new Gameobject(false, Sce, itr);
+	*itr = newD Gameobject(false, Sce, itr);
 	Gameobject* Value = *itr;
 
 	Value->tag = tag;
@@ -382,7 +393,7 @@ Gameobject* Gameobject_manager::createCylinder(const std::string go_name, u_int 
 	gameobjects[Sce].emplace_back(null);
 	auto itr = gameobjects[Sce].end();
 	itr--;
-	*itr = D_new Gameobject(false, Sce, itr);
+	*itr = newD Gameobject(false, Sce, itr);
 	Gameobject* Value = *itr;
 
 	Value->tag = tag;

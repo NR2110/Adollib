@@ -1,6 +1,6 @@
 #pragma once
 #include "contact.h"
-#include "ALP__shapes.h"
+#include "collider_shape.h"
 
 namespace Adollib {
 	namespace Physics_function {
@@ -10,23 +10,23 @@ namespace Adollib {
 		//void generate_contact(std::vector<Adollib::Plane*> planes, std::vector<Adollib::Box*> boxes, std::vector<Adollib::Sphere*> spheres, std::vector<Contacts::Contact_pair>& pairs);
 
 		//è’ìÀê∂ê¨
-		bool generate_contact_sphere_plane	(const ALP_shape* S1, const ALP_shape* S2, Contacts::Contact_pair& pair);
-		bool generate_contact_sphere_sphere	(const ALP_shape* S1, const ALP_shape* S2, Contacts::Contact_pair& pair);
-		bool generate_contact_sphere_box	(const ALP_shape* S1, const ALP_shape* S2, Contacts::Contact_pair& pair);
-		bool generate_contact_sphere_capsule(const ALP_shape* S1, const ALP_shape* S2, Contacts::Contact_pair& pair);
-		bool generate_contact_sphere_mesh	(const ALP_shape* S1, const ALP_shape* S2, Contacts::Contact_pair& pair);
+		bool generate_contact_sphere_plane	(const Collider_shape* S1, const Collider_shape* S2, Contacts::Contact_pair& pair, bool& is_crossing);
+		bool generate_contact_sphere_sphere	(const Collider_shape* S1, const Collider_shape* S2, Contacts::Contact_pair& pair, bool& is_crossing);
+		bool generate_contact_sphere_box	(const Collider_shape* S1, const Collider_shape* S2, Contacts::Contact_pair& pair, bool& is_crossing);
+		bool generate_contact_sphere_capsule(const Collider_shape* S1, const Collider_shape* S2, Contacts::Contact_pair& pair, bool& is_crossing);
+		bool generate_contact_sphere_mesh	(const Collider_shape* S1, const Collider_shape* S2, Contacts::Contact_pair& pair, bool& is_crossing);
 
-		bool generate_contact_box_plane		(const ALP_shape* S1, const ALP_shape* S2, Contacts::Contact_pair& pair);
-		bool generate_contact_box_box		(const ALP_shape* S1, const ALP_shape* S2, Contacts::Contact_pair& pair);
-		bool generate_contact_box_capsule	(const ALP_shape* S1, const ALP_shape* S2, Contacts::Contact_pair& pair);
-		bool generate_contact_box_mesh		(const ALP_shape* S1, const ALP_shape* S2, Contacts::Contact_pair& pair);
+		bool generate_contact_box_plane		(const Collider_shape* S1, const Collider_shape* S2, Contacts::Contact_pair& pair, bool& is_crossing);
+		bool generate_contact_box_box		(const Collider_shape* S1, const Collider_shape* S2, Contacts::Contact_pair& pair, bool& is_crossing);
+		bool generate_contact_box_capsule	(const Collider_shape* S1, const Collider_shape* S2, Contacts::Contact_pair& pair, bool& is_crossing);
+		bool generate_contact_box_mesh		(const Collider_shape* S1, const Collider_shape* S2, Contacts::Contact_pair& pair, bool& is_crossing);
 
-		bool generate_contact_capsule_plane		(const ALP_shape* S1, const ALP_shape* S2, Contacts::Contact_pair& pair);
-		bool generate_contact_capsule_capsule	(const ALP_shape* S1, const ALP_shape* S2, Contacts::Contact_pair& pair);
-		bool generate_contact_capsule_mesh		(const ALP_shape* S1, const ALP_shape* S2, Contacts::Contact_pair& pair);
+		bool generate_contact_capsule_plane		(const Collider_shape* S1, const Collider_shape* S2, Contacts::Contact_pair& pair, bool& is_crossing);
+		bool generate_contact_capsule_capsule	(const Collider_shape* S1, const Collider_shape* S2, Contacts::Contact_pair& pair, bool& is_crossing);
+		bool generate_contact_capsule_mesh		(const Collider_shape* S1, const Collider_shape* S2, Contacts::Contact_pair& pair, bool& is_crossing);
 
-		bool generate_contact_mesh_plane	(const ALP_shape* S1, const ALP_shape* S2, Contacts::Contact_pair& pair);
-		bool generate_contact_mesh_mesh		(const ALP_shape* S1, const ALP_shape* S2, Contacts::Contact_pair& pair);
+		bool generate_contact_mesh_plane	(const Collider_shape* S1, const Collider_shape* S2, Contacts::Contact_pair& pair, bool& is_crossing);
+		bool generate_contact_mesh_mesh		(const Collider_shape* S1, const Collider_shape* S2, Contacts::Contact_pair& pair, bool& is_crossing);
 
 	}
 }

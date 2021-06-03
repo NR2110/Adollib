@@ -6,7 +6,7 @@ using namespace Adollib;
 using namespace Physics_function;
 
 #include "../Imgui/debug.h"
-#include "ALP__shapes.h"
+#include "collider_shape.h"
 
 //slab‚É‚æ‚éraycast
 bool ray_cast_14DOP(const Vector3& Ray_pos, const Vector3& Ray_dir,
@@ -44,7 +44,7 @@ bool ray_cast_14DOP(const Vector3& Ray_pos, const Vector3& Ray_dir,
 }
 
 bool ray_cast_sphere(const Vector3& Ray_pos, const Vector3& Ray_dir,
-	const ALP_shape* coll,
+	const Collider_shape* coll,
 	const float ray_min,
 	float& tmin, float& tmax,
 	Vector3& normal
@@ -69,7 +69,7 @@ bool ray_cast_sphere(const Vector3& Ray_pos, const Vector3& Ray_dir,
 }
 
 bool ray_cast_box(const Vector3& Ray_pos, const Vector3& Ray_dir,
-	const ALP_shape* coll,
+	const Collider_shape* coll,
 	const float ray_min,
 	float& tmin, float& tmax,
 	Vector3& normal
@@ -123,7 +123,7 @@ bool ray_cast_box(const Vector3& Ray_pos, const Vector3& Ray_dir,
 }
 
 bool ray_cast_plane(const Vector3& Ray_pos, const Vector3& Ray_dir,
-	const ALP_shape* coll,
+	const Collider_shape* coll,
 	const float ray_min,
 	float& tmin, float& tmax,
 	Vector3& normal
@@ -147,7 +147,7 @@ bool ray_cast_plane(const Vector3& Ray_pos, const Vector3& Ray_dir,
 
 #include "meshcoll_resorce_manager.h"
 bool ray_cast_mesh(const Vector3& l_Ray_pos, const Vector3& l_Ray_dir,
-	const ALP_shape* mesh,
+	const Collider_shape* mesh,
 	const float ray_min,
 	float& tmin, float& tmax,
 	Vector3& normal
@@ -227,7 +227,7 @@ bool Physics_function::ray_cast(const Vector3& Ray_pos, const Vector3& Ray_dir,
 	float DOPtmin = 0,DOPtmax = 0;
 	bool ret = false;
 
-	for (const auto& mesh : coll->shapes) {
+	for (const auto& mesh : coll->get_shapes()) {
 		if (ray_cast_14DOP(Ray_pos, Ray_dir, mesh->get_DOP(), DOPtmin, DOPtmax) == false)continue;
 		if (DOPtmax < ray_min)continue;
 
@@ -235,16 +235,16 @@ bool Physics_function::ray_cast(const Vector3& Ray_pos, const Vector3& Ray_dir,
 		float tmax_ = 0;
 		bool hit = false;
 
-		if (mesh->get_shape_tag() == ALP_Collider_shape_tag::Sphere)
+		if (mesh->get_shape_tag() == ALPCollider_shape_type::Sphere)
 			hit = ray_cast_sphere(Ray_pos, Ray_dir, mesh, ray_min, tmin_, tmax_, normal_);
 
-		if (mesh->get_shape_tag() == ALP_Collider_shape_tag::BOX)
+		if (mesh->get_shape_tag() == ALPCollider_shape_type::BOX)
 			hit = ray_cast_box(Ray_pos, Ray_dir, mesh, ray_min, tmin_, tmax_, normal_);
 
-		if (mesh->get_shape_tag() == ALP_Collider_shape_tag::Plane)
+		if (mesh->get_shape_tag() == ALPCollider_shape_type::Plane)
 			hit = ray_cast_plane(Ray_pos, Ray_dir, mesh, ray_min, tmin_, tmax_, normal_);
 
-		if (mesh->get_shape_tag() == ALP_Collider_shape_tag::Mesh)
+		if (mesh->get_shape_tag() == ALPCollider_shape_type::Mesh)
 			hit = ray_cast_mesh(Ray_pos, Ray_dir, mesh, ray_min, tmin_, tmax_, normal_);
 
 		if (hit == false)continue;

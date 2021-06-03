@@ -101,7 +101,7 @@ namespace Adollib {
 			}
 
 			//std::shared_ptr<T> newCom = std::make_shared<T>();
-			T* newCom = D_new T();
+			T* newCom = newD T();
 
 			// Componentクラスから派生したものかチェック
 			Component_camera* pCom = dynamic_cast<Component_camera*>(newCom);

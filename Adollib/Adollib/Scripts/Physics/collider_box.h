@@ -1,17 +1,18 @@
 #pragma once
 #include "collider__base.h"
-#include "ALP__shapes.h"
+#include "collider_shape.h"
 
 namespace Adollib {
 	//Boxクラス
-	class Box : public ALP_shape {
+	class Box : public Collider_shape {
 	public:
 		Vector3	center;//中心座標
 		Vector3	rotate;//回転
 		Vector3	size;//大きさ
 
 		Box(Physics_function::ALP_Collider* l_ALPcollider_ptr) : center(Vector3(0)), rotate(Vector3(0)), size(Vector3(1)) {
-			shape_tag = Physics_function::ALP_Collider_shape_tag::BOX;
+			shape_tag = Physics_function::ALPCollider_shape_type::BOX;
+			tensor_type = Physics_function::Tensor_type::Box;
 			ALPcollider_ptr = l_ALPcollider_ptr;
 		};
 
@@ -76,6 +77,17 @@ namespace Adollib {
 
 			}
 		};
+
+		void update_inertial_tensor(Matrix& inertial_tensor, const float& inertial_mass) override {
+			const Vector3& Wsize = world_scale();
+
+			inertial_tensor = matrix_identity();
+			inertial_tensor._11 = 0.3333333f * inertial_mass * ((Wsize.y * Wsize.y) + (Wsize.z * Wsize.z));
+			inertial_tensor._22 = 0.3333333f * inertial_mass * ((Wsize.z * Wsize.z) + (Wsize.x * Wsize.x));
+			inertial_tensor._33 = 0.3333333f * inertial_mass * ((Wsize.x * Wsize.x) + (Wsize.y * Wsize.y));
+		};
+
+
 
 	};
 

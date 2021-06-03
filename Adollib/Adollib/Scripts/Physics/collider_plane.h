@@ -3,7 +3,7 @@
 
 namespace Adollib {
 	//平面用クラス
-	class Plane : public ALP_shape {
+	class Plane : public Collider_shape {
 	public:
 		Vector3 rotate; //平面の回転
 		float distance; //平面の距離
@@ -11,11 +11,9 @@ namespace Adollib {
 		//不動オブジェクトとして生成
 		Plane(Physics_function::ALP_Collider* l_ALPcollider_ptr) :rotate(Vector3(0, 0, 0)), distance(0)
 		{
-			shape_tag = Physics_function::ALP_Collider_shape_tag::Plane;
+			shape_tag = Physics_function::ALPCollider_shape_type::Plane;
+			tensor_type = Physics_function::Tensor_type::Box;
 			ALPcollider_ptr = l_ALPcollider_ptr;
-			//name = std::string("Plane");
-			//physics_data.is_moveable = false;
-			//physics_data.inertial_mass = FLT_MAX;
 		};
 
 		void adapt_Colliderdata() override {
@@ -45,6 +43,16 @@ namespace Adollib {
 				}
 
 		}
+
+		void update_inertial_tensor(Matrix& inertial_tensor, const float& inertial_mass) override {
+			const Vector3& Wsize = world_scale();
+
+			inertial_tensor = matrix_identity();
+			inertial_tensor._11 = 0.3333333f * inertial_mass * ((Wsize.y * Wsize.y) + (Wsize.z * Wsize.z));
+			inertial_tensor._22 = 0.3333333f * inertial_mass * ((Wsize.z * Wsize.z) + (Wsize.x * Wsize.x));
+			inertial_tensor._33 = 0.3333333f * inertial_mass * ((Wsize.x * Wsize.x) + (Wsize.y * Wsize.y));
+		};
+
 	};
 
 }

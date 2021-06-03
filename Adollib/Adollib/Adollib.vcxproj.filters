@@ -232,7 +232,7 @@
     <ClCompile Include="Scripts\Physics\collider.cpp">
       <Filter>00_Adollib\22_physics\collider</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Physics\ALP_shape.cpp">
+    <ClCompile Include="Scripts\Physics\collider_shape.cpp">
       <Filter>00_Adollib\22_physics\collider</Filter>
     </ClCompile>
   </ItemGroup>
@@ -519,7 +519,10 @@
     <ClInclude Include="..\Scripts\player_manager.h">
       <Filter>ソース ファイル\scene_game\player</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Physics\ALP__shapes.h">
+    <ClInclude Include="Scripts\Physics\collider_shape.h">
+      <Filter>00_Adollib\22_physics\collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\collider_types.h">
       <Filter>00_Adollib\22_physics\collider</Filter>
     </ClInclude>
   </ItemGroup>

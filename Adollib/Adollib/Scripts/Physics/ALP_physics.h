@@ -3,8 +3,11 @@
 #include "../Math/math.h"
 #include "ALP_collider.h"
 
+#include "collider_types.h"
+
 //SIMDを使うかどうか バグっているため使用不可
 //#define PHYICSE_USED_SIMD
+
 
 namespace Adollib {
 	namespace Physics_function {
@@ -29,9 +32,9 @@ namespace Adollib {
 		public:
 			//コンストラクタ
 			ALP_Physics(
-				Gameobject* l_go, std::list<ALP_Physics*>::iterator l_itr, Scenelist l_scene, u_int l_index
+				Gameobject* l_go, std::list<ALP_Physics*>::iterator l_itr, ALP_Collider* _ALPcollider ,Scenelist l_scene, u_int l_index
 			) :
-				gameobject(l_go), this_itr(l_itr), scene(l_scene), index(l_index) {};
+				gameobject(l_go), this_itr(l_itr), ALPcollider(_ALPcollider), scene(l_scene), index(l_index) {};
 
 		private:
 			//::: 自身へのイテレータ(remove用) :::
@@ -39,7 +42,19 @@ namespace Adollib {
 
 			u_int index = 0; //このcolliderの番号
 			Scenelist scene = Scenelist::scene_null; //このcolldierが存在するscene
+
+			//::: 慣性モーメントのtype :::
+			Physics_function::Tensor_type tensor_type = Physics_function::Tensor_type::None;
+
+
+
+			//::: Colliderへのポインタ :::
+			ALP_Collider* ALPcollider = nullptr;
+
+			//::: アタッチされたGOへのポインタ :::
+			Gameobject* gameobject = nullptr;
 		public:
+			ALP_Solverbody* solve = nullptr; //衝突解決用
 
 			void set_default();
 
@@ -62,7 +77,7 @@ namespace Adollib {
 			Vector3 linear_velocity;//並進速度
 			Vector3 anglar_velocity; //回転速度
 
-			Matrix inertial_tensor;//慣性テンソル
+			Matrix inertial_tensor; //慣性テンソル
 
 			bool sleep_state = false; //sleep状態かのflag
 
@@ -72,16 +87,6 @@ namespace Adollib {
 
 			Vector3 linear_acceleration;//並進加速度
 			Vector3 angula_acceleration; //回転加速度
-
-
-			//::: Colliderへのポインタ :::
-			ALP_Collider* ALPcollider = nullptr;
-
-			//::: アタッチされたGOへのポインタ :::
-			Gameobject* gameobject = nullptr;
-
-
-			ALP_Solverbody* solve = nullptr; //衝突解決用
 
 		public:
 			//並進移動に力を加える
@@ -99,6 +104,12 @@ namespace Adollib {
 			//慣性モーメントの逆行列を返す
 			Matrix inverse_inertial_tensor() const;
 
+			//追加された形により慣性モーメントのタイプを変更する
+			void add_tensor_type(Tensor_type type);
+
+			//現在アタッチされているshapeから慣性モーメントのタイプを再設定する(shapeがremoveされたときなどに使用)
+			void refresh_tensor_type(const std::vector<Collider_shape*>& shapes);
+
 			//::: 毎フレーム呼ぶもの :::::
 			//速度、加速度を0にする
 			void reset_force();
@@ -110,7 +121,7 @@ namespace Adollib {
 			void integrate(float duration = 1);
 
 			//サイズ変更などに対応するため毎フレーム慣性テンソルなどを更新 慣性テンソルの更新にALP_collider::scaleとALP_Physics::massが必要なためここに記述
-			void update_inertial();
+			void update_tensor(const std::vector<Collider_shape*>& shapes);
 
 			//::: collider:Component の massなどが変更されたときに呼ぶもの :::
 			// Colliderから情報の獲得

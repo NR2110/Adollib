@@ -4,7 +4,7 @@
 
 #include "../Imgui/imgui_all.h"
 
-#include "ALP__shapes.h"
+#include "collider_shape.h"
 
 using namespace Adollib;
 using namespace Physics_function;
@@ -18,48 +18,55 @@ using namespace Closest_func;
 
 void Physics_function::generate_contact(std::vector<Contacts::Contact_pair>& pairs) {
 
+	bool is_crossing = false;
 	for (auto& pair : pairs) {
 
-		const ALP_shape* shapeA = pair.body[0];
-		const ALP_shape* shapeB = pair.body[1];
+		const Collider_shape* shapeA = pair.body[0];
+		const Collider_shape* shapeB = pair.body[1];
+		is_crossing = false;
 
-		if (shapeA->get_shape_tag() == ALP_Collider_shape_tag::Sphere) {
+		if (shapeA->get_shape_tag() == ALPCollider_shape_type::Sphere) {
 
-			if (shapeB->get_shape_tag() == ALP_Collider_shape_tag::Sphere)generate_contact_sphere_sphere(shapeA, shapeB, pair);
-			if (shapeB->get_shape_tag() == ALP_Collider_shape_tag::BOX)	generate_contact_sphere_box(shapeA, shapeB, pair);
-			if (shapeB->get_shape_tag() == ALP_Collider_shape_tag::Capsule)generate_contact_sphere_capsule(shapeA, shapeB, pair);
-			if (shapeB->get_shape_tag() == ALP_Collider_shape_tag::Plane)	generate_contact_sphere_plane(shapeA, shapeB, pair);
-			if (shapeB->get_shape_tag() == ALP_Collider_shape_tag::Mesh)	generate_contact_sphere_mesh(shapeA, shapeB, pair);
+			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Sphere)generate_contact_sphere_sphere(shapeA, shapeB, pair, is_crossing);
+			if (shapeB->get_shape_tag() == ALPCollider_shape_type::BOX)	generate_contact_sphere_box(shapeA, shapeB, pair, is_crossing);
+			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Capsule)generate_contact_sphere_capsule(shapeA, shapeB, pair, is_crossing);
+			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Plane)	generate_contact_sphere_plane(shapeA, shapeB, pair, is_crossing);
+			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Mesh)	generate_contact_sphere_mesh(shapeA, shapeB, pair, is_crossing);
 		}
-		if (shapeA->get_shape_tag() == ALP_Collider_shape_tag::BOX) {
+		if (shapeA->get_shape_tag() == ALPCollider_shape_type::BOX) {
 
-			if (shapeB->get_shape_tag() == ALP_Collider_shape_tag::Sphere)generate_contact_sphere_box(shapeB, shapeA, pair);
-			if (shapeB->get_shape_tag() == ALP_Collider_shape_tag::BOX)	generate_contact_box_box(shapeA, shapeB, pair);
-			if (shapeB->get_shape_tag() == ALP_Collider_shape_tag::Capsule)generate_contact_box_capsule(shapeA, shapeB, pair);
-			if (shapeB->get_shape_tag() == ALP_Collider_shape_tag::Plane)	generate_contact_box_plane(shapeA, shapeB, pair);
-			if (shapeB->get_shape_tag() == ALP_Collider_shape_tag::Mesh)	generate_contact_box_mesh(shapeA, shapeB, pair);
+			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Sphere)generate_contact_sphere_box(shapeB, shapeA, pair, is_crossing);
+			if (shapeB->get_shape_tag() == ALPCollider_shape_type::BOX)	generate_contact_box_box(shapeA, shapeB, pair, is_crossing);
+			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Capsule)generate_contact_box_capsule(shapeA, shapeB, pair, is_crossing);
+			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Plane)	generate_contact_box_plane(shapeA, shapeB, pair, is_crossing);
+			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Mesh)	generate_contact_box_mesh(shapeA, shapeB, pair, is_crossing);
 		}
-		if (shapeA->get_shape_tag() == ALP_Collider_shape_tag::Capsule) {
-			if (shapeB->get_shape_tag() == ALP_Collider_shape_tag::Sphere)generate_contact_sphere_capsule(shapeB, shapeA, pair);
-			if (shapeB->get_shape_tag() == ALP_Collider_shape_tag::BOX)generate_contact_box_capsule(shapeB, shapeA, pair);
-			if (shapeB->get_shape_tag() == ALP_Collider_shape_tag::Capsule)generate_contact_capsule_capsule(shapeA, shapeB, pair);
-			if (shapeB->get_shape_tag() == ALP_Collider_shape_tag::Mesh)generate_contact_capsule_mesh(shapeA, shapeB, pair);
+		if (shapeA->get_shape_tag() == ALPCollider_shape_type::Capsule) {
+			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Sphere)generate_contact_sphere_capsule(shapeB, shapeA, pair, is_crossing);
+			if (shapeB->get_shape_tag() == ALPCollider_shape_type::BOX)generate_contact_box_capsule(shapeB, shapeA, pair, is_crossing);
+			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Capsule)generate_contact_capsule_capsule(shapeA, shapeB, pair, is_crossing);
+			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Mesh)generate_contact_capsule_mesh(shapeA, shapeB, pair, is_crossing);
 		}
-		if (shapeA->get_shape_tag() == ALP_Collider_shape_tag::Plane) {
+		if (shapeA->get_shape_tag() == ALPCollider_shape_type::Plane) {
 
-			if (shapeB->get_shape_tag() == ALP_Collider_shape_tag::Sphere)generate_contact_sphere_plane(shapeB, shapeA, pair);
-			if (shapeB->get_shape_tag() == ALP_Collider_shape_tag::BOX)	generate_contact_box_plane(shapeB, shapeA, pair);
-			if (shapeB->get_shape_tag() == ALP_Collider_shape_tag::Plane) {}
+			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Sphere)generate_contact_sphere_plane(shapeB, shapeA, pair, is_crossing);
+			if (shapeB->get_shape_tag() == ALPCollider_shape_type::BOX)	generate_contact_box_plane(shapeB, shapeA, pair, is_crossing);
+			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Plane) {}
 		}
-		if (shapeA->get_shape_tag() == ALP_Collider_shape_tag::Mesh) {
+		if (shapeA->get_shape_tag() == ALPCollider_shape_type::Mesh) {
 
-			if (shapeB->get_shape_tag() == ALP_Collider_shape_tag::Sphere)generate_contact_sphere_mesh(shapeB, shapeA, pair);
-			if (shapeB->get_shape_tag() == ALP_Collider_shape_tag::Capsule)generate_contact_capsule_mesh(shapeB, shapeA, pair);
-			if (shapeB->get_shape_tag() == ALP_Collider_shape_tag::BOX)	generate_contact_box_mesh(shapeB, shapeA, pair);
-			if (shapeB->get_shape_tag() == ALP_Collider_shape_tag::Plane)	generate_contact_mesh_plane(shapeA, shapeB, pair);
-			if (shapeB->get_shape_tag() == ALP_Collider_shape_tag::Mesh)	generate_contact_mesh_mesh(shapeA, shapeB, pair);
+			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Sphere)generate_contact_sphere_mesh(shapeB, shapeA, pair, is_crossing);
+			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Capsule)generate_contact_capsule_mesh(shapeB, shapeA, pair, is_crossing);
+			if (shapeB->get_shape_tag() == ALPCollider_shape_type::BOX)	generate_contact_box_mesh(shapeB, shapeA, pair, is_crossing);
+			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Plane)	generate_contact_mesh_plane(shapeA, shapeB, pair, is_crossing);
+			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Mesh)	generate_contact_mesh_mesh(shapeA, shapeB, pair, is_crossing);
 		}
 
+		//もし交差していたらそれぞれのoncoll_bitに相手のtagを追加
+		if (is_crossing) {
+			pair.body[0]->get_ALPcollider()->add_oncoll_bits(pair.body[1]->get_ALPcollider()->get_tag());
+			pair.body[1]->get_ALPcollider()->add_oncoll_bits(pair.body[0]->get_ALPcollider()->get_tag());
+		}
 
 	}
 }
@@ -119,7 +126,7 @@ float sum_of_projected_radii(const Triangle& tri, const Vector3& Wvec, float& mi
 
 	return min;
 }
-float sum_of_projected_radii(float& max, float& min, const ALP_shape* meshcoll, const Vector3& nor) {
+float sum_of_projected_radii(float& max, float& min, const Collider_shape* meshcoll, const Vector3& nor) {
 	float value;
 	max = -FLT_MAX;
 	min = +FLT_MAX;
@@ -454,7 +461,7 @@ bool sat_obb_Triangle(
 }
 
 //どちらも凸包の場合
-bool sat_convex_mesh_mesh(const ALP_shape* meshA, const ALP_shape* meshB,
+bool sat_convex_mesh_mesh(const Collider_shape* meshA, const Collider_shape* meshB,
 	float& smallest_penetration, //最小の貫通量
 	int smallest_axis[2], //どの軸で最近になったか(edge×edge用に2つ分用意)
 	SAT_TYPE& smallest_case //どのような形で最近になっているか
@@ -637,7 +644,7 @@ bool sat_convex_mesh_mesh(const ALP_shape* meshA, const ALP_shape* meshB,
 
 }
 
-bool sat_obb_convex_mesh(const OBB& obb, const ALP_shape* mesh,
+bool sat_obb_convex_mesh(const OBB& obb, const Collider_shape* mesh,
 	float& smallest_penetration, //最小の貫通量
 	int smallest_axis[2], //どの軸で最近になったか(edge×edge用に2つ分用意)
 	SAT_TYPE& smallest_case //どのような形で最近になっているか
@@ -748,7 +755,7 @@ bool sat_obb_convex_mesh(const OBB& obb, const ALP_shape* mesh,
 
 //衝突生成
 #pragma region SPHERE-SPHERE
-bool Physics_function::generate_contact_sphere_sphere(const ALP_shape* SA, const ALP_shape* SB, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_sphere_sphere(const Collider_shape* SA, const Collider_shape* SB, Contacts::Contact_pair& pair, bool& is_crossing) {
 	//const std::list<ALP_Collider>::iterator& SA = SA->get_ALPcollider();
 	//const std::list<ALP_Collider>::iterator& SB = SB->get_ALPcollider();
 
@@ -778,8 +785,7 @@ bool Physics_function::generate_contact_sphere_sphere(const ALP_shape* SA, const
 
 	if (is_AC)
 	{
-		SA->get_ALPcollider()->oncoll_bits |= SB->get_ALPcollider()->tag;
-		SB->get_ALPcollider()->oncoll_bits |= SA->get_ALPcollider()->tag;
+		is_crossing = true;
 
 		//oncoll_enterのみの場合addcontactせずにreturn
 		if (pair.check_oncoll_only == true) return false;
@@ -797,9 +803,11 @@ bool Physics_function::generate_contact_sphere_sphere(const ALP_shape* SA, const
 #pragma endregion
 
 #pragma region SPHERE-PLANE
-bool Physics_function::generate_contact_sphere_plane(const ALP_shape* sphere, const ALP_shape* plane, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_sphere_plane(const Collider_shape* sphere, const Collider_shape* plane, Contacts::Contact_pair& pair, bool& is_crossing) {
 	//const std::list<ALP_Collider>::iterator& sphere = sphere_mesh->get_ALPcollider();
 	//const std::list<ALP_Collider>::iterator& plane = plane_mesh->get_ALPcollider();
+
+	sphere->get_shape_tag();
 
 	//AddContact用の変数
 	bool is_AC = false;
@@ -826,8 +834,7 @@ bool Physics_function::generate_contact_sphere_plane(const ALP_shape* sphere, co
 
 	if (abs(p.y) < sphere->world_scale().x) {
 
-		sphere->get_ALPcollider()->oncoll_bits |= plane->tag;
-		plane->get_ALPcollider()->oncoll_bits |= sphere->tag;
+		is_crossing = true;
 
 		//oncoll_enterのみの場合ここでreturn
 		if (pair.check_oncoll_only == true) return false;
@@ -860,7 +867,7 @@ bool Physics_function::generate_contact_sphere_plane(const ALP_shape* sphere, co
 #pragma endregion
 
 #pragma region SPHERE-BOX
-bool Physics_function::generate_contact_sphere_box(const ALP_shape* sphere, const ALP_shape* box, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_sphere_box(const Collider_shape* sphere, const Collider_shape* box, Contacts::Contact_pair& pair, bool& is_crossing) {
 	//const std::list<ALP_Collider>::iterator& sphere = sphere_mesh->get_ALPcollider();
 	//const std::list<ALP_Collider>::iterator& box = box_part->get_ALPcollider();
 
@@ -916,8 +923,7 @@ bool Physics_function::generate_contact_sphere_box(const ALP_shape* sphere, cons
 
 	if (is_AC)
 	{
-		sphere->get_ALPcollider()->oncoll_bits |= box->get_ALPcollider()->tag;
-		box->get_ALPcollider()->oncoll_bits |= sphere->get_ALPcollider()->tag;
+		is_crossing = true;
 
 		//oncoll_enterのみの場合ここでreturn
 		if (pair.check_oncoll_only == true) return false;
@@ -942,7 +948,7 @@ bool Physics_function::generate_contact_sphere_box(const ALP_shape* sphere, cons
 #pragma endregion
 
 #pragma region SPHERE-Capsule
-bool Physics_function::generate_contact_sphere_capsule(const ALP_shape* sphere, const ALP_shape* capsule, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_sphere_capsule(const Collider_shape* sphere, const Collider_shape* capsule, Contacts::Contact_pair& pair, bool& is_crossing) {
 
 	//const std::list<ALP_Collider>::iterator& sphere = sphere_mesh->get_ALPcollider();
 	//const std::list<ALP_Collider>::iterator& capsule = capsule_mesh->get_ALPcollider();
@@ -987,8 +993,7 @@ bool Physics_function::generate_contact_sphere_capsule(const ALP_shape* sphere, 
 
 	if (is_AC)
 	{
-		sphere->get_ALPcollider()->oncoll_bits |= capsule->get_ALPcollider()->tag;
-		capsule->get_ALPcollider()->oncoll_bits |= sphere->get_ALPcollider()->tag;
+		is_crossing = true;
 
 		//oncoll_enterのみの場合ここでreturn
 		if (pair.check_oncoll_only == true) return false;
@@ -1013,7 +1018,7 @@ bool Physics_function::generate_contact_sphere_capsule(const ALP_shape* sphere, 
 #pragma endregion
 
 #pragma region SPHERE-MESH
-bool Physics_function::generate_contact_sphere_mesh(const ALP_shape* sphere, const ALP_shape* mesh, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_sphere_mesh(const Collider_shape* sphere, const Collider_shape* mesh, Contacts::Contact_pair& pair, bool& is_crossing) {
 	//const std::list<ALP_Collider>::iterator& sphere = sphere_mesh->get_ALPcollider();
 	//const std::list<ALP_Collider>::iterator& mesh = mesh_part->get_ALPcollider();
 
@@ -1116,8 +1121,7 @@ bool Physics_function::generate_contact_sphere_mesh(const ALP_shape* sphere, con
 
 	if (is_AC)
 	{
-		sphere->get_ALPcollider()->oncoll_bits |= mesh->get_ALPcollider()->tag;
-		mesh->get_ALPcollider()->oncoll_bits |= sphere->get_ALPcollider()->tag;
+		is_crossing = true;
 
 		//oncoll_enterのみの場合ここでreturn
 		if (pair.check_oncoll_only == true) return false;
@@ -1143,7 +1147,7 @@ bool Physics_function::generate_contact_sphere_mesh(const ALP_shape* sphere, con
 
 
 #pragma region BOX-PLANE
-bool Physics_function::generate_contact_box_plane(const ALP_shape* box, const ALP_shape* plane, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_box_plane(const Collider_shape* box, const Collider_shape* plane, Contacts::Contact_pair& pair, bool& is_crossing) {
 	//const std::list<ALP_Collider>::iterator& box = box_part->get_ALPcollider();
 	//const std::list<ALP_Collider>::iterator& plane = plane_mesh->get_ALPcollider();
 
@@ -1213,8 +1217,7 @@ bool Physics_function::generate_contact_box_plane(const ALP_shape* box, const AL
 
 	if (is_AC)
 	{
-		box->get_ALPcollider()->oncoll_bits |= plane->get_ALPcollider()->tag;
-		plane->get_ALPcollider()->oncoll_bits |= box->get_ALPcollider()->tag;
+		is_crossing = true;
 
 		//oncoll_enterのみの場合ここでreturn
 		if (pair.check_oncoll_only == true) return false;
@@ -1240,7 +1243,7 @@ bool Physics_function::generate_contact_box_plane(const ALP_shape* box, const AL
 
 #pragma region BOX-BOX
 
-bool Physics_function::generate_contact_box_box(const ALP_shape* boxA, const ALP_shape* boxB, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_box_box(const Collider_shape* boxA, const Collider_shape* boxB, Contacts::Contact_pair& pair, bool& is_crossing) {
 	//const std::list<ALP_Collider>::iterator& boxA = bA->get_ALPcollider();
 	//const std::list<ALP_Collider>::iterator& boxB = bB->get_ALPcollider();
 
@@ -1427,8 +1430,7 @@ bool Physics_function::generate_contact_box_box(const ALP_shape* boxA, const ALP
 
 	if (is_AC)
 	{
-		boxA->get_ALPcollider()->oncoll_bits |= boxB->get_ALPcollider()->tag;
-		boxB->get_ALPcollider()->oncoll_bits |= boxA->get_ALPcollider()->tag;
+		is_crossing = true;
 
 		//oncoll_enterのみの場合ここでreturn
 		if (pair.check_oncoll_only == true) return false;
@@ -1445,7 +1447,7 @@ bool Physics_function::generate_contact_box_box(const ALP_shape* boxA, const ALP
 #pragma endregion
 
 #pragma region BOX-Capsule
-bool Physics_function::generate_contact_box_capsule(const ALP_shape* box, const ALP_shape* capsule, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_box_capsule(const Collider_shape* box, const Collider_shape* capsule, Contacts::Contact_pair& pair, bool& is_crossing) {
 	//const std::list<ALP_Collider>::iterator& capsule = capsule_mesh->get_ALPcollider();
 	//const std::list<ALP_Collider>::iterator& box = box_part->get_ALPcollider();
 
@@ -1467,7 +1469,6 @@ bool Physics_function::generate_contact_box_capsule(const ALP_shape* box, const 
 	Vector3 cuppos_boxcoord = vector3_quatrotate(capsule->world_position() - box->world_position(), box->world_orientation().inverse());
 	Vector3 cupsca_boxcoord = vector3_quatrotate(Vector3(0, capsule->world_scale().y, 0), capsule->world_orientation() * box->world_orientation().inverse());
 
-	bool is_crossing = false;
 	{
 		float tmax;
 		is_crossing = Crossing_func::getCrossingP_AABB_ray(
@@ -1555,8 +1556,7 @@ bool Physics_function::generate_contact_box_capsule(const ALP_shape* box, const 
 
 	if (is_AC)
 	{
-		box->get_ALPcollider()->oncoll_bits |= capsule->get_ALPcollider()->tag;
-		capsule->get_ALPcollider()->oncoll_bits |= box->get_ALPcollider()->tag;
+		is_crossing = true;
 
 		//oncoll_enterのみの場合ここでreturn
 		if (pair.check_oncoll_only == true) return false;
@@ -1584,7 +1584,7 @@ bool Physics_function::generate_contact_box_capsule(const ALP_shape* box, const 
 
 #pragma region BOX-MESH
 
-bool Physics_function::generate_contact_box_mesh(const ALP_shape* box, const ALP_shape* mesh, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_box_mesh(const Collider_shape* box, const Collider_shape* mesh, Contacts::Contact_pair& pair, bool& is_crossing) {
 	//const std::list<ALP_Collider>::iterator& box = box_part->get_ALPcollider();
 	//const std::list<ALP_Collider>::iterator& mesh = mesh_part->get_ALPcollider();
 
@@ -1853,8 +1853,7 @@ bool Physics_function::generate_contact_box_mesh(const ALP_shape* box, const ALP
 
 			if (is_AC)
 			{
-				box->get_ALPcollider()->oncoll_bits |= mesh->get_ALPcollider()->tag;
-				mesh->get_ALPcollider()->oncoll_bits |= box->get_ALPcollider()->tag;
+				is_crossing = true;
 
 				//oncoll_enterのみの場合ここでreturn
 				if (pair.check_oncoll_only == true) return false;
@@ -1888,7 +1887,7 @@ bool Physics_function::generate_contact_box_mesh(const ALP_shape* box, const ALP
 
 
 #pragma region Capsule-Capsule
-bool Physics_function::generate_contact_capsule_capsule(const ALP_shape* capsuleA, const ALP_shape* capsuleB, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_capsule_capsule(const Collider_shape* capsuleA, const Collider_shape* capsuleB, Contacts::Contact_pair& pair, bool& is_crossing) {
 	//const std::list<ALP_Collider>::iterator& capsuleA = SA->get_ALPcollider();
 	//const std::list<ALP_Collider>::iterator& capsuleB = SB->get_ALPcollider();
 
@@ -1932,8 +1931,7 @@ bool Physics_function::generate_contact_capsule_capsule(const ALP_shape* capsule
 
 	if (is_AC)
 	{
-		capsuleA->get_ALPcollider()->oncoll_bits |= capsuleB->get_ALPcollider()->tag;
-		capsuleB->get_ALPcollider()->oncoll_bits |= capsuleA->get_ALPcollider()->tag;
+		is_crossing = true;
 
 		//oncoll_enterのみの場合ここでreturn
 		if (pair.check_oncoll_only == true) return false;
@@ -1958,7 +1956,7 @@ bool Physics_function::generate_contact_capsule_capsule(const ALP_shape* capsule
 #pragma endregion
 
 #pragma region Capsule-Mesh
-bool Physics_function::generate_contact_capsule_mesh(const ALP_shape* capsule, const ALP_shape* mesh, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_capsule_mesh(const Collider_shape* capsule, const Collider_shape* mesh, Contacts::Contact_pair& pair, bool& is_crossing) {
 	//const std::list<ALP_Collider>::iterator& capsule = capsule_mesh->get_ALPcollider();
 	//const std::list<ALP_Collider>::iterator& mesh = mesh_part->get_ALPcollider();
 
@@ -2096,8 +2094,7 @@ bool Physics_function::generate_contact_capsule_mesh(const ALP_shape* capsule, c
 
 	if (is_AC)
 	{
-		mesh->get_ALPcollider()->oncoll_bits |= capsule->get_ALPcollider()->tag;
-		capsule->get_ALPcollider()->oncoll_bits |= mesh->get_ALPcollider()->tag;
+		is_crossing = true;
 
 		//oncoll_enterのみの場合ここでreturn
 		if (pair.check_oncoll_only == true) return false;
@@ -2123,18 +2120,18 @@ bool Physics_function::generate_contact_capsule_mesh(const ALP_shape* capsule, c
 
 
 #pragma region MESH-PLANE
-bool Physics_function::generate_contact_mesh_plane(const ALP_shape* S1, const ALP_shape* S2, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_mesh_plane(const Collider_shape* S1, const Collider_shape* S2, Contacts::Contact_pair& pair, bool& is_crossing) {
 	return true;
 }
 #pragma endregion
 
 #pragma region MESH-MESH
 
-bool GC_concave_mesh_mesh(const ALP_Collider& S1, const ALP_shape* S2, int concave_num, Contacts::Contact_pair& pair) {
+bool GC_concave_mesh_mesh(const ALP_Collider& S1, const Collider_shape* S2, int concave_num, Contacts::Contact_pair& pair, bool& is_crossing) {
 	return false;
 }
 
-bool Physics_function::generate_contact_mesh_mesh(const ALP_shape* meshA, const ALP_shape* meshB, Contacts::Contact_pair& pair) {
+bool Physics_function::generate_contact_mesh_mesh(const Collider_shape* meshA, const Collider_shape* meshB, Contacts::Contact_pair& pair, bool& is_crossing) {
 	//const std::list<ALP_Collider>::iterator& meshA = mA->get_ALPcollider();
 	//const std::list<ALP_Collider>::iterator& meshB = mB->get_ALPcollider();
 
@@ -2154,8 +2151,8 @@ bool Physics_function::generate_contact_mesh_mesh(const ALP_shape* meshA, const 
 		//SBの頂点がSAの面と衝突した場合
 		if (smallest_case == SAT_TYPE::POINTB_FACETA)
 		{
-			const ALP_shape* facet_shape = meshA;
-			const ALP_shape* vertex_shape = meshB;
+			const Collider_shape* facet_shape = meshA;
+			const Collider_shape* vertex_shape = meshB;
 
 			//const std::list<ALP_Collider>::iterator& facet_mesh = facet_mesh->get_ALPcollider();
 			//const std::list<ALP_Collider>::iterator& vertex_mesh = vertex_mesh->get_ALPcollider();
@@ -2236,8 +2233,8 @@ bool Physics_function::generate_contact_mesh_mesh(const ALP_shape* meshA, const 
 		//SAの頂点がSBの面と衝突した場合
 		if (smallest_case == SAT_TYPE::POINTA_FACETB)
 		{
-			const ALP_shape* facet_mesh = meshB;
-			const ALP_shape* vertex_mesh = meshA;
+			const Collider_shape* facet_mesh = meshB;
+			const Collider_shape* vertex_mesh = meshA;
 
 			//const std::list<ALP_Collider>::iterator& facet_mesh = facet_mesh->get_ALPcollider();
 			//const std::list<ALP_Collider>::iterator& vertex_mesh = vertex_mesh->get_ALPcollider();

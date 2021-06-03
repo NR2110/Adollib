@@ -128,7 +128,7 @@ namespace Adollib {
 
 				Pairtype type = Pairtype::new_pair; //Õ“Ë‚Ìí—Ş(‘OƒtƒŒ[ƒ€‚©‚ç‚ ‚éÕ“Ë‚©‚Ç‚¤‚©)
 
-				ALP_shape* body[2]; //ÚG‚µ‚½object
+				Collider_shape* body[2]; //ÚG‚µ‚½object
 
 				Contact contacts; //Õ“Ë‚Ìî•ñ
 
@@ -136,8 +136,8 @@ namespace Adollib {
 			};
 
 			struct Collider_2 {
-				ALP_shape* body;
-				std::list<ALP_shape*> bodylists;
+				Collider_shape* body;
+				std::list<Collider_shape*> bodylists;
 			};
 
 		}

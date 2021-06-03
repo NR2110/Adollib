@@ -74,22 +74,22 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 			SB.delta_LinearVelocity = Vector3(0.0f);
 			SB.delta_AngulaVelocity = Vector3(0.0f);
 
-			if (coll->ALPphysics->is_kinmatic_anglar) SB.inv_inertia = coll->ALPphysics->inverse_inertial_tensor();
+			if (coll->get_ALPphysics()->is_kinmatic_anglar) SB.inv_inertia = coll->get_ALPphysics()->inverse_inertial_tensor();
 			else SB.inv_inertia = matrix_zero();
 
-			SB.inv_mass = coll->ALPphysics->inverse_mass();
+			SB.inv_mass = coll->get_ALPphysics()->inverse_mass();
 
 			SBs.emplace_back(SB);
 			count++;
 		}
 		count = 0;
 		for (auto& coll : colliders) {
-			coll->ALPphysics->solve = &SBs[count];
+			coll->get_ALPphysics()->solve = &SBs[count];
 			count++;
 		}
 	}
 
-	ALP_shape* coll[2];
+	Collider_shape* coll[2];
 	ALP_Physics* ALPphysics[2];
 	ALP_Solverbody* solverbody[2];
 	//std::vector<Balljoint> balljoints; //ç°âÒÇÕÇ»Çµ
@@ -98,8 +98,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 
 		coll[0] = pair.body[0];
 		coll[1] = pair.body[1];
-		ALPphysics[0] = coll[0]->get_ALPcollider()->ALPphysics;
-		ALPphysics[1] = coll[1]->get_ALPcollider()->ALPphysics;
+		ALPphysics[0] = coll[0]->get_ALPcollider()->get_ALPphysics();
+		ALPphysics[1] = coll[1]->get_ALPcollider()->get_ALPphysics();
 		solverbody[0] = ALPphysics[0]->solve;
 		solverbody[1] = ALPphysics[1]->solve;
 
@@ -217,8 +217,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 
 		coll[0] = pair.body[0];
 		coll[1] = pair.body[1];
-		ALPphysics[0] = coll[0]->get_ALPcollider()->ALPphysics;
-		ALPphysics[1] = coll[1]->get_ALPcollider()->ALPphysics;
+		ALPphysics[0] = coll[0]->get_ALPcollider()->get_ALPphysics();
+		ALPphysics[1] = coll[1]->get_ALPcollider()->get_ALPphysics();
 		solverbody[0] = ALPphysics[0]->solve;
 		solverbody[1] = ALPphysics[1]->solve;
 
@@ -245,8 +245,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 
 			coll[0] = pair.body[0];
 			coll[1] = pair.body[1];
-			ALPphysics[0] = coll[0]->get_ALPcollider()->ALPphysics;
-			ALPphysics[1] = coll[1]->get_ALPcollider()->ALPphysics;
+			ALPphysics[0] = coll[0]->get_ALPcollider()->get_ALPphysics();
+			ALPphysics[1] = coll[1]->get_ALPcollider()->get_ALPphysics();
 			solverbody[0] = ALPphysics[0]->solve;
 			solverbody[1] = ALPphysics[1]->solve;
 
@@ -318,8 +318,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 
 	// ë¨ìxÇÃçXêV
 	for (auto& coll : colliders) {
-		if (coll->ALPphysics->is_kinmatic_linear) coll->ALPphysics->linear_velocity += coll->ALPphysics->solve->delta_LinearVelocity;
-		if (coll->ALPphysics->is_kinmatic_anglar) coll->ALPphysics->anglar_velocity += coll->ALPphysics->solve->delta_AngulaVelocity;
+		if (coll->get_ALPphysics()->is_kinmatic_linear) coll->get_ALPphysics()->linear_velocity += coll->get_ALPphysics()->solve->delta_LinearVelocity;
+		if (coll->get_ALPphysics()->is_kinmatic_anglar) coll->get_ALPphysics()->anglar_velocity += coll->get_ALPphysics()->solve->delta_AngulaVelocity;
 
 	}
 

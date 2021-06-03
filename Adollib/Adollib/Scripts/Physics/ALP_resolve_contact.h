@@ -1,6 +1,6 @@
 #pragma once
 #include "contact.h"
-#include "ALP__shapes.h"
+#include "collider_shape.h"
 
 #include <memory>
 namespace Adollib {

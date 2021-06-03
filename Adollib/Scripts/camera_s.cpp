@@ -57,9 +57,9 @@ namespace Adollib
 
 			ImGui::InputFloat("rotate_speed", &rotate_speed, 0.01f, 10.0f, "%.2f");
 			ImGui::InputFloat("linear_speed", &linear_speed, 1.0f, 300.0f, "%.2f");
-			ImGui::Checkbox("follow_player", &follow_player);
-			if(follow_player)
-			ImGui::DragFloat("dis", &dis, 0.1f);
+			//ImGui::Checkbox("follow_player", &follow_player);
+			//if(follow_player)
+			//ImGui::DragFloat("dis", &dis, 0.1f);
 			ImGui::End();
 		}
 

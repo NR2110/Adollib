@@ -1,11 +1,12 @@
 #include "ALP__physics_manager.h"
 
-using namespace Adollib;
-
 //#include "ALP__manager.h"
 #include "../Object/gameobject.h"
 #include "../Main/Adollib.h"
 #include "contact.h"
+
+using namespace Adollib;
+using namespace Physics_function;
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 #pragma region Rigitbody
@@ -26,15 +27,13 @@ void Collider::add_torque(const Vector3& force) {
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 void Collider::awake() {
-	Physics_function::ColliderPhysics_ptrs data;
+	Phyisics_manager::ColliderPhysics_ptrs data;
 
 	data = Phyisics_manager::add_collider(this);
 
 	ALPcollider_ptr = data.ALPcollider_ptr;
 	ALPphysics_ptr = data.ALPphysics_ptr;
 	coll_itr = data.coll_itr;
-
-	data.ALPcollider_ptr->coll_itr = coll_itr;
 
 	//data.ALPcollider_ptr->shapes.resize(1);
 	//data.ALPcollider_itr->shapes.at(0).ALPcollider = data.ALPcollider_itr;

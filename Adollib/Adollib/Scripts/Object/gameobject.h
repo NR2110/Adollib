@@ -64,21 +64,21 @@ namespace Adollib {
 
 	public:
 		//goのworld空間上でのの姿勢を返す
-		Quaternion world_orientate()override {
+		const Quaternion world_orientate() const override {
 			if (pearent() != nullptr) {
 				return transform->local_orient * pearent()->transform->orientation;
 			}
 			else return transform->local_orient;
 		};
 		//goのworld空間上での座標を返す
-		Vector3 world_position()override {
+		const Vector3 world_position() const override {
 			if (pearent() != nullptr) {
 				return pearent()->transform->position + vector3_quatrotate(transform->local_pos * pearent()->transform->scale, pearent()->transform->orientation);
 			}
 			else return transform->local_pos;
 		};
 		//goのworld空間上でのscaleを返す
-		Vector3 world_scale() override {
+		const Vector3 world_scale() const override {
 			if (pearent() != nullptr) {
 				return pearent()->transform->scale * transform->local_scale;
 			}
@@ -107,6 +107,9 @@ namespace Adollib {
 		template<typename T>
 		T* addComponent()
 		{
+			// Componentクラスから派生したものかチェック
+			static_assert(std::is_base_of<Component, T>::value == true, "template T must inherit Component");
+
 			// 既に同一コンポーネントが存在する場合、Addしない
 			for (auto&& com : components)
 			{
@@ -119,11 +122,9 @@ namespace Adollib {
 			}
 
 			//std::shared_ptr<T> newCom = std::make_shared<T>();
-			T* newCom = D_new T();
+			T* newCom = newD T();
 
-			// Componentクラスから派生したものかチェック
 			Component* pCom = dynamic_cast<Component*>(newCom);
-			if (pCom == nullptr)assert("Componentを継承しているclassをアタッチしてください");
 			if (pCom != nullptr)
 			{
 				components.emplace_back(pCom);

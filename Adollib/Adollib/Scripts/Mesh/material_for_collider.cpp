@@ -13,7 +13,7 @@ Microsoft::WRL::ComPtr<ID3D11InputLayout> Collider_renderer::vertexLayout;
 ComPtr<ID3D11Buffer> Collider_renderer::world_cb; //WVP行列用バッファ
 ComPtr<ID3D11Buffer> Collider_renderer::Mat_cb; //material用バッファ
 
-std::map<ALP_Collider_shape_tag, std::vector<Mesh::mesh>*> Collider_renderer::meshes; //mesh
+std::map<ALPCollider_shape_type, std::vector<Mesh::mesh>*> Collider_renderer::meshes; //mesh
 Shader Collider_renderer::shader; //shader
 
 //カプセルを描画し、ほかのollider表示をoffにする
@@ -39,17 +39,17 @@ void Collider_renderer::initialize() {
 
 
 	//::: 描画用modelの読み込み :::::::
-	meshes[ALP_Collider_shape_tag::BOX];
-	ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape_tag::BOX], "./DefaultModel/cube.fbx", "");
+	meshes[ALPCollider_shape_type::BOX];
+	ResourceManager::CreateModelFromFBX(&meshes[ALPCollider_shape_type::BOX], "./DefaultModel/cube.fbx", "");
 
-	meshes[ALP_Collider_shape_tag::Sphere];
-	ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape_tag::Sphere], "./DefaultModel/sphere.fbx", "");
+	meshes[ALPCollider_shape_type::Sphere];
+	ResourceManager::CreateModelFromFBX(&meshes[ALPCollider_shape_type::Sphere], "./DefaultModel/sphere.fbx", "");
 
-	meshes[ALP_Collider_shape_tag::Plane];
-	ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape_tag::Plane], "./DefaultModel/plane.fbx", "");
+	meshes[ALPCollider_shape_type::Plane];
+	ResourceManager::CreateModelFromFBX(&meshes[ALPCollider_shape_type::Plane], "./DefaultModel/plane.fbx", "");
 
-	meshes[ALP_Collider_shape_tag::Cylinder];
-	ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape_tag::Cylinder], "./DefaultModel/cylinder.fbx", "");
+	meshes[ALPCollider_shape_type::Cylinder];
+	ResourceManager::CreateModelFromFBX(&meshes[ALPCollider_shape_type::Cylinder], "./DefaultModel/cylinder.fbx", "");
 
 	//meshes[ALP_Collider_shape::Mesh];
 	//ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::Mesh], "../Data/FBX/0311_collisions.fbx", "");
@@ -58,18 +58,18 @@ void Collider_renderer::initialize() {
 
 void Collider_renderer::render_collider(const Physics_function::ALP_Collider* coll) {
 
-	for (const auto shape : coll->shapes) {
+	for (const auto shape : coll->get_shapes()) {
 #ifndef draw_cupsule_cullback
-		if (shape->get_shape_tag() == ALP_Collider_shape_tag::BOX)render_box(shape);
-		if (shape->get_shape_tag() == ALP_Collider_shape_tag::Sphere)render_sphere(shape);
-		if (shape->get_shape_tag() == ALP_Collider_shape_tag::Mesh)render_meshcoll(shape);
+		if (shape->get_shape_tag() == ALPCollider_shape_type::BOX)render_box(shape);
+		if (shape->get_shape_tag() == ALPCollider_shape_type::Sphere)render_sphere(shape);
+		if (shape->get_shape_tag() == ALPCollider_shape_type::Mesh)render_meshcoll(shape);
 
 #endif // draw_cupsule_cullback
-		if (shape->get_shape_tag() == ALP_Collider_shape_tag::Capsule)render_capsule(shape);
+		if (shape->get_shape_tag() == ALPCollider_shape_type::Capsule)render_capsule(shape);
 	}
 }
 
-void Collider_renderer::render_box(const ALP_shape* shape) {
+void Collider_renderer::render_box(const Collider_shape* shape) {
 	//CB : ConstantBufferPerCO_OBJ
 	ConstantBufferPerGO g_cb;
 	g_cb.world = matrix_world(shape->world_scale() * 1.0001f, shape->world_orientation().get_rotate_matrix(), shape->world_position()).get_XMFLOAT4X4();
@@ -133,7 +133,7 @@ void Collider_renderer::render_box(const ALP_shape* shape) {
 	}
 
 }
-void Collider_renderer::render_sphere(const ALP_shape* shape) {
+void Collider_renderer::render_sphere(const Collider_shape* shape) {
 	//CB : ConstantBufferPerCO_OBJ
 	ConstantBufferPerGO g_cb;
 	g_cb.world = matrix_world(shape->world_scale() * 1.0001f, shape->world_orientation().get_rotate_matrix(), shape->world_position()).get_XMFLOAT4X4();
@@ -196,7 +196,7 @@ void Collider_renderer::render_sphere(const ALP_shape* shape) {
 	}
 
 }
-void Collider_renderer::render_meshcoll(const ALP_shape* shape) {
+void Collider_renderer::render_meshcoll(const Collider_shape* shape) {
 	//	render_AABB(shape);
 
 		//CB : ConstantBufferPerCO_OBJ
@@ -261,11 +261,11 @@ void Collider_renderer::render_meshcoll(const ALP_shape* shape) {
 	}
 }
 
-void Collider_renderer::render_capsule(const ALP_shape* shape) {
+void Collider_renderer::render_capsule(const Collider_shape* shape) {
 	//CB : ConstantBufferPerCO_OBJ
 
 	std::vector<Mesh::mesh>* meshs;
-	meshs = meshes[ALP_Collider_shape_tag::Cylinder];
+	meshs = meshes[ALPCollider_shape_type::Cylinder];
 	{
 		ConstantBufferPerGO g_cb;
 		g_cb.world = matrix_world(Vector3(shape->world_scale().x, shape->world_scale().y, shape->world_scale().x) * 1.0001f, shape->world_orientation().get_rotate_matrix(), shape->world_position()).get_XMFLOAT4X4();
@@ -331,7 +331,7 @@ void Collider_renderer::render_capsule(const ALP_shape* shape) {
 
 	}
 
-	meshs = meshes[ALP_Collider_shape_tag::Sphere];
+	meshs = meshes[ALPCollider_shape_type::Sphere];
 	{
 		ConstantBufferPerGO g_cb;
 		g_cb.world = matrix_world(Vector3(shape->world_scale().x) * 1.0001f, shape->world_orientation().get_rotate_matrix(), shape->world_position() + vector3_quatrotate(Vector3(0, shape->world_scale().y, 0), shape->world_orientation())).get_XMFLOAT4X4();
@@ -397,7 +397,7 @@ void Collider_renderer::render_capsule(const ALP_shape* shape) {
 
 	}
 
-	meshs = meshes[ALP_Collider_shape_tag::Sphere];
+	meshs = meshes[ALPCollider_shape_type::Sphere];
 	{
 		ConstantBufferPerGO g_cb;
 		g_cb.world = matrix_world(Vector3(shape->world_scale().x) * 1.0001f, shape->world_orientation().get_rotate_matrix(), shape->world_position() - vector3_quatrotate(Vector3(0, shape->world_scale().y, 0), shape->world_orientation())).get_XMFLOAT4X4();
@@ -469,12 +469,12 @@ void Collider_renderer::render_capsule(const ALP_shape* shape) {
 
 void Collider_renderer::render_AABB(const  Physics_function::ALP_Collider* coll) {
 
-	const std::vector<Mesh::mesh>* box_mesh = meshes[ALP_Collider_shape_tag::BOX];
+	const std::vector<Mesh::mesh>* box_mesh = meshes[ALPCollider_shape_type::BOX];
 
 	Vector3 w_pos;
 	Vector3 w_scale;
 	int color_num = 0;
-	for (const auto& shape : coll->shapes) {
+	for (const auto& shape : coll->get_shapes()) {
 
 		if (Systems::RS_type != State_manager::RStypes::RS_CULL_FRONT) Systems::SetRasterizerState(State_manager::RStypes::RS_CULL_FRONT);
 		//Debug::dopbaseの表示

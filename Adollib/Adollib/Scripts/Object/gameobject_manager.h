@@ -21,13 +21,31 @@ namespace Adollib {
 		static Microsoft::WRL::ComPtr<ID3D11Buffer> view_cb;
 		static Microsoft::WRL::ComPtr<ID3D11Buffer> projection_cb;
 
-		static std::vector<object*> masters; //GO親子ツリーの頂点を保存
-		static std::vector<object*> gos;	  //GOを1つの配列に保存
-
-		static std::thread physics_thread;
-		static bool physics_thread_finish;
-
 		static int go_count;
+
+		//遅れせてdeleteするためここに保存する
+		static std::vector<Gameobject*> save_delete_gameobject;
+		static std::vector<Camera*>		save_delete_camera;
+		static std::vector<Light*>		save_delete_light;
+
+		static void delete_gameobjects(){
+			for (auto go : save_delete_gameobject) {
+				go->destroy();
+				delete go;
+			}
+			for (auto go : save_delete_camera) {
+				go->destroy();
+				delete go;
+			}
+			for (auto go : save_delete_light) {
+				go->destroy();
+				delete go;
+			}
+
+			save_delete_gameobject.clear();
+			save_delete_camera.clear();
+			save_delete_light.clear();
+		}
 
 	public:
 		//実体はすべてここで保存する
@@ -91,16 +109,13 @@ namespace Adollib {
 
 		//GOの削除を行う
 		static void deleteGameobject(Gameobject* gameobject) {
-			gameobject->destroy();
-			delete gameobject;
+			save_delete_gameobject.emplace_back(gameobject);
 		};
 		static void deleteCamera(Camera* gameobject) {
-			gameobject->destroy();
-			delete gameobject;
+			save_delete_camera.emplace_back(gameobject);
 		};
 		static void deleteLight(Light* gameobject) {
-			gameobject->destroy();
-			delete gameobject;
+			save_delete_light.emplace_back(gameobject);
 		};
 
 

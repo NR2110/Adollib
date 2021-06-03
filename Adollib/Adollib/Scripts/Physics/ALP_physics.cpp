@@ -86,11 +86,11 @@ void ALP_Physics::apply_external_force(float duration) {
 		//F(t) = 1/2 * k * v(t)
 		//F(t) = m * a(t)
 		//a(t) = dv/dt = - * k * v(t) / m
-		//∫1 / v(t) * dv/dt * dt = ∫ -k / m * dt
+		//∫ 1 / v(t) * dv/dt * dt = ∫ -k / m * dt
 		//ln v(t) = -k / m * t + C
 		//v(t) = exp(-k / m * t + C)
 		//v(t) = C´ * exp(-k / m * t)
-		//t=の時 C´ = V(0)より
+		//t=0の時 C´ = V(0)より
 		//v(t) = V(0) * exp(-k / m * t)
 		const float k = linear_drag * inv_mass; //空気抵抗やらなんやらを考慮した値 のはずだけど適当に簡略化
 		linear_velocity = linear_velocity * exp(-k * duration); // 空気抵抗
@@ -143,33 +143,107 @@ void ALP_Physics::integrate(float duration) {
 
 }
 
-//サイズ変更などに対応するため毎フレーム慣性テンソルなどを更新
-void ALP_Physics::update_inertial() {
-
-	Vector3 Wsize = gameobject->world_scale();
-
-	//慣性モーメントの更新
-	switch (ALPcollider->shape)
+void ALP_Physics::add_tensor_type(Tensor_type type) {
+	switch (tensor_type)
 	{
-	case ALP_Collider_inertial_shape::box:
-		inertial_tensor = matrix_identity();
-		inertial_tensor._11 = 0.3333333f * inertial_mass * ((Wsize.y * Wsize.y) + (Wsize.z * Wsize.z));
-		inertial_tensor._22 = 0.3333333f * inertial_mass * ((Wsize.z * Wsize.z) + (Wsize.x * Wsize.x));
-		inertial_tensor._33 = 0.3333333f * inertial_mass * ((Wsize.x * Wsize.x) + (Wsize.y * Wsize.y));
+	case Adollib::Physics_function::Tensor_type::None:
+		tensor_type = type;
 		break;
 
-	case ALP_Collider_inertial_shape::sphere:
-		inertial_tensor = matrix_identity();
-		inertial_tensor._11 = 0.4f * inertial_mass * Wsize.x * Wsize.x;
-		inertial_tensor._22 = 0.4f * inertial_mass * Wsize.x * Wsize.x;
-		inertial_tensor._33 = 0.4f * inertial_mass * Wsize.x * Wsize.x;
+	case Adollib::Physics_function::Tensor_type::Sphere:
+		//アタッチされたshapeがsphereのみの時、転がりやすくするため慣性モーメントをsphere用にする
+		tensor_type = type;
+		break;
+
+	case Adollib::Physics_function::Tensor_type::Box:
+		//一つでもsphere以外が混じっていた場合 とりあえず便利なBox用の慣性モーメントにする
+		break;
+
+	default:
 		break;
 	}
+}
+void ALP_Physics::refresh_tensor_type(const std::vector<Collider_shape*>& shapes) {
+	tensor_type = Tensor_type::None;
+	for (const auto& shape : shapes) {
+		add_tensor_type(shape->get_tensor_type());
+		if (tensor_type == Adollib::Physics_function::Tensor_type::Box)return;
+	}
+}
+
+//サイズ変更などに対応するため毎フレーム慣性テンソルなどを更新
+void ALP_Physics::update_tensor(const std::vector<Collider_shape*>& shapes) {
+
+	const int shapes_size = shapes.size();
+
+	if (shapes_size == 0)return;
+	if (shapes_size == 1) {
+		shapes.at(0)->update_inertial_tensor(inertial_tensor, inertial_mass);
+		return;
+	}
+
+	switch (tensor_type)
+	{
+	case Adollib::Physics_function::Tensor_type::None:
+		return;
+		break;
+
+	case Adollib::Physics_function::Tensor_type::Sphere:
+		break;
+
+	case Adollib::Physics_function::Tensor_type::Box:
+		break;
+
+	default:
+		break;
+	}
+
+
+	//if (tensor_type == Physics_function::Tensor_type::None)return;
+	//else if (tensor_type == Physics_function::Tensor_type::Shape)shapes.at(1)->update_inertial_tensor(inertial_tensor, inertial_mass);
+	//else if (shapes_size >= 2){
+	//	switch (ALPcollider->shape)
+	//	{
+	//	case ALP_Collider_inertial_shape::box:
+	//		inertial_tensor = matrix_identity();
+	//		inertial_tensor._11 = 0.3333333f * inertial_mass * ((Wsize.y * Wsize.y) + (Wsize.z * Wsize.z));
+	//		inertial_tensor._22 = 0.3333333f * inertial_mass * ((Wsize.z * Wsize.z) + (Wsize.x * Wsize.x));
+	//		inertial_tensor._33 = 0.3333333f * inertial_mass * ((Wsize.x * Wsize.x) + (Wsize.y * Wsize.y));
+	//		break;
+
+	//	case ALP_Collider_inertial_shape::sphere:
+	//		inertial_tensor = matrix_identity();
+	//		inertial_tensor._11 = 0.4f * inertial_mass * Wsize.x * Wsize.x;
+	//		inertial_tensor._22 = 0.4f * inertial_mass * Wsize.x * Wsize.x;
+	//		inertial_tensor._33 = 0.4f * inertial_mass * Wsize.x * Wsize.x;
+	//		break;
+	//	}
+	//}
+
+	//Vector3 Wsize = gameobject->world_scale();
+
+	////慣性モーメントの更新
+	//switch (ALPcollider->shape)
+	//{
+	//case ALP_Collider_inertial_shape::box:
+	//	inertial_tensor = matrix_identity();
+	//	inertial_tensor._11 = 0.3333333f * inertial_mass * ((Wsize.y * Wsize.y) + (Wsize.z * Wsize.z));
+	//	inertial_tensor._22 = 0.3333333f * inertial_mass * ((Wsize.z * Wsize.z) + (Wsize.x * Wsize.x));
+	//	inertial_tensor._33 = 0.3333333f * inertial_mass * ((Wsize.x * Wsize.x) + (Wsize.y * Wsize.y));
+	//	break;
+
+	//case ALP_Collider_inertial_shape::sphere:
+	//	inertial_tensor = matrix_identity();
+	//	inertial_tensor._11 = 0.4f * inertial_mass * Wsize.x * Wsize.x;
+	//	inertial_tensor._22 = 0.4f * inertial_mass * Wsize.x * Wsize.x;
+	//	inertial_tensor._33 = 0.4f * inertial_mass * Wsize.x * Wsize.x;
+	//	break;
+	//}
 }
 
 void ALP_Physics::update_physics_data() {
 
-	Physics_data Cdata = (*ALPcollider->coll_itr)->physics_data;
+	Physics_data Cdata = (*ALPcollider->get_collitr())->physics_data;
 
 	inertial_mass = Cdata.inertial_mass;
 	linear_drag = Cdata.drag;

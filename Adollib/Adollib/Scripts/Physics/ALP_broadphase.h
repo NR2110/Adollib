@@ -2,7 +2,7 @@
 #include <memory>
 #include "contact.h"
 #include "ALP_physics.h"
-#include "ALP__shapes.h"
+#include "collider_shape.h"
 
 #include "../Scene/scene.h"
 
@@ -10,12 +10,12 @@ namespace Adollib {
 	namespace Physics_function {
 		//‘}“ü–@‚Ì
 		struct Insert_edge {
-			ALP_shape* shape; //
+			Collider_shape* shape; //
 			float value = 0; //
 			bool edge_start = false; //true = st, false = go
 			u_int mesh_index = 0;
 			std::list<Insert_edge>::iterator axis_list_pair_itr;
-			std::list<ALP_shape*>::iterator active_list_pair_itr; //‚±‚Ìedge‚Ìpair‚Æ‚È‚éedge‚Ö‚Ìitr
+			std::list<Collider_shape*>::iterator active_list_pair_itr; //‚±‚Ìedge‚Ìpair‚Æ‚È‚éedge‚Ö‚Ìitr
 		};
 
 		namespace Broadphase_static {

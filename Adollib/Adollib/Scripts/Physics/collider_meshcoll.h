@@ -25,7 +25,7 @@ namespace Adollib {
 
 			return meshcoll_data;
 
-			//Physics_function::ALP_shape coll_mesh;
+			//Physics_function::Collider_shape coll_mesh;
 			//coll_mesh.ALPcollider = ALPcollider_itr;
 
 			//for (auto& data : *meshcoll_data) {
@@ -38,7 +38,7 @@ namespace Adollib {
 	//add_shape(Meshcoll.load_mesh)でmeshはアタッチしてもらうため、Meshcoll_partは隠す
 	namespace Physics_function {
 		//Mesh colliderクラス
-		class Meshcoll_part : public ALP_shape {
+		class Meshcoll_part : public Collider_shape {
 		public:
 			Vector3 center;
 			Vector3 rotate;
@@ -53,7 +53,8 @@ namespace Adollib {
 			//不動オブジェクトとして生成
 			Meshcoll_part(Physics_function::ALP_Collider* l_ALPcollider_ptr, std::string FBX_pass, Meshcollider_data* data)
 				:center(Vector3(0)), rotate(Vector3(0)), size(1) {
-				shape_tag = Physics_function::ALP_Collider_shape_tag::Mesh;
+				shape_tag = Physics_function::ALPCollider_shape_type::Mesh;
+				tensor_type = Physics_function::Tensor_type::Box;
 				ALPcollider_ptr = l_ALPcollider_ptr;
 			};
 
@@ -111,6 +112,16 @@ namespace Adollib {
 
 				}
 			};
+
+			void update_inertial_tensor(Matrix& inertial_tensor, const float& inertial_mass) override {
+				const Vector3& Wsize = world_scale();
+
+				inertial_tensor = matrix_identity();
+				inertial_tensor._11 = 0.3333333f * inertial_mass * ((Wsize.y * Wsize.y) + (Wsize.z * Wsize.z));
+				inertial_tensor._22 = 0.3333333f * inertial_mass * ((Wsize.z * Wsize.z) + (Wsize.x * Wsize.x));
+				inertial_tensor._33 = 0.3333333f * inertial_mass * ((Wsize.x * Wsize.x) + (Wsize.y * Wsize.y));
+			};
+
 
 		};
 

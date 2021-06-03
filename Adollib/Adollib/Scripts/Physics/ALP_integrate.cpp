@@ -4,15 +4,6 @@ using namespace Adollib;
 using namespace Physics_function;
 using namespace Contacts;
 
-//::: get_data‚Ìdata‚ðCollider‚É“ü—Í :::
-void Physics_function::refresh_ALP_from_data(std::list<Physics_function::ALP_Collider*>& ALP_colliders) {
-
-	std::for_each(ALP_colliders.begin(), ALP_colliders.end(), [](ALP_Collider* coll) {
-		coll->refresh_ALP_from_data();
-		}
-	);
-}
-
 //:::::::::::::::::::::::::::::::::::::::::::::::::::
 #pragma region ALP_colliders
 //:::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -52,7 +43,7 @@ void Physics_function::update_dop14(std::list<Physics_function::ALP_Collider*>& 
 
 void Physics_function::reset_oncoll_bits(std::list<Physics_function::ALP_Collider*>& ALP_colliders) {
 
-	for (auto& coll : ALP_colliders)coll->oncoll_bits = 0;
+	for (auto& coll : ALP_colliders)coll->reset_oncoll_bits();
 }
 
 #pragma endregion

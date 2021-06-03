@@ -84,11 +84,6 @@ bool Phyisics_manager::update(Scenelist Sce)
 		return true;
 	}
 
-	Work_meter::start("refresh_ALP_from_data");
-	// get_data‚Ìdata‚ðCollider‚É“ü—Í
-	refresh_ALP_from_data(ALP_colliders[Sce]);
-	Work_meter::stop("refresh_ALP_from_data");
-
 	// Collider‚Ìoncoll_bit‚Ìreset
 	reset_oncoll_bits(ALP_colliders[Sce]);
 
@@ -172,8 +167,8 @@ bool Phyisics_manager::update(Scenelist Sce)
 			const auto coll0 = *p.body[0]->get_ALPcollider();
 			const auto coll1 = *p.body[1]->get_ALPcollider();
 
-			debug_go[count - 1]->transform->local_pos = vector3_quatrotate((p.contacts.contactpoints[i].point[0]), coll0.gameobject->world_orientate()) + coll0.gameobject->world_position();
-			debug_go[count - 2]->transform->local_pos = vector3_quatrotate((p.contacts.contactpoints[i].point[1]), coll1.gameobject->world_orientate()) + coll1.gameobject->world_position();
+			debug_go[count - 1]->transform->local_pos = vector3_quatrotate((p.contacts.contactpoints[i].point[0]), coll0.get_gameobject()->world_orientate()) + coll0.get_gameobject()->world_position();
+			debug_go[count - 2]->transform->local_pos = vector3_quatrotate((p.contacts.contactpoints[i].point[1]), coll1.get_gameobject()->world_orientate()) + coll1.get_gameobject()->world_position();
 			int adfsdg = 0;
 		}
 	}
@@ -248,7 +243,7 @@ bool Phyisics_manager::ray_cast(
 	bool ret = false;
 
 	for (const auto coll : ALP_colliders[Sce]) {
-		if (!(coll->tag & tag))continue;
+		if (!(coll->get_tag() & tag))continue;
 
 		if (Physics_function::ray_cast(
 			Ray_pos, Ray_dir,

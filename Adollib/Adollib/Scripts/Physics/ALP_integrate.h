@@ -2,7 +2,7 @@
 #include <memory>
 #include "../Scene/scene.h"
 #include "ALP_collider.h"
-#include "ALP__shapes.h"
+#include "collider_shape.h"
 
 
 namespace Adollib {
@@ -13,9 +13,6 @@ namespace Adollib {
 
 		// gameobject‚Ìtransform‚©‚çcollider‚Ìworld‹óŠÔ‚Å‚Ìî•ñ‚ğXV
 		void update_world_trans(std::list<Physics_function::ALP_Collider*>& ALP_colliders);
-
-		// get_data‚Ìdata‚ğCollider‚É“ü—Í
-		void refresh_ALP_from_data(std::list<Physics_function::ALP_Collider*>& ALP_colliders);
 
 		// gameobject‚Ö‚Ì•Ï‰»—Ê‚ğ‹‚ß‚é
 		void solv_resolve(std::list<Physics_function::ALP_Collider*>& ALP_colliders);
