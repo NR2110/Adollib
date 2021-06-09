@@ -110,7 +110,14 @@ namespace Adollib {
 			//現在アタッチされているshapeから慣性モーメントのタイプを再設定する(shapeがremoveされたときなどに使用)
 			void refresh_tensor_type(const std::vector<Collider_shape*>& shapes);
 
-			//::: 毎フレーム呼ぶもの :::::
+			//慣性モーメントをユーザー指定のものに固定する
+			void set_tensor(const Matrix& tensor) {
+				tensor_type = Tensor_type::User;
+				inertial_tensor = tensor;
+			}
+
+
+			//::: 毎フレーム呼ぶもの ::::::::::::
 			//速度、加速度を0にする
 			void reset_force();
 

@@ -20,8 +20,8 @@ namespace Adollib {
 		// gameobjectへ変化量を渡す
 		void resolve_gameobject(std::list<Physics_function::ALP_Collider*>& ALP_colliders);
 
-		// k-DOPの更新
-		void update_dop14(std::list<Physics_function::ALP_Collider*>& ALP_shapes);
+		// k-DOPの更新 update_world_transでおこなっている
+		//void update_dop(std::list<Physics_function::ALP_Collider*>& ALP_shapes);
 
 		// oncoll_bitsのリセット
 		void reset_oncoll_bits(std::list<Physics_function::ALP_Collider*>& ALP_colliders);

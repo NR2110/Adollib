@@ -105,7 +105,10 @@ void Gameobject::destroy() {
 	clearComponent();
 	Gameobject_manager::removeGameobject(this_scene, this_itr);
 
-	if (pearent() != nullptr)
-		pearent()->remove_child(this);
+	if (pearent() != nullptr) pearent()->remove_child(this);
+
+	for (const auto child : *children()) {
+		child->set_pearent(nullptr);
+	}
 
 }

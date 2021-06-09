@@ -70,7 +70,7 @@ namespace Adollib
 		}
 		if (stage_type == Stage_types::Mesh_Cube) {
 			{
-			//C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultModel
+				//C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultModel
 				GO = Gameobject_manager::createFromFBX("../Adollib/DefaultModel/cube.fbx");
 				GO->transform->local_pos = Vector3(0, -60, 0);
 				GO->transform->local_scale = Vector3(60, 60, 60);
@@ -209,15 +209,17 @@ namespace Adollib
 				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &BOX_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
 
 				if (summon == true) {
-					Gameobject* pearent =  Gameobject_manager::create("BOXpyramid");
+					Gameobject* pearent = Gameobject_manager::create("BOXpyramid");
 					for (int i = 0; i < BOX_pyramid_count; i++) {
 						for (int o = 0; o < BOX_pyramid_count - i; o++) {
 							pearent->add_child(set_box(Vector3(
 								BOX_pyramid_size[0] * 2.0f * 1.2f * o - (BOX_pyramid_count - i) * 2.300001f / 2.0f + BOX_pyramid_pos[0],
 								3.0f + BOX_pyramid_size[1] * 2 * i + BOX_pyramid_pos[1],
 								BOX_pyramid_pos[2]),
-								Vector3(BOX_pyramid_size[0], BOX_pyramid_size[1], BOX_pyramid_size[2]), Vector3(0, 10, 0), Vector3(0, 1, 1))
-								);
+								Vector3(BOX_pyramid_size[0], BOX_pyramid_size[1], BOX_pyramid_size[2]),
+								Vector3(0, 10, 0),
+								Vector3(0, 1, 1))
+							);
 						}
 
 					}
@@ -236,13 +238,22 @@ namespace Adollib
 				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), SPHERE_pyramid_pos, 0.1f); ImGui::NextColumn(); ImGui::NextColumn();
 				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &SPHERE_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
 
-				if (summon == true)
+				if (summon == true) {
+					Gameobject* pearent = Gameobject_manager::create("Spherepyramid");
 					for (int i = 0; i < SPHERE_pyramid_count; i++) {
 						for (int o = 0; o < SPHERE_pyramid_count - i; o++) {
-							set_sphere(Vector3(2.50001f * o - (SPHERE_pyramid_count - i) * 2.500001f / 2.0f + SPHERE_pyramid_pos[0], 5.0f + 2.50001f * i + SPHERE_pyramid_pos[1], SPHERE_pyramid_pos[2]), 1, Vector3(0, 1, 1));
+							pearent->add_child(
+								set_sphere(
+									Vector3(2.50001f * o - (SPHERE_pyramid_count - i) * 2.500001f / 2.0f + SPHERE_pyramid_pos[0],
+										5.0f + 2.50001f * i + SPHERE_pyramid_pos[1],
+										SPHERE_pyramid_pos[2]),
+									1,
+									Vector3(0, 1, 1)
+								));
 						}
 
 					}
+				}
 				imgui_num++;
 			}
 
@@ -332,6 +343,82 @@ namespace Adollib
 						}
 
 					}
+				imgui_num++;
+			}
+
+			//daruma
+			{
+				static int count = 5;
+				static float pos[3] = { 0 };
+				bool summon = false;
+				ImGui::Separator();
+				ImGui::Text("Daruma_pyramid"); ImGui::NextColumn();
+				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
+				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), pos, 0.1f); ImGui::NextColumn(); ImGui::NextColumn();
+				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &count, 1, 1, 100000); ImGui::NextColumn();
+
+				float dis = 1.0f;
+				if (summon == true) {
+					Matrix tensor = matrix_identity();
+					tensor._11 = tensor._22 = tensor._33 = 0.4f * 1.5f * 1.5f ;
+
+					for (int i = 0; i < count; i++) {
+
+						for (int o = 0; o < count - i; o++) {
+							const Vector3& position = Vector3(2.50001f * o - (count - i) * 2.500001f / 2.0f + pos[0],
+								5.0f + 2.50001f * i + pos[1],
+								pos[2]);
+
+
+							// darumaの生成とcolliderのアタッチ
+							Gameobject* Daruma = nullptr;
+							Daruma = Gameobject_manager::create("Daruma", GO_tag::Sphere);
+							Daruma->transform->local_pos = Vector3(position[0], position[1], position[2]);
+							Daruma->transform->local_scale = Vector3(1, 1, 1);
+
+							Collider* coll = Daruma->addComponent<Collider>();
+							//coll->set_tensor(tensor);
+							Sphere* sphere[2] = { nullptr };
+							sphere[0] = coll->add_shape<Sphere>();
+							//sphere[1] = coll->add_shape<Sphere>();
+
+							sphere[0]->center = Vector3(0, 5, 0);
+							sphere[0]->r = 1;
+							//sphere[1]->center = Vector3(0, 2, 0);
+							//sphere[1]->r = 0.5f;
+
+
+
+							//sphere[1]->r = 2;
+
+							// darumaが描画されるようにGOをdarumaにつける
+							Gameobject* parts[2] = { nullptr };
+							parts[0] = Gameobject_manager::createSphere(GO_tag::Sphere);
+							parts[1] = Gameobject_manager::createSphere(GO_tag::Sphere);
+							Vector4 C = Vector4(1, 0, 0, 1);
+							parts[0]->material->color = C;
+							parts[1]->material->color = C;
+
+							//object->addComponent<object_fall>();
+							parts[0]->transform->local_pos = Vector3(0, 0, 0);
+							parts[1]->transform->local_pos = Vector3(0, 0, 0);
+
+							parts[0]->transform->local_scale = Vector3(1, 1, 1) * 0.5f;
+							parts[1]->transform->local_scale = Vector3(1, 1, 1) * 1.0f;
+
+
+							coll->tag = Collider_tags::Sphere;
+
+							Daruma->add_child(parts[0]);
+							Daruma->add_child(parts[1]);
+
+							GOs.emplace_back(Daruma);
+							GOs.emplace_back(parts[0]);
+							GOs.emplace_back(parts[1]);
+						}
+
+					}
+				}
 				imgui_num++;
 			}
 

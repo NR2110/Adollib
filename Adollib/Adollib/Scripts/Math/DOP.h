@@ -55,10 +55,11 @@ namespace Adollib {
 
 		struct AABB {
 			//’†SÀ•W
-			Vector3 pos;
+			Vector3 pos = Vector3(0);
 
-			Vector3 max;
-			Vector3 min;
+			//+ - •ûŒü‚Ö‚Ì‘å‚«‚³
+			Vector3 max = Vector3(-FLT_MAX);
+			Vector3 min = Vector3(+FLT_MAX);;
 		};
 	}
 }

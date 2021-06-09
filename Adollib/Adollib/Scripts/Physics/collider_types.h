@@ -16,6 +16,7 @@ namespace Adollib {
 
 		enum class Tensor_type {
 			None,
+			User,
 			Sphere,
 			Box
 		};

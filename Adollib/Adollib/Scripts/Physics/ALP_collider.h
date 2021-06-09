@@ -24,7 +24,12 @@ namespace Adollib {
 		public:
 			//コンストラクタ
 			ALP_Collider(
-				Gameobject* l_go, std::list<Collider*>::iterator l_collitr, std::list<ALP_Collider*>::iterator l_itr, ALP_Physics* l_ALPphysics, Scenelist l_scene, u_int l_index
+				Gameobject* l_go,
+				std::list<Collider*>::iterator l_collitr,
+				std::list<ALP_Collider*>::iterator l_itr,
+				ALP_Physics* l_ALPphysics,
+				Scenelist l_scene,
+				u_int l_index
 			) :
 				gameobject(l_go), coll_itr(l_collitr), this_itr(l_itr), ALPphysics(l_ALPphysics), scene(l_scene), index(l_index) {};
 
@@ -36,7 +41,13 @@ namespace Adollib {
 			//::: 自身へのイテレータ(remove用) :::
 			std::list<ALP_Collider*>::iterator this_itr;
 
+		private:
+			//::: アタッチされたshapeを包むAABB :::::::
+			DOP::AABB AABB;
+
 		public:
+			// ここをすべてprivateにしたかった........
+
 			u_int index = 0; //このcolliderの番号
 			Scenelist scene = Scenelist::scene_null; //このcolldierが存在するscene
 
@@ -48,6 +59,8 @@ namespace Adollib {
 			Collider_tagbit oncoll_bits = 0; //oncollision enterで使用するbit情報
 
 		public:
+			const DOP::AABB get_AABB() const { return AABB; };
+
 			//このcolliderの番号
 			const u_int get_index() const { return index; };
 
@@ -83,10 +96,10 @@ namespace Adollib {
 			Gameobject* get_gameobject() const { return gameobject; };
 		public:
 
-			//oncollision enter
+			//::: 毎フレーム呼ぶもの ::::::
+			//oncollision enter そのcolliderと接触していたらtrue
 			const bool concoll_enter(const unsigned int tag_name);
 
-			//::: 毎フレーム呼ぶもの :::::
 			//gameobjectへの変化量を求める
 			void solv_resolve();
 
@@ -96,16 +109,10 @@ namespace Adollib {
 			// gameobjectのtransformからcolliderのworld空間での情報を更新
 			void update_world_trans();
 
-			//::: collider:Component の local_positionなどが変更されたときに呼ぶもの :::
-			// DOP_14データの更新
-			void update_dop14();
-
 			//座標,姿勢によるworld情報の更新
 			void integrate(float duration, Vector3 linear_velocity, Vector3 anglar_velocity);
 
-			void set_inertial_mass(const Matrix& m);
-
-			////::: 親のtagを獲得 :::::::::::::
+			//::: 親のtagを獲得 :::::::::::::
 			const Collider_tagbit get_tag() const; //自身のtag(bit)
 			const Collider_tagbit get_ignore_tags() const; //衝突しないtags
 
@@ -133,12 +140,9 @@ namespace Adollib {
 			void destroy();
 
 
-			//private:
-			//	void update_dop14_as_sphere();
-			//	void update_dop14_as_box();
-			//	void update_dop14_as_capsule();
-			//	void update_dop14_as_plane();
-			//	void update_dop14_as_mesh();
+		private:
+			//::: shapeを包むAABBの更新 ::::::
+			void update_AABB();
 		};
 	}
 }

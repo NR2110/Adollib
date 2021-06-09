@@ -81,18 +81,36 @@ namespace Adollib {
 			bool& is_chenged_position, bool& is_chenged_orientation, bool& is_chenged_scale
 		);
 
-	public:
-		//慣性モーメントの更新(複数のshapeがアタッチされている場合はALP_Collider::update_inertial_tensorが呼ばれる)
-		virtual void update_inertial_tensor(Matrix& inertial_tensor, const float& inertial_mass) = 0;
 
+	protected:
 		//各shapeのユーザー用の情報(box:center,size)から計算用の情報(position,scale)に治す
 		virtual void adapt_Colliderdata() = 0;
+	public:
+		//
+		void update_Colliderdata() {
+			Vector3 old_pos = local_position;
+			Quaternion old_orient = local_orientation;
+			Vector3 old_scale = local_scale;
+
+			adapt_Colliderdata();
+
+			if (old_pos != local_position ||
+				old_orient != local_orientation ||
+				old_scale != local_scale
+				) {
+
+			}
+		};
+
+		//慣性モーメントの更新(複数のshapeがアタッチされている場合はALP_Collider::update_inertial_tensorが呼ばれる)
+		virtual void update_inertial_tensor(Matrix& inertial_tensor, const float& inertial_mass) = 0;
 
 		//ヒエラルキーへの表示
 		virtual void Update_hierarchy() = 0;
 
 		//DOPの更新
 		virtual void update_dop14() = 0;
+
 
 	};
 

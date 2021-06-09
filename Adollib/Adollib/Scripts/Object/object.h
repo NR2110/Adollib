@@ -41,7 +41,7 @@ namespace Adollib
 	public:
 		object* pearent() const{ return pearent_;}
 		void set_pearent(object* obj) { pearent_ = obj; }
-		std::list<object*>* children() { return &children_; }
+		const std::list<object*>* children() { return &children_; }
 
 		//ˆê”Ô‚Ìe‚ğ•Ô‚·
 		object* top_pearent() {

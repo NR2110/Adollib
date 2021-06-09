@@ -93,6 +93,10 @@ namespace Adollib {
 		//meshcolliderのアタッチ
 		void add_shape(const char* filepass, bool is_right_rtiangle = true);
 
+		void set_tensor(const Matrix& tensor) {
+			ALPphysics_ptr->set_tensor(tensor);
+		}
+
 
 	public:
 		void Update_hierarchy();

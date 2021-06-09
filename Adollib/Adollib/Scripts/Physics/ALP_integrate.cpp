@@ -32,14 +32,14 @@ void Physics_function::resolve_gameobject(std::list<Physics_function::ALP_Collid
 	);
 }
 
-
-void Physics_function::update_dop14(std::list<Physics_function::ALP_Collider*>& ALP_colliders) {
-
-	std::for_each(ALP_colliders.begin(), ALP_colliders.end(), [](ALP_Collider* coll) {
-		coll->update_dop14();
-		}
-	);
-}
+//
+//void Physics_function::update_dop(std::list<Physics_function::ALP_Collider*>& ALP_colliders) {
+//
+//	std::for_each(ALP_colliders.begin(), ALP_colliders.end(), [](ALP_Collider* coll) {
+//		coll->update_shapes_dop();
+//		}
+//	);
+//}
 
 void Physics_function::reset_oncoll_bits(std::list<Physics_function::ALP_Collider*>& ALP_colliders) {
 

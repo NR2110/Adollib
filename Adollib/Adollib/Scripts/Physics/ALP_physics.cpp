@@ -144,6 +144,9 @@ void ALP_Physics::integrate(float duration) {
 }
 
 void ALP_Physics::add_tensor_type(Tensor_type type) {
+	//ユーザー指定の慣性モーメントがあれば何もしない
+	if (tensor_type == Tensor_type::User)return;
+
 	switch (tensor_type)
 	{
 	case Adollib::Physics_function::Tensor_type::None:
@@ -164,6 +167,9 @@ void ALP_Physics::add_tensor_type(Tensor_type type) {
 	}
 }
 void ALP_Physics::refresh_tensor_type(const std::vector<Collider_shape*>& shapes) {
+	//ユーザー指定の慣性モーメントがあれば何もしない
+	if (tensor_type == Tensor_type::User)return;
+
 	tensor_type = Tensor_type::None;
 	for (const auto& shape : shapes) {
 		add_tensor_type(shape->get_tensor_type());
@@ -182,63 +188,36 @@ void ALP_Physics::update_tensor(const std::vector<Collider_shape*>& shapes) {
 		return;
 	}
 
+	const auto& AABB = ALPcollider->get_AABB();
+	const float AABB_max_scale = ALmax(ALmax(AABB.max.x, AABB.max.y), AABB.max.z);
 	switch (tensor_type)
 	{
 	case Adollib::Physics_function::Tensor_type::None:
 		return;
 		break;
+	case Adollib::Physics_function::Tensor_type::User:
+		//ユーザー指定の慣性モーメントがあれば更新しない
+		return;
+		break;
 
 	case Adollib::Physics_function::Tensor_type::Sphere:
+		inertial_tensor = matrix_identity();
+		inertial_tensor._11 = 0.4f * inertial_mass * AABB_max_scale * AABB_max_scale;
+		inertial_tensor._22 = 0.4f * inertial_mass * AABB_max_scale * AABB_max_scale;
+		inertial_tensor._33 = 0.4f * inertial_mass * AABB_max_scale * AABB_max_scale;
 		break;
 
 	case Adollib::Physics_function::Tensor_type::Box:
+		inertial_tensor = matrix_identity();
+		inertial_tensor._11 = 0.3333333f * inertial_mass * ((AABB.max.y * AABB.max.y) + (AABB.max.z * AABB.max.z));
+		inertial_tensor._22 = 0.3333333f * inertial_mass * ((AABB.max.z * AABB.max.z) + (AABB.max.x * AABB.max.x));
+		inertial_tensor._33 = 0.3333333f * inertial_mass * ((AABB.max.x * AABB.max.x) + (AABB.max.y * AABB.max.y));
 		break;
 
 	default:
 		break;
 	}
 
-
-	//if (tensor_type == Physics_function::Tensor_type::None)return;
-	//else if (tensor_type == Physics_function::Tensor_type::Shape)shapes.at(1)->update_inertial_tensor(inertial_tensor, inertial_mass);
-	//else if (shapes_size >= 2){
-	//	switch (ALPcollider->shape)
-	//	{
-	//	case ALP_Collider_inertial_shape::box:
-	//		inertial_tensor = matrix_identity();
-	//		inertial_tensor._11 = 0.3333333f * inertial_mass * ((Wsize.y * Wsize.y) + (Wsize.z * Wsize.z));
-	//		inertial_tensor._22 = 0.3333333f * inertial_mass * ((Wsize.z * Wsize.z) + (Wsize.x * Wsize.x));
-	//		inertial_tensor._33 = 0.3333333f * inertial_mass * ((Wsize.x * Wsize.x) + (Wsize.y * Wsize.y));
-	//		break;
-
-	//	case ALP_Collider_inertial_shape::sphere:
-	//		inertial_tensor = matrix_identity();
-	//		inertial_tensor._11 = 0.4f * inertial_mass * Wsize.x * Wsize.x;
-	//		inertial_tensor._22 = 0.4f * inertial_mass * Wsize.x * Wsize.x;
-	//		inertial_tensor._33 = 0.4f * inertial_mass * Wsize.x * Wsize.x;
-	//		break;
-	//	}
-	//}
-
-	//Vector3 Wsize = gameobject->world_scale();
-
-	////慣性モーメントの更新
-	//switch (ALPcollider->shape)
-	//{
-	//case ALP_Collider_inertial_shape::box:
-	//	inertial_tensor = matrix_identity();
-	//	inertial_tensor._11 = 0.3333333f * inertial_mass * ((Wsize.y * Wsize.y) + (Wsize.z * Wsize.z));
-	//	inertial_tensor._22 = 0.3333333f * inertial_mass * ((Wsize.z * Wsize.z) + (Wsize.x * Wsize.x));
-	//	inertial_tensor._33 = 0.3333333f * inertial_mass * ((Wsize.x * Wsize.x) + (Wsize.y * Wsize.y));
-	//	break;
-
-	//case ALP_Collider_inertial_shape::sphere:
-	//	inertial_tensor = matrix_identity();
-	//	inertial_tensor._11 = 0.4f * inertial_mass * Wsize.x * Wsize.x;
-	//	inertial_tensor._22 = 0.4f * inertial_mass * Wsize.x * Wsize.x;
-	//	inertial_tensor._33 = 0.4f * inertial_mass * Wsize.x * Wsize.x;
-	//	break;
-	//}
 }
 
 void ALP_Physics::update_physics_data() {

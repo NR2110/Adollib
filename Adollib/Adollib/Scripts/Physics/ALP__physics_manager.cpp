@@ -94,7 +94,8 @@ bool Phyisics_manager::update(Scenelist Sce)
 	applyexternalforce(ALP_physicses[Sce]);
 
 
-	physicsParams.timeStep = Al_Global::second_per_frame();
+	physicsParams.timeStep = ALmax(Al_Global::second_per_frame(), 0.016f);
+	physicsParams.timeStep = 0.016f;
 
 
 	// ‘åŽG”c‚È“–‚½‚è”»’è
@@ -167,8 +168,11 @@ bool Phyisics_manager::update(Scenelist Sce)
 			const auto coll0 = *p.body[0]->get_ALPcollider();
 			const auto coll1 = *p.body[1]->get_ALPcollider();
 
-			debug_go[count - 1]->transform->local_pos = vector3_quatrotate((p.contacts.contactpoints[i].point[0]), coll0.get_gameobject()->world_orientate()) + coll0.get_gameobject()->world_position();
-			debug_go[count - 2]->transform->local_pos = vector3_quatrotate((p.contacts.contactpoints[i].point[1]), coll1.get_gameobject()->world_orientate()) + coll1.get_gameobject()->world_position();
+			//debug_go[count - 1]->transform->local_pos = vector3_quatrotate((p.contacts.contactpoints[i].point[0]), coll0.get_gameobject()->world_orientate()) + coll0.get_gameobject()->world_position();
+			//debug_go[count - 2]->transform->local_pos = vector3_quatrotate((p.contacts.contactpoints[i].point[1]), coll1.get_gameobject()->world_orientate()) + coll1.get_gameobject()->world_position();
+
+			debug_go[count - 1]->transform->local_pos = p.body[0]->world_position() + vector3_quatrotate(p.contacts.contactpoints[i].point[0], p.body[0]->world_orientation());
+			debug_go[count - 2]->transform->local_pos = p.body[1]->world_position() + vector3_quatrotate(p.contacts.contactpoints[i].point[1], p.body[1]->world_orientation());
 			int adfsdg = 0;
 		}
 	}
