@@ -8,6 +8,7 @@
 #include "../Scene/scene_list.h"
 #include "collider_shape.h"
 
+
 namespace Adollib {
 
 	class Collider;
@@ -34,9 +35,6 @@ namespace Adollib {
 				gameobject(l_go), coll_itr(l_collitr), this_itr(l_itr), ALPphysics(l_ALPphysics), scene(l_scene), index(l_index) {};
 
 		private:
-			//::: GOに渡すためのバッファ :::::::
-			Quaternion buffer_quat_chang;
-			Vector3 buffer_pos_chang;
 
 			//::: 自身へのイテレータ(remove用) :::
 			std::list<ALP_Collider*>::iterator this_itr;
@@ -100,12 +98,6 @@ namespace Adollib {
 			//oncollision enter そのcolliderと接触していたらtrue
 			const bool concoll_enter(const unsigned int tag_name);
 
-			//gameobjectへの変化量を求める
-			void solv_resolve();
-
-			// gameobjectへ変化量を渡す
-			void resolve_gameobject();
-
 			// gameobjectのtransformからcolliderのworld空間での情報を更新
 			void update_world_trans();
 
@@ -125,7 +117,7 @@ namespace Adollib {
 
 				T* shape = newD T(this);
 
-				ALPphysics->add_tensor_type(shape->get_tensor_type());
+				//ALPphysics->add_tensor_type(shape->get_tensor_type());
 
 				shapes.emplace_back(shape);
 				return shape;

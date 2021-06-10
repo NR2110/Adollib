@@ -4,6 +4,7 @@
 #include "../Object/gameobject.h"
 #include "ALP__physics_manager.h"
 
+#include "ALP_collider.h"
 #include "collider__base.h"
 
 using namespace Adollib;

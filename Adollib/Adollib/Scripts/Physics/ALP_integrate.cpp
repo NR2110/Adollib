@@ -16,22 +16,6 @@ void Physics_function::update_world_trans(std::list<Physics_function::ALP_Collid
 	);
 }
 
-void Physics_function::solv_resolve(std::list<Physics_function::ALP_Collider*>& ALP_colliders) {
-
-	std::for_each(ALP_colliders.begin(), ALP_colliders.end(), [](ALP_Collider* coll) {
-		coll->solv_resolve();
-		}
-	);
-}
-
-void Physics_function::resolve_gameobject(std::list<Physics_function::ALP_Collider*>& ALP_colliders) {
-
-	std::for_each(ALP_colliders.begin(), ALP_colliders.end(), [](ALP_Collider* coll) {
-		coll->resolve_gameobject();
-		}
-	);
-}
-
 //
 //void Physics_function::update_dop(std::list<Physics_function::ALP_Collider*>& ALP_colliders) {
 //

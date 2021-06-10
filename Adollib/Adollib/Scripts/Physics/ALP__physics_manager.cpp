@@ -94,8 +94,7 @@ bool Phyisics_manager::update(Scenelist Sce)
 	applyexternalforce(ALP_physicses[Sce]);
 
 
-	physicsParams.timeStep = ALmax(Al_Global::second_per_frame(), 0.016f);
-	physicsParams.timeStep = 0.016f;
+	physicsParams.timeStep = ALmin(Al_Global::second_per_frame(), 0.016f);
 
 
 	// ‘åG”c‚È“–‚½‚è”»’è
@@ -131,10 +130,6 @@ bool Phyisics_manager::update(Scenelist Sce)
 	resolve_contact(ALP_colliders[Sce], pairs);
 	Work_meter::tag_stop();
 	Work_meter::stop("Resolve");
-
-	// GO‚ÖCollider‚Ì‰e‹¿‚ğ“n‚·
-	solv_resolve(ALP_colliders[Sce]);
-	resolve_gameobject(ALP_colliders[Sce]);
 
 	// ˆÊ’u‚ÌXV
 	integrate(ALP_physicses[Sce]);

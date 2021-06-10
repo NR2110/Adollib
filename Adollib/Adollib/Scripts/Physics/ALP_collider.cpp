@@ -22,26 +22,6 @@ const bool ALP_Collider::concoll_enter(const unsigned int tag_name) {
 	oncoll_check_bits |= tag_name;
 	return (oncoll_bits & tag_name);
 }
-void ALP_Collider::solv_resolve() {
-	////offset_CollGO_quat = world_orientation() * gameobject->get_world_orientate().inverse() * local_orientation.inverse();
-	////offset_CollGO_quat = world_orientation() * (local_orientation * gameobject->get_world_orientate()).inverse();
-	//offset_CollGO_quat = (local_orientation * gameobject->get_world_orientate()).inverse() * world_orientation();
-	////offset_CollGO_quat = local_orientation.inverse() * gameobject->get_world_orientate().inverse() * world_orientation();
-	//offset_CollGO_pos = world_position() - vector3_quatrotate(local_position * gameobject->get_world_scale(), world_orientation()) - gameobject->get_world_position();
-
-	buffer_quat_chang = quaternion_identity();
-	buffer_pos_chang = Vector3(0);
-
-	for (const auto& shape : shapes) {
-		buffer_quat_chang *= (shape->local_orientation * gameobject->world_orientate()).inverse() * shape->world_orientation();
-		buffer_pos_chang += shape->world_position() - vector3_quatrotate(shape->local_position * gameobject->world_scale(), shape->world_orientation()) - gameobject->world_position();
-	}
-}
-
-void ALP_Collider::resolve_gameobject() {
-	gameobject->transform->local_orient = buffer_quat_chang * gameobject->transform->local_orient ;
-	gameobject->transform->local_pos += buffer_pos_chang;
-}
 
 void ALP_Collider::update_world_trans() {
 	bool is_changed_Size = false;
@@ -101,10 +81,6 @@ void ALP_Collider::integrate(float duration, Vector3 linear_velocity, Vector3 an
 		pearent_orientate_inv = gameobject->pearent()->world_orientate();
 		pearent_orientate_inv = pearent_orientate_inv.inverse();
 	}
-
-	//位置の更新
-	gameobject->transform->local_orient = gameobject->transform->local_orient * buffer_quat_chang;
-	gameobject->transform->local_pos += buffer_pos_chang;
 
 	//アタッチされているGOの親子関係に対応 親が回転していても落下は"下"方向に
 	Vector3 local_linear_velocity = vector3_quatrotate(linear_velocity, pearent_orientate_inv);
