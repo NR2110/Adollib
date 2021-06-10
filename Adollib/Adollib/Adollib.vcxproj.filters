@@ -205,9 +205,6 @@
     <ClCompile Include="Scripts\Physics\ALP__physics_manager.cpp">
       <Filter>00_Adollib\22_physics\base</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Physics\collider__base.cpp">
-      <Filter>00_Adollib\22_physics\collider</Filter>
-    </ClCompile>
     <ClCompile Include="Scripts\Math\closest_func.cpp">
       <Filter>00_Adollib\11_math\functions</Filter>
     </ClCompile>
@@ -482,9 +479,6 @@
     </ClInclude>
     <ClInclude Include="Scripts\Shader\constant_buffer.h">
       <Filter>00_Adollib\44_shader</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Physics\collider__base.h">
-      <Filter>00_Adollib\22_physics\collider</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Math\closest_func.h">
       <Filter>00_Adollib\11_math\functions</Filter>

@@ -69,6 +69,10 @@ void Collider::Update_hierarchy() {
 
 		ImGui::DragFloat("friction", &physics_data.dynamic_friction, 0.001f, 0, 100000000.f);
 
+		ImGui::DragFloat("linear_drag", &physics_data.drag, 0.01f, 0, 0);
+		ImGui::DragFloat("anglar_drag", &physics_data.anglar_drag, 0.01f, 0, 0);
+
+
 		ImGui::EndTabBar();
 	}
 

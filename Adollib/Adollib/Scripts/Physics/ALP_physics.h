@@ -46,8 +46,6 @@ namespace Adollib {
 			//::: 慣性モーメントのtype :::
 			Physics_function::Tensor_type tensor_type = Physics_function::Tensor_type::None;
 
-
-
 			//::: Colliderへのポインタ :::
 			ALP_Collider* ALPcollider = nullptr;
 

@@ -346,7 +346,7 @@ namespace Adollib
 				imgui_num++;
 			}
 
-			//daruma
+			//darumapyramid
 			{
 				static int count = 5;
 				static float pos[3] = { 0 };
@@ -377,15 +377,15 @@ namespace Adollib
 							Daruma->transform->local_scale = Vector3(1, 1, 1);
 
 							Collider* coll = Daruma->addComponent<Collider>();
-							//coll->set_tensor(tensor);
+							coll->set_tensor(tensor);
 							Sphere* sphere[2] = { nullptr };
 							sphere[0] = coll->add_shape<Sphere>();
-							//sphere[1] = coll->add_shape<Sphere>();
+							sphere[1] = coll->add_shape<Sphere>();
 
-							sphere[0]->center = Vector3(0, 5, 0);
+							sphere[0]->center = Vector3(0, 1, 0);
 							sphere[0]->r = 1;
-							//sphere[1]->center = Vector3(0, 2, 0);
-							//sphere[1]->r = 0.5f;
+							sphere[1]->center = Vector3(0, 2, 0);
+							sphere[1]->r = 0.5f;
 
 
 
@@ -400,8 +400,8 @@ namespace Adollib
 							parts[1]->material->color = C;
 
 							//object->addComponent<object_fall>();
-							parts[0]->transform->local_pos = Vector3(0, 0, 0);
-							parts[1]->transform->local_pos = Vector3(0, 0, 0);
+							parts[0]->transform->local_pos = Vector3(0, 2, 0);
+							parts[1]->transform->local_pos = Vector3(0, 1, 0);
 
 							parts[0]->transform->local_scale = Vector3(1, 1, 1) * 0.5f;
 							parts[1]->transform->local_scale = Vector3(1, 1, 1) * 1.0f;

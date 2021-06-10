@@ -1,5 +1,4 @@
 #pragma once
-#include "collider__base.h"
 #include "collider_shape.h"
 
 namespace Adollib {

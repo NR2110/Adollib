@@ -1,8 +1,6 @@
 #pragma once
 #include "../Math/math.h"
 
-#include "collider__base.h"
-
 namespace Adollib {
 
 	class Collider;

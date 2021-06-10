@@ -226,7 +226,6 @@
     <ClInclude Include="Scripts\Physics\collider_plane.h" />
     <ClInclude Include="Scripts\Physics\collider_sphere.h" />
     <ClInclude Include="Scripts\Physics\collider_types.h" />
-    <ClInclude Include="Scripts\Physics\collider__base.h" />
     <ClInclude Include="Scripts\Physics\contact.h" />
     <ClInclude Include="Scripts\Physics\meshcoll_resorce_manager.h" />
     <ClInclude Include="Scripts\Physics\ray.h" />
@@ -289,7 +288,6 @@
     <ClCompile Include="Scripts\Physics\collider_shape.cpp" />
     <ClCompile Include="Scripts\Physics\ALP__physics_manager.cpp" />
     <ClCompile Include="Scripts\Physics\collider.cpp" />
-    <ClCompile Include="Scripts\Physics\collider__base.cpp" />
     <ClCompile Include="Scripts\Physics\contact.cpp" />
     <ClCompile Include="Scripts\Physics\meshcoll_resorce_manager.cpp" />
     <ClCompile Include="Scripts\Physics\ray.cpp" />

@@ -2,12 +2,10 @@
 #include <unordered_map>
 #include <string>
 #include "../Math/math.h"
-#include "ALP__tags.h"
-#include "ALP__meshcoll_data.h"
-
 #include "../Scene/scene_list.h"
-#include "collider_shape.h"
 
+#include "ALP__tags.h"
+#include "collider_shape.h"
 
 namespace Adollib {
 
@@ -17,10 +15,7 @@ namespace Adollib {
 	namespace Physics_function {
 
 		class ALP_Physics;
-		class ALP_Collider;
 		class Meshcoll_part;
-		struct ALP_Solverbody;
-
 		class ALP_Collider {
 		public:
 			//コンストラクタ
@@ -117,7 +112,7 @@ namespace Adollib {
 
 				T* shape = newD T(this);
 
-				//ALPphysics->add_tensor_type(shape->get_tensor_type());
+				call_add_tensor_type(shape->get_tensor_type());
 
 				shapes.emplace_back(shape);
 				return shape;
@@ -135,6 +130,8 @@ namespace Adollib {
 		private:
 			//::: shapeを包むAABBの更新 ::::::
 			void update_AABB();
+
+			void call_add_tensor_type(const Tensor_type& type);
 		};
 	}
 }

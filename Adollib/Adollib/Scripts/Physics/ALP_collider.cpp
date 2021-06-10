@@ -1,15 +1,12 @@
 #include "ALP_Collider.h"
 
-#include "collider__base.h"
 #include "../Object/gameobject.h"
-
 #include "ALP__physics_manager.h"
 
-#include "../Object/gameobject.h"
-
 #include "collider_shape.h"
-
 #include "ALP_physics.h"
+#include "ALP__meshcoll_data.h"
+
 
 using namespace Adollib;
 using namespace Physics_function;
@@ -160,4 +157,8 @@ void ALP_Collider::update_AABB() {
 	}
 
 	AABB = aabb;
+}
+
+void ALP_Collider::call_add_tensor_type(const Tensor_type& type) {
+	ALPphysics->add_tensor_type(type);
 }

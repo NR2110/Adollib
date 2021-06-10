@@ -5,6 +5,8 @@
 
 #include "../Shader/constant_buffer.h"
 
+#include "../Physics/ALP__meshcoll_data.h"
+
 using namespace Adollib;
 using namespace Physics_function;
 
@@ -103,7 +105,7 @@ void Collider_renderer::render_box(const Collider_shape* shape) {
 		ConstantBufferPerMaterial cb;
 		cb.shininess = 1;
 		cb.ambientColor = DirectX::XMFLOAT4(0.1f, 0.1f, 0.1f, 1);
-		//		cb.materialColor = Al_Global::get_gaming(Al_Global::second_per_game * 60, 800).get_XM4();
+		//cb.materialColor = Al_Global::get_gaming(Al_Global::second_per_game * 60, 800).get_XM4();
 		cb.materialColor = Vector4(Al_Global::get_gaming((Al_Global::second_per_game + color_num * 2) * 60, 600), 1);
 		//cb.materialColor = color16[color_num].get_XM4();
 		Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);

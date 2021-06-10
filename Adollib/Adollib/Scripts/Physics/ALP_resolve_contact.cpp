@@ -110,8 +110,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 		for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 			Contactpoint& cp = pair.contacts.contactpoints[C_num];
 
-			Vector3 rA = vector3_quatrotate(cp.point[0], coll[0]->world_orientation());
-			Vector3 rB = vector3_quatrotate(cp.point[1], coll[1]->world_orientation());
+			Vector3 rA = vector3_quatrotate(coll[0]->local_position + vector3_quatrotate(cp.point[0], coll[0]->local_orientation), coll[0]->get_ALPcollider()->get_gameobject()->transform->local_orient);
+			Vector3 rB = vector3_quatrotate(coll[1]->local_position + vector3_quatrotate(cp.point[1], coll[1]->local_orientation), coll[1]->get_ALPcollider()->get_gameobject()->transform->local_orient);
 
 			// ”½”­ŒW”‚ÌŠl“¾
 			// Œp‘±‚ÌÕ“Ë‚Ìê‡”½”­ŒW”‚ğ0‚É‚·‚é
@@ -225,8 +225,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 		for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 			//Õ“Ë“_‚Ìî•ñ
 			Contactpoint& cp = pair.contacts.contactpoints[C_num];
-			Vector3 rA = vector3_quatrotate(cp.point[0], coll[0]->world_orientation());
-			Vector3 rB = vector3_quatrotate(cp.point[1], coll[1]->world_orientation());
+			Vector3 rA = vector3_quatrotate(coll[0]->local_position + vector3_quatrotate(cp.point[0], coll[0]->local_orientation), coll[0]->get_ALPcollider()->get_gameobject()->transform->local_orient);
+			Vector3 rB = vector3_quatrotate(coll[1]->local_position + vector3_quatrotate(cp.point[1], coll[1]->local_orientation), coll[1]->get_ALPcollider()->get_gameobject()->transform->local_orient);
 
 			for (int k = 0; k < 3; k++) {
 				float deltaImpulse = cp.constraint[k].accuminpulse;
@@ -253,8 +253,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 			for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 				//Õ“Ë“_‚Ìî•ñ
 				Contactpoint& cp = pair.contacts.contactpoints[C_num];
-				Vector3 rA = vector3_quatrotate(cp.point[0], coll[0]->world_orientation());
-				Vector3 rB = vector3_quatrotate(cp.point[1], coll[1]->world_orientation());
+				Vector3 rA = vector3_quatrotate(coll[0]->local_position + vector3_quatrotate(cp.point[0], coll[0]->local_orientation), coll[0]->get_ALPcollider()->get_gameobject()->transform->local_orient);
+				Vector3 rB = vector3_quatrotate(coll[1]->local_position + vector3_quatrotate(cp.point[1], coll[1]->local_orientation), coll[1]->get_ALPcollider()->get_gameobject()->transform->local_orient);
 
 				{
 					Constraint& constraint = cp.constraint[0];

@@ -1,11 +1,9 @@
 #include "ALP_physics.h"
 
-#include "collider__base.h"
 #include "../Object/gameobject.h"
 #include "ALP__physics_manager.h"
 
 #include "ALP_collider.h"
-#include "collider__base.h"
 
 using namespace Adollib;
 using namespace Physics_function;
@@ -53,6 +51,7 @@ Matrix ALP_Physics::inverse_inertial_tensor() const {
 		rotation = gameobject->world_orientate().get_rotate_matrix();
 		transposed_rotation = matrix_trans(rotation);
 		inverse_inertial_tensor = rotation * inverse_inertial_tensor * transposed_rotation;
+		//inverse_inertial_tensor = transposed_rotation * inverse_inertial_tensor * rotation;
 	}
 	else {
 		inverse_inertial_tensor = matrix_identity();
@@ -93,8 +92,11 @@ void ALP_Physics::apply_external_force(float duration) {
 		//v(t) = C´ * exp(-k / m * t)
 		//t=0の時 C´ = V(0)より
 		//v(t) = V(0) * exp(-k / m * t)
-		const float k = linear_drag * inv_mass; //空気抵抗やらなんやらを考慮した値 のはずだけど適当に簡略化
-		linear_velocity = linear_velocity * exp(-k * duration); // 空気抵抗
+		const float kl = linear_drag * inv_mass; //空気抵抗やらなんやらを考慮した値 のはずだけど適当に簡略化
+		linear_velocity = linear_velocity * exp(-kl * duration); // 空気抵抗
+
+		const float ka = anglar_drag * inv_mass; //空気抵抗やらなんやらを考慮した値 のはずだけど適当に簡略化
+		anglar_velocity = anglar_velocity * exp(-ka * duration); // 空気抵抗
 
 		//並進移動に加える力(accumulated_force)から加速度を出して並進速度を更新する 向きを間違えないように!!
 		linear_acceleration += accumulated_force * inv_mass;
