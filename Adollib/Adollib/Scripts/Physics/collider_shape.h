@@ -40,8 +40,8 @@ namespace Adollib {
 	public:
 
 		//質量を考慮しない慣性モーメント  barycenter : 回転の中心
-		Matrix get_tensor(const Vector3& barycenter) {
-			Matrix tensor;
+		Matrix33 get_tensor(const Vector3& barycenter) {
+			Matrix33 tensor;
 			//shapeの中心を回転中心とした慣性モーメント
 			tensor = tensor_base();
 
@@ -94,7 +94,7 @@ namespace Adollib {
 		virtual void adapt_Colliderdata() = 0;
 
 		//shapeの中心を回転中心とした慣性モーメント
-		virtual const Matrix tensor_base() const = 0;
+		virtual const Matrix33 tensor_base() const = 0;
 
 	public:
 		//

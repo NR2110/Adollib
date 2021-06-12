@@ -76,11 +76,11 @@ namespace Adollib {
 			}
 		};
 
-		const Matrix tensor_base() const override {
+		const Matrix33 tensor_base() const override {
 			const Vector3& Wsize = world_scale();
-			Matrix ret;
+			Matrix33 ret;
 
-			ret = matrix_identity();
+			ret = matrix33_identity();
 			ret._11 = 0.3333333f * ((Wsize.y * Wsize.y) + (Wsize.z * Wsize.z));
 			ret._22 = 0.3333333f * ((Wsize.z * Wsize.z) + (Wsize.x * Wsize.x));
 			ret._33 = 0.3333333f * ((Wsize.x * Wsize.x) + (Wsize.y * Wsize.y));

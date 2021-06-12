@@ -75,7 +75,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 			SB.delta_AngulaVelocity = Vector3(0.0f);
 
 			if (coll->get_ALPphysics()->is_kinmatic_anglar) SB.inv_inertia = coll->get_ALPphysics()->inverse_inertial_tensor();
-			else SB.inv_inertia = matrix_zero();
+			else SB.inv_inertia = matrix33_zero();
 
 			SB.inv_mass = coll->get_ALPphysics()->inverse_mass();
 
@@ -127,7 +127,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 			pdotb = vector3_cross(ALPphysics[1]->anglar_velocity, rB);
 			pdotb += ALPphysics[1]->linear_velocity;
 
-			//衝突時の衝突平面法線方向の相対速度(結局衝突に使うのは法線方向への速さ)
+			//衝突時の衝突平面法線方向の相対速度
 			Vector3 vrel = pdota - pdotb;
 
 			Vector3

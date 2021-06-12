@@ -61,11 +61,11 @@ namespace Adollib {
 			}
 		};
 
-		const Matrix tensor_base() const override {
+		const Matrix33 tensor_base() const override {
 			const Vector3& Wsize = world_scale();
-			Matrix ret;
+			Matrix33 ret;
 
-			ret = matrix_identity();
+			ret = matrix33_identity();
 
 			//R‚Í”¼Œa H‚Í‰~’Œ‚Ì‚‚³
 			//‰~’Œ

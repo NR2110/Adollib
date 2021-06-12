@@ -6,7 +6,8 @@
 namespace Adollib {
 
 	class Vector3;
-	class Matrix;
+	class Matrix44;
+	class Matrix33;
 
 	class Quaternion : public DirectX::XMFLOAT4 {
 		//public:
@@ -59,7 +60,7 @@ namespace Adollib {
 		DirectX::XMFLOAT3 get_XM3() const;
 		Vector3 get_NV3() const;
 		DirectX::XMFLOAT4 get_XM4() const;
-		Matrix get_rotate_matrix() const;
+		Matrix33 get_rotate_matrix() const;
 
 		// length
 		float norm_sqr() const;
@@ -105,7 +106,7 @@ namespace Adollib {
 	Quaternion quaternion_from_euler(Vector3 V);
 
 	//回転行列からクォータニオンの生成
-	Quaternion quaternion_by_rotate_matrix(Matrix& M);
+	Quaternion quaternion_by_rotate_matrix(Matrix44& M);
 
 	Quaternion quaternion_look_at(Vector3& me, Vector3& you);
 

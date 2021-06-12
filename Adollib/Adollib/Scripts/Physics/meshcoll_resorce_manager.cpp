@@ -97,7 +97,7 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 		mesh.FBX_pass = fbxname;
 		//::
 
-		Matrix mesh_globalTransform = matrix_identity();
+		Matrix44 mesh_globalTransform = matrix44_identity();
 		// globalTransform
 		FbxAMatrix global_transform = fbxMesh->GetNode()->EvaluateGlobalTransform(0);
 		for (int row = 0; row < 4; row++)

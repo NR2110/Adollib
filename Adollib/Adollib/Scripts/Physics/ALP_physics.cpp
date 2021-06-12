@@ -42,18 +42,18 @@ float ALP_Physics::inverse_mass() const {
 	else return 0;
 }
 
-Matrix ALP_Physics::inverse_inertial_tensor() const {
-	Matrix inverse_inertial_tensor;
+Matrix33 ALP_Physics::inverse_inertial_tensor() const {
+	Matrix33 inverse_inertial_tensor;
 	if (is_movable()) {
 		inverse_inertial_tensor = matrix_inverse(inertial_tensor);
 
-		Matrix rotation, transposed_rotation;
+		Matrix33 rotation, transposed_rotation;
 		rotation = gameobject->world_orientate().get_rotate_matrix();
 		transposed_rotation = matrix_trans(rotation);
 		inverse_inertial_tensor = rotation * inverse_inertial_tensor * transposed_rotation;
 	}
 	else {
-		inverse_inertial_tensor = matrix_identity();
+		inverse_inertial_tensor = matrix33_identity();
 
 		inverse_inertial_tensor._11 = 0;
 		inverse_inertial_tensor._22 = 0;
@@ -102,10 +102,10 @@ void ALP_Physics::apply_external_force(float duration) {
 		linear_velocity += linear_acceleration * duration;
 
 		//各回転に加える力(accumulated_torque)から加速度を出して角速度を更新する
-		Matrix inverse_inertia_tensor = matrix_inverse(inertial_tensor);
+		Matrix33 inverse_inertia_tensor = matrix_inverse(inertial_tensor);
 		//Matrix rotation = ALPcollider->local_orientation.get_rotate_matrix();
-		Matrix rotation = gameobject->world_orientate().get_rotate_matrix();
-		Matrix transposed_rotation = matrix_trans(rotation);
+		Matrix33 rotation = gameobject->world_orientate().get_rotate_matrix();
+		Matrix33 transposed_rotation = matrix_trans(rotation);
 		inverse_inertia_tensor = transposed_rotation * inverse_inertia_tensor * rotation;
 		angula_acceleration += vector3_trans(accumulated_torque, inverse_inertia_tensor);
 
@@ -147,8 +147,7 @@ void ALP_Physics::update_tensor_and_mass(const std::vector<Collider_shape*>& sha
 	//ユーザーに定義された慣性モーメントが無いとき
 	if (is_user_tensor == false) {
 		//慣性モーメントの更新
-		inertial_tensor = matrix_zero();
-		inertial_tensor._44 = 1;
+		inertial_tensor = matrix33_zero();
 		for (const auto& shape : shapes) {
 			const float shape_mass = shape->local_scale.x * shape->local_scale.y * shape->local_scale.z;
 			inertial_tensor += shape_mass / sum_valume * shape->get_tensor(barycenter);

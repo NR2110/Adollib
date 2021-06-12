@@ -86,7 +86,7 @@ void Gameobject::render() {
 
 		//CB : ConstantBufferPerOBJ
 		ConstantBufferPerGO g_cb;
-		g_cb.world = matrix_world(transform->scale, transform->orientation.get_rotate_matrix(), transform->position).get_XMFLOAT4X4();
+		g_cb.world = matrix_world(transform->scale, transform->orientation.get_rotate_matrix(), transform->position);
 		Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
 		Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 		Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());

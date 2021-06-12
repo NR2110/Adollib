@@ -360,9 +360,6 @@
     <ClInclude Include="Scripts\Math\matrix.h">
       <Filter>00_Adollib\11_math</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Math\matrix_e.h">
-      <Filter>00_Adollib\11_math</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts\Math\quaternion.h">
       <Filter>00_Adollib\11_math</Filter>
     </ClInclude>
@@ -518,6 +515,12 @@
     </ClInclude>
     <ClInclude Include="Scripts\Physics\collider_types.h">
       <Filter>00_Adollib\22_physics\collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Math\matrix4x4_e.h">
+      <Filter>00_Adollib\11_math</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Math\matrix3x3_e.h">
+      <Filter>00_Adollib\11_math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

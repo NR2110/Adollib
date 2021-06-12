@@ -41,7 +41,7 @@ void Material::render() {
 		//CB : ConstantBufferPerMaterial
 		ConstantBufferPerMaterial cb;
 		for (int i = 0; i < MAX_BONES; i++) {
-			cb.boneTransforms[i] = matrix_identity().get_XMFLOAT4X4();
+			cb.boneTransforms[i] = matrix44_identity();
 		}
 		{
 			// boneTransform

@@ -158,8 +158,8 @@ bool ray_cast_mesh(const Vector3& l_Ray_pos, const Vector3& l_Ray_dir,
 	bool crossing = false; //‚Ç‚±‚©‚ªŒğ·‚µ‚Ä‚¢‚½‚çtrue‚É•ÏX
 	const std::vector<Vector3>& vertices = mesh->get_mesh_data()->vertices;
 
-	Matrix mat = matrix_world(mesh->world_scale(), mesh->world_orientation().get_rotate_matrix(), mesh->world_position());
-	Matrix mat_inv = matrix_inverse(mat);
+	Matrix44 mat = matrix_world(mesh->world_scale(), mesh->world_orientation().get_rotate_matrix(), mesh->world_position());
+	Matrix44 mat_inv = matrix_inverse(mat);
 
 	//Ray‚Ìî•ñ‚ğmesh‚ÌÀ•WŒn‚É‚É‚Á‚Ä‚­‚é
 	const Vector3 Ray_pos = vector3_trans(l_Ray_pos, mat_inv);

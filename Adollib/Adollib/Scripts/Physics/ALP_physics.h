@@ -17,7 +17,7 @@ namespace Adollib {
 			Vector3 delta_LinearVelocity; // 並進速度差分
 			Vector3 delta_AngulaVelocity; // 回転速度差分
 			//Quaternion orientation; // 姿勢
-			Matrix inv_inertia; // 慣性テンソルの逆行列
+			Matrix33 inv_inertia; // 慣性テンソルの逆行列
 #else
 			DirectX::XMVECTOR delta_LinearVelocity; // 並進速度差分
 			DirectX::XMVECTOR delta_AngulaVelocity; // 回転速度差分
@@ -76,7 +76,7 @@ namespace Adollib {
 			Vector3 linear_velocity;//並進速度
 			Vector3 anglar_velocity; //回転速度
 
-			Matrix inertial_tensor; //慣性テンソル
+			Matrix33 inertial_tensor; //慣性テンソル
 
 			bool sleep_state = false; //sleep状態かのflag
 
@@ -103,10 +103,10 @@ namespace Adollib {
 			float inverse_mass() const;
 
 			//慣性モーメントの逆行列を返す
-			Matrix inverse_inertial_tensor() const;
+			Matrix33 inverse_inertial_tensor() const;
 
 			//慣性モーメントをユーザー指定のものに固定する
-			void set_tensor(const Matrix& tensor) {
+			void set_tensor(const Matrix33& tensor) {
 				is_user_tensor = true;
 				inertial_tensor = tensor;
 			}

@@ -359,7 +359,7 @@ namespace Adollib
 
 				float dis = 1.0f;
 				if (summon == true) {
-					Matrix tensor = matrix_identity();
+					Matrix33 tensor = matrix33_identity();
 					Vector3 s = Vector3(2, 0.75f, 1.5f);
 					tensor._11 = 0.3f * (s.y * s.y + s.z * s.z);
 					tensor._22 = 0.3f * (s.z * s.z + s.x * s.x);
@@ -465,8 +465,6 @@ namespace Adollib
 				}
 				imgui_num++;
 			}
-
-
 
 			ImGui::Columns(1);
 			ImGui::End();

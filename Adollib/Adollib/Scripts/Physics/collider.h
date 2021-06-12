@@ -90,7 +90,7 @@ namespace Adollib {
 		void add_shape(const char* filepass, bool is_right_rtiangle = true);
 
 		//慣性モーメントをユーザー定義で設定する
-		void set_tensor(const Matrix& tensor) { ALPphysics_ptr->set_tensor(tensor); };
+		void set_tensor(const Matrix33& tensor) { ALPphysics_ptr->set_tensor(tensor); };
 
 
 	public:

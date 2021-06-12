@@ -161,10 +161,10 @@ namespace Adollib {
 	inline Vector3 Quaternion::get_NV3() const {
 		return Vector3(x, y, z);
 	}
-	inline Matrix Quaternion::get_rotate_matrix() const {
+	inline Matrix44 Quaternion::get_rotate_matrix() const {
 		__m128 Q = DirectX::XMLoadFloat4(this);
 
-		Matrix R;
+		Matrix44 R;
 		DirectX::XMStoreFloat4x4(&R, DirectX::XMMatrixRotationQuaternion(Q));
 		return R;
 	}
@@ -258,7 +258,7 @@ namespace Adollib {
 	//
 	//	return Rz * Rx * Ry;
 	//}
-	inline Quaternion Adollib::quaternion_by_rotate_matrix(Matrix& M) {
+	inline Quaternion Adollib::quaternion_by_rotate_matrix(Matrix44& M) {
 		Vector3 V = matrix_to_euler(M);
 		Quaternion Rx = quaternion_angle_axis(V.x, Vector3(1, 0, 0));
 		Quaternion Ry = quaternion_angle_axis(V.y, Vector3(0, 1, 0));

@@ -817,7 +817,7 @@ bool Physics_function::generate_contact_sphere_plane(const Collider_shape* spher
 	Vector3 ACcontact_pointB;
 
 	//球面と平面の衝突判定を行う
-	Matrix rotate, inverse_rotate;
+	Matrix44 rotate, inverse_rotate;
 	rotate = plane->world_orientation().get_rotate_matrix();
 	rotate._41 = plane->world_position().x; //transpseの入力
 	rotate._42 = plane->world_position().y;
@@ -879,7 +879,7 @@ bool Physics_function::generate_contact_sphere_box(const Collider_shape* sphere,
 	Vector3 ACcontact_pointB;
 
 	//球とboxの衝突判定を行う
-	Matrix rotate, inverse_rotate;
+	Matrix44 rotate, inverse_rotate;
 	rotate = matrix_world(Vector3(1, 1, 1), box->world_orientation().get_rotate_matrix(), box->world_position());
 	inverse_rotate = matrix_inverse(rotate);
 
@@ -1031,7 +1031,7 @@ bool Physics_function::generate_contact_sphere_mesh(const Collider_shape* sphere
 
 	if (false && mesh->get_mesh_data()->is_Convex == true) {
 		//球とmeshの衝突判定を行う
-		Matrix rotate, inverse_rotate;
+		Matrix44 rotate, inverse_rotate;
 		rotate = matrix_world(Vector3(1, 1, 1), mesh->world_orientation().get_rotate_matrix(), mesh->world_position());
 		inverse_rotate = matrix_inverse(rotate);
 
@@ -1171,7 +1171,7 @@ bool Physics_function::generate_contact_box_plane(const Collider_shape* box, con
 	};
 
 	//Boxと平面の衝突判定を行う
-	Matrix rotate, inverse_rotate;
+	Matrix44 rotate, inverse_rotate;
 	rotate = plane->world_orientation().get_rotate_matrix();
 	rotate._41 = plane->world_position().x; //transpseの入力
 	rotate._42 = plane->world_position().y;
@@ -1254,7 +1254,7 @@ bool Physics_function::generate_contact_box_box(const Collider_shape* boxA, cons
 	Vector3 ACcontact_pointA;
 	Vector3 ACcontact_pointB;
 
-	Matrix m;
+	Matrix33 m;
 	m = boxA->world_orientation().get_rotate_matrix();
 	OBB obbA;
 	obbA.world_position = boxA->world_position();
@@ -1299,7 +1299,7 @@ bool Physics_function::generate_contact_box_box(const Collider_shape* boxA, cons
 		if (vector3_dot(obbB.u_axes[2], -Wn) > 0) p1.z = -p1.z;
 
 		//boxAの逆行列の作成
-		Matrix rotate, inverse_rotate;
+		Matrix44 rotate, inverse_rotate;
 		rotate = boxA->world_orientation().get_rotate_matrix();
 		rotate._41 = boxA->world_position().x; //transpseの入力
 		rotate._42 = boxA->world_position().y;
@@ -1349,7 +1349,7 @@ bool Physics_function::generate_contact_box_box(const Collider_shape* boxA, cons
 		if (vector3_dot(obbA.u_axes[2], Wn) > 0) p0.z = -p0.z;
 
 		//box0の逆行列の作成
-		Matrix rotate, inverse_rotate;
+		Matrix44 rotate, inverse_rotate;
 		rotate = boxB->world_orientation().get_rotate_matrix();
 		rotate._41 = boxB->world_position().x; //transpseの入力
 		rotate._42 = boxB->world_position().y;
@@ -1598,7 +1598,7 @@ bool Physics_function::generate_contact_box_mesh(const Collider_shape* box, cons
 	if (0 && mesh->get_mesh_data()->is_Convex == true) {}
 	else {
 		//boxとmeshの判定
-		Matrix m;
+		Matrix33 m;
 		m = box->world_orientation().get_rotate_matrix();
 		OBB obb;
 		obb.world_position = box->world_position();
@@ -1704,7 +1704,7 @@ bool Physics_function::generate_contact_box_mesh(const Collider_shape* box, cons
 				p1 *= smallest_triangle.world_scale;
 
 				//boxAの逆行列の作成
-				Matrix rotate, inverse_rotate;
+				Matrix44 rotate, inverse_rotate;
 				rotate = box->world_orientation().get_rotate_matrix();
 				rotate._41 = box->world_position().x; //transpseの入力
 				rotate._42 = box->world_position().y;

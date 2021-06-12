@@ -182,8 +182,9 @@
     <ClInclude Include="Scripts\Math\math.h" />
     <ClInclude Include="Scripts\Math\math_e.h" />
     <ClInclude Include="Scripts\Math\matrix.h" />
+    <ClInclude Include="Scripts\Math\matrix3x3_e.h" />
     <ClInclude Include="Scripts\Math\matrixSIM_e.h" />
-    <ClInclude Include="Scripts\Math\matrix_e.h" />
+    <ClInclude Include="Scripts\Math\matrix4x4_e.h" />
     <ClInclude Include="Scripts\Math\quaternion.h" />
     <ClInclude Include="Scripts\Math\quaternionSIM_e.h" />
     <ClInclude Include="Scripts\Math\quaternion_e.h" />
