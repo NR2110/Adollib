@@ -11,7 +11,6 @@ namespace Adollib {
 
 		Box(Physics_function::ALP_Collider* l_ALPcollider_ptr) : center(Vector3(0)), rotate(Vector3(0)), size(Vector3(1)) {
 			shape_tag = Physics_function::ALPCollider_shape_type::BOX;
-			tensor_type = Physics_function::Tensor_type::Box;
 			ALPcollider_ptr = l_ALPcollider_ptr;
 		};
 
@@ -77,13 +76,15 @@ namespace Adollib {
 			}
 		};
 
-		void update_inertial_tensor(Matrix& inertial_tensor, const float& inertial_mass) override {
+		const Matrix tensor_base() const override {
 			const Vector3& Wsize = world_scale();
+			Matrix ret;
 
-			inertial_tensor = matrix_identity();
-			inertial_tensor._11 = 0.3333333f * inertial_mass * ((Wsize.y * Wsize.y) + (Wsize.z * Wsize.z));
-			inertial_tensor._22 = 0.3333333f * inertial_mass * ((Wsize.z * Wsize.z) + (Wsize.x * Wsize.x));
-			inertial_tensor._33 = 0.3333333f * inertial_mass * ((Wsize.x * Wsize.x) + (Wsize.y * Wsize.y));
+			ret = matrix_identity();
+			ret._11 = 0.3333333f * ((Wsize.y * Wsize.y) + (Wsize.z * Wsize.z));
+			ret._22 = 0.3333333f * ((Wsize.z * Wsize.z) + (Wsize.x * Wsize.x));
+			ret._33 = 0.3333333f * ((Wsize.x * Wsize.x) + (Wsize.y * Wsize.y));
+			return ret;
 		};
 
 

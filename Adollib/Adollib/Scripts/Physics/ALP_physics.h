@@ -43,14 +43,15 @@ namespace Adollib {
 			u_int index = 0; //このcolliderの番号
 			Scenelist scene = Scenelist::scene_null; //このcolldierが存在するscene
 
-			//::: 慣性モーメントのtype :::
-			Physics_function::Tensor_type tensor_type = Physics_function::Tensor_type::None;
+			//::: 慣性モーメントがユーザー定義されたものか :::
+			bool is_user_tensor = false;
 
 			//::: Colliderへのポインタ :::
 			ALP_Collider* ALPcollider = nullptr;
 
 			//::: アタッチされたGOへのポインタ :::
 			Gameobject* gameobject = nullptr;
+
 		public:
 			ALP_Solverbody* solve = nullptr; //衝突解決用
 
@@ -79,12 +80,14 @@ namespace Adollib {
 
 			bool sleep_state = false; //sleep状態かのflag
 
-			//::: 見せない :::::::::::::::::::::::::::
-			Vector3 accumulated_force;//並進速度
+		private:
+			Vector3 accumulated_force;  //並進速度
 			Vector3 accumulated_torque; //回転速度
 
-			Vector3 linear_acceleration;//並進加速度
+			Vector3 linear_acceleration; //並進加速度
 			Vector3 angula_acceleration; //回転加速度
+
+			Vector3 barycenter; //GOのlocal空間の重心座標
 
 		public:
 			//並進移動に力を加える
@@ -102,15 +105,9 @@ namespace Adollib {
 			//慣性モーメントの逆行列を返す
 			Matrix inverse_inertial_tensor() const;
 
-			//追加された形により慣性モーメントのタイプを変更する
-			void add_tensor_type(Tensor_type type);
-
-			//現在アタッチされているshapeから慣性モーメントのタイプを再設定する(shapeがremoveされたときなどに使用)
-			void refresh_tensor_type(const std::vector<Collider_shape*>& shapes);
-
 			//慣性モーメントをユーザー指定のものに固定する
 			void set_tensor(const Matrix& tensor) {
-				tensor_type = Tensor_type::User;
+				is_user_tensor = true;
 				inertial_tensor = tensor;
 			}
 
@@ -125,14 +122,15 @@ namespace Adollib {
 			//座標,姿勢の更新
 			void integrate(float duration = 1);
 
-			//サイズ変更などに対応するため毎フレーム慣性テンソルなどを更新 慣性テンソルの更新にALP_collider::scaleとALP_Physics::massが必要なためここに記述
-			void update_tensor(const std::vector<Collider_shape*>& shapes);
+			//アタッチされたshapesから慣性モーメントと質量、ついでに重心の更新
+			void update_tensor_and_mass(const std::vector<Collider_shape*>& shapes);
+
 
 			//::: collider:Component の massなどが変更されたときに呼ぶもの :::
 			// Colliderから情報の獲得
 			void update_physics_data();
 
-			//マネージャーからこのクラスの削除
+			//マネージャーからこのクラスのremove itrがprivateなためメンバ関数でremoveする
 			void destroy();
 
 		};

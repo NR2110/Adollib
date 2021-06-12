@@ -12,7 +12,6 @@ namespace Adollib {
 
 		Capsule(Physics_function::ALP_Collider* l_ALPcollider_ptr) : center(Vector3(0)), rotate(Vector3(0)), r(1), length(1) {
 			shape_tag = Physics_function::ALPCollider_shape_type::Capsule;
-			tensor_type = Physics_function::Tensor_type::Box;
 			ALPcollider_ptr = l_ALPcollider_ptr;
 		};
 
@@ -62,13 +61,37 @@ namespace Adollib {
 			}
 		};
 
-		void update_inertial_tensor(Matrix& inertial_tensor, const float& inertial_mass) override {
+		const Matrix tensor_base() const override {
 			const Vector3& Wsize = world_scale();
+			Matrix ret;
 
-			inertial_tensor = matrix_identity();
-			inertial_tensor._11 = 0.3333333f * inertial_mass * ((Wsize.y * Wsize.y) + (Wsize.z * Wsize.z));
-			inertial_tensor._22 = 0.3333333f * inertial_mass * ((Wsize.z * Wsize.z) + (Wsize.x * Wsize.x));
-			inertial_tensor._33 = 0.3333333f * inertial_mass * ((Wsize.x * Wsize.x) + (Wsize.y * Wsize.y));
+			ret = matrix_identity();
+
+			//RÇÕîºåa HÇÕâ~íåÇÃçÇÇ≥
+			//â~íå
+			//X : M(1/4 R^2 + 1/12 H^2)
+			//Y : 1/2 M R^2
+			//Z : M(1/4 R^2 + 1/12 H^2)
+			//í[ÇÃãÖ
+			//X : M(1/5 R^2 + 1/4 H^2) * 2
+			//Y : 2/5 M R^2
+			//Z : M(1/5 R^2 + 1/4 H^2) * 2
+
+			//Wsize.yÇÕâ~íåÇÃçÇÇ≥/2Ç»ÇÃÇ≈
+			float H = Wsize.y * 2;
+
+			ret._11 = 0.65f * Wsize.x * Wsize.x + 0.583333333f * H * H;
+			ret._22 = 0.9f * Wsize.x * Wsize.x;
+			ret._33 = 0.65f * Wsize.x * Wsize.x + 0.583333333f * H * H;
+
+			//Ç»Ç∫Ç©è„ÇÃéÆÇ≈Ç§Ç‹Ç≠Ç¢Ç©Ç»Ç¢ÇÃÇ≈ Ç∆ÇËÇ†Ç¶Ç∏éläpÇÃÉeÉìÉ\ÉãÇì¸ÇÍÇƒÇ®Ç≠
+			//ret._11 = 0.3333333f * ((Wsize.y * Wsize.y) + (Wsize.z * Wsize.z));
+			//ret._22 = 0.3333333f * ((Wsize.z * Wsize.z) + (Wsize.x * Wsize.x));
+			//ret._33 = 0.3333333f * ((Wsize.x * Wsize.x) + (Wsize.y * Wsize.y));
+
+
+
+			return ret;
 		};
 
 

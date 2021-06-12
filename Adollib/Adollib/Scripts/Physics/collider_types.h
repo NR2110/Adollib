@@ -14,11 +14,5 @@ namespace Adollib {
 			Cylinder
 		};
 
-		enum class Tensor_type {
-			None,
-			User,
-			Sphere,
-			Box
-		};
 	}
 }

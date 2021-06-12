@@ -51,7 +51,6 @@ Matrix ALP_Physics::inverse_inertial_tensor() const {
 		rotation = gameobject->world_orientate().get_rotate_matrix();
 		transposed_rotation = matrix_trans(rotation);
 		inverse_inertial_tensor = rotation * inverse_inertial_tensor * transposed_rotation;
-		//inverse_inertial_tensor = transposed_rotation * inverse_inertial_tensor * rotation;
 	}
 	else {
 		inverse_inertial_tensor = matrix_identity();
@@ -124,102 +123,54 @@ void ALP_Physics::apply_external_force(float duration) {
 }
 void ALP_Physics::integrate(float duration) {
 
-	//if (is_movable() == false)return;
-
-	////位置の更新
-	//if (linear_velocity.norm() >= FLT_EPSILON)
-	//	ALP_coll->offset_CollGO_pos += linear_velocity * duration;
-
-	//ALP_coll->offset_CollGO_quat *= quaternion_radian_axis(anglar_velocity.norm_sqr() * duration * 0.5f, anglar_velocity.unit_vect());
-	//ALP_coll->offset_CollGO_quat = ALP_coll->world_orientation().unit_vect();
-
 	if (is_movable() == false)return;
-
-	////位置の更新
-	//if (linear_velocity.norm() >= FLT_EPSILON)
-	//	ALP_coll->world_position_ += linear_velocity * duration;
-
-	//ALP_coll->world_orientation_ *= quaternion_radian_axis(anglar_velocity.norm_sqr() * duration * 0.5f, anglar_velocity.unit_vect());
-	//ALP_coll->world_orientation_ = ALP_coll->world_orientation().unit_vect();
 
 	ALPcollider->integrate(duration, linear_velocity, anglar_velocity);
 
 }
 
-void ALP_Physics::add_tensor_type(Tensor_type type) {
-	//ユーザー指定の慣性モーメントがあれば何もしない
-	if (tensor_type == Tensor_type::User)return;
+//アタッチされたshapesから慣性モーメントと質量、ついでに重心の更新
+void ALP_Physics::update_tensor_and_mass(const std::vector<Collider_shape*>& shapes) {
 
-	switch (tensor_type)
+
+	float sum_valume = 0;
 	{
-	case Adollib::Physics_function::Tensor_type::None:
-		tensor_type = type;
-		break;
-
-	case Adollib::Physics_function::Tensor_type::Sphere:
-		//アタッチされたshapeがsphereのみの時、転がりやすくするため慣性モーメントをsphere用にする
-		tensor_type = type;
-		break;
-
-	case Adollib::Physics_function::Tensor_type::Box:
-		//一つでもsphere以外が混じっていた場合 とりあえず便利なBox用の慣性モーメントにする
-		break;
-
-	default:
-		break;
-	}
-}
-void ALP_Physics::refresh_tensor_type(const std::vector<Collider_shape*>& shapes) {
-	//ユーザー指定の慣性モーメントがあれば何もしない
-	if (tensor_type == Tensor_type::User)return;
-
-	tensor_type = Tensor_type::None;
-	for (const auto& shape : shapes) {
-		add_tensor_type(shape->get_tensor_type());
-		if (tensor_type == Adollib::Physics_function::Tensor_type::Box)return;
-	}
-}
-
-//サイズ変更などに対応するため毎フレーム慣性テンソルなどを更新
-void ALP_Physics::update_tensor(const std::vector<Collider_shape*>& shapes) {
-
-	const int shapes_size = shapes.size();
-
-	if (shapes_size == 0)return;
-	if (shapes_size == 1) {
-		shapes.at(0)->update_inertial_tensor(inertial_tensor, inertial_mass);
-		return;
+		barycenter = Vector3(0);
+		for (const auto& shape : shapes) {
+			const float shape_mass = shape->local_scale.x * shape->local_scale.y * shape->local_scale.z;
+			barycenter += shape_mass * shape->local_position;
+			sum_valume += shape_mass;
+		}
+		barycenter /= sum_valume;
 	}
 
-	const auto& AABB = ALPcollider->get_AABB();
-	const float AABB_max_scale = ALmax(ALmax(AABB.max.x, AABB.max.y), AABB.max.z);
-	switch (tensor_type)
-	{
-	case Adollib::Physics_function::Tensor_type::None:
-		return;
-		break;
-	case Adollib::Physics_function::Tensor_type::User:
-		//ユーザー指定の慣性モーメントがあれば更新しない
-		return;
-		break;
-
-	case Adollib::Physics_function::Tensor_type::Sphere:
-		inertial_tensor = matrix_identity();
-		inertial_tensor._11 = 0.4f * inertial_mass * AABB_max_scale * AABB_max_scale;
-		inertial_tensor._22 = 0.4f * inertial_mass * AABB_max_scale * AABB_max_scale;
-		inertial_tensor._33 = 0.4f * inertial_mass * AABB_max_scale * AABB_max_scale;
-		break;
-
-	case Adollib::Physics_function::Tensor_type::Box:
-		inertial_tensor = matrix_identity();
-		inertial_tensor._11 = 0.3333333f * inertial_mass * ((AABB.max.y * AABB.max.y) + (AABB.max.z * AABB.max.z));
-		inertial_tensor._22 = 0.3333333f * inertial_mass * ((AABB.max.z * AABB.max.z) + (AABB.max.x * AABB.max.x));
-		inertial_tensor._33 = 0.3333333f * inertial_mass * ((AABB.max.x * AABB.max.x) + (AABB.max.y * AABB.max.y));
-		break;
-
-	default:
-		break;
+	//ユーザーに定義された慣性モーメントが無いとき
+	if (is_user_tensor == false) {
+		//慣性モーメントの更新
+		inertial_tensor = matrix_zero();
+		inertial_tensor._44 = 1;
+		for (const auto& shape : shapes) {
+			const float shape_mass = shape->local_scale.x * shape->local_scale.y * shape->local_scale.z;
+			inertial_tensor += shape_mass / sum_valume * shape->get_tensor(barycenter);
+		}
+		inertial_tensor *= inertial_mass;
 	}
+
+	//質量と重心の更新
+	//inertial_mass = 0;
+	//barycenter = Vector3(0);
+	//for (const auto& shape : shapes) {
+	//	inertial_mass += shape->mass;
+	//	barycenter += shape->local_position * shape->mass;
+	//}
+
+	//barycenter /= inertial_mass;
+
+	////重心の更新
+	//barycenter = Vector3(0);
+	//for (auto& shape : shapes) {
+	//	barycenter += shape->local_position * shape->mass;
+	//}
 
 }
 

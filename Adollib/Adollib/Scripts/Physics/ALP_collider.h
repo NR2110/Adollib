@@ -16,6 +16,8 @@ namespace Adollib {
 
 		class ALP_Physics;
 		class Meshcoll_part;
+
+		//形情報
 		class ALP_Collider {
 		public:
 			//コンストラクタ
@@ -30,17 +32,11 @@ namespace Adollib {
 				gameobject(l_go), coll_itr(l_collitr), this_itr(l_itr), ALPphysics(l_ALPphysics), scene(l_scene), index(l_index) {};
 
 		private:
-
 			//::: 自身へのイテレータ(remove用) :::
 			std::list<ALP_Collider*>::iterator this_itr;
 
-		private:
-			//::: アタッチされたshapeを包むAABB :::::::
-			DOP::AABB AABB;
-
 		public:
 			// ここをすべてprivateにしたかった........
-
 			u_int index = 0; //このcolliderの番号
 			Scenelist scene = Scenelist::scene_null; //このcolldierが存在するscene
 
@@ -52,8 +48,6 @@ namespace Adollib {
 			Collider_tagbit oncoll_bits = 0; //oncollision enterで使用するbit情報
 
 		public:
-			const DOP::AABB get_AABB() const { return AABB; };
-
 			//このcolliderの番号
 			const u_int get_index() const { return index; };
 
@@ -83,10 +77,12 @@ namespace Adollib {
 
 			//::: アタッチされたGOへのポインタ :::
 			Gameobject* gameobject = nullptr;
+
 		public:
 			std::list<Collider*>::iterator get_collitr() const { return coll_itr; };
 			ALP_Physics* get_ALPphysics() const { return ALPphysics; };
 			Gameobject* get_gameobject() const { return gameobject; };
+
 		public:
 
 			//::: 毎フレーム呼ぶもの ::::::
@@ -112,8 +108,6 @@ namespace Adollib {
 
 				T* shape = newD T(this);
 
-				call_add_tensor_type(shape->get_tensor_type());
-
 				shapes.emplace_back(shape);
 				return shape;
 			};
@@ -123,15 +117,13 @@ namespace Adollib {
 			//ヒエラルキー描画用
 			void Update_hierarchy();
 
-			//managerからクラスの削除 & shapesのdelete
+			//managerから自身のremove & shapesのdelete
 			void destroy();
 
 
 		private:
 			//::: shapeを包むAABBの更新 ::::::
-			void update_AABB();
-
-			void call_add_tensor_type(const Tensor_type& type);
+			//void update_AABB();
 		};
 	}
 }

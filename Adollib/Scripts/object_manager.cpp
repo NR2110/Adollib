@@ -360,12 +360,15 @@ namespace Adollib
 				float dis = 1.0f;
 				if (summon == true) {
 					Matrix tensor = matrix_identity();
-					tensor._11 = tensor._22 = tensor._33 = 0.4f * 1.5f * 1.5f ;
+					Vector3 s = Vector3(2, 0.75f, 1.5f);
+					tensor._11 = 0.3f * (s.y * s.y + s.z * s.z);
+					tensor._22 = 0.3f * (s.z * s.z + s.x * s.x);
+					tensor._33 = 0.3f * (s.x * s.x + s.y * s.y);
 
 					for (int i = 0; i < count; i++) {
 
 						for (int o = 0; o < count - i; o++) {
-							const Vector3& position = Vector3(2.50001f * o - (count - i) * 2.500001f / 2.0f + pos[0],
+							const Vector3& position = Vector3(4.20001f * o - (count - i) * 4.500001f / 2.0f + pos[0],
 								5.0f + 2.50001f * i + pos[1],
 								pos[2]);
 
@@ -374,47 +377,88 @@ namespace Adollib
 							Gameobject* Daruma = nullptr;
 							Daruma = Gameobject_manager::create("Daruma", GO_tag::Sphere);
 							Daruma->transform->local_pos = Vector3(position[0], position[1], position[2]);
-							Daruma->transform->local_scale = Vector3(1, 1, 1);
+							Daruma->transform->local_scale = Vector3(1, 1, 1) * 0.5f;
 
 							Collider* coll = Daruma->addComponent<Collider>();
-							coll->set_tensor(tensor);
-							Sphere* sphere[2] = { nullptr };
-							sphere[0] = coll->add_shape<Sphere>();
-							sphere[1] = coll->add_shape<Sphere>();
+							//coll->set_tensor(tensor);
+							//{
+							//	Sphere* sphere[2] = { nullptr };
+							//	sphere[0] = coll->add_shape<Sphere>();
+							//	sphere[1] = coll->add_shape<Sphere>();
 
-							sphere[0]->center = Vector3(0, 1, 0);
-							sphere[0]->r = 1;
-							sphere[1]->center = Vector3(0, 2, 0);
-							sphere[1]->r = 0.5f;
+							//	sphere[0]->center = Vector3(0, 1, 0);
+							//	sphere[0]->r = 1;
+							//	sphere[1]->center = Vector3(0, 2, 0);
+							//	sphere[1]->r = 0.5f;
+							//}
 
+							{
+								Box* box[5] = { nullptr };
+								box[0] = coll->add_shape<Box>();
+								box[1] = coll->add_shape<Box>();
+								box[2] = coll->add_shape<Box>();
+								box[3] = coll->add_shape<Box>();
+								box[4] = coll->add_shape<Box>();
 
+								box[0]->center = Vector3(0, 0.75f, 0);
+								box[0]->size = Vector3(4, 0.5f, 3);
 
-							//sphere[1]->r = 2;
+								box[1]->center = Vector3(+2.8f, -0.75f, +1.8f);
+								box[1]->size =   Vector3(0.5f, 1, 0.5f);
+								box[2]->center = Vector3(+2.8f, -0.75f, -1.8f);
+								box[2]->size =   Vector3(0.5f, 1, 0.5f);
+								box[3]->center = Vector3(-2.8f, -0.75f, +1.8f);
+								box[3]->size =   Vector3(0.5f, 1, 0.5f);
+								box[4]->center = Vector3(-2.8f, -0.75f, -1.8f);
+								box[4]->size =   Vector3(0.5f, 1, 0.5f);
+							}
+
 
 							// daruma‚ª•`‰æ‚³‚ê‚é‚æ‚¤‚ÉGO‚ðdaruma‚É‚Â‚¯‚é
-							Gameobject* parts[2] = { nullptr };
-							parts[0] = Gameobject_manager::createSphere(GO_tag::Sphere);
-							parts[1] = Gameobject_manager::createSphere(GO_tag::Sphere);
-							Vector4 C = Vector4(1, 0, 0, 1);
+							Gameobject* parts[5] = { nullptr };
+							parts[0] = Gameobject_manager::createCube();
+							parts[1] = Gameobject_manager::createCube();
+							parts[2] = Gameobject_manager::createCube();
+							parts[3] = Gameobject_manager::createCube();
+							parts[4] = Gameobject_manager::createCube();
+							Vector4 C = Vector4(207, 171, 142, 255) / 255;
+							//parts[0]->material->color = Vector4(238, 229, 224, 255) / 255;
+							////parts[1]->material->color = Vector4(207, 171, 142, 255) / 255;
+							//parts[1]->material->color = Vector4(255, 77, 17, 255) / 255;
+
 							parts[0]->material->color = C;
 							parts[1]->material->color = C;
+							parts[2]->material->color = C;
+							parts[3]->material->color = C;
+							parts[4]->material->color = C;
 
-							//object->addComponent<object_fall>();
-							parts[0]->transform->local_pos = Vector3(0, 2, 0);
-							parts[1]->transform->local_pos = Vector3(0, 1, 0);
+							parts[0]->transform->local_pos =  Vector3(0, 0.75f, 0);
+							parts[0]->transform->local_scale = Vector3(4, 0.5f, 3);
 
-							parts[0]->transform->local_scale = Vector3(1, 1, 1) * 0.5f;
-							parts[1]->transform->local_scale = Vector3(1, 1, 1) * 1.0f;
+							parts[1]->transform->local_pos = Vector3(+2.8f, -0.75f, +1.8f);
+							parts[1]->transform->local_scale = Vector3(0.5f, 1, 0.5f);
+							parts[2]->transform->local_pos = Vector3(+2.8f, -0.75f, -1.8f);
+							parts[2]->transform->local_scale = Vector3(0.5f, 1, 0.5f);
+							parts[3]->transform->local_pos = Vector3(-2.8f, -0.75f, +1.8f);
+							parts[3]->transform->local_scale = Vector3(0.5f, 1, 0.5f);
+							parts[4]->transform->local_pos = Vector3(-2.8f, -0.75f, -1.8f);
+							parts[4]->transform->local_scale = Vector3(0.5f, 1, 0.5f);
 
 
-							coll->tag = Collider_tags::Sphere;
+							//coll->tag = Collider_tags::Sphere;
 
 							Daruma->add_child(parts[0]);
 							Daruma->add_child(parts[1]);
+							Daruma->add_child(parts[2]);
+							Daruma->add_child(parts[3]);
+							Daruma->add_child(parts[4]);
 
 							GOs.emplace_back(Daruma);
 							GOs.emplace_back(parts[0]);
 							GOs.emplace_back(parts[1]);
+							GOs.emplace_back(parts[2]);
+							GOs.emplace_back(parts[3]);
+							GOs.emplace_back(parts[4]);
 						}
 
 					}

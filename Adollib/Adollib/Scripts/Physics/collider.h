@@ -52,16 +52,11 @@ namespace Adollib {
 		//static同士で衝突判定を行わない
 		bool is_static = false;
 
-	protected:
-		//physics_managerが実態を持つ。removeを実装するためlistの配列 したがってitrを保存。きもいので要修正
-		//実態をcolliderが持つべき? ->managerがポインタ配列を持つ? きもい?
-		Physics_function::ALP_Collider* ALPcollider_ptr;
-		Physics_function::ALP_Physics* ALPphysics_ptr;
+	private:
+		Physics_function::ALP_Collider* ALPcollider_ptr = nullptr;
+		Physics_function::ALP_Physics*  ALPphysics_ptr = nullptr;
 
 		std::list<Collider*>::iterator coll_itr;//自身へのitr
-
-	private:
-		bool removed = false; //二重にremoveをするのを防ぐ
 
 	public:
 		//::: 後で変更する :::
@@ -78,7 +73,7 @@ namespace Adollib {
 
 	public:
 
-		//on collision enter
+		//交差していたらtrueを返す
 		const bool concoll_enter(const unsigned int tag_name) const;
 
 		//並進移動に力を加える
@@ -87,15 +82,15 @@ namespace Adollib {
 		//角回転に力を加える
 		void add_torque(const Vector3& force);
 
+		//shapeのアタッチ
 		template<typename T>
 		T* add_shape() { return ALPcollider_ptr->add_shape<T>(); };
 
 		//meshcolliderのアタッチ
 		void add_shape(const char* filepass, bool is_right_rtiangle = true);
 
-		void set_tensor(const Matrix& tensor) {
-			ALPphysics_ptr->set_tensor(tensor);
-		}
+		//慣性モーメントをユーザー定義で設定する
+		void set_tensor(const Matrix& tensor) { ALPphysics_ptr->set_tensor(tensor); };
 
 
 	public:

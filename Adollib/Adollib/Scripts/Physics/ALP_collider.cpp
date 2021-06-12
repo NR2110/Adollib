@@ -48,12 +48,8 @@ void ALP_Collider::update_world_trans() {
 	// ユーザーに入力されたphysicsデータ(massなど)を計算用のデータに治す
 	ALPphysics->update_physics_data();
 
-	// shapesを包むAABBを更新
-	update_AABB();
-
 	// 慣性モーメントの更新
-	//if(is_changed_Size)
-	ALPphysics->update_tensor(shapes);
+	ALPphysics->update_tensor_and_mass(shapes);
 
 
 
@@ -62,12 +58,6 @@ void ALP_Collider::update_world_trans() {
 
 #pragma endregion
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-//void ALP_Collider::update_shapes_dop() {
-//	for (auto& shape : shapes) {
-//		shape->update_dop14();
-//	}
-//}
 
 void ALP_Collider::integrate(float duration, Vector3 linear_velocity, Vector3 anglar_velocity) {
 	if (linear_velocity.norm() == 0 && anglar_velocity.norm() == 0)return;
@@ -116,49 +106,45 @@ void ALP_Collider::destroy()
 const Collider_tagbit ALP_Collider::get_tag()const { return (*coll_itr)->tag; }; //自身のtag(bit)
 const Collider_tagbit ALP_Collider::get_ignore_tags() const { return (*coll_itr)->ignore_tags; }; //衝突しないtags
 
-void ALP_Collider::update_AABB() {
-
-	DOP::AABB aabb;
-	aabb.max = Vector3(-FLT_MAX);
-	aabb.min = Vector3(+FLT_MAX);
-
-	// shapeがアタッチされていなければ0を入れて返す
-	if (shapes.size() == 0) {
-		aabb.max = Vector3(0);
-		aabb.min = Vector3(0);
-		aabb.pos = Vector3(0);
-		AABB = aabb;
-		return;
-	}
-
-	// shapesの最大,最小の点を求める
-	for (const auto& shape : shapes) {
-		const DOP::DOP_14& dop = shape->get_DOP();
-
-		for (int i = 0; i < 3; i++) {
-			if (aabb.max[i] < dop.max[i] + dop.pos[i])aabb.max[i] = dop.max[i] + dop.pos[i];
-			if (aabb.min[i] > dop.min[i] + dop.pos[i])aabb.min[i] = dop.min[i] + dop.pos[i];
-		}
-
-	}
-	// 中心座標の調整 いずれ質量の中心をposに持ってくるかも????
-	aabb.pos = Vector3(
-		(aabb.max[0] + aabb.min[0]) * 0.5f,
-		(aabb.max[1] + aabb.min[1]) * 0.5f,
-		(aabb.max[2] + aabb.min[2]) * 0.5f
-	);
-
-	// min,maxを調整
-	for (int i = 0; i < 3; i++) {
-		const float len = fabsf(aabb.max[i] - aabb.pos[i]);
-
-		aabb.max[i] = +len;
-		aabb.min[i] = -len;
-	}
-
-	AABB = aabb;
-}
-
-void ALP_Collider::call_add_tensor_type(const Tensor_type& type) {
-	ALPphysics->add_tensor_type(type);
-}
+//void ALP_Collider::update_AABB() {
+//
+//	DOP::AABB aabb;
+//	aabb.max = Vector3(-FLT_MAX);
+//	aabb.min = Vector3(+FLT_MAX);
+//
+//	// shapeがアタッチされていなければ0を入れて返す
+//	if (shapes.size() == 0) {
+//		aabb.max = Vector3(0);
+//		aabb.min = Vector3(0);
+//		aabb.pos = Vector3(0);
+//		AABB = aabb;
+//		return;
+//	}
+//
+//	// shapesの最大,最小の点を求める
+//	for (const auto& shape : shapes) {
+//		const DOP::DOP_14& dop = shape->get_DOP();
+//
+//		for (int i = 0; i < 3; i++) {
+//			if (aabb.max[i] < dop.max[i] + dop.pos[i])aabb.max[i] = dop.max[i] + dop.pos[i];
+//			if (aabb.min[i] > dop.min[i] + dop.pos[i])aabb.min[i] = dop.min[i] + dop.pos[i];
+//		}
+//
+//	}
+//	// 中心座標の調整 いずれ質量の中心をposに持ってくるかも????
+//	aabb.pos = Vector3(
+//		(aabb.max[0] + aabb.min[0]) * 0.5f,
+//		(aabb.max[1] + aabb.min[1]) * 0.5f,
+//		(aabb.max[2] + aabb.min[2]) * 0.5f
+//	);
+//
+//	// min,maxを調整
+//	for (int i = 0; i < 3; i++) {
+//		const float len = fabsf(aabb.max[i] - aabb.pos[i]);
+//
+//		aabb.max[i] = +len;
+//		aabb.min[i] = -len;
+//	}
+//
+//	AABB = aabb;
+//}

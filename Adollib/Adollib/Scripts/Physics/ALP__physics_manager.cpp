@@ -16,7 +16,7 @@ using namespace Physics_function;
 using namespace Contacts;
 
 //ContactPoint‚Ì•\¦
-//#define Draw_Contact
+#define Draw_Contact
 
 //::: staticƒƒ“ƒo‚Ì‰Šú‰» :::::
 #pragma region static_initialize
@@ -91,7 +91,7 @@ bool Phyisics_manager::update(Scenelist Sce)
 	applyexternalforce(ALP_physicses[Sce]);
 
 
-	physicsParams.timeStep = ALmin(Al_Global::second_per_frame(), 0.016f);
+	physicsParams.timeStep = ALmin(Al_Global::second_per_frame(), 0.016f * 2);
 
 
 	// ‘åG”c‚È“–‚½‚è”»’è

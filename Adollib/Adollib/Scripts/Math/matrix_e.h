@@ -142,6 +142,7 @@ namespace Adollib {
 
 	inline Matrix Adollib::matrix_zero() {
 		Matrix M;
+		M *= 0;
 		return M;
 	}
 

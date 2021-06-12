@@ -27,6 +27,8 @@ namespace Adollib {
 		Vector3 old_world_scale_;
 
 	public:
+
+	public:
 		const Vector3	world_position()const { return world_position_; };
 		const Quaternion	world_orientation()const { return world_orientation_; };
 		const Vector3	world_scale()const { return world_scale_; };
@@ -37,15 +39,27 @@ namespace Adollib {
 
 	public:
 
+		//質量を考慮しない慣性モーメント  barycenter : 回転の中心
+		Matrix get_tensor(const Vector3& barycenter) {
+			Matrix tensor;
+			//shapeの中心を回転中心とした慣性モーメント
+			tensor = tensor_base();
+
+			//barycenterを回転中心として shapeのlocal座標の分を考慮 (平行軸の定理)
+			Vector3 dis = local_position - barycenter;
+			tensor._11 += (dis.y * dis.y + dis.z * dis.z);
+			tensor._22 += (dis.z * dis.z + dis.x * dis.x);
+			tensor._33 += (dis.x * dis.x + dis.y * dis.y);
+
+			return tensor;
+		};
+
 	protected:
 		//このshapeがどのような形なのか
 		Physics_function::ALPCollider_shape_type shape_tag = Physics_function::ALPCollider_shape_type::None;
 
-		//このshapeがどのような慣性モーメントを持つか
-		Physics_function::Tensor_type tensor_type = Physics_function::Tensor_type::None;
-
-		//14-DOP
-		DOP::DOP_14	dop14;	//14DOP データ
+		//DOP
+		DOP::DOP_14	dop14;	//DOP データ
 
 		//meshcollider用 vertexes,Edges,Facetsなどの情報 resorce_managerの中にある情報へのポインタ
 		Physics_function::Meshcollider_data* mesh_data = nullptr;
@@ -54,8 +68,6 @@ namespace Adollib {
 		Physics_function::ALP_Collider* ALPcollider_ptr = nullptr;
 
 	public:
-		const Physics_function::Tensor_type get_tensor_type() const { return tensor_type; };
-
 		const Physics_function::ALPCollider_shape_type get_shape_tag() const { return shape_tag; };
 
 		const DOP::DOP_14 get_DOP() const { return dop14; };
@@ -71,10 +83,6 @@ namespace Adollib {
 
 	public:
 
-
-
-	public:
-
 		//world情報の更新 動いていればtrueを変えす inertial_tensor更新の是非を確認するため
 		void update_world_trans(const Vector3& GO_Wposiiton, const Quaternion& GO_Worientation, const Vector3& GO_Wscale,
 			bool& is_chenged_position, bool& is_chenged_orientation, bool& is_chenged_scale
@@ -84,6 +92,10 @@ namespace Adollib {
 	protected:
 		//各shapeのユーザー用の情報(box:center,size)から計算用の情報(position,scale)に治す
 		virtual void adapt_Colliderdata() = 0;
+
+		//shapeの中心を回転中心とした慣性モーメント
+		virtual const Matrix tensor_base() const = 0;
+
 	public:
 		//
 		void update_Colliderdata() {
@@ -100,9 +112,6 @@ namespace Adollib {
 
 			}
 		};
-
-		//慣性モーメントの更新(複数のshapeがアタッチされている場合はALP_Collider::update_inertial_tensorが呼ばれる)
-		virtual void update_inertial_tensor(Matrix& inertial_tensor, const float& inertial_mass) = 0;
 
 		//ヒエラルキーへの表示
 		virtual void Update_hierarchy() = 0;
