@@ -67,9 +67,9 @@ namespace Adollib
 			float bounce_threshold = 0.01f; //跳ね返りの閾値
 			float sleep_threshold = 0.01f; //sleepの閾値
 
-			float contact_allowable_error = 0.02f; //これ以上近いと同一衝突点とする
-			float contact_threrhold_normal = 0.004f; //衝突点の閾値
-			float contact_threrhold_tangent = 0.02f;//衝突点の閾値
+			float contact_allowable_error = 0.01f; //これ以上近いと同一衝突点とする
+			float contact_threrhold_normal = 0.01f; //衝突点の閾値
+			float contact_threrhold_tangent = 0.002f;//衝突点の閾値
 
 
 

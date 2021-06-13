@@ -92,7 +92,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 	Collider_shape* coll[2];
 	ALP_Physics* ALPphysics[2];
 	ALP_Solverbody* solverbody[2];
-	//std::vector<Balljoint> balljoints; //ç°âÒÇÕÇ»Çµ
+	//std::vector<Balljoint> balljoints; //ç°ÇÕÇ»Çµ
 
 	for (auto& pair : pairs) {
 
@@ -110,13 +110,13 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 		for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 			Contactpoint& cp = pair.contacts.contactpoints[C_num];
 
-			Vector3 rA = vector3_quatrotate(coll[0]->local_position + vector3_quatrotate(cp.point[0], coll[0]->local_orientation), coll[0]->get_ALPcollider()->get_gameobject()->transform->local_orient);
-			Vector3 rB = vector3_quatrotate(coll[1]->local_position + vector3_quatrotate(cp.point[1], coll[1]->local_orientation), coll[1]->get_ALPcollider()->get_gameobject()->transform->local_orient);
+			Vector3 rA = vector3_quatrotate(coll[0]->local_position + vector3_quatrotate(cp.point[0], coll[0]->local_orientation), coll[0]->world_orientation());
+			Vector3 rB = vector3_quatrotate(coll[1]->local_position + vector3_quatrotate(cp.point[1], coll[1]->local_orientation), coll[1]->world_orientation());
 
 			// îΩî≠åWêîÇÃälìæ
 			// åpë±ÇÃè’ìÀÇÃèÍçáîΩî≠åWêîÇ0Ç…Ç∑ÇÈ
 			float restitution = (pair.type == Pairtype::new_pair ? 0.5f * (ALPphysics[0]->restitution + ALPphysics[1]->restitution) : 0.0f);
-
+			restitution = 0;
 
 			//è’ìÀéûÇÃÇªÇÍÇºÇÍÇÃë¨ìx
 			Vector3 pdota;
@@ -225,8 +225,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 		for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 			//è’ìÀì_ÇÃèÓïÒ
 			Contactpoint& cp = pair.contacts.contactpoints[C_num];
-			Vector3 rA = vector3_quatrotate(coll[0]->local_position + vector3_quatrotate(cp.point[0], coll[0]->local_orientation), coll[0]->get_ALPcollider()->get_gameobject()->transform->local_orient);
-			Vector3 rB = vector3_quatrotate(coll[1]->local_position + vector3_quatrotate(cp.point[1], coll[1]->local_orientation), coll[1]->get_ALPcollider()->get_gameobject()->transform->local_orient);
+			Vector3 rA = vector3_quatrotate(coll[0]->local_position + vector3_quatrotate(cp.point[0], coll[0]->local_orientation), coll[0]->world_orientation());
+			Vector3 rB = vector3_quatrotate(coll[1]->local_position + vector3_quatrotate(cp.point[1], coll[1]->local_orientation), coll[1]->world_orientation());
 
 			for (int k = 0; k < 3; k++) {
 				float deltaImpulse = cp.constraint[k].accuminpulse;
@@ -253,13 +253,14 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 			for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 				//è’ìÀì_ÇÃèÓïÒ
 				Contactpoint& cp = pair.contacts.contactpoints[C_num];
-				Vector3 rA = vector3_quatrotate(coll[0]->local_position + vector3_quatrotate(cp.point[0], coll[0]->local_orientation), coll[0]->get_ALPcollider()->get_gameobject()->transform->local_orient);
-				Vector3 rB = vector3_quatrotate(coll[1]->local_position + vector3_quatrotate(cp.point[1], coll[1]->local_orientation), coll[1]->get_ALPcollider()->get_gameobject()->transform->local_orient);
+				Vector3 rA = vector3_quatrotate(coll[0]->local_position + vector3_quatrotate(cp.point[0], coll[0]->local_orientation), coll[0]->world_orientation());
+				Vector3 rB = vector3_quatrotate(coll[1]->local_position + vector3_quatrotate(cp.point[1], coll[1]->local_orientation), coll[1]->world_orientation());
 
 				{
 					Constraint& constraint = cp.constraint[0];
 					float delta_impulse = constraint.rhs;
 					Vector3 delta_velocity[2];
+					//éÛÇØÇÈâeãøÇåvéZ
 					delta_velocity[0] = solverbody[0]->delta_LinearVelocity + vector3_cross(solverbody[0]->delta_AngulaVelocity, rA);
 					delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngulaVelocity, rB);
 					delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
@@ -271,8 +272,26 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 					solverbody[1]->delta_LinearVelocity -= delta_impulse * solverbody[1]->inv_mass * constraint.axis;
 					solverbody[1]->delta_AngulaVelocity -= delta_impulse * vector3_trans(vector3_cross(rB, constraint.axis), solverbody[1]->inv_inertia);
 				}
+				{
+					Constraint& constraint = cp.constraint[0];
+					float delta_impulse = constraint.rhs;
+					Vector3 delta_velocity[2];
+					//ëºÇÃcontactÇÃâeãøÇåvéZ
+					delta_velocity[0] = solverbody[0]->delta_LinearVelocity + vector3_cross(solverbody[0]->delta_AngulaVelocity, rA);
+					delta_velocity[1] = solverbody[1]->delta_LinearVelocity + vector3_cross(solverbody[1]->delta_AngulaVelocity, rB);
+					delta_impulse -= constraint.jacDiagInv * vector3_dot(constraint.axis, delta_velocity[0] - delta_velocity[1]);
+					float old_impulse = constraint.accuminpulse;
+					//constraint.accuminpulse = ALClamp(old_impulse + delta_impulse, constraint.lowerlimit, constraint.upperlimit);
+					delta_impulse = ALClamp(old_impulse + delta_impulse, constraint.lowerlimit, constraint.upperlimit) - old_impulse;
+				}
 
 				float max_friction = pair.contacts.friction * fabsf(cp.constraint[0].accuminpulse);
+				cp.constraint[1].lowerlimit = -max_friction;
+				cp.constraint[1].upperlimit = +max_friction;
+				cp.constraint[2].lowerlimit = -max_friction;
+				cp.constraint[2].upperlimit = +max_friction;
+
+				max_friction = 0.6f * fabsf(cp.constraint[0].accuminpulse);
 				cp.constraint[1].lowerlimit = -max_friction;
 				cp.constraint[1].upperlimit = +max_friction;
 				cp.constraint[2].lowerlimit = -max_friction;

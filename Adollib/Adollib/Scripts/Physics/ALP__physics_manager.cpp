@@ -91,7 +91,8 @@ bool Phyisics_manager::update(Scenelist Sce)
 	applyexternalforce(ALP_physicses[Sce]);
 
 
-	physicsParams.timeStep = ALmin(Al_Global::second_per_frame(), 0.016f * 2);
+	//physicsParams.timeStep = ALmin(Al_Global::second_per_frame(), 0.016f * 2);
+	physicsParams.timeStep = 0.016f;
 
 
 	// ‘åŽG”c‚È“–‚½‚è”»’è

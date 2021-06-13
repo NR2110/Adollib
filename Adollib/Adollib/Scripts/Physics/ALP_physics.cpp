@@ -91,11 +91,11 @@ void ALP_Physics::apply_external_force(float duration) {
 		//v(t) = C´ * exp(-k / m * t)
 		//t=0の時 C´ = V(0)より
 		//v(t) = V(0) * exp(-k / m * t)
-		const float kl = linear_drag * inv_mass; //空気抵抗やらなんやらを考慮した値 のはずだけど適当に簡略化
-		linear_velocity = linear_velocity * exp(-kl * duration); // 空気抵抗
+		//const float kl = linear_drag * inv_mass; //空気抵抗やらなんやらを考慮した値 のはずだけど適当に簡略化
+		//linear_velocity = linear_velocity * exp(-kl * duration); // 空気抵抗
 
-		const float ka = anglar_drag * inv_mass; //空気抵抗やらなんやらを考慮した値 のはずだけど適当に簡略化
-		anglar_velocity = anglar_velocity * exp(-ka * duration); // 空気抵抗
+		//const float ka = anglar_drag * inv_mass; //空気抵抗やらなんやらを考慮した値 のはずだけど適当に簡略化
+		//anglar_velocity = anglar_velocity * exp(-ka * duration); // 空気抵抗
 
 		//並進移動に加える力(accumulated_force)から加速度を出して並進速度を更新する 向きを間違えないように!!
 		linear_acceleration += accumulated_force * inv_mass;
@@ -106,7 +106,7 @@ void ALP_Physics::apply_external_force(float duration) {
 		//Matrix rotation = ALPcollider->local_orientation.get_rotate_matrix();
 		Matrix33 rotation = gameobject->world_orientate().get_rotate_matrix();
 		Matrix33 transposed_rotation = matrix_trans(rotation);
-		inverse_inertia_tensor = transposed_rotation * inverse_inertia_tensor * rotation;
+		inverse_inertia_tensor = rotation * inverse_inertia_tensor * rotation * transposed_rotation;
 		angula_acceleration += vector3_trans(accumulated_torque, inverse_inertia_tensor);
 
 		anglar_velocity += angula_acceleration * duration;
@@ -151,6 +151,7 @@ void ALP_Physics::update_tensor_and_mass(const std::vector<Collider_shape*>& sha
 		for (const auto& shape : shapes) {
 			const float shape_mass = shape->local_scale.x * shape->local_scale.y * shape->local_scale.z;
 			inertial_tensor += shape_mass / sum_valume * shape->get_tensor(barycenter);
+			inertial_tensor *= shape->local_orientation.get_rotate_matrix();
 		}
 		inertial_tensor *= inertial_mass;
 	}

@@ -146,23 +146,22 @@ int Contact::find_contact_point(
 }
 
 void Contact::chack_remove_contact_point(
-	const Vector3& pointA,
-	const Quaternion& rotA,
-	const Vector3& pointB,
-	const Quaternion& rotB
+	const Collider_shape* shape0,
+	const Collider_shape* shape1
 ) {
 	for (int i = 0; i < contact_num;) {
 		Vector3& normal = contactpoints[i].normal;
-		Vector3 contactpointA = pointA + vector3_quatrotate(contactpoints[i].point[0], rotA);
-		Vector3 contactpointB = pointB + vector3_quatrotate(contactpoints[i].point[1], rotB);
+
+		Vector3 contactpointA = shape0->world_position() + vector3_quatrotate(contactpoints[i].point[0], shape0->world_orientation());
+		Vector3 contactpointB = shape1->world_position() + vector3_quatrotate(contactpoints[i].point[1], shape1->world_orientation());
 
 		// normal方向の距離を比べる
-		float dis_N = vector3_dot(normal, contactpointA - contactpointB);
-		if (dis_N > Phyisics_manager::physicsParams.contact_threrhold_normal) {
+		const float dis_N = vector3_dot(normal, contactpointB - contactpointA);
+		if (dis_N < -Phyisics_manager::physicsParams.contact_threrhold_normal) {
 			remove_contactpoint(i);
 			continue;
 		}
-		contactpoints[i].distance = dis_N;
+		contactpoints[i].distance = -dis_N;
 
 		// normal方向を除去して両点の距離をチェック
 		// contactpointAをcontactpointBとnormal軸上で同じ場所に持ってくる

@@ -71,10 +71,8 @@ namespace Adollib {
 				// vector3 rotB : Rigitbody[1]ÇÃépê®
 				//:::::::
 				void chack_remove_contact_point(
-					const Vector3& pointA,
-					const Quaternion& rotA,
-					const Vector3& pointB,
-					const Quaternion& rotB
+					const Collider_shape* shape0,
+					const Collider_shape* shape1
 				);
 
 			private:

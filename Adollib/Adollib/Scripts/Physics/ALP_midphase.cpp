@@ -156,10 +156,8 @@ void Physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std:
 	//Œ»ÝŽg—p‚µ‚Ä‚¢‚È‚¢Õ“Ë“_‚ðíœ
 	for (auto& new_p : new_pairs) {
 		new_p.contacts.chack_remove_contact_point(
-			new_p.body[0]->world_position(),
-			new_p.body[0]->world_orientation(),
-			new_p.body[1]->world_position(),
-			new_p.body[1]->world_orientation()
+			new_p.body[0],
+			new_p.body[1]
 		);
 	}
 

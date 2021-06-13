@@ -75,8 +75,11 @@ void ALP_Collider::integrate(float duration, Vector3 linear_velocity, Vector3 an
 
 	gameobject->transform->local_pos += local_linear_velocity * duration;
 
-	gameobject->transform->local_orient *= quaternion_radian_axis(local_anglar_velocity.norm_sqr() * duration * 0.5f, local_anglar_velocity.unit_vect());
-	gameobject->transform->local_orient = gameobject->transform->local_orient.unit_vect();
+	//gameobject->transform->local_orient *= quaternion_radian_axis(local_anglar_velocity.norm_sqr() * duration * 0.5f, local_anglar_velocity.unit_vect());
+	//gameobject->transform->local_orient = gameobject->transform->local_orient.unit_vect();
+	Quaternion dang = gameobject->transform->local_orient.unit_vect() * Quaternion(0, anglar_velocity.x, anglar_velocity.y, anglar_velocity.z) * 0.5f;
+	gameobject->transform->local_orient =( gameobject->transform->local_orient + dang * duration).unit_vect();
+
 }
 
 void ALP_Collider::Update_hierarchy()
