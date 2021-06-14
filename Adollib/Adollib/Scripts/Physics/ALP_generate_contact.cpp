@@ -1481,6 +1481,7 @@ bool Physics_function::generate_contact_box_capsule(const Collider_shape* box, c
 			closest_cap = cuppos_boxcoord + cupsca_boxcoord * capsule_t;
 		}
 	}
+	//TODO:–Ê‚Æü•ª‚ÌÅ‹ß“_‚É•ÏX‚·‚é!!!
 
 	//ü•ª‚ªBox‚ÆŒğ·‚µ‚Ä‚¢‚È‚©‚Á‚½‚çBox‚ÆCapsule‚ÌÅ‹ß“_‚ğ‹‚ß‚é
 	if (is_crossing == false)
