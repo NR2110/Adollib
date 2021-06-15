@@ -88,14 +88,21 @@ struct Ret_S {
 	bool hit_point_to_face = true;
 };
 
-struct OBB {
+struct OBB_struct {
 	Vector3 world_position; //中心座標
 	Vector3 u_axes[3]; //軸の向き
 	Quaternion world_orientation;
 	Vector3 half_width; //軸ごとの辺の長さ
 };
 
-struct Triangle {
+struct Capsule_struct {
+	Vector3 world_position;
+	Vector3 y_axis;
+	float hight = 0;
+	float r = 0;
+};
+
+struct Triangle_struct {
 	Vector3 world_position; //triangleの中心座標
 	Quaternion world_orientation;
 	Vector3 world_scale;
@@ -108,14 +115,14 @@ struct Triangle {
 };
 
 //軸に投影した長さ
-float sum_of_projected_radii(const OBB& obb, const Vector3& vec) {
+float sum_of_projected_radii(const OBB_struct& obb, const Vector3& vec) {
 	return
 		fabsf(vector3_dot(vec, obb.half_width.x * obb.u_axes[0])) +
 		fabsf(vector3_dot(vec, obb.half_width.y * obb.u_axes[1])) +
 		fabsf(vector3_dot(vec, obb.half_width.z * obb.u_axes[2]));
 }
 
-float sum_of_projected_radii(const Triangle& tri, const Vector3& Wvec, float& min, float& max) {
+float sum_of_projected_radii(const Triangle_struct& tri, const Vector3& Wvec, float& min, float& max) {
 
 	float A = vector3_dot(Wvec, tri.world_vertex_position[0]);
 	float B = vector3_dot(Wvec, tri.world_vertex_position[1]);
@@ -141,7 +148,7 @@ float sum_of_projected_radii(float& max, float& min, const Collider_shape* meshc
 
 //OBBとOBBの分離軸判定 衝突していればtrueを返す ついでに色々引数に入れる
 bool sat_obb_obb(
-	const OBB& obbA, const OBB& obbB,
+	const OBB_struct& obbA, const OBB_struct& obbB,
 	float& smallest_penetration, //最小の貫通量
 	int smallest_axis[2], //どの軸で最近になったか(edge×edge用に2つ分用意)
 	SAT_TYPE& smallest_case //どのような形で最近になっているか
@@ -253,7 +260,7 @@ bool sat_obb_obb(
 
 //OBBとTriangleの分離軸判定 交差していればtrueを返す ついでに色々引数に入れる
 bool sat_obb_Triangle(
-	const OBB& obb, const Triangle& triangle, const Physics_function::Meshcollider_data* mesh,
+	const OBB_struct& obb, const Triangle_struct& triangle, const Physics_function::Meshcollider_data* mesh,
 	float& smallest_penetration, //最小の貫通量
 	int smallest_axis[2], //どの軸で最近になったか(edge×edge用に2つ分用意)
 	SAT_TYPE& smallest_case //どのような形で最近になっているか
@@ -460,6 +467,106 @@ bool sat_obb_Triangle(
 	return (smallest_penetration < FLT_MAX&& smallest_penetration > FLT_EPSILON) ? true : false;
 }
 
+bool sat_obb_capsule(
+	const OBB_struct& obb, const Capsule_struct& capsule,
+	float& smallest_penetration, //最小の貫通量
+	int smallest_axis[2], //どの軸で最近になったか(edge×edge用に2つ分用意)
+	SAT_TYPE& smallest_case //どのような形で最近になっているか
+) {
+	smallest_penetration = FLT_MAX;
+
+	Ret_S PB_FA, PA_FB;
+	PB_FA.hit_point_to_face = PA_FB.hit_point_to_face = true;
+	PA_FB.penetrate = PB_FA.penetrate = FLT_MAX;
+
+
+	float penetration = 0; //貫通量
+	float ra, rb; //obbA,obbBのLに投影された長さ
+	Vector3 axis; //投影する軸
+	Vector3 distCapsuleToObb = obb.world_position - capsule.world_position; //2obbの中心座標の距離
+
+	//boxの軸にcupsuleを投影
+	for (int i = 0; i < 3; i++) {
+
+		const Vector3& axis = obb.u_axes[i];
+		float ra = obb.half_width[i];
+		float rb = vector3_dot(axis, capsule.y_axis)*capsule.hight + capsule.r * 2;
+
+		assert(ra > 0 && rb > 0);
+
+		float penetration = ra + rb - abs(vector3_dot(axis, distCapsuleToObb));
+		if (penetration < 0) return false;
+
+		if (fabsf(vector3_dot(axis, distCapsuleToObb)) + rb < ra) {
+			PA_FB.hit_point_to_face = false;
+		}
+
+		if (PB_FA.penetrate > penetration) {
+			PB_FA.penetrate = penetration;
+			PB_FA.smallest_axis[0] = i;
+			PB_FA.smallest_axis[1] = -1;
+			PB_FA.smallest_case = SAT_TYPE::POINTB_FACETA;
+		}
+	}
+
+	//obbの最近頂点とcapsuleの軸の距離から
+	{
+		Vector3 nearext_vertex = obb.half_width;
+		Vector3 capsule_nearest_pos;
+		//obbの中心からcapsuleへ垂直なベクトルをとり、obbの最近頂点を求める
+		Closest_func::get_closestP_point_segment(obb.world_position, capsule.world_position, capsule.y_axis, capsule_nearest_pos);
+		if (capsule_nearest_pos.x < 0)nearext_vertex.x *= -1;
+		if (capsule_nearest_pos.y < 0)nearext_vertex.y *= -1;
+		if (capsule_nearest_pos.z < 0)nearext_vertex.z *= -1;
+
+		//capsule_nearest_posを最近頂点から一番近いcapsulleの点を取る
+		Closest_func::get_closestP_point_segment(nearext_vertex, capsule.world_position, capsule.y_axis, capsule_nearest_pos);
+		const Vector3 axis = capsule_nearest_pos - nearext_vertex;
+
+		float ra = capsule.r;
+		float rb = fabsf(sum_of_projected_radii(obb, axis));
+
+		assert(ra > 0 && rb > 0);
+
+		float penetration = ra + rb - abs(vector3_dot(axis, distCapsuleToObb));
+		if (penetration < 0) return false;
+
+		if (fabsf(vector3_dot(axis, distCapsuleToObb)) + rb < ra) {
+			PA_FB.hit_point_to_face = false;
+		}
+
+		if (PB_FA.penetrate > penetration) {
+			PB_FA.penetrate = penetration;
+			PB_FA.smallest_axis[0] = -1;
+			PB_FA.smallest_axis[1] = 0;
+			PB_FA.smallest_case = SAT_TYPE::POINTA_FACETB;
+		}
+	}
+
+	//boxの辺とcapsuleの軸で外積
+	for (int i = 0; i < 3; i++) {
+		Vector3& axis = vector3_cross(obb.u_axes[i], capsule.y_axis);
+		if (axis.norm() <= FLT_EPSILON * FLT_EPSILON)continue;//外積が 0 = 平行
+
+		axis = axis.unit_vect();
+
+		float ra = fabsf(sum_of_projected_radii(obb, axis));
+		float rb = fabsf(vector3_dot(axis, capsule.y_axis) * capsule.hight + capsule.r * 2);
+
+		float penetration = ra + rb - fabsf(vector3_dot(axis, distCapsuleToObb));
+		if (penetration < 0) return false;
+
+
+		if (smallest_penetration > penetration) {
+
+			smallest_penetration = penetration;
+			smallest_axis[0] = i;
+			smallest_axis[1] = 0;
+			smallest_case = SAT_TYPE::EDGE_EDGE;
+		}
+	}
+}
+
 //どちらも凸包の場合
 bool sat_convex_mesh_mesh(const Collider_shape* meshA, const Collider_shape* meshB,
 	float& smallest_penetration, //最小の貫通量
@@ -644,7 +751,7 @@ bool sat_convex_mesh_mesh(const Collider_shape* meshA, const Collider_shape* mes
 
 }
 
-bool sat_obb_convex_mesh(const OBB& obb, const Collider_shape* mesh,
+bool sat_obb_convex_mesh(const OBB_struct& obb, const Collider_shape* mesh,
 	float& smallest_penetration, //最小の貫通量
 	int smallest_axis[2], //どの軸で最近になったか(edge×edge用に2つ分用意)
 	SAT_TYPE& smallest_case //どのような形で最近になっているか
@@ -1256,7 +1363,7 @@ bool Physics_function::generate_contact_box_box(const Collider_shape* boxA, cons
 
 	Matrix33 m;
 	m = boxA->world_orientation().get_rotate_matrix();
-	OBB obbA;
+	OBB_struct obbA;
 	obbA.world_position = boxA->world_position();
 	obbA.u_axes[0].x = m._11; obbA.u_axes[0].y = m._12; obbA.u_axes[0].z = m._13;
 	obbA.u_axes[1].x = m._21; obbA.u_axes[1].y = m._22; obbA.u_axes[1].z = m._23;
@@ -1266,7 +1373,7 @@ bool Physics_function::generate_contact_box_box(const Collider_shape* boxA, cons
 	assert(!isnan(obbA.world_orientation.norm()));
 
 	m = boxB->world_orientation().get_rotate_matrix();
-	OBB obbB;
+	OBB_struct obbB;
 	obbB.world_position = boxB->world_position();
 	obbB.u_axes[0].x = m._11; obbB.u_axes[0].y = m._12; obbB.u_axes[0].z = m._13;
 	obbB.u_axes[1].x = m._21; obbB.u_axes[1].y = m._22; obbB.u_axes[1].z = m._23;
@@ -1458,102 +1565,115 @@ bool Physics_function::generate_contact_box_capsule(const Collider_shape* box, c
 	Vector3 ACcontact_pointA;
 	Vector3 ACcontact_pointB;
 
-
-	Vector3 box_halfsize = box->world_scale();
-
-	//boxの座標系で計算
-	Vector3 closest_box, closest_cap;
-	float capsule_t = FLT_MAX;
-
 	//box座標系でのcapsuleの情報
 	Vector3 cuppos_boxcoord = vector3_quatrotate(capsule->world_position() - box->world_position(), box->world_orientation().inverse());
 	Vector3 cupsca_boxcoord = vector3_quatrotate(Vector3(0, capsule->world_scale().y, 0), capsule->world_orientation() * box->world_orientation().inverse());
 
-	{
-		float tmax;
-		is_crossing = Crossing_func::getCrossingP_AABB_ray(
-			Vector3(0, 0, 0), box_halfsize,
-			cuppos_boxcoord, cupsca_boxcoord,
-			capsule_t, tmax
-		);
-		if (is_crossing) {
-			capsule_t = ALClamp(capsule_t, -1, 1);
-			closest_cap = cuppos_boxcoord + cupsca_boxcoord * capsule_t;
+	//boxの情報を使いやすいように変更
+	Matrix33 m;
+	m = box->world_orientation().get_rotate_matrix();
+	OBB_struct obb;
+	obb.world_position = box->world_position();
+	obb.u_axes[0].x = m._11; obb.u_axes[0].y = m._12; obb.u_axes[0].z = m._13;
+	obb.u_axes[1].x = m._21; obb.u_axes[1].y = m._22; obb.u_axes[1].z = m._23;
+	obb.u_axes[2].x = m._31; obb.u_axes[2].y = m._32; obb.u_axes[2].z = m._33;
+	obb.half_width = box->world_scale();
+	obb.world_orientation = box->world_orientation();
+	assert(!isnan(obb.world_orientation.norm()));
+
+	//capsuleの情報を
+	Capsule_struct capsule_s;
+	capsule_s.world_position = cuppos_boxcoord;
+	capsule_s.r = capsule->world_scale().x;
+	capsule_s.hight = capsule->world_scale().y;
+	capsule_s.y_axis = cupsca_boxcoord.unit_vect();
+
+	float smallest_penetration = FLT_MAX;	//最小めり込み量
+	int smallest_axis[2];	//最小めり込み量を得た分離軸の作成に使用した各OBBのローカル軸番号 辺×辺用に2つ
+	SAT_TYPE smallest_case;	//衝突の種類
+	if (!sat_obb_capsule(obb, capsule_s, smallest_penetration, smallest_axis, smallest_case))return false;
+
+	//capsuleがobbの面と衝突した場合
+	if (smallest_case == SAT_TYPE::POINTB_FACETA) {
+
+		Vector3 d = obb.world_position - capsule_s.world_position;	//capsuleからobb方向
+		Vector3 Wn = obb.u_axes[smallest_axis[0]];	//obbAの衝突面の法線と平行のobbAのローカル軸ベクトル
+		if (vector3_dot(Wn, d) < 0)	//obbAとobbBの位置関係より衝突面の法線ベクトルを決定する
+		{
+			Wn = Wn * -1.0f;
 		}
+		Wn = Wn.unit_vect();
+
+		//capsuleのローカル座標系での最近点(p1)
+		Vector3 p1 = capsule_s.y_axis * capsule_s.hight;
+		if (vector3_dot(capsule_s.y_axis, -Wn) > 0) p1 = -p1;
+		p1 += capsule_s.r * vector3_quatrotate(Wn, capsule->world_orientation().inverse());
+
+
+		//boxの逆行列の作成
+		Matrix44 rotate, inverse_rotate;
+		rotate = box->world_orientation().get_rotate_matrix();
+		rotate._41 = box->world_position().x; //transpseの入力
+		rotate._42 = box->world_position().y;
+		rotate._43 = box->world_position().z;
+		rotate._44 = 1;
+		inverse_rotate = matrix_inverse(rotate);
+
+		//p1をboxのローカル座標系へ
+		Vector3 P = vector3_quatrotate(p1, capsule->world_orientation()) + capsule->world_position();
+		Vector3 c = vector3_trans(P, inverse_rotate);
+
+		//obbAの最近点を求める
+		Vector3 p0 = c;
+		Vector3 box_halfsize = box->world_scale();
+		if (c.x > +box_halfsize.x)p0.x = +box_halfsize.x;
+		if (c.x < -box_halfsize.x)p0.x = -box_halfsize.x;
+
+		if (c.y > +box_halfsize.y)p0.y = +box_halfsize.y;
+		if (c.y < -box_halfsize.y)p0.y = -box_halfsize.y;
+
+		if (c.z > +box_halfsize.z)p0.z = +box_halfsize.z;
+		if (c.z < -box_halfsize.z)p0.z = -box_halfsize.z;
+
+		p0 += vector3_quatrotate(-Wn, box->world_orientation().inverse()) * smallest_penetration;
+
+		is_AC = true;
+		ACpenetration = smallest_penetration;
+		ACnormal = -Wn;
+		ACcontact_pointA = p0;
+		ACcontact_pointB = p1;
 	}
-	//TODO:面と線分の最近点に変更する!!!
 
-	//線分がBoxと交差していなかったらBoxとCapsuleの最近点を求める
-	if (is_crossing == false)
-	{
-		float dis_save = FLT_MAX;
+	//obbの頂点がcapsuleと衝突した場合
+	else if (smallest_case == SAT_TYPE::POINTA_FACETB) {
+		Vector3 d = obb.world_position - capsule_s.world_position;	//capsuleからobb方向
 
-		//boxのすべての辺とカプセルの線分の総当たりで最近点を求める
-		Vector3 vertex[4] = {
-			{+box_halfsize.x, +box_halfsize.y, +box_halfsize.z },
-			{-box_halfsize.x, +box_halfsize.y, -box_halfsize.z },
-			{-box_halfsize.x, -box_halfsize.y, +box_halfsize.z },
-			{+box_halfsize.x, -box_halfsize.y, -box_halfsize.z }
-		};
-		for (int i = 0; i < 4; i++) {
-			Vector3 closest_P, closest_Q;
-			float s, t;
-			Closest_func::get_closestP_two_segment(vertex[i], Vector3(-vertex[i].x, +vertex[i].y, +vertex[i].z), cuppos_boxcoord - cupsca_boxcoord, cuppos_boxcoord + cupsca_boxcoord, closest_P, closest_Q, s, t);
-			if ((closest_P - closest_Q).norm() < dis_save) {
-				dis_save = (closest_P - closest_Q).norm();
-				closest_box = closest_P;
-				closest_cap = closest_Q;
-				capsule_t = t * 2 - 1;
-			}
-			Closest_func::get_closestP_two_segment(vertex[i], Vector3(+vertex[i].x, -vertex[i].y, +vertex[i].z), cuppos_boxcoord - cupsca_boxcoord, cuppos_boxcoord + cupsca_boxcoord, closest_P, closest_Q, s, t);
-			if ((closest_P - closest_Q).norm() < dis_save) {
-				dis_save = (closest_P - closest_Q).norm();
-				closest_box = closest_P;
-				closest_cap = closest_Q;
-				capsule_t = t * 2 - 1;
-			}
-			Closest_func::get_closestP_two_segment(vertex[i], Vector3(+vertex[i].x, +vertex[i].y, -vertex[i].z), cuppos_boxcoord - cupsca_boxcoord, cuppos_boxcoord + cupsca_boxcoord, closest_P, closest_Q, s, t);
-			if ((closest_P - closest_Q).norm() < dis_save) {
-				dis_save = (closest_P - closest_Q).norm();
-				closest_box = closest_P;
-				closest_cap = closest_Q;
-				capsule_t = t * 2 - 1;
-			}
-		}
+		Vector3 nearext_vertex = obb.half_width;
+		Vector3 capsule_nearest_pos;
+		//obbの中心からcapsuleへ垂直なベクトルをとり、obbの最近頂点を求める
+		Closest_func::get_closestP_point_segment(obb.world_position, capsule_s.world_position, capsule_s.y_axis, capsule_nearest_pos);
+		if (capsule_nearest_pos.x < 0)nearext_vertex.x *= -1;
+		if (capsule_nearest_pos.y < 0)nearext_vertex.y *= -1;
+		if (capsule_nearest_pos.z < 0)nearext_vertex.z *= -1;
+
+		float s = 0;
+		//capsule_nearest_posを最近頂点から一番近いcapsulleの点をとなるs(capsule_s.world_position + capsule_s.y_axis * s)をとる
+		Closest_func::get_closestP_point_line(nearext_vertex, capsule_s.world_position, capsule_s.y_axis, s);
+
+		const Vector3 Wn = ((capsule_s.world_position + capsule_s.y_axis * s) - nearext_vertex).unit_vect();
+
+		is_AC = true;
+		ACpenetration = smallest_penetration;
+		ACnormal = Wn;
+		ACcontact_pointA = ;
+		ACcontact_pointB = p1;
+
 	}
+	//obbの辺とcapsuleが衝突した場合
+	else if (smallest_case == SAT_TYPE::EDGE_EDGE) {
 
-	//衝突していなければfalseを返す
-	if (
-		abs(closest_cap.x) - capsule->world_scale().x > box_halfsize.x ||
-		abs(closest_cap.y) - capsule->world_scale().x > box_halfsize.y ||
-		abs(closest_cap.z) - capsule->world_scale().x > box_halfsize.z
-		) return false;
-
-	//box上の最近点
-	closest_box = closest_cap;
-	if (closest_cap.x > +box_halfsize.x)closest_box.x = +box_halfsize.x;
-	if (closest_cap.x < -box_halfsize.x)closest_box.x = -box_halfsize.x;
-
-	if (closest_cap.y > +box_halfsize.y)closest_box.y = +box_halfsize.y;
-	if (closest_cap.y < -box_halfsize.y)closest_box.y = -box_halfsize.y;
-
-	if (closest_cap.z > +box_halfsize.z)closest_box.z = +box_halfsize.z;
-	if (closest_cap.z < -box_halfsize.z)closest_box.z = -box_halfsize.z;
-
-	float leng = capsule->world_scale().x - (closest_box - closest_cap).norm_sqr(); //貫通量
-	if (leng < FLT_EPSILON)return false;
-
-	Vector3 n = (closest_cap - closest_box).unit_vect(); //boxからsphereへのベクトル boxcoord
-	Vector3 Wn = vector3_quatrotate(n, box->world_orientation()); //worldcoord
-
-	//
-	is_AC = true;
-	ACpenetration = leng;
-	ACnormal = -Wn;
-	ACcontact_pointA = closest_box;
-	ACcontact_pointB = (Vector3(0, capsule->world_scale().y, 0) * capsule_t) + vector3_quatrotate(-Wn, capsule->world_orientation().inverse()) * capsule->world_scale().x;
-	//vector3_quatrotate(vector3_quatrotate(closest_cap - n * capsule->world_scale().x, box->world_orientation().conjugate()) + box->world_position() - capsule->world_position(), capsule->world_orientation().conjugate())
-
+	}
+	else assert(0);
 
 	if (is_AC)
 	{
@@ -1601,7 +1721,7 @@ bool Physics_function::generate_contact_box_mesh(const Collider_shape* box, cons
 		//boxとmeshの判定
 		Matrix33 m;
 		m = box->world_orientation().get_rotate_matrix();
-		OBB obb;
+		OBB_struct obb;
 		obb.world_position = box->world_position();
 		obb.u_axes[0].x = m._11; obb.u_axes[0].y = m._12; obb.u_axes[0].z = m._13;
 		obb.u_axes[1].x = m._21; obb.u_axes[1].y = m._22; obb.u_axes[1].z = m._23;
@@ -1614,13 +1734,13 @@ bool Physics_function::generate_contact_box_mesh(const Collider_shape* box, cons
 		const Vector3 triangle_relative_movement_from_box = -(box->world_position() - box->old_world_position()) + (mesh->world_position() - mesh->old_world_position());
 
 
-		Triangle smallest_triangle;
+		Triangle_struct smallest_triangle;
 		float smallest_penetration = FLT_MAX;
 		int smallest_axis[2] = { -1,-1 };
 		SAT_TYPE smallest_case = SAT_TYPE::EDGE_EDGE;
 
 
-		Triangle triangle;
+		Triangle_struct triangle;
 		triangle.world_position = mesh->world_position();
 		triangle.world_orientation = mesh->world_orientation();
 		triangle.world_scale = mesh->world_scale();

@@ -105,6 +105,34 @@ namespace Adollib {
 
 
 		//:::::::::::::::::
+		// 線分と点の最近点を求める
+		// point    : 点
+		// l_segS   : 線分の始点
+		// l_segG   : 線分の終点
+		// closestP : 光線上の点への最近点
+		//:::::::::::::::::
+		void get_closestP_point_segment(
+			const Vector3& point,
+			const Vector3& l_segS,
+			const Vector3& l_segG,
+			Vector3& closestP
+		);
+		////:::::::::::::::::
+		//// 線分と点の最近点を求める
+		//// point    : 点
+		//// l_point  : 光線上の一点
+		//// l_dir    : 光線の向き
+		//// closestP : 光線上の点への最近点
+		////:::::::::::::::::
+		//void get_closestP_point_segment(
+		//	const Vector3& point,
+		//	const Vector3& l_segS,
+		//	const Vector3& l_segG,
+		//	float& closests
+		//);
+
+
+		//:::::::::::::::::
 		// 3頂点メッシュと点の最近点を求める
 		// point       : 点
 		// t_point0～2 : 3頂点
