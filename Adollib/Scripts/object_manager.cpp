@@ -48,7 +48,7 @@ namespace Adollib
 			Teach
 		};
 
-		Stage_types stage_type = Stage_types::Cube;
+		Stage_types stage_type = Stage_types::Capsule;
 		Gameobject* GO = nullptr;
 
 		if (stage_type == Stage_types::Cube) {
@@ -102,10 +102,9 @@ namespace Adollib
 		}
 		else if (stage_type == Stage_types::Capsule) {
 			{
-				GO = Gameobject_manager::createCapsule("stage");
-				GO->transform->local_pos = Vector3(0, -6000, 0);
-				GO->transform->local_scale = Vector3(6000, 6000, 6000);
-				GO->material->color = Vector4(1, 1, 1, 1);
+				GO = Gameobject_manager::create("stage");
+				GO->transform->local_pos = Vector3(0, -60, 0);
+				GO->transform->local_scale = Vector3(60, 60, 60);
 
 				Collider* coll = GO->addComponent<Collider>();
 				Capsule* capsule = coll->add_shape<Capsule>();

@@ -31,7 +31,7 @@ namespace Adollib {
 				scenes[Scene::now_scene]->initialize(); //Ÿscene‚Ìcomponent‚ğİ’è
 
 			Gameobject_manager::initialize(Scene::now_scene); //Ÿscene‚Ìinitialize‚ğŒÄ‚Ô
-	
+
 		}
 
 	}

@@ -30,6 +30,7 @@ void Contact::addcontact(
 	//‚µ‚Ä‚¢‚È‚©‚Á‚½‚ç’Ç‰Á
 	if (num == -1 && contact_num < contact_max_per_pair) {
 		num = contact_num;
+		find_contact_point(contact_pointA, contact_pointB, normal);
 		contactpoints[num].reset();
 		contact_num++;
 	}
@@ -149,6 +150,10 @@ void Contact::chack_remove_contact_point(
 	const Collider_shape* shape0,
 	const Collider_shape* shape1
 ) {
+
+	if (contact_num > 1) {
+		int adfsgdf = 0;
+	}
 	for (int i = 0; i < contact_num;) {
 		Vector3& normal = contactpoints[i].normal;
 
