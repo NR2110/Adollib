@@ -1,3 +1,5 @@
+//#define _XM_NO_INTRINSICS_
+
 #include "ALP_resolve_contact.h"
 
 #include "../Imgui/debug.h"
@@ -61,8 +63,32 @@ void CalcTangentVector(const Vector3& normal, DirectX::XMVECTOR& tangent1, Direc
 }
 #endif
 
-void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std::vector<Contacts::Contact_pair>& pairs) {
+#pragma optimize("", on)
+//TODO : 最適化されるとなぜか落ちる 要 原因究明
+void calc_no_optimize(ALP_Solverbody* solverbody[2],const DirectX::XMVECTOR& rA, const  DirectX::XMVECTOR& rB, const  DirectX::XMVECTOR& axis, const float deltaImpulse) {
+	DirectX::XMVECTOR sale0 = DirectX::XMVectorScale(axis, deltaImpulse * solverbody[0]->inv_mass);
+	DirectX::XMVECTOR sale1 = DirectX::XMVectorScale(axis, deltaImpulse * solverbody[1]->inv_mass);
 
+	//DirectX::XMVECTOR value = solverbody[0]->delta_LinearVelocity
+
+	solverbody[0]->delta_LinearVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_LinearVelocity, sale0);
+	solverbody[0]->delta_AngulaVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rA, axis), solverbody[0]->inv_inertia), deltaImpulse));
+	solverbody[1]->delta_LinearVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_LinearVelocity, sale1);
+	solverbody[1]->delta_AngulaVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rB, axis), solverbody[1]->inv_inertia), deltaImpulse));
+
+
+	//solverbody[0]->delta_LinearVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_LinearVelocity, sale0);
+	////solverbody[0]->delta_LinearVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_LinearVelocity, sale0);
+	//solverbody[0]->delta_AngulaVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(cross0, solverbody[0]->inv_inertia), deltaImpulse));
+	//solverbody[1]->delta_LinearVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_LinearVelocity, sale1);
+	//solverbody[1]->delta_AngulaVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(cross1, solverbody[1]->inv_inertia), deltaImpulse));
+
+}
+
+#pragma optimize("", on)
+
+#pragma optimize("", on)
+void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std::vector<Contacts::Contact_pair>& pairs) {
 #ifndef PHYICSE_USED_SIMD
 	//::: 解決用オブジェクトの生成 :::::::::::
 	std::vector<ALP_Solverbody> SBs;
@@ -344,42 +370,43 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 
 #else
 	//::: 解決用オブジェクトの生成 :::::::::::
-	std::list<ALP_Solverbody> SBs;
+	static std::vector<ALP_Solverbody> SBs;
 	{
-		std::list<ALP_Solverbody>::iterator itr;
+		int count = 0;
+		std::vector<ALP_Solverbody>::iterator itr;
 		SBs.resize(colliders.size());
-		itr = SBs.begin();
 		for (const auto& coll : colliders) {
-			itr->orientation = DirectX::XMLoadFloat4(&coll.world_orientation());
-			itr->delta_LinearVelocity = DirectX::XMLoadFloat3(&vector3_zero());
-			itr->delta_AngulaVelocity = DirectX::XMLoadFloat3(&vector3_zero());
+			ALP_Solverbody& SB = SBs[count];
 
-			if (coll.ALPphysics->is_kinmatic_anglar) itr->inv_inertia = DirectX::XMLoadFloat4x4(&coll.ALPphysics->inverse_inertial_tensor());
-			else itr->inv_inertia = DirectX::XMLoadFloat4x4(&matrix_zero());
+			SB.delta_LinearVelocity = DirectX::XMLoadFloat3(&vector3_zero());
+			SB.delta_AngulaVelocity = DirectX::XMLoadFloat3(&vector3_zero());
 
-			itr->inv_mass = coll.ALPphysics->inverse_mass();
+			if (coll->get_ALPphysics()->is_kinmatic_anglar) SB.inv_inertia = DirectX::XMLoadFloat3x3(&coll->get_ALPphysics()->inverse_inertial_tensor());
+			else itr->inv_inertia = DirectX::XMLoadFloat3x3(&matrix33_zero());
 
-			++itr;
+			SB.inv_mass = coll->get_ALPphysics()->inverse_mass();
+
+			++count;
 		}
 
-		itr = SBs.begin();
+		count = 0;
 		for (auto& coll : colliders) {
-			coll.ALPphysics->solve = itr;
-			++itr;
+			coll->get_ALPphysics()->solve = &SBs[count];
+			count++;
 		}
 	}
 
-	ALP_Collider_mesh* coll[2];
-	std::list<ALP_Physics>::iterator ALPphysics[2];
-	std::list < ALP_Solverbody>::iterator solverbody[2];
+	Collider_shape* coll[2];
+	ALP_Physics* ALPphysics[2];
+	ALP_Solverbody* solverbody[2];
 	//std::vector<Balljoint> balljoints; //今回はなし
 
 	for (auto& pair : pairs) {
 
 		coll[0] = pair.body[0];
 		coll[1] = pair.body[1];
-		ALPphysics[0] = coll[0]->ALPcollider->ALPphysics;
-		ALPphysics[1] = coll[1]->ALPcollider->ALPphysics;
+		ALPphysics[0] = coll[0]->get_ALPcollider()->get_ALPphysics();
+		ALPphysics[1] = coll[1]->get_ALPcollider()->get_ALPphysics();
 		solverbody[0] = ALPphysics[0]->solve;
 		solverbody[1] = ALPphysics[1]->solve;
 
@@ -390,12 +417,12 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 		for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 			Contactpoint& cp = pair.contacts.contactpoints[C_num];
 
-			DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[0]), solverbody[0]->orientation);
-			DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[1]), solverbody[1]->orientation);
+			DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[0]), DirectX::XMLoadFloat4(&coll[0]->world_orientation()));
+			DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[1]), DirectX::XMLoadFloat4(&coll[1]->world_orientation()));
 
 			// 反発係数の獲得
 			// 継続の衝突の場合反発係数を0にする
-			float restitution = (pair.type == Pairtype::new_pair ? 0.5f * (ALPphysics[0]->restitution + ALPphysics[1]->restitution) : 0.0f);
+			const float restitution = (pair.type == Pairtype::new_pair ? 0.5f * (ALPphysics[0]->restitution + ALPphysics[1]->restitution) : 0.0f);
 
 
 			//衝突時のそれぞれの速度
@@ -416,8 +443,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 			CalcTangentVector(cp.normal, tangent1, tangent2);
 
 			//Baraff[1997]の式(8-18)の分母(denominator)を求める
-			float term1 = ALPphysics[0]->inverse_mass();
-			float term2 = ALPphysics[1]->inverse_mass();
+			const float& term1 = ALPphysics[0]->inverse_mass();
+			const float& term2 = ALPphysics[1]->inverse_mass();
 			DirectX::XMVECTOR tA, tB;
 
 			float term3, term4, denominator;
@@ -439,8 +466,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 				cp.constraint[0].jacDiagInv = 1.0f / denominator; //Baraff1997(8-18)の分母
 				cp.constraint[0].rhs = -(1.0f + restitution) * DirectX::XMVectorGetX(DirectX::XMVector3Dot(axis, vrel)); //Baraff1997(8-18)の分子
 
-				if (0.0f < cp.distance - Phyisics_manager::slop)
-					cp.constraint[0].rhs += (Phyisics_manager::bias * (cp.distance - Phyisics_manager::slop)) / Phyisics_manager::timeStep; //めり込みを直す力
+				if (0.0f < cp.distance - Phyisics_manager::physicsParams.slop)
+					cp.constraint[0].rhs += (Phyisics_manager::physicsParams.bias * (cp.distance - Phyisics_manager::physicsParams.slop)) / Phyisics_manager::physicsParams.timeStep; //めり込みを直す力
 
 				cp.constraint[0].rhs *= cp.constraint[0].jacDiagInv;
 				cp.constraint[0].lowerlimit = 0.0f;
@@ -495,64 +522,59 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 	}
 
 	//::: 変化量を求める :::::::::::::::
-	int count_Debg = 0;
 	for (auto& pair : pairs) {
 
 		coll[0] = pair.body[0];
 		coll[1] = pair.body[1];
-		ALPphysics[0] = coll[0]->ALPcollider->ALPphysics;
-		ALPphysics[1] = coll[1]->ALPcollider->ALPphysics;
+		ALPphysics[0] = coll[0]->get_ALPcollider()->get_ALPphysics();
+		ALPphysics[1] = coll[1]->get_ALPcollider()->get_ALPphysics();
 		solverbody[0] = ALPphysics[0]->solve;
 		solverbody[1] = ALPphysics[1]->solve;
 
 		for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 			//衝突点の情報
-			Contactpoint& cp = pair.contacts.contactpoints[C_num];
-			DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[0]), solverbody[0]->orientation);
-			DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[1]), solverbody[1]->orientation);
+			const Contactpoint& cp = pair.contacts.contactpoints[C_num];
+			const DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[0]), DirectX::XMLoadFloat4(&coll[0]->world_orientation()));
+			const DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[1]), DirectX::XMLoadFloat4(&coll[1]->world_orientation()));
 
 			for (int k = 0; k < 3; k++) {
-				float deltaImpulse = cp.constraint[k].accuminpulse;
+				const float& deltaImpulse = cp.constraint[k].accuminpulse;
 				DirectX::XMVECTOR axis = DirectX::XMLoadFloat3(&cp.constraint[k].axis);
 
-				//auto F_0 = deltaImpulse * solverbody[0]->inv_mass * count_Debg;
-				//auto F_1 = deltaImpulse * solverbody[1]->inv_mass * count_Debg;
-				//solverbody[0]->delta_LinearVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_LinearVelocity, DirectX::XMVectorScale(axis, F_0));
+				//TODO : 最適化されるとなぜか落ちる 要 原因究明
+
+				//solverbody[0]->delta_LinearVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_LinearVelocity, DirectX::XMVectorScale(axis, deltaImpulse * solverbody[0]->inv_mass));
 				//solverbody[0]->delta_AngulaVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rA, axis), solverbody[0]->inv_inertia), deltaImpulse));
-				//solverbody[1]->delta_LinearVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_LinearVelocity, DirectX::XMVectorScale(axis, F_1));
+				//solverbody[1]->delta_LinearVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_LinearVelocity, DirectX::XMVectorScale(axis, deltaImpulse * solverbody[1]->inv_mass));
 				//solverbody[1]->delta_AngulaVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rB, axis), solverbody[1]->inv_inertia), deltaImpulse));
 
-				solverbody[0]->delta_LinearVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_LinearVelocity, DirectX::XMVectorScale(axis, deltaImpulse * solverbody[0]->inv_mass));
-				solverbody[0]->delta_AngulaVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rA, axis), solverbody[0]->inv_inertia), deltaImpulse));
-				solverbody[1]->delta_LinearVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_LinearVelocity, DirectX::XMVectorScale(axis, deltaImpulse * solverbody[1]->inv_mass));
-				solverbody[1]->delta_AngulaVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rB, axis), solverbody[1]->inv_inertia), deltaImpulse));
-
+				//最適化されると落ちるのでoptimizeをいじった別関数を使う
+				calc_no_optimize(solverbody, rA, rB, axis, deltaImpulse);
 			}
 		}
 
-		count_Debg++;
 	}
 
 
-	for (int i = 0; i < Phyisics_manager::solver_iterations; i++) {
+	for (int i = 0; i < Phyisics_manager::physicsParams.solver_iterations; i++) {
 		for (auto& pair : pairs) {
 
 			coll[0] = pair.body[0];
 			coll[1] = pair.body[1];
-			ALPphysics[0] = coll[0]->ALPcollider->ALPphysics;
-			ALPphysics[1] = coll[1]->ALPcollider->ALPphysics;
+			ALPphysics[0] = coll[0]->get_ALPcollider()->get_ALPphysics();
+			ALPphysics[1] = coll[1]->get_ALPcollider()->get_ALPphysics();
 			solverbody[0] = ALPphysics[0]->solve;
 			solverbody[1] = ALPphysics[1]->solve;
 
 			for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 				//衝突点の情報
 				Contactpoint& cp = pair.contacts.contactpoints[C_num];
-				DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[0]), solverbody[0]->orientation);
-				DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[1]), solverbody[1]->orientation);
+				const DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[0]), DirectX::XMLoadFloat4(&coll[0]->world_orientation()));
+				const DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[1]), DirectX::XMLoadFloat4(&coll[1]->world_orientation()));
 
 				{
 					Constraint& constraint = cp.constraint[0];
-					DirectX::XMVECTOR axis = DirectX::XMLoadFloat3(&constraint.axis);
+					const DirectX::XMVECTOR axis = DirectX::XMLoadFloat3(&constraint.axis);
 
 					float delta_impulse = constraint.rhs;
 					DirectX::XMVECTOR delta_velocity[2];
@@ -618,21 +640,24 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 
 	// 速度の更新
 	for (auto& coll : colliders) {
-		if (coll.ALPphysics->is_kinmatic_linear) {
+		if (coll->get_ALPphysics()->is_kinmatic_linear) {
 			Vector3 linervec;
-			DirectX::XMStoreFloat3(&linervec, coll.ALPphysics->solve->delta_LinearVelocity);
-			coll.ALPphysics->linear_velocity += linervec;
+			DirectX::XMStoreFloat3(&linervec, coll->get_ALPphysics()->solve->delta_LinearVelocity);
+			coll->get_ALPphysics()->linear_velocity += linervec;
 		}
-		if (coll.ALPphysics->is_kinmatic_anglar) {
+		if (coll->get_ALPphysics()->is_kinmatic_anglar) {
 			Vector3 anglvec;
-			DirectX::XMStoreFloat3(&anglvec, coll.ALPphysics->solve->delta_AngulaVelocity);
-			coll.ALPphysics->anglar_velocity += anglvec;
+			DirectX::XMStoreFloat3(&anglvec, coll->get_ALPphysics()->solve->delta_AngulaVelocity);
+			coll->get_ALPphysics()->anglar_velocity += anglvec;
 		}
 
 	}
+
 #endif
 
 }
 
 #pragma endregion
 //:::::::::::::::::::::::::::
+
+#pragma optimize("", on)

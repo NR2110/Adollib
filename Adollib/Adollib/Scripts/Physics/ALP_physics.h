@@ -6,7 +6,7 @@
 #include "collider_types.h"
 
 //SIMDを使うかどうか バグっているため使用不可
-//#define PHYICSE_USED_SIMD
+#define PHYICSE_USED_SIMD
 
 
 namespace Adollib {

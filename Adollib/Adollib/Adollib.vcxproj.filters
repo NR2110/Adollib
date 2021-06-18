@@ -232,6 +232,9 @@
     <ClCompile Include="Scripts\Physics\collider_shape.cpp">
       <Filter>00_Adollib\22_physics\collider</Filter>
     </ClCompile>
+    <ClCompile Include="Scripts\Physics\ALP_resolve_contact_SIM.cpp">
+      <Filter>00_Adollib\22_physics\ALP</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Scripts\player.h">

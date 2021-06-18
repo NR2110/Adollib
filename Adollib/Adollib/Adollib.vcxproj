@@ -286,6 +286,7 @@
     <ClCompile Include="Scripts\Physics\ALP_physics.cpp" />
     <ClCompile Include="Scripts\Physics\ALP_raycast.cpp" />
     <ClCompile Include="Scripts\Physics\ALP_resolve_contact.cpp" />
+    <ClCompile Include="Scripts\Physics\ALP_resolve_contact_SIM.cpp" />
     <ClCompile Include="Scripts\Physics\collider_shape.cpp" />
     <ClCompile Include="Scripts\Physics\ALP__physics_manager.cpp" />
     <ClCompile Include="Scripts\Physics\collider.cpp" />

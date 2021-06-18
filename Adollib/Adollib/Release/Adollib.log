@@ -1,10 +1,7 @@
-﻿  ALP_generate_contact.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(485,8): warning C4101: 'ra': ローカル変数は 1 度も使われていません。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(485,12): warning C4101: 'rb': ローカル変数は 1 度も使われていません。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(2093,26): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+﻿  ALP_resolve_contact.cpp
   コード生成しています。
-  1 of 8997 functions (<0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    48 functions had inline decision re-evaluated but remain unchanged
+  268 of 9022 functions ( 3.0%) were compiled, the rest were copied from previous compilation.
+    16 functions were new in current compilation
+    157 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Release\Adollib.exe
