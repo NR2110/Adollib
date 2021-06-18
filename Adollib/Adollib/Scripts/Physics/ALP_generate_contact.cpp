@@ -534,7 +534,7 @@ bool sat_obb_capsule(
 			float ra = fabsf(vector3_dot(axis, obb.half_width.x * DOP::AABB_axis[0])) +
 				fabsf(vector3_dot(axis, obb.half_width.y * DOP::AABB_axis[1])) +
 				fabsf(vector3_dot(axis, obb.half_width.z * DOP::AABB_axis[2]));
-			float rb = fabsf(vector3_dot(axis, capsule.y_axis) * capsule.hight + capsule.r);
+			float rb = fabsf(vector3_dot(axis, capsule.y_axis) * capsule.hight) + capsule.r;
 
 			float penetration = ra + rb - fabsf(vector3_dot(axis, distCapsuleToObb));
 			if (penetration < 0) return false;
@@ -1646,7 +1646,7 @@ bool Physics_function::generate_contact_box_capsule(const Collider_shape* box, c
 		Vector3 nearext_vertex = obb.half_width;
 		Vector3 capsule_nearest_pos;
 		//obbの中心からcapsuleへ垂直なベクトルをとり、obbの最近頂点を求める
-		Closest_func::get_closestP_point_segment(obb.world_position, capsule_s.position - capsule_s.y_axis, capsule_s.position + capsule_s.y_axis, capsule_nearest_pos);
+		Closest_func::get_closestP_point_segment(Vector3(0), capsule_s.position - capsule_s.y_axis * capsule_s.hight, capsule_s.position + capsule_s.y_axis * capsule_s.hight, capsule_nearest_pos);
 		if (capsule_nearest_pos.x < 0)nearext_vertex.x *= -1;
 		if (capsule_nearest_pos.y < 0)nearext_vertex.y *= -1;
 		if (capsule_nearest_pos.z < 0)nearext_vertex.z *= -1;
