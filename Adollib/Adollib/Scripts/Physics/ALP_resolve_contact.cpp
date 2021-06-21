@@ -370,22 +370,23 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 
 #else
 	//::: 解決用オブジェクトの生成 :::::::::::
-	static std::vector<ALP_Solverbody> SBs;
+	std::vector<ALP_Solverbody> SBs;
+	SBs.reserve(sizeof(ALP_Solverbody)* colliders.size());
+	//SBs.resize(colliders.size()); //アライメントでSIMDとコンテナが競合する??? reserveにしたら治った
 	{
 		int count = 0;
-		std::vector<ALP_Solverbody>::iterator itr;
-		SBs.resize(colliders.size());
+		ALP_Solverbody SB;
 		for (const auto& coll : colliders) {
-			ALP_Solverbody& SB = SBs[count];
 
 			SB.delta_LinearVelocity = DirectX::XMLoadFloat3(&vector3_zero());
 			SB.delta_AngulaVelocity = DirectX::XMLoadFloat3(&vector3_zero());
 
 			if (coll->get_ALPphysics()->is_kinmatic_anglar) SB.inv_inertia = DirectX::XMLoadFloat3x3(&coll->get_ALPphysics()->inverse_inertial_tensor());
-			else itr->inv_inertia = DirectX::XMLoadFloat3x3(&matrix33_zero());
+			else SB.inv_inertia = DirectX::XMLoadFloat3x3(&matrix33_zero());
 
 			SB.inv_mass = coll->get_ALPphysics()->inverse_mass();
 
+			SBs.emplace_back(SB);
 			++count;
 		}
 
@@ -541,15 +542,15 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 				const float& deltaImpulse = cp.constraint[k].accuminpulse;
 				DirectX::XMVECTOR axis = DirectX::XMLoadFloat3(&cp.constraint[k].axis);
 
-				//TODO : 最適化されるとなぜか落ちる 要 原因究明
+				//TODO : 最適化されると落ちる -> コンテナとSIMDのアライメントが競合して悪さしてる????
 
-				//solverbody[0]->delta_LinearVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_LinearVelocity, DirectX::XMVectorScale(axis, deltaImpulse * solverbody[0]->inv_mass));
-				//solverbody[0]->delta_AngulaVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rA, axis), solverbody[0]->inv_inertia), deltaImpulse));
-				//solverbody[1]->delta_LinearVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_LinearVelocity, DirectX::XMVectorScale(axis, deltaImpulse * solverbody[1]->inv_mass));
-				//solverbody[1]->delta_AngulaVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rB, axis), solverbody[1]->inv_inertia), deltaImpulse));
+				solverbody[0]->delta_LinearVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_LinearVelocity, DirectX::XMVectorScale(axis, deltaImpulse * solverbody[0]->inv_mass));
+				solverbody[0]->delta_AngulaVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rA, axis), solverbody[0]->inv_inertia), deltaImpulse));
+				solverbody[1]->delta_LinearVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_LinearVelocity, DirectX::XMVectorScale(axis, deltaImpulse * solverbody[1]->inv_mass));
+				solverbody[1]->delta_AngulaVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rB, axis), solverbody[1]->inv_inertia), deltaImpulse));
 
 				//最適化されると落ちるのでoptimizeをいじった別関数を使う
-				calc_no_optimize(solverbody, rA, rB, axis, deltaImpulse);
+				//calc_no_optimize(solverbody, rA, rB, axis, deltaImpulse);
 			}
 		}
 

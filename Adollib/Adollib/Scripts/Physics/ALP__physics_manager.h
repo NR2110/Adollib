@@ -80,6 +80,7 @@ namespace Adollib
 			bool hit_backfaces_flag = false;//mesh‚ÌŒã‚ë‚©‚çÕ“Ë‚·‚é‚©
 
 			float timeStep = 0.016f;
+			float max_timeStep = 0.032;
 
 			//::: Physics‚Ì‰Šú’l•”•ª :::
 

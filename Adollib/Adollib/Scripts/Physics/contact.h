@@ -126,7 +126,12 @@ namespace Adollib {
 
 				Pairtype type = Pairtype::new_pair; //衝突の種類(前フレームからある衝突かどうか)
 
-				Collider_shape* body[2]; //接触したobject
+				union {
+					struct {
+						Collider_shape* body[2]; //接触したobject
+					};
+					double key; //ポインタ2つからなるユニークな数字
+				};
 
 				Contact contacts; //衝突の情報
 
@@ -137,6 +142,52 @@ namespace Adollib {
 				Collider_shape* body;
 				std::list<Collider_shape*> bodylists;
 			};
+
+			// ソート
+			// param[in,out] d ソートするデータの配列
+			// param buff ソート用のバッファ（入力データと同サイズ）
+			// param n データの数
+			static void Contact_pair_quick_sort(Contact_pair* d, Contact_pair* buff, int n)
+			{
+				int n1 = n >> 1;
+				int n2 = n - n1;
+				if (n1 > 1) Contact_pair_quick_sort(d, buff, n1);
+				if (n2 > 1) Contact_pair_quick_sort(d + n1, buff, n2);
+
+				{
+					Contact_pair* d1 = d;
+					Contact_pair* d2 = d + n1;
+					int i = 0, j = 0;
+
+					while (i < n1 && j < n2) {
+						if (d1[i].key < d2[j].key) {
+							buff[i + j] = d1[i++];
+						}
+						else {
+							buff[i + j] = d2[j++];
+						}
+					}
+
+					if (i < n1) {
+						while (i < n1) {
+							buff[i + j] = d1[i++];
+						}
+					}
+					else if (j < n2) {
+						while (j < n2) {
+							buff[i + j] = d2[j++];
+						}
+					}
+
+					for (int k = 0; k < (n1 + n2); k++) {
+						d1[k] = buff[k];
+					}
+				}
+
+			};
+
+
+
 
 		}
 	}

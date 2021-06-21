@@ -120,12 +120,23 @@ void Physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std:
 	}
 	Work_meter::stop("Mid_Dop14");
 
+	Work_meter::start("Contact_pair_quick_sort");
+	//{
+	//	std::vector<Contacts::Contact_pair> pair_buff;
+	//	pair_buff.resize(new_pairs.size());
+	//	if (new_pairs.size() != 0) {
+	//		Contact_pair_quick_sort(&new_pairs[0], &pair_buff[0], new_pairs.size());
+	//	}
+	//}
+	Work_meter::stop("Contact_pair_quick_sort");
+
+	//TODO : 重い。 要軽量化
 	Work_meter::start("Mid_check_alive");
 	//生成したpairが前のpairから存在しているかの確認
-	for (auto& old_p : pairs) {
-		for (auto& new_p : new_pairs) {
-			if (new_p.type == Pairtype::keep_pair) continue;
+	for (auto& new_p : new_pairs) {
+		if (new_p.type == Pairtype::keep_pair) continue;
 
+		for (const auto& old_p : pairs) {
 			if (
 				new_p.body[0] == old_p.body[0] &&
 				new_p.body[1] == old_p.body[1]
@@ -133,17 +144,11 @@ void Physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std:
 				//前から存在していたらデータを引き継ぐ
 				new_p = old_p;
 
-				new_p.type = Pairtype::keep_pair;
-			}
-			//else if (
-			//	new_p.body[0] == old_p.body[1] &&
-			//	new_p.body[1] == old_p.body[0]
-			//	) {
-			//	//前から存在していたらデータを引き継ぐ
-			//	new_p = old_p;
+				old_p.key;
 
-			//	new_p.type = Pairtype::keep_pair;
-			//}
+				new_p.type = Pairtype::keep_pair;
+				break;
+			}
 			else {
 				new_p.type = Pairtype::new_pair;
 			}

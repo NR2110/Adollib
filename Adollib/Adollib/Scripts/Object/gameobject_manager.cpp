@@ -17,6 +17,8 @@
 
 #include "hierarchy.h"
 
+#include "../Imgui/work_meter.h"
+
 #include <future>
 
 using namespace Adollib;
@@ -139,6 +141,7 @@ void Gameobject_manager::update(Scenelist Sce) {
 }
 
 void Gameobject_manager::render(Scenelist Sce) {
+	Work_meter::tag_start("render");
 	if (Sce == Scenelist::scene_null)return;
 
 	//std::list<std::shared_ptr<Light>>::iterator itr_li = lights[Sce].begin();
@@ -180,6 +183,8 @@ void Gameobject_manager::render(Scenelist Sce) {
 	ConstantBufferPerCamera c_cb;
 	ConstantBufferPerSystem s_sb;
 	//そのシーンのカメラの数だけ回す
+
+	Work_meter::start("drawobj_per_camera");
 	for (const auto& camera : cameras[Sce]) {
 		if (camera->active == false)continue;
 
@@ -213,15 +218,20 @@ void Gameobject_manager::render(Scenelist Sce) {
 		FrustumCulling::update_frustum(camera);
 
 		//Sceのsceneにアタッチされたgoのrenderを呼ぶ
+
+		Work_meter::start("render_obj");
 		for (auto& go : gameobjects[Sce]) {
 			if (go->active == false)continue;
 			go->render();
 		}
+		Work_meter::stop("render_obj");
 
 
 		Phyisics_manager::render_collider(Sce);
 	}
+	Work_meter::stop("drawobj_per_camera");
 
+	Work_meter::tag_stop();
 }
 
 

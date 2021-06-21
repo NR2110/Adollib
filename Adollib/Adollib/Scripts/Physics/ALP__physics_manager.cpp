@@ -91,7 +91,7 @@ bool Phyisics_manager::update(Scenelist Sce)
 	applyexternalforce(ALP_physicses[Sce]);
 
 
-	physicsParams.timeStep = ALmin(Al_Global::second_per_frame(), 0.016f * 2);
+	physicsParams.timeStep = ALmin(Al_Global::second_per_frame(), physicsParams.max_timeStep);
 	//physicsParams.timeStep = 0.016f;
 
 
@@ -198,6 +198,9 @@ bool Phyisics_manager::update_Gui() {
 		ImGui::InputFloat("bias", &physicsParams.bias, 0.01f, 0.1f, "%.3f");
 		//ä—í ãñóeåÎç∑
 		ImGui::InputFloat("slop", &physicsParams.slop, 0.0001f, 0.001f, "%.4f");
+
+		ImGui::DragFloat("max_timeStep", &physicsParams.max_timeStep, 0.001f, 0.001f,100000000);
+		ImGui::Text("timeStep : %f", physicsParams.timeStep);
 
 		//physics_defaultÇÃï\é¶
 		if (ImGui::CollapsingHeader("physics_default")) {
