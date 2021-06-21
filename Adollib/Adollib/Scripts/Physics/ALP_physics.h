@@ -17,7 +17,7 @@ namespace Adollib {
 			Vector3 delta_LinearVelocity; // 並進速度差分
 			Vector3 delta_AngulaVelocity; // 回転速度差分
 			//Quaternion orientation; // 姿勢
-			Matrix33 inv_inertia; // 慣性テンソルの逆行列
+			Matrix33 inv_tensor; // 慣性テンソルの逆行列
 #else
 			DirectX::XMVECTOR delta_LinearVelocity; // 並進速度差分
 			DirectX::XMVECTOR delta_AngulaVelocity; // 回転速度差分

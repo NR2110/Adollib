@@ -75,6 +75,14 @@ namespace Adollib {
 					const Collider_shape* shape1
 				);
 
+				//‰Šú‰»
+				void reset() {
+					contact_num = 0;
+					for (int i = 0; i < contact_max_per_pair; i++) {
+						contactpoints[i].reset();
+					}
+				};
+
 			private:
 				//:::::::::
 				// addcontact‚Åg—p
@@ -107,14 +115,6 @@ namespace Adollib {
 					const Vector3& contact_pointB,
 					const Vector3& normal
 				);
-
-				//‰Šú‰»
-				void reset() {
-					contact_num = 0;
-					for (int i = 0; i < contact_max_per_pair; i++) {
-						contactpoints[i].reset();
-					}
-				};
 			};
 
 			enum class Pairtype {

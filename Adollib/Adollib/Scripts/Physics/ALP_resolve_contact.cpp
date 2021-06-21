@@ -64,30 +64,6 @@ void CalcTangentVector(const Vector3& normal, DirectX::XMVECTOR& tangent1, Direc
 #endif
 
 #pragma optimize("", on)
-//TODO : Å“K‰»‚³‚ê‚é‚Æ‚È‚º‚©—‚¿‚é —v Œ´ˆö‹†–¾
-void calc_no_optimize(ALP_Solverbody* solverbody[2],const DirectX::XMVECTOR& rA, const  DirectX::XMVECTOR& rB, const  DirectX::XMVECTOR& axis, const float deltaImpulse) {
-	DirectX::XMVECTOR sale0 = DirectX::XMVectorScale(axis, deltaImpulse * solverbody[0]->inv_mass);
-	DirectX::XMVECTOR sale1 = DirectX::XMVectorScale(axis, deltaImpulse * solverbody[1]->inv_mass);
-
-	//DirectX::XMVECTOR value = solverbody[0]->delta_LinearVelocity
-
-	solverbody[0]->delta_LinearVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_LinearVelocity, sale0);
-	solverbody[0]->delta_AngulaVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rA, axis), solverbody[0]->inv_inertia), deltaImpulse));
-	solverbody[1]->delta_LinearVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_LinearVelocity, sale1);
-	solverbody[1]->delta_AngulaVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rB, axis), solverbody[1]->inv_inertia), deltaImpulse));
-
-
-	//solverbody[0]->delta_LinearVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_LinearVelocity, sale0);
-	////solverbody[0]->delta_LinearVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_LinearVelocity, sale0);
-	//solverbody[0]->delta_AngulaVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(cross0, solverbody[0]->inv_inertia), deltaImpulse));
-	//solverbody[1]->delta_LinearVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_LinearVelocity, sale1);
-	//solverbody[1]->delta_AngulaVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(cross1, solverbody[1]->inv_inertia), deltaImpulse));
-
-}
-
-#pragma optimize("", on)
-
-#pragma optimize("", on)
 void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std::vector<Contacts::Contact_pair>& pairs) {
 #ifndef PHYICSE_USED_SIMD
 	//::: ‰ğŒˆ—pƒIƒuƒWƒFƒNƒg‚Ì¶¬ :::::::::::
@@ -100,8 +76,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 			SB.delta_LinearVelocity = Vector3(0.0f);
 			SB.delta_AngulaVelocity = Vector3(0.0f);
 
-			if (coll->get_ALPphysics()->is_kinmatic_anglar) SB.inv_inertia = coll->get_ALPphysics()->inverse_inertial_tensor();
-			else SB.inv_inertia = matrix33_zero();
+			if (coll->get_ALPphysics()->is_kinmatic_anglar) SB.inv_tensor = coll->get_ALPphysics()->inverse_inertial_tensor();
+			else SB.inv_tensor = matrix33_zero();
 
 			SB.inv_mass = coll->get_ALPphysics()->inverse_mass();
 
@@ -142,7 +118,6 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 			// ”½”­ŒW”‚ÌŠl“¾
 			// Œp‘±‚ÌÕ“Ë‚Ìê‡”½”­ŒW”‚ğ0‚É‚·‚é
 			float restitution = (pair.type == Pairtype::new_pair ? 0.5f * (ALPphysics[0]->restitution + ALPphysics[1]->restitution) : 0.0f);
-			restitution = 0;
 
 			//Õ“Ë‚Ì‚»‚ê‚¼‚ê‚Ì‘¬“x
 			Vector3 pdota;
@@ -173,8 +148,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 				Vector3 axis = cp.normal;
 				tA = vector3_cross(rA, axis);
 				tB = vector3_cross(rB, axis);
-				tA = vector3_trans(tA, ALPphysics[0]->solve->inv_inertia);
-				tB = vector3_trans(tB, ALPphysics[1]->solve->inv_inertia);
+				tA = vector3_trans(tA, ALPphysics[0]->solve->inv_tensor);
+				tB = vector3_trans(tB, ALPphysics[1]->solve->inv_tensor);
 				tA = vector3_cross(tA, rA);
 				tB = vector3_cross(tB, rB);
 				term3 = vector3_dot(axis, tA);
@@ -198,8 +173,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 				Vector3 axis = tangent1;
 				tA = vector3_cross(rA, axis);
 				tB = vector3_cross(rB, axis);
-				tA = vector3_trans(tA, ALPphysics[0]->solve->inv_inertia);
-				tB = vector3_trans(tB, ALPphysics[1]->solve->inv_inertia);
+				tA = vector3_trans(tA, ALPphysics[0]->solve->inv_tensor);
+				tB = vector3_trans(tB, ALPphysics[1]->solve->inv_tensor);
 				tA = vector3_cross(tA, rA);
 				tB = vector3_cross(tB, rB);
 				term3 = vector3_dot(axis, tA);
@@ -219,8 +194,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 				Vector3 axis = tangent2;
 				tA = vector3_cross(rA, axis);
 				tB = vector3_cross(rB, axis);
-				tA = vector3_trans(tA, ALPphysics[0]->solve->inv_inertia);
-				tB = vector3_trans(tB, ALPphysics[1]->solve->inv_inertia);
+				tA = vector3_trans(tA, ALPphysics[0]->solve->inv_tensor);
+				tB = vector3_trans(tB, ALPphysics[1]->solve->inv_tensor);
 				tA = vector3_cross(tA, rA);
 				tB = vector3_cross(tB, rB);
 				term3 = vector3_dot(axis, tA);
@@ -257,9 +232,9 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 			for (int k = 0; k < 3; k++) {
 				float deltaImpulse = cp.constraint[k].accuminpulse;
 				solverbody[0]->delta_LinearVelocity += deltaImpulse * solverbody[0]->inv_mass * cp.constraint[k].axis;
-				solverbody[0]->delta_AngulaVelocity += deltaImpulse * vector3_trans(vector3_cross(rA, cp.constraint[k].axis), solverbody[0]->inv_inertia);
+				solverbody[0]->delta_AngulaVelocity += deltaImpulse * vector3_trans(vector3_cross(rA, cp.constraint[k].axis), solverbody[0]->inv_tensor);
 				solverbody[1]->delta_LinearVelocity -= deltaImpulse * solverbody[1]->inv_mass * cp.constraint[k].axis;
-				solverbody[1]->delta_AngulaVelocity -= deltaImpulse * vector3_trans(vector3_cross(rB, cp.constraint[k].axis), solverbody[1]->inv_inertia);
+				solverbody[1]->delta_AngulaVelocity -= deltaImpulse * vector3_trans(vector3_cross(rB, cp.constraint[k].axis), solverbody[1]->inv_tensor);
 
 			}
 		}
@@ -294,9 +269,9 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 					constraint.accuminpulse = ALClamp(old_impulse + delta_impulse, constraint.lowerlimit, constraint.upperlimit);
 					delta_impulse = constraint.accuminpulse - old_impulse;
 					solverbody[0]->delta_LinearVelocity += delta_impulse * solverbody[0]->inv_mass * constraint.axis;
-					solverbody[0]->delta_AngulaVelocity += delta_impulse * vector3_trans(vector3_cross(rA, constraint.axis), solverbody[0]->inv_inertia);
+					solverbody[0]->delta_AngulaVelocity += delta_impulse * vector3_trans(vector3_cross(rA, constraint.axis), solverbody[0]->inv_tensor);
 					solverbody[1]->delta_LinearVelocity -= delta_impulse * solverbody[1]->inv_mass * constraint.axis;
-					solverbody[1]->delta_AngulaVelocity -= delta_impulse * vector3_trans(vector3_cross(rB, constraint.axis), solverbody[1]->inv_inertia);
+					solverbody[1]->delta_AngulaVelocity -= delta_impulse * vector3_trans(vector3_cross(rB, constraint.axis), solverbody[1]->inv_tensor);
 				}
 				{
 					Constraint& constraint = cp.constraint[0];
@@ -334,9 +309,9 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 					constraint.accuminpulse = ALClamp(old_impulse + delta_impulse, constraint.lowerlimit, constraint.upperlimit);
 					delta_impulse = constraint.accuminpulse - old_impulse;
 					solverbody[0]->delta_LinearVelocity += delta_impulse * solverbody[0]->inv_mass * constraint.axis;
-					solverbody[0]->delta_AngulaVelocity += delta_impulse * vector3_trans(vector3_cross(rA, constraint.axis), solverbody[0]->inv_inertia);
+					solverbody[0]->delta_AngulaVelocity += delta_impulse * vector3_trans(vector3_cross(rA, constraint.axis), solverbody[0]->inv_tensor);
 					solverbody[1]->delta_LinearVelocity -= delta_impulse * solverbody[1]->inv_mass * constraint.axis;
-					solverbody[1]->delta_AngulaVelocity -= delta_impulse * vector3_trans(vector3_cross(rB, constraint.axis), solverbody[1]->inv_inertia);
+					solverbody[1]->delta_AngulaVelocity -= delta_impulse * vector3_trans(vector3_cross(rB, constraint.axis), solverbody[1]->inv_tensor);
 				}
 
 
@@ -351,9 +326,9 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 					constraint.accuminpulse = ALClamp(old_impulse + delta_impulse, constraint.lowerlimit, constraint.upperlimit);
 					delta_impulse = constraint.accuminpulse - old_impulse;
 					solverbody[0]->delta_LinearVelocity += delta_impulse * solverbody[0]->inv_mass * constraint.axis;
-					solverbody[0]->delta_AngulaVelocity += delta_impulse * vector3_trans(vector3_cross(rA, constraint.axis), solverbody[0]->inv_inertia);
+					solverbody[0]->delta_AngulaVelocity += delta_impulse * vector3_trans(vector3_cross(rA, constraint.axis), solverbody[0]->inv_tensor);
 					solverbody[1]->delta_LinearVelocity -= delta_impulse * solverbody[1]->inv_mass * constraint.axis;
-					solverbody[1]->delta_AngulaVelocity -= delta_impulse * vector3_trans(vector3_cross(rB, constraint.axis), solverbody[1]->inv_inertia);
+					solverbody[1]->delta_AngulaVelocity -= delta_impulse * vector3_trans(vector3_cross(rB, constraint.axis), solverbody[1]->inv_tensor);
 				}
 
 
@@ -418,8 +393,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 		for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 			Contactpoint& cp = pair.contacts.contactpoints[C_num];
 
-			DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[0]), DirectX::XMLoadFloat4(&coll[0]->world_orientation()));
-			DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[1]), DirectX::XMLoadFloat4(&coll[1]->world_orientation()));
+			const DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&coll[0]->local_position), DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[0]), DirectX::XMLoadFloat4(&coll[0]->local_orientation))), DirectX::XMLoadFloat4(&coll[0]->world_orientation()));
+			const DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&coll[1]->local_position), DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[1]), DirectX::XMLoadFloat4(&coll[1]->local_orientation))), DirectX::XMLoadFloat4(&coll[1]->world_orientation()));
 
 			// ”½”­ŒW”‚ÌŠl“¾
 			// Œp‘±‚ÌÕ“Ë‚Ìê‡”½”­ŒW”‚ğ0‚É‚·‚é
@@ -535,8 +510,9 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 		for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 			//Õ“Ë“_‚Ìî•ñ
 			const Contactpoint& cp = pair.contacts.contactpoints[C_num];
-			const DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[0]), DirectX::XMLoadFloat4(&coll[0]->world_orientation()));
-			const DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[1]), DirectX::XMLoadFloat4(&coll[1]->world_orientation()));
+
+			const DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&coll[0]->local_position), DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[0]), DirectX::XMLoadFloat4(&coll[0]->local_orientation))), DirectX::XMLoadFloat4(&coll[0]->world_orientation()));
+			const DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&coll[1]->local_position), DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[1]), DirectX::XMLoadFloat4(&coll[1]->local_orientation))), DirectX::XMLoadFloat4(&coll[1]->world_orientation()));
 
 			for (int k = 0; k < 3; k++) {
 				const float& deltaImpulse = cp.constraint[k].accuminpulse;
@@ -570,8 +546,9 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 			for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
 				//Õ“Ë“_‚Ìî•ñ
 				Contactpoint& cp = pair.contacts.contactpoints[C_num];
-				const DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[0]), DirectX::XMLoadFloat4(&coll[0]->world_orientation()));
-				const DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[1]), DirectX::XMLoadFloat4(&coll[1]->world_orientation()));
+
+				const DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&coll[0]->local_position), DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[0]), DirectX::XMLoadFloat4(&coll[0]->local_orientation))), DirectX::XMLoadFloat4(&coll[0]->world_orientation()));
+				const DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&coll[1]->local_position), DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[1]), DirectX::XMLoadFloat4(&coll[1]->local_orientation))), DirectX::XMLoadFloat4(&coll[1]->world_orientation()));
 
 				{
 					Constraint& constraint = cp.constraint[0];

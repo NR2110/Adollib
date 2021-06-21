@@ -55,7 +55,8 @@ namespace Adollib
 	std::unordered_map<Scenelist, std::list<Physics_function::ALP_Collider*>> Phyisics_manager::ALP_colliders;
 	std::unordered_map<Scenelist, std::list<Physics_function::ALP_Physics*>> Phyisics_manager::ALP_physicses;
 
-	std::vector<Physics_function::Contacts::Contact_pair> Phyisics_manager::pairs;
+	std::vector<Physics_function::Contacts::Contact_pair> Phyisics_manager::pairs[2];
+	u_int Phyisics_manager::pairs_new_num = 0; //pairs‚Ì‚Ç‚Á‚¿‚ªV‚µ‚¢Õ“Ë‚È‚Ì‚©
 	std::vector<Physics_function::Contacts::Collider_2> Phyisics_manager::broad_mid_pair;
 
 	std::unordered_map<Scenelist, std::vector<Physics_function::ALP_Collider*>> Phyisics_manager::moved_collider;   //“®‚¢‚½
@@ -94,6 +95,7 @@ bool Phyisics_manager::update(Scenelist Sce)
 	physicsParams.timeStep = ALmin(Al_Global::second_per_frame(), physicsParams.max_timeStep);
 	//physicsParams.timeStep = 0.016f;
 
+	pairs_new_num = 1 - pairs_new_num;
 
 	// ‘åG”c‚È“–‚½‚è”»’è
 	Work_meter::start("Broad,Mid,Narrow");
@@ -103,20 +105,20 @@ bool Phyisics_manager::update(Scenelist Sce)
 	Broadphase(Sce,
 		ALP_colliders[Sce], broad_mid_pair,
 		moved_collider[Sce], added_collider[Sce]
-		);
+	);
 	Work_meter::tag_stop();
 	Work_meter::stop("Broadphase");
 
 	Work_meter::start("Midphase");
 	Work_meter::tag_start("Midphase");
-	Midphase(broad_mid_pair, pairs);
+	Midphase(broad_mid_pair, pairs[1 - pairs_new_num], pairs[pairs_new_num]);
 	Work_meter::tag_stop();
 	Work_meter::stop("Midphase");
 
 	// Õ“Ë¶¬
 	Work_meter::start("Narrowphase");
 	Work_meter::tag_start("Narrowphase");
-	generate_contact(pairs);
+	generate_contact(pairs[pairs_new_num]);
 	Work_meter::tag_stop();
 	Work_meter::stop("Narrowphase");
 
@@ -125,7 +127,7 @@ bool Phyisics_manager::update(Scenelist Sce)
 	// Õ“Ë‰ğŒˆ
 	Work_meter::start("Resolve");
 	Work_meter::tag_start("Resolve");
-	resolve_contact(ALP_colliders[Sce], pairs);
+	resolve_contact(ALP_colliders[Sce], pairs[pairs_new_num]);
 	Work_meter::tag_stop();
 	Work_meter::stop("Resolve");
 
@@ -154,7 +156,7 @@ bool Phyisics_manager::update(Scenelist Sce)
 	}
 
 	int count = 0;
-	for (const auto& p : pairs) {
+	for (const auto& p : pairs[pairs_new_num]) {
 		for (int i = 0; i < p.contacts.contact_num; i++) {
 			count += 2;
 			if (count > size)break;
@@ -199,7 +201,7 @@ bool Phyisics_manager::update_Gui() {
 		//ŠÑ’Ê‹–—eŒë·
 		ImGui::InputFloat("slop", &physicsParams.slop, 0.0001f, 0.001f, "%.4f");
 
-		ImGui::DragFloat("max_timeStep", &physicsParams.max_timeStep, 0.001f, 0.001f,100000000);
+		ImGui::DragFloat("max_timeStep", &physicsParams.max_timeStep, 0.001f, 0.001f, 100000000);
 		ImGui::Text("timeStep : %f", physicsParams.timeStep);
 
 		//physics_default‚Ì•\¦

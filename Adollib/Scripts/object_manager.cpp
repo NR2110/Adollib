@@ -166,6 +166,11 @@ namespace Adollib
 
 		//flag |= ImGuiWindowFlags_AlwaysAutoResize;
 
+	/*	Quaternion a = quaternion_from_euler(0, 180, 0);
+		Vector3 b = Vector3(0, 180, 0);
+		Vector3 c = Vector3(0, -180, 0);
+		Quaternion d = quaternion_from_to_rotate(b.unit_vect(), c.unit_vect());*/
+
 #pragma region IMGUI
 
 		if (ImGui::Begin("object_manage", 0, flag)) {

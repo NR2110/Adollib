@@ -112,7 +112,8 @@ namespace Adollib
 			static std::unordered_map<Scenelist, std::list<Physics_function::ALP_Collider*>> ALP_colliders;
 			static std::unordered_map<Scenelist, std::list<Physics_function::ALP_Physics*>> ALP_physicses;
 
-			static std::vector<Physics_function::Contacts::Contact_pair> pairs;
+			static std::vector<Physics_function::Contacts::Contact_pair> pairs[2];
+			static u_int pairs_new_num; //pairsのどっちが新しい衝突なのか
 			static std::vector<Physics_function::Contacts::Collider_2> broad_mid_pair;
 
 			//そのフレーム間で変化したもの(broad_phase用)
