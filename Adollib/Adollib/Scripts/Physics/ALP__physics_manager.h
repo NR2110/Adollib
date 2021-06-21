@@ -8,6 +8,7 @@
 #include "collider.h"
 #include "ALP_collider.h"
 #include "ALP_physics.h"
+#include "ALP_joint_base.h"
 
 #include "ALP_broadphase.h"
 
@@ -111,6 +112,7 @@ namespace Adollib
 			//Šedata‚ÌÀ‘Ô”z—ñ
 			static std::unordered_map<Scenelist, std::list<Physics_function::ALP_Collider*>> ALP_colliders;
 			static std::unordered_map<Scenelist, std::list<Physics_function::ALP_Physics*>> ALP_physicses;
+			static std::unordered_map<Scenelist, std::list<Physics_function::ALP_Joint_base*>> ALP_joint_base;
 
 			static std::vector<Physics_function::Contacts::Contact_pair> pairs[2];
 			static u_int pairs_new_num; //pairs‚Ì‚Ç‚Á‚¿‚ªV‚µ‚¢Õ“Ë‚È‚Ì‚©

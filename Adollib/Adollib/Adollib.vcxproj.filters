@@ -65,6 +65,9 @@
     <Filter Include="00_Adollib\00_main\natvis">
       <UniqueIdentifier>{aee142de-7b15-4eea-88fc-128ef08de0e9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00_Adollib\22_physics\Joint">
+      <UniqueIdentifier>{49b4bba8-3f1f-4682-a578-69c8e8cd5674}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Scripts\player.cpp">
@@ -234,6 +237,12 @@
     </ClCompile>
     <ClCompile Include="Scripts\Physics\ALP_resolve_contact_SIM.cpp">
       <Filter>00_Adollib\22_physics\ALP</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Physics\ALP_balljoint.cpp">
+      <Filter>00_Adollib\22_physics\Joint</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Physics\joint.cpp">
+      <Filter>00_Adollib\22_physics\Joint</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -524,6 +533,15 @@
     </ClInclude>
     <ClInclude Include="Scripts\Math\matrix3x3_e.h">
       <Filter>00_Adollib\11_math</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\ALP_balljoint.h">
+      <Filter>00_Adollib\22_physics\Joint</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\joint.h">
+      <Filter>00_Adollib\22_physics\Joint</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\ALP_joint_base.h">
+      <Filter>00_Adollib\22_physics\Joint</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
