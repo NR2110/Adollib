@@ -202,18 +202,6 @@ namespace Adollib
 				return ret;
 			}
 
-			//static void remove_collider(
-			//	std::list<Collider*>::iterator coll_itr,
-			//	Physics_function::ALP_Collider* ALPcoll_itr,
-			//	Physics_function::ALP_Physics* ALPphys_itr,
-			//	Scenelist Sce = Scene::now_scene);
-
-
-			//static void remove_collider(
-			//	std::list<Collider*>::iterator coll_itr,
-			//	Physics_function::ALP_Collider* ALPcoll_itr,
-			//	Scenelist Sce = Scene::now_scene);
-
 			static void remove_Collider(
 				const Scenelist Sce,
 				std::list<Collider*>::iterator coll_itr)
