@@ -74,6 +74,7 @@ namespace Adollib
 
 			float linear_sleep_threrhold = 0.5f;
 			float angula_sleep_threrhold = 0.5f;
+			float accumeimpulse_sleep_threrhold = 0.1f;
 
 
 
