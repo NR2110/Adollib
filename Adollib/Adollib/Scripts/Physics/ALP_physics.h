@@ -74,11 +74,11 @@ namespace Adollib {
 			//::: 見せるだけ :::::::::::::::::::::::::
 			float speed = 0;//debugしやすいように
 			Vector3 linear_velocity;//並進速度
-			Vector3 anglar_velocity; //回転速度
+			Vector3 angula_velocity; //回転速度
 
 			Matrix33 inertial_tensor; //慣性テンソル
 
-			bool sleep_state = false; //sleep状態かのflag
+			bool is_sleep = false; //sleep状態かのflag
 
 		private:
 			Vector3 accumulated_force;  //並進速度

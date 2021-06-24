@@ -111,11 +111,11 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 
 			//衝突時のそれぞれの速度
 			DirectX::XMVECTOR pdota;
-			pdota = DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&ALPphysics[0]->anglar_velocity), rA);
+			pdota = DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&ALPphysics[0]->angula_velocity), rA);
 			pdota = DirectX::XMVectorAdd(pdota, DirectX::XMLoadFloat3(&ALPphysics[0]->linear_velocity));
 
 			DirectX::XMVECTOR pdotb;
-			pdotb = DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&ALPphysics[1]->anglar_velocity), rB);
+			pdotb = DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&ALPphysics[1]->angula_velocity), rB);
 			pdotb = DirectX::XMVectorAdd(pdotb, DirectX::XMLoadFloat3(&ALPphysics[1]->linear_velocity));
 
 			//衝突時の衝突平面法線方向の相対速度(結局衝突に使うのは法線方向への速さ)
@@ -334,7 +334,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 		if (coll->get_ALPphysics()->is_kinmatic_anglar) {
 			Vector3 anglvec;
 			DirectX::XMStoreFloat3(&anglvec, coll->get_ALPphysics()->solve->delta_AngulaVelocity);
-			coll->get_ALPphysics()->anglar_velocity += anglvec;
+			coll->get_ALPphysics()->angula_velocity += anglvec;
 		}
 
 	}

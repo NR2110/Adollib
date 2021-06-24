@@ -64,7 +64,7 @@ Matrix33 ALP_Physics::inverse_inertial_tensor() const {
 
 void ALP_Physics::reset_force() {
 	linear_velocity = Vector3(0, 0, 0);
-	anglar_velocity = Vector3(0, 0, 0);
+	angula_velocity = Vector3(0, 0, 0);
 
 	accumulated_force = Vector3(0, 0, 0);
 	accumulated_torque = Vector3(0, 0, 0);
@@ -109,8 +109,8 @@ void ALP_Physics::apply_external_force(float duration) {
 		inverse_inertia_tensor = rotation * inverse_inertia_tensor * rotation * transposed_rotation;
 		angula_acceleration += vector3_trans(accumulated_torque, inverse_inertia_tensor);
 
-		anglar_velocity += angula_acceleration * duration;
-		if (anglar_velocity.norm() < FLT_EPSILON)anglar_velocity = Vector3(0, 0, 0);
+		angula_velocity += angula_acceleration * duration;
+		if (angula_velocity.norm() < FLT_EPSILON)angula_velocity = Vector3(0, 0, 0);
 	}
 	else reset_force();
 
@@ -125,7 +125,13 @@ void ALP_Physics::integrate(float duration) {
 
 	if (is_movable() == false)return;
 
-	ALPcollider->integrate(duration, linear_velocity, anglar_velocity);
+	if (linear_velocity.norm() < Phyisics_manager::physicsParams.linear_sleep_threrhold * Phyisics_manager::physicsParams.linear_sleep_threrhold &&
+		angula_velocity.norm() < Phyisics_manager::physicsParams.angula_sleep_threrhold * Phyisics_manager::physicsParams.angula_sleep_threrhold) {
+		is_sleep = true;
+		return;
+	}
+	is_sleep = false;
+	ALPcollider->integrate(duration, linear_velocity, angula_velocity);
 
 }
 

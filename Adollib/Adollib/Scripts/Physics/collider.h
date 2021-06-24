@@ -65,10 +65,10 @@ namespace Adollib {
 			ALPphysics_ptr->linear_velocity = v;
 			return ALPphysics_ptr->linear_velocity;
 		}
-		const Vector3 linear_anglar_velocity() const { return ALPphysics_ptr->anglar_velocity; }
+		const Vector3 linear_anglar_velocity() const { return ALPphysics_ptr->angula_velocity; }
 		const Vector3 linear_anglar_velocity(Vector3 v) {
-			ALPphysics_ptr->anglar_velocity = v;
-			return ALPphysics_ptr->anglar_velocity;
+			ALPphysics_ptr->angula_velocity = v;
+			return ALPphysics_ptr->angula_velocity;
 		}
 
 	public:

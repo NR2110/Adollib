@@ -56,25 +56,21 @@ void Midphase_DOP_14(std::vector<Contacts::Contact_pair>& new_pairs, Collider_sh
 	const ALP_Collider* collA = meshA->get_ALPcollider();
 	const ALP_Collider* collB = meshB->get_ALPcollider();
 
+	bool is_generate_contact = true;
+	// sleep“¯Žm‚Ìê‡‚ÍÕ“ËŒŸ’m‚Ì‚Ý
+	if (collA->get_ALPphysics()->is_sleep == true && collB->get_ALPphysics()->is_sleep == true)is_generate_contact = false;
+
 	// ƒ^ƒO‚É‚æ‚éÕ“Ë‚Ì¥”ñ
-	//bool hit = true;
-	//if (collA->ALPphysics->is_hitable == false|| (collA->get_tag() & collB->nohit_tag)) hit = false;
-	//if (collB->ALPphysics->is_hitable == false|| (collB->get_tag() & collA->nohit_tag)) hit = false;
-	//bool check_oncoll_only = false;
-	//if (hit == false) {
-	//	if (collA->get_oncoll_check_bits() & collB->get_tag())check_oncoll_only = true;
-	//	if (collB->get_oncoll_check_bits() & collA->get_tag())check_oncoll_only = true;
-	//}
-	//if (hit == false && check_oncoll_only == false)return;
-	bool hit = true;
-	if (collA->get_ALPphysics()->is_hitable == false || (meshA->get_tag() & meshB->get_ignore_tags())) hit = false;
-	if (collB->get_ALPphysics()->is_hitable == false || (meshB->get_tag() & meshA->get_ignore_tags())) hit = false;
+	if (collA->get_ALPphysics()->is_hitable == false || (meshA->get_tag() & meshB->get_ignore_tags())) is_generate_contact = false;
+	if (collB->get_ALPphysics()->is_hitable == false || (meshB->get_tag() & meshA->get_ignore_tags())) is_generate_contact = false;
+
+
 	bool check_oncoll_only = false;
-	if (hit == false) {
+	if (is_generate_contact == false) {
 		if (collA->get_oncoll_check_bits() & meshB->get_tag())check_oncoll_only = true;
 		if (collB->get_oncoll_check_bits() & meshA->get_tag())check_oncoll_only = true;
 	}
-	if (hit == false && check_oncoll_only == false)return;
+	if (is_generate_contact == false && check_oncoll_only == false)return;
 
 	//DOP‚É‚æ‚é‘åŽG”c‚È“–‚½‚è”»’è
 	if (meshA->get_shape_tag() != ALPCollider_shape_type::Plane && meshB->get_shape_tag() != ALPCollider_shape_type::Plane) {

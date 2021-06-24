@@ -9,5 +9,6 @@ Joint_data Joint::add_balljoint(
 	Collider* colliderB, Vector3 anchorB,
 	float bias
 ) {
-
+	Joint_data a;
+	return a;
 }

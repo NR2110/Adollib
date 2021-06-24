@@ -197,11 +197,16 @@ bool Phyisics_manager::update_Gui() {
 		//正確さの調整
 		ImGui::InputInt("accuracy", &physicsParams.solver_iterations, 1, 200);
 
+		//sleepの閾値
+		ImGui::InputFloat("linear_sleep_threrhold", &physicsParams.linear_sleep_threrhold,0.01f);
+		ImGui::InputFloat("angular_sleep_threrhold", &physicsParams.angula_sleep_threrhold, 0.01f);
+
 		//貫通時のばねの強さ
 		ImGui::InputFloat("bias", &physicsParams.bias, 0.01f, 0.1f, "%.3f");
 		//貫通許容誤差
 		ImGui::InputFloat("slop", &physicsParams.slop, 0.0001f, 0.001f, "%.4f");
 
+		//最大何フレーム
 		ImGui::DragFloat("max_timeStep", &physicsParams.max_timeStep, 0.001f, 0.001f, 100000000);
 		ImGui::Text("timeStep : %f", physicsParams.timeStep);
 
