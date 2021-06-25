@@ -117,8 +117,10 @@ void Gameobject_manager::update(Scenelist Sce) {
 	//親から子へupdateを呼ぶ update中に、親objectが削除されたときに対応できないためNG
 	std::for_each(masters.begin(), masters.end(), [](object* ob) {ob->update_to_children(); });
 
+#ifdef UseImgui
 	//ヒエラルキー
 	Hierarchy::update_hierarchy(masters);
+#endif // UseImgui
 
 	Phyisics_manager::update();
 

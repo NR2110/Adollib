@@ -54,10 +54,10 @@ namespace Adollib {
 			//ÀÛ‚Í14-DOP‚¾‚ª•`‰æ‚ª‚ß‚ñ‚Ç‚­‚³‚¢‚Ì‚ÅAABB‚Å•`‰æ
 			static void render_AABB(const Physics_function::ALP_Collider*);
 
-			static void render_box(const Collider_shape* R);
-			static void render_sphere(const Collider_shape* R);
-			static void render_meshcoll(const Collider_shape* R);
-			static void render_capsule(const Collider_shape* R);
+			static void render_box(const Collider_shape* R,const Vector3& color);
+			static void render_sphere(const Collider_shape* R, const Vector3& color);
+			static void render_meshcoll(const Collider_shape* R, const Vector3& color);
+			static void render_capsule(const Collider_shape* R, const Vector3& color);
 
 		};
 

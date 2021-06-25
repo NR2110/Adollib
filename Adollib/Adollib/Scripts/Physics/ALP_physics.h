@@ -111,6 +111,8 @@ namespace Adollib {
 				inertial_tensor = tensor;
 			}
 
+			//重心を返す
+			const Vector3 get_barycenter() const;
 
 			//::: 毎フレーム呼ぶもの ::::::::::::
 			//速度、加速度を0にする

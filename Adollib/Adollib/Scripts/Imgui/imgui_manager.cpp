@@ -77,13 +77,14 @@ bool Imgui_manager::update(MSG hMsg) {
 
 bool Imgui_manager::render() {
 
+#ifdef UseImgui
 	static bool draw_flags[2] = { true };
 
-	ImGui::Begin("Imgui_manager@"); 
+	ImGui::Begin("Imgui_manager@");
 
 	ImGui::Checkbox("Work_meter", &(draw_flags[0]));
 	ImGui::Checkbox("Debug", &(draw_flags[1]));
-	
+
 	ImGui::End();
 
 	if(draw_flags[0])
@@ -91,6 +92,7 @@ bool Imgui_manager::render() {
 
 	if(draw_flags[1])
 	Debug::render();
+#endif
 
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());

@@ -244,6 +244,9 @@
     <ClCompile Include="Scripts\Physics\joint.cpp">
       <Filter>00_Adollib\22_physics\Joint</Filter>
     </ClCompile>
+    <ClCompile Include="demo_house.cpp">
+      <Filter>ソース ファイル\scene_game\object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Scripts\player.h">
@@ -542,6 +545,9 @@
     </ClInclude>
     <ClInclude Include="Scripts\Physics\ALP_joint_base.h">
       <Filter>00_Adollib\22_physics\Joint</Filter>
+    </ClInclude>
+    <ClInclude Include="demo_house.h">
+      <Filter>ソース ファイル\scene_game\object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

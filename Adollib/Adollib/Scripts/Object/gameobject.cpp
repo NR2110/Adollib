@@ -28,6 +28,12 @@ void Gameobject::initialize() {
 void Gameobject::update_imgui_toChildren() {
 	if (ImGui::CollapsingHeader((name + std::string("##") + std::to_string((int)this)).c_str())) {
 		ImGui::Checkbox("active", &active);
+		bool de = false;
+		ImGui::Checkbox("destroy", &de);
+		if(de){
+			destroy();
+			return;
+		}
 
 		ImGuiTreeNodeFlags f = 0;
 		//transforme‚Ì•\Ž¦

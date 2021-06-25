@@ -46,7 +46,7 @@ namespace Adollib {
 			tensor = tensor_base();
 
 			//barycenterを回転中心として shapeのlocal座標の分を考慮 (平行軸の定理)
-			Vector3 dis = local_position - barycenter;
+			Vector3 dis =  local_position - barycenter;
 			tensor._11 += (dis.y * dis.y + dis.z * dis.z);
 			tensor._22 += (dis.z * dis.z + dis.x * dis.x);
 			tensor._33 += (dis.x * dis.x + dis.y * dis.y);

@@ -49,6 +49,7 @@ namespace Adollib
 
 		//gameobject->aspect = (float)Al_Global::SCREEN_WIDTH / Al_Global::SCREEN_HEIGHT;
 
+#ifdef UseImgui
 		ImGuiWindowFlags flag = 0;
 		//flag |= ImGuiWindowFlags_AlwaysAutoResize;
 		flag |= ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize;
@@ -62,6 +63,7 @@ namespace Adollib
 			//ImGui::DragFloat("dis", &dis, 0.1f);
 			ImGui::End();
 		}
+#endif // UseImgui
 
 		if (follow_player == false) {
 

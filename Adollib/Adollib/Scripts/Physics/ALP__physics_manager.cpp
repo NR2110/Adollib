@@ -16,7 +16,7 @@ using namespace Physics_function;
 using namespace Contacts;
 
 //ContactPointの表示
-#define Draw_Contact
+//#define Draw_Contact
 
 //::: staticメンバの初期化 :::::
 #pragma region static_initialize
@@ -46,7 +46,7 @@ using namespace Contacts;
 
 namespace Adollib
 {
-	int Phyisics_manager::frame_count;
+	float Phyisics_manager::frame_count = -1;
 
 	//collider_componentのポインタ配列
 	std::unordered_map<Scenelist, std::list<Collider*>> Phyisics_manager::colliders;
@@ -75,9 +75,13 @@ namespace Adollib
 
 bool Phyisics_manager::update(Scenelist Sce)
 {
+#ifdef UseImgui
 	update_Gui();
+#endif
 
-	if (frame_count < 10) {
+	frame_count += Al_Global::second_per_frame();
+	if (frame_count < 0.016f) {
+		return true;
 		resetforce(ALP_physicses[Sce]);
 		frame_count++;
 		return true;
@@ -93,7 +97,9 @@ bool Phyisics_manager::update(Scenelist Sce)
 	applyexternalforce(ALP_physicses[Sce]);
 
 
-	physicsParams.timeStep = ALmin(Al_Global::second_per_frame(), physicsParams.max_timeStep);
+	//physicsParams.timeStep = ALmin(Al_Global::second_per_frame(), physicsParams.max_timeStep);
+	physicsParams.timeStep = ALmin(frame_count, physicsParams.max_timeStep);
+	frame_count = 0;
 	//physicsParams.timeStep = 0.016f;
 
 	pairs_new_num = 1 - pairs_new_num;

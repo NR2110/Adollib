@@ -127,12 +127,31 @@ void ALP_Physics::integrate(float duration) {
 
 	if (linear_velocity.norm() < Phyisics_manager::physicsParams.linear_sleep_threrhold * Phyisics_manager::physicsParams.linear_sleep_threrhold &&
 		angula_velocity.norm() < Phyisics_manager::physicsParams.angula_sleep_threrhold * Phyisics_manager::physicsParams.angula_sleep_threrhold) {
+		linear_velocity = Vector3(0);
+		angula_velocity = Vector3(0);
 		is_sleep = true;
-		//return;
+		return;
 	}
-	else is_sleep = false;
+	is_sleep = false;
 	ALPcollider->integrate(duration, linear_velocity, angula_velocity);
 
+}
+
+const Vector3 ALP_Physics::get_barycenter() const{
+	const auto shapes = ALPcollider->get_shapes();
+	Vector3 val;
+	float sum_valume = 0;
+	{
+		val = Vector3(0);
+		for (const auto& shape : shapes) {
+			const float shape_mass = shape->local_scale.x * shape->local_scale.y * shape->local_scale.z;
+			val += shape_mass * shape->local_position;
+			sum_valume += shape_mass;
+		}
+		val /= sum_valume;
+	}
+
+	return val;
 }
 
 //アタッチされたshapesから慣性モーメントと質量、ついでに重心の更新
@@ -156,9 +175,9 @@ void ALP_Physics::update_tensor_and_mass(const std::vector<Collider_shape*>& sha
 		inertial_tensor = matrix33_zero();
 		for (const auto& shape : shapes) {
 			const float shape_mass = shape->local_scale.x * shape->local_scale.y * shape->local_scale.z;
-			inertial_tensor += shape_mass / sum_valume * shape->get_tensor(barycenter);
-			inertial_tensor *= shape->local_orientation.get_rotate_matrix();
+			inertial_tensor += shape_mass / sum_valume * shape->get_tensor(barycenter) *shape->local_orientation.get_rotate_matrix();
 		}
+
 		inertial_tensor *= inertial_mass;
 	}
 

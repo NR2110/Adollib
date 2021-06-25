@@ -72,8 +72,8 @@ namespace Adollib
 			float contact_threrhold_normal = 0.01f; //衝突点の閾値
 			float contact_threrhold_tangent = 0.002f;//衝突点の閾値
 
-			float linear_sleep_threrhold = 0.8f;
-			float angula_sleep_threrhold = 1.0f;
+			float linear_sleep_threrhold = 0.18f; //freezeの閾値
+			float angula_sleep_threrhold = 0.1f; //freezeの閾値
 
 
 
@@ -106,7 +106,7 @@ namespace Adollib
 		class Phyisics_manager
 		{
 		private:
-			static int frame_count;
+			static float frame_count;
 
 			//collider_componentのポインタ配列
 			static std::unordered_map<Scenelist, std::list<Collider*>> colliders;
