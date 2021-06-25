@@ -1,3 +1,0 @@
-﻿  ALP_physics.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(88,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-  Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe
