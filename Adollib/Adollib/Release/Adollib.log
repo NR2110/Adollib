@@ -1,75 +1,13 @@
-﻿  camera_manager.cpp
-  camera_s.cpp
-  object_manager.cpp
+﻿  demo_house.cpp
 C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(88,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-  object_rotate.cpp
-  player.cpp
-  player_manager.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(88,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-  imgui.cpp
-  imgui_demo.cpp
-  imgui_draw.cpp
-  imgui_impl_dx11.cpp
-  imgui_impl_win32.cpp
-  imgui_widgets.cpp
-  debug.cpp
-  imgui_manager.cpp
-  work_meter.cpp
-  main.cpp
-  systems.cpp
-  material_for_collider.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(114,98): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(179,98): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(245,98): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(314,99): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(380,99): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(446,99): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(719,94): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-  gameobject.cpp
-  gameobject_camera.cpp
-  コンパイル中...
-  gameobject_light.cpp
-  gameobject_manager.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(88,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-  hierarchy.cpp
-  ALP__physics_manager.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(88,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-  ALP_broadphase.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(88,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-  ALP_collider.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(88,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-  ALP_generate_contact.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(485,8): warning C4101: 'ra': ローカル変数は 1 度も使われていません。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(485,12): warning C4101: 'rb': ローカル変数は 1 度も使われていません。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(2093,26): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-  ALP_integrate.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(88,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-  ALP_physics.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(88,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-  ALP_resolve_contact.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(88,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-  ALP_resolve_contact_SIM.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(88,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-  collider.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(88,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-  collider_shape.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(88,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-  contact.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(88,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-  joint.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(88,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-  ray.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(88,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(72,38): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(70,45): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(75,26): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
   scene_game.cpp
-  demo_house.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(88,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\demo_house.cpp(72,38): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\demo_house.cpp(70,45): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\demo_house.cpp(75,26): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
   コード生成しています。
 C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\vector_e.h(338): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
-  1143 of 8476 functions (13.5%) were compiled, the rest were copied from previous compilation.
-    17 functions were new in current compilation
-    332 functions had inline decision re-evaluated but remain unchanged
+  1127 of 9096 functions (12.4%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    341 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Release\Adollib.exe

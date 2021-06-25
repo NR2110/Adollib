@@ -14,11 +14,11 @@ namespace Adollib {
 		}
 
 		{
-	/*		Gameobject* GO = Gameobject_manager::create("object_manager");
-			GO->addComponent<object_manager>();*/
+			Gameobject* GO = Gameobject_manager::create("object_manager");
+			GO->addComponent<object_manager>();
 
-			Gameobject* GO = Gameobject_manager::create("Demo_house");
-			GO->addComponent<Demo_house>();
+			//Gameobject* GO = Gameobject_manager::create("Demo_house");
+			//GO->addComponent<Demo_house>();
 			//GO->transform->local_pos = vector3(0, -5, 0);
 			//GO->transform->local_scale = vector3(30, 0.1, 30);
 			//GO->material->color = vector4(1, 0, 1, 1);
