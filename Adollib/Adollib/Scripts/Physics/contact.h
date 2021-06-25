@@ -147,44 +147,76 @@ namespace Adollib {
 			// param[in,out] d ソートするデータの配列
 			// param buff ソート用のバッファ（入力データと同サイズ）
 			// param n データの数
-			static void Contact_pair_quick_sort(Contact_pair* d, Contact_pair* buff, int n)
-			{
-				int n1 = n >> 1;
-				int n2 = n - n1;
-				if (n1 > 1) Contact_pair_quick_sort(d, buff, n1);
-				if (n2 > 1) Contact_pair_quick_sort(d + n1, buff, n2);
 
-				{
-					Contact_pair* d1 = d;
-					Contact_pair* d2 = d + n1;
-					int i = 0, j = 0;
+			static int partition(std::vector<Contacts::Contact_pair>& array, int l, int r) {
+				auto& pivot = array[r];
+				int i = (l - 1);
 
-					while (i < n1 && j < n2) {
-						if (d1[i].key < d2[j].key) {
-							buff[i + j] = d1[i++];
-						}
-						else {
-							buff[i + j] = d2[j++];
-						}
-					}
+				for (int j = l; j <= r - 1; j++) {
+					if (array[j].key <= pivot.key) {
+						i++;
 
-					if (i < n1) {
-						while (i < n1) {
-							buff[i + j] = d1[i++];
-						}
-					}
-					else if (j < n2) {
-						while (j < n2) {
-							buff[i + j] = d2[j++];
-						}
-					}
-
-					for (int k = 0; k < (n1 + n2); k++) {
-						d1[k] = buff[k];
+						const auto t = array[i];
+						array[i] = array[j];
+						array[j] = t;
 					}
 				}
 
-			};
+				{
+					const auto t = array[i + 1];
+					array[i + 1] = array[r];
+					array[r] = t;
+				}
+				return (i + 1);
+			}
+
+			static void Contact_pair_quick_sort(std::vector<Contacts::Contact_pair>& array, int l, int r) {
+				if (l < r) {
+					int pivot = partition(array, l, r);
+					Contact_pair_quick_sort(array, l, pivot - 1);
+					Contact_pair_quick_sort(array, pivot + 1, r);
+				}
+			}
+
+
+			//static void Contact_pair_quick_sort(Contact_pair* d, Contact_pair* buff, int n)
+			//{
+			//	int n1 = n >> 1;
+			//	int n2 = n - n1;
+			//	if (n1 > 1) Contact_pair_quick_sort(d, buff, n1);
+			//	if (n2 > 1) Contact_pair_quick_sort(d + n1, buff, n2);
+
+			//	{
+			//		Contact_pair* d1 = d;
+			//		Contact_pair* d2 = d + n1;
+			//		int i = 0, j = 0;
+
+			//		while (i < n1 && j < n2) {
+			//			if (d1[i].key < d2[j].key) {
+			//				buff[i + j] = d1[i++];
+			//			}
+			//			else {
+			//				buff[i + j] = d2[j++];
+			//			}
+			//		}
+
+			//		if (i < n1) {
+			//			while (i < n1) {
+			//				buff[i + j] = d1[i++];
+			//			}
+			//		}
+			//		else if (j < n2) {
+			//			while (j < n2) {
+			//				buff[i + j] = d2[j++];
+			//			}
+			//		}
+
+			//		for (int k = 0; k < (n1 + n2); k++) {
+			//			d1[k] = buff[k];
+			//		}
+			//	}
+
+			//};
 
 
 

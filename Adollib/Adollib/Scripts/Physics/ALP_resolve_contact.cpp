@@ -108,11 +108,11 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 
 			//衝突時のそれぞれの速度
 			Vector3 pdota;
-			pdota = vector3_cross(ALPphysics[0]->anglar_velocity, rA);
+			pdota = vector3_cross(ALPphysics[0]->angula_velocity, rA);
 			pdota += ALPphysics[0]->linear_velocity;
 
 			Vector3 pdotb;
-			pdotb = vector3_cross(ALPphysics[1]->anglar_velocity, rB);
+			pdotb = vector3_cross(ALPphysics[1]->angula_velocity, rB);
 			pdotb += ALPphysics[1]->linear_velocity;
 
 			//衝突時の衝突平面法線方向の相対速度
@@ -326,7 +326,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 	// 速度の更新
 	for (auto& coll : colliders) {
 		if (coll->get_ALPphysics()->is_kinmatic_linear) coll->get_ALPphysics()->linear_velocity += coll->get_ALPphysics()->solve->delta_LinearVelocity;
-		if (coll->get_ALPphysics()->is_kinmatic_anglar) coll->get_ALPphysics()->anglar_velocity += coll->get_ALPphysics()->solve->delta_AngulaVelocity;
+		if (coll->get_ALPphysics()->is_kinmatic_anglar) coll->get_ALPphysics()->angula_velocity += coll->get_ALPphysics()->solve->delta_AngulaVelocity;
 
 	}
 

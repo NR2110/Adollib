@@ -8,6 +8,7 @@ using namespace Physics_function;
 using namespace Contacts;
 using namespace DOP;
 
+
 //:::::::::::::::::::::::::::
 #pragma region Midphase
 //:::::::::::::::::::::::::::
@@ -125,7 +126,7 @@ void Physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std:
 		if (new_pair_size != 0) {
 			std::vector<Contacts::Contact_pair> pair_buff;
 			pair_buff.resize(new_pair_size);
-			Contact_pair_quick_sort(&new_pairs[0], &pair_buff[0], new_pair_size);
+			//Contact_pair_quick_sort(new_pairs, 0, new_pair_size);
 		}
 	}
 	Work_meter::stop("Contact_pair_quick_sort");
@@ -156,6 +157,13 @@ void Physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std:
 				newId++;
 			}
 
+		}
+
+		if (newId < new_pair_size) {
+			// Žc‚è‚Í‘S•”new
+			new_pairs[newId].type = Contacts::Pairtype::new_pair;
+			new_pairs[newId].contacts.reset();
+			newId++;
 		}
 
 	}

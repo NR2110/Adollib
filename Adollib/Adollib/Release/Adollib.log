@@ -1,13 +1,7 @@
-﻿  demo_house.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(88,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(72,38): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(70,45): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(75,26): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-  scene_game.cpp
+﻿  ALP_midphase.cpp
   コード生成しています。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\vector_e.h(338): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
-  1127 of 9096 functions (12.4%) were compiled, the rest were copied from previous compilation.
+  2 of 8932 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    341 functions had inline decision re-evaluated but remain unchanged
+    45 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Release\Adollib.exe

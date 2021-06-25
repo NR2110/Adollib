@@ -106,7 +106,6 @@ void Physics_function::Broadphase(Scenelist Sce,
 					edge->value = edge->shape->get_DOP().pos[SAP_axis] + edge->shape->get_DOP().max[SAP_axis];
 				else
 					edge->value = edge->shape->get_DOP().pos[SAP_axis] + edge->shape->get_DOP().min[SAP_axis];
-
 			}
 
 		}
@@ -121,7 +120,6 @@ void Physics_function::Broadphase(Scenelist Sce,
 					edge->value = edge->shape->get_DOP().pos[SAP_axis] + edge->shape->get_DOP().min[SAP_axis];
 
 			}
-
 		}
 
 		Work_meter::stop("update_Value");
