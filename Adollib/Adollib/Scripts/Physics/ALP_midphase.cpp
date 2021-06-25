@@ -58,7 +58,7 @@ void Midphase_DOP_14(std::vector<Contacts::Contact_pair>& new_pairs, Collider_sh
 
 	bool is_generate_contact = true;
 	// sleep“¯Žm‚Ìê‡‚ÍÕ“ËŒŸ’m‚Ì‚Ý
-	if (collA->get_ALPphysics()->is_sleep == true && collB->get_ALPphysics()->is_sleep == true)is_generate_contact = false;
+	//if (collA->get_ALPphysics()->is_sleep == true && collB->get_ALPphysics()->is_sleep == true)is_generate_contact = false;
 
 	// ƒ^ƒO‚É‚æ‚éÕ“Ë‚Ì¥”ñ
 	if (collA->get_ALPphysics()->is_hitable == false || (meshA->get_tag() & meshB->get_ignore_tags())) is_generate_contact = false;

@@ -128,9 +128,9 @@ void ALP_Physics::integrate(float duration) {
 	if (linear_velocity.norm() < Phyisics_manager::physicsParams.linear_sleep_threrhold * Phyisics_manager::physicsParams.linear_sleep_threrhold &&
 		angula_velocity.norm() < Phyisics_manager::physicsParams.angula_sleep_threrhold * Phyisics_manager::physicsParams.angula_sleep_threrhold) {
 		is_sleep = true;
-		return;
+		//return;
 	}
-	is_sleep = false;
+	else is_sleep = false;
 	ALPcollider->integrate(duration, linear_velocity, angula_velocity);
 
 }
