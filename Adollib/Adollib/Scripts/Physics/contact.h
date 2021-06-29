@@ -69,8 +69,9 @@ namespace Adollib {
 				// vector3 rotA : Rigitbody[0]‚Ìp¨
 				// vector3 pointB : Rigitbody[1]‚ÌˆÊ’u
 				// vector3 rotB : Rigitbody[1]‚Ìp¨
+				// ‘¶İ‚µ‚È‚¢Õ“Ë“_‚ª‚ ‚ê‚Îtrue‚ğ•Ô‚·(sleepˆ—‚Ì‚½‚ß‚É)
 				//:::::::
-				void chack_remove_contact_point(
+				bool chack_remove_contact_point(
 					const Collider_shape* shape0,
 					const Collider_shape* shape1
 				);
@@ -177,7 +178,6 @@ namespace Adollib {
 					Contact_pair_quick_sort(array, pivot + 1, r);
 				}
 			}
-
 
 			//static void Contact_pair_quick_sort(Contact_pair* d, Contact_pair* buff, int n)
 			//{

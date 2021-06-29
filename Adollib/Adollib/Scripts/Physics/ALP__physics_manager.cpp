@@ -125,7 +125,7 @@ bool Phyisics_manager::update(Scenelist Sce)
 	// Õ“Ë¶¬
 	Work_meter::start("Narrowphase");
 	Work_meter::tag_start("Narrowphase");
-	//generate_contact(pairs[pairs_new_num]);
+	generate_contact(pairs[pairs_new_num]);
 	Work_meter::tag_stop();
 	Work_meter::stop("Narrowphase");
 
@@ -134,7 +134,7 @@ bool Phyisics_manager::update(Scenelist Sce)
 	// Õ“Ë‰ğŒˆ
 	Work_meter::start("Resolve");
 	Work_meter::tag_start("Resolve");
-//	resolve_contact(ALP_colliders[Sce], pairs[pairs_new_num]);
+	resolve_contact(ALP_colliders[Sce], pairs[pairs_new_num]);
 	Work_meter::tag_stop();
 	Work_meter::stop("Resolve");
 

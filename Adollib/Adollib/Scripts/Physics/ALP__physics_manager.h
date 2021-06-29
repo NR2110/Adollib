@@ -72,8 +72,8 @@ namespace Adollib
 			float contact_threrhold_normal = 0.01f; //衝突点の閾値
 			float contact_threrhold_tangent = 0.002f;//衝突点の閾値
 
-			float linear_sleep_threrhold = 0.18f; //freezeの閾値
-			float angula_sleep_threrhold = 0.1f; //freezeの閾値
+			float linear_sleep_threrhold = 0.2f; //freezeの閾値
+			float angula_sleep_threrhold = 0.2f; //freezeの閾値
 
 
 
@@ -85,7 +85,7 @@ namespace Adollib
 			bool hit_backfaces_flag = false;//meshの後ろから衝突するか
 
 			float timeStep = 0.016f;
-			float max_timeStep = 0.032;
+			float max_timeStep = 0.032f;
 
 			//::: Physicsの初期値部分 :::
 

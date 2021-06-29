@@ -79,6 +79,7 @@ namespace Adollib {
 			Matrix33 inertial_tensor; //慣性テンソル
 
 			bool is_sleep = false; //sleep状態かのflag
+			float sleep_timer = 0;
 
 		private:
 			Vector3 accumulated_force;  //並進速度

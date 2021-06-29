@@ -126,7 +126,7 @@ void Physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std:
 		if (new_pair_size != 0) {
 			std::vector<Contacts::Contact_pair> pair_buff;
 			pair_buff.resize(new_pair_size);
-			//Contact_pair_quick_sort(new_pairs, 0, new_pair_size);
+			Contact_pair_quick_sort(new_pairs, 0, new_pair_size - 1);
 		}
 	}
 	Work_meter::stop("Contact_pair_quick_sort");
@@ -173,10 +173,13 @@ void Physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std:
 	Work_meter::start("Mid_remove_contact_point");
 	//Œ»ÝŽg—p‚µ‚Ä‚¢‚È‚¢Õ“Ë“_‚ðíœ
 	for (auto& new_p : new_pairs) {
-		new_p.contacts.chack_remove_contact_point(
+		if (new_p.contacts.chack_remove_contact_point(
 			new_p.body[0],
 			new_p.body[1]
-		);
+		)) {
+			//new_p.body[0]->get_ALPcollider()->get_ALPphysics()->sleep_timer = 0.0f;
+			//new_p.body[1]->get_ALPcollider()->get_ALPphysics()->sleep_timer = 0.0f;
+		}
 	}
 
 	Work_meter::stop("Mid_remove_contact_point");

@@ -146,14 +146,11 @@ int Contact::find_contact_point(
 	return ret;
 }
 
-void Contact::chack_remove_contact_point(
+bool Contact::chack_remove_contact_point(
 	const Collider_shape* shape0,
 	const Collider_shape* shape1
 ) {
-
-	if (contact_num > 1) {
-		int adfsgdf = 0;
-	}
+	bool ret = false;
 	for (int i = 0; i < contact_num;) {
 		Vector3& normal = contactpoints[i].normal;
 
@@ -164,6 +161,7 @@ void Contact::chack_remove_contact_point(
 		const float dis_N = vector3_dot(normal, contactpointB - contactpointA);
 		if (dis_N < -Phyisics_manager::physicsParams.contact_threrhold_normal) {
 			remove_contactpoint(i);
+			ret = true;
 			continue;
 		}
 		contactpoints[i].distance = -dis_N;
@@ -174,12 +172,14 @@ void Contact::chack_remove_contact_point(
 		float dis_T = (contactpointA - contactpointB).norm();
 		if (dis_T > Phyisics_manager::physicsParams.contact_threrhold_tangent) {
 			remove_contactpoint(i);
+			ret = true;
 			continue;
 		}
 
 		i++;
 	}
 
+	return ret;
 }
 #pragma endregion
 //:::::::::::::::::::::::::::::::::::::::::::::::::::
