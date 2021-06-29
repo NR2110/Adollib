@@ -116,7 +116,7 @@ namespace Adollib
 			//Šedata‚ÌÀ‘Ô”z—ñ
 			static std::unordered_map<Scenelist, std::list<Physics_function::ALP_Collider*>> ALP_colliders;
 			static std::unordered_map<Scenelist, std::list<Physics_function::ALP_Physics*>> ALP_physicses;
-			static std::unordered_map<Scenelist, std::list<Physics_function::ALP_Joint_base*>> ALP_joint_base;
+			static std::list<Physics_function::ALP_Joint_base*> ALP_joint_bases;
 
 			static std::vector<Physics_function::Contacts::Contact_pair> pairs[2];
 			static u_int pairs_new_num; //pairs‚Ì‚Ç‚Á‚¿‚ªV‚µ‚¢Õ“Ë‚È‚Ì‚©
@@ -205,6 +205,17 @@ namespace Adollib
 
 				return ret;
 			}
+
+			template<typename T>
+			static T* add_Joint() {
+				static_assert(std::is_base_of<ALP_Joint_base, T>::value == true, "template T must inherit ALP_Joint_base");
+
+				T* joint = newD T;
+
+				ALP_joint_bases.emplace_back(joint);
+
+				return joint;
+			};
 
 			static void remove_Collider(
 				const Scenelist Sce,

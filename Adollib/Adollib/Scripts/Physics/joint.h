@@ -2,6 +2,7 @@
 
 #include "../Math/math.h"
 #include "collider.h"
+#include "ALP_joint_base.h"
 
 namespace Adollib {
 
@@ -9,6 +10,17 @@ namespace Adollib {
 		class ALP_Collider;
 
 		class Joint_data {
+		public:
+			Joint_data(ALP_Joint_base* base) {
+
+				anchorA = &base->anchorA;
+				anchorB = &base->anchorB;
+				bias = &base->bias;
+
+				colliderA = base->colliderA;
+				colliderB = base->colliderB;
+			}
+
 		public:
 			//実体のデータへのポインタ
 			float* bias = 0; // 拘束の強さの調整値

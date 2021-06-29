@@ -54,7 +54,7 @@ namespace Adollib
 	//Šedata‚ÌÀ‘Ô”z—ñ
 	std::unordered_map<Scenelist, std::list<Physics_function::ALP_Collider*>> Phyisics_manager::ALP_colliders;
 	std::unordered_map<Scenelist, std::list<Physics_function::ALP_Physics*>> Phyisics_manager::ALP_physicses;
-	std::unordered_map<Scenelist, std::list<Physics_function::ALP_Joint_base*>> Phyisics_manager::ALP_joint_base;
+	std::list<Physics_function::ALP_Joint_base*> Phyisics_manager::ALP_joint_bases;
 
 	std::vector<Physics_function::Contacts::Contact_pair> Phyisics_manager::pairs[2];
 	u_int Phyisics_manager::pairs_new_num = 0; //pairs‚Ì‚Ç‚Á‚¿‚ªV‚µ‚¢Õ“Ë‚È‚Ì‚©

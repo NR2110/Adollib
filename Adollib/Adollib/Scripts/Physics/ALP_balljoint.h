@@ -17,8 +17,9 @@ namespace Adollib {
 				constraint.accuminpulse = 0.0f;
 			}
 
-		};
+		void vvv() override;
 
+		};
 
 
 

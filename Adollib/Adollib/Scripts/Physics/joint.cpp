@@ -1,6 +1,8 @@
 #include "joint.h"
 #include "ALP__physics_manager.h"
 
+#include "ALP_balljoint.h"
+
 using namespace Adollib;
 using namespace Physics_function;
 
@@ -10,7 +12,9 @@ Joint_data Joint::add_balljoint(
 	float bias
 ) {
 
+	auto joint = Phyisics_manager::add_Joint<ALP_BallJoint>();
 
-	Joint_data a;
-	return a;
+	Joint_data ret(joint);
+
+	return ret;
 }
