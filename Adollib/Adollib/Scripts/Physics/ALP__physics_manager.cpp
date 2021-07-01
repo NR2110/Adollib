@@ -335,6 +335,11 @@ bool Phyisics_manager::render_dop(Scenelist Sce) {
 
 void Phyisics_manager::destroy(Scenelist Sce) {
 
+	for (auto& joint : ALP_joints) {
+		auto& base = joint->joint;
+		base->destroy();
+		delete base;
+	}
 	//colliders[Sce].clear();
 }
 
