@@ -8,13 +8,17 @@
 #include "collider.h"
 #include "ALP_collider.h"
 #include "ALP_physics.h"
-#include "ALP_joint_base.h"
+#include "joint_base.h"
 
 #include "ALP_broadphase.h"
 
 #include "contact.h"
 
 #include "collider_shape.h"
+
+
+#include "ALP_joint.h"
+#include "joint_base.h"
 
 namespace Adollib
 {
@@ -108,15 +112,13 @@ namespace Adollib
 		private:
 			static float frame_count;
 
-			//collider_componentのポインタ配列
-			static std::unordered_map<Scenelist, std::list<Collider*>> colliders;
 
 			static std::unordered_map<Scenelist, u_int> collider_index_count;
 
 			//各dataの実態配列
 			static std::unordered_map<Scenelist, std::list<Physics_function::ALP_Collider*>> ALP_colliders;
 			static std::unordered_map<Scenelist, std::list<Physics_function::ALP_Physics*>> ALP_physicses;
-			static std::list<Physics_function::ALP_Joint_base*> ALP_joint_bases;
+			static std::list<Physics_function::ALP_Joint*> ALP_joints;
 
 			static std::vector<Physics_function::Contacts::Contact_pair> pairs[2];
 			static u_int pairs_new_num; //pairsのどっちが新しい衝突なのか
@@ -135,7 +137,6 @@ namespace Adollib
 
 		public:
 			struct ColliderPhysics_ptrs {
-				std::list<Collider*>::iterator coll_itr;
 				ALP_Collider* ALPcollider_ptr = nullptr;
 				ALP_Physics* ALPphysics_ptr = nullptr;
 			};
@@ -145,15 +146,9 @@ namespace Adollib
 				Scenelist Sce = coll->gameobject->get_scene();
 
 				ColliderPhysics_ptrs ret;
-				std::list<Collider*>::iterator& coll_itr = ret.coll_itr;
 				ALP_Collider*& ALPcollider_ptr = ret.ALPcollider_ptr;
 				ALP_Physics*& ALPphysics_ptr = ret.ALPphysics_ptr;
 
-				{
-					colliders[Sce].emplace_back(coll);
-					coll_itr = colliders[Sce].end();
-					coll_itr--;
-				}
 				{
 					//itrがほしいため空のポインタで枠だけ取る
 					Physics_function::ALP_Collider* null_coll = nullptr;
@@ -168,13 +163,13 @@ namespace Adollib
 					physics_itr--;
 
 					//colliderのアドレスだけ生成 (ALPphysics,ALPcolliderのコンストラクタにお互いのアドレスが必要なため)
-					ALPcollider_ptr = newD Physics_function::ALP_Collider(coll->gameobject, coll_itr, collider_itr, nullptr, Sce, collider_index_count[Sce]);
+					ALPcollider_ptr = newD Physics_function::ALP_Collider(coll->gameobject, coll, collider_itr, nullptr, Sce, collider_index_count[Sce]);
 
 					//phsics中身を入れつつ生成
-					ALPphysics_ptr = newD Physics_function::ALP_Physics(coll->gameobject, physics_itr,ALPcollider_ptr, Sce, collider_index_count[Sce]);
+					ALPphysics_ptr = newD Physics_function::ALP_Physics(coll->gameobject, physics_itr, ALPcollider_ptr, Sce, collider_index_count[Sce]);
 
 					//colliderの中身を入れる
-					*ALPcollider_ptr = Physics_function::ALP_Collider(coll->gameobject, coll_itr, collider_itr, ALPphysics_ptr, Sce, collider_index_count[Sce]);
+					*ALPcollider_ptr = Physics_function::ALP_Collider(coll->gameobject, coll, collider_itr, ALPphysics_ptr, Sce, collider_index_count[Sce]);
 
 					//イテレーターでmanagerの配列にポインタを保存
 					*collider_itr = ALPcollider_ptr;
@@ -188,41 +183,44 @@ namespace Adollib
 				added_collider[Sce].emplace_back(ALPcollider_ptr);
 
 				//::: 初期値をいれる :::
-				(*coll_itr)->physics_data.inertial_mass = physicsParams.inertial_mass; //質量
-				(*coll_itr)->physics_data.drag = physicsParams.linear_drag; //空気抵抗
-				(*coll_itr)->physics_data.anglar_drag = physicsParams.anglar_drag; //空気抵抗
-				(*coll_itr)->physics_data.dynamic_friction = physicsParams.dynamic_friction; //動摩擦
-				(*coll_itr)->physics_data.static_friction = physicsParams.static_friction; //静摩擦
-				(*coll_itr)->physics_data.restitution = physicsParams.restitution;	 //反発係数
+				coll->physics_data.inertial_mass = physicsParams.inertial_mass; //質量
+				coll->physics_data.drag = physicsParams.linear_drag; //空気抵抗
+				coll->physics_data.anglar_drag = physicsParams.anglar_drag; //空気抵抗
+				coll->physics_data.dynamic_friction = physicsParams.dynamic_friction; //動摩擦
+				coll->physics_data.static_friction = physicsParams.static_friction; //静摩擦
+				coll->physics_data.restitution = physicsParams.restitution;	 //反発係数
 
-				(*coll_itr)->physics_data.is_fallable = physicsParams.is_fallable; //落ちない
-				(*coll_itr)->physics_data.is_kinmatic_anglar = physicsParams.is_kinmatic_anglar;//影響うけない(fallはする)
-				(*coll_itr)->physics_data.is_kinmatic_linear = physicsParams.is_kinmatic_linear;//影響うけない(fallはする)
-				(*coll_itr)->physics_data.is_moveable = physicsParams.is_moveable; //動かない
-				(*coll_itr)->physics_data.is_hitable = physicsParams.is_hitable;  //衝突しない
+				coll->physics_data.is_fallable = physicsParams.is_fallable; //落ちない
+				coll->physics_data.is_kinmatic_anglar = physicsParams.is_kinmatic_anglar;//影響うけない(fallはする)
+				coll->physics_data.is_kinmatic_linear = physicsParams.is_kinmatic_linear;//影響うけない(fallはする)
+				coll->physics_data.is_moveable = physicsParams.is_moveable; //動かない
+				coll->physics_data.is_hitable = physicsParams.is_hitable;  //衝突しない
 
 				collider_index_count[Sce]++;
 
 				return ret;
 			}
 
-			template<typename T>
-			static T* add_Joint() {
-				static_assert(std::is_base_of<ALP_Joint_base, T>::value == true, "template T must inherit ALP_Joint_base");
+			static ALP_Joint* add_Joint() {
+				//static_assert(std::is_base_of<Joint_base, T>::value == true, "template T must inherit ALP_Joint_base");
 
-				T* joint = newD T;
+				//空っぽのポインタで枠だけ確保(itrをコンストラクタで使いたいから)
+				ALP_Joint* null_ptr;
+				ALP_joints.emplace_back(null_ptr);
+				auto itr = ALP_joints.end();
+				itr--;
 
-				ALP_joint_bases.emplace_back(joint);
+				//計算用の共通のクラスを生成
+				ALP_Joint* ALPjoint = newD ALP_Joint(itr);
+				//中身を入れる
+				*itr = ALPjoint;
 
-				return joint;
+				return ALPjoint;
 			};
 
-			static void remove_Collider(
-				const Scenelist Sce,
-				std::list<Collider*>::iterator coll_itr)
-			{
-				colliders[Sce].erase(coll_itr);
-			}
+			static void remove_Joint(std::list<Physics_function::ALP_Joint*>::iterator joint_itr) {
+				ALP_joints.erase(joint_itr);
+			};
 
 			//deleteはしない
 			static void remove_ALPcollider(

@@ -110,8 +110,8 @@ void ALP_Collider::destroy()
 	Phyisics_manager::remove_ALPcollider(scene, this_itr);
 };
 
-const Collider_tagbit ALP_Collider::get_tag()const { return (*coll_itr)->tag; }; //é©êgÇÃtag(bit)
-const Collider_tagbit ALP_Collider::get_ignore_tags() const { return (*coll_itr)->ignore_tags; }; //è’ìÀÇµÇ»Ç¢tags
+const Collider_tagbit ALP_Collider::get_tag()const { return coll_itr->tag; }; //é©êgÇÃtag(bit)
+const Collider_tagbit ALP_Collider::get_ignore_tags() const { return coll_itr->ignore_tags; }; //è’ìÀÇµÇ»Ç¢tags
 
 //void ALP_Collider::update_AABB() {
 //

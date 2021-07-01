@@ -1,7 +1,5 @@
 #pragma once
 
-#pragma once
-
 #include <vector>
 #include <assert.h>
 #include <string>
@@ -39,6 +37,10 @@ namespace Adollib {
 
 	}
 
+	namespace Physics_function {
+		class ALP_Joint;
+	}
+
 	class Collider : public Component {
 
 	public:
@@ -56,7 +58,8 @@ namespace Adollib {
 		Physics_function::ALP_Collider* ALPcollider_ptr = nullptr;
 		Physics_function::ALP_Physics*  ALPphysics_ptr = nullptr;
 
-		std::list<Collider*>::iterator coll_itr;//©g‚Ö‚Ìitr
+	public:
+	//	Physics_function::ALP_Collider* get_ALP_Collider() const{ return ALPcollider_ptr; }; //‚â‚¾
 
 	public:
 		//::: Œã‚Å•ÏX‚·‚é :::
@@ -72,6 +75,9 @@ namespace Adollib {
 		}
 
 	public:
+
+		//joint‚É©g‚Ì•Û‚·‚éALPCollider‚Ìî•ñ‚ğ“ü‚ê‚é
+		void set_ptr_to_joint(Physics_function::ALP_Joint* joint_base);
 
 		//Œğ·‚µ‚Ä‚¢‚½‚çtrue‚ğ•Ô‚·
 		const bool concoll_enter(const unsigned int tag_name) const;

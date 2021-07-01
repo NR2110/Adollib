@@ -209,7 +209,7 @@ void ALP_Physics::update_tensor_and_mass(const std::vector<Collider_shape*>& sha
 
 void ALP_Physics::update_physics_data() {
 
-	Physics_data Cdata = (*ALPcollider->get_collitr())->physics_data;
+	Physics_data Cdata = ALPcollider->get_collitr()->physics_data;
 
 	inertial_mass = Cdata.inertial_mass;
 	linear_drag = Cdata.drag;

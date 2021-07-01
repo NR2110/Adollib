@@ -5,6 +5,8 @@
 #include "../Main/Adollib.h"
 #include "contact.h"
 
+#include "ALP_joint.h"
+
 using namespace Adollib;
 using namespace Physics_function;
 
@@ -33,7 +35,6 @@ void Collider::awake() {
 
 	ALPcollider_ptr = data.ALPcollider_ptr;
 	ALPphysics_ptr = data.ALPphysics_ptr;
-	coll_itr = data.coll_itr;
 
 	//data.ALPcollider_ptr->shapes.resize(1);
 	//data.ALPcollider_itr->shapes.at(0).ALPcollider = data.ALPcollider_itr;
@@ -98,3 +99,9 @@ void Collider::add_shape(const char* filepass, bool is_right_rtiangle) {
 	//Physics_function::ALP_shape coll_mesh;
 	//coll_mesh.ALPcollider = ALPcollider_itr;
 }
+
+void Collider::set_ptr_to_joint(Physics_function::ALP_Joint* joint) {
+	if (joint->collider[0] == nullptr)joint->collider[0] = ALPcollider_ptr;
+	else if (joint->collider[1] == nullptr)joint->collider[1] = ALPcollider_ptr;
+	else assert(0 && "too many ALP_Collider to attach joint");
+};

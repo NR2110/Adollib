@@ -179,7 +179,7 @@ void Physics_function::Broadphase(Scenelist Sce,
 			//collider‚Ìn“_‚È‚çactivelist‚É‚ ‚é‚à‚Ì‚ÆÕ“Ë‚Ì‰Â”\«‚ ‚è
 			if (insert_edge.edge_start == true) {
 
-				if ((*insert_edge.shape->get_ALPcollider()->get_collitr())->is_static == true) {
+				if (insert_edge.shape->get_ALPcollider()->get_collitr()->is_static == true) {
 
 					pair.body = insert_edge.shape;
 					pair.bodylists = actives;
@@ -207,7 +207,7 @@ void Physics_function::Broadphase(Scenelist Sce,
 
 			}
 			else {
-				if ((*insert_edge.shape->get_ALPcollider()->get_collitr())->is_static == true)
+				if (insert_edge.shape->get_ALPcollider()->get_collitr()->is_static == true)
 					static_actives.erase(insert_edge.active_list_pair_itr);
 				else
 					actives.erase(insert_edge.active_list_pair_itr);

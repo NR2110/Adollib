@@ -7,6 +7,7 @@
 #include "../Adollib/Scripts/Math/closest_func.h"
 #include "../Adollib/Scripts/Imgui/imgui_all.h"
 #include "../Adollib/Scripts/Physics/ALP__physics_manager.h"
+#include "../Adollib/Scripts/Physics/joint.h"
 
 #include "../Adollib/Scripts/Physics/ray.h"
 
@@ -16,11 +17,11 @@
 
 #include "player.h"
 
+
 namespace Adollib
 {
 	// 所属するシーンの初期化時に一度だけ呼ばれる
 	void object_manager::awake() {
-
 	}
 
 	void object_manager::start()
@@ -156,7 +157,6 @@ namespace Adollib
 				coll->is_static = true;
 			}
 		}
-
 	}
 
 	// 毎フレーム呼ばれる更新処理
@@ -170,6 +170,8 @@ namespace Adollib
 		Vector3 b = Vector3(0, 180, 0);
 		Vector3 c = Vector3(0, -180, 0);
 		Quaternion d = quaternion_from_to_rotate(b.unit_vect(), c.unit_vect());*/
+	///	Adollib::Ray
+
 
 #pragma region IMGUI
 
@@ -216,7 +218,8 @@ namespace Adollib
 					Gameobject* pearent = Gameobject_manager::create("BOXpyramid");
 					for (int i = 0; i < BOX_pyramid_count; i++) {
 						for (int o = 0; o < BOX_pyramid_count - i; o++) {
-							pearent->add_child(set_box(Vector3(
+							Collider* out_coll;
+							pearent->add_child(set_box(out_coll, Vector3(
 								BOX_pyramid_size[0] * 2.0f * 1.2f * o - (BOX_pyramid_count - i) * 2.300001f / 2.0f + BOX_pyramid_pos[0],
 								3.0f + BOX_pyramid_size[1] * 2 * i + BOX_pyramid_pos[1],
 								BOX_pyramid_pos[2]),
@@ -282,30 +285,6 @@ namespace Adollib
 				imgui_num++;
 			}
 
-			//MIXpyramid
-			{
-				static int MIX_pyramid_count = 5;
-				static float MIX_pyramid_pos[3] = { 0 };
-				bool summon = false;
-				ImGui::Separator();
-				ImGui::Text("MIX_pyramid"); ImGui::NextColumn();
-				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
-				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), MIX_pyramid_pos, 0.1f); ImGui::NextColumn(); ImGui::NextColumn();
-				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &MIX_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
-
-				if (summon == true)
-					for (int i = 0; i < MIX_pyramid_count; i++) {
-						for (int o = 0; o < MIX_pyramid_count - i; o++) {
-							if ((i + o) % 2 == 0)
-								set_box(Vector3(2.50001f * o - (MIX_pyramid_count - i) * 2.500001f / 2.0f + MIX_pyramid_pos[0], 5.0f + 2.50001f * i + MIX_pyramid_pos[1], MIX_pyramid_pos[2]), Vector3(1, 1, 1), Vector3(30, 0, 30), Vector3(0, 1, 1));
-							else
-								set_sphere(Vector3(2.50001f * o - (MIX_pyramid_count - i) * 2.500001f / 2.0f + MIX_pyramid_pos[0], 5.0f + 2.50001f * i + MIX_pyramid_pos[1], MIX_pyramid_pos[2]), 1, Vector3(0, 1, 1));
-						}
-
-					}
-				imgui_num++;
-			}
-
 			//Meshpyramid
 			{
 				static int Mesh_pyramid_count = 5;
@@ -327,30 +306,7 @@ namespace Adollib
 				imgui_num++;
 			}
 
-			//SPHEREplane
-			{
-				static int SPHERE_plane_count = 5;
-				static float SPHERE_plane_pos[3] = { 0 };
-				bool summon = false;
-				ImGui::Separator();
-				ImGui::Text("SPHERE_plane"); ImGui::NextColumn();
-				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
-				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), SPHERE_plane_pos, 0.1f); ImGui::NextColumn(); ImGui::NextColumn();
-				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &SPHERE_plane_count, 1, 1, 100000); ImGui::NextColumn();
-
-				if (summon == true)
-					for (int i = 0; i < SPHERE_plane_count; i++) {
-
-						for (int o = 0; o < SPHERE_plane_count; o++) {
-
-							set_sphere(Vector3(2.50001f * i - (SPHERE_plane_count - i) * 5.000001f / 2.0f + SPHERE_plane_pos[0], 10 + SPHERE_plane_pos[1], 2.50001f * o - (SPHERE_plane_count - o) * 2.500001f / 2.0f + SPHERE_plane_pos[2]), 1, Vector3(0, 1, 1));
-						}
-
-					}
-				imgui_num++;
-			}
-
-			//darumapyramid
+			//deskpyramid
 			{
 				static int count = 5;
 				static float pos[3] = { 0 };
@@ -384,17 +340,6 @@ namespace Adollib
 							Daruma->transform->local_scale = Vector3(1, 1, 1) * 0.5f;
 
 							Collider* coll = Daruma->addComponent<Collider>();
-							//coll->set_tensor(tensor);
-							//{
-							//	Sphere* sphere[2] = { nullptr };
-							//	sphere[0] = coll->add_shape<Sphere>();
-							//	sphere[1] = coll->add_shape<Sphere>();
-
-							//	sphere[0]->center = Vector3(0, 1, 0);
-							//	sphere[0]->r = 1;
-							//	sphere[1]->center = Vector3(0, 2, 0);
-							//	sphere[1]->r = 0.5f;
-							//}
 
 							{
 								Box* box[5] = { nullptr };
@@ -408,13 +353,13 @@ namespace Adollib
 								box[0]->size = Vector3(4, 0.5f, 3);
 
 								box[1]->center = Vector3(+2.8f, -0.75f, +1.8f);
-								box[1]->size =   Vector3(0.5f, 1, 0.5f);
+								box[1]->size = Vector3(0.5f, 1, 0.5f);
 								box[2]->center = Vector3(+2.8f, -0.75f, -1.8f);
-								box[2]->size =   Vector3(0.5f, 1, 0.5f);
+								box[2]->size = Vector3(0.5f, 1, 0.5f);
 								box[3]->center = Vector3(-2.8f, -0.75f, +1.8f);
-								box[3]->size =   Vector3(0.5f, 1, 0.5f);
+								box[3]->size = Vector3(0.5f, 1, 0.5f);
 								box[4]->center = Vector3(-2.8f, -0.75f, -1.8f);
-								box[4]->size =   Vector3(0.5f, 1, 0.5f);
+								box[4]->size = Vector3(0.5f, 1, 0.5f);
 							}
 
 
@@ -436,7 +381,7 @@ namespace Adollib
 							parts[3]->material->color = C;
 							parts[4]->material->color = C;
 
-							parts[0]->transform->local_pos =  Vector3(0, 0.75f, 0);
+							parts[0]->transform->local_pos = Vector3(0, 0.75f, 0);
 							parts[0]->transform->local_scale = Vector3(4, 0.5f, 3);
 
 							parts[1]->transform->local_pos = Vector3(+2.8f, -0.75f, +1.8f);
@@ -469,6 +414,82 @@ namespace Adollib
 				}
 				imgui_num++;
 			}
+
+			//treepyramid
+			{
+				static int TREE_pyramid_count = 5;
+				static float TREE_pyramid_pos[3] = { 0 };
+				bool summon = false;
+				ImGui::Separator();
+				ImGui::Text("TREE_pyramid"); ImGui::NextColumn();
+				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
+				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), TREE_pyramid_pos, 0.1f); ImGui::NextColumn(); ImGui::NextColumn();
+				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &TREE_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
+
+				if (summon == true) {
+					Gameobject* pearent = Gameobject_manager::create("Treepyramid");
+					for (int i = 0; i < TREE_pyramid_count; i++) {
+						for (int o = 0; o < TREE_pyramid_count - i; o++) {
+							pearent->add_child(
+								set_tree(
+									Vector3(10.0f * o - (TREE_pyramid_count - i) * 10.0f / 2.0f + TREE_pyramid_pos[0],
+										TREE_pyramid_pos[1] + i * 13.0f,
+										TREE_pyramid_pos[2]),
+									Vector3(1),
+									Vector3(0),
+									Vector3(1)
+								));
+						}
+
+					}
+				}
+				imgui_num++;
+			}
+
+			//JointBox pyramid
+			{
+				static int JointBox_pyramid_count = 5;
+				static float JointBox_pyramid_pos[3] = { 0 };
+				static float JointBox_pyramid_size[3] = { 1,1,1 };
+				bool summon = false;
+				ImGui::Separator();
+				ImGui::Text("JointBox_pyramid"); ImGui::NextColumn();
+				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
+				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), JointBox_pyramid_pos, 0.1f); ImGui::NextColumn();
+				ImGui::DragFloat3(std::to_string(imgui_num + 250).c_str(), JointBox_pyramid_size, 0.1f); ImGui::NextColumn();
+				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &JointBox_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
+
+				if (summon == true) {
+					Gameobject* pearent = Gameobject_manager::create("BOXpyramid");
+					for (int i = 0; i < JointBox_pyramid_count; i++) {
+						for (int o = 0; o < JointBox_pyramid_count - i; o++) {
+							Collider* coll[2];
+							pearent->add_child(set_box(coll[0], Vector3(
+								JointBox_pyramid_size[0] * 2.0f * 1.2f * o - (JointBox_pyramid_count - i) * 2.300001f / 2.0f + JointBox_pyramid_pos[0],
+								3.0f + JointBox_pyramid_size[1] * 2 * i + JointBox_pyramid_pos[1],
+								JointBox_pyramid_pos[2]),
+								Vector3(JointBox_pyramid_size[0], JointBox_pyramid_size[1], JointBox_pyramid_size[2]),
+								Vector3(0, 10, 0),
+								Vector3(0, 1, 1))
+							);
+
+							pearent->add_child(set_box(coll[1], Vector3(
+								JointBox_pyramid_size[0] * 2.0f * 1.2f * o - (JointBox_pyramid_count - i) * 2.300001f / 2.0f + JointBox_pyramid_pos[0] + 2,
+								3.0f + JointBox_pyramid_size[1] * 2 * i + JointBox_pyramid_pos[1] + 2,
+								JointBox_pyramid_pos[2]),
+								Vector3(JointBox_pyramid_size[0], JointBox_pyramid_size[1], JointBox_pyramid_size[2]),
+								Vector3(0, 10, 0),
+								Vector3(0, 1, 1))
+							);
+
+							Joint::add_balljoint(coll[0], Vector3(1, 1, 1), coll[1], Vector3(-1, -1, -1), 1);
+						}
+
+					}
+				}
+				imgui_num++;
+			}
+
 
 			ImGui::Columns(1);
 			ImGui::End();
@@ -537,7 +558,7 @@ namespace Adollib
 		return object;
 	}
 
-	Gameobject* object_manager::set_box(Vector3 pos, Vector3 size, Vector3 rotate, Vector3 color) {
+	Gameobject* object_manager::set_box(Collider*& out_coll, Vector3 pos, Vector3 size, Vector3 rotate, Vector3 color) {
 		Gameobject* object = nullptr;
 		object = Gameobject_manager::createCube(GO_tag::Box);
 		Vector4 C = Vector4(color.x, color.y, color.z, 1);
@@ -555,6 +576,8 @@ namespace Adollib
 
 		GOs.emplace_back(object);
 		boxes.emplace_back(coll);
+
+		out_coll = coll;
 		return object;
 	}
 	Gameobject* object_manager::set_capsule(Vector3 pos, float r, float length, Vector3 rotate, Vector3 color) {
@@ -614,6 +637,111 @@ namespace Adollib
 
 		GOs.emplace_back(object);
 		return object;
+	}
+
+	Gameobject* object_manager::set_tree(Vector3 pos, Vector3 scale, Vector3 rotate, Vector3 color) {
+		Gameobject* tree = nullptr;
+		tree = Gameobject_manager::create(GO_tag::None);
+
+		Vector4 stem_color = Vector4(90, 47, 27, 255) / 255.0f;
+		Vector4 reaf_color = Vector4(48, 188, 0, 255) / 255.0f;
+		Vector4 floar_color = Vector4(188, 214, 54, 255) / 255.0f;
+
+		tree->transform->local_pos = pos;
+		tree->transform->local_scale = scale;
+		tree->transform->local_orient = quaternion_from_euler(rotate);
+
+		const int Tree_size = 7;
+		Gameobject* tree_parts[Tree_size] = { nullptr };
+		for (int i = 0; i < Tree_size; i++) {
+			tree_parts[i] = Gameobject_manager::createCube(GO_tag::Box);
+		}
+
+		tree_parts[0]->transform->local_pos = Vector3(0, 7, 0);
+		tree_parts[0]->transform->local_scale = Vector3(1, 6.9f, 1);
+		tree_parts[0]->material->color = stem_color;
+
+		tree_parts[1]->transform->local_pos = Vector3(0, 15, 0);
+		tree_parts[1]->transform->local_scale = Vector3(1.5, 1, 1.5);
+		tree_parts[1]->transform->local_orient = quaternion_from_euler(0, 0, 0);
+		tree_parts[1]->material->color = reaf_color;
+
+		tree_parts[2]->transform->local_pos = Vector3(0, 13, 0);
+		tree_parts[2]->transform->local_scale = Vector3(2.0, 1, 2.0);
+		tree_parts[2]->transform->local_orient = quaternion_from_euler(0, 1.7f, 0);
+		tree_parts[2]->material->color = reaf_color;
+
+		tree_parts[3]->transform->local_pos = Vector3(0, 11, 0);
+		tree_parts[3]->transform->local_scale = Vector3(3.0, 1, 3.0);
+		tree_parts[3]->transform->local_orient = quaternion_from_euler(0, 13, 0);
+		tree_parts[3]->material->color = reaf_color;
+
+		tree_parts[4]->transform->local_pos = Vector3(0, 9, 0);
+		tree_parts[4]->transform->local_scale = Vector3(3.5, 1, 3.5);
+		tree_parts[4]->transform->local_orient = quaternion_from_euler(0, 28, 0);
+		tree_parts[4]->material->color = reaf_color;
+
+		tree_parts[5]->transform->local_pos = Vector3(0, 7, 0);
+		tree_parts[5]->transform->local_scale = Vector3(4.5, 1, 4.5);
+		tree_parts[5]->transform->local_orient = quaternion_from_euler(0, 14, 0);
+		tree_parts[5]->material->color = reaf_color;
+
+		tree_parts[6]->transform->local_pos = Vector3(0, 0.2f, 0);
+		tree_parts[6]->transform->local_scale = Vector3(3, 0.2f, 3);
+		tree_parts[6]->transform->local_orient = quaternion_from_euler(0, 0, 0);
+		tree_parts[6]->material->color = floar_color;
+
+		for (int i = 0; i < Tree_size; i++) {
+			tree->add_child(tree_parts[i]);
+		}
+
+		Box* boxes[Tree_size];
+		Collider* coll = tree->addComponent<Collider>();
+		for (int i = 0; i < Tree_size; i++) {
+			boxes[i] = coll->add_shape<Box>();
+		}
+
+		boxes[0]->center = Vector3(0, 7, 0);
+		boxes[0]->size = Vector3(1, 7, 1);
+
+		boxes[1]->center = Vector3(0, 15, 0);
+		boxes[1]->size = Vector3(1.5f, 1, 1.5f);
+		boxes[1]->rotate = Vector3(0, 0, 0);
+
+		boxes[2]->center = Vector3(0, 13, 0);
+		boxes[2]->size = Vector3(2.0f, 1, 2.0f);
+		boxes[2]->rotate = Vector3(0, 1.7f, 0);
+
+		boxes[3]->center = Vector3(0, 11, 0);
+		boxes[3]->size = Vector3(3.0f, 1, 3.0f);
+		boxes[3]->rotate = Vector3(0, 13, 0);
+
+		boxes[4]->center = Vector3(0, 9, 0);
+		boxes[4]->size = Vector3(3.5f, 1, 3.5f);
+		boxes[4]->rotate = Vector3(0, 28, 0);
+
+		boxes[5]->center = Vector3(0, 7, 0);
+		boxes[5]->size = Vector3(4.5f, 1, 4.5f);
+		boxes[5]->rotate = Vector3(0, 14, 0);
+
+		boxes[6]->center = Vector3(0, 0.2f, 0);
+		boxes[6]->size = Vector3(3, 0.2f, 3);
+		boxes[6]->rotate = Vector3(0, 0, 0);
+
+
+
+		for (int i = 0; i < Tree_size; i++) {
+			boxes[i]->adapt_Colliderdata();
+		}
+		Vector3 barycenter = coll->get_barycenter();
+		for (int i = 0; i < Tree_size; i++) {
+			boxes[i]->center -= barycenter;
+			tree_parts[i]->transform->local_pos -= barycenter;
+		}
+		tree->transform->local_pos += barycenter;
+		tree->transform->local_pos += barycenter * (scale.y - 1);
+
+		return tree;
 	}
 
 

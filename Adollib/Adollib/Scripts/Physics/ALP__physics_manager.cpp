@@ -48,13 +48,10 @@ namespace Adollib
 {
 	float Phyisics_manager::frame_count = -1;
 
-	//collider_componentのポインタ配列
-	std::unordered_map<Scenelist, std::list<Collider*>> Phyisics_manager::colliders;
-
 	//各dataの実態配列
 	std::unordered_map<Scenelist, std::list<Physics_function::ALP_Collider*>> Phyisics_manager::ALP_colliders;
 	std::unordered_map<Scenelist, std::list<Physics_function::ALP_Physics*>> Phyisics_manager::ALP_physicses;
-	std::list<Physics_function::ALP_Joint_base*> Phyisics_manager::ALP_joint_bases;
+	std::list<Physics_function::ALP_Joint*> Phyisics_manager::ALP_joints;
 
 	std::vector<Physics_function::Contacts::Contact_pair> Phyisics_manager::pairs[2];
 	u_int Phyisics_manager::pairs_new_num = 0; //pairsのどっちが新しい衝突なのか
@@ -134,7 +131,7 @@ bool Phyisics_manager::update(Scenelist Sce)
 	// 衝突解決
 	Work_meter::start("Resolve");
 	Work_meter::tag_start("Resolve");
-	resolve_contact(ALP_colliders[Sce], pairs[pairs_new_num]);
+	resolve_contact(ALP_colliders[Sce], pairs[pairs_new_num], ALP_joints);
 	Work_meter::tag_stop();
 	Work_meter::stop("Resolve");
 
@@ -338,6 +335,6 @@ bool Phyisics_manager::render_dop(Scenelist Sce) {
 
 void Phyisics_manager::destroy(Scenelist Sce) {
 
-	colliders[Sce].clear();
+	//colliders[Sce].clear();
 }
 

@@ -29,7 +29,7 @@ namespace Adollib {
 		static void set(std::string tabname, std::string name, float x, float y, float z, float w);
 		static void set(std::string tabname, std::string name, DirectX::XMFLOAT4 xyzw);
 		static void set(std::string tabname, std::string name, DirectX::XMFLOAT3 xyz) ;
-																					  
+
 		static void render();
 
 	};

@@ -23,7 +23,7 @@ namespace Adollib {
 			//コンストラクタ
 			ALP_Collider(
 				Gameobject* l_go,
-				std::list<Collider*>::iterator l_collitr,
+				Collider* l_collitr,
 				std::list<ALP_Collider*>::iterator l_itr,
 				ALP_Physics* l_ALPphysics,
 				Scenelist l_scene,
@@ -67,10 +67,9 @@ namespace Adollib {
 			void reset_oncoll_bits() { oncoll_bits = 0; };
 
 
-
 		private:
 			//::: ComponentがアタッチされたColliderへのイテレータ :::
-			std::list<Collider*>::iterator coll_itr;
+			Collider* coll_itr;
 
 			//::: Physicsへのポインタ :::
 			ALP_Physics* ALPphysics = nullptr;
@@ -79,7 +78,7 @@ namespace Adollib {
 			Gameobject* gameobject = nullptr;
 
 		public:
-			std::list<Collider*>::iterator get_collitr() const { return coll_itr; };
+			Collider* get_collitr() const { return coll_itr; };
 			ALP_Physics* get_ALPphysics() const { return ALPphysics; };
 			Gameobject* get_gameobject() const { return gameobject; };
 

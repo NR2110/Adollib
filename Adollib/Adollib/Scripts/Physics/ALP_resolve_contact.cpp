@@ -16,7 +16,9 @@ using namespace Contacts;
 #pragma region resolve_contact
 //:::::::::::::::::::::::::::
 
-#ifndef PHYICSE_USED_SIMD
+//#ifndef PHYICSE_USED_SIMD
+#if 0
+
 //衝突解決
 // ソルバーボディ(解決用のなんか)
 // ボールジョイント

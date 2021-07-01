@@ -209,8 +209,9 @@
     <ClInclude Include="Scripts\Object\hierarchy.h" />
     <ClInclude Include="Scripts\Object\object.h" />
     <ClInclude Include="Scripts\Object\transform.h" />
-    <ClInclude Include="Scripts\Physics\ALP_balljoint.h" />
-    <ClInclude Include="Scripts\Physics\ALP_joint_base.h" />
+    <ClInclude Include="Scripts\Physics\ALP_joint.h" />
+    <ClInclude Include="Scripts\Physics\balljoint.h" />
+    <ClInclude Include="Scripts\Physics\joint_base.h" />
     <ClInclude Include="Scripts\Physics\ALP_raycast.h" />
     <ClInclude Include="Scripts\Physics\ALP__meshcoll_data.h" />
     <ClInclude Include="Scripts\Physics\collider_shape.h" />
@@ -284,11 +285,11 @@
     <ClCompile Include="Scripts\Object\gameobject_light.cpp" />
     <ClCompile Include="Scripts\Object\gameobject_manager.cpp" />
     <ClCompile Include="Scripts\Object\hierarchy.cpp" />
-    <ClCompile Include="Scripts\Physics\ALP_balljoint.cpp" />
     <ClCompile Include="Scripts\Physics\ALP_broadphase.cpp" />
     <ClCompile Include="Scripts\Physics\ALP_collider.cpp" />
     <ClCompile Include="Scripts\Physics\ALP_generate_contact.cpp" />
     <ClCompile Include="Scripts\Physics\ALP_integrate.cpp" />
+    <ClCompile Include="Scripts\Physics\ALP_joint.cpp" />
     <ClCompile Include="Scripts\Physics\ALP_midphase.cpp" />
     <ClCompile Include="Scripts\Physics\ALP_physics.cpp" />
     <ClCompile Include="Scripts\Physics\ALP_raycast.cpp" />
@@ -299,6 +300,7 @@
     <ClCompile Include="Scripts\Physics\collider.cpp" />
     <ClCompile Include="Scripts\Physics\contact.cpp" />
     <ClCompile Include="Scripts\Physics\joint.cpp" />
+    <ClCompile Include="Scripts\Physics\joint_base.cpp" />
     <ClCompile Include="Scripts\Physics\meshcoll_resorce_manager.cpp" />
     <ClCompile Include="Scripts\Physics\ray.cpp" />
     <ClCompile Include="Scripts\Scene\scene_game.cpp" />
