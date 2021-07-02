@@ -16,6 +16,7 @@ namespace Adollib {
 
 		class ALP_Physics;
 		class Meshcoll_part;
+		class ALP_Joint;
 
 		//形情報
 		class ALP_Collider {
@@ -34,6 +35,9 @@ namespace Adollib {
 		private:
 			//::: 自身へのイテレータ(remove用) :::
 			std::list<ALP_Collider*>::iterator this_itr;
+
+			//::: このColliderが属しているjointへのポインタ配列 :::
+			std::list<ALP_Joint*> joints;
 
 		public:
 			// ここをすべてprivateにしたかった........
@@ -112,6 +116,13 @@ namespace Adollib {
 			};
 
 			Meshcoll_part* add_mesh_shape(const char* filepass, Physics_function::Meshcollider_data* mesh_data);
+
+			//このcolliderが属するjointを追加
+			void add_joint(ALP_Joint* joint);
+
+			//jointから外された
+			void remove_joint(ALP_Joint* joint);
+
 
 			//ヒエラルキー描画用
 			void Update_hierarchy();

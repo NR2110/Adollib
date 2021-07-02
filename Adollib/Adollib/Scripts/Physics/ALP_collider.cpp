@@ -5,8 +5,8 @@
 
 #include "collider_shape.h"
 #include "ALP_physics.h"
+#include "ALP_joint.h"
 #include "ALP__meshcoll_data.h"
-
 
 using namespace Adollib;
 using namespace Physics_function;
@@ -93,6 +93,22 @@ void ALP_Collider::Update_hierarchy()
 	}
 };
 
+//このcolliderが属するjointを追加
+void ALP_Collider::add_joint(ALP_Joint* joint) {
+#if _DEBUG
+	//エラー表示 同じjointをアタッチしてはいけない
+	for (auto& j : joints) {
+		if (j == joint) assert(0 && " the joint is already been added");
+	}
+#endif
+	joints.emplace_back(joint);
+}
+
+//jointから外された
+void ALP_Collider::remove_joint(ALP_Joint* joint) {
+	joints.remove(joint);
+}
+
 Meshcoll_part* ALP_Collider::add_mesh_shape(const char* filepass, Physics_function::Meshcollider_data* mesh_data) {
 	Meshcoll_part* shape = newD Meshcoll_part(this, filepass, mesh_data);
 
@@ -103,8 +119,13 @@ Meshcoll_part* ALP_Collider::add_mesh_shape(const char* filepass, Physics_functi
 void ALP_Collider::destroy()
 {
 	//shapeの解放
-	for (auto shape : shapes) {
+	for (auto& shape : shapes) {
 		delete shape;
+	}
+
+	for (auto& j : joints) {
+		j->destroy(this, true);
+		delete j;
 	}
 
 	Phyisics_manager::remove_ALPcollider(scene, this_itr);

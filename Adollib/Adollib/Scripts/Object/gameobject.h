@@ -39,7 +39,7 @@ namespace Adollib {
 
 		Scenelist this_scene = Scenelist::scene_null; //このgoのあるscene
 
-		std::list<Gameobject*>::iterator this_itr; //自身へのイテレーター(いつ使うの?)
+		std::list<Gameobject*>::iterator this_itr;
 	public:
 		//このGOが存在するシーンを返す
 		Scenelist get_scene() { return this_scene; };

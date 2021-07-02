@@ -159,7 +159,7 @@ bool Contact::chack_remove_contact_point(
 
 		// normal•ûŒü‚Ì‹——£‚ð”ä‚×‚é
 		const float dis_N = vector3_dot(normal, contactpointB - contactpointA);
-		if (dis_N < -Phyisics_manager::physicsParams.contact_threrhold_normal) {
+		if ( dis_N < -Phyisics_manager::physicsParams.contact_threrhold_normal) {
 			remove_contactpoint(i);
 			ret = true;
 			continue;

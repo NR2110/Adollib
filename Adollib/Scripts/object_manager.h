@@ -20,7 +20,7 @@ namespace Adollib
 		bool is_draw_raycast = true;
 
 	public:
-		Gameobject* set_sphere(Vector3 pos, float r, Vector3 color = Vector3(1, 1, 1));
+		Gameobject* set_sphere(Collider*& coll, Vector3 pos, float r, Vector3 color = Vector3(1, 1, 1));
 		Gameobject* set_box(Collider*& coll, Vector3 pos, Vector3 size, Vector3 rotate, Vector3 color = Vector3(1, 1, 1));
 		Gameobject* set_capsule(Vector3 pos, float r,float length,Vector3 rotate, Vector3 color = Vector3(1, 1, 1));
 		Gameobject* set_plane(Vector3 pos, Vector3 normal, Vector3 color = Vector3(1, 1, 1));

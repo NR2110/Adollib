@@ -12,7 +12,7 @@ void ALP_Physics::set_default() {
 
 	inertial_mass = PhysicsParams_default::inertial_mass; //¿—Ê
 	linear_drag = PhysicsParams_default::linear_drag;//‹ó‹C’ïR
-	anglar_drag = PhysicsParams_default::anglar_drag;//‹ó‹C’ïR
+	angula_drag = PhysicsParams_default::anglar_drag;//‹ó‹C’ïR
 	dynamic_friction = PhysicsParams_default::dynamic_friction;//“®–€C
 	static_friction = PhysicsParams_default::static_friction;//Ã–€C
 	restitution = PhysicsParams_default::restitution; //”½”­ŒW”
@@ -76,6 +76,9 @@ void ALP_Physics::reset_force() {
 void ALP_Physics::apply_external_force(float duration) {
 	if (is_movable()) {
 		//inv_rotate = Quaternion(1, 0, 0, 0);
+
+		angula_velocity = angula_velocity * pow(1 - angula_drag, duration);
+		linear_velocity = linear_velocity * pow(1 - linear_drag, duration);
 
 		const float inv_mass = 1 / inertial_mass;
 		if (is_fallable) accumulated_force += Vector3(0, -Phyisics_manager::physicsParams.gravity, 0) * inertial_mass; //—‰º
@@ -213,7 +216,7 @@ void ALP_Physics::update_physics_data() {
 
 	inertial_mass = Cdata.inertial_mass;
 	linear_drag = Cdata.drag;
-	anglar_drag = Cdata.anglar_drag;
+	angula_drag = Cdata.anglar_drag;
 	dynamic_friction = Cdata.dynamic_friction;
 	static_friction = Cdata.static_friction;
 	restitution = Cdata.restitution;

@@ -6,8 +6,8 @@ using namespace Adollib;
 using namespace Physics_function;
 
 BallJoint* Joint::add_balljoint(
-	Collider* colliderA, Vector3 anchorA,
-	Collider* colliderB, Vector3 anchorB,
+	Collider* colliderA,Collider* colliderB,
+	Vector3 anchorA, Vector3 anchorB,
 	float bias
 ) {
 	//jointÇÃê∂ê¨

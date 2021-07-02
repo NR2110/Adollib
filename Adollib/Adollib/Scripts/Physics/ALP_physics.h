@@ -60,7 +60,7 @@ namespace Adollib {
 			//::: •ÏX‰Â :::::::::::::::::::::::::::::
 			float inertial_mass = 0; //¿—Ê
 			float linear_drag = 0; //‹ó‹C’ïR
-			float anglar_drag = 0; //‹ó‹C’ïR
+			float angula_drag = 0; //‹ó‹C’ïR
 			float dynamic_friction = 0;//“®–€C
 			float static_friction = 0; //Ã–€C
 			float restitution = 0;	 //”½”­ŒW”

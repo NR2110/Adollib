@@ -16,7 +16,7 @@ using namespace Physics_function;
 using namespace Contacts;
 
 //ContactPoint‚Ì•\¦
-//#define Draw_Contact
+#define Draw_Contact
 
 //::: staticƒƒ“ƒo‚Ì‰Šú‰» :::::
 #pragma region static_initialize

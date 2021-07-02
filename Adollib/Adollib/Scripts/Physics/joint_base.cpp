@@ -7,6 +7,7 @@ using namespace Adollib;
 using namespace Physics_function;
 
 void Joint_base::destroy() {
-	ALPjoint->destroy();
+	ALPjoint->destroy(nullptr, false);
 	delete ALPjoint;
+
 }

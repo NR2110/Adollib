@@ -170,7 +170,7 @@ namespace Adollib
 		Vector3 b = Vector3(0, 180, 0);
 		Vector3 c = Vector3(0, -180, 0);
 		Quaternion d = quaternion_from_to_rotate(b.unit_vect(), c.unit_vect());*/
-	///	Adollib::Ray
+		///	Adollib::Ray
 
 
 #pragma region IMGUI
@@ -249,8 +249,9 @@ namespace Adollib
 					Gameobject* pearent = Gameobject_manager::create("Spherepyramid");
 					for (int i = 0; i < SPHERE_pyramid_count; i++) {
 						for (int o = 0; o < SPHERE_pyramid_count - i; o++) {
+							Collider* coll;
 							pearent->add_child(
-								set_sphere(
+								set_sphere(coll,
 									Vector3(2.50001f * o - (SPHERE_pyramid_count - i) * 2.500001f / 2.0f + SPHERE_pyramid_pos[0],
 										5.0f + 2.50001f * i + SPHERE_pyramid_pos[1],
 										SPHERE_pyramid_pos[2]),
@@ -444,52 +445,193 @@ namespace Adollib
 					}
 				}
 				imgui_num++;
-			}
+			};
 
-			//JointBox pyramid
+			//BallJoint_Shpererope
 			{
 				static int JointBox_pyramid_count = 5;
 				static float JointBox_pyramid_pos[3] = { 0 };
 				static float JointBox_pyramid_size[3] = { 1,1,1 };
 				bool summon = false;
 				ImGui::Separator();
-				ImGui::Text("JointBox_pyramid"); ImGui::NextColumn();
+				ImGui::Text("BallJoint_Shpererope"); ImGui::NextColumn();
 				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
 				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), JointBox_pyramid_pos, 0.1f); ImGui::NextColumn();
 				ImGui::DragFloat3(std::to_string(imgui_num + 250).c_str(), JointBox_pyramid_size, 0.1f); ImGui::NextColumn();
 				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &JointBox_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
 
+				static Gameobject* joint_base = Gameobject_manager::create("BallJoint_Shpererope_joint_base");
 				if (summon == true) {
-					Gameobject* pearent = Gameobject_manager::create("BOXpyramid");
+					Gameobject* pearent = Gameobject_manager::create("BallJoint_Shpererope");
+					Collider* old_coll = nullptr;
+					Gameobject* old_go = nullptr;
+
+					{
+						Collider* coll = nullptr;
+						Gameobject* go = nullptr;
+						go = set_sphere(coll, Vector3(
+							JointBox_pyramid_pos[0],
+							JointBox_pyramid_pos[1] + 2,
+							JointBox_pyramid_pos[2]
+						),
+							2,
+							Vector3(0, 1, 1))
+							;
+
+						coll->physics_data.inertial_mass = 10;
+						pearent->add_child(go);
+
+						old_coll = coll;
+						old_go = go;
+					}
+
 					for (int i = 0; i < JointBox_pyramid_count; i++) {
-						for (int o = 0; o < JointBox_pyramid_count - i; o++) {
-							Collider* coll[2];
-							pearent->add_child(set_box(coll[0], Vector3(
-								JointBox_pyramid_size[0] * 2.0f * 1.2f * o - (JointBox_pyramid_count - i) * 2.300001f / 2.0f + JointBox_pyramid_pos[0],
-								3.0f + JointBox_pyramid_size[1] * 2 * i + JointBox_pyramid_pos[1],
-								JointBox_pyramid_pos[2]),
-								Vector3(JointBox_pyramid_size[0], JointBox_pyramid_size[1], JointBox_pyramid_size[2]),
-								Vector3(0, 10, 0),
-								Vector3(0, 1, 1))
-							);
+						Collider* coll = nullptr;
+						Gameobject* go = nullptr;
+						go = set_sphere(coll, Vector3(
+							JointBox_pyramid_pos[0] + 0.0001f,
+							JointBox_pyramid_pos[1] + i * 2 + 5,
+							JointBox_pyramid_pos[2]
+						),
+							1,
+							Vector3(1, 0, (1.0f / JointBox_pyramid_count) * i)
+						);
 
-							pearent->add_child(set_box(coll[1], Vector3(
-								JointBox_pyramid_size[0] * 2.0f * 1.2f * o - (JointBox_pyramid_count - i) * 2.300001f / 2.0f + JointBox_pyramid_pos[0] + 2,
-								3.0f + JointBox_pyramid_size[1] * 2 * i + JointBox_pyramid_pos[1] + 2,
-								JointBox_pyramid_pos[2]),
-								Vector3(JointBox_pyramid_size[0], JointBox_pyramid_size[1], JointBox_pyramid_size[2]),
-								Vector3(0, 10, 0),
-								Vector3(0, 1, 1))
-							);
+						pearent->add_child(go);
 
-							Joint::add_balljoint(coll[0], Vector3(1, 1, 1), coll[1], Vector3(-1, -1, -1), 1);
+						if (old_coll != nullptr) {
+							if (i == 0)
+								Joint::add_balljoint(old_coll, coll, Vector3(0, 2, 0), Vector3(0, -1, 0), 0.1f);
+							else
+								Joint::add_balljoint(old_coll, coll, Vector3(0, 1, 0), Vector3(0, -1, 0), 0.1f);
 						}
 
+						old_coll = coll;
+						old_go = go;
 					}
+
+
+					if (old_coll != nullptr) {
+						old_coll->physics_data.is_moveable = false;
+						joint_base->add_child(old_go);
+					}
+
+
+
 				}
+
 				imgui_num++;
 			}
 
+			//BallJoint_Boxrope
+			{
+				static int JointBox_pyramid_count = 5;
+				static float JointBox_pyramid_pos[3] = { 0 };
+				static float JointBox_pyramid_size[3] = { 1,1,1 };
+				bool summon = false;
+				ImGui::Separator();
+				ImGui::Text("BallJoint_Boxrope"); ImGui::NextColumn();
+				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
+				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), JointBox_pyramid_pos, 0.1f); ImGui::NextColumn();
+				ImGui::DragFloat3(std::to_string(imgui_num + 250).c_str(), JointBox_pyramid_size, 0.1f); ImGui::NextColumn();
+				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &JointBox_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
+
+				static Gameobject* joint_base = Gameobject_manager::create("BallJoint_Boxrope_joint_base");
+				if (summon == true) {
+					Gameobject* pearent = Gameobject_manager::create("BOXpyramid");
+					Collider* old_coll = nullptr;
+					Gameobject* old_go = nullptr;
+
+					for (int i = 0; i < JointBox_pyramid_count; i++) {
+						Collider* coll = nullptr;
+						Gameobject* go = nullptr;
+						go = set_box(coll, Vector3(
+							JointBox_pyramid_size[0] + i * 2 - JointBox_pyramid_count * 2,
+							JointBox_pyramid_pos[1],
+							JointBox_pyramid_pos[2] + i * 2 - JointBox_pyramid_count * 2
+						),
+							Vector3(JointBox_pyramid_size[0], JointBox_pyramid_size[1], JointBox_pyramid_size[2]),
+							Vector3(0, 0, 0),
+							Vector3(0, 1, 1))
+							;
+
+						pearent->add_child(go);
+
+						if (old_coll != nullptr) {
+							Joint::add_balljoint(old_coll, coll, Vector3(1, 1, 1), Vector3(-1, 1, -1), 0.1f);
+						}
+						old_coll = coll;
+						old_go = go;
+					}
+					if (old_coll != nullptr) {
+						old_coll->physics_data.is_moveable = false;
+						joint_base->add_child(old_go);
+					}
+
+
+
+				}
+
+				imgui_num++;
+			}
+
+			//BallJoint_Shpererope
+			{
+				static int JointBox_pyramid_count = 5;
+				static float JointBox_pyramid_pos[3] = { 0 };
+				static float JointBox_pyramid_size[3] = { 1,1,1 };
+				bool summon = false;
+				ImGui::Separator();
+				ImGui::Text("BallJoint_Shpereami"); ImGui::NextColumn();
+				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
+				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), JointBox_pyramid_pos, 0.1f); ImGui::NextColumn();
+				ImGui::DragFloat3(std::to_string(imgui_num + 250).c_str(), JointBox_pyramid_size, 0.1f); ImGui::NextColumn();
+				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &JointBox_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
+
+				static Gameobject* joint_base = Gameobject_manager::create("BallJoint_Shpererope_joint_base");
+				if (summon == true) {
+					Gameobject* pearent = Gameobject_manager::create("BallJoint_Shpererope");
+					std::vector<Collider*>colls;
+
+					const int colls_size = JointBox_pyramid_count * JointBox_pyramid_count;
+					colls.resize(colls_size);
+
+					for (int xaxis = 0; xaxis < JointBox_pyramid_count; xaxis++) {
+						for (int zaxis = 0; zaxis < JointBox_pyramid_count; zaxis++) {
+							int index = xaxis * JointBox_pyramid_count + zaxis;
+
+							Collider* coll = nullptr;
+							Gameobject* go = nullptr;
+
+							go = set_sphere(coll, Vector3(
+								JointBox_pyramid_pos[0] + (xaxis - JointBox_pyramid_count * 0.5f) * 2,
+								JointBox_pyramid_pos[1] + 2,
+								JointBox_pyramid_pos[2] + (zaxis - JointBox_pyramid_count * 0.5f) * 2
+							),
+								1,
+								Vector3(1, 0, (1.0f / (JointBox_pyramid_count * JointBox_pyramid_count)) * index)
+							);
+
+							pearent->add_child(go);
+							colls.at(index) = (coll);
+						}
+					}
+
+					for (int xaxis = 0; xaxis < JointBox_pyramid_count; xaxis++) {
+						for (int zaxis = 0; zaxis < JointBox_pyramid_count; zaxis++) {
+							int index = xaxis * JointBox_pyramid_count + zaxis;
+
+							if (xaxis > 0) Joint::add_balljoint(colls[index], colls[index - JointBox_pyramid_count], Vector3(-1, 0, 0), Vector3(1, 0, 0), 0.1f);
+							if (zaxis > 0) Joint::add_balljoint(colls[index], colls[index - 1], Vector3(0, 0, -1), Vector3(0, 0, 1), 0.1f);
+						}
+					}
+
+
+
+				}
+
+				imgui_num++;
+			}
 
 			ImGui::Columns(1);
 			ImGui::End();
@@ -538,11 +680,11 @@ namespace Adollib
 
 namespace Adollib
 {
-	Gameobject* object_manager::set_sphere(Vector3 pos, float r, Vector3 color) {
+	Gameobject* object_manager::set_sphere(Collider*& out_coll, Vector3 pos, float r, Vector3 color) {
 		Gameobject* object = nullptr;
 		object = Gameobject_manager::createSphere(GO_tag::Sphere);
 		//Vector4 C = Vector4(color.x, color.y, color.z, 1);
-		Vector4 C = Vector4(1, 0, 1, 1);
+		Vector4 C = Vector4(color, 1);
 		object->material->color = C;
 
 		//object->addComponent<object_fall>();
@@ -555,6 +697,8 @@ namespace Adollib
 
 		coll->tag = Collider_tags::Sphere;
 		GOs.emplace_back(object);
+
+		out_coll = coll;
 		return object;
 	}
 

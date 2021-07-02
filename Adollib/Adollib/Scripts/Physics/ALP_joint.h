@@ -19,7 +19,7 @@ namespace Adollib {
 			Vector3 anchor[2]; // 剛体のローカル座標系における接続点
 
 			Collider* collider_comp[2] = { nullptr }; // 剛体のcomponentへのポインタ
-			ALP_Collider* collider[2] = { nullptr }; // 剛体へのポインタ
+			ALP_Collider* ALPcollider[2] = { nullptr }; // 剛体へのポインタ
 
 			Contacts::Constraint constraint; // 拘束計算用
 
@@ -32,9 +32,11 @@ namespace Adollib {
 
 
 		public:
+			void reset();
+
 			void adapt_Jointdata();
 
-			void destroy();
+			void destroy(ALP_Collider* coll_ptr = nullptr, const bool is_delete_userjoint = true);
 
 		};
 	}

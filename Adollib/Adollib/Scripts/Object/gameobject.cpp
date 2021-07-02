@@ -31,7 +31,7 @@ void Gameobject::update_imgui_toChildren() {
 		bool de = false;
 		ImGui::Checkbox("destroy", &de);
 		if(de){
-			destroy();
+			Gameobject_manager::deleteGameobject(this);
 			return;
 		}
 
@@ -39,7 +39,7 @@ void Gameobject::update_imgui_toChildren() {
 		//transformeの表示
 		ImGui::SetNextItemOpen(true, ImGuiCond_Once);
 		if (ImGui::TreeNodeEx((void*)(int)this, f, "Transforme")) {
-			float ave = (transform->local_scale.x + transform->local_scale.y + transform->local_scale.z) * 0.333333333f;
+			float ave = (transform->local_scale.x + transform->local_scale.y + transform->local_scale.z) * 0.333333333f * 10;
 			//position
 			{
 				float vec3[3] = { transform->local_pos.x, transform->local_pos.y, transform->local_pos.z };
@@ -98,8 +98,8 @@ void Gameobject::render() {
 		Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 
 		//視錐台カリング用
-		FrustumCulling::update_obj(this);
-		FrustumCulling::frustum_culling_init();
+		//FrustumCulling::update_obj(this);
+		//FrustumCulling::frustum_culling_init();
 
 		material->render();
 	}

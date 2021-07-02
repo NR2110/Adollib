@@ -122,6 +122,37 @@ void Gameobject_manager::update(Scenelist Sce) {
 	Hierarchy::update_hierarchy(masters);
 #endif // UseImgui
 
+	gos.clear();
+	//扱いやすいように一つの配列に保存
+	for (auto& GO : gameobjects[Sce]) {
+		gos.push_back(GO);
+	}
+
+	for (auto& GO : lights[Sce]) {
+		gos.push_back(GO);
+	}
+
+	for (auto& GO : cameras[Sce]) {
+		gos.push_back(GO);
+	}
+
+	//親から子に座標の更新を行う
+	{
+		std::unordered_map<object*, bool> masters_manag;
+		if (gos.size() > 8) {
+			int dasfgfhg = 0;
+		}
+		for (auto& GO : gos) {
+			object* master = GO->top_pearent();
+			if (masters_manag.count(master) == 0) {
+				//if()
+				master->update_world_trans_to_children();
+			}
+			masters_manag[master] = true;
+		}
+
+	}
+
 	Phyisics_manager::update();
 
 

@@ -16,9 +16,9 @@ namespace Adollib {
 		static void delete_joint(Physics_function::Joint_base*&);
 
 		static Physics_function::BallJoint* add_balljoint(
-			Collider* colliderA, Vector3 anchorA,
-			Collider* colliderB, Vector3 anchorB,
-			float bias = 1
+			Collider* colliderA,Collider* colliderB,
+			Vector3 anchorA, Vector3 anchorB,
+			float bias = 0.01f
 		);
 	};
 

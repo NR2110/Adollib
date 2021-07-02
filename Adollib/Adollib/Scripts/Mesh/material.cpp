@@ -29,9 +29,9 @@ void Material::render() {
 	if (Systems::RS_type != RS_state) Systems::SetRasterizerState(RS_state);
 	if (Systems::DS_type != DS_state) Systems::SetDephtStencilState(DS_state);
 
-	for (Mesh::mesh mesh : *meshes)
+	for (Mesh::mesh& mesh : *meshes)
 	{
-		if (FrustumCulling::frustum_culling(&mesh) == false) continue;
+		//if (FrustumCulling::frustum_culling(&mesh) == false) continue;
 
 		UINT stride = sizeof(VertexFormat);
 		UINT offset = 0;
