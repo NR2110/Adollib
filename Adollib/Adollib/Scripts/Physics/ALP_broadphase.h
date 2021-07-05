@@ -32,7 +32,7 @@ namespace Adollib {
 		void BroadMidphase(Scenelist Sce,
 			const std::list<ALP_Collider*>& ALP_collider,
 			//std::vector<Contacts::Collider_2>& out_pair,
-			std::vector<Contacts::Contact_pair>& out_pair,
+			std::vector < Contacts::Contact_pair*> & out_pair,
 			std::vector<Physics_function::ALP_Collider*>& moved_collider, //“®‚¢‚½‚à‚Ì
 			std::vector<Physics_function::ALP_Collider*>& added_collider //’Ç‰Á‚³‚ê‚½‚à‚Ì
 		);

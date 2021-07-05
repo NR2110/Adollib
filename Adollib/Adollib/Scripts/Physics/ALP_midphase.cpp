@@ -103,7 +103,7 @@ using namespace DOP;
 //}
 
 
-void Physics_function::Midphase(std::vector<Contacts::Contact_pair>& old_pairs, std::vector<Contacts::Contact_pair>& new_pairs) {
+void Physics_function::Midphase(std::vector<Contacts::Contact_pair*>& old_pairs, std::vector<Contacts::Contact_pair*>& new_pairs) {
 
 	//new_pairs.clear();
 
@@ -160,35 +160,44 @@ void Physics_function::Midphase(std::vector<Contacts::Contact_pair>& old_pairs, 
 		int oldId = 0, newId = 0;
 		while (oldId < old_pair_size && newId < new_pair_size)
 		{
-			if (new_pairs[newId].key > old_pairs[oldId].key) {
+			if (new_pairs[newId]->key > old_pairs[oldId]->key) {
 				//oldのkeyがnewより小さい -> そのoldは存在しない
+				delete old_pairs[oldId];
 				oldId++;
 			}
-			else if (new_pairs[newId].key == old_pairs[oldId].key) {
+			else if (new_pairs[newId]->key == old_pairs[oldId]->key) {
 				//oldのkeyとnewが同じ -> 前から存在している
 				// keep
+				delete new_pairs[newId];
 				new_pairs[newId] = old_pairs[oldId];
-				new_pairs[newId].type = Contacts::Pairtype::keep_pair;
+				new_pairs[newId]->type = Contacts::Pairtype::keep_pair;
 				oldId++;
 				newId++;
 			}
 			else {
 				//oldのkeyがnewより大きい -> 新しいnew
 				// new
-				new_pairs[newId].type = Contacts::Pairtype::new_pair;
-				new_pairs[newId].contacts.reset();
+				new_pairs[newId]->type = Contacts::Pairtype::new_pair;
+				new_pairs[newId]->contacts.reset();
 				newId++;
 			}
 
 		}
 
-		if (newId < new_pair_size) {
+		while (newId < new_pair_size) {
 			// 残りは全部new
-			new_pairs[newId].type = Contacts::Pairtype::new_pair;
-			new_pairs[newId].contacts.reset();
+			new_pairs[newId]->type = Contacts::Pairtype::new_pair;
+			new_pairs[newId]->contacts.reset();
 			newId++;
 		}
 
+		while (oldId < old_pair_size) {
+			// 残りは全部old
+			delete old_pairs[oldId];
+			oldId++;
+		}
+
+		old_pairs.clear();
 	}
 
 	Work_meter::stop("Mid_check_alive");
@@ -196,9 +205,9 @@ void Physics_function::Midphase(std::vector<Contacts::Contact_pair>& old_pairs, 
 	Work_meter::start("Mid_remove_contact_point");
 	//現在使用していない衝突点を削除
 	for (auto& new_p : new_pairs) {
-		if (new_p.contacts.chack_remove_contact_point(
-			new_p.body[0],
-			new_p.body[1]
+		if (new_p->contacts.chack_remove_contact_point(
+			new_p->body[0],
+			new_p->body[1]
 		)) {
 			//new_p.body[0]->get_ALPcollider()->get_ALPphysics()->sleep_timer = 0.0f;
 			//new_p.body[1]->get_ALPcollider()->get_ALPphysics()->sleep_timer = 0.0f;

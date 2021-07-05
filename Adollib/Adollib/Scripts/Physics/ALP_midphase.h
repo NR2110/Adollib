@@ -6,8 +6,8 @@ namespace Adollib {
 	namespace Physics_function {
 		//‘åŽG”c‚È“–‚½‚è”»’è
 		void Midphase(
-			std::vector<Contacts::Contact_pair>& old_pairs,
-			std::vector<Contacts::Contact_pair>& new_pairs
+			std::vector<Contacts::Contact_pair*>& old_pairs,
+			std::vector<Contacts::Contact_pair*>& new_pairs
 		);
 
 	}

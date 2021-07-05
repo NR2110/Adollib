@@ -16,13 +16,13 @@ using namespace Closest_func;
 #pragma region generate_contact
 //:::::::::::::::::::::::::::
 
-void Physics_function::generate_contact(std::vector<Contacts::Contact_pair>& pairs) {
+void Physics_function::generate_contact (std::vector<Contacts::Contact_pair*>& pairs) {
 
 	bool is_crossing = false;
 	for (auto& pair : pairs) {
 
-		const Collider_shape* shapeA = pair.body[0];
-		const Collider_shape* shapeB = pair.body[1];
+		const Collider_shape* shapeA = pair->body[0];
+		const Collider_shape* shapeB = pair->body[1];
 		is_crossing = false;
 
 		if (shapeA->get_shape_tag() == ALPCollider_shape_type::Sphere) {
@@ -65,8 +65,8 @@ void Physics_function::generate_contact(std::vector<Contacts::Contact_pair>& pai
 
 		//もし交差していたらそれぞれのoncoll_bitに相手のtagを追加
 		if (is_crossing) {
-			pair.body[0]->get_ALPcollider()->add_oncoll_bits(pair.body[1]->get_ALPcollider()->get_tag());
-			pair.body[1]->get_ALPcollider()->add_oncoll_bits(pair.body[0]->get_ALPcollider()->get_tag());
+			pair->body[0]->get_ALPcollider()->add_oncoll_bits(pair->body[1]->get_ALPcollider()->get_tag());
+			pair->body[1]->get_ALPcollider()->add_oncoll_bits(pair->body[0]->get_ALPcollider()->get_tag());
 		}
 
 	}
@@ -865,7 +865,7 @@ bool sat_obb_convex_mesh(const OBB_struct& obb, const Collider_shape* mesh,
 
 //衝突生成
 #pragma region SPHERE-SPHERE
-bool Physics_function::generate_contact_sphere_sphere(const Collider_shape* SA, const Collider_shape* SB, Contacts::Contact_pair& pair, bool& is_crossing) {
+bool Physics_function::generate_contact_sphere_sphere(const Collider_shape* SA, const Collider_shape* SB, Contacts::Contact_pair*& pair, bool& is_crossing) {
 	//const std::list<ALP_Collider>::iterator& SA = SA->get_ALPcollider();
 	//const std::list<ALP_Collider>::iterator& SB = SB->get_ALPcollider();
 
@@ -898,10 +898,10 @@ bool Physics_function::generate_contact_sphere_sphere(const Collider_shape* SA, 
 		is_crossing = true;
 
 		//oncoll_enterのみの場合addcontactせずにreturn
-		if (pair.check_oncoll_only == true) return false;
+		if (pair->check_oncoll_only == true) return false;
 
 
-		pair.contacts.addcontact(
+		pair->contacts.addcontact(
 			ACpenetration,
 			ACnormal,
 			ACcontact_pointA,
@@ -913,7 +913,7 @@ bool Physics_function::generate_contact_sphere_sphere(const Collider_shape* SA, 
 #pragma endregion
 
 #pragma region SPHERE-PLANE
-bool Physics_function::generate_contact_sphere_plane(const Collider_shape* sphere, const Collider_shape* plane, Contacts::Contact_pair& pair, bool& is_crossing) {
+bool Physics_function::generate_contact_sphere_plane(const Collider_shape* sphere, const Collider_shape* plane, Contacts::Contact_pair*& pair, bool& is_crossing) {
 	//const std::list<ALP_Collider>::iterator& sphere = sphere_mesh->get_ALPcollider();
 	//const std::list<ALP_Collider>::iterator& plane = plane_mesh->get_ALPcollider();
 
@@ -947,7 +947,7 @@ bool Physics_function::generate_contact_sphere_plane(const Collider_shape* spher
 		is_crossing = true;
 
 		//oncoll_enterのみの場合ここでreturn
-		if (pair.check_oncoll_only == true) return false;
+		if (pair->check_oncoll_only == true) return false;
 
 		n = p.y > 0 ? n : -n;
 
@@ -963,9 +963,9 @@ bool Physics_function::generate_contact_sphere_plane(const Collider_shape* spher
 	if (is_AC)
 	{
 		//oncoll_enterのみの場合ここでreturn
-		if (pair.check_oncoll_only == true) return false;
+		if (pair->check_oncoll_only == true) return false;
 
-		pair.contacts.addcontact(
+		pair->contacts.addcontact(
 			ACpenetration,
 			ACnormal,
 			ACcontact_pointA,
@@ -977,7 +977,7 @@ bool Physics_function::generate_contact_sphere_plane(const Collider_shape* spher
 #pragma endregion
 
 #pragma region SPHERE-BOX
-bool Physics_function::generate_contact_sphere_box(const Collider_shape* sphere, const Collider_shape* box, Contacts::Contact_pair& pair, bool& is_crossing) {
+bool Physics_function::generate_contact_sphere_box(const Collider_shape* sphere, const Collider_shape* box, Contacts::Contact_pair*& pair, bool& is_crossing) {
 	//const std::list<ALP_Collider>::iterator& sphere = sphere_mesh->get_ALPcollider();
 	//const std::list<ALP_Collider>::iterator& box = box_part->get_ALPcollider();
 
@@ -1036,17 +1036,17 @@ bool Physics_function::generate_contact_sphere_box(const Collider_shape* sphere,
 		is_crossing = true;
 
 		//oncoll_enterのみの場合ここでreturn
-		if (pair.check_oncoll_only == true) return false;
+		if (pair->check_oncoll_only == true) return false;
 
-		if (pair.body[0]->get_shape_tag() == box->get_shape_tag())
-			pair.contacts.addcontact(
+		if (pair->body[0]->get_shape_tag() == box->get_shape_tag())
+			pair->contacts.addcontact(
 				ACpenetration,
 				ACnormal,
 				ACcontact_pointA,
 				ACcontact_pointB
 			);
 		else
-			pair.contacts.addcontact(
+			pair->contacts.addcontact(
 				ACpenetration,
 				-ACnormal,
 				ACcontact_pointB,
@@ -1058,7 +1058,7 @@ bool Physics_function::generate_contact_sphere_box(const Collider_shape* sphere,
 #pragma endregion
 
 #pragma region SPHERE-Capsule
-bool Physics_function::generate_contact_sphere_capsule(const Collider_shape* sphere, const Collider_shape* capsule, Contacts::Contact_pair& pair, bool& is_crossing) {
+bool Physics_function::generate_contact_sphere_capsule(const Collider_shape* sphere, const Collider_shape* capsule, Contacts::Contact_pair*& pair, bool& is_crossing) {
 
 	//const std::list<ALP_Collider>::iterator& sphere = sphere_mesh->get_ALPcollider();
 	//const std::list<ALP_Collider>::iterator& capsule = capsule_mesh->get_ALPcollider();
@@ -1106,17 +1106,17 @@ bool Physics_function::generate_contact_sphere_capsule(const Collider_shape* sph
 		is_crossing = true;
 
 		//oncoll_enterのみの場合ここでreturn
-		if (pair.check_oncoll_only == true) return false;
+		if (pair->check_oncoll_only == true) return false;
 
-		if (pair.body[0]->get_shape_tag() == sphere->get_shape_tag())
-			pair.contacts.addcontact(
+		if (pair->body[0]->get_shape_tag() == sphere->get_shape_tag())
+			pair->contacts.addcontact(
 				ACpenetration,
 				ACnormal,
 				ACcontact_pointA,
 				ACcontact_pointB
 			);
 		else
-			pair.contacts.addcontact(
+			pair->contacts.addcontact(
 				ACpenetration,
 				-ACnormal,
 				ACcontact_pointB,
@@ -1128,7 +1128,7 @@ bool Physics_function::generate_contact_sphere_capsule(const Collider_shape* sph
 #pragma endregion
 
 #pragma region SPHERE-MESH
-bool Physics_function::generate_contact_sphere_mesh(const Collider_shape* sphere, const Collider_shape* mesh, Contacts::Contact_pair& pair, bool& is_crossing) {
+bool Physics_function::generate_contact_sphere_mesh(const Collider_shape* sphere, const Collider_shape* mesh, Contacts::Contact_pair*& pair, bool& is_crossing) {
 	//const std::list<ALP_Collider>::iterator& sphere = sphere_mesh->get_ALPcollider();
 	//const std::list<ALP_Collider>::iterator& mesh = mesh_part->get_ALPcollider();
 
@@ -1234,17 +1234,17 @@ bool Physics_function::generate_contact_sphere_mesh(const Collider_shape* sphere
 		is_crossing = true;
 
 		//oncoll_enterのみの場合ここでreturn
-		if (pair.check_oncoll_only == true) return false;
+		if (pair->check_oncoll_only == true) return false;
 
-		if (pair.body[0]->get_shape_tag() == sphere->get_shape_tag())
-			pair.contacts.addcontact(
+		if (pair->body[0]->get_shape_tag() == sphere->get_shape_tag())
+			pair->contacts.addcontact(
 				ACpenetration,
 				ACnormal,
 				ACcontact_pointA,
 				ACcontact_pointB
 			);
 		else
-			pair.contacts.addcontact(
+			pair->contacts.addcontact(
 				ACpenetration,
 				-ACnormal,
 				ACcontact_pointB,
@@ -1257,7 +1257,7 @@ bool Physics_function::generate_contact_sphere_mesh(const Collider_shape* sphere
 
 
 #pragma region BOX-PLANE
-bool Physics_function::generate_contact_box_plane(const Collider_shape* box, const Collider_shape* plane, Contacts::Contact_pair& pair, bool& is_crossing) {
+bool Physics_function::generate_contact_box_plane(const Collider_shape* box, const Collider_shape* plane, Contacts::Contact_pair*& pair, bool& is_crossing) {
 	//const std::list<ALP_Collider>::iterator& box = box_part->get_ALPcollider();
 	//const std::list<ALP_Collider>::iterator& plane = plane_mesh->get_ALPcollider();
 
@@ -1330,17 +1330,17 @@ bool Physics_function::generate_contact_box_plane(const Collider_shape* box, con
 		is_crossing = true;
 
 		//oncoll_enterのみの場合ここでreturn
-		if (pair.check_oncoll_only == true) return false;
+		if (pair->check_oncoll_only == true) return false;
 
-		if (pair.body[0]->get_shape_tag() == box->get_shape_tag())
-			pair.contacts.addcontact(
+		if (pair->body[0]->get_shape_tag() == box->get_shape_tag())
+			pair->contacts.addcontact(
 				ACpenetration,
 				ACnormal,
 				ACcontact_pointA,
 				ACcontact_pointB
 			);
 		else
-			pair.contacts.addcontact(
+			pair->contacts.addcontact(
 				ACpenetration,
 				-ACnormal,
 				ACcontact_pointB,
@@ -1353,7 +1353,7 @@ bool Physics_function::generate_contact_box_plane(const Collider_shape* box, con
 
 #pragma region BOX-BOX
 
-bool Physics_function::generate_contact_box_box(const Collider_shape* boxA, const Collider_shape* boxB, Contacts::Contact_pair& pair, bool& is_crossing) {
+bool Physics_function::generate_contact_box_box(const Collider_shape* boxA, const Collider_shape* boxB, Contacts::Contact_pair*& pair, bool& is_crossing) {
 	//const std::list<ALP_Collider>::iterator& boxA = bA->get_ALPcollider();
 	//const std::list<ALP_Collider>::iterator& boxB = bB->get_ALPcollider();
 
@@ -1543,9 +1543,9 @@ bool Physics_function::generate_contact_box_box(const Collider_shape* boxA, cons
 		is_crossing = true;
 
 		//oncoll_enterのみの場合ここでreturn
-		if (pair.check_oncoll_only == true) return false;
+		if (pair->check_oncoll_only == true) return false;
 
-		pair.contacts.addcontact(
+		pair->contacts.addcontact(
 			ACpenetration,
 			ACnormal,
 			ACcontact_pointA,
@@ -1557,7 +1557,7 @@ bool Physics_function::generate_contact_box_box(const Collider_shape* boxA, cons
 #pragma endregion
 
 #pragma region BOX-Capsule
-bool Physics_function::generate_contact_box_capsule(const Collider_shape* box, const Collider_shape* capsule, Contacts::Contact_pair& pair, bool& is_crossing) {
+bool Physics_function::generate_contact_box_capsule(const Collider_shape* box, const Collider_shape* capsule, Contacts::Contact_pair*& pair, bool& is_crossing) {
 #if 1
 	//const std::list<ALP_Collider>::iterator& capsule = capsule_mesh->get_ALPcollider();
 	//const std::list<ALP_Collider>::iterator& box = box_part->get_ALPcollider();
@@ -1826,17 +1826,17 @@ bool Physics_function::generate_contact_box_capsule(const Collider_shape* box, c
 		is_crossing = true;
 
 		//oncoll_enterのみの場合ここでreturn
-		if (pair.check_oncoll_only == true) return false;
+		if (pair->check_oncoll_only == true) return false;
 
-		if (pair.body[0]->get_shape_tag() == box->get_shape_tag())
-			pair.contacts.addcontact(
+		if (pair->body[0]->get_shape_tag() == box->get_shape_tag())
+			pair->contacts.addcontact(
 				ACpenetration,
 				ACnormal,
 				ACcontact_pointA,
 				ACcontact_pointB
 			);
 		else
-			pair.contacts.addcontact(
+			pair->contacts.addcontact(
 				ACpenetration,
 				-ACnormal,
 				ACcontact_pointB,
@@ -1958,17 +1958,17 @@ bool Physics_function::generate_contact_box_capsule(const Collider_shape* box, c
 		is_crossing = true;
 
 		//oncoll_enterのみの場合ここでreturn
-		if (pair.check_oncoll_only == true) return false;
+		if (pair->check_oncoll_only == true) return false;
 
-		if (pair.body[0]->get_shape_tag() == box->get_shape_tag())
-			pair.contacts.addcontact(
+		if (pair->body[0]->get_shape_tag() == box->get_shape_tag())
+			pair->contacts.addcontact(
 				ACpenetration,
 				ACnormal,
 				ACcontact_pointA,
 				ACcontact_pointB
 			);
 		else
-			pair.contacts.addcontact(
+			pair->contacts.addcontact(
 				ACpenetration,
 				-ACnormal,
 				ACcontact_pointB,
@@ -1984,7 +1984,7 @@ bool Physics_function::generate_contact_box_capsule(const Collider_shape* box, c
 
 #pragma region BOX-MESH
 
-bool Physics_function::generate_contact_box_mesh(const Collider_shape* box, const Collider_shape* mesh, Contacts::Contact_pair& pair, bool& is_crossing) {
+bool Physics_function::generate_contact_box_mesh(const Collider_shape* box, const Collider_shape* mesh, Contacts::Contact_pair*& pair, bool& is_crossing) {
 	//const std::list<ALP_Collider>::iterator& box = box_part->get_ALPcollider();
 	//const std::list<ALP_Collider>::iterator& mesh = mesh_part->get_ALPcollider();
 
@@ -2256,17 +2256,17 @@ bool Physics_function::generate_contact_box_mesh(const Collider_shape* box, cons
 				is_crossing = true;
 
 				//oncoll_enterのみの場合ここでreturn
-				if (pair.check_oncoll_only == true) return false;
+				if (pair->check_oncoll_only == true) return false;
 
-				if (pair.body[0]->get_shape_tag() == box->get_shape_tag())
-					pair.contacts.addcontact(
+				if (pair->body[0]->get_shape_tag() == box->get_shape_tag())
+					pair->contacts.addcontact(
 						ACpenetration,
 						ACnormal,
 						ACcontact_pointA,
 						ACcontact_pointB
 					);
 				else
-					pair.contacts.addcontact(
+					pair->contacts.addcontact(
 						ACpenetration,
 						-ACnormal,
 						ACcontact_pointB,
@@ -2287,7 +2287,7 @@ bool Physics_function::generate_contact_box_mesh(const Collider_shape* box, cons
 
 
 #pragma region Capsule-Capsule
-bool Physics_function::generate_contact_capsule_capsule(const Collider_shape* capsuleA, const Collider_shape* capsuleB, Contacts::Contact_pair& pair, bool& is_crossing) {
+bool Physics_function::generate_contact_capsule_capsule(const Collider_shape* capsuleA, const Collider_shape* capsuleB, Contacts::Contact_pair*& pair, bool& is_crossing) {
 	//const std::list<ALP_Collider>::iterator& capsuleA = SA->get_ALPcollider();
 	//const std::list<ALP_Collider>::iterator& capsuleB = SB->get_ALPcollider();
 
@@ -2334,17 +2334,17 @@ bool Physics_function::generate_contact_capsule_capsule(const Collider_shape* ca
 		is_crossing = true;
 
 		//oncoll_enterのみの場合ここでreturn
-		if (pair.check_oncoll_only == true) return false;
+		if (pair->check_oncoll_only == true) return false;
 
-		if (pair.body[0]->get_shape_tag() == capsuleA->get_shape_tag())
-			pair.contacts.addcontact(
+		if (pair->body[0]->get_shape_tag() == capsuleA->get_shape_tag())
+			pair->contacts.addcontact(
 				ACpenetration,
 				ACnormal,
 				ACcontact_pointA,
 				ACcontact_pointB
 			);
 		else
-			pair.contacts.addcontact(
+			pair->contacts.addcontact(
 				ACpenetration,
 				-ACnormal,
 				ACcontact_pointB,
@@ -2356,7 +2356,7 @@ bool Physics_function::generate_contact_capsule_capsule(const Collider_shape* ca
 #pragma endregion
 
 #pragma region Capsule-Mesh
-bool Physics_function::generate_contact_capsule_mesh(const Collider_shape* capsule, const Collider_shape* mesh, Contacts::Contact_pair& pair, bool& is_crossing) {
+bool Physics_function::generate_contact_capsule_mesh(const Collider_shape* capsule, const Collider_shape* mesh, Contacts::Contact_pair*& pair, bool& is_crossing) {
 	//const std::list<ALP_Collider>::iterator& capsule = capsule_mesh->get_ALPcollider();
 	//const std::list<ALP_Collider>::iterator& mesh = mesh_part->get_ALPcollider();
 
@@ -2393,10 +2393,10 @@ bool Physics_function::generate_contact_capsule_mesh(const Collider_shape* capsu
 		//if (sphere->world_scale().x - distance > FLT_EPSILON) { //float誤差も調整
 		//	Vector3 n = (sphere->world_position() - vector3_trans(closest_point, rotate)).unit_vect(); //meshからsphereへのベクトル
 
-		//	if (pair.body[0]->get_ALPcollider()->shape == mesh->shape) {
+		//	if (pair->body[0]->get_ALPcollider()->shape == mesh->shape) {
 		//		//body[0]　が　mesh
 		//		//body[1]　が　sphere
-		//		pair.contacts.addcontact(
+		//		pair->contacts.addcontact(
 		//			sphere->world_scale().x - distance,
 		//			-n,
 		//			closest_point,
@@ -2406,7 +2406,7 @@ bool Physics_function::generate_contact_capsule_mesh(const Collider_shape* capsu
 		//	else {
 		//		//body[0]　が　sphere
 		//		//body[1]　が　mesh
-		//		pair.contacts.addcontact(
+		//		pair->contacts.addcontact(
 		//			sphere->world_scale().x - distance,
 		//			n,
 		//			sphere->world_scale().x * vector3_quatrotate(n, sphere->world_orientation().conjugate()),
@@ -2497,17 +2497,17 @@ bool Physics_function::generate_contact_capsule_mesh(const Collider_shape* capsu
 		is_crossing = true;
 
 		//oncoll_enterのみの場合ここでreturn
-		if (pair.check_oncoll_only == true) return false;
+		if (pair->check_oncoll_only == true) return false;
 
-		if (pair.body[0]->get_shape_tag() == mesh->get_shape_tag())
-			pair.contacts.addcontact(
+		if (pair->body[0]->get_shape_tag() == mesh->get_shape_tag())
+			pair->contacts.addcontact(
 				ACpenetration,
 				ACnormal,
 				ACcontact_pointA,
 				ACcontact_pointB
 			);
 		else
-			pair.contacts.addcontact(
+			pair->contacts.addcontact(
 				ACpenetration,
 				-ACnormal,
 				ACcontact_pointB,
@@ -2520,18 +2520,18 @@ bool Physics_function::generate_contact_capsule_mesh(const Collider_shape* capsu
 
 
 #pragma region MESH-PLANE
-bool Physics_function::generate_contact_mesh_plane(const Collider_shape* S1, const Collider_shape* S2, Contacts::Contact_pair& pair, bool& is_crossing) {
+bool Physics_function::generate_contact_mesh_plane(const Collider_shape* S1, const Collider_shape* S2, Contacts::Contact_pair*& pair, bool& is_crossing) {
 	return true;
 }
 #pragma endregion
 
 #pragma region MESH-MESH
 
-bool GC_concave_mesh_mesh(const ALP_Collider& S1, const Collider_shape* S2, int concave_num, Contacts::Contact_pair& pair, bool& is_crossing) {
+bool GC_concave_mesh_mesh(const ALP_Collider& S1, const Collider_shape* S2, int concave_num, Contacts::Contact_pair*& pair, bool& is_crossing) {
 	return false;
 }
 
-bool Physics_function::generate_contact_mesh_mesh(const Collider_shape* meshA, const Collider_shape* meshB, Contacts::Contact_pair& pair, bool& is_crossing) {
+bool Physics_function::generate_contact_mesh_mesh(const Collider_shape* meshA, const Collider_shape* meshB, Contacts::Contact_pair*& pair, bool& is_crossing) {
 	//const std::list<ALP_Collider>::iterator& meshA = mA->get_ALPcollider();
 	//const std::list<ALP_Collider>::iterator& meshB = mB->get_ALPcollider();
 
@@ -2622,7 +2622,7 @@ bool Physics_function::generate_contact_mesh_mesh(const Collider_shape* meshA, c
 				pA *= facet_shape->world_scale();
 			}
 
-			pair.contacts.addcontact(
+			pair->contacts.addcontact(
 				smallest_penetration,
 				axisW,
 				pA,
@@ -2704,7 +2704,7 @@ bool Physics_function::generate_contact_mesh_mesh(const Collider_shape* meshA, c
 				pA *= facet_mesh->world_scale();
 			}
 
-			pair.contacts.addcontact(
+			pair->contacts.addcontact(
 				smallest_penetration,
 				-axisW,
 				pB,
@@ -2762,7 +2762,7 @@ bool Physics_function::generate_contact_mesh_mesh(const Collider_shape* meshA, c
 				edgeB_p_A, edgeB_v_A,
 				s, t
 			);
-			pair.contacts.addcontact(
+			pair->contacts.addcontact(
 				smallest_penetration,
 				axisW,
 				edgeA_p[0] + s * edgeA_vec,

@@ -1,7 +1,61 @@
-﻿  ALP_broadphase.cpp
+﻿  camera_s.cpp
+  demo_house.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(75,26): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(72,38): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(70,45): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+  object_manager.cpp
+  object_rotate.cpp
+  player.cpp
+  player_manager.cpp
+  imgui.cpp
+  imgui_demo.cpp
+  imgui_draw.cpp
+  imgui_impl_dx11.cpp
+  imgui_impl_win32.cpp
+  imgui_widgets.cpp
+  debug.cpp
+  imgui_manager.cpp
+  work_meter.cpp
+  loop.cpp
+  main.cpp
+  systems.cpp
+  material_for_collider.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(114,98): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(179,98): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(245,98): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(314,99): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(380,99): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(446,99): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(719,94): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+  gameobject_camera.cpp
+  コンパイル中...
+  gameobject_light.cpp
+  gameobject_manager.cpp
+  hierarchy.cpp
+  ALP__physics_manager.cpp
+  ALP_broadphase.cpp
+  ALP_collider.cpp
+  ALP_generate_contact.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(486,8): warning C4101: 'ra': ローカル変数は 1 度も使われていません。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(486,12): warning C4101: 'rb': ローカル変数は 1 度も使われていません。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(2094,26): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+  ALP_integrate.cpp
+  ALP_joint.cpp
+  ALP_physics.cpp
+  ALP_resolve_contact.cpp
+  ALP_resolve_contact_SIM.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact_SIM.cpp(335,21): warning C4101: 'position': ローカル変数は 1 度も使われていません。
+  collider.cpp
+  collider_shape.cpp
+  contact.cpp
+  joint.cpp
+  joint_base.cpp
+  ray.cpp
+  scene_game.cpp
   コード生成しています。
-  2 of 8643 functions (<0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    48 functions had inline decision re-evaluated but remain unchanged
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\vector_e.h(338): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
+  968 of 8003 functions (12.1%) were compiled, the rest were copied from previous compilation.
+    17 functions were new in current compilation
+    365 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Release\Adollib.exe

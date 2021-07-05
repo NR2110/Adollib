@@ -3,6 +3,7 @@
 #include "../Imgui/imgui_manager.h"
 #include "../Imgui/work_meter.h"
 
+#include "../Physics/ALP__physics_manager.h"
 using namespace Adollib;
 
 bool loop::init(HWND hWnd) {
@@ -52,6 +53,8 @@ bool loop::destroy() {
 	for (int i = 0; i < static_cast<int>(Scenelist::scene_list_size); i++) {
 		Gameobject_manager::destroy(static_cast<Scenelist>(i));
 	}
+
+	Physics_function::Phyisics_manager::destroy();
 
 	return true;
 }

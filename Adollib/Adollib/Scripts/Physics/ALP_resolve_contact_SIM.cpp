@@ -52,7 +52,7 @@ void CalcTangentVector(const Vector3& normal, DirectX::XMVECTOR& tangent1, Direc
 	tangent2 = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(tangent1, xmnorm));
 }
 
-void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std::vector<Contacts::Contact_pair>& pairs, std::list<Physics_function::ALP_Joint*> joints) {
+void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std::vector<Contacts::Contact_pair*>& pairs, std::list<Physics_function::ALP_Joint*> joints) {
 
 
 	Work_meter::start("Make_solver");
@@ -166,26 +166,26 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 
 	for (auto& pair : pairs) {
 
-		coll[0] = pair.body[0];
-		coll[1] = pair.body[1];
+		coll[0] = pair->body[0];
+		coll[1] = pair->body[1];
 		ALPphysics[0] = coll[0]->get_ALPcollider()->get_ALPphysics();
 		ALPphysics[1] = coll[1]->get_ALPcollider()->get_ALPphysics();
 		solverbody[0] = ALPphysics[0]->solve;
 		solverbody[1] = ALPphysics[1]->solve;
 
 		// ñÄéCÇÃälìæ
-		pair.contacts.friction = sqrtf(ALPphysics[0]->dynamic_friction * ALPphysics[1]->dynamic_friction);
+		pair->contacts.friction = sqrtf(ALPphysics[0]->dynamic_friction * ALPphysics[1]->dynamic_friction);
 
 		//::: è’ìÀì_èÓïÒÇÃçXêV ::::::::
-		for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
-			Contactpoint& cp = pair.contacts.contactpoints[C_num];
+		for (int C_num = 0; C_num < pair->contacts.contact_num; C_num++) {
+			Contactpoint& cp = pair->contacts.contactpoints[C_num];
 
 			const DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&coll[0]->local_position), DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[0]), DirectX::XMLoadFloat4(&coll[0]->local_orientation))), DirectX::XMLoadFloat4(&coll[0]->world_orientation()));
 			const DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&coll[1]->local_position), DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[1]), DirectX::XMLoadFloat4(&coll[1]->local_orientation))), DirectX::XMLoadFloat4(&coll[1]->world_orientation()));
 
 			// îΩî≠åWêîÇÃälìæ
 			// åpë±ÇÃè’ìÀÇÃèÍçáîΩî≠åWêîÇ0Ç…Ç∑ÇÈ
-			const float restitution = (pair.type == Pairtype::new_pair ? 0.5f * (ALPphysics[0]->restitution + ALPphysics[1]->restitution) : 0.0f);
+			const float restitution = (pair->type == Pairtype::new_pair ? 0.5f * (ALPphysics[0]->restitution + ALPphysics[1]->restitution) : 0.0f);
 
 
 			//è’ìÀéûÇÃÇªÇÍÇºÇÍÇÃë¨ìx
@@ -293,16 +293,16 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 	//::: ïœâªó ÇãÅÇﬂÇÈ :::::::::::::::
 	for (auto& pair : pairs) {
 
-		coll[0] = pair.body[0];
-		coll[1] = pair.body[1];
+		coll[0] = pair->body[0];
+		coll[1] = pair->body[1];
 		ALPphysics[0] = coll[0]->get_ALPcollider()->get_ALPphysics();
 		ALPphysics[1] = coll[1]->get_ALPcollider()->get_ALPphysics();
 		solverbody[0] = ALPphysics[0]->solve;
 		solverbody[1] = ALPphysics[1]->solve;
 
-		for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
+		for (int C_num = 0; C_num < pair->contacts.contact_num; C_num++) {
 			//è’ìÀì_ÇÃèÓïÒ
-			const Contactpoint& cp = pair.contacts.contactpoints[C_num];
+			const Contactpoint& cp = pair->contacts.contactpoints[C_num];
 
 			const DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&coll[0]->local_position), DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[0]), DirectX::XMLoadFloat4(&coll[0]->local_orientation))), DirectX::XMLoadFloat4(&coll[0]->world_orientation()));
 			const DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&coll[1]->local_position), DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[1]), DirectX::XMLoadFloat4(&coll[1]->local_orientation))), DirectX::XMLoadFloat4(&coll[1]->world_orientation()));
@@ -365,16 +365,16 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 
 		for (auto& pair : pairs) {
 
-			coll[0] = pair.body[0];
-			coll[1] = pair.body[1];
+			coll[0] = pair->body[0];
+			coll[1] = pair->body[1];
 			ALPphysics[0] = coll[0]->get_ALPcollider()->get_ALPphysics();
 			ALPphysics[1] = coll[1]->get_ALPcollider()->get_ALPphysics();
 			solverbody[0] = ALPphysics[0]->solve;
 			solverbody[1] = ALPphysics[1]->solve;
 
-			for (int C_num = 0; C_num < pair.contacts.contact_num; C_num++) {
+			for (int C_num = 0; C_num < pair->contacts.contact_num; C_num++) {
 				//è’ìÀì_ÇÃèÓïÒ
-				Contactpoint& cp = pair.contacts.contactpoints[C_num];
+				Contactpoint& cp = pair->contacts.contactpoints[C_num];
 
 				const DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&coll[0]->local_position), DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[0]), DirectX::XMLoadFloat4(&coll[0]->local_orientation))), DirectX::XMLoadFloat4(&coll[0]->world_orientation()));
 				const DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&coll[1]->local_position), DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[1]), DirectX::XMLoadFloat4(&coll[1]->local_orientation))), DirectX::XMLoadFloat4(&coll[1]->world_orientation()));
@@ -397,7 +397,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 					solverbody[1]->delta_AngulaVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rB, axis), solverbody[1]->inv_inertia), delta_impulse));
 				}
 
-				float max_friction = pair.contacts.friction * fabsf(cp.constraint[0].accuminpulse);
+				float max_friction = pair->contacts.friction * fabsf(cp.constraint[0].accuminpulse);
 				cp.constraint[1].lowerlimit = -max_friction;
 				cp.constraint[1].upperlimit = +max_friction;
 				cp.constraint[2].lowerlimit = -max_friction;

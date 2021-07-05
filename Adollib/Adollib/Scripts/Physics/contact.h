@@ -149,12 +149,12 @@ namespace Adollib {
 			// param buff ソート用のバッファ（入力データと同サイズ）
 			// param n データの数
 
-			static int partition(std::vector<Contacts::Contact_pair>& array, int l, int r) {
+			static int partition(std::vector<Contacts::Contact_pair*>& array, int l, int r) {
 				auto& pivot = array[r];
 				int i = (l - 1);
 
 				for (int j = l; j <= r - 1; j++) {
-					if (array[j].key <= pivot.key) {
+					if (array[j]->key <= pivot->key) {
 						i++;
 
 						const auto t = array[i];
@@ -171,7 +171,7 @@ namespace Adollib {
 				return (i + 1);
 			}
 
-			static void Contact_pair_quick_sort(std::vector<Contacts::Contact_pair>& array, int l, int r) {
+			static void Contact_pair_quick_sort(std::vector<Contacts::Contact_pair*>& array, int l, int r) {
 				if (l < r) {
 					int pivot = partition(array, l, r);
 					Contact_pair_quick_sort(array, l, pivot - 1);

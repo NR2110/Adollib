@@ -53,7 +53,7 @@ namespace Adollib
 	std::unordered_map<Scenelist, std::list<Physics_function::ALP_Physics*>> Phyisics_manager::ALP_physicses;
 	std::list<Physics_function::ALP_Joint*> Phyisics_manager::ALP_joints;
 
-	std::vector<Physics_function::Contacts::Contact_pair> Phyisics_manager::pairs[2];
+	std::vector<Physics_function::Contacts::Contact_pair*> Phyisics_manager::pairs[2];
 	u_int Phyisics_manager::pairs_new_num = 0; //pairs‚Ì‚Ç‚Á‚¿‚ªV‚µ‚¢Õ“Ë‚È‚Ì‚©
 	//std::vector<Physics_function::Contacts::Collider_2> Phyisics_manager::broad_mid_pair;
 
@@ -161,17 +161,17 @@ bool Phyisics_manager::update(Scenelist Sce)
 
 	int count = 0;
 	for (const auto& p : pairs[pairs_new_num]) {
-		for (int i = 0; i < p.contacts.contact_num; i++) {
+		for (int i = 0; i < p->contacts.contact_num; i++) {
 			count += 2;
 			if (count > size)break;
-			const auto coll0 = *p.body[0]->get_ALPcollider();
-			const auto coll1 = *p.body[1]->get_ALPcollider();
+			const auto coll0 = *p->body[0]->get_ALPcollider();
+			const auto coll1 = *p->body[1]->get_ALPcollider();
 
 			//debug_go[count - 1]->transform->local_pos = vector3_quatrotate((p.contacts.contactpoints[i].point[0]), coll0.get_gameobject()->world_orientate()) + coll0.get_gameobject()->world_position();
 			//debug_go[count - 2]->transform->local_pos = vector3_quatrotate((p.contacts.contactpoints[i].point[1]), coll1.get_gameobject()->world_orientate()) + coll1.get_gameobject()->world_position();
 
-			debug_go[count - 1]->transform->local_pos = p.body[0]->world_position() + vector3_quatrotate(p.contacts.contactpoints[i].point[0], p.body[0]->world_orientation());
-			debug_go[count - 2]->transform->local_pos = p.body[1]->world_position() + vector3_quatrotate(p.contacts.contactpoints[i].point[1], p.body[1]->world_orientation());
+			debug_go[count - 1]->transform->local_pos = p->body[0]->world_position() + vector3_quatrotate(p->contacts.contactpoints[i].point[0], p->body[0]->world_orientation());
+			debug_go[count - 2]->transform->local_pos = p->body[1]->world_position() + vector3_quatrotate(p->contacts.contactpoints[i].point[1], p->body[1]->world_orientation());
 			int adfsdg = 0;
 		}
 	}
@@ -340,6 +340,15 @@ void Phyisics_manager::destroy(Scenelist Sce) {
 		base->destroy();
 		delete base;
 	}
+
+	for (auto& p : pairs[0]) {
+		delete p;
+	}
+	for (auto& p : pairs[1]) {
+		delete p;
+	}
+	pairs[0].clear();
+	pairs[1].clear();
 	//colliders[Sce].clear();
 }
 

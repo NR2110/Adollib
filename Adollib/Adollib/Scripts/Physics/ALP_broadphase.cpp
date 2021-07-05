@@ -50,11 +50,10 @@ bool Check_insert_Plane(const Collider_shape* plane, const Collider_shape* mesh)
 }
 
 
-void Midphase_DOP_14(std::vector<Contacts::Contact_pair>& new_pairs, Collider_shape* meshA, Collider_shape* meshB) {
+void Midphase_DOP_14(std::vector<Contacts::Contact_pair*>& new_pairs, Collider_shape* meshA, Collider_shape* meshB) {
 
 	if (meshA->get_ALPcollider() == meshB->get_ALPcollider())return; //同じGOにアタッチされたshape同士は衝突しない
 
-	Contact_pair new_pair;
 
 	const ALP_Collider* collA = meshA->get_ALPcollider();
 	const ALP_Collider* collB = meshB->get_ALPcollider();
@@ -87,17 +86,18 @@ void Midphase_DOP_14(std::vector<Contacts::Contact_pair>& new_pairs, Collider_sh
 	}
 	else return;
 
+	Contact_pair* new_pair = newD Contact_pair;
 	//new_pair.body[0]にアドレスの大きいほうをしまう
 	if (&*meshA > & *meshB) {
-		new_pair.body[0] = meshA;
-		new_pair.body[1] = meshB;
+		new_pair->body[0] = meshA;
+		new_pair->body[1] = meshB;
 	}
 	else {
-		new_pair.body[0] = meshB;
-		new_pair.body[1] = meshA;
+		new_pair->body[0] = meshB;
+		new_pair->body[1] = meshA;
 	}
-	new_pair.type = Pairtype::new_pair;
-	new_pair.check_oncoll_only = check_oncoll_only;
+	new_pair->type = Pairtype::new_pair;
+	new_pair->check_oncoll_only = check_oncoll_only;
 
 	new_pairs.emplace_back(new_pair);
 }
@@ -107,7 +107,7 @@ void Midphase_DOP_14(std::vector<Contacts::Contact_pair>& new_pairs, Collider_sh
 
 void Physics_function::BroadMidphase(Scenelist Sce,
 	const std::list<ALP_Collider*>& ALP_collider,
-	std::vector<Contacts::Contact_pair>& out_pair,
+	std::vector<Contacts::Contact_pair*>& out_pair,
 	std::vector<Physics_function::ALP_Collider*>& moved_collider, //動いたもの
 	std::vector<Physics_function::ALP_Collider*>& added_collider //追加されたもの
 ) {
