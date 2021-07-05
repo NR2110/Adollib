@@ -4,8 +4,6 @@
 #include "../../Imgui/imgui_impl_win32.h"
 #include "../../Imgui/imgui_impl_dx11.h"
 
-#define UseRelese TRUE
-
 using namespace Adollib;
 
 std::unordered_map<std::string, std::unordered_map<std::string, Work_meter::meter>> Work_meter::start_stop;
@@ -19,7 +17,7 @@ std::string Work_meter::now_tag = std::string("");
 
 
 bool Work_meter::render() {
-#if UseRelese || _DEBUG
+#ifdef UseImgui
 
 	static float max_num = 0.016f;
 	static int start_num = 0;
@@ -197,7 +195,7 @@ bool Work_meter::render() {
 
 bool Work_meter::start(const std::string& name) {
 
-#if UseRelese || _DEBUG
+#ifdef UseImgui
 	if (meters[now_tag].count(name) == 0) {
 		names[now_tag].push_back(name);
 		name_flags[now_tag].push_back(1);
@@ -210,7 +208,7 @@ bool Work_meter::start(const std::string& name) {
 }
 
 bool Work_meter::stop(const std::string& name) {
-#if UseRelese || _DEBUG
+#ifdef UseImgui
 	if (meters[now_tag].count(name) == 0) {
 		names[now_tag].push_back(name);
 		name_flags[now_tag].push_back(1);
