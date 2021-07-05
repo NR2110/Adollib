@@ -55,6 +55,8 @@ void CalcTangentVector(const Vector3& normal, DirectX::XMVECTOR& tangent1, Direc
 void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std::vector<Contacts::Contact_pair>& pairs, std::list<Physics_function::ALP_Joint*> joints) {
 
 
+	Work_meter::start("Make_solver");
+
 	//::: 解決用オブジェクトの生成 :::::::::::
 	std::vector<ALP_Solverbody> SBs;
 	SBs.reserve(sizeof(ALP_Solverbody) * colliders.size());
@@ -87,7 +89,9 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 	ALP_Physics* ALPphysics[2];
 	ALP_Solverbody* solverbody[2];
 
+	Work_meter::stop("Make_solver");
 
+	Work_meter::start("Setup_solver");
 	// 拘束のセットアップ
 	{
 		Transfome* transform[2];
@@ -102,27 +106,24 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 			solverbody[0] = ALPphysics[0]->solve;
 			solverbody[1] = ALPphysics[1]->solve;
 
+			//anchorそれぞれのlocal座標
 			const DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&joint->anchor[0]), DirectX::XMLoadFloat4(&transform[0]->orientation));
 			const DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&joint->anchor[1]), DirectX::XMLoadFloat4(&transform[1]->orientation));
 
-
+			//anchorそれぞれのworld座標
 			position[0] = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&transform[0]->position), rA);
 			position[1] = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&transform[1]->position), rB);
 			DirectX::XMVECTOR direction = DirectX::XMVectorSubtract(position[1], position[0]);
 			DirectX::XMVECTOR distance = DirectX::XMVector3Length(direction);
 
-			float s = DirectX::XMVectorGetX(distance);
 			if (DirectX::XMVectorGetX(distance) < FLT_EPSILON) {
-				//引っ張らない
+				//とても近い位置にある -> 引っ張らない
 				joint->constraint.jacDiagInv = 0.0f;
 				joint->constraint.rhs = 0.0f;
 				joint->constraint.lowerlimit = -FLT_MAX;
 				joint->constraint.upperlimit = +FLT_MAX;
 				joint->constraint.axis = Vector3(0, 1, 0);
 				continue;
-			}
-			if (DirectX::XMVectorGetX(distance) > 1) {
-				int dafsgdhf = 0;
 			}
 
 			direction = DirectX::XMVectorDivide(direction, distance);
@@ -283,6 +284,12 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 		}
 	}
 
+	Work_meter::stop("Setup_solver");
+
+
+	Work_meter::start("adapt_impulse");
+
+
 	//::: 変化量を求める :::::::::::::::
 	for (auto& pair : pairs) {
 
@@ -318,6 +325,9 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 
 	}
 
+	Work_meter::stop("adapt_impulse");
+
+	Work_meter::start("solver");
 
 	for (int i = 0; i < Phyisics_manager::physicsParams.solver_iterations; i++) {
 		// 拘束の演算
@@ -434,6 +444,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 			}
 		}
 	}
+
+	Work_meter::stop("solver");
 
 	// 速度の更新
 	for (auto& coll : colliders) {

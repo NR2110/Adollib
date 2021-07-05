@@ -41,7 +41,7 @@ namespace Adollib {
 
 		public:
 			// ここをすべてprivateにしたかった........
-			u_int index = 0; //このcolliderの番号
+			u_int index = 0; //このcolliderのuniqueなID
 			Scenelist scene = Scenelist::scene_null; //このcolldierが存在するscene
 
 			//::: アタッチされたshapeの配列 :::
@@ -52,7 +52,7 @@ namespace Adollib {
 			Collider_tagbit oncoll_bits = 0; //oncollision enterで使用するbit情報
 
 		public:
-			//このcolliderの番号
+			//このcolliderのuniqueなID
 			const u_int get_index() const { return index; };
 
 			//このcolldierが存在するscene

@@ -55,7 +55,7 @@ namespace Adollib
 
 	std::vector<Physics_function::Contacts::Contact_pair> Phyisics_manager::pairs[2];
 	u_int Phyisics_manager::pairs_new_num = 0; //pairs‚Ì‚Ç‚Á‚¿‚ªV‚µ‚¢Õ“Ë‚È‚Ì‚©
-	std::vector<Physics_function::Contacts::Collider_2> Phyisics_manager::broad_mid_pair;
+	//std::vector<Physics_function::Contacts::Collider_2> Phyisics_manager::broad_mid_pair;
 
 	std::unordered_map<Scenelist, std::vector<Physics_function::ALP_Collider*>> Phyisics_manager::moved_collider;   //“®‚¢‚½
 	std::unordered_map<Scenelist, std::vector<Physics_function::ALP_Collider*>> Phyisics_manager::added_collider;   //’Ç‰Á‚³‚ê‚½
@@ -106,8 +106,8 @@ bool Phyisics_manager::update(Scenelist Sce)
 
 	Work_meter::start("Broadphase");
 	Work_meter::tag_start("Broadphase");
-	Broadphase(Sce,
-		ALP_colliders[Sce], broad_mid_pair,
+	BroadMidphase(Sce,
+		ALP_colliders[Sce], pairs[pairs_new_num],
 		moved_collider[Sce], added_collider[Sce]
 	);
 	Work_meter::tag_stop();
@@ -115,7 +115,7 @@ bool Phyisics_manager::update(Scenelist Sce)
 
 	Work_meter::start("Midphase");
 	Work_meter::tag_start("Midphase");
-	Midphase(broad_mid_pair, pairs[1 - pairs_new_num], pairs[pairs_new_num]);
+	Midphase(pairs[1 - pairs_new_num], pairs[pairs_new_num]);
 	Work_meter::tag_stop();
 	Work_meter::stop("Midphase");
 

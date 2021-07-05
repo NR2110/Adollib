@@ -575,14 +575,14 @@ namespace Adollib
 				imgui_num++;
 			}
 
-			//BallJoint_Shpererope
+			//BallJoint_Shperenet
 			{
 				static int JointBox_pyramid_count = 5;
 				static float JointBox_pyramid_pos[3] = { 0 };
 				static float JointBox_pyramid_size[3] = { 1,1,1 };
 				bool summon = false;
 				ImGui::Separator();
-				ImGui::Text("BallJoint_Shpereami"); ImGui::NextColumn();
+				ImGui::Text("BallJoint_Shperenet"); ImGui::NextColumn();
 				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
 				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), JointBox_pyramid_pos, 0.1f); ImGui::NextColumn();
 				ImGui::DragFloat3(std::to_string(imgui_num + 250).c_str(), JointBox_pyramid_size, 0.1f); ImGui::NextColumn();
@@ -694,8 +694,11 @@ namespace Adollib
 
 		Collider* coll = object->addComponent<Collider>();
 		coll->add_shape<Sphere>();
+		coll->tag = Collider_tags::croth;
+		//coll->ignore_tags = Collider_tags::croth;
+		//coll->ignore_tags = UINT_MAX;
 
-		coll->tag = Collider_tags::Sphere;
+		coll->tag |= Collider_tags::Sphere;
 		GOs.emplace_back(object);
 
 		out_coll = coll;

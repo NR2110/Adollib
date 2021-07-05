@@ -139,10 +139,10 @@ namespace Adollib {
 				bool check_oncoll_only = false;
 			};
 
-			struct Collider_2 {
-				Collider_shape* body;
-				std::list<Collider_shape*> bodylists;
-			};
+			//struct Collider_2 {
+			//	Collider_shape* body;
+			//	std::list<Collider_shape*> bodylists;
+			//};
 
 			// ソート
 			// param[in,out] d ソートするデータの配列
