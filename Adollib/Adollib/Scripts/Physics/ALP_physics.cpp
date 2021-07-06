@@ -186,7 +186,7 @@ void ALP_Physics::update_tensor_and_mass(const std::vector<Collider_shape*>& sha
 		inertial_tensor = matrix33_zero();
 		for (const auto& shape : shapes) {
 			const float shape_mass = shape->local_scale.x * shape->local_scale.y * shape->local_scale.z;
-			inertial_tensor += shape_mass / sum_valume * shape->get_tensor(barycenter) * shape->local_orientation.get_rotate_matrix();
+			inertial_tensor += shape_mass / sum_valume * shape->get_tensor(barycenter);
 		}
 
 		inertial_tensor *= inertial_mass;

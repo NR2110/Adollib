@@ -416,6 +416,7 @@ namespace Adollib
 				imgui_num++;
 			}
 
+
 			//treepyramid
 			{
 				static int TREE_pyramid_count = 5;
@@ -445,7 +446,8 @@ namespace Adollib
 					}
 				}
 				imgui_num++;
-			};
+			}
+
 
 			//BallJoint_Shpererope
 			{
@@ -630,6 +632,46 @@ namespace Adollib
 
 				}
 
+				imgui_num++;
+			}
+
+			//gear
+			{
+				static int TREE_pyramid_count = 5;
+				static float TREE_pyramid_pos[3] = { 0 };
+				bool summon = false;
+				ImGui::Separator();
+				ImGui::Text("GEAR"); ImGui::NextColumn();
+				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
+				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), TREE_pyramid_pos, 0.1f); ImGui::NextColumn(); ImGui::NextColumn();
+				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &TREE_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
+
+				if (summon == true) {
+					Gameobject* pearent = Gameobject_manager::create("GEAR");
+					pearent->transform->local_pos = Vector3(TREE_pyramid_pos[0], TREE_pyramid_pos[1], TREE_pyramid_pos[2]);
+
+					Collider* coll = pearent->addComponent<Collider>();
+					const Vector3 size = Vector3(1, 2, 1);
+
+					for (int gear_tooth_num = 0; gear_tooth_num < TREE_pyramid_count; gear_tooth_num++) {
+						Gameobject* GO =  Gameobject_manager::createCube("tooth");
+						GO->transform->local_scale = size;
+						GO->transform->local_orient =  quaternion_from_euler(0, 0, 360 / TREE_pyramid_count * gear_tooth_num);
+						GO->transform->local_pos = Vector3(0, size.y, 0);
+						GO->transform->local_pos = vector3_quatrotate(GO->transform->local_pos, quaternion_angle_axis(360 / TREE_pyramid_count * gear_tooth_num, Vector3(0, 0, 1)));
+
+						pearent->add_child(GO);
+					}
+
+					for (int gear_tooth_num = 0; gear_tooth_num < TREE_pyramid_count; gear_tooth_num++) {
+						Box* box = coll->add_shape<Box>();
+						box->size = size;
+						box->rotate = Vector3(0, 0, 360.0f / TREE_pyramid_count * gear_tooth_num);
+						box->center = Vector3(0, size.y, 0);
+						box->center = vector3_quatrotate(box->center, quaternion_angle_axis(360 / TREE_pyramid_count * gear_tooth_num, Vector3(0, 0, 1)));
+
+					}
+				}
 				imgui_num++;
 			}
 

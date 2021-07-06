@@ -14,7 +14,7 @@ void Collider_shape::update_world_trans(const Vector3& GO_Wposiiton, const Quate
 	old_world_scale_ = world_scale_;
 
 
-	world_position_ = GO_Wposiiton + vector3_quatrotate(local_position * GO_Wscale, world_orientation());
+	world_position_ = GO_Wposiiton + vector3_quatrotate(local_position * GO_Wscale, GO_Worientation);
 	//world_orientation_ = (*coll_itr)->gameobject->get_world_orientate() * local_orientation;
 	world_orientation_ = local_orientation * GO_Worientation;
 	world_scale_ = GO_Wscale * local_scale;
