@@ -45,7 +45,7 @@ namespace Adollib {
 			//shapeの中心を回転中心とした慣性モーメント
 			tensor = tensor_base();
 
-			tensor *= local_orientation.get_rotate_matrix();
+			tensor = local_orientation.get_rotate_matrix() * tensor * matrix_inverse(local_orientation.get_rotate_matrix());
 
 			//barycenterを回転中心として shapeのlocal座標の分を考慮 (平行軸の定理)
 			Vector3 dis =  local_position - barycenter;
