@@ -1,61 +1,53 @@
 #pragma once
 
 #include "object.h"
+#include "component.h"
 #include "../Main/input.h"
 #include "time.h"
 #include <string>
 #include <memory>
 
-//TODO : こんなコンポーネント作りたくない 継承使ってなくす
 namespace Adollib
 {
-	class Camera;
-	class Transfome;
-
-	// ****************************************************
-	// gameobject_cameraにアタッチされるすべてに対するベースクラス // TODO : インターフェースにしてもよいかも？
-	// ****************************************************
-	class Component_camera
+	//カメラ用のコンポーネントクラス 継承不可!
+	class Camera_component final : public Component
 	{
 	public:
-		Camera*    gameobject;	// このコンポーネントがアタッチされているGameObject
-		Transfome* transform;	// GameObjectのTransformへのポインタ
+		float fov = 60.0f;
+		float aspect = 1280 / 720.0f;
+		float nearZ = 0.1f;
+		float farZ = 1000000.0f;
 
-		MonoInput* input = nullptr;
-		Time* time = nullptr;
+
+	private:
+		//managerに保存されている 自身へのitr
+		std::list<Camera_component*>::iterator this_itr;
 
 	public:
 
-		Component_camera(const Component_camera&) = delete;
-		Component_camera& operator=(const Component_camera&) = delete;
-
-		Component_camera() = default;
-		virtual ~Component_camera() = default;
-
-
 		// addComponentされたときに呼ばれる
-		virtual void awake() {};
+		void awake() override;
 
 		// 所属するシーンの初期化時に一度だけ呼ばれる
-		virtual void start() {};
+		virtual void start() override {};
+
+		// Hierarchyの表示(Imguiの関数 Imgui::begin,Imgui::endはいらない)
+		virtual void Update_hierarchy() override;
 
 		// 毎フレーム呼ばれる更新処理
-		virtual void update() {};
-
-		// 毎フレーム、update()後に呼ばれる更新処理
-		virtual void lateUpdate() {};
+		virtual void update() override {};
 
 		// このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる(GO生成時にスクリプトが有効な時も呼ばれる)
-		virtual void onEnable() {};
+		virtual void onEnable() override {};
 
 		// このスクリプトがアタッチされているGOのactiveSelfがfalseになった時呼ばれる
-		virtual void onDisable() {};
+		virtual void onDisable() override {};
 
 		// removeComponent()、clear()時に呼ぶ
-		virtual void finalize() {};
+		void finalize() override;
 
 	};
 
 
 
-}
+};

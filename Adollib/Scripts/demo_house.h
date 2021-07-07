@@ -1,7 +1,6 @@
 #pragma once
 #include "../Adollib/Scripts/Object/component.h"
 #include "../Adollib/Scripts/Physics/collider.h"
-#include "../Adollib/Scripts/Object/gameobject_camera.h"
 
 namespace Adollib
 {
@@ -10,7 +9,7 @@ namespace Adollib
 	{
 	private:
 
-		Camera* camera;
+		Gameobject* camera;
 
 	public:
 		Gameobject* set_tree(Vector3 pos, Vector3 scale, Vector3 rotate, Vector3 color = Vector3(1, 1, 1));

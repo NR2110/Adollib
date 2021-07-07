@@ -24,7 +24,6 @@ namespace Adollib
 
 	public:
 		Collider* collider;
-		Camera* camera;
 
 	public:
 		void awake();

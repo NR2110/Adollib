@@ -23,7 +23,8 @@ namespace Adollib
 		if (input->getKeyState(Key::S))move_vec += Vector3(0, 0, -1);
 		if (input->getKeyState(Key::D))move_vec += Vector3(+1, 0, 0);
 		if (input->getKeyState(Key::A))move_vec += Vector3(-1, 0, 0);
-		Vector3 rot = camera->transform->orientation.euler();
+		//Vector3 rot = camera->transform->orientation.euler();
+		Vector3 rot = Vector3(0);
 		rot.x = rot.z = 0;
 		move_vec = vector3_quatrotate(move_vec, quaternion_from_euler(rot));
 		collider->add_force(move_vec * move_speed);

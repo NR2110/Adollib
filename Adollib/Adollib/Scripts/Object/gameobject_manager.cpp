@@ -1,6 +1,9 @@
 
 #include "gameobject_manager.h"
 
+#include "component_camera.h"
+
+
 #include "../Main/systems.h"
 
 #include "../Scene/scene.h"
@@ -27,9 +30,9 @@ using namespace ConstantBuffer;
 
 std::map<Scenelist, std::list<Gameobject*>> Gameobject_manager::gameobjects;
 std::map<Scenelist, std::list<Light*>> Gameobject_manager::lights;
-std::map<Scenelist, std::list<Camera*>> Gameobject_manager::cameras;
+std::map<Scenelist, std::list<Camera_component*>> Gameobject_manager::cameras;
+
 std::vector<Gameobject*>	Gameobject_manager::save_delete_gameobject;
-std::vector<Camera*>		Gameobject_manager::save_delete_camera;
 std::vector<Light*>			Gameobject_manager::save_delete_light;
 
 int Gameobject_manager::go_count = 0;
@@ -55,9 +58,6 @@ void Gameobject_manager::awake() {
 
 		std::list<Light*> li_manager;
 		lights[static_cast<Scenelist>(i)] = li_manager;
-
-		std::list<Camera*> ca_manager;
-		cameras[static_cast<Scenelist>(i)] = ca_manager;
 	}
 
 	Physics_function::Collider_renderer::initialize();
@@ -72,9 +72,6 @@ void Gameobject_manager::initialize(Scenelist Sce) {
 		GO->initialize();
 	}
 	for (auto& GO : lights[Sce]) {
-		GO->initialize();
-	}
-	for (auto& GO : cameras[Sce]) {
 		GO->initialize();
 	}
 
@@ -94,9 +91,9 @@ void Gameobject_manager::update(Scenelist Sce) {
 		gos.push_back(GO);
 	}
 
-	for (auto& GO : cameras[Sce]) {
-		gos.push_back(GO);
-	}
+	//for (auto& GO : cameras[Sce]) {
+	//	gos.push_back(GO);
+	//}
 
 
 	//一番上のの親を保存
@@ -132,10 +129,6 @@ void Gameobject_manager::update(Scenelist Sce) {
 		gos.push_back(GO);
 	}
 
-	for (auto& GO : cameras[Sce]) {
-		gos.push_back(GO);
-	}
-
 	//親から子に座標の更新を行う
 	{
 		std::unordered_map<object*, bool> masters_manag;
@@ -145,7 +138,6 @@ void Gameobject_manager::update(Scenelist Sce) {
 		for (auto& GO : gos) {
 			object* master = GO->top_pearent();
 			if (masters_manag.count(master) == 0) {
-				//if()
 				master->update_world_trans_to_children();
 			}
 			masters_manag[master] = true;
@@ -219,7 +211,7 @@ void Gameobject_manager::render(Scenelist Sce) {
 
 	Work_meter::start("drawobj_per_camera");
 	for (const auto& camera : cameras[Sce]) {
-		if (camera->active == false)continue;
+		if (camera->gameobject->active == false)continue;
 
 		//CB : ConstantBufferPerCamera
 		// ビュー行列
@@ -248,7 +240,7 @@ void Gameobject_manager::render(Scenelist Sce) {
 
 
 		//視錐台カリングにカメラ情報のセット
-		FrustumCulling::update_frustum(camera);
+		//FrustumCulling::update_frustum(camera);
 
 		//Sceのsceneにアタッチされたgoのrenderを呼ぶ
 
@@ -280,11 +272,6 @@ void Gameobject_manager::destroy(Scenelist Sce) {
 		delete GO;
 	}
 
-	for (auto& GO : cameras[Sce]) {
-		GO->clearComponent();
-		delete GO;
-	}
-
 	for (auto& GO : lights[Sce]) {
 		GO->clearComponent();
 		delete GO;
@@ -293,7 +280,6 @@ void Gameobject_manager::destroy(Scenelist Sce) {
 	//適当にSceのsceneにアタッチされたgoを削除
 	gameobjects[Sce].clear();
 	lights[Sce].clear();
-	cameras[Sce].clear();
 
 }
 
@@ -309,21 +295,6 @@ Light* Gameobject_manager::create_light(const std::string go_name, Scenelist Sce
 
 	Value->initialize();
 	//Value->name = std::string("light");
-	return Value;
-}
-
-Camera* Gameobject_manager::create_camera(const std::string go_name, Scenelist Sce) {
-	Camera* null = nullptr;
-	cameras[Sce].emplace_back(null);
-	auto itr = cameras[Sce].end();
-	itr--;
-	*itr = newD Camera(Sce, itr);
-	Camera* Value = *itr;
-
-	Value->name = go_name;
-	Value->transform = std::make_shared<Transfome>();
-
-	Value->initialize();
 	return Value;
 }
 

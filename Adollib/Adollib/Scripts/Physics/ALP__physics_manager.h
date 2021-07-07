@@ -254,7 +254,7 @@ namespace Adollib
 
 		public:
 
-			static bool init();
+			//static bool init();
 
 			// 毎フレーム呼ばれる更新処理
 			static bool update(Scenelist Sce = Scene::now_scene);

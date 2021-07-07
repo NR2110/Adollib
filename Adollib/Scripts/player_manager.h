@@ -1,7 +1,6 @@
 #pragma once
 #include "../Adollib/Scripts/Object/component.h"
 #include "../Adollib/Scripts/Physics/collider.h"
-#include "../Adollib/Scripts/Object/gameobject_camera.h"
 
 #include "player.h"
 
@@ -13,7 +12,7 @@ namespace Adollib
 	private:
 		Player* player;
 
-		Camera* camera;
+		//Camera* camera;
 	public:
 
 	public:

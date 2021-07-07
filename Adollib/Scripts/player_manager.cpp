@@ -27,8 +27,8 @@ namespace Adollib
 
 	void Player_manager::start()
 	{
-		camera = Gameobject_manager::find_camera("camera");
-		player->camera = camera;
+		//camera = Gameobject_manager::find_camera("camera");
+		//player->camera = camera;
 	}
 
 	// 毎フレーム呼ばれる更新処理

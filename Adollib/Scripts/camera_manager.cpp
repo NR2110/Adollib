@@ -43,11 +43,12 @@ namespace Adollib
 
 namespace Adollib {
 	void camera_manager_s::set_camera(Vector3 pos, Vector3 look_pos) {
-		Camera* camera = nullptr;
-		camera = Gameobject_manager::create_camera("camera");
-		camera->addComponent<camera_s>();
+		Gameobject* camera_go = Gameobject_manager::create("camera");
 
-		camera->transform->local_pos = pos;
-		camera->transform->local_orient = quaternion_look_at(pos, look_pos);
+		camera_go->addComponent<Camera_component>();
+		camera_go->addComponent<camera_s>();
+
+		camera_go->transform->local_pos = pos;
+		camera_go->transform->local_orient = quaternion_look_at(pos, look_pos);
 	}
 }

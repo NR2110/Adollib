@@ -23,7 +23,7 @@ namespace Adollib
 
 	void Demo_house::start()
 	{
-		camera = Gameobject_manager::find_camera("camera");
+		camera = Gameobject_manager::find("camera");
 
 		enum class Stage_types {
 

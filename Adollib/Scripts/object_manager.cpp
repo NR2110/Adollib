@@ -26,7 +26,7 @@ namespace Adollib
 
 	void object_manager::start()
 	{
-		camera = Gameobject_manager::find_camera("camera");
+		camera = Gameobject_manager::find("camera");
 
 		{
 			sphere_go = Gameobject_manager::createSphere(std::string("render_notmal_s"));

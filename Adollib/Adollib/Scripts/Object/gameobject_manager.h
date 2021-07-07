@@ -1,7 +1,6 @@
 #pragma once
 #include "gameobject.h"
 #include "gameobject_light.h"
-#include "gameobject_camera.h"
 
 #include "../Scene/scene.h"
 #include "../Scene/scene_list.h"
@@ -15,6 +14,10 @@
 
 
 namespace Adollib {
+
+	class Camera_component;
+
+
 	class Gameobject_manager{
 	private:
 		static Microsoft::WRL::ComPtr<ID3D11Buffer> light_cb;
@@ -25,15 +28,10 @@ namespace Adollib {
 
 		//遅れせてdeleteするためここに保存する
 		static std::vector<Gameobject*> save_delete_gameobject;
-		static std::vector<Camera*>		save_delete_camera;
 		static std::vector<Light*>		save_delete_light;
 
 		static void delete_gameobjects(){
 			for (auto go : save_delete_gameobject) {
-				go->destroy();
-				delete go;
-			}
-			for (auto go : save_delete_camera) {
 				go->destroy();
 				delete go;
 			}
@@ -43,17 +41,18 @@ namespace Adollib {
 			}
 
 			save_delete_gameobject.clear();
-			save_delete_camera.clear();
 			save_delete_light.clear();
 		}
 
-	public:
-		//実体はすべてここで保存する
+	private:
+		//Gameobjectのポインタ
 		static std::map<Scenelist, std::list<Gameobject*>> gameobjects;
-		//light
+
+		//camera_componentへのポインタ
+		static std::map<Scenelist, std::list<Camera_component*>> cameras;
 		static std::map<Scenelist, std::list<Light*>> lights;
-		//camera
-		static std::map<Scenelist, std::list<Camera*>> cameras;
+
+	public:
 
 		void awake();
 		static void initialize(Scenelist Sce = Scene::now_scene);
@@ -66,8 +65,15 @@ namespace Adollib {
 		static Gameobject* create(const u_int& tag, Scenelist Sce = Scene::now_scene) {return create(std::string("GO_" + std::to_string(go_count)), tag, Sce);}
 		static Gameobject* create(Scenelist Sce = Scene::now_scene) {return create(std::string("GO_" + std::to_string(go_count)), GO_tag::None, Sce);}
 
-		static Camera* create_camera(const std::string tag, Scenelist Sce = Scene::now_scene);
-		static Camera* create_camera(Scenelist Sce = Scene::now_scene) { create_camera(std::string("camera"), Sce); }
+		static std::list<Camera_component*>::iterator add_camera_component(const Scenelist& scene, Camera_component* c_comp_ptr) {
+			cameras[scene].emplace_back(c_comp_ptr);
+			auto itr = cameras[scene].end();
+			itr--;
+			return itr;
+		};
+		static void remove_camera_component(const Scenelist& scene, std::list<Camera_component*>::iterator itr) {
+			cameras[scene].erase(itr);
+		};
 
 		static Light* create_light(const std::string go_name, Scenelist Sce = Scene::now_scene);
 		static Light* create_light(Scenelist Sce = Scene::now_scene) { create_light(std::string("light"), Sce); };
@@ -104,15 +110,11 @@ namespace Adollib {
 		}
 
 		static void removeGameobject(Scenelist Sce,std::list<Gameobject*>::iterator itr) { gameobjects[Sce].erase(itr); };
-		static void removeCamera(Scenelist Sce, std::list<Camera*>::iterator itr) { cameras[Sce].erase(itr); };
 		static void removeLight(Scenelist Sce, std::list<Light*>::iterator itr) { lights[Sce].erase(itr); };
 
 		//GOの削除を行う
 		static void deleteGameobject(Gameobject* gameobject) {
 			save_delete_gameobject.emplace_back(gameobject);
-		};
-		static void deleteCamera(Camera* gameobject) {
-			save_delete_camera.emplace_back(gameobject);
 		};
 		static void deleteLight(Light* gameobject) {
 			save_delete_light.emplace_back(gameobject);
@@ -122,15 +124,6 @@ namespace Adollib {
 		static Gameobject* find(const std::string name, Scenelist Sce = Scene::now_scene)
 		{
 			for (auto& go : gameobjects[Sce])
-			{
-				if (go->name == name) return go;
-			}
-			return nullptr;
-		}
-		static Camera* find_camera(const std::string& name, Scenelist Sce = Scene::now_scene)
-		{
-			const auto itr_end = cameras[Sce].end();
-			for (auto& go : cameras[Sce])
 			{
 				if (go->name == name) return go;
 			}

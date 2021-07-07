@@ -5,11 +5,12 @@
 
 namespace Adollib
 {
-	class camera_s : public Component_camera
+	class camera_s : public Component
 	{
 	private:
 		bool follow_player = false;
 		float dis = 10;
+
 	public:
 		std::shared_ptr<Transfome> player;
 		Vector3 c_pos_save;

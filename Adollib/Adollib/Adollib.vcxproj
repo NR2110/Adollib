@@ -202,7 +202,6 @@
     <ClInclude Include="Scripts\Object\component_camera.h" />
     <ClInclude Include="Scripts\Object\component_light.h" />
     <ClInclude Include="Scripts\Object\gameobject.h" />
-    <ClInclude Include="Scripts\Object\gameobject_camera.h" />
     <ClInclude Include="Scripts\Object\gameobject_light.h" />
     <ClInclude Include="Scripts\Object\gameobject_manager.h" />
     <ClInclude Include="Scripts\Object\gameobject_tags.h" />
@@ -280,8 +279,8 @@
     <ClCompile Include="Scripts\Mesh\material_for_collider.cpp" />
     <ClCompile Include="Scripts\Mesh\mesh.cpp" />
     <ClCompile Include="Scripts\Mesh\texture.cpp" />
+    <ClCompile Include="Scripts\Object\component_camera.cpp" />
     <ClCompile Include="Scripts\Object\gameobject.cpp" />
-    <ClCompile Include="Scripts\Object\gameobject_camera.cpp" />
     <ClCompile Include="Scripts\Object\gameobject_light.cpp" />
     <ClCompile Include="Scripts\Object\gameobject_manager.cpp" />
     <ClCompile Include="Scripts\Object\hierarchy.cpp" />
