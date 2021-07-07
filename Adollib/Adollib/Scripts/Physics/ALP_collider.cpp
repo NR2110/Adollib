@@ -27,6 +27,9 @@ void ALP_Collider::update_world_trans() {
 	bool is_changRot = false;
 	bool is_changSiz = false;
 
+	if (shapes.size() == 0) {
+		int adsfgh = 0;
+	}
 	for (auto& shape : shapes) {
 
 		// ユーザーに入力されたcolliderデータ(center,sizeなど)を計算用のデータに治す

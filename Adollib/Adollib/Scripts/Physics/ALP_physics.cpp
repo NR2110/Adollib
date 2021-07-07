@@ -114,6 +114,7 @@ void ALP_Physics::apply_external_force(float duration) {
 
 		angula_velocity += angula_acceleration * duration;
 		if (angula_velocity.norm() < FLT_EPSILON)angula_velocity = Vector3(0, 0, 0);
+
 	}
 	else reset_force();
 
@@ -143,7 +144,6 @@ void ALP_Physics::integrate(float duration) {
 	else {
 		is_sleep = false;
 	}
-
 	ALPcollider->integrate(duration, linear_velocity, angula_velocity);
 
 }
@@ -168,6 +168,11 @@ const Vector3 ALP_Physics::get_barycenter() const {
 //アタッチされたshapesから慣性モーメントと質量、ついでに重心の更新
 void ALP_Physics::update_tensor_and_mass(const std::vector<Collider_shape*>& shapes) {
 
+	if (shapes.size() == 0) {
+		barycenter = Vector3(0, 0, 0);
+		inertial_tensor = matrix33_identity();
+		return;
+	}
 
 	float sum_valume = 0;
 	{

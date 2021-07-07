@@ -193,7 +193,8 @@ namespace Adollib {
 	//matrix‚©‚çXMMATRIX‚Ö‚Ì•ÏŠ·
 	DirectX::XMMATRIX matrix_to_XMMATRIX(const Matrix33& M);
 
-
+	//Box‚ÌŠµ«ƒeƒ“ƒ\ƒ‹‚ğ•Ô‚·
+	Matrix33 make_box_tensor(Vector3 size, float mass);
 
 }
 

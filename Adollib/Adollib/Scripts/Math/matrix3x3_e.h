@@ -263,6 +263,15 @@ namespace Adollib {
 			);
 	}
 
+	inline Matrix33 Adollib::make_box_tensor(Vector3 size, float mass) {
+
+		Matrix33 ret = matrix33_identity();
+		ret._11 = mass * 0.3333333f * ((size.y * size.y) + (size.z * size.z));
+		ret._22 = mass * 0.3333333f * ((size.z * size.z) + (size.x * size.x));
+		ret._33 = mass * 0.3333333f * ((size.x * size.x) + (size.y * size.y));
+		return ret;
+	}
+
 
 #else
 
