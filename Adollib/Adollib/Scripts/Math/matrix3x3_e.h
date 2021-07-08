@@ -140,6 +140,8 @@ namespace Adollib {
 
 	inline Matrix33 Adollib::matrix_inverse(const Matrix33& M) {
 
+		const float det = matrix_determinant(M);
+
 		Matrix33 Ret;
 
 		Ret._11 = +(M._22 * M._33 - M._23 * M._32);
@@ -154,10 +156,7 @@ namespace Adollib {
 		Ret._32 = -(M._11 * M._32 - M._12 * M._31);
 		Ret._33 = +(M._11 * M._22 - M._12 * M._21);
 
-
-
-		Ret /= matrix_determinant(M);
-		//Ret = matrix_trans(Ret);
+		Ret /= det;
 
 		return Ret;
 	}

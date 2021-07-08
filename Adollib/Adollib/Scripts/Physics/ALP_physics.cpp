@@ -47,6 +47,8 @@ Matrix33 ALP_Physics::inverse_inertial_tensor() const {
 	if (is_movable()) {
 		inverse_inertial_tensor = matrix_inverse(inertial_tensor);
 
+		if (isnan(matrix_determinant(inverse_inertial_tensor))) assert(0&&"toooooo laaarrrrrrrrgge");
+
 		Matrix33 rotation, transposed_rotation;
 		rotation = gameobject->world_orientate().get_rotate_matrix();
 		transposed_rotation = matrix_trans(rotation);
@@ -196,6 +198,10 @@ void ALP_Physics::update_tensor_and_mass(const std::vector<Collider_shape*>& sha
 
 		inertial_tensor *= inertial_mass;
 	}
+
+	inertial_tensor._11 *= gameobject->world_scale().x;
+	inertial_tensor._22 *= gameobject->world_scale().y;
+	inertial_tensor._33 *= gameobject->world_scale().z;
 
 	//質量と重心の更新
 	//inertial_mass = 0;
