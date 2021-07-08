@@ -121,9 +121,6 @@
     <ClCompile Include="Scripts\Object\gameobject.cpp">
       <Filter>00_Adollib\33_object</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Object\gameobject_light.cpp">
-      <Filter>00_Adollib\33_object</Filter>
-    </ClCompile>
     <ClCompile Include="Scripts\Object\gameobject_manager.cpp">
       <Filter>00_Adollib\33_object</Filter>
     </ClCompile>
@@ -250,6 +247,9 @@
     <ClCompile Include="Scripts\Object\component_camera.cpp">
       <Filter>00_Adollib\33_object</Filter>
     </ClCompile>
+    <ClCompile Include="Scripts\Object\component_light.cpp">
+      <Filter>00_Adollib\33_object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Scripts\player.h">
@@ -319,9 +319,6 @@
       <Filter>00_Adollib\33_object</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Object\gameobject.h">
-      <Filter>00_Adollib\33_object</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Object\gameobject_light.h">
       <Filter>00_Adollib\33_object</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Object\gameobject_manager.h">

@@ -1,61 +1,66 @@
 #pragma once
 
 #include "object.h"
+#include "component.h"
+
+//#include "../Shader/light_types.h"
+
 #include "../Main/input.h"
 #include "time.h"
 #include <string>
 #include <memory>
+#include <vector>
+#include <memory>
 
-//TODO : こんなコンポーネント作りたくない 継承使ってなくす
 namespace Adollib
 {
-	class Light;
-	class Transfome;
+	struct POINTLIGHT;
+	struct SPOTLIGHT;
 
-	// ****************************************************
-	// gameobject_cameraにアタッチされるすべてに対するベースクラス // TODO : インターフェースにしてもよいかも？
-	// ****************************************************
-	class Component_light
+	//カメラ用のコンポーネントクラス 継承不可!
+	class Light_component final : public Component
 	{
 	public:
-		Light* gameobject;	// このコンポーネントがアタッチされているGameObject
-		Transfome* transform;	// GameObjectのTransformへのポインタ
+		std::vector <POINTLIGHT*> PointLight;
+		std::vector <SPOTLIGHT*>  SpotLight;
 
-		MonoInput* input = nullptr;
-		Time* time = nullptr;
+		void set_dirLight(Vector3 dir, Vector3 color);
+
+		void set_ambient(Vector3 amb);
+
+		void set_pointLight(Vector3 pos, Vector3 color, float range);
+
+		void set_spotLight(Vector3 pos, Vector3 color, Vector3 dir, float range, float near, float far);
+
+	private:
+		//managerに保存されている 自身へのitr
+		std::list<Light_component*>::iterator this_itr;
 
 	public:
-		Component_light(const Component_light&) = delete;
-		Component_light& operator=(const Component_light&) = delete;
-
-		Component_light() = default;
-		virtual ~Component_light() = default;
-
-
 
 		// addComponentされたときに呼ばれる
-		virtual void awake() {};
+		void awake() override;
 
 		// 所属するシーンの初期化時に一度だけ呼ばれる
-		virtual void start() {};
+		virtual void start() override {};
+
+		// Hierarchyの表示(Imguiの関数 Imgui::begin,Imgui::endはいらない)
+		virtual void Update_hierarchy() override;
 
 		// 毎フレーム呼ばれる更新処理
-		virtual void update() {};
-
-		// 毎フレーム、update()後に呼ばれる更新処理
-		virtual void lateUpdate() {};
+		virtual void update() override {};
 
 		// このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる(GO生成時にスクリプトが有効な時も呼ばれる)
-		virtual void onEnable() {};
+		virtual void onEnable() override {};
 
 		// このスクリプトがアタッチされているGOのactiveSelfがfalseになった時呼ばれる
-		virtual void onDisable() {};
+		virtual void onDisable() override {};
 
 		// removeComponent()、clear()時に呼ぶ
-		virtual void finalize() {};
+		void finalize() override;
 
 	};
 
 
 
-}
+};

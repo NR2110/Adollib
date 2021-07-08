@@ -483,7 +483,6 @@ bool sat_obb_capsule(
 
 
 	float penetration = 0; //ŠÑ’Ê—Ê
-	float ra, rb; //obbA,obbB‚ÌL‚É“Š‰e‚³‚ê‚½’·‚³
 	Vector3 axis; //“Š‰e‚·‚é²
 	Vector3 distCapsuleToObb = capsule.position; //2obb‚Ì’†SÀ•W‚Ì‹——£
 

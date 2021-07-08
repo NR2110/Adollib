@@ -2,6 +2,7 @@
 #include "gameobject_manager.h"
 
 #include "component_camera.h"
+#include "component_light.h"
 
 
 #include "../Main/systems.h"
@@ -29,11 +30,10 @@ using namespace Physics_function;
 using namespace ConstantBuffer;
 
 std::map<Scenelist, std::list<Gameobject*>> Gameobject_manager::gameobjects;
-std::map<Scenelist, std::list<Light*>> Gameobject_manager::lights;
+std::map<Scenelist, std::list<Light_component*>> Gameobject_manager::lights;
 std::map<Scenelist, std::list<Camera_component*>> Gameobject_manager::cameras;
 
 std::vector<Gameobject*>	Gameobject_manager::save_delete_gameobject;
-std::vector<Light*>			Gameobject_manager::save_delete_light;
 
 int Gameobject_manager::go_count = 0;
 
@@ -55,9 +55,6 @@ void Gameobject_manager::awake() {
 	for (int i = 0; i < static_cast<int>(Scenelist::scene_list_size); i++) {
 		std::list<Gameobject*> go_manager;
 		gameobjects[static_cast<Scenelist>(i)] = go_manager;
-
-		std::list<Light*> li_manager;
-		lights[static_cast<Scenelist>(i)] = li_manager;
 	}
 
 	Physics_function::Collider_renderer::initialize();
@@ -69,9 +66,6 @@ void Gameobject_manager::initialize(Scenelist Sce) {
 
 
 	for (auto& GO : gameobjects[Sce]) {
-		GO->initialize();
-	}
-	for (auto& GO : lights[Sce]) {
 		GO->initialize();
 	}
 
@@ -86,14 +80,6 @@ void Gameobject_manager::update(Scenelist Sce) {
 	for (auto& GO : gameobjects[Sce]) {
 		gos.push_back(GO);
 	}
-
-	for (auto& GO : lights[Sce]) {
-		gos.push_back(GO);
-	}
-
-	//for (auto& GO : cameras[Sce]) {
-	//	gos.push_back(GO);
-	//}
 
 
 	//一番上のの親を保存
@@ -122,10 +108,6 @@ void Gameobject_manager::update(Scenelist Sce) {
 	gos.clear();
 	//扱いやすいように一つの配列に保存
 	for (auto& GO : gameobjects[Sce]) {
-		gos.push_back(GO);
-	}
-
-	for (auto& GO : lights[Sce]) {
 		gos.push_back(GO);
 	}
 
@@ -185,14 +167,14 @@ void Gameobject_manager::render(Scenelist Sce) {
 		int spot_num = 0;
 		for (const auto& light : lights[Sce]) {
 			for (u_int o = 0; o < light->PointLight.size(); o++) {
-				if (light->active == false)return;
+				if (light->gameobject->active == false)return;
 				PointLight[point_num] = *light->PointLight[o];
 				//	PointLight[point_num].pos = (*itr_li->get()->PointLight[o]->pos )+( *itr_li->get()->transform->position);
 				point_num++;
 			}
 
 			for (u_int o = 0; o < light->SpotLight.size(); o++) {
-				if (light->active == false)return;
+				if (light->gameobject->active == false)return;
 				SpotLight[spot_num] = *light->SpotLight[o];
 				spot_num++;
 			}
@@ -272,30 +254,11 @@ void Gameobject_manager::destroy(Scenelist Sce) {
 		delete GO;
 	}
 
-	for (auto& GO : lights[Sce]) {
-		GO->clearComponent();
-		delete GO;
-	}
-
 	//適当にSceのsceneにアタッチされたgoを削除
 	gameobjects[Sce].clear();
+	cameras[Sce].clear();
 	lights[Sce].clear();
 
-}
-
-Light* Gameobject_manager::create_light(const std::string go_name, Scenelist Sce) {
-	Light* null = nullptr;
-	lights[Sce].emplace_back(null);
-	auto itr = lights[Sce].end();
-	itr--;
-	*itr = newD Light(Sce,itr);
-	Light* Value = *itr;
-
-	Value->name = go_name;
-
-	Value->initialize();
-	//Value->name = std::string("light");
-	return Value;
 }
 
 Gameobject* Gameobject_manager::create(const std::string& go_name, const u_int& tag, Scenelist Sce) {

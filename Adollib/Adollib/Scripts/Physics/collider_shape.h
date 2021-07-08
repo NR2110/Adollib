@@ -43,7 +43,7 @@ namespace Adollib {
 		Matrix33 get_tensor(const Vector3& barycenter) {
 			Matrix33 tensor;
 			//shapeの中心を回転中心とした慣性モーメント
-			tensor = tensor_base();
+			tensor = local_tensor();
 
 			tensor = local_orientation.get_rotate_matrix() * tensor * matrix_inverse(local_orientation.get_rotate_matrix());
 
@@ -55,6 +55,9 @@ namespace Adollib {
 
 			return tensor;
 		};
+
+		//shapeの体積
+		virtual const float get_volume() const = 0;
 
 	protected:
 		//このshapeがどのような形なのか
@@ -96,7 +99,7 @@ namespace Adollib {
 		virtual void adapt_Colliderdata() = 0;
 
 		//shapeの中心を回転中心とした慣性モーメント
-		virtual const Matrix33 tensor_base() const = 0;
+		virtual const Matrix33 local_tensor() const = 0;
 
 	public:
 		//

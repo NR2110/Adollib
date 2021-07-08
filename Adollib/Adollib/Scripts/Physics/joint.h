@@ -18,7 +18,15 @@ namespace Adollib {
 		static Physics_function::BallJoint* add_balljoint(
 			Collider* colliderA,Collider* colliderB,
 			Vector3 anchorA, Vector3 anchorB,
-			float bias = 0.01f
+			float bias = 0.1f
+		);
+
+		static Physics_function::BallJoint* add_Hingejoint(
+			Collider* colliderA, Collider* colliderB,
+			Vector3 anchorA_s, Vector3 anchorA_g,
+			Vector3 anchorB_s, Vector3 anchorB_g,
+			float hingepow,
+			float bias = 0.1f
 		);
 	};
 

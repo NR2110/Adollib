@@ -337,7 +337,6 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 	for (int i = 0; i < Phyisics_manager::physicsParams.solver_iterations; i++) {
 		// S‘©‚Ì‰‰ŽZ
 		Transfome* transform[2];
-		DirectX::XMVECTOR position[2];
 		for (auto& joint : joints) {
 			transform[0] = joint->ALPcollider[0]->get_gameobject()->transform.get();
 			transform[1] = joint->ALPcollider[1]->get_gameobject()->transform.get();

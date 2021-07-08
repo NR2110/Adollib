@@ -112,8 +112,8 @@ namespace Adollib {
 				}
 			};
 
-			const Matrix33 tensor_base() const override {
-				const Vector3& Wsize = world_scale();
+			const Matrix33 local_tensor() const override {
+				const Vector3& Wsize = local_scale;
 				Matrix33 ret;
 
 				ret = matrix33_identity();
@@ -122,6 +122,10 @@ namespace Adollib {
 				ret._33 = 0.3333333f * ((Wsize.x * Wsize.x) + (Wsize.y * Wsize.y));
 				return ret;
 			};
+
+			const float get_volume() const override {
+				return local_scale.x * local_scale.y * local_scale.z;
+			}
 
 
 		};

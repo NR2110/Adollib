@@ -1,6 +1,5 @@
 #pragma once
 #include "collider_shape.h"
-
 namespace Adollib {
 	//Boxクラス
 	class Capsule : public Collider_shape {
@@ -61,8 +60,8 @@ namespace Adollib {
 			}
 		};
 
-		const Matrix33 tensor_base() const override {
-			const Vector3& Wsize = world_scale();
+		const Matrix33 local_tensor() const override {
+			const Vector3& Wsize = local_scale;
 			Matrix33 ret;
 
 			ret = matrix33_identity();
@@ -78,21 +77,20 @@ namespace Adollib {
 			//Z : M(1/5 R^2 + 1/4 H^2) * 2
 
 			//Wsize.yは円柱の高さ/2なので
-			float H = Wsize.y * 2;
+			const float H = Wsize.y * 2;
 
 			ret._11 = 0.65f * Wsize.x * Wsize.x + 0.583333333f * H * H;
 			ret._22 = 0.9f * Wsize.x * Wsize.x;
 			ret._33 = 0.65f * Wsize.x * Wsize.x + 0.583333333f * H * H;
 
-			//なぜか上の式でうまくいかないので とりあえず四角のテンソルを入れておく
-			//ret._11 = 0.3333333f * ((Wsize.y * Wsize.y) + (Wsize.z * Wsize.z));
-			//ret._22 = 0.3333333f * ((Wsize.z * Wsize.z) + (Wsize.x * Wsize.x));
-			//ret._33 = 0.3333333f * ((Wsize.x * Wsize.x) + (Wsize.y * Wsize.y));
-
-
-
 			return ret;
 		};
+
+		const float get_volume() const override {
+			const float h = local_scale.x * local_scale.x * DirectX::XM_PI * local_scale.y * 2;
+			const float s = 1.3333333f * DirectX::XM_PI * local_scale.x * local_scale.x * local_scale.x;
+			return h + s;
+		}
 
 
 	};

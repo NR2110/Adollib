@@ -658,14 +658,14 @@ namespace Adollib
 					GEAR->transform->local_pos = pos;
 
 					Collider* coll = GEAR->addComponent<Collider>();
-					coll->set_tensor(make_box_tensor(Vector3(2.5f, 2.5f, 25), 1));
+					coll->set_tensor(make_box_tensor(Vector3(5, 5, 50), 1));
 
 					for (int gear_tooth_num = 0; gear_tooth_num < TREE_pyramid_count; gear_tooth_num++) {
 						Gameobject* GO = Gameobject_manager::createCube("tooth");
 						GO->transform->local_scale = size;
-						GO->transform->local_orient = quaternion_from_euler(0, 0, 360 / TREE_pyramid_count * gear_tooth_num);
+						GO->transform->local_orient = quaternion_from_euler(0, 0, 360.0f / TREE_pyramid_count * gear_tooth_num);
 						GO->transform->local_pos = Vector3(0, size.y * 2, 0);
-						GO->transform->local_pos = vector3_quatrotate(GO->transform->local_pos, quaternion_angle_axis(360 / TREE_pyramid_count * gear_tooth_num, Vector3(0, 0, 1)));
+						GO->transform->local_pos = vector3_quatrotate(GO->transform->local_pos, quaternion_angle_axis(360.0f / TREE_pyramid_count * gear_tooth_num, Vector3(0, 0, 1)));
 
 						GO->material->color = Vector4(1, 1, 0, 1);
 						GEAR->add_child(GO);
@@ -676,7 +676,7 @@ namespace Adollib
 						box->size = size;
 						box->rotate = Vector3(0, 0, 360.0f / TREE_pyramid_count * gear_tooth_num);
 						box->center = Vector3(0, size.y * 2, 0);
-						box->center = vector3_quatrotate(box->center, quaternion_angle_axis(360 / TREE_pyramid_count * gear_tooth_num, Vector3(0, 0, 1)));
+						box->center = vector3_quatrotate(box->center, quaternion_angle_axis(360.0f / TREE_pyramid_count * gear_tooth_num, Vector3(0, 0, 1)));
 
 					}
 

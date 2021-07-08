@@ -155,7 +155,7 @@ const Vector3 ALP_Physics::get_barycenter() const {
 	{
 		val = Vector3(0);
 		for (const auto& shape : shapes) {
-			const float shape_mass = shape->local_scale.x * shape->local_scale.y * shape->local_scale.z;
+			const float shape_mass = shape->get_volume();
 			val += shape_mass * shape->local_position;
 			sum_valume += shape_mass;
 		}
@@ -178,7 +178,7 @@ void ALP_Physics::update_tensor_and_mass(const std::vector<Collider_shape*>& sha
 	{
 		barycenter = Vector3(0);
 		for (const auto& shape : shapes) {
-			const float shape_mass = shape->local_scale.x * shape->local_scale.y * shape->local_scale.z;
+			const float shape_mass = shape->get_volume();
 			barycenter += shape_mass * shape->local_position;
 			sum_valume += shape_mass;
 		}
@@ -190,7 +190,7 @@ void ALP_Physics::update_tensor_and_mass(const std::vector<Collider_shape*>& sha
 		//慣性モーメントの更新
 		inertial_tensor = matrix33_zero();
 		for (const auto& shape : shapes) {
-			const float shape_mass = shape->local_scale.x * shape->local_scale.y * shape->local_scale.z;
+			const float shape_mass = shape->get_volume();
 			inertial_tensor += shape_mass / sum_valume * shape->get_tensor(barycenter);
 		}
 
