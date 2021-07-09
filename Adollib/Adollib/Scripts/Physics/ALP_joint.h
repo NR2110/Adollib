@@ -1,7 +1,8 @@
 #pragma once
 #include "../Math/math.h"
-#include "contact.h"
 #include "../Scene/scene_list.h"
+#include "contact.h"
+#include "ALP_anchor.h"
 
 namespace Adollib {
 
@@ -16,19 +17,20 @@ namespace Adollib {
 
 		public:
 			float bias = 0; // 拘束の強さの調整値
-			Vector3 anchor[2]; // 剛体のローカル座標系における接続点
+
+			int anchor_count = 0;
+			Anchor* anchor; // 剛体のローカル座標系における接続点
+
 
 			Collider* collider_comp[2] = { nullptr }; // 剛体のcomponentへのポインタ
 			ALP_Collider* ALPcollider[2] = { nullptr }; // 剛体へのポインタ
 
-			Contacts::Constraint constraint; // 拘束計算用
+			Contacts::Constraint constraint[3]; // 拘束計算用
 
-
-			Joint_base* joint = nullptr; //ユーザー触る情報へのポインタ
+			Joint_base* joint = nullptr; //ユーザーの触る情報へのポインタ
 
 		private:
 			std::list<ALP_Joint*>::iterator this_itr; //physics_manager内の自身へのイテレータ
-
 
 
 		public:

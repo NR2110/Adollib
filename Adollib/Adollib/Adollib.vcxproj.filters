@@ -549,6 +549,12 @@
     <ClInclude Include="Scripts\Physics\ALP_joint.h">
       <Filter>00_Adollib\22_physics\base</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Physics\hingejoint.h">
+      <Filter>00_Adollib\22_physics\Joint</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\ALP_anchor.h">
+      <Filter>00_Adollib\22_physics\base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="DefaultShader\default.hlsli">

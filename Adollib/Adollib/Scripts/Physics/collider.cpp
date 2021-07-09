@@ -5,6 +5,8 @@
 #include "../Main/Adollib.h"
 #include "contact.h"
 
+#include "ALP_collider.h"
+#include "ALP_physics.h"
 #include "ALP_joint.h"
 
 using namespace Adollib;
@@ -24,6 +26,7 @@ void Collider::add_force(const Vector3& force) {
 void Collider::add_torque(const Vector3& force) {
 	ALPphysics_ptr->add_torque(force);
 }
+
 
 #pragma endregion
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

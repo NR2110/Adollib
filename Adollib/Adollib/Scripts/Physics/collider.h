@@ -7,7 +7,7 @@
 #include "../Math/math.h"
 #include "../Object/component.h"
 
-//#include "ALP__meshcoll_data.h"
+#include "ALP__tags.h"
 #include "ALP_collider.h"
 #include "ALP_physics.h"
 
@@ -39,6 +39,8 @@ namespace Adollib {
 
 	namespace Physics_function {
 		class ALP_Joint;
+		class ALP_Collider;
+		class ALP_Physics;
 	}
 
 	class Collider : public Component {

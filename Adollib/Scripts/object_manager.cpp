@@ -244,7 +244,7 @@ namespace Adollib
 				ImGui::Text("SPHERE_pyramid"); ImGui::NextColumn();
 				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
 				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), SPHERE_pyramid_pos, 0.1f); ImGui::NextColumn();
-				ImGui::DragFloat(std::to_string(imgui_num + 220).c_str(), &size, 0.1f,0.01f,100000); ImGui::NextColumn();
+				ImGui::DragFloat(std::to_string(imgui_num + 220).c_str(), &size, 0.1f, 0.01f, 100000); ImGui::NextColumn();
 				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &SPHERE_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
 
 				if (summon == true) {
@@ -640,7 +640,7 @@ namespace Adollib
 			//gear
 			{
 
-				static int TREE_pyramid_count = 5;
+				static int TREE_pyramid_count = 11;
 				static float TREE_pyramid_pos[3] = { 0 };
 				bool summon = false;
 				ImGui::Separator();
@@ -658,7 +658,7 @@ namespace Adollib
 					GEAR->transform->local_pos = pos;
 
 					Collider* coll = GEAR->addComponent<Collider>();
-					coll->set_tensor(make_box_tensor(Vector3(5, 5, 50), 1));
+					//coll->set_tensor(make_box_tensor(Vector3(5, 5, 50), 1));
 
 					for (int gear_tooth_num = 0; gear_tooth_num < TREE_pyramid_count; gear_tooth_num++) {
 						Gameobject* GO = Gameobject_manager::createCube("tooth");
@@ -686,10 +686,62 @@ namespace Adollib
 					Collider* gear_joint_collider = gear_joint->addComponent<Collider>();
 					gear_joint_collider->physics_data.is_moveable = false;
 
-					Joint::add_balljoint(gear_joint_collider, coll, Vector3(0, 0, +10), Vector3(0, 0, +10), 0.1f);
-					Joint::add_balljoint(gear_joint_collider, coll, Vector3(0, 0, -10), Vector3(0, 0, -10), 0.1f);
-					//Joint::add_balljoint(gear_joint_collider, coll, Vector3(0, 0, +1), Vector3(0, 0, +1), 0.1f);
-					//Joint::add_balljoint(gear_joint_collider, coll, Vector3(0, 0, -1), Vector3(0, 0, -1), 0.1f);
+					Joint::add_Hingejoint(gear_joint_collider, coll, Vector3(0, 0, +10), Vector3(0, 0, -10), Vector3(0, 0, +10), Vector3(0, 0, -10), 2, 0.1f);
+
+				}
+				imgui_num++;
+			}
+
+			//gear
+			{
+
+				static int TREE_pyramid_count = 3;
+				static float TREE_pyramid_pos[3] = { 0 };
+				bool summon = false;
+				ImGui::Separator();
+				ImGui::Text("GEAR"); ImGui::NextColumn();
+				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
+				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), TREE_pyramid_pos, 0.1f); ImGui::NextColumn(); ImGui::NextColumn();
+				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &TREE_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
+
+				if (summon == true) {
+					const Vector3 pos = Vector3(TREE_pyramid_pos[0], TREE_pyramid_pos[1] + 8, TREE_pyramid_pos[2]);
+					const Vector3 size = Vector3(6, 3, 1);
+
+
+					Gameobject* PATAPATA = Gameobject_manager::create("PATAPATA");
+					PATAPATA->transform->local_pos = pos;
+
+					Collider* coll = PATAPATA->addComponent<Collider>();
+					//coll->set_tensor(make_box_tensor(Vector3(5, 5, 50), 1));
+
+					for (int gear_tooth_num = 0; gear_tooth_num < TREE_pyramid_count; gear_tooth_num++) {
+						Gameobject* GO = Gameobject_manager::createCube("tooth");
+						GO->transform->local_scale = size;
+						GO->transform->local_orient = quaternion_from_euler(0, 360.0f / TREE_pyramid_count * gear_tooth_num, 0);
+						GO->transform->local_pos = Vector3(0, size.y * 0, 0);
+						GO->transform->local_pos = vector3_quatrotate(GO->transform->local_pos, quaternion_angle_axis(360.0f / TREE_pyramid_count * gear_tooth_num, Vector3(0, 1, 0)));
+
+						GO->material->color = Vector4(1, 1, 0, 1);
+						PATAPATA->add_child(GO);
+					}
+
+					for (int gear_tooth_num = 0; gear_tooth_num < TREE_pyramid_count; gear_tooth_num++) {
+						Box* box = coll->add_shape<Box>();
+						box->size = size;
+						box->rotate = Vector3(0, 360.0f / TREE_pyramid_count * gear_tooth_num, 0);
+						box->center = Vector3(0, size.y * 0, 0);
+						box->center = vector3_quatrotate(box->center, quaternion_angle_axis(360.0f / TREE_pyramid_count * gear_tooth_num, Vector3(0, 1, 0)));
+
+					}
+
+
+					Gameobject* gear_joint = Gameobject_manager::createCube("gear_joint");
+					gear_joint->transform->local_pos = pos;
+					Collider* gear_joint_collider = gear_joint->addComponent<Collider>();
+					gear_joint_collider->physics_data.is_moveable = false;
+
+					Joint::add_Hingejoint(gear_joint_collider, coll, Vector3(0, +10, 0), Vector3(0, -10, 0), Vector3(0, +10, 0), Vector3(0, -10, 0), 2, 0.1f);
 
 				}
 				imgui_num++;

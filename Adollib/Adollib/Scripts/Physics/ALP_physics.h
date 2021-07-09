@@ -126,7 +126,7 @@ namespace Adollib {
 			void integrate(float duration = 1);
 
 			//アタッチされたshapesから慣性モーメントと質量、ついでに重心の更新
-			void update_tensor_and_mass(const std::vector<Collider_shape*>& shapes);
+			void update_tensor_and_barycenter(const std::vector<Collider_shape*>& shapes, const std::list<ALP_Joint*>& joints);
 
 
 			//::: collider:Component の massなどが変更されたときに呼ぶもの :::

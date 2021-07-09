@@ -27,9 +27,6 @@ void ALP_Collider::update_world_trans() {
 	bool is_changRot = false;
 	bool is_changSiz = false;
 
-	if (shapes.size() == 0) {
-		int adsfgh = 0;
-	}
 	for (auto& shape : shapes) {
 
 		// ユーザーに入力されたcolliderデータ(center,sizeなど)を計算用のデータに治す
@@ -52,7 +49,7 @@ void ALP_Collider::update_world_trans() {
 	ALPphysics->update_physics_data();
 
 	// 慣性モーメントの更新
-	ALPphysics->update_tensor_and_mass(shapes);
+	ALPphysics->update_tensor_and_barycenter(shapes, joints);
 
 
 
@@ -126,7 +123,7 @@ void ALP_Collider::destroy()
 		delete shape;
 	}
 
-	for (auto& j : joints) {
+	for (auto j : joints) {
 		j->destroy(this, true);
 		delete j;
 	}

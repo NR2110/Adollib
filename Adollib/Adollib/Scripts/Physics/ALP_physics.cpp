@@ -47,7 +47,7 @@ Matrix33 ALP_Physics::inverse_inertial_tensor() const {
 	if (is_movable()) {
 		inverse_inertial_tensor = matrix_inverse(inertial_tensor);
 
-		if (isnan(matrix_determinant(inverse_inertial_tensor))) assert(0&&"toooooo laaarrrrrrrrgge");
+		if (isnan(matrix_determinant(inverse_inertial_tensor))) assert(0 && "toooooo laaarrrrrrrrgge");
 
 		Matrix33 rotation, transposed_rotation;
 		rotation = gameobject->world_orientate().get_rotate_matrix();
@@ -168,7 +168,7 @@ const Vector3 ALP_Physics::get_barycenter() const {
 }
 
 //アタッチされたshapesから慣性モーメントと質量、ついでに重心の更新
-void ALP_Physics::update_tensor_and_mass(const std::vector<Collider_shape*>& shapes) {
+void ALP_Physics::update_tensor_and_barycenter(const std::vector<Collider_shape*>& shapes, const std::list<ALP_Joint*>& joints) {
 
 	if (shapes.size() == 0) {
 		barycenter = Vector3(0, 0, 0);
@@ -178,6 +178,7 @@ void ALP_Physics::update_tensor_and_mass(const std::vector<Collider_shape*>& sha
 
 	float sum_valume = 0;
 	{
+		//重心の更新
 		barycenter = Vector3(0);
 		for (const auto& shape : shapes) {
 			const float shape_mass = shape->get_volume();
@@ -197,11 +198,19 @@ void ALP_Physics::update_tensor_and_mass(const std::vector<Collider_shape*>& sha
 		}
 
 		inertial_tensor *= inertial_mass;
+
+
+		for (auto& joint : joints) {
+			inertial_tensor += joint->joint->tensor_effect(ALPcollider->get_collptr());
+		}
+
+
+
+		inertial_tensor._11 *= gameobject->world_scale().x;
+		inertial_tensor._22 *= gameobject->world_scale().y;
+		inertial_tensor._33 *= gameobject->world_scale().z;
 	}
 
-	inertial_tensor._11 *= gameobject->world_scale().x;
-	inertial_tensor._22 *= gameobject->world_scale().y;
-	inertial_tensor._33 *= gameobject->world_scale().z;
 
 	//質量と重心の更新
 	//inertial_mass = 0;
@@ -223,7 +232,7 @@ void ALP_Physics::update_tensor_and_mass(const std::vector<Collider_shape*>& sha
 
 void ALP_Physics::update_physics_data() {
 
-	Physics_data Cdata = ALPcollider->get_collitr()->physics_data;
+	Physics_data Cdata = ALPcollider->get_collptr()->physics_data;
 
 	inertial_mass = Cdata.inertial_mass;
 	linear_drag = Cdata.drag;

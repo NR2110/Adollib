@@ -100,67 +100,74 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 		for (auto& joint : joints) {
 			joint->adapt_Jointdata();
 
-			transform[0] = joint->ALPcollider[0]->get_gameobject()->transform.get();
-			transform[1] = joint->ALPcollider[1]->get_gameobject()->transform.get();
-			ALPphysics[0] = joint->ALPcollider[0]->get_ALPphysics();
-			ALPphysics[1] = joint->ALPcollider[1]->get_ALPphysics();
-			solverbody[0] = ALPphysics[0]->solve;
-			solverbody[1] = ALPphysics[1]->solve;
+			for (int i = 0; i < joint->anchor_count; i++) {
+				const Vector3 joint_posA = joint->anchor[i].posA;
+				const Vector3 joint_posB = joint->anchor[i].posB;
+				auto& constraint = joint->constraint[i];
 
-			//anchorそれぞれのlocal座標
-			const DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&joint->anchor[0]), DirectX::XMLoadFloat4(&transform[0]->orientation));
-			const DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&joint->anchor[1]), DirectX::XMLoadFloat4(&transform[1]->orientation));
 
-			//anchorそれぞれのworld座標
-			position[0] = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&transform[0]->position), rA);
-			position[1] = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&transform[1]->position), rB);
-			DirectX::XMVECTOR direction = DirectX::XMVectorSubtract(position[1], position[0]);
-			DirectX::XMVECTOR distance = DirectX::XMVector3Length(direction);
+				transform[0] = joint->ALPcollider[0]->get_gameobject()->transform.get();
+				transform[1] = joint->ALPcollider[1]->get_gameobject()->transform.get();
+				ALPphysics[0] = joint->ALPcollider[0]->get_ALPphysics();
+				ALPphysics[1] = joint->ALPcollider[1]->get_ALPphysics();
+				solverbody[0] = ALPphysics[0]->solve;
+				solverbody[1] = ALPphysics[1]->solve;
 
-			if (DirectX::XMVectorGetX(distance) < FLT_EPSILON) {
-				//とても近い位置にある -> 引っ張らない
-				joint->constraint.jacDiagInv = 0.0f;
-				joint->constraint.rhs = 0.0f;
-				joint->constraint.lowerlimit = -FLT_MAX;
-				joint->constraint.upperlimit = +FLT_MAX;
-				joint->constraint.axis = Vector3(0, 1, 0);
-				continue;
+				//anchorそれぞれのlocal座標
+				const DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&joint_posA), DirectX::XMLoadFloat4(&transform[0]->orientation));
+				const DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&joint_posB), DirectX::XMLoadFloat4(&transform[1]->orientation));
+
+				//anchorそれぞれのworld座標
+				position[0] = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&transform[0]->position), rA);
+				position[1] = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&transform[1]->position), rB);
+				DirectX::XMVECTOR direction = DirectX::XMVectorSubtract(position[1], position[0]);
+				DirectX::XMVECTOR distance = DirectX::XMVector3Length(direction);
+
+				if (DirectX::XMVectorGetX(distance) < FLT_EPSILON) {
+					//とても近い位置にある -> 引っ張らない
+					constraint.jacDiagInv = 0.0f;
+					constraint.rhs = 0.0f;
+					constraint.lowerlimit = -FLT_MAX;
+					constraint.upperlimit = +FLT_MAX;
+					constraint.axis = Vector3(0, 1, 0);
+					continue;
+				}
+
+				direction = DirectX::XMVectorDivide(direction, distance);
+
+				DirectX::XMVECTOR velocityA = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&ALPphysics[0]->linear_velocity), DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&ALPphysics[0]->angula_velocity), rA));
+				DirectX::XMVECTOR velocityB = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&ALPphysics[1]->linear_velocity), DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&ALPphysics[1]->angula_velocity), rB));
+				DirectX::XMVECTOR relativeVelocity = DirectX::XMVectorSubtract(velocityA, velocityB);
+
+				const float& term1 = ALPphysics[0]->inverse_mass();
+				const float& term2 = ALPphysics[1]->inverse_mass();
+				DirectX::XMVECTOR tA, tB;
+
+				float term3, term4, denominator;
+				DirectX::XMVECTOR axis;
+				axis = direction;
+				tA = DirectX::XMVector3Cross(rA, axis);
+				tB = DirectX::XMVector3Cross(rB, axis);
+				tA = DirectX::XMVector3Transform(tA, ALPphysics[0]->solve->inv_inertia);
+				tB = DirectX::XMVector3Transform(tB, ALPphysics[1]->solve->inv_inertia);
+				tA = DirectX::XMVector3Cross(tA, rA);
+				tB = DirectX::XMVector3Cross(tB, rB);
+				term3 = DirectX::XMVectorGetX(DirectX::XMVector3Dot(axis, tA));
+				term4 = DirectX::XMVectorGetX(DirectX::XMVector3Dot(axis, tB));
+				denominator = term1 + term2 + term3 + term4;
+
+
+				constraint.jacDiagInv = 1.0f / denominator;
+
+				constraint.rhs = -DirectX::XMVectorGetX(DirectX::XMVector3Dot(relativeVelocity, direction)); // velocity error
+				constraint.rhs += joint->bias * DirectX::XMVectorGetX(distance) / Phyisics_manager::physicsParams.timeStep; // position error
+				constraint.rhs *= constraint.jacDiagInv;
+				constraint.lowerlimit = -FLT_MAX;
+				constraint.upperlimit = +FLT_MAX;
+				DirectX::XMStoreFloat3(&constraint.axis, direction);
+
+				constraint.accuminpulse = 0.0f;
 			}
-
-			direction = DirectX::XMVectorDivide(direction, distance);
-
-			DirectX::XMVECTOR velocityA = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&ALPphysics[0]->linear_velocity), DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&ALPphysics[0]->angula_velocity), rA));
-			DirectX::XMVECTOR velocityB = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&ALPphysics[1]->linear_velocity), DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&ALPphysics[1]->angula_velocity), rB));
-			DirectX::XMVECTOR relativeVelocity = DirectX::XMVectorSubtract(velocityA, velocityB);
-
-			const float& term1 = ALPphysics[0]->inverse_mass();
-			const float& term2 = ALPphysics[1]->inverse_mass();
-			DirectX::XMVECTOR tA, tB;
-
-			float term3, term4, denominator;
-			DirectX::XMVECTOR axis;
-			axis = direction;
-			tA = DirectX::XMVector3Cross(rA, axis);
-			tB = DirectX::XMVector3Cross(rB, axis);
-			tA = DirectX::XMVector3Transform(tA, ALPphysics[0]->solve->inv_inertia);
-			tB = DirectX::XMVector3Transform(tB, ALPphysics[1]->solve->inv_inertia);
-			tA = DirectX::XMVector3Cross(tA, rA);
-			tB = DirectX::XMVector3Cross(tB, rB);
-			term3 = DirectX::XMVectorGetX(DirectX::XMVector3Dot(axis, tA));
-			term4 = DirectX::XMVectorGetX(DirectX::XMVector3Dot(axis, tB));
-			denominator = term1 + term2 + term3 + term4;
-
-
-			joint->constraint.jacDiagInv = 1.0f / denominator;
-
-			joint->constraint.rhs = -DirectX::XMVectorGetX(DirectX::XMVector3Dot(relativeVelocity, direction)); // velocity error
-			joint->constraint.rhs += joint->bias * DirectX::XMVectorGetX(distance) / Phyisics_manager::physicsParams.timeStep; // position error
-			joint->constraint.rhs *= joint->constraint.jacDiagInv;
-			joint->constraint.lowerlimit = -FLT_MAX;
-			joint->constraint.upperlimit = +FLT_MAX;
-			DirectX::XMStoreFloat3(&joint->constraint.axis, direction);
-
-			joint->constraint.accuminpulse = 0.0f;
 
 		}
 	}
@@ -338,33 +345,39 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 		// 拘束の演算
 		Transfome* transform[2];
 		for (auto& joint : joints) {
-			transform[0] = joint->ALPcollider[0]->get_gameobject()->transform.get();
-			transform[1] = joint->ALPcollider[1]->get_gameobject()->transform.get();
-			ALPphysics[0] = joint->ALPcollider[0]->get_ALPphysics();
-			ALPphysics[1] = joint->ALPcollider[1]->get_ALPphysics();
-			solverbody[0] = ALPphysics[0]->solve;
-			solverbody[1] = ALPphysics[1]->solve;
 
-			const DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&joint->anchor[0]), DirectX::XMLoadFloat4(&transform[0]->orientation));
-			const DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&joint->anchor[1]), DirectX::XMLoadFloat4(&transform[1]->orientation));
+			for (int i = 0; i < joint->anchor_count; i++) {
+				const Vector3 joint_posA = joint->anchor[i].posA;
+				const Vector3 joint_posB = joint->anchor[i].posB;
 
-			Constraint& constraint = joint->constraint;
-			const DirectX::XMVECTOR axis = DirectX::XMLoadFloat3(&constraint.axis);
+				transform[0] = joint->ALPcollider[0]->get_gameobject()->transform.get();
+				transform[1] = joint->ALPcollider[1]->get_gameobject()->transform.get();
+				ALPphysics[0] = joint->ALPcollider[0]->get_ALPphysics();
+				ALPphysics[1] = joint->ALPcollider[1]->get_ALPphysics();
+				solverbody[0] = ALPphysics[0]->solve;
+				solverbody[1] = ALPphysics[1]->solve;
 
-			float delta_impulse = constraint.rhs;
-			DirectX::XMVECTOR delta_velocity[2];
-			delta_velocity[0] = DirectX::XMVectorAdd(solverbody[0]->delta_LinearVelocity, DirectX::XMVector3Cross(solverbody[0]->delta_AngulaVelocity, rA));
-			delta_velocity[1] = DirectX::XMVectorAdd(solverbody[1]->delta_LinearVelocity, DirectX::XMVector3Cross(solverbody[1]->delta_AngulaVelocity, rB));
-			delta_impulse -= constraint.jacDiagInv * DirectX::XMVectorGetX(DirectX::XMVector3Dot(axis, DirectX::XMVectorSubtract(delta_velocity[0], delta_velocity[1])));
+				const DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&joint_posA), DirectX::XMLoadFloat4(&transform[0]->orientation));
+				const DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&joint_posB), DirectX::XMLoadFloat4(&transform[1]->orientation));
 
-			float old_impulse = constraint.accuminpulse;
-			constraint.accuminpulse = ALClamp(old_impulse + delta_impulse, constraint.lowerlimit, constraint.upperlimit);
-			delta_impulse = constraint.accuminpulse - old_impulse;
+				Constraint& constraint = joint->constraint[i];
+				const DirectX::XMVECTOR axis = DirectX::XMLoadFloat3(&constraint.axis);
 
-			solverbody[0]->delta_LinearVelocity = DirectX::XMVectorAdd(     solverbody[0]->delta_LinearVelocity, DirectX::XMVectorScale(axis, delta_impulse * solverbody[0]->inv_mass));
-			solverbody[0]->delta_AngulaVelocity = DirectX::XMVectorAdd(     solverbody[0]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rA, axis), solverbody[0]->inv_inertia), delta_impulse));
-			solverbody[1]->delta_LinearVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_LinearVelocity, DirectX::XMVectorScale(axis, delta_impulse * solverbody[1]->inv_mass));
-			solverbody[1]->delta_AngulaVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rB, axis), solverbody[1]->inv_inertia), delta_impulse));
+				float delta_impulse = constraint.rhs;
+				DirectX::XMVECTOR delta_velocity[2];
+				delta_velocity[0] = DirectX::XMVectorAdd(solverbody[0]->delta_LinearVelocity, DirectX::XMVector3Cross(solverbody[0]->delta_AngulaVelocity, rA));
+				delta_velocity[1] = DirectX::XMVectorAdd(solverbody[1]->delta_LinearVelocity, DirectX::XMVector3Cross(solverbody[1]->delta_AngulaVelocity, rB));
+				delta_impulse -= constraint.jacDiagInv * DirectX::XMVectorGetX(DirectX::XMVector3Dot(axis, DirectX::XMVectorSubtract(delta_velocity[0], delta_velocity[1])));
+
+				float old_impulse = constraint.accuminpulse;
+				constraint.accuminpulse = ALClamp(old_impulse + delta_impulse, constraint.lowerlimit, constraint.upperlimit);
+				delta_impulse = constraint.accuminpulse - old_impulse;
+
+				solverbody[0]->delta_LinearVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_LinearVelocity, DirectX::XMVectorScale(axis, delta_impulse * solverbody[0]->inv_mass));
+				solverbody[0]->delta_AngulaVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rA, axis), solverbody[0]->inv_inertia), delta_impulse));
+				solverbody[1]->delta_LinearVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_LinearVelocity, DirectX::XMVectorScale(axis, delta_impulse * solverbody[1]->inv_mass));
+				solverbody[1]->delta_AngulaVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rB, axis), solverbody[1]->inv_inertia), delta_impulse));
+			}
 		}
 
 		for (auto& pair : pairs) {
@@ -397,8 +410,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 					float old_impulse = constraint.accuminpulse;
 					constraint.accuminpulse = ALClamp(old_impulse + delta_impulse, constraint.lowerlimit, constraint.upperlimit);
 					delta_impulse = constraint.accuminpulse - old_impulse;
-					solverbody[0]->delta_LinearVelocity = DirectX::XMVectorAdd(     solverbody[0]->delta_LinearVelocity, DirectX::XMVectorScale(axis, delta_impulse * solverbody[0]->inv_mass));
-					solverbody[0]->delta_AngulaVelocity = DirectX::XMVectorAdd(     solverbody[0]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rA, axis), solverbody[0]->inv_inertia), delta_impulse));
+					solverbody[0]->delta_LinearVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_LinearVelocity, DirectX::XMVectorScale(axis, delta_impulse * solverbody[0]->inv_mass));
+					solverbody[0]->delta_AngulaVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rA, axis), solverbody[0]->inv_inertia), delta_impulse));
 					solverbody[1]->delta_LinearVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_LinearVelocity, DirectX::XMVectorScale(axis, delta_impulse * solverbody[1]->inv_mass));
 					solverbody[1]->delta_AngulaVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rB, axis), solverbody[1]->inv_inertia), delta_impulse));
 				}
@@ -421,8 +434,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 					float old_impulse = constraint.accuminpulse;
 					constraint.accuminpulse = ALClamp(old_impulse + delta_impulse, constraint.lowerlimit, constraint.upperlimit);
 					delta_impulse = constraint.accuminpulse - old_impulse;
-					solverbody[0]->delta_LinearVelocity = DirectX::XMVectorAdd(		solverbody[0]->delta_LinearVelocity, DirectX::XMVectorScale(axis, delta_impulse * solverbody[0]->inv_mass));
-					solverbody[0]->delta_AngulaVelocity = DirectX::XMVectorAdd(		solverbody[0]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rA, axis), solverbody[0]->inv_inertia), delta_impulse));
+					solverbody[0]->delta_LinearVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_LinearVelocity, DirectX::XMVectorScale(axis, delta_impulse * solverbody[0]->inv_mass));
+					solverbody[0]->delta_AngulaVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rA, axis), solverbody[0]->inv_inertia), delta_impulse));
 					solverbody[1]->delta_LinearVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_LinearVelocity, DirectX::XMVectorScale(axis, delta_impulse * solverbody[1]->inv_mass));
 					solverbody[1]->delta_AngulaVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rB, axis), solverbody[1]->inv_inertia), delta_impulse));
 				}
@@ -440,8 +453,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 					float old_impulse = constraint.accuminpulse;
 					constraint.accuminpulse = ALClamp(old_impulse + delta_impulse, constraint.lowerlimit, constraint.upperlimit);
 					delta_impulse = constraint.accuminpulse - old_impulse;
-					solverbody[0]->delta_LinearVelocity = DirectX::XMVectorAdd(		solverbody[0]->delta_LinearVelocity, DirectX::XMVectorScale(axis, delta_impulse * solverbody[0]->inv_mass));
-					solverbody[0]->delta_AngulaVelocity = DirectX::XMVectorAdd(		solverbody[0]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rA, axis), solverbody[0]->inv_inertia), delta_impulse));
+					solverbody[0]->delta_LinearVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_LinearVelocity, DirectX::XMVectorScale(axis, delta_impulse * solverbody[0]->inv_mass));
+					solverbody[0]->delta_AngulaVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rA, axis), solverbody[0]->inv_inertia), delta_impulse));
 					solverbody[1]->delta_LinearVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_LinearVelocity, DirectX::XMVectorScale(axis, delta_impulse * solverbody[1]->inv_mass));
 					solverbody[1]->delta_AngulaVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rB, axis), solverbody[1]->inv_inertia), delta_impulse));
 				}

@@ -8,12 +8,16 @@ using namespace Physics_function;
 
 void ALP_Joint::reset() {
 	bias = 1;
-	constraint.accuminpulse = 0;
+	constraint[0].accuminpulse = 0;
+	constraint[1].accuminpulse = 0;
+	constraint[2].accuminpulse = 0;
 }
 
 void ALP_Joint::adapt_Jointdata() {
-	anchor[0] = joint->anchor[0];
-	anchor[1] = joint->anchor[1];
+	joint->adapt_anchor();
+
+	anchor = joint->anchors;
+	anchor_count = joint->anchor_count;
 	bias = joint->bias;
 }
 

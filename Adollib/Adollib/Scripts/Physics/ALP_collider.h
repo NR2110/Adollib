@@ -82,7 +82,7 @@ namespace Adollib {
 			Gameobject* gameobject = nullptr;
 
 		public:
-			Collider* get_collitr() const { return coll_itr; };
+			Collider* get_collptr() const { return coll_itr; };
 			ALP_Physics* get_ALPphysics() const { return ALPphysics; };
 			Gameobject* get_gameobject() const { return gameobject; };
 
