@@ -46,6 +46,7 @@ namespace Adollib
 			Capsule,
 			Mesh_Cube,
 			Shaclo,
+			Shaclo_stage,
 			Teach
 		};
 
@@ -118,6 +119,24 @@ namespace Adollib
 
 		}
 		else if (stage_type == Stage_types::Shaclo) {
+			{
+				GO = Gameobject_manager::createFromFBX("../Data/FBX/Model_Shaclo_Winter_Edit.fbx");
+				//objGO = Gameobject_manager::create();
+				//objGO = Gameobject_manager::createFromFBX("../Adollib/DefaultModel/cylinder.fbx");
+				//GO->transform->local_pos = Vector3(-10, 15, -25);
+				//objGO->transform->local_scale = Vector3(0.01f, 0.02f, 0.03f);
+				//GO->transform->local_scale = Vector3(0.01f, 0.01f, 0.01f);
+				//objGO->transform->local_orient = quaternion_from_euler(45, 45, 45);
+				GO->transform->local_orient = quaternion_from_euler(0, 180, 0);
+
+				Collider* coll = GO->addComponent<Collider>();
+				coll->add_shape("../Data/FBX/Model_Shaclo_Winter_Edit.fbx", true,true);
+				//R->load_mesh("../Adollib/DefaultModel/cylinder.fbx");
+				coll->physics_data.is_moveable = false;
+				coll->is_static = true;
+			}
+		}
+		else if (stage_type == Stage_types::Shaclo_stage) {
 			{
 				//objGO = Gameobject_manager::createFromFBX("../Data/FBX/big_plane.fbx");
 				GO = Gameobject_manager::createFromFBX("../Data/FBX/stage_col.fbx");

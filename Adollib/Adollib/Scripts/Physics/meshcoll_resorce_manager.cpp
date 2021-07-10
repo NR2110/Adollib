@@ -20,7 +20,7 @@ using namespace std;
 
 std::unordered_map <std::string, std::vector<Meshcollider_data>> Collider_ResourceManager::meshcoll_datas;
 
-bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<Meshcollider_data>** ret_mesh, bool Right_triangle) {
+bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<Meshcollider_data>** ret_mesh, bool Right_triangle, bool is_permit_edge_have_many_facet) {
 
 	//すでに同名ファイルをLoadしていれば
 	if (meshcoll_datas.count((string)fbxname) == 1) {
@@ -37,14 +37,14 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 #pragma region Load FBX
 
 	//FbxManagerとFbxSceneとFbxImporterオブジェクトを作成
-	FbxManager* manager = FbxManager::Create();
-	manager->SetIOSettings(FbxIOSettings::Create(manager, IOSROOT));
-	FbxImporter* importer = FbxImporter::Create(manager, "");
+	fbxsdk::FbxManager* manager = fbxsdk::FbxManager::Create();
+	manager->SetIOSettings(fbxsdk::FbxIOSettings::Create(manager, IOSROOT));
+	FbxImporter* importer = ::FbxImporter::Create(manager, "");
 	bool import_status = false;
 	import_status = importer->Initialize(fileName, -1, manager->GetIOSettings());
 	_ASSERT_EXPR_A(import_status, importer->GetStatus().GetErrorString());
 
-	FbxScene* scene = FbxScene::Create(manager, "");
+	FbxScene* scene = ::FbxScene::Create(manager, "");
 	// データをインポート
 	import_status = importer->Import(scene);
 	_ASSERT_EXPR_A(import_status, importer->GetStatus().GetErrorString());
@@ -83,7 +83,7 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 		int vertex_count = 0;
 	};
 	std::vector<Subset> subsets;
-	std::vector<Meshcollider_data> _mesh;
+	std::vector<Meshcollider_data>& _mesh = meshcoll_datas[fbxname];
 
 	//TODO : FBX内のgloabal_transformを考慮していない
 
@@ -193,11 +193,11 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 	/*					int intId0 = (int)vertId0;
 						int intId1 = (int)vertId1;*/
 
-						double b = vertId1 * vertId1 - vertId1;
+						u_int b = vertId1 * vertId1 - vertId1;
 
 						////int tableId = (vertId1 * vertId1 - vertId1) * 0.5f + vertId0;
 						//float tableId_ = (intId1 * (intId1 - 1)) * 0.5f + intId0;
-						int tableId = (int)(b * 0.5 + vertId0);
+						int tableId = (int)(b + vertId0 * 2);
 
 						if (edgeID_Table.count(tableId) == 0) {
 							// 初回時は登録のみ
@@ -218,7 +218,11 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 							Physics_function::Edge& edge = edges[edgeID_Table[tableId]];
 							Physics_function::Facet& facetB = facets[edge.facetID[0]];
 
+							if (is_permit_edge_have_many_facet && edge.facetID[0] != edge.facetID[1]) {
+								continue;
+							}
 							assert(edge.facetID[0] == edge.facetID[1] && "Don't let the edges have 3～ facet.");
+
 
 							// エッジに含まれないＡ面の頂点がB面の表か裏かで判断
 							Vector3 s = vertices[facet.vertexID[(o + 2) % 3]];
@@ -353,7 +357,7 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 		halfsize = Vector3(dopbase.max[0] - dopbase.min[0], dopbase.max[1] - dopbase.min[1], dopbase.max[2] - dopbase.min[2]) / 2.0f;
 	}
 
-	meshcoll_datas[fbxname] = _mesh;
+	//meshcoll_datas[fbxname] = _mesh;
 
 
 	//for (auto& data : meshcoll_datas[fbxname]) {
@@ -361,6 +365,8 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 	//}
 	//*ret_mesh = &meshcoll_datas[fbxname];
 	*ret_mesh = &meshcoll_datas[fbxname];
+
+	manager->Destroy();
 
 	return true;
 }

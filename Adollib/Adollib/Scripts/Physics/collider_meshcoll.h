@@ -7,33 +7,33 @@
 namespace Adollib {
 
 	//add_shape(Meshcoll.load_mesh)でmeshをアタッチ
-	class Meshcoll {
-	private:
-		Physics_function::Meshcollider_data* collider_mesh = nullptr;
-		std::string FBX_pass;
+	//class Meshcoll {
+	//private:
+	//	Physics_function::Meshcollider_data* collider_mesh = nullptr;
+	//	std::string FBX_pass;
 
-	public:
+	//public:
 
-		std::vector<Physics_function::Meshcollider_data>* load_mesh(const char* filename) {
-			return load_mesh(filename, true);
-		};
-		std::vector<Physics_function::Meshcollider_data>* load_mesh(const char* filename, bool Right_triangle) {
-			//FBXのLoadを行う
-			std::vector<Physics_function::Meshcollider_data>* meshcoll_data = nullptr;
-			Physics_function::Collider_ResourceManager::CreateMCFromFBX(filename, &meshcoll_data, Right_triangle);
-			FBX_pass = filename; //自身のfilepassの保存
+	//	std::vector<Physics_function::Meshcollider_data>* load_mesh(const char* filename) {
+	//		return load_mesh(filename, true);
+	//	};
+	//	std::vector<Physics_function::Meshcollider_data>* load_mesh(const char* filename, bool Right_triangle) {
+	//		//FBXのLoadを行う
+	//		std::vector<Physics_function::Meshcollider_data>* meshcoll_data = nullptr;
+	//		Physics_function::Collider_ResourceManager::CreateMCFromFBX(filename, &meshcoll_data, Right_triangle);
+	//		FBX_pass = filename; //自身のfilepassの保存
 
-			return meshcoll_data;
+	//		return meshcoll_data;
 
-			//Physics_function::Collider_shape coll_mesh;
-			//coll_mesh.ALPcollider = ALPcollider_itr;
+	//		//Physics_function::Collider_shape coll_mesh;
+	//		//coll_mesh.ALPcollider = ALPcollider_itr;
 
-			//for (auto& data : *meshcoll_data) {
-			//	coll_mesh.mesh_data = &data;
-			//	ALPcollider_itr->shapes.emplace_back(coll_mesh);
-			//}
-		};
-	};
+	//		//for (auto& data : *meshcoll_data) {
+	//		//	coll_mesh.mesh_data = &data;
+	//		//	ALPcollider_itr->shapes.emplace_back(coll_mesh);
+	//		//}
+	//	};
+	//};
 
 	//add_shape(Meshcoll.load_mesh)でmeshはアタッチしてもらうため、Meshcoll_partは隠す
 	namespace Physics_function {
@@ -44,8 +44,6 @@ namespace Adollib {
 			Vector3 rotate;
 			Vector3 size;
 
-			//Meshcoll_partが隠されている...と信じて
-			Meshcollider_data* collider_mesh = nullptr;
 			std::string FBX_pass;
 		private:
 
@@ -55,6 +53,7 @@ namespace Adollib {
 				:center(Vector3(0)), rotate(Vector3(0)), size(1) {
 				shape_tag = Physics_function::ALPCollider_shape_type::Mesh;
 				ALPcollider_ptr = l_ALPcollider_ptr;
+				mesh_data = data;
 			};
 
 			void adapt_Colliderdata() override {

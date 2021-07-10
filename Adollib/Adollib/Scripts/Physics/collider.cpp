@@ -89,11 +89,11 @@ void Collider::Update_hierarchy() {
 //}
 
 //meshcolliderのアタッチ
-void Collider::add_shape(const char* filepass, bool is_right_rtiangle) {
+void Collider::add_shape(const char* filepass, bool is_right_rtiangle, bool is_permit_edge_have_many_facet) {
 
 	//FBXのLoadを行う
 	std::vector<Physics_function::Meshcollider_data>* meshcoll_data = nullptr;
-	Physics_function::Collider_ResourceManager::CreateMCFromFBX(filepass, &meshcoll_data, is_right_rtiangle);
+	Physics_function::Collider_ResourceManager::CreateMCFromFBX(filepass, &meshcoll_data, is_right_rtiangle, is_permit_edge_have_many_facet);
 
 	for (auto& data : *meshcoll_data) {
 		Physics_function::Meshcoll_part* shape = ALPcollider_ptr->add_mesh_shape(filepass, &data);

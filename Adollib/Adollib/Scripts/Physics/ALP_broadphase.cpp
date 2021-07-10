@@ -240,7 +240,7 @@ void Physics_function::BroadMidphase(Scenelist Sce,
 		std::list<Insert_edge*>::iterator itr_end = axis_list.end();
 
 
-		itr[next_num]++;
+		if(itr[next_num] != itr_end)itr[next_num]++;
 
 		while (true) {
 			if (itr[next_num] == itr_end)break;

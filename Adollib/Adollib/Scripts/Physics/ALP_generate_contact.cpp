@@ -16,7 +16,7 @@ using namespace Closest_func;
 #pragma region generate_contact
 //:::::::::::::::::::::::::::
 
-void Physics_function::generate_contact (std::vector<Contacts::Contact_pair*>& pairs) {
+void Physics_function::generate_contact(std::vector<Contacts::Contact_pair*>& pairs) {
 
 	bool is_crossing = false;
 	for (auto& pair : pairs) {
@@ -1983,6 +1983,13 @@ bool Physics_function::generate_contact_box_capsule(const Collider_shape* box, c
 
 #pragma region BOX-MESH
 
+struct Crossing_struct {
+	float ACpenetration = 0;
+	Vector3 ACnormal = Vector3(0);
+	Vector3 ACcontact_pointA = Vector3(0);
+	Vector3 ACcontact_pointB = Vector3(0);
+};
+
 bool Physics_function::generate_contact_box_mesh(const Collider_shape* box, const Collider_shape* mesh, Contacts::Contact_pair*& pair, bool& is_crossing) {
 	//const std::list<ALP_Collider>::iterator& box = box_part->get_ALPcollider();
 	//const std::list<ALP_Collider>::iterator& mesh = mesh_part->get_ALPcollider();
@@ -2023,9 +2030,8 @@ bool Physics_function::generate_contact_box_mesh(const Collider_shape* box, cons
 		triangle.world_orientation = mesh->world_orientation();
 		triangle.world_scale = mesh->world_scale();
 
-		int debug_conut = 0;
+		std::vector<Crossing_struct> crossing_structs;
 		for (const auto& faset : mesh->get_mesh_data()->facets) {
-			debug_conut++;
 
 			auto& vertices = mesh->get_mesh_data()->vertices;
 			triangle.vertex_position[0] = (vertices)[faset.vertexID[0]];
@@ -2130,11 +2136,14 @@ bool Physics_function::generate_contact_box_mesh(const Collider_shape* box, cons
 
 				p0 += vector3_quatrotate(-Wn, obb.world_orientation.inverse()) * smallest_penetration;
 
+				Crossing_struct crossing;
 				is_AC = true;
-				ACpenetration = smallest_penetration;
-				ACnormal = Wn;
-				ACcontact_pointA = p0;
-				ACcontact_pointB = p1;
+				crossing.ACpenetration = smallest_penetration;
+				crossing.ACnormal = Wn;
+				crossing.ACcontact_pointA = p0;
+				crossing.ACcontact_pointB = p1;
+				crossing_structs.emplace_back(crossing);
+
 			}
 
 			//obb‚Ì’¸“_‚ªtriangle‚Ì–Ê‚ÆÕ“Ë‚µ‚½ê‡
@@ -2185,11 +2194,13 @@ bool Physics_function::generate_contact_box_mesh(const Collider_shape* box, cons
 					p1 += Wn * smallest_penetration;
 				}
 
+				Crossing_struct crossing;
 				is_AC = true;
-				ACpenetration = smallest_penetration;
-				ACnormal = Wn;
-				ACcontact_pointA = p0;
-				ACcontact_pointB = p1;
+				crossing.ACpenetration = smallest_penetration;
+				crossing.ACnormal = Wn;
+				crossing.ACcontact_pointA = p0;
+				crossing.ACcontact_pointB = p1;
+				crossing_structs.emplace_back(crossing);
 			}
 			//‡Bobb0‚Ì•Ó‚Æobb1‚Ì•Ó‚ÆÕ“Ë‚µ‚½ê‡
 			else if (smallest_case == SAT_TYPE::EDGE_EDGE)
@@ -2238,42 +2249,58 @@ bool Physics_function::generate_contact_box_mesh(const Collider_shape* box, cons
 					Vector3(0,0,1)
 				};
 
-
+				Crossing_struct crossing;
 				is_AC = true;
-				ACpenetration = smallest_penetration;
-				ACnormal = Wn;
-				ACcontact_pointA = p[0] + s * b_axis[smallest_axis[0]];
-				ACcontact_pointB = (p[1] + t * triangle_edge_dir) * smallest_triangle.world_scale;
+				crossing.ACpenetration = smallest_penetration;
+				crossing.ACnormal = Wn;
+				crossing.ACcontact_pointA = p[0] + s * b_axis[smallest_axis[0]];
+				crossing.ACcontact_pointB = (p[1] + t * triangle_edge_dir) * smallest_triangle.world_scale;
+				crossing_structs.emplace_back(crossing);
 			}
 
 			else assert(0);
 
+		}
 
+		if (is_AC)
+		{
+			is_crossing = true;
+			if (pair->check_oncoll_only == true) return false;
 
-			if (is_AC)
-			{
-				is_crossing = true;
+			float smallest_penetrate = FLT_MAX;
+			Vector3 smallest_axis = Vector3(0);
+			for (const auto& crossing : crossing_structs) {
+				if (smallest_penetrate > crossing.ACpenetration) {
+					smallest_penetrate = crossing.ACpenetration;
+					smallest_axis = crossing.ACnormal;
+				}
+			}
+
+			for (const auto& crossing : crossing_structs) {
+				if (vector3_dot(crossing.ACnormal, smallest_axis) < 0)continue;
 
 				//oncoll_enter‚Ì‚Ý‚Ìê‡‚±‚±‚Åreturn
-				if (pair->check_oncoll_only == true) return false;
 
 				if (pair->body[0]->get_shape_tag() == box->get_shape_tag())
 					pair->contacts.addcontact(
-						ACpenetration,
-						ACnormal,
-						ACcontact_pointA,
-						ACcontact_pointB
+						crossing.ACpenetration,
+						crossing.ACnormal,
+						crossing.ACcontact_pointA,
+						crossing.ACcontact_pointB
 					);
 				else
 					pair->contacts.addcontact(
-						ACpenetration,
-						-ACnormal,
-						ACcontact_pointB,
-						ACcontact_pointA
+						crossing.ACpenetration,
+						-crossing.ACnormal,
+						crossing.ACcontact_pointB,
+						crossing.ACcontact_pointA
 					);
 			}
 
+
 		}
+
+
 		return is_AC;
 
 

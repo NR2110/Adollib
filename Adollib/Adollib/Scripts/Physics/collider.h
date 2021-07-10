@@ -95,7 +95,7 @@ namespace Adollib {
 		T* add_shape() { return ALPcollider_ptr->add_shape<T>(); };
 
 		//meshcolliderのアタッチ
-		void add_shape(const char* filepass, bool is_right_rtiangle = true);
+		void add_shape(const char* filepass, bool is_right_rtiangle = true, bool is_permit_edge_have_many_facet = false);
 
 		//慣性モーメントをユーザー定義で設定する
 		void set_tensor(const Matrix33& tensor) { ALPphysics_ptr->set_tensor(tensor); };
