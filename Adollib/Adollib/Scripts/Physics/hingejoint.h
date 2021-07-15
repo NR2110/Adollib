@@ -1,6 +1,10 @@
 #pragma once
 
 #include "joint_base.h"
+#include "collider.h"
+#include "../Object/gameobject.h"
+
+#include "../Imgui/debug.h"
 
 namespace Adollib {
 	class Collider;
@@ -17,7 +21,9 @@ namespace Adollib {
 			Anchor anchor_s; //Hinge 始点
 			Anchor anchor_g; //Hinge 終点
 
-			float hinge_pow = 0;
+			float hinge_pow = 0; //ジョイントの強さ 大きすぎると軸が動かなくなる?
+
+			Vector2 limit = Vector2(0, 360);
 
 		public:
 			void adapt_anchor() override {
@@ -25,6 +31,11 @@ namespace Adollib {
 
 				anchors[0] = anchor_s;
 				anchors[1] = anchor_g;
+
+				Vector3 contactP0;
+				Vector3 contactP1;
+				float penetrate;
+				limit_effect(contactP0, contactP1, penetrate);
 			}
 
 			Matrix33 tensor_effect(const Collider* coll) const override {
@@ -46,6 +57,71 @@ namespace Adollib {
 
 				return mat;
 			}
+
+			bool limit_effect(Vector3& contactP0, Vector3& contactP1, float& penetrate) const override {
+
+				//Hingeの向き
+				const Vector3 hinge_vec[2] = {
+					(anchor_s.posA - anchor_g.posA).unit_vect(),
+					(anchor_s.posB - anchor_g.posB).unit_vect()
+				};
+				//Hingeのworld_vec
+				const Vector3 hinge_vec_world[2] = {
+					vector3_quatrotate(hinge_vec[0],collider_comp[0]->gameobject->transform->orientation),
+					vector3_quatrotate(hinge_vec[1],collider_comp[1]->gameobject->transform->orientation),
+				};
+				//Hingeを90度回転させたlocal_vec
+				const Vector3 hinge_vec_rot90[2] = {
+					vector3_quatrotate(Vector3(1,0,0),quaternion_from_to_rotate(Vector3(0,1,0),hinge_vec[0])),
+					vector3_quatrotate(Vector3(1,0,0),quaternion_from_to_rotate(Vector3(0,1,0),hinge_vec[1]))
+				};
+				const Vector3 hinge_vec_rot90_world[2] = {
+					vector3_quatrotate(hinge_vec_rot90[0],collider_comp[0]->gameobject->transform->orientation).unit_vect(),
+					vector3_quatrotate(hinge_vec_rot90[1],collider_comp[1]->gameobject->transform->orientation).unit_vect(),
+				};
+
+				//角度を得る
+				float radian = vector3_radian(hinge_vec_rot90_world[0], hinge_vec_rot90_world[1]);
+				if (vector3_dot(hinge_vec_world[0], vector3_cross(hinge_vec_rot90_world[0], hinge_vec_rot90_world[1])) < 0) {
+					radian = DirectX::XM_PI + DirectX::XM_PI - radian; //0~180~0 を 0~360に治す
+				};
+
+				const Vector2 limit_rad = Vector2(ToRadian(limit.x), ToRadian(limit.y)); //limitえおradianに治した
+
+				Debug::set("angle", ToAngle(radian));
+
+				// もしlimitの影響を受ける位置に入なければfalseをreturn
+				if (limit_rad.x <= limit_rad.y) {
+					if (limit_rad.x <= radian && radian <= limit_rad.y)return false;
+				}
+				else if (limit_rad.y <= limit_rad.x) {
+					if (!(limit_rad.y <= radian && radian <= limit_rad.x))return false;
+				}
+
+				//radianを基準にcosで一番近いlimitを求める
+				const Vector2 limit_rad_off = Vector2(limit_rad.x - radian, limit_rad.y - radian);
+
+				//contactP1の基準に
+				//contactP0を持ってくる
+				if (cosf(limit_rad_off.x) < cosf(limit_rad_off.y)) {
+					//limit_xのほうが近い
+					contactP0 = vector3_quatrotate(hinge_vec_rot90[0], quaternion_radian_axis(limit_rad.y, hinge_vec[0]));
+					contactP1 = hinge_vec_rot90[1];
+
+					penetrate = 2 * cosf(DirectX::XM_PIDIV2 - fabsf(limit_rad_off.y) * 0.5f);
+				}
+				else {
+					//limit_yのほうが近い
+					contactP0 = vector3_quatrotate(hinge_vec_rot90[0], quaternion_radian_axis(limit_rad.x, hinge_vec[0]));
+					contactP1 = hinge_vec_rot90[1];
+
+					penetrate = 2 * cosf(DirectX::XM_PIDIV2 - fabsf(limit_rad_off.x) * 0.5f);
+				}
+
+
+				return true;
+			}
+
 
 
 		};

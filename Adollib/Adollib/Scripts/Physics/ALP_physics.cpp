@@ -201,6 +201,7 @@ void ALP_Physics::update_tensor_and_barycenter(const std::vector<Collider_shape*
 
 
 		for (auto& joint : joints) {
+			//auto a = joint->joint->get_colliderA();
 			inertial_tensor += joint->joint->tensor_effect(ALPcollider->get_collptr());
 		}
 

@@ -77,7 +77,7 @@ namespace Adollib
 			float contact_threrhold_tangent = 0.002f;//衝突点の閾値
 
 			float linear_sleep_threrhold = 0.2f; //freezeの閾値
-			float angula_sleep_threrhold = 0.2f; //freezeの閾値
+			float angula_sleep_threrhold = 0.02f; //freezeの閾値
 
 
 

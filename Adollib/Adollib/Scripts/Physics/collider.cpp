@@ -73,8 +73,8 @@ void Collider::Update_hierarchy() {
 
 		ImGui::DragFloat("friction", &physics_data.dynamic_friction, 0.001f, 0, 100000000.f);
 
-		ImGui::DragFloat("linear_drag", &physics_data.drag, 0.01f, 0, 0);
-		ImGui::DragFloat("anglar_drag", &physics_data.anglar_drag, 0.01f, 0, 0);
+		ImGui::DragFloat("linear_drag", &physics_data.drag, 0.01f, 0, 1);
+		ImGui::DragFloat("anglar_drag", &physics_data.anglar_drag, 0.01f, 0, 1);
 
 
 		ImGui::EndTabBar();
@@ -103,7 +103,7 @@ void Collider::add_shape(const char* filepass, bool is_right_rtiangle, bool is_p
 	//coll_mesh.ALPcollider = ALPcollider_itr;
 }
 
-void Collider::set_ptr_to_joint(Physics_function::ALP_Joint* joint) {
+void Collider::set_ptr_to_joint(Physics_function::ALP_Joint*& joint) {
 	if (joint->ALPcollider[0] == nullptr)joint->ALPcollider[0] = ALPcollider_ptr;
 	else if (joint->ALPcollider[1] == nullptr)joint->ALPcollider[1] = ALPcollider_ptr;
 	else assert(0 && "too many ALP_Collider to attach joint");

@@ -130,7 +130,7 @@ namespace Adollib
 				GO->transform->local_orient = quaternion_from_euler(0, 180, 0);
 
 				Collider* coll = GO->addComponent<Collider>();
-				coll->add_shape("../Data/FBX/Model_Shaclo_Winter_Edit.fbx", true,true);
+				coll->add_shape("../Data/FBX/Model_Shaclo_Winter_Edit.fbx", true, true);
 				//R->load_mesh("../Adollib/DefaultModel/cylinder.fbx");
 				coll->physics_data.is_moveable = false;
 				coll->is_static = true;
@@ -176,6 +176,23 @@ namespace Adollib
 				coll->is_static = true;
 			}
 		}
+
+		Vector3 axisA = Vector3(1, 1, 0).unit_vect();
+		Quaternion x90 = quaternion_from_euler(90, 0, 0);
+		Quaternion Y90 = quaternion_from_euler(0, 90, 0);
+		Quaternion Z90 = quaternion_from_euler(0, 0, 90);
+
+		Quaternion xy90 = quaternion_from_euler(90, 90, 0);
+		Quaternion yz90 = quaternion_from_euler(0, 90, 90);
+		Quaternion zx90 = quaternion_from_euler(90, 0, 90);
+
+		Vector3 axisB = Vector3(0, 0, 1);
+		if (vector3_dot(axisA, axisB) == 0) axisB = Vector3(0, 1, 0);
+
+		Vector3 axis = vector3_cross(axisA, axisB).unit_vect();
+
+
+		int dsdvf = 0;
 	}
 
 	// 毎フレーム呼ばれる更新処理
@@ -711,14 +728,14 @@ namespace Adollib
 				imgui_num++;
 			}
 
-			//gear
+			//patapata
 			{
 
 				static int TREE_pyramid_count = 3;
 				static float TREE_pyramid_pos[3] = { 0 };
 				bool summon = false;
 				ImGui::Separator();
-				ImGui::Text("GEAR"); ImGui::NextColumn();
+				ImGui::Text("patapata"); ImGui::NextColumn();
 				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
 				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), TREE_pyramid_pos, 0.1f); ImGui::NextColumn(); ImGui::NextColumn();
 				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &TREE_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
@@ -760,7 +777,21 @@ namespace Adollib
 					Collider* gear_joint_collider = gear_joint->addComponent<Collider>();
 					gear_joint_collider->physics_data.is_moveable = false;
 
-					Joint::add_Hingejoint(gear_joint_collider, coll, Vector3(0, +10, 0), Vector3(0, -10, 0), Vector3(0, +10, 0), Vector3(0, -10, 0), 2, 0.1f);
+					//auto hinge = Joint::add_Hingejoint(gear_joint_collider, coll, Vector3(0, +10, 0), Vector3(0, -10, 0), Vector3(0, +10, 0), Vector3(0, -10, 0), 2, 0.1f);
+					auto hinge = Joint::add_Hingejoint(
+						gear_joint_collider,
+						coll,
+						Vector3(0, 10, 10).unit_vect() * 10, Vector3(0, -10, -10).unit_vect() * 10,
+						Vector3(0, +10, 0), Vector3(0, -10, 0),
+						2, 0.1f
+					);
+					//auto hinge = Joint::add_Hingejoint(
+					//	gear_joint_collider, coll,
+					//	Vector3(0, -10, 0), Vector3(0, +10, 0),
+					//	Vector3(0, +10, 0), Vector3(0, -10, 0),
+					//	2, 0.1f
+					//);
+					hinge->limit = Vector2(0, 90);
 
 				}
 				imgui_num++;

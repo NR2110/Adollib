@@ -15,7 +15,7 @@ namespace Adollib {
 		class Joint_base {
 		public:
 			Joint_base(Collider* l_colliderA_comp, Collider* l_colliderB_comp, ALP_Joint* l_ALPjoint)
-				:  ALPjoint(l_ALPjoint)
+				: ALPjoint(l_ALPjoint)
 			{
 				collider_comp[0] = l_colliderA_comp;
 				collider_comp[1] = l_colliderB_comp;
@@ -45,6 +45,9 @@ namespace Adollib {
 
 			//joint‚Ìtensor‚Ö‚Ì‰e‹¿‚ð‚©‚¦‚·
 			virtual Matrix33 tensor_effect(const Collider* coll) const = 0;
+
+			//limit‚Ì‰e‹¿‚ð•Ô‚·
+			virtual bool limit_effect(Vector3& contactP0, Vector3& contactP1, float& penetrate) const = 0;
 
 			void destroy();
 		};

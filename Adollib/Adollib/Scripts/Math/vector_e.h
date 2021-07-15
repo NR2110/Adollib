@@ -230,7 +230,8 @@ namespace Adollib {
 	}
 	inline float Adollib::vector3_radian(const Vector3& P, const Vector3& Q) {
 
-		return acosf(Adollib::vector3_dot(P.unit_vect(), Q.unit_vect()));
+		float buf = ALClamp(Adollib::vector3_dot(P.unit_vect(), Q.unit_vect()), -1, 1);
+		return acosf(buf);
 	}
 
 	inline Vector3 Adollib::vector3_look_at(const Vector3& P, const Vector3& Q) {

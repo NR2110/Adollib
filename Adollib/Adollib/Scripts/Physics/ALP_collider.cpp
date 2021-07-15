@@ -123,7 +123,7 @@ void ALP_Collider::destroy()
 		delete shape;
 	}
 
-	for (auto j : joints) {
+	for (auto& j : joints) {
 		j->destroy(this, true);
 		delete j;
 	}

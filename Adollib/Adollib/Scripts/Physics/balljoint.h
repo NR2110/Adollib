@@ -27,6 +27,9 @@ namespace Adollib {
 				return matrix33_zero();
 			}
 
+			bool limit_effect(Vector3& contactP0, Vector3& contactP1, float& penetrate) const override {
+				return false;
+			}
 
 
 		};

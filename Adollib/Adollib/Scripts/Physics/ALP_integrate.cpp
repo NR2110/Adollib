@@ -1,8 +1,28 @@
 #include "ALP_integrate.h"
+
+#include "ALP_collider.h"
+#include "ALP_Physics.h"
+#include "ALP_joint.h"
 #include "ALP__physics_manager.h"
+
 using namespace Adollib;
 using namespace Physics_function;
 using namespace Contacts;
+
+
+//:::::::::::::::::::::::::::::::::::::::::::::::::::
+#pragma region ALP_Joint
+//:::::::::::::::::::::::::::::::::::::::::::::::::::
+void Physics_function::adapt_joint_limit(std::list<Physics_function::ALP_Joint*>& ALP_Joints) {
+
+	std::for_each(ALP_Joints.begin(), ALP_Joints.end(), [](ALP_Joint* joint) {
+		}
+	);
+}
+#pragma endregion
+//:::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
 
 //:::::::::::::::::::::::::::::::::::::::::::::::::::
 #pragma region ALP_colliders
@@ -15,15 +35,6 @@ void Physics_function::update_world_trans(std::list<Physics_function::ALP_Collid
 		}
 	);
 }
-
-//
-//void Physics_function::update_dop(std::list<Physics_function::ALP_Collider*>& ALP_colliders) {
-//
-//	std::for_each(ALP_colliders.begin(), ALP_colliders.end(), [](ALP_Collider* coll) {
-//		coll->update_shapes_dop();
-//		}
-//	);
-//}
 
 void Physics_function::reset_oncoll_bits(std::list<Physics_function::ALP_Collider*>& ALP_colliders) {
 

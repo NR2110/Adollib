@@ -18,14 +18,16 @@ namespace Adollib {
 		public:
 			float bias = 0; // 拘束の強さの調整値
 
-			int anchor_count = 0;
+			int anchor_count = 0; //anchorがいくつあるか
 			Anchor* anchor; // 剛体のローカル座標系における接続点
-
 
 			Collider* collider_comp[2] = { nullptr }; // 剛体のcomponentへのポインタ
 			ALP_Collider* ALPcollider[2] = { nullptr }; // 剛体へのポインタ
 
-			Contacts::Constraint constraint[3]; // 拘束計算用
+			Contacts::Constraint constraint[3]; // anchor拘束計算用
+
+			Vector3 limit_constraint_pos[2]; //limit拘束計算用 拘束点
+			Contacts::Constraint constraint_limit; // limit拘束計算用
 
 			Joint_base* joint = nullptr; //ユーザーの触る情報へのポインタ
 

@@ -43,6 +43,9 @@ HingeJoint* Joint::add_Hingejoint(
 	HingeJoint* hingejoint = newD HingeJoint(colliderA, colliderB, joint);
 	joint->joint = hingejoint;
 
+	colliderA->physics_data.drag = 0.8f;
+	colliderB->physics_data.drag = 0.8f;
+
 	hingejoint->anchor_s.posA = anchorA_s;
 	hingejoint->anchor_s.posB = anchorB_s;
 

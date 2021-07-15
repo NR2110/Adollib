@@ -210,6 +210,7 @@
     <ClInclude Include="Scripts\Physics\ALP_anchor.h" />
     <ClInclude Include="Scripts\Physics\ALP_joint.h" />
     <ClInclude Include="Scripts\Physics\balljoint.h" />
+    <ClInclude Include="Scripts\Physics\coneTwistjoint.h" />
     <ClInclude Include="Scripts\Physics\hingejoint.h" />
     <ClInclude Include="Scripts\Physics\joint_base.h" />
     <ClInclude Include="Scripts\Physics\ALP_raycast.h" />

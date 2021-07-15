@@ -2,7 +2,7 @@
   コード生成しています。
   1 of 8341 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    66 functions had inline decision re-evaluated but remain unchanged
+    119 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
 camera_manager.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
 camera_s.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。

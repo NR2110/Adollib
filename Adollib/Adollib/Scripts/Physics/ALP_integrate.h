@@ -1,16 +1,17 @@
 #pragma once
-#include <memory>
-#include "../Scene/scene.h"
-#include "ALP_collider.h"
-#include "collider_shape.h"
-
+#include <list>
 
 namespace Adollib {
 	namespace Physics_function {
+		class ALP_Joint;
+		class ALP_Collider;
+		class ALP_Physics;
+
+		//::: ALP_Joint ::::::::
+		void adapt_joint_limit(std::list<Physics_function::ALP_Joint*>& ALP_Joints);
 
 
 		//::: ALP_colliders ::::::::::
-
 		// gameobjectのtransformからcolliderのworld空間での情報を更新
 		void update_world_trans(std::list<Physics_function::ALP_Collider*>& ALP_colliders);
 
@@ -19,6 +20,7 @@ namespace Adollib {
 
 		// oncoll_bitsのリセット
 		void reset_oncoll_bits(std::list<Physics_function::ALP_Collider*>& ALP_colliders);
+
 
 		//::: ALP_phyicses ::::::::::
 

@@ -8,6 +8,7 @@
 #include "../Imgui/work_meter.h"
 
 #include "collider.h"
+#include "ALP_joint.h"
 
 #include "ALP_raycast.h"
 
@@ -16,7 +17,7 @@ using namespace Physics_function;
 using namespace Contacts;
 
 //ContactPointの表示
-#define Draw_Contact
+//#define Draw_Contact
 
 //::: staticメンバの初期化 :::::
 #pragma region static_initialize
@@ -138,6 +139,45 @@ bool Phyisics_manager::update(Scenelist Sce)
 	// 位置の更新
 	integrate(ALP_physicses[Sce]);
 
+#ifndef Draw_Contact
+	static bool init = true;
+	static const int size = 100;
+	static Gameobject* debug_go[size];
+	if (init) {
+		for (int i = 0; i < size; i++) {
+			debug_go[i] = Gameobject_manager::createSphere();
+			debug_go[i]->transform->local_scale = Vector3(1) * 0.3f;
+			if (i % 2 == 0)debug_go[i]->material->color = Vector4(1, 0.5f, 0.5f, 1);
+			else debug_go[i]->material->color = Vector4(0.5f, 1, 0.5f, 1);
+
+			debug_go[i]->is_hierarchy = false;
+		}
+		init = false;
+	}
+
+	for (int i = 0; i < size; i++) {
+		debug_go[i]->transform->local_pos = Vector3(1000000, 1000000, 1000000);
+	}
+
+	int count = 0;
+	for (const auto& p : ALP_joints) {
+
+		count += 2;
+		if (count > size)break;
+		const auto coll0 = p->joint->get_colliderA();
+		const auto coll1 = p->joint->get_colliderB();
+
+		//debug_go[count - 1]->transform->local_pos = vector3_quatrotate((p.contacts.contactpoints[i].point[0]), coll0.get_gameobject()->world_orientate()) + coll0.get_gameobject()->world_position();
+		//debug_go[count - 2]->transform->local_pos = vector3_quatrotate((p.contacts.contactpoints[i].point[1]), coll1.get_gameobject()->world_orientate()) + coll1.get_gameobject()->world_position();
+
+		debug_go[count - 1]->transform->local_pos = coll0->gameobject->transform->position + vector3_quatrotate(p->limit_constraint_pos[0], coll0->gameobject->transform->orientation);
+		debug_go[count - 2]->transform->local_pos = coll1->gameobject->transform->position + vector3_quatrotate(p->limit_constraint_pos[1], coll1->gameobject->transform->orientation);
+		int adfsdg = 0;
+
+
+	}
+
+#endif // DEBUG
 
 #ifdef Draw_Contact
 	static bool init = true;
@@ -201,7 +241,7 @@ bool Phyisics_manager::update_Gui() {
 		ImGui::InputInt("accuracy", &physicsParams.solver_iterations, 1, 200);
 
 		//sleepの閾値
-		ImGui::InputFloat("linear_sleep_threrhold", &physicsParams.linear_sleep_threrhold,0.01f);
+		ImGui::InputFloat("linear_sleep_threrhold", &physicsParams.linear_sleep_threrhold, 0.01f);
 		ImGui::InputFloat("angular_sleep_threrhold", &physicsParams.angula_sleep_threrhold, 0.01f);
 
 		//貫通時のばねの強さ
