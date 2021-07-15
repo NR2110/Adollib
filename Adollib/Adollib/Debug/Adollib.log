@@ -1,25 +1,3 @@
-﻿  demo_house.cpp
-  object_manager.cpp
-  player_manager.cpp
-  loop.cpp
-  gameobject_manager.cpp
-  ALP__physics_manager.cpp
-  ALP_broadphase.cpp
-  ALP_collider.cpp
-  ALP_integrate.cpp
-  ALP_joint.cpp
-  ALP_physics.cpp
-  ALP_resolve_contact.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(72,38): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(70,45): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(75,26): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-  ALP_resolve_contact_SIM.cpp
-  collider.cpp
-  collider_shape.cpp
-  contact.cpp
-  joint.cpp
-  joint_base.cpp
-  ray.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\vector_e.h(339): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
+﻿  object_manager.cpp
 C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\vector_e.h(339): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

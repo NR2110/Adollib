@@ -31,11 +31,6 @@ namespace Adollib {
 
 				anchors[0] = anchor_s;
 				anchors[1] = anchor_g;
-
-				Vector3 contactP0;
-				Vector3 contactP1;
-				float penetrate;
-				limit_effect(contactP0, contactP1, penetrate);
 			}
 
 			Matrix33 tensor_effect(const Collider* coll) const override {

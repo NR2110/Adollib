@@ -14,9 +14,10 @@ namespace Adollib {
 			ConetwistJoint(Collider* l_colliderA_comp, Collider* l_colliderB_comp, ALP_Joint* l_ALPjoint)
 				: Joint_base(l_colliderA_comp, l_colliderB_comp, l_ALPjoint) {}
 
-			Anchor anchor; //
+			Anchor anchor; //Ú‘±“_
+			Vector3 limit_axis[2]; //² axis‚Æaxis‚ÌŠp“x‚Ålimit‚ğ‚Æ‚é
 
-			float limit;
+			float limit = 0;
 
 		public:
 			void adapt_anchor() override {

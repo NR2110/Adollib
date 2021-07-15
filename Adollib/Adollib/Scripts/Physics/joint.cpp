@@ -9,9 +9,9 @@ using namespace Adollib;
 using namespace Physics_function;
 
 BallJoint* Joint::add_balljoint(
-	Collider* colliderA,Collider* colliderB,
-	Vector3 anchorA, Vector3 anchorB,
-	float bias
+	Collider* colliderA, Collider* colliderB,
+	const Vector3& anchorA, const Vector3& anchorB,
+	const float& bias
 ) {
 	//joint‚Ì¶¬
 	auto joint = Phyisics_manager::add_Joint();
@@ -30,10 +30,10 @@ BallJoint* Joint::add_balljoint(
 
 HingeJoint* Joint::add_Hingejoint(
 	Collider* colliderA, Collider* colliderB,
-	Vector3 anchorA_s, Vector3 anchorA_g,
-	Vector3 anchorB_s, Vector3 anchorB_g,
-	float hingepow,
-	float bias
+	const Vector3& anchorA_s, const Vector3& anchorA_g,
+	const Vector3& anchorB_s, const Vector3& anchorB_g,
+	const float& hingepow ,
+	const float& bias
 ) {
 	//joint‚Ì¶¬
 	auto joint = Phyisics_manager::add_Joint();
@@ -55,6 +55,31 @@ HingeJoint* Joint::add_Hingejoint(
 	hingejoint->bias = bias;
 	hingejoint->hinge_pow = hingepow;
 	return hingejoint;
+}
+
+ConetwistJoint* Joint::add_Conetwistjoint(
+	Collider* colliderA, Collider* colliderB,
+	const Vector3& anchorA, const Vector3& anchorB,
+	const Vector3& axisA, const Vector3& axisB,
+	const float& bias
+) {
+	//joint‚Ì¶¬
+	auto joint = Phyisics_manager::add_Joint();
+	colliderA->set_ptr_to_joint(joint);
+	colliderB->set_ptr_to_joint(joint);
+
+	ConetwistJoint* conetwist = newD ConetwistJoint(colliderA, colliderB, joint);
+	joint->joint = conetwist;
+
+	conetwist->anchor.posA = anchorA;
+	conetwist->anchor.posB = anchorB;
+
+	conetwist->limit_axis[0] = axisA;
+	conetwist->limit_axis[1] = axisA;
+
+	conetwist->bias = bias;
+
+	return conetwist;
 }
 
 

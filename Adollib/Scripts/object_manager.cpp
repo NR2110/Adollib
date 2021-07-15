@@ -252,6 +252,7 @@ namespace Adollib
 
 				if (summon == true) {
 					Gameobject* pearent = Gameobject_manager::create("BOXpyramid");
+					GOs.emplace_back(pearent);
 					for (int i = 0; i < BOX_pyramid_count; i++) {
 						for (int o = 0; o < BOX_pyramid_count - i; o++) {
 							Collider* out_coll;
@@ -285,6 +286,7 @@ namespace Adollib
 
 				if (summon == true) {
 					Gameobject* pearent = Gameobject_manager::create("Spherepyramid");
+					GOs.emplace_back(pearent);
 					for (int i = 0; i < SPHERE_pyramid_count; i++) {
 						for (int o = 0; o < SPHERE_pyramid_count - i; o++) {
 							Collider* coll;
@@ -468,9 +470,10 @@ namespace Adollib
 
 				if (summon == true) {
 					Gameobject* pearent = Gameobject_manager::create("Treepyramid");
+					GOs.emplace_back(pearent);
 					for (int i = 0; i < TREE_pyramid_count; i++) {
 						for (int o = 0; o < TREE_pyramid_count - i; o++) {
-							pearent->add_child(
+							 pearent->add_child(
 								set_tree(
 									Vector3(10.0f * o - (TREE_pyramid_count - i) * 10.0f / 2.0f + TREE_pyramid_pos[0],
 										TREE_pyramid_pos[1] + i * 13.0f,
@@ -503,6 +506,7 @@ namespace Adollib
 				static Gameobject* joint_base = Gameobject_manager::create("BallJoint_Shpererope_joint_base");
 				if (summon == true) {
 					Gameobject* pearent = Gameobject_manager::create("BallJoint_Shpererope");
+					GOs.emplace_back(pearent);
 					Collider* old_coll = nullptr;
 					Gameobject* old_go = nullptr;
 
@@ -579,6 +583,7 @@ namespace Adollib
 				static Gameobject* joint_base = Gameobject_manager::create("BallJoint_Boxrope_joint_base");
 				if (summon == true) {
 					Gameobject* pearent = Gameobject_manager::create("BOXpyramid");
+					GOs.emplace_back(pearent);
 					Collider* old_coll = nullptr;
 					Gameobject* old_go = nullptr;
 
@@ -795,6 +800,59 @@ namespace Adollib
 
 				}
 				imgui_num++;
+			}
+
+			//ConeTwist
+			{
+
+				static int TREE_pyramid_count = 3;
+				static float TREE_pyramid_pos[3] = { 0 };
+				bool summon = false;
+				ImGui::Separator();
+				ImGui::Text("ConeWist"); ImGui::NextColumn();
+				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
+				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), TREE_pyramid_pos, 0.1f); ImGui::NextColumn(); ImGui::NextColumn();
+				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &TREE_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
+
+				if (summon == true) {
+					const Vector3 pos = Vector3(TREE_pyramid_pos[0], TREE_pyramid_pos[1] + 8, TREE_pyramid_pos[2]);
+					const Vector3 size = Vector3(1, 2, 1);
+
+
+					Gameobject* Twist = Gameobject_manager::create("Twist");
+					GOs.emplace_back(Twist);
+					Twist->transform->local_pos = pos;
+
+					Collider* save_coll = nullptr;
+					for (int sphere_num = 0; sphere_num < TREE_pyramid_count; sphere_num++) {
+
+						Gameobject* GO = Gameobject_manager::createCube("part");
+						GO->transform->local_scale = size;
+						GO->transform->local_orient = quaternion_from_euler(90, 0, 0);
+						GO->transform->local_pos = Vector3(size.x* sphere_num * 2, size.y, 0);
+
+						Collider* coll = GO->addComponent<Collider>();
+						coll->add_shape<Capsule>();
+
+						if (sphere_num == 0)coll->physics_data.is_moveable = false;
+
+						if (save_coll != nullptr) {
+							Joint::add_Conetwistjoint(
+								save_coll, coll,
+								Vector3(0, -(size.y + 2), 0), Vector3(0, +(size.y + 2), 0),
+								Vector3(0, 1, 0), Vector3(0, 1, 0)
+							);
+						}
+
+						save_coll = coll;
+						GO->material->color = Vector4(1, 1, 0, 1);
+						Twist->add_child(GO);
+
+						GOs.emplace_back(GO);
+					}
+					imgui_num++;
+				}
+
 			}
 
 			ImGui::Columns(1);
