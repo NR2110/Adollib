@@ -31,7 +31,36 @@ namespace Adollib {
 			}
 
 			bool limit_effect(Vector3& contactP0, Vector3& contactP1, float& penetrate) const override {
-				return false;
+
+				//limit_axis‚ðworld‚ÉŽ‚Á‚Ä‚­‚é
+				const Vector3 limit_axis_world[2] = {
+					vector3_quatrotate(limit_axis[0],collider_comp[0]->transform->orientation),
+					vector3_quatrotate(limit_axis[1],collider_comp[1]->transform->orientation)
+				};
+
+				//Šp“x‚ð“¾‚é
+				float radian = vector3_radian(limit_axis_world[0], limit_axis_world[1]); // 0 - ƒÎ
+
+				const float limit_rad = ToRadian(limit); //limit‚¦‚¨radian‚ÉŽ¡‚µ‚½
+
+				Debug::set("angle", ToAngle(radian));
+
+				// ‚à‚µlimit‚Ì‰e‹¿‚ðŽó‚¯‚éˆÊ’u‚É“ü‚È‚¯‚ê‚Îfalse‚ðreturn
+				if (radian <= limit_rad) return false;
+
+				//collider_comp[0]‚Ìaxis‚ðŠî€‚É‚µ‚Äl‚¦‚é
+
+				//limit_axis_world[0]‚ðŠî€‚É‚µ‚½limit‚Ìvector_worldcoord
+				Vector3 limit_world = vector3_quatrotate(limit_axis_world[0], quaternion_radian_axis(limit_rad, vector3_cross(limit_axis_world[0], limit_axis_world[1])));
+				{
+					contactP0 = vector3_quatrotate(limit_world, collider_comp[0]->transform->orientation.inverse());
+					contactP1 = limit_axis[1];
+
+					penetrate = (limit_world - limit_axis_world[1]).norm_sqr();
+				}
+
+
+				return true;
 			}
 
 

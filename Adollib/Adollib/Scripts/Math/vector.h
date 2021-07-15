@@ -115,10 +115,10 @@ namespace Adollib {
 		DirectX::XMFLOAT3 get_XM3() const;
 
 
-		// norm^2
+		// norm
 		float norm_sqr() const;
 
-		// norm
+		// norm^2
 		float norm() const;
 
 		// unit_vect
