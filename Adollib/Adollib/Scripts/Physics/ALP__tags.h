@@ -16,6 +16,8 @@ namespace Adollib {
 		//static const unsigned int Cylinder = (1 << 5);
 		//static const unsigned int Cylinder = (1 << 5);
 		static const Collider_tagbit croth = (1 << 7);
+
+		static const Collider_tagbit Human = (1 << 8);
 		static const Collider_tagbit Tags_max = (1 << 31);
 	};
 

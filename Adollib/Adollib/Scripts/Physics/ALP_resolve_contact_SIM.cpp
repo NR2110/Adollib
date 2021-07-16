@@ -110,6 +110,9 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 			// limit‚Ì‰e‹¿‚ðŒvŽZ
 			{
 				float penetrate = 0;
+				static Vector3 debug_save = { Vector3(0)};
+				static float debug_count = 0;
+				debug_count -= Phyisics_manager::physicsParams.timeStep;
 				if (joint->joint->limit_effect(joint->limit_constraint_pos[0], joint->limit_constraint_pos[1], penetrate)) {
 					//joint->joint->limit_effect(joint->limit_constraint_pos[0], joint->limit_constraint_pos[1], penetrate);
 
