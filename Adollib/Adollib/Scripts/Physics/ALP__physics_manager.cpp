@@ -67,6 +67,7 @@ namespace Adollib
 
 	bool Phyisics_manager::is_draw_collider = false;
 	bool Phyisics_manager::is_draw_dop = false;
+	bool Phyisics_manager::is_draw_joint = false;
 }
 
 #pragma endregion
@@ -231,8 +232,8 @@ bool Phyisics_manager::update_Gui() {
 
 		//Collider‚Ì•\¦
 		ImGui::Checkbox("draw_collider", &is_draw_collider);
-		//Collider‚Ì•\¦
 		ImGui::Checkbox("draw_DOP", &is_draw_dop);
+		ImGui::Checkbox("draw_joint", &is_draw_joint);
 
 		//d—Í‚Ì’²®
 		ImGui::InputFloat("gravity", &physicsParams.gravity, 0.1f, 1.0f, "%.2f");
@@ -315,43 +316,12 @@ bool Phyisics_manager::ray_cast(
 	return ret;
 }
 
-
-
-//void Phyisics_manager::remove_collider(
-//	std::list<Collider*>::iterator coll_itr,
-//	Physics_function::ALP_Collider* ALPcoll_itr,
-//	Physics_function::ALP_Physics* ALPphys_itr,
-//	Scenelist Sce) {
-//
-//	//íœ‚³‚ê‚½colider
-//	remove_collider_broad_phase(ALPcoll_itr);
-//
-//	ALPcoll_itr->destroy();
-//	ALP_colliders[Sce].erase(ALPcoll_itr);
-//	ALP_physicses[Sce].erase(ALPphys_itr);
-//
-//	colliders[Sce].erase(coll_itr);
-//
-//}
-//
-//void Phyisics_manager::remove_collider(
-//	std::list<Collider*>::iterator coll_itr,
-//	std::list<Physics_function::ALP_Collider>::iterator ALPcoll_itr,
-//	Scenelist Sce) {
-//
-//	//íœ‚³‚ê‚½colider
-//	remove_collider_broad_phase(ALPcoll_itr);
-//
-//	ALP_colliders[Sce].erase(ALPcoll_itr);
-//
-//	colliders[Sce].erase(coll_itr);
-//}
-
 #include "../Main/systems.h"
 #include "../Mesh/material_for_collider.h"
 
 bool Phyisics_manager::render_collider(Scenelist Sce) {
 	render_dop(Sce);
+	render_joint(Sce);
 
 	if (is_draw_collider == false)return false;
 
@@ -371,6 +341,17 @@ bool Phyisics_manager::render_dop(Scenelist Sce) {
 
 	return true;
 
+}
+
+bool Phyisics_manager::render_joint(Scenelist Sce) {
+
+	if (is_draw_joint == false)return false;
+
+	for (auto& itr : ALP_joints) {
+		Collider_renderer::render_joint(itr);
+	}
+
+	return true;
 }
 
 void Phyisics_manager::destroy(Scenelist Sce) {

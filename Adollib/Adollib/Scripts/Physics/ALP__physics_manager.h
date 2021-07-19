@@ -133,6 +133,7 @@ namespace Adollib
 
 			static bool is_draw_collider; //COlliderの表示
 			static bool is_draw_dop; //dopの表示(14-DOPを表示するのがめんどくさいためAABBを表示する)
+			static bool is_draw_joint; //jointの表示
 
 		public:
 			struct ColliderPhysics_ptrs {
@@ -265,6 +266,8 @@ namespace Adollib
 			static bool render_collider(Scenelist Sce = Scene::now_scene);
 			// kdopの表示
 			static bool render_dop(Scenelist Sce = Scene::now_scene);
+			// jointの表示
+			static bool render_joint(Scenelist Sce = Scene::now_scene);
 
 			static void destroy(Scenelist Sce = Scene::now_scene);
 

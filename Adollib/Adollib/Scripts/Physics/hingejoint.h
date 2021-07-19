@@ -55,6 +55,14 @@ namespace Adollib {
 
 			bool limit_effect(Vector3& contactP0, Vector3& contactP1, float& penetrate) const override {
 
+				constexpr float power = 2; //“ä ‚È‚º‚©‚È‚¢‚Æ’£‚è•t‚­
+
+				// transform
+				const Transfome* transforms[2] = {
+					collider_comp[0]->gameobject->transform.get(),
+					collider_comp[1]->gameobject->transform.get()
+				};
+
 				//Hinge‚ÌŒü‚«
 				const Vector3 hinge_vec[2] = {
 					(anchor_s.posA - anchor_g.posA).unit_vect(),
@@ -62,8 +70,8 @@ namespace Adollib {
 				};
 				//Hinge‚Ìworld_vec
 				const Vector3 hinge_vec_world[2] = {
-					vector3_quatrotate(hinge_vec[0],collider_comp[0]->gameobject->transform->orientation),
-					vector3_quatrotate(hinge_vec[1],collider_comp[1]->gameobject->transform->orientation),
+					vector3_quatrotate(hinge_vec[0],transforms[0]->orientation),
+					vector3_quatrotate(hinge_vec[1],transforms[1]->orientation),
 				};
 				//Hinge‚ð90“x‰ñ“]‚³‚¹‚½local_vec
 				const Vector3 hinge_vec_rot90[2] = {
@@ -71,8 +79,8 @@ namespace Adollib {
 					vector3_quatrotate(Vector3(1,0,0),quaternion_from_to_rotate(Vector3(0,1,0),hinge_vec[1]))
 				};
 				const Vector3 hinge_vec_rot90_world[2] = {
-					vector3_quatrotate(hinge_vec_rot90[0],collider_comp[0]->gameobject->transform->orientation).unit_vect(),
-					vector3_quatrotate(hinge_vec_rot90[1],collider_comp[1]->gameobject->transform->orientation).unit_vect(),
+					vector3_quatrotate(hinge_vec_rot90[0],transforms[0]->orientation).unit_vect(),
+					vector3_quatrotate(hinge_vec_rot90[1],transforms[1]->orientation).unit_vect(),
 				};
 
 				//Šp“x‚ð“¾‚é
@@ -81,9 +89,9 @@ namespace Adollib {
 					radian = DirectX::XM_PI + DirectX::XM_PI - radian; //0~180~0 ‚ð 0~360‚ÉŽ¡‚·
 				};
 
-				const Vector2 limit_rad = Vector2(ToRadian(limit.x), ToRadian(limit.y)); //limit‚¦‚¨radian‚ÉŽ¡‚µ‚½
+				const Vector2 limit_rad = Vector2(ToRadian(limit.x), ToRadian(limit.y)); //limit‚ðradian‚ÉŽ¡‚µ‚½
 
-				Debug::set("angle", ToAngle(radian));
+				//Debug::set("angle", ToAngle(radian));
 
 				// ‚à‚µlimit‚Ì‰e‹¿‚ðŽó‚¯‚éˆÊ’u‚É“ü‚È‚¯‚ê‚Îfalse‚ðreturn
 				if (limit_rad.x <= limit_rad.y) {
@@ -99,18 +107,22 @@ namespace Adollib {
 				//contactP1‚ÌŠî€‚É
 				//contactP0‚ðŽ‚Á‚Ä‚­‚é
 				if (cosf(limit_rad_off.x) < cosf(limit_rad_off.y)) {
+					Vector3 contactP0_world = vector3_quatrotate(hinge_vec_rot90_world[1], quaternion_radian_axis(limit_rad_off.y, hinge_vec_world[1])) + transforms[1]->position;
+
 					//limit_x‚Ì‚Ù‚¤‚ª‹ß‚¢
-					contactP0 = vector3_quatrotate(hinge_vec_rot90[0], quaternion_radian_axis(limit_rad.y, hinge_vec[0]));
+					contactP0 = vector3_quatrotate(contactP0_world - transforms[0]->position, transforms[0]->orientation.inverse());
 					contactP1 = hinge_vec_rot90[1];
 
-					penetrate = 2 * cosf(DirectX::XM_PIDIV2 - fabsf(limit_rad_off.y) * 0.5f);
+					penetrate = 2 * cosf(DirectX::XM_PIDIV2 - fabsf(limit_rad_off.y) * 0.5f) * power;
 				}
 				else {
-					//limit_y‚Ì‚Ù‚¤‚ª‹ß‚¢
-					contactP0 = vector3_quatrotate(hinge_vec_rot90[0], quaternion_radian_axis(limit_rad.x, hinge_vec[0]));
-					contactP1 = hinge_vec_rot90[1];
+					Vector3 contactP0_world = vector3_quatrotate(hinge_vec_rot90_world[1], quaternion_radian_axis(limit_rad_off.x, hinge_vec_world[1])) + transforms[1]->position;
 
-					penetrate = 2 * cosf(DirectX::XM_PIDIV2 - fabsf(limit_rad_off.x) * 0.5f);
+					//limit_y‚Ì‚Ù‚¤‚ª‹ß‚¢
+					contactP0 = vector3_quatrotate(contactP0_world - transforms[0]->position, transforms[0]->orientation.inverse());
+					contactP1 = hinge_vec_rot90[1] ;
+
+					penetrate = 2 * cosf(DirectX::XM_PIDIV2 - fabsf(limit_rad_off.x) * 0.5f) * power;
 				}
 
 

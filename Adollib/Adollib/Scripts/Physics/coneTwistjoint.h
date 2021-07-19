@@ -1,6 +1,12 @@
 #pragma once
 
 #include "joint_base.h"
+#include "conejoint.h"
+
+#include "collider.h"
+#include "../Object/transform.h"
+
+#include "../Imgui/debug.h"
 
 namespace Adollib {
 	class Collider;
@@ -9,10 +15,10 @@ namespace Adollib {
 		class ALP_Joint;
 
 		// Conetwist 肩などに使用
-		class ConetwistJoint : public Joint_base {
+		class ConetwistJoint : public ConeJoint {
 		public:
 			ConetwistJoint(Collider* l_colliderA_comp, Collider* l_colliderB_comp, ALP_Joint* l_ALPjoint)
-				: Joint_base(l_colliderA_comp, l_colliderB_comp, l_ALPjoint) {}
+				: ConeJoint(l_colliderA_comp, l_colliderB_comp, l_ALPjoint) {}
 
 			Anchor anchor; //接続点
 			Vector3 limit_axis[2]; //軸 axisとaxisの角度でlimitをとる
@@ -32,7 +38,7 @@ namespace Adollib {
 
 			bool limit_effect(Vector3& contactP0, Vector3& contactP1, float& penetrate) const override {
 
-			    constexpr float power = 2;
+			    constexpr float power = 2; //謎 なぜかないと張り付く
 
 				const Transfome* transforms[2] = {
 					collider_comp[0]->transform,
@@ -54,6 +60,10 @@ namespace Adollib {
 				const float radian = vector3_radian(limit_axis_world[0], limit_axis_world[1]); // 0 - π
 
 				const float limit_rad = ToRadian(limit); //limitえおradianに治した
+
+				//Debug::set("angle", ToAngle(radian));
+				//Debug::set("limit_axis_world[0]", limit_axis_world[0].unit_vect());
+				//Debug::set("limit_axis_world[1]", limit_axis_world[1].unit_vect());
 
 				// もしlimitの影響を受ける位置に入なければfalseをreturn
 				if (radian <= limit_rad + FLT_EPSILON) return false;

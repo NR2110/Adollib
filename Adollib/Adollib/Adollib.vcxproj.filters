@@ -558,6 +558,12 @@
     <ClInclude Include="Scripts\Physics\coneTwistjoint.h">
       <Filter>00_Adollib\22_physics\Joint</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Physics\conejoint.h">
+      <Filter>00_Adollib\22_physics\Joint</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\twistjoint.h">
+      <Filter>00_Adollib\22_physics\Joint</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="DefaultShader\default.hlsli">

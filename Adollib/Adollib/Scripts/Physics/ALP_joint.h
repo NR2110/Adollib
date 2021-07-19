@@ -17,6 +17,7 @@ namespace Adollib {
 
 		public:
 			float bias = 0; // 拘束の強さの調整値
+			float limit_bias = 0;
 
 			int anchor_count = 0; //anchorがいくつあるか
 			Anchor* anchor; // 剛体のローカル座標系における接続点

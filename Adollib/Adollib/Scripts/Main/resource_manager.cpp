@@ -356,6 +356,7 @@ namespace Adollib
 		// 三角ポリゴン化
 		FbxGeometryConverter geometry_converter(manager);
 		geometry_converter.Triangulate(scene, /*replace*/true);
+		geometry_converter.RemoveBadPolygonsFromMeshes(scene);
 
 		// ノード属性の取得　(現在はメッシュのみ)
 		vector<FbxNode*> fetched_meshes;

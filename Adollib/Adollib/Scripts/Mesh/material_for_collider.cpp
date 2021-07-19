@@ -1,12 +1,17 @@
 
 #include "material_for_collider.h"
+
 #include "../Main/systems.h"
 #include "../Main/resource_manager.h"
+
+#include "../Object/gameobject.h"
 
 #include "../Shader/constant_buffer.h"
 
 #include "../Physics/ALP__meshcoll_data.h"
 #include "../Physics/ALP_physics.h"
+#include "../Physics/ALP_collider.h"
+#include "../Physics/ALP_joint.h"
 
 using namespace Adollib;
 using namespace Physics_function;
@@ -75,6 +80,100 @@ void Collider_renderer::render_collider(const Physics_function::ALP_Collider* co
 		if (shape->get_shape_tag() == ALPCollider_shape_type::Capsule)render_capsule(shape, color);
 	}
 }
+
+void Collider_renderer::render_joint(const Physics_function::ALP_Joint* joint) {
+
+	for (int i = 0; i < joint->anchor_count; i++) {
+		Vector4 color = Vector4(1, 1, 1, 1)  * 0.8f;
+		if (joint->bias != 0)color = Vector4(-1, -1, -1, -1);
+
+		const Transfome* transforms[2] = {
+			joint->ALPcollider[0]->get_gameobject()->transform.get(),
+			joint->ALPcollider[1]->get_gameobject()->transform.get()
+		};
+
+		const Vector3 rA = vector3_quatrotate(joint->anchor[i].posA, transforms[0]->orientation);
+		const Vector3 rB = vector3_quatrotate(joint->anchor[i].posB, transforms[1]->orientation);
+		//anchor‚»‚ê‚¼‚ê‚ÌworldÀ•W
+
+		Vector3 position[2];
+		position[0] = transforms[0]->position + rA;
+		position[1] = transforms[1]->position + rB;
+
+		Vector3 vec = (position[0] - position[1]);
+		float length = vec.norm_sqr();
+		vec = vec.unit_vect();
+
+		Vector3 Wscale = Vector3(0.2f, length * 0.5f, 0.2f);
+
+		Quaternion Wrotate = quaternion_from_to_rotate(Vector3(0, 1, 0), vec);
+
+		Vector3 Wposition = (position[0] + position[1]) * 0.5f;
+
+		//CB : ConstantBufferPerCO_OBJ
+		ConstantBufferPerGO g_cb;
+		g_cb.world = matrix_world(Wscale, Wrotate.get_rotate_matrix(), Wposition);
+		Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
+		Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
+		Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
+
+		Systems::DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		Systems::DeviceContext->IASetInputLayout(vertexLayout.Get());
+
+		shader.Activate();
+
+		Systems::SetBlendState(State_manager::BStypes::BS_NONE);
+		Systems::SetRasterizerState(State_manager::RStypes::RS_CULL_BACK);
+		Systems::SetDephtStencilState(State_manager::DStypes::DS_TRUE);
+
+		std::vector<Mesh::mesh>* meshs;
+		meshs = meshes[ALPCollider_shape_type::BOX];
+
+		int color_num = 0;
+
+		//•`‰æ
+		for (Mesh::mesh mesh : *meshs)
+		{
+			UINT stride = sizeof(VertexFormat);
+			UINT offset = 0;
+			Systems::DeviceContext->IASetVertexBuffers(0, 1, mesh.vertexBuffer.GetAddressOf(), &stride, &offset);
+			Systems::DeviceContext->IASetIndexBuffer(mesh.indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+
+			//CB : ConstantBufferPerCoMaterial
+			ConstantBufferPerMaterial cb;
+			cb.shininess = 1;
+			cb.ambientColor = DirectX::XMFLOAT4(0.1f, 0.1f, 0.1f, 1);
+			if (color.x == -1 && color.y == -1 && color.z == -1)
+				cb.materialColor = Vector4(Al_Global::get_gaming((Al_Global::second_per_game + 30 + color_num * 2) * 60, 600), 1);
+			else cb.materialColor = color;
+			Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
+			Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
+			Systems::DeviceContext->PSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
+
+			//CB : ConstantBufferPerMesh
+			{
+				ConstantBuffer::ConstantBufferPerMesh g_cb;
+				g_cb.Mesh_world = matrix44_identity();
+				Systems::DeviceContext->UpdateSubresource(mesh.mesh_cb.Get(), 0, NULL, &g_cb, 0, 0);
+				Systems::DeviceContext->VSSetConstantBuffers(3, 1, mesh.mesh_cb.GetAddressOf());
+				Systems::DeviceContext->PSSetConstantBuffers(3, 1, mesh.mesh_cb.GetAddressOf());
+			}
+
+			for (auto& subset : mesh.subsets)
+			{
+				Systems::DeviceContext->PSSetShaderResources(0, 1, subset.diffuse.shaderResourceVirw.GetAddressOf());
+
+				// •`‰æ
+				Systems::DeviceContext->DrawIndexed(subset.indexCount, subset.indexStart, 0);
+
+			}
+
+
+			color_num++;
+		}
+	}
+}
+
 
 void Collider_renderer::render_box(const Collider_shape* shape, const Vector3& color) {
 	//CB : ConstantBufferPerCO_OBJ
@@ -547,7 +646,7 @@ void Collider_renderer::render_AABB(const  Physics_function::ALP_Collider* coll)
 			}
 
 
-		}
+	}
 #endif
 
 		if (Systems::RS_type != State_manager::RStypes::RS_CULL_BACK) Systems::SetRasterizerState(State_manager::RStypes::RS_CULL_BACK);
@@ -613,7 +712,7 @@ void Collider_renderer::render_AABB(const  Physics_function::ALP_Collider* coll)
 				}
 			}
 
-		}
+}
 #endif
 
 		//Debug::basepos‚Ì•\Ž¦

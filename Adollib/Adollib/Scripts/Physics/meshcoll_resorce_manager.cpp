@@ -52,6 +52,7 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 	// ŽOŠpƒ|ƒŠƒSƒ“‰»
 	FbxGeometryConverter geometry_converter(manager);
 	geometry_converter.Triangulate(scene, /*replace*/true);
+	geometry_converter.RemoveBadPolygonsFromMeshes(scene);
 
 	// ƒm[ƒh‘®«‚ÌŽæ“¾
 	vector<FbxNode*> fetched_meshes;

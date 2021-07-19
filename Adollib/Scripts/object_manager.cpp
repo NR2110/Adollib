@@ -47,7 +47,8 @@ namespace Adollib
 			Mesh_Cube,
 			Shaclo,
 			Shaclo_stage,
-			Teach
+			Teach,
+			Sponza
 		};
 
 		Stage_types stage_type = Stage_types::Cube;
@@ -138,8 +139,9 @@ namespace Adollib
 		}
 		else if (stage_type == Stage_types::Shaclo_stage) {
 			{
-				//objGO = Gameobject_manager::createFromFBX("../Data/FBX/big_plane.fbx");
-				GO = Gameobject_manager::createFromFBX("../Data/FBX/stage_col.fbx");
+				//GO = Gameobject_manager::createFromFBX("../Data/FBX/big_plane.fbx");
+				//GO = Gameobject_manager::createFromFBX("../Data/FBX/stage_col.fbx");
+				GO = Gameobject_manager::create("stage");
 				//objGO = Gameobject_manager::createFromFBX("../Data/FBX/0311_collisions.fbx");
 				//objGO = Gameobject_manager::create();
 				//objGO = Gameobject_manager::createFromFBX("../Adollib/DefaultModel/cylinder.fbx");
@@ -150,7 +152,7 @@ namespace Adollib
 				GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
 
 				Collider* coll = GO->addComponent<Collider>();
-				coll->add_shape("../Data/FBX/stage_col.fbx", true);
+				coll->add_shape("../Data/FBX/stage_col.fbx", true,true);
 				//R->load_mesh("../Adollib/DefaultModel/cylinder.fbx");
 				coll->physics_data.is_moveable = false;
 				coll->is_static = true;
@@ -175,6 +177,28 @@ namespace Adollib
 				coll->physics_data.is_moveable = false;
 				coll->is_static = true;
 			}
+		}
+		else if (stage_type == Stage_types::Sponza) {
+			{
+				//objGO = Gameobject_manager::createFromFBX("../Data/FBX/big_plane.fbx");
+				GO = Gameobject_manager::createFromFBX("../Data/FBX/sponza.obj");
+				//objGO = Gameobject_manager::createFromFBX("../Data/FBX/0311_collisions.fbx");
+				//objGO = Gameobject_manager::create();
+				//objGO = Gameobject_manager::createFromFBX("../Adollib/DefaultModel/cylinder.fbx");
+				GO->transform->local_pos = Vector3(0, 0, 0);
+				//objGO->transform->local_scale = Vector3(0.01f, 0.02f, 0.03f);
+				GO->transform->local_scale = Vector3(1, 1, 1);
+				//objGO->transform->local_orient = quaternion_from_euler(45, 45, 45);
+				GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
+
+				Collider* coll = GO->addComponent<Collider>();
+				coll->add_shape("../Data/FBX/sponza.obj", true,true);
+				//R->load_mesh("../Adollib/DefaultModel/cylinder.fbx");
+				coll->physics_data.is_moveable = false;
+				coll->is_static = true;
+
+			}
+
 		}
 
 		Vector3 axisA = Vector3(1, 1, 0).unit_vect();
@@ -786,7 +810,7 @@ namespace Adollib
 					auto hinge = Joint::add_Hingejoint(
 						gear_joint_collider,
 						coll,
-						Vector3(0, 10, 10).unit_vect() * 10, Vector3(0, -10, -10).unit_vect() * 10,
+						Vector3(0, 10, 0).unit_vect() * 10, Vector3(0, -10, 0).unit_vect() * 10,
 						Vector3(0, +10, 0), Vector3(0, -10, 0),
 						2, 0.1f
 					);
@@ -928,7 +952,7 @@ namespace Adollib
 					}
 
 					Vector3 arm_size = Vector3(0.4f, 0.5f, 0.4f);
-					float arm_y_pos = 0.9f;
+					float arm_y_pos = 1.0f;
 					{
 						{
 							auto& GO = Relbow;
@@ -1010,26 +1034,15 @@ namespace Adollib
 					Box* Rfoot_shape = Rfoot_collider->add_shape<Box>();
 					Box* Lleg_shape = Lleg_collider->add_shape<Box>();
 					Box* Lfoot_shape = Lfoot_collider->add_shape<Box>();
-					//Box* Head_shape = Head_collider->add_shape<Box>();
-					//Box* Relbow_shape = Relbow_collider->add_shape<Box>();
-					//Box* Rsholder_shape = Rsholder_collider->add_shape<Box>();
-					//Box* Lelbow_shape = Lelbow_collider->add_shape<Box>();
-					//Box* Lsholder_shape = Lsholder_collider->add_shape<Box>();
-					//Box* Body_shape = Body_collider->add_shape<Box>();
-					//Box* Waist_shape = Waist_collider->add_shape<Box>();
-					//Box* Rleg_shape = Rleg_collider->add_shape<Box>();
-					//Box* Rfoot_shape = Rfoot_collider->add_shape<Box>();
-					//Box* Lleg_shape = Lleg_collider->add_shape<Box>();
-					//Box* Lfoot_shape = Lfoot_collider->add_shape<Box>();
 
 
 					//::: capsule :::
-					//Relbow_shape->length *= Relbow->transform->local_scale.y / (Relbow->transform->local_scale.x + Relbow->transform->local_scale.y) * 0.5f;
-					//Rsholder_shape->length *= Rsholder->transform->local_scale.y / (Rsholder->transform->local_scale.x + Rsholder->transform->local_scale.y) * 0.5f;
-					//Lelbow_shape->length *= Lelbow->transform->local_scale.y / (Lelbow->transform->local_scale.x + Lelbow->transform->local_scale.y) * 0.5f;
-					//Lsholder_shape->length *= Lsholder->transform->local_scale.y / (Lsholder->transform->local_scale.x + Lsholder->transform->local_scale.y) * 0.5f;
+					Relbow_shape->length *= (Relbow->transform->local_scale.y - Relbow->transform->local_scale.x) / (Relbow->transform->local_scale.y);
+					Rsholder_shape->length *= (Rsholder->transform->local_scale.y - Rsholder->transform->local_scale.x) / (Rsholder->transform->local_scale.y);
+					Lelbow_shape->length *= (Lelbow->transform->local_scale.y - Lelbow->transform->local_scale.x) / (Lelbow->transform->local_scale.y);
+					Lsholder_shape->length *= (Lsholder->transform->local_scale.y - Lsholder->transform->local_scale.x) / (Lsholder->transform->local_scale.y);
 
-					//Body_shape->length *= Body->transform->local_scale.y / (Body->transform->local_scale.x + Body->transform->local_scale.y);
+					Body_shape->length *= (Body->transform->local_scale.y - Body->transform->local_scale.x) / (Body->transform->local_scale.y);
 
 					//Rleg_shape->length *= Rleg->transform->local_scale.y / (Rleg->transform->local_scale.x + Rleg->transform->local_scale.y);
 					//Rfoot_shape->length *= Rfoot->transform->local_scale.y / (Rfoot->transform->local_scale.x + Rfoot->transform->local_scale.y);
@@ -1041,6 +1054,22 @@ namespace Adollib
 
 					//::: Joint‚Ìİ’è
 
+					{
+	/*					auto Hinge = Joint::add_Hingejoint(Head_collider, Body_collider, Vector3(0, 0, 0), Vector3(0, -1, 0), Vector3(0, 3, 0), Vector3(0, 2, 0));
+						Hinge->limit = Vector2(360 - 90, 90);*/
+					}
+					{
+						auto Cone = Joint::add_Conetwistjoint(Body_collider, Relbow_collider, Vector3(-1.1f, 1.0f, 0), Vector3(0, 0.5f, 0), Vector3(-1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect());
+						Cone->limit = 120;
+
+						//auto Hinge = Joint::add_Hingejoint(Body_collider, Relbow_collider, Vector3(-2, 1.0f, 0), Vector3(-10, 1.0f, 0), Vector3(0, 1, 0), Vector3(0, -7, 0), 0);
+						//Hinge->hinge_pow = 0;
+						//Hinge->bias = -1;
+						//Hinge->limit = Vector2(0, 180);
+
+						auto Twist = Joint::add_Twistjoint(Body_collider, Relbow_collider, Vector3(0, 1, 0));
+						Twist->limit = Vector2(0, 180);
+					}
 
 
 

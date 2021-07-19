@@ -5,7 +5,9 @@
 
 #include "balljoint.h"
 #include "hingejoint.h"
+#include "conejoint.h"
 #include "coneTwistjoint.h"
+#include "twistjoint.h"
 
 namespace Adollib {
 
@@ -37,6 +39,14 @@ namespace Adollib {
 			const float& bias = 0.1f
 		);
 
+		//ConeJointÇÃê∂ê¨
+		static Physics_function::ConeJoint* add_Conejoint(
+			Collider* colliderA, Collider* colliderB,
+			const Vector3& anchorA, const Vector3& anchorB,
+			const Vector3& axisA, const Vector3& axisB,
+			const float& bias = 0.1f
+		);
+
 		//ConeTwistJointÇÃê∂ê¨
 		static Physics_function::ConetwistJoint* add_Conetwistjoint(
 			Collider* colliderA, Collider* colliderB,
@@ -44,6 +54,12 @@ namespace Adollib {
 			const Vector3& axisA, const Vector3& axisB,
 			const float& bias = 0.1f
 		);
+
+		static Physics_function::TwistJoint* add_Twistjoint(
+			Collider* colliderA, Collider* colliderB,
+			const Vector3& axisB
+		);
+
 	};
 
 

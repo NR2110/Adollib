@@ -4,6 +4,7 @@
 
 #include "balljoint.h"
 #include "hingejoint.h"
+#include "twistjoint.h"
 
 using namespace Adollib;
 using namespace Physics_function;
@@ -57,6 +58,31 @@ HingeJoint* Joint::add_Hingejoint(
 	return hingejoint;
 }
 
+ConeJoint* Joint::add_Conejoint(
+	Collider* colliderA, Collider* colliderB,
+	const Vector3& anchorA, const Vector3& anchorB,
+	const Vector3& axisA, const Vector3& axisB,
+	const float& bias
+) {
+	//joint‚Ì¶¬
+	auto joint = Phyisics_manager::add_Joint();
+	colliderA->set_ptr_to_joint(joint);
+	colliderB->set_ptr_to_joint(joint);
+
+	ConeJoint* conetwist = newD ConeJoint(colliderA, colliderB, joint);
+	joint->joint = conetwist;
+
+	conetwist->anchor.posA = anchorA;
+	conetwist->anchor.posB = anchorB;
+
+	conetwist->limit_axis[0] = axisA;
+	conetwist->limit_axis[1] = axisB;
+
+	conetwist->bias = bias;
+
+	return conetwist;
+}
+
 ConetwistJoint* Joint::add_Conetwistjoint(
 	Collider* colliderA, Collider* colliderB,
 	const Vector3& anchorA, const Vector3& anchorB,
@@ -75,12 +101,31 @@ ConetwistJoint* Joint::add_Conetwistjoint(
 	conetwist->anchor.posB = anchorB;
 
 	conetwist->limit_axis[0] = axisA;
-	conetwist->limit_axis[1] = axisA;
+	conetwist->limit_axis[1] = axisB;
 
 	conetwist->bias = bias;
 
 	return conetwist;
 }
+
+TwistJoint* Joint::add_Twistjoint(
+	Collider* colliderA, Collider* colliderB,
+	const Vector3& axisB
+) {
+	//joint‚Ì¶¬
+	auto joint = Phyisics_manager::add_Joint();
+	colliderA->set_ptr_to_joint(joint);
+	colliderB->set_ptr_to_joint(joint);
+
+	TwistJoint* twistjoint = newD TwistJoint(colliderA, colliderB, joint);
+	joint->joint = twistjoint;
+
+	twistjoint->vec1 = axisB;
+
+	return twistjoint;
+}
+
+
 
 
 void Joint::delete_joint(Joint_base*& joint) {

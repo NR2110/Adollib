@@ -110,7 +110,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 			// limit‚Ì‰e‹¿‚ðŒvŽZ
 			{
 				float penetrate = 0;
-				static Vector3 debug_save = { Vector3(0)};
+				static Vector3 debug_save = { Vector3(0) };
 				static float debug_count = 0;
 				debug_count -= Phyisics_manager::physicsParams.timeStep;
 				if (joint->joint->limit_effect(joint->limit_constraint_pos[0], joint->limit_constraint_pos[1], penetrate)) {
@@ -153,7 +153,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 					joint->constraint_limit.jacDiagInv = 1.0f / denominator;
 
 					joint->constraint_limit.rhs = -DirectX::XMVectorGetX(DirectX::XMVector3Dot(relativeVelocity, direction)); // velocity error
-					joint->constraint_limit.rhs += joint->bias * penetrate / Phyisics_manager::physicsParams.timeStep; // position error
+					joint->constraint_limit.rhs += joint->limit_bias * penetrate / Phyisics_manager::physicsParams.timeStep; // position error
 					joint->constraint_limit.rhs *= joint->constraint_limit.jacDiagInv;
 					joint->constraint_limit.lowerlimit = -FLT_MAX;
 					joint->constraint_limit.upperlimit = +FLT_MAX;
@@ -175,6 +175,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 
 
 
+			if (joint->bias == -1)continue;
 
 			for (int i = 0; i < joint->anchor_count; i++) {
 				const Vector3 joint_posA = joint->anchor[i].posA;

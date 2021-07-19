@@ -21,7 +21,8 @@ namespace Adollib {
 				collider_comp[1] = l_colliderB_comp;
 			};
 
-			float bias = 0; // 拘束の強さの調整値
+			float bias = 0.1f; // 拘束の強さの調整値
+			float limit_bias = 0.1f;
 			//std::vector<Vector3> anchor; // 剛体のローカル座標系における接続点
 			//Vector3 anchor[2]; // 剛体のローカル座標系における接続点
 
