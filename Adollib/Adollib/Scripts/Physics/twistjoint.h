@@ -109,6 +109,7 @@ namespace Adollib {
 					penetrate = 2 * cosf(DirectX::XM_PIDIV2 - fabsf(limit_rad_off.x) * 0.5f);
 				}
 
+				if (penetrate == 0)return false;
 				return true;
 			}
 

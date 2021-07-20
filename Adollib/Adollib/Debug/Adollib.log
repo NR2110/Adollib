@@ -1,1 +1,7 @@
-﻿  Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe
+﻿  object_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(1301,93): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(1301,113): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(1312,93): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(1312,113): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\vector_e.h(339): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
+  Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe
