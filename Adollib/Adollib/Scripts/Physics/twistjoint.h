@@ -43,39 +43,35 @@ namespace Adollib {
 					collider_comp[1]->gameobject->transform.get()
 				};
 
-				// collider_comp[1]からcollider_comp[0]へのオフセット (collider_comp[0]を親 collider_comp[1]を子 とした回転)
-				Quaternion off_comp1to0 = transforms[0]->orientation * transforms[1]->orientation.inverse();
+				// collider_comp[1]からcollider_comp[0]へのオフセット (collider_comp[1]のlocal情報をcollider_comp[0]の座標系にする)
+				Quaternion off_comp1to0 = transforms[1]->orientation * transforms[0]->orientation.inverse();
 
-				// worldという名前だが collider_comp[0]の座標系である
-				Vector3 vec1_rotated = vector3_quatrotate(vec1, transforms[1]->orientation);
+				// collider_comp[0]の座標系である
+				Vector3 vec1_comp0coord= vector3_quatrotate(vec1, off_comp1to0).unit_vect();
 
 				// 回転前、回転後のお互いに垂直なベクトル -> z回転以外の影響を受けない
-				Vector3 axis = vector3_cross(vec1, vec1_rotated);
-				if (fabsf(fabsf(vector3_dot(vec1, vec1_rotated)) - 1) < FLT_EPSILON) {
+				Vector3 axis = vector3_cross(vec1, vec1_comp0coord);
+				if (fabsf(fabsf(vector3_dot(vec1, vec1_comp0coord)) - 1) < FLT_EPSILON) {
 					//2ベクトルが平行なら適当な垂直な軸でよい
-					axis = vector3_cross(vec1, vec1_rotated + Vector3(1, 0, 0));
+					axis = vector3_cross(vec1, vec1_comp0coord + Vector3(1, 0, 0));
 				}
 				axis = axis.unit_vect();
 
 
 				// axisの回転後のベクトル
-				Vector3 axis_rotated =  vector3_quatrotate(axis, transforms[1]->orientation);
-
-				Debug::set("axis", axis);
-				Debug::set("axis_rotated", axis_rotated);
+				Vector3 axis_comp0coord =  vector3_quatrotate(axis, off_comp1to0);
 
 				// z回転の角度を得る
-				float radian = vector3_radian(axis_rotated, axis);
-				if (vector3_dot(vector3_cross(axis_rotated, axis), vec1_rotated) < 0) {
+				float radian = vector3_radian(axis_comp0coord, axis);
+				if (vector3_dot(vector3_cross(axis_comp0coord, axis), vec1_comp0coord) < 0) {
 					radian = DirectX::XM_PI + DirectX::XM_PI - radian; //0~180~0 を 0~360に治す
 					axis *= -1;
-					axis_rotated *= -1;
+					axis_comp0coord *= -1;
 				};
 
 				const Vector2 limit_rad = Vector2(ToRadian(limit.x), ToRadian(limit.y)); //limitをradianに治した
 
 				Debug::set("angle", ToAngle(radian));
-				Debug::set("quate_angle", ToAngle(acosf(transforms[1]->orientation.z) * 2));
 
 				// もしlimitの影響を受ける位置に入なければfalseをreturn
 				if (limit_rad.x <= limit_rad.y) {
@@ -91,19 +87,19 @@ namespace Adollib {
 				//contactP1の基準に
 				//contactP0を持ってくる
 				if (cosf(limit_rad_off.x) < cosf(limit_rad_off.y)) {
-					Vector3 contactP0_world = vector3_quatrotate(axis_rotated, quaternion_radian_axis(-limit_rad_off.y, vec1_rotated)) + transforms[1]->position;
+					Vector3 contactP0_world = vector3_quatrotate(axis_comp0coord, quaternion_radian_axis(-limit_rad_off.y, vec1_comp0coord));
 
 					//limit_xのほうが近い
-					contactP0 = vector3_quatrotate(contactP0_world - transforms[0]->position, transforms[0]->orientation.inverse());
+					contactP0 = vector3_quatrotate(transforms[1]->position - transforms[0]->position, transforms[0]->orientation.inverse()) + contactP0_world;
 					contactP1 = axis;
 
 					penetrate = 2 * cosf(DirectX::XM_PIDIV2 - fabsf(limit_rad_off.y) * 0.5f);
 				}
 				else {
-					Vector3 contactP0_world = vector3_quatrotate(axis_rotated, quaternion_radian_axis(-limit_rad_off.x, vec1_rotated)) + transforms[1]->position;
+					Vector3 contactP0_world = vector3_quatrotate(axis_comp0coord, quaternion_radian_axis(-limit_rad_off.x, vec1_comp0coord));
 
 					//limit_yのほうが近い
-					contactP0 = vector3_quatrotate(contactP0_world - transforms[0]->position, transforms[0]->orientation.inverse());
+					contactP0 = vector3_quatrotate(transforms[1]->position - transforms[0]->position, transforms[0]->orientation.inverse()) + contactP0_world;
 					contactP1 = axis;
 
 					penetrate = 2 * cosf(DirectX::XM_PIDIV2 - fabsf(limit_rad_off.x) * 0.5f);

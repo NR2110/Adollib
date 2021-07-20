@@ -915,10 +915,38 @@ namespace Adollib
 					Gameobject* Lleg = Gameobject_manager::createCube("Lleg");
 					Gameobject* Lfoot = Gameobject_manager::createCube("Lfoot");
 
-					Gameobject* belt = Gameobject_manager::createCube("belt");
-					Body->add_child(belt);
-					belt->transform->local_pos = Vector3(0, 0, -1);
-					belt->transform->local_scale = Vector3(1, 0.1, 0.1);
+					Vector4 face_color = Vector4(0.5f, 0.5f, 0.5f, 1);
+					{
+						Gameobject* eye0 = Gameobject_manager::createSphere("eye0");
+						Head->add_child(eye0);
+						eye0->transform->local_pos = Vector3(+0.5f, 0.5f, -1);
+						eye0->transform->local_scale = Vector3(0.25f, 0.25f, 0.25f);
+						eye0->material->color = face_color;
+					}
+					{
+						Gameobject* eye1 = Gameobject_manager::createSphere("eye1");
+						Head->add_child(eye1);
+						eye1->transform->local_pos = Vector3(-0.5f, 0.5f, -1);
+						eye1->transform->local_scale = Vector3(0.25f, 0.25f, 0.25f);
+						eye1->material->color = face_color;
+					}
+					{
+						Gameobject* mouth = Gameobject_manager::createCube("mouth");
+						Head->add_child(mouth);
+						mouth->transform->local_pos = Vector3(0, -0.45f, -1);
+						mouth->transform->local_scale = Vector3(0.7f, 0.25f, 0.3f);
+						mouth->material->color = face_color;
+					}
+
+					{
+						Gameobject* belt = Gameobject_manager::createCube("belt");
+						Waist->add_child(belt);
+						belt->transform->local_pos = Vector3(0, -0.45f, 0);
+						belt->transform->local_scale = Vector3(1.1, 0.25f, 1.1);
+						belt->material->color = face_color;
+					}
+
+
 
 #if 1
 					//::: eqŠÖŒW‚Ìİ’è :::
@@ -1246,17 +1274,17 @@ namespace Adollib
 					Box* Lfoot_shape = Lfoot_collider->add_shape<Box>();
 
 					//::: ¿—Ê‚Ì’²® :::
-					Head_collider		->physics_data.inertial_mass = 3;
-					Rsholder_collider	->physics_data.inertial_mass = 2;
-					Relbow_collider		->physics_data.inertial_mass = 1;
-					Lsholder_collider	->physics_data.inertial_mass = 2;
-					Lelbow_collider		->physics_data.inertial_mass = 1;
-					Body_collider		->physics_data.inertial_mass = 5;
-					Waist_collider		->physics_data.inertial_mass = 4;
-					Rleg_collider		->physics_data.inertial_mass = 2;
-					Rfoot_collider		->physics_data.inertial_mass = 1;
-					Lleg_collider		->physics_data.inertial_mass = 2;
-					Lfoot_collider		->physics_data.inertial_mass = 1;
+					Head_collider->physics_data.inertial_mass = 3;
+					Rsholder_collider->physics_data.inertial_mass = 2;
+					Relbow_collider->physics_data.inertial_mass = 1;
+					Lsholder_collider->physics_data.inertial_mass = 2;
+					Lelbow_collider->physics_data.inertial_mass = 1;
+					Body_collider->physics_data.inertial_mass = 5;
+					Waist_collider->physics_data.inertial_mass = 4;
+					Rleg_collider->physics_data.inertial_mass = 2;
+					Rfoot_collider->physics_data.inertial_mass = 1;
+					Lleg_collider->physics_data.inertial_mass = 2;
+					Lfoot_collider->physics_data.inertial_mass = 1;
 
 
 					//::: capsule‚Ì’²® :::

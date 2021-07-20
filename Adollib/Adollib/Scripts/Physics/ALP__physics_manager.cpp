@@ -18,7 +18,7 @@ using namespace Contacts;
 
 //ContactPointの表示
 //#define Draw_Contact
-//#define Draw_Joint
+//#define Draw_JointContact
 
 //::: staticメンバの初期化 :::::
 #pragma region static_initialize
@@ -141,7 +141,7 @@ bool Phyisics_manager::update(Scenelist Sce)
 	// 位置の更新
 	integrate(ALP_physicses[Sce]);
 
-#ifdef Draw_Joint
+#ifdef Draw_JointContact
 	static bool init = true;
 	static const int size = 100;
 	static Gameobject* debug_go[size];
