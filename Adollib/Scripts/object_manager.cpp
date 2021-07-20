@@ -907,12 +907,18 @@ namespace Adollib
 					Gameobject* Lelbow = Gameobject_manager::createCube("Lelbow");
 
 					Gameobject* Body = Gameobject_manager::createCube("Body");
+
 					Gameobject* Waist = Gameobject_manager::createCube("Waist");
 
 					Gameobject* Rleg = Gameobject_manager::createCube("Rleg");
 					Gameobject* Rfoot = Gameobject_manager::createCube("Rfoot");
 					Gameobject* Lleg = Gameobject_manager::createCube("Lleg");
 					Gameobject* Lfoot = Gameobject_manager::createCube("Lfoot");
+
+					Gameobject* belt = Gameobject_manager::createCube("belt");
+					Body->add_child(belt);
+					belt->transform->local_pos = Vector3(0, 0, -1);
+					belt->transform->local_scale = Vector3(1, 0.1, 0.1);
 
 #if 1
 					//::: 親子関係の設定 :::
@@ -1215,10 +1221,10 @@ namespace Adollib
 
 					//::: collider,shapeのアタッチ :::
 					Collider* Head_collider = Head->addComponent<Collider>();
-					Collider* Relbow_collider = Relbow->addComponent<Collider>();
 					Collider* Rsholder_collider = Rsholder->addComponent<Collider>();
-					Collider* Lelbow_collider = Lelbow->addComponent<Collider>();
+					Collider* Relbow_collider = Relbow->addComponent<Collider>();
 					Collider* Lsholder_collider = Lsholder->addComponent<Collider>();
+					Collider* Lelbow_collider = Lelbow->addComponent<Collider>();
 					Collider* Body_collider = Body->addComponent<Collider>();
 					Collider* Waist_collider = Waist->addComponent<Collider>();
 					Collider* Rleg_collider = Rleg->addComponent<Collider>();
@@ -1227,11 +1233,11 @@ namespace Adollib
 					Collider* Lfoot_collider = Lfoot->addComponent<Collider>();
 
 
-					Box* Head_shape = Head_collider->add_shape<Box>();
-					Capsule* Relbow_shape = Relbow_collider->add_shape<Capsule>();
+					Sphere* Head_shape = Head_collider->add_shape<Sphere>();
 					Capsule* Rsholder_shape = Rsholder_collider->add_shape<Capsule>();
-					Capsule* Lelbow_shape = Lelbow_collider->add_shape<Capsule>();
+					Capsule* Relbow_shape = Relbow_collider->add_shape<Capsule>();
 					Capsule* Lsholder_shape = Lsholder_collider->add_shape<Capsule>();
+					Capsule* Lelbow_shape = Lelbow_collider->add_shape<Capsule>();
 					Box* Body_shape = Body_collider->add_shape<Box>();
 					Box* Waist_shape = Waist_collider->add_shape<Box>();
 					Box* Rleg_shape = Rleg_collider->add_shape<Box>();
@@ -1239,8 +1245,21 @@ namespace Adollib
 					Box* Lleg_shape = Lleg_collider->add_shape<Box>();
 					Box* Lfoot_shape = Lfoot_collider->add_shape<Box>();
 
+					//::: 質量の調整 :::
+					Head_collider		->physics_data.inertial_mass = 3;
+					Rsholder_collider	->physics_data.inertial_mass = 2;
+					Relbow_collider		->physics_data.inertial_mass = 1;
+					Lsholder_collider	->physics_data.inertial_mass = 2;
+					Lelbow_collider		->physics_data.inertial_mass = 1;
+					Body_collider		->physics_data.inertial_mass = 5;
+					Waist_collider		->physics_data.inertial_mass = 4;
+					Rleg_collider		->physics_data.inertial_mass = 2;
+					Rfoot_collider		->physics_data.inertial_mass = 1;
+					Lleg_collider		->physics_data.inertial_mass = 2;
+					Lfoot_collider		->physics_data.inertial_mass = 1;
 
-					//::: capsule :::
+
+					//::: capsuleの調整 :::
 					Relbow_shape->length *= (Relbow->transform->local_scale.y - Relbow->transform->local_scale.x) / (Relbow->transform->local_scale.y);
 					Rsholder_shape->length *= (Rsholder->transform->local_scale.y - Rsholder->transform->local_scale.x) / (Rsholder->transform->local_scale.y);
 					Lelbow_shape->length *= (Lelbow->transform->local_scale.y - Lelbow->transform->local_scale.x) / (Lelbow->transform->local_scale.y);
@@ -1321,7 +1340,7 @@ namespace Adollib
 					}
 
 #else
-					{
+				/*	{
 						auto Ball = Joint::add_Conejoint(Head_collider, Body_collider, Vector3(0, -1, 0), Vector3(0, 1.5f, 0), Vector3(0, 1, 0), Vector3(0, 1, 0));
 						Ball->limit = 30;
 
@@ -1350,7 +1369,7 @@ namespace Adollib
 					{
 						auto hinge = Joint::add_Hingejoint(Lsholder_collider, Lelbow_collider, Vector3(-1, -0.6f, 0), Vector3(+1, -0.6f, 0), Vector3(-1, 0.6f, 0), Vector3(+1, 0.6f, 0));
 						hinge->limit = Vector2(230, 360);
-					}
+					}*/
 #endif
 
 

@@ -96,7 +96,6 @@ namespace Adollib {
 					//penetrate = (p1_limit_vec_world - limit_axis_world[1]).norm_sqr() * 10;
 				}
 
-				if (penetrate == 0)return false;
 				return true;
 			}
 

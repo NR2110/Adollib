@@ -27,46 +27,39 @@ bool Closest_func::get_closestP_two_line(
 }
 
 #pragma region  get_closestP_two_segment
+void Closest_func::get_closestP_two_segment(
+	const Vector3& segAs, const Vector3& segAg,
+	const Vector3& segBs, const Vector3& segBg,
+	Vector3& closestP_A, Vector3& closestP_B,
+	float& s, float& t
+) {
+	get_closestP_two_segment(
+		segAs, segAg,
+		segBs, segBg,
+		s, t
+	);
+	const Vector3 v1 = segAg - segAs; //A線分のベクトル
+	const Vector3 v2 = segBg - segBs; //B線分のベクトル
+	closestP_A = segAs + s * v1;
+	closestP_B = segBs + t * v2;
 
+}
 void Closest_func::get_closestP_two_segment(
 	const Vector3& segAs, const Vector3& segAg,
 	const Vector3& segBs, const Vector3& segBg,
 	Vector3& closestP_A, Vector3& closestP_B
 ) {
 
+	float s, t;
+	get_closestP_two_segment(
+		segAs, segAg,
+		segBs, segBg,
+		s, t
+	);
 	const Vector3 v1 = segAg - segAs; //A線分のベクトル
 	const Vector3 v2 = segBg - segBs; //B線分のベクトル
-	const Vector3 r = segAs - segBs; //各始点をつなぐベクトル
-
-	const float a = vector3_dot(v1, v1);
-	const float b = vector3_dot(v1, v2);
-	const float c = vector3_dot(v2, v2);
-	const float d = vector3_dot(v1, r);
-	const float e = vector3_dot(v2, r);
-	const float det = -a * c + b * b;
-	float s = 0.0f, t = 0.0f; //最近点の場所 s=0 : segAs
-
-
-	// 逆行列のチェック
-	if (det * det > FLT_EPSILON) {
-		s = (c * d - b * e) / det;
-	}
-
-	// sを0～1にクランプ
-	s = ALmax(ALmin(s, 1.f), 0.f);
-
-	t = (e + s * b) / c;
-
-	// tを0～1にクランプ
-	t = ALmax(ALmin(t, 1.f), 0.f);
-
-	// 再度sを求める
-	s = (-d + t * b) / a;
-	s = ALmax(ALmin(s, 1.f), 0.f);
-
 	closestP_A = segAs + s * v1;
 	closestP_B = segBs + t * v2;
-
 }
 void Closest_func::get_closestP_two_segment(
 	const Vector3& segAs, const Vector3& segAg,
@@ -76,6 +69,30 @@ void Closest_func::get_closestP_two_segment(
 
 	Vector3 v1 = segAg - segAs; //A線分のベクトル
 	Vector3 v2 = segBg - segBs; //B線分のベクトル
+
+	// v1またはv2が0の時 点と線分になる
+	if (v1.norm() == 0 && v2.norm() != 0) {
+		Vector3 p;
+		get_closestP_point_segment(segAg, segBs, segBg, p);
+
+		s = 0;
+		t = vector3_dot(p - segBs, v2.unit_vect());
+		return;
+	}
+	else if (v2.norm() == 0 && v1.norm() != 0) {
+		Vector3 p;
+		get_closestP_point_segment(segBg, segAs, segAg, p);
+
+		s = vector3_dot(p - segAs, v1.unit_vect());
+		t = 0;
+		return;
+	}
+	else if (v1.norm() == 0 && v2.norm() == 0) {
+		s = 0;
+		t = 0;
+		return;
+	}
+
 	Vector3 r = segAs - segBs; //各始点をつなぐベクトル
 
 	const float a = vector3_dot(v1, v1);
@@ -84,7 +101,6 @@ void Closest_func::get_closestP_two_segment(
 	const float d = vector3_dot(v1, r);
 	const float e = vector3_dot(v2, r);
 	const float det = -a * c + b * b;
-	//float s = 0.0f, t = 0.0f; //最近点の場所 s=0 : segAs
 
 
 	// 逆行列のチェック
@@ -106,47 +122,6 @@ void Closest_func::get_closestP_two_segment(
 
 	//closestP_A = segAs + s * v1;
 	//closestP_B = segBs + t * v2;
-
-}
-void Closest_func::get_closestP_two_segment(
-	const Vector3& segAs, const Vector3& segAg,
-	const Vector3& segBs, const Vector3& segBg,
-	Vector3& closestP_A, Vector3& closestP_B,
-	float& s, float& t
-) {
-
-	Vector3 v1 = segAg - segAs; //A線分のベクトル
-	Vector3 v2 = segBg - segBs; //B線分のベクトル
-	Vector3 r = segAs - segBs; //各始点をつなぐベクトル
-
-	const float a = vector3_dot(v1, v1);
-	const float b = vector3_dot(v1, v2);
-	const float c = vector3_dot(v2, v2);
-	const float d = vector3_dot(v1, r);
-	const float e = vector3_dot(v2, r);
-	const float det = -a * c + b * b;
-	//float s = 0.0f, t = 0.0f; //最近点の場所 s=0 : segAs
-
-
-	// 逆行列のチェック
-	if (det * det > FLT_EPSILON) {
-		s = (c * d - b * e) / det;
-	}
-
-	// sを0～1にクランプ
-	s = s < 0.0f ? 0.0f : s > 1.0f ? 1.0f : s;
-
-	t = (e + s * b) / c;
-
-	// tを0～1にクランプ
-	t = t < 0.0f ? 0.0f : t > 1.0f ? 1.0f : t;
-
-	// 再度sを求める
-	s = (-d + t * b) / a;
-	s = s < 0.0f ? 0.0f : s > 1.0f ? 1.0f : s;
-
-	closestP_A = segAs + s * v1;
-	closestP_B = segBs + t * v2;
 
 }
 #pragma endregion
@@ -351,6 +326,12 @@ void Closest_func::get_closestP_segment_triangle(
 ) {
 	const float plane_dis = vector3_dot(t_normal, t_point0); //平面の法線
 	Vector3 line_dir = segG - segS; //線分の向き
+
+	if (line_dir.norm() == 0) {
+		get_closestP_point_triangle(segG, t_point0, t_point1, t_point2, t_normal, closest_p);
+		closest_t = 0;
+		return;
+	}
 
 	closest_t = (plane_dis - vector3_dot(segS, t_normal)) / vector3_dot(t_normal, line_dir);
 	//線分を直線とした平面上の交点

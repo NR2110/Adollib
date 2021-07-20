@@ -38,6 +38,7 @@ struct Balljoint {
 		constraint.accuminpulse = 0.0f;
 	}
 };
+
 void CalcTangentVector(const Vector3& normal, DirectX::XMVECTOR& tangent1, DirectX::XMVECTOR& tangent2)
 {
 	Vector3 vec(1.0f, 0.0f, 0.0f);
@@ -51,6 +52,90 @@ void CalcTangentVector(const Vector3& normal, DirectX::XMVECTOR& tangent1, Direc
 	tangent1 = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(xmnorm, DirectX::XMLoadFloat3(&vec)));
 	tangent2 = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(tangent1, xmnorm));
 }
+bool Calc_joint_effect(ALP_Joint* joint)
+{
+	ALP_Physics* ALPphysics[2];
+	ALP_Solverbody* solverbody[2];
+	Transfome* transform[2];
+	DirectX::XMVECTOR position[2];
+
+	transform[0] = joint->ALPcollider[0]->get_gameobject()->transform.get();
+	transform[1] = joint->ALPcollider[1]->get_gameobject()->transform.get();
+	ALPphysics[0] = joint->ALPcollider[0]->get_ALPphysics();
+	ALPphysics[1] = joint->ALPcollider[1]->get_ALPphysics();
+	solverbody[0] = ALPphysics[0]->solve;
+	solverbody[1] = ALPphysics[1]->solve;
+
+	float penetrate = 0;
+	static Vector3 debug_save = { Vector3(0) };
+	static float debug_count = 0;
+	debug_count -= Phyisics_manager::physicsParams.timeStep;
+
+	if (joint->joint->limit_effect(joint->limit_constraint_pos[0], joint->limit_constraint_pos[1], penetrate)) {
+		if (penetrate == 0)return false;
+
+		//anchorそれぞれのlocal座標
+		const DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&joint->limit_constraint_pos[0]), DirectX::XMLoadFloat4(&transform[0]->orientation));
+		const DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&joint->limit_constraint_pos[1]), DirectX::XMLoadFloat4(&transform[1]->orientation));
+
+		//anchorそれぞれのworld座標
+		position[0] = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&transform[0]->position), rA);
+		position[1] = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&transform[1]->position), rB);
+		DirectX::XMVECTOR direction = DirectX::XMVectorSubtract(position[1], position[0]);
+		DirectX::XMVECTOR distance = DirectX::XMVector3Length(direction);
+		if (DirectX::XMVectorGetX(distance) == 0)return false;
+
+		direction = DirectX::XMVectorDivide(direction, distance);
+
+		DirectX::XMVECTOR velocityA = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&ALPphysics[0]->linear_velocity), DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&ALPphysics[0]->angula_velocity), rA));
+		DirectX::XMVECTOR velocityB = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&ALPphysics[1]->linear_velocity), DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&ALPphysics[1]->angula_velocity), rB));
+		DirectX::XMVECTOR relativeVelocity = DirectX::XMVectorSubtract(velocityA, velocityB);
+
+		const float& term1 = ALPphysics[0]->inverse_mass();
+		const float& term2 = ALPphysics[1]->inverse_mass();
+		DirectX::XMVECTOR tA, tB;
+
+		float term3, term4, denominator;
+		DirectX::XMVECTOR axis;
+		axis = direction;
+		tA = DirectX::XMVector3Cross(rA, axis);
+		tB = DirectX::XMVector3Cross(rB, axis);
+		tA = DirectX::XMVector3Transform(tA, ALPphysics[0]->solve->inv_inertia);
+		tB = DirectX::XMVector3Transform(tB, ALPphysics[1]->solve->inv_inertia);
+		tA = DirectX::XMVector3Cross(tA, rA);
+		tB = DirectX::XMVector3Cross(tB, rB);
+		term3 = DirectX::XMVectorGetX(DirectX::XMVector3Dot(axis, tA));
+		term4 = DirectX::XMVectorGetX(DirectX::XMVector3Dot(axis, tB));
+		denominator = term1 + term2 + term3 + term4;
+
+
+		joint->constraint_limit.jacDiagInv = 1.0f / denominator;
+
+		joint->constraint_limit.rhs = -DirectX::XMVectorGetX(DirectX::XMVector3Dot(relativeVelocity, direction)); // velocity error
+		joint->constraint_limit.rhs += joint->limit_bias * penetrate / Phyisics_manager::physicsParams.timeStep; // position error
+		joint->constraint_limit.rhs *= joint->constraint_limit.jacDiagInv;
+		joint->constraint_limit.lowerlimit = -FLT_MAX;
+		joint->constraint_limit.upperlimit = +FLT_MAX;
+		DirectX::XMStoreFloat3(&joint->constraint_limit.axis, direction);
+
+		Vector3 linervec, anglvec;
+		DirectX::XMStoreFloat3(&linervec, direction);
+		if (isnan(linervec.norm())) {
+			int adsfgh = 0;
+		}
+
+		joint->constraint_limit.accuminpulse = 0.0f;
+
+
+	}
+	else {
+		return false;
+	}
+
+
+	return true;
+}
+
 
 void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std::vector<Contacts::Contact_pair*>& pairs, std::list<Physics_function::ALP_Joint*> joints) {
 
@@ -108,72 +193,14 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 			solverbody[1] = ALPphysics[1]->solve;
 
 			// limitの影響を計算
-			{
-				float penetrate = 0;
-				static Vector3 debug_save = { Vector3(0) };
-				static float debug_count = 0;
-				debug_count -= Phyisics_manager::physicsParams.timeStep;
-				if (joint->joint->limit_effect(joint->limit_constraint_pos[0], joint->limit_constraint_pos[1], penetrate)) {
-					//joint->joint->limit_effect(joint->limit_constraint_pos[0], joint->limit_constraint_pos[1], penetrate);
-
-					//anchorそれぞれのlocal座標
-					const DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&joint->limit_constraint_pos[0]), DirectX::XMLoadFloat4(&transform[0]->orientation));
-					const DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&joint->limit_constraint_pos[1]), DirectX::XMLoadFloat4(&transform[1]->orientation));
-
-					//anchorそれぞれのworld座標
-					position[0] = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&transform[0]->position), rA);
-					position[1] = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&transform[1]->position), rB);
-					DirectX::XMVECTOR direction = DirectX::XMVectorSubtract(position[1], position[0]);
-					DirectX::XMVECTOR distance = DirectX::XMVector3Length(direction);
-
-					direction = DirectX::XMVectorDivide(direction, distance);
-
-					DirectX::XMVECTOR velocityA = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&ALPphysics[0]->linear_velocity), DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&ALPphysics[0]->angula_velocity), rA));
-					DirectX::XMVECTOR velocityB = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&ALPphysics[1]->linear_velocity), DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&ALPphysics[1]->angula_velocity), rB));
-					DirectX::XMVECTOR relativeVelocity = DirectX::XMVectorSubtract(velocityA, velocityB);
-
-					const float& term1 = ALPphysics[0]->inverse_mass();
-					const float& term2 = ALPphysics[1]->inverse_mass();
-					DirectX::XMVECTOR tA, tB;
-
-					float term3, term4, denominator;
-					DirectX::XMVECTOR axis;
-					axis = direction;
-					tA = DirectX::XMVector3Cross(rA, axis);
-					tB = DirectX::XMVector3Cross(rB, axis);
-					tA = DirectX::XMVector3Transform(tA, ALPphysics[0]->solve->inv_inertia);
-					tB = DirectX::XMVector3Transform(tB, ALPphysics[1]->solve->inv_inertia);
-					tA = DirectX::XMVector3Cross(tA, rA);
-					tB = DirectX::XMVector3Cross(tB, rB);
-					term3 = DirectX::XMVectorGetX(DirectX::XMVector3Dot(axis, tA));
-					term4 = DirectX::XMVectorGetX(DirectX::XMVector3Dot(axis, tB));
-					denominator = term1 + term2 + term3 + term4;
-
-
-					joint->constraint_limit.jacDiagInv = 1.0f / denominator;
-
-					joint->constraint_limit.rhs = -DirectX::XMVectorGetX(DirectX::XMVector3Dot(relativeVelocity, direction)); // velocity error
-					joint->constraint_limit.rhs += joint->limit_bias * penetrate / Phyisics_manager::physicsParams.timeStep; // position error
-					joint->constraint_limit.rhs *= joint->constraint_limit.jacDiagInv;
-					joint->constraint_limit.lowerlimit = -FLT_MAX;
-					joint->constraint_limit.upperlimit = +FLT_MAX;
-					DirectX::XMStoreFloat3(&joint->constraint_limit.axis, direction);
-
-					joint->constraint_limit.accuminpulse = 0.0f;
-
-
-				}
-				else {
-					//limitに引っかかっていない -> 何も起きない
-					joint->constraint_limit.jacDiagInv = 0.0f;
-					joint->constraint_limit.rhs = 0.0f;
-					joint->constraint_limit.lowerlimit = -FLT_MAX;
-					joint->constraint_limit.upperlimit = +FLT_MAX;
-					joint->constraint_limit.axis = Vector3(0, 1, 0);
-				}
+			if (Calc_joint_effect(joint) == false) {
+				//limitに引っかかっていない -> 何も起きない
+				joint->constraint_limit.jacDiagInv = 0.0f;
+				joint->constraint_limit.rhs = 0.0f;
+				joint->constraint_limit.lowerlimit = -FLT_MAX;
+				joint->constraint_limit.upperlimit = +FLT_MAX;
+				joint->constraint_limit.axis = Vector3(0, 1, 0);
 			}
-
-
 
 			if (joint->bias == -1)continue;
 
@@ -441,7 +468,6 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 				solverbody[0]->delta_AngulaVelocity = DirectX::XMVectorAdd(solverbody[0]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rA, axis), solverbody[0]->inv_inertia), delta_impulse));
 				solverbody[1]->delta_LinearVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_LinearVelocity, DirectX::XMVectorScale(axis, delta_impulse * solverbody[1]->inv_mass));
 				solverbody[1]->delta_AngulaVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rB, axis), solverbody[1]->inv_inertia), delta_impulse));
-
 			}
 
 			for (int i = 0; i < joint->anchor_count; i++) {
@@ -569,14 +595,21 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 
 	// 速度の更新
 	for (auto& coll : colliders) {
+
 		if (coll->get_ALPphysics()->is_kinmatic_linear) {
 			Vector3 linervec;
 			DirectX::XMStoreFloat3(&linervec, coll->get_ALPphysics()->solve->delta_LinearVelocity);
+			if (isnan(linervec.norm())) {
+				int adsfgh = 0;
+			}
 			coll->get_ALPphysics()->linear_velocity += linervec;
 		}
 		if (coll->get_ALPphysics()->is_kinmatic_anglar) {
 			Vector3 anglvec;
 			DirectX::XMStoreFloat3(&anglvec, coll->get_ALPphysics()->solve->delta_AngulaVelocity);
+			if (isnan(anglvec.norm())) {
+				int adsfgh = 0;
+			}
 			coll->get_ALPphysics()->angula_velocity += anglvec;
 		}
 

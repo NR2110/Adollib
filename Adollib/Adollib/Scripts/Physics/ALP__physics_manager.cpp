@@ -251,7 +251,7 @@ bool Phyisics_manager::update_Gui() {
 		//貫通許容誤差
 		ImGui::InputFloat("slop", &physicsParams.slop, 0.0001f, 0.001f, "%.4f");
 
-		//最大何フレーム
+		//毎フレーム回すのはおもいので 何秒毎に回すのか
 		ImGui::DragFloat("max_timeStep", &physicsParams.max_timeStep, 0.001f, 0.001f, 100000000);
 		ImGui::Text("timeStep : %f", physicsParams.timeStep);
 

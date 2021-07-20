@@ -1726,6 +1726,10 @@ bool Physics_function::generate_contact_box_capsule(const Collider_shape* box, c
 						closest_box = closest_P;
 						closest_cap = closest_Q;
 						capsule_t = t * 2 - 1;
+
+						if (isnan(capsule_t) || isinf(capsule_t)) {
+							int dafsdgf = 0;
+						}
 					}
 					Closest_func::get_closestP_two_segment(vertex[i], Vector3(+vertex[i].x, -vertex[i].y, +vertex[i].z), cuppos_boxcoord - cupsca_boxcoord, cuppos_boxcoord + cupsca_boxcoord, closest_P, closest_Q, s, t);
 					if ((closest_P - closest_Q).norm() < dis_save) {
@@ -1733,6 +1737,10 @@ bool Physics_function::generate_contact_box_capsule(const Collider_shape* box, c
 						closest_box = closest_P;
 						closest_cap = closest_Q;
 						capsule_t = t * 2 - 1;
+
+						if (isnan(capsule_t) || isinf(capsule_t)) {
+							int dafsdgf = 0;
+						}
 					}
 					Closest_func::get_closestP_two_segment(vertex[i], Vector3(+vertex[i].x, +vertex[i].y, -vertex[i].z), cuppos_boxcoord - cupsca_boxcoord, cuppos_boxcoord + cupsca_boxcoord, closest_P, closest_Q, s, t);
 					if ((closest_P - closest_Q).norm() < dis_save) {
@@ -1740,6 +1748,10 @@ bool Physics_function::generate_contact_box_capsule(const Collider_shape* box, c
 						closest_box = closest_P;
 						closest_cap = closest_Q;
 						capsule_t = t * 2 - 1;
+
+						if (isnan(capsule_t) || isinf(capsule_t)) {
+							int dafsdgf = 0;
+						}
 					}
 				}
 			}
@@ -1774,6 +1786,10 @@ bool Physics_function::generate_contact_box_capsule(const Collider_shape* box, c
 			ACnormal = -Wns;
 			ACcontact_pointA = closest_box;
 			ACcontact_pointB = (Vector3(0, capsule->world_scale().y, 0) * capsule_t) + vector3_quatrotate(-Wn, capsule->world_orientation().inverse()) * capsule->world_scale().x;
+
+			if (isnan(ACcontact_pointA.norm() + ACcontact_pointB.norm())) {
+				int adsfgh = 0;
+			}
 		}
 
 
@@ -1785,6 +1801,7 @@ bool Physics_function::generate_contact_box_capsule(const Collider_shape* box, c
 
 
 	}
+
 	//obbÇÃï”Ç∆capsuleÇ™è’ìÀÇµÇΩèÍçá
 	else if (smallest_case == SAT_TYPE::EDGE_EDGE) {
 		Vector3 boxN = -vector3_cross(obb.u_axes[smallest_axis[0]], capsule_s.y_axis);	//boxç¿ïWånÇ≈ÇÃè’ìÀñ@ê¸ obxÇ©ÇÁcapsule
@@ -1822,6 +1839,7 @@ bool Physics_function::generate_contact_box_capsule(const Collider_shape* box, c
 
 	if (is_AC)
 	{
+
 		is_crossing = true;
 
 		//oncoll_enterÇÃÇ›ÇÃèÍçáÇ±Ç±Ç≈return

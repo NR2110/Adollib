@@ -79,6 +79,9 @@ void ALP_Physics::apply_external_force(float duration) {
 	if (is_movable()) {
 		//inv_rotate = Quaternion(1, 0, 0, 0);
 
+		if (isnan(linear_velocity.norm() + linear_velocity.norm())) {
+			int adsfgh = 0;
+		}
 		angula_velocity = angula_velocity * pow(1 - angula_drag, duration);
 		linear_velocity = linear_velocity * pow(1 - linear_drag, duration);
 
@@ -117,6 +120,9 @@ void ALP_Physics::apply_external_force(float duration) {
 		angula_velocity += angula_acceleration * duration;
 		if (angula_velocity.norm() < FLT_EPSILON)angula_velocity = Vector3(0, 0, 0);
 
+		if (isnan(linear_acceleration.norm() + angula_acceleration.norm())) {
+			int adsfgh = 0;
+		}
 	}
 	else reset_force();
 
@@ -146,6 +152,7 @@ void ALP_Physics::integrate(float duration) {
 	else {
 		is_sleep = false;
 	}
+
 	ALPcollider->integrate(duration, linear_velocity, angula_velocity);
 
 }
