@@ -212,8 +212,8 @@ bool ray_cast_mesh(const Vector3& l_Ray_pos, const Vector3& l_Ray_dir,
 
 
 bool Physics_function::ray_cast(const Vector3& Ray_pos, const Vector3& Ray_dir,
-	const ALP_Collider* coll,
 	const float ray_min,
+	const ALP_Collider* coll,
 	float& tmin, float& tmax,
 	Vector3& normal
 ) {

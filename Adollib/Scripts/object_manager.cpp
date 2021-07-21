@@ -1159,7 +1159,7 @@ namespace Adollib
 					}
 					{
 						auto hinge = Joint::add_Hingejoint(Rleg_collider, Rfoot_collider, Vector3(-1, -0.4f, 0), Vector3(+1, -0.3f, 0), Vector3(-1, +0.3f, 0), Vector3(+1, +0.3f, 0));
-						hinge->limit = Vector2(0, 100);
+						hinge->limit = Vector2(0, 60);
 					}
 					{
 						auto Cone = Joint::add_Conejoint(Waist_collider, Lleg_collider, Vector3(+0.6f, -0.8, 0), Vector3(0, 0.3, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect());
@@ -1170,7 +1170,7 @@ namespace Adollib
 					}
 					{
 						auto hinge = Joint::add_Hingejoint(Lleg_collider, Lfoot_collider, Vector3(-1, -0.4f, 0), Vector3(+1, -0.3f, 0), Vector3(-1, +0.3f, 0), Vector3(+1, +0.3f, 0));
-						hinge->limit = Vector2(0, 100);
+						hinge->limit = Vector2(0, 60);
 					}
 
 

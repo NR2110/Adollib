@@ -8,9 +8,21 @@ namespace Adollib
 	class Player : public Component
 	{
 	private:
-		float move_speed = 3 * 5;
-		float turn_speed = 0.4f;
-		float jump_power = 7.5f;
+		float move_speed = 1200000;
+		float turn_speed = 2;
+		float jump_power = 8000000;
+
+		float gnyat_pow = 1;
+
+		float coyote = 0.3f;
+
+		Quaternion rotate;
+		Vector3 dir;
+		Vector3 pos;
+
+		std::shared_ptr<Transfome> camera;
+
+		bool is_jumping = false;
 
 	private:
 		//::: GO :::
@@ -43,6 +55,8 @@ namespace Adollib
 		Collider* Lleg_collider = nullptr;
 		Collider* Lfoot_collider = nullptr;
 
+		Collider* Waist_capsule_collider = nullptr;
+
 
 
 
@@ -58,7 +72,8 @@ namespace Adollib
 		Collider* l_Rleg_collider		,
 		Collider* l_Rfoot_collider		,
 		Collider* l_Lleg_collider		,
-		Collider* l_Lfoot_collider
+		Collider* l_Lfoot_collider		,
+		Collider* l_Waist_capsule_collider
 		) {
 			Head_collider		= l_Head_collider;
 			Rsholder_collider	= l_Rsholder_collider;
@@ -71,6 +86,7 @@ namespace Adollib
 			Rfoot_collider		= l_Rfoot_collider;
 			Lleg_collider		= l_Lleg_collider;
 			Lfoot_collider		= l_Lfoot_collider;
+			Waist_capsule_collider = l_Waist_capsule_collider;
 
 			Head		=Head_collider		->gameobject;
 			Rsholder	=Rsholder_collider	->gameobject;

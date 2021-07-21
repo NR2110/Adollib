@@ -33,12 +33,12 @@ namespace Adollib
 	// 所属するシーンの初期化時に一度だけ呼ばれる
 	void camera_s::awake()
 	{
-
+		player = Gameobject_manager::find("Waist")->transform;
 	}
 
 	void camera_s::start()
 	{
-		//player = Gameobject_manager::find("player")->transform;
+
 	}
 
 	// 毎フレーム呼ばれる更新処理

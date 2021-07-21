@@ -226,7 +226,7 @@ namespace Adollib {
 
 	inline float Adollib::vector3_angle(const Vector3& P, const Vector3& Q) {
 
-		return ToAngle(acosf(Adollib::vector3_dot(P.unit_vect(), Q.unit_vect())));
+		return ToAngle(vector3_radian(P, Q));
 	}
 	inline float Adollib::vector3_radian(const Vector3& P, const Vector3& Q) {
 

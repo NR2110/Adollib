@@ -29,7 +29,7 @@ namespace Adollib
 		struct PhysicsParams_default {
 		public:
 
-			static constexpr float gravity = 9.8f; //重力
+			static constexpr float gravity = 30; //重力
 
 			static constexpr float bounce_threshold = 0.01f; //跳ね返りの閾値
 			static constexpr float sleep_threshold = 0.01f; //sleepの閾値
@@ -67,7 +67,8 @@ namespace Adollib
 
 		struct PhysicsParams {
 		public:
-			float gravity = 9.8f; //重力
+			//float gravity = 9.8f; //重力
+			float gravity = 30; //重力
 
 			float bounce_threshold = 0.01f; //跳ね返りの閾値
 			float sleep_threshold = 0.01f; //sleepの閾値
@@ -240,6 +241,19 @@ namespace Adollib
 			}
 
 		public:
+			//::::::
+			//raycastを行う
+			// ray_pos : rayの始点
+			// ray_dir : rayの向き
+			// tag : rayの衝突するtag
+			// ray_min
+			// ---out---
+			// tmin : rayの最近点
+			// tmax : rayの最遠点
+			// normal : 衝突した面のnormal
+			// coll : 衝突したcoiiderへのポインタ
+			// Sce  : Rayの衝突するcolliderの存在するscene
+			//:::::::
 			static bool ray_cast(
 				const Vector3& Ray_pos, const Vector3& Ray_dir,
 				u_int tag,

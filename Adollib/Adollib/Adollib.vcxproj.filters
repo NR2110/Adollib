@@ -14,9 +14,6 @@
     <Filter Include="ソース ファイル\scene_game\object">
       <UniqueIdentifier>{1318d6d5-7f58-4468-9a25-b89ef51ca1f0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\scene_game\player">
-      <UniqueIdentifier>{5803a67c-c3e6-4d3c-82a6-90b2b6264aeb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00_Adollib">
       <UniqueIdentifier>{457a0db0-78dc-4f19-9ba1-e6eb79f8abcf}</UniqueIdentifier>
     </Filter>
@@ -68,10 +65,19 @@
     <Filter Include="00_Adollib\22_physics\Joint">
       <UniqueIdentifier>{49b4bba8-3f1f-4682-a578-69c8e8cd5674}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\scene_game\scene_house">
+      <UniqueIdentifier>{e6d50f78-9f68-4ce7-acad-d2aae7892255}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\scene_game\scene_house\player">
+      <UniqueIdentifier>{5803a67c-c3e6-4d3c-82a6-90b2b6264aeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\scene_game\scene_house\camera">
+      <UniqueIdentifier>{c5a1a0b5-3b44-4ee7-b36f-e93b357c3d6b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Scripts\player.cpp">
-      <Filter>ソース ファイル\scene_game\player</Filter>
+      <Filter>ソース ファイル\scene_game\scene_house\player</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\object_rotate.cpp">
       <Filter>ソース ファイル\scene_game\object</Filter>
@@ -221,7 +227,7 @@
       <Filter>00_Adollib\33_object</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\player_manager.cpp">
-      <Filter>ソース ファイル\scene_game\player</Filter>
+      <Filter>ソース ファイル\scene_game\scene_house\player</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Physics\collider.cpp">
       <Filter>00_Adollib\22_physics\collider</Filter>
@@ -235,9 +241,6 @@
     <ClCompile Include="Scripts\Physics\joint.cpp">
       <Filter>00_Adollib\22_physics\Joint</Filter>
     </ClCompile>
-    <ClCompile Include="..\Scripts\demo_house.cpp">
-      <Filter>ソース ファイル\scene_game\object</Filter>
-    </ClCompile>
     <ClCompile Include="Scripts\Physics\joint_base.cpp">
       <Filter>00_Adollib\22_physics\Joint</Filter>
     </ClCompile>
@@ -250,10 +253,16 @@
     <ClCompile Include="Scripts\Object\component_light.cpp">
       <Filter>00_Adollib\33_object</Filter>
     </ClCompile>
+    <ClCompile Include="..\Scripts\demo_house.cpp">
+      <Filter>ソース ファイル\scene_game\scene_house</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\camera.cpp">
+      <Filter>ソース ファイル\scene_game\scene_house\camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Scripts\player.h">
-      <Filter>ソース ファイル\scene_game\player</Filter>
+      <Filter>ソース ファイル\scene_game\scene_house\player</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\scene_game_all.h">
       <Filter>ソース ファイル\scene_game</Filter>
@@ -520,7 +529,7 @@
       <Filter>00_Adollib\11_math</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\player_manager.h">
-      <Filter>ソース ファイル\scene_game\player</Filter>
+      <Filter>ソース ファイル\scene_game\scene_house\player</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Physics\collider_shape.h">
       <Filter>00_Adollib\22_physics\collider</Filter>
@@ -533,9 +542,6 @@
     </ClInclude>
     <ClInclude Include="Scripts\Math\matrix3x3_e.h">
       <Filter>00_Adollib\11_math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Scripts\demo_house.h">
-      <Filter>ソース ファイル\scene_game\object</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Physics\joint.h">
       <Filter>00_Adollib\22_physics\Joint</Filter>
@@ -563,6 +569,12 @@
     </ClInclude>
     <ClInclude Include="Scripts\Physics\twistjoint.h">
       <Filter>00_Adollib\22_physics\Joint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\demo_house.h">
+      <Filter>ソース ファイル\scene_game\scene_house</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\camera.h">
+      <Filter>ソース ファイル\scene_game\scene_house\camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -145,6 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Scripts\camera.h" />
     <ClInclude Include="..\Scripts\camera_manager.h" />
     <ClInclude Include="..\Scripts\camera_s.h" />
     <ClInclude Include="..\Scripts\demo_house.h" />
@@ -251,6 +252,7 @@
     <ClInclude Include="Scripts\Shader\shader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Scripts\camera.cpp" />
     <ClCompile Include="..\Scripts\camera_manager.cpp" />
     <ClCompile Include="..\Scripts\camera_s.cpp" />
     <ClCompile Include="..\Scripts\demo_house.cpp" />

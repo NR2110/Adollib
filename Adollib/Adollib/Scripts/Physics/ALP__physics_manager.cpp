@@ -80,10 +80,11 @@ bool Phyisics_manager::update(Scenelist Sce)
 #endif
 
 	frame_count += Al_Global::second_per_frame();
-	if (frame_count < 0.016f) {
-		return true;
+	if (Al_Global::second_per_game < 1) {
 		resetforce(ALP_physicses[Sce]);
-		frame_count++;
+	}
+
+	if (frame_count < 0.016f) {
 		return true;
 	}
 
@@ -96,10 +97,14 @@ bool Phyisics_manager::update(Scenelist Sce)
 	// 外力の更新
 	applyexternalforce(ALP_physicses[Sce]);
 
-
-	//physicsParams.timeStep = ALmin(Al_Global::second_per_frame(), physicsParams.max_timeStep);
+#if 0
 	physicsParams.timeStep = ALmin(frame_count, physicsParams.max_timeStep);
 	frame_count = 0;
+#else
+	// 0.016秒ごとに更新するとアタッチしたGOへの追跡カメラがバグるため
+	physicsParams.timeStep = ALmin(Al_Global::second_per_frame(), physicsParams.max_timeStep);
+#endif
+
 	//physicsParams.timeStep = 0.016f;
 
 	pairs_new_num = 1 - pairs_new_num;
@@ -300,8 +305,8 @@ bool Phyisics_manager::ray_cast(
 
 		if (Physics_function::ray_cast(
 			Ray_pos, Ray_dir,
-			coll,
 			ray_min,
+			coll,
 			min, max, norm
 		) == false) continue;
 

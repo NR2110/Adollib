@@ -163,11 +163,13 @@ namespace Adollib {
 	}
 
 	inline float Quaternion::radian() const {
+		if (w >= 1) return 0;
+		else if (w <= -1) return DirectX::XM_2PI;
 		return acosf(w) * 2;
 	}
 
 	inline float Quaternion::angle() const {
-		return ToAngle(acosf(w) * 2);
+		return ToAngle(radian());
 	}
 
 

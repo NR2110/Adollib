@@ -9,3 +9,5 @@
 #include "../Scripts/player.h"
 
 #include "../Scripts/demo_house.h"
+
+#include "../Scripts/camera.h"

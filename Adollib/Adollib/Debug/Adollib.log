@@ -1,79 +1,18 @@
-﻿  camera_manager.cpp
-  camera_s.cpp
-  demo_house.cpp
-  object_manager.cpp
-  object_rotate.cpp
+﻿  object_manager.cpp
   player.cpp
   player_manager.cpp
-  imgui_manager.cpp
-  Adollib.cpp
-  input.cpp
-  loop.cpp
-  main.cpp
-  resource_manager.cpp
-  systems.cpp
-  closest_func.cpp
-  crossing_func.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(72,38): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(70,45): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(75,26): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(72,58): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(281,90): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(281,110): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(292,90): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(292,110): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+  scene_game.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player.cpp(151,18): warning C4305: '=': 'double' から 'float' へ切り詰めます。
 C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(945,61): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(1154,93): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(1154,113): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(1165,93): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(1165,113): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-  material.cpp
-  material_for_collider.cpp
-  mesh.cpp
-  texture.cpp
-  component_camera.cpp
-  component_light.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(264,91): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(264,111): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(275,91): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(275,111): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(317,59): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(330,53): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\vector_e.h(339): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
-  gameobject.cpp
-  gameobject_manager.cpp
-  hierarchy.cpp
-  ALP__physics_manager.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\vector_e.h(339): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
-  ALP_broadphase.cpp
-  ALP_collider.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(550,82): warning C4018: '>': signed と unsigned の数値を比較しようとしました。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(552,63): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(576,27): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(667,35): warning C4244: '=': 'double' から 'Adollib::u_int' への変換です。データが失われる可能性があります。
-  ALP_generate_contact.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(147,104): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(213,98): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(278,98): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(344,98): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(413,99): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(479,99): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(545,99): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(818,94): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-  ALP_integrate.cpp
-  ALP_joint.cpp
-  ALP_midphase.cpp
-  ALP_physics.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\vector_e.h(339): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
-  ALP_raycast.cpp
-  ALP_resolve_contact.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(2117,26): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-  ALP_resolve_contact_SIM.cpp
-  collider.cpp
-  collider_shape.cpp
-  contact.cpp
-  joint.cpp
-  joint_base.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(108,23): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-  meshcoll_resorce_manager.cpp
-  ray.cpp
-  scene_game.cpp
-  scene_manager.cpp
-  compute_shader.cpp
-  shader.cpp
-  LINK : 前回のインクリメンタル リンクで C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe が見つからなかったか、ビルドされませんでした。フル リンクを行います。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe
