@@ -20,11 +20,11 @@ namespace Adollib
 
 		ret.x = vector3_angle(Vector3(Q.x, 0, Q.z).unit_vect(), Vector3(0, 0, 1));
 		if (vector3_cross(Vector3(Q.x, 0, Q.z), Vector3(0, 0, 1)).y < 0) ret.y *= -1;
-		Q = vector3_quatrotate(Q, quaternion_angle_axis(-ret.y, Vector3(0, 1, 0)));
+		Q = vector3_quatrotate(Q, quaternion_axis_angle(Vector3(0, 1, 0), -ret.y));
 
 		ret.y = vector3_angle(Vector3(0, Q.y, Q.z).unit_vect(), Vector3(0, 0, 1));
 		if (vector3_cross(Vector3(0, Q.y, Q.z), Vector3(0, 0, 1)).x < 0) ret.x *= -1;
-		Q = vector3_quatrotate(Q, quaternion_angle_axis(-ret.x, Vector3(1, 0, 0)));
+		Q = vector3_quatrotate(Q, quaternion_axis_angle(Vector3(1, 0, 0), -ret.x));
 
 
 		return ret;
@@ -80,8 +80,8 @@ namespace Adollib
 				rotate_vec.y = input->getCursorPosX() - c_pos_save.x;
 				rotate_vec.x = input->getCursorPosY() - c_pos_save.y;
 
-				rotate *= quaternion_angle_axis(+rotate_vec.y * rotate_pow, Vector3(0, 1, 0));
-				rotate *= quaternion_angle_axis(+rotate_vec.x * rotate_pow, vector3_cross(Vector3(0, 1, 0), vector3_quatrotate(Vector3(0, 0, 1), transform->local_orient)).unit_vect());
+				rotate *= quaternion_axis_angle(Vector3(0, 1, 0), +rotate_vec.y * rotate_pow);
+				rotate *= quaternion_axis_angle(vector3_cross(Vector3(0, 1, 0), vector3_quatrotate(Vector3(0, 0, 1), transform->local_orient)).unit_vect(), +rotate_vec.x * rotate_pow);
 			}
 			c_pos_save.x = (float)input->getCursorPosX();
 			c_pos_save.y = (float)input->getCursorPosY();
@@ -123,8 +123,8 @@ namespace Adollib
 				rotate_vec.y = input->getCursorPosX() - c_pos_save.x;
 				rotate_vec.x = input->getCursorPosY() - c_pos_save.y;
 
-				rotate *= quaternion_angle_axis(+rotate_vec.y * rotate_pow, Vector3(0, 1, 0));
-				rotate *= quaternion_angle_axis(+rotate_vec.x * rotate_pow, vector3_cross(Vector3(0, 1, 0), vector3_quatrotate(Vector3(0, 0, 1), transform->local_orient)).unit_vect());
+				rotate *= quaternion_axis_angle(Vector3(0, 1, 0), +rotate_vec.y * rotate_pow);
+				rotate *= quaternion_axis_angle(vector3_cross(Vector3(0, 1, 0), vector3_quatrotate(Vector3(0, 0, 1), transform->local_orient)).unit_vect(), +rotate_vec.x * rotate_pow);
 			}
 			c_pos_save.x = (float)input->getCursorPosX();
 			c_pos_save.y = (float)input->getCursorPosY();

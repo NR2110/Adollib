@@ -78,7 +78,7 @@ void ALP_Collider::integrate(float duration, Vector3 linear_velocity, Vector3 an
 	Quaternion debug_0, debug_1;
 
 	//‚Ç‚Á‚¿‚àŒvŽZŒ‹‰Ê‚Íˆê ã‚Ì‚Ù‚¤‚ª’¼Š´“I
-	gameobject->transform->local_orient *= quaternion_radian_axis(local_anglar_velocity.norm_sqr() * duration , local_anglar_velocity.unit_vect());
+	gameobject->transform->local_orient *= quaternion_axis_radian(local_anglar_velocity.unit_vect(), local_anglar_velocity.norm_sqr() * duration);
 	gameobject->transform->local_orient = gameobject->transform->local_orient.unit_vect();
 
 	//Quaternion dAng = gameobject->transform->local_orient.unit_vect() * Quaternion(0, anglar_velocity.x, anglar_velocity.y, anglar_velocity.z) * 0.5f;

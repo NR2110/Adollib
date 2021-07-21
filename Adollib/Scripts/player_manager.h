@@ -12,7 +12,6 @@ namespace Adollib
 	private:
 		Player* player;
 
-		//Camera* camera;
 	public:
 
 	public:

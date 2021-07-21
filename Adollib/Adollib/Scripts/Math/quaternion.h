@@ -84,15 +84,24 @@ namespace Adollib {
 		// ƒIƒCƒ‰[Šp(radian)‚Å•Ô‚·
 		Vector3 euler_radian() const;
 
+		// ‰ñ“]‚Ì²‚ğ•Ô‚·
+		Vector3 axis() const;
+
+		// ‰ñ“]—Ê‚ğ•Ô‚·
+		float radian() const;
+
+		// ‰ñ“]—Ê‚ğ•Ô‚·
+		float angle() const;
+
 	};
 
 	Quaternion quaternion_identity();
 	Vector3 vector3_quatrotate(const Vector3& V, const Quaternion& Q);
 
 	//axis‚ğ²‚ÉR“x‰ñ“]‚³‚¹‚équaternion‚Ìì¬
-	Quaternion quaternion_angle_axis(float R, const Vector3& axis);
+	Quaternion quaternion_axis_angle(const Vector3& axis, float R);
 	//axis‚ğ²‚ÉR“x‰ñ“]‚³‚¹‚équaternion‚Ìì¬
-	Quaternion quaternion_radian_axis(float R, const  Vector3& axis);
+	Quaternion quaternion_axis_radian(const Vector3& axis, float R);
 
 	//Q1‚©‚çQ2‚Ö‚Ì‹…–Ê•âŠÔ
 	//R = 0 = Q1

@@ -87,7 +87,7 @@ namespace Adollib {
 				//contactP1‚ÌŠî€‚É
 				//contactP0‚ğ‚Á‚Ä‚­‚é
 				if (cosf(limit_rad_off.x) < cosf(limit_rad_off.y)) {
-					Vector3 contactP0_world = vector3_quatrotate(axis_comp0coord, quaternion_radian_axis(-limit_rad_off.y, vec1_comp0coord));
+					Vector3 contactP0_world = vector3_quatrotate(axis_comp0coord, quaternion_axis_radian(vec1_comp0coord, -limit_rad_off.y));
 
 					//limit_x‚Ì‚Ù‚¤‚ª‹ß‚¢
 					contactP0 = vector3_quatrotate(transforms[1]->position - transforms[0]->position, transforms[0]->orientation.inverse()) + contactP0_world;
@@ -96,7 +96,7 @@ namespace Adollib {
 					penetrate = 2 * cosf(DirectX::XM_PIDIV2 - fabsf(limit_rad_off.y) * 0.5f);
 				}
 				else {
-					Vector3 contactP0_world = vector3_quatrotate(axis_comp0coord, quaternion_radian_axis(-limit_rad_off.x, vec1_comp0coord));
+					Vector3 contactP0_world = vector3_quatrotate(axis_comp0coord, quaternion_axis_radian(vec1_comp0coord, -limit_rad_off.x));
 
 					//limit_y‚Ì‚Ù‚¤‚ª‹ß‚¢
 					contactP0 = vector3_quatrotate(transforms[1]->position - transforms[0]->position, transforms[0]->orientation.inverse()) + contactP0_world;

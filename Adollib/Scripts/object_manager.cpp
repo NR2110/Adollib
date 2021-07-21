@@ -730,7 +730,7 @@ namespace Adollib
 						GO->transform->local_scale = size;
 						GO->transform->local_orient = quaternion_from_euler(0, 0, 360.0f / TREE_pyramid_count * gear_tooth_num);
 						GO->transform->local_pos = Vector3(0, size.y * 2, 0);
-						GO->transform->local_pos = vector3_quatrotate(GO->transform->local_pos, quaternion_angle_axis(360.0f / TREE_pyramid_count * gear_tooth_num, Vector3(0, 0, 1)));
+						GO->transform->local_pos = vector3_quatrotate(GO->transform->local_pos, quaternion_axis_angle(Vector3(0, 0, 1), 360.0f / TREE_pyramid_count * gear_tooth_num));
 
 						GO->material->color = Vector4(1, 1, 0, 1);
 						GEAR->add_child(GO);
@@ -741,7 +741,7 @@ namespace Adollib
 						box->size = size;
 						box->rotate = Vector3(0, 0, 360.0f / TREE_pyramid_count * gear_tooth_num);
 						box->center = Vector3(0, size.y * 2, 0);
-						box->center = vector3_quatrotate(box->center, quaternion_angle_axis(360.0f / TREE_pyramid_count * gear_tooth_num, Vector3(0, 0, 1)));
+						box->center = vector3_quatrotate(box->center, quaternion_axis_angle(Vector3(0, 0, 1), 360.0f / TREE_pyramid_count * gear_tooth_num));
 
 					}
 
@@ -785,7 +785,7 @@ namespace Adollib
 						GO->transform->local_scale = size;
 						GO->transform->local_orient = quaternion_from_euler(0, 360.0f / TREE_pyramid_count * gear_tooth_num, 0);
 						GO->transform->local_pos = Vector3(0, size.y * 0, 0);
-						GO->transform->local_pos = vector3_quatrotate(GO->transform->local_pos, quaternion_angle_axis(360.0f / TREE_pyramid_count * gear_tooth_num, Vector3(0, 1, 0)));
+						GO->transform->local_pos = vector3_quatrotate(GO->transform->local_pos, quaternion_axis_angle(Vector3(0, 1, 0), 360.0f / TREE_pyramid_count * gear_tooth_num));
 
 						GO->material->color = Vector4(1, 1, 0, 1);
 						PATAPATA->add_child(GO);
@@ -796,7 +796,7 @@ namespace Adollib
 						box->size = size;
 						box->rotate = Vector3(0, 360.0f / TREE_pyramid_count * gear_tooth_num, 0);
 						box->center = Vector3(0, size.y * 0, 0);
-						box->center = vector3_quatrotate(box->center, quaternion_angle_axis(360.0f / TREE_pyramid_count * gear_tooth_num, Vector3(0, 1, 0)));
+						box->center = vector3_quatrotate(box->center, quaternion_axis_angle(Vector3(0, 1, 0), 360.0f / TREE_pyramid_count * gear_tooth_num));
 
 					}
 
@@ -947,8 +947,6 @@ namespace Adollib
 					}
 
 
-
-#if 1
 					//::: 親子関係の設定 :::
 					Human->add_child(Body);
 
@@ -1048,204 +1046,6 @@ namespace Adollib
 							GO->transform->local_pos = Vector3(+leg_x_pos, -(body_size.y + Waist_size.y * 2 + Foot_size.y * 5), 0);
 						}
 					}
-#elif 0
-
-					//::: 親子関係の設定 :::
-					Human->add_child(Body);
-
-					Body->add_child(Head);
-
-					Body->add_child(Rsholder);
-					Rsholder->add_child(Relbow);
-					Body->add_child(Lsholder);
-					Lsholder->add_child(Lelbow);
-
-					Body->add_child(Waist);
-
-					Waist->add_child(Rleg);
-					Rleg->add_child(Rfoot);
-					Waist->add_child(Lleg);
-					Lleg->add_child(Lfoot);
-
-					//::: gameobjectの座標設定 :::
-					Vector3 head_size = Vector3(1, 1, 1);
-					Vector3 body_size = Vector3(0.8f, 0.5f, 0.8f);
-					{
-						{
-							Head->transform->local_scale = head_size / body_size;
-							Head->transform->local_pos = Vector3(0, 3.3f, 0);
-						}
-					}
-
-					{
-						{
-							auto& GO = Body;
-							GO->transform->local_scale = body_size;
-							GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
-							GO->transform->local_pos = Vector3(0, 0, 0);
-						}
-						{
-							auto& GO = Waist;
-							GO->transform->local_scale = Vector3(1.01f, 1.31f, 1.01f);
-							GO->transform->local_pos = Vector3(0, -2.66, 0);
-						}
-					}
-
-					Vector3 arm_size = Vector3(0.4f, 0.5f, 0.4f);
-					float arm_y_pos = 1.0f;
-					{
-						{
-							auto& GO = Rsholder;
-							GO->transform->local_scale = Vector3(0.4f, 1.25, 0.4f);
-							GO->transform->local_orient = quaternion_from_euler(0, 0, -90);
-							GO->transform->local_pos = Vector3(-2, 0.23f, 0);
-						}
-						{
-							auto& GO = Relbow;
-							GO->transform->local_scale *= Vector3(1.2f, 0.66, 1.2f);
-							GO->transform->local_pos = Vector3(-0, -1.93, 0);
-						}
-						{
-							auto& GO = Lsholder;
-							GO->transform->local_scale = Vector3(0.4f, 1.25, 0.4f);
-							GO->transform->local_orient = quaternion_from_euler(0, 0, +90);
-							GO->transform->local_pos = Vector3(+2, 0.23f, 0);
-						}
-						{
-							auto& GO = Lelbow;
-							GO->transform->local_scale *= Vector3(1.2f, 0.66, 1.2f);
-							GO->transform->local_pos = Vector3(-0, -1.93, 0);
-						}
-					}
-
-					Vector3 Foot_size = Vector3(0.4f, 0.35, 0.6f);
-					float leg_x_pos = 0.67;
-					{
-						{
-							auto& GO = Rleg;
-							GO->transform->local_scale = Foot_size / 0.8f;
-							GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
-							GO->transform->local_pos = Vector3(-leg_x_pos, -(1.59f), 0);
-						}
-						{
-							auto& GO = Rfoot;
-							GO->transform->local_scale = Vector3(0.71f, 0.81, 0.59f);
-							GO->transform->local_pos = Vector3(+0.05f, -2.33f, 0.24f);
-						}
-						{
-							auto& GO = Lleg;
-							GO->transform->local_scale = Foot_size / 0.8f;
-							GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
-							GO->transform->local_pos = Vector3(+leg_x_pos, -1.59f, 0);
-						}
-						{
-							auto& GO = Lfoot;
-							GO->transform->local_scale = Vector3(0.71f, 0.81, 0.59f);
-							GO->transform->local_pos = Vector3(-0.05f, -2.33f, 0.24f);
-						}
-					}
-
-#else
-					//::: 親子関係の設定 :::
-					Human->add_child(Waist);
-
-					Waist->add_child(Body);
-
-					Body->add_child(Head);
-
-					Body->add_child(Rsholder);
-					Rsholder->add_child(Relbow);
-					Body->add_child(Lsholder);
-					Lsholder->add_child(Lelbow);
-
-
-					Waist->add_child(Rleg);
-					Rleg->add_child(Rfoot);
-					Waist->add_child(Lleg);
-					Lleg->add_child(Lfoot);
-
-					//::: gameobjectの座標設定 :::
-					Vector3 head_size = Vector3(1, 1, 1);
-					Vector3 body_size = Vector3(0.8f, 1.45f * 0.5f * 0.9f, 0.8f);
-					{
-						{
-							Head->transform->local_scale = head_size / body_size;
-							Head->transform->local_pos = Vector3(0, 2.79f, 0);
-						}
-					}
-
-					{
-						{
-							auto& GO = Body;
-							GO->transform->local_scale = body_size;
-							GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
-							GO->transform->local_pos = Vector3(0, 1.88, 0);
-						}
-						{
-							auto& GO = Waist;
-							GO->transform->local_scale = Vector3(0.9f);
-							GO->transform->local_pos = Vector3(0, -body_size.y * 0.5f, 0);
-						}
-					}
-
-					Vector3 arm_size = Vector3(0.4f, 0.5f, 0.4f);
-					float arm_y_pos = 1.0f;
-					{
-						{
-							auto& GO = Rsholder;
-							GO->transform->local_scale = arm_size / body_size;;
-							GO->transform->local_orient = quaternion_from_euler(0, 0, -90);
-							GO->transform->local_pos = Vector3(-1.84, 0.47f, 0);
-						}
-						{
-							auto& GO = Relbow;
-							GO->transform->local_scale = Vector3(1);
-							GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
-							GO->transform->local_pos = Vector3(0, -2.5f, 0);
-						}
-						{
-							auto& GO = Lsholder;
-							GO->transform->local_scale = arm_size / body_size;;
-							GO->transform->local_orient = quaternion_from_euler(0, 0, +90);
-							GO->transform->local_pos = Vector3(+1.84, 0.47f, 0);
-						}
-						{
-							auto& GO = Lelbow;
-							GO->transform->local_scale = Vector3(1);
-							GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
-							GO->transform->local_pos = Vector3(0, -2.5f, 0);
-						}
-					}
-
-					Vector3 Foot_size = Vector3(0.4f, 0.25, 0.4f);
-					float leg_x_pos = 0.6f;
-					{
-						{
-							auto& GO = Rleg;
-							GO->transform->local_scale = Vector3(0.5f, 0.33, 0.5f);
-							GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
-							GO->transform->local_pos = Vector3(+0.6f, -1.5f, 0);
-						}
-						{
-							auto& GO = Rfoot;
-							GO->transform->local_scale = Vector3(1);
-							GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
-							GO->transform->local_pos = Vector3(0, -2.40, 0);
-						}
-						{
-							auto& GO = Lleg;
-							GO->transform->local_scale = Vector3(0.5f, 0.33, 0.5f);
-							GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
-							GO->transform->local_pos = Vector3(-0.6f, -1.5f, 0);
-						}
-						{
-							auto& GO = Lfoot;
-							GO->transform->local_scale = Vector3(1);
-							GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
-							GO->transform->local_pos = Vector3(0, -2.40, 0);
-						}
-					}
-#endif
 
 					//::: collider,shapeのアタッチ :::
 					Collider* Head_collider = Head->addComponent<Collider>();
@@ -1268,10 +1068,10 @@ namespace Adollib
 					Capsule* Lelbow_shape = Lelbow_collider->add_shape<Capsule>();
 					Box* Body_shape = Body_collider->add_shape<Box>();
 					Box* Waist_shape = Waist_collider->add_shape<Box>();
-					Box* Rleg_shape = Rleg_collider->add_shape<Box>();
-					Box* Rfoot_shape = Rfoot_collider->add_shape<Box>();
-					Box* Lleg_shape = Lleg_collider->add_shape<Box>();
-					Box* Lfoot_shape = Lfoot_collider->add_shape<Box>();
+					Sphere* Rleg_shape = Rleg_collider->add_shape<Sphere>();
+					Sphere* Rfoot_shape = Rfoot_collider->add_shape<Sphere>();
+					Sphere* Lleg_shape = Lleg_collider->add_shape<Sphere>();
+					Sphere* Lfoot_shape = Lfoot_collider->add_shape<Sphere>();
 
 					//::: 質量の調整 :::
 					Head_collider->physics_data.inertial_mass = 3;
@@ -1300,11 +1100,17 @@ namespace Adollib
 					//Lleg_shape->length *= Lleg->transform->local_scale.y / (Lleg->transform->local_scale.x + Lleg->transform->local_scale.y);
 					//Lfoot_shape->length *= Lfoot->transform->local_scale.y / (Lfoot->transform->local_scale.x + Lfoot->transform->local_scale.y);
 
+					//::: sphereの調整 :::
+					Rleg_shape->r = Rleg->transform->local_scale.y * 2;
+					Rfoot_shape->r = Rfoot->transform->local_scale.y * 2;
+					Lleg_shape->r = Lleg->transform->local_scale.y * 2;
+					Lfoot_shape->r = Lfoot->transform->local_scale.y * 2;
+
 
 
 
 					//::: Jointの設定
-#if 1
+
 					{
 						auto Ball = Joint::add_Conejoint(Head_collider, Body_collider, Vector3(0, -1, 0), Vector3(0, 0.8f, 0), Vector3(0, 1, 0), Vector3(0, 1, 0));
 						Ball->limit = 30;
@@ -1366,41 +1172,6 @@ namespace Adollib
 						auto hinge = Joint::add_Hingejoint(Lleg_collider, Lfoot_collider, Vector3(-1, -0.4f, 0), Vector3(+1, -0.3f, 0), Vector3(-1, +0.3f, 0), Vector3(+1, +0.3f, 0));
 						hinge->limit = Vector2(0, 100);
 					}
-
-#else
-				/*	{
-						auto Ball = Joint::add_Conejoint(Head_collider, Body_collider, Vector3(0, -1, 0), Vector3(0, 1.5f, 0), Vector3(0, 1, 0), Vector3(0, 1, 0));
-						Ball->limit = 30;
-
-						auto Twist = Joint::add_Twistjoint(Body_collider, Head_collider, Vector3(0, 1, 0));
-						Twist->limit = Vector2(360 - 90, 90);
-					}
-					{
-						auto Cone = Joint::add_Conejoint(Body_collider, Rsholder_collider, Vector3(-1.1f, 1.0f, 0), Vector3(0, 0.5f, 0), Vector3(-1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect());
-						Cone->limit = 120;
-
-						auto Twist = Joint::add_Twistjoint(Body_collider, Rsholder_collider, Vector3(0, 1, 0));
-						Twist->limit = Vector2(360 - 90, 90);
-					}
-					{
-						auto hinge = Joint::add_Hingejoint(Rsholder_collider, Relbow_collider, Vector3(-1, -0.6f, 0), Vector3(+1, -0.6f, 0), Vector3(-1, 0.6f, 0), Vector3(+1, 0.6f, 0));
-						hinge->limit = Vector2(230, 360);
-					}
-
-					{
-						auto Cone = Joint::add_Conejoint(Body_collider, Lsholder_collider, Vector3(+1.1f, 1.0f, 0), Vector3(0, 0.5f, 0), Vector3(-1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect());
-						Cone->limit = 120;
-
-						auto Twist = Joint::add_Twistjoint(Body_collider, Lsholder_collider, Vector3(0, 1, 0));
-						Twist->limit = Vector2(360 - 90, 90);
-					}
-					{
-						auto hinge = Joint::add_Hingejoint(Lsholder_collider, Lelbow_collider, Vector3(-1, -0.6f, 0), Vector3(+1, -0.6f, 0), Vector3(-1, 0.6f, 0), Vector3(+1, 0.6f, 0));
-						hinge->limit = Vector2(230, 360);
-					}*/
-#endif
-
-
 
 
 

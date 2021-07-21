@@ -158,6 +158,18 @@ namespace Adollib {
 		return matrix_to_euler_radian(get_rotate_matrix());
 	}
 
+	inline Vector3 Quaternion::axis() const {
+		return Vector3(x, y, z).unit_vect();
+	}
+
+	inline float Quaternion::radian() const {
+		return acosf(w) * 2;
+	}
+
+	inline float Quaternion::angle() const {
+		return ToAngle(acosf(w) * 2);
+	}
+
 
 	inline DirectX::XMFLOAT3 Quaternion::get_XM3() const {
 		return DirectX::XMFLOAT3(x, y, z);
@@ -193,19 +205,19 @@ namespace Adollib {
 #endif
 	}
 
-	inline Quaternion Adollib::quaternion_angle_axis(float S, const Vector3& axis) {
-		return quaternion_radian_axis(ToRadian(S), axis);
+	inline Quaternion Adollib::quaternion_axis_angle(const Vector3& axis, float S) {
+		return quaternion_axis_radian(axis, ToRadian(S));
 	}
-	inline Quaternion Adollib::quaternion_radian_axis(float S, const Vector3& axis) {
+	inline Quaternion Adollib::quaternion_axis_radian(const Vector3& axis, float S) {
 		if (S == 0)return Quaternion(1, 0, 0, 0);
 		if (axis.norm() == 0)return Quaternion(1, 0, 0, 0);
 		Vector3 A = axis.unit_vect();
 
 		Quaternion R;
-		R.w = cosf(S / 2.0f);
-		R.x = A.x * sinf(S / 2.0f);
-		R.y = A.y * sinf(S / 2.0f);
-		R.z = A.z * sinf(S / 2.0f);
+		R.w = cosf(S * 0.5f);
+		R.x = A.x * sinf(S * 0.5f);
+		R.y = A.y * sinf(S * 0.5f);
+		R.z = A.z * sinf(S * 0.5f);
 		return R;
 	}
 
@@ -234,17 +246,17 @@ namespace Adollib {
 		return ret.unit_vect();
 	}
 	inline Quaternion Adollib::quaternion_from_euler(float x, float y, float z) {
-		Quaternion Rx = quaternion_angle_axis(x, Vector3(1, 0, 0));
-		Quaternion Ry = quaternion_angle_axis(y, Vector3(0, 1, 0));
-		Quaternion Rz = quaternion_angle_axis(z, Vector3(0, 0, 1));
+		Quaternion Rx = quaternion_axis_angle(Vector3(1, 0, 0), x);
+		Quaternion Ry = quaternion_axis_angle(Vector3(0, 1, 0), y);
+		Quaternion Rz = quaternion_axis_angle(Vector3(0, 0, 1), z);
 
 		Quaternion A = Rz * Rx * Ry;
 		return  A.unit_vect();
 	}
 	inline Quaternion Adollib::quaternion_from_euler(Vector3 V) {
-		Quaternion Rx = quaternion_angle_axis(V.x, Vector3(1, 0, 0));
-		Quaternion Ry = quaternion_angle_axis(V.y, Vector3(0, 1, 0));
-		Quaternion Rz = quaternion_angle_axis(V.z, Vector3(0, 0, 1));
+		Quaternion Rx = quaternion_axis_angle(Vector3(1, 0, 0), V.x);
+		Quaternion Ry = quaternion_axis_angle(Vector3(0, 1, 0), V.y);
+		Quaternion Rz = quaternion_axis_angle(Vector3(0, 0, 1), V.z);
 
 		return (Rz * Rx * Ry).unit_vect();
 	}
@@ -264,9 +276,9 @@ namespace Adollib {
 	//}
 	inline Quaternion Adollib::quaternion_by_rotate_matrix(Matrix44& M) {
 		Vector3 V = matrix_to_euler(M);
-		Quaternion Rx = quaternion_angle_axis(V.x, Vector3(1, 0, 0));
-		Quaternion Ry = quaternion_angle_axis(V.y, Vector3(0, 1, 0));
-		Quaternion Rz = quaternion_angle_axis(V.z, Vector3(0, 0, 1));
+		Quaternion Rx = quaternion_axis_angle(Vector3(1, 0, 0), V.x);
+		Quaternion Ry = quaternion_axis_angle(Vector3(0, 1, 0), V.y);
+		Quaternion Rz = quaternion_axis_angle(Vector3(0, 0, 1), V.z);
 
 		return Rz * Rx * Ry;
 	}
@@ -286,7 +298,7 @@ namespace Adollib {
 			Vector3 axis = Vector3(0, 1, 0);
 			if (fabsf(V1.y) == 1)axis = Vector3(1, 0, 0);
 
-			const Quaternion buff = quaternion_angle_axis(90, axis);
+			const Quaternion buff = quaternion_axis_angle(axis, 90);
 			return buff * quaternion_from_to_rotate(vector3_quatrotate(V1, buff), V2);
 		}
 

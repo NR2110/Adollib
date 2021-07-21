@@ -243,7 +243,7 @@ void Collider_renderer::render_box(const Collider_shape* shape, const Vector3& c
 void Collider_renderer::render_sphere(const Collider_shape* shape, const Vector3& color) {
 	//CB : ConstantBufferPerCO_OBJ
 	ConstantBufferPerGO g_cb;
-	g_cb.world = matrix_world(shape->world_scale() * 1.0001f, shape->world_orientation().get_rotate_matrix(), shape->world_position());
+	g_cb.world = matrix_world(Vector3(shape->world_scale().x) * 1.0001f, shape->world_orientation().get_rotate_matrix(), shape->world_position());
 	Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
 	Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 	Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());

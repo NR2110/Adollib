@@ -5,11 +5,13 @@
 namespace Adollib {
 
 	static float ToRadian(float angle) {
-		return (float)angle * (3.141592654f / 180.0f);
+		constexpr float value= (3.141592654f / 180.0f);
+		return (float)angle * value;
 	}
 
 	static float ToAngle(float radian) {
-		return (float)radian * 180 / 3.1415926535f;
+		constexpr float value = (180 / 3.1415926535f);
+		return (float)radian * value;
 	}
 
 #define ALmax(a,b) (a>b?a:b)
