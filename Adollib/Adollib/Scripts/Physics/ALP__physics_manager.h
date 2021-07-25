@@ -43,7 +43,7 @@ namespace Adollib
 			static constexpr float bias = 0.15f;//めり込みを直す力
 			static constexpr float slop = 0.003f;//衝突の許容値
 
-			static constexpr int solver_iterations = 5; //衝突の精度
+			static constexpr int solver_iterations = 10; //衝突の精度
 			static constexpr bool hit_backfaces_flag = false;//meshの後ろから衝突するか
 
 			static constexpr float timeStep = 0.016f;
@@ -77,8 +77,10 @@ namespace Adollib
 			float contact_threrhold_normal = 0.01f; //衝突点の閾値
 			float contact_threrhold_tangent = 0.002f;//衝突点の閾値
 
-			float linear_sleep_threrhold = 0.2f; //freezeの閾値
-			float angula_sleep_threrhold = 0.02f; //freezeの閾値
+			//float linear_sleep_threrhold = 0.2f; //freezeの閾値
+			//float angula_sleep_threrhold = 0.02f; //freezeの閾値
+			float linear_sleep_threrhold = 0.6f; //freezeの閾値
+			float angula_sleep_threrhold = 0.15f; //freezeの閾値
 
 
 
