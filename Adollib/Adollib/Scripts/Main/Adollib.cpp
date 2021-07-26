@@ -14,10 +14,7 @@ namespace Adollib {
 	float Al_Global::base_Coefficient_of_friction = 0.6f;
 	float Al_Global::base_resituation = 0.2f;
 
-	float Al_Global::second_per_frame() {
-		return Systems::time->deltaTime();
-
-	}
+	float Al_Global::second_per_frame = 0;
 	float Al_Global::second_per_game = 0;
 
 	float get_P_by_f(float M, float F) {

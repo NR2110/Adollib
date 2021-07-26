@@ -220,6 +220,17 @@ bool Work_meter::stop(const std::string& name) {
 	return true;
 }
 
+void Work_meter::set(const std::string& name, const float& value) {
+	if (meters[now_tag].count(name) == 0) {
+		names[now_tag].push_back(name);
+		name_flags[now_tag].push_back(1);
+		memset(meters[now_tag][name], 0, max_ * 2 * sizeof(float));
+	}
+
+	start_stop[now_tag][name].start.QuadPart = (LONGLONG)0;
+	start_stop[now_tag][name].stop.QuadPart = (LONGLONG)(value * 10000000.f);
+}
+
 bool Work_meter::tag_start(const std::string& tag) {
 	if (meters.count(tag) == 0) {
 		tags.push_back(tag);

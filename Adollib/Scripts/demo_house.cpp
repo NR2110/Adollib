@@ -274,7 +274,7 @@ namespace Adollib
 					pearent->add_child(go);
 					colls.at(index) = (coll);
 
-					coll->physics_data.inertial_mass = 0.01f;
+					coll->physics_data.inertial_mass = 0.1f;
 				}
 			}
 

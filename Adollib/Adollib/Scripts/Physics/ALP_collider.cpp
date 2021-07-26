@@ -88,7 +88,7 @@ void ALP_Collider::integrate(float duration, Vector3 linear_velocity, Vector3 an
 
 void ALP_Collider::Update_hierarchy()
 {
-	for (auto shape : shapes) {
+	for (auto& shape : shapes) {
 		shape->Update_hierarchy();
 	}
 };

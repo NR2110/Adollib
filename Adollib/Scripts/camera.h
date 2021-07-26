@@ -11,6 +11,7 @@ namespace Adollib
 		bool follow_player = false;
 		float dis = 20;
 		float dis_buffer = 20;
+		Vector3 pos_buffer;
 
 		bool is_lock_cursol = false;
 

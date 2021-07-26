@@ -5,6 +5,7 @@
 
 #include "collider_shape.h"
 #include "ALP__meshcoll_data.h"
+#include "contact.h"
 
 using namespace Adollib;
 using namespace Physics_function;
@@ -67,7 +68,14 @@ void Physics_function::generate_contact(std::vector<Contacts::Contact_pair*>& pa
 		if (is_crossing) {
 			pair->body[0]->get_ALPcollider()->add_oncoll_bits(pair->body[1]->get_ALPcollider()->get_tag());
 			pair->body[1]->get_ALPcollider()->add_oncoll_bits(pair->body[0]->get_ALPcollider()->get_tag());
+
+			if (!pair->check_oncoll_only) {
+				if (pair->body[0]->get_ALPcollider()->is_save_pair())pair->body[0]->get_ALPcollider()->add_contacted_colliders(pair, 0); //Ž©g‚ÌŠÖ‚í‚épair‚ð•Û‘¶‚·‚é
+				if (pair->body[1]->get_ALPcollider()->is_save_pair())pair->body[0]->get_ALPcollider()->add_contacted_colliders(pair, 1);
+			}
+
 		}
+
 
 	}
 }

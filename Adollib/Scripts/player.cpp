@@ -37,35 +37,42 @@ namespace Adollib
 		//	Rfoot_collider->concoll_enter(Collider_tags::Stage) ||
 		//	Lfoot_collider->concoll_enter(Collider_tags::Stage)*/
 		//	) {
-		//	gnyat_pow += Al_Global::second_per_frame() * 2;
+		//	gnyat_pow += Al_Global::second_per_frame * 2;
 		//}
 		//else {
-		//	gnyat_pow -= Al_Global::second_per_frame() * 0.5f;
+		//	gnyat_pow -= Al_Global::second_per_frame * 0.5f;
 		//}
 		gnyat_pow = ALClamp(gnyat_pow, 0, 1);
 
-		gnyat_pow = 0.9f;
+		//gnyat_pow = 0.9f / Al_Global::second_per_frame * 0.01f;
+
+		gnyat_pow = 0.9f ;
+		if(1)
 		{
 			{
 				//Šç‚ªÔ‚¿‚á‚ñ‚È‚Ì‚ðŽ¡‚·
 				Head_collider->physics_data.anglar_drag = 1;
 				Quaternion off = Body_collider->gameobject->transform->orientation * Head_collider->gameobject->transform->orientation.inverse();
-				Head_collider->add_torque(off.axis() * off.radian() * 200000 * gnyat_pow * Al_Global::second_per_frame());
+				Head_collider->add_torque(off.axis() * off.radian() * 200000 * gnyat_pow * Al_Global::second_per_frame);
+				//Head_collider->add_torque(off.axis() * off.radian() * 200000 * gnyat_pow);
 			}
 			{
 				//˜‚ð‚½‚½‚¹‚é
 				Quaternion off_rot = rotate * Waist_collider->gameobject->transform->orientation.inverse();
-				Waist_collider->add_torque(off_rot.axis() * off_rot.radian() * 600000 * gnyat_pow* Al_Global::second_per_frame());
+				Waist_collider->add_torque(off_rot.axis() * off_rot.radian() * 600000 * gnyat_pow* Al_Global::second_per_frame);
+				//Waist_collider->add_torque(off_rot.axis() * off_rot.radian() * 600000 * gnyat_pow);
 
 				pos.y = Waist_collider->gameobject->transform->position.y;
 				Vector3 off_pos = pos - Waist_collider->gameobject->transform->position;
-				Waist_collider->add_force(off_pos * move_speed * gnyat_pow * Al_Global::second_per_frame());
+				Waist_collider->add_force(off_pos * move_speed * gnyat_pow * Al_Global::second_per_frame);
+				//Waist_collider->add_force(off_pos * move_speed * gnyat_pow);
 
 			}
 			{
 				//“·‘Ì‚ð‚½‚½‚¹‚é
 				Quaternion off = Waist_collider->gameobject->transform->orientation * Body_collider->gameobject->transform->orientation.inverse();
-				Body_collider->add_torque(off.axis() * off.radian() * 100000 * gnyat_pow * Al_Global::second_per_frame());
+				Body_collider->add_torque(off.axis() * off.radian() * 100000 * gnyat_pow * Al_Global::second_per_frame);
+				//Body_collider->add_torque(off.axis() * off.radian() * 100000 * gnyat_pow);
 			}
 		}
 
@@ -127,7 +134,7 @@ namespace Adollib
 				move_vec.y = 0;
 				move_vec = move_vec.unit_vect();
 
-				pos += move_vec * move_speed * Al_Global::second_per_frame();
+				pos += move_vec * move_speed * Al_Global::second_per_frame;
 			}
 
 			if (move_vec.norm() == 0)pos = Waist_collider->gameobject->transform->position;
@@ -139,14 +146,14 @@ namespace Adollib
 
 		//ƒWƒƒƒ“ƒv
 		{
-			if (is_jumping == true)coyote += Al_Global::second_per_frame();
+			if (is_jumping == true)coyote += Al_Global::second_per_frame;
 			if (coyote >= 0)is_jumping = false;
 			if (is_jumping == false && Waist_capsule_collider->concoll_enter(Collider_tags::Stage)) coyote = 0.3f;
-			if (is_jumping == false && !Waist_capsule_collider->concoll_enter(Collider_tags::Stage)) coyote -= Al_Global::second_per_frame();
+			if (is_jumping == false && !Waist_capsule_collider->concoll_enter(Collider_tags::Stage)) coyote -= Al_Global::second_per_frame;
 
 
 			if (coyote >= 0 && input->getKeyTrigger(Key::Space)) {
-				//Waist_collider->add_force(Vector3(0, 1, 0) * jump_power * Al_Global::second_per_frame());
+				//Waist_collider->add_force(Vector3(0, 1, 0) * jump_power * Al_Global::second_per_frame);
 				Waist_collider->linear_velocity(Vector3(Waist_collider->linear_velocity().x, 150, Waist_collider->linear_velocity().z));
 				is_jumping = true;
 				coyote = -0.3;

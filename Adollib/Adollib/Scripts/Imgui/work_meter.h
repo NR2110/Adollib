@@ -27,6 +27,7 @@ namespace Adollib {
 		static bool render();
 		static bool start(const std::string&);
 		static bool stop(const std::string&);
+		static void set(const std::string& name, const float& value);
 
 		static bool tag_start(const std::string&); //tag
 		static bool tag_stop (); //tag

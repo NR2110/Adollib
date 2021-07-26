@@ -79,7 +79,7 @@ bool Phyisics_manager::update(Scenelist Sce)
 	update_Gui();
 #endif
 
-	frame_count += Al_Global::second_per_frame();
+	frame_count += Al_Global::second_per_frame;
 	if (Al_Global::second_per_game < 1) {
 		resetforce(ALP_physicses[Sce]);
 	}
@@ -94,18 +94,19 @@ bool Phyisics_manager::update(Scenelist Sce)
 	// ColliderのWorld情報の更新
 	update_world_trans(ALP_colliders[Sce]);
 
-	// 外力の更新
-	applyexternalforce(ALP_physicses[Sce]);
 
 #if 0
 	physicsParams.timeStep = ALmin(frame_count, physicsParams.max_timeStep);
 	frame_count = 0;
 #else
 	// 0.016秒ごとに更新するとアタッチしたGOへの追跡カメラがバグるため
-	physicsParams.timeStep = ALmin(Al_Global::second_per_frame(), physicsParams.max_timeStep);
+	physicsParams.timeStep = ALmin(Al_Global::second_per_frame, physicsParams.max_timeStep);
+	Work_meter::set("timestep", Al_Global::second_per_frame);
 #endif
-
 	//physicsParams.timeStep = 0.016f;
+
+	// 外力の更新
+	applyexternalforce(ALP_physicses[Sce]);
 
 	pairs_new_num = 1 - pairs_new_num;
 

@@ -68,6 +68,7 @@ namespace Adollib
 				//R->load_mesh("./DefaultModel/cube.fbx");
 				coll->physics_data.is_moveable = false;
 				coll->is_static = true;
+				coll->tag = Collider_tags::Stage;
 			}
 
 		}

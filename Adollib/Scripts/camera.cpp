@@ -96,8 +96,8 @@ namespace Adollib
 			//ƒJƒƒ‰‚ÌˆÚ“®
 			{
 				Vector3 move_vec = Vector3(0, 0, 0);
-				float   move_pow = linear_speed * Al_Global::second_per_frame();
-				if (input->getKeyState(Key::LeftShift)) move_pow = linear_speed * 2 * Al_Global::second_per_frame();
+				float   move_pow = linear_speed * Al_Global::second_per_frame;
+				if (input->getKeyState(Key::LeftShift)) move_pow = linear_speed * 2 * Al_Global::second_per_frame;
 				if (input->getKeyState(Key::W))move_vec += Vector3(0, 0, +1);
 				if (input->getKeyState(Key::S))move_vec += Vector3(0, 0, -1);
 				if (input->getKeyState(Key::D))move_vec += Vector3(+1, 0, 0);
@@ -158,13 +158,14 @@ namespace Adollib
 			{
 				dis -= input->getMouseWheel() * 0.01f;
 				dis = ALClamp(dis, 10, 50);
-				dis_buffer = ALEasing(dis_buffer, dis, 0.1f, Al_Global::second_per_frame());
+				dis_buffer = ALEasing(dis_buffer, dis, 0.1f, Al_Global::second_per_frame);
+				pos_buffer = ALEasing(pos_buffer, player->position, 0.1f, Al_Global::second_per_frame);
 			}
 
 			camera_rot *= rotate;
-			transform->local_orient = ALEasing(transform->local_orient, camera_rot, 1, Al_Global::second_per_frame());
+			transform->local_orient = ALEasing(transform->local_orient, camera_rot, 1, Al_Global::second_per_frame);
 
-			transform->local_pos = player->position + vector3_quatrotate(dis_buffer * Vector3(0, 0, -1), camera_rot);
+			transform->local_pos = pos_buffer + vector3_quatrotate(dis_buffer * Vector3(0, 0, -1), camera_rot);
 
 		}
 
