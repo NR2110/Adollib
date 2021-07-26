@@ -41,7 +41,11 @@ namespace Adollib {
 		class ALP_Joint;
 		class ALP_Collider;
 		class ALP_Physics;
+		namespace Contacts {
+			struct Contact_pair;
+		}
 	}
+
 
 	class Collider : public Component {
 
@@ -58,10 +62,10 @@ namespace Adollib {
 
 	private:
 		Physics_function::ALP_Collider* ALPcollider_ptr = nullptr;
-		Physics_function::ALP_Physics*  ALPphysics_ptr = nullptr;
+		Physics_function::ALP_Physics* ALPphysics_ptr = nullptr;
 
 	public:
-	//	Physics_function::ALP_Collider* get_ALP_Collider() const{ return ALPcollider_ptr; }; //やだ
+		//	Physics_function::ALP_Collider* get_ALP_Collider() const{ return ALPcollider_ptr; }; //やだ
 
 	public:
 		//::: 後で変更する :::
@@ -80,6 +84,12 @@ namespace Adollib {
 
 		//jointに自身の保持するALPColliderの情報を入れる
 		void set_ptr_to_joint(Physics_function::ALP_Joint*& joint_base);
+
+		//自身の関わる衝突の情報を自身に保存するか
+		void set_is_save_pair(bool flag);
+
+		//自身の関わる衝突の情報 set_is_save_pairをtrueにしないと保存されない
+		const std::vector<std::pair<Physics_function::Contacts::Contact_pair*, u_int>>& get_contacted_pair() const;
 
 		//交差していたらtrueを返す
 		const bool concoll_enter(const unsigned int tag_name) const;
@@ -102,7 +112,6 @@ namespace Adollib {
 
 		//重心のlocal座標を返す
 		const Vector3 get_barycenter() const { return ALPphysics_ptr->get_barycenter(); };
-
 
 	public:
 		void Update_hierarchy();

@@ -81,7 +81,10 @@ namespace Adollib {
 			void add_oncoll_bits(Collider_tagbit bit) { oncoll_bits |= bit; };
 
 			// 保存したtagを0にリセット
-			void reset_oncoll_bits() { oncoll_bits = 0; };
+			void reset_data_per_frame() {
+				oncoll_bits = 0;
+				if (is_save_pair_)contacted_colliders.clear();
+			};
 
 
 		private:
@@ -140,8 +143,9 @@ namespace Adollib {
 			bool is_save_pair() const { return is_save_pair_; };
 			bool is_save_pair(bool flag) {
 				if (is_save_pair_ == flag)return flag;
-				if (is_save_pair_ == false)contacted_colliders.resize(5); //trueになったとき とりあえず適当な数だけ枠を確保
+				if (is_save_pair_ == false)contacted_colliders.reserve(5); //trueになったとき とりあえず適当な数だけ枠を確保
 				else {
+					contacted_colliders.clear();
 					contacted_colliders.resize(0); //falseになったとき 保存する配列を小さく
 					contacted_colliders.shrink_to_fit();
 				}

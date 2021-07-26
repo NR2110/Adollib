@@ -9,6 +9,8 @@
 #include "ALP_physics.h"
 #include "ALP_joint.h"
 
+#include "contact.h"
+
 using namespace Adollib;
 using namespace Physics_function;
 
@@ -21,10 +23,10 @@ const bool Collider::concoll_enter(const unsigned int tag_name) const {
 }
 
 void Collider::add_force(const Vector3& force) {
-	ALPphysics_ptr->add_force(force);
+	ALPphysics_ptr->add_force(force * Al_Global::second_per_frame);
 }
 void Collider::add_torque(const Vector3& force) {
-	ALPphysics_ptr->add_torque(force);
+	ALPphysics_ptr->add_torque(force * Al_Global::second_per_frame);
 }
 
 
@@ -82,11 +84,17 @@ void Collider::Update_hierarchy() {
 
 }
 
-////規定のshapeをアタッチする
-//template<typename T>
-//T* Collider::add_shape() {
-//	return ALPcollider_itr->add_shape<T>();
-//}
+//自身の関わる衝突の情報を自身に保存するか
+void Collider::set_is_save_pair(bool flag) {
+	ALPcollider_ptr->is_save_pair(flag);
+}
+
+//自身の関わる衝突の情報 set_is_save_pairをtrueにしないと保存されない
+const std::vector<std::pair<Contacts::Contact_pair*, u_int>>& Collider::get_contacted_pair() const {
+	return ALPcollider_ptr->get_contacted_colliders();
+};
+
+
 
 //meshcolliderのアタッチ
 void Collider::add_shape(const char* filepass, bool is_right_rtiangle, bool is_permit_edge_have_many_facet) {

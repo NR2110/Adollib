@@ -71,7 +71,7 @@ void Physics_function::generate_contact(std::vector<Contacts::Contact_pair*>& pa
 
 			if (!pair->check_oncoll_only) {
 				if (pair->body[0]->get_ALPcollider()->is_save_pair())pair->body[0]->get_ALPcollider()->add_contacted_colliders(pair, 0); //Ž©g‚ÌŠÖ‚í‚épair‚ð•Û‘¶‚·‚é
-				if (pair->body[1]->get_ALPcollider()->is_save_pair())pair->body[0]->get_ALPcollider()->add_contacted_colliders(pair, 1);
+				if (pair->body[1]->get_ALPcollider()->is_save_pair())pair->body[1]->get_ALPcollider()->add_contacted_colliders(pair, 1);
 			}
 
 		}

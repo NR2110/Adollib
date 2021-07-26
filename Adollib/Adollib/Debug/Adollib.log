@@ -1,6 +1,5 @@
-﻿  player.cpp
-  ALP__physics_manager.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\contact.h(126,24): warning C4099: 'Adollib::Physics_function::Contacts::Contact_pair': タイプ名は最初 'class' として使われていましたが 'struct' として使われています。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP__physics_manager.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\contact.h(126): message : 'Adollib::Physics_function::Contacts::Contact_pair' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ALP__physics_manager.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player.cpp(159,18): warning C4305: '=': 'double' から 'float' へ切り詰めます。
+﻿  ALP_generate_contact.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\contact.h(126,24): warning C4099: 'Adollib::Physics_function::Contacts::Contact_pair': タイプ名は最初 'class' として使われていましたが 'struct' として使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\contact.h(126): message : 'Adollib::Physics_function::Contacts::Contact_pair' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(2125,26): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

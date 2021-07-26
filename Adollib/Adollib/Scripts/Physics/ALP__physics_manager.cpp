@@ -88,8 +88,8 @@ bool Phyisics_manager::update(Scenelist Sce)
 		return true;
 	}
 
-	// Collider‚Ìoncoll_bit‚Ìreset
-	reset_oncoll_bits(ALP_colliders[Sce]);
+	// Collider‚Ìframe–ˆ‚É•Û‘¶‚·‚édata‚ğreset
+	reset_data_per_frame(ALP_colliders[Sce]);
 
 	// Collider‚ÌWorldî•ñ‚ÌXV
 	update_world_trans(ALP_colliders[Sce]);

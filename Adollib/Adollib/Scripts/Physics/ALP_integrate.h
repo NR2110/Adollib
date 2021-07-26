@@ -19,7 +19,7 @@ namespace Adollib {
 		//void update_dop(std::list<Physics_function::ALP_Collider*>& ALP_shapes);
 
 		// oncoll_bits‚ÌƒŠƒZƒbƒg
-		void reset_oncoll_bits(std::list<Physics_function::ALP_Collider*>& ALP_colliders);
+		void reset_data_per_frame(std::list<Physics_function::ALP_Collider*>& ALP_colliders);
 
 
 		//::: ALP_phyicses ::::::::::

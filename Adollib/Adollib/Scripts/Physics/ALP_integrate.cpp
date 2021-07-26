@@ -36,9 +36,9 @@ void Physics_function::update_world_trans(std::list<Physics_function::ALP_Collid
 	);
 }
 
-void Physics_function::reset_oncoll_bits(std::list<Physics_function::ALP_Collider*>& ALP_colliders) {
+void Physics_function::reset_data_per_frame(std::list<Physics_function::ALP_Collider*>& ALP_colliders) {
 
-	for (auto& coll : ALP_colliders)coll->reset_oncoll_bits();
+	for (auto& coll : ALP_colliders)coll->reset_data_per_frame();
 }
 
 #pragma endregion

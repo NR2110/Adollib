@@ -33,6 +33,11 @@ namespace Adollib
 		Lleg_collider->physics_data.drag = 0;
 		Lfoot_collider->physics_data.drag = 0;
 
+		{
+			Waist_collider->set_is_save_pair(true);
+			auto& pairs = Waist_collider->get_contacted_pair();
+			int dsdddd = 0;
+		}
 		//if (Waist_capsule_collider->concoll_enter(Collider_tags::Stage) /*||
 		//	Rfoot_collider->concoll_enter(Collider_tags::Stage) ||
 		//	Lfoot_collider->concoll_enter(Collider_tags::Stage)*/
@@ -47,32 +52,28 @@ namespace Adollib
 		//gnyat_pow = 0.9f / Al_Global::second_per_frame * 0.01f;
 
 		gnyat_pow = 0.9f ;
-		if(1)
+		if(!input->getKeyState(Key::LeftControl))
 		{
 			{
 				//Šç‚ªÔ‚¿‚á‚ñ‚È‚Ì‚ðŽ¡‚·
 				Head_collider->physics_data.anglar_drag = 1;
 				Quaternion off = Body_collider->gameobject->transform->orientation * Head_collider->gameobject->transform->orientation.inverse();
-				Head_collider->add_torque(off.axis() * off.radian() * 200000 * gnyat_pow * Al_Global::second_per_frame);
-				//Head_collider->add_torque(off.axis() * off.radian() * 200000 * gnyat_pow);
+				Head_collider->add_torque(off.axis() * off.radian() * 200000 * gnyat_pow);
 			}
 			{
 				//˜‚ð‚½‚½‚¹‚é
 				Quaternion off_rot = rotate * Waist_collider->gameobject->transform->orientation.inverse();
-				Waist_collider->add_torque(off_rot.axis() * off_rot.radian() * 600000 * gnyat_pow* Al_Global::second_per_frame);
-				//Waist_collider->add_torque(off_rot.axis() * off_rot.radian() * 600000 * gnyat_pow);
+				Waist_collider->add_torque(off_rot.axis() * off_rot.radian() * 600000 * gnyat_pow);
 
 				pos.y = Waist_collider->gameobject->transform->position.y;
 				Vector3 off_pos = pos - Waist_collider->gameobject->transform->position;
-				Waist_collider->add_force(off_pos * move_speed * gnyat_pow * Al_Global::second_per_frame);
-				//Waist_collider->add_force(off_pos * move_speed * gnyat_pow);
+				Waist_collider->add_force(off_pos * move_speed * gnyat_pow);
 
 			}
 			{
 				//“·‘Ì‚ð‚½‚½‚¹‚é
 				Quaternion off = Waist_collider->gameobject->transform->orientation * Body_collider->gameobject->transform->orientation.inverse();
-				Body_collider->add_torque(off.axis() * off.radian() * 100000 * gnyat_pow * Al_Global::second_per_frame);
-				//Body_collider->add_torque(off.axis() * off.radian() * 100000 * gnyat_pow);
+				Body_collider->add_torque(off.axis() * off.radian() * 100000 * gnyat_pow);
 			}
 		}
 
