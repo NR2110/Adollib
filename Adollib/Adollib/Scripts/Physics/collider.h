@@ -14,28 +14,37 @@
 #include "../Imgui/imgui_all.h"
 
 namespace Adollib {
+	class Collider;
 
-	namespace Physics_function {
 
-		//表示用のphysics_data ユーザーが簡単に変更できるように
-		struct Physics_data {
-			float inertial_mass = 0; //質量
-			float drag = 0; //空気抵抗
-			float anglar_drag = 0; //空気抵抗
-			float dynamic_friction = 0; //動摩擦
-			float static_friction = 0; //静摩擦
-			float restitution = 0;	 //反発係数
 
-			bool is_fallable = 0; //落ちない
-			bool is_kinematic = 0;//影響うけない(fallはする)
-			bool is_kinmatic_anglar = 0; //ほかの物体からの影響で回転速度が変化しない
-			bool is_kinmatic_linear = 0; //ほかの物体からの影響で並進速度が変化しない
-			bool is_moveable = 0; //動かない
-			bool is_hitable = 0;  //衝突しない
-		};
-		//:::::::::::::::::::::::::
+	//表示用のphysics_data ユーザーが簡単に変更できるように
+	struct Physics_data {
+		float inertial_mass = 0; //質量
+		float drag = 0; //空気抵抗
+		float anglar_drag = 0; //空気抵抗
+		float dynamic_friction = 0; //動摩擦
+		float static_friction = 0; //静摩擦
+		float restitution = 0;	 //反発係数
 
-	}
+		bool is_fallable = 0; //落ちない
+		bool is_kinematic = 0;//影響うけない(fallはする)
+		bool is_kinmatic_anglar = 0; //ほかの物体からの影響で回転速度が変化しない
+		bool is_kinmatic_linear = 0; //ほかの物体からの影響で並進速度が変化しない
+		bool is_moveable = 0; //動かない
+		bool is_hitable = 0;  //衝突しない
+	};
+
+	struct Contacted_data {
+		Collider* coll; //相手のcollider
+		float penetrate = 0; //貫通量
+		Vector3 normal; //衝突法線 world座標系
+		Vector3 contacted_pointA; //自身のGO座標系の衝突点
+		Vector3 contacted_pointB; //相手のGO座標系の衝突点
+	};
+	//:::::::::::::::::::::::::
+
+
 
 	namespace Physics_function {
 		class ALP_Joint;
@@ -55,17 +64,20 @@ namespace Adollib {
 		Collider_tagbit ignore_tags = 0; //衝突しないtags(bit)
 
 		//::: unityのphysics部分 分ける必要なんてないやろ ::::
-		Physics_function::Physics_data physics_data;
+		Physics_data physics_data;
 
-		//static同士で衝突判定を行わない
+		//::: static同士で衝突判定を行わない :::
 		bool is_static = false;
+
+		//::: 自身の関わるcontact_pairの情報をメンバに保存するかどうか :::
+		bool is_save_contacted_colls = false;
+
+		//::: is_save_contacted_collsがtrueの時 自身の関わるcontact_pairの情報を保存する :::
+		std::vector<Contacted_data> contacted_colliders;
 
 	private:
 		Physics_function::ALP_Collider* ALPcollider_ptr = nullptr;
 		Physics_function::ALP_Physics* ALPphysics_ptr = nullptr;
-
-	public:
-		//	Physics_function::ALP_Collider* get_ALP_Collider() const{ return ALPcollider_ptr; }; //やだ
 
 	public:
 		//::: 後で変更する :::
@@ -81,16 +93,10 @@ namespace Adollib {
 		}
 
 	public:
-
 		//jointに自身の保持するALPColliderの情報を入れる
 		void set_ptr_to_joint(Physics_function::ALP_Joint*& joint_base);
 
-		//自身の関わる衝突の情報を自身に保存するか
-		void set_is_save_pair(bool flag);
-
-		//自身の関わる衝突の情報 set_is_save_pairをtrueにしないと保存されない
-		const std::vector<std::pair<Physics_function::Contacts::Contact_pair*, u_int>>& get_contacted_pair() const;
-
+	public:
 		//交差していたらtrueを返す
 		const bool concoll_enter(const unsigned int tag_name) const;
 

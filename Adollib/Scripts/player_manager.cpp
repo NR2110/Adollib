@@ -54,17 +54,17 @@ namespace Adollib
 		Collider* Lfoot_collider = Lfoot->addComponent<Collider>();
 
 
-		Sphere* Head_shape = Head_collider->add_shape<Sphere>();
+		Sphere* Head_shape = Head_collider         ->add_shape<Sphere>();
 		Capsule* Rsholder_shape = Rsholder_collider->add_shape<Capsule>();
-		Capsule* Relbow_shape = Relbow_collider->add_shape<Capsule>();
+		Capsule* Relbow_shape = Relbow_collider    ->add_shape<Capsule>();
 		Capsule* Lsholder_shape = Lsholder_collider->add_shape<Capsule>();
-		Capsule* Lelbow_shape = Lelbow_collider->add_shape<Capsule>();
-		Box* Body_shape = Body_collider->add_shape<Box>();
-		Box* Waist_shape = Waist_collider->add_shape<Box>();
-		Sphere* Rleg_shape = Rleg_collider->add_shape<Sphere>();
-		Sphere* Rfoot_shape = Rfoot_collider->add_shape<Sphere>();
-		Sphere* Lleg_shape = Lleg_collider->add_shape<Sphere>();
-		Sphere* Lfoot_shape = Lfoot_collider->add_shape<Sphere>();
+		Capsule* Lelbow_shape = Lelbow_collider    ->add_shape<Capsule>();
+		Sphere* Body_shape = Body_collider         ->add_shape<Sphere>();
+		Sphere* Waist_shape = Waist_collider       ->add_shape<Sphere>();
+		Sphere* Rleg_shape = Rleg_collider         ->add_shape<Sphere>();
+		Sphere* Rfoot_shape = Rfoot_collider       ->add_shape<Sphere>();
+		Sphere* Lleg_shape = Lleg_collider         ->add_shape<Sphere>();
+		Sphere* Lfoot_shape = Lfoot_collider       ->add_shape<Sphere>();
 
 
 		{
@@ -195,8 +195,6 @@ namespace Adollib
 			Lfoot_collider->tag = Collider_tags::Human;
 
 
-
-
 			//::: capsule‚Ì’²® :::
 			Relbow_shape->length *= (Relbow->transform->local_scale.y - Relbow->transform->local_scale.x) / (Relbow->transform->local_scale.y);
 			Rsholder_shape->length *= (Rsholder->transform->local_scale.y - Rsholder->transform->local_scale.x) / (Rsholder->transform->local_scale.y);
@@ -215,6 +213,9 @@ namespace Adollib
 			Rfoot_shape->r = Rfoot->transform->local_scale.y * 2;
 			Lleg_shape->r = Lleg->transform->local_scale.y * 2;
 			Lfoot_shape->r = Lfoot->transform->local_scale.y * 2;
+
+			Body_shape->r = Body->transform->local_scale.y ;
+			Waist_shape->r = Waist->transform->local_scale.y ;
 
 
 
@@ -254,7 +255,7 @@ namespace Adollib
 
 			{
 				auto Cone = Joint::add_Conejoint(Body_collider, Waist_collider, Vector3(0, -1.0f, 0), Vector3(0, 0.5f, 0), Vector3(0, 1, 0).unit_vect(), Vector3(0, 1.5f, -1).unit_vect());
-				Cone->limit = 40;
+				Cone->limit = 60;
 
 				auto Twist = Joint::add_Twistjoint(Body_collider, Waist_collider, Vector3(0, 1, 0));
 				Twist->limit = Vector2(360 - 30, 30);

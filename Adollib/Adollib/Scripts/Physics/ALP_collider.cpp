@@ -86,12 +86,19 @@ void ALP_Collider::integrate(float duration, Vector3 linear_velocity, Vector3 an
 
 }
 
+void ALP_Collider::reset_data_per_frame() {
+	oncoll_bits = 0;
+	coll_ptr->contacted_colliders.clear();
+};
+
 void ALP_Collider::Update_hierarchy()
 {
 	for (auto& shape : shapes) {
 		shape->Update_hierarchy();
 	}
 };
+
+//:::::
 
 //このcolliderが属するjointを追加
 void ALP_Collider::add_joint(ALP_Joint* joint) {
@@ -107,6 +114,26 @@ void ALP_Collider::add_joint(ALP_Joint* joint) {
 //jointから外された
 void ALP_Collider::remove_joint(ALP_Joint* joint) {
 	joints.remove(joint);
+}
+
+void ALP_Collider::add_contacted_collider(Contacts::Contact_pair* pair, u_int num) {
+	if (coll_ptr->is_save_contacted_colls == false)return; //保存するflagが立っていなければ保存しない
+
+	Contacted_data data;
+	data.coll = pair->body[1 - num]->get_ALPcollider()->get_collptr();
+	//すべてのpairから衝突点、貫通量、衝突法線を保存
+	for (int contact_num = 0; contact_num < pair->contacts.contact_num; ++contact_num) {
+		const auto& contact_point = pair->contacts.contactpoints[contact_num];
+
+		//shape座標系からGO座標系に直して保存(縦を合わせたいから"0+"を入れている)
+		data.contacted_pointA = vector3_quatrotate(contact_point.point[0 + num], pair->body[0 + num]->local_orientation) + pair->body[0 + num]->local_position;
+		data.contacted_pointB = vector3_quatrotate(contact_point.point[1 - num], pair->body[1 - num]->local_orientation) + pair->body[1 - num]->local_position;
+		data.normal = contact_point.normal; //ワールド情報
+		data.penetrate = contact_point.distance;
+
+		coll_ptr->contacted_colliders.push_back(data);
+	}
+
 }
 
 Meshcoll_part* ALP_Collider::add_mesh_shape(const char* filepass, Physics_function::Meshcollider_data* mesh_data) {
@@ -131,48 +158,5 @@ void ALP_Collider::destroy()
 	Phyisics_manager::remove_ALPcollider(scene, this_itr);
 };
 
-const Collider_tagbit ALP_Collider::get_tag()const { return coll_itr->tag; }; //自身のtag(bit)
-const Collider_tagbit ALP_Collider::get_ignore_tags() const { return coll_itr->ignore_tags; }; //衝突しないtags
-
-//void ALP_Collider::update_AABB() {
-//
-//	DOP::AABB aabb;
-//	aabb.max = Vector3(-FLT_MAX);
-//	aabb.min = Vector3(+FLT_MAX);
-//
-//	// shapeがアタッチされていなければ0を入れて返す
-//	if (shapes.size() == 0) {
-//		aabb.max = Vector3(0);
-//		aabb.min = Vector3(0);
-//		aabb.pos = Vector3(0);
-//		AABB = aabb;
-//		return;
-//	}
-//
-//	// shapesの最大,最小の点を求める
-//	for (const auto& shape : shapes) {
-//		const DOP::DOP_14& dop = shape->get_DOP();
-//
-//		for (int i = 0; i < 3; i++) {
-//			if (aabb.max[i] < dop.max[i] + dop.pos[i])aabb.max[i] = dop.max[i] + dop.pos[i];
-//			if (aabb.min[i] > dop.min[i] + dop.pos[i])aabb.min[i] = dop.min[i] + dop.pos[i];
-//		}
-//
-//	}
-//	// 中心座標の調整 いずれ質量の中心をposに持ってくるかも????
-//	aabb.pos = Vector3(
-//		(aabb.max[0] + aabb.min[0]) * 0.5f,
-//		(aabb.max[1] + aabb.min[1]) * 0.5f,
-//		(aabb.max[2] + aabb.min[2]) * 0.5f
-//	);
-//
-//	// min,maxを調整
-//	for (int i = 0; i < 3; i++) {
-//		const float len = fabsf(aabb.max[i] - aabb.pos[i]);
-//
-//		aabb.max[i] = +len;
-//		aabb.min[i] = -len;
-//	}
-//
-//	AABB = aabb;
-//}
+const Collider_tagbit ALP_Collider::get_tag()const { return coll_ptr->tag; }; //自身のtag(bit)
+const Collider_tagbit ALP_Collider::get_ignore_tags() const { return coll_ptr->ignore_tags; }; //衝突しないtags

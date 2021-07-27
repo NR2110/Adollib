@@ -79,16 +79,12 @@ void Debug::render() {
 
 	}
 	ImGui::End();
+}
 
+void Debug::reset() {
 	debug_params.clear();
 	notag_debug_param.clear();
 	tags.clear();
-
-	if (stop_flag == false) {
-		debug_params.clear();
-		notag_debug_param.clear();
-		tags.clear();
-	}
 }
 
 

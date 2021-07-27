@@ -34,7 +34,7 @@ namespace Adollib {
 				Scenelist l_scene,
 				u_int l_index
 			) :
-				gameobject(l_go), coll_itr(l_collitr), this_itr(l_itr), ALPphysics(l_ALPphysics), scene(l_scene), index(l_index) {};
+				gameobject(l_go), coll_ptr(l_collitr), this_itr(l_itr), ALPphysics(l_ALPphysics), scene(l_scene), index(l_index) {};
 
 		private:
 			//::: 自身へのイテレータ(remove用) :::
@@ -49,11 +49,6 @@ namespace Adollib {
 			//::: アタッチされたshapeの配列 :::
 			std::vector<Collider_shape*> shapes;
 
-			//::: 自身の関わるcontact_pairの情報をメンバに保存するかどうか :::
-			bool is_save_pair_ = false;
-
-			//::: is_save_pairがtrueの時 自身の関わるcontact_pairの情報を保存する
-			std::vector<std::pair<Contacts::Contact_pair*, u_int>> contacted_colliders;
 		public:
 			// ここをすべてprivateにしたかった........
 			//::: oncoll_enter :::::::
@@ -74,22 +69,12 @@ namespace Adollib {
 			// アタッチされたshapeの配列
 			const std::vector<Collider_shape*> get_shapes() const { return shapes; };
 
-			// 自身の関わるpairの情報, u_int : Contact_pair::body[u_int] = 自分
-			const std::vector<std::pair<Contacts::Contact_pair*, u_int>>& get_contacted_colliders() const { return contacted_colliders; };
-
 			// 衝突したcolliderのtagを保存
 			void add_oncoll_bits(Collider_tagbit bit) { oncoll_bits |= bit; };
 
-			// 保存したtagを0にリセット
-			void reset_data_per_frame() {
-				oncoll_bits = 0;
-				if (is_save_pair_)contacted_colliders.clear();
-			};
-
-
 		private:
 			//::: ComponentがアタッチされたColliderへのイテレータ :::
-			Collider* coll_itr;
+			Collider* coll_ptr;
 
 			//::: Physicsへのポインタ :::
 			ALP_Physics* ALPphysics = nullptr;
@@ -98,7 +83,7 @@ namespace Adollib {
 			Gameobject* gameobject = nullptr;
 
 		public:
-			Collider* get_collptr() const { return coll_itr; };
+			Collider* get_collptr() const { return coll_ptr; };
 			ALP_Physics* get_ALPphysics() const { return ALPphysics; };
 			Gameobject* get_gameobject() const { return gameobject; };
 
@@ -113,6 +98,9 @@ namespace Adollib {
 
 			//座標,姿勢によるworld情報の更新
 			void integrate(float duration, Vector3 linear_velocity, Vector3 anglar_velocity);
+
+			// 毎フレーム行うreset
+			void reset_data_per_frame();
 
 			//::: 親のtagを獲得 :::::::::::::
 			const Collider_tagbit get_tag() const; //自身のtag(bit)
@@ -139,26 +127,8 @@ namespace Adollib {
 			//jointから外された
 			void remove_joint(ALP_Joint* joint);
 
-			//is_save_pairを変更したりしなかったり
-			bool is_save_pair() const { return is_save_pair_; };
-			bool is_save_pair(bool flag) {
-				if (is_save_pair_ == flag)return flag;
-				if (is_save_pair_ == false)contacted_colliders.reserve(5); //trueになったとき とりあえず適当な数だけ枠を確保
-				else {
-					contacted_colliders.clear();
-					contacted_colliders.resize(0); //falseになったとき 保存する配列を小さく
-					contacted_colliders.shrink_to_fit();
-				}
-				is_save_pair_ = flag;
-				return flag;
-			};
-			//自身のかかわるpairへのポインタを保存
-			void add_contacted_colliders(Contacts::Contact_pair* pair, u_int num) {
-				if (!is_save_pair_)return;
-				contacted_colliders.emplace_back(std::pair<Contacts::Contact_pair*, u_int>(pair, num));
-			};
-			//contacted_collidersをリセット
-			void clear_contacted_colliders() { contacted_colliders.clear(); };
+			//衝突情報を保存
+			void add_contacted_collider(Contacts::Contact_pair* pair, u_int num);
 
 			//ヒエラルキー描画用
 			void Update_hierarchy();

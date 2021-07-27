@@ -128,14 +128,17 @@ namespace Adollib
 				rotate_vec.y = input->getCursorPosX() - cursol_pos_save.x;
 				rotate_vec.x = input->getCursorPosY() - cursol_pos_save.y;
 
+				rotate_vec.x = ALClamp(rotate_vec.x, -170 - rotate_vec_save.x, 170 - rotate_vec_save.x);
+				rotate_vec_save += rotate_vec;
+
 				rotate *= quaternion_axis_angle(Vector3(0, 1, 0), +rotate_vec.y * rotate_pow);
 				rotate *= quaternion_axis_angle(vector3_cross(Vector3(0, 1, 0), vector3_quatrotate(Vector3(0, 0, 1), transform->local_orient)).unit_vect(), +rotate_vec.x * rotate_pow);
 
 				input->setCursorPos(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
 				cursol_pos_save = Vector3(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f, 0);
 			}
-			else {
-				if (input->getMouseState(Mouse::RBUTTON)) {
+			else if(0){
+				{
 					//float rotate_pow = 70 * Al_Global::second_per_frame;
 					float rotate_pow = rotate_speed;
 					Vector3 rotate_vec = Vector3(0, 0, 0);
@@ -154,6 +157,7 @@ namespace Adollib
 				cursol_pos_save.y = (float)input->getCursorPosY();
 			}
 
+
 			//ƒJƒƒ‰‚Ì‹——£
 			{
 				dis -= input->getMouseWheel() * 0.01f;
@@ -167,6 +171,14 @@ namespace Adollib
 
 			transform->local_pos = pos_buffer + vector3_quatrotate(dis_buffer * Vector3(0, 0, -1), camera_rot);
 
+		}
+
+		if (input->getKeyTrigger(Key::RightControl)) {
+			is_lock_cursol = !is_lock_cursol;
+			if (is_lock_cursol == true) {
+				input->setCursorPos(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
+				cursol_pos_save = Vector3(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f, 0);
+			}
 		}
 
 	}

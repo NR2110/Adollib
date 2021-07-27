@@ -1,6 +1,7 @@
 #pragma once
 #include "../Adollib/Scripts/Object/component.h"
 #include "../Adollib/Scripts/Physics/collider.h"
+#include "../Adollib/Scripts/Physics/joint.h"
 
 namespace Adollib
 {
@@ -8,21 +9,23 @@ namespace Adollib
 	class Player : public Component
 	{
 	private:
-		float move_speed = 1200000;
+		float move_speed = 12000;
 		float turn_speed = 2;
-		float jump_power = 8000000;
+		float jump_power = 80000;
 
-		float gnyat_pow = 1;
+		float gnyat_pow = 1; //
 
-		float coyote = 0.3f;
+		Quaternion rotate; //rotateのbuffer
+		Vector3 dir; //向きのbuffer
+		Vector3 pos; //座標のbuffer
 
-		Quaternion rotate;
-		Vector3 dir;
-		Vector3 pos;
+		std::shared_ptr<Transfome> camera; //cameraへのポインタ
 
-		std::shared_ptr<Transfome> camera;
+		bool is_jumping = false; //今ジャンプしているか
+		float coyote = 0.3f; //jumpの許容時間
 
-		bool is_jumping = false;
+		Joint_base* catch_right_joint = nullptr; //右手がつかんでいるjoint
+		Joint_base* catch_left_joint = nullptr;	 //左手がつかんでいるjoint
 
 	private:
 		//::: GO :::

@@ -92,6 +92,8 @@ bool Imgui_manager::render() {
 
 	if(draw_flags[1])
 	Debug::render();
+
+	Debug::reset();
 #endif
 
 	ImGui::Render();

@@ -1,13 +1,13 @@
 #pragma once
 #include "../Math/math.h"
 #include "../Scene/scene_list.h"
-#include "contact.h"
+#include "ALP_contact.h"
 #include "ALP_anchor.h"
 
 namespace Adollib {
+	class Joint_base;
 
 	namespace Physics_function {
-		class Joint_base;
 
 		//phasics_managerに保存されている
 		class ALP_Joint {
@@ -17,6 +17,7 @@ namespace Adollib {
 
 		public:
 			float bias = 0; // 拘束の強さの調整値
+			float slop = 0; // 拘束の許容誤差
 			float limit_bias = 0;
 
 			int anchor_count = 0; //anchorがいくつあるか
@@ -30,7 +31,7 @@ namespace Adollib {
 			Vector3 limit_constraint_pos[2]; //limit拘束計算用 拘束点
 			Contacts::Constraint constraint_limit; // limit拘束計算用
 
-			Joint_base* joint = nullptr; //ユーザーの触る情報へのポインタ
+			Adollib::Joint_base* joint = nullptr; //ユーザーの触る情報へのポインタ
 
 		private:
 			std::list<ALP_Joint*>::iterator this_itr; //physics_manager内の自身へのイテレータ

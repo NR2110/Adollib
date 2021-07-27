@@ -1,5 +1,5 @@
 #pragma once
-#include "contact.h"
+#include "ALP_contact.h"
 #include "collider_shape.h"
 
 namespace Adollib {

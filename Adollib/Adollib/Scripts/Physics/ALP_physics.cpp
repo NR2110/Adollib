@@ -79,14 +79,11 @@ void ALP_Physics::apply_external_force(float duration) {
 	if (is_movable()) {
 		//inv_rotate = Quaternion(1, 0, 0, 0);
 
-		if (isnan(linear_velocity.norm() + linear_velocity.norm())) {
-			int adsfgh = 0;
-		}
 		angula_velocity = angula_velocity * pow(1 - angula_drag, duration);
 		linear_velocity = linear_velocity * pow(1 - linear_drag, duration);
 
 		const float inv_mass = 1 / inertial_mass;
-		if (is_fallable) accumulated_force += Vector3(0, -Phyisics_manager::physicsParams.gravity, 0) * inertial_mass; //落下
+		//if (is_fallable) accumulated_force += Vector3(0, -Phyisics_manager::physicsParams.gravity, 0) * inertial_mass; //落下
 
 		//空気抵抗の求め方
 		// k は流体の密度やらなんやらを考慮した定数
@@ -107,7 +104,7 @@ void ALP_Physics::apply_external_force(float duration) {
 
 		//並進移動に加える力(accumulated_force)から加速度を出して並進速度を更新する 向きを間違えないように!!
 		linear_acceleration += accumulated_force * inv_mass;
-		//if (is_fallable) linear_acceleration += Vector3(0, -Phyisics_manager::physicsParams.gravity, 0); //落下
+		if (is_fallable) linear_acceleration += Vector3(0, -Phyisics_manager::physicsParams.gravity, 0); //落下
 		linear_velocity += linear_acceleration * duration;
 
 		//各回転に加える力(accumulated_torque)から加速度を出して角速度を更新する
@@ -120,10 +117,6 @@ void ALP_Physics::apply_external_force(float duration) {
 
 		angula_velocity += angula_acceleration * duration;
 		if (angula_velocity.norm() < FLT_EPSILON)angula_velocity = Vector3(0, 0, 0);
-
-		if (isnan(linear_acceleration.norm() + angula_acceleration.norm())) {
-			int adsfgh = 0;
-		}
 	}
 	else reset_force();
 

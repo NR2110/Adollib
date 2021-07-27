@@ -1,5 +1,5 @@
 
-#include "contact.h"
+#include "ALP_contact.h"
 
 #include "ALP__physics_manager.h"
 

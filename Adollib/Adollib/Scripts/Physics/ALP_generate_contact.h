@@ -1,6 +1,6 @@
 #pragma once
-#include "contact.h"
 #include "collider_shape.h"
+#include "ALP_contact.h"
 
 namespace Adollib {
 	namespace Physics_function {

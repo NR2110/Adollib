@@ -31,6 +31,7 @@ namespace Adollib {
 		static void set(std::string tabname, std::string name, DirectX::XMFLOAT3 xyz) ;
 
 		static void render();
+		static void reset();
 
 	};
 }

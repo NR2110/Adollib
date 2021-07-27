@@ -156,8 +156,8 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 
 			Systems::time->tick();
 
-			Al_Global::second_per_frame = Systems::time->deltaTime();
-			Al_Global::second_per_game += Systems::time->deltaTime();
+			Al_Global::second_per_frame = ALmin(Systems::time->deltaTime(), 0.016f);
+			Al_Global::second_per_game += Al_Global::second_per_frame;
 			float mspf = 1000.0f / fps;
 
 			Interval -= Systems::time->deltaTime();

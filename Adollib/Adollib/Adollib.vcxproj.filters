@@ -193,9 +193,6 @@
     <ClCompile Include="Scripts\Physics\ALP_resolve_contact.cpp">
       <Filter>00_Adollib\22_physics\ALP</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Physics\contact.cpp">
-      <Filter>00_Adollib\22_physics\ALP</Filter>
-    </ClCompile>
     <ClCompile Include="Scripts\Physics\meshcoll_resorce_manager.cpp">
       <Filter>00_Adollib\22_physics\collider</Filter>
     </ClCompile>
@@ -258,6 +255,9 @@
     </ClCompile>
     <ClCompile Include="..\Scripts\camera.cpp">
       <Filter>ソース ファイル\scene_game\scene_house\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Physics\ALP_contact.cpp">
+      <Filter>00_Adollib\22_physics\ALP</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -471,9 +471,6 @@
     <ClInclude Include="Scripts\Physics\collider_sphere.h">
       <Filter>00_Adollib\22_physics\collider</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Physics\contact.h">
-      <Filter>00_Adollib\22_physics\ALP</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts\Physics\meshcoll_resorce_manager.h">
       <Filter>00_Adollib\22_physics\collider</Filter>
     </ClInclude>
@@ -575,6 +572,9 @@
     </ClInclude>
     <ClInclude Include="..\Scripts\camera.h">
       <Filter>ソース ファイル\scene_game\scene_house\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\ALP_contact.h">
+      <Filter>00_Adollib\22_physics\ALP</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

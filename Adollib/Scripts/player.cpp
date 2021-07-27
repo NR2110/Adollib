@@ -5,12 +5,20 @@
 
 #include "../Adollib/Scripts/Physics/ray.h"
 
+static Adollib::Collider* debug_coll = nullptr;
+
 namespace Adollib
 {
 	// 所属するシーンの初期化時に一度だけ呼ばれる
 	void Player::awake() {
 		rotate = quaternion_from_euler(0, 180, 0);
 		pos = Vector3(-2.7f, 23, -52.2f);
+
+		auto Go = Gameobject_manager::createSphere();
+		Go->transform->local_pos = Vector3(0, 3, 0);
+		debug_coll = Go->addComponent<Collider>();
+		debug_coll->add_shape<Sphere>();
+		debug_coll->physics_data.inertial_mass = 1;
 	}
 
 	void Player::start()
@@ -21,23 +29,72 @@ namespace Adollib
 	// 毎フレーム呼ばれる更新処理
 	void Player::update()
 	{
-		Head_collider->physics_data.drag = 0;
-		Rsholder_collider->physics_data.drag = 0;
-		Relbow_collider->physics_data.drag = 0;
-		Lsholder_collider->physics_data.drag = 0;
-		Lelbow_collider->physics_data.drag = 0;
-		Body_collider->physics_data.drag = 0;
-		Waist_collider->physics_data.drag = 0;
-		Rleg_collider->physics_data.drag = 0;
-		Rfoot_collider->physics_data.drag = 0;
-		Lleg_collider->physics_data.drag = 0;
-		Lfoot_collider->physics_data.drag = 0;
+		debug_coll->add_force(Vector3(0, 30, 0));
 
+
+		//Head_collider->physics_data.drag = 0;
+		//Rsholder_collider->physics_data.drag = 0;
+		//Relbow_collider->physics_data.drag = 0;
+		//Lsholder_collider->physics_data.drag = 0;
+		//Lelbow_collider->physics_data.drag = 0;
+		//Body_collider->physics_data.drag = 0;
+		//Waist_collider->physics_data.drag = 0;
+		//Rleg_collider->physics_data.drag = 0;
+		//Rfoot_collider->physics_data.drag = 0;
+		//Lleg_collider->physics_data.drag = 0;
+		//Lfoot_collider->physics_data.drag = 0;
+
+		//物を持つ
 		{
-			Waist_collider->set_is_save_pair(true);
-			auto& pairs = Waist_collider->get_contacted_pair();
-			int dsdddd = 0;
+			const Mouse keys[2] = {
+				Mouse::LBUTTON ,
+				Mouse::RBUTTON };
+
+			Collider* colliders[2] = {
+				Lelbow_collider,
+				Relbow_collider
+			};
+			Joint_base** joints[2] = {
+				&catch_left_joint,
+				&catch_right_joint
+			};
+
+			for (int i = 0; i < 2; i++) {
+				const Mouse key = keys[i];
+				auto& collider = colliders[i];
+				Joint_base*& joint = *joints[i];
+				//持つ
+				if (input->getMouseState(key) && joint == nullptr) {
+					collider->is_save_contacted_colls = true;
+					auto& contacted_colls = collider->contacted_colliders;
+
+					//衝突しているcolliderから一番近いものを探査
+					Contacted_data* min_data = nullptr;
+					for (auto& c_coll : contacted_colls) {
+						if (min_data == nullptr || min_data->penetrate > c_coll.penetrate) {
+							min_data = &c_coll;
+						}
+					}
+					if (min_data != nullptr && min_data->coll->tag != Collider_tags::Human) {
+						//Jointに登録
+						joint = Joint::add_balljoint(
+							collider,
+							min_data->coll,
+							min_data->contacted_pointA,
+							min_data->contacted_pointB
+						);
+						joint->slop = 0.1f;
+					}
+				}
+				//離す
+				if (input->getMouseReleased(key) && joint != nullptr) {
+					Joint::delete_joint(joint);
+				}
+
+			}
 		}
+
+
 		//if (Waist_capsule_collider->concoll_enter(Collider_tags::Stage) /*||
 		//	Rfoot_collider->concoll_enter(Collider_tags::Stage) ||
 		//	Lfoot_collider->concoll_enter(Collider_tags::Stage)*/
@@ -51,19 +108,19 @@ namespace Adollib
 
 		//gnyat_pow = 0.9f / Al_Global::second_per_frame * 0.01f;
 
-		gnyat_pow = 0.9f ;
-		if(!input->getKeyState(Key::LeftControl))
+		gnyat_pow = 0.9f;
+		if (!input->getKeyState(Key::LeftControl))
 		{
 			{
 				//顔が赤ちゃんなのを治す
 				Head_collider->physics_data.anglar_drag = 1;
 				Quaternion off = Body_collider->gameobject->transform->orientation * Head_collider->gameobject->transform->orientation.inverse();
-				Head_collider->add_torque(off.axis() * off.radian() * 200000 * gnyat_pow);
+				Head_collider->add_torque(off.axis() * off.radian() * 2000 * gnyat_pow);
 			}
 			{
 				//腰をたたせる
 				Quaternion off_rot = rotate * Waist_collider->gameobject->transform->orientation.inverse();
-				Waist_collider->add_torque(off_rot.axis() * off_rot.radian() * 600000 * gnyat_pow);
+				Waist_collider->add_torque(off_rot.axis() * off_rot.radian() * 6000 * gnyat_pow);
 
 				pos.y = Waist_collider->gameobject->transform->position.y;
 				Vector3 off_pos = pos - Waist_collider->gameobject->transform->position;
@@ -73,7 +130,7 @@ namespace Adollib
 			{
 				//胴体をたたせる
 				Quaternion off = Waist_collider->gameobject->transform->orientation * Body_collider->gameobject->transform->orientation.inverse();
-				Body_collider->add_torque(off.axis() * off.radian() * 100000 * gnyat_pow);
+				Body_collider->add_torque(off.axis() * off.radian() * 1000 * gnyat_pow);
 			}
 		}
 
