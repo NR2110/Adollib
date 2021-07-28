@@ -152,6 +152,8 @@ void ALP_Physics::integrate(float duration) {
 }
 
 const Vector3 ALP_Physics::get_barycenter() const {
+	if (is_user_barycnter) return barycenter;
+
 	const auto shapes = ALPcollider->get_shapes();
 	Vector3 val;
 	float sum_valume = 0;
@@ -167,6 +169,10 @@ const Vector3 ALP_Physics::get_barycenter() const {
 
 	return val;
 }
+void ALP_Physics::set_barycenter(const Vector3& cent) {
+	barycenter = cent;
+	is_user_barycnter = true;
+}
 
 //アタッチされたshapesから慣性モーメントと質量、ついでに重心の更新
 void ALP_Physics::update_tensor_and_barycenter(const std::vector<Collider_shape*>& shapes, const std::list<ALP_Joint*>& joints) {
@@ -178,19 +184,26 @@ void ALP_Physics::update_tensor_and_barycenter(const std::vector<Collider_shape*
 	}
 
 	float sum_valume = 0;
+
 	{
 		//重心の更新
-		barycenter = Vector3(0);
+		Vector3 bary = Vector3(0);
 		for (const auto& shape : shapes) {
 			const float shape_mass = shape->get_volume();
-			barycenter += shape_mass * shape->local_position;
+			bary += shape_mass * shape->local_position;
 			sum_valume += shape_mass;
 		}
-		barycenter /= sum_valume;
+
+		if (is_user_barycnter == false) {
+			bary /= sum_valume;
+			barycenter = bary;
+		}
 	}
+
 
 	//ユーザーに定義された慣性モーメントが無いとき
 	if (is_user_tensor == false) {
+
 		//慣性モーメントの更新
 		inertial_tensor = matrix33_zero();
 		for (const auto& shape : shapes) {

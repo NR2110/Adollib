@@ -484,6 +484,7 @@ namespace Adollib
 
 			//treepyramid
 			{
+
 				static int TREE_pyramid_count = 5;
 				static float TREE_pyramid_pos[3] = { 0 };
 				bool summon = false;

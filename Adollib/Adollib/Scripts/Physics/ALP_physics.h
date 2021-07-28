@@ -46,6 +46,9 @@ namespace Adollib {
 			//::: 慣性モーメントがユーザー定義されたものか :::
 			bool is_user_tensor = false;
 
+			//::: 重心がユーザーに定義されたものか :::
+			bool is_user_barycnter = false;
+
 			//::: Colliderへのポインタ :::
 			ALP_Collider* ALPcollider = nullptr;
 
@@ -114,6 +117,7 @@ namespace Adollib {
 
 			//重心を返す
 			const Vector3 get_barycenter() const;
+			void set_barycenter(const Vector3& cent);
 
 			//::: 毎フレーム呼ぶもの ::::::::::::
 			//速度、加速度を0にする

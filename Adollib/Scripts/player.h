@@ -11,7 +11,7 @@ namespace Adollib
 	private:
 		float move_speed = 12000;
 		float turn_speed = 2;
-		float jump_power = 80000;
+		float jump_power = 150;
 
 		float gnyat_pow = 1; //
 
@@ -58,7 +58,7 @@ namespace Adollib
 		Collider* Lleg_collider = nullptr;
 		Collider* Lfoot_collider = nullptr;
 
-		Collider* Waist_capsule_collider = nullptr;
+		Collider* hanger_collider = nullptr;
 
 
 
@@ -89,7 +89,7 @@ namespace Adollib
 			Rfoot_collider		= l_Rfoot_collider;
 			Lleg_collider		= l_Lleg_collider;
 			Lfoot_collider		= l_Lfoot_collider;
-			Waist_capsule_collider = l_Waist_capsule_collider;
+			hanger_collider = l_Waist_capsule_collider;
 
 			Head		=Head_collider		->gameobject;
 			Rsholder	=Rsholder_collider	->gameobject;

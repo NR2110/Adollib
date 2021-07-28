@@ -239,6 +239,7 @@
     <ClInclude Include="Scripts\Physics\joint.h" />
     <ClInclude Include="Scripts\Physics\meshcoll_resorce_manager.h" />
     <ClInclude Include="Scripts\Physics\ray.h" />
+    <ClInclude Include="Scripts\Physics\springjoint.h" />
     <ClInclude Include="Scripts\Physics\twistjoint.h" />
     <ClInclude Include="Scripts\Scene\scene.h" />
     <ClInclude Include="Scripts\Scene\scene_game.h" />

@@ -19,6 +19,7 @@ namespace Adollib
 		debug_coll = Go->addComponent<Collider>();
 		debug_coll->add_shape<Sphere>();
 		debug_coll->physics_data.inertial_mass = 1;
+
 	}
 
 	void Player::start()
@@ -120,7 +121,7 @@ namespace Adollib
 			{
 				//˜‚ð‚½‚½‚¹‚é
 				Quaternion off_rot = rotate * Waist_collider->gameobject->transform->orientation.inverse();
-				Waist_collider->add_torque(off_rot.axis() * off_rot.radian() * 6000 * gnyat_pow);
+				Waist_collider->add_torque(off_rot.axis() * off_rot.radian() * 4000 * gnyat_pow);
 
 				pos.y = Waist_collider->gameobject->transform->position.y;
 				Vector3 off_pos = pos - Waist_collider->gameobject->transform->position;
@@ -132,6 +133,8 @@ namespace Adollib
 				Quaternion off = Waist_collider->gameobject->transform->orientation * Body_collider->gameobject->transform->orientation.inverse();
 				Body_collider->add_torque(off.axis() * off.radian() * 1000 * gnyat_pow);
 			}
+
+			Waist_collider->add_force(Vector3(0, -1, 0) * 300);
 		}
 
 		//‰ñ“]
@@ -206,13 +209,14 @@ namespace Adollib
 		{
 			if (is_jumping == true)coyote += Al_Global::second_per_frame;
 			if (coyote >= 0)is_jumping = false;
-			if (is_jumping == false && Waist_capsule_collider->concoll_enter(Collider_tags::Stage)) coyote = 0.3f;
-			if (is_jumping == false && !Waist_capsule_collider->concoll_enter(Collider_tags::Stage)) coyote -= Al_Global::second_per_frame;
+			if (is_jumping == false && hanger_collider->concoll_enter(Collider_tags::Stage)) coyote = 0.3f;
+			if (is_jumping == false && !hanger_collider->concoll_enter(Collider_tags::Stage)) coyote -= Al_Global::second_per_frame;
 
 
 			if (coyote >= 0 && input->getKeyTrigger(Key::Space)) {
 				//Waist_collider->add_force(Vector3(0, 1, 0) * jump_power * Al_Global::second_per_frame);
-				Waist_collider->linear_velocity(Vector3(Waist_collider->linear_velocity().x, 150, Waist_collider->linear_velocity().z));
+				Waist_collider->linear_velocity(Vector3(Waist_collider->linear_velocity().x, jump_power, Waist_collider->linear_velocity().z));
+				Body_collider->linear_velocity(Vector3(Waist_collider->linear_velocity().x, jump_power * 0.5f, Waist_collider->linear_velocity().z));
 				is_jumping = true;
 				coyote = -0.3;
 			}

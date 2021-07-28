@@ -576,6 +576,9 @@
     <ClInclude Include="Scripts\Physics\ALP_contact.h">
       <Filter>00_Adollib\22_physics\ALP</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Physics\springjoint.h">
+      <Filter>00_Adollib\22_physics\Joint</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="DefaultShader\default.hlsli">

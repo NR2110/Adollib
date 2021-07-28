@@ -24,7 +24,7 @@ void Collider::add_force(const Vector3& force) {
 	ALPphysics_ptr->add_force(force);
 }
 void Collider::add_torque(const Vector3& force) {
-	ALPphysics_ptr->add_torque(force );
+	ALPphysics_ptr->add_torque(force);
 }
 
 

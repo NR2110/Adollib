@@ -116,6 +116,8 @@ namespace Adollib {
 		//慣性モーメントをユーザー定義で設定する
 		void set_tensor(const Matrix33& tensor) { ALPphysics_ptr->set_tensor(tensor); };
 
+		void set_barycenter(const Vector3& cent) { ALPphysics_ptr->set_barycenter(cent); };
+
 		//重心のlocal座標を返す
 		const Vector3 get_barycenter() const { return ALPphysics_ptr->get_barycenter(); };
 
