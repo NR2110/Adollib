@@ -1,4 +1,8 @@
-﻿  scene_game.cpp
+﻿  player_manager.cpp
 C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider.h(54,23): warning C4099: 'Adollib::Physics_function::Contacts::Contact_pair': タイプ名は最初 'class' として使われていましたが 'struct' として使われています。
 C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(22): message : 'Adollib::Physics_function::Contacts::Contact_pair' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_contact.h(126,24): warning C4099: 'Adollib::Physics_function::Contacts::Contact_pair': タイプ名は最初 'class' として使われていましたが 'struct' として使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_contact.h(126): message : 'Adollib::Physics_function::Contacts::Contact_pair' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(319,59): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(333,53): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

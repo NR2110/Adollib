@@ -59,7 +59,7 @@ namespace Adollib {
 			//Šp“x‚ð“¾‚é
 			const float radian = vector3_radian(limit_axis_world[0], limit_axis_world[1]); // 0 - ƒÎ
 
-			const float limit_rad = ToRadian(limit); //limit‚¦‚¨radian‚ÉŽ¡‚µ‚½
+			const float limit_rad = ToRadian(limit); //limit‚ðradian‚ÉŽ¡‚µ‚½
 
 			Debug::set("cone_angle", ToAngle(radian));
 
