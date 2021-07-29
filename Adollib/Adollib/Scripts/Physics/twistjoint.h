@@ -50,17 +50,30 @@ namespace Adollib {
 			// collider_comp[0]の座標系である
 			Vector3 vec1_comp0coord = vector3_quatrotate(vec1, off_comp1to0).unit_vect();
 
+
 			// 回転前、回転後のお互いに垂直なベクトル -> z回転以外の影響を受けない
 			Vector3 axis = vector3_cross(vec1, vec1_comp0coord);
-			if (fabsf(fabsf(vector3_dot(vec1, vec1_comp0coord)) - 1) < FLT_EPSILON) {
+			{
+				Vector3 rot_axis = vector3_cross(Vector3(0,1,0), vec1);
+				if (vector3_cross(rot_axis, vec1).norm() < FLT_EPSILON) {
+					rot_axis = vector3_cross(Vector3(1, 0, 0), vec1);
+				}
+				axis = vector3_quatrotate(vec1, quaternion_axis_angle(rot_axis, 90));
+			}
+
+			if (axis.norm() < FLT_EPSILON) {
 				//2ベクトルが平行なら適当な垂直な軸でよい
 				axis = vector3_cross(vec1, vec1_comp0coord + Vector3(1, 0, 0));
 			}
 			axis = axis.unit_vect();
 
-
 			// axisの回転後のベクトル
 			Vector3 axis_comp0coord = vector3_quatrotate(axis, off_comp1to0);
+
+			Debug::set("vec1", vec1);
+			Debug::set("vec1_comp0coord", vec1_comp0coord);
+			Debug::set("axis", axis);
+			Debug::set("axis_comp0coord", axis_comp0coord);
 
 			// z回転の角度を得る
 			float radian = vector3_radian(axis_comp0coord, axis);
@@ -72,7 +85,7 @@ namespace Adollib {
 
 			const Vector2 limit_rad = Vector2(ToRadian(limit.x), ToRadian(limit.y)); //limitをradianに治した
 
-			Debug::set("twist_angle", ToAngle(radian));
+			Debug::set("angle", ToAngle(radian));
 
 			// もしlimitの影響を受ける位置に入なければfalseをreturn
 			if (limit_rad.x <= limit_rad.y) {
@@ -85,29 +98,36 @@ namespace Adollib {
 			//radianを基準にcosで一番近いlimitを求める
 			const Vector2 limit_rad_off = Vector2(limit_rad.x - radian, limit_rad.y - radian);
 
+			Vector3 tangent = vector3_cross(axis, vec1);
+
 			//contactP1の基準に
 			//contactP0を持ってくる
 			if (cosf(limit_rad_off.x) < cosf(limit_rad_off.y)) {
-				Vector3 contactP0_world = vector3_quatrotate(axis_comp0coord, quaternion_axis_radian(vec1_comp0coord, -limit_rad_off.y));
 
+				penetrate = DirectX::XM_2PI * power * fabsf(limit_rad_off.y) * DirectX::XM_1DIV2PI; //余分な弧の長さ
+
+				Vector3 contactP0_world = vector3_quatrotate((axis - tangent * penetrate),transforms[1]->orientation) + transforms[1]->position;
 				//limit_xのほうが近い
-				contactP0 = vector3_quatrotate(transforms[1]->position - transforms[0]->position, transforms[0]->orientation.inverse()) + contactP0_world;
+				contactP0 = vector3_quatrotate(contactP0_world - transforms[0]->position, transforms[0]->orientation.inverse());
 				contactP1 = axis;
 
-				penetrate = 2 * cosf(DirectX::XM_PIDIV2 - fabsf(limit_rad_off.y) * 0.5f);
 			}
 			else {
-				Vector3 contactP0_world = vector3_quatrotate(axis_comp0coord, quaternion_axis_radian(vec1_comp0coord, -limit_rad_off.x));
+				//Vector3 contactP0_world = vector3_quatrotate(axis_comp0coord, quaternion_axis_radian(vec1_comp0coord, -limit_rad_off.x));
+
+				penetrate = DirectX::XM_2PI * power * fabsf(limit_rad_off.x) * DirectX::XM_1DIV2PI; //余分な弧の長さ
+
+				Vector3 contactP0_world = vector3_quatrotate((axis + tangent * penetrate), transforms[1]->orientation) + transforms[1]->position;
 
 				//limit_yのほうが近い
-				contactP0 = vector3_quatrotate(transforms[1]->position - transforms[0]->position, transforms[0]->orientation.inverse()) + contactP0_world;
+				contactP0 = vector3_quatrotate(contactP0_world - transforms[0]->position, transforms[0]->orientation.inverse());
 				contactP1 = axis;
 
-				penetrate = 2 * cosf(DirectX::XM_PIDIV2 - fabsf(limit_rad_off.x) * 0.5f);
 			}
 
 			return true;
 		}
+
 
 
 	};
