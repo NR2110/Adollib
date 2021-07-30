@@ -61,7 +61,7 @@ namespace Adollib {
 
 			const float limit_rad = ToRadian(limit); //limit‚ðradian‚ÉŽ¡‚µ‚½
 
-			Debug::set("cone_angle", ToAngle(radian));
+			//Debug::set("cone_angle", ToAngle(radian));
 
 			// ‚à‚µlimit‚Ì‰e‹¿‚ðŽó‚¯‚éˆÊ’u‚É“ü‚È‚¯‚ê‚Îfalse‚ðreturn
 			if (radian <= limit_rad + FLT_EPSILON) return false;

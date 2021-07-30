@@ -1,12 +1,8 @@
-﻿  player_manager.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider.h(54,23): warning C4099: 'Adollib::Physics_function::Contacts::Contact_pair': タイプ名は最初 'class' として使われていましたが 'struct' として使われています。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(22): message : 'Adollib::Physics_function::Contacts::Contact_pair' の宣言を確認してください
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_contact.h(126,24): warning C4099: 'Adollib::Physics_function::Contacts::Contact_pair': タイプ名は最初 'class' として使われていましたが 'struct' として使われています。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_contact.h(126): message : 'Adollib::Physics_function::Contacts::Contact_pair' の宣言を確認してください
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(266,91): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(266,111): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(277,91): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(277,111): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(318,59): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(332,53): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-  Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe
+﻿  player.cpp
+  scene_game.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider.h(54,23): warning C4099: 'Adollib::Physics_function::Contacts::Contact_pair': タイプ名は最初 'class' として使われていましたが 'struct' として使われています。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(22): message : 'Adollib::Physics_function::Contacts::Contact_pair' の宣言を確認してください (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider.h(54,23): warning C4099: 'Adollib::Physics_function::Contacts::Contact_pair': タイプ名は最初 'class' として使われていましたが 'struct' として使われています。 (ソース ファイルをコンパイルしています Scripts\Scene\scene_game.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(22): message : 'Adollib::Physics_function::Contacts::Contact_pair' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Scene\scene_game.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player.cpp(268,18): warning C4305: '=': 'double' から 'float' へ切り詰めます。
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppCommon.targets(876,5): error MSB6006: "link.exe" はコード 1 を伴って終了しました。

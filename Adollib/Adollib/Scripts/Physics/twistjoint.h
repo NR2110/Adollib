@@ -70,10 +70,10 @@ namespace Adollib {
 			// axis‚Ì‰ñ“]Œã‚ÌƒxƒNƒgƒ‹
 			Vector3 axis_comp0coord = vector3_quatrotate(axis, off_comp1to0);
 
-			Debug::set("vec1", vec1);
-			Debug::set("vec1_comp0coord", vec1_comp0coord);
-			Debug::set("axis", axis);
-			Debug::set("axis_comp0coord", axis_comp0coord);
+			//Debug::set("vec1", vec1);
+			//Debug::set("vec1_comp0coord", vec1_comp0coord);
+			//Debug::set("axis", axis);
+			//Debug::set("axis_comp0coord", axis_comp0coord);
 
 			// z‰ñ“]‚ÌŠp“x‚ð“¾‚é
 			float radian = vector3_radian(axis_comp0coord, axis);
@@ -85,7 +85,7 @@ namespace Adollib {
 
 			const Vector2 limit_rad = Vector2(ToRadian(limit.x), ToRadian(limit.y)); //limit‚ðradian‚ÉŽ¡‚µ‚½
 
-			Debug::set("angle", ToAngle(radian));
+			//Debug::set("angle", ToAngle(radian));
 
 			// ‚à‚µlimit‚Ì‰e‹¿‚ðŽó‚¯‚éˆÊ’u‚É“ü‚È‚¯‚ê‚Îfalse‚ðreturn
 			if (limit_rad.x <= limit_rad.y) {

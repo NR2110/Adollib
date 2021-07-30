@@ -13,8 +13,6 @@ namespace Adollib
 		float turn_speed = 2;
 		float jump_power = 150;
 
-		float gnyat_pow = 1; //
-
 		Quaternion rotate; //rotateのbuffer
 		Vector3 dir; //向きのbuffer
 		Vector3 pos; //座標のbuffer
@@ -23,6 +21,7 @@ namespace Adollib
 
 		bool is_jumping = false; //今ジャンプしているか
 		float coyote = 0.3f; //jumpの許容時間
+		float move_timer = 0;
 
 		Joint_base* catch_right_joint = nullptr; //右手がつかんでいるjoint
 		Joint_base* catch_left_joint = nullptr;	 //左手がつかんでいるjoint

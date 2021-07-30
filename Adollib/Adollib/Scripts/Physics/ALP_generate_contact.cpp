@@ -28,13 +28,13 @@ void Physics_function::generate_contact(std::vector<Contacts::Contact_pair*>& pa
 
 		if (shapeA->get_shape_tag() == ALPCollider_shape_type::Sphere) {
 
-			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Sphere)generate_contact_sphere_sphere(shapeA, shapeB, pair, is_crossing);
-			if (shapeB->get_shape_tag() == ALPCollider_shape_type::BOX)	generate_contact_sphere_box(shapeA, shapeB, pair, is_crossing);
-			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Capsule)generate_contact_sphere_capsule(shapeA, shapeB, pair, is_crossing);
+			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Sphere)	generate_contact_sphere_sphere(shapeA, shapeB, pair, is_crossing);
+			if (shapeB->get_shape_tag() == ALPCollider_shape_type::BOX)		generate_contact_sphere_box(shapeA, shapeB, pair, is_crossing);
+			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Capsule)	generate_contact_sphere_capsule(shapeA, shapeB, pair, is_crossing);
 			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Plane)	generate_contact_sphere_plane(shapeA, shapeB, pair, is_crossing);
 			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Mesh)	generate_contact_sphere_mesh(shapeA, shapeB, pair, is_crossing);
 		}
-		if (shapeA->get_shape_tag() == ALPCollider_shape_type::BOX) {
+		if (shapeA->get_shape_tag()     == ALPCollider_shape_type::BOX) {
 
 			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Sphere)generate_contact_sphere_box(shapeB, shapeA, pair, is_crossing);
 			if (shapeB->get_shape_tag() == ALPCollider_shape_type::BOX)	generate_contact_box_box(shapeA, shapeB, pair, is_crossing);
@@ -42,20 +42,20 @@ void Physics_function::generate_contact(std::vector<Contacts::Contact_pair*>& pa
 			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Plane)	generate_contact_box_plane(shapeA, shapeB, pair, is_crossing);
 			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Mesh)	generate_contact_box_mesh(shapeA, shapeB, pair, is_crossing);
 		}
-		if (shapeA->get_shape_tag() == ALPCollider_shape_type::Capsule) {
+		if (shapeA->get_shape_tag()     == ALPCollider_shape_type::Capsule) {
 
 			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Sphere)generate_contact_sphere_capsule(shapeB, shapeA, pair, is_crossing);
 			if (shapeB->get_shape_tag() == ALPCollider_shape_type::BOX)generate_contact_box_capsule(shapeB, shapeA, pair, is_crossing);
 			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Capsule)generate_contact_capsule_capsule(shapeA, shapeB, pair, is_crossing);
 			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Mesh)generate_contact_capsule_mesh(shapeA, shapeB, pair, is_crossing);
 		}
-		if (shapeA->get_shape_tag() == ALPCollider_shape_type::Plane) {
+		if (shapeA->get_shape_tag()     == ALPCollider_shape_type::Plane) {
 
 			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Sphere)generate_contact_sphere_plane(shapeB, shapeA, pair, is_crossing);
 			if (shapeB->get_shape_tag() == ALPCollider_shape_type::BOX)	generate_contact_box_plane(shapeB, shapeA, pair, is_crossing);
 			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Plane) {}
 		}
-		if (shapeA->get_shape_tag() == ALPCollider_shape_type::Mesh) {
+		if (shapeA->get_shape_tag()     == ALPCollider_shape_type::Mesh) {
 
 			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Sphere)generate_contact_sphere_mesh(shapeB, shapeA, pair, is_crossing);
 			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Capsule)generate_contact_capsule_mesh(shapeB, shapeA, pair, is_crossing);

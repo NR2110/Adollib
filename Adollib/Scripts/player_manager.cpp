@@ -181,6 +181,16 @@ namespace Adollib
 			Lleg_collider    ->physics_data.inertial_mass = 2;
 			Lfoot_collider   ->physics_data.inertial_mass = 1;
 
+			Rleg_collider->physics_data.anglar_drag = 0.95f;
+			Lleg_collider->physics_data.anglar_drag = 0.95f;
+
+			//::: d—Í“K—p‚Ì’²® :::
+			Head_collider->physics_data.is_fallable = false;
+			Rsholder_collider->physics_data.is_fallable  = false;
+			Lsholder_collider->physics_data.is_fallable  = false;
+			Rleg_collider->physics_data.is_fallable = false;
+			Lleg_collider->physics_data.is_fallable = false;
+
 			//::: tag‚ÌÝ’è :::
 			Head_collider    ->tag = Collider_tags::Human;
 			Rsholder_collider->tag = Collider_tags::Human;
@@ -233,7 +243,6 @@ namespace Adollib
 			{
 				auto Cone = Joint::add_Conejoint(Body_collider, Rsholder_collider, Vector3(-1.1f, 0.2f, 0), Vector3(0, 0.5f, 0), Vector3(-1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect());
 				Cone->limit = 85;
-				//auto Cone = Joint::add_balljoint(Body_collider, Rsholder_collider, Vector3(-1.1f, 0.2f, 0), Vector3(0, 0.5f, 0));
 
 				auto Twist = Joint::add_Twistjoint(Body_collider, Rsholder_collider, Vector3(0, 1, 0));
 				Twist->limit = Vector2(360 - 90, 90);

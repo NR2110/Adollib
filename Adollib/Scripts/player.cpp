@@ -95,34 +95,22 @@ namespace Adollib
 			}
 		}
 
-
-		//if (Waist_capsule_collider->concoll_enter(Collider_tags::Stage) /*||
-		//	Rfoot_collider->concoll_enter(Collider_tags::Stage) ||
-		//	Lfoot_collider->concoll_enter(Collider_tags::Stage)*/
-		//	) {
-		//	gnyat_pow += Al_Global::second_per_frame * 2;
-		//}
-		//else {
-		//	gnyat_pow -= Al_Global::second_per_frame * 0.5f;
-		//}
-		gnyat_pow = ALClamp(gnyat_pow, 0, 1);
-
-		//gnyat_pow = 0.9f / Al_Global::second_per_frame * 0.01f;
-
-		gnyat_pow = 0.9f;
+		//Player‚ª—§‚Â‚æ‚¤‚É
 		if (!input->getKeyState(Key::LeftControl))
 		{
+			const float gnyat_pow = 0.9f;
 			{
 				//Šç‚ªÔ‚¿‚á‚ñ‚È‚Ì‚ðŽ¡‚·
 				Head_collider->physics_data.anglar_drag = 1;
 				Quaternion off = Body_collider->gameobject->transform->orientation * Head_collider->gameobject->transform->orientation.inverse();
-				Head_collider->add_torque(off.axis() * off.radian() * 2000 * gnyat_pow);
+				Head_collider->add_torque(off.axis() * off.radian() * 1000 * gnyat_pow);
 			}
 			{
 				//˜‚ð‚½‚½‚¹‚é
 				Quaternion off_rot = rotate * Waist_collider->gameobject->transform->orientation.inverse();
 				Waist_collider->add_torque(off_rot.axis() * off_rot.radian() * 4000 * gnyat_pow);
 
+				//ˆÚ“®
 				pos.y = Waist_collider->gameobject->transform->position.y;
 				Vector3 off_pos = pos - Waist_collider->gameobject->transform->position;
 				Waist_collider->add_force(off_pos * move_speed * gnyat_pow);
@@ -130,12 +118,70 @@ namespace Adollib
 			}
 			{
 				//“·‘Ì‚ð‚½‚½‚¹‚é
-				Quaternion off = Waist_collider->gameobject->transform->orientation * Body_collider->gameobject->transform->orientation.inverse();
+				Quaternion off = rotate * Body_collider->gameobject->transform->orientation.inverse();
 				Body_collider->add_torque(off.axis() * off.radian() * 1000 * gnyat_pow);
 			}
 
-			Waist_collider->add_force(Vector3(0, -1, 0) * 300);
 		}
+		//joint‚Å‚Â‚È‚°‚é‚Æd—Í‚ªŽã‚­‚È‚é‚©‚ç & ˆê’è‚Ìƒp[ƒc‚Íd—Í‚Ì‰e‹¿‚ðŽó‚¯‚È‚¢‚æ‚¤‚É‚µ‚Ä‚¢‚é‚©‚ç  ‰ºŒü‚«‚É—Í‚ð‰Á‚¦‚é
+		Waist_collider->add_force(Vector3(0, -1, 0) * 600);
+
+
+		//Player‚ª•à‚­‚æ‚¤‚É
+		//{
+		//	if (dir.norm() != 0) {
+		//		float pow = 2;
+		//		float max_theata = ToRadian(60) * 0.5f;
+		//		//float sin = sinf(move_timer * 1.5f * DirectX::XM_2PI); //timre‚©‚ç‘«‚Ì‰ñ“]—Ê‚ð‹‚ß‚é
+		//		float sin = sinf(move_timer * DirectX::XM_2PI * 0.5f); //timre‚©‚ç‘«‚Ì‰ñ“]—Ê‚ð‹‚ß‚é
+
+		//		Vector3 waist_axis = Vector3(0, -1, 0);
+		//		Vector3 rot_axis = Vector3(-1, 0, 0);
+		//		//
+		//		//Vector3 waist_axis = vector3_quatrotate(Vector3(0, -1, 0), Waist_collider->gameobject->transform->orientation);
+		//		//Vector3 rot_axis = vector3_cross(waist_axis, dir);
+		//		//if (waist_axis.norm() < 0)rot_axis = vector3_quatrotate(Vector3(1, 0, 0), Waist_collider->gameobject->transform->orientation);
+		//		//rot_axis = rot_axis.unit_vect();
+
+		//		Collider* collider[2]{
+		//			Rleg_collider,
+		//			Lleg_collider
+		//		};
+		//		Quaternion goal_rotate[2] = {
+		//			quaternion_axis_radian(rot_axis, +sin * max_theata),
+		//			quaternion_axis_radian(rot_axis, -sin * max_theata)
+		//		};
+		//		Vector3 goal_vec[2] = {
+		//			vector3_quatrotate(waist_axis, goal_rotate[0].inverse()),
+		//			vector3_quatrotate(waist_axis, goal_rotate[1].inverse())
+		//		};
+
+		//		Vector3 now_vec[2] = {
+		//			vector3_quatrotate(Vector3(0, -1, 0), Rleg->transform->orientation),
+		//			vector3_quatrotate(Vector3(0, -1, 0), Lleg->transform->orientation)
+		//		};
+		//		Debug::set("sin", sin);
+		//		Debug::set("rot_axis", rot_axis);
+		//		Debug::set("goal_vec[R]", goal_vec[0]);
+		//		Debug::set("goal_vec[L]", goal_vec[1]);
+		//		Debug::set("now_vec[R]", now_vec[0]);
+		//		Debug::set("now_vec[L]", now_vec[1]);
+
+		//		for (int i = 0; i < 2; i++) {
+		//			float radian = vector3_radian(now_vec[i], goal_vec[i]);
+		//			Vector3 axis = vector3_cross(now_vec[i], goal_vec[i]);
+		//			if (axis.norm() < FLT_EPSILON)continue;
+		//			axis = axis.unit_vect();
+
+		//			collider[i]->add_torque(axis * radian * pow);
+		//			//collider[i]->transform->local_orient = goal_rotate[i];
+
+		//			Debug::set("axis", axis);
+		//		}
+
+		//		move_timer += Al_Global::second_per_frame;
+		//	}
+		//}
 
 		//‰ñ“]
 		{
@@ -197,6 +243,7 @@ namespace Adollib
 
 				pos += move_vec * move_speed * Al_Global::second_per_frame;
 			}
+			dir = move_vec;
 
 			if (move_vec.norm() == 0)pos = Waist_collider->gameobject->transform->position;
 

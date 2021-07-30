@@ -24,11 +24,11 @@ namespace Adollib {
 			camera->addComponent<Camera>();
 			camera->addComponent<Camera_component>();
 
-			Gameobject* GO = Gameobject_manager::create("object_manager");
-			GO->addComponent<object_manager>();
+			//Gameobject* GO = Gameobject_manager::create("object_manager");
+			//GO->addComponent<object_manager>();
 
-			//Gameobject* GO = Gameobject_manager::create("Demo_house");
-			//GO->addComponent<Demo_house>();
+			Gameobject* GO = Gameobject_manager::create("Demo_house");
+			GO->addComponent<Demo_house>();
 
 
 			Gameobject* Playre = Gameobject_manager::create("Player_manager");
