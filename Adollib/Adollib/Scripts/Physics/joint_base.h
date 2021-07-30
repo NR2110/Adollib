@@ -40,8 +40,8 @@ namespace Adollib {
 		Physics_function::ALP_Joint* ALPjoint = nullptr; // 計算用Jointへのポインタ
 
 	public:
-		const Collider* get_colliderA() const { return collider_comp[0]; };
-		const Collider* get_colliderB() const { return collider_comp[1]; };
+		Collider* get_colliderA() const { return collider_comp[0]; };
+		Collider* get_colliderB() const { return collider_comp[1]; };
 
 		//anchorの値を派生クラスから更新する
 		virtual void adapt_anchor() = 0;

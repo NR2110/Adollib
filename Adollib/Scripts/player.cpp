@@ -89,9 +89,19 @@ namespace Adollib
 				}
 				//—£‚·
 				if (input->getMouseReleased(key) && joint != nullptr) {
+					joint->get_colliderB()->tag &= ~Collider_tags::Having_Stage;
+					joint->get_colliderB()->tag |= Collider_tags::Stage;
 					Joint::delete_joint(joint);
+
 				}
 
+			}
+
+			for (int i = 0; i < 2; i++) {
+				Joint_base*& joint = *joints[i];
+				if (joint == nullptr)continue;
+				joint->get_colliderB()->tag |= Collider_tags::Having_Stage;
+				joint->get_colliderB()->tag &= ~Collider_tags::Stage;
 			}
 		}
 

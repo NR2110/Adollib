@@ -19,6 +19,7 @@ namespace Adollib {
 
 		static const Collider_tagbit Human = (1 << 8);
 		static const Collider_tagbit Stage = (1 << 9);
+		static const Collider_tagbit Having_Stage = (1 << 10);
 
 		static const Collider_tagbit Tags_max = (1 << 31);
 	};
