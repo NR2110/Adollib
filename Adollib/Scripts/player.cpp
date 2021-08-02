@@ -138,60 +138,60 @@ namespace Adollib
 
 
 		//Player‚ª•à‚­‚æ‚¤‚É
-		//{
-		//	if (dir.norm() != 0) {
-		//		float pow = 2;
-		//		float max_theata = ToRadian(60) * 0.5f;
-		//		//float sin = sinf(move_timer * 1.5f * DirectX::XM_2PI); //timre‚©‚ç‘«‚Ì‰ñ“]—Ê‚ð‹‚ß‚é
-		//		float sin = sinf(move_timer * DirectX::XM_2PI * 0.5f); //timre‚©‚ç‘«‚Ì‰ñ“]—Ê‚ð‹‚ß‚é
+		{
+			if (dir.norm() != 0) {
+				float pow = 2;
+				float max_theata = ToRadian(60) * 0.5f;
+				//float sin = sinf(move_timer * 1.5f * DirectX::XM_2PI); //timre‚©‚ç‘«‚Ì‰ñ“]—Ê‚ð‹‚ß‚é
+				float sin = sinf(move_timer * DirectX::XM_2PI * 0.5f); //timre‚©‚ç‘«‚Ì‰ñ“]—Ê‚ð‹‚ß‚é
 
-		//		Vector3 waist_axis = Vector3(0, -1, 0);
-		//		Vector3 rot_axis = Vector3(-1, 0, 0);
-		//		//
-		//		//Vector3 waist_axis = vector3_quatrotate(Vector3(0, -1, 0), Waist_collider->gameobject->transform->orientation);
-		//		//Vector3 rot_axis = vector3_cross(waist_axis, dir);
-		//		//if (waist_axis.norm() < 0)rot_axis = vector3_quatrotate(Vector3(1, 0, 0), Waist_collider->gameobject->transform->orientation);
-		//		//rot_axis = rot_axis.unit_vect();
+				Vector3 waist_axis = Vector3(0, -1, 0);
+				Vector3 rot_axis = Vector3(-1, 0, 0);
+				//
+				//Vector3 waist_axis = vector3_quatrotate(Vector3(0, -1, 0), Waist_collider->gameobject->transform->orientation);
+				//Vector3 rot_axis = vector3_cross(waist_axis, dir);
+				//if (waist_axis.norm() < 0)rot_axis = vector3_quatrotate(Vector3(1, 0, 0), Waist_collider->gameobject->transform->orientation);
+				//rot_axis = rot_axis.unit_vect();
 
-		//		Collider* collider[2]{
-		//			Rleg_collider,
-		//			Lleg_collider
-		//		};
-		//		Quaternion goal_rotate[2] = {
-		//			quaternion_axis_radian(rot_axis, +sin * max_theata),
-		//			quaternion_axis_radian(rot_axis, -sin * max_theata)
-		//		};
-		//		Vector3 goal_vec[2] = {
-		//			vector3_quatrotate(waist_axis, goal_rotate[0].inverse()),
-		//			vector3_quatrotate(waist_axis, goal_rotate[1].inverse())
-		//		};
+				Collider* collider[2]{
+					Rleg_collider,
+					Lleg_collider
+				};
+				Quaternion goal_rotate[2] = {
+					quaternion_axis_radian(rot_axis, +sin * max_theata) * quaternion_axis_angle(Vector3(0,1,0),180),
+					quaternion_axis_radian(rot_axis, -sin * max_theata) * quaternion_axis_angle(Vector3(0,1,0),180)
+				};
+				Vector3 goal_vec[2] = {
+					vector3_quatrotate(waist_axis, goal_rotate[0].inverse()),
+					vector3_quatrotate(waist_axis, goal_rotate[1].inverse())
+				};
 
-		//		Vector3 now_vec[2] = {
-		//			vector3_quatrotate(Vector3(0, -1, 0), Rleg->transform->orientation),
-		//			vector3_quatrotate(Vector3(0, -1, 0), Lleg->transform->orientation)
-		//		};
-		//		Debug::set("sin", sin);
-		//		Debug::set("rot_axis", rot_axis);
-		//		Debug::set("goal_vec[R]", goal_vec[0]);
-		//		Debug::set("goal_vec[L]", goal_vec[1]);
-		//		Debug::set("now_vec[R]", now_vec[0]);
-		//		Debug::set("now_vec[L]", now_vec[1]);
+				Vector3 now_vec[2] = {
+					vector3_quatrotate(Vector3(0, -1, 0), Rleg->transform->orientation),
+					vector3_quatrotate(Vector3(0, -1, 0), Lleg->transform->orientation)
+				};
+				Debug::set("sin", sin);
+				Debug::set("rot_axis", rot_axis);
+				Debug::set("goal_vec[R]", goal_vec[0]);
+				Debug::set("goal_vec[L]", goal_vec[1]);
+				Debug::set("now_vec[R]", now_vec[0]);
+				Debug::set("now_vec[L]", now_vec[1]);
 
-		//		for (int i = 0; i < 2; i++) {
-		//			float radian = vector3_radian(now_vec[i], goal_vec[i]);
-		//			Vector3 axis = vector3_cross(now_vec[i], goal_vec[i]);
-		//			if (axis.norm() < FLT_EPSILON)continue;
-		//			axis = axis.unit_vect();
+				for (int i = 0; i < 2; i++) {
+					float radian = vector3_radian(now_vec[i], goal_vec[i]);
+					Vector3 axis = vector3_cross(now_vec[i], goal_vec[i]);
+					if (axis.norm() < FLT_EPSILON)continue;
+					axis = axis.unit_vect();
 
-		//			collider[i]->add_torque(axis * radian * pow);
-		//			//collider[i]->transform->local_orient = goal_rotate[i];
+					collider[i]->add_torque(axis * radian * pow);
+					//collider[i]->transform->local_orient = goal_rotate[i];
 
-		//			Debug::set("axis", axis);
-		//		}
+					Debug::set("axis", axis);
+				}
 
-		//		move_timer += Al_Global::second_per_frame;
-		//	}
-		//}
+				move_timer += Al_Global::second_per_frame;
+			}
+		}
 
 		//‰ñ“]
 		{
