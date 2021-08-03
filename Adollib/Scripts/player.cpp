@@ -137,13 +137,29 @@ namespace Adollib
 		Waist_collider->add_force(Vector3(0, -1, 0) * 600);
 
 
+		//Waist_collider->physics_data.is_moveable = false;
+		//Rleg_collider->physics_data.is_fallable = false;
+		//Lleg_collider->physics_data.is_fallable = false;
 		//Player‚ª•à‚­‚æ‚¤‚É
 		{
 			if (dir.norm() != 0) {
-				float pow = 2;
+				float pow = 500;
 				float max_theata = ToRadian(60) * 0.5f;
-				//float sin = sinf(move_timer * 1.5f * DirectX::XM_2PI); //timre‚©‚ç‘«‚Ì‰ñ“]—Ê‚ğ‹‚ß‚é
-				float sin = sinf(move_timer * DirectX::XM_2PI * 0.5f); //timre‚©‚ç‘«‚Ì‰ñ“]—Ê‚ğ‹‚ß‚é
+				//float teata = move_timer * DirectX::XM_2PI * 0.5f + DirectX::XM_PIDIV2;
+				float teata = move_timer * DirectX::XM_2PI * 3 + DirectX::XM_PIDIV2;
+
+				float sin = sinf(teata); //timre‚©‚ç‘«‚Ì‰ñ“]—Ê‚ğ‹‚ß‚é
+				float cos = cosf(teata); //timre‚©‚ç‘«‚Ì‰ñ“]—Ê‚ğ‹‚ß‚é
+
+				int f[2]{
+					+1,
+					-1
+				};
+				//float sin = 1; //timre‚©‚ç‘«‚Ì‰ñ“]—Ê‚ğ‹‚ß‚é
+
+				//if (sin < 0)sin = -1;
+				//else if (sin > 0) sin = 1;
+				//else sin = 0;
 
 				Vector3 waist_axis = Vector3(0, -1, 0);
 				Vector3 rot_axis = Vector3(-1, 0, 0);
@@ -158,39 +174,35 @@ namespace Adollib
 					Lleg_collider
 				};
 				Quaternion goal_rotate[2] = {
-					quaternion_axis_radian(rot_axis, +sin * max_theata) * quaternion_axis_angle(Vector3(0,1,0),180),
-					quaternion_axis_radian(rot_axis, -sin * max_theata) * quaternion_axis_angle(Vector3(0,1,0),180)
-				};
-				Vector3 goal_vec[2] = {
-					vector3_quatrotate(waist_axis, goal_rotate[0].inverse()),
-					vector3_quatrotate(waist_axis, goal_rotate[1].inverse())
+					quaternion_axis_radian(rot_axis, (+sin - 1) * max_theata) * Waist->transform->orientation,
+					quaternion_axis_radian(rot_axis, (-sin - 1) * max_theata) * Waist->transform->orientation
 				};
 
-				Vector3 now_vec[2] = {
-					vector3_quatrotate(Vector3(0, -1, 0), Rleg->transform->orientation),
-					vector3_quatrotate(Vector3(0, -1, 0), Lleg->transform->orientation)
+				Quaternion now_rotate[2] = {
+					Rleg->transform->orientation,
+					Lleg->transform->orientation
 				};
 				Debug::set("sin", sin);
 				Debug::set("rot_axis", rot_axis);
-				Debug::set("goal_vec[R]", goal_vec[0]);
-				Debug::set("goal_vec[L]", goal_vec[1]);
-				Debug::set("now_vec[R]", now_vec[0]);
-				Debug::set("now_vec[L]", now_vec[1]);
+				Debug::set("goal_rotate", goal_rotate[0].euler());
+				Debug::set("now_rotate", now_rotate[0].euler());
 
 				for (int i = 0; i < 2; i++) {
-					float radian = vector3_radian(now_vec[i], goal_vec[i]);
-					Vector3 axis = vector3_cross(now_vec[i], goal_vec[i]);
-					if (axis.norm() < FLT_EPSILON)continue;
-					axis = axis.unit_vect();
+					//if (i == 0 && cos > 0)continue;
+					//if (i == 1 && cos < 0)continue;
+					collider[i]->physics_data.is_moveable = true;
 
-					collider[i]->add_torque(axis * radian * pow);
+					Quaternion off = goal_rotate[i] * now_rotate[i].inverse();
+					if (off.norm() < FLT_EPSILON)continue;
+					off = off.unit_vect();
+
+					collider[i]->add_torque(off.axis() * off.radian() * pow);
 					//collider[i]->transform->local_orient = goal_rotate[i];
-
-					Debug::set("axis", axis);
 				}
 
 				move_timer += Al_Global::second_per_frame;
 			}
+			else move_timer = 0;
 		}
 
 		//‰ñ“]

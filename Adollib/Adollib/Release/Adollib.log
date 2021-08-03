@@ -1,11 +1,11 @@
 ﻿  player.cpp
 C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider.h(54,23): warning C4099: 'Adollib::Physics_function::Contacts::Contact_pair': タイプ名は最初 'class' として使われていましたが 'struct' として使われています。
 C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_collider.h(22): message : 'Adollib::Physics_function::Contacts::Contact_pair' の宣言を確認してください
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player.cpp(278,18): warning C4305: '=': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player.cpp(279,18): warning C4305: '=': 'double' から 'float' へ切り詰めます。
   コード生成しています。
-  301 of 8466 functions ( 3.6%) were compiled, the rest were copied from previous compilation.
-    1 functions were new in current compilation
-    189 functions had inline decision re-evaluated but remain unchanged
+  1 of 8466 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    55 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
 camera.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
 camera_manager.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。

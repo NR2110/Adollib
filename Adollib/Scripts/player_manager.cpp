@@ -273,7 +273,8 @@ namespace Adollib
 			//‘«
 			{
 				auto Cone = Joint::add_Conejoint(Waist_collider, Rleg_collider, Vector3(-0.6f, -0.8, 0), Vector3(0, 0.3, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect());
-				Cone->limit = 48;
+				//Cone->limit = 48;
+				Cone->limit = 60;
 
 				auto Twist = Joint::add_Twistjoint(Waist_collider, Rleg_collider, Vector3(0, 1, 0));
 				Twist->limit = Vector2(360 - 5, 15);
@@ -284,7 +285,8 @@ namespace Adollib
 			}
 			{
 				auto Cone = Joint::add_Conejoint(Waist_collider, Lleg_collider, Vector3(+0.6f, -0.8, 0), Vector3(0, 0.3, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect());
-				Cone->limit = 48;
+				//Cone->limit = 48;
+				Cone->limit = 60;
 
 				auto Twist = Joint::add_Twistjoint(Waist_collider, Lleg_collider, Vector3(0, 1, 0));
 				Twist->limit = Vector2(360 - 15, 5);
