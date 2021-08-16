@@ -76,8 +76,11 @@ namespace Adollib {
 
 			//::: 見せるだけ :::::::::::::::::::::::::
 			float speed = 0;//debugしやすいように
-			Vector3 linear_velocity;//並進速度
+			Vector3 linear_velocity; //並進速度
 			Vector3 angula_velocity; //回転速度
+
+			Vector3 old_linear_velocity; //一フレーム前の並進速度
+			Vector3 old_angula_velocity; //一フレーム前の回転速度
 
 			Matrix33 inertial_tensor; //慣性テンソル
 
@@ -90,6 +93,7 @@ namespace Adollib {
 
 			Vector3 linear_acceleration; //並進加速度
 			Vector3 angula_acceleration; //回転加速度
+
 
 			Vector3 barycenter; //GOのlocal空間の重心座標
 

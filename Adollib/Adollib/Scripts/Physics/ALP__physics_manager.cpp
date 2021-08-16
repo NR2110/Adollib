@@ -82,9 +82,6 @@ bool Phyisics_manager::update(Scenelist Sce)
 	frame_count += Al_Global::second_per_frame;
 	if (Al_Global::second_per_game < 1) {
 		resetforce(ALP_physicses[Sce]);
-	}
-
-	if (frame_count < 0.016f) {
 		return true;
 	}
 
@@ -96,53 +93,58 @@ bool Phyisics_manager::update(Scenelist Sce)
 
 
 #if 0
+	physicsParams.time_per_flame = ALmin(Al_Global::second_per_frame, physicsParams.max_timeStep);
 	physicsParams.timeStep = ALmin(frame_count, physicsParams.max_timeStep);
-	frame_count = 0;
 #else
 	// 0.016秒ごとに更新するとアタッチしたGOへの追跡カメラがバグるため
+	physicsParams.time_per_flame = ALmin(Al_Global::second_per_frame, physicsParams.max_timeStep);
 	physicsParams.timeStep = ALmin(Al_Global::second_per_frame, physicsParams.max_timeStep);
-	Work_meter::set("timestep", Al_Global::second_per_frame);
 #endif
 	//physicsParams.timeStep = 0.016f;
+
 
 	// 外力の更新
 	applyexternalforce(ALP_physicses[Sce]);
 
-	pairs_new_num = 1 - pairs_new_num;
+	if (frame_count >= 0.016f) {
+	//frame_count = 0;
 
-	// 大雑把な当たり判定
-	Work_meter::start("Broad,Mid,Narrow");
+		pairs_new_num = 1 - pairs_new_num;
 
-	Work_meter::start("Broadphase");
-	Work_meter::tag_start("Broadphase");
-	BroadMidphase(Sce,
-		ALP_colliders[Sce], pairs[pairs_new_num],
-		moved_collider[Sce], added_collider[Sce]
-	);
-	Work_meter::tag_stop();
-	Work_meter::stop("Broadphase");
+		// 大雑把な当たり判定
+		Work_meter::start("Broad,Mid,Narrow");
 
-	Work_meter::start("Midphase");
-	Work_meter::tag_start("Midphase");
-	Midphase(pairs[1 - pairs_new_num], pairs[pairs_new_num]);
-	Work_meter::tag_stop();
-	Work_meter::stop("Midphase");
+		Work_meter::start("Broadphase");
+		Work_meter::tag_start("Broadphase");
+		BroadMidphase(Sce,
+			ALP_colliders[Sce], pairs[pairs_new_num],
+			moved_collider[Sce], added_collider[Sce]
+		);
+		Work_meter::tag_stop();
+		Work_meter::stop("Broadphase");
 
-	// 衝突生成
-	Work_meter::start("Narrowphase");
-	Work_meter::tag_start("Narrowphase");
-	generate_contact(pairs[pairs_new_num]);
-	Work_meter::tag_stop();
-	Work_meter::stop("Narrowphase");
+		Work_meter::start("Midphase");
+		Work_meter::tag_start("Midphase");
+		Midphase(pairs[1 - pairs_new_num], pairs[pairs_new_num]);
+		Work_meter::tag_stop();
+		Work_meter::stop("Midphase");
 
-	Work_meter::stop("Broad,Mid,Narrow");
+		// 衝突生成
+		Work_meter::start("Narrowphase");
+		Work_meter::tag_start("Narrowphase");
+		generate_contact(pairs[pairs_new_num]);
+		Work_meter::tag_stop();
+		Work_meter::stop("Narrowphase");
 
-	// 衝突解決
-	Work_meter::start("Resolve");
-	Work_meter::tag_start("Resolve");
-	resolve_contact(ALP_colliders[Sce], pairs[pairs_new_num], ALP_joints);
-	Work_meter::tag_stop();
-	Work_meter::stop("Resolve");
+		Work_meter::stop("Broad,Mid,Narrow");
+
+		// 衝突解決
+		Work_meter::start("Resolve");
+		Work_meter::tag_start("Resolve");
+		resolve_contact(ALP_colliders[Sce], pairs[pairs_new_num], ALP_joints);
+		Work_meter::tag_stop();
+		Work_meter::stop("Resolve");
+	}
 
 	// 位置の更新
 	integrate(ALP_physicses[Sce]);

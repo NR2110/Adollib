@@ -61,7 +61,7 @@ void Physics_function::resetforce(std::list<Physics_function::ALP_Physics*>& ALP
 void Physics_function::applyexternalforce(std::list<Physics_function::ALP_Physics*>& ALP_physics) {
 
 	std::for_each(ALP_physics.begin(), ALP_physics.end(), [](ALP_Physics* phys) {
-		phys->apply_external_force(Phyisics_manager::physicsParams.timeStep);
+		phys->apply_external_force(Phyisics_manager::physicsParams.time_per_flame);
 		}
 	);
 }
@@ -69,7 +69,7 @@ void Physics_function::applyexternalforce(std::list<Physics_function::ALP_Physic
 void Physics_function::integrate(std::list<Physics_function::ALP_Physics*>& ALP_physics) {
 
 	std::for_each(ALP_physics.begin(), ALP_physics.end(), [](ALP_Physics* phys) {
-		phys->integrate(Phyisics_manager::physicsParams.timeStep);
+		phys->integrate(Phyisics_manager::physicsParams.time_per_flame);
 		}
 	);
 }

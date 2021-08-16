@@ -110,7 +110,7 @@ bool Calc_joint_effect(ALP_Joint* joint)
 		joint->constraint_limit.jacDiagInv = 1.0f / denominator;
 
 		joint->constraint_limit.rhs = -DirectX::XMVectorGetX(DirectX::XMVector3Dot(relativeVelocity, direction)); // velocity error
-		joint->constraint_limit.rhs += joint->limit_bias * penetrate / Phyisics_manager::physicsParams.timeStep; // position error
+		joint->constraint_limit.rhs += joint->limit_bias * penetrate / Phyisics_manager::physicsParams.time_per_flame; // position error
 		joint->constraint_limit.rhs *= joint->constraint_limit.jacDiagInv;
 		joint->constraint_limit.lowerlimit = -FLT_MAX;
 		joint->constraint_limit.upperlimit = +FLT_MAX;
@@ -254,7 +254,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 				constraint.rhs = -DirectX::XMVectorGetX(DirectX::XMVector3Dot(relativeVelocity, direction)); // velocity error
 
 				if (0.0f < DirectX::XMVectorGetX(distance) - joint->slop)
-				constraint.rhs += joint->bias * (DirectX::XMVectorGetX(distance) - joint->slop) / Phyisics_manager::physicsParams.timeStep; // position error
+				constraint.rhs += joint->bias * (DirectX::XMVectorGetX(distance) - joint->slop) / Phyisics_manager::physicsParams.time_per_flame; // position error
 				constraint.rhs *= constraint.jacDiagInv;
 				constraint.lowerlimit = -FLT_MAX;
 				constraint.upperlimit = +FLT_MAX;
@@ -337,7 +337,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 				cp.constraint[0].rhs = -(1.0f + restitution) * DirectX::XMVectorGetX(DirectX::XMVector3Dot(axis, vrel)); //Baraff1997(8-18)‚Ì•ªŽq
 
 				if (0.0f < cp.distance - Phyisics_manager::physicsParams.slop)
-					cp.constraint[0].rhs += (Phyisics_manager::physicsParams.bias * (cp.distance - Phyisics_manager::physicsParams.slop)) / Phyisics_manager::physicsParams.timeStep; //‚ß‚èž‚Ý‚ð’¼‚·—Í
+					cp.constraint[0].rhs += (Phyisics_manager::physicsParams.bias * (cp.distance - Phyisics_manager::physicsParams.slop)) / Phyisics_manager::physicsParams.time_per_flame; //‚ß‚èž‚Ý‚ð’¼‚·—Í
 
 				cp.constraint[0].rhs *= cp.constraint[0].jacDiagInv;
 				cp.constraint[0].lowerlimit = 0.0f;
@@ -604,6 +604,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 				int adsfgh = 0;
 			}
 			coll->get_ALPphysics()->linear_velocity += linervec;
+			coll->get_ALPphysics()->old_linear_velocity += linervec;
 		}
 		if (coll->get_ALPphysics()->is_kinmatic_anglar) {
 			Vector3 anglvec;
@@ -612,6 +613,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 				int adsfgh = 0;
 			}
 			coll->get_ALPphysics()->angula_velocity += anglvec;
+			coll->get_ALPphysics()->old_angula_velocity += anglvec;
 		}
 
 	}

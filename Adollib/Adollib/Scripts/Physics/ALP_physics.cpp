@@ -76,6 +76,10 @@ void ALP_Physics::reset_force() {
 }
 
 void ALP_Physics::apply_external_force(float duration) {
+	//‘O‚Ì‘¬“x‚ð•Û‘¶ (integrate‚ÅŽg‚¤)
+		old_angula_velocity = angula_velocity;
+		old_linear_velocity = linear_velocity;
+
 	if (is_movable()) {
 		//inv_rotate = Quaternion(1, 0, 0, 0);
 
@@ -147,7 +151,7 @@ void ALP_Physics::integrate(float duration) {
 		is_sleep = false;
 	}
 
-	ALPcollider->integrate(duration, linear_velocity, angula_velocity);
+	ALPcollider->integrate(duration, linear_velocity, angula_velocity, old_linear_velocity, old_angula_velocity);
 
 }
 

@@ -97,7 +97,7 @@ namespace Adollib {
 			void update_world_trans();
 
 			//座標,姿勢によるworld情報の更新
-			void integrate(float duration, Vector3 linear_velocity, Vector3 anglar_velocity);
+			void integrate(float duration, Vector3 linear_velocity, Vector3 anglar_velocity, Vector3 linear_acceleration, Vector3 angula_acceleration);
 
 			// 毎フレーム行うreset
 			void reset_data_per_frame();

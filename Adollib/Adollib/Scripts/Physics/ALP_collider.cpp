@@ -59,8 +59,8 @@ void ALP_Collider::update_world_trans() {
 #pragma endregion
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-void ALP_Collider::integrate(float duration, Vector3 linear_velocity, Vector3 anglar_velocity) {
-	if (linear_velocity.norm() == 0 && anglar_velocity.norm() == 0)return;
+void ALP_Collider::integrate(float duration, Vector3 linear_velocity, Vector3 anugla_velocity, Vector3 old_linear_velocity, Vector3 old_anugla_velocity) {
+	if (linear_velocity.norm() == 0 && anugla_velocity.norm() == 0)return;
 
 	//親のorienattionの逆をとる
 	Quaternion pearent_orientate_inv = Quaternion(1, 0, 0, 0);
@@ -69,16 +69,18 @@ void ALP_Collider::integrate(float duration, Vector3 linear_velocity, Vector3 an
 		pearent_orientate_inv = pearent_orientate_inv.inverse();
 	}
 
+	//現在の速度が 前の速度から加速度一定で変化したとして積分を行い移動距離を求める
+	const Vector3 linear_move = old_linear_velocity * duration + 0.5f * (linear_velocity - old_linear_velocity) * duration;
+	const Vector3 angula_move = old_anugla_velocity * duration + 0.5f * (anugla_velocity - old_anugla_velocity) * duration;
+
 	//アタッチされているGOの親子関係に対応 親が回転していても落下は"下"方向に
-	Vector3 local_linear_velocity = vector3_quatrotate(linear_velocity, pearent_orientate_inv);
-	Vector3 local_anglar_velocity = vector3_quatrotate(anglar_velocity, pearent_orientate_inv);
+	const Vector3 local_linear_move = vector3_quatrotate(linear_move, pearent_orientate_inv);
+	const Vector3 local_anglar_move = vector3_quatrotate(angula_move, pearent_orientate_inv);
 
-	gameobject->transform->local_pos += local_linear_velocity * duration;
-
-	Quaternion debug_0, debug_1;
+	gameobject->transform->local_pos += local_linear_move;
 
 	//どっちも計算結果は一緒 上のほうが直感的
-	gameobject->transform->local_orient *= quaternion_axis_radian(local_anglar_velocity.unit_vect(), local_anglar_velocity.norm_sqr() * duration);
+	gameobject->transform->local_orient *= quaternion_axis_radian(local_anglar_move.unit_vect(), local_anglar_move.norm_sqr());
 	gameobject->transform->local_orient = gameobject->transform->local_orient.unit_vect();
 
 	//Quaternion dAng = gameobject->transform->local_orient.unit_vect() * Quaternion(0, anglar_velocity.x, anglar_velocity.y, anglar_velocity.z) * 0.5f;

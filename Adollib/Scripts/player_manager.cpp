@@ -349,9 +349,10 @@ namespace Adollib
 
 			//Waist_capsule_collider->physics_data.is_kinmatic_anglar = false;
 
-			auto hinge = Joint::add_Hingejoint(Waist_collider, Waist_capsule_collider, Vector3(0, 1, 0), Vector3(0, -1, 0), Vector3(0, 1, 0), Vector3(0, -1, 0));
-			hinge->hinge_pow = 0;
-			//auto ball = Joint::add_balljoint(Waist_capsule_collider, Head_collider, Vector3(0, 3.2, 0), Vector3(0, 0, 0), 0.01f);
+			//auto hinge = Joint::add_Hingejoint(Waist_collider, Waist_capsule_collider, Vector3(0, 1, 0), Vector3(0, -1, 0), Vector3(0, 1, 0), Vector3(0, -1, 0));
+			//hinge->hinge_pow = 0;
+
+			//auto ball = Joint::add_balljoint(Waist_capsule_collider, Head_collider, Vector3(0, 3.2, 0), Vector3(0, 0, 0), 0.01f);w
 		}
 
 		{

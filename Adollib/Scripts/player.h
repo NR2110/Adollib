@@ -9,10 +9,29 @@ namespace Adollib
 	class Player : public Component
 	{
 	private:
-		float move_speed = 12000;
-		float turn_speed = 2;
+		//player‚ÌŠî–{‚Ì’l Œˆ‚Ü‚Á‚½‚çconst‚É‚·‚é
+		float waist_move_max_speed = 1000;
+		float waist_move_max_pow = 1000;
+		float waist_move_pow = 1000;
+
+		float waist_rot_max_speed = 1000;
+		float waist_rot_max_pow = 1000;
+		float waist_rot_pow = 1000;
+
+		float head_rot_max_speed = 1000;
+		float head_rot_max_pow = 1000;
+		float head_rot_pow = 1000;
+
+		float body_rot_max_speed = 1000;
+		float body_rot_max_pow = 1000;
+		float body_rot_pow = 1000;
+
 		float jump_power = 150;
 
+		float move_speed = 12000;
+		float turn_speed = 2;
+
+	private:
 		Quaternion rotate; //rotate‚Ìbuffer
 		Vector3 dir; //Œü‚«‚Ìbuffer
 		Vector3 pos; //À•W‚Ìbuffer

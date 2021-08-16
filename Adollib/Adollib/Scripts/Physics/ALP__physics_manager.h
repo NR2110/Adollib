@@ -91,8 +91,9 @@ namespace Adollib
 			int solver_iterations = 5; //衝突の精度
 			bool hit_backfaces_flag = false;//meshの後ろから衝突するか
 
-			float timeStep = 0.016f;
-			float max_timeStep = 0.032f;
+			float time_per_flame = 0; // ゲームのFPS
+			float timeStep = 0.016f; // 物理計算に用いるtimestep 最低値を定義できる
+			float max_timeStep = 0.032f; // 最大のtimestep 更新の感覚が大きすぎるとバグるから
 
 			//::: Physicsの初期値部分 :::
 
