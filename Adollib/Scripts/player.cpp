@@ -52,281 +52,281 @@ namespace Adollib
 	// 毎フレーム呼ばれる更新処理
 	void Player::update()
 	{
-		debug_coll->add_force(Vector3(0, 30, 0));
+		//debug_coll->add_force(Vector3(0, 30, 0));
 
 
-		//Head_collider->physics_data.drag = 0;
-		//Rsholder_collider->physics_data.drag = 0;
-		//Relbow_collider->physics_data.drag = 0;
-		//Lsholder_collider->physics_data.drag = 0;
-		//Lelbow_collider->physics_data.drag = 0;
-		//Body_collider->physics_data.drag = 0;
-		//Waist_collider->physics_data.drag = 0;
-		//Rleg_collider->physics_data.drag = 0;
-		//Rfoot_collider->physics_data.drag = 0;
-		//Lleg_collider->physics_data.drag = 0;
-		//Lfoot_collider->physics_data.drag = 0;
+		////Head_collider->physics_data.drag = 0;
+		////Rsholder_collider->physics_data.drag = 0;
+		////Relbow_collider->physics_data.drag = 0;
+		////Lsholder_collider->physics_data.drag = 0;
+		////Lelbow_collider->physics_data.drag = 0;
+		////Body_collider->physics_data.drag = 0;
+		////Waist_collider->physics_data.drag = 0;
+		////Rleg_collider->physics_data.drag = 0;
+		////Rfoot_collider->physics_data.drag = 0;
+		////Lleg_collider->physics_data.drag = 0;
+		////Lfoot_collider->physics_data.drag = 0;
 
-		//物を持つ
-		{
-			const Mouse keys[2] = {
-				Mouse::LBUTTON ,
-				Mouse::RBUTTON };
+		////物を持つ
+		//{
+		//	const Mouse keys[2] = {
+		//		Mouse::LBUTTON ,
+		//		Mouse::RBUTTON };
 
-			Collider* colliders[2] = {
-				Lelbow_collider,
-				Relbow_collider
-			};
-			Joint_base** joints[2] = {
-				&catch_left_joint,
-				&catch_right_joint
-			};
+		//	Collider* colliders[2] = {
+		//		Lelbow_collider,
+		//		Relbow_collider
+		//	};
+		//	Joint_base** joints[2] = {
+		//		&catch_left_joint,
+		//		&catch_right_joint
+		//	};
 
-			for (int i = 0; i < 2; i++) {
-				const Mouse key = keys[i];
-				auto& collider = colliders[i];
-				Joint_base*& joint = *joints[i];
-				//持つ
-				if (input->getMouseState(key) && joint == nullptr) {
-					collider->is_save_contacted_colls = true;
-					auto& contacted_colls = collider->contacted_colliders;
+		//	for (int i = 0; i < 2; i++) {
+		//		const Mouse key = keys[i];
+		//		auto& collider = colliders[i];
+		//		Joint_base*& joint = *joints[i];
+		//		//持つ
+		//		if (input->getMouseState(key) && joint == nullptr) {
+		//			collider->is_save_contacted_colls = true;
+		//			auto& contacted_colls = collider->contacted_colliders;
 
-					//衝突しているcolliderから一番近いものを探査
-					Contacted_data* min_data = nullptr;
-					for (auto& c_coll : contacted_colls) {
-						if (min_data == nullptr || min_data->penetrate > c_coll.penetrate) {
-							min_data = &c_coll;
-						}
-					}
-					if (min_data != nullptr && min_data->coll->tag != Collider_tags::Human) {
-						//Jointに登録
-						joint = Joint::add_balljoint(
-							collider,
-							min_data->coll,
-							min_data->contacted_pointA,
-							min_data->contacted_pointB
-						);
-						joint->slop = 0.1f;
-					}
-				}
-				//離す
-				if (input->getMouseReleased(key) && joint != nullptr) {
-					joint->get_colliderB()->tag &= ~Collider_tags::Having_Stage;
-					joint->get_colliderB()->tag |= Collider_tags::Stage;
-					Joint::delete_joint(joint);
+		//			//衝突しているcolliderから一番近いものを探査
+		//			Contacted_data* min_data = nullptr;
+		//			for (auto& c_coll : contacted_colls) {
+		//				if (min_data == nullptr || min_data->penetrate > c_coll.penetrate) {
+		//					min_data = &c_coll;
+		//				}
+		//			}
+		//			if (min_data != nullptr && min_data->coll->tag != Collider_tags::Human) {
+		//				//Jointに登録
+		//				joint = Joint::add_balljoint(
+		//					collider,
+		//					min_data->coll,
+		//					min_data->contacted_pointA,
+		//					min_data->contacted_pointB
+		//				);
+		//				joint->slop = 0.1f;
+		//			}
+		//		}
+		//		//離す
+		//		if (input->getMouseReleased(key) && joint != nullptr) {
+		//			joint->get_colliderB()->tag &= ~Collider_tags::Having_Stage;
+		//			joint->get_colliderB()->tag |= Collider_tags::Stage;
+		//			Joint::delete_joint(joint);
 
-				}
+		//		}
 
-			}
+		//	}
 
-			for (int i = 0; i < 2; i++) {
-				Joint_base*& joint = *joints[i];
-				if (joint == nullptr)continue;
-				joint->get_colliderB()->tag |= Collider_tags::Having_Stage;
-				joint->get_colliderB()->tag &= ~Collider_tags::Stage;
-			}
-		}
+		//	for (int i = 0; i < 2; i++) {
+		//		Joint_base*& joint = *joints[i];
+		//		if (joint == nullptr)continue;
+		//		joint->get_colliderB()->tag |= Collider_tags::Having_Stage;
+		//		joint->get_colliderB()->tag &= ~Collider_tags::Stage;
+		//	}
+		//}
 
-		//Playerが立つように
-		//移動
-		Debug::set("waist_speed ", Waist_collider->linear_velocity());
-		if (!input->getKeyState(Key::LeftControl))
-		{
-			const float gnyat_pow = 0.9f;
-			{
-				////顔が赤ちゃんなのを治す
-				//Head_collider->physics_data.anglar_drag = 1;
-				//Quaternion off = Body_collider->gameobject->transform->orientation * Head_collider->gameobject->transform->orientation.inverse();
-				//float pow = ALClamp(off.radian() * head_rot_pow, 0, head_rot_max_pow);
-				//Head_collider->add_torque(off.axis() * pow * gnyat_pow);
-			}
+		////Playerが立つように
+		////移動
+		//Debug::set("waist_speed ", Waist_collider->linear_velocity());
+		//if (!input->getKeyState(Key::LeftControl))
+		//{
+		//	const float gnyat_pow = 0.9f;
+		//	{
+		//		////顔が赤ちゃんなのを治す
+		//		//Head_collider->physics_data.anglar_drag = 1;
+		//		//Quaternion off = Body_collider->gameobject->transform->orientation * Head_collider->gameobject->transform->orientation.inverse();
+		//		//float pow = ALClamp(off.radian() * head_rot_pow, 0, head_rot_max_pow);
+		//		//Head_collider->add_torque(off.axis() * pow * gnyat_pow);
+		//	}
 
-			{
-				////腰をたたせる
-				//Quaternion off_rot = rotate * Waist_collider->gameobject->transform->orientation.inverse();
-				//Waist_collider->add_torque(off_rot.axis() * off_rot.radian() * 4000 * gnyat_pow);
-			}
-			{
-				////移動
-				//Vector3 off = pos - Waist_collider->gameobject->transform->position;
-				//off.y = 0;
-				//float pow = ALClamp(off.norm_sqr() * waist_move_pow, 0, waist_move_max_pow);
-				//Waist_collider->add_force(dir * waist_move_pow * gnyat_pow);
+		//	{
+		//		////腰をたたせる
+		//		//Quaternion off_rot = rotate * Waist_collider->gameobject->transform->orientation.inverse();
+		//		//Waist_collider->add_torque(off_rot.axis() * off_rot.radian() * 4000 * gnyat_pow);
+		//	}
+		//	{
+		//		////移動
+		//		//Vector3 off = pos - Waist_collider->gameobject->transform->position;
+		//		//off.y = 0;
+		//		//float pow = ALClamp(off.norm_sqr() * waist_move_pow, 0, waist_move_max_pow);
+		//		//Waist_collider->add_force(dir * waist_move_pow * gnyat_pow);
 
-				//// 速度制限
-				//Vector3 speed = Waist_collider->linear_velocity();
-				//speed.y = 0;
-				//if (speed.norm() > waist_move_max_speed * waist_move_max_speed) {
-				//	Vector3 Yspeed = Vector3(0, Waist_collider->linear_velocity().y, 0);
-				//	Waist_collider->linear_velocity(speed.unit_vect() * waist_move_max_speed + Yspeed);
-				//}
-			}
+		//		//// 速度制限
+		//		//Vector3 speed = Waist_collider->linear_velocity();
+		//		//speed.y = 0;
+		//		//if (speed.norm() > waist_move_max_speed * waist_move_max_speed) {
+		//		//	Vector3 Yspeed = Vector3(0, Waist_collider->linear_velocity().y, 0);
+		//		//	Waist_collider->linear_velocity(speed.unit_vect() * waist_move_max_speed + Yspeed);
+		//		//}
+		//	}
 
-			{
-				////胴体をたたせる
-				//Quaternion off = rotate * Body_collider->gameobject->transform->orientation.inverse();
-				//Body_collider->add_torque(off.axis() * off.radian() * 1000 * gnyat_pow);
-			}
+		//	{
+		//		////胴体をたたせる
+		//		//Quaternion off = rotate * Body_collider->gameobject->transform->orientation.inverse();
+		//		//Body_collider->add_torque(off.axis() * off.radian() * 1000 * gnyat_pow);
+		//	}
 
-		}
-		//jointでつなげると重力が弱くなるから & 一定のパーツは重力の影響を受けないようにしているから  下向きに力を加える
-		Waist_collider->add_force(Vector3(0, -1, 0) * 600);
+		//}
+		////jointでつなげると重力が弱くなるから & 一定のパーツは重力の影響を受けないようにしているから  下向きに力を加える
+		//Waist_collider->add_force(Vector3(0, -1, 0) * 600);
 
-		{
-			//Waist_collider->physics_data.is_moveable = false;
-			//Rleg_collider->physics_data.is_fallable = false;
-			//Lleg_collider->physics_data.is_fallable = false;
-			//Playerが歩くように
-			//{
-			//	if (dir.norm() != 0) {
-			//		float pow = 800;
-			//		float max_theata = ToRadian(60) * 0.5f;
-			//		//float teata = move_timer * DirectX::XM_2PI * 0.5f + DirectX::XM_PIDIV2;
-			//		float teata = move_timer * DirectX::XM_2PI * 3 + DirectX::XM_PIDIV2;
+		//{
+		//	//Waist_collider->physics_data.is_moveable = false;
+		//	//Rleg_collider->physics_data.is_fallable = false;
+		//	//Lleg_collider->physics_data.is_fallable = false;
+		//	//Playerが歩くように
+		//	//{
+		//	//	if (dir.norm() != 0) {
+		//	//		float pow = 800;
+		//	//		float max_theata = ToRadian(60) * 0.5f;
+		//	//		//float teata = move_timer * DirectX::XM_2PI * 0.5f + DirectX::XM_PIDIV2;
+		//	//		float teata = move_timer * DirectX::XM_2PI * 3 + DirectX::XM_PIDIV2;
 
-			//		float sin = sinf(teata); //timreから足の回転量を求める
-			//		float cos = cosf(teata); //timreから足の回転量を求める
+		//	//		float sin = sinf(teata); //timreから足の回転量を求める
+		//	//		float cos = cosf(teata); //timreから足の回転量を求める
 
-			//		int f[2]{
-			//			+1,
-			//			-1
-			//		};
-			//		//float sin = 1; //timreから足の回転量を求める
+		//	//		int f[2]{
+		//	//			+1,
+		//	//			-1
+		//	//		};
+		//	//		//float sin = 1; //timreから足の回転量を求める
 
-			//		//if (sin < 0)sin = -1;
-			//		//else if (sin > 0) sin = 1;
-			//		//else sin = 0;
+		//	//		//if (sin < 0)sin = -1;
+		//	//		//else if (sin > 0) sin = 1;
+		//	//		//else sin = 0;
 
-			//		Vector3 waist_axis = Vector3(0, -1, 0);
-			//		Vector3 rot_axis = Vector3(-1, 0, 0);
-			//		//
-			//		//Vector3 waist_axis = vector3_quatrotate(Vector3(0, -1, 0), Waist_collider->gameobject->transform->orientation);
-			//		//Vector3 rot_axis = vector3_cross(waist_axis, dir);
-			//		//if (waist_axis.norm() < 0)rot_axis = vector3_quatrotate(Vector3(1, 0, 0), Waist_collider->gameobject->transform->orientation);
-			//		//rot_axis = rot_axis.unit_vect();
+		//	//		Vector3 waist_axis = Vector3(0, -1, 0);
+		//	//		Vector3 rot_axis = Vector3(-1, 0, 0);
+		//	//		//
+		//	//		//Vector3 waist_axis = vector3_quatrotate(Vector3(0, -1, 0), Waist_collider->gameobject->transform->orientation);
+		//	//		//Vector3 rot_axis = vector3_cross(waist_axis, dir);
+		//	//		//if (waist_axis.norm() < 0)rot_axis = vector3_quatrotate(Vector3(1, 0, 0), Waist_collider->gameobject->transform->orientation);
+		//	//		//rot_axis = rot_axis.unit_vect();
 
-			//		Collider* collider[2]{
-			//			Rleg_collider,
-			//			Lleg_collider
-			//		};
-			//		Quaternion goal_rotate[2] = {
-			//			quaternion_axis_radian(rot_axis, (+sin - 1) * max_theata) * Waist->transform->orientation,
-			//			quaternion_axis_radian(rot_axis, (-sin - 1) * max_theata) * Waist->transform->orientation
-			//		};
+		//	//		Collider* collider[2]{
+		//	//			Rleg_collider,
+		//	//			Lleg_collider
+		//	//		};
+		//	//		Quaternion goal_rotate[2] = {
+		//	//			quaternion_axis_radian(rot_axis, (+sin - 1) * max_theata) * Waist->transform->orientation,
+		//	//			quaternion_axis_radian(rot_axis, (-sin - 1) * max_theata) * Waist->transform->orientation
+		//	//		};
 
-			//		Quaternion now_rotate[2] = {
-			//			Rleg->transform->orientation,
-			//			Lleg->transform->orientation
-			//		};
-			//		Debug::set("sin", sin);
-			//		Debug::set("rot_axis", rot_axis);
-			//		Debug::set("goal_rotate", goal_rotate[0].euler());
-			//		Debug::set("now_rotate", now_rotate[0].euler());
+		//	//		Quaternion now_rotate[2] = {
+		//	//			Rleg->transform->orientation,
+		//	//			Lleg->transform->orientation
+		//	//		};
+		//	//		Debug::set("sin", sin);
+		//	//		Debug::set("rot_axis", rot_axis);
+		//	//		Debug::set("goal_rotate", goal_rotate[0].euler());
+		//	//		Debug::set("now_rotate", now_rotate[0].euler());
 
-			//		for (int i = 0; i < 2; i++) {
-			//			//if (i == 0 && cos > 0)continue;
-			//			//if (i == 1 && cos < 0)continue;
-			//			collider[i]->physics_data.is_moveable = true;
+		//	//		for (int i = 0; i < 2; i++) {
+		//	//			//if (i == 0 && cos > 0)continue;
+		//	//			//if (i == 1 && cos < 0)continue;
+		//	//			collider[i]->physics_data.is_moveable = true;
 
-			//			Quaternion off = goal_rotate[i] * now_rotate[i].inverse();
-			//			if (off.norm() < FLT_EPSILON)continue;
-			//			off = off.unit_vect();
+		//	//			Quaternion off = goal_rotate[i] * now_rotate[i].inverse();
+		//	//			if (off.norm() < FLT_EPSILON)continue;
+		//	//			off = off.unit_vect();
 
-			//			collider[i]->add_torque(off.axis() * off.radian() * pow);
-			//			//collider[i]->transform->local_orient = goal_rotate[i];
-			//		}
+		//	//			collider[i]->add_torque(off.axis() * off.radian() * pow);
+		//	//			//collider[i]->transform->local_orient = goal_rotate[i];
+		//	//		}
 
-			//		move_timer += Al_Global::second_per_frame;
-			//	}
-			//	else move_timer = 0;
-			//}
-		}
+		//	//		move_timer += Al_Global::second_per_frame;
+		//	//	}
+		//	//	else move_timer = 0;
+		//	//}
+		//}
 
-		//回転
-		{
-			Vector3 rot_vec = Vector3(0);
-			if (input->getKeyState(Key::W)) {
-				rot_vec += Vector3(0, 0, -1);
-			}
-			if (input->getKeyState(Key::S)) {
-				rot_vec += Vector3(0, 0, +1);
-			}
-			if (input->getKeyState(Key::A)) {
-				rot_vec += Vector3(+1, 0, 0);
-			}
-			if (input->getKeyState(Key::D)) {
-				rot_vec += Vector3(-1, 0, 0);
-			}
+		////回転
+		//{
+		//	Vector3 rot_vec = Vector3(0);
+		//	if (input->getKeyState(Key::W)) {
+		//		rot_vec += Vector3(0, 0, -1);
+		//	}
+		//	if (input->getKeyState(Key::S)) {
+		//		rot_vec += Vector3(0, 0, +1);
+		//	}
+		//	if (input->getKeyState(Key::A)) {
+		//		rot_vec += Vector3(+1, 0, 0);
+		//	}
+		//	if (input->getKeyState(Key::D)) {
+		//		rot_vec += Vector3(-1, 0, 0);
+		//	}
 
-			if (rot_vec.norm() != 0) {
-				rot_vec = rot_vec.unit_vect();
+		//	if (rot_vec.norm() != 0) {
+		//		rot_vec = rot_vec.unit_vect();
 
-				rot_vec = vector3_quatrotate(rot_vec, camera->orientation);
-				rot_vec.y = 0;
-				rot_vec = rot_vec.unit_vect();
+		//		rot_vec = vector3_quatrotate(rot_vec, camera->orientation);
+		//		rot_vec.y = 0;
+		//		rot_vec = rot_vec.unit_vect();
 
-				Vector3 player_vec = vector3_quatrotate(Vector3(0, 0, 1), rotate);
+		//		Vector3 player_vec = vector3_quatrotate(Vector3(0, 0, 1), rotate);
 
-				float angle = vector3_angle(rot_vec, player_vec);
-				if (angle > turn_speed)angle = turn_speed;
+		//		float angle = vector3_angle(rot_vec, player_vec);
+		//		if (angle > turn_speed)angle = turn_speed;
 
-				if (vector3_cross(player_vec, rot_vec).y < 0)angle *= -1;
+		//		if (vector3_cross(player_vec, rot_vec).y < 0)angle *= -1;
 
-				rotate *= quaternion_axis_angle(Vector3(0, 1, 0), angle);
+		//		rotate *= quaternion_axis_angle(Vector3(0, 1, 0), angle);
 
-				vector3_angle(rot_vec, player_vec);
+		//		vector3_angle(rot_vec, player_vec);
 
-			}
-		}
+		//	}
+		//}
 
-		//移動
-		{
-			Vector3 move_vec = Vector3(0);
-			if (input->getKeyState(Key::W)) {
-				move_vec += Vector3(0, 0, +1);
-			}
-			if (input->getKeyState(Key::S)) {
-				move_vec += Vector3(0, 0, -1);
-			}
-			if (input->getKeyState(Key::A)) {
-				move_vec += Vector3(-1, 0, 0);
-			}
-			if (input->getKeyState(Key::D)) {
-				move_vec += Vector3(+1, 0, 0);
-			}
-			if (move_vec.norm() != 0) {
-				move_vec = move_vec.unit_vect();
-				move_vec = vector3_quatrotate(move_vec, camera->orientation);
-				move_vec.y = 0;
+		////移動
+		//{
+		//	Vector3 move_vec = Vector3(0);
+		//	if (input->getKeyState(Key::W)) {
+		//		move_vec += Vector3(0, 0, +1);
+		//	}
+		//	if (input->getKeyState(Key::S)) {
+		//		move_vec += Vector3(0, 0, -1);
+		//	}
+		//	if (input->getKeyState(Key::A)) {
+		//		move_vec += Vector3(-1, 0, 0);
+		//	}
+		//	if (input->getKeyState(Key::D)) {
+		//		move_vec += Vector3(+1, 0, 0);
+		//	}
+		//	if (move_vec.norm() != 0) {
+		//		move_vec = move_vec.unit_vect();
+		//		move_vec = vector3_quatrotate(move_vec, camera->orientation);
+		//		move_vec.y = 0;
 
-				move_vec = move_vec.unit_vect();
+		//		move_vec = move_vec.unit_vect();
 
-				pos += move_vec * move_speed * Waist_collider->gameobject->transform->position;
-			}
-			else pos = Waist_collider->gameobject->transform->position;
-			dir = move_vec;
+		//		pos += move_vec * move_speed * Waist_collider->gameobject->transform->position;
+		//	}
+		//	else pos = Waist_collider->gameobject->transform->position;
+		//	dir = move_vec;
 
-			float pow = 0.2f;
-			if ((pos - Waist_collider->gameobject->transform->position).norm() > pow * pow)
-				pos = Waist_collider->gameobject->transform->position + (pos - Waist_collider->gameobject->transform->position).unit_vect() * pow;
-		}
+		//	float pow = 0.2f;
+		//	if ((pos - Waist_collider->gameobject->transform->position).norm() > pow * pow)
+		//		pos = Waist_collider->gameobject->transform->position + (pos - Waist_collider->gameobject->transform->position).unit_vect() * pow;
+		//}
 
-		//ジャンプ
-		{
-			if (is_jumping == true)coyote += Al_Global::second_per_frame;
-			if (coyote >= 0)is_jumping = false;
-			if (is_jumping == false && hanger_collider->concoll_enter(Collider_tags::Stage)) coyote = 0.3f;
-			if (is_jumping == false && !hanger_collider->concoll_enter(Collider_tags::Stage)) coyote -= Al_Global::second_per_frame;
+		////ジャンプ
+		//{
+		//	if (is_jumping == true)coyote += Al_Global::second_per_frame;
+		//	if (coyote >= 0)is_jumping = false;
+		//	if (is_jumping == false && hanger_collider->concoll_enter(Collider_tags::Stage)) coyote = 0.3f;
+		//	if (is_jumping == false && !hanger_collider->concoll_enter(Collider_tags::Stage)) coyote -= Al_Global::second_per_frame;
 
 
-			if (coyote >= 0 && input->getKeyTrigger(Key::Space)) {
-				//Waist_collider->add_force(Vector3(0, 1, 0) * jump_power * Al_Global::second_per_frame);
-				Waist_collider->linear_velocity(Vector3(Waist_collider->linear_velocity().x, jump_power, Waist_collider->linear_velocity().z));
-				Body_collider->linear_velocity(Vector3(Waist_collider->linear_velocity().x, jump_power * 0.5f, Waist_collider->linear_velocity().z));
-				is_jumping = true;
-				coyote = -0.3;
-			}
-		}
+		//	if (coyote >= 0 && input->getKeyTrigger(Key::Space)) {
+		//		//Waist_collider->add_force(Vector3(0, 1, 0) * jump_power * Al_Global::second_per_frame);
+		//		Waist_collider->linear_velocity(Vector3(Waist_collider->linear_velocity().x, jump_power, Waist_collider->linear_velocity().z));
+		//		Body_collider->linear_velocity(Vector3(Waist_collider->linear_velocity().x, jump_power * 0.5f, Waist_collider->linear_velocity().z));
+		//		is_jumping = true;
+		//		coyote = -0.3;
+		//	}
+		//}
 	}
 
 	// このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる

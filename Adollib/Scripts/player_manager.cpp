@@ -204,6 +204,19 @@ namespace Adollib
 			Lleg_collider    ->tag = Collider_tags::Human;
 			Lfoot_collider   ->tag = Collider_tags::Human;
 
+			//::: Šµ«ƒ‚[ƒƒ“ƒg‚ÌÝ’è :::
+			//Head_collider->set_tensor() = 3;
+			//Rsholder_collider->physics_data.inertial_mass = 2;
+			//Relbow_collider->physics_data.inertial_mass = 1;
+			//Lsholder_collider->physics_data.inertial_mass = 2;
+			//Lelbow_collider->physics_data.inertial_mass = 1;
+			//Body_collider->physics_data.inertial_mass = 5;
+			//Waist_collider->physics_data.inertial_mass = 4;
+			//Rleg_collider->physics_data.inertial_mass = 2;
+			//Rfoot_collider->physics_data.inertial_mass = 1;
+			//Lleg_collider->physics_data.inertial_mass = 2;
+			//Lfoot_collider->physics_data.inertial_mass = 1;
+
 
 			//::: capsule‚Ì’²® :::
 			Relbow_shape->length *= (Relbow->transform->local_scale.y - Relbow->transform->local_scale.x) / (Relbow->transform->local_scale.y);

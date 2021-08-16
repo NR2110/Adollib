@@ -106,7 +106,7 @@ bool Phyisics_manager::update(Scenelist Sce)
 	// 外力の更新
 	applyexternalforce(ALP_physicses[Sce]);
 
-	if (frame_count >= 0.016f) {
+	//if (frame_count >= 0.016f) {
 	//frame_count = 0;
 
 		pairs_new_num = 1 - pairs_new_num;
@@ -144,7 +144,7 @@ bool Phyisics_manager::update(Scenelist Sce)
 		resolve_contact(ALP_colliders[Sce], pairs[pairs_new_num], ALP_joints);
 		Work_meter::tag_stop();
 		Work_meter::stop("Resolve");
-	}
+	//}
 
 	// 位置の更新
 	integrate(ALP_physicses[Sce]);

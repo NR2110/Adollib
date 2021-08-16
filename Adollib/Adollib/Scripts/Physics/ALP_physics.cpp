@@ -83,8 +83,8 @@ void ALP_Physics::apply_external_force(float duration) {
 	if (is_movable()) {
 		//inv_rotate = Quaternion(1, 0, 0, 0);
 
-		angula_velocity = angula_velocity * pow(1 - angula_drag, duration);
-		linear_velocity = linear_velocity * pow(1 - linear_drag, duration);
+		//angula_velocity = angula_velocity * pow(1 - angula_drag, duration);
+		//linear_velocity = linear_velocity * pow(1 - linear_drag, duration);
 
 		const float inv_mass = 1 / inertial_mass;
 		//if (is_fallable) accumulated_force += Vector3(0, -Phyisics_manager::physicsParams.gravity, 0) * inertial_mass; //—Ž‰º
