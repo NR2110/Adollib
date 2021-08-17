@@ -30,6 +30,8 @@ namespace Adollib
 	// 毎フレーム呼ばれる更新処理
 	void Player::update()
 	{
+		return;
+
 		debug_coll->add_force(Vector3(0, 30, 0));
 
 

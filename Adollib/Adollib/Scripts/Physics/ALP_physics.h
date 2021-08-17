@@ -79,6 +79,9 @@ namespace Adollib {
 			Vector3 linear_velocity;//並進速度
 			Vector3 angula_velocity; //回転速度
 
+			Vector3 old_linear_velocity;//並進速度
+			Vector3 old_angula_velocity; //回転速度
+
 			Matrix33 inertial_tensor; //慣性テンソル
 
 			bool is_sleep = false; //sleep状態かのflag

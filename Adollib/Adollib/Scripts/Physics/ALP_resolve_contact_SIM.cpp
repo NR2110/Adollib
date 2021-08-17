@@ -604,6 +604,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 				int adsfgh = 0;
 			}
 			coll->get_ALPphysics()->linear_velocity += linervec;
+			coll->get_ALPphysics()->old_linear_velocity += linervec;
 		}
 		if (coll->get_ALPphysics()->is_kinmatic_anglar) {
 			Vector3 anglvec;
@@ -612,6 +613,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 				int adsfgh = 0;
 			}
 			coll->get_ALPphysics()->angula_velocity += anglvec;
+			coll->get_ALPphysics()->old_angula_velocity += anglvec;
 		}
 
 	}

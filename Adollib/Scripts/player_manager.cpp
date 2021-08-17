@@ -181,6 +181,24 @@ namespace Adollib
 			Lleg_collider    ->physics_data.inertial_mass = 2;
 			Lfoot_collider   ->physics_data.inertial_mass = 1;
 
+			//::: Šµ«ƒ‚[ƒƒ“ƒg‚Ì’²® :::
+			//Matrix33 tensor = matrix33_identity();
+			//tensor._11 = 0.3333333f;
+			//tensor._22 = 0.3333333f;
+			//tensor._33 = 0.3333333f;
+			//Head_collider	 ->set_tensor(tensor);
+			//Rsholder_collider->set_tensor(tensor);
+			//Relbow_collider  ->set_tensor(tensor);
+			//Lsholder_collider->set_tensor(tensor);
+			//Lelbow_collider  ->set_tensor(tensor);
+			//Body_collider    ->set_tensor(tensor);
+			//Waist_collider   ->set_tensor(tensor);
+			//Rleg_collider    ->set_tensor(tensor);
+			//Rfoot_collider   ->set_tensor(tensor);
+			//Lleg_collider    ->set_tensor(tensor);
+			//Lfoot_collider   ->set_tensor(tensor);
+
+
 			Rleg_collider->physics_data.anglar_drag = 0.95f;
 			Lleg_collider->physics_data.anglar_drag = 0.95f;
 
@@ -347,8 +365,8 @@ namespace Adollib
 
 			//Waist_capsule_collider->physics_data.is_kinmatic_anglar = false;
 
-			auto hinge = Joint::add_Hingejoint(Waist_collider, Waist_capsule_collider, Vector3(0, 1, 0), Vector3(0, -1, 0), Vector3(0, 1, 0), Vector3(0, -1, 0));
-			hinge->hinge_pow = 0;
+			//auto hinge = Joint::add_Hingejoint(Waist_collider, Waist_capsule_collider, Vector3(0, 1, 0), Vector3(0, -1, 0), Vector3(0, 1, 0), Vector3(0, -1, 0));
+			//hinge->hinge_pow = 0;
 			//auto ball = Joint::add_balljoint(Waist_capsule_collider, Head_collider, Vector3(0, 3.2, 0), Vector3(0, 0, 0), 0.01f);
 		}
 
