@@ -17,6 +17,7 @@ using namespace Physics_function;
 using namespace Contacts;
 
 //ContactPointの表示
+#define Update60fps
 //#define Draw_Contact
 //#define Draw_JointContact
 
@@ -78,15 +79,18 @@ bool Phyisics_manager::update(Scenelist Sce)
 #ifdef UseImgui
 	update_Gui();
 #endif
-
 	frame_count += Al_Global::second_per_frame;
 	if (Al_Global::second_per_game < 1) {
+		if (frame_count > inv60)frame_count -= inv60;
 		resetforce(ALP_physicses[Sce]);
 	}
 
-	if (frame_count < 0.016f) {
+	//1/60s毎に更新を行う
+#ifdef Update60fps
+	if (frame_count < inv60) {
 		return true;
 	}
+#endif
 
 	// Colliderのframe毎に保存するdataをreset
 	reset_data_per_frame(ALP_colliders[Sce]);
@@ -95,15 +99,13 @@ bool Phyisics_manager::update(Scenelist Sce)
 	update_world_trans(ALP_colliders[Sce]);
 
 
-#if 0
-	physicsParams.timeStep = ALmin(frame_count, physicsParams.max_timeStep);
-	frame_count = 0;
+#ifdef Update60fps
+	physicsParams.timeStep = ALmin(inv60, physicsParams.max_timeStep);
+	frame_count -= inv60;
 #else
 	// 0.016秒ごとに更新するとアタッチしたGOへの追跡カメラがバグるため
 	physicsParams.timeStep = ALmin(Al_Global::second_per_frame, physicsParams.max_timeStep);
-	Work_meter::set("timestep", Al_Global::second_per_frame);
 #endif
-	//physicsParams.timeStep = 0.016f;
 
 	// 外力の更新
 	applyexternalforce(ALP_physicses[Sce]);
@@ -377,6 +379,5 @@ void Phyisics_manager::destroy(Scenelist Sce) {
 	}
 	pairs[0].clear();
 	pairs[1].clear();
-	//colliders[Sce].clear();
 }
 

@@ -8,6 +8,7 @@ namespace Adollib
 	class Camera : public Component
 	{
 	private:
+		float timeStep = 0.016f;
 		bool follow_player = false;
 		float dis = 20;
 		float dis_buffer = 20;

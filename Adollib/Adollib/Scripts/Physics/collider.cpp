@@ -8,6 +8,8 @@
 #include "ALP_physics.h"
 #include "ALP_joint.h"
 
+#include "../Main/Adollib.h"
+
 
 using namespace Adollib;
 using namespace Physics_function;
@@ -21,10 +23,10 @@ const bool Collider::concoll_enter(const unsigned int tag_name) const {
 }
 
 void Collider::add_force(const Vector3& force) {
-	ALPphysics_ptr->add_force(force);
+	ALPphysics_ptr->add_force(force * Al_Global::second_per_frame);
 }
 void Collider::add_torque(const Vector3& force) {
-	ALPphysics_ptr->add_torque(force);
+	ALPphysics_ptr->add_torque(force * Al_Global::second_per_frame);
 }
 
 

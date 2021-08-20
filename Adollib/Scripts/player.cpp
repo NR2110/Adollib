@@ -25,12 +25,34 @@ namespace Adollib
 	void Player::start()
 	{
 		camera = Gameobject_manager::find("camera")->transform;
+
+		head_rot_max_speed = 30;
+		head_rot_max_pow = 1000;
+		head_rot_pow = 500;
+
+		waist_move_max_speed = 30;
+		waist_move_max_pow = 1000;
+		waist_move_pow = 1000;
+
+		waist_rot_max_speed = 10;
+		waist_rot_max_pow = 2000;
+		waist_rot_pow = 5000;
+
+		body_rot_max_speed = 10;
+		body_rot_max_pow = 2000;
+		body_rot_pow = 1500;
+
+		jump_power = 150;
+
+		move_speed = 12000;
+		turn_speed = 2;
 	}
 
 	// 毎フレーム呼ばれる更新処理
 	void Player::update()
 	{
-		return;
+		//Debug::set("waist",Waist_collider->s)
+		//return;
 
 		debug_coll->add_force(Vector3(0, 30, 0));
 
@@ -112,31 +134,55 @@ namespace Adollib
 		{
 			const float gnyat_pow = 0.9f;
 			{
+				////顔が赤ちゃんなのを治す
+				//Head_collider->physics_data.anglar_drag = 1;
+				//Quaternion off = Body_collider->gameobject->transform->orientation * Head_collider->gameobject->transform->orientation.inverse();
+				//Head_collider->add_torque(off.axis() * off.radian() * 100 * gnyat_pow);
+
 				//顔が赤ちゃんなのを治す
-				Head_collider->physics_data.anglar_drag = 1;
+				Head_collider->physics_data.anglar_drag = 1.f;
 				Quaternion off = Body_collider->gameobject->transform->orientation * Head_collider->gameobject->transform->orientation.inverse();
-				Head_collider->add_torque(off.axis() * off.radian() * 1000 * gnyat_pow);
+				float pow = ALClamp(off.radian() * head_rot_pow, 0, head_rot_max_pow);
+				Head_collider->add_torque(off.axis()* pow* gnyat_pow);
 			}
 			{
-				//腰をたたせる
-				Quaternion off_rot = rotate * Waist_collider->gameobject->transform->orientation.inverse();
-				Waist_collider->add_torque(off_rot.axis() * off_rot.radian() * 4000 * gnyat_pow);
+				//胴体をたたせる
+				Quaternion off = rotate * Waist_collider->gameobject->transform->orientation.inverse();
+				float pow = ALClamp(off.radian() * waist_rot_pow, 0, waist_rot_max_pow);
+				Waist_collider->add_torque(off.axis() * pow *  gnyat_pow);
 
-				//移動
-				pos.y = Waist_collider->gameobject->transform->position.y;
-				Vector3 off_pos = pos - Waist_collider->gameobject->transform->position;
-				Waist_collider->add_force(off_pos * move_speed * gnyat_pow);
+				{
+					//移動
+					Vector3 off = pos - Waist_collider->gameobject->transform->position;
+					off.y = 0;
+					float pow = ALClamp(off.norm_sqr() * waist_move_pow, 0, waist_move_max_pow);
+					Waist_collider->add_force(dir * waist_move_pow * gnyat_pow);
+
+					// 速度制限
+					Vector3 speed = Waist_collider->linear_velocity();
+					speed.y = 0;
+					if (speed.norm() > waist_move_max_speed * waist_move_max_speed) {
+						Vector3 Yspeed = Vector3(0, Waist_collider->linear_velocity().y, 0);
+						Waist_collider->linear_velocity(speed.unit_vect() * waist_move_max_speed + Yspeed);
+					}
+				}
 
 			}
 			{
 				//胴体をたたせる
 				Quaternion off = rotate * Body_collider->gameobject->transform->orientation.inverse();
-				Body_collider->add_torque(off.axis() * off.radian() * 1000 * gnyat_pow);
+				float pow = ALClamp(off.radian() * body_rot_pow, 0, body_rot_max_pow);
+				Body_collider->add_torque(off.axis()* pow* gnyat_pow);
 			}
 
 		}
-		//jointでつなげると重力が弱くなるから & 一定のパーツは重力の影響を受けないようにしているから  下向きに力を加える
-		Waist_collider->add_force(Vector3(0, -1, 0) * 600);
+
+		{
+			//jointでつなげると重力が弱くなるから & 一定のパーツは重力の影響を受けないようにしているから  下向きに力を加える
+			Waist_collider->add_force(Vector3(0, -1, 0) * 100);
+			Body_collider->add_force(Vector3(0, -1, 0) * 100);
+			Head_collider->add_force(Vector3(0, -1, 0) * 100);
+		}
 
 
 		//Playerが歩くように
@@ -277,7 +323,7 @@ namespace Adollib
 				Waist_collider->linear_velocity(Vector3(Waist_collider->linear_velocity().x, jump_power, Waist_collider->linear_velocity().z));
 				Body_collider->linear_velocity(Vector3(Waist_collider->linear_velocity().x, jump_power * 0.5f, Waist_collider->linear_velocity().z));
 				is_jumping = true;
-				coyote = -0.3;
+				coyote = -0.3f;
 			}
 		}
 	}

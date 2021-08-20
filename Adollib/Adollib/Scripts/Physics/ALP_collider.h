@@ -19,7 +19,7 @@ namespace Adollib {
 		class ALP_Joint;
 
 		namespace Contacts {
-			class Contact_pair;
+			struct Contact_pair;
 		}
 
 		//Œ`î•ñ

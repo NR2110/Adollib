@@ -54,17 +54,17 @@ namespace Adollib
 		Collider* Lfoot_collider = Lfoot->addComponent<Collider>();
 
 
-		Sphere* Head_shape = Head_collider         ->add_shape<Sphere>();
+		Sphere* Head_shape = Head_collider->add_shape<Sphere>();
 		Capsule* Rsholder_shape = Rsholder_collider->add_shape<Capsule>();
-		Capsule* Relbow_shape = Relbow_collider    ->add_shape<Capsule>();
+		Capsule* Relbow_shape = Relbow_collider->add_shape<Capsule>();
 		Capsule* Lsholder_shape = Lsholder_collider->add_shape<Capsule>();
-		Capsule* Lelbow_shape = Lelbow_collider    ->add_shape<Capsule>();
-		Box* Body_shape = Body_collider         ->add_shape<Box>();
-		Box* Waist_shape = Waist_collider       ->add_shape<Box>();
-		Sphere* Rleg_shape = Rleg_collider         ->add_shape<Sphere>();
-		Sphere* Rfoot_shape = Rfoot_collider       ->add_shape<Sphere>();
-		Sphere* Lleg_shape = Lleg_collider         ->add_shape<Sphere>();
-		Sphere* Lfoot_shape = Lfoot_collider       ->add_shape<Sphere>();
+		Capsule* Lelbow_shape = Lelbow_collider->add_shape<Capsule>();
+		Box* Body_shape = Body_collider->add_shape<Box>();
+		Box* Waist_shape = Waist_collider->add_shape<Box>();
+		Sphere* Rleg_shape = Rleg_collider->add_shape<Sphere>();
+		Sphere* Rfoot_shape = Rfoot_collider->add_shape<Sphere>();
+		Sphere* Lleg_shape = Lleg_collider->add_shape<Sphere>();
+		Sphere* Lfoot_shape = Lfoot_collider->add_shape<Sphere>();
 
 
 		{
@@ -169,17 +169,17 @@ namespace Adollib
 			}
 
 			//::: 質量の調整 :::
-			Head_collider    ->physics_data.inertial_mass = 3;
+			Head_collider->physics_data.inertial_mass = 3;
 			Rsholder_collider->physics_data.inertial_mass = 2;
-			Relbow_collider  ->physics_data.inertial_mass = 1;
+			Relbow_collider->physics_data.inertial_mass = 1;
 			Lsholder_collider->physics_data.inertial_mass = 2;
-			Lelbow_collider  ->physics_data.inertial_mass = 1;
-			Body_collider    ->physics_data.inertial_mass = 5;
-			Waist_collider   ->physics_data.inertial_mass = 4;
-			Rleg_collider    ->physics_data.inertial_mass = 2;
-			Rfoot_collider   ->physics_data.inertial_mass = 1;
-			Lleg_collider    ->physics_data.inertial_mass = 2;
-			Lfoot_collider   ->physics_data.inertial_mass = 1;
+			Lelbow_collider->physics_data.inertial_mass = 1;
+			Body_collider->physics_data.inertial_mass = 5;
+			Waist_collider->physics_data.inertial_mass = 4;
+			Rleg_collider->physics_data.inertial_mass = 2;
+			Rfoot_collider->physics_data.inertial_mass = 1;
+			Lleg_collider->physics_data.inertial_mass = 2;
+			Lfoot_collider->physics_data.inertial_mass = 1;
 
 			//::: 慣性モーメントの調整 :::
 			//Matrix33 tensor = matrix33_identity();
@@ -204,23 +204,23 @@ namespace Adollib
 
 			//::: 重力適用の調整 :::
 			Head_collider->physics_data.is_fallable = false;
-			Rsholder_collider->physics_data.is_fallable  = false;
-			Lsholder_collider->physics_data.is_fallable  = false;
+			Rsholder_collider->physics_data.is_fallable = false;
+			Lsholder_collider->physics_data.is_fallable = false;
 			Rleg_collider->physics_data.is_fallable = false;
 			Lleg_collider->physics_data.is_fallable = false;
 
 			//::: tagの設定 :::
-			Head_collider    ->tag = Collider_tags::Human;
+			Head_collider->tag = Collider_tags::Human;
 			Rsholder_collider->tag = Collider_tags::Human;
-			Relbow_collider  ->tag = Collider_tags::Human;
+			Relbow_collider->tag = Collider_tags::Human;
 			Lsholder_collider->tag = Collider_tags::Human;
-			Lelbow_collider  ->tag = Collider_tags::Human;
-			Body_collider    ->tag = Collider_tags::Human;
-			Waist_collider   ->tag = Collider_tags::Human;
-			Rleg_collider    ->tag = Collider_tags::Human;
-			Rfoot_collider   ->tag = Collider_tags::Human;
-			Lleg_collider    ->tag = Collider_tags::Human;
-			Lfoot_collider   ->tag = Collider_tags::Human;
+			Lelbow_collider->tag = Collider_tags::Human;
+			Body_collider->tag = Collider_tags::Human;
+			Waist_collider->tag = Collider_tags::Human;
+			Rleg_collider->tag = Collider_tags::Human;
+			Rfoot_collider->tag = Collider_tags::Human;
+			Lleg_collider->tag = Collider_tags::Human;
+			Lfoot_collider->tag = Collider_tags::Human;
 
 
 			//::: capsuleの調整 :::
@@ -290,7 +290,7 @@ namespace Adollib
 			}
 			//足
 			{
-				auto Cone = Joint::add_Conejoint(Waist_collider, Rleg_collider, Vector3(-0.6f, -0.8, 0), Vector3(0, 0.3, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect());
+				auto Cone = Joint::add_Conejoint(Waist_collider, Rleg_collider, Vector3(-0.6f, -0.8f, 0), Vector3(0, 0.3, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect());
 				Cone->limit = 48;
 
 				auto Twist = Joint::add_Twistjoint(Waist_collider, Rleg_collider, Vector3(0, 1, 0));
@@ -301,7 +301,7 @@ namespace Adollib
 				hinge->limit = Vector2(0, 60);
 			}
 			{
-				auto Cone = Joint::add_Conejoint(Waist_collider, Lleg_collider, Vector3(+0.6f, -0.8, 0), Vector3(0, 0.3, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect());
+				auto Cone = Joint::add_Conejoint(Waist_collider, Lleg_collider, Vector3(+0.6f, -0.8f, 0), Vector3(0, 0.3f, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect());
 				Cone->limit = 48;
 
 				auto Twist = Joint::add_Twistjoint(Waist_collider, Lleg_collider, Vector3(0, 1, 0));
@@ -348,24 +348,43 @@ namespace Adollib
 		}
 
 		//onground用のcolliderのアタッチ
-		auto Waist_capsule = Gameobject_manager::create("Waist_capsule");
-		auto Waist_capsule_collider = Waist_capsule->addComponent<Collider>();
+		//auto Waist_sphere = Gameobject_manager::create("Waist_sphere");
+		//auto Waist_sphere_collider = Waist_sphere->addComponent<Collider>();
 		{
-			auto Waist_capsule_shape = Waist_capsule_collider->add_shape<Capsule>();
-			Human->add_child(Waist_capsule);
+			//Waist_collider->set_tensor();
+			Waist_collider->set_barycenter(Vector3(0, -1, 0));
 
-			Waist_capsule_shape->r = 0.15f;
-			Waist_capsule_shape->length = 0.68f;
-			Waist_capsule_shape->center = Vector3(0, -1.15, 0);
+			auto Waist_sphere_shape = Waist_collider->add_shape<Sphere>();
+			Waist_sphere_shape->r = 0.15f;
+			Waist_sphere_shape->center = Vector3(0, -2.5f, 0);
 
-			Waist_capsule_collider->ignore_tags = Collider_tags::Human;
+		}
+
+		auto Waist_sphere = Gameobject_manager::create("Waist_sphere");
+		auto Waist_sphere_collider = Waist_sphere->addComponent<Collider>();
+		{
+
+			Waist->add_child(Waist_sphere);
+
+			auto Waist_sphere_shape = Waist_sphere_collider->add_shape<Sphere>();
+
+			//Waist_sphere_collider->physics_data.dynamic_friction = 4;
+			//Waist_sphere_collider->physics_data.static_friction = 4;
+
+			Waist_sphere_collider->physics_data.is_hitable = false;
+
+			Waist_sphere_shape->r = 0.15f;
+			Waist_sphere_shape->center = Vector3(0, -1.15, 0);
+
+
+
+			//Waist_sphere_collider->ignore_tags = Collider_tags::Human;
 			//Waist_capsule_collider->physics_data.is_hitable = false;
-
 
 
 			//Waist_capsule_collider->physics_data.is_kinmatic_anglar = false;
 
-			//auto hinge = Joint::add_Hingejoint(Waist_collider, Waist_capsule_collider, Vector3(0, 1, 0), Vector3(0, -1, 0), Vector3(0, 1, 0), Vector3(0, -1, 0));
+			//auto hinge = Joint::add_Hingejoint(Waist_collider, Waist_sphere_collider, Vector3(0, 1, 0), Vector3(0, -1, 0), Vector3(0, 1, 0), Vector3(0, -1, 0));
 			//hinge->hinge_pow = 0;
 			//auto ball = Joint::add_balljoint(Waist_capsule_collider, Head_collider, Vector3(0, 3.2, 0), Vector3(0, 0, 0), 0.01f);
 		}
@@ -387,7 +406,7 @@ namespace Adollib
 				Rfoot_collider,
 				Lleg_collider,
 				Lfoot_collider,
-				Waist_capsule_collider
+				Waist_sphere_collider
 			);
 
 			//auto shape = Waist_collider->add_shape<Capsule>();

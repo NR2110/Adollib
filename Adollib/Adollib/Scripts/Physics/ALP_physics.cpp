@@ -106,7 +106,7 @@ void ALP_Physics::apply_external_force(float duration) {
 		//angula_velocity = angula_velocity * exp(-ka * duration); // 空気抵抗
 
 		//並進移動に加える力(accumulated_force)から加速度を出して並進速度を更新する 向きを間違えないように!!
-		linear_acceleration += accumulated_force * inv_mass;
+		linear_acceleration += accumulated_force * inv_mass / duration;
 		if (is_fallable) linear_acceleration += Vector3(0, -Phyisics_manager::physicsParams.gravity, 0); //落下
 		linear_velocity += linear_acceleration * duration;
 
@@ -116,7 +116,7 @@ void ALP_Physics::apply_external_force(float duration) {
 		Matrix33 rotation = gameobject->world_orientate().get_rotate_matrix();
 		Matrix33 transposed_rotation = matrix_trans(rotation);
 		inverse_inertia_tensor = rotation * inverse_inertia_tensor * rotation * transposed_rotation;
-		angula_acceleration += vector3_trans(accumulated_torque, inverse_inertia_tensor);
+		angula_acceleration += vector3_trans(accumulated_torque / duration, inverse_inertia_tensor);
 
 		angula_velocity += angula_acceleration * duration;
 		if (angula_velocity.norm() < FLT_EPSILON)angula_velocity = Vector3(0, 0, 0);

@@ -9,6 +9,8 @@
 
 #include "../Adollib/Scripts/Object/component_camera.h"
 
+#include "../Adollib/Scripts/Physics/ALP__physics_manager.h"
+
 namespace Adollib
 {
 	Vector3 Camera::eular_xy(Vector3 V) {
@@ -34,6 +36,7 @@ namespace Adollib
 	void Camera::awake()
 	{
 		gameobject->transform->local_pos = Vector3(0, 30, -50);
+		timeStep = 1;
 	}
 
 	void Camera::start()
@@ -45,6 +48,7 @@ namespace Adollib
 	// 毎フレーム呼ばれる更新処理
 	void Camera::update()
 	{
+
 		//static float frame_count = 0;
 		//frame_count += Al_Global::second_per_frame();
 		//if (frame_count < 0.016f) {
@@ -71,6 +75,13 @@ namespace Adollib
 			ImGui::End();
 		}
 #endif // UseImgui
+
+		// physicsの更新が1/60s毎なので 追尾カメラも揃えないとがくがくする
+		timeStep += Al_Global::second_per_frame;
+		if (timeStep < inv60) {
+		//if (timeStep < 0.1f) {
+			return;
+		}
 
 		if (follow_player == false) {
 
@@ -162,12 +173,12 @@ namespace Adollib
 			{
 				dis -= input->getMouseWheel() * 0.01f;
 				dis = ALClamp(dis, 10, 50);
-				dis_buffer = ALEasing(dis_buffer, dis, 0.1f, Al_Global::second_per_frame);
-				pos_buffer = ALEasing(pos_buffer, player->position, 0.1f, Al_Global::second_per_frame);
+				dis_buffer = ALEasing(dis_buffer, dis, 0.1f, timeStep);
+				pos_buffer = ALEasing(pos_buffer, player->position, 0.1f, timeStep);
 			}
 
 			camera_rot *= rotate;
-			transform->local_orient = ALEasing(transform->local_orient, camera_rot, 1, Al_Global::second_per_frame);
+			transform->local_orient = ALEasing(transform->local_orient, camera_rot, 1, timeStep);
 
 			transform->local_pos = pos_buffer + vector3_quatrotate(dis_buffer * Vector3(0, 0, -1), camera_rot);
 
@@ -181,6 +192,8 @@ namespace Adollib
 			}
 		}
 
+
+		timeStep -= inv60;
 	}
 
 	// このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる

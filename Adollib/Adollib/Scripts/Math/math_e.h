@@ -12,7 +12,22 @@ namespace Adollib {
 	static float ToAngle(float radian) {
 		constexpr float value = (180 / 3.1415926535f);
 		return (float)radian * value;
+
+		constexpr float XM_PI = 3.141592654f;
+		constexpr float XM_2PI = 6.283185307f;
+		constexpr float XM_1DIVPI = 0.318309886f;
+		constexpr float XM_1DIV2PI = 0.159154943f;
+		constexpr float XM_PIDIV2 = 1.570796327f;
+		constexpr float XM_PIDIV4 = 0.785398163f;
 	}
+
+#define inv120 (0.00833333f)
+#define inv90 (0.011111111f)
+#define inv60 (0.016666666f)
+#define inv30 (0.033333333f)
+#define PI    (3.14159265358979f)
+#define invPI (0.318309886f)
+#define inv2PI (0.159154943f)
 
 #define ALmax(a,b) (a>b?a:b)
 #define ALmax3(a,b,c) (ALmax(ALmax(a,b),c))
