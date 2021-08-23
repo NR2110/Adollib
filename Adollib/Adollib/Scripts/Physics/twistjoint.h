@@ -85,7 +85,7 @@ namespace Adollib {
 
 			const Vector2 limit_rad = Vector2(ToRadian(limit.x), ToRadian(limit.y)); //limit‚ðradian‚ÉŽ¡‚µ‚½
 
-			//Debug::set("angle", ToAngle(radian));
+			Debug::set("angle", ToAngle(radian));
 
 			// ‚à‚µlimit‚Ì‰e‹¿‚ðŽó‚¯‚éˆÊ’u‚É“ü‚È‚¯‚ê‚Îfalse‚ðreturn
 			if (limit_rad.x <= limit_rad.y) {

@@ -116,10 +116,10 @@ namespace Adollib {
 		//慣性モーメントをユーザー定義で設定する
 		void set_tensor(const Matrix33& tensor) { ALPphysics_ptr->set_tensor(tensor); };
 
-		//慣性モーメントを現在の値で固定する(この後addshapeしても慣性モーメントが変更されない)
-		void set_tensor() {
+		//現在の慣性モーメントの値
+		Matrix33 get_tensor() {
 			ALPcollider_ptr->update_world_trans();
-			ALPphysics_ptr->set_tensor(ALPphysics_ptr->inertial_tensor);
+			return ALPphysics_ptr->inertial_tensor;
 		};
 
 		void set_barycenter(const Vector3& cent) { ALPphysics_ptr->set_barycenter(cent); };

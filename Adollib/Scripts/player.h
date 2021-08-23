@@ -11,7 +11,6 @@ namespace Adollib
 	private:
 		//playerの基本の値 決まったらconstにする
 		float waist_move_max_speed = 1000;
-		float waist_move_max_pow = 1000;
 		float waist_move_pow = 1000;
 
 		float head_rot_max_speed = 1000;
@@ -26,16 +25,26 @@ namespace Adollib
 		float body_rot_max_pow = 1000;
 		float body_rot_pow = 1000;
 
+		//歩くときの足の力の強さ
+		float leg_rot_max_speed = 1000;
+		float leg_rot_max_pow = 1000;
+		float leg_rot_pow = 100;
+
+		//手を伸ばすときの力の強さ
+		float hand_rot_max_speed = 1000;
+		float hand_rot_max_pow = 1000;
+		float hand_rot_pow = 100;
+
+
+
 		float jump_power = 150;
 
-		float move_speed = 12000;
 		float turn_speed = 2;
 
 	private:
 
 		Quaternion rotate; //rotateのbuffer
 		Vector3 dir; //向きのbuffer
-		Vector3 pos; //座標のbuffer
 
 		std::shared_ptr<Transfome> camera; //cameraへのポインタ
 
@@ -48,36 +57,43 @@ namespace Adollib
 
 	private:
 		//::: GO :::
-		Gameobject* Head = nullptr;
-
-		Gameobject* Rsholder = nullptr;
-		Gameobject* Relbow = nullptr;
-		Gameobject* Lsholder = nullptr;
-		Gameobject* Lelbow = nullptr;
-
-		Gameobject* Body = nullptr;
-
-		Gameobject* Waist = nullptr;
-
-		Gameobject* Rleg = nullptr;
-		Gameobject* Rfoot = nullptr;
-		Gameobject* Lleg = nullptr;
-		Gameobject* Lfoot = nullptr;
+		const int Human_gameobject_size = 11;
+		union {
+			Gameobject* Human_gameobjects[11] = { nullptr };
+			struct {
+				Gameobject* Head    ;
+				Gameobject* Rsholder;
+				Gameobject* Relbow  ;
+				Gameobject* Lsholder;
+				Gameobject* Lelbow  ;
+				Gameobject* Body    ;
+				Gameobject* Waist   ;
+				Gameobject* Rleg    ;
+				Gameobject* Rfoot   ;
+				Gameobject* Lleg    ;
+				Gameobject* Lfoot   ;
+			};
+		};
 
 		//::: collider :::
-		Collider* Head_collider = nullptr;
-		Collider* Rsholder_collider = nullptr;
-		Collider* Relbow_collider = nullptr;
-		Collider* Lsholder_collider = nullptr;
-		Collider* Lelbow_collider = nullptr;
-		Collider* Body_collider = nullptr;
-		Collider* Waist_collider = nullptr;
-		Collider* Rleg_collider = nullptr;
-		Collider* Rfoot_collider = nullptr;
-		Collider* Lleg_collider = nullptr;
-		Collider* Lfoot_collider = nullptr;
-
-		Collider* hanger_collider = nullptr;
+		const int Human_collider_size = 11;
+		union {
+			Collider* Human_colliders[11] = { nullptr };
+			struct {
+				Collider* Head_collider;
+				Collider* Rsholder_collider;
+				Collider* Relbow_collider;
+				Collider* Lsholder_collider;
+				Collider* Lelbow_collider;
+				Collider* Body_collider;
+				Collider* Waist_collider;
+				Collider* Rleg_collider;
+				Collider* Rfoot_collider;
+				Collider* Lleg_collider;
+				Collider* Lfoot_collider;
+			};
+		};
+		Collider* onground_collider = nullptr;
 
 
 
@@ -108,7 +124,7 @@ namespace Adollib
 			Rfoot_collider		= l_Rfoot_collider;
 			Lleg_collider		= l_Lleg_collider;
 			Lfoot_collider		= l_Lfoot_collider;
-			hanger_collider = l_Waist_capsule_collider;
+			onground_collider = l_Waist_capsule_collider;
 
 			Head		=Head_collider		->gameobject;
 			Rsholder	=Rsholder_collider	->gameobject;
@@ -124,19 +140,21 @@ namespace Adollib
 		}
 
 	public:
-		void awake();
+		void awake() override;
 
 		// 所属するシーンの初期化時に一度だけ呼ばれる
-		void start();
+		void start()override;
 
 		// 毎フレーム呼ばれる更新処理
-		void update();
+		void update()override;
+
+		void Update_hierarchy() override;
 
 		// このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる
-		void onEnable();
+		void onEnable()override;
 
 		// このスクリプトがアタッチされているGOのactiveSelfがfalseになった時呼ばれる
-		void onDisable();
+		void onDisable()override;
 
 	};
 

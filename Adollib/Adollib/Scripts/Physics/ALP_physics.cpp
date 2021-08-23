@@ -23,6 +23,8 @@ void ALP_Physics::set_default() {
 	is_moveable = PhysicsParams_default::is_moveable;//“®‚©‚È‚¢
 	is_hitable = PhysicsParams_default::is_hitable;
 
+	is_sleep = true; //Å‰sleep‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©
+
 };
 
 void ALP_Physics::add_force(const Vector3& force) {
@@ -140,7 +142,7 @@ void ALP_Physics::integrate(float duration) {
 	}
 	else sleep_timer = 0;
 
-	if (sleep_timer > 0.032) {
+	if (sleep_timer > 0.1f) {
 		linear_velocity = Vector3(0);
 		angula_velocity = Vector3(0);
 		is_sleep = true;

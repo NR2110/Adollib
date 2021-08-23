@@ -182,21 +182,17 @@ namespace Adollib
 			Lfoot_collider->physics_data.inertial_mass = 1;
 
 			//::: 慣性モーメントの調整 :::
-			//Matrix33 tensor = matrix33_identity();
-			//tensor._11 = 0.3333333f;
-			//tensor._22 = 0.3333333f;
-			//tensor._33 = 0.3333333f;
-			//Head_collider	 ->set_tensor(tensor);
-			//Rsholder_collider->set_tensor(tensor);
-			//Relbow_collider  ->set_tensor(tensor);
-			//Lsholder_collider->set_tensor(tensor);
-			//Lelbow_collider  ->set_tensor(tensor);
-			//Body_collider    ->set_tensor(tensor);
-			//Waist_collider   ->set_tensor(tensor);
-			//Rleg_collider    ->set_tensor(tensor);
-			//Rfoot_collider   ->set_tensor(tensor);
-			//Lleg_collider    ->set_tensor(tensor);
-			//Lfoot_collider   ->set_tensor(tensor);
+			//Head_collider	 ->set_tensor(Head_collider->get_tensor());
+			//Rsholder_collider->set_tensor(Head_collider->get_tensor());
+			//Relbow_collider  ->set_tensor(Head_collider->get_tensor());
+			//Lsholder_collider->set_tensor(Head_collider->get_tensor());
+			//Lelbow_collider  ->set_tensor(Head_collider->get_tensor());
+			//Body_collider    ->set_tensor(Head_collider->get_tensor());
+			//Waist_collider   ->set_tensor(Head_collider->get_tensor());
+			//Rleg_collider    ->set_tensor(Head_collider->get_tensor());
+			//Rfoot_collider   ->set_tensor(Head_collider->get_tensor());
+			//Lleg_collider    ->set_tensor(Head_collider->get_tensor());
+			//Lfoot_collider   ->set_tensor(Head_collider->get_tensor());
 
 
 			Rleg_collider->physics_data.anglar_drag = 0.95f;
@@ -291,7 +287,8 @@ namespace Adollib
 			//足
 			{
 				auto Cone = Joint::add_Conejoint(Waist_collider, Rleg_collider, Vector3(-0.6f, -0.8f, 0), Vector3(0, 0.3, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect());
-				Cone->limit = 48;
+				//Cone->limit = 48;
+				Cone->limit = 80;
 
 				auto Twist = Joint::add_Twistjoint(Waist_collider, Rleg_collider, Vector3(0, 1, 0));
 				Twist->limit = Vector2(360 - 5, 15);
@@ -302,7 +299,8 @@ namespace Adollib
 			}
 			{
 				auto Cone = Joint::add_Conejoint(Waist_collider, Lleg_collider, Vector3(+0.6f, -0.8f, 0), Vector3(0, 0.3f, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect());
-				Cone->limit = 48;
+				//Cone->limit = 48;
+				Cone->limit = 80;
 
 				auto Twist = Joint::add_Twistjoint(Waist_collider, Lleg_collider, Vector3(0, 1, 0));
 				Twist->limit = Vector2(360 - 15, 5);
@@ -347,46 +345,32 @@ namespace Adollib
 			}
 		}
 
-		//onground用のcolliderのアタッチ
-		//auto Waist_sphere = Gameobject_manager::create("Waist_sphere");
-		//auto Waist_sphere_collider = Waist_sphere->addComponent<Collider>();
+
 		{
-			//Waist_collider->set_tensor();
+			// 立たせるために waistの下にsphereをアタッチ
+			//Waist_collider->set_tensor(Waist_collider->get_tensor());
 			Waist_collider->set_barycenter(Vector3(0, -1, 0));
 
 			auto Waist_sphere_shape = Waist_collider->add_shape<Sphere>();
-			Waist_sphere_shape->r = 0.15f;
+			Waist_sphere_shape->r = 0.25f;
 			Waist_sphere_shape->center = Vector3(0, -2.5f, 0);
 
 		}
 
+		//onground用のcolliderのアタッチ 上でアタッチしたsphereと同じ位置へ
 		auto Waist_sphere = Gameobject_manager::create("Waist_sphere");
 		auto Waist_sphere_collider = Waist_sphere->addComponent<Collider>();
 		{
 
 			Waist->add_child(Waist_sphere);
 
+			Waist_sphere->transform->local_scale = Vector3(0.4f) / Waist->world_scale();
+			Waist_sphere->transform->local_pos = Vector3(0, -2.5f, 0);
+
 			auto Waist_sphere_shape = Waist_sphere_collider->add_shape<Sphere>();
-
-			//Waist_sphere_collider->physics_data.dynamic_friction = 4;
-			//Waist_sphere_collider->physics_data.static_friction = 4;
-
 			Waist_sphere_collider->physics_data.is_hitable = false;
-
-			Waist_sphere_shape->r = 0.15f;
-			Waist_sphere_shape->center = Vector3(0, -1.15, 0);
-
-
-
-			//Waist_sphere_collider->ignore_tags = Collider_tags::Human;
-			//Waist_capsule_collider->physics_data.is_hitable = false;
-
-
-			//Waist_capsule_collider->physics_data.is_kinmatic_anglar = false;
-
-			//auto hinge = Joint::add_Hingejoint(Waist_collider, Waist_sphere_collider, Vector3(0, 1, 0), Vector3(0, -1, 0), Vector3(0, 1, 0), Vector3(0, -1, 0));
-			//hinge->hinge_pow = 0;
-			//auto ball = Joint::add_balljoint(Waist_capsule_collider, Head_collider, Vector3(0, 3.2, 0), Vector3(0, 0, 0), 0.01f);
+			Waist_sphere_collider->physics_data.is_fallable = false;
+			Waist_sphere_collider->physics_data.is_moveable = false;
 		}
 
 		{
