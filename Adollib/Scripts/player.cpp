@@ -44,8 +44,8 @@ namespace Adollib
 		leg_rot_max_pow = 200;
 		leg_rot_pow = 100;
 
-		hand_rot_max_speed = 1000;
-		hand_rot_max_pow = 1000;
+		hand_rot_max_speed = 100;
+		hand_rot_max_pow = 100;
 		hand_rot_pow = 100;
 
 		jump_power = 30;
@@ -75,16 +75,37 @@ namespace Adollib
 			for (int i = 0; i < 2; i++) {
 				const Mouse key = keys[i];
 				auto& collider = colliders[i];
+
+				Quaternion body_off;
+				{
+					Vector3 body_vec = vector3_quatrotate(Vector3(0, 0, -1), Body_collider->transform->orientation);
+					Debug::set("body_vec", body_vec);
+					body_vec.y = 0;
+					body_vec = body_vec.unit_vect();
+					body_off = quaternion_from_to_rotate(Vector3(0, 0, 1), body_vec);
+				}
 				if (input->getMouseState(key)) {
 
-					Quaternion goal = quaternion_from_euler(180, 90 * sign[i], 0) * camera->orientation;
+
+					Quaternion goal = quaternion_from_euler(180, 90 * sign[i], 0) * body_off * camera->orientation;
+
+
 					Quaternion off = collider->transform->orientation * goal.inverse();
 					float pow = ALClamp(off.radian() * hand_rot_pow, 0, hand_rot_max_pow);
-					collider->add_torque(off.axis() * pow);
+					collider->add_torque(-off.axis() * pow);
 				}
 			}
 
 			{
+
+				Quaternion camera_off;
+				{
+					Vector3 camera_vec = vector3_quatrotate(Vector3(0, 0, 1), camera->orientation);
+					camera_vec.y = 0;
+					camera_vec = camera_vec.unit_vect();
+					camera_off = quaternion_from_to_rotate(Vector3(0, 0, 1), camera_vec);
+				}
+
 				const Mouse key = keys[0];
 				auto& collider = colliders[0];
 
