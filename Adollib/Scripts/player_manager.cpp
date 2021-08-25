@@ -245,26 +245,26 @@ namespace Adollib
 
 
 			//::: Joint‚ÌÝ’è
-			//“ª
-			{
-				auto Ball = Joint::add_Conejoint(Head_collider, Body_collider, Vector3(0, -1, 0), Vector3(0, 0.8f, 0), Vector3(0, 1, 0), Vector3(0, 1, 0));
-				Ball->limit = 30;
+			////“ª
+			//{
+			//	auto Ball = Joint::add_Conejoint(Head_collider, Body_collider, Vector3(0, -1, 0), Vector3(0, 0.8f, 0), Vector3(0, 1, 0), Vector3(0, 1, 0));
+			//	Ball->limit = 30;
 
-				auto Twist = Joint::add_Twistjoint(Body_collider, Head_collider, Vector3(0, 1, 0));
-				Twist->limit = Vector2(360 - 90, 90);
-			}
-			//˜r
-			{
-				auto Cone = Joint::add_Conejoint(Body_collider, Rsholder_collider, Vector3(-1.1f, 0.2f, 0), Vector3(0, 0.5f, 0), Vector3(-1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect());
-				Cone->limit = 85;
+			//	auto Twist = Joint::add_Twistjoint(Body_collider, Head_collider, Vector3(0, 1, 0));
+			//	Twist->limit = Vector2(360 - 90, 90);
+			//}
+			////˜r
+			//{
+			//	auto Cone = Joint::add_Conejoint(Body_collider, Rsholder_collider, Vector3(-1.1f, 0.2f, 0), Vector3(0, 0.5f, 0), Vector3(-1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect());
+			//	Cone->limit = 85;
 
-				auto Twist = Joint::add_Twistjoint(Body_collider, Rsholder_collider, Vector3(0, 1, 0));
-				Twist->limit = Vector2(360 - 90, 90);
-			}
-			{
-				auto hinge = Joint::add_Hingejoint(Rsholder_collider, Relbow_collider, Vector3(-1, -0.6f, 0), Vector3(+1, -0.6f, 0), Vector3(-1, 0.6f, 0), Vector3(+1, 0.6f, 0));
-				hinge->limit = Vector2(230, 360);
-			}
+			//	auto Twist = Joint::add_Twistjoint(Body_collider, Rsholder_collider, Vector3(0, 1, 0));
+			//	Twist->limit = Vector2(360 - 90, 90);
+			//}
+			//{
+			//	auto hinge = Joint::add_Hingejoint(Rsholder_collider, Relbow_collider, Vector3(-1, -0.6f, 0), Vector3(+1, -0.6f, 0), Vector3(-1, 0.6f, 0), Vector3(+1, 0.6f, 0));
+			//	hinge->limit = Vector2(230, 360);
+			//}
 			{
 				auto Cone = Joint::add_Conejoint(Body_collider, Lsholder_collider, Vector3(+1.1f, 0.2f, 0), Vector3(0, 0.5f, 0), Vector3(-1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect());
 				Cone->limit = 85;
@@ -276,39 +276,39 @@ namespace Adollib
 				auto hinge = Joint::add_Hingejoint(Lsholder_collider, Lelbow_collider, Vector3(-1, -0.6f, 0), Vector3(+1, -0.6f, 0), Vector3(-1, 0.6f, 0), Vector3(+1, 0.6f, 0));
 				hinge->limit = Vector2(230, 360);
 			}
-			//˜
-			{
-				auto Cone = Joint::add_Conejoint(Body_collider, Waist_collider, Vector3(0, -1.0f, 0), Vector3(0, 0.5f, 0), Vector3(0, 1, 0).unit_vect(), Vector3(0, 1.5f, -1).unit_vect());
-				Cone->limit = 60;
+			////˜
+			//{
+			//	auto Cone = Joint::add_Conejoint(Body_collider, Waist_collider, Vector3(0, -1.0f, 0), Vector3(0, 0.5f, 0), Vector3(0, 1, 0).unit_vect(), Vector3(0, 1.5f, -1).unit_vect());
+			//	Cone->limit = 60;
 
-				auto Twist = Joint::add_Twistjoint(Body_collider, Waist_collider, Vector3(0, 1, 0));
-				Twist->limit = Vector2(360 - 30, 30);
-			}
-			//‘«
-			{
-				auto Cone = Joint::add_Conejoint(Waist_collider, Rleg_collider, Vector3(-0.6f, -0.8f, 0), Vector3(0, 0.3, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect());
-				//Cone->limit = 48;
-				Cone->limit = 80;
+			//	auto Twist = Joint::add_Twistjoint(Body_collider, Waist_collider, Vector3(0, 1, 0));
+			//	Twist->limit = Vector2(360 - 30, 30);
+			//}
+			////‘«
+			//{
+			//	auto Cone = Joint::add_Conejoint(Waist_collider, Rleg_collider, Vector3(-0.6f, -0.8f, 0), Vector3(0, 0.3, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect());
+			//	//Cone->limit = 48;
+			//	Cone->limit = 80;
 
-				auto Twist = Joint::add_Twistjoint(Waist_collider, Rleg_collider, Vector3(0, 1, 0));
-				Twist->limit = Vector2(360 - 5, 15);
-			}
-			{
-				auto hinge = Joint::add_Hingejoint(Rleg_collider, Rfoot_collider, Vector3(-1, -0.4f, 0), Vector3(+1, -0.3f, 0), Vector3(-1, +0.3f, 0), Vector3(+1, +0.3f, 0));
-				hinge->limit = Vector2(0, 60);
-			}
-			{
-				auto Cone = Joint::add_Conejoint(Waist_collider, Lleg_collider, Vector3(+0.6f, -0.8f, 0), Vector3(0, 0.3f, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect());
-				//Cone->limit = 48;
-				Cone->limit = 80;
+			//	auto Twist = Joint::add_Twistjoint(Waist_collider, Rleg_collider, Vector3(0, 1, 0));
+			//	Twist->limit = Vector2(360 - 5, 15);
+			//}
+			//{
+			//	auto hinge = Joint::add_Hingejoint(Rleg_collider, Rfoot_collider, Vector3(-1, -0.4f, 0), Vector3(+1, -0.3f, 0), Vector3(-1, +0.3f, 0), Vector3(+1, +0.3f, 0));
+			//	hinge->limit = Vector2(0, 60);
+			//}
+			//{
+			//	auto Cone = Joint::add_Conejoint(Waist_collider, Lleg_collider, Vector3(+0.6f, -0.8f, 0), Vector3(0, 0.3f, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect());
+			//	//Cone->limit = 48;
+			//	Cone->limit = 80;
 
-				auto Twist = Joint::add_Twistjoint(Waist_collider, Lleg_collider, Vector3(0, 1, 0));
-				Twist->limit = Vector2(360 - 15, 5);
-			}
-			{
-				auto hinge = Joint::add_Hingejoint(Lleg_collider, Lfoot_collider, Vector3(-1, -0.4f, 0), Vector3(+1, -0.3f, 0), Vector3(-1, +0.3f, 0), Vector3(+1, +0.3f, 0));
-				hinge->limit = Vector2(0, 60);
-			}
+			//	auto Twist = Joint::add_Twistjoint(Waist_collider, Lleg_collider, Vector3(0, 1, 0));
+			//	Twist->limit = Vector2(360 - 15, 5);
+			//}
+			//{
+			//	auto hinge = Joint::add_Hingejoint(Lleg_collider, Lfoot_collider, Vector3(-1, -0.4f, 0), Vector3(+1, -0.3f, 0), Vector3(-1, +0.3f, 0), Vector3(+1, +0.3f, 0));
+			//	hinge->limit = Vector2(0, 60);
+			//}
 		}
 
 		//Šç‚Æ‚©ƒxƒ‹ƒg‚ð’…‚¯‚Ä‚Ý‚é

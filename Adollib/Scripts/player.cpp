@@ -45,8 +45,12 @@ namespace Adollib
 		leg_rot_pow = 100;
 
 		hand_rot_max_speed = 100;
-		hand_rot_max_pow = 100;
-		hand_rot_pow = 100;
+		hand_rot_max_pow = 50;
+		hand_rot_pow = 1000;
+
+		hand_updown_max_rot = ToRadian(80);
+		hand_updown_rot_pow = 3;
+		hand_updown_rot_center = ToRadian(30);
 
 		jump_power = 30;
 		turn_speed = 2;
@@ -64,35 +68,58 @@ namespace Adollib
 				Mouse::LBUTTON ,
 				Mouse::RBUTTON
 			};
-			Collider* colliders[2] = {
+			Collider* colliders[4] = {
 				Lsholder_collider,
-				Rsholder_collider
+				Rsholder_collider,
+				Lelbow_collider,
+				Relbow_collider
 			};
 			const int sign[2] = {
-				1,
+				+1,
 				-1
 			};
 			for (int i = 0; i < 2; i++) {
 				const Mouse key = keys[i];
-				auto& collider = colliders[i];
-
-				Quaternion body_off;
-				{
-					Vector3 body_vec = vector3_quatrotate(Vector3(0, 0, -1), Body_collider->transform->orientation);
-					Debug::set("body_vec", body_vec);
-					body_vec.y = 0;
-					body_vec = body_vec.unit_vect();
-					body_off = quaternion_from_to_rotate(Vector3(0, 0, 1), body_vec);
-				}
 				if (input->getMouseState(key)) {
 
+					Quaternion camera_off;
+					{
+						Vector3 camera_vec = vector3_quatrotate(Vector3(0, 0, 1), camera->orientation).unit_vect();
+						Vector3 camera_vec_y0 = camera_vec;
+						camera_vec_y0.y = 0;
+						camera_vec_y0 = camera_vec_y0.unit_vect();
 
-					Quaternion goal = quaternion_from_euler(180, 90 * sign[i], 0) * body_off * camera->orientation;
+						Vector3 rot_axis = vector3_cross(camera_vec, camera_vec_y0).unit_vect();
+						float radian = vector3_radian(camera_vec, camera_vec_y0) * hand_updown_rot_pow;
+						if (camera_vec.y < 0)
+							radian *= -1;
+						radian = ALClamp(radian + hand_updown_rot_center * hand_updown_rot_pow, -hand_updown_max_rot, +hand_updown_max_rot);
+						camera_off = quaternion_axis_radian(Vector3(1, 0, 0), radian);
+					}
 
-
-					Quaternion off = collider->transform->orientation * goal.inverse();
-					float pow = ALClamp(off.radian() * hand_rot_pow, 0, hand_rot_max_pow);
-					collider->add_torque(-off.axis() * pow);
+					Quaternion goal = quaternion_axis_angle(Vector3(0, 1, 0), sign[i] * 90) * quaternion_axis_angle(Vector3(1, 0, 0), 90) * camera_off * Body_collider->transform->orientation;
+					{
+						// Œ¨
+						auto& collider = colliders[i];
+						//Quaternion off;
+						//if (collider->transform->orientation.y < 0) {
+						//	if(vector3_quatrotate(Vector3(0,-1,0), collider->transform->orientation).y < 0)
+						//	off = -collider->transform->orientation * goal.inverse();
+						//	else off = collider->transform->orientation * goal.inverse();
+						//}
+						//else off = collider->transform->orientation * goal.inverse();
+						//if(off.angle() > 270)off = -collider->transform->orientation * goal.inverse();
+						Quaternion off = collider->transform->orientation * goal.inverse();
+						float pow = ALClamp(off.radian() * hand_rot_pow, 0, hand_rot_max_pow);
+						collider->add_torque(-off.axis() * pow);
+					}
+					//{
+					//	//˜r
+					//	auto& collider = colliders[i + 2];
+					//	Quaternion off = collider->transform->orientation * goal.inverse();
+					//	float pow = ALClamp(off.radian() * hand_rot_pow, 0, hand_rot_max_pow);
+					//	collider->add_torque(-off.axis() * pow);
+					//}
 				}
 			}
 
@@ -100,21 +127,31 @@ namespace Adollib
 
 				Quaternion camera_off;
 				{
-					Vector3 camera_vec = vector3_quatrotate(Vector3(0, 0, 1), camera->orientation);
-					camera_vec.y = 0;
-					camera_vec = camera_vec.unit_vect();
-					camera_off = quaternion_from_to_rotate(Vector3(0, 0, 1), camera_vec);
+					Vector3 camera_vec = vector3_quatrotate(Vector3(0, 0, 1), camera->orientation).unit_vect();
+					Vector3 camera_vec_y0 = camera_vec;
+					camera_vec_y0.y = 0;
+					camera_vec_y0 = camera_vec_y0.unit_vect();
+
+					Vector3 rot_axis = vector3_cross(camera_vec, camera_vec_y0).unit_vect();
+					float radian = ALClamp(vector3_radian(camera_vec, camera_vec_y0) * hand_updown_rot_pow, -hand_updown_max_rot, +hand_updown_max_rot);
+					camera_off = quaternion_axis_radian(rot_axis, radian);
+
+					Debug::set("rot_axis", rot_axis);
+					Debug::set("radian", radian);
+					Debug::set("camera_off", camera_off);
 				}
 
 				const Mouse key = keys[0];
 				auto& collider = colliders[0];
 
 				//addforce‚ÌŒü‚«‚ð•K—v‚É‰ž‚¶‚Ä‹t‚É‚µ‚È‚¯‚ê‚Î‚¢‚¯‚È‚¢ —vC³
-				Quaternion goal = quaternion_from_euler(180, 90 * sign[0], 0) * camera->orientation;
+				Quaternion goal = quaternion_axis_angle(Vector3(0, 1, 0), sign[0] * 90) * quaternion_axis_angle(Vector3(1, 0, 0), 90) * camera_off * Body_collider->transform->orientation;
 				Quaternion off = collider->transform->orientation * goal.inverse();
 
-				Debug::set("Lhand_start", collider->transform->orientation);
+				Debug::set("Lsholder_orient", collider->transform->orientation);
+				Debug::set("Lelbow_orient", colliders[2]->transform->orientation);
 				Debug::set("Lhand_goal", goal);
+				Debug::set("Body_collider->transform->orientation", Body_collider->transform->orientation);
 				Debug::set("Lhand_start_eular", collider->transform->orientation.euler());
 				Debug::set("Lhand_goal_vec", vector3_quatrotate(Vector3(0, -1, 0), goal));
 				Debug::set("Lhand_axis", off.axis());
@@ -381,7 +418,9 @@ namespace Adollib
 			if (input->getKeyState(Key::D)) {
 				move_vec += Vector3(+1, 0, 0);
 			}
-			dir = move_vec.unit_vect();
+			dir = vector3_quatrotate(move_vec, camera->orientation).unit_vect();
+			dir.y = 0;
+			dir = dir.unit_vect();
 		}
 
 		//ƒWƒƒƒ“ƒv
@@ -394,11 +433,15 @@ namespace Adollib
 
 			if (coyote >= 0 && input->getKeyTrigger(Key::Space)) {
 				for (int i = 0; i < Human_collider_size; i++) {
-					Human_colliders[i]->linear_velocity(Vector3(Human_colliders[i]->linear_velocity().x, jump_power * 0.1f, Human_colliders[i]->linear_velocity().z));
+					Human_colliders[i]->linear_velocity(Vector3(Human_colliders[i]->linear_velocity().x, jump_power, Human_colliders[i]->linear_velocity().z));
 				}
-				Head_collider->linear_velocity(Vector3(Head_collider->linear_velocity().x, jump_power, Head_collider->linear_velocity().z));
-				Body_collider->linear_velocity(Vector3(Body_collider->linear_velocity().x, jump_power, Body_collider->linear_velocity().z));
-				Waist_collider->linear_velocity(Vector3(Waist_collider->linear_velocity().x, jump_power, Waist_collider->linear_velocity().z));
+				Lleg_collider->linear_velocity(Vector3(Lleg_collider->linear_velocity().x, jump_power * 0.1f, Lleg_collider->linear_velocity().z));
+				Rleg_collider->linear_velocity(Vector3(Rleg_collider->linear_velocity().x, jump_power * 0.1f, Rleg_collider->linear_velocity().z));
+				Lfoot_collider->linear_velocity(Vector3(Lfoot_collider->linear_velocity().x, jump_power * 0.1f, Lfoot_collider->linear_velocity().z));
+				Rfoot_collider->linear_velocity(Vector3(Rfoot_collider->linear_velocity().x, jump_power * 0.1f, Rfoot_collider->linear_velocity().z));
+				//Head_collider->linear_velocity(Vector3(Head_collider->linear_velocity().x, jump_power, Head_collider->linear_velocity().z));
+				//Body_collider->linear_velocity(Vector3(Body_collider->linear_velocity().x, jump_power, Body_collider->linear_velocity().z));
+				//Waist_collider->linear_velocity(Vector3(Waist_collider->linear_velocity().x, jump_power, Waist_collider->linear_velocity().z));
 
 				is_jumping = true;
 				coyote = -0.3f;

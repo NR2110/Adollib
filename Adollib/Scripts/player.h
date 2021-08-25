@@ -35,6 +35,11 @@ namespace Adollib
 		float hand_rot_max_pow = 1000;
 		float hand_rot_pow = 100;
 
+		//ƒJƒƒ‰‰ñ“]‚É‰‚¶‚Äè‚ğã‚°‰º‚°‚·‚é‹­‚³
+		float hand_updown_max_rot = ToRadian(45);
+		float hand_updown_rot_pow = 2;
+		float hand_updown_rot_center = ToRadian(30);
+
 
 
 		float jump_power = 150;
