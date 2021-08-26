@@ -98,32 +98,39 @@ namespace Adollib
 					}
 
 					Quaternion goal = quaternion_axis_angle(Vector3(0, 1, 0), sign[i] * 90) * quaternion_axis_angle(Vector3(1, 0, 0), 90) * camera_off * Body_collider->transform->orientation;
+
+					//quaternion‚ª-Q‚ÌŽžA¶¬‚·‚é‰ñ“]‚ª‹t‰ñ“]‚É‚È‚é‚½‚ßlocalorint‚É - ‚ð‚©‚¯‚é
+					if (colliders[i]->transform->orientation.y < 0) {
+
+						const Vector3& sholder_dir = vector3_quatrotate(Vector3(0, -1, 0), colliders[i]->transform->orientation);
+						const Vector3& waist_dir = vector3_quatrotate(Vector3(0, -1, 0), Waist_collider->transform->orientation);
+						if (vector3_dot(sholder_dir, waist_dir) > 0) {
+							colliders[i]->transform->local_orient *= -1;
+							colliders[i + 2]->transform->local_orient *= -1;
+						}
+					}
+
 					{
 						// Œ¨
 						auto& collider = colliders[i];
-						//Quaternion off;
-						//if (collider->transform->orientation.y < 0) {
-						//	if(vector3_quatrotate(Vector3(0,-1,0), collider->transform->orientation).y < 0)
-						//	off = -collider->transform->orientation * goal.inverse();
-						//	else off = collider->transform->orientation * goal.inverse();
-						//}
-						//else off = collider->transform->orientation * goal.inverse();
-						//if(off.angle() > 270)off = -collider->transform->orientation * goal.inverse();
 						Quaternion off = collider->transform->orientation * goal.inverse();
 						float pow = ALClamp(off.radian() * hand_rot_pow, 0, hand_rot_max_pow);
 						collider->add_torque(-off.axis() * pow);
 					}
-					//{
-					//	//˜r
-					//	auto& collider = colliders[i + 2];
-					//	Quaternion off = collider->transform->orientation * goal.inverse();
-					//	float pow = ALClamp(off.radian() * hand_rot_pow, 0, hand_rot_max_pow);
-					//	collider->add_torque(-off.axis() * pow);
-					//}
+					{
+						//˜r
+						auto& collider = colliders[i + 2];
+						Quaternion off = collider->transform->orientation * goal.inverse();
+						float pow = ALClamp(off.radian() * hand_rot_pow, 0, hand_rot_max_pow);
+						collider->add_torque(-off.axis() * pow);
+					}
 				}
 			}
 
 			{
+				const Vector3& sholder_dir = vector3_quatrotate(Vector3(0, -1, 0), colliders[0]->transform->orientation);
+				const Vector3& waist_dir = vector3_quatrotate(Vector3(0, -1, 0), Waist_collider->transform->orientation);
+				Debug::set("waist_dir", waist_dir);
 
 				Quaternion camera_off;
 				{
