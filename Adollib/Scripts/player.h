@@ -36,9 +36,9 @@ namespace Adollib
 		float hand_rot_pow = 100;
 
 		//カメラ回転に応じて手を上げ下げする強さ
-		float hand_updown_max_rot = ToRadian(45);
-		float hand_updown_rot_pow = 2;
-		float hand_updown_rot_center = ToRadian(30);
+		float hand_camera_max_rot = ToRadian(45);
+		float hand_camera_rot_pow = 2;
+		float hand_camera_rot_center = ToRadian(30);
 
 
 
@@ -51,6 +51,15 @@ namespace Adollib
 		Quaternion rotate; //rotateのbuffer
 		Vector3 dir; //向きのbuffer
 
+		// staticなものをつかむとき、質量を変えるため保存する
+		float shlder_mass = 0;
+		float elbow_mass = 0;
+		float hand_mass = 0;
+
+		// waist_colliderにアタッチされている waistをたたせるためのsphere 場合によってlocalposを変更したい
+		BallJoint* Waist_sphere_joint = nullptr;
+		float Waist_sphere_length = 0;
+
 		std::shared_ptr<Transfome> camera; //cameraへのポインタ
 
 		bool is_jumping = false; //今ジャンプしているか
@@ -62,15 +71,17 @@ namespace Adollib
 
 	private:
 		//::: GO :::
-		const int Human_gameobject_size = 11;
+		const int Human_gameobject_size = 13;
 		union {
-			Gameobject* Human_gameobjects[11] = { nullptr };
+			Gameobject* Human_gameobjects[13] = { nullptr };
 			struct {
 				Gameobject* Head    ;
-				Gameobject* Rsholder;
-				Gameobject* Relbow  ;
 				Gameobject* Lsholder;
 				Gameobject* Lelbow  ;
+				Gameobject* Lhand   ;
+				Gameobject* Rsholder;
+				Gameobject* Relbow  ;
+				Gameobject* Rhand	;
 				Gameobject* Body    ;
 				Gameobject* Waist   ;
 				Gameobject* Rleg    ;
@@ -81,15 +92,17 @@ namespace Adollib
 		};
 
 		//::: collider :::
-		const int Human_collider_size = 11;
+		const int Human_collider_size = 13;
 		union {
-			Collider* Human_colliders[11] = { nullptr };
+			Collider* Human_colliders[13] = { nullptr };
 			struct {
 				Collider* Head_collider;
-				Collider* Rsholder_collider;
-				Collider* Relbow_collider;
 				Collider* Lsholder_collider;
 				Collider* Lelbow_collider;
+				Collider* Lhand_collider;
+				Collider* Rsholder_collider;
+				Collider* Relbow_collider;
+				Collider* Rhand_collider;
 				Collider* Body_collider;
 				Collider* Waist_collider;
 				Collider* Rleg_collider;
@@ -106,42 +119,56 @@ namespace Adollib
 	public:
 		void set_player_colliders(
 		Collider* l_Head_collider		,
-		Collider* l_Rsholder_collider	,
-		Collider* l_Relbow_collider		,
 		Collider* l_Lsholder_collider	,
 		Collider* l_Lelbow_collider		,
+		Collider* l_Lhand_collider		,
+		Collider* l_Rsholder_collider	,
+		Collider* l_Relbow_collider		,
+		Collider* l_Rhand_collider		,
 		Collider* l_Body_collider		,
 		Collider* l_Waist_collider		,
 		Collider* l_Rleg_collider		,
 		Collider* l_Rfoot_collider		,
 		Collider* l_Lleg_collider		,
 		Collider* l_Lfoot_collider		,
-		Collider* l_Waist_capsule_collider
+		BallJoint* l_waist_sphere_joint,
+		Collider* l_Waist_sphere_collider
 		) {
 			Head_collider		= l_Head_collider;
-			Rsholder_collider	= l_Rsholder_collider;
-			Relbow_collider		= l_Relbow_collider;
 			Lsholder_collider	= l_Lsholder_collider;
 			Lelbow_collider		= l_Lelbow_collider;
+			Lhand_collider		= l_Lhand_collider;
+			Rsholder_collider	= l_Rsholder_collider;
+			Relbow_collider		= l_Relbow_collider;
+			Rhand_collider		= l_Rhand_collider;
 			Body_collider		= l_Body_collider;
 			Waist_collider		= l_Waist_collider;
 			Rleg_collider		= l_Rleg_collider;
 			Rfoot_collider		= l_Rfoot_collider;
 			Lleg_collider		= l_Lleg_collider;
 			Lfoot_collider		= l_Lfoot_collider;
-			onground_collider = l_Waist_capsule_collider;
+			Waist_sphere_joint  = l_waist_sphere_joint;
+			onground_collider = l_Waist_sphere_collider;
 
 			Head		=Head_collider		->gameobject;
-			Rsholder	=Rsholder_collider	->gameobject;
-			Relbow		=Relbow_collider	->gameobject;
 			Lsholder	=Lsholder_collider	->gameobject;
 			Lelbow		=Lelbow_collider	->gameobject;
+			Lhand		=Lhand_collider	    ->gameobject;
+			Rsholder	=Rsholder_collider	->gameobject;
+			Relbow		=Relbow_collider	->gameobject;
+			Rhand		=Rhand_collider	    ->gameobject;
 			Body		=Body_collider		->gameobject;
 			Waist		=Waist_collider		->gameobject;
 			Rleg		=Rleg_collider		->gameobject;
 			Rfoot		=Rfoot_collider		->gameobject;
 			Lleg		=Lleg_collider		->gameobject;
 			Lfoot		=Lfoot_collider		->gameobject;
+
+			shlder_mass = Lsholder_collider->physics_data.inertial_mass;
+			elbow_mass = Lelbow_collider->physics_data.inertial_mass;
+			hand_mass =  Lhand_collider->physics_data.inertial_mass;
+
+			Waist_sphere_length = Waist_sphere_joint->anchor.posA.y;
 		}
 
 	public:

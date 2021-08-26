@@ -48,9 +48,9 @@ namespace Adollib
 		hand_rot_max_pow = 50;
 		hand_rot_pow = 1000;
 
-		hand_updown_max_rot = ToRadian(80);
-		hand_updown_rot_pow = 3;
-		hand_updown_rot_center = ToRadian(30);
+		hand_camera_max_rot = ToRadian(80);
+		hand_camera_rot_pow = 3;
+		hand_camera_rot_center = ToRadian(30);
 
 		jump_power = 30;
 		turn_speed = 2;
@@ -78,10 +78,17 @@ namespace Adollib
 				+1,
 				-1
 			};
+			Joint_base* joints[2] = {
+				catch_left_joint,
+				catch_right_joint
+			};
+
 			for (int i = 0; i < 2; i++) {
 				const Mouse key = keys[i];
 				if (input->getMouseState(key)) {
+					Joint_base* joint = joints[i];
 
+					//ÉJÉÅÉâÇÃâÒì]Ç©ÇÁòrÇè„Ç∞ÇÈçÇÇ≥ÇïœÇ¶ÇÈ
 					Quaternion camera_off;
 					{
 						Vector3 camera_vec = vector3_quatrotate(Vector3(0, 0, 1), camera->orientation).unit_vect();
@@ -90,24 +97,27 @@ namespace Adollib
 						camera_vec_y0 = camera_vec_y0.unit_vect();
 
 						Vector3 rot_axis = vector3_cross(camera_vec, camera_vec_y0).unit_vect();
-						float radian = vector3_radian(camera_vec, camera_vec_y0) * hand_updown_rot_pow;
+						float radian = vector3_radian(camera_vec, camera_vec_y0) * hand_camera_rot_pow;
 						if (camera_vec.y < 0)
 							radian *= -1;
-						radian = ALClamp(radian + hand_updown_rot_center * hand_updown_rot_pow, -hand_updown_max_rot, +hand_updown_max_rot);
+						radian = ALClamp(radian + hand_camera_rot_center * hand_camera_rot_pow, -hand_camera_max_rot, +hand_camera_max_rot);
 						camera_off = quaternion_axis_radian(Vector3(1, 0, 0), radian);
 					}
 
 					Quaternion goal = quaternion_axis_angle(Vector3(0, 1, 0), sign[i] * 90) * quaternion_axis_angle(Vector3(1, 0, 0), 90) * camera_off * Body_collider->transform->orientation;
 
 					//quaternionÇ™-QÇÃéûÅAê∂ê¨Ç∑ÇÈâÒì]Ç™ãtâÒì]Ç…Ç»ÇÈÇΩÇﬂlocalorintÇ… - ÇÇ©ÇØÇÈ
-					if (colliders[i]->transform->orientation.y < 0) {
-
-						const Vector3& sholder_dir = vector3_quatrotate(Vector3(0, -1, 0), colliders[i]->transform->orientation);
-						const Vector3& waist_dir = vector3_quatrotate(Vector3(0, -1, 0), Waist_collider->transform->orientation);
-						if (vector3_dot(sholder_dir, waist_dir) > 0) {
-							colliders[i]->transform->local_orient *= -1;
-							colliders[i + 2]->transform->local_orient *= -1;
+					{
+						const Quaternion& off = colliders[i]->transform->orientation * goal.inverse();
+						if (off.angle() < 180) {
+							const Vector3& sholder_dir = vector3_quatrotate(Vector3(0, -1, 0), colliders[i]->transform->orientation);
+							const Vector3& waist_dir = vector3_quatrotate(Vector3(0, -1, 0), Waist_collider->transform->orientation);
+							if (vector3_dot(sholder_dir, waist_dir) > 0) {
+								colliders[i]->transform->local_orient *= -1;
+								colliders[i + 2]->transform->local_orient *= -1;
+							}
 						}
+
 					}
 
 					{
@@ -115,18 +125,19 @@ namespace Adollib
 						auto& collider = colliders[i];
 						Quaternion off = collider->transform->orientation * goal.inverse();
 						float pow = ALClamp(off.radian() * hand_rot_pow, 0, hand_rot_max_pow);
-						collider->add_torque(-off.axis() * pow);
+						collider->add_torque(off.axis() * pow * collider->physics_data.inertial_mass);
 					}
 					{
 						//òr
 						auto& collider = colliders[i + 2];
 						Quaternion off = collider->transform->orientation * goal.inverse();
 						float pow = ALClamp(off.radian() * hand_rot_pow, 0, hand_rot_max_pow);
-						collider->add_torque(-off.axis() * pow);
+						collider->add_torque(off.axis() * pow * collider->physics_data.inertial_mass);
 					}
 				}
 			}
 
+			/*
 			{
 				const Vector3& sholder_dir = vector3_quatrotate(Vector3(0, -1, 0), colliders[0]->transform->orientation);
 				const Vector3& waist_dir = vector3_quatrotate(Vector3(0, -1, 0), Waist_collider->transform->orientation);
@@ -140,7 +151,7 @@ namespace Adollib
 					camera_vec_y0 = camera_vec_y0.unit_vect();
 
 					Vector3 rot_axis = vector3_cross(camera_vec, camera_vec_y0).unit_vect();
-					float radian = ALClamp(vector3_radian(camera_vec, camera_vec_y0) * hand_updown_rot_pow, -hand_updown_max_rot, +hand_updown_max_rot);
+					float radian = ALClamp(vector3_radian(camera_vec, camera_vec_y0) * hand_camera_rot_pow, -hand_camera_max_rot, +hand_camera_max_rot);
 					camera_off = quaternion_axis_radian(rot_axis, radian);
 
 					Debug::set("rot_axis", rot_axis);
@@ -166,8 +177,7 @@ namespace Adollib
 
 
 			}
-
-
+			*/
 
 		}
 
@@ -180,9 +190,13 @@ namespace Adollib
 				Mouse::RBUTTON
 			};
 
-			Collider* colliders[2] = {
+			Collider* colliders[6] = {
+				Lhand_collider,
+				Rhand_collider,
 				Lelbow_collider,
-				Relbow_collider
+				Relbow_collider,
+				Lsholder_collider,
+				Rsholder_collider
 			};
 			Joint_base** joints[2] = {
 				&catch_left_joint,
@@ -221,11 +235,31 @@ namespace Adollib
 					joint->get_colliderB()->tag &= ~Collider_tags::Having_Stage;
 					joint->get_colliderB()->tag |= Collider_tags::Stage;
 					Joint::delete_joint(joint);
+				}
 
+
+				//staticÇ»Ç‡ÇÃÇéùÇ¡ÇƒÇ¢ÇÈÇ∆Ç´ÅA
+				if (joint != nullptr && joint->get_colliderB()->physics_data.is_moveable == false) {
+					// staticÇ»Ç‡ÇÃÇ…ãﬂÇ¢èá(handÇ©ÇÁèá)Ç…éøó ÇëÂÇ´Ç≠Ç∑ÇÈ
+					colliders[i]->physics_data.inertial_mass = shlder_mass * 10;
+					colliders[i + 2]->physics_data.inertial_mass = elbow_mass * 10;
+					colliders[i + 4]->physics_data.inertial_mass = hand_mass * 10;
+
+					Waist_sphere_joint->anchor.posA = Vector3(0);
+				}
+				else {
+					// BodyÇ©ÇÁèáÇ…éøó Çê›íË(èâä˙íl)
+					colliders[i]->physics_data.inertial_mass = hand_mass;
+					colliders[i + 2]->physics_data.inertial_mass = elbow_mass;
+					colliders[i + 4]->physics_data.inertial_mass = shlder_mass;
+
+					Waist_sphere_joint->anchor.posA += Vector3(0, -1, 0) * 1.f * Al_Global::second_per_frame;
+					if (Waist_sphere_joint->anchor.posA.y < Waist_sphere_length)Waist_sphere_joint->anchor.posA = Vector3(0, Waist_sphere_length, 0);
 				}
 
 			}
 
+			//TODO : Ç¬Ç©ÇÒÇ≈Ç¢ÇÈÇ‡ÇÃÇÃStage tagÇè¡ÇµÇƒÅAèÊÇ¡ÇƒÇ¢ÇÈÇ∆Ç´Ç…jumpÇ≈Ç´Ç»Ç¢ÇÊÇ§Ç…ÇµÇƒÇ¢ÇÈ
 			for (int i = 0; i < 2; i++) {
 				Joint_base*& joint = *joints[i];
 				if (joint == nullptr)continue;
@@ -485,6 +519,11 @@ namespace Adollib
 		ImGui::DragFloat("hand_rot_max_speed", &hand_rot_max_speed, 0.1f);
 		ImGui::DragFloat("hand_rot_max_pow", &hand_rot_max_pow, 0.1f);
 		ImGui::DragFloat("hand_rot_pow", &hand_rot_pow, 0.1f);
+		ImGui::Separator();
+
+		ImGui::DragFloat("hand_updown_max_rot", &hand_camera_max_rot, 0.1f);
+		ImGui::DragFloat("hand_updown_rot_pow", &hand_camera_rot_pow, 0.1f);
+		ImGui::DragFloat("hand_updown_rot_center", &hand_camera_rot_center, 0.1f);
 		ImGui::Separator();
 
 		ImGui::DragFloat("jump_power", &jump_power, 0.1f);
