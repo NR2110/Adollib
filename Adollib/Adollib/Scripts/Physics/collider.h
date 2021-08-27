@@ -106,6 +106,12 @@ namespace Adollib {
 		//角回転に力を加える
 		void add_torque(const Vector3& force);
 
+		//並進加速に値を加える
+		void add_linear_acc(const Vector3& force);
+
+		//角加速に値を加える
+		void add_angula_acc(const Vector3& force);
+
 		//shapeのアタッチ
 		template<typename T>
 		T* add_shape() { return ALPcollider_ptr->add_shape<T>(); };

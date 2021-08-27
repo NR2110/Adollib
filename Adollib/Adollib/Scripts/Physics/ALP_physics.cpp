@@ -33,6 +33,12 @@ void ALP_Physics::add_force(const Vector3& force) {
 void ALP_Physics::add_torque(const Vector3& force) {
 	accumulated_torque += force;
 }
+void ALP_Physics::add_linear_acc(const Vector3& acc) {
+	linear_acceleration += acc;
+}
+void ALP_Physics::add_angula_acc(const Vector3& acc) {
+	angula_acceleration += acc;
+}
 
 bool ALP_Physics::is_movable() const {
 	return (is_moveable && inertial_mass > 0 && inertial_mass < FLT_MAX);
@@ -108,6 +114,9 @@ void ALP_Physics::apply_external_force(float duration) {
 		//angula_velocity = angula_velocity * exp(-ka * duration); // 空気抵抗
 
 		//並進移動に加える力(accumulated_force)から加速度を出して並進速度を更新する 向きを間違えないように!!
+		linear_acceleration = linear_acceleration / duration;
+		angula_acceleration = vector3_quatrotate(angula_acceleration, gameobject->world_orientate())/ duration;
+
 		linear_acceleration += accumulated_force * inv_mass / duration;
 		if (is_fallable) linear_acceleration += Vector3(0, -Phyisics_manager::physicsParams.gravity, 0); //落下
 		linear_velocity += linear_acceleration * duration;
@@ -117,7 +126,7 @@ void ALP_Physics::apply_external_force(float duration) {
 		//Matrix rotation = ALPcollider->local_orientation.get_rotate_matrix();
 		Matrix33 rotation = gameobject->world_orientate().get_rotate_matrix();
 		Matrix33 transposed_rotation = matrix_trans(rotation);
-		inverse_inertia_tensor = rotation * inverse_inertia_tensor * rotation * transposed_rotation;
+		inverse_inertia_tensor = rotation * inverse_inertia_tensor * transposed_rotation * rotation;
 		angula_acceleration += vector3_trans(accumulated_torque / duration, inverse_inertia_tensor);
 
 		angula_velocity += angula_acceleration * duration;

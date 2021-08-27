@@ -230,13 +230,13 @@ namespace Adollib
 						joint->slop = 0.1f;
 					}
 				}
+
 				//離す
 				if (input->getMouseReleased(key) && joint != nullptr) {
 					joint->get_colliderB()->tag &= ~Collider_tags::Having_Stage;
 					joint->get_colliderB()->tag |= Collider_tags::Stage;
 					Joint::delete_joint(joint);
 				}
-
 
 				//staticなものを持っているとき、
 				if (joint != nullptr && joint->get_colliderB()->physics_data.is_moveable == false) {
@@ -299,19 +299,22 @@ namespace Adollib
 				Quaternion off = Body_collider->gameobject->transform->orientation * Head_collider->gameobject->transform->orientation.inverse();
 				float pow = ALClamp(off.radian() * head_rot_pow, 0, head_rot_max_pow);
 				Head_collider->add_torque(off.axis() * pow * gnyat_pow);
+				//Head_collider->add_angula_acc(off.axis() * pow * gnyat_pow / Head_collider->physics_data.inertial_mass);
 			}
 			{
 				//胴体をたたせる
 				Quaternion off = rotate * Waist_collider->gameobject->transform->orientation.inverse();
 				float pow = ALClamp(off.radian() * waist_rot_pow, 0, waist_rot_max_pow);
 				Waist_collider->add_torque(off.axis() * pow * gnyat_pow);
+				//Waist_collider->add_angula_acc(off.axis() * pow * gnyat_pow / Head_collider->physics_data.inertial_mass);
 
 			}
 			{
 				//胴体をたたせる
 				Quaternion off = rotate * Body_collider->gameobject->transform->orientation.inverse();
 				float pow = ALClamp(off.radian() * body_rot_pow, 0, body_rot_max_pow);
-				Body_collider->add_torque(off.axis() * pow * gnyat_pow);
+				Body_collider->add_torque(off.axis() * pow * gnyat_pow );
+				//Body_collider->add_angula_acc(off.axis() * pow * gnyat_pow / Head_collider->physics_data.inertial_mass);
 			}
 
 		}
@@ -320,6 +323,8 @@ namespace Adollib
 			//jointでつなげると重力が弱くなるから & 一定のパーツは重力の影響を受けないようにしているから  下向きに力を加える
 			Waist_collider->add_force(Vector3(0, -1, 0) * 150);
 			Body_collider->add_force(Vector3(0, -1, 0) * 150);
+			Lfoot_collider->add_force(Vector3(0, -1, 0) * 50);
+			Rfoot_collider->add_force(Vector3(0, -1, 0) * 50);
 		}
 
 

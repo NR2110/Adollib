@@ -28,6 +28,12 @@ void Collider::add_force(const Vector3& force) {
 void Collider::add_torque(const Vector3& force) {
 	ALPphysics_ptr->add_torque(force * Al_Global::second_per_frame);
 }
+void Collider::add_linear_acc(const Vector3& acc) {
+	ALPphysics_ptr->add_linear_acc(acc * Al_Global::second_per_frame);
+}
+void Collider::add_angula_acc(const Vector3& acc) {
+	ALPphysics_ptr->add_angula_acc(acc * Al_Global::second_per_frame);
+}
 
 
 #pragma endregion

@@ -292,10 +292,10 @@ namespace Adollib
 				hinge->limit = Vector2(230, 360);
 			}
 			{
-				auto ball = Joint::add_balljoint(Lelbow_collider, Lhand_collider, Vector3(0, -0.4f, 0), Vector3(0, 0, 0));
+				auto ball = Joint::add_balljoint(Lelbow_collider, Lhand_collider, Vector3(-0.2f, -0.4f, 0), Vector3(0, 0, 0));
 			}
 			{
-				auto Cone = Joint::add_Conejoint(Body_collider, Rsholder_collider, Vector3(-1.1f, 0.2f, 0), Vector3(0, 0.5f, 0), Vector3(-1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect());
+				auto Cone = Joint::add_Conejoint(Body_collider, Rsholder_collider, Vector3(-1.1f, 0.2f, 0), Vector3(0, 0.5f, 0), Vector3(+1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect());
 				Cone->limit = 85;
 
 				auto Twist = Joint::add_Twistjoint(Body_collider, Rsholder_collider, Vector3(0, 1, 0));
@@ -306,7 +306,7 @@ namespace Adollib
 				hinge->limit = Vector2(230, 360);
 			}
 			{
-				auto ball = Joint::add_balljoint(Relbow_collider, Rhand_collider, Vector3(0, -0.4f, 0), Vector3(0, 0, 0));
+				auto ball = Joint::add_balljoint(Relbow_collider, Rhand_collider, Vector3(0.2f, -0.4f, 0), Vector3(0, 0, 0));
 			}
 			//çò
 			{
