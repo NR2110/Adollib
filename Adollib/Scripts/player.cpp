@@ -54,6 +54,17 @@ namespace Adollib
 
 		jump_power = 30;
 		turn_speed = 2;
+
+		auto GO = Gameobject_manager::create("waist_sphere_stand");
+		check_standable_collider = GO->addComponent<Collider>();
+		auto shape = check_standable_collider->add_shape<Sphere>();
+
+		Waist->add_child(GO);
+		GO->transform->local_pos = Vector3(0, -3.0f, 0);
+		GO->transform->local_scale = Vector3(0.4f) / Waist->transform->local_scale;
+
+		check_standable_collider->physics_data.is_moveable = false;
+		check_standable_collider->physics_data.is_hitable = false;
 	}
 
 	// 毎フレーム呼ばれる更新処理
@@ -182,6 +193,8 @@ namespace Adollib
 		}
 
 
+		{}
+
 
 		// 物を持つ
 		{
@@ -238,23 +251,18 @@ namespace Adollib
 					Joint::delete_joint(joint);
 				}
 
-				//staticなものを持っているとき、
+				// staticなものに近い順(handから順)に質量を大きくする
 				if (joint != nullptr && joint->get_colliderB()->physics_data.is_moveable == false) {
 					// staticなものに近い順(handから順)に質量を大きくする
 					colliders[i]->physics_data.inertial_mass = shlder_mass * 10;
 					colliders[i + 2]->physics_data.inertial_mass = elbow_mass * 10;
 					colliders[i + 4]->physics_data.inertial_mass = hand_mass * 10;
-
-					Waist_sphere_joint->anchor.posA = Vector3(0);
 				}
 				else {
-					// Bodyから順に質量を設定(初期値)
+					// 初期値の質量を設定
 					colliders[i]->physics_data.inertial_mass = hand_mass;
 					colliders[i + 2]->physics_data.inertial_mass = elbow_mass;
 					colliders[i + 4]->physics_data.inertial_mass = shlder_mass;
-
-					Waist_sphere_joint->anchor.posA += Vector3(0, -1, 0) * 1.f * Al_Global::second_per_frame;
-					if (Waist_sphere_joint->anchor.posA.y < Waist_sphere_length)Waist_sphere_joint->anchor.posA = Vector3(0, Waist_sphere_length, 0);
 				}
 
 			}
@@ -268,67 +276,118 @@ namespace Adollib
 			}
 		}
 
-		const float gnyat_pow = 0.9f;
+		// waist_sphereの調整 出しっぱなしだと引っかかるため 条件で調整
+		{
+			const Mouse keys[2] = {
+				Mouse::LBUTTON ,
+				Mouse::RBUTTON
+			};
+			Collider* colliders[6] = {
+				Lhand_collider,
+				Rhand_collider,
+				Lelbow_collider,
+				Relbow_collider,
+				Lsholder_collider,
+				Rsholder_collider
+			};
+			Joint_base** joints[2] = {
+				&catch_left_joint,
+				&catch_right_joint
+			};
+
+			float anchor_move_vec = 0;
+			if (!check_standable_collider->concoll_enter(Collider_tags::Stage) && is_jumping == false) {
+				anchor_move_vec = -0.2f;
+			}
+			else anchor_move_vec = 1;
+			for (int i = 0; i < 2; i++) {
+				const Mouse key = keys[i];
+				auto& collider = colliders[i];
+				Joint_base*& joint = *joints[i];
+				//staticなものを持っているとき、
+				if (joint != nullptr && joint->get_colliderB()->physics_data.is_moveable == false) {
+					Waist_sphere_joint->anchor.posA = Vector3(0);
+					check_standable_collider_timer = 1;
+				}
+				else {
+					check_standable_collider_timer -= Al_Global::second_per_frame;
+
+					if (check_standable_collider_timer > 0)anchor_move_vec = 1;
+				}
+			}
+			Waist_sphere_joint->anchor.posA += Vector3(0, -1, 0) * anchor_move_vec * 1.f * Al_Global::second_per_frame;
+			if (Waist_sphere_joint->anchor.posA.y < Waist_sphere_length)Waist_sphere_joint->anchor.posA = Vector3(0, Waist_sphere_length, 0);
+			if (Waist_sphere_joint->anchor.posA.y > 0) Waist_sphere_joint->anchor.posA = Vector3(0, 0, 0);
+
+			//if()
+		}
+
 		//移動
-		if (!input->getKeyState(Key::LeftControl))
 		{
-			Debug::set("linear_velocity", Waist_collider->linear_velocity());
-			//移動
-			Waist_collider->add_force(dir * waist_move_pow * gnyat_pow);
+			const float gnyat_pow = 0.9f;
+			if (!input->getKeyState(Key::LeftControl))
+			{
+				Debug::set("linear_velocity", Waist_collider->linear_velocity());
+				//移動
+				Waist_collider->add_force(dir * waist_move_pow * gnyat_pow);
 
-			// 速度制限
-			Vector3 speed = Waist_collider->linear_velocity();
-			speed.y = 0;
-			if (speed.norm() > waist_move_max_speed * waist_move_max_speed) {
-				Vector3 Yspeed = Vector3(0, Waist_collider->linear_velocity().y, 0);
-				Waist_collider->linear_velocity(speed.unit_vect() * waist_move_max_speed + Yspeed);
+				// 速度制限
+				Vector3 speed = Waist_collider->linear_velocity();
+				speed.y = 0;
+				if (speed.norm() > waist_move_max_speed * waist_move_max_speed) {
+					Vector3 Yspeed = Vector3(0, Waist_collider->linear_velocity().y, 0);
+					Waist_collider->linear_velocity(speed.unit_vect() * waist_move_max_speed + Yspeed);
+				}
 			}
-		}
-		// 地面に接している & 入力が無い時
-		if (dir.norm() == 0 && onground_collider->concoll_enter(Collider_tags::Stage)) {
-			Waist_collider->physics_data.drag = 0.8f;
-		}
-		else Waist_collider->physics_data.drag = 0.1;
+			// 地面に接している & 入力が無い時
+			if (dir.norm() == 0 && onground_collider->concoll_enter(Collider_tags::Stage)) {
+				Waist_collider->physics_data.drag = 0.8f;
+			}
+			else Waist_collider->physics_data.drag = 0.1;
 
-		//Playerが立つように
-		if (!input->getKeyState(Key::LeftControl))
+		}
+
+		//Playerが立つようにtorqueを加える
 		{
+			float gnyat_pow = 0.9f;
+			if (!input->getKeyState(Key::LeftControl))
 			{
-				//顔が赤ちゃんなのを治す
-				Head_collider->physics_data.anglar_drag = 1.f;
-				Quaternion off = Body_collider->gameobject->transform->orientation * Head_collider->gameobject->transform->orientation.inverse();
-				float pow = ALClamp(off.radian() * head_rot_pow, 0, head_rot_max_pow);
-				Head_collider->add_torque(off.axis() * pow * gnyat_pow);
-				//Head_collider->add_angula_acc(off.axis() * pow * gnyat_pow / Head_collider->physics_data.inertial_mass);
-			}
-			{
-				//胴体をたたせる
-				Quaternion off = rotate * Waist_collider->gameobject->transform->orientation.inverse();
-				float pow = ALClamp(off.radian() * waist_rot_pow, 0, waist_rot_max_pow);
-				Waist_collider->add_torque(off.axis() * pow * gnyat_pow);
-				//Waist_collider->add_angula_acc(off.axis() * pow * gnyat_pow / Head_collider->physics_data.inertial_mass);
+				{
+					//顔が赤ちゃんなのを治す
+					Head_collider->physics_data.anglar_drag = 1.f;
+					Quaternion off = Body_collider->gameobject->transform->orientation * Head_collider->gameobject->transform->orientation.inverse();
+					float pow = ALClamp(off.radian() * head_rot_pow, 0, head_rot_max_pow);
+					Head_collider->add_torque(off.axis() * pow * gnyat_pow);
+					//Head_collider->add_angula_acc(off.axis() * pow * gnyat_pow / Head_collider->physics_data.inertial_mass);
+				}
+				{
+					//胴体をたたせる
+					Quaternion off = rotate * Waist_collider->gameobject->transform->orientation.inverse();
+					float pow = ALClamp(off.radian() * waist_rot_pow, 0, waist_rot_max_pow);
+					Waist_collider->add_torque(off.axis() * pow * gnyat_pow);
+					//Waist_collider->add_angula_acc(off.axis() * pow * gnyat_pow / Head_collider->physics_data.inertial_mass);
+
+				}
+				{
+					//胴体をたたせる
+					Quaternion off = rotate * Body_collider->gameobject->transform->orientation.inverse();
+					float pow = ALClamp(off.radian() * body_rot_pow, 0, body_rot_max_pow);
+					Body_collider->add_torque(off.axis() * pow * gnyat_pow);
+					//Body_collider->add_angula_acc(off.axis() * pow * gnyat_pow / Head_collider->physics_data.inertial_mass);
+				}
 
 			}
-			{
-				//胴体をたたせる
-				Quaternion off = rotate * Body_collider->gameobject->transform->orientation.inverse();
-				float pow = ALClamp(off.radian() * body_rot_pow, 0, body_rot_max_pow);
-				Body_collider->add_torque(off.axis() * pow * gnyat_pow );
-				//Body_collider->add_angula_acc(off.axis() * pow * gnyat_pow / Head_collider->physics_data.inertial_mass);
-			}
 
+			{
+				//jointでつなげると重力が弱くなるから & 一定のパーツは重力の影響を受けないようにしているから  下向きに力を加える
+				Waist_collider->add_force(Vector3(0, -1, 0) * 150);
+				Body_collider->add_force(Vector3(0, -1, 0) * 150);
+				Lfoot_collider->add_force(Vector3(0, -1, 0) * 50);
+				Rfoot_collider->add_force(Vector3(0, -1, 0) * 50);
+			}
 		}
 
-		{
-			//jointでつなげると重力が弱くなるから & 一定のパーツは重力の影響を受けないようにしているから  下向きに力を加える
-			Waist_collider->add_force(Vector3(0, -1, 0) * 150);
-			Body_collider->add_force(Vector3(0, -1, 0) * 150);
-			Lfoot_collider->add_force(Vector3(0, -1, 0) * 50);
-			Rfoot_collider->add_force(Vector3(0, -1, 0) * 50);
-		}
-
-
-		//Playerが歩くように
+		//Playerの足を動かす
 		{
 			//Waist_collider->physics_data.is_moveable = false;
 			//Rleg_collider->physics_data.is_moveable = false;

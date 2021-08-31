@@ -188,6 +188,24 @@ namespace Adollib
 				}
 			}
 
+			//::: 慣性モーメントの調整 :::
+			Lhand_collider->physics_data.inertial_mass = 100;
+			Lhand_collider->set_tensor(Lhand_collider->get_tensor());
+			Rhand_collider->physics_data.inertial_mass = 100;
+			Rhand_collider->set_tensor(Lhand_collider->get_tensor());
+			//Head_collider	 ->set_tensor(Head_collider->get_tensor());
+			//Rsholder_collider->set_tensor(Head_collider->get_tensor());
+			//Relbow_collider  ->set_tensor(Head_collider->get_tensor());
+			//Lsholder_collider->set_tensor(Head_collider->get_tensor());
+			//Lelbow_collider  ->set_tensor(Head_collider->get_tensor());
+			//Body_collider    ->set_tensor(Head_collider->get_tensor());
+			//Waist_collider   ->set_tensor(Head_collider->get_tensor());
+			//Rleg_collider    ->set_tensor(Head_collider->get_tensor());
+			//Rfoot_collider   ->set_tensor(Head_collider->get_tensor());
+			//Lleg_collider    ->set_tensor(Head_collider->get_tensor());
+			//Lfoot_collider   ->set_tensor(Head_collider->get_tensor());
+
+
 			//::: 質量の調整 :::
 			Head_collider->physics_data.inertial_mass = 3;
 			Lsholder_collider->physics_data.inertial_mass = 3;
@@ -203,18 +221,6 @@ namespace Adollib
 			Lleg_collider->physics_data.inertial_mass = 2;
 			Lfoot_collider->physics_data.inertial_mass = 1;
 
-			//::: 慣性モーメントの調整 :::
-			//Head_collider	 ->set_tensor(Head_collider->get_tensor());
-			//Rsholder_collider->set_tensor(Head_collider->get_tensor());
-			//Relbow_collider  ->set_tensor(Head_collider->get_tensor());
-			//Lsholder_collider->set_tensor(Head_collider->get_tensor());
-			//Lelbow_collider  ->set_tensor(Head_collider->get_tensor());
-			//Body_collider    ->set_tensor(Head_collider->get_tensor());
-			//Waist_collider   ->set_tensor(Head_collider->get_tensor());
-			//Rleg_collider    ->set_tensor(Head_collider->get_tensor());
-			//Rfoot_collider   ->set_tensor(Head_collider->get_tensor());
-			//Lleg_collider    ->set_tensor(Head_collider->get_tensor());
-			//Lfoot_collider   ->set_tensor(Head_collider->get_tensor());
 
 
 			Rleg_collider->physics_data.anglar_drag = 0.95f;

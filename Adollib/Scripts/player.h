@@ -56,24 +56,30 @@ namespace Adollib
 		float elbow_mass = 0;
 		float hand_mass = 0;
 
-		// waist_colliderにアタッチされている waistをたたせるためのsphere 場合によってlocalposを変更したい
+		// このcolliderが接地していた場合 立つことができる しばらくこのcolliderが接地していないと ぐにゃぐにゃになる
+		Collider* check_standable_collider = nullptr;
+		float check_standable_collider_timer = 0;
+
+		// waist_colliderにアタッチされている waistをたたせるためのsphere 場合によってanchorの座標を変更したい
 		BallJoint* Waist_sphere_joint = nullptr;
 		float Waist_sphere_length = 0;
 
-		std::shared_ptr<Transfome> camera; //cameraへのポインタ
-
 		bool is_jumping = false; //今ジャンプしているか
 		float coyote = 0.3f; //jumpの許容時間
-		float move_timer = 0;
+
+		float move_timer = 0; //足の回転を求めるために 入力時間を保存
 
 		Joint_base* catch_right_joint = nullptr; //右手がつかんでいるjoint
 		Joint_base* catch_left_joint = nullptr;	 //左手がつかんでいるjoint
 
 	private:
+		std::shared_ptr<Transfome> camera; //cameraへのポインタ
+
+	private:
 		//::: GO :::
-		const int Human_gameobject_size = 13;
+		static constexpr int Human_gameobject_size = 13;
 		union {
-			Gameobject* Human_gameobjects[13] = { nullptr };
+			Gameobject* Human_gameobjects[Human_gameobject_size] = { nullptr };
 			struct {
 				Gameobject* Head    ;
 				Gameobject* Lsholder;
@@ -92,9 +98,9 @@ namespace Adollib
 		};
 
 		//::: collider :::
-		const int Human_collider_size = 13;
+		static constexpr int Human_collider_size = 13;
 		union {
-			Collider* Human_colliders[13] = { nullptr };
+			Collider* Human_colliders[Human_collider_size] = { nullptr };
 			struct {
 				Collider* Head_collider;
 				Collider* Lsholder_collider;
@@ -112,8 +118,6 @@ namespace Adollib
 			};
 		};
 		Collider* onground_collider = nullptr;
-
-
 
 
 	public:
