@@ -45,7 +45,7 @@ namespace Adollib {
 		};
 
 		const Matrix33 local_tensor() const override {
-			const Vector3& Wsize = world_scale() * 2;
+			const Vector3& Wsize = world_scale();
 			Matrix33 ret;
 
 			ret = matrix33_identity();

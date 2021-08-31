@@ -59,14 +59,14 @@ namespace Adollib
 
 
 		Sphere* Head_shape = Head_collider->add_shape<Sphere>();
-		Capsule* Lsholder_shape = Lsholder_collider->add_shape<Capsule>();
-		Capsule* Lelbow_shape = Lelbow_collider->add_shape<Capsule>();
+		Sphere* Lsholder_shape = Lsholder_collider->add_shape<Sphere>();
+		Sphere* Lelbow_shape = Lelbow_collider->add_shape<Sphere>();
 		Sphere* Lhand_shape = Lhand_collider->add_shape<Sphere>();
-		Capsule* Rsholder_shape = Rsholder_collider->add_shape<Capsule>();
-		Capsule* Relbow_shape = Relbow_collider->add_shape<Capsule>();
+		Sphere* Rsholder_shape = Rsholder_collider->add_shape<Sphere>();
+		Sphere* Relbow_shape = Relbow_collider->add_shape<Sphere>();
 		Sphere* Rhand_shape = Rhand_collider->add_shape<Sphere>();
-		Box* Body_shape = Body_collider->add_shape<Box>();
-		Box* Waist_shape = Waist_collider->add_shape<Box>();
+		Sphere* Body_shape = Body_collider->add_shape<Sphere>();
+		Sphere* Waist_shape = Waist_collider->add_shape<Sphere>();
 		Sphere* Rleg_shape = Rleg_collider->add_shape<Sphere>();
 		Sphere* Rfoot_shape = Rfoot_collider->add_shape<Sphere>();
 		Sphere* Lleg_shape = Lleg_collider->add_shape<Sphere>();
@@ -207,21 +207,60 @@ namespace Adollib
 
 
 			//::: ¿—Ê‚Ì’²® :::
-			Head_collider->physics_data.inertial_mass = 3;
+			Head_collider    ->physics_data.inertial_mass = 3;
 			Lsholder_collider->physics_data.inertial_mass = 3;
-			Lelbow_collider->physics_data.inertial_mass = 2;
-			Lhand_collider->physics_data.inertial_mass = 1;
+			Lelbow_collider  ->physics_data.inertial_mass = 2;
+			Lhand_collider   ->physics_data.inertial_mass = 1;
 			Rsholder_collider->physics_data.inertial_mass = 3;
-			Relbow_collider->physics_data.inertial_mass = 2;
-			Rhand_collider->physics_data.inertial_mass = 1;
-			Body_collider->physics_data.inertial_mass = 5;
-			Waist_collider->physics_data.inertial_mass = 4;
-			Rleg_collider->physics_data.inertial_mass = 2;
-			Rfoot_collider->physics_data.inertial_mass = 1;
-			Lleg_collider->physics_data.inertial_mass = 2;
-			Lfoot_collider->physics_data.inertial_mass = 1;
+			Relbow_collider  ->physics_data.inertial_mass = 2;
+			Rhand_collider   ->physics_data.inertial_mass = 1;
+			Body_collider    ->physics_data.inertial_mass = 5;
+			Waist_collider   ->physics_data.inertial_mass = 4;
+			Rleg_collider    ->physics_data.inertial_mass = 2;
+			Rfoot_collider   ->physics_data.inertial_mass = 1;
+			Lleg_collider    ->physics_data.inertial_mass = 2;
+			Lfoot_collider   ->physics_data.inertial_mass = 1;
+			//Head_collider    ->physics_data.inertial_mass = 6;
+			//Lsholder_collider->physics_data.inertial_mass = 6;
+			//Lelbow_collider  ->physics_data.inertial_mass = 4;
+			//Lhand_collider   ->physics_data.inertial_mass = 2;
+			//Rsholder_collider->physics_data.inertial_mass = 6;
+			//Relbow_collider  ->physics_data.inertial_mass = 4;
+			//Rhand_collider   ->physics_data.inertial_mass = 2;
+			//Body_collider    ->physics_data.inertial_mass = 10;
+			//Waist_collider   ->physics_data.inertial_mass = 8;
+			//Rleg_collider    ->physics_data.inertial_mass = 4;
+			//Rfoot_collider   ->physics_data.inertial_mass = 2;
+			//Lleg_collider    ->physics_data.inertial_mass = 4;
+			//Lfoot_collider   ->physics_data.inertial_mass = 2;
+			//Head_collider    ->physics_data.inertial_mass = 1;
+			//Lsholder_collider->physics_data.inertial_mass = 1;
+			//Lelbow_collider  ->physics_data.inertial_mass = 1;
+			//Lhand_collider   ->physics_data.inertial_mass = 1;
+			//Rsholder_collider->physics_data.inertial_mass = 1;
+			//Relbow_collider  ->physics_data.inertial_mass = 1;
+			//Rhand_collider   ->physics_data.inertial_mass = 1;
+			//Body_collider    ->physics_data.inertial_mass = 1;
+			//Waist_collider   ->physics_data.inertial_mass = 1;
+			//Rleg_collider    ->physics_data.inertial_mass = 1;
+			//Rfoot_collider   ->physics_data.inertial_mass = 1;
+			//Lleg_collider    ->physics_data.inertial_mass = 1;
+			//Lfoot_collider   ->physics_data.inertial_mass = 1;
 
 
+			Head_collider    ->physics_data.anglar_drag = 0.5f;
+			Lsholder_collider->physics_data.anglar_drag = 0.5f;
+			Lelbow_collider  ->physics_data.anglar_drag = 0.5f;
+			Lhand_collider   ->physics_data.anglar_drag = 0.5f;
+			Rsholder_collider->physics_data.anglar_drag = 0.5f;
+			Relbow_collider  ->physics_data.anglar_drag = 0.5f;
+			Rhand_collider   ->physics_data.anglar_drag = 0.5f;
+			Body_collider    ->physics_data.anglar_drag = 0.5f;
+			Waist_collider   ->physics_data.anglar_drag = 0.5f;
+			Rleg_collider    ->physics_data.anglar_drag = 0.5f;
+			Rfoot_collider   ->physics_data.anglar_drag = 0.5f;
+			Lleg_collider    ->physics_data.anglar_drag = 0.5f;
+			Lfoot_collider   ->physics_data.anglar_drag = 0.5f;
 
 			Rleg_collider->physics_data.anglar_drag = 0.95f;
 			Lleg_collider->physics_data.anglar_drag = 0.95f;
@@ -252,10 +291,10 @@ namespace Adollib
 			Rhand_collider->ignore_tags |= Collider_tags::Human;
 
 			//::: capsule‚Ì’²® :::
-			Lelbow_shape->length *= (Lelbow->transform->local_scale.y - Lelbow->transform->local_scale.x) / (Lelbow->transform->local_scale.y);
-			Lsholder_shape->length *= (Lsholder->transform->local_scale.y - Lsholder->transform->local_scale.x) / (Lsholder->transform->local_scale.y);
-			Relbow_shape->length *= (Relbow->transform->local_scale.y - Relbow->transform->local_scale.x) / (Relbow->transform->local_scale.y);
-			Rsholder_shape->length *= (Rsholder->transform->local_scale.y - Rsholder->transform->local_scale.x) / (Rsholder->transform->local_scale.y);
+			//Lelbow_shape->length *= (Lelbow->transform->local_scale.y - Lelbow->transform->local_scale.x) / (Lelbow->transform->local_scale.y);
+			//Lsholder_shape->length *= (Lsholder->transform->local_scale.y - Lsholder->transform->local_scale.x) / (Lsholder->transform->local_scale.y);
+			//Relbow_shape->length *= (Relbow->transform->local_scale.y - Relbow->transform->local_scale.x) / (Relbow->transform->local_scale.y);
+			//Rsholder_shape->length *= (Rsholder->transform->local_scale.y - Rsholder->transform->local_scale.x) / (Rsholder->transform->local_scale.y);
 
 			//Body_shape->length *= (Body->transform->local_scale.y - Body->transform->local_scale.x) / (Body->transform->local_scale.y);
 
@@ -270,81 +309,88 @@ namespace Adollib
 			Rleg_shape->r = Rleg->transform->local_scale.y * 2;
 			Rfoot_shape->r = Rfoot->transform->local_scale.y * 2;
 
-			//Body_shape->r = Body->transform->local_scale.y ;
-			//Waist_shape->r = Waist->transform->local_scale.y ;
+			Body_shape->r = Body->transform->local_scale.y ;
+			Waist_shape->r = Waist->transform->local_scale.y ;
 
+
+			auto a = Body_collider->get_tensor();
 
 
 
 			//::: Joint‚Ìİ’è
+			float joint_bias = 0.1f;
 			//“ª
 			{
-				auto Ball = Joint::add_Conejoint(Head_collider, Body_collider, Vector3(0, -1, 0), Vector3(0, 0.8f, 0), Vector3(0, 1, 0), Vector3(0, 1, 0));
+				auto Ball = Joint::add_Conejoint(Head_collider, Body_collider, Vector3(0, -1, 0), Vector3(0, 0.8f, 0), Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
 				Ball->limit = 30;
 
-				auto Twist = Joint::add_Twistjoint(Body_collider, Head_collider, Vector3(0, 1, 0));
+				auto Twist = Joint::add_Twistjoint(Body_collider, Head_collider, Vector3(0, 1, 0), joint_bias);
 				Twist->limit = Vector2(360 - 90, 90);
 			}
 			//˜r
 			{
-				auto Cone = Joint::add_Conejoint(Body_collider, Lsholder_collider, Vector3(+1.1f, 0.2f, 0), Vector3(0, 0.5f, 0), Vector3(-1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect());
+				auto Cone = Joint::add_Conejoint(Body_collider, Lsholder_collider, Vector3(+1.1f, 0.2f, 0), Vector3(0, 0.5f, 0), Vector3(-1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
 				Cone->limit = 85;
 
-				auto Twist = Joint::add_Twistjoint(Body_collider, Lsholder_collider, Vector3(0, 1, 0));
+				auto Twist = Joint::add_Twistjoint(Body_collider, Lsholder_collider, Vector3(0, 1, 0), joint_bias);
 				Twist->limit = Vector2(360 - 90, 90);
 			}
 			{
-				auto hinge = Joint::add_Hingejoint(Lsholder_collider, Lelbow_collider, Vector3(-1, -0.6f, 0), Vector3(+1, -0.6f, 0), Vector3(-1, 0.6f, 0), Vector3(+1, 0.6f, 0));
+				auto hinge = Joint::add_Hingejoint(Lsholder_collider, Lelbow_collider, Vector3(-1, -0.6f, 0), Vector3(+1, -0.6f, 0), Vector3(-1, 0.6f, 0), Vector3(+1, 0.6f, 0), joint_bias);
+				hinge->hinge_pow = 0;
 				hinge->limit = Vector2(230, 360);
 			}
 			{
-				auto ball = Joint::add_balljoint(Lelbow_collider, Lhand_collider, Vector3(-0.2f, -0.4f, 0), Vector3(0, 0, 0));
+				auto ball = Joint::add_balljoint(Lelbow_collider, Lhand_collider, Vector3(-0.2f, -0.4f, 0), Vector3(0, 0, 0), joint_bias);
 			}
 			{
-				auto Cone = Joint::add_Conejoint(Body_collider, Rsholder_collider, Vector3(-1.1f, 0.2f, 0), Vector3(0, 0.5f, 0), Vector3(+1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect());
+				auto Cone = Joint::add_Conejoint(Body_collider, Rsholder_collider, Vector3(-1.1f, 0.2f, 0), Vector3(0, 0.5f, 0), Vector3(+1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
 				Cone->limit = 85;
 
-				auto Twist = Joint::add_Twistjoint(Body_collider, Rsholder_collider, Vector3(0, 1, 0));
+				auto Twist = Joint::add_Twistjoint(Body_collider, Rsholder_collider, Vector3(0, 1, 0), joint_bias);
 				Twist->limit = Vector2(360 - 90, 90);
 			}
 			{
-				auto hinge = Joint::add_Hingejoint(Rsholder_collider, Relbow_collider, Vector3(-1, -0.6f, 0), Vector3(+1, -0.6f, 0), Vector3(-1, 0.6f, 0), Vector3(+1, 0.6f, 0));
+				auto hinge = Joint::add_Hingejoint(Rsholder_collider, Relbow_collider, Vector3(-1, -0.6f, 0), Vector3(+1, -0.6f, 0), Vector3(-1, 0.6f, 0), Vector3(+1, 0.6f, 0), joint_bias);
+				hinge->hinge_pow = 0;
 				hinge->limit = Vector2(230, 360);
 			}
 			{
-				auto ball = Joint::add_balljoint(Relbow_collider, Rhand_collider, Vector3(0.2f, -0.4f, 0), Vector3(0, 0, 0));
+				auto ball = Joint::add_balljoint(Relbow_collider, Rhand_collider, Vector3(0.2f, -0.4f, 0), Vector3(0, 0, 0), joint_bias);
 			}
 			//˜
 			{
 				auto Cone = Joint::add_Conejoint(Body_collider, Waist_collider, Vector3(0, -1.0f, 0), Vector3(0, 0.5f, 0), Vector3(0, 1, 0).unit_vect(), Vector3(0, 1.5f, -1).unit_vect());
 				Cone->limit = 60;
 
-				auto Twist = Joint::add_Twistjoint(Body_collider, Waist_collider, Vector3(0, 1, 0));
+				auto Twist = Joint::add_Twistjoint(Body_collider, Waist_collider, Vector3(0, 1, 0), joint_bias);
 				Twist->limit = Vector2(360 - 30, 30);
 			}
 			//‘«
 			{
-				auto Cone = Joint::add_Conejoint(Waist_collider, Rleg_collider, Vector3(-0.6f, -0.8f, 0), Vector3(0, 0.3, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect());
+				auto Cone = Joint::add_Conejoint(Waist_collider, Rleg_collider, Vector3(-0.6f, -0.8f, 0), Vector3(0, 0.3, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
 				//Cone->limit = 48;
 				Cone->limit = 80;
 
-				auto Twist = Joint::add_Twistjoint(Waist_collider, Rleg_collider, Vector3(0, 1, 0));
+				auto Twist = Joint::add_Twistjoint(Waist_collider, Rleg_collider, Vector3(0, 1, 0), joint_bias);
 				Twist->limit = Vector2(360 - 5, 15);
 			}
 			{
-				auto hinge = Joint::add_Hingejoint(Rleg_collider, Rfoot_collider, Vector3(-1, -0.4f, 0), Vector3(+1, -0.3f, 0), Vector3(-1, +0.3f, 0), Vector3(+1, +0.3f, 0));
+				auto hinge = Joint::add_Hingejoint(Rleg_collider, Rfoot_collider, Vector3(-1, -0.4f, 0), Vector3(+1, -0.3f, 0), Vector3(-1, +0.3f, 0), Vector3(+1, +0.3f, 0), joint_bias);
+				hinge->hinge_pow = 0;
 				hinge->limit = Vector2(0, 60);
 			}
 			{
-				auto Cone = Joint::add_Conejoint(Waist_collider, Lleg_collider, Vector3(+0.6f, -0.8f, 0), Vector3(0, 0.3f, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect());
+				auto Cone = Joint::add_Conejoint(Waist_collider, Lleg_collider, Vector3(+0.6f, -0.8f, 0), Vector3(0, 0.3f, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
 				//Cone->limit = 48;
 				Cone->limit = 80;
 
-				auto Twist = Joint::add_Twistjoint(Waist_collider, Lleg_collider, Vector3(0, 1, 0));
+				auto Twist = Joint::add_Twistjoint(Waist_collider, Lleg_collider, Vector3(0, 1, 0), joint_bias);
 				Twist->limit = Vector2(360 - 15, 5);
 			}
 			{
-				auto hinge = Joint::add_Hingejoint(Lleg_collider, Lfoot_collider, Vector3(-1, -0.4f, 0), Vector3(+1, -0.3f, 0), Vector3(-1, +0.3f, 0), Vector3(+1, +0.3f, 0));
+				auto hinge = Joint::add_Hingejoint(Lleg_collider, Lfoot_collider, Vector3(-1, -0.4f, 0), Vector3(+1, -0.3f, 0), Vector3(-1, +0.3f, 0), Vector3(+1, +0.3f, 0), joint_bias);
+				hinge->hinge_pow = 0;
 				hinge->limit = Vector2(0, 60);
 			}
 		}
@@ -405,6 +451,7 @@ namespace Adollib
 
 			Waist_sphere_collider = Waist_sphere->addComponent<Collider>();
 
+			Waist_sphere_collider->physics_data.inertial_mass = 10;
 			Waist_sphere_collider->physics_data.is_fallable = false;
 			Waist_sphere_collider->physics_data.is_kinmatic_anglar = false;
 			Waist_sphere_collider->ignore_tags |= Collider_tags::Human;

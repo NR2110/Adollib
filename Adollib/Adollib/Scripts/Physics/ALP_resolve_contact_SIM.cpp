@@ -67,7 +67,6 @@ bool Calc_joint_effect(ALP_Joint* joint)
 	solverbody[1] = ALPphysics[1]->solve;
 
 	float penetrate = 0;
-	static Vector3 debug_save = { Vector3(0) };
 
 	if (joint->joint->limit_effect(joint->limit_constraint_pos[0], joint->limit_constraint_pos[1], penetrate)) {
 		if (penetrate == 0)return false;

@@ -40,7 +40,7 @@ namespace Adollib {
 	public:
 
 		//質量を考慮しない慣性モーメント  barycenter : 回転の中心
-		Matrix33 get_tensor(const Vector3& barycenter) {
+		Matrix33 get_tensor(const Vector3& barycenter = Vector3(0)) {
 			Matrix33 tensor;
 			//shapeの中心を回転中心とした慣性モーメント
 			tensor = local_tensor();

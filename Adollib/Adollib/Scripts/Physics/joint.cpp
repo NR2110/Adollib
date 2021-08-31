@@ -33,8 +33,8 @@ HingeJoint* Joint::add_Hingejoint(
 	Collider* colliderA, Collider* colliderB,
 	const Vector3& anchorA_s, const Vector3& anchorA_g,
 	const Vector3& anchorB_s, const Vector3& anchorB_g,
-	const float& hingepow ,
-	const float& bias
+	const float& bias,
+	const float& hingepow
 ) {
 	//joint‚Ì¶¬
 	auto joint = Phyisics_manager::add_Joint();
@@ -110,7 +110,8 @@ ConetwistJoint* Joint::add_Conetwistjoint(
 
 TwistJoint* Joint::add_Twistjoint(
 	Collider* colliderA, Collider* colliderB,
-	const Vector3& axisB
+	const Vector3& axisB,
+	const float& bias
 ) {
 	//joint‚Ì¶¬
 	auto joint = Phyisics_manager::add_Joint();
@@ -121,6 +122,8 @@ TwistJoint* Joint::add_Twistjoint(
 	joint->joint = twistjoint;
 
 	twistjoint->vec1 = axisB;
+
+	twistjoint->bias = bias;
 
 	return twistjoint;
 }

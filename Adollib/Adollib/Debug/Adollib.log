@@ -1,4 +1,4 @@
-﻿  player.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player.cpp(118,72): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player.cpp(346,48): warning C4305: '=': 'double' から 'float' へ切り詰めます。
+﻿  player_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(371,112): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(438,59): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe
