@@ -21,7 +21,7 @@ namespace Adollib {
 			float limit_bias = 0;
 
 			int anchor_count = 0; //anchorがいくつあるか
-			Anchor* anchor; // 剛体のローカル座標系における接続点
+			const Anchor* anchor; // 剛体のローカル座標系における接続点
 
 			//Collider* collider_comp[2] = { nullptr }; // 剛体のcomponentへのポインタ
 			ALP_Collider* ALPcollider[2] = { nullptr }; // 剛体へのポインタ

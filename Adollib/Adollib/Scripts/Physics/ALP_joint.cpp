@@ -18,8 +18,8 @@ void ALP_Joint::adapt_Jointdata() {
 
 	joint->adapt_anchor();
 
-	anchor = joint->anchors;
-	anchor_count = joint->anchor_count;
+	anchor = joint->get_anchors();
+	anchor_count = joint->get_anchors_count();
 	bias = joint->bias;
 	slop = joint->slop;
 	limit_bias = joint->limit_bias;

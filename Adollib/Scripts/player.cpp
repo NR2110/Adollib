@@ -358,14 +358,20 @@ namespace Adollib
 					Quaternion off = Body_collider->gameobject->transform->orientation * Head_collider->gameobject->transform->orientation.inverse();
 					float pow = ALClamp(off.radian() * head_rot_pow, 0, head_rot_max_pow);
 					Head_collider->add_torque(off.axis() * pow * gnyat_pow);
-					//Head_collider->add_angula_acc(off.axis() * pow * gnyat_pow / Head_collider->physics_data.inertial_mass);
 				}
 				{
 					//“·‘Ì‚ð‚½‚½‚¹‚é
 					Quaternion off = rotate * Waist_collider->gameobject->transform->orientation.inverse();
+
+					//float k = 1;
+					//float t = inv60;
+					//float omega = sqrtf(k / Waist_collider->physics_data.inertial_mass);
+					//float next = off.radian() * k * cosf(t * omega);
+					//float pow = k * (next * t + 0.5f * t * (off.radian() - next));
+					//pow = ALClamp(pow * waist_rot_pow, 0, waist_rot_max_pow);
+
 					float pow = ALClamp(off.radian() * waist_rot_pow, 0, waist_rot_max_pow);
 					Waist_collider->add_torque(off.axis() * pow * gnyat_pow);
-					//Waist_collider->add_angula_acc(off.axis() * pow * gnyat_pow / Head_collider->physics_data.inertial_mass);
 
 				}
 				{
@@ -373,7 +379,6 @@ namespace Adollib
 					Quaternion off = rotate * Body_collider->gameobject->transform->orientation.inverse();
 					float pow = ALClamp(off.radian() * body_rot_pow, 0, body_rot_max_pow);
 					Body_collider->add_torque(off.axis() * pow * gnyat_pow);
-					//Body_collider->add_angula_acc(off.axis() * pow * gnyat_pow / Head_collider->physics_data.inertial_mass);
 				}
 
 			}

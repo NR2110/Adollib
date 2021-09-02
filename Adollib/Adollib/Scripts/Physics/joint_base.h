@@ -29,12 +29,11 @@ namespace Adollib {
 		//Vector3 anchor[2]; // 剛体のローカル座標系における接続点
 
 
-	//protected:
-		Anchor anchors[3]; //接続点(最大3つ)
+	protected:
+		Anchor anchors[3]; //接続点(最大3つ) 各shapeのworld座標系
 
 		int anchor_count = 0; //接続点の数
 
-	protected:
 		Collider* collider_comp[2] = { nullptr }; // 剛体のcomponentへのポインタ
 
 		Physics_function::ALP_Joint* ALPjoint = nullptr; // 計算用Jointへのポインタ
@@ -42,6 +41,9 @@ namespace Adollib {
 	public:
 		Collider* get_colliderA() const { return collider_comp[0]; };
 		Collider* get_colliderB() const { return collider_comp[1]; };
+
+		const Anchor* get_anchors()const { return anchors; };
+		const int     get_anchors_count()const { return anchor_count; };
 
 		//anchorの値を派生クラスから更新する
 		virtual void adapt_anchor() = 0;

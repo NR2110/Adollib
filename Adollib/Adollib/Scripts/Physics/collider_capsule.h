@@ -68,20 +68,32 @@ namespace Adollib {
 
 			//RÇÕîºåa HÇÕâ~íåÇÃçÇÇ≥
 			//â~íå
-			//X : M(1/4 R^2 + 1/12 H^2)
-			//Y : 1/2 M R^2
-			//Z : M(1/4 R^2 + 1/12 H^2)
+			//Mc = PI * r^2 * H
+			//X : Mc(1/4 R^2 + 1/12 H^2)
+			//Y : 1/2 Mc R^2
+			//Z : Mc(1/4 R^2 + 1/12 H^2)
 			//í[ÇÃãÖ
-			//X : M(1/5 R^2 + 1/4 H^2) * 2
-			//Y : 2/5 M R^2
-			//Z : M(1/5 R^2 + 1/4 H^2) * 2
+			//Ms = PI * r^3 * 4/3
+			//X : Ms(1/5 R^2 + 1/4 H^2) * 2
+			//Y : 2/5 Ms R^2
+			//Z : Ms(1/5 R^2 + 1/4 H^2) * 2
 
 			//Wsize.yÇÕâ~íåÇÃçÇÇ≥/2Ç»ÇÃÇ≈
 			const float H = Wsize.y * 2;
+			float Mc = PI * Wsize.x * Wsize.x * H;
+			float Ms = PI * Wsize.x * Wsize.x * Wsize.x * 1.3333333f;
+			Mc /= Mc + Ms; //ëÃêœî‰Ç≈ï\Ç∑
+			Ms /= Mc + Ms;
 
-			ret._11 = 0.65f * Wsize.x * Wsize.x + 0.583333333f * H * H;
-			ret._22 = 0.9f * Wsize.x * Wsize.x;
-			ret._33 = 0.65f * Wsize.x * Wsize.x + 0.583333333f * H * H;
+			constexpr float _inv2 = 0.5f;
+			constexpr float _inv4 = 0.25f;
+			constexpr float _2inv4 = 0.5f;
+			constexpr float _2inv5 = 0.4f;
+			constexpr float _inv12 = 0.08333333f;
+
+			ret._11 = Wsize.x * Wsize.x * (_inv4 * Mc + _2inv5 * Ms) + H * H * (_inv12 * Mc + _2inv4 * Ms);
+			ret._22 = Wsize.x * Wsize.x * (_inv2 * Mc + _2inv5 * Ms);
+			ret._33 = ret._11;
 
 			return ret;
 		};
