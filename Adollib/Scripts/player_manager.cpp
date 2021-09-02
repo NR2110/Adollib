@@ -482,14 +482,14 @@ namespace Adollib
 		//	waist_sphere_joint = Joint::add_balljoint(Waist_collider, Waist_sphere_collider, Vector3(0, -1.8f, 0), Vector3(0), 0.1f);
 		//}
 		//auto Waist_sphere = Gameobject_manager::create("Waist_sphere");
+		auto Waist_sphere = Waist_collider->add_shape<Sphere>();
 		{
 
-			auto shape = Waist_collider->add_shape<Sphere>();
-			shape->r = 6.f;
-			shape->center = Vector3(0, -2.8f, 0);
+			Waist_sphere->r = 6.f;
+			Waist_sphere->center = Vector3(0, -2.8f, 0);
 			Waist_collider->physics_data.restitution = 0;
 			Waist_collider->set_tensor(Waist_collider->get_tensor());
-			shape->r = 0.15f;
+			Waist_sphere->r = 0.15f;
 		}
 
 		{
@@ -510,7 +510,8 @@ namespace Adollib
 				Rleg_collider,
 				Rfoot_collider,
 				Lleg_collider,
-				Lfoot_collider
+				Lfoot_collider,
+				Waist_sphere
 			);
 
 			//auto shape = Waist_collider->add_shape<Capsule>();

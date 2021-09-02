@@ -28,7 +28,7 @@ namespace Adollib {
 			Collider* colliderA, Collider* colliderB,
 			const Vector3& anchorA_s, const Vector3& anchorA_g,
 			const Vector3& anchorB_s, const Vector3& anchorB_g,
-			const float& hingepow = 0.1f,
+			const float& hingepow = 0.01f,
 			const float& bias = 0.1f
 		);
 

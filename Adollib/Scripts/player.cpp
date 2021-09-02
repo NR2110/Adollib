@@ -55,16 +55,30 @@ namespace Adollib
 		jump_power = 30;
 		turn_speed = 2;
 
-		auto GO = Gameobject_manager::create("waist_sphere_stand");
-		check_standable_collider = GO->addComponent<Collider>();
-		auto shape = check_standable_collider->add_shape<Sphere>();
+		{
+			auto GO = Gameobject_manager::create("waist_sphere_stand");
+			check_standable_collider = GO->addComponent<Collider>();
+			auto shape = check_standable_collider->add_shape<Sphere>();
 
-		Waist->add_child(GO);
-		GO->transform->local_pos = Vector3(0, -3.0f, 0);
-		GO->transform->local_scale = Vector3(0.4f) / Waist->transform->local_scale;
+			Waist->add_child(GO);
+			GO->transform->local_pos = Vector3(0, -3.0f, 0);
+			GO->transform->local_scale = Vector3(0.4f) / Waist->transform->local_scale;
 
-		check_standable_collider->physics_data.is_moveable = false;
-		check_standable_collider->physics_data.is_hitable = false;
+			check_standable_collider->physics_data.is_moveable = false;
+			check_standable_collider->physics_data.is_hitable = false;
+		}
+		{
+			onground_collider_GO = Gameobject_manager::create("check_onglound_go");
+			onground_collider = onground_collider_GO->addComponent<Collider>();
+			auto shape = onground_collider->add_shape<Sphere>();
+
+			Waist->add_child(onground_collider_GO);
+			onground_collider_GO->transform->local_scale = Vector3(0.4f) / Waist->transform->local_scale;
+
+			check_standable_collider->physics_data.is_moveable = false;
+			check_standable_collider->physics_data.is_hitable = false;
+			check_standable_collider->ignore_tags |= Collider_tags::Human;
+		}
 	}
 
 	// 毎フレーム呼ばれる更新処理
@@ -72,6 +86,10 @@ namespace Adollib
 	{
 		debug_coll->add_force(Vector3(0, 30, 0));
 
+		// Update_pnground
+		{
+			onground_collider_GO->transform->local_pos = waist_sphere->center;
+		}
 
 		// 手を伸ばす
 		{
@@ -245,10 +263,12 @@ namespace Adollib
 				}
 
 				//離す
-				if (input->getMouseReleased(key) && joint != nullptr) {
+				if (!input->getMouseState(key) && joint != nullptr) {
 					joint->get_colliderB()->tag &= ~Collider_tags::Having_Stage;
 					joint->get_colliderB()->tag |= Collider_tags::Stage;
 					Joint::delete_joint(joint);
+
+					//collider->physics_data.is_hitable = false;
 				}
 
 				// staticなものに近い順(handから順)に質量を大きくする
@@ -277,7 +297,6 @@ namespace Adollib
 		}
 
 		// waist_sphereの調整 出しっぱなしだと引っかかるため 条件で調整
-		/*
 		{
 			const Mouse keys[2] = {
 				Mouse::LBUTTON ,
@@ -307,7 +326,7 @@ namespace Adollib
 				Joint_base*& joint = *joints[i];
 				//staticなものを持っているとき、
 				if (joint != nullptr && joint->get_colliderB()->physics_data.is_moveable == false) {
-					Waist_sphere_joint->anchor.posA = Vector3(0);
+					waist_sphere->center = Vector3(0);
 					check_standable_collider_timer = 1;
 				}
 				else {
@@ -316,13 +335,13 @@ namespace Adollib
 					if (check_standable_collider_timer > 0)anchor_move_vec = 1;
 				}
 			}
-			Waist_sphere_joint->anchor.posA += Vector3(0, -1, 0) * anchor_move_vec * 1.f * Al_Global::second_per_frame;
-			if (Waist_sphere_joint->anchor.posA.y < Waist_sphere_length)Waist_sphere_joint->anchor.posA = Vector3(0, Waist_sphere_length, 0);
-			if (Waist_sphere_joint->anchor.posA.y > 0) Waist_sphere_joint->anchor.posA = Vector3(0, 0, 0);
+			waist_sphere->center += Vector3(0, -1, 0) * anchor_move_vec * 1.f * Al_Global::second_per_frame;
+			if (waist_sphere->center.y < Waist_sphere_length)waist_sphere->center = Vector3(0, Waist_sphere_length, 0);
+			if (waist_sphere->center.y > 0) waist_sphere->center = Vector3(0, 0, 0);
 
 			//if()
 		}
-		*/
+
 
 		//移動
 		{
@@ -536,7 +555,6 @@ namespace Adollib
 		}
 
 		//ジャンプ
-		/*
 		{
 			if (is_jumping == true)coyote += Al_Global::second_per_frame;
 			if (coyote >= 0)is_jumping = false;
@@ -560,7 +578,7 @@ namespace Adollib
 				coyote = -0.3f;
 			}
 		}
-		*/
+
 	}
 
 	void Player::Update_hierarchy() {

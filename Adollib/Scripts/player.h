@@ -60,8 +60,12 @@ namespace Adollib
 		Collider* check_standable_collider = nullptr;
 		float check_standable_collider_timer = 0;
 
+		// 接地判定を行う
+		Collider* onground_collider = nullptr;
+		Gameobject* onground_collider_GO = nullptr; //立たせるためのsphereの座標に持ってくる必要があるため 変数で持って管理
+
 		// waist_colliderにアタッチされている waistをたたせるためのsphere 場合によってanchorの座標を変更したい
-		BallJoint* Waist_sphere_joint = nullptr;
+		Sphere* waist_sphere = nullptr;
 		float Waist_sphere_length = 0;
 
 		bool is_jumping = false; //今ジャンプしているか
@@ -71,6 +75,7 @@ namespace Adollib
 
 		Joint_base* catch_right_joint = nullptr; //右手がつかんでいるjoint
 		Joint_base* catch_left_joint = nullptr;	 //左手がつかんでいるjoint
+
 
 	private:
 		std::shared_ptr<Transfome> camera; //cameraへのポインタ
@@ -117,7 +122,6 @@ namespace Adollib
 				Collider* Lfoot_collider;
 			};
 		};
-		Collider* onground_collider = nullptr;
 
 
 	public:
@@ -135,8 +139,7 @@ namespace Adollib
 		Collider* l_Rfoot_collider		,
 		Collider* l_Lleg_collider		,
 		Collider* l_Lfoot_collider		,
-		BallJoint* l_waist_sphere_joint = nullptr,
-		Collider* l_Waist_sphere_collider = nullptr
+		  Sphere* l_waist_sphere
 		) {
 			Head_collider		= l_Head_collider;
 			Lsholder_collider	= l_Lsholder_collider;
@@ -151,8 +154,7 @@ namespace Adollib
 			Rfoot_collider		= l_Rfoot_collider;
 			Lleg_collider		= l_Lleg_collider;
 			Lfoot_collider		= l_Lfoot_collider;
-			Waist_sphere_joint  = l_waist_sphere_joint;
-			onground_collider   = l_Lfoot_collider;
+			waist_sphere		= l_waist_sphere;
 
 			Head		=Head_collider		->gameobject;
 			Lsholder	=Lsholder_collider	->gameobject;
@@ -172,7 +174,7 @@ namespace Adollib
 			elbow_mass = Lelbow_collider->physics_data.inertial_mass;
 			hand_mass =  Lhand_collider->physics_data.inertial_mass;
 
-			//Waist_sphere_length = Waist_sphere_joint->anchor.posA.y;
+			Waist_sphere_length = l_waist_sphere->local_position.y;
 		}
 
 	public:
