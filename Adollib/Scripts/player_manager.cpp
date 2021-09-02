@@ -379,7 +379,7 @@ namespace Adollib
 			}
 			{
 				auto hinge = Joint::add_Hingejoint(Rleg_collider, Rfoot_collider, Vector3(-1, -0.4f, 0), Vector3(+1, -0.3f, 0), Vector3(-1, +0.3f, 0), Vector3(+1, +0.3f, 0), joint_bias);
-				//hinge->hinge_pow = 0;
+				hinge->hinge_pow = 0.01f;
 				hinge->limit = Vector2(0, 60);
 			}
 			{
@@ -392,7 +392,7 @@ namespace Adollib
 			}
 			{
 				auto hinge = Joint::add_Hingejoint(Lleg_collider, Lfoot_collider, Vector3(-1, -0.4f, 0), Vector3(+1, -0.3f, 0), Vector3(-1, +0.3f, 0), Vector3(+1, +0.3f, 0), joint_bias);
-				//hinge->hinge_pow = 0;
+				hinge->hinge_pow = 0.01f;
 				hinge->limit = Vector2(0, 60);
 			}
 		}
@@ -461,25 +461,35 @@ namespace Adollib
 		}
 
 		//onground用のcolliderのアタッチ 上でアタッチしたsphereと同じ位置へ
-		Collider* Waist_sphere_collider = nullptr;
-		BallJoint* waist_sphere_joint = nullptr;
+		//Collider* Waist_sphere_collider = nullptr;
+		//BallJoint* waist_sphere_joint = nullptr;
+		//{
+		//	auto Waist_sphere = Gameobject_manager::create("Waist_sphere");
+		//	Human->add_child(Waist_sphere);
+		//	Waist_sphere->transform->local_scale = Vector3(0.4f);
+		//	Waist_sphere->transform->local_pos = Vector3(0, -2.5f, 0);
+
+		//	Waist_sphere_collider = Waist_sphere->addComponent<Collider>();
+
+		//	Waist_sphere_collider->physics_data.inertial_mass = 10;
+		//	Waist_sphere_collider->physics_data.is_fallable = false;
+		//	Waist_sphere_collider->physics_data.is_kinmatic_anglar = false;
+		//	Waist_sphere_collider->ignore_tags |= Collider_tags::Human;
+
+
+		//	auto Waist_sphere_shape = Waist_sphere_collider->add_shape<Sphere>();
+
+		//	waist_sphere_joint = Joint::add_balljoint(Waist_collider, Waist_sphere_collider, Vector3(0, -1.8f, 0), Vector3(0), 0.1f);
+		//}
+		//auto Waist_sphere = Gameobject_manager::create("Waist_sphere");
 		{
-			auto Waist_sphere = Gameobject_manager::create("Waist_sphere");
-			Human->add_child(Waist_sphere);
-			Waist_sphere->transform->local_scale = Vector3(0.4f);
-			Waist_sphere->transform->local_pos = Vector3(0, -2.5f, 0);
 
-			Waist_sphere_collider = Waist_sphere->addComponent<Collider>();
-
-			Waist_sphere_collider->physics_data.inertial_mass = 10;
-			Waist_sphere_collider->physics_data.is_fallable = false;
-			Waist_sphere_collider->physics_data.is_kinmatic_anglar = false;
-			Waist_sphere_collider->ignore_tags |= Collider_tags::Human;
-
-
-			auto Waist_sphere_shape = Waist_sphere_collider->add_shape<Sphere>();
-
-			waist_sphere_joint = Joint::add_balljoint(Waist_collider, Waist_sphere_collider, Vector3(0, -1.8f, 0), Vector3(0), 0.1f);
+			auto shape = Waist_collider->add_shape<Sphere>();
+			shape->r = 6.f;
+			shape->center = Vector3(0, -2.8f, 0);
+			Waist_collider->physics_data.restitution = 0;
+			Waist_collider->set_tensor(Waist_collider->get_tensor());
+			shape->r = 0.15f;
 		}
 
 		{
@@ -500,9 +510,7 @@ namespace Adollib
 				Rleg_collider,
 				Rfoot_collider,
 				Lleg_collider,
-				Lfoot_collider,
-				waist_sphere_joint,
-				Waist_sphere_collider
+				Lfoot_collider
 			);
 
 			//auto shape = Waist_collider->add_shape<Capsule>();

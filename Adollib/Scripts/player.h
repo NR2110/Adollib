@@ -135,8 +135,8 @@ namespace Adollib
 		Collider* l_Rfoot_collider		,
 		Collider* l_Lleg_collider		,
 		Collider* l_Lfoot_collider		,
-		BallJoint* l_waist_sphere_joint,
-		Collider* l_Waist_sphere_collider
+		BallJoint* l_waist_sphere_joint = nullptr,
+		Collider* l_Waist_sphere_collider = nullptr
 		) {
 			Head_collider		= l_Head_collider;
 			Lsholder_collider	= l_Lsholder_collider;
@@ -152,7 +152,7 @@ namespace Adollib
 			Lleg_collider		= l_Lleg_collider;
 			Lfoot_collider		= l_Lfoot_collider;
 			Waist_sphere_joint  = l_waist_sphere_joint;
-			onground_collider = l_Waist_sphere_collider;
+			onground_collider   = l_Lfoot_collider;
 
 			Head		=Head_collider		->gameobject;
 			Lsholder	=Lsholder_collider	->gameobject;
@@ -172,7 +172,7 @@ namespace Adollib
 			elbow_mass = Lelbow_collider->physics_data.inertial_mass;
 			hand_mass =  Lhand_collider->physics_data.inertial_mass;
 
-			Waist_sphere_length = Waist_sphere_joint->anchor.posA.y;
+			//Waist_sphere_length = Waist_sphere_joint->anchor.posA.y;
 		}
 
 	public:

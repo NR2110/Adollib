@@ -33,8 +33,8 @@ namespace Adollib
 		waist_move_pow = 1000;
 
 		waist_rot_max_speed = 10;
-		waist_rot_max_pow = 2000;
-		waist_rot_pow = 3000;
+		waist_rot_max_pow = 4000;
+		waist_rot_pow = 9000;
 
 		body_rot_max_speed = 10;
 		body_rot_max_pow = 2000;
@@ -277,6 +277,7 @@ namespace Adollib
 		}
 
 		// waist_sphere‚Ì’²® o‚µ‚Á‚Ï‚È‚µ‚¾‚Æˆø‚Á‚©‚©‚é‚½‚ß ðŒ‚Å’²®
+		/*
 		{
 			const Mouse keys[2] = {
 				Mouse::LBUTTON ,
@@ -321,6 +322,7 @@ namespace Adollib
 
 			//if()
 		}
+		*/
 
 		//ˆÚ“®
 		{
@@ -534,6 +536,7 @@ namespace Adollib
 		}
 
 		//ƒWƒƒƒ“ƒv
+		/*
 		{
 			if (is_jumping == true)coyote += Al_Global::second_per_frame;
 			if (coyote >= 0)is_jumping = false;
@@ -557,6 +560,7 @@ namespace Adollib
 				coyote = -0.3f;
 			}
 		}
+		*/
 	}
 
 	void Player::Update_hierarchy() {
