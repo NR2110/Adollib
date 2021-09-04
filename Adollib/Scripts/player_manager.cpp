@@ -208,18 +208,18 @@ namespace Adollib
 
 			//::: Ž¿—Ê‚Ì’²® :::
 			Head_collider->physics_data.inertial_mass = 3;
-			Lsholder_collider->physics_data.inertial_mass = 3;
-			Lelbow_collider->physics_data.inertial_mass = 2;
+			Lsholder_collider->physics_data.inertial_mass = 4;
+			Rsholder_collider->physics_data.inertial_mass = 4;
+			Lelbow_collider->physics_data.inertial_mass = 1;
+			Relbow_collider->physics_data.inertial_mass = 1;
 			Lhand_collider->physics_data.inertial_mass = 1;
-			Rsholder_collider->physics_data.inertial_mass = 3;
-			Relbow_collider->physics_data.inertial_mass = 2;
 			Rhand_collider->physics_data.inertial_mass = 1;
 			Body_collider->physics_data.inertial_mass = 5;
 			Waist_collider->physics_data.inertial_mass = 4;
-			Rleg_collider->physics_data.inertial_mass = 2;
-			Rfoot_collider->physics_data.inertial_mass = 1;
 			Lleg_collider->physics_data.inertial_mass = 2;
+			Rleg_collider->physics_data.inertial_mass = 2;
 			Lfoot_collider->physics_data.inertial_mass = 1;
+			Rfoot_collider->physics_data.inertial_mass = 1;
 			//Head_collider    ->physics_data.inertial_mass = 6;
 			//Lsholder_collider->physics_data.inertial_mass = 6;
 			//Lelbow_collider  ->physics_data.inertial_mass = 4;
@@ -337,7 +337,7 @@ namespace Adollib
 			}
 			{
 				auto hinge = Joint::add_Hingejoint(Lsholder_collider, Lelbow_collider, Vector3(-1, -0.6f, 0), Vector3(+1, -0.6f, 0), Vector3(-1, 0.6f, 0), Vector3(+1, 0.6f, 0), joint_bias);
-				//hinge->hinge_pow = 0;
+				hinge->bias = 0.5f;
 				hinge->limit = Vector2(230, 360);
 			}
 			{
@@ -352,7 +352,7 @@ namespace Adollib
 			}
 			{
 				auto hinge = Joint::add_Hingejoint(Rsholder_collider, Relbow_collider, Vector3(-1, -0.6f, 0), Vector3(+1, -0.6f, 0), Vector3(-1, 0.6f, 0), Vector3(+1, 0.6f, 0), joint_bias);
-				//hinge->hinge_pow = 0;
+				hinge->bias = 0.5f;
 				hinge->limit = Vector2(230, 360);
 			}
 			{
@@ -379,7 +379,7 @@ namespace Adollib
 			}
 			{
 				auto hinge = Joint::add_Hingejoint(Rleg_collider, Rfoot_collider, Vector3(-1, -0.4f, 0), Vector3(+1, -0.3f, 0), Vector3(-1, +0.3f, 0), Vector3(+1, +0.3f, 0), joint_bias);
-				hinge->hinge_pow = 0.01f;
+				//hinge->hinge_pow = 0.01f;
 				hinge->limit = Vector2(0, 60);
 			}
 			{
@@ -392,7 +392,7 @@ namespace Adollib
 			}
 			{
 				auto hinge = Joint::add_Hingejoint(Lleg_collider, Lfoot_collider, Vector3(-1, -0.4f, 0), Vector3(+1, -0.3f, 0), Vector3(-1, +0.3f, 0), Vector3(+1, +0.3f, 0), joint_bias);
-				hinge->hinge_pow = 0.01f;
+				//hinge->hinge_pow = 0.01f;
 				hinge->limit = Vector2(0, 60);
 			}
 		}
@@ -489,7 +489,7 @@ namespace Adollib
 			Waist_sphere->center = Vector3(0, -2.8f, 0);
 			Waist_collider->physics_data.restitution = 0;
 			Waist_collider->set_tensor(Waist_collider->get_tensor());
-			Waist_sphere->r = 0.15f;
+			Waist_sphere->r = 0.25f;
 		}
 
 		{

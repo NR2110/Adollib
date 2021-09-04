@@ -131,6 +131,10 @@ void ALP_Physics::apply_external_force(float duration) {
 
 		angula_velocity += angula_acceleration * duration;
 		if (angula_velocity.norm() < FLT_EPSILON)angula_velocity = Vector3(0, 0, 0);
+
+		if (linear_velocity.norm() > max_linear_velocity * max_linear_velocity) linear_velocity = linear_velocity.unit_vect() * max_linear_velocity;
+		if (angula_velocity.norm() > max_angula_velocity * max_angula_velocity) angula_velocity = angula_velocity.unit_vect() * max_angula_velocity;
+
 	}
 	else reset_force();
 

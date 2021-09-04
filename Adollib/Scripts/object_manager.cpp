@@ -481,6 +481,7 @@ namespace Adollib
 				imgui_num++;
 			}
 
+			{}
 
 			//treepyramid
 			{
@@ -725,6 +726,7 @@ namespace Adollib
 					GEAR->transform->local_pos = pos;
 
 					Collider* coll = GEAR->addComponent<Collider>();
+					coll->tag |= Collider_tags::Stage;
 					//coll->set_tensor(make_box_tensor(Vector3(5, 5, 50), 1));
 
 					for (int gear_tooth_num = 0; gear_tooth_num < TREE_pyramid_count; gear_tooth_num++) {
@@ -753,7 +755,7 @@ namespace Adollib
 					Collider* gear_joint_collider = gear_joint->addComponent<Collider>();
 					gear_joint_collider->physics_data.is_moveable = false;
 
-					Joint::add_Hingejoint(gear_joint_collider, coll, Vector3(0, 0, +10), Vector3(0, 0, -10), Vector3(0, 0, +10), Vector3(0, 0, -10), 2, 0.1f);
+					Joint::add_Hingejoint(gear_joint_collider, coll, Vector3(0, 0, +10), Vector3(0, 0, -10), Vector3(0, 0, +10), Vector3(0, 0, -10), 1, 0.1f);
 
 				}
 				imgui_num++;

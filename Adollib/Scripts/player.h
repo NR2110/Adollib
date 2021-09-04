@@ -51,10 +51,15 @@ namespace Adollib
 		Quaternion rotate; //rotateのbuffer
 		Vector3 dir; //向きのbuffer
 
+		bool is_gunyatto = false; //trueの時ぐにゃっとする
+
 		// staticなものをつかむとき、質量を変えるため保存する
 		float shlder_mass = 0;
 		float elbow_mass = 0;
 		float hand_mass = 0;
+
+		Joint_base* catch_right_joint = nullptr; //右手がつかんでいるjoint
+		Joint_base* catch_left_joint = nullptr;	 //左手がつかんでいるjoint
 
 		// このcolliderが接地していた場合 立つことができる しばらくこのcolliderが接地していないと ぐにゃぐにゃになる
 		Collider* check_standable_collider = nullptr;
@@ -72,9 +77,6 @@ namespace Adollib
 		float coyote = 0.3f; //jumpの許容時間
 
 		float move_timer = 0; //足の回転を求めるために 入力時間を保存
-
-		Joint_base* catch_right_joint = nullptr; //右手がつかんでいるjoint
-		Joint_base* catch_left_joint = nullptr;	 //左手がつかんでいるjoint
 
 
 	private:
@@ -139,7 +141,7 @@ namespace Adollib
 		Collider* l_Rfoot_collider		,
 		Collider* l_Lleg_collider		,
 		Collider* l_Lfoot_collider		,
-		  Sphere* l_waist_sphere
+		Sphere* l_waist_sphere
 		) {
 			Head_collider		= l_Head_collider;
 			Lsholder_collider	= l_Lsholder_collider;

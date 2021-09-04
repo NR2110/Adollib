@@ -112,6 +112,10 @@ namespace Adollib {
 		//角加速に値を加える
 		void add_angula_acc(const Vector3& force);
 
+		//速度制限を行う
+		void set_max_linear_velocity(const float& max_scalar) { ALPphysics_ptr->set_max_linear_velocity(max_scalar); };
+		void set_max_angula_velocity(const float& max_scalar) { ALPphysics_ptr->set_max_angula_velocity(max_scalar); };
+
 		//shapeのアタッチ
 		template<typename T>
 		T* add_shape() { return ALPcollider_ptr->add_shape<T>(); };

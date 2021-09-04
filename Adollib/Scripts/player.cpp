@@ -44,8 +44,8 @@ namespace Adollib
 		leg_rot_max_pow = 200;
 		leg_rot_pow = 100;
 
-		hand_rot_max_speed = 100;
-		hand_rot_max_pow = 50;
+		hand_rot_max_speed = 10;
+		hand_rot_max_pow = 5000;
 		hand_rot_pow = 1000;
 
 		hand_camera_max_rot = ToRadian(80);
@@ -62,7 +62,7 @@ namespace Adollib
 
 			Waist->add_child(GO);
 			GO->transform->local_pos = Vector3(0, -3.0f, 0);
-			GO->transform->local_scale = Vector3(0.4f) / Waist->transform->local_scale;
+			GO->transform->local_scale = Vector3(0.5f) / Waist->transform->local_scale;
 
 			check_standable_collider->physics_data.is_moveable = false;
 			check_standable_collider->physics_data.is_hitable = false;
@@ -97,11 +97,13 @@ namespace Adollib
 				Mouse::LBUTTON ,
 				Mouse::RBUTTON
 			};
-			Collider* colliders[4] = {
+			Collider* colliders[6] = {
 				Lsholder_collider,
 				Rsholder_collider,
 				Lelbow_collider,
-				Relbow_collider
+				Relbow_collider,
+				Lhand_collider,
+				Rhand_collider
 			};
 			const int sign[2] = {
 				+1,
@@ -149,20 +151,35 @@ namespace Adollib
 
 					}
 
+					float debug = 1;
+					//if (joint != nullptr && joint->get_colliderB()->physics_data.is_moveable == false) {
+					//	debug = 3;
+					//}
+
 					{
 						// Œ¨
 						auto& collider = colliders[i];
 						Quaternion off = collider->transform->orientation * goal.inverse();
 						float pow = ALClamp(off.radian() * hand_rot_pow, 0, hand_rot_max_pow);
-						collider->add_torque(off.axis() * pow * collider->physics_data.inertial_mass);
+						collider->add_torque(off.axis() * pow * 1 * collider->physics_data.inertial_mass);
+						collider->set_max_angula_velocity(hand_rot_max_speed);
 					}
 					{
 						//˜r
 						auto& collider = colliders[i + 2];
 						Quaternion off = collider->transform->orientation * goal.inverse();
 						float pow = ALClamp(off.radian() * hand_rot_pow, 0, hand_rot_max_pow);
-						collider->add_torque(off.axis() * pow * collider->physics_data.inertial_mass);
+						collider->add_torque(off.axis() * pow * 2 * collider->physics_data.inertial_mass);
+						collider->set_max_angula_velocity(hand_rot_max_speed);
 					}
+					//{
+					//	//˜r
+					//	auto& collider = colliders[i + 4];
+					//	Quaternion off = collider->transform->orientation * goal.inverse();
+					//	float pow = ALClamp(off.radian() * hand_rot_pow, 0, hand_rot_max_pow);
+					//	collider->add_torque(off.axis() * pow * 3 * collider->physics_data.inertial_mass);
+					//	collider->set_max_angula_velocity(hand_rot_max_speed);
+					//}
 				}
 			}
 
@@ -315,27 +332,29 @@ namespace Adollib
 				&catch_right_joint
 			};
 
+			is_gunyatto = false;
 			float anchor_move_vec = 0;
 			if (!check_standable_collider->concoll_enter(Collider_tags::Stage) && is_jumping == false) {
 				anchor_move_vec = -0.2f;
 			}
-			else anchor_move_vec = 1;
+			else anchor_move_vec = 3;
 			for (int i = 0; i < 2; i++) {
 				const Mouse key = keys[i];
 				auto& collider = colliders[i];
 				Joint_base*& joint = *joints[i];
 				//static‚È‚à‚Ì‚ğ‚Á‚Ä‚¢‚é‚Æ‚«A
 				if (joint != nullptr && joint->get_colliderB()->physics_data.is_moveable == false) {
-					waist_sphere->center = Vector3(0);
+					//waist_sphere->center = Vector3(0);
 					check_standable_collider_timer = 1;
+					is_gunyatto = true;
 				}
 				else {
 					check_standable_collider_timer -= Al_Global::second_per_frame;
 
-					if (check_standable_collider_timer > 0)anchor_move_vec = 1;
+					if (check_standable_collider_timer > 0)anchor_move_vec = 3;
 				}
 			}
-			waist_sphere->center += Vector3(0, -1, 0) * anchor_move_vec * 1.f * Al_Global::second_per_frame;
+			waist_sphere->center += Vector3(0, -1, 0) * anchor_move_vec * Al_Global::second_per_frame;
 			if (waist_sphere->center.y < Waist_sphere_length)waist_sphere->center = Vector3(0, Waist_sphere_length, 0);
 			if (waist_sphere->center.y > 0) waist_sphere->center = Vector3(0, 0, 0);
 
@@ -371,7 +390,7 @@ namespace Adollib
 		//Player‚ª—§‚Â‚æ‚¤‚Étorque‚ğ‰Á‚¦‚é
 		{
 			float gnyat_pow = 0.9f;
-			if (!input->getKeyState(Key::LeftControl))
+			if (!input->getKeyState(Key::LeftControl) && is_gunyatto == false)
 			{
 				{
 					//Šç‚ªÔ‚¿‚á‚ñ‚È‚Ì‚ğ¡‚·

@@ -34,7 +34,8 @@ namespace Adollib {
 			ALP_Physics(
 				Gameobject* l_go, std::list<ALP_Physics*>::iterator l_itr, ALP_Collider* _ALPcollider ,Scenelist l_scene, u_int l_index
 			) :
-				gameobject(l_go), this_itr(l_itr), ALPcollider(_ALPcollider), scene(l_scene), index(l_index) {};
+				gameobject(l_go), this_itr(l_itr), ALPcollider(_ALPcollider), scene(l_scene), index(l_index) {
+			};
 
 		private:
 			//::: 自身へのイテレータ(remove用) :::
@@ -88,6 +89,9 @@ namespace Adollib {
 			float sleep_timer = 0;
 
 		private:
+			float max_linear_velocity = FLT_MAX; //並進速度の制限
+			float max_angula_velocity = FLT_MAX; //回転速度の制限
+
 			Vector3 accumulated_force;  //並進速度
 			Vector3 accumulated_torque; //回転速度
 
@@ -108,6 +112,10 @@ namespace Adollib {
 
 			//角加速に値を加える
 			void add_angula_acc(const Vector3& acc);
+
+			//速度制限を行う
+			void set_max_linear_velocity(const float& max_scalar) { max_linear_velocity = max_scalar; };
+			void set_max_angula_velocity(const float& max_scalar) { max_angula_velocity = max_scalar; };
 
 			//可動オブジェクトかどうか
 			bool is_movable() const;
