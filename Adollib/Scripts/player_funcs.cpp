@@ -232,8 +232,8 @@ void Player::catch_things() {
 //˜‚ðŽx‚¦‚éwaist_pillar‚ð’²®
 void Player::tuning_waist_pillar() {
 	const Mouse keys[2] = {
-				Mouse::LBUTTON ,
-				Mouse::RBUTTON
+		Mouse::LBUTTON ,
+		Mouse::RBUTTON
 	};
 	Collider* colliders[6] = {
 		Lhand_collider,
@@ -417,11 +417,11 @@ void Player::move_legs() {
 		Vector3 waist_axis = Vector3(0, -1, 0);
 		Vector3 rot_axis = Vector3(1, 0, 0);
 
-		if (1) {
-			//‚±‚ê‚ð‚·‚ê‚Î‘«‚ð‰¡‚É“®‚©‚¹‚é ‚Í‚¸‚¾‚ª‚¤‚Ü‚­‚¢‚©‚È‚¢
-			rot_axis = vector3_cross(dir, -waist_axis).unit_vect();
-			rot_axis = vector3_quatrotate(rot_axis, Waist_collider->transform->orientation.inverse());
-		}
+		//if (1) {
+		//	//‚±‚ê‚ð‚·‚ê‚Î‘«‚ð‰¡‚É“®‚©‚¹‚é ‚Í‚¸‚¾‚ª‚¤‚Ü‚­‚¢‚©‚È‚¢
+		//	rot_axis = vector3_cross(dir, -waist_axis).unit_vect();
+		//	rot_axis = vector3_quatrotate(rot_axis, Waist_collider->transform->orientation.inverse());
+		//}
 
 		Debug::set("rot_axis_local", rot_axis);
 		Debug::set("rot_axis_world", vector3_quatrotate(rot_axis, Waist_collider->transform->orientation.inverse()));
@@ -469,18 +469,13 @@ void Player::move_legs() {
 		////Debug::set("now_vec[L]", now_vec[1]);
 
 		for (int i = 0; i < 2; i++) {
-			//float radian = vector3_radian(now_vec[i], goal_vec[i]);
-			//if (axis[i].norm() < FLT_EPSILON)continue;
-			//axis[i] = axis[i].unit_vect();
 
 			auto axis = off[i].axis();
 
 			float pow = ALClamp(off[i].radian() * leg_rot_pow, 0, leg_rot_max_pow);
 
 			collider[i]->add_torque(axis * pow);
-			//collider[i]->gameobject->transform->local_orient = goal_rotate[i];
-			//collider[i]->physics_data.is_moveable = false;
-			//Debug::set("pow", pow);
+			collider[i]->set_max_angula_velocity(leg_rot_max_speed);
 		}
 
 		move_timer += Al_Global::second_per_frame;
