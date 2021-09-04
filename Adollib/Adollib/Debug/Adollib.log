@@ -1,4 +1,7 @@
-﻿  player.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player.cpp(138,72): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player.cpp(386,48): warning C4305: '=': 'double' から 'float' へ切り詰めます。
+﻿  camera.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\camera.cpp(148,82): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\camera.cpp(148,49): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\camera.cpp(181,30): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\camera.cpp(190,82): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\camera.cpp(190,49): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

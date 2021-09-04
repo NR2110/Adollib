@@ -259,6 +259,9 @@
     <ClCompile Include="Scripts\Physics\ALP_contact.cpp">
       <Filter>00_Adollib\22_physics\ALP</Filter>
     </ClCompile>
+    <ClCompile Include="..\Scripts\player_funcs.cpp">
+      <Filter>ソース ファイル\scene_game\scene_house\player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Scripts\player.h">

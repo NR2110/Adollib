@@ -260,6 +260,7 @@
     <ClCompile Include="..\Scripts\object_manager.cpp" />
     <ClCompile Include="..\Scripts\object_rotate.cpp" />
     <ClCompile Include="..\Scripts\player.cpp" />
+    <ClCompile Include="..\Scripts\player_funcs.cpp" />
     <ClCompile Include="..\Scripts\player_manager.cpp" />
     <ClCompile Include="Imgui\imgui.cpp" />
     <ClCompile Include="Imgui\imgui_demo.cpp" />
