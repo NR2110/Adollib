@@ -40,9 +40,9 @@ namespace Adollib
 		body_rot_max_pow = 2000;
 		body_rot_pow = 1500;
 
-		leg_rot_max_speed = 10;
+		leg_rot_max_speed = 60;
 		leg_rot_max_pow = 200;
-		leg_rot_pow = 100;
+		leg_rot_pow = 200;
 
 		hand_rot_max_speed = 10;
 		hand_rot_max_pow = 5000;
@@ -75,9 +75,9 @@ namespace Adollib
 			Waist->add_child(onground_collider_GO);
 			onground_collider_GO->transform->local_scale = Vector3(0.4f) / Waist->transform->local_scale;
 
-			check_standable_collider->physics_data.is_moveable = false;
-			check_standable_collider->physics_data.is_hitable = false;
-			check_standable_collider->ignore_tags |= Collider_tags::Human;
+			onground_collider->physics_data.is_moveable = false;
+			onground_collider->physics_data.is_hitable = false;
+			onground_collider->ignore_tags |= Collider_tags::Human;
 		}
 	}
 

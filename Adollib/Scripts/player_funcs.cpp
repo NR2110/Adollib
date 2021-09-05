@@ -216,6 +216,9 @@ void Player::catch_things() {
 			colliders[i]->physics_data.inertial_mass = hand_mass;
 			colliders[i + 2]->physics_data.inertial_mass = elbow_mass;
 			colliders[i + 4]->physics_data.inertial_mass = shlder_mass;
+			//colliders[i]->physics_data.inertial_mass = shlder_mass * 2;
+			//colliders[i + 2]->physics_data.inertial_mass = elbow_mass * 2;
+			//colliders[i + 4]->physics_data.inertial_mass = hand_mass * 2;
 		}
 
 	}
@@ -469,6 +472,9 @@ void Player::move_legs() {
 		////Debug::set("now_vec[L]", now_vec[1]);
 
 		for (int i = 0; i < 2; i++) {
+			//float radian = vector3_radian(now_vec[i], goal_vec[i]);
+			//if (axis[i].norm() < FLT_EPSILON)continue;
+			//axis[i] = axis[i].unit_vect();
 
 			auto axis = off[i].axis();
 
@@ -476,6 +482,9 @@ void Player::move_legs() {
 
 			collider[i]->add_torque(axis * pow);
 			collider[i]->set_max_angula_velocity(leg_rot_max_speed);
+			//collider[i]->gameobject->transform->local_orient = goal_rotate[i];
+			//collider[i]->physics_data.is_moveable = false;
+			//Debug::set("pow", pow);
 		}
 
 		move_timer += Al_Global::second_per_frame;

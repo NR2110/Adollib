@@ -190,7 +190,7 @@ namespace Adollib
 			elbow_mass = Lelbow_collider->physics_data.inertial_mass;
 			hand_mass =  Lhand_collider->physics_data.inertial_mass;
 
-			Waist_pillar_length = l_waist_pillar->local_position.y;
+			Waist_pillar_length = l_waist_pillar->center.y;
 		}
 
 	public:
