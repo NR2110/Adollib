@@ -336,9 +336,12 @@ void Player::angula_move() {
 
 		rotate *= quaternion_axis_angle(Vector3(0, 1, 0), angle);
 
-		vector3_angle(rot_vec, player_vec);
-
 	}
+
+	if (is_gunyatto == true) {
+		turn_gunyatto_dir();
+	}
+
 };
 
 //ˆÚ“®•ûŒü‚ðŒvŽZ
@@ -515,3 +518,21 @@ void Player::make_jump() {
 		coyote = -0.3f;
 	}
 };
+
+
+
+void Player::turn_gunyatto_dir() {
+	Vector3 dir = vector3_quatrotate(Vector3(0, 0, 1), Waist->transform->orientation);
+	dir.y = 0;
+	dir = dir.unit_vect();
+	if (dir.norm() == 0) {
+		return;
+	}
+	Vector3 player_vec = vector3_quatrotate(Vector3(0, 0, 1), rotate);
+
+	float angle = vector3_angle(dir, player_vec);
+
+	if (vector3_cross(player_vec, dir).y < 0)angle *= -1;
+
+	rotate *= quaternion_axis_angle(Vector3(0, 1, 0), angle);
+}

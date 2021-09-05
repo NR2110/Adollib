@@ -95,6 +95,8 @@ namespace Adollib
 		void make_jump(); //jump‚³‚¹‚é
 		//:::
 
+		void turn_gunyatto_dir();
+
 
 	private:
 		//::: GO :::
