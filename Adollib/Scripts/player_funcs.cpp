@@ -252,30 +252,47 @@ void Player::tuning_waist_pillar() {
 	};
 
 	is_gunyatto = false;
-	float anchor_move_vec = 0;
-	if (!check_standable_collider->concoll_enter(Collider_tags::Stage) && is_jumping == false) {
-		anchor_move_vec = -0.2f;
-	}
-	else anchor_move_vec = 3;
-	for (int i = 0; i < 2; i++) {
-		const Mouse key = keys[i];
-		auto& collider = colliders[i];
-		Joint_base*& joint = *joints[i];
-		//staticなものを持っているとき、
-		if (joint != nullptr && joint->get_colliderB()->physics_data.is_moveable == false) {
-			//waist_sphere->center = Vector3(0);
-			check_standable_collider_timer = 1;
-			is_gunyatto = true;
-		}
-		else {
-			check_standable_collider_timer -= Al_Global::second_per_frame;
 
-			if (check_standable_collider_timer > 0)anchor_move_vec = 3;
+	//waist_sphereのy方向の調整
+	float center_y = waist_pillar->center.y;
+	{
+		float anchor_move_vec = 0;
+		if (!check_standable_collider->concoll_enter(Collider_tags::Stage) && is_jumping == false) {
+			anchor_move_vec = -0.2f;
 		}
+		else anchor_move_vec = 3;
+		for (int i = 0; i < 2; i++) {
+			const Mouse key = keys[i];
+			auto& collider = colliders[i];
+			Joint_base*& joint = *joints[i];
+			//staticなものを持っているとき、
+			if (joint != nullptr && joint->get_colliderB()->physics_data.is_moveable == false) {
+				//waist_sphere->center = Vector3(0);
+				check_standable_collider_timer = 1;
+				is_gunyatto = true;
+			}
+			else {
+				check_standable_collider_timer -= Al_Global::second_per_frame;
+
+				if (check_standable_collider_timer > 0)anchor_move_vec = 3;
+			}
+		}
+
+		center_y += -1 * anchor_move_vec * Al_Global::second_per_frame;
+		center_y = ALClamp(center_y, Waist_pillar_max_y, 0);
 	}
-	waist_pillar->center += Vector3(0, -1, 0) * anchor_move_vec * Al_Global::second_per_frame;
-	if (waist_pillar->center.y < Waist_pillar_length)waist_pillar->center = Vector3(0, Waist_pillar_length, 0);
-	if (waist_pillar->center.y > 0) waist_pillar->center = Vector3(0, 0, 0);
+
+	Vector3 center_xz = waist_pillar->center;
+	{
+		center_xz.y = 0;
+		center_xz += vector3_quatrotate(-dir, Waist->transform->orientation) * 0.01f;
+
+		if (center_xz.norm() > Waist_pillar_max_xz * Waist_pillar_max_xz)center_xz = center_xz.unit_vect() * Waist_pillar_max_xz;
+	}
+
+	//waist_pillar->center = Vector3(center_xz.x, center_y, center_xz.z);
+	waist_pillar->center = Vector3(0, center_y, -0.3f);
+	//waist_pillar->center = vector3_quatrotate(-dir, Waist->transform->orientation) +Vector3(0, waist_pillar->center.y,0);
 
 	//if()
 }
@@ -415,7 +432,7 @@ void Player::move_legs() {
 		//Rleg_collider->physics_data.is_moveable = false;
 		//Lleg_collider->physics_data.is_moveable = false;
 	if (dir.norm() != 0) {
-		float front_value = ToRadian(40); //足は胴体より遅れるため 足を前に出すために余分にかける回転の力
+		float front_value = ToRadian(30); //足は胴体より遅れるため 足を前に出すために余分にかける回転の力
 		float max_theata = ToRadian(60) * 0.5f;
 		float sin = sinf(move_timer * 1.5f * DirectX::XM_2PI); //timreから足の回転量を求める
 		//float sin = sinf(move_timer * DirectX::XM_2PI * 0.5f); //timreから足の回転量を求める

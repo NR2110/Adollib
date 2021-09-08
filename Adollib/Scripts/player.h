@@ -69,9 +69,10 @@ namespace Adollib
 		Collider* onground_collider = nullptr;
 		Gameobject* onground_collider_GO = nullptr; //立たせるためのsphereの座標に持ってくる必要があるため 変数で持って管理
 
-		// waist_colliderにアタッチされている waistをたたせるためのsphere 場合によってanchorの座標を変更したい
+		// waist_colliderにアタッチされている waistをたたせるためのshape
 		Sphere* waist_pillar = nullptr;
-		float Waist_pillar_length = 0;
+		float Waist_pillar_max_y = 0; //waist_pillarのy方向の最大値
+		float Waist_pillar_max_xz = 0.5f;//waist_pillarのtangent方向の最大値
 
 		bool is_jumping = false; //今ジャンプしているか
 		float coyote = 0.3f; //jumpの許容時間
@@ -192,7 +193,7 @@ namespace Adollib
 			elbow_mass = Lelbow_collider->physics_data.inertial_mass;
 			hand_mass =  Lhand_collider->physics_data.inertial_mass;
 
-			Waist_pillar_length = l_waist_pillar->center.y;
+			Waist_pillar_max_y = l_waist_pillar->center.y;
 		}
 
 	public:

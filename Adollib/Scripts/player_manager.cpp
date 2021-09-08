@@ -118,12 +118,13 @@ namespace Adollib
 				}
 			}
 
+			Vector3 sholder_size = Vector3(0.4f, 0.5f, 0.4f);
 			Vector3 arm_size = Vector3(0.4f, 0.5f, 0.4f);
 			float arm_y_pos = 0.18f;
 			{
 				{
 					auto& GO = Lsholder;
-					GO->transform->local_scale = arm_size;
+					GO->transform->local_scale = sholder_size;
 					GO->transform->local_orient = quaternion_from_euler(0, 0, +90);
 					GO->transform->local_pos = Vector3(+(body_size.x + arm_size.x * 2), arm_y_pos, 0);
 				}
@@ -141,7 +142,7 @@ namespace Adollib
 				}
 				{
 					auto& GO = Rsholder;
-					GO->transform->local_scale = arm_size;
+					GO->transform->local_scale = sholder_size;
 					GO->transform->local_orient = quaternion_from_euler(0, 0, -90);
 					GO->transform->local_pos = Vector3(-(body_size.x + arm_size.x * 2), arm_y_pos, 0);
 				}
@@ -190,12 +191,26 @@ namespace Adollib
 			}
 
 			//::: äµê´ÉÇÅ[ÉÅÉìÉgÇÃí≤êÆ :::
+			Head_collider	 ->set_barycenter(Vector3(0, -0.2f, 0));
+			Body_collider	 ->set_barycenter(Vector3(0, -0.2f, 0));
+
 			Lhand_collider->physics_data.inertial_mass = 100;
 			Lhand_collider->set_tensor(Lhand_collider->get_tensor());
 			Rhand_collider->physics_data.inertial_mass = 100;
 			Rhand_collider->set_tensor(Lhand_collider->get_tensor());
-			//Head_collider	 ->set_tensor(Head_collider->get_tensor());
-			//Rsholder_collider->set_tensor(Head_collider->get_tensor());
+
+			Lsholder_collider->set_barycenter(Vector3(0, 0.5f, 0));
+			Rsholder_collider->set_barycenter(Vector3(0, 0.5f, 0));
+			Lelbow_collider->set_barycenter(Vector3(0, 0.5f, 0));
+			Relbow_collider->set_barycenter(Vector3(0, 0.5f, 0));
+
+			Lleg_collider->set_barycenter(Vector3(0, 1, 0));
+			Rleg_collider->set_barycenter(Vector3(0, 1, 0));
+			Lfoot_collider->set_barycenter(Vector3(0, 1, 0));
+			Rfoot_collider->set_barycenter(Vector3(0, 1, 0));
+			//Rsholder_collider->set_tensor(Rsholder_collider->get_tensor());
+
+
 			//Relbow_collider  ->set_tensor(Head_collider->get_tensor());
 			//Lsholder_collider->set_tensor(Head_collider->get_tensor());
 			//Lelbow_collider  ->set_tensor(Head_collider->get_tensor());
@@ -340,9 +355,11 @@ namespace Adollib
 				auto hinge = Joint::add_Hingejoint(Lsholder_collider, Lelbow_collider, Vector3(-1, -0.6f, 0), Vector3(+1, -0.6f, 0), Vector3(-1, 0.6f, 0), Vector3(+1, 0.6f, 0), joint_bias);
 				hinge->bias = 0.5f;
 				hinge->limit = Vector2(230, 360);
+
+				//auto ball = Joint::add_balljoint(Lsholder_collider, Lelbow_collider, Vector3(0, -0.9f, 0), Vector3(0, 0.6f, 0), joint_bias);
 			}
 			{
-				auto ball = Joint::add_balljoint(Lelbow_collider, Lhand_collider, Vector3(-0.2f, -0.4f, 0), Vector3(0, 0, 0), joint_bias);
+				auto ball = Joint::add_balljoint(Lelbow_collider, Lhand_collider, Vector3(-0.2f, -0.1f, 0), Vector3(0, 0, 0), joint_bias);
 			}
 			{
 				auto Cone = Joint::add_Conejoint(Body_collider, Rsholder_collider, Vector3(-1.1f, 0.2f, 0), Vector3(0, 0.5f, 0), Vector3(+1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
@@ -355,9 +372,11 @@ namespace Adollib
 				auto hinge = Joint::add_Hingejoint(Rsholder_collider, Relbow_collider, Vector3(-1, -0.6f, 0), Vector3(+1, -0.6f, 0), Vector3(-1, 0.6f, 0), Vector3(+1, 0.6f, 0), joint_bias);
 				hinge->bias = 0.5f;
 				hinge->limit = Vector2(230, 360);
+
+				//auto ball = Joint::add_balljoint(Rsholder_collider, Relbow_collider, Vector3(0, -0.9f, 0), Vector3(0, 0.6f, 0), joint_bias);
 			}
 			{
-				auto ball = Joint::add_balljoint(Relbow_collider, Rhand_collider, Vector3(0.2f, -0.4f, 0), Vector3(0, 0, 0), joint_bias);
+				auto ball = Joint::add_balljoint(Relbow_collider, Rhand_collider, Vector3(0.2f, -0.1f, 0), Vector3(0, 0, 0), joint_bias);
 			}
 			//çò
 			{
