@@ -1027,6 +1027,29 @@ bool Physics_function::generate_contact_sphere_box(const Collider_shape* sphere,
 	float distance = (closest_point - center).norm_sqr(); //最近点と球中心の距離
 	if (sphere->world_scale().x - distance < FLT_EPSILON) return false; //衝突していなかったらfalse
 
+	//closest_pointがcenterのまま -> sphereの中心がbox内部にある
+	if (closest_point == center) {
+		//sphereの中心から一番近い面を探す
+		float min_value = FLT_MAX;
+		int min_num = -1;
+
+		for (int i = 0; i < 3; i++) {
+			if(box_halfsize[i] - center[i] < min_value) {
+				min_value = box_halfsize[i] - center[i];
+				min_num = i;
+			}
+			if (box_halfsize[i] + center[i] < min_value) {
+				min_value = box_halfsize[i] + center[i];
+				min_num = i;
+			}
+		}
+		if (center[min_num] > 0)closest_point[min_num] = +box_halfsize[min_num];
+		else closest_point[min_num] = -box_halfsize[min_num];
+
+		distance = (closest_point - center).norm_sqr(); //最近点と球中心の距離
+	}
+
+
 	Vector3 n = (sphere->world_position() - vector3_trans(closest_point, rotate)).unit_vect(); //boxからsphereへのベクトル
 	if (vector3_dot(n, sphere->world_position() - box->world_position()) < 0)n *= -1;
 

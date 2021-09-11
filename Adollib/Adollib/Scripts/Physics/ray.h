@@ -10,23 +10,24 @@ namespace Adollib {
 		Vector3 position;
 		Vector3 direction;
 
+		struct Raycast_struct {
+			u_int collider_tag = UINT_MAX; // 衝突するtag
+			float ray_min = 0; // Rayminの最小の値
+			float raymin = 0; // Rayの衝突した最小値
+			float raymax = 0; // Rayの衝突した最大値
+			Vector3 normal; // Rayの衝突した最近の場所の法線
+			Collider* coll = nullptr; // Rayの衝突した最近のCollider
+		};
 	public:
 		bool ray_cast(u_int tag,
 			const float ray_min,
 			float& tmin, float& tmax, Vector3& normal, Collider* coll = nullptr);
 
-		bool ray_cast(float ray_min, float& tmin, float& tmax, Collider* coll = nullptr) {
+		bool ray_cast(Raycast_struct& str) {
 			Vector3 normal;
-			return ray_cast(UINT_MAX, ray_min, tmin, tmax, normal, coll);
+			return ray_cast(str.collider_tag, str.ray_min, str.raymin, str.raymax, str.normal, str.coll);
 		}
 
-		bool ray_cast() {
-			float tmin = 0, tmax = 0;
-			float ray_min = -FLT_MAX;
-			Vector3 normal;
-			Collider* coll = nullptr;
-			return ray_cast(UINT_MAX, ray_min, tmin, tmax, normal, coll);
-		}
 
 
 	};

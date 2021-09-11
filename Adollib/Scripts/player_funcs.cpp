@@ -259,8 +259,6 @@ void Player::tuning_waist_pillar() {
 		&catch_right_joint
 	};
 
-	is_gunyatto = false;
-
 	//waist_sphere‚Ìy•ûŒü‚Ì’²®
 	float center_y = waist_pillar->center.y;
 	{
@@ -277,9 +275,8 @@ void Player::tuning_waist_pillar() {
 			Joint_base*& joint = *joints[i];
 			//static‚È‚à‚Ì‚ðŽ‚Á‚Ä‚¢‚é‚Æ‚«A
 			if (joint != nullptr && joint->get_colliderB()->physics_data.is_moveable == false) {
-				// ‚®‚É‚á‚Á‚Æ‚³‚¹‚Ä timer‚ð1‚É‚·‚é
+				// timer‚ð1‚É‚·‚é
 				check_standable_collider_timer = 1;
-				is_gunyatto = true;
 			}
 		}
 
@@ -301,11 +298,12 @@ void Player::tuning_waist_pillar() {
 		if (center_xz.norm() > Waist_pillar_max_xz * Waist_pillar_max_xz)center_xz = center_xz.unit_vect() * Waist_pillar_max_xz;
 	}
 
-	//waist_pillar->center = Vector3(center_xz.x, center_y, center_xz.z);
-	waist_pillar->center = Vector3(0, center_y, -0.3f);
-	//waist_pillar->center = vector3_quatrotate(-dir, Waist->transform->orientation) +Vector3(0, waist_pillar->center.y,0);
+	////waist_pillar->center = Vector3(center_xz.x, center_y, center_xz.z);
+	//waist_pillar->center = Vector3(0, center_y, -0.3f);
+	////waist_pillar->center = vector3_quatrotate(-dir, Waist->transform->orientation) +Vector3(0, waist_pillar->center.y,0);
 
 	//if()
+
 }
 
 //ˆÚ“®
@@ -390,6 +388,16 @@ void Player::accume_move_dir() {
 
 //—§‚Â‚æ‚¤‚É—Í‚ð‰Á‚¦‚é
 void Player::add_pow_for_stand() {
+
+
+	//—¼Žè‚ªstatic‚È‚à‚Ì‚ðŽ‚Á‚Ä‚¢‚é‚Æ‚«A‚®‚É‚á‚Á‚Æ
+	if ((catch_left_joint  != nullptr &&  catch_left_joint->get_colliderB()->physics_data.is_moveable == false) &&
+		(catch_right_joint != nullptr && catch_right_joint->get_colliderB()->physics_data.is_moveable == false)
+		) {
+		is_gunyatto = true;
+	}
+
+
 	float gnyat_pow = 0.9f;
 	if (!input->getKeyState(Key::LeftControl) && is_gunyatto == false)
 	{
@@ -434,7 +442,7 @@ void Player::add_pow_for_stand() {
 		Rfoot_collider->add_force(Vector3(0, -1, 0) * 50);
 	}
 
-
+	is_gunyatto = false;
 };
 
 //‘«‚ð“®‚©‚·
