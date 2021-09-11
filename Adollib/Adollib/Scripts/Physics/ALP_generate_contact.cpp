@@ -1026,6 +1026,7 @@ bool Physics_function::generate_contact_sphere_box(const Collider_shape* sphere,
 
 	float distance = (closest_point - center).norm_sqr(); //最近点と球中心の距離
 	if (sphere->world_scale().x - distance < FLT_EPSILON) return false; //衝突していなかったらfalse
+	float penetrate = sphere->world_scale().x - distance;
 
 	//closest_pointがcenterのまま -> sphereの中心がbox内部にある
 	if (closest_point == center) {
@@ -1047,6 +1048,7 @@ bool Physics_function::generate_contact_sphere_box(const Collider_shape* sphere,
 		else closest_point[min_num] = -box_halfsize[min_num];
 
 		distance = (closest_point - center).norm_sqr(); //最近点と球中心の距離
+		penetrate = sphere->world_scale().x + distance;
 	}
 
 
@@ -1055,7 +1057,7 @@ bool Physics_function::generate_contact_sphere_box(const Collider_shape* sphere,
 
 	//衝突していたらContactオブジェクトを生成用に準備する
 	is_AC = true;
-	ACpenetration = sphere->world_scale().x - distance;
+	ACpenetration = penetrate;
 	ACnormal = -n;
 	ACcontact_pointA = closest_point;
 	ACcontact_pointB = sphere->world_scale().x * vector3_quatrotate(-n, sphere->world_orientation().inverse());

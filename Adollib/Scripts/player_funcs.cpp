@@ -102,49 +102,6 @@ void Player::reach_out_hands() {
 		}
 	}
 
-	/*
-	{
-		const Vector3& sholder_dir = vector3_quatrotate(Vector3(0, -1, 0), colliders[0]->transform->orientation);
-		const Vector3& waist_dir = vector3_quatrotate(Vector3(0, -1, 0), Waist_collider->transform->orientation);
-		Debug::set("waist_dir", waist_dir);
-
-		Quaternion camera_off;
-		{
-			Vector3 camera_vec = vector3_quatrotate(Vector3(0, 0, 1), camera->orientation).unit_vect();
-			Vector3 camera_vec_y0 = camera_vec;
-			camera_vec_y0.y = 0;
-			camera_vec_y0 = camera_vec_y0.unit_vect();
-
-			Vector3 rot_axis = vector3_cross(camera_vec, camera_vec_y0).unit_vect();
-			float radian = ALClamp(vector3_radian(camera_vec, camera_vec_y0) * hand_camera_rot_pow, -hand_camera_max_rot, +hand_camera_max_rot);
-			camera_off = quaternion_axis_radian(rot_axis, radian);
-
-			Debug::set("rot_axis", rot_axis);
-			Debug::set("radian", radian);
-			Debug::set("camera_off", camera_off);
-		}
-
-		const Mouse key = keys[0];
-		auto& collider = colliders[0];
-
-		//addforceの向きを必要に応じて逆にしなければいけない 要修正
-		Quaternion goal = quaternion_axis_angle(Vector3(0, 1, 0), sign[0] * 90) * quaternion_axis_angle(Vector3(1, 0, 0), 90) * camera_off * Body_collider->transform->orientation;
-		Quaternion off = collider->transform->orientation * goal.inverse();
-
-		Debug::set("Lsholder_orient", collider->transform->orientation);
-		Debug::set("Lelbow_orient", colliders[2]->transform->orientation);
-		Debug::set("Lhand_goal", goal);
-		Debug::set("Body_collider->transform->orientation", Body_collider->transform->orientation);
-		Debug::set("Lhand_start_eular", collider->transform->orientation.euler());
-		Debug::set("Lhand_goal_vec", vector3_quatrotate(Vector3(0, -1, 0), goal));
-		Debug::set("Lhand_axis", off.axis());
-		Debug::set("Lhand_angle", off.angle());
-
-
-	}
-	*/
-
-
 };
 
 //物をつかむ
@@ -267,27 +224,24 @@ void Player::tuning_waist_pillar() {
 		// しばらく地面にいなければ徐々にwaist_Sphereを上にあげる
 			anchor_move_vec = -0.2f;
 		}
-		else anchor_move_vec = 4; // 接地していればwaist_Sphereを下げる
+		else anchor_move_vec = 3; // 接地していればwaist_Sphereを下げる
 
-		for (int i = 0; i < 2; i++) {
-			const Mouse key = keys[i];
-			auto& collider = colliders[i];
-			Joint_base*& joint = *joints[i];
-			//staticなものを持っているとき、
-			if (joint != nullptr && joint->get_colliderB()->physics_data.is_moveable == false) {
-				// timerを1にする
-				check_standable_collider_timer = 1;
-			}
+		//両手がstaticなものを持っているとき、
+		if ((catch_left_joint != nullptr && catch_left_joint->get_colliderB()->physics_data.is_moveable == false) &&
+			(catch_right_joint != nullptr && catch_right_joint->get_colliderB()->physics_data.is_moveable == false)
+			) {
+			// timerを設定する
+			check_standable_collider_timer = 0.5f;
 		}
 
 		{
 			check_standable_collider_timer -= Al_Global::second_per_frame;
 			// timerが0より大きい時 waist_Sphereを上にあげる
-			//if (check_standable_collider_timer > 0)anchor_move_vec = -1;
+			if (check_standable_collider_timer > 0)anchor_move_vec = -1;
 		}
 
 		center_y += -1 * anchor_move_vec * Al_Global::second_per_frame;
-		center_y = ALClamp(center_y, Waist_pillar_max_y, 0);
+		center_y = ALClamp(center_y, Waist_pillar_max_y, -1.0f);
 	}
 
 	Vector3 center_xz = waist_pillar->center;
@@ -298,9 +252,9 @@ void Player::tuning_waist_pillar() {
 		if (center_xz.norm() > Waist_pillar_max_xz * Waist_pillar_max_xz)center_xz = center_xz.unit_vect() * Waist_pillar_max_xz;
 	}
 
-	////waist_pillar->center = Vector3(center_xz.x, center_y, center_xz.z);
-	//waist_pillar->center = Vector3(0, center_y, -0.3f);
-	////waist_pillar->center = vector3_quatrotate(-dir, Waist->transform->orientation) +Vector3(0, waist_pillar->center.y,0);
+	//waist_pillar->center = Vector3(center_xz.x, center_y, center_xz.z);
+	waist_pillar->center = Vector3(0, center_y, -0.3f);
+	//waist_pillar->center = vector3_quatrotate(-dir, Waist->transform->orientation) +Vector3(0, waist_pillar->center.y,0);
 
 	//if()
 
@@ -311,7 +265,6 @@ void Player::linear_move() {
 	const float gnyat_pow = 0.9f;
 	if (!input->getKeyState(Key::LeftControl))
 	{
-		Debug::set("linear_velocity", Waist_collider->linear_velocity());
 		//移動
 		Waist_collider->add_force(dir * waist_move_pow * gnyat_pow);
 
@@ -389,15 +342,6 @@ void Player::accume_move_dir() {
 //立つように力を加える
 void Player::add_pow_for_stand() {
 
-
-	//両手がstaticなものを持っているとき、ぐにゃっと
-	if ((catch_left_joint  != nullptr &&  catch_left_joint->get_colliderB()->physics_data.is_moveable == false) &&
-		(catch_right_joint != nullptr && catch_right_joint->get_colliderB()->physics_data.is_moveable == false)
-		) {
-		is_gunyatto = true;
-	}
-
-
 	float gnyat_pow = 0.9f;
 	if (!input->getKeyState(Key::LeftControl) && is_gunyatto == false)
 	{
@@ -443,6 +387,12 @@ void Player::add_pow_for_stand() {
 	}
 
 	is_gunyatto = false;
+	//両手がstaticなものを持っているとき、ぐにゃっと
+	if ((catch_left_joint != nullptr && catch_left_joint->get_colliderB()->physics_data.is_moveable == false) &&
+		(catch_right_joint != nullptr && catch_right_joint->get_colliderB()->physics_data.is_moveable == false)
+		) {
+		is_gunyatto = true;
+	}
 };
 
 //足を動かす
@@ -465,8 +415,6 @@ void Player::move_legs() {
 		//	rot_axis = vector3_quatrotate(rot_axis, Waist_collider->transform->orientation.inverse());
 		//}
 
-		Debug::set("rot_axis_local", rot_axis);
-		Debug::set("rot_axis_world", vector3_quatrotate(rot_axis, Waist_collider->transform->orientation.inverse()));
 
 
 
@@ -499,21 +447,7 @@ void Player::move_legs() {
 			goal_rotate[1] * collider[1]->transform->orientation.inverse()
 		};
 
-		//if (sinf(move_timer * DirectX::XM_2PI * 0.5f + PI_inv2) > 0) axis[0] *= -1;
-		//else axis[1] *= -1;
-
-		//Debug::set("sin", sin);
-		//Debug::set("waist_axis", waist_axis);
-		//Debug::set("rot_axis", rot_axis);
-		//Debug::set("goal_vec[R]", goal_vec[0]);
-		////Debug::set("goal_vec[L]", goal_vec[1]);
-		//Debug::set("now_vec[R]", now_vec[0]);
-		////Debug::set("now_vec[L]", now_vec[1]);
-
 		for (int i = 0; i < 2; i++) {
-			//float radian = vector3_radian(now_vec[i], goal_vec[i]);
-			//if (axis[i].norm() < FLT_EPSILON)continue;
-			//axis[i] = axis[i].unit_vect();
 
 			auto axis = off[i].axis();
 
@@ -521,9 +455,6 @@ void Player::move_legs() {
 
 			collider[i]->add_torque(axis * pow);
 			collider[i]->set_max_angula_velocity(leg_rot_max_speed);
-			//collider[i]->gameobject->transform->local_orient = goal_rotate[i];
-			//collider[i]->physics_data.is_moveable = false;
-			//Debug::set("pow", pow);
 		}
 
 		move_timer += Al_Global::second_per_frame;
@@ -537,6 +468,10 @@ void Player::make_jump() {
 	if (is_jumping == false && onground_collider->concoll_enter(Collider_tags::Stage)) coyote = 0.3f;
 	if (is_jumping == false && !onground_collider->concoll_enter(Collider_tags::Stage)) coyote -= Al_Global::second_per_frame;
 
+
+	 Debug::set("is_jumpable", coyote);
+	 if(onground_collider->concoll_enter(Collider_tags::Stage))	 Debug::set("is_onground", 11111111);
+	 else                                                        Debug::set("is_onground", 00000000);
 
 	if (coyote >= 0 && input->getKeyTrigger(Key::Space)) {
 		for (int i = 0; i < Human_collider_size; i++) {
