@@ -91,31 +91,31 @@ namespace Adollib
 			onground_collider_GO->transform->local_pos = waist_pillar->center;
 		}
 
-		//è‚ğL‚Î‚·
+		// è‚ğL‚Î‚·
 		reach_out_hands();
 
-		//•¨‚ğ‚Â‚©‚Ş
+		// •¨‚ğ‚Â‚©‚Ş
 		catch_things();
 
-		//˜‚ğx‚¦‚éwaist_pillar‚ğ’²®
+		// ˜‚ğx‚¦‚éwaist_pillar‚ğ’²®
 		tuning_waist_pillar();
 
-		//ˆÚ“®
+		// ˆÚ“®
 		linear_move();
 
-		//‰ñ“]
+		// ‰ñ“]
 		angula_move();
 
-		//ˆÚ“®•ûŒü‚ğŒvZ
+		// ˆÚ“®•ûŒü‚ğŒvZ
 		accume_move_dir();
 
-		//—§‚Â‚æ‚¤‚É—Í‚ğ‰Á‚¦‚é
+		// —§‚Â‚æ‚¤‚É—Í‚ğ‰Á‚¦‚é
 		add_pow_for_stand();
 
-		//‘«‚ğ“®‚©‚·
+		// ‘«‚ğ“®‚©‚·
 		move_legs();
 
-		//jump‚³‚¹‚é
+		// jump‚³‚¹‚é
 		make_jump();
 
 	}

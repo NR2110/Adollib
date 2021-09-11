@@ -181,17 +181,26 @@ void Player::catch_things() {
 			for (auto& c_coll : contacted_colls) {
 				if (min_data == nullptr || min_data->penetrate > c_coll.penetrate) {
 					min_data = &c_coll;
+
 				}
 			}
 			if (min_data != nullptr && min_data->coll->tag != Collider_tags::Human) {
-				//Jointに登録
-				joint = Joint::add_balljoint(
-					collider,
-					min_data->coll,
-					min_data->contacted_pointA,
-					min_data->contacted_pointB
-				);
-				joint->slop = 0.1f;
+
+				//相手がstaticの
+				//if (min_data->coll->physics_data.is_moveable == false) {
+					//Jointに登録
+					joint = Joint::add_balljoint(
+						collider,
+						min_data->coll,
+						min_data->contacted_pointA,
+						min_data->contacted_pointB
+					);
+					joint->slop = 0.1f;
+				//}
+				//else {
+
+				//}
+
 			}
 		}
 
@@ -200,8 +209,6 @@ void Player::catch_things() {
 			joint->get_colliderB()->tag &= ~Collider_tags::Having_Stage;
 			joint->get_colliderB()->tag |= Collider_tags::Stage;
 			Joint::delete_joint(joint);
-
-			//collider->physics_data.is_hitable = false;
 		}
 
 		// staticなものに近い順(handから順)に質量を大きくする
@@ -210,6 +217,7 @@ void Player::catch_things() {
 			colliders[i]->physics_data.inertial_mass = shlder_mass * 10;
 			colliders[i + 2]->physics_data.inertial_mass = elbow_mass * 10;
 			colliders[i + 4]->physics_data.inertial_mass = hand_mass * 10;
+
 		}
 		else {
 			// 初期値の質量を設定
@@ -258,24 +266,27 @@ void Player::tuning_waist_pillar() {
 	{
 		float anchor_move_vec = 0;
 		if (!check_standable_collider->concoll_enter(Collider_tags::Stage) && is_jumping == false) {
+		// しばらく地面にいなければ徐々にwaist_Sphereを上にあげる
 			anchor_move_vec = -0.2f;
 		}
-		else anchor_move_vec = 3;
+		else anchor_move_vec = 4; // 接地していればwaist_Sphereを下げる
+
 		for (int i = 0; i < 2; i++) {
 			const Mouse key = keys[i];
 			auto& collider = colliders[i];
 			Joint_base*& joint = *joints[i];
 			//staticなものを持っているとき、
 			if (joint != nullptr && joint->get_colliderB()->physics_data.is_moveable == false) {
-				//waist_sphere->center = Vector3(0);
+				// ぐにゃっとさせて timerを1にする
 				check_standable_collider_timer = 1;
 				is_gunyatto = true;
 			}
-			else {
-				check_standable_collider_timer -= Al_Global::second_per_frame;
+		}
 
-				if (check_standable_collider_timer > 0)anchor_move_vec = 3;
-			}
+		{
+			check_standable_collider_timer -= Al_Global::second_per_frame;
+			// timerが0より大きい時 waist_Sphereを上にあげる
+			//if (check_standable_collider_timer > 0)anchor_move_vec = -1;
 		}
 
 		center_y += -1 * anchor_move_vec * Al_Global::second_per_frame;
@@ -355,10 +366,6 @@ void Player::angula_move() {
 
 	}
 
-	if (is_gunyatto == true) {
-		turn_gunyatto_dir();
-	}
-
 };
 
 //移動方向を計算
@@ -416,6 +423,8 @@ void Player::add_pow_for_stand() {
 		}
 
 	}
+	// gunyattoしていた時は
+	else{ turn_gunyatto_dir(); }
 
 	{
 		//jointでつなげると重力が弱くなるから & 一定のパーツは重力の影響を受けないようにしているから  下向きに力を加える
@@ -424,6 +433,8 @@ void Player::add_pow_for_stand() {
 		Lfoot_collider->add_force(Vector3(0, -1, 0) * 50);
 		Rfoot_collider->add_force(Vector3(0, -1, 0) * 50);
 	}
+
+
 };
 
 //足を動かす
@@ -539,11 +550,19 @@ void Player::make_jump() {
 
 
 void Player::turn_gunyatto_dir() {
+	//Vector3 dir = vector3_quatrotate(Vector3(0, 0, 1), Waist->transform->orientation);
+
 	Vector3 dir = vector3_quatrotate(Vector3(0, 0, 1), Waist->transform->orientation);
+	//if (dir.y < -0.8f) dir = vector3_quatrotate(Vector3(0, 1, 0), Waist->transform->orientation);
+	//else if(dir.y > 0.8f) dir = vector3_quatrotate(Vector3(0, -1, 0), Waist->transform->orientation);
 
-	if (dir.y < -0.9f) dir = vector3_quatrotate(Vector3(0, 1, 0), Waist->transform->orientation);
-	else if(dir.y > 0.9f) dir = vector3_quatrotate(Vector3(0, -1, 0), Waist->transform->orientation);
-
+	Vector3 waist_head_dir = (Head->world_position() - Waist->world_position()).unit_vect();
+	if (fabsf(dir.y) > 0.7f) {
+		if      (dir.y < 0) dir = +waist_head_dir;
+		else                dir = -waist_head_dir;
+	}
+	//if      (waist_head_dir.y < -0.8f) dir = +waist_head_dir;
+	//else if (waist_head_dir.y > +0.8f) dir = -waist_head_dir;
 
 	dir.y = 0;
 	dir = dir.unit_vect();

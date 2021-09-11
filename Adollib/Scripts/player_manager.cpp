@@ -120,6 +120,7 @@ namespace Adollib
 
 			Vector3 sholder_size = Vector3(0.4f, 0.5f, 0.4f);
 			Vector3 arm_size = Vector3(0.4f, 0.5f, 0.4f);
+			Vector3 hand_size = Vector3(0.45f, 0.45f, 0.45f);
 			float arm_y_pos = 0.18f;
 			{
 				{
@@ -136,7 +137,7 @@ namespace Adollib
 				}
 				{
 					auto& GO = Lhand;
-					GO->transform->local_scale = Vector3(arm_size.x * 1.5f);
+					GO->transform->local_scale = hand_size;
 					GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
 					GO->transform->local_pos = Vector3(+(body_size.x + arm_size.x * 6), arm_y_pos, 0);
 				}
@@ -154,7 +155,7 @@ namespace Adollib
 				}
 				{
 					auto& GO = Rhand;
-					GO->transform->local_scale = Vector3(arm_size.x * 1.5f);
+					GO->transform->local_scale = hand_size;
 					GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
 					GO->transform->local_pos = Vector3(-(body_size.x + arm_size.x * 6), arm_y_pos, 0);
 				}
@@ -359,7 +360,7 @@ namespace Adollib
 				//auto ball = Joint::add_balljoint(Lsholder_collider, Lelbow_collider, Vector3(0, -0.9f, 0), Vector3(0, 0.6f, 0), joint_bias);
 			}
 			{
-				auto ball = Joint::add_balljoint(Lelbow_collider, Lhand_collider, Vector3(-0.2f, -0.1f, 0), Vector3(0, 0, 0), joint_bias);
+				auto ball = Joint::add_balljoint(Lelbow_collider, Lhand_collider, Vector3(-0.2f, -0.25f, 0), Vector3(0, 0, 0), joint_bias);
 			}
 			{
 				auto Cone = Joint::add_Conejoint(Body_collider, Rsholder_collider, Vector3(-1.1f, 0.2f, 0), Vector3(0, 0.5f, 0), Vector3(+1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
@@ -376,7 +377,7 @@ namespace Adollib
 				//auto ball = Joint::add_balljoint(Rsholder_collider, Relbow_collider, Vector3(0, -0.9f, 0), Vector3(0, 0.6f, 0), joint_bias);
 			}
 			{
-				auto ball = Joint::add_balljoint(Relbow_collider, Rhand_collider, Vector3(0.2f, -0.1f, 0), Vector3(0, 0, 0), joint_bias);
+				auto ball = Joint::add_balljoint(Relbow_collider, Rhand_collider, Vector3(0.2f, -0.25f, 0), Vector3(0, 0, 0), joint_bias);
 			}
 			//çò
 			{
