@@ -66,6 +66,7 @@ namespace Adollib
 
 			check_standable_collider->physics_data.is_moveable = false;
 			check_standable_collider->physics_data.is_hitable = false;
+
 		}
 		{
 			onground_collider_GO = Gameobject_manager::create("check_onglound_go");
@@ -78,6 +79,7 @@ namespace Adollib
 			onground_collider->physics_data.is_moveable = false;
 			onground_collider->physics_data.is_hitable = false;
 			onground_collider->ignore_tags |= Collider_tags::Human;
+
 		}
 	}
 
