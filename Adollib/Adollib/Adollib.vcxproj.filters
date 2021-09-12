@@ -74,6 +74,15 @@
     <Filter Include="ソース ファイル\scene_game\scene_house\camera">
       <UniqueIdentifier>{c5a1a0b5-3b44-4ee7-b36f-e93b357c3d6b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\scene_game\stage">
+      <UniqueIdentifier>{3188ed85-55f8-473e-8937-984656018759}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\scene_game\stage\parts">
+      <UniqueIdentifier>{8acb49fd-f466-4fea-a25f-e71f4f5b8155}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\scene_game\stage\base">
+      <UniqueIdentifier>{6f7db560-cc33-4c5e-831f-e256c3b8824d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Scripts\player.cpp">
@@ -581,6 +590,21 @@
     </ClInclude>
     <ClInclude Include="Scripts\Physics\springjoint.h">
       <Filter>00_Adollib\22_physics\Joint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\bottan.h">
+      <Filter>ソース ファイル\scene_game\stage\parts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\door.h">
+      <Filter>ソース ファイル\scene_game\stage\parts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\kinematic_block.h">
+      <Filter>ソース ファイル\scene_game\stage\parts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\stage_base.h">
+      <Filter>ソース ファイル\scene_game\stage\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\stageparts_tags.h">
+      <Filter>ソース ファイル\scene_game\stage\base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

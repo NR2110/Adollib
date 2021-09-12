@@ -11,9 +11,7 @@ namespace Adollib
 	class Gameobject;
 	class Transfome;
 
-	// ****************************************************
-	// gameobjectにアタッチされるすべてに対するベースクラス // TODO : インターフェースにしてもよいかも？
-	// ****************************************************
+	// gameobjectにアタッチされるベースクラス
 	class Component
 	{
 	public:

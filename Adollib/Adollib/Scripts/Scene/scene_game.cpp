@@ -19,7 +19,7 @@ namespace Adollib {
 			camera->addComponent<camera_manager_s>();
 
 		}
-		else if (1)
+		else if (0)
 		{
 			Gameobject* camera = Gameobject_manager::create("camera");
 			camera->addComponent<Camera>();

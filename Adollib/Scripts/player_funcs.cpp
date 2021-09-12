@@ -181,9 +181,6 @@ void Player::catch_things() {
 			colliders[i]->physics_data.inertial_mass = hand_mass;
 			colliders[i + 2]->physics_data.inertial_mass = elbow_mass;
 			colliders[i + 4]->physics_data.inertial_mass = shlder_mass;
-			//colliders[i]->physics_data.inertial_mass = shlder_mass * 2;
-			//colliders[i + 2]->physics_data.inertial_mass = elbow_mass * 2;
-			//colliders[i + 4]->physics_data.inertial_mass = hand_mass * 2;
 		}
 
 	}

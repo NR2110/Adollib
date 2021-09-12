@@ -98,7 +98,7 @@ namespace Adollib {
 
 	public:
 		//交差していたらtrueを返す
-		const bool concoll_enter(const unsigned int tag_name) const;
+		const bool concoll_enter(const Collider_tagbit tag_name) const;
 
 		//並進移動に力を加える
 		void add_force(const Vector3& force);
@@ -111,6 +111,9 @@ namespace Adollib {
 
 		//角加速に値を加える
 		void add_angula_acc(const Vector3& force);
+
+		//現在かかっている速度、加速度、力を0にする
+		void reset_force() { ALPphysics_ptr->reset_force(); };
 
 		//速度制限を行う
 		void set_max_linear_velocity(const float& max_scalar) { ALPphysics_ptr->set_max_linear_velocity(max_scalar); };

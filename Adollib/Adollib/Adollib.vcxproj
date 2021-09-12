@@ -145,15 +145,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Scripts\bottan.h" />
     <ClInclude Include="..\Scripts\camera.h" />
     <ClInclude Include="..\Scripts\camera_manager.h" />
     <ClInclude Include="..\Scripts\camera_s.h" />
     <ClInclude Include="..\Scripts\demo_house.h" />
+    <ClInclude Include="..\Scripts\door.h" />
+    <ClInclude Include="..\Scripts\kinematic_block.h" />
     <ClInclude Include="..\Scripts\object_manager.h" />
     <ClInclude Include="..\Scripts\object_rotate.h" />
     <ClInclude Include="..\Scripts\player.h" />
     <ClInclude Include="..\Scripts\player_manager.h" />
     <ClInclude Include="..\Scripts\scene_game_all.h" />
+    <ClInclude Include="..\Scripts\stageparts_tags.h" />
+    <ClInclude Include="..\Scripts\stage_base.h" />
     <ClInclude Include="Imgui\imconfig.h" />
     <ClInclude Include="Imgui\imgui.h" />
     <ClInclude Include="Imgui\imgui_impl_dx11.h" />

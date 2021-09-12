@@ -13,15 +13,18 @@ namespace Adollib {
 		static const Collider_tagbit Cylinder =	(1 << 5);
 		static const Collider_tagbit FBX =			(1 << 6);
 
-		//static const unsigned int Cylinder = (1 << 5);
-		//static const unsigned int Cylinder = (1 << 5);
+
 		static const Collider_tagbit croth = (1 << 7);
 
 		static const Collider_tagbit Human = (1 << 8);
+
 		static const Collider_tagbit Stage = (1 << 9);
 		static const Collider_tagbit Jumpable_Stage = (1 << 10);
 		static const Collider_tagbit Having_Stage = (1 << 11);
 		static const Collider_tagbit Static_Stage = (1 << 12);
+		static const Collider_tagbit Kinematic_Stage = (1 << 13);
+
+
 
 		static const Collider_tagbit Tags_max = (1 << 31);
 	};
