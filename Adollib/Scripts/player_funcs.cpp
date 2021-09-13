@@ -78,17 +78,24 @@ void Player::reach_out_hands() {
 				// Œ¨
 				auto& collider = colliders[i];
 				Quaternion off = collider->transform->orientation * goal.inverse();
-				float pow = ALClamp(off.radian() * hand_rot_pow, 0, hand_rot_max_pow);
+				float rad = off.radian();
+				if (rad > PI)rad = 2 * PI - rad;
+				float pow = ALClamp(rad *  hand_rot_pow, 0, hand_rot_max_pow);
 				collider->add_torque(off.axis() * pow * catch_obje_mass * collider->physics_data.inertial_mass);
 				collider->set_max_angula_velocity(hand_rot_max_speed);
+				Debug::set("radian_Sholder", rad);
 			}
 			{
 				//˜r
 				auto& collider = colliders[i + 2];
 				Quaternion off = collider->transform->orientation * goal.inverse();
-				float pow = ALClamp(off.radian() * hand_rot_pow, 0, hand_rot_max_pow);
+				float rad = off.radian();
+				if (rad > PI)rad = 2 * PI - rad;
+
+				float pow = ALClamp(rad * hand_rot_pow, 0, hand_rot_max_pow);
 				collider->add_torque(off.axis() * pow * catch_obje_mass * collider->physics_data.inertial_mass);
 				collider->set_max_angula_velocity(hand_rot_max_speed * 0.8f);
+				Debug::set("radian_elbow", rad);
 			}
 			//{
 			//	//˜r
@@ -167,27 +174,31 @@ void Player::catch_things() {
 			Joint::delete_joint(joint);
 		}
 
-		if (joint != nullptr) {
-			if (joint->get_colliderB()->physics_data.is_moveable == false) {
-				// static‚È‚à‚Ì‚É‹ß‚¢‡(hand‚©‚ç‡)‚ÉŽ¿—Ê‚ð‘å‚«‚­‚·‚é
-				colliders[i]->physics_data.inertial_mass = shlder_mass * 10;
-				colliders[i + 2]->physics_data.inertial_mass = elbow_mass * 10;
-				colliders[i + 4]->physics_data.inertial_mass = hand_mass * 10;
-			}
-			//else {
-			//	float mass = ALClamp(joint->get_colliderB()->physics_data.inertial_mass * 0.5f, 1, 10);
-			//	colliders[i]->physics_data.inertial_mass = shlder_mass * mass;
-			//	colliders[i + 2]->physics_data.inertial_mass = elbow_mass * mass;
-			//	colliders[i + 4]->physics_data.inertial_mass = hand_mass * mass;
-			//}
+		//if (joint != nullptr) {
+		//	if (joint->get_colliderB()->physics_data.is_moveable == false) {
+		//		// static‚È‚à‚Ì‚É‹ß‚¢‡(hand‚©‚ç‡)‚ÉŽ¿—Ê‚ð‘å‚«‚­‚·‚é
+		//		colliders[i]->physics_data.inertial_mass = shlder_mass * 10;
+		//		colliders[i + 2]->physics_data.inertial_mass = elbow_mass * 10;
+		//		colliders[i + 4]->physics_data.inertial_mass = hand_mass * 10;
+		//	}
+		//	//else {
+		//	//	float mass = ALClamp(joint->get_colliderB()->physics_data.inertial_mass * 0.5f, 1, 10);
+		//		colliders[i]->physics_data.inertial_mass = 1 * 1;
+		//		colliders[i + 2]->physics_data.inertial_mass = elbow_mass * 3;
+		//		colliders[i + 4]->physics_data.inertial_mass = hand_mass * 3;
+		//	//}
 
-		}
-		else {
-			// ‰Šú’l‚ÌŽ¿—Ê‚ðÝ’è
-			colliders[i]->physics_data.inertial_mass = hand_mass;
-			colliders[i + 2]->physics_data.inertial_mass = elbow_mass;
-			colliders[i + 4]->physics_data.inertial_mass = shlder_mass;
-		}
+		//}
+		//else {
+		//	// ‰Šú’l‚ÌŽ¿—Ê‚ðÝ’è
+		//	colliders[i]->physics_data.inertial_mass = hand_mass;
+		//	colliders[i + 2]->physics_data.inertial_mass = elbow_mass;
+		//	colliders[i + 4]->physics_data.inertial_mass = shlder_mass;
+		//}
+
+		//colliders[i]->physics_data.inertial_mass = hand_mass;
+		//colliders[i + 2]->physics_data.inertial_mass = elbow_mass;
+		//colliders[i + 4]->physics_data.inertial_mass = shlder_mass;
 
 	}
 

@@ -225,10 +225,10 @@ namespace Adollib
 
 			//::: Ž¿—Ê‚Ì’²® :::
 			Head_collider->physics_data.inertial_mass = 3;
-			Lsholder_collider->physics_data.inertial_mass = 4;
-			Rsholder_collider->physics_data.inertial_mass = 4;
-			Lelbow_collider->physics_data.inertial_mass = 1;
-			Relbow_collider->physics_data.inertial_mass = 1;
+			Lsholder_collider->physics_data.inertial_mass = 3;
+			Rsholder_collider->physics_data.inertial_mass = 3;
+			Lelbow_collider->physics_data.inertial_mass = 3;
+			Relbow_collider->physics_data.inertial_mass = 3;
 			Lhand_collider->physics_data.inertial_mass = 1;
 			Rhand_collider->physics_data.inertial_mass = 1;
 			Body_collider->physics_data.inertial_mass = 5;
@@ -237,6 +237,13 @@ namespace Adollib
 			Rleg_collider->physics_data.inertial_mass = 2;
 			Lfoot_collider->physics_data.inertial_mass = 1;
 			Rfoot_collider->physics_data.inertial_mass = 1;
+
+			//Lsholder_collider->physics_data.inertial_mass = 3;
+			//Rsholder_collider->physics_data.inertial_mass = 3;
+			//Lelbow_collider->physics_data.inertial_mass = 4;
+			//Relbow_collider->physics_data.inertial_mass = 4;
+			//Lhand_collider->physics_data.inertial_mass = 4;
+			//Rhand_collider->physics_data.inertial_mass = 4;
 			//Head_collider    ->physics_data.inertial_mass = 6;
 			//Lsholder_collider->physics_data.inertial_mass = 6;
 			//Lelbow_collider  ->physics_data.inertial_mass = 4;

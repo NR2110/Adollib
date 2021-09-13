@@ -29,8 +29,8 @@ namespace Adollib
 		head_rot_max_pow = 1000;
 		head_rot_pow = 500;
 
-		waist_move_max_speed = 15;
-		waist_move_pow = 1000;
+		waist_move_max_speed = 10;
+		waist_move_pow = 1500;
 
 		waist_rot_max_speed = 10;
 		waist_rot_max_pow = 4000;
@@ -44,9 +44,9 @@ namespace Adollib
 		leg_rot_max_pow = 200;
 		leg_rot_pow = 200;
 
-		hand_rot_max_speed = 8;
-		hand_rot_max_pow = 50;
-		hand_rot_pow = 15;
+		hand_rot_max_speed = 10;
+		hand_rot_max_pow = 200;
+		hand_rot_pow = 200;
 
 		hand_camera_max_rot = ToRadian(80);
 		hand_camera_rot_pow = 3;
