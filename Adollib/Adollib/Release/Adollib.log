@@ -1,9 +1,10 @@
-﻿  player_funcs.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(57,70): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(287,46): warning C4305: '=': 'double' から 'float' へ切り詰めます。
+﻿  stage_demo.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo.cpp(58,26): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo.cpp(55,38): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo.cpp(53,45): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
   コード生成しています。
-  1 of 8493 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  2 of 8547 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    51 functions had inline decision re-evaluated but remain unchanged
+    50 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Release\Adollib.exe

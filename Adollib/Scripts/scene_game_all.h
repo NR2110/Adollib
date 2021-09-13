@@ -10,4 +10,6 @@
 
 #include "../Scripts/demo_house.h"
 
+#include "../Scripts/stage_demo.h"
+
 #include "../Scripts/camera.h"

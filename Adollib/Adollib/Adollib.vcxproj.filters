@@ -83,6 +83,9 @@
     <Filter Include="ソース ファイル\scene_game\stage\base">
       <UniqueIdentifier>{6f7db560-cc33-4c5e-831f-e256c3b8824d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\scene_game\stage\stage">
+      <UniqueIdentifier>{12652a8b-3b50-4c00-957c-a10b36361d3e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Scripts\player.cpp">
@@ -270,6 +273,15 @@
     </ClCompile>
     <ClCompile Include="..\Scripts\player_funcs.cpp">
       <Filter>ソース ファイル\scene_game\scene_house\player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\stage_demo.cpp">
+      <Filter>ソース ファイル\scene_game\stage\stage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\stage_demo_funcs.cpp">
+      <Filter>ソース ファイル\scene_game\stage\stage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\stage_base.cpp">
+      <Filter>ソース ファイル\scene_game\stage\base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -591,9 +603,6 @@
     <ClInclude Include="Scripts\Physics\springjoint.h">
       <Filter>00_Adollib\22_physics\Joint</Filter>
     </ClInclude>
-    <ClInclude Include="..\Scripts\bottan.h">
-      <Filter>ソース ファイル\scene_game\stage\parts</Filter>
-    </ClInclude>
     <ClInclude Include="..\Scripts\door.h">
       <Filter>ソース ファイル\scene_game\stage\parts</Filter>
     </ClInclude>
@@ -604,6 +613,15 @@
       <Filter>ソース ファイル\scene_game\stage\base</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\stageparts_tags.h">
+      <Filter>ソース ファイル\scene_game\stage\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\stage_demo.h">
+      <Filter>ソース ファイル\scene_game\stage\stage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\buttan.h">
+      <Filter>ソース ファイル\scene_game\stage\parts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\stageparts_base.h">
       <Filter>ソース ファイル\scene_game\stage\base</Filter>
     </ClInclude>
   </ItemGroup>

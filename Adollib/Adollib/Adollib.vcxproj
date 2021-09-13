@@ -145,7 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\Scripts\bottan.h" />
+    <ClInclude Include="..\Scripts\buttan.h" />
     <ClInclude Include="..\Scripts\camera.h" />
     <ClInclude Include="..\Scripts\camera_manager.h" />
     <ClInclude Include="..\Scripts\camera_s.h" />
@@ -157,8 +157,10 @@
     <ClInclude Include="..\Scripts\player.h" />
     <ClInclude Include="..\Scripts\player_manager.h" />
     <ClInclude Include="..\Scripts\scene_game_all.h" />
+    <ClInclude Include="..\Scripts\stageparts_base.h" />
     <ClInclude Include="..\Scripts\stageparts_tags.h" />
     <ClInclude Include="..\Scripts\stage_base.h" />
+    <ClInclude Include="..\Scripts\stage_demo.h" />
     <ClInclude Include="Imgui\imconfig.h" />
     <ClInclude Include="Imgui\imgui.h" />
     <ClInclude Include="Imgui\imgui_impl_dx11.h" />
@@ -267,6 +269,9 @@
     <ClCompile Include="..\Scripts\player.cpp" />
     <ClCompile Include="..\Scripts\player_funcs.cpp" />
     <ClCompile Include="..\Scripts\player_manager.cpp" />
+    <ClCompile Include="..\Scripts\stage_base.cpp" />
+    <ClCompile Include="..\Scripts\stage_demo.cpp" />
+    <ClCompile Include="..\Scripts\stage_demo_funcs.cpp" />
     <ClCompile Include="Imgui\imgui.cpp" />
     <ClCompile Include="Imgui\imgui_demo.cpp" />
     <ClCompile Include="Imgui\imgui_draw.cpp" />
