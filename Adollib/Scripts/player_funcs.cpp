@@ -70,17 +70,16 @@ void Player::reach_out_hands() {
 
 			}
 
-			float debug = 1;
-			//if (joint != nullptr && joint->get_colliderB()->physics_data.is_moveable == false) {
-			//	debug = 3;
-			//}
-
+			float catch_obje_mass = 1;
+			if (joint != nullptr) {
+				catch_obje_mass = 1;
+			}
 			{
 				// 肩
 				auto& collider = colliders[i];
 				Quaternion off = collider->transform->orientation * goal.inverse();
 				float pow = ALClamp(off.radian() * hand_rot_pow, 0, hand_rot_max_pow);
-				collider->add_torque(off.axis() * pow * 1 * collider->physics_data.inertial_mass);
+				collider->add_torque(off.axis() * pow * catch_obje_mass * collider->physics_data.inertial_mass);
 				collider->set_max_angula_velocity(hand_rot_max_speed);
 			}
 			{
@@ -88,7 +87,7 @@ void Player::reach_out_hands() {
 				auto& collider = colliders[i + 2];
 				Quaternion off = collider->transform->orientation * goal.inverse();
 				float pow = ALClamp(off.radian() * hand_rot_pow, 0, hand_rot_max_pow);
-				collider->add_torque(off.axis() * pow * 1 * collider->physics_data.inertial_mass);
+				collider->add_torque(off.axis() * pow * catch_obje_mass * collider->physics_data.inertial_mass);
 				collider->set_max_angula_velocity(hand_rot_max_speed * 0.8f);
 			}
 			//{
@@ -146,13 +145,13 @@ void Player::catch_things() {
 				//相手がstaticの
 				//if (min_data->coll->physics_data.is_moveable == false) {
 					//Jointに登録
-					joint = Joint::add_balljoint(
-						collider,
-						min_data->coll,
-						min_data->contacted_pointA,
-						min_data->contacted_pointB
-					);
-					joint->slop = 0.1f;
+				joint = Joint::add_balljoint(
+					collider,
+					min_data->coll,
+					min_data->contacted_pointA,
+					min_data->contacted_pointB
+				);
+				joint->slop = 0.1f;
 				//}
 				//else {
 
@@ -164,16 +163,23 @@ void Player::catch_things() {
 		//離す
 		if (!input->getMouseState(key) && joint != nullptr) {
 			joint->get_colliderB()->tag &= ~Collider_tags::Having_Stage;
-			joint->get_colliderB()->tag |= Collider_tags::Stage;
+			joint->get_colliderB()->tag |= Collider_tags::Jumpable_Stage;
 			Joint::delete_joint(joint);
 		}
 
-		// staticなものに近い順(handから順)に質量を大きくする
-		if (joint != nullptr && joint->get_colliderB()->physics_data.is_moveable == false) {
-			// staticなものに近い順(handから順)に質量を大きくする
-			colliders[i]->physics_data.inertial_mass = shlder_mass * 10;
-			colliders[i + 2]->physics_data.inertial_mass = elbow_mass * 10;
-			colliders[i + 4]->physics_data.inertial_mass = hand_mass * 10;
+		if (joint != nullptr) {
+			if (joint->get_colliderB()->physics_data.is_moveable == false) {
+				// staticなものに近い順(handから順)に質量を大きくする
+				colliders[i]->physics_data.inertial_mass = shlder_mass * 10;
+				colliders[i + 2]->physics_data.inertial_mass = elbow_mass * 10;
+				colliders[i + 4]->physics_data.inertial_mass = hand_mass * 10;
+			}
+			//else {
+			//	float mass = ALClamp(joint->get_colliderB()->physics_data.inertial_mass * 0.5f, 1, 10);
+			//	colliders[i]->physics_data.inertial_mass = shlder_mass * mass;
+			//	colliders[i + 2]->physics_data.inertial_mass = elbow_mass * mass;
+			//	colliders[i + 4]->physics_data.inertial_mass = hand_mass * mass;
+			//}
 
 		}
 		else {
@@ -190,7 +196,7 @@ void Player::catch_things() {
 		Joint_base*& joint = *joints[i];
 		if (joint == nullptr)continue;
 		joint->get_colliderB()->tag |= Collider_tags::Having_Stage;
-		joint->get_colliderB()->tag &= ~Collider_tags::Stage;
+		joint->get_colliderB()->tag &= ~Collider_tags::Jumpable_Stage;
 	}
 };
 
@@ -218,7 +224,7 @@ void Player::tuning_waist_pillar() {
 	{
 		float anchor_move_vec = 0;
 		if (!check_standable_collider->concoll_enter(Collider_tags::Stage) && is_jumping == false) {
-		// しばらく地面にいなければ徐々にwaist_Sphereを上にあげる
+			// しばらく地面にいなければ徐々にwaist_Sphereを上にあげる
 			anchor_move_vec = -0.2f;
 		}
 		else anchor_move_vec = 3; // 接地していればwaist_Sphereを下げる
@@ -373,7 +379,7 @@ void Player::add_pow_for_stand() {
 
 	}
 	// gunyattoしていた時は
-	else{ turn_gunyatto_dir(); }
+	else { turn_gunyatto_dir(); }
 
 	{
 		//jointでつなげると重力が弱くなるから & 一定のパーツは重力の影響を受けないようにしているから  下向きに力を加える
@@ -462,13 +468,8 @@ void Player::move_legs() {
 void Player::make_jump() {
 	if (is_jumping == true)coyote += Al_Global::second_per_frame;
 	if (coyote >= 0)is_jumping = false;
-	if (is_jumping == false && onground_collider->concoll_enter(Collider_tags::Stage)) coyote = 0.3f;
-	if (is_jumping == false && !onground_collider->concoll_enter(Collider_tags::Stage)) coyote -= Al_Global::second_per_frame;
-
-
-	 Debug::set("is_jumpable", coyote);
-	 if(onground_collider->concoll_enter(Collider_tags::Stage))	 Debug::set("is_onground", 11111111);
-	 else                                                        Debug::set("is_onground", 00000000);
+	if (is_jumping == false && onground_collider->concoll_enter(Collider_tags::Jumpable_Stage)) coyote = 0.3f;
+	if (is_jumping == false && !onground_collider->concoll_enter(Collider_tags::Jumpable_Stage)) coyote -= Al_Global::second_per_frame;
 
 	if (coyote >= 0 && input->getKeyTrigger(Key::Space)) {
 		for (int i = 0; i < Human_collider_size; i++) {
@@ -498,7 +499,7 @@ void Player::turn_gunyatto_dir() {
 
 	Vector3 waist_head_dir = (Head->world_position() - Waist->world_position()).unit_vect();
 	if (fabsf(dir.y) > 0.7f) {
-		if      (dir.y < 0) dir = +waist_head_dir;
+		if (dir.y < 0) dir = +waist_head_dir;
 		else                dir = -waist_head_dir;
 	}
 	//if      (waist_head_dir.y < -0.8f) dir = +waist_head_dir;

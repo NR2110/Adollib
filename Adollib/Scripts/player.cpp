@@ -44,7 +44,7 @@ namespace Adollib
 		leg_rot_max_pow = 200;
 		leg_rot_pow = 200;
 
-		hand_rot_max_speed = 20;
+		hand_rot_max_speed = 8;
 		hand_rot_max_pow = 50;
 		hand_rot_pow = 15;
 
