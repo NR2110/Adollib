@@ -192,7 +192,7 @@ namespace Adollib
 			}
 
 			//::: Šµ«ƒ‚[ƒƒ“ƒg‚Ì’²® :::
-			Head_collider	 ->set_barycenter(Vector3(0, 0.2f, 0));
+			Head_collider	 ->set_barycenter(Vector3(0, +0.5f, 0));
 			Body_collider	 ->set_barycenter(Vector3(0, -0.2f, 0));
 
 			Lhand_collider->physics_data.inertial_mass = 100;
