@@ -55,7 +55,7 @@ namespace Adollib
 		hand_camera_rot_center = ToRadian(30);
 
 		jump_power = 21;
-		turn_speed = 2.5f;
+		turn_speed = 1.5f;
 
 		{
 			auto GO = Gameobject_manager::create("waist_sphere_stand");

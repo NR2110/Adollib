@@ -313,7 +313,7 @@ void Player::angula_move() {
 	if (rot_vec.norm() != 0) {
 		rot_vec = rot_vec.unit_vect();
 
-		rot_vec = vector3_quatrotate(rot_vec, camera->orientation);
+		rot_vec = vector3_quatrotate(Vector3(0, 0, -1), camera->orientation);
 		rot_vec.y = 0;
 		rot_vec = rot_vec.unit_vect();
 
@@ -425,11 +425,11 @@ void Player::move_legs() {
 		Vector3 waist_axis = Vector3(0, -1, 0);
 		Vector3 rot_axis = Vector3(1, 0, 0);
 
-		//if (1) {
-		//	//‚±‚ê‚ð‚·‚ê‚Î‘«‚ð‰¡‚É“®‚©‚¹‚é ‚Í‚¸‚¾‚ª‚¤‚Ü‚­‚¢‚©‚È‚¢
-		//	rot_axis = vector3_cross(dir, -waist_axis).unit_vect();
-		//	rot_axis = vector3_quatrotate(rot_axis, Waist_collider->transform->orientation.inverse());
-		//}
+		if (1) {
+			//‚±‚ê‚ð‚·‚ê‚Î‘«‚ð‰¡‚É“®‚©‚¹‚é ‚Í‚¸‚¾‚ª‚¤‚Ü‚­‚¢‚©‚È‚¢
+			rot_axis = vector3_cross(dir, -waist_axis).unit_vect();
+			rot_axis = vector3_quatrotate(rot_axis, Waist_collider->transform->orientation.inverse());
+		}
 
 
 
@@ -486,7 +486,7 @@ void Player::make_jump() {
 	if (is_jumping == false && onground_collider->concoll_enter(Collider_tags::Jumpable_Stage)) coyote = 0.3f;
 	if (is_jumping == false && !onground_collider->concoll_enter(Collider_tags::Jumpable_Stage)) coyote -= Al_Global::second_per_frame;
 
-	if (coyote >= 0 && input->getKeyTrigger(Key::Space)) {
+	if (is_gunyatto == false && coyote >= 0 && input->getKeyTrigger(Key::Space)) {
 		for (int i = 0; i < Human_collider_size; i++) {
 			Human_colliders[i]->linear_velocity(Vector3(Human_colliders[i]->linear_velocity().x, jump_power, Human_colliders[i]->linear_velocity().z));
 		}
