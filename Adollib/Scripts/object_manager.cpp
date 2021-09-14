@@ -1245,11 +1245,11 @@ namespace Adollib
 
 		Collider* coll = object->addComponent<Collider>();
 		coll->add_shape<Sphere>();
-		coll->tag = Collider_tags::croth | Collider_tags::Jumpable_Stage;;
+		coll->tag = Collider_tags::Sphere | Collider_tags::Stage | Collider_tags::Jumpable_Stage;
 		//coll->ignore_tags = Collider_tags::croth;
 		//coll->ignore_tags = UINT_MAX;
 
-		coll->tag |= Collider_tags::Sphere;
+		coll->tag |= Collider_tags::croth;
 		GOs.emplace_back(object);
 
 		out_coll = coll;
@@ -1270,7 +1270,7 @@ namespace Adollib
 		Collider* coll = object->addComponent<Collider>();
 		Box* box = coll->add_shape<Box>();
 
-		coll->tag = Collider_tags::Box | Collider_tags::Jumpable_Stage;
+		coll->tag = Collider_tags::Box | Collider_tags::Stage | Collider_tags::Jumpable_Stage;
 
 		GOs.emplace_back(object);
 		boxes.emplace_back(coll);
@@ -1295,7 +1295,7 @@ namespace Adollib
 		//Meshcoll* M = object->addComponent<Meshcoll>();
 		//M->load_mesh("./DefaultModel/cube.fbx");
 		//M->inertial_mass = 1;
-		coll->tag = Collider_tags::Cylinder | Collider_tags::Jumpable_Stage;;
+		coll->tag = Collider_tags::Cylinder | Collider_tags::Stage | Collider_tags::Jumpable_Stage;;
 		GOs.emplace_back(object);
 		return object;
 	}
@@ -1395,7 +1395,7 @@ namespace Adollib
 
 		Box* boxes[Tree_size];
 		Collider* coll = tree->addComponent<Collider>();
-		coll->tag = Collider_tags::Jumpable_Stage;
+		coll->tag = Collider_tags::Stage | Collider_tags::Jumpable_Stage;
 		for (int i = 0; i < Tree_size; i++) {
 			boxes[i] = coll->add_shape<Box>();
 		}

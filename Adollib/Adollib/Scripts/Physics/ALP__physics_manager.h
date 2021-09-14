@@ -81,7 +81,7 @@ namespace Adollib
 			//float angula_sleep_threrhold = 0.02f; //freezeの閾値
 			float linear_sleep_threrhold = 0.5f; //freezeの閾値
 			//float angula_sleep_threrhold = 0.15f; //freezeの閾値
-			float angula_sleep_threrhold = 1; //freezeの閾値
+			float angula_sleep_threrhold = 0.5f; //freezeの閾値
 
 
 
