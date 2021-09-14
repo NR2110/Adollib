@@ -8,7 +8,6 @@ namespace Adollib
 	class Camera : public Component
 	{
 	private:
-		float timeStep = 0.016f;
 		bool follow_player = false;
 		float dis = 20;
 		float dis_buffer = 20;
@@ -23,6 +22,9 @@ namespace Adollib
 		Quaternion camera_rot;
 
 		Vector3 eular_xy(Vector3 V);
+
+		//カメラの更新をphysicsの更新と同期させているため updateが回っていないときのtriggerをここで保存
+		bool is_trigger_leftctrl = false;
 
 	public:
 		void awake();

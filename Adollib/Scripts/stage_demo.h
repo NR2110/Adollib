@@ -8,7 +8,7 @@ namespace Adollib {
 
 	private:
 
-		Gameobject* set_tree(Vector3 pos, Vector3 scale, Vector3 rotate, Vector3 color = Vector3(1, 1, 1));
+		Gameobject* set_tree(Vector3 pos, Vector3 scale, Vector3 rotate);
 		Gameobject* set_buttan(Vector3 pos, Vector3 scale, Vector3 rotate, Vector3 color = Vector3(1, 1, 1));
 		Gameobject* set_door(Vector3 pos, Vector3 scale, Vector3 rotate, Vector3 color = Vector3(1, 1, 1));
 		Gameobject* set_rope(Vector3 pos, Vector3 scale, Vector3 rotate, Vector3 color = Vector3(1, 1, 1));

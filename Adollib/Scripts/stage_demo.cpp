@@ -22,20 +22,10 @@ namespace Adollib
 
 	void Stage_demo::start()
 	{
-		enum class Stage_types {
-
-			Cube,
-			Sphere,
-			Capsule,
-			Mesh_Cube,
-			Shaclo,
-			Teach
-		};
-
 
 		Gameobject* GO = nullptr;
 
-		set_box(Vector3(0, -60, 0), Vector3(80, 60, 80), Vector3(0), Vector3(1, 1, 1) * 0.8f, true);
+		set_box(Vector3(0, -60, 0), Vector3(80, 60, 80), Vector3(0), Vector3(188, 214, 54) / 255.0f, true);
 
 		//Tree
 		{
@@ -55,8 +45,7 @@ namespace Adollib
 								z_num * 17 - 60 + rand() % 6 - 3
 							),
 							Vector3(1, 0.9f + (rand() % 100) * 0.01f * 0.5f, 1),
-							Vector3(0, rand() % 180, 0),
-							Vector3(1)
+							Vector3(0, rand() % 180, 0)
 						));
 				}
 			}

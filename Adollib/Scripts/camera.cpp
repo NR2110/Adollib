@@ -36,7 +36,6 @@ namespace Adollib
 	void Camera::awake()
 	{
 		gameobject->transform->local_pos = Vector3(0, 30, -50);
-		timeStep = 1;
 	}
 
 	void Camera::start()
@@ -76,19 +75,12 @@ namespace Adollib
 		}
 #endif // UseImgui
 
-		// physicsの更新に追尾カメラも揃えないとがくがくする
-		timeStep += Al_Global::second_per_frame;
-		static bool Debug_01 = true;
-		static bool Debug_02= true;
+		is_trigger_leftctrl |= input->getKeyTrigger(Key::RightControl);
 
-		//Debug_02 = Debug_01;
-		//if (Physics_function::Phyisics_manager::is_updated_physics) Debug_01 = true;
-		//else Debug_01 = false;
-		//if (Debug_02 == false)return;
+		// physicsの更新に追尾カメラを揃えないとがくがくする
+		if (Physics_function::Phyisics_manager::is_updated_physics == false) return;
 
-		if (Physics_function::Phyisics_manager::is_updated_physics == false) {
-			return;
-		}
+		float timeStep = Al_Global::second_per_frame;
 
 		if (follow_player == false) {
 
@@ -192,7 +184,7 @@ namespace Adollib
 
 		}
 
-		if (input->getKeyTrigger(Key::RightControl)) {
+		if (is_trigger_leftctrl) {
 			is_lock_cursol = !is_lock_cursol;
 			if (is_lock_cursol == true) {
 				input->setCursorPos(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
@@ -200,7 +192,7 @@ namespace Adollib
 			}
 		}
 
-
+		is_trigger_leftctrl = false;
 		timeStep = 0;
 	}
 

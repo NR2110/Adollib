@@ -13,7 +13,7 @@
 
 namespace Adollib
 {
-	Gameobject* Stage_demo::set_tree(Vector3 pos, Vector3 scale, Vector3 rotate, Vector3 color) {
+	Gameobject* Stage_demo::set_tree(Vector3 pos, Vector3 scale, Vector3 rotate) {
 		Gameobject* tree = nullptr;
 		tree = Gameobject_manager::create(GO_tag::None);
 
