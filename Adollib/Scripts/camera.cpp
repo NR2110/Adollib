@@ -76,10 +76,17 @@ namespace Adollib
 		}
 #endif // UseImgui
 
-		// physicsの更新が1/60s毎なので 追尾カメラも揃えないとがくがくする
+		// physicsの更新に追尾カメラも揃えないとがくがくする
 		timeStep += Al_Global::second_per_frame;
-		if (timeStep < inv60) {
-		//if (timeStep < 0.1f) {
+		static bool Debug_01 = true;
+		static bool Debug_02= true;
+
+		//Debug_02 = Debug_01;
+		//if (Physics_function::Phyisics_manager::is_updated_physics) Debug_01 = true;
+		//else Debug_01 = false;
+		//if (Debug_02 == false)return;
+
+		if (Physics_function::Phyisics_manager::is_updated_physics == false) {
 			return;
 		}
 
@@ -175,6 +182,7 @@ namespace Adollib
 				dis = ALClamp(dis, 10, 50);
 				dis_buffer = ALEasing(dis_buffer, dis, 0.1f, timeStep);
 				pos_buffer = ALEasing(pos_buffer, player->position, 0.1f, timeStep);
+				//pos_buffer = player->position;
 			}
 
 			camera_rot *= rotate;
@@ -193,7 +201,7 @@ namespace Adollib
 		}
 
 
-		timeStep -= inv60;
+		timeStep = 0;
 	}
 
 	// このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる

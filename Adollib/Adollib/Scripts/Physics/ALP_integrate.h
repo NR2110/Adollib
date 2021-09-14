@@ -28,7 +28,7 @@ namespace Adollib {
 		void resetforce(std::list<Physics_function::ALP_Physics*>& ALP_physics);
 
 		// 外力による速度などの更新
-		void applyexternalforce(std::list<Physics_function::ALP_Physics*>& ALP_physics);
+		void applyexternalforce(std::list<Physics_function::ALP_Physics*>& ALP_physics, const float timeratio_60);
 
 		// 座標,姿勢の更新
 		void integrate(std::list<Physics_function::ALP_Physics*>& ALP_physics);

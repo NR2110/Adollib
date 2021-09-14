@@ -49,6 +49,8 @@ using namespace Contacts;
 
 namespace Adollib
 {
+	bool Phyisics_manager::is_updated_physics = false; //physicsを更新したframeだけtrueになる
+
 	float Phyisics_manager::frame_count = -1;
 
 	//各dataの実態配列
@@ -81,15 +83,18 @@ bool Phyisics_manager::update(Scenelist Sce)
 #endif
 	frame_count += Al_Global::second_per_frame;
 	if (Al_Global::second_per_game < 1) {
-		if (frame_count > inv60)frame_count -= inv60;
+		frame_count = 0;
 		resetforce(ALP_physicses[Sce]);
 	}
 
 	//1/60s毎に更新を行う
 #ifdef Update60fps
 	if (frame_count < inv60) {
+		is_updated_physics = false;
 		return true;
 	}
+	is_updated_physics = true;
+	float timeratio_60 = 1 / (frame_count * 60); // framecountが大きい->大きすぎる力がかかっている 力を0.016s秒に直す
 #endif
 
 	// Colliderのframe毎に保存するdataをreset
@@ -101,14 +106,14 @@ bool Phyisics_manager::update(Scenelist Sce)
 
 #ifdef Update60fps
 	physicsParams.timeStep = ALmin(inv60, physicsParams.max_timeStep);
-	frame_count -= inv60;
+	for (; frame_count - inv60 > 0;)frame_count -= inv60;
 #else
 	// 0.016秒ごとに更新するとアタッチしたGOへの追跡カメラがバグるため
 	physicsParams.timeStep = ALmin(Al_Global::second_per_frame, physicsParams.max_timeStep);
 #endif
 
 	// 外力の更新
-	applyexternalforce(ALP_physicses[Sce]);
+	applyexternalforce(ALP_physicses[Sce], timeratio_60);
 
 	pairs_new_num = 1 - pairs_new_num;
 

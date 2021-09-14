@@ -74,13 +74,7 @@ void Gameobject_manager::initialize(Scenelist Sce) {
 void Gameobject_manager::update(Scenelist Sce) {
 	if (Sce == Scenelist::scene_null)return;
 
-	std::vector<object*> gos;
-
-	//扱いやすいように一つの配列に保存
-	for (auto& GO : gameobjects[Sce]) {
-		gos.push_back(GO);
-	}
-
+	auto& gos = gameobjects[Sce];
 
 	//一番上のの親を保存
 	std::vector<object*> masters; //GO親子ツリーの頂点を保存
@@ -96,6 +90,19 @@ void Gameobject_manager::update(Scenelist Sce) {
 		}
 	}
 
+	Phyisics_manager::update();
+
+	//親から子に座標の更新を行う
+	{
+		std::unordered_map<object*, bool> masters_manag;
+		for (auto& GO : gos) {
+			object* master = GO->top_pearent();
+			if (masters_manag.count(master) == 0) {
+				master->update_world_trans_to_children();
+			}
+			masters_manag[master] = true;
+		}
+	}
 
 	//親から子へupdateを呼ぶ update中に、親objectが削除されたときに対応できないためNG
 	std::for_each(masters.begin(), masters.end(), [](object* ob) {ob->update_to_children(); });
@@ -105,18 +112,10 @@ void Gameobject_manager::update(Scenelist Sce) {
 	Hierarchy::update_hierarchy(masters);
 #endif // UseImgui
 
-	gos.clear();
-	//扱いやすいように一つの配列に保存
-	for (auto& GO : gameobjects[Sce]) {
-		gos.push_back(GO);
-	}
-
 	//親から子に座標の更新を行う
 	{
 		std::unordered_map<object*, bool> masters_manag;
-		if (gos.size() > 8) {
-			int dasfgfhg = 0;
-		}
+
 		for (auto& GO : gos) {
 			object* master = GO->top_pearent();
 			if (masters_manag.count(master) == 0) {
@@ -127,20 +126,6 @@ void Gameobject_manager::update(Scenelist Sce) {
 
 	}
 
-	Phyisics_manager::update();
-
-
-	//親から子に座標の更新を行う
-	{
-		std::unordered_map<object*, bool> masters_manag;
-		for (auto& GO : gos) {
-			object* master = GO->top_pearent();
-			if (masters_manag.count(master) == 0) {
-				master->update_world_trans_to_children();
-			}
-			masters_manag[master] = true;
-		}
-	}
 
 	delete_gameobjects();
 

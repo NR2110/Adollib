@@ -71,7 +71,7 @@ namespace Adollib
 
 		Box* boxes[Tree_size];
 		Collider* coll = tree->addComponent<Collider>();
-		coll->physics_data.inertial_mass = 30;
+		coll->physics_data.inertial_mass = 40;
 		coll->tag = Collider_tags::Stage | Collider_tags::Kinematic_Stage | Collider_tags::Jumpable_Stage;
 
 		for (int i = 0; i < Tree_size; i++) {

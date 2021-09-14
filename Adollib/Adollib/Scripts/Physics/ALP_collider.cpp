@@ -69,15 +69,13 @@ void ALP_Collider::integrate(float duration, Vector3 linear_velocity, Vector3 an
 		pearent_orientate_inv = pearent_orientate_inv.inverse();
 	}
 
-	//現在の速度が 前の速度から加速度一定で変化したとして積分を行い移動距離を求める
+	//現在の速度が 前の速度から加速度一定で変化したとして移動距離を求める
 	const Vector3 linear_move = old_linear_velocity * duration + 0.5f * (linear_velocity - old_linear_velocity) * duration;
 	const Vector3 angula_move = old_angula_velocity * duration + 0.5f * (angula_velocity - old_angula_velocity) * duration;
 
 	//アタッチされているGOの親子関係に対応 親が回転していても落下は"下"方向に
 	const Vector3 local_linear_move = vector3_quatrotate(linear_move, pearent_orientate_inv);
 	const Vector3 local_anglar_move = vector3_quatrotate(angula_move, pearent_orientate_inv);
-
-	//gameobject->transform->local_pos += local_linear_move;
 
 	//どっちも計算結果は一緒 上のほうが直感的
 	//gameobject->transform->local_orient *= quaternion_axis_radian(local_anglar_move.unit_vect(), local_anglar_move.norm_sqr());
@@ -92,33 +90,6 @@ void ALP_Collider::integrate(float duration, Vector3 linear_velocity, Vector3 an
 
 	//Quaternion dAng = gameobject->transform->local_orient.unit_vect() * Quaternion(0, anglar_velocity.x, anglar_velocity.y, anglar_velocity.z) * 0.5f;
 	//gameobject->transform->local_orient =( gameobject->transform->local_orient + dAng * duration).unit_vect();
-	//:::::::::::::::::::::
-
-
-	//if (linear_velocity.norm() == 0 && anglar_velocity.norm() == 0)return;
-
-	////親のorienattionの逆をとる
-	//Quaternion pearent_orientate_inv = Quaternion(1, 0, 0, 0);
-	//if (gameobject->pearent() != nullptr) {
-	//	pearent_orientate_inv = gameobject->pearent()->world_orientate();
-	//	pearent_orientate_inv = pearent_orientate_inv.inverse();
-	//}
-
-	////アタッチされているGOの親子関係に対応 親が回転していても落下は"下"方向に
-	//Vector3 local_linear_velocity = vector3_quatrotate(linear_velocity, pearent_orientate_inv);
-	//Vector3 local_anglar_velocity = vector3_quatrotate(anglar_velocity, pearent_orientate_inv);
-
-	//gameobject->transform->local_pos += local_linear_velocity * duration;
-
-	//Quaternion debug_0, debug_1;
-
-	////どっちも計算結果は一緒 上のほうが直感的
-	//gameobject->transform->local_orient *= quaternion_axis_radian(local_anglar_velocity.unit_vect(), local_anglar_velocity.norm_sqr() * duration);
-	//gameobject->transform->local_orient = gameobject->transform->local_orient.unit_vect();
-
-	////Quaternion dAng = gameobject->transform->local_orient.unit_vect() * Quaternion(0, anglar_velocity.x, anglar_velocity.y, anglar_velocity.z) * 0.5f;
-	////gameobject->transform->local_orient =( gameobject->transform->local_orient + dAng * duration).unit_vect();
-
 }
 
 void ALP_Collider::reset_data_per_frame() {

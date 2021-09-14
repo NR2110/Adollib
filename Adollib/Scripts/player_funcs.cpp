@@ -71,9 +71,6 @@ void Player::reach_out_hands() {
 			}
 
 			float catch_obje_mass = 1;
-			if (joint != nullptr) {
-				catch_obje_mass = 1;
-			}
 			{
 				// Œ¨
 				auto& collider = colliders[i];
@@ -377,14 +374,19 @@ void Player::add_pow_for_stand() {
 			//float pow = k * (next * t + 0.5f * t * (off.radian() - next));
 			//pow = ALClamp(pow * waist_rot_pow, 0, waist_rot_max_pow);
 
-			float pow = ALClamp(off.radian() * waist_rot_pow, 0, waist_rot_max_pow);
+			float rad = off.radian();
+			if (rad > PI)rad = 2 * PI - rad;
+			float pow = ALClamp(rad * waist_rot_pow, 0, waist_rot_max_pow);
 			Waist_collider->add_torque(off.axis() * pow * gnyat_pow);
 
 		}
 		{
 			//“·‘Ì‚ð‚½‚½‚¹‚é
 			Quaternion off = rotate * Body_collider->gameobject->transform->orientation.inverse();
-			float pow = ALClamp(off.radian() * body_rot_pow, 0, body_rot_max_pow);
+
+			float rad = off.radian();
+			if (rad > PI)rad = 2 * PI - rad;
+			float pow = ALClamp(rad * body_rot_pow, 0, body_rot_max_pow);
 			Body_collider->add_torque(off.axis() * pow * gnyat_pow);
 		}
 
@@ -465,7 +467,9 @@ void Player::move_legs() {
 
 			auto axis = off[i].axis();
 
-			float pow = ALClamp(off[i].radian() * leg_rot_pow, 0, leg_rot_max_pow);
+			float rad = off[i].radian();
+			if (rad > PI)rad = 2 * PI - rad;
+			float pow = ALClamp(rad * leg_rot_pow, 0, leg_rot_max_pow);
 
 			collider[i]->add_torque(axis * pow);
 			collider[i]->set_max_angula_velocity(leg_rot_max_speed);
@@ -486,6 +490,13 @@ void Player::make_jump() {
 		for (int i = 0; i < Human_collider_size; i++) {
 			Human_colliders[i]->linear_velocity(Vector3(Human_colliders[i]->linear_velocity().x, jump_power, Human_colliders[i]->linear_velocity().z));
 		}
+		//Lsholder_collider->linear_velocity(Vector3(Lleg_collider->linear_velocity().x, jump_power * 2, Lleg_collider->linear_velocity().z));
+		//Rsholder_collider->linear_velocity(Vector3(Lleg_collider->linear_velocity().x, jump_power * 2, Lleg_collider->linear_velocity().z));
+		//Lelbow_collider->linear_velocity(Vector3(Lleg_collider->linear_velocity().x, jump_power * 2, Lleg_collider->linear_velocity().z));
+		//Relbow_collider->linear_velocity(Vector3(Lleg_collider->linear_velocity().x, jump_power * 2, Lleg_collider->linear_velocity().z));
+		//Lhand_collider->linear_velocity(Vector3(Lleg_collider->linear_velocity().x, jump_power * 2, Lleg_collider->linear_velocity().z));
+		//Rhand_collider->linear_velocity(Vector3(Lleg_collider->linear_velocity().x, jump_power * 2, Lleg_collider->linear_velocity().z));
+
 		Lleg_collider->linear_velocity(Vector3(Lleg_collider->linear_velocity().x, jump_power * 0.1f, Lleg_collider->linear_velocity().z));
 		Rleg_collider->linear_velocity(Vector3(Rleg_collider->linear_velocity().x, jump_power * 0.1f, Rleg_collider->linear_velocity().z));
 		Lfoot_collider->linear_velocity(Vector3(Lfoot_collider->linear_velocity().x, jump_power * 0.1f, Lfoot_collider->linear_velocity().z));

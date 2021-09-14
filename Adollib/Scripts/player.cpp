@@ -37,12 +37,14 @@ namespace Adollib
 		waist_rot_pow = 9000;
 
 		body_rot_max_speed = 10;
-		body_rot_max_pow = 2000;
-		body_rot_pow = 1500;
+		//body_rot_max_pow = 2000;
+		//body_rot_pow = 1500;
+		body_rot_max_pow = 4000;
+		body_rot_pow = 5000;
 
 		leg_rot_max_speed = 60;
 		leg_rot_max_pow = 200;
-		leg_rot_pow = 200;
+		leg_rot_pow = 250;
 
 		hand_rot_max_speed = 10;
 		hand_rot_max_pow = 200;
@@ -52,8 +54,8 @@ namespace Adollib
 		hand_camera_rot_pow = 3;
 		hand_camera_rot_center = ToRadian(30);
 
-		jump_power = 30;
-		turn_speed = 2;
+		jump_power = 21;
+		turn_speed = 3;
 
 		{
 			auto GO = Gameobject_manager::create("waist_sphere_stand");

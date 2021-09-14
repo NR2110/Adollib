@@ -66,7 +66,7 @@ namespace Adollib
 
 		//house
 		{
-			float mass = 5;
+			float mass = 7;
 			Vector3 color = Vector3(187, 185, 181) / 255;
 			//Vector3 color = Vector3(220, 220, 220) / 255;
 			Vector3 size = Vector3(2, 1, 1);

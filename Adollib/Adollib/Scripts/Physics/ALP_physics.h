@@ -141,7 +141,7 @@ namespace Adollib {
 			void reset_force();
 
 			//外力の更新
-			void apply_external_force(float duration = 1);
+			void apply_external_force(float duration = 1,float timeratio_60 = 1);
 
 			//座標,姿勢の更新
 			void integrate(float duration = 1);

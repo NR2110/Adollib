@@ -192,7 +192,7 @@ namespace Adollib
 			}
 
 			//::: 慣性モーメントの調整 :::
-			Head_collider	 ->set_barycenter(Vector3(0, -0.2f, 0));
+			Head_collider	 ->set_barycenter(Vector3(0, -0.5f, 0));
 			Body_collider	 ->set_barycenter(Vector3(0, -0.2f, 0));
 
 			Lhand_collider->physics_data.inertial_mass = 100;
@@ -227,8 +227,8 @@ namespace Adollib
 			Head_collider->physics_data.inertial_mass = 3;
 			Lsholder_collider->physics_data.inertial_mass = 3;
 			Rsholder_collider->physics_data.inertial_mass = 3;
-			Lelbow_collider->physics_data.inertial_mass = 3;
-			Relbow_collider->physics_data.inertial_mass = 3;
+			Lelbow_collider->physics_data.inertial_mass = 4;
+			Relbow_collider->physics_data.inertial_mass = 4;
 			Lhand_collider->physics_data.inertial_mass = 1;
 			Rhand_collider->physics_data.inertial_mass = 1;
 			Body_collider->physics_data.inertial_mass = 5;
@@ -279,8 +279,8 @@ namespace Adollib
 			Rsholder_collider->physics_data.anglar_drag = 0.5f;
 			Relbow_collider->physics_data.anglar_drag = 0.5f;
 			Rhand_collider->physics_data.anglar_drag = 0.5f;
-			Body_collider->physics_data.anglar_drag = 0.5f;
-			Waist_collider->physics_data.anglar_drag = 0.5f;
+			Body_collider->physics_data.anglar_drag = 0.9f;
+			Waist_collider->physics_data.anglar_drag = 0.8f;
 			Rleg_collider->physics_data.anglar_drag = 0.5f;
 			Rfoot_collider->physics_data.anglar_drag = 0.5f;
 			Lleg_collider->physics_data.anglar_drag = 0.5f;
@@ -291,8 +291,8 @@ namespace Adollib
 
 			//::: 重力適用の調整 :::
 			Head_collider->physics_data.is_fallable = false;
-			Rsholder_collider->physics_data.is_fallable = false;
-			Lsholder_collider->physics_data.is_fallable = false;
+			//Rsholder_collider->physics_data.is_fallable = false;
+			//Lsholder_collider->physics_data.is_fallable = false;
 			Rleg_collider->physics_data.is_fallable = false;
 			Lleg_collider->physics_data.is_fallable = false;
 

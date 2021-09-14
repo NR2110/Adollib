@@ -132,6 +132,8 @@ namespace Adollib
 			static std::unordered_map<Scenelist, std::vector<Physics_function::ALP_Collider*>> added_collider;   //’Ç‰Á‚³‚ê‚½
 
 		public:
+			static bool is_updated_physics; //physics‚ğXV‚µ‚½frame‚¾‚¯true‚É‚È‚é
+
 			//¶¬‚Ìphysics‚Ì’l
 			static Physics_function::PhysicsParams physicsParams;
 

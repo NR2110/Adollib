@@ -83,11 +83,14 @@ void ALP_Physics::reset_force() {
 	angula_acceleration = Vector3(0, 0, 0);
 }
 
-void ALP_Physics::apply_external_force(float duration) {
+void ALP_Physics::apply_external_force(float duration, const float timeratio_60) {
 	old_angula_velocity = angula_velocity;
 	old_linear_velocity = linear_velocity;
 
 	if (is_movable()) {
+		// —Í‚ğŠ’è‚Ì•b”‚Ì‚Ì—Ê‚É’¼‚·
+		accumulated_force  *= timeratio_60;
+		accumulated_torque *= timeratio_60;
 		//inv_rotate = Quaternion(1, 0, 0, 0);
 
 		angula_velocity = angula_velocity * pow(1 - angula_drag, duration);
