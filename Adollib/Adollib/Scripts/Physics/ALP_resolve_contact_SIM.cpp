@@ -270,7 +270,6 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 
 	Work_meter::start("Setup_solver_contact");
 	// pairのセットアップ
-	Debug::set("pair_count", pairs.size());
 	for (auto& pair : pairs) {
 
 		coll[0] = pair->body[0];

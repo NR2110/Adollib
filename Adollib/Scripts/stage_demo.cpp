@@ -25,7 +25,7 @@ namespace Adollib
 
 		Gameobject* GO = nullptr;
 
-		set_box(Vector3(0, -60, 80), Vector3(80, 60, 160), Vector3(0), Vector3(188, 214, 54) / 255.0f, true);
+		set_box(Vector3(0, -60, 0), Vector3(80, 60, 80), Vector3(0), Vector3(188, 214, 54) / 255.0f, true);
 
 		//Tree
 		{
@@ -49,7 +49,6 @@ namespace Adollib
 						));
 				}
 			}
-
 
 		}
 
@@ -257,7 +256,7 @@ namespace Adollib
 					pearent->add_child(go);
 					colls.at(index) = (coll);
 
-					coll->physics_data.inertial_mass = 0.5f;
+					coll->physics_data.inertial_mass = 0.3f;
 				}
 			}
 
@@ -270,6 +269,17 @@ namespace Adollib
 				}
 			}
 		}
+
+		{
+			Vector3 base_pos = Vector3(120, 2, 0);
+			Vector3 off = Vector3(0);
+			for (int i = 0; i < 5; i++) {
+				set_box(base_pos + off, Vector3(40, 4, 40), Vector3(0), Vector3(188, 214, 54) / 255.0f * pow(1.03f, i + 1), true);
+				off += Vector3(10, 8, 0);
+			}
+		}
+
+		//buttan
 
 	}
 

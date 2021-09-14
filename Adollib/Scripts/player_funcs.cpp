@@ -80,7 +80,6 @@ void Player::reach_out_hands() {
 				float pow = ALClamp(rad *  hand_rot_pow, 0, hand_rot_max_pow);
 				collider->add_torque(off.axis() * pow * catch_obje_mass * collider->physics_data.inertial_mass);
 				collider->set_max_angula_velocity(hand_rot_max_speed);
-				Debug::set("radian_Sholder", rad);
 			}
 			{
 				//˜r
@@ -92,7 +91,6 @@ void Player::reach_out_hands() {
 				float pow = ALClamp(rad * hand_rot_pow, 0, hand_rot_max_pow);
 				collider->add_torque(off.axis() * pow * catch_obje_mass * collider->physics_data.inertial_mass);
 				collider->set_max_angula_velocity(hand_rot_max_speed * 0.8f);
-				Debug::set("radian_elbow", rad);
 			}
 			//{
 			//	//˜r
@@ -352,6 +350,8 @@ void Player::accume_move_dir() {
 
 //—§‚Â‚æ‚¤‚É—Í‚ð‰Á‚¦‚é
 void Player::add_pow_for_stand() {
+	if (onground_collider->concoll_enter(Collider_tags::Jumpable_Stage))Debug::set("is_onground", 4);
+	else Debug::set("is_onground", 0);
 
 	float gnyat_pow = 0.9f;
 	if (!input->getKeyState(Key::LeftControl) && is_gunyatto == false)
@@ -360,7 +360,9 @@ void Player::add_pow_for_stand() {
 			//Šç‚ªÔ‚¿‚á‚ñ‚È‚Ì‚ðŽ¡‚·
 			Head_collider->physics_data.anglar_drag = 1.f;
 			Quaternion off = Body_collider->gameobject->transform->orientation * Head_collider->gameobject->transform->orientation.inverse();
-			float pow = ALClamp(off.radian() * head_rot_pow, 0, head_rot_max_pow);
+			float rad = off.radian();
+			if (rad > PI)rad = 2 * PI - rad;
+			float pow = ALClamp(rad * head_rot_pow, 0, head_rot_max_pow);
 			Head_collider->add_torque(off.axis() * pow * gnyat_pow);
 		}
 		{
@@ -404,10 +406,19 @@ void Player::add_pow_for_stand() {
 
 	is_gunyatto = false;
 	//—¼Žè‚ªstatic‚È‚à‚Ì‚ðŽ‚Á‚Ä‚¢‚é‚Æ‚«A‚®‚É‚á‚Á‚Æ
-	if ((catch_left_joint != nullptr && catch_left_joint->get_colliderB()->physics_data.is_moveable == false) &&
+	if ((catch_left_joint  != nullptr && catch_left_joint ->get_colliderB()->physics_data.is_moveable == false) &&
 		(catch_right_joint != nullptr && catch_right_joint->get_colliderB()->physics_data.is_moveable == false)
 		) {
 		is_gunyatto = true;
+	}
+
+	if (!onground_collider->concoll_enter(Collider_tags::Jumpable_Stage)) {
+		Waist_collider->physics_data.dynamic_friction = 0;
+		Body_collider->physics_data.dynamic_friction = 0;
+	}
+	else{
+		Waist_collider->physics_data.dynamic_friction = 0.4f;
+		Body_collider->physics_data.dynamic_friction =  0.4f;
 	}
 };
 

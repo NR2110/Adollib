@@ -71,7 +71,7 @@ namespace Adollib
 
 		Box* boxes[Tree_size];
 		Collider* coll = tree->addComponent<Collider>();
-		coll->physics_data.inertial_mass = 40;
+		coll->physics_data.inertial_mass = 35;
 		coll->tag = Collider_tags::Stage | Collider_tags::Kinematic_Stage | Collider_tags::Jumpable_Stage;
 
 		for (int i = 0; i < Tree_size; i++) {
@@ -119,5 +119,9 @@ namespace Adollib
 		tree->transform->local_pos += barycenter * (scale.y - 1);
 
 		return tree;
+	}
+
+	Gameobject* set_buttan(Vector3 pos, Vector3 scale, Vector3 rotate, Vector3 color = Vector3(1, 1, 1)) {
+
 	}
 }
