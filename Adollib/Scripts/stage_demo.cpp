@@ -25,7 +25,7 @@ namespace Adollib
 
 		Gameobject* GO = nullptr;
 
-		set_box(Vector3(0, -60, 0), Vector3(80, 60, 80), Vector3(0), Vector3(188, 214, 54) / 255.0f, true);
+		set_box(Vector3(0, -60, 80), Vector3(80, 60, 160), Vector3(0), Vector3(188, 214, 54) / 255.0f, true);
 
 		//Tree
 		{
@@ -144,6 +144,7 @@ namespace Adollib
 
 					Collider* coll = Daruma->addComponent<Collider>();
 					coll->tag = Collider_tags::Stage | Collider_tags::Kinematic_Stage | Collider_tags::Jumpable_Stage;
+					coll->physics_data.inertial_mass = 5;
 					//coll->set_tensor(tensor);
 					//{
 					//	Sphere* sphere[2] = { nullptr };
@@ -225,6 +226,7 @@ namespace Adollib
 
 		{}
 
+		//croth
 		{
 			Gameobject* pearent = Gameobject_manager::create("BallJoint_Shperenet");
 			pearent->transform->local_pos = Vector3(0, 60, 0);
@@ -255,7 +257,7 @@ namespace Adollib
 					pearent->add_child(go);
 					colls.at(index) = (coll);
 
-					coll->physics_data.inertial_mass = 0.1f;
+					coll->physics_data.inertial_mass = 0.5f;
 				}
 			}
 

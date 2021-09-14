@@ -1,8 +1,5 @@
-﻿  player.cpp
-  stage_demo.cpp
-  stage_demo_funcs.cpp
-  scene_game.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo.cpp(55,38): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo.cpp(53,45): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo.cpp(58,26): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+﻿  player_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(164,47): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(401,112): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(486,59): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

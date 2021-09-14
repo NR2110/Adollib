@@ -23,9 +23,6 @@ namespace Adollib
 
 		Vector3 eular_xy(Vector3 V);
 
-		//カメラの更新をphysicsの更新と同期させているため updateが回っていないときのtriggerをここで保存
-		bool is_trigger_leftctrl = false;
-
 	public:
 		void awake();
 

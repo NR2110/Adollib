@@ -9,6 +9,7 @@
 
 #include "../Adollib/Scripts/Object/component_camera.h"
 
+#include "../Adollib/Scripts/Physics/ray.h"
 #include "../Adollib/Scripts/Physics/ALP__physics_manager.h"
 
 namespace Adollib
@@ -74,11 +75,6 @@ namespace Adollib
 			ImGui::End();
 		}
 #endif // UseImgui
-
-		is_trigger_leftctrl |= input->getKeyTrigger(Key::RightControl);
-
-		// physicsの更新に追尾カメラを揃えないとがくがくする
-		if (Physics_function::Phyisics_manager::is_updated_physics == false) return;
 
 		float timeStep = Al_Global::second_per_frame;
 
@@ -168,13 +164,43 @@ namespace Adollib
 			}
 
 
+			{
+				// physicsの更新に追尾カメラを揃えないとがくがくする
+				if (Physics_function::Phyisics_manager::is_updated_physics);
+				//pos_buffer = ALEasing(pos_buffer, player->position, 1, timeStep);
+				pos_buffer = player->position;
+
+			}
+
 			//カメラの距離
 			{
-				dis -= input->getMouseWheel() * 0.01f;
+				static float easing_value = 3 * Al_Global::second_per_frame;
+				if (input->getMouseWheel() != 0) {
+					easing_value = 100 * Al_Global::second_per_frame;
+					dis = dis_buffer;
+				}
+				dis -= input->getMouseWheel() * 0.015f;
 				dis = ALClamp(dis, 10, 50);
-				dis_buffer = ALEasing(dis_buffer, dis, 0.1f, timeStep);
-				pos_buffer = ALEasing(pos_buffer, player->position, 0.1f, timeStep);
-				//pos_buffer = player->position;
+
+				Ray ray;
+				ray.position = pos_buffer;
+				ray.direction = vector3_quatrotate(Vector3(0, 0, -1), camera_rot);
+				Ray::Raycast_struct str;
+				str.collider_tag = Collider_tags::Stage;
+				ray.ray_cast(str);
+
+				if (str.raymin - 1 < dis_buffer) {
+					easing_value = 5 * Al_Global::second_per_frame;
+					dis_buffer = str.raymin - 1;
+					if (dis > 30)dis = 30;
+				}
+
+				float next = ALEasing(dis_buffer, dis, 0.1f, timeStep);
+				dis_buffer += ALClamp(next - dis_buffer, -easing_value, easing_value);
+				//dis_buffer = ALEasing(dis_buffer, dis, 0.03f, timeStep);
+
+				dis_buffer = ALClamp(dis_buffer, 10, 50);
+
 			}
 
 			camera_rot *= rotate;
@@ -184,7 +210,7 @@ namespace Adollib
 
 		}
 
-		if (is_trigger_leftctrl) {
+		if (input->getKeyTrigger(Key::RightControl)) {
 			is_lock_cursol = !is_lock_cursol;
 			if (is_lock_cursol == true) {
 				input->setCursorPos(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
@@ -192,7 +218,6 @@ namespace Adollib
 			}
 		}
 
-		is_trigger_leftctrl = false;
 		timeStep = 0;
 	}
 
