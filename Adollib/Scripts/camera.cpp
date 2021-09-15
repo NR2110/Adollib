@@ -1,6 +1,7 @@
 
 #include "../Adollib/Scripts/Main/systems.h"
 #include "../Adollib/Scripts/Main/Adollib.h"
+#include "../Adollib/Scripts/Imgui/debug.h"
 #include "../Adollib/Scripts/Object/transform.h"
 #include "../Adollib/Scripts/Object/gameobject_manager.h"
 #include "Camera.h"
@@ -174,6 +175,7 @@ namespace Adollib
 
 			//カメラの距離
 			{
+				//wheelから距離の調整
 				static float easing_value = 3 * Al_Global::second_per_frame;
 				if (input->getMouseWheel() != 0) {
 					easing_value = 100 * Al_Global::second_per_frame;
@@ -182,6 +184,11 @@ namespace Adollib
 				dis -= input->getMouseWheel() * 0.015f;
 				dis = ALClamp(dis, 10, 50);
 
+				//disをイージングのためにdis_bufferに保存
+				float next = ALEasing(dis_buffer, dis, 0.1f, timeStep);
+				dis_buffer += ALClamp(next - dis_buffer, -easing_value, easing_value);
+
+				//rayを飛ばしてcameraがstageにめり込まないように
 				Ray ray;
 				ray.position = pos_buffer;
 				ray.direction = vector3_quatrotate(Vector3(0, 0, -1), camera_rot);
@@ -189,17 +196,14 @@ namespace Adollib
 				str.collider_tag = Collider_tags::Stage;
 				ray.ray_cast(str);
 
+				//カメラがめり込んでいたら位置を調整
 				if (str.raymin - 1 < dis_buffer) {
 					easing_value = 5 * Al_Global::second_per_frame;
 					dis_buffer = str.raymin - 1;
 					if (dis > 30)dis = 30;
 				}
 
-				float next = ALEasing(dis_buffer, dis, 0.1f, timeStep);
-				dis_buffer += ALClamp(next - dis_buffer, -easing_value, easing_value);
-				//dis_buffer = ALEasing(dis_buffer, dis, 0.03f, timeStep);
-
-				dis_buffer = ALClamp(dis_buffer, 10, 50);
+				//dis_buffer = ALClamp(dis_buffer, 10, 50);
 
 			}
 

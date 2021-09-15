@@ -53,13 +53,10 @@ namespace Adollib
 
 		bool is_gunyatto = false; //trueの時ぐにゃっとする
 
-		// staticなものをつかむとき、質量を変えるため保存する
-		float shlder_mass = 0;
-		float elbow_mass = 0;
-		float hand_mass = 0;
-
 		Joint_base* catch_right_joint = nullptr; //右手がつかんでいるjoint
 		Joint_base* catch_left_joint = nullptr;	 //左手がつかんでいるjoint
+		bool is_maked_right_joint = false; //つかんでいたものが距離で離れたとき、stateのみだと即座に次のものをつかんでします 嫌なのでboolで管理
+		bool is_maked_left_joint = false;
 
 		// このcolliderが接地していた場合 立つことができる しばらくこのcolliderが接地していないと ぐにゃぐにゃになる
 		Collider* check_standable_collider = nullptr;
@@ -188,10 +185,6 @@ namespace Adollib
 			Rfoot		=Rfoot_collider		->gameobject;
 			Lleg		=Lleg_collider		->gameobject;
 			Lfoot		=Lfoot_collider		->gameobject;
-
-			shlder_mass = Lsholder_collider->physics_data.inertial_mass;
-			elbow_mass = Lelbow_collider->physics_data.inertial_mass;
-			hand_mass =  Lhand_collider->physics_data.inertial_mass;
 
 			Waist_pillar_max_y = l_waist_pillar->center.y;
 		}

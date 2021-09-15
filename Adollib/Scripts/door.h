@@ -72,7 +72,7 @@ namespace Adollib {
 					if (start_pos != goal_pos)
 					{
 						Vector3 dir = start_pos - goal_pos;
-						float pow = pos_speed;
+						float pow = pos_speed * 1.5f;
 
 						//s‚«‰ß‚¬‚È‚¢‚æ‚¤‚É
 						if (vector3_dot(goal_pos - start_pos, transform->local_pos - start_pos) <= 0) {

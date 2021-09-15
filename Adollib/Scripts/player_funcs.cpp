@@ -124,13 +124,17 @@ void Player::catch_things() {
 		&catch_left_joint,
 		&catch_right_joint
 	};
+	bool* is_maked_joint[2] = {
+		&is_maked_left_joint,
+		&is_maked_right_joint
+	};
 
 	for (int i = 0; i < 2; i++) {
 		const Mouse key = keys[i];
 		auto& collider = colliders[i];
 		Joint_base*& joint = *joints[i];
 		//Ž‚Â
-		if (input->getMouseState(key) && joint == nullptr) {
+		if (input->getMouseState(key) && joint == nullptr && *is_maked_joint[i] == false) { //Key‚ª‰Ÿ‚³‚ê‚Ä‚¢‚é joint‚ª‘¶Ý‚µ‚È‚¢ “¯state’†‚É•¨‚ð‚Â‚©‚ñ‚Å‚¢‚È‚¢
 			collider->is_save_contacted_colls = true;
 			auto& contacted_colls = collider->contacted_colliders;
 
@@ -142,58 +146,47 @@ void Player::catch_things() {
 
 				}
 			}
+			//joint‚ð¶¬
 			if (min_data != nullptr && min_data->coll->tag != Collider_tags::Human) {
-
-				//‘ŠŽè‚ªstatic‚Ì
-				//if (min_data->coll->physics_data.is_moveable == false) {
-					//Joint‚É“o˜^
+				*is_maked_joint[i] = true;
 				joint = Joint::add_balljoint(
 					collider,
 					min_data->coll,
 					min_data->contacted_pointA,
 					min_data->contacted_pointB
 				);
-				joint->slop = 0.1f;
-				//}
-				//else {
-
-				//}
 
 			}
 		}
 
 		//—£‚·
-		if (!input->getMouseState(key) && joint != nullptr) {
-			joint->get_colliderB()->tag &= ~Collider_tags::Having_Stage;
-			joint->get_colliderB()->tag |= Collider_tags::Jumpable_Stage;
-			Joint::delete_joint(joint);
+		{
+
+			if (!input->getMouseState(key)) {
+				*is_maked_joint[i] = false;
+			}
+
+			if (!input->getMouseState(key) && joint != nullptr) {
+				joint->get_colliderB()->tag &= ~Collider_tags::Having_Stage;
+				joint->get_colliderB()->tag |= Collider_tags::Jumpable_Stage;
+				Joint::delete_joint(joint);
+			}
+
+
+			if (joint != nullptr) {
+				joint->adapt_anchor();
+				Vector3 world_posA = joint->get_colliderA()->transform->position + vector3_quatrotate(joint->get_anchors()[0].posA, joint->get_colliderA()->transform->orientation);
+				Vector3 world_posB = joint->get_colliderB()->transform->position + vector3_quatrotate(joint->get_anchors()[0].posB, joint->get_colliderB()->transform->orientation);
+
+				if((world_posA - world_posB).norm() > 1){
+					joint->get_colliderB()->tag &= ~Collider_tags::Having_Stage;
+					joint->get_colliderB()->tag |= Collider_tags::Jumpable_Stage;
+					Joint::delete_joint(joint);
+				}
+
+			}
+
 		}
-
-		//if (joint != nullptr) {
-		//	if (joint->get_colliderB()->physics_data.is_moveable == false) {
-		//		// static‚È‚à‚Ì‚É‹ß‚¢‡(hand‚©‚ç‡)‚ÉŽ¿—Ê‚ð‘å‚«‚­‚·‚é
-		//		colliders[i]->physics_data.inertial_mass = shlder_mass * 10;
-		//		colliders[i + 2]->physics_data.inertial_mass = elbow_mass * 10;
-		//		colliders[i + 4]->physics_data.inertial_mass = hand_mass * 10;
-		//	}
-		//	//else {
-		//	//	float mass = ALClamp(joint->get_colliderB()->physics_data.inertial_mass * 0.5f, 1, 10);
-		//		colliders[i]->physics_data.inertial_mass = 1 * 1;
-		//		colliders[i + 2]->physics_data.inertial_mass = elbow_mass * 3;
-		//		colliders[i + 4]->physics_data.inertial_mass = hand_mass * 3;
-		//	//}
-
-		//}
-		//else {
-		//	// ‰Šú’l‚ÌŽ¿—Ê‚ðÝ’è
-		//	colliders[i]->physics_data.inertial_mass = hand_mass;
-		//	colliders[i + 2]->physics_data.inertial_mass = elbow_mass;
-		//	colliders[i + 4]->physics_data.inertial_mass = shlder_mass;
-		//}
-
-		//colliders[i]->physics_data.inertial_mass = hand_mass;
-		//colliders[i + 2]->physics_data.inertial_mass = elbow_mass;
-		//colliders[i + 4]->physics_data.inertial_mass = shlder_mass;
 
 	}
 
@@ -236,8 +229,8 @@ void Player::tuning_waist_pillar() {
 		else anchor_move_vec = 3; // Ú’n‚µ‚Ä‚¢‚ê‚Îwaist_Sphere‚ð‰º‚°‚é
 
 		//—¼Žè‚ªstatic‚È‚à‚Ì‚ðŽ‚Á‚Ä‚¢‚é‚Æ‚«A
-		if ((catch_left_joint != nullptr && catch_left_joint->get_colliderB()->physics_data.is_moveable == false) &&
-			(catch_right_joint != nullptr && catch_right_joint->get_colliderB()->physics_data.is_moveable == false)
+		if ((catch_left_joint != nullptr  && catch_left_joint ->get_colliderB()->tag & Collider_tags::Static_Stage) &&
+			(catch_right_joint != nullptr && catch_right_joint->get_colliderB()->tag & Collider_tags::Static_Stage)
 			) {
 			// timer‚ðÝ’è‚·‚é
 			check_standable_collider_timer = 0.5f;
@@ -350,8 +343,6 @@ void Player::accume_move_dir() {
 
 //—§‚Â‚æ‚¤‚É—Í‚ð‰Á‚¦‚é
 void Player::add_pow_for_stand() {
-	if (onground_collider->concoll_enter(Collider_tags::Jumpable_Stage))Debug::set("is_onground", 4);
-	else Debug::set("is_onground", 0);
 
 	float gnyat_pow = 0.9f;
 	if (!input->getKeyState(Key::LeftControl) && is_gunyatto == false)
@@ -364,6 +355,7 @@ void Player::add_pow_for_stand() {
 			if (rad > PI)rad = 2 * PI - rad;
 			float pow = ALClamp(rad * head_rot_pow, 0, head_rot_max_pow);
 			Head_collider->add_torque(off.axis() * pow * gnyat_pow);
+
 		}
 		{
 			//“·‘Ì‚ð‚½‚½‚¹‚é
@@ -406,8 +398,8 @@ void Player::add_pow_for_stand() {
 
 	is_gunyatto = false;
 	//—¼Žè‚ªstatic‚È‚à‚Ì‚ðŽ‚Á‚Ä‚¢‚é‚Æ‚«A‚®‚É‚á‚Á‚Æ
-	if ((catch_left_joint  != nullptr && catch_left_joint ->get_colliderB()->physics_data.is_moveable == false) &&
-		(catch_right_joint != nullptr && catch_right_joint->get_colliderB()->physics_data.is_moveable == false)
+	if ((catch_left_joint  != nullptr && catch_left_joint ->get_colliderB()->tag & Collider_tags::Static_Stage) &&
+		(catch_right_joint != nullptr && catch_right_joint->get_colliderB()->tag & Collider_tags::Static_Stage)
 		) {
 		is_gunyatto = true;
 	}

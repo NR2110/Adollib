@@ -28,6 +28,9 @@ namespace Adollib
 		set_box(Vector3(0, -60, 0), Vector3(80, 60, 80), Vector3(0), Vector3(188, 214, 54) / 255.0f, true);
 		set_box(Vector3(0, -60, -98), Vector3(30, 30, 60), Vector3(0), Vector3(188, 214, 54) / 255.0f, true);
 
+
+#if _DEBUG
+#else
 		//Tree
 		{
 			Gameobject* pearent = Gameobject_manager::create("Trees");
@@ -270,6 +273,7 @@ namespace Adollib
 				}
 			}
 		}
+#endif
 
 		{
 			Vector3 base_pos = Vector3(120, 2, 0);
@@ -289,7 +293,7 @@ namespace Adollib
 		set_buttan(Vector3(0, -2.9f - 30, -115), Vector3(3, 3, 3), Vector3(0), Stage_parts::Stageparts_tags::Flag_0, Vector3(255, 80, 80) / 255.0f);
 
 		set_door(
-			Vector3(0, -91, -95), Vector3(0, -60, -95),
+			Vector3(0, -89.5f, -95), Vector3(0, -60, -95),
 			Vector3(0, 0, 0), Vector3(0, 0, 0),
 			3, 1,
 			Vector3(25,60,15),

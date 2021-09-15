@@ -1,5 +1,5 @@
-﻿  stage_base.cpp
+﻿  player_funcs.cpp
   stage_demo.cpp
-  stage_demo_funcs.cpp
-  scene_game.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(57,70): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(285,46): warning C4305: '=': 'double' から 'float' へ切り詰めます。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe
