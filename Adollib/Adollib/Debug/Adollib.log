@@ -1,5 +1,5 @@
-﻿  player_manager.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(164,47): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(401,112): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(486,59): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+﻿  stage_base.cpp
+  stage_demo.cpp
+  stage_demo_funcs.cpp
+  scene_game.cpp
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

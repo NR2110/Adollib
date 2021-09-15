@@ -18,7 +18,7 @@ namespace Adollib
 	// Š‘®‚·‚éƒV[ƒ“‚Ì‰Šú‰»‚Éˆê“x‚¾‚¯ŒÄ‚Î‚ê‚é
 	void Player_manager::awake() {
 
-		Vector3 player_start_pos = Vector3(-2.7f, 23, -52.2f);
+		Vector3 player_start_pos = Vector3(-2.7f, 23, -150);
 		Quaternion player_start_rotate = quaternion_from_euler(0, 180, 0);
 
 		Gameobject* Human = Gameobject_manager::create("Human");

@@ -11,9 +11,13 @@
 #include "../Adollib/Scripts/Imgui/debug.h"
 #include "../Adollib/Scripts/Physics/joint.h"
 
+#include "buttan.h"
+#include "kinematic_block.h"
+#include "door.h"
+
 namespace Adollib
 {
-	Gameobject* Stage_demo::set_tree(Vector3 pos, Vector3 scale, Vector3 rotate) {
+	Gameobject* Stage_demo::set_tree(const Vector3& pos, const Vector3& scale, const Vector3& rotate) {
 		Gameobject* tree = nullptr;
 		tree = Gameobject_manager::create(GO_tag::None);
 
@@ -118,10 +122,61 @@ namespace Adollib
 		tree->transform->local_pos += barycenter;
 		tree->transform->local_pos += barycenter * (scale.y - 1);
 
+		// 動くのであれば所定のcomponentをアタッチする
+		auto comp = tree->addComponent<Stage_parts::Kinematic_block>();
+		comp->this_stage = this;
+		comp->this_coll = coll;
+		comp->respown_pos = pos;
+		comp->respown_rotate = quaternion_identity();
+
 		return tree;
 	}
 
-	Gameobject* set_buttan(Vector3 pos, Vector3 scale, Vector3 rotate, Vector3 color = Vector3(1, 1, 1)) {
+	Gameobject* Stage_demo::set_buttan(const Vector3& pos, const Vector3& scale, const Vector3& rotate, Stage_parts::Stageparts_tagbit tag, const Vector3& color) {
+		auto coll = set_box(pos, scale, rotate, color);
+		auto go = coll->gameobject;
+		auto buttan_comp = go->addComponent<Stage_parts::Buttan>();
 
+		coll->physics_data.is_hitable = false;
+
+		go->transform->local_scale.y += 0.2f;
+
+		buttan_comp->tag = tag;
+		buttan_comp->this_stage = this;
+		buttan_comp->this_coll = coll;
+		buttan_comp->base_scale_y = scale.y;
+		buttan_comp->base_material_color = color;
+
+		return go;
+	}
+
+	Gameobject* Stage_demo::set_door(
+		const Vector3& start_pos, const Vector3& goal_pos,
+		const Vector3& start_rot, const Vector3& goal_rot,
+		float pos_speed, float rot_speed,
+		const Vector3& scale,
+		Stage_parts::Stageparts_tagbit tag,
+		const Vector3& color
+	) {
+
+		auto coll = set_box(start_pos, scale, start_rot, color);
+		auto go = coll->gameobject;
+		auto door_comp = go->addComponent<Stage_parts::Door>();
+
+		coll->physics_data.inertial_mass = 1000;
+		coll->physics_data.is_moveable = true;
+		coll->physics_data.is_fallable = false;
+
+		door_comp->tag = tag;
+		door_comp->this_stage = this;
+		door_comp->this_coll = coll;
+		door_comp->start_pos = start_pos;
+		door_comp->goal_pos = goal_pos;
+		door_comp->start_rot = start_rot;
+		door_comp->goal_rot = goal_rot;
+		door_comp->pos_speed = pos_speed;
+		door_comp->rot_speed = rot_speed;
+
+		return go;
 	}
 }

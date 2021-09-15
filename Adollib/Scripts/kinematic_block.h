@@ -23,9 +23,10 @@ namespace Adollib {
 
 			// 毎フレーム呼ばれる更新処理
 			void update() override {
-				if (transform->position.y < this_stage->y_respown_value) {
+				if (transform->position.y < this_stage->y_respown_limit) {
 					this_coll->reset_force();
 					transform->local_pos = respown_pos;
+					transform->local_pos.y = this_stage->y_respown_pos;
 					transform->local_orient = respown_rotate;
 				}
 			};

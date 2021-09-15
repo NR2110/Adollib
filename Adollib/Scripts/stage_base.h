@@ -13,7 +13,8 @@ namespace Adollib {
 	public:
 		Stage_parts::Stageparts_tagbit tags; //‚±‚Ìstage‚ª‚Âtag
 
-		float y_respown_value = 0; // Y‚ª‚±‚êˆÈ‰º‚¾‚Ærespown‚³‚ê‚é
+		float y_respown_limit = -150; // Y‚ª‚±‚êˆÈ‰º‚¾‚Ærespown‚³‚ê‚é
+		float y_respown_pos = 100; // respown‚µ‚½‚Æ‚«‚ÌY‚ÌÀ•W
 
 	private:
 

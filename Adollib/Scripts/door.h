@@ -1,19 +1,32 @@
 #pragma once
 
 #include "stageparts_base.h"
+#include "../Adollib/Scripts/Main/Adollib.h"
 
 namespace Adollib {
 
 	namespace Stage_parts{
 		// 指定のtagが1であれば動くギミック
 		class Door : public Stageparts_base {
+		public:
 
-			Stageparts_tagbit flag = Stageparts_tags::None; //自身の管理するbit
+			Stageparts_tagbit tag = Stageparts_tags::None; //自身の管理するbit
 
-			Vector3 dir = Vector3(0, 1, 0); //動く向き
-			float move_dis = 10; //動く距離
+			//初期位置
+			Vector3 start_pos;
+			Quaternion start_rot;
+
+			//goal位置
+			Vector3 goal_pos;
+			Quaternion goal_rot;
+
+			//動く速さ
+			float pos_speed = 5;
+			float rot_speed;
 
 		private:
+
+
 
 		public:
 
@@ -22,15 +35,61 @@ namespace Adollib {
 
 			// 毎フレーム呼ばれる更新処理
 			void update() override{
+				this_coll->ignore_tags = Collider_tags::Static_Stage;
+
+				if (start_pos == goal_pos)this_coll->physics_data.is_kinmatic_linear = false;
+				if (start_rot == goal_rot)this_coll->physics_data.is_kinmatic_anglar = false;
+				this_coll->physics_data.is_kinmatic_linear = false;
+				this_coll->physics_data.is_kinmatic_anglar = false;
 
 				//指定のbitが立っていたら力を加える
-				if (this_stage->tags & flag) {
+				if (this_stage->tags & tag) {
+
+					//pos
+					if (start_pos != goal_pos)
+					{
+						Vector3 dir = goal_pos - start_pos;
+						float pow = pos_speed;
+
+						//行き過ぎないように
+						if (vector3_dot(start_pos - goal_pos, transform->local_pos - goal_pos) <= 0) {
+							transform->local_pos = goal_pos;
+						}
+						else {
+							//行き過ぎていなければ力を加える
+							this_coll->linear_velocity(dir.unit_vect() * pos_speed);
+						}
+					}
 
 
-
+					//rot
+					if (start_rot != goal_rot) {}
 
 
 				}
+				else {
+					//pos
+					if (start_pos != goal_pos)
+					{
+						Vector3 dir = start_pos - goal_pos;
+						float pow = pos_speed;
+
+						//行き過ぎないように
+						if (vector3_dot(goal_pos - start_pos, transform->local_pos - start_pos) <= 0) {
+							transform->local_pos = start_pos;
+						}
+						else {
+							//行き過ぎていなければ力を加える
+							this_coll->linear_velocity(dir.unit_vect() * pos_speed);
+						}
+					}
+
+
+					//rot
+					if (start_rot != goal_rot) {}
+				}
+
+
 			};
 
 		};
