@@ -181,7 +181,7 @@ namespace Adollib
 					easing_value = 100 * Al_Global::second_per_frame;
 					dis = dis_buffer;
 				}
-				dis -= input->getMouseWheel() * 0.015f;
+				dis -= input->getMouseWheel() * 0.03f;
 				dis = ALClamp(dis, 10, 50);
 
 				//disをイージングのためにdis_bufferに保存

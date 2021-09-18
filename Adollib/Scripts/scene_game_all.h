@@ -12,4 +12,6 @@
 
 #include "../Scripts/stage_demo.h"
 
+#include "../Scripts/stage_manager.h"
+
 #include "../Scripts/camera.h"

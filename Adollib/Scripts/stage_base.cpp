@@ -46,6 +46,7 @@ Collider* Stage_base::set_sphere(Vector3 pos, float r, Vector3 color, bool is_st
 
 	}
 
+	stage_parts.emplace_back(object);
 	return coll;
 }
 
@@ -76,6 +77,7 @@ Collider* Stage_base::set_box(Vector3 pos, Vector3 size, Vector3 rotate, Vector3
 
 	}
 
+	stage_parts.emplace_back(object);
 	return coll;
 }
 
@@ -107,6 +109,7 @@ Collider* Stage_base::set_capsule(Vector3 pos, float r, float length, Vector3 ro
 
 	}
 
+	stage_parts.emplace_back(object);
 	return coll;
 }
 
@@ -139,6 +142,7 @@ Collider* Stage_base::set_meshbox(Vector3 pos, Vector3 size, Vector3 rotate, Vec
 
 	}
 
+	stage_parts.emplace_back(object);
 	return coll;
 }
 
@@ -160,6 +164,7 @@ Collider* Stage_base::set_plane(Vector3 pos, Vector3 normal, Vector3 color, bool
 		coll->physics_data.is_moveable = false;
 	}
 
+	stage_parts.emplace_back(object);
 	return coll;
 }
 

@@ -5,6 +5,7 @@
 
 namespace Adollib
 {
+	class Stage_manager;
 
 	class Player : public Component
 	{
@@ -76,12 +77,15 @@ namespace Adollib
 
 		float move_timer = 0; //足の回転を求めるために 入力時間を保存
 
+		float respown_timer = 0; //respown処理用のtimer >0の時 check_respown()でPlayer::updateをreturn (入力を受け付けない、gunyattoする)
 
 	private:
 		std::shared_ptr<Transfome> camera; //cameraへのポインタ
+		Stage_manager* stage_manager = nullptr; //cameraへのポインタ
 
 	private:
 		//::: 毎フレーム呼び出す
+		bool check_respown(); //respown処理
 		void reach_out_hands(); //手を伸ばす
 		void catch_things(); //物をつかむ
 		void tuning_waist_pillar(); //腰を支えるwaist_pillarを調整

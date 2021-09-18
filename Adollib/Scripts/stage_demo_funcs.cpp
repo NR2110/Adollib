@@ -129,6 +129,8 @@ namespace Adollib
 		comp->respown_pos = pos;
 		comp->respown_rotate = quaternion_identity();
 
+		for (int i = 0; i < Tree_size; i++) stage_parts.emplace_back(tree_parts[i]);
+
 		return tree;
 	}
 

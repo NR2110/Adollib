@@ -21,20 +21,16 @@ namespace Adollib {
 		Gameobject* set_rope(const Vector3& pos, const Vector3& scale, const Vector3& rotate, const Vector3& color = Vector3(1, 1, 1));
 
 	public:
-		void awake() override;
+		// stage_managerが呼ぶawake このstageに切り替わったときに呼ばれる
+		void stage_awake() override;
 
-		// 所属するシーンの初期化時に一度だけ呼ばれる
-		void start()override;
+		// stage_managerが呼ぶdestroy このstageから次に切り替わったときに呼ばれる
+		void stage_destroy() override;
 
+	public:
 		// 毎フレーム呼ばれる更新処理
 		void update()override;
 
-		void Update_hierarchy() override {};
-
-		// このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる
-		void onEnable()override;
-
-		// このスクリプトがアタッチされているGOのactiveSelfがfalseになった時呼ばれる
-		void onDisable()override;
+		void Update_hierarchy() override ;
 	};
 }

@@ -8,9 +8,6 @@
     <Filter Include="ソース ファイル\scene_game">
       <UniqueIdentifier>{99480d18-a01a-478a-95d0-fb97c50cd010}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\scene_game\camera">
-      <UniqueIdentifier>{8ef12ffc-f6e1-45e5-ba59-12c05479917f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\scene_game\object">
       <UniqueIdentifier>{1318d6d5-7f58-4468-9a25-b89ef51ca1f0}</UniqueIdentifier>
     </Filter>
@@ -65,15 +62,6 @@
     <Filter Include="00_Adollib\22_physics\Joint">
       <UniqueIdentifier>{49b4bba8-3f1f-4682-a578-69c8e8cd5674}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\scene_game\scene_house">
-      <UniqueIdentifier>{e6d50f78-9f68-4ce7-acad-d2aae7892255}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\scene_game\scene_house\player">
-      <UniqueIdentifier>{5803a67c-c3e6-4d3c-82a6-90b2b6264aeb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\scene_game\scene_house\camera">
-      <UniqueIdentifier>{c5a1a0b5-3b44-4ee7-b36f-e93b357c3d6b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\scene_game\stage">
       <UniqueIdentifier>{3188ed85-55f8-473e-8937-984656018759}</UniqueIdentifier>
     </Filter>
@@ -86,19 +74,22 @@
     <Filter Include="ソース ファイル\scene_game\stage\stage">
       <UniqueIdentifier>{12652a8b-3b50-4c00-957c-a10b36361d3e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\scene_game\object\scene_house">
+      <UniqueIdentifier>{e6d50f78-9f68-4ce7-acad-d2aae7892255}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\scene_game\player">
+      <UniqueIdentifier>{5803a67c-c3e6-4d3c-82a6-90b2b6264aeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\scene_game\camera">
+      <UniqueIdentifier>{c5a1a0b5-3b44-4ee7-b36f-e93b357c3d6b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Scripts\player.cpp">
-      <Filter>ソース ファイル\scene_game\scene_house\player</Filter>
+      <Filter>ソース ファイル\scene_game\player</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\object_rotate.cpp">
       <Filter>ソース ファイル\scene_game\object</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Scripts\camera_manager.cpp">
-      <Filter>ソース ファイル\scene_game\camera</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Scripts\camera_s.cpp">
-      <Filter>ソース ファイル\scene_game\camera</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\object_manager.cpp">
       <Filter>ソース ファイル\scene_game\object</Filter>
@@ -236,7 +227,7 @@
       <Filter>00_Adollib\33_object</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\player_manager.cpp">
-      <Filter>ソース ファイル\scene_game\scene_house\player</Filter>
+      <Filter>ソース ファイル\scene_game\player</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Physics\collider.cpp">
       <Filter>00_Adollib\22_physics\collider</Filter>
@@ -263,16 +254,16 @@
       <Filter>00_Adollib\33_object</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\demo_house.cpp">
-      <Filter>ソース ファイル\scene_game\scene_house</Filter>
+      <Filter>ソース ファイル\scene_game\object\scene_house</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\camera.cpp">
-      <Filter>ソース ファイル\scene_game\scene_house\camera</Filter>
+      <Filter>ソース ファイル\scene_game\camera</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Physics\ALP_contact.cpp">
       <Filter>00_Adollib\22_physics\ALP</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\player_funcs.cpp">
-      <Filter>ソース ファイル\scene_game\scene_house\player</Filter>
+      <Filter>ソース ファイル\scene_game\player</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\stage_demo.cpp">
       <Filter>ソース ファイル\scene_game\stage\stage</Filter>
@@ -283,22 +274,19 @@
     <ClCompile Include="..\Scripts\stage_base.cpp">
       <Filter>ソース ファイル\scene_game\stage\base</Filter>
     </ClCompile>
+    <ClCompile Include="..\Scripts\stage_manager.cpp">
+      <Filter>ソース ファイル\scene_game\stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Scripts\player.h">
-      <Filter>ソース ファイル\scene_game\scene_house\player</Filter>
+      <Filter>ソース ファイル\scene_game\player</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\scene_game_all.h">
       <Filter>ソース ファイル\scene_game</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\object_rotate.h">
       <Filter>ソース ファイル\scene_game\object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Scripts\camera_manager.h">
-      <Filter>ソース ファイル\scene_game\camera</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Scripts\camera_s.h">
-      <Filter>ソース ファイル\scene_game\camera</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\object_manager.h">
       <Filter>ソース ファイル\scene_game\object</Filter>
@@ -550,7 +538,7 @@
       <Filter>00_Adollib\11_math</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\player_manager.h">
-      <Filter>ソース ファイル\scene_game\scene_house\player</Filter>
+      <Filter>ソース ファイル\scene_game\player</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Physics\collider_shape.h">
       <Filter>00_Adollib\22_physics\collider</Filter>
@@ -592,10 +580,10 @@
       <Filter>00_Adollib\22_physics\Joint</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\demo_house.h">
-      <Filter>ソース ファイル\scene_game\scene_house</Filter>
+      <Filter>ソース ファイル\scene_game\object\scene_house</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\camera.h">
-      <Filter>ソース ファイル\scene_game\scene_house\camera</Filter>
+      <Filter>ソース ファイル\scene_game\camera</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Physics\ALP_contact.h">
       <Filter>00_Adollib\22_physics\ALP</Filter>
@@ -623,6 +611,15 @@
     </ClInclude>
     <ClInclude Include="..\Scripts\stageparts_base.h">
       <Filter>ソース ファイル\scene_game\stage\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\stage_manager.h">
+      <Filter>ソース ファイル\scene_game\stage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\stage_types.h">
+      <Filter>ソース ファイル\scene_game\stage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\respown_area.h">
+      <Filter>ソース ファイル\scene_game\stage\parts</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

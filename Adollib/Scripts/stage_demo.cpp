@@ -15,15 +15,12 @@
 
 namespace Adollib
 {
-	// 所属するシーンの初期化時に一度だけ呼ばれる
-	void Stage_demo::awake() {
-
-	}
-
-	void Stage_demo::start()
+	void Stage_demo::stage_awake()
 	{
 
 		Gameobject* GO = nullptr;
+
+		player_respown_pos = Vector3(-2.7f, 100, -150);
 
 		set_box(Vector3(0, -60, 0), Vector3(80, 60, 80), Vector3(0), Vector3(188, 214, 54) / 255.0f, true);
 		set_box(Vector3(0, -60, -98), Vector3(30, 30, 60), Vector3(0), Vector3(188, 214, 54) / 255.0f, true);
@@ -303,24 +300,18 @@ namespace Adollib
 	}
 
 	// 毎フレーム呼ばれる更新処理
-	void Stage_demo::update()
-	{
+	void Stage_demo::update() {
 
 	}
 
-
-
-
-	// このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる
-	void Stage_demo::onEnable()
-	{
+	void Stage_demo::Update_hierarchy() {
 
 	}
 
-	// このスクリプトがアタッチされているGOのactiveSelfがfalseになった時呼ばれる
-	void Stage_demo::onDisable()
-	{
-
+	void Stage_demo::stage_destroy() {
+		for (auto& object : stage_parts) {
+			Gameobject_manager::deleteGameobject(object);
+		}
 	}
 
 }

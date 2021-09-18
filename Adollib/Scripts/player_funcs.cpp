@@ -1,11 +1,12 @@
 #include "player.h"
 
-#include "player.h"
-
 #include "../Adollib/Scripts/Main/Adollib.h"
 #include "../Adollib/Scripts/Object/gameobject_manager.h"
 
 #include "../Adollib/Scripts/Physics/ray.h"
+
+#include "stage_manager.h"
+#include "stage_base.h"
 
 using namespace Adollib;
 
@@ -513,8 +514,52 @@ void Player::make_jump() {
 	}
 };
 
+//respownˆ—
+bool Player::check_respown() {
 
+	if (respown_timer > 0) {
+		if(Waist_collider->concoll_enter(Collider_tags::Stage))respown_timer -= Al_Global::second_per_frame;
+	}
+	if (respown_timer > 0)return true;
 
+	auto stage = stage_manager->get_current_stage();
+	// stagew’è‚ÌYÀ•W‚æ‚èPlayer‚ª’á‚¯‚ê‚Îrespown
+	if (Waist->world_position().y < stage->y_player_respown_limit + 50) {
+
+		// À•WˆÚ“®
+		Vector3 off = vector3_quatrotate(stage->player_respown_pos - Waist->world_position(), Waist->pearent()->world_orientate().inverse());
+		for (int i = 0; i < Human_gameobject_size; i++) {
+			Human_gameobjects[i]->transform->local_pos += off;
+		}
+
+		// —Í‚Ìreset
+		for (int i = 0; i < Human_collider_size; i++) {
+			Human_colliders[i]->reset_force();
+		}
+
+		// ‚Á‚Ä‚¢‚é‚à‚Ì‚ğ—£‚·
+		Joint_base** joints[2] = {
+			&catch_left_joint,
+			&catch_right_joint
+		};
+		for (int i = 0; i < 2; i++) {
+			Joint_base*& joint = *joints[i];
+			if (joint != nullptr) {
+				joint->get_colliderB()->tag &= ~Collider_tags::Having_Stage;
+				joint->get_colliderB()->tag |= Collider_tags::Jumpable_Stage;
+				Joint::delete_joint(joint);
+			}
+		}
+
+		respown_timer = 1;
+
+		return true;
+	}
+
+	return false;
+}
+
+//player‚ÌŒü‚«‚ğ’²®
 void Player::turn_gunyatto_dir() {
 	//Vector3 dir = vector3_quatrotate(Vector3(0, 0, 1), Waist->transform->orientation);
 

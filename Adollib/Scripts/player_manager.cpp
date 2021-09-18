@@ -543,11 +543,6 @@ namespace Adollib
 				Lfoot_collider,
 				Waist_sphere
 			);
-
-			//auto shape = Waist_collider->add_shape<Capsule>();
-			//shape->r = 0.15f;
-			//shape->length = 1.4f;
-			//shape->center = Vector3(0, -1.15, 0);
 		}
 
 	}

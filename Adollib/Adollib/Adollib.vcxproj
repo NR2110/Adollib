@@ -147,8 +147,6 @@
   <ItemGroup>
     <ClInclude Include="..\Scripts\buttan.h" />
     <ClInclude Include="..\Scripts\camera.h" />
-    <ClInclude Include="..\Scripts\camera_manager.h" />
-    <ClInclude Include="..\Scripts\camera_s.h" />
     <ClInclude Include="..\Scripts\demo_house.h" />
     <ClInclude Include="..\Scripts\door.h" />
     <ClInclude Include="..\Scripts\kinematic_block.h" />
@@ -156,11 +154,14 @@
     <ClInclude Include="..\Scripts\object_rotate.h" />
     <ClInclude Include="..\Scripts\player.h" />
     <ClInclude Include="..\Scripts\player_manager.h" />
+    <ClInclude Include="..\Scripts\respown_area.h" />
     <ClInclude Include="..\Scripts\scene_game_all.h" />
     <ClInclude Include="..\Scripts\stageparts_base.h" />
     <ClInclude Include="..\Scripts\stageparts_tags.h" />
     <ClInclude Include="..\Scripts\stage_base.h" />
     <ClInclude Include="..\Scripts\stage_demo.h" />
+    <ClInclude Include="..\Scripts\stage_manager.h" />
+    <ClInclude Include="..\Scripts\stage_types.h" />
     <ClInclude Include="Imgui\imconfig.h" />
     <ClInclude Include="Imgui\imgui.h" />
     <ClInclude Include="Imgui\imgui_impl_dx11.h" />
@@ -261,8 +262,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Scripts\camera.cpp" />
-    <ClCompile Include="..\Scripts\camera_manager.cpp" />
-    <ClCompile Include="..\Scripts\camera_s.cpp" />
     <ClCompile Include="..\Scripts\demo_house.cpp" />
     <ClCompile Include="..\Scripts\object_manager.cpp" />
     <ClCompile Include="..\Scripts\object_rotate.cpp" />
@@ -272,6 +271,7 @@
     <ClCompile Include="..\Scripts\stage_base.cpp" />
     <ClCompile Include="..\Scripts\stage_demo.cpp" />
     <ClCompile Include="..\Scripts\stage_demo_funcs.cpp" />
+    <ClCompile Include="..\Scripts\stage_manager.cpp" />
     <ClCompile Include="Imgui\imgui.cpp" />
     <ClCompile Include="Imgui\imgui_demo.cpp" />
     <ClCompile Include="Imgui\imgui_draw.cpp" />

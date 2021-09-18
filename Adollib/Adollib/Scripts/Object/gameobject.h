@@ -141,6 +141,19 @@ namespace Adollib {
 			return nullptr;
 		}
 
+		template<typename T>
+		T* findComponent(){
+			// Componentクラスから派生したものかチェック
+			static_assert(std::is_base_of<Component, T>::value == true, "template T must inherit Component");
+
+			for (auto com : components) {
+				T* comp = dynamic_cast<T*>(com) ;
+				if (comp != nullptr) return comp;
+			}
+
+			return nullptr;
+		}
+
 		// ==============================================================
 		// このGameObjectにアタッチされているコンポーネントを削除する
 		// ==============================================================

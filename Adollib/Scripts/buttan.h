@@ -18,6 +18,7 @@ namespace Adollib{
 
 		private:
 			float timer = 0; //—£‚ê‚Ä‚à­‚µ‚ÌŠÔ‚ÍON‚É‚È‚é‚æ‚¤‚É‚·‚é‚½‚ß(‚¿‚©‚¿‚©‚³‚¹‚½‚­‚È‚¢)
+
 		public:
 
 			// addComponent‚³‚ê‚½‚Æ‚«‚ÉŒÄ‚Î‚ê‚é

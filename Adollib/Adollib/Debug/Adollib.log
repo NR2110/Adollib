@@ -1,5 +1,3 @@
-﻿  player_funcs.cpp
-  stage_demo.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(57,70): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(285,46): warning C4305: '=': 'double' から 'float' へ切り詰めます。
+﻿  player.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_manager.h(22): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_manager::Stage_types' の左辺を無視します。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

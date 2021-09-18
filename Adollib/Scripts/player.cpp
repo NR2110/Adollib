@@ -5,6 +5,8 @@
 
 #include "../Adollib/Scripts/Physics/ray.h"
 
+#include "stage_manager.h"
+
 static Adollib::Collider* debug_coll = nullptr;
 
 namespace Adollib
@@ -23,7 +25,10 @@ namespace Adollib
 
 	void Player::start()
 	{
+		respown_timer = 1;
+
 		camera = Gameobject_manager::find("camera")->transform;
+		stage_manager = Gameobject_manager::find("Stage_manager")->findComponent<Stage_manager>();
 
 		head_rot_max_speed = 20;
 		head_rot_max_pow = 1000;
@@ -52,7 +57,7 @@ namespace Adollib
 
 		hand_camera_max_rot = ToRadian(80);
 		hand_camera_rot_pow = 3;
-		hand_camera_rot_center = ToRadian(30);
+		hand_camera_rot_center = ToRadian(46);
 
 		jump_power = 25;
 		turn_speed = 1.5f;
@@ -94,6 +99,9 @@ namespace Adollib
 		{
 			onground_collider_GO->transform->local_pos = waist_pillar->center;
 		}
+
+		// respownˆ—
+		if (check_respown() == true)return;
 
 		// è‚ğL‚Î‚·
 		reach_out_hands();
