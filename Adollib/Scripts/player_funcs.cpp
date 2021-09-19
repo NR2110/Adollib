@@ -13,6 +13,8 @@ using namespace Adollib;
 //Žè‚ðL‚Î‚·
 void Player::reach_out_hands() {
 
+	if (input->getKeyState(Key::LeftControl))return;
+
 	const Mouse keys[2] = {
 		Mouse::LBUTTON ,
 		Mouse::RBUTTON
@@ -339,7 +341,10 @@ void Player::accume_move_dir() {
 	}
 	dir = vector3_quatrotate(move_vec, camera->orientation).unit_vect();
 	dir.y = 0;
-	dir = dir.unit_vect();
+	dir = vector3_quatrotate(dir, quaternion_from_euler(0, 180, 0));
+	dir = -dir.unit_vect();
+
+	//debug_coll->transform->local_pos = Waist->world_position() + dir * 5;
 };
 
 //—§‚Â‚æ‚¤‚É—Í‚ð‰Á‚¦‚é

@@ -48,6 +48,7 @@ namespace Adollib
 		float turn_speed = 2;
 
 	private:
+		Adollib::Collider* debug_coll = nullptr;
 
 		Quaternion rotate; //rotate‚Ìbuffer
 		Vector3 dir; //Œü‚«‚Ìbuffer

@@ -7,8 +7,6 @@
 
 #include "stage_manager.h"
 
-static Adollib::Collider* debug_coll = nullptr;
-
 namespace Adollib
 {
 	// Š‘®‚·‚éƒV[ƒ“‚Ì‰Šú‰»Žž‚Éˆê“x‚¾‚¯ŒÄ‚Î‚ê‚é
@@ -20,7 +18,7 @@ namespace Adollib
 		debug_coll = Go->addComponent<Collider>();
 		debug_coll->add_shape<Sphere>();
 		debug_coll->physics_data.inertial_mass = 1;
-
+		debug_coll->physics_data.is_hitable = false;
 	}
 
 	void Player::start()
@@ -51,13 +49,13 @@ namespace Adollib
 		leg_rot_max_pow = 200;
 		leg_rot_pow = 250;
 
-		hand_rot_max_speed = 13;
+		hand_rot_max_speed = 10;
 		hand_rot_max_pow = 200;
 		hand_rot_pow = 200;
 
 		hand_camera_max_rot = ToRadian(80);
 		hand_camera_rot_pow = 3;
-		hand_camera_rot_center = ToRadian(46);
+		hand_camera_rot_center = ToRadian(43);
 
 		jump_power = 25;
 		turn_speed = 1.5f;

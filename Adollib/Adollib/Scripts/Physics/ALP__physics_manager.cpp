@@ -81,7 +81,6 @@ bool Phyisics_manager::update(Scenelist Sce)
 #ifdef UseImgui
 	update_Gui();
 #endif
-	frame_count += Al_Global::second_per_frame;
 	if (Al_Global::second_per_game < 1) {
 		frame_count = 0;
 		resetforce(ALP_physicses[Sce]);
@@ -89,70 +88,74 @@ bool Phyisics_manager::update(Scenelist Sce)
 
 	//1/60s毎に更新を行う
 #ifdef Update60fps
-	if (frame_count < inv60) {
-		is_updated_physics = false;
-		return true;
-	}
-	is_updated_physics = true;
-	float timeratio_60 = 1 / (frame_count * 60); // framecountが大きい->大きすぎる力がかかっている 力を0.016s秒に直す
+	is_updated_physics = false;
+	if (frame_count > inv60) {
+		is_updated_physics = true;
+
+		float timeratio_60 = 1 / (frame_count * 60); // framecountが大きい->大きすぎる力がかかっている 力を0.016s秒に直す
 #endif
 
 	// Colliderのframe毎に保存するdataをreset
-	reset_data_per_frame(ALP_colliders[Sce]);
+		reset_data_per_frame(ALP_colliders[Sce]);
 
-	// ColliderのWorld情報の更新
-	update_world_trans(ALP_colliders[Sce]);
+		// ColliderのWorld情報の更新
+		update_world_trans(ALP_colliders[Sce]);
 
 
 #ifdef Update60fps
-	physicsParams.timeStep = ALmin(inv60, physicsParams.max_timeStep);
-	for (; frame_count - inv60 > 0;)frame_count -= inv60;
+		physicsParams.timeStep = ALmin(inv60, physicsParams.max_timeStep);
+		for (; frame_count - inv60 > 0;)frame_count -= inv60;
 #else
-	// 0.016秒ごとに更新するとアタッチしたGOへの追跡カメラがバグるため
-	physicsParams.timeStep = ALmin(Al_Global::second_per_frame, physicsParams.max_timeStep);
+		// 0.016秒ごとに更新するとアタッチしたGOへの追跡カメラがバグるため
+		physicsParams.timeStep = ALmin(Al_Global::second_per_frame, physicsParams.max_timeStep);
 #endif
 
-	// 外力の更新
-	applyexternalforce(ALP_physicses[Sce], timeratio_60);
+		// 外力の更新
+		applyexternalforce(ALP_physicses[Sce], timeratio_60);
 
-	pairs_new_num = 1 - pairs_new_num;
+		pairs_new_num = 1 - pairs_new_num;
 
-	// 大雑把な当たり判定
-	Work_meter::start("Broad,Mid,Narrow");
+		// 大雑把な当たり判定
+		Work_meter::start("Broad,Mid,Narrow");
 
-	Work_meter::start("Broadphase");
-	Work_meter::tag_start("Broadphase");
-	BroadMidphase(Sce,
-		ALP_colliders[Sce], pairs[pairs_new_num],
-		moved_collider[Sce], added_collider[Sce]
-	);
-	Work_meter::tag_stop();
-	Work_meter::stop("Broadphase");
+		Work_meter::start("Broadphase");
+		Work_meter::tag_start("Broadphase");
+		BroadMidphase(Sce,
+			ALP_colliders[Sce], pairs[pairs_new_num],
+			moved_collider[Sce], added_collider[Sce]
+		);
+		Work_meter::tag_stop();
+		Work_meter::stop("Broadphase");
 
-	Work_meter::start("Midphase");
-	Work_meter::tag_start("Midphase");
-	Midphase(pairs[1 - pairs_new_num], pairs[pairs_new_num]);
-	Work_meter::tag_stop();
-	Work_meter::stop("Midphase");
+		Work_meter::start("Midphase");
+		Work_meter::tag_start("Midphase");
+		Midphase(pairs[1 - pairs_new_num], pairs[pairs_new_num]);
+		Work_meter::tag_stop();
+		Work_meter::stop("Midphase");
 
-	// 衝突生成
-	Work_meter::start("Narrowphase");
-	Work_meter::tag_start("Narrowphase");
-	generate_contact(pairs[pairs_new_num]);
-	Work_meter::tag_stop();
-	Work_meter::stop("Narrowphase");
+		// 衝突生成
+		Work_meter::start("Narrowphase");
+		Work_meter::tag_start("Narrowphase");
+		generate_contact(pairs[pairs_new_num]);
+		Work_meter::tag_stop();
+		Work_meter::stop("Narrowphase");
 
-	Work_meter::stop("Broad,Mid,Narrow");
+		Work_meter::stop("Broad,Mid,Narrow");
 
-	// 衝突解決
-	Work_meter::start("Resolve");
-	Work_meter::tag_start("Resolve");
-	resolve_contact(ALP_colliders[Sce], pairs[pairs_new_num], ALP_joints);
-	Work_meter::tag_stop();
-	Work_meter::stop("Resolve");
+		// 衝突解決
+		Work_meter::start("Resolve");
+		Work_meter::tag_start("Resolve");
+		resolve_contact(ALP_colliders[Sce], pairs[pairs_new_num], ALP_joints);
+		Work_meter::tag_stop();
+		Work_meter::stop("Resolve");
 
-	// 位置の更新
-	integrate(ALP_physicses[Sce]);
+		// 位置の更新
+		integrate(ALP_physicses[Sce]);
+
+	}
+
+
+	frame_count += Al_Global::second_per_frame;
 
 #ifdef Draw_JointContact
 	static bool init = true;
