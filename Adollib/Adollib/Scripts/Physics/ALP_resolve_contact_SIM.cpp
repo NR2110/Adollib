@@ -151,7 +151,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 			if (coll->get_ALPphysics()->is_kinmatic_anglar) SB.inv_inertia = DirectX::XMLoadFloat3x3(&coll->get_ALPphysics()->inverse_inertial_tensor());
 			else SB.inv_inertia = DirectX::XMLoadFloat3x3(&matrix33_zero());
 
-			SB.inv_mass = coll->get_ALPphysics()->inverse_mass();
+			if (coll->get_ALPphysics()->is_kinmatic_linear) SB.inv_mass = coll->get_ALPphysics()->inverse_mass();
+			else SB.inv_mass = 0;
 
 			SBs.emplace_back(SB);
 			++count;

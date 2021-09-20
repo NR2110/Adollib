@@ -37,10 +37,10 @@ namespace Adollib {
 			void update() override{
 				this_coll->ignore_tags = Collider_tags::Static_Stage;
 
-				if (start_pos == goal_pos)this_coll->physics_data.is_kinmatic_linear = false;
-				if (start_rot == goal_rot)this_coll->physics_data.is_kinmatic_anglar = false;
-				this_coll->physics_data.is_kinmatic_linear = false;
-				this_coll->physics_data.is_kinmatic_anglar = false;
+				//if (start_pos == goal_pos)this_coll->physics_data.is_kinmatic_linear = false;
+				//if (start_rot == goal_rot)this_coll->physics_data.is_kinmatic_anglar = false;
+				//this_coll->physics_data.is_kinmatic_linear = false;
+				//this_coll->physics_data.is_kinmatic_anglar = false;
 
 				//指定のbitが立っていたら力を加える
 				if (this_stage->tags & tag) {
@@ -54,10 +54,12 @@ namespace Adollib {
 						//行き過ぎないように
 						if (vector3_dot(start_pos - goal_pos, transform->local_pos - goal_pos) <= 0) {
 							transform->local_pos = goal_pos;
+							this_coll->physics_data.is_moveable = false;
 						}
 						else {
 							//行き過ぎていなければ力を加える
 							this_coll->linear_velocity(dir.unit_vect() * pos_speed);
+							this_coll->physics_data.is_moveable = true;
 						}
 					}
 
@@ -77,10 +79,12 @@ namespace Adollib {
 						//行き過ぎないように
 						if (vector3_dot(goal_pos - start_pos, transform->local_pos - start_pos) <= 0) {
 							transform->local_pos = start_pos;
+							this_coll->physics_data.is_moveable = false;
 						}
 						else {
 							//行き過ぎていなければ力を加える
 							this_coll->linear_velocity(dir.unit_vect() * pos_speed);
+							this_coll->physics_data.is_moveable = true;
 						}
 					}
 

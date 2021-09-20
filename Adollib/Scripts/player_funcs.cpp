@@ -152,12 +152,33 @@ void Player::catch_things() {
 			//joint‚ğ¶¬
 			if (min_data != nullptr && min_data->coll->tag != Collider_tags::Human) {
 				*is_maked_joint[i] = true;
+
 				joint = Joint::add_balljoint(
 					collider,
 					min_data->coll,
 					min_data->contacted_pointA,
 					min_data->contacted_pointB
 				);
+
+				//elbow‚Éjoint‚ğì‚éê‡
+				/*
+				auto& elbow_collider = colliders[i + 2];
+
+				Vector3 contacted_pointA_world = vector3_quatrotate(min_data->contacted_pointA, collider->transform->orientation) + collider->transform->position;
+				Vector3 contacted_pointA_elbowcoord = vector3_quatrotate(contacted_pointA_world - elbow_collider->transform->position, elbow_collider->transform->orientation.inverse());
+
+				Vector3 contacted_pointB_world = vector3_quatrotate(min_data->contacted_pointB, min_data->coll->transform->orientation) + min_data->coll->transform->position;
+				Vector3 contacted_pointB_elbowcoord = vector3_quatrotate(contacted_pointA_world - elbow_collider->transform->position, elbow_collider->transform->orientation.inverse());
+
+				Vector3 elbow0_point_world = elbow_collider->transform->position;
+				Vector3 elbow0_point_collBcoord = vector3_quatrotate(elbow0_point_world - min_data->coll->transform->position, min_data->coll->transform->orientation.inverse());
+
+				joint = Joint::add_balljoint(
+					elbow_collider,
+					min_data->coll,
+					Vector3(0,0,0),
+					elbow0_point_collBcoord
+				);*/
 
 			}
 		}
@@ -181,7 +202,7 @@ void Player::catch_things() {
 				Vector3 world_posA = joint->get_colliderA()->transform->position + vector3_quatrotate(joint->get_anchors()[0].posA, joint->get_colliderA()->transform->orientation);
 				Vector3 world_posB = joint->get_colliderB()->transform->position + vector3_quatrotate(joint->get_anchors()[0].posB, joint->get_colliderB()->transform->orientation);
 
-				if((world_posA - world_posB).norm() > 1){
+				if((world_posA - world_posB).norm() > 3 * 3){
 					joint->get_colliderB()->tag &= ~Collider_tags::Having_Stage;
 					joint->get_colliderB()->tag |= Collider_tags::Jumpable_Stage;
 					Joint::delete_joint(joint);
@@ -259,6 +280,7 @@ void Player::tuning_waist_pillar() {
 
 	//waist_pillar->center = Vector3(center_xz.x, center_y, center_xz.z);
 	waist_pillar->center = Vector3(0, center_y, -0.3f);
+	//waist_pillar->center = Vector3(0, center_y, -0);
 	//waist_pillar->center = vector3_quatrotate(-dir, Waist->transform->orientation) +Vector3(0, waist_pillar->center.y,0);
 
 	//if()
@@ -320,6 +342,7 @@ void Player::angula_move() {
 
 		rotate *= quaternion_axis_angle(Vector3(0, 1, 0), angle);
 
+		debug_coll->transform->local_pos = Waist_collider->transform->position + vector3_quatrotate(Vector3(0, 0, 1), rotate);
 	}
 
 };
@@ -341,8 +364,8 @@ void Player::accume_move_dir() {
 	}
 	dir = vector3_quatrotate(move_vec, camera->orientation).unit_vect();
 	dir.y = 0;
-	dir = vector3_quatrotate(dir, quaternion_from_euler(0, 180, 0));
-	dir = -dir.unit_vect();
+	//dir = vector3_quatrotate(dir, quaternion_from_euler(0, 180, 0));
+	dir = dir.unit_vect();
 
 	//debug_coll->transform->local_pos = Waist->world_position() + dir * 5;
 };
@@ -410,18 +433,20 @@ void Player::add_pow_for_stand() {
 		is_gunyatto = true;
 	}
 
-	if (!onground_collider->concoll_enter(Collider_tags::Jumpable_Stage)) {
-		Waist_collider->physics_data.dynamic_friction = 0;
-		Body_collider->physics_data.dynamic_friction = 0;
-	}
-	else{
-		Waist_collider->physics_data.dynamic_friction = 0.4f;
-		Body_collider->physics_data.dynamic_friction =  0.4f;
-	}
+	//if (!onground_collider->concoll_enter(Collider_tags::Jumpable_Stage)) {
+	//	Waist_collider->physics_data.dynamic_friction = 0;
+	//	Body_collider->physics_data.dynamic_friction = 0;
+	//}
+	//else{
+	//	Waist_collider->physics_data.dynamic_friction = 0.4f;
+	//	Body_collider->physics_data.dynamic_friction =  0.4f;
+	//}
 };
 
 //‘«‚ğ“®‚©‚·
 void Player::move_legs() {
+	if (input->getKeyState(Key::LeftControl))return;
+
 	//Waist_collider->physics_data.is_moveable = false;
 		//Rleg_collider->physics_data.is_moveable = false;
 		//Lleg_collider->physics_data.is_moveable = false;
@@ -593,5 +618,54 @@ void Player::turn_gunyatto_dir() {
 	if (vector3_cross(player_vec, dir).y < 0)angle *= -1;
 
 	rotate *= quaternion_axis_angle(Vector3(0, 1, 0), angle);
+
+}
+
+
+//"•¨‚ğ‚Â"joint‚ğíœ‚·‚é
+void Player::delete_catchjoint() {
+	Joint_base** joints[2] = {
+		&catch_left_joint,
+		&catch_right_joint
+	};
+	for (int i = 0; i < 2; i++) {
+		Joint_base*& joint = *joints[i];
+		if (joint != nullptr) {
+			joint->get_colliderB()->tag &= ~Collider_tags::Having_Stage;
+			joint->get_colliderB()->tag |= Collider_tags::Jumpable_Stage;
+			Joint::delete_joint(joint);
+		}
+	}
+}
+
+//respownˆ—
+void Player::respown() {
+	auto stage = stage_manager->get_current_stage();
+
+	// À•WˆÚ“®
+	Vector3 off = vector3_quatrotate(stage->player_respown_pos - Waist->world_position(), Waist->pearent()->world_orientate().inverse());
+	for (int i = 0; i < Human_gameobject_size; i++) {
+		Human_gameobjects[i]->transform->local_pos += off;
+	}
+
+	// —Í‚Ìreset
+	for (int i = 0; i < Human_collider_size; i++) {
+		Human_colliders[i]->reset_force();
+	}
+
+	// ‚Á‚Ä‚¢‚é‚à‚Ì‚ğ—£‚·
+	Joint_base** joints[2] = {
+		&catch_left_joint,
+		&catch_right_joint
+	};
+	for (int i = 0; i < 2; i++) {
+		Joint_base*& joint = *joints[i];
+		if (joint != nullptr) {
+			joint->get_colliderB()->tag &= ~Collider_tags::Having_Stage;
+			joint->get_colliderB()->tag |= Collider_tags::Jumpable_Stage;
+			Joint::delete_joint(joint);
+		}
+	}
+	respown_timer = 1;
 
 }

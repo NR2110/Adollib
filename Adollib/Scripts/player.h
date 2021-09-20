@@ -99,6 +99,9 @@ namespace Adollib
 		//:::
 
 		void turn_gunyatto_dir();
+	public:
+		void delete_catchjoint(); //"•¨‚ğ‚Â"joint‚ğíœ‚·‚é
+		void respown(); //respownˆ—
 
 
 	private:

@@ -11,14 +11,13 @@ namespace Adollib
 {
 	// 所属するシーンの初期化時に一度だけ呼ばれる
 	void Player::awake() {
-		rotate = quaternion_from_euler(0, 180, 0);
+		rotate = quaternion_from_euler(0, 180, 1);
 
-		auto Go = Gameobject_manager::createSphere();
-		Go->transform->local_pos = Vector3(0, 3, 0);
-		debug_coll = Go->addComponent<Collider>();
+		auto GO = Gameobject_manager::create("debugGO");
+		debug_coll = GO->addComponent<Collider>();
 		debug_coll->add_shape<Sphere>();
-		debug_coll->physics_data.inertial_mass = 1;
 		debug_coll->physics_data.is_hitable = false;
+		debug_coll->physics_data.is_moveable = false;
 	}
 
 	void Player::start()
@@ -30,14 +29,14 @@ namespace Adollib
 
 		head_rot_max_speed = 20;
 		head_rot_max_pow = 1000;
-		head_rot_pow = 500;
+		head_rot_pow = 1000;
 
 		waist_move_max_speed = 10;
 		waist_move_pow = 1500;
 
-		waist_rot_max_speed = 10;
-		waist_rot_max_pow = 4000;
-		waist_rot_pow = 9000;
+		waist_rot_max_speed = 100;
+		waist_rot_max_pow = 5000;
+		waist_rot_pow = 10000;
 
 		body_rot_max_speed = 10;
 		//body_rot_max_pow = 2000;
@@ -49,7 +48,7 @@ namespace Adollib
 		leg_rot_max_pow = 200;
 		leg_rot_pow = 250;
 
-		hand_rot_max_speed = 10;
+		hand_rot_max_speed = 11;
 		hand_rot_max_pow = 200;
 		hand_rot_pow = 200;
 
@@ -86,12 +85,12 @@ namespace Adollib
 			onground_collider->ignore_tags |= Collider_tags::Human;
 
 		}
+
 	}
 
 	// 毎フレーム呼ばれる更新処理
 	void Player::update()
 	{
-		debug_coll->add_force(Vector3(0, 30, 0));
 
 		// Update_pnground
 		{

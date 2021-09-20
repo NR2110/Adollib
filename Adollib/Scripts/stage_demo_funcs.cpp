@@ -19,7 +19,7 @@ namespace Adollib
 {
 	Gameobject* Stage_demo::set_tree(const Vector3& pos, const Vector3& scale, const Vector3& rotate) {
 		Gameobject* tree = nullptr;
-		tree = Gameobject_manager::create(GO_tag::None);
+		tree = Gameobject_manager::create("tree",GO_tag::None);
 
 		Vector4 stem_color = Vector4(90, 47, 27, 255) / 255.0f;
 		Vector4 reaf_color = Vector4(48, 188, 0, 255) / 255.0f;
@@ -32,7 +32,7 @@ namespace Adollib
 		const int Tree_size = 7;
 		Gameobject* tree_parts[Tree_size] = { nullptr };
 		for (int i = 0; i < Tree_size; i++) {
-			tree_parts[i] = Gameobject_manager::createCube(GO_tag::Box);
+			tree_parts[i] = Gameobject_manager::createCube("tree_part",GO_tag::Box);
 		}
 
 		tree_parts[0]->transform->local_pos = Vector3(0, 7, 0);
@@ -130,6 +130,7 @@ namespace Adollib
 		comp->respown_rotate = quaternion_identity();
 
 		for (int i = 0; i < Tree_size; i++) stage_parts.emplace_back(tree_parts[i]);
+		stage_parts.emplace_back(tree);
 
 		return tree;
 	}
@@ -139,6 +140,7 @@ namespace Adollib
 		auto go = coll->gameobject;
 		auto buttan_comp = go->addComponent<Stage_parts::Buttan>();
 
+		coll->tag &= ~Collider_tags::Caera_not_sunk_Stage;
 		coll->physics_data.is_hitable = false;
 
 		go->transform->local_scale.y += 0.2f;
@@ -165,9 +167,11 @@ namespace Adollib
 		auto go = coll->gameobject;
 		auto door_comp = go->addComponent<Stage_parts::Door>();
 
-		coll->physics_data.inertial_mass = 1000;
+		coll->physics_data.inertial_mass = 10000;
 		coll->physics_data.is_moveable = true;
 		coll->physics_data.is_fallable = false;
+		coll->physics_data.is_kinmatic_linear = false;
+		coll->physics_data.is_kinmatic_anglar = false;
 
 		door_comp->tag = tag;
 		door_comp->this_stage = this;
@@ -181,4 +185,46 @@ namespace Adollib
 
 		return go;
 	}
+
+	Gameobject* Stage_demo::set_sphere_rope(const Vector3& pos, const float& scale, const Vector3& rotate, int quantity, float mass, const Vector3& color) {
+
+		Gameobject* rope_pearent = Gameobject_manager::create("sphere_rope");
+		rope_pearent->transform->local_orient = quaternion_from_euler(rotate + Vector3(0.1f, 0, 0.1f));
+
+		stage_parts.emplace_back(rope_pearent);
+
+		Collider* old_coll = nullptr;
+		Gameobject* old_go = nullptr;
+		{
+			auto coll = set_sphere(pos, scale, color);
+			coll->tag &= ~Collider_tags::Caera_not_sunk_Stage;
+
+			rope_pearent->add_child(coll->gameobject);
+
+			old_coll = coll;
+			old_go = coll->gameobject;
+		}
+
+		for (int i = 0; i < quantity; i++) {
+
+			Gameobject* go = nullptr;
+			auto coll = set_sphere(pos - Vector3(0, scale * (i + 1) * 2, 0), scale, color, false);
+			coll->tag &= ~Collider_tags::Caera_not_sunk_Stage;
+			coll->physics_data.inertial_mass = mass * powf(1.1f, quantity - i);
+
+			rope_pearent->add_child(coll->gameobject);
+
+			if (old_coll != nullptr) Joint::add_balljoint(old_coll, coll, Vector3(0, -1, 0), Vector3(0, 1, 0), 0.1f);
+
+			old_coll = coll;
+			old_go = go;
+		}
+
+		return rope_pearent;
+
+	}
+
+
+
+
 }

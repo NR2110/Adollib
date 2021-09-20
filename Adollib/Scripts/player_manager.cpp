@@ -19,7 +19,7 @@ namespace Adollib
 	void Player_manager::awake() {
 
 		Vector3 player_start_pos = Vector3(-2.7f, 23, -150);
-		Quaternion player_start_rotate = quaternion_from_euler(0, 180, 0);
+		Quaternion player_start_rotate = quaternion_from_euler(2, 180, 0);
 
 		Gameobject* Human = Gameobject_manager::create("Human");
 		Human->transform->local_pos = player_start_pos;
@@ -225,12 +225,12 @@ namespace Adollib
 
 			//::: Ž¿—Ê‚Ì’²® :::
 			Head_collider->physics_data.inertial_mass = 3;
-			Lsholder_collider->physics_data.inertial_mass = 3;
-			Rsholder_collider->physics_data.inertial_mass = 3;
-			Lelbow_collider->physics_data.inertial_mass = 4;
-			Relbow_collider->physics_data.inertial_mass = 4;
-			Lhand_collider->physics_data.inertial_mass = 1;
-			Rhand_collider->physics_data.inertial_mass = 1;
+			Lsholder_collider->physics_data.inertial_mass = 4;
+			Rsholder_collider->physics_data.inertial_mass = 4;
+			Lelbow_collider->physics_data.inertial_mass = 3;
+			Relbow_collider->physics_data.inertial_mass = 3;
+			Lhand_collider->physics_data.inertial_mass = 1.5f;
+			Rhand_collider->physics_data.inertial_mass = 1.5f;
 			Body_collider->physics_data.inertial_mass = 5;
 			Waist_collider->physics_data.inertial_mass = 4;
 			Lleg_collider->physics_data.inertial_mass = 2;

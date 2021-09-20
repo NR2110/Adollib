@@ -22,7 +22,7 @@ using namespace Stage_parts;
 Collider* Stage_base::set_sphere(Vector3 pos, float r, Vector3 color, bool is_static ) {
 
 	Gameobject* object = nullptr;
-	object = Gameobject_manager::createSphere(GO_tag::Sphere);
+	object = Gameobject_manager::createSphere("sphere",GO_tag::Sphere);
 
 	object->material->color = Vector4(color.x, color.y, color.z, 1);
 	object->transform->local_pos = pos;
@@ -32,11 +32,11 @@ Collider* Stage_base::set_sphere(Vector3 pos, float r, Vector3 color, bool is_st
 	coll->add_shape<Sphere>();
 
 	if (is_static) {
-		coll->tag = Collider_tags::Sphere | Collider_tags::Stage | Collider_tags::Static_Stage | Collider_tags::Jumpable_Stage;
+		coll->tag = Collider_tags::Sphere | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Static_Stage | Collider_tags::Jumpable_Stage;
 		coll->physics_data.is_moveable = false;
 	}
 	else {
-		coll->tag = Collider_tags::Sphere | Collider_tags::Stage | Collider_tags::Kinematic_Stage | Collider_tags::Jumpable_Stage;
+		coll->tag = Collider_tags::Sphere | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Kinematic_Stage | Collider_tags::Jumpable_Stage;
 		// 動くのであれば所定のcomponentをアタッチする
 		auto comp = object->addComponent<Kinematic_block>();
 		comp->this_stage = this;
@@ -52,7 +52,7 @@ Collider* Stage_base::set_sphere(Vector3 pos, float r, Vector3 color, bool is_st
 
 Collider* Stage_base::set_box(Vector3 pos, Vector3 size, Vector3 rotate, Vector3 color, bool is_static ) {
 	Gameobject* object = nullptr;
-	object = Gameobject_manager::createCube(GO_tag::Box);
+	object = Gameobject_manager::createCube("Cube",GO_tag::Box);
 	object->material->color = Vector4(color.x, color.y, color.z, 1);
 
 	object->transform->local_orient = quaternion_from_euler(rotate);
@@ -63,11 +63,11 @@ Collider* Stage_base::set_box(Vector3 pos, Vector3 size, Vector3 rotate, Vector3
 	coll->add_shape<Box>();
 
 	if (is_static) {
-		coll->tag = Collider_tags::Box | Collider_tags::Stage | Collider_tags::Static_Stage | Collider_tags::Jumpable_Stage;
+		coll->tag = Collider_tags::Box | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Static_Stage | Collider_tags::Jumpable_Stage;
 		coll->physics_data.is_moveable = false;
 	}
 	else {
-		coll->tag = Collider_tags::Box | Collider_tags::Stage | Collider_tags::Kinematic_Stage | Collider_tags::Jumpable_Stage;
+		coll->tag = Collider_tags::Box | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Kinematic_Stage | Collider_tags::Jumpable_Stage;
 		// 動くのであれば所定のcomponentをアタッチする
 		auto comp = object->addComponent<Kinematic_block>();
 		comp->this_stage = this;
@@ -83,7 +83,7 @@ Collider* Stage_base::set_box(Vector3 pos, Vector3 size, Vector3 rotate, Vector3
 
 Collider* Stage_base::set_capsule(Vector3 pos, float r, float length, Vector3 rotate, Vector3 color, bool is_static ) {
 	Gameobject* object = nullptr;
-	object = Gameobject_manager::createCube(GO_tag::Capsule);
+	object = Gameobject_manager::createCube("capsule",GO_tag::Capsule);
 	object->material->color = Vector4(color.x, color.y, color.z, 1);
 
 	object->transform->local_orient = quaternion_from_euler(rotate);
@@ -95,11 +95,11 @@ Collider* Stage_base::set_capsule(Vector3 pos, float r, float length, Vector3 ro
 	capsule->length = ALmax(0, capsule->length - r);
 
 	if (is_static) {
-		coll->tag = Collider_tags::Capsule | Collider_tags::Stage | Collider_tags::Static_Stage | Collider_tags::Jumpable_Stage;
+		coll->tag = Collider_tags::Capsule | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Static_Stage | Collider_tags::Jumpable_Stage;
 		coll->physics_data.is_moveable = false;
 	}
 	else {
-		coll->tag = Collider_tags::Capsule | Collider_tags::Stage | Collider_tags::Kinematic_Stage | Collider_tags::Jumpable_Stage;
+		coll->tag = Collider_tags::Capsule | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Kinematic_Stage | Collider_tags::Jumpable_Stage;
 		// 動くのであれば所定のcomponentをアタッチする
 		auto comp = object->addComponent<Kinematic_block>();
 		comp->this_stage = this;
@@ -128,11 +128,11 @@ Collider* Stage_base::set_meshbox(Vector3 pos, Vector3 size, Vector3 rotate, Vec
 	coll->add_shape("./DefaultModel/cone.fbx");
 
 	if (is_static) {
-		coll->tag = Collider_tags::FBX | Collider_tags::Stage | Collider_tags::Static_Stage | Collider_tags::Jumpable_Stage;
+		coll->tag = Collider_tags::FBX | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Static_Stage | Collider_tags::Jumpable_Stage;
 		coll->physics_data.is_moveable = false;
 	}
 	else {
-		coll->tag = Collider_tags::FBX | Collider_tags::Stage | Collider_tags::Kinematic_Stage | Collider_tags::Jumpable_Stage;
+		coll->tag = Collider_tags::FBX | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Kinematic_Stage | Collider_tags::Jumpable_Stage;
 		// 動くのであれば所定のcomponentをアタッチする
 		auto comp = object->addComponent<Kinematic_block>();
 		comp->this_stage = this;
@@ -148,7 +148,7 @@ Collider* Stage_base::set_meshbox(Vector3 pos, Vector3 size, Vector3 rotate, Vec
 
 Collider* Stage_base::set_plane(Vector3 pos, Vector3 normal, Vector3 color, bool is_static ) {
 	Gameobject* object = nullptr;
-	object = Gameobject_manager::createCube(GO_tag::Plane);
+	object = Gameobject_manager::createCube("plane",GO_tag::Plane);
 	Vector4 C = Vector4(color.x, color.y, color.z, 1);
 	object->material->color = C;
 
@@ -160,7 +160,7 @@ Collider* Stage_base::set_plane(Vector3 pos, Vector3 normal, Vector3 color, bool
 	Plane* plane = coll->add_shape<Plane>();
 
 	if (is_static) {
-		coll->tag = Collider_tags::Plane | Collider_tags::Stage | Collider_tags::Static_Stage | Collider_tags::Jumpable_Stage;
+		coll->tag = Collider_tags::Plane | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Static_Stage | Collider_tags::Jumpable_Stage;
 		coll->physics_data.is_moveable = false;
 	}
 

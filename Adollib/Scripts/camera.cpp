@@ -38,12 +38,16 @@ namespace Adollib
 	void Camera::awake()
 	{
 		gameobject->transform->local_pos = Vector3(0, 30, -50);
+		input->setCursorPos(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
 	}
 
 	void Camera::start()
 	{
-		player = Gameobject_manager::find("Waist")->transform;
+		player = Gameobject_manager::find("Body")->transform;
 		follow_player = true;
+
+		is_lock_cursol = true;
+		input->setCursorPos(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
 	}
 
 	// 毎フレーム呼ばれる更新処理
@@ -169,7 +173,7 @@ namespace Adollib
 				// physicsの更新に追尾カメラを揃えないとがくがくする
 				if (Physics_function::Phyisics_manager::is_updated_physics);
 				//pos_buffer = ALEasing(pos_buffer, player->position, 1, timeStep);
-				pos_buffer = player->position;
+				pos_buffer = player->position + Vector3(0, 1, 0);
 
 			}
 
@@ -193,7 +197,7 @@ namespace Adollib
 				ray.position = pos_buffer;
 				ray.direction = vector3_quatrotate(Vector3(0, 0, -1), camera_rot);
 				Ray::Raycast_struct str;
-				str.collider_tag = Collider_tags::Stage;
+				str.collider_tag = Collider_tags::Caera_not_sunk_Stage;
 				ray.ray_cast(str);
 
 				//カメラがめり込んでいたら位置を調整

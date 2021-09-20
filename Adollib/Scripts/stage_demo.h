@@ -18,7 +18,7 @@ namespace Adollib {
 			Stage_parts::Stageparts_tagbit tag,
 			const Vector3& color = Vector3(1, 1, 1)
 		);
-		Gameobject* set_rope(const Vector3& pos, const Vector3& scale, const Vector3& rotate, const Vector3& color = Vector3(1, 1, 1));
+		Gameobject* set_sphere_rope(const Vector3& pos, const float& scale, const Vector3& rotate, int quantity, float mass, const Vector3& color = Vector3(1, 1, 1));
 
 	public:
 		// stage_manager‚ªŒÄ‚Ôawake ‚±‚Ìstage‚ÉØ‚è‘Ö‚í‚Á‚½‚Æ‚«‚ÉŒÄ‚Î‚ê‚é

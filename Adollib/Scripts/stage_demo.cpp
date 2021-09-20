@@ -31,6 +31,7 @@ namespace Adollib
 		//Tree
 		{
 			Gameobject* pearent = Gameobject_manager::create("Trees");
+			stage_parts.emplace_back(pearent);
 			int numn_max = 8;
 			for (int x_num = 0; x_num < numn_max; x_num++) {
 
@@ -55,7 +56,7 @@ namespace Adollib
 
 		//house
 		{
-			float mass = 7;
+			float mass = 4;
 			Vector3 color = Vector3(187, 185, 181) / 255;
 			//Vector3 color = Vector3(220, 220, 220) / 255;
 			Vector3 size = Vector3(2, 1, 1);
@@ -77,6 +78,7 @@ namespace Adollib
 				Gameobject* wall_pearent = Gameobject_manager::create("Wall");
 				wall_pearent->transform->local_pos = pos[c];
 				wall_pearent->transform->local_orient = quaternion_from_euler(rotate[c]);
+				stage_parts.emplace_back(wall_pearent);
 
 				for (int i = 0; i < count.y; i++) {
 					if ((i + c) % 2 == 0) {
@@ -91,6 +93,7 @@ namespace Adollib
 								color + Vector3(rand() % 5 / 255.0f),
 								false
 							);
+							coll->tag &= ~Collider_tags::Caera_not_sunk_Stage;
 							coll->physics_data.inertial_mass = mass;
 							wall_pearent->add_child(coll->gameobject);
 						}
@@ -107,9 +110,9 @@ namespace Adollib
 								color + Vector3(rand() % 5 / 255.0f),
 								false
 							);
+							coll->tag &= ~Collider_tags::Caera_not_sunk_Stage;
 							coll->physics_data.inertial_mass = mass;
-							wall_pearent->add_child(coll->gameobject
-							);
+							wall_pearent->add_child(coll->gameobject);
 						}
 					}
 
@@ -137,12 +140,12 @@ namespace Adollib
 						pos[2]);
 
 					// darumaの生成とcolliderのアタッチ
-					Gameobject* Daruma = nullptr;
-					Daruma = Gameobject_manager::create("Daruma", GO_tag::Sphere);
-					Daruma->transform->local_pos = Vector3(position[0], position[1], position[2]);
-					Daruma->transform->local_scale = Vector3(1, 1, 1) * 0.5f;
+					Gameobject* desk = nullptr;
+					desk = Gameobject_manager::create("Desk", GO_tag::Sphere);
+					desk->transform->local_pos = Vector3(position[0], position[1], position[2]);
+					desk->transform->local_scale = Vector3(1, 1, 1) * 0.5f;
 
-					Collider* coll = Daruma->addComponent<Collider>();
+					Collider* coll = desk->addComponent<Collider>();
 					coll->tag = Collider_tags::Stage | Collider_tags::Kinematic_Stage | Collider_tags::Jumpable_Stage;
 					coll->physics_data.inertial_mass = 5;
 					//coll->set_tensor(tensor);
@@ -212,11 +215,19 @@ namespace Adollib
 
 					//coll->tag = Collider_tags::Sphere;
 
-					Daruma->add_child(parts[0]);
-					Daruma->add_child(parts[1]);
-					Daruma->add_child(parts[2]);
-					Daruma->add_child(parts[3]);
-					Daruma->add_child(parts[4]);
+					desk->add_child(parts[0]);
+					desk->add_child(parts[1]);
+					desk->add_child(parts[2]);
+					desk->add_child(parts[3]);
+					desk->add_child(parts[4]);
+
+
+					stage_parts.emplace_back(desk);
+					stage_parts.emplace_back(parts[0]);
+					stage_parts.emplace_back(parts[1]);
+					stage_parts.emplace_back(parts[2]);
+					stage_parts.emplace_back(parts[3]);
+					stage_parts.emplace_back(parts[4]);
 
 
 				}
@@ -231,6 +242,7 @@ namespace Adollib
 			Gameobject* pearent = Gameobject_manager::create("BallJoint_Shperenet");
 			pearent->transform->local_pos = Vector3(0, 60, 0);
 			std::vector<Collider*>colls;
+			stage_parts.emplace_back(pearent);
 
 			int sphere_size = 10;
 			const int colls_size = sphere_size * sphere_size;
@@ -257,7 +269,8 @@ namespace Adollib
 					pearent->add_child(go);
 					colls.at(index) = (coll);
 
-					coll->physics_data.inertial_mass = 0.3f;
+					coll->tag &= ~Collider_tags::Caera_not_sunk_Stage;
+					coll->physics_data.inertial_mass = 0.1f;
 				}
 			}
 
@@ -280,9 +293,11 @@ namespace Adollib
 				off += Vector3(10, 8, 0);
 			}
 		}
+		set_box(Vector3(140, 18, 60), Vector3(65, 20, 20), Vector3(0), Vector3(188, 214, 54) / 255.0f, true);
 
 		{
-			auto coll = set_box(Vector3(0, -30, -100), Vector3(2, 2, 2), Vector3(0), Vector3(0.8f), false);
+			auto coll = set_box(Vector3(0, -29, -100), Vector3(2, 2, 2), Vector3(0), Vector3(0.8f), false);
+			coll->tag &= ~Collider_tags::Caera_not_sunk_Stage;
 			coll->physics_data.inertial_mass = 10;
 		}
 
@@ -297,6 +312,8 @@ namespace Adollib
 			Stage_parts::Stageparts_tags::Flag_0,
 			Vector3(188, 214, 54) / 255.0f * 0.8f
 		);
+
+		set_sphere_rope(Vector3(64, 60, 65), 1, Vector3(0, 0, 0), 10, 5);
 	}
 
 	// 毎フレーム呼ばれる更新処理
@@ -312,6 +329,7 @@ namespace Adollib
 		for (auto& object : stage_parts) {
 			Gameobject_manager::deleteGameobject(object);
 		}
+		stage_parts.clear();
 	}
 
 }

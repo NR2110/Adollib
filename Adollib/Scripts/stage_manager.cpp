@@ -20,7 +20,7 @@ void Stage_manager::awake() {
 }
 
 void Stage_manager::start() {
-
+	player = Gameobject_manager::find("player")->findComponent<Player>();
 }
 
 void Stage_manager::update() {
@@ -30,7 +30,16 @@ void Stage_manager::update() {
 		stages[next_stage]->stage_awake();
 
 		now_stage = next_stage;
+
+		player->delete_catchjoint();
 	}
+
+	if (input->getKeyTrigger(Key::R)) player->respown();
+
+	if (input->getKeyTrigger(Key::D1))
+		set_next_stage_type(Stage_types::demo);
+	if (input->getKeyTrigger(Key::D2))
+		set_next_stage_type(Stage_types::stage_0);
 }
 
 void Stage_manager::set_next_stage_type(Stage_types next_stge) {
