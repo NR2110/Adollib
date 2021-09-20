@@ -436,10 +436,12 @@ void Player::add_pow_for_stand() {
 	if (!onground_collider->concoll_enter(Collider_tags::Jumpable_Stage)) {
 		Waist_collider->physics_data.dynamic_friction = 0;
 		Body_collider->physics_data.dynamic_friction = 0;
+
 	}
 	else{
 		Waist_collider->physics_data.dynamic_friction = 0.4f;
 		Body_collider->physics_data.dynamic_friction =  0.4f;
+
 	}
 };
 
