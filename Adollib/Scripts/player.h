@@ -45,7 +45,7 @@ namespace Adollib
 
 		float jump_power = 150;
 
-		float turn_speed = 2;
+		float turn_speed = 200;
 
 	private:
 		Adollib::Collider* debug_coll = nullptr;

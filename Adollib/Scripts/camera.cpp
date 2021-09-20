@@ -47,6 +47,7 @@ namespace Adollib
 		follow_player = true;
 
 		is_lock_cursol = true;
+		ShowCursor(FALSE);
 		input->setCursorPos(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
 	}
 
@@ -220,6 +221,9 @@ namespace Adollib
 
 		if (input->getKeyTrigger(Key::RightControl)) {
 			is_lock_cursol = !is_lock_cursol;
+			if (is_lock_cursol) ShowCursor(FALSE);
+			else ShowCursor(TRUE);
+
 			if (is_lock_cursol == true) {
 				input->setCursorPos(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
 				cursol_pos_save = Vector3(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f, 0);

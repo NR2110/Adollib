@@ -83,6 +83,12 @@
     <Filter Include="ソース ファイル\scene_game\camera">
       <UniqueIdentifier>{c5a1a0b5-3b44-4ee7-b36f-e93b357c3d6b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\scene_game\stage\stage\stage_demo">
+      <UniqueIdentifier>{6474080a-8940-43e5-9d97-4902e2bd4472}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\scene_game\stage\stage\stage_01">
+      <UniqueIdentifier>{3f98db6c-a379-43e7-b67f-827a81fa4f0b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Scripts\player.cpp">
@@ -265,17 +271,23 @@
     <ClCompile Include="..\Scripts\player_funcs.cpp">
       <Filter>ソース ファイル\scene_game\player</Filter>
     </ClCompile>
-    <ClCompile Include="..\Scripts\stage_demo.cpp">
-      <Filter>ソース ファイル\scene_game\stage\stage</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Scripts\stage_demo_funcs.cpp">
-      <Filter>ソース ファイル\scene_game\stage\stage</Filter>
-    </ClCompile>
     <ClCompile Include="..\Scripts\stage_base.cpp">
       <Filter>ソース ファイル\scene_game\stage\base</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\stage_manager.cpp">
       <Filter>ソース ファイル\scene_game\stage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\stage_demo_funcs.cpp">
+      <Filter>ソース ファイル\scene_game\stage\stage\stage_demo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\stage_demo.cpp">
+      <Filter>ソース ファイル\scene_game\stage\stage\stage_demo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\stage_01.cpp">
+      <Filter>ソース ファイル\scene_game\stage\stage\stage_01</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\stage_01_funcs.cpp">
+      <Filter>ソース ファイル\scene_game\stage\stage\stage_01</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -603,9 +615,6 @@
     <ClInclude Include="..\Scripts\stageparts_tags.h">
       <Filter>ソース ファイル\scene_game\stage\base</Filter>
     </ClInclude>
-    <ClInclude Include="..\Scripts\stage_demo.h">
-      <Filter>ソース ファイル\scene_game\stage\stage</Filter>
-    </ClInclude>
     <ClInclude Include="..\Scripts\buttan.h">
       <Filter>ソース ファイル\scene_game\stage\parts</Filter>
     </ClInclude>
@@ -620,6 +629,12 @@
     </ClInclude>
     <ClInclude Include="..\Scripts\respown_area.h">
       <Filter>ソース ファイル\scene_game\stage\parts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\stage_demo.h">
+      <Filter>ソース ファイル\scene_game\stage\stage\stage_demo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\stage_01.h">
+      <Filter>ソース ファイル\scene_game\stage\stage\stage_01</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

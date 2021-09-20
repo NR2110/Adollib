@@ -39,8 +39,9 @@ struct Balljoint {
 	}
 };
 
-void CalcTangentVector(const Vector3& normal, DirectX::XMVECTOR& tangent1, DirectX::XMVECTOR& tangent2)
+void CalcTangentVector(const Vector3& normal, const DirectX::XMVECTOR& vrel, DirectX::XMVECTOR& tangent1, DirectX::XMVECTOR& tangent2)
 {
+#if 0
 	Vector3 vec(1.0f, 0.0f, 0.0f);
 	Vector3 n(normal);
 	n[0] = 0.0f;
@@ -51,6 +52,31 @@ void CalcTangentVector(const Vector3& normal, DirectX::XMVECTOR& tangent1, Direc
 	DirectX::XMVECTOR xmnorm = DirectX::XMLoadFloat3(&normal);
 	tangent1 = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(xmnorm, DirectX::XMLoadFloat3(&vec)));
 	tangent2 = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(tangent1, xmnorm));
+#else
+	// 相対速度の方向にtangentをとる(適当な方向にtangentをとるとfrictionがうまく働かなくなる)
+
+	// 二つの相対速度の向きからtangentを求める
+	DirectX::XMVECTOR xmnorm = DirectX::XMLoadFloat3(&normal);
+	DirectX::XMVECTOR dot = DirectX::XMVector3Dot(xmnorm, vrel);
+
+	if (DirectX::XMVectorGetX(dot) < 1 + FLT_EPSILON && DirectX::XMVectorGetX(dot) > 1 - FLT_EPSILON) {
+	// もし相対速度と衝突法線が同じ方向なら適当にtangentを求める
+		Vector3 vec(1.0f, 0.0f, 0.0f);
+		Vector3 n(normal);
+		n[0] = 0.0f;
+		if (n.norm() < FLT_EPSILON) {
+			vec = Vector3(0.0f, 1.0f, 0.0f);
+		}
+		tangent1 = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(xmnorm, DirectX::XMLoadFloat3(&vec)));
+		tangent2 = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(tangent1, xmnorm));
+
+	}
+	else {
+		tangent1 = DirectX::XMVector3Normalize(DirectX::XMVectorSubtract(vrel, DirectX::XMVectorMultiply(xmnorm, DirectX::XMVector3Dot(xmnorm, vrel))));
+		tangent2 = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(tangent1, xmnorm));
+	}
+#endif
+
 }
 bool Calc_joint_effect(ALP_Joint* joint)
 {
@@ -312,7 +338,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 			DirectX::XMVECTOR
 				tangent1, //normalに対するz方向
 				tangent2; //normalに対するx方向
-			CalcTangentVector(cp.normal, tangent1, tangent2);
+			CalcTangentVector(cp.normal, vrel, tangent1, tangent2);
 
 			//Baraff[1997]の式(8-18)の分母(denominator)を求める
 			const float& term1 = ALPphysics[0]->inverse_mass();

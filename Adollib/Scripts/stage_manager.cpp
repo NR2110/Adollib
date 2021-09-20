@@ -1,9 +1,12 @@
 #include "stage_manager.h"
 
+#include "../Adollib/Scripts/Main/Adollib.h"
+
 #include "stageparts_base.h"
 #include "stage_base.h"
 
 #include "stage_demo.h"
+#include "stage_01.h"
 
 #include "player.h"
 
@@ -13,7 +16,11 @@ using namespace Stage_parts;
 void Stage_manager::awake() {
 
 	add_stage<Stage_demo>(Stage_types::demo);
-	add_stage<Stage_demo>(Stage_types::stage_0);
+	add_stage<Stage_01>(Stage_types::stage_0);
+	//add_stage<Stage_01>(Stage_types::stage_1);
+
+	now_stage = Stage_types::demo; //¡‚Ìstagetype
+	next_stage = Stage_types::demo; //ŽŸ‚Ìstagetype
 
 	stages[now_stage]->stage_awake();
 
@@ -21,9 +28,11 @@ void Stage_manager::awake() {
 
 void Stage_manager::start() {
 	player = Gameobject_manager::find("player")->findComponent<Player>();
+	//player->respown();
 }
 
 void Stage_manager::update() {
+	if (Al_Global::second_per_game < 2)return;
 	if (now_stage != next_stage) {
 
 		stages[now_stage]->stage_destroy();
@@ -32,6 +41,7 @@ void Stage_manager::update() {
 		now_stage = next_stage;
 
 		player->delete_catchjoint();
+		player->respown();
 	}
 
 	if (input->getKeyTrigger(Key::R)) player->respown();

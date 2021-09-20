@@ -340,7 +340,7 @@ void Player::angula_move() {
 
 		if (vector3_cross(player_vec, rot_vec).y < 0)angle *= -1;
 
-		rotate *= quaternion_axis_angle(Vector3(0, 1, 0), angle);
+		rotate *= quaternion_axis_angle(Vector3(0, 1, 0), angle * Al_Global::second_per_frame * 100);
 
 		debug_coll->transform->local_pos = Waist_collider->transform->position + vector3_quatrotate(Vector3(0, 0, 1), rotate);
 	}
@@ -433,14 +433,14 @@ void Player::add_pow_for_stand() {
 		is_gunyatto = true;
 	}
 
-	//if (!onground_collider->concoll_enter(Collider_tags::Jumpable_Stage)) {
-	//	Waist_collider->physics_data.dynamic_friction = 0;
-	//	Body_collider->physics_data.dynamic_friction = 0;
-	//}
-	//else{
-	//	Waist_collider->physics_data.dynamic_friction = 0.4f;
-	//	Body_collider->physics_data.dynamic_friction =  0.4f;
-	//}
+	if (!onground_collider->concoll_enter(Collider_tags::Jumpable_Stage)) {
+		Waist_collider->physics_data.dynamic_friction = 0;
+		Body_collider->physics_data.dynamic_friction = 0;
+	}
+	else{
+		Waist_collider->physics_data.dynamic_friction = 0.4f;
+		Body_collider->physics_data.dynamic_friction =  0.4f;
+	}
 };
 
 //足を動かす
@@ -549,8 +549,12 @@ bool Player::check_respown() {
 
 	if (respown_timer > 0) {
 		if(Waist_collider->concoll_enter(Collider_tags::Stage))respown_timer -= Al_Global::second_per_frame;
+		else if(Head_collider->concoll_enter(Collider_tags::Stage))respown_timer -= Al_Global::second_per_frame * 0.5f;
 	}
-	if (respown_timer > 0)return true;
+	if (respown_timer > 0) {
+		turn_gunyatto_dir();
+		return true;
+	}
 
 	auto stage = stage_manager->get_current_stage();
 	// stage指定のY座標よりPlayerが低ければrespown
@@ -593,28 +597,27 @@ bool Player::check_respown() {
 void Player::turn_gunyatto_dir() {
 	//Vector3 dir = vector3_quatrotate(Vector3(0, 0, 1), Waist->transform->orientation);
 
+	// 腰の向き
 	Vector3 dir = vector3_quatrotate(Vector3(0, 0, 1), Waist->transform->orientation);
-	//if (dir.y < -0.8f) dir = vector3_quatrotate(Vector3(0, 1, 0), Waist->transform->orientation);
-	//else if(dir.y > 0.8f) dir = vector3_quatrotate(Vector3(0, -1, 0), Waist->transform->orientation);
 
+	// 腰から頭への向き(この方向に正面を持っていきたい)
 	Vector3 waist_head_dir = (Head->world_position() - Waist->world_position()).unit_vect();
-	if (fabsf(dir.y) > 0.7f) {
+
+	// 腹ばいか 仰向けか
+	if (fabsf(dir.y) > 0.5f) {
 		if (dir.y < 0) dir = +waist_head_dir;
-		else                dir = -waist_head_dir;
+		else           dir = -waist_head_dir;
 	}
-	//if      (waist_head_dir.y < -0.8f) dir = +waist_head_dir;
-	//else if (waist_head_dir.y > +0.8f) dir = -waist_head_dir;
+	// 立っているなら何もせずにreturn
+	else return;
 
-	dir.y = 0;
-	dir = dir.unit_vect();
-	if (dir.norm() == 0) {
-		return;
-	}
-
+	// 今の向き
 	Vector3 player_vec = vector3_quatrotate(Vector3(0, 0, 1), rotate);
 
+	// 差分を求めて
 	float angle = vector3_angle(dir, player_vec);
 
+	// 回転軸は0,1,0にしたいから 外積で回転方向の確認
 	if (vector3_cross(player_vec, dir).y < 0)angle *= -1;
 
 	rotate *= quaternion_axis_angle(Vector3(0, 1, 0), angle);
