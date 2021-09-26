@@ -114,13 +114,14 @@ bool Work_meter::render() {
 
 			// 値の記入
 			if (before < 0)
-				meters[tag][name][start_num + max_] = (float)(start_stop[tag][name].stop.QuadPart - start_stop[tag][name].start.QuadPart) * F;
+				meters[tag][name][start_num + max_] = (float)(start_stop[tag][name].duration_time) * F;
 
 				// 描画
 				ImGui::PlotLines("", &meters[tag][name][start_num], max_, 0, name.c_str(), 0.0f, max_num, ImVec2(500, 50));
 
 			start_stop[tag][name].stop.QuadPart = 0;
 			start_stop[tag][name].start.QuadPart = 0;
+			start_stop[tag][name].duration_time = 0;
 		}
 
 
@@ -143,7 +144,7 @@ bool Work_meter::render() {
 
 					// 値の記入
 					if (before < 0)
-						meters[tag][name][start_num + max_] = (float)(start_stop[tag][name].stop.QuadPart - start_stop[tag][name].start.QuadPart) * F;
+						meters[tag][name][start_num + max_] = (float)(start_stop[tag][name].duration_time) * F;
 
 
 						// 描画
@@ -151,6 +152,7 @@ bool Work_meter::render() {
 
 					start_stop[tag][name].stop.QuadPart = 0;
 					start_stop[tag][name].start.QuadPart = 0;
+					start_stop[tag][name].duration_time = 0;
 				}
 			}
 			else if(update_always) {
@@ -169,10 +171,11 @@ bool Work_meter::render() {
 
 					// 値の記入
 					if (before < 0)
-						meters[tag][name][start_num + max_] = (float)(start_stop[tag][name].stop.QuadPart - start_stop[tag][name].start.QuadPart) * F;
+						meters[tag][name][start_num + max_] = (float)(start_stop[tag][name].duration_time) * F;
 
 					start_stop[tag][name].stop.QuadPart = 0;
 					start_stop[tag][name].start.QuadPart = 0;
+					start_stop[tag][name].duration_time = 0;
 				}
 			}
 		}
@@ -203,6 +206,7 @@ bool Work_meter::start(const std::string& name) {
 	}
 
 	QueryPerformanceCounter(&start_stop[now_tag][name].start);
+
 #endif
 	return true;
 }
@@ -216,6 +220,9 @@ bool Work_meter::stop(const std::string& name) {
 	}
 
 	QueryPerformanceCounter(&start_stop[now_tag][name].stop);
+
+	start_stop[now_tag][name].duration_time += start_stop[now_tag][name].stop.QuadPart - start_stop[now_tag][name].start.QuadPart;
+
 #endif
 	return true;
 }

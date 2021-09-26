@@ -10,6 +10,7 @@ namespace Adollib {
 		struct meter {
 			LARGE_INTEGER start;
 			LARGE_INTEGER stop;
+			long long duration_time;
 		};
 
 		static const int max_ = 120;
