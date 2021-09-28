@@ -25,6 +25,8 @@
 
 #include <future>
 
+#include <thread>
+
 using namespace Adollib;
 using namespace Physics_function;
 using namespace ConstantBuffer;
@@ -61,6 +63,15 @@ void Gameobject_manager::awake() {
 
 }
 
+void update_physics() {
+
+	while (true)
+	{
+		Phyisics_manager::update();
+	}
+
+}
+
 void Gameobject_manager::initialize(Scenelist Sce) {
 	if (Sce == Scenelist::scene_null)return;
 
@@ -68,6 +79,9 @@ void Gameobject_manager::initialize(Scenelist Sce) {
 	for (auto& GO : gameobjects[Sce]) {
 		GO->initialize();
 	}
+
+	//std::thread update_physics_(update_physics);
+	//update_physics_.join();
 
 }
 

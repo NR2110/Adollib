@@ -16,11 +16,15 @@ using namespace Physics_function;
 #pragma region Collider
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 const bool ALP_Collider::concoll_enter(const unsigned int tag_name) {
+	//std::lock_guard <std::mutex> lock(mtx);
+
 	oncoll_check_bits |= tag_name;
 	return (oncoll_bits & tag_name);
 }
 
 void ALP_Collider::update_world_trans() {
+	//std::lock_guard <std::mutex> lock(mtx);
+
 	bool is_changed_Size = false;
 
 	bool is_changPos = false;
@@ -33,7 +37,7 @@ void ALP_Collider::update_world_trans() {
 		shape->update_Colliderdata();
 
 		// world情報の更新
-		shape->update_world_trans(gameobject->world_position(), gameobject->world_orientate(), gameobject->world_scale(),
+		shape->update_world_trans(transform.position, transform.orientation, transform.scale,
 			is_changPos, is_changRot, is_changSiz
 		);
 
@@ -42,6 +46,7 @@ void ALP_Collider::update_world_trans() {
 		// DOPの更新
 		shape->update_dop14();
 
+		//shape->is_update_world_trans = true;
 	}
 
 
@@ -50,16 +55,14 @@ void ALP_Collider::update_world_trans() {
 
 	// 慣性モーメントの更新
 	ALPphysics->update_tensor_and_barycenter(shapes, joints);
-
-
-
-
 }
 
 #pragma endregion
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 void ALP_Collider::integrate(float duration, Vector3 linear_velocity, Vector3 angula_velocity, Vector3 old_linear_velocity, Vector3 old_angula_velocity) {
+	//std::lock_guard <std::mutex> lock(mtx);
+
 	if (linear_velocity.norm() == 0 && angula_velocity.norm() == 0)return;
 
 	//親のorienattionの逆をとる
@@ -93,12 +96,16 @@ void ALP_Collider::integrate(float duration, Vector3 linear_velocity, Vector3 an
 }
 
 void ALP_Collider::reset_data_per_frame() {
+	//std::lock_guard <std::mutex> lock(mtx);
+
 	oncoll_bits = 0;
 	coll_ptr->contacted_colliders.clear();
+	transform = *gameobject->transform;
 };
 
-void ALP_Collider::Update_hierarchy()
-{
+void ALP_Collider::Update_hierarchy(){
+	//std::lock_guard <std::mutex> lock(mtx);
+
 	for (auto& shape : shapes) {
 		shape->Update_hierarchy();
 	}
@@ -108,6 +115,8 @@ void ALP_Collider::Update_hierarchy()
 
 //このcolliderが属するjointを追加
 void ALP_Collider::add_joint(ALP_Joint* joint) {
+	//std::lock_guard <std::mutex> lock(mtx);
+
 #if _DEBUG
 	//エラー表示 同じjointをアタッチしてはいけない
 	for (auto& j : joints) {
@@ -119,10 +128,14 @@ void ALP_Collider::add_joint(ALP_Joint* joint) {
 
 //jointから外された
 void ALP_Collider::remove_joint(ALP_Joint* joint) {
+	//std::lock_guard <std::mutex> lock(mtx);
+
 	joints.remove(joint);
 }
 
 void ALP_Collider::add_contacted_collider(Contacts::Contact_pair* pair, u_int num) {
+	//std::lock_guard <std::mutex> lock(mtx);
+
 	if (coll_ptr->is_save_contacted_colls == false)return; //保存するflagが立っていなければ保存しない
 
 	Contacted_data data;
@@ -143,14 +156,16 @@ void ALP_Collider::add_contacted_collider(Contacts::Contact_pair* pair, u_int nu
 }
 
 Meshcoll_part* ALP_Collider::add_mesh_shape(const char* filepass, Physics_function::Meshcollider_data* mesh_data) {
+	//std::lock_guard <std::mutex> lock(mtx);
 	Meshcoll_part* shape = newD Meshcoll_part(this, filepass, mesh_data);
 
 	shapes.emplace_back(shape);
 	return shape;
 };
 
-void ALP_Collider::destroy()
-{
+void ALP_Collider::destroy(){
+	//std::lock_guard <std::mutex> lock(mtx);
+
 	//shapeの解放
 	for (auto& shape : shapes) {
 		delete shape;

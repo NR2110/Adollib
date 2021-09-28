@@ -18,8 +18,6 @@ namespace Adollib {
 		// k-DOPの更新 update_world_transでおこなっている
 		//void update_dop(std::list<Physics_function::ALP_Collider*>& ALP_shapes);
 
-		// oncoll_bitsのリセット
-		void reset_data_per_frame(std::list<Physics_function::ALP_Collider*>& ALP_colliders);
 
 
 		//::: ALP_phyicses ::::::::::
@@ -32,6 +30,12 @@ namespace Adollib {
 
 		// 座標,姿勢の更新
 		void integrate(std::list<Physics_function::ALP_Physics*>& ALP_physics);
+
+
+		//::: どっちも ::::
+		// oncoll_bitsやtrnsformのリセット
+		void reset_data_per_frame(std::list<Physics_function::ALP_Collider*>& ALP_colliders, std::list<Physics_function::ALP_Physics*>& ALP_physics);
+
 
 
 	}

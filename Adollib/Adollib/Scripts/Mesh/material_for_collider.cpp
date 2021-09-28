@@ -88,8 +88,8 @@ void Collider_renderer::render_joint(const Physics_function::ALP_Joint* joint) {
 		if (joint->bias != 0)color = Vector4(-1, -1, -1, -1);
 
 		const Transfome* transforms[2] = {
-			joint->ALPcollider[0]->get_gameobject()->transform.get(),
-			joint->ALPcollider[1]->get_gameobject()->transform.get()
+			&joint->ALPcollider[0]->transform,
+			&joint->ALPcollider[1]->transform
 		};
 
 		const Vector3 rA = vector3_quatrotate(joint->anchor[i].posA, transforms[0]->orientation);

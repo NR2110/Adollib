@@ -27,6 +27,7 @@ namespace Adollib {
 		Vector3 old_world_scale_;
 
 	public:
+		//bool is_update_world_trans = false;
 
 	public:
 		const Vector3	world_position()const { return world_position_; };

@@ -192,6 +192,9 @@ void Physics_function::BroadMidphase(Scenelist Sce,
 		}
 	}
 
+	auto a = axis_list;
+
+
 	Work_meter::stop("make_axis_list");
 
 	//::: 動いたもののvalueを更新
@@ -281,6 +284,8 @@ void Physics_function::BroadMidphase(Scenelist Sce,
 		Work_meter::stop("insert_sort");
 	}
 
+	auto b = axis_list;
+
 	Work_meter::start("Sweep&Prune");
 	//Sweep&Prune
 	std::list<Collider_shape*> actives;
@@ -290,6 +295,7 @@ void Physics_function::BroadMidphase(Scenelist Sce,
 	{
 		for (auto& insert_edge_itr : axis_list) {
 			auto& insert_edge = *insert_edge_itr;
+			auto c = axis_list;
 
 			//colliderの始点ならactivelistにあるものと衝突の可能性あり
 			if (insert_edge.edge_start == true) {
@@ -325,6 +331,7 @@ void Physics_function::BroadMidphase(Scenelist Sce,
 			}
 
 			else {
+
 				if (insert_edge.shape->get_ALPcollider()->get_collptr()->is_static == true)
 					static_actives.erase(insert_edge.active_list_pair_itr);
 				else

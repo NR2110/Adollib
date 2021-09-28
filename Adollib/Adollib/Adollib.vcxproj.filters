@@ -671,9 +671,6 @@
     <FxCompile Include="DefaultShader\default_ps_notex.hlsl">
       <Filter>00_Adollib\44_shader\hlsli</Filter>
     </FxCompile>
-    <FxCompile Include="DefaultShader\physics_resolve.hlsl">
-      <Filter>00_Adollib\22_physics</Filter>
-    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="native\value.natvis">

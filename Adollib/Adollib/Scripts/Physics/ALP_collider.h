@@ -7,6 +7,10 @@
 #include "ALP__tags.h"
 #include "collider_shape.h"
 
+#include "../Object/transform.h"
+
+#include <mutex>
+
 namespace Adollib {
 
 	class Collider;
@@ -49,11 +53,22 @@ namespace Adollib {
 			//::: アタッチされたshapeの配列 :::
 			std::vector<Collider_shape*> shapes;
 
+			//
+			std::mutex mtx;
+
+		public:
+			void set_ALPphysics_ptr(ALP_Physics* ptr) { ALPphysics = ptr; };
+
+			// マルチスレッド化するにあたり、add_colliderした時点ではメインのlistに入れずbufferのlistに入れるため 自身のitrが生成時に決まらないため set関数を準備
+			void set_this_itr(std::list<ALP_Collider*>::iterator itr) { this_itr = itr; };
+
+
 		public:
 			// ここをすべてprivateにしたかった........
 			//::: oncoll_enter :::::::
 			Collider_tagbit oncoll_check_bits = 0; //on collision enterを行うtagの情報(互いに衝突しないけどoncollenterが必要な場合)
 			Collider_tagbit oncoll_bits = 0; //oncollision enterで使用するbit情報
+
 
 
 		public:
@@ -83,9 +98,13 @@ namespace Adollib {
 			Gameobject* gameobject = nullptr;
 
 		public:
+			//::: マルチスレッドにするためtransformをコピー :::
+			Transfome transform;
+
+		public:
 			Collider* get_collptr() const { return coll_ptr; };
 			ALP_Physics* get_ALPphysics() const { return ALPphysics; };
-			Gameobject* get_gameobject() const { return gameobject; };
+			//Gameobject* get_gameobject() const { return gameobject; };
 
 		public:
 
@@ -110,6 +129,7 @@ namespace Adollib {
 			//規定のshapeをアタッチする
 			template<typename T>
 			T* add_shape() {
+				std::lock_guard <std::mutex> lock(mtx);
 
 				static_assert(std::is_base_of<Collider_shape, T>::value == true, "template T must inherit ALP_shape");
 
@@ -138,8 +158,7 @@ namespace Adollib {
 
 
 		private:
-			//::: shapeを包むAABBの更新 ::::::
-			//void update_AABB();
+
 		};
 	}
 }

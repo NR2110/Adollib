@@ -85,8 +85,8 @@ bool Calc_joint_effect(ALP_Joint* joint)
 	Transfome* transform[2];
 	DirectX::XMVECTOR position[2];
 
-	transform[0] = joint->ALPcollider[0]->get_gameobject()->transform.get();
-	transform[1] = joint->ALPcollider[1]->get_gameobject()->transform.get();
+	transform[0] = &joint->ALPcollider[0]->transform;
+	transform[1] = &joint->ALPcollider[1]->transform;
 	ALPphysics[0] = joint->ALPcollider[0]->get_ALPphysics();
 	ALPphysics[1] = joint->ALPcollider[1]->get_ALPphysics();
 	solverbody[0] = ALPphysics[0]->solve;
@@ -206,8 +206,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 		for (auto& joint : joints) {
 			joint->adapt_Jointdata();
 
-			transform[0] = joint->ALPcollider[0]->get_gameobject()->transform.get();
-			transform[1] = joint->ALPcollider[1]->get_gameobject()->transform.get();
+			transform[0] = &joint->ALPcollider[0]->transform;
+			transform[1] = &joint->ALPcollider[1]->transform;
 			ALPphysics[0] = joint->ALPcollider[0]->get_ALPphysics();
 			ALPphysics[1] = joint->ALPcollider[1]->get_ALPphysics();
 			solverbody[0] = ALPphysics[0]->solve;
@@ -315,8 +315,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 		for (int C_num = 0; C_num < pair->contacts.contact_num; C_num++) {
 			Contactpoint& cp = pair->contacts.contactpoints[C_num];
 
-			const DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&coll[0]->local_position), DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[0]), DirectX::XMLoadFloat4(&coll[0]->local_orientation))), DirectX::XMLoadFloat4(&ALPcollider[0]->get_gameobject()->world_orientate()));
-			const DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&coll[1]->local_position), DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[1]), DirectX::XMLoadFloat4(&coll[1]->local_orientation))), DirectX::XMLoadFloat4(&ALPcollider[1]->get_gameobject()->world_orientate()));
+			const DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&coll[0]->local_position), DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[0]), DirectX::XMLoadFloat4(&coll[0]->local_orientation))), DirectX::XMLoadFloat4(&ALPcollider[0]->transform.orientation));
+			const DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&coll[1]->local_position), DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[1]), DirectX::XMLoadFloat4(&coll[1]->local_orientation))), DirectX::XMLoadFloat4(&ALPcollider[1]->transform.orientation));
 
 			// ”½”­ŒW”‚ÌŠl“¾
 			// Œp‘±‚ÌÕ“Ë‚Ìê‡”½”­ŒW”‚ğ0‚É‚·‚é
@@ -441,8 +441,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 			//Õ“Ë“_‚Ìî•ñ
 			const Contactpoint& cp = pair->contacts.contactpoints[C_num];
 
-			const DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&coll[0]->local_position), DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[0]), DirectX::XMLoadFloat4(&coll[0]->local_orientation))), DirectX::XMLoadFloat4(&ALPcollider[0]->get_gameobject()->world_orientate()));
-			const DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&coll[1]->local_position), DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[1]), DirectX::XMLoadFloat4(&coll[1]->local_orientation))), DirectX::XMLoadFloat4(&ALPcollider[1]->get_gameobject()->world_orientate()));
+			const DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&coll[0]->local_position), DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[0]), DirectX::XMLoadFloat4(&coll[0]->local_orientation))), DirectX::XMLoadFloat4(&ALPcollider[0]->transform.orientation));
+			const DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&coll[1]->local_position), DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[1]), DirectX::XMLoadFloat4(&coll[1]->local_orientation))), DirectX::XMLoadFloat4(&ALPcollider[1]->transform.orientation));
 
 			for (int k = 0; k < 3; k++) {
 				const float& deltaImpulse = cp.constraint[k].accuminpulse;
@@ -461,8 +461,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 		Transfome* transform[2];
 		DirectX::XMVECTOR position[2];
 		for (auto& joint : joints) {
-			transform[0] = joint->ALPcollider[0]->get_gameobject()->transform.get();
-			transform[1] = joint->ALPcollider[1]->get_gameobject()->transform.get();
+			transform[0] = &joint->ALPcollider[0]->transform;
+			transform[1] = &joint->ALPcollider[1]->transform;
 			ALPphysics[0] = joint->ALPcollider[0]->get_ALPphysics();
 			ALPphysics[1] = joint->ALPcollider[1]->get_ALPphysics();
 			solverbody[0] = ALPphysics[0]->solve;
@@ -522,8 +522,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 				const Vector3 joint_posA = joint->limit_constraint_pos[0];
 				const Vector3 joint_posB = joint->limit_constraint_pos[1];
 
-				transform[0] = joint->ALPcollider[0]->get_gameobject()->transform.get();
-				transform[1] = joint->ALPcollider[1]->get_gameobject()->transform.get();
+				transform[0] = &joint->ALPcollider[0]->transform;
+				transform[1] = &joint->ALPcollider[1]->transform;
 				ALPphysics[0] = joint->ALPcollider[0]->get_ALPphysics();
 				ALPphysics[1] = joint->ALPcollider[1]->get_ALPphysics();
 				solverbody[0] = ALPphysics[0]->solve;
@@ -555,8 +555,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 				const Vector3 joint_posA = joint->anchor[i].posA;
 				const Vector3 joint_posB = joint->anchor[i].posB;
 
-				transform[0] = joint->ALPcollider[0]->get_gameobject()->transform.get();
-				transform[1] = joint->ALPcollider[1]->get_gameobject()->transform.get();
+				transform[0] = &joint->ALPcollider[0]->transform;
+				transform[1] = &joint->ALPcollider[1]->transform;
 				ALPphysics[0] = joint->ALPcollider[0]->get_ALPphysics();
 				ALPphysics[1] = joint->ALPcollider[1]->get_ALPphysics();
 				solverbody[0] = ALPphysics[0]->solve;
@@ -603,8 +603,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 				//Õ“Ë“_‚Ìî•ñ
 				Contactpoint& cp = pair->contacts.contactpoints[C_num];
 
-				const DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&coll[0]->local_position), DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[0]), DirectX::XMLoadFloat4(&coll[0]->local_orientation))), DirectX::XMLoadFloat4(&ALPcollider[0]->get_gameobject()->world_orientate()));
-				const DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&coll[1]->local_position), DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[1]), DirectX::XMLoadFloat4(&coll[1]->local_orientation))), DirectX::XMLoadFloat4(&ALPcollider[1]->get_gameobject()->world_orientate()));
+				const DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&coll[0]->local_position), DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[0]), DirectX::XMLoadFloat4(&coll[0]->local_orientation))), DirectX::XMLoadFloat4(&ALPcollider[0]->transform.orientation));
+				const DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&coll[1]->local_position), DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&cp.point[1]), DirectX::XMLoadFloat4(&coll[1]->local_orientation))), DirectX::XMLoadFloat4(&ALPcollider[1]->transform.orientation));
 
 				{
 					Constraint& constraint = cp.constraint[0];

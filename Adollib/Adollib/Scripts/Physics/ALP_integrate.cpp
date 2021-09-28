@@ -36,10 +36,6 @@ void Physics_function::update_world_trans(std::list<Physics_function::ALP_Collid
 	);
 }
 
-void Physics_function::reset_data_per_frame(std::list<Physics_function::ALP_Collider*>& ALP_colliders) {
-
-	for (auto& coll : ALP_colliders)coll->reset_data_per_frame();
-}
 
 #pragma endregion
 //:::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -70,6 +66,26 @@ void Physics_function::integrate(std::list<Physics_function::ALP_Physics*>& ALP_
 
 	std::for_each(ALP_physics.begin(), ALP_physics.end(), [](ALP_Physics* phys) {
 		phys->integrate(Phyisics_manager::physicsParams.timeStep);
+		}
+	);
+}
+
+#pragma endregion
+//:::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+//:::::::::::::::::::::::::::::::::::::::::::::::::::
+#pragma region colliders & phyicses
+//:::::::::::::::::::::::::::::::::::::::::::::::::::
+
+void Physics_function::reset_data_per_frame(std::list<Physics_function::ALP_Collider*>& ALP_colliders, std::list<Physics_function::ALP_Physics*>& ALP_physics) {
+
+	std::for_each(ALP_colliders.begin(), ALP_colliders.end(), [](ALP_Collider* coll) {
+		coll->reset_data_per_frame();
+		}
+	);
+	std::for_each(ALP_physics.begin(), ALP_physics.end(), [](ALP_Physics* phys) {
+		phys->reset_data_per_frame();
 		}
 	);
 }

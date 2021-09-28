@@ -46,9 +46,9 @@ namespace Adollib
 		player = Gameobject_manager::find("Body")->transform;
 		follow_player = true;
 
-		is_lock_cursol = true;
-		ShowCursor(FALSE);
-		input->setCursorPos(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
+		//is_lock_cursol = true;
+		//ShowCursor(FALSE);
+		//input->setCursorPos(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
 	}
 
 	// 毎フレーム呼ばれる更新処理

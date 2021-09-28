@@ -9,6 +9,7 @@ using namespace Adollib;
 using namespace Physics_function;
 
 void ALP_Physics::set_default() {
+	//std::lock_guard <std::mutex> lock(mtx);
 
 	inertial_mass = PhysicsParams_default::inertial_mass; //質量
 	linear_drag = PhysicsParams_default::linear_drag;//空気抵抗
@@ -28,15 +29,23 @@ void ALP_Physics::set_default() {
 };
 
 void ALP_Physics::add_force(const Vector3& force) {
+	//std::lock_guard <std::mutex> lock(mtx);
+
 	accumulated_force += force;
 }
 void ALP_Physics::add_torque(const Vector3& force) {
+	//std::lock_guard <std::mutex> lock(mtx);
+
 	accumulated_torque += force;
 }
 void ALP_Physics::add_linear_acc(const Vector3& acc) {
+	//std::lock_guard <std::mutex> lock(mtx);
+
 	linear_acceleration += acc;
 }
 void ALP_Physics::add_angula_acc(const Vector3& acc) {
+	//std::lock_guard <std::mutex> lock(mtx);
+
 	angula_acceleration += acc;
 }
 
@@ -58,7 +67,7 @@ Matrix33 ALP_Physics::inverse_inertial_tensor() const {
 		if (isnan(matrix_determinant(inverse_inertial_tensor))) assert(0 && "toooooo laaarrrrrrrrgge");
 
 		Matrix33 rotation, transposed_rotation;
-		rotation = gameobject->world_orientate().get_rotate_matrix();
+		rotation = transform.orientation.get_rotate_matrix();
 		transposed_rotation = matrix_trans(rotation);
 		inverse_inertial_tensor = rotation * inverse_inertial_tensor * transposed_rotation;
 	}
@@ -73,6 +82,8 @@ Matrix33 ALP_Physics::inverse_inertial_tensor() const {
 }
 
 void ALP_Physics::reset_force() {
+	////std::lock_guard <std::mutex> lock(mtx);
+
 	linear_velocity = Vector3(0, 0, 0);
 	angula_velocity = Vector3(0, 0, 0);
 
@@ -83,7 +94,13 @@ void ALP_Physics::reset_force() {
 	angula_acceleration = Vector3(0, 0, 0);
 }
 
+void ALP_Physics::reset_data_per_frame() {
+	transform = *gameobject->transform;
+}
+
 void ALP_Physics::apply_external_force(float duration, const float timeratio_60) {
+	//std::lock_guard <std::mutex> lock(mtx);
+
 	old_angula_velocity = angula_velocity;
 	old_linear_velocity = linear_velocity;
 
@@ -118,7 +135,7 @@ void ALP_Physics::apply_external_force(float duration, const float timeratio_60)
 
 		//並進移動に加える力(accumulated_force)から加速度を出して並進速度を更新する 向きを間違えないように!!
 		linear_acceleration = linear_acceleration / duration;
-		angula_acceleration = vector3_quatrotate(angula_acceleration, gameobject->world_orientate())/ duration;
+		angula_acceleration = vector3_quatrotate(angula_acceleration, transform.orientation)/ duration;
 
 		linear_acceleration += accumulated_force * inv_mass / duration;
 		if (is_fallable) linear_acceleration += Vector3(0, -Phyisics_manager::physicsParams.gravity, 0); //落下
@@ -127,7 +144,7 @@ void ALP_Physics::apply_external_force(float duration, const float timeratio_60)
 		//各回転に加える力(accumulated_torque)から加速度を出して角速度を更新する
 		Matrix33 inverse_inertia_tensor = matrix_inverse(inertial_tensor);
 		//Matrix rotation = ALPcollider->local_orientation.get_rotate_matrix();
-		Matrix33 rotation = gameobject->world_orientate().get_rotate_matrix();
+		Matrix33 rotation = transform.orientation.get_rotate_matrix();
 		Matrix33 transposed_rotation = matrix_trans(rotation);
 		inverse_inertia_tensor = rotation * inverse_inertia_tensor * transposed_rotation * rotation;
 		angula_acceleration += vector3_trans(accumulated_torque / duration, inverse_inertia_tensor);
@@ -149,6 +166,7 @@ void ALP_Physics::apply_external_force(float duration, const float timeratio_60)
 	angula_acceleration = Vector3(0, 0, 0);
 }
 void ALP_Physics::integrate(float duration) {
+	//std::lock_guard <std::mutex> lock(mtx);
 
 	if (is_movable() == false)return;
 
@@ -191,12 +209,15 @@ const Vector3 ALP_Physics::get_barycenter() const {
 	return val;
 }
 void ALP_Physics::set_barycenter(const Vector3& cent) {
+	//std::lock_guard <std::mutex> lock(mtx);
+
 	barycenter = cent;
 	is_user_barycnter = true;
 }
 
 //アタッチされたshapesから慣性モーメントと質量、ついでに重心の更新
 void ALP_Physics::update_tensor_and_barycenter(const std::vector<Collider_shape*>& shapes, const std::list<ALP_Joint*>& joints) {
+	//std::lock_guard <std::mutex> lock(mtx);
 
 	if (shapes.size() == 0) {
 		barycenter = Vector3(0, 0, 0);
@@ -267,6 +288,7 @@ void ALP_Physics::update_tensor_and_barycenter(const std::vector<Collider_shape*
 }
 
 void ALP_Physics::update_physics_data() {
+	//std::lock_guard <std::mutex> lock(mtx);
 
 	Physics_data Cdata = ALPcollider->get_collptr()->physics_data;
 

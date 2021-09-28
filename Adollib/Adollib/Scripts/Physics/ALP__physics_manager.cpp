@@ -55,7 +55,9 @@ namespace Adollib
 
 	//各dataの実態配列
 	std::unordered_map<Scenelist, std::list<Physics_function::ALP_Collider*>> Phyisics_manager::ALP_colliders;
-	std::unordered_map<Scenelist, std::list<Physics_function::ALP_Physics*>> Phyisics_manager::ALP_physicses;
+	std::unordered_map<Scenelist, std::list<Physics_function::ALP_Physics*>>  Phyisics_manager::ALP_physicses;
+	std::map<Scenelist, std::list<Physics_function::ALP_Collider*>> Phyisics_manager::added_ALP_colliders;
+	std::map<Scenelist, std::list<Physics_function::ALP_Physics*>>  Phyisics_manager::added_ALP_physicses;
 	std::list<Physics_function::ALP_Joint*> Phyisics_manager::ALP_joints;
 
 	std::vector<Physics_function::Contacts::Contact_pair*> Phyisics_manager::pairs[2];
@@ -94,9 +96,11 @@ bool Phyisics_manager::update(Scenelist Sce)
 
 		float timeratio_60 = 1 / (frame_count * 60); // framecountが大きい->大きすぎる力がかかっている 力を0.016s秒に直す
 #endif
+		// 追加したものを配列に加える
+		adapt_added_data();
 
-	// Colliderのframe毎に保存するdataをreset
-		reset_data_per_frame(ALP_colliders[Sce]);
+	    // Colliderのframe毎に保存するdataをreset
+		reset_data_per_frame(ALP_colliders[Sce], ALP_physicses[Sce]);
 
 		// ColliderのWorld情報の更新
 		update_world_trans(ALP_colliders[Sce]);

@@ -5,6 +5,9 @@
 
 #include "collider_types.h"
 
+#include "../Object/transform.h"
+#include <mutex>
+
 //SIMDを使うかどうか バグっているため使用不可
 #define PHYICSE_USED_SIMD
 
@@ -56,6 +59,15 @@ namespace Adollib {
 			//::: アタッチされたGOへのポインタ :::
 			Gameobject* gameobject = nullptr;
 
+			//::: マルチスレッド用にtransformをコピー :::
+			Transfome transform;
+			std::mutex mtx;
+
+		public:
+
+			// マルチスレッド化するにあたり、add_colliderした時点ではメインのlistに入れずbufferのlistに入れるため 自身のitrが生成時に決まらないため set関数を準備
+			void set_this_itr(std::list<ALP_Physics*>::iterator itr) { this_itr = itr; };
+
 		public:
 			ALP_Solverbody* solve = nullptr; //衝突解決用
 
@@ -101,52 +113,61 @@ namespace Adollib {
 			Vector3 barycenter; //GOのlocal空間の重心座標
 
 		public:
-			//並進移動に力を加える
+			// 並進移動に力を加える
 			void add_force(const Vector3& force);
-
-			//角回転に力を加える
+			// 角回転に力を加える
 			void add_torque(const Vector3& force);
 
-			//並進加速に値を加える
+			// 並進加速に値を加える
 			void add_linear_acc(const Vector3& acc);
-
 			//角加速に値を加える
 			void add_angula_acc(const Vector3& acc);
 
-			//速度制限を行う
-			void set_max_linear_velocity(const float& max_scalar) { max_linear_velocity = max_scalar; };
-			void set_max_angula_velocity(const float& max_scalar) { max_angula_velocity = max_scalar; };
+			// 並進速度の指定
+			void set_linear_velocity(const Vector3& vec) { std::lock_guard <std::mutex> lock(mtx); linear_velocity = vec;};
+			// 角速度の指定
+			void set_angula_velocity(const Vector3& vec) { std::lock_guard <std::mutex> lock(mtx); angula_velocity = vec; };
 
-			//可動オブジェクトかどうか
+			// 速度制限を行う
+			void set_max_linear_velocity(const float& max_scalar) { std::lock_guard <std::mutex> lock(mtx); max_linear_velocity = max_scalar; };
+			// 速度制限を行う
+			void set_max_angula_velocity(const float& max_scalar) { std::lock_guard <std::mutex> lock(mtx); max_angula_velocity = max_scalar; };
+
+			// 可動オブジェクトかどうか
 			bool is_movable() const;
 
-			//質量の逆数を返す(不稼働オブジェクトは0を返す)
+			// 質量の逆数を返す(不稼働オブジェクトは0を返す)
 			float inverse_mass() const;
 
-			//慣性モーメントの逆行列を返す
+			// 慣性モーメントの逆行列を返す
 			Matrix33 inverse_inertial_tensor() const;
 
-			//慣性モーメントをユーザー指定のものに固定する
+			// 慣性モーメントをユーザー指定のものに固定する
 			void set_tensor(const Matrix33& tensor) {
+				std::lock_guard <std::mutex> lock(mtx);
+
 				is_user_tensor = true;
 				inertial_tensor = tensor;
 			}
 
-			//重心を返す
+			// 重心を返す
 			const Vector3 get_barycenter() const;
 			void set_barycenter(const Vector3& cent);
 
 			//::: 毎フレーム呼ぶもの ::::::::::::
-			//速度、加速度を0にする
+			// 速度、加速度を0にする
 			void reset_force();
 
-			//外力の更新
+			// transformの更新
+			void reset_data_per_frame();
+
+			// 外力の更新
 			void apply_external_force(float duration = 1,float timeratio_60 = 1);
 
-			//座標,姿勢の更新
+			// 座標,姿勢の更新
 			void integrate(float duration = 1);
 
-			//アタッチされたshapesから慣性モーメントと質量、ついでに重心の更新
+			// アタッチされたshapesから慣性モーメントと質量、ついでに重心の更新
 			void update_tensor_and_barycenter(const std::vector<Collider_shape*>& shapes, const std::list<ALP_Joint*>& joints);
 
 
@@ -154,7 +175,7 @@ namespace Adollib {
 			// Colliderから情報の獲得
 			void update_physics_data();
 
-			//マネージャーからこのクラスのremove itrがprivateなためメンバ関数でremoveする
+			// マネージャーからこのクラスのremove itrがprivateなためメンバ関数でremoveする
 			void destroy();
 
 		};

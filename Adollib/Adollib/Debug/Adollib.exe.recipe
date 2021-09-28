@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project>
   <ProjectOutputs>C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe</ProjectOutputs>
-  <ContentFiles>C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\default_ps.cso;C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\default_vs.cso;C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\default_ps_notex.cso;C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\physics_resolve.cso</ContentFiles>
+  <ContentFiles>C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\default_ps.cso;C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\default_vs.cso;C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\default_ps_notex.cso</ContentFiles>
   <SatelliteDlls></SatelliteDlls>
   <NonRecipeFileRefs></NonRecipeFileRefs>
 </Project>

@@ -20,6 +20,8 @@
 #include "ALP_joint.h"
 #include "joint_base.h"
 
+#include <map>
+
 namespace Adollib
 {
 	class Collider;
@@ -121,7 +123,9 @@ namespace Adollib
 
 			//各dataの実態配列
 			static std::unordered_map<Scenelist, std::list<Physics_function::ALP_Collider*>> ALP_colliders;
-			static std::unordered_map<Scenelist, std::list<Physics_function::ALP_Physics*>> ALP_physicses;
+			static std::unordered_map<Scenelist, std::list<Physics_function::ALP_Physics*>>  ALP_physicses;
+			static std::map<Scenelist, std::list<Physics_function::ALP_Collider*>> added_ALP_colliders; // マルチスレッド用 処理の途中で追加された要素
+			static std::map<Scenelist, std::list<Physics_function::ALP_Physics*>>  added_ALP_physicses; // マルチスレッド用 処理の途中で追加された要素
 			static std::list<Physics_function::ALP_Joint*> ALP_joints;
 
 			static std::vector<Physics_function::Contacts::Contact_pair*> pairs[2];
@@ -160,12 +164,12 @@ namespace Adollib
 					Physics_function::ALP_Collider* null_coll = nullptr;
 					Physics_function::ALP_Physics* null_phy = nullptr;
 
-					ALP_colliders[Sce].emplace_back(null_coll);
-					ALP_physicses[Sce].emplace_back(null_phy);
+					added_ALP_colliders[Sce].emplace_back(null_coll);
+					added_ALP_physicses[Sce].emplace_back(null_phy);
 
-					auto collider_itr = ALP_colliders[Sce].end();
+					auto collider_itr = added_ALP_colliders[Sce].end();
 					collider_itr--;
-					auto physics_itr = ALP_physicses[Sce].end();
+					auto physics_itr =  added_ALP_physicses[Sce].end();
 					physics_itr--;
 
 					//colliderのアドレスだけ生成 (ALPphysics,ALPcolliderのコンストラクタにお互いのアドレスが必要なため)
@@ -174,8 +178,9 @@ namespace Adollib
 					//phsics中身を入れつつ生成
 					ALPphysics_ptr = newD Physics_function::ALP_Physics(coll->gameobject, physics_itr, ALPcollider_ptr, Sce, collider_index_count[Sce]);
 
-					//colliderの中身を入れる
-					*ALPcollider_ptr = Physics_function::ALP_Collider(coll->gameobject, coll, collider_itr, ALPphysics_ptr, Sce, collider_index_count[Sce]);
+					//colliderのALPphysics_ptrに値を入れる
+					ALPcollider_ptr->set_ALPphysics_ptr(ALPphysics_ptr);
+					//*ALPcollider_ptr = Physics_function::ALP_Collider(coll->gameobject, coll, collider_itr, ALPphysics_ptr, Sce, collider_index_count[Sce]);
 
 					//イテレーターでmanagerの配列にポインタを保存
 					*collider_itr = ALPcollider_ptr;
@@ -184,9 +189,6 @@ namespace Adollib
 					//phsicsの初期値の入力
 					ALPphysics_ptr->set_default();
 				}
-
-				//追加されたcollider
-				added_collider[Sce].emplace_back(ALPcollider_ptr);
 
 				//::: 初期値をいれる :::
 				coll->physics_data.inertial_mass = physicsParams.inertial_mass; //質量
@@ -272,6 +274,47 @@ namespace Adollib
 				moved_collider[Sce].push_back(coll);
 			}
 
+			private:
+
+
+			// 追加されたものをphysicsのupdate最初に適応する(マルチスレッドだと処理途中に追加されるためbufferを挟む)
+			static void adapt_added_data() {
+
+				for (auto added_coll : added_ALP_colliders) {
+					//追加されたcollider
+					for (auto& coll : added_coll.second) {
+						added_collider[added_coll.first].emplace_back(coll);
+					}
+
+					int save_size = ALP_colliders[added_coll.first].size();
+					ALP_colliders[added_coll.first].splice(ALP_colliders[added_coll.first].end(), std::move(added_coll.second));
+
+					// listを引っ越したためitrが変化している 自身のitrを更新
+					auto save_itr = ALP_colliders[added_coll.first].begin();
+					for (save_itr; save_itr != ALP_colliders[added_coll.first].end(); ++save_itr) {
+						save_size--;
+						if (save_size >= 0)continue;
+						(*save_itr)->set_this_itr(save_itr);
+					}
+				}
+				for (auto& added_phys : added_ALP_physicses) {
+
+
+					int save_size = ALP_colliders[added_phys.first].size();
+					ALP_physicses[added_phys.first].splice(ALP_physicses[added_phys.first].end(), std::move(added_phys.second));
+
+					// listを引っ越したためitrが変化している 自身のitrを更新
+					auto save_itr = ALP_physicses[added_phys.first].begin();
+					for (save_itr; save_itr != ALP_physicses[added_phys.first].end(); ++save_itr) {
+						save_size--;
+						if (save_size >= 0)continue;
+						(*save_itr)->set_this_itr(save_itr);
+					}
+				}
+
+				added_ALP_colliders.clear();
+				added_ALP_physicses.clear();
+			}
 		public:
 
 			//static bool init();
