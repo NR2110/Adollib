@@ -216,8 +216,6 @@ namespace Adollib
 
 		Vector3 axis = vector3_cross(axisA, axisB).unit_vect();
 
-
-		int dsdvf = 0;
 	}
 
 	// 毎フレーム呼ばれる更新処理

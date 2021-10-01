@@ -43,35 +43,48 @@ namespace Adollib
 
 
 		//::: collider,shapeのアタッチ :::
-		Collider* Head_collider = Head->addComponent<Collider>();
+		Collider* Head_collider     = Head->addComponent<Collider>();
 		Collider* Lsholder_collider = Lsholder->addComponent<Collider>();
-		Collider* Lelbow_collider = Lelbow->addComponent<Collider>();
-		Collider* Lhand_collider = Lhand->addComponent<Collider>();
+		Collider* Lelbow_collider   = Lelbow->addComponent<Collider>();
+		Collider* Lhand_collider    = Lhand->addComponent<Collider>();
 		Collider* Rsholder_collider = Rsholder->addComponent<Collider>();
-		Collider* Relbow_collider = Relbow->addComponent<Collider>();
-		Collider* Rhand_collider = Rhand->addComponent<Collider>();
-		Collider* Body_collider = Body->addComponent<Collider>();
-		Collider* Waist_collider = Waist->addComponent<Collider>();
-		Collider* Rleg_collider = Rleg->addComponent<Collider>();
-		Collider* Rfoot_collider = Rfoot->addComponent<Collider>();
-		Collider* Lleg_collider = Lleg->addComponent<Collider>();
-		Collider* Lfoot_collider = Lfoot->addComponent<Collider>();
+		Collider* Relbow_collider   = Relbow->addComponent<Collider>();
+		Collider* Rhand_collider    = Rhand->addComponent<Collider>();
+		Collider* Body_collider     = Body->addComponent<Collider>();
+		Collider* Waist_collider    = Waist->addComponent<Collider>();
+		Collider* Rleg_collider     = Rleg->addComponent<Collider>();
+		Collider* Rfoot_collider    = Rfoot->addComponent<Collider>();
+		Collider* Lleg_collider     = Lleg->addComponent<Collider>();
+		Collider* Lfoot_collider    = Lfoot->addComponent<Collider>();
 
 
-		Sphere* Head_shape = Head_collider->add_shape<Sphere>();
+		Sphere* Head_shape     = Head_collider->add_shape<Sphere>();
 		Sphere* Lsholder_shape = Lsholder_collider->add_shape<Sphere>();
-		Sphere* Lelbow_shape = Lelbow_collider->add_shape<Sphere>();
-		Sphere* Lhand_shape = Lhand_collider->add_shape<Sphere>();
+		Sphere* Lelbow_shape   = Lelbow_collider->add_shape<Sphere>();
+		Sphere* Lhand_shape    = Lhand_collider->add_shape<Sphere>();
 		Sphere* Rsholder_shape = Rsholder_collider->add_shape<Sphere>();
-		Sphere* Relbow_shape = Relbow_collider->add_shape<Sphere>();
-		Sphere* Rhand_shape = Rhand_collider->add_shape<Sphere>();
-		Box* Body_shape = Body_collider->add_shape<Box>();
-		Box* Waist_shape = Waist_collider->add_shape<Box>();
-		Sphere* Rleg_shape = Rleg_collider->add_shape<Sphere>();
-		Sphere* Rfoot_shape = Rfoot_collider->add_shape<Sphere>();
-		Sphere* Lleg_shape = Lleg_collider->add_shape<Sphere>();
-		Sphere* Lfoot_shape = Lfoot_collider->add_shape<Sphere>();
+		Sphere* Relbow_shape   = Relbow_collider->add_shape<Sphere>();
+		Sphere* Rhand_shape    = Rhand_collider->add_shape<Sphere>();
+		Box* Body_shape        = Body_collider->add_shape<Box>();
+		Box* Waist_shape       = Waist_collider->add_shape<Box>();
+		Sphere* Rleg_shape     = Rleg_collider->add_shape<Sphere>();
+		Sphere* Rfoot_shape    = Rfoot_collider->add_shape<Sphere>();
+		Sphere* Lleg_shape     = Lleg_collider->add_shape<Sphere>();
+		Sphere* Lfoot_shape    = Lfoot_collider->add_shape<Sphere>();
 
+		//Head_collider    ->ALPcollider_ptr->adapt_added_data();
+		//Lsholder_collider->ALPcollider_ptr->adapt_added_data();
+		//Lelbow_collider  ->ALPcollider_ptr->adapt_added_data();
+		//Lhand_collider   ->ALPcollider_ptr->adapt_added_data();
+		//Rsholder_collider->ALPcollider_ptr->adapt_added_data();
+		//Relbow_collider  ->ALPcollider_ptr->adapt_added_data();
+		//Rhand_collider   ->ALPcollider_ptr->adapt_added_data();
+		//Body_collider    ->ALPcollider_ptr->adapt_added_data();
+		//Waist_collider   ->ALPcollider_ptr->adapt_added_data();
+		//Rleg_collider    ->ALPcollider_ptr->adapt_added_data();
+		//Rfoot_collider   ->ALPcollider_ptr->adapt_added_data();
+		//Lleg_collider    ->ALPcollider_ptr->adapt_added_data();
+		//Lfoot_collider   ->ALPcollider_ptr->adapt_added_data();
 
 		{
 			//::: 親子関係の設定 :::

@@ -51,12 +51,25 @@ namespace Adollib {
 			Scenelist scene = Scenelist::scene_null; //このcolldierが存在するscene
 
 			//::: アタッチされたshapeの配列 :::
-			std::vector<Collider_shape*> shapes;
+			std::list<Collider_shape*> shapes;
+			std::list<Collider_shape*> added_shapes; // マルチスレッド用 処理の途中で追加された要素
 
 			//
 			std::mutex mtx;
 
 		public:
+			// added_dataをmainのdata配列に引っ越す
+			void adapt_added_data() {
+				if (added_shapes.size() == 0)return;
+
+				//std::lock_guard <std::mutex> lock(mtx);
+
+				shapes.splice(shapes.end(), std::move(added_shapes));
+
+				added_shapes.clear();
+			};
+
+			// ALPphysics_ptrのset
 			void set_ALPphysics_ptr(ALP_Physics* ptr) { ALPphysics = ptr; };
 
 			// マルチスレッド化するにあたり、add_colliderした時点ではメインのlistに入れずbufferのlistに入れるため 自身のitrが生成時に決まらないため set関数を準備
@@ -81,8 +94,11 @@ namespace Adollib {
 			// on collision enterを行うtagの情報
 			const Collider_tagbit get_oncoll_check_bits() const { return oncoll_check_bits; };
 
+			const std::list<ALP_Joint*> get_joints() const { return joints; };
+
 			// アタッチされたshapeの配列
-			const std::vector<Collider_shape*> get_shapes() const { return shapes; };
+			const std::list<Collider_shape*> get_shapes() const { return shapes; };
+			const std::list<Collider_shape*> get_added_shapes() const { return added_shapes; };
 
 			// 衝突したcolliderのtagを保存
 			void add_oncoll_bits(Collider_tagbit bit) { oncoll_bits |= bit; };
@@ -126,7 +142,7 @@ namespace Adollib {
 			const Collider_tagbit get_ignore_tags() const; //衝突しないtags
 
 			//:::::::::::::::::::::::::::
-			//規定のshapeをアタッチする
+			// 規定のshapeをアタッチする
 			template<typename T>
 			T* add_shape() {
 				std::lock_guard <std::mutex> lock(mtx);
@@ -135,11 +151,14 @@ namespace Adollib {
 
 				T* shape = newD T(this);
 
-				shapes.emplace_back(shape);
+				added_shapes.emplace_back(shape);
+				//adapt_added_data();
 				return shape;
 			};
 			Meshcoll_part* add_mesh_shape(const char* filepass, Physics_function::Meshcollider_data* mesh_data);
 
+			// gameobjectのtransformからcolliderのworld空間での情報を更新
+			void update_world_trans_contain_added();
 
 			//このcolliderが属するjointを追加
 			void add_joint(ALP_Joint* joint);

@@ -27,7 +27,7 @@ namespace Adollib {
 		Vector3 old_world_scale_;
 
 	public:
-		//bool is_update_world_trans = false;
+		// bool is_update_world_trans = false;
 
 	public:
 		const Vector3	world_position()const { return world_position_; };
@@ -40,7 +40,7 @@ namespace Adollib {
 
 	public:
 
-		//質量を考慮しない慣性モーメント  barycenter : 回転の中心
+		// 質量を考慮しない慣性モーメント  barycenter : 回転の中心
 		Matrix33 get_tensor(const Vector3& barycenter = Vector3(0)) {
 			Matrix33 tensor;
 			//shapeの中心を回転中心とした慣性モーメント
@@ -48,7 +48,7 @@ namespace Adollib {
 
 			tensor = local_orientation.get_rotate_matrix() * tensor * matrix_inverse(local_orientation.get_rotate_matrix());
 
-			//barycenterを回転中心として shapeのlocal座標の分を考慮 (平行軸の定理)
+			// barycenterを回転中心として shapeのlocal座標の分を考慮 (平行軸の定理)
 			Vector3 dis =  local_position - barycenter;
 			tensor._11 += (dis.y * dis.y + dis.z * dis.z);
 			tensor._22 += (dis.z * dis.z + dis.x * dis.x);
@@ -57,20 +57,20 @@ namespace Adollib {
 			return tensor;
 		};
 
-		//shapeの体積
+		// shapeの体積
 		virtual const float get_volume() const = 0;
 
 	protected:
-		//このshapeがどのような形なのか
+		// このshapeがどのような形なのか
 		Physics_function::ALPCollider_shape_type shape_tag = Physics_function::ALPCollider_shape_type::None;
 
-		//DOP
+		// DOP
 		DOP::DOP_14	dop14;	//DOP データ
 
-		//meshcollider用 vertexes,Edges,Facetsなどの情報 resorce_managerの中にある情報へのポインタ
+		// meshcollider用 vertexes,Edges,Facetsなどの情報 resorce_managerの中にある情報へのポインタ
 		Physics_function::Meshcollider_data* mesh_data = nullptr;
 
-		//このshapeがアタッチされたcolliderへのイテレータ
+		// このshapeがアタッチされたcolliderへのイテレータ
 		Physics_function::ALP_Collider* ALPcollider_ptr = nullptr;
 
 	public:

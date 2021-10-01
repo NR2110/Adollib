@@ -8,43 +8,43 @@
 using namespace Adollib;
 using namespace Physics_function;
 
-void ALP_Physics::set_default() {
-	//std::lock_guard <std::mutex> lock(mtx);
-
-	inertial_mass = PhysicsParams_default::inertial_mass; //質量
-	linear_drag = PhysicsParams_default::linear_drag;//空気抵抗
-	angula_drag = PhysicsParams_default::anglar_drag;//空気抵抗
-	dynamic_friction = PhysicsParams_default::dynamic_friction;//動摩擦
-	static_friction = PhysicsParams_default::static_friction;//静摩擦
-	restitution = PhysicsParams_default::restitution; //反発係数
-
-	is_fallable = PhysicsParams_default::is_fallable;//落ちない
-	is_kinmatic_anglar = PhysicsParams_default::is_kinmatic_anglar;//ほかの物体からの影響で回転速度が変化しない
-	is_kinmatic_linear = PhysicsParams_default::is_kinmatic_linear;//ほかの物体からの影響で並進速度が変化しない
-	is_moveable = PhysicsParams_default::is_moveable;//動かない
-	is_hitable = PhysicsParams_default::is_hitable;
-
-	is_sleep = true; //最初sleepしているかどうか
-
-};
+//void ALP_Physics::set_default() {
+//	std::lock_guard <std::mutex> lock(mtx);
+//
+//	inertial_mass = PhysicsParams_default::inertial_mass; //質量
+//	linear_drag = PhysicsParams_default::linear_drag;//空気抵抗
+//	angula_drag = PhysicsParams_default::anglar_drag;//空気抵抗
+//	dynamic_friction = PhysicsParams_default::dynamic_friction;//動摩擦
+//	static_friction = PhysicsParams_default::static_friction;//静摩擦
+//	restitution = PhysicsParams_default::restitution; //反発係数
+//
+//	is_fallable = PhysicsParams_default::is_fallable;//落ちない
+//	is_kinmatic_anglar = PhysicsParams_default::is_kinmatic_anglar;//ほかの物体からの影響で回転速度が変化しない
+//	is_kinmatic_linear = PhysicsParams_default::is_kinmatic_linear;//ほかの物体からの影響で並進速度が変化しない
+//	is_moveable = PhysicsParams_default::is_moveable;//動かない
+//	is_hitable = PhysicsParams_default::is_hitable;
+//
+//	is_sleep = true; //最初sleepしているかどうか
+//
+//};
 
 void ALP_Physics::add_force(const Vector3& force) {
-	//std::lock_guard <std::mutex> lock(mtx);
+	std::lock_guard <std::mutex> lock(mtx);
 
 	accumulated_force += force;
 }
 void ALP_Physics::add_torque(const Vector3& force) {
-	//std::lock_guard <std::mutex> lock(mtx);
+	std::lock_guard <std::mutex> lock(mtx);
 
 	accumulated_torque += force;
 }
 void ALP_Physics::add_linear_acc(const Vector3& acc) {
-	//std::lock_guard <std::mutex> lock(mtx);
+	std::lock_guard <std::mutex> lock(mtx);
 
 	linear_acceleration += acc;
 }
 void ALP_Physics::add_angula_acc(const Vector3& acc) {
-	//std::lock_guard <std::mutex> lock(mtx);
+	std::lock_guard <std::mutex> lock(mtx);
 
 	angula_acceleration += acc;
 }
@@ -82,7 +82,7 @@ Matrix33 ALP_Physics::inverse_inertial_tensor() const {
 }
 
 void ALP_Physics::reset_force() {
-	////std::lock_guard <std::mutex> lock(mtx);
+	std::lock_guard <std::mutex> lock(mtx);
 
 	linear_velocity = Vector3(0, 0, 0);
 	angula_velocity = Vector3(0, 0, 0);
@@ -99,14 +99,14 @@ void ALP_Physics::reset_data_per_frame() {
 }
 
 void ALP_Physics::apply_external_force(float duration, const float timeratio_60) {
-	//std::lock_guard <std::mutex> lock(mtx);
+	std::lock_guard <std::mutex> lock(mtx);
 
 	old_angula_velocity = angula_velocity;
 	old_linear_velocity = linear_velocity;
 
 	if (is_movable()) {
 		// 力を所定の秒数のの量に直す
-		accumulated_force  *= timeratio_60;
+		accumulated_force *= timeratio_60;
 		accumulated_torque *= timeratio_60;
 		//inv_rotate = Quaternion(1, 0, 0, 0);
 
@@ -135,7 +135,7 @@ void ALP_Physics::apply_external_force(float duration, const float timeratio_60)
 
 		//並進移動に加える力(accumulated_force)から加速度を出して並進速度を更新する 向きを間違えないように!!
 		linear_acceleration = linear_acceleration / duration;
-		angula_acceleration = vector3_quatrotate(angula_acceleration, transform.orientation)/ duration;
+		angula_acceleration = vector3_quatrotate(angula_acceleration, transform.orientation) / duration;
 
 		linear_acceleration += accumulated_force * inv_mass / duration;
 		if (is_fallable) linear_acceleration += Vector3(0, -Phyisics_manager::physicsParams.gravity, 0); //落下
@@ -156,7 +156,10 @@ void ALP_Physics::apply_external_force(float duration, const float timeratio_60)
 		if (angula_velocity.norm() > max_angula_velocity * max_angula_velocity) angula_velocity = angula_velocity.unit_vect() * max_angula_velocity;
 
 	}
-	else reset_force();
+	else {
+		linear_velocity = Vector3(0, 0, 0);
+		angula_velocity = Vector3(0, 0, 0);
+	}
 
 	//加速を0にする
 	accumulated_force = Vector3(0, 0, 0);
@@ -166,7 +169,7 @@ void ALP_Physics::apply_external_force(float duration, const float timeratio_60)
 	angula_acceleration = Vector3(0, 0, 0);
 }
 void ALP_Physics::integrate(float duration) {
-	//std::lock_guard <std::mutex> lock(mtx);
+	std::lock_guard <std::mutex> lock(mtx);
 
 	if (is_movable() == false)return;
 
@@ -190,7 +193,82 @@ void ALP_Physics::integrate(float duration) {
 
 }
 
+Matrix33 ALP_Physics::get_tensor() {
+	ALPcollider->update_world_trans();
+	return inertial_tensor;
+};
+Matrix33 ALP_Physics::get_tensor_contain_added() {
+	if (is_user_tensor)return inertial_tensor;
+
+	std::lock_guard <std::mutex> lock(mtx);
+
+	// shapeなどのadaptを行う
+	ALPcollider->update_world_trans_contain_added();
+
+	// 質量などをcomponent::colliderからコピーする
+	update_physics_data();
+
+	{
+		const auto& shapes = ALPcollider->get_shapes();
+		const auto& added_shapes = ALPcollider->get_added_shapes();
+		const auto& joints = ALPcollider->get_joints();
+		float sum_valume = 0;
+
+		{
+			Vector3 bary = Vector3(0);
+			for (const auto& shape : shapes) {
+				const float shape_mass = shape->get_volume();
+				bary += shape_mass * shape->local_position;
+				sum_valume += shape_mass;
+			}
+			for (const auto& shape : added_shapes) {
+				const float shape_mass = shape->get_volume();
+				bary += shape_mass * shape->local_position;
+				sum_valume += shape_mass;
+			}
+
+			bary /= sum_valume;
+
+			if (is_user_barycnter == false)barycenter = bary;
+		}
+
+
+		// ユーザーに定義された慣性モーメントが無いとき
+		if (is_user_tensor == false) {
+
+			// 慣性モーメントの更新
+			inertial_tensor = matrix33_zero();
+			for (const auto& shape : shapes) {
+				const float shape_mass = shape->get_volume();
+				inertial_tensor += shape_mass / sum_valume * shape->get_tensor(barycenter);
+			}
+			for (const auto& shape : added_shapes) {
+				const float shape_mass = shape->get_volume();
+				inertial_tensor += shape_mass / sum_valume * shape->get_tensor(barycenter);
+			}
+
+			inertial_tensor *= inertial_mass;
+
+
+			for (const auto& joint : joints) {
+				inertial_tensor += joint->joint->tensor_effect(ALPcollider->get_collptr());
+			}
+		}
+	}
+
+	return inertial_tensor;
+};
+void ALP_Physics::set_tensor(const Matrix33& tensor) {
+	std::lock_guard <std::mutex> lock(mtx);
+
+	is_user_tensor = true;
+	inertial_tensor = tensor;
+}
+
+
+
 const Vector3 ALP_Physics::get_barycenter() const {
+
 	if (is_user_barycnter) return barycenter;
 
 	const auto shapes = ALPcollider->get_shapes();
@@ -208,16 +286,47 @@ const Vector3 ALP_Physics::get_barycenter() const {
 
 	return val;
 }
+
+const Vector3 ALP_Physics::get_barycenter_contain_added() {
+	std::lock_guard <std::mutex> lock(mtx);
+
+	if (is_user_barycnter) return barycenter;
+
+	// shapeなどのadaptを行う
+	ALPcollider->update_world_trans_contain_added();
+
+	const auto shapes = ALPcollider->get_shapes();
+	const auto added_shapes = ALPcollider->get_added_shapes();
+	Vector3 val;
+	float sum_valume = 0;
+	{
+		val = Vector3(0);
+		for (const auto& shape : shapes) {
+			const float shape_mass = shape->get_volume();
+			val += shape_mass * shape->local_position;
+			sum_valume += shape_mass;
+		}
+		for (const auto& shape : added_shapes) {
+			const float shape_mass = shape->get_volume();
+			val += shape_mass * shape->local_position;
+			sum_valume += shape_mass;
+		}
+
+		val /= sum_valume;
+	}
+
+	return val;
+}
+
 void ALP_Physics::set_barycenter(const Vector3& cent) {
-	//std::lock_guard <std::mutex> lock(mtx);
+	std::lock_guard <std::mutex> lock(mtx);
 
 	barycenter = cent;
 	is_user_barycnter = true;
 }
 
 //アタッチされたshapesから慣性モーメントと質量、ついでに重心の更新
-void ALP_Physics::update_tensor_and_barycenter(const std::vector<Collider_shape*>& shapes, const std::list<ALP_Joint*>& joints) {
-	//std::lock_guard <std::mutex> lock(mtx);
+void ALP_Physics::update_tensor_and_barycenter(const std::list<Collider_shape*>& shapes, const std::list<ALP_Joint*>& joints) {
 
 	if (shapes.size() == 0) {
 		barycenter = Vector3(0, 0, 0);
@@ -288,8 +397,6 @@ void ALP_Physics::update_tensor_and_barycenter(const std::vector<Collider_shape*
 }
 
 void ALP_Physics::update_physics_data() {
-	//std::lock_guard <std::mutex> lock(mtx);
-
 	Physics_data Cdata = ALPcollider->get_collptr()->physics_data;
 
 	inertial_mass = Cdata.inertial_mass;

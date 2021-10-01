@@ -23,7 +23,6 @@ const bool ALP_Collider::concoll_enter(const unsigned int tag_name) {
 }
 
 void ALP_Collider::update_world_trans() {
-	//std::lock_guard <std::mutex> lock(mtx);
 
 	bool is_changed_Size = false;
 
@@ -45,8 +44,6 @@ void ALP_Collider::update_world_trans() {
 
 		// DOPの更新
 		shape->update_dop14();
-
-		//shape->is_update_world_trans = true;
 	}
 
 
@@ -55,6 +52,38 @@ void ALP_Collider::update_world_trans() {
 
 	// 慣性モーメントの更新
 	ALPphysics->update_tensor_and_barycenter(shapes, joints);
+}
+
+void ALP_Collider::update_world_trans_contain_added() {
+	//std::lock_guard <std::mutex> lock(mtx);
+
+	bool is_changed_Size = false;
+
+	bool is_changPos = false;
+	bool is_changRot = false;
+	bool is_changSiz = false;
+
+
+	for (auto& shape : shapes) {
+
+		// ユーザーに入力されたcolliderデータ(center,sizeなど)を計算用のデータに治す
+		shape->update_Colliderdata();
+
+		// world情報の更新
+		shape->update_world_trans(transform.position, transform.orientation, transform.scale,
+			is_changPos, is_changRot, is_changSiz
+		);
+	}
+	for (auto& shape : added_shapes) {
+
+		// ユーザーに入力されたcolliderデータ(center,sizeなど)を計算用のデータに治す
+		shape->update_Colliderdata();
+
+		// world情報の更新
+		shape->update_world_trans(transform.position, transform.orientation, transform.scale,
+			is_changPos, is_changRot, is_changSiz
+		);
+	}
 }
 
 #pragma endregion

@@ -97,7 +97,7 @@ bool Phyisics_manager::update(Scenelist Sce)
 		float timeratio_60 = 1 / (frame_count * 60); // framecount‚ª‘å‚«‚¢->‘å‚«‚·‚¬‚é—Í‚ª‚©‚©‚Á‚Ä‚¢‚é —Í‚ð0.016s•b‚É’¼‚·
 #endif
 		// ’Ç‰Á‚µ‚½‚à‚Ì‚ð”z—ñ‚É‰Á‚¦‚é
-		adapt_added_data();
+		adapt_added_data(Sce);
 
 	    // Collider‚Ìframe–ˆ‚É•Û‘¶‚·‚édata‚ðreset
 		reset_data_per_frame(ALP_colliders[Sce], ALP_physicses[Sce]);

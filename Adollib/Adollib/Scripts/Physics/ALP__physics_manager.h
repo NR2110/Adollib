@@ -185,9 +185,6 @@ namespace Adollib
 					//イテレーターでmanagerの配列にポインタを保存
 					*collider_itr = ALPcollider_ptr;
 					*physics_itr = ALPphysics_ptr;
-
-					//phsicsの初期値の入力
-					ALPphysics_ptr->set_default();
 				}
 
 				//::: 初期値をいれる :::
@@ -278,7 +275,7 @@ namespace Adollib
 
 
 			// 追加されたものをphysicsのupdate最初に適応する(マルチスレッドだと処理途中に追加されるためbufferを挟む)
-			static void adapt_added_data() {
+			static void adapt_added_data(Scenelist Sce) {
 
 				for (auto added_coll : added_ALP_colliders) {
 					//追加されたcollider
@@ -299,7 +296,6 @@ namespace Adollib
 				}
 				for (auto& added_phys : added_ALP_physicses) {
 
-
 					int save_size = ALP_colliders[added_phys.first].size();
 					ALP_physicses[added_phys.first].splice(ALP_physicses[added_phys.first].end(), std::move(added_phys.second));
 
@@ -314,6 +310,10 @@ namespace Adollib
 
 				added_ALP_colliders.clear();
 				added_ALP_physicses.clear();
+
+				for (auto added_coll : ALP_colliders[Sce]) {
+					added_coll->adapt_added_data();
+				}
 			}
 		public:
 

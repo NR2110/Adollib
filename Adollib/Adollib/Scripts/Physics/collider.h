@@ -76,10 +76,10 @@ namespace Adollib {
 		std::vector<Contacted_data> contacted_colliders;
 
 	private:
-		Physics_function::ALP_Collider* ALPcollider_ptr = nullptr;
 		Physics_function::ALP_Physics* ALPphysics_ptr = nullptr;
 
 	public:
+		Physics_function::ALP_Collider* ALPcollider_ptr = nullptr;
 		//::: 後で変更する :::
 		const Vector3 linear_velocity() const { return ALPphysics_ptr->linear_velocity; }
 		const Vector3 linear_velocity(Vector3 v) {
@@ -93,52 +93,50 @@ namespace Adollib {
 		}
 
 	public:
-		//jointに自身の保持するALPColliderの情報を入れる
+		// jointに自身の保持するALPColliderの情報を入れる
 		void set_ptr_to_joint(Physics_function::ALP_Joint*& joint_base);
 
 	public:
-		//交差していたらtrueを返す
+		// 交差していたらtrueを返す
 		const bool concoll_enter(const Collider_tagbit tag_name) const;
 
-		//並進移動に力を加える
+		// 並進移動に力を加える
 		void add_force(const Vector3& force);
 
-		//角回転に力を加える
+		// 角回転に力を加える
 		void add_torque(const Vector3& force);
 
-		//並進加速に値を加える
+		// 並進加速に値を加える
 		void add_linear_acc(const Vector3& force);
 
-		//角加速に値を加える
+		// 角加速に値を加える
 		void add_angula_acc(const Vector3& force);
 
-		//現在かかっている速度、加速度、力を0にする
+		// 現在かかっている速度、加速度、力を0にする
 		void reset_force() { ALPphysics_ptr->reset_force(); };
 
-		//速度制限を行う
+		// 速度制限を行う
 		void set_max_linear_velocity(const float& max_scalar) { ALPphysics_ptr->set_max_linear_velocity(max_scalar); };
 		void set_max_angula_velocity(const float& max_scalar) { ALPphysics_ptr->set_max_angula_velocity(max_scalar); };
 
-		//shapeのアタッチ
+		// shapeのアタッチ
 		template<typename T>
 		T* add_shape() { return ALPcollider_ptr->add_shape<T>(); };
 
-		//meshcolliderのアタッチ
+		// meshcolliderのアタッチ
 		void add_shape(const char* filepass, bool is_right_rtiangle = true, bool is_permit_edge_have_many_facet = false);
 
-		//慣性モーメントをユーザー定義で設定する
+		// 慣性モーメントをユーザー定義で設定する
 		void set_tensor(const Matrix33& tensor) { ALPphysics_ptr->set_tensor(tensor); };
 
-		//現在の慣性モーメントの値
-		Matrix33 get_tensor() {
-			ALPcollider_ptr->update_world_trans();
-			return ALPphysics_ptr->inertial_tensor;
-		};
+		// 現在の慣性モーメントの値
+		const Matrix33 get_tensor() {return ALPphysics_ptr->get_tensor_contain_added();};
 
+		// 重心をユーザー定義で設定する
 		void set_barycenter(const Vector3& cent) { ALPphysics_ptr->set_barycenter(cent); };
 
-		//重心のlocal座標を返す
-		const Vector3 get_barycenter() const { return ALPphysics_ptr->get_barycenter(); };
+		// 重心のlocal座標を返す
+		const Vector3 get_barycenter() const { return ALPphysics_ptr->get_barycenter_contain_added(); };
 
 	public:
 		void Update_hierarchy();

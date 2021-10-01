@@ -71,8 +71,6 @@ namespace Adollib {
 		public:
 			ALP_Solverbody* solve = nullptr; //衝突解決用
 
-			void set_default();
-
 			//::: 変更可 :::::::::::::::::::::::::::::
 			float inertial_mass = 0; //質量
 			float linear_drag = 0; //空気抵抗
@@ -113,6 +111,8 @@ namespace Adollib {
 			Vector3 barycenter; //GOのlocal空間の重心座標
 
 		public:
+			//::: userのタイミングで呼ぶもの(mutexのlockが必要) :::::::
+
 			// 並進移動に力を加える
 			void add_force(const Vector3& force);
 			// 角回転に力を加える
@@ -133,32 +133,21 @@ namespace Adollib {
 			// 速度制限を行う
 			void set_max_angula_velocity(const float& max_scalar) { std::lock_guard <std::mutex> lock(mtx); max_angula_velocity = max_scalar; };
 
-			// 可動オブジェクトかどうか
-			bool is_movable() const;
-
-			// 質量の逆数を返す(不稼働オブジェクトは0を返す)
-			float inverse_mass() const;
-
-			// 慣性モーメントの逆行列を返す
-			Matrix33 inverse_inertial_tensor() const;
-
-			// 慣性モーメントをユーザー指定のものに固定する
-			void set_tensor(const Matrix33& tensor) {
-				std::lock_guard <std::mutex> lock(mtx);
-
-				is_user_tensor = true;
-				inertial_tensor = tensor;
-			}
+			Matrix33 get_tensor();
+			Matrix33 get_tensor_contain_added(); // 慣性モーメントを得るためにcollider,spaheのadaptなどいろいろしている
+			void set_tensor(const Matrix33& tensor); //慣性モーメントをユーザー指定のものに固定する
 
 			// 重心を返す
-			const Vector3 get_barycenter() const;
-			void set_barycenter(const Vector3& cent);
+			const Vector3 get_barycenter() const; //shapeのみの重心
+			const Vector3 get_barycenter_contain_added(); //added_shapeを含めた重心(mutexをlockするためconstにできない)
+			void set_barycenter(const Vector3& cent); //重心をユーザー指定のものに固定する
 
-			//::: 毎フレーム呼ぶもの ::::::::::::
 			// 速度、加速度を0にする
 			void reset_force();
 
-			// transformの更新
+			//::: 毎フレームphysics_managerが呼ぶもの(mutexのlockが必要ない) ::::::::::::
+
+			// transformの更新(transformの値をコピーする 最終的には速度の影響量をtransformに与えるためmutexのlockは必要ないと判断)
 			void reset_data_per_frame();
 
 			// 外力の更新
@@ -168,12 +157,22 @@ namespace Adollib {
 			void integrate(float duration = 1);
 
 			// アタッチされたshapesから慣性モーメントと質量、ついでに重心の更新
-			void update_tensor_and_barycenter(const std::vector<Collider_shape*>& shapes, const std::list<ALP_Joint*>& joints);
+			void update_tensor_and_barycenter(const std::list<Collider_shape*>& shapes, const std::list<ALP_Joint*>& joints);
 
-
-			//::: collider:Component の massなどが変更されたときに呼ぶもの :::
 			// Colliderから情報の獲得
-			void update_physics_data();
+			void update_physics_data(); //component::colliderの情報をコピーする mutexのlockは必要ないと判断
+
+
+			//::: 必要な時に呼ぶもの(mutexのlockが必要ない) :::::::::
+
+			// 可動オブジェクトかどうか
+			bool is_movable() const;
+
+			// 質量の逆数を返す(不稼働オブジェクトは0を返す)
+			float inverse_mass() const;
+
+			// 慣性モーメントの逆行列を返す
+			Matrix33 inverse_inertial_tensor() const;
 
 			// マネージャーからこのクラスのremove itrがprivateなためメンバ関数でremoveする
 			void destroy();
