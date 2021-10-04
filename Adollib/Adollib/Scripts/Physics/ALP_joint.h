@@ -36,6 +36,8 @@ namespace Adollib {
 		private:
 			std::list<ALP_Joint*>::iterator this_itr; //physics_manager内の自身へのイテレータ
 
+		public:
+			void set_this_itr(std::list<ALP_Joint*>::iterator itr) { this_itr = itr; };
 
 		public:
 			void reset();

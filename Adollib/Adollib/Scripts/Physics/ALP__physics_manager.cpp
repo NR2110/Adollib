@@ -53,12 +53,15 @@ namespace Adollib
 
 	float Phyisics_manager::frame_count = -1;
 
+	std::mutex Phyisics_manager::mtx;
+
 	//Šedata‚ÌÀ‘Ô”z—ñ
 	std::unordered_map<Scenelist, std::list<Physics_function::ALP_Collider*>> Phyisics_manager::ALP_colliders;
 	std::unordered_map<Scenelist, std::list<Physics_function::ALP_Physics*>>  Phyisics_manager::ALP_physicses;
 	std::map<Scenelist, std::list<Physics_function::ALP_Collider*>> Phyisics_manager::added_ALP_colliders;
 	std::map<Scenelist, std::list<Physics_function::ALP_Physics*>>  Phyisics_manager::added_ALP_physicses;
 	std::list<Physics_function::ALP_Joint*> Phyisics_manager::ALP_joints;
+	std::list<Physics_function::ALP_Joint*> Phyisics_manager::added_ALP_joints;
 
 	std::vector<Physics_function::Contacts::Contact_pair*> Phyisics_manager::pairs[2];
 	u_int Phyisics_manager::pairs_new_num = 0; //pairs‚Ì‚Ç‚Á‚¿‚ªV‚µ‚¢Õ“Ë‚È‚Ì‚©

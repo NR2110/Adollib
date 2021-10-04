@@ -21,6 +21,7 @@
 #include "joint_base.h"
 
 #include <map>
+#include <mutex>
 
 namespace Adollib
 {
@@ -116,17 +117,19 @@ namespace Adollib
 		class Phyisics_manager
 		{
 		private:
-			static float frame_count;
+			static float frame_count; //
 
+			static std::mutex mtx; //主にadd_collder,phsics,jointと added_dataの扱いの時
 
-			static std::unordered_map<Scenelist, u_int> collider_index_count;
+			static std::unordered_map<Scenelist, u_int> collider_index_count; //colliderにuniqueな値を割り振るため作成総数を保存
 
 			//各dataの実態配列
 			static std::unordered_map<Scenelist, std::list<Physics_function::ALP_Collider*>> ALP_colliders;
 			static std::unordered_map<Scenelist, std::list<Physics_function::ALP_Physics*>>  ALP_physicses;
-			static std::map<Scenelist, std::list<Physics_function::ALP_Collider*>> added_ALP_colliders; // マルチスレッド用 処理の途中で追加された要素
-			static std::map<Scenelist, std::list<Physics_function::ALP_Physics*>>  added_ALP_physicses; // マルチスレッド用 処理の途中で追加された要素
+			static std::map<Scenelist, std::list<Physics_function::ALP_Collider*>> added_ALP_colliders; //マルチスレッド用 処理の途中で追加された要素
+			static std::map<Scenelist, std::list<Physics_function::ALP_Physics*>>  added_ALP_physicses; //マルチスレッド用 処理の途中で追加された要素
 			static std::list<Physics_function::ALP_Joint*> ALP_joints;
+			static std::list<Physics_function::ALP_Joint*> added_ALP_joints; //マルチスレッド用 処理の途中で追加された要素
 
 			static std::vector<Physics_function::Contacts::Contact_pair*> pairs[2];
 			static u_int pairs_new_num; //pairsのどっちが新しい衝突なのか
@@ -152,6 +155,7 @@ namespace Adollib
 			};
 
 			static ColliderPhysics_ptrs add_collider(Collider* coll) {
+				std::lock_guard <std::mutex> lock(mtx);
 
 				Scenelist Sce = coll->gameobject->get_scene();
 
@@ -207,12 +211,12 @@ namespace Adollib
 			}
 
 			static ALP_Joint* add_Joint() {
-				//static_assert(std::is_base_of<Joint_base, T>::value == true, "template T must inherit ALP_Joint_base");
+				std::lock_guard <std::mutex> lock(mtx);
 
 				//空っぽのポインタで枠だけ確保(itrをコンストラクタで使いたいから)
 				ALP_Joint* null_ptr;
-				ALP_joints.emplace_back(null_ptr);
-				auto itr = ALP_joints.end();
+				added_ALP_joints.emplace_back(null_ptr);
+				auto itr = added_ALP_joints.end();
 				itr--;
 
 				//計算用の共通のクラスを生成
@@ -276,13 +280,15 @@ namespace Adollib
 
 			// 追加されたものをphysicsのupdate最初に適応する(マルチスレッドだと処理途中に追加されるためbufferを挟む)
 			static void adapt_added_data(Scenelist Sce) {
+				std::lock_guard <std::mutex> lock(mtx);
 
 				for (auto added_coll : added_ALP_colliders) {
-					//追加されたcollider
+					// 追加されたcollider
 					for (auto& coll : added_coll.second) {
 						added_collider[added_coll.first].emplace_back(coll);
 					}
 
+					// 引っ越す
 					int save_size = ALP_colliders[added_coll.first].size();
 					ALP_colliders[added_coll.first].splice(ALP_colliders[added_coll.first].end(), std::move(added_coll.second));
 
@@ -312,7 +318,19 @@ namespace Adollib
 				added_ALP_physicses.clear();
 
 				for (auto added_coll : ALP_colliders[Sce]) {
+					// 各colliderのshapeのadded_dataを処理
 					added_coll->adapt_added_data();
+				}
+
+				{
+					// 引っ越す
+					ALP_joints.splice(ALP_joints.end(), std::move(added_ALP_joints));
+
+					// listを引っ越したためitrが変化している 自身のitrを更新
+					auto save_itr = ALP_joints.begin();
+					for (save_itr; save_itr != ALP_joints.end(); ++save_itr) {
+						(*save_itr)->set_this_itr(save_itr);
+					}
 				}
 			}
 		public:
