@@ -61,8 +61,9 @@ float ALP_Physics::inverse_mass() const {
 
 Matrix33 ALP_Physics::inverse_inertial_tensor() const {
 	Matrix33 inverse_inertial_tensor;
+
 	if (is_movable()) {
-		inverse_inertial_tensor = matrix_inverse(inertial_tensor);
+		inverse_inertial_tensor = matrix_inverse(inertial_tensor_);
 
 		if (isnan(matrix_determinant(inverse_inertial_tensor))) assert(0 && "toooooo laaarrrrrrrrgge");
 
@@ -84,8 +85,11 @@ Matrix33 ALP_Physics::inverse_inertial_tensor() const {
 void ALP_Physics::reset_force() {
 	std::lock_guard <std::mutex> lock(mtx);
 
-	linear_velocity = Vector3(0, 0, 0);
-	angula_velocity = Vector3(0, 0, 0);
+	linear_velocity_ = Vector3(0, 0, 0);
+	angula_velocity_ = Vector3(0, 0, 0);
+
+	old_linear_velocity_ = Vector3(0, 0, 0);
+	old_angula_velocity_ = Vector3(0, 0, 0);
 
 	accumulated_force = Vector3(0, 0, 0);
 	accumulated_torque = Vector3(0, 0, 0);
@@ -101,8 +105,8 @@ void ALP_Physics::reset_data_per_frame() {
 void ALP_Physics::apply_external_force(float duration, const float timeratio_60) {
 	std::lock_guard <std::mutex> lock(mtx);
 
-	old_angula_velocity = angula_velocity;
-	old_linear_velocity = linear_velocity;
+	old_angula_velocity_ = angula_velocity_;
+	old_linear_velocity_ = linear_velocity_;
 
 	if (is_movable()) {
 		// 力を所定の秒数のの量に直す
@@ -110,8 +114,8 @@ void ALP_Physics::apply_external_force(float duration, const float timeratio_60)
 		accumulated_torque *= timeratio_60;
 		//inv_rotate = Quaternion(1, 0, 0, 0);
 
-		angula_velocity = angula_velocity * pow(1 - angula_drag, duration);
-		linear_velocity = linear_velocity * pow(1 - linear_drag, duration);
+		angula_velocity_ = angula_velocity_ * pow(1 - angula_drag, duration);
+		linear_velocity_ = linear_velocity_ * pow(1 - linear_drag, duration);
 
 		const float inv_mass = 1 / inertial_mass;
 		//if (is_fallable) accumulated_force += Vector3(0, -Phyisics_manager::physicsParams.gravity, 0) * inertial_mass; //落下
@@ -128,10 +132,10 @@ void ALP_Physics::apply_external_force(float duration, const float timeratio_60)
 		//t=0の時 C´ = V(0)より
 		//v(t) = V(0) * exp(-k / m * t)
 		//const float kl = linear_drag * inv_mass; //空気抵抗やらなんやらを考慮した値 のはずだけど適当に簡略化
-		//linear_velocity = linear_velocity * exp(-kl * duration); // 空気抵抗
+		//_linear_velocity = _linear_velocity * exp(-kl * duration); // 空気抵抗
 
 		//const float ka = angula_drag * inv_mass; //空気抵抗やらなんやらを考慮した値 のはずだけど適当に簡略化
-		//angula_velocity = angula_velocity * exp(-ka * duration); // 空気抵抗
+		//_angula_velocity = _angula_velocity * exp(-ka * duration); // 空気抵抗
 
 		//並進移動に加える力(accumulated_force)から加速度を出して並進速度を更新する 向きを間違えないように!!
 		linear_acceleration = linear_acceleration / duration;
@@ -139,26 +143,28 @@ void ALP_Physics::apply_external_force(float duration, const float timeratio_60)
 
 		linear_acceleration += accumulated_force * inv_mass / duration;
 		if (is_fallable) linear_acceleration += Vector3(0, -Phyisics_manager::physicsParams.gravity, 0); //落下
-		linear_velocity += linear_acceleration * duration;
+		linear_velocity_ += linear_acceleration * duration;
 
 		//各回転に加える力(accumulated_torque)から加速度を出して角速度を更新する
-		Matrix33 inverse_inertia_tensor = matrix_inverse(inertial_tensor);
+		Matrix33 inverse_inertia_tensor = matrix_inverse(inertial_tensor_);
 		//Matrix rotation = ALPcollider->local_orientation.get_rotate_matrix();
 		Matrix33 rotation = transform.orientation.get_rotate_matrix();
 		Matrix33 transposed_rotation = matrix_trans(rotation);
 		inverse_inertia_tensor = rotation * inverse_inertia_tensor * transposed_rotation * rotation;
 		angula_acceleration += vector3_trans(accumulated_torque / duration, inverse_inertia_tensor);
 
-		angula_velocity += angula_acceleration * duration;
-		if (angula_velocity.norm() < FLT_EPSILON)angula_velocity = Vector3(0, 0, 0);
+		angula_velocity_ += angula_acceleration * duration;
+		if (angula_velocity_.norm() < FLT_EPSILON)angula_velocity_ = Vector3(0, 0, 0);
 
-		if (linear_velocity.norm() > max_linear_velocity * max_linear_velocity) linear_velocity = linear_velocity.unit_vect() * max_linear_velocity;
-		if (angula_velocity.norm() > max_angula_velocity * max_angula_velocity) angula_velocity = angula_velocity.unit_vect() * max_angula_velocity;
+		if (linear_velocity_.norm() > max_linear_velocity * max_linear_velocity) linear_velocity_ = linear_velocity_.unit_vect() * max_linear_velocity;
+		if (angula_velocity_.norm() > max_angula_velocity * max_angula_velocity) angula_velocity_ = angula_velocity_.unit_vect() * max_angula_velocity;
 
 	}
 	else {
-		linear_velocity = Vector3(0, 0, 0);
-		angula_velocity = Vector3(0, 0, 0);
+		linear_velocity_ = Vector3(0, 0, 0);
+		angula_velocity_ = Vector3(0, 0, 0);
+		old_linear_velocity_ = Vector3(0, 0, 0);
+		old_angula_velocity_ = Vector3(0, 0, 0);
 	}
 
 	//加速を0にする
@@ -173,32 +179,33 @@ void ALP_Physics::integrate(float duration) {
 
 	if (is_movable() == false)return;
 
-	if (linear_velocity.norm() < Phyisics_manager::physicsParams.linear_sleep_threrhold * Phyisics_manager::physicsParams.linear_sleep_threrhold &&
-		angula_velocity.norm() < Phyisics_manager::physicsParams.angula_sleep_threrhold * Phyisics_manager::physicsParams.angula_sleep_threrhold) {
+	if (linear_velocity_.norm() < Phyisics_manager::physicsParams.linear_sleep_threrhold * Phyisics_manager::physicsParams.linear_sleep_threrhold &&
+		angula_velocity_.norm() < Phyisics_manager::physicsParams.angula_sleep_threrhold * Phyisics_manager::physicsParams.angula_sleep_threrhold) {
 		sleep_timer += duration;
 	}
 	else sleep_timer = 0;
 
 	if (sleep_timer > 0.1f) {
-		linear_velocity = Vector3(0);
-		angula_velocity = Vector3(0);
-		is_sleep = true;
+		linear_velocity_ = Vector3(0);
+		angula_velocity_ = Vector3(0);
+		is_sleep_ = true;
 		return;
 	}
 	else {
-		is_sleep = false;
+		is_sleep_ = false;
 	}
 
-	ALPcollider->integrate(duration, linear_velocity, angula_velocity, old_linear_velocity, old_angula_velocity);
+	ALPcollider->integrate(duration, linear_velocity_, angula_velocity_, old_linear_velocity_, old_angula_velocity_);
 
 }
 
 Matrix33 ALP_Physics::get_tensor() {
+	std::lock_guard <std::mutex> lock(mtx);
 	ALPcollider->update_world_trans();
-	return inertial_tensor;
+	return inertial_tensor_;
 };
 Matrix33 ALP_Physics::get_tensor_contain_added() {
-	if (is_user_tensor)return inertial_tensor;
+	if (is_user_tensor)return inertial_tensor_;
 
 	std::lock_guard <std::mutex> lock(mtx);
 
@@ -237,32 +244,32 @@ Matrix33 ALP_Physics::get_tensor_contain_added() {
 		if (is_user_tensor == false) {
 
 			// 慣性モーメントの更新
-			inertial_tensor = matrix33_zero();
+			inertial_tensor_ = matrix33_zero();
 			for (const auto& shape : shapes) {
 				const float shape_mass = shape->get_volume();
-				inertial_tensor += shape_mass / sum_valume * shape->get_tensor(barycenter);
+				inertial_tensor_ += shape_mass / sum_valume * shape->get_tensor(barycenter);
 			}
 			for (const auto& shape : added_shapes) {
 				const float shape_mass = shape->get_volume();
-				inertial_tensor += shape_mass / sum_valume * shape->get_tensor(barycenter);
+				inertial_tensor_ += shape_mass / sum_valume * shape->get_tensor(barycenter);
 			}
 
-			inertial_tensor *= inertial_mass;
+			inertial_tensor_ *= inertial_mass;
 
 
 			for (const auto& joint : joints) {
-				inertial_tensor += joint->joint->tensor_effect(ALPcollider->get_collptr());
+				inertial_tensor_ += joint->joint->tensor_effect(ALPcollider->get_collptr());
 			}
 		}
 	}
 
-	return inertial_tensor;
+	return inertial_tensor_;
 };
 void ALP_Physics::set_tensor(const Matrix33& tensor) {
 	std::lock_guard <std::mutex> lock(mtx);
 
 	is_user_tensor = true;
-	inertial_tensor = tensor;
+	inertial_tensor_ = tensor;
 }
 
 
@@ -286,11 +293,10 @@ const Vector3 ALP_Physics::get_barycenter() const {
 
 	return val;
 }
-
 const Vector3 ALP_Physics::get_barycenter_contain_added() {
-	std::lock_guard <std::mutex> lock(mtx);
-
 	if (is_user_barycnter) return barycenter;
+
+	std::lock_guard <std::mutex> lock(mtx);
 
 	// shapeなどのadaptを行う
 	ALPcollider->update_world_trans_contain_added();
@@ -317,7 +323,6 @@ const Vector3 ALP_Physics::get_barycenter_contain_added() {
 
 	return val;
 }
-
 void ALP_Physics::set_barycenter(const Vector3& cent) {
 	std::lock_guard <std::mutex> lock(mtx);
 
@@ -327,10 +332,9 @@ void ALP_Physics::set_barycenter(const Vector3& cent) {
 
 //アタッチされたshapesから慣性モーメントと質量、ついでに重心の更新
 void ALP_Physics::update_tensor_and_barycenter(const std::list<Collider_shape*>& shapes, const std::list<ALP_Joint*>& joints) {
-
 	if (shapes.size() == 0) {
 		barycenter = Vector3(0, 0, 0);
-		inertial_tensor = matrix33_identity();
+		inertial_tensor_ = matrix33_identity();
 		return;
 	}
 
@@ -356,18 +360,18 @@ void ALP_Physics::update_tensor_and_barycenter(const std::list<Collider_shape*>&
 	if (is_user_tensor == false) {
 
 		//慣性モーメントの更新
-		inertial_tensor = matrix33_zero();
+		inertial_tensor_ = matrix33_zero();
 		for (const auto& shape : shapes) {
 			const float shape_mass = shape->get_volume();
-			inertial_tensor += shape_mass / sum_valume * shape->get_tensor(barycenter);
+			inertial_tensor_ += shape_mass / sum_valume * shape->get_tensor(barycenter);
 		}
 
-		inertial_tensor *= inertial_mass;
+		inertial_tensor_ *= inertial_mass;
 
 
 		for (auto& joint : joints) {
 			//auto a = joint->joint->get_colliderA();
-			inertial_tensor += joint->joint->tensor_effect(ALPcollider->get_collptr());
+			inertial_tensor_ += joint->joint->tensor_effect(ALPcollider->get_collptr());
 		}
 
 

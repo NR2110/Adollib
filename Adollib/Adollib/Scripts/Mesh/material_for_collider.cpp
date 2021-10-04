@@ -68,7 +68,7 @@ void Collider_renderer::render_collider(const Physics_function::ALP_Collider* co
 
 	for (const auto shape : coll->get_shapes()) {
 		Vector3 color = Vector3(-1);
-		if (shape->get_ALPcollider()->get_ALPphysics()->is_sleep == true) color = Vector3(1);
+		if (shape->get_ALPcollider()->get_ALPphysics()->is_sleep() == true) color = Vector3(1);
 
 
 #ifndef draw_cupsule_cullback

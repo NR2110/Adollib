@@ -85,18 +85,27 @@ namespace Adollib {
 			bool is_moveable = false;//動かない
 			bool is_hitable = false;  //衝突しない
 
+
+
+		private:
 			//::: 見せるだけ :::::::::::::::::::::::::
-			float speed = 0;//debugしやすいように
-			Vector3 linear_velocity;//並進速度
-			Vector3 angula_velocity; //回転速度
+			Vector3 linear_velocity_;//並進速度
+			Vector3 angula_velocity_; //回転速度
 
-			Vector3 old_linear_velocity;//並進速度
-			Vector3 old_angula_velocity; //回転速度
+			Vector3 old_linear_velocity_;//並進速度
+			Vector3 old_angula_velocity_; //回転速度
 
-			Matrix33 inertial_tensor; //慣性テンソル
+			bool is_sleep_ = false; //sleep状態かのflag
+			float sleep_timer = 0; //
 
-			bool is_sleep = false; //sleep状態かのflag
-			float sleep_timer = 0;
+			Matrix33 inertial_tensor_; //慣性テンソル
+
+		public:
+			const Vector3& linear_velocity() const { return linear_velocity_; };
+			const Vector3& angula_velocity() const { return angula_velocity_; };
+			const Vector3& old_linear_velocity() const { return old_linear_velocity_; };
+			const Vector3& old_angula_velocity() const { return old_angula_velocity_; };
+			const bool& is_sleep()const { return is_sleep_; };
 
 		private:
 			float max_linear_velocity = FLT_MAX; //並進速度の制限
@@ -111,7 +120,7 @@ namespace Adollib {
 			Vector3 barycenter; //GOのlocal空間の重心座標
 
 		public:
-			//::: userのタイミングで呼ぶもの(mutexのlockが必要) :::::::
+			//::: userのタイミングで呼ぶもの(だいたいmutexのlockが必要) :::::::
 
 			// 並進移動に力を加える
 			void add_force(const Vector3& force);
@@ -124,14 +133,18 @@ namespace Adollib {
 			void add_angula_acc(const Vector3& acc);
 
 			// 並進速度の指定
-			void set_linear_velocity(const Vector3& vec) { std::lock_guard <std::mutex> lock(mtx); linear_velocity = vec;};
+			void set_linear_velocity(const Vector3& vec) { std::lock_guard <std::mutex> lock(mtx); linear_velocity_ = vec;};
 			// 角速度の指定
-			void set_angula_velocity(const Vector3& vec) { std::lock_guard <std::mutex> lock(mtx); angula_velocity = vec; };
+			void set_angula_velocity(const Vector3& vec) { std::lock_guard <std::mutex> lock(mtx); angula_velocity_ = vec; };
+			// old並進速度の指定
+			void set_old_linear_velocity(const Vector3& old_vec) { std::lock_guard <std::mutex> lock(mtx); old_linear_velocity_ += old_vec; };
+			// old角速度の指定
+			void set_old_angula_velocity(const Vector3& old_vec) { std::lock_guard <std::mutex> lock(mtx); old_angula_velocity_ += old_vec; };
 
 			// 速度制限を行う
-			void set_max_linear_velocity(const float& max_scalar) { std::lock_guard <std::mutex> lock(mtx); max_linear_velocity = max_scalar; };
+			void set_max_linear_velocity(const float& max_scalar) {/*std::lock_guard <std::mutex> lock(mtx);*/ max_linear_velocity = max_scalar; }; //max_linear_velocityにphsicsが値を入れないためmutexでlockしない
 			// 速度制限を行う
-			void set_max_angula_velocity(const float& max_scalar) { std::lock_guard <std::mutex> lock(mtx); max_angula_velocity = max_scalar; };
+			void set_max_angula_velocity(const float& max_scalar) {/*std::lock_guard <std::mutex> lock(mtx);*/ max_angula_velocity = max_scalar; };//max_angula_velocityにphtsicsが値を入れないためmutexでlockしない
 
 			Matrix33 get_tensor();
 			Matrix33 get_tensor_contain_added(); // 慣性モーメントを得るためにcollider,spaheのadaptなどいろいろしている

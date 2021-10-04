@@ -10,14 +10,13 @@
   stage_base.cpp
   stage_demo.cpp
   stage_demo_funcs.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_manager.h(23): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_manager::Stage_types' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\player_funcs.cpp)
 C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_manager.h(23): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_manager::Stage_types' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_manager.h(23): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_manager::Stage_types' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\player_funcs.cpp)
 C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(60,70): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
 C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(310,46): warning C4305: '=': 'double' から 'float' へ切り詰めます。
 C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(177,47): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(414,112): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(499,59): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(349,66): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
 C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_funcs.cpp(213,66): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
 C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\camera.cpp(41,80): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
 C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\camera.cpp(41,47): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
@@ -30,6 +29,7 @@ C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\camera.cpp(175,64): warning C43
 C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(75,38): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
 C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(73,45): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
 C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(78,26): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(349,66): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
 C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(947,62): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(1156,114): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(1167,93): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
@@ -40,9 +40,9 @@ C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(1167,113): w
   gameobject_manager.cpp
   ALP__physics_manager.cpp
   ALP_broadphase.cpp
+  ALP_contact.cpp
   ALP_collider.cpp
 C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\vector_e.h(339): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
-  ALP_contact.cpp
   ALP_integrate.cpp
   ALP_joint.cpp
   ALP_midphase.cpp

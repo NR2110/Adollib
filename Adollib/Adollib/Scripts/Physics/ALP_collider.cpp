@@ -32,7 +32,7 @@ void ALP_Collider::update_world_trans() {
 
 	for (auto& shape : shapes) {
 
-		// ユーザーに入力されたcolliderデータ(center,sizeなど)を計算用のデータに治す
+		// ユーザーに入力されたcolliderデータ(center,sizeなど)を計算用のデータに直す
 		shape->update_Colliderdata();
 
 		// world情報の更新
@@ -47,7 +47,7 @@ void ALP_Collider::update_world_trans() {
 	}
 
 
-	// ユーザーに入力されたphysicsデータ(massなど)を計算用のデータに治す
+	// ユーザーに入力されたphysicsデータ(massなど)を計算用のデータに直す
 	ALPphysics->update_physics_data();
 
 	// 慣性モーメントの更新
@@ -188,7 +188,7 @@ Meshcoll_part* ALP_Collider::add_mesh_shape(const char* filepass, Physics_functi
 	//std::lock_guard <std::mutex> lock(mtx);
 	Meshcoll_part* shape = newD Meshcoll_part(this, filepass, mesh_data);
 
-	shapes.emplace_back(shape);
+	added_shapes.emplace_back(shape);
 	return shape;
 };
 

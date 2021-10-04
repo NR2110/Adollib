@@ -110,8 +110,8 @@ bool Calc_joint_effect(ALP_Joint* joint)
 
 		direction = DirectX::XMVectorDivide(direction, distance);
 
-		DirectX::XMVECTOR velocityA = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&ALPphysics[0]->linear_velocity), DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&ALPphysics[0]->angula_velocity), rA));
-		DirectX::XMVECTOR velocityB = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&ALPphysics[1]->linear_velocity), DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&ALPphysics[1]->angula_velocity), rB));
+		DirectX::XMVECTOR velocityA = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&ALPphysics[0]->linear_velocity()), DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&ALPphysics[0]->angula_velocity()), rA));
+		DirectX::XMVECTOR velocityB = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&ALPphysics[1]->linear_velocity()), DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&ALPphysics[1]->angula_velocity()), rB));
 		DirectX::XMVECTOR relativeVelocity = DirectX::XMVectorSubtract(velocityA, velocityB);
 
 		const float& term1 = ALPphysics[0]->inverse_mass();
@@ -254,8 +254,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 
 				direction = DirectX::XMVectorDivide(direction, distance);
 
-				DirectX::XMVECTOR velocityA = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&ALPphysics[0]->linear_velocity), DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&ALPphysics[0]->angula_velocity), rA));
-				DirectX::XMVECTOR velocityB = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&ALPphysics[1]->linear_velocity), DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&ALPphysics[1]->angula_velocity), rB));
+				DirectX::XMVECTOR velocityA = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&ALPphysics[0]->linear_velocity()), DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&ALPphysics[0]->angula_velocity()), rA));
+				DirectX::XMVECTOR velocityB = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&ALPphysics[1]->linear_velocity()), DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&ALPphysics[1]->angula_velocity()), rB));
 				DirectX::XMVECTOR relativeVelocity = DirectX::XMVectorSubtract(velocityA, velocityB);
 
 				const float& term1 = ALPphysics[0]->inverse_mass();
@@ -325,12 +325,12 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 
 			//衝突時のそれぞれの速度
 			DirectX::XMVECTOR pdota;
-			pdota = DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&ALPphysics[0]->angula_velocity), rA);
-			pdota = DirectX::XMVectorAdd(pdota, DirectX::XMLoadFloat3(&ALPphysics[0]->linear_velocity));
+			pdota = DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&ALPphysics[0]->angula_velocity()), rA);
+			pdota = DirectX::XMVectorAdd(pdota, DirectX::XMLoadFloat3(&ALPphysics[0]->linear_velocity()));
 
 			DirectX::XMVECTOR pdotb;
-			pdotb = DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&ALPphysics[1]->angula_velocity), rB);
-			pdotb = DirectX::XMVectorAdd(pdotb, DirectX::XMLoadFloat3(&ALPphysics[1]->linear_velocity));
+			pdotb = DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&ALPphysics[1]->angula_velocity()), rB);
+			pdotb = DirectX::XMVectorAdd(pdotb, DirectX::XMLoadFloat3(&ALPphysics[1]->linear_velocity()));
 
 			//衝突時の衝突平面法線方向の相対速度(結局衝突に使うのは法線方向への速さ)
 			DirectX::XMVECTOR vrel = DirectX::XMVectorSubtract(pdota, pdotb);
@@ -683,8 +683,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 			if (isnan(linervec.norm())) {
 				int adsfgh = 0;
 			}
-			coll->get_ALPphysics()->linear_velocity += linervec;
-			coll->get_ALPphysics()->old_linear_velocity += linervec;
+			coll->get_ALPphysics()->set_linear_velocity(coll->get_ALPphysics()->linear_velocity() + linervec);
+			coll->get_ALPphysics()->set_old_linear_velocity(coll->get_ALPphysics()->old_linear_velocity() + linervec);
 		}
 		if (coll->get_ALPphysics()->is_kinmatic_anglar) {
 			Vector3 anglvec;
@@ -692,8 +692,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 			if (isnan(anglvec.norm())) {
 				int adsfgh = 0;
 			}
-			coll->get_ALPphysics()->angula_velocity += anglvec;
-			coll->get_ALPphysics()->old_angula_velocity += anglvec;
+			coll->get_ALPphysics()->set_angula_velocity(coll->get_ALPphysics()->angula_velocity() + anglvec);
+			coll->get_ALPphysics()->set_old_angula_velocity(coll->get_ALPphysics()->old_angula_velocity() + anglvec);
 		}
 
 	}

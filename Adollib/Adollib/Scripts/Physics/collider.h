@@ -81,15 +81,15 @@ namespace Adollib {
 	public:
 		Physics_function::ALP_Collider* ALPcollider_ptr = nullptr;
 		//::: Œã‚Å•ÏX‚·‚é :::
-		const Vector3 linear_velocity() const { return ALPphysics_ptr->linear_velocity; }
-		const Vector3 linear_velocity(Vector3 v) {
-			ALPphysics_ptr->linear_velocity = v;
-			return ALPphysics_ptr->linear_velocity;
+		const Vector3 linear_velocity() const { return ALPphysics_ptr->linear_velocity(); }
+		const Vector3 angula_velocity() const { return ALPphysics_ptr->angula_velocity(); }
+		const void linear_velocity(Vector3 v) {
+			ALPphysics_ptr->set_linear_velocity(v);
+			ALPphysics_ptr->set_old_linear_velocity(v);
 		}
-		const Vector3 angula_velocity() const { return ALPphysics_ptr->angula_velocity; }
-		const Vector3 angula_velocity(Vector3 v) {
-			ALPphysics_ptr->angula_velocity = v;
-			return ALPphysics_ptr->angula_velocity;
+		const void angula_velocity(Vector3 v) {
+			ALPphysics_ptr->set_angula_velocity(v);
+			ALPphysics_ptr->set_old_angula_velocity(v);
 		}
 
 	public:
