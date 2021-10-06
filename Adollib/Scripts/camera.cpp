@@ -171,8 +171,6 @@ namespace Adollib
 
 
 			{
-				// physics‚ÌXV‚É’Ç”öƒJƒƒ‰‚ð‘µ‚¦‚È‚¢‚Æ‚ª‚­‚ª‚­‚·‚é
-				if (Physics_function::Phyisics_manager::is_updated_physics);
 				//pos_buffer = ALEasing(pos_buffer, player->position, 1, timeStep);
 				pos_buffer = player->position + Vector3(0, 1, 0);
 

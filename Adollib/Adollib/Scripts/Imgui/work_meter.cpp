@@ -120,12 +120,11 @@ bool Work_meter::render() {
 			if (before < 0)
 				meters[tag][name][start_num + max_] = (float)(start_stop[tag][name].duration_time) * F;
 
-				// •`‰æ
-				ImGui::PlotLines("", &meters[tag][name][start_num], max_, 0, name.c_str(), 0.0f, max_num, ImVec2(500, 50));
+			// •`‰æ
+			ImGui::PlotLines("", &meters[tag][name][start_num], max_, 0, name.c_str(), 0.0f, max_num, ImVec2(500, 50));
 
-			start_stop[tag][name].stop.QuadPart = 0;
-			start_stop[tag][name].start.QuadPart = 0;
 			start_stop[tag][name].duration_time = 0;
+
 		}
 
 
@@ -154,9 +153,7 @@ bool Work_meter::render() {
 						// •`‰æ
 						ImGui::PlotLines("", &meters[tag][name][start_num], 120, 0, name.c_str(), 0.0f, max_num, ImVec2(500, 50));
 
-					start_stop[tag][name].stop.QuadPart = 0;
-					start_stop[tag][name].start.QuadPart = 0;
-					start_stop[tag][name].duration_time = 0;
+						start_stop[tag][name].duration_time = 0;
 				}
 			}
 			else if(update_always) {
@@ -177,8 +174,6 @@ bool Work_meter::render() {
 					if (before < 0)
 						meters[tag][name][start_num + max_] = (float)(start_stop[tag][name].duration_time) * F;
 
-					start_stop[tag][name].stop.QuadPart = 0;
-					start_stop[tag][name].start.QuadPart = 0;
 					start_stop[tag][name].duration_time = 0;
 				}
 			}
@@ -202,6 +197,9 @@ bool Work_meter::render() {
 
 bool Work_meter::start(const std::string& name) {
 	std::lock_guard <std::mutex> lock(mtx);
+
+	start_stop[now_tag][name].stop.QuadPart = 0;
+	start_stop[now_tag][name].start.QuadPart = 0;
 
 #ifdef UseImgui
 	if (meters[now_tag].count(name) == 0) {
@@ -234,7 +232,51 @@ bool Work_meter::stop(const std::string& name) {
 	return true;
 }
 
+bool Work_meter::start(const std::string& name, const std::string& tag) {
+	std::lock_guard <std::mutex> lock(mtx);
+
+	start_stop[tag][name].stop.QuadPart = 0;
+	start_stop[tag][name].start.QuadPart = 0;
+
+#ifdef UseImgui
+	if (meters.count(tag) == 0) {
+		tags.push_back(tag);
+		meters[tag];
+	}
+
+	if (meters[tag].count(name) == 0) {
+		names[tag].push_back(name);
+		name_flags[tag].push_back(1);
+		memset(meters[tag][name], 0, max_ * 2 * sizeof(float));
+	}
+
+	QueryPerformanceCounter(&start_stop[tag][name].start);
+
+#endif
+	return true;
+}
+
+bool Work_meter::stop(const std::string& name, const std::string& tag) {
+	std::lock_guard <std::mutex> lock(mtx);
+
+#ifdef UseImgui
+	if (meters[tag].count(name) == 0) {
+		names[tag].push_back(name);
+		name_flags[tag].push_back(1);
+		memset(meters[tag][name], 0, max_ * 2 * sizeof(float));
+	}
+
+	QueryPerformanceCounter(&start_stop[tag][name].stop);
+
+	start_stop[now_tag][name].duration_time += start_stop[tag][name].stop.QuadPart - start_stop[tag][name].start.QuadPart;
+
+#endif
+	return true;
+}
+
 void Work_meter::set(const std::string& name, const float& value) {
+	std::lock_guard <std::mutex> lock(mtx);
+
 	if (meters[now_tag].count(name) == 0) {
 		names[now_tag].push_back(name);
 		name_flags[now_tag].push_back(1);
@@ -243,9 +285,13 @@ void Work_meter::set(const std::string& name, const float& value) {
 
 	start_stop[now_tag][name].start.QuadPart = (LONGLONG)0;
 	start_stop[now_tag][name].stop.QuadPart = (LONGLONG)(value * 10000000.f);
+
+	start_stop[now_tag][name].duration_time = start_stop[now_tag][name].stop.QuadPart - start_stop[now_tag][name].start.QuadPart;
 }
 
 bool Work_meter::tag_start(const std::string& tag) {
+	std::lock_guard <std::mutex> lock(mtx);
+
 	if (meters.count(tag) == 0) {
 		tags.push_back(tag);
 		meters[tag];
@@ -255,6 +301,8 @@ bool Work_meter::tag_start(const std::string& tag) {
 	return 1;
 }
 bool Work_meter::tag_stop() {
+	std::lock_guard <std::mutex> lock(mtx);
+
 	now_tag = std::string("");
 
 	return 1;

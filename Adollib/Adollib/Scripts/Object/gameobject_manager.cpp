@@ -79,7 +79,8 @@ void Gameobject_manager::initialize(Scenelist Sce) {
 	for (auto& GO : gameobjects[Sce]) {
 		GO->initialize();
 	}
-	//static std::thread update_physics_(update_physics);
+
+	static std::thread update_physics_(update_physics);
 
 }
 
@@ -102,7 +103,7 @@ void Gameobject_manager::update(Scenelist Sce) {
 		}
 	}
 
-	Phyisics_manager::update();
+	Phyisics_manager::adapt_to_gameobject_transform(Sce);
 
 	//親から子に座標の更新を行う
 	{

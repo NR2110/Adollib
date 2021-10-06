@@ -19,6 +19,8 @@ using namespace Closest_func;
 
 void Physics_function::generate_contact(std::vector<Contacts::Contact_pair*>& pairs) {
 
+	const std::string work_meter_tag = std::string("Narrowphase");
+
 	bool is_crossing = false;
 	for (auto& pair : pairs) {
 

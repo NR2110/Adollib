@@ -117,7 +117,7 @@ namespace Adollib
 		class Phyisics_manager
 		{
 		private:
-			static float frame_count; //
+			static LARGE_INTEGER frame_count; //
 
 			static std::mutex mtx; //主にadd_collder,phsics,jointと added_dataの扱いの時
 
@@ -139,7 +139,7 @@ namespace Adollib
 			static std::unordered_map<Scenelist, std::vector<Physics_function::ALP_Collider*>> added_collider; //挿入ソート用 追加された
 
 		public:
-			static bool is_updated_physics; //physicsを更新したframeだけtrueになる
+			static bool is_updated_mainthred; //physicsを更新したframeだけtrueになる
 
 			// 生成時のphysicsの値
 			static Physics_function::PhysicsParams physicsParams;
@@ -173,7 +173,7 @@ namespace Adollib
 
 					auto collider_itr = added_ALP_colliders[Sce].end();
 					collider_itr--;
-					auto physics_itr =  added_ALP_physicses[Sce].end();
+					auto physics_itr = added_ALP_physicses[Sce].end();
 					physics_itr--;
 
 					//colliderのアドレスだけ生成 (ALPphysics,ALPcolliderのコンストラクタにお互いのアドレスが必要なため)
@@ -275,7 +275,7 @@ namespace Adollib
 				moved_collider[Sce].push_back(coll);
 			}
 
-			private:
+		private:
 
 
 			// 追加されたものをphysicsのupdate最初に適応する(マルチスレッドだと処理途中に追加されるためbufferを挟む)
@@ -334,13 +334,15 @@ namespace Adollib
 				}
 			}
 
+		public:
 			// gameobject.transformをALPcollider.transformで上書きする
 			static void adapt_to_gameobject_transform(Scenelist Sce) {
 				for (auto coll : ALP_colliders[Sce]) {
 					coll->adapt_to_gameobject_transform();
 				}
+
+				is_updated_mainthred = true;
 			}
-		public:
 
 			//static bool init();
 

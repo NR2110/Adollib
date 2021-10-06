@@ -49,9 +49,9 @@ using namespace Contacts;
 
 namespace Adollib
 {
-	bool Phyisics_manager::is_updated_physics = false; //physicsを更新したframeだけtrueになる
+	bool Phyisics_manager::is_updated_mainthred = true; //physicsを更新したframeだけtrueになる
 
-	float Phyisics_manager::frame_count = -1;
+	LARGE_INTEGER Phyisics_manager::frame_count;
 
 	std::mutex Phyisics_manager::mtx;
 
@@ -86,42 +86,43 @@ bool Phyisics_manager::update(Scenelist Sce)
 #ifdef UseImgui
 	//update_Gui();
 #endif
-	if (Al_Global::second_per_game < 1) {
-		frame_count = 0;
+	Work_meter::start("Phyisics_manager");
+
+	LARGE_INTEGER time;
+	QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&time));
+	LONGLONG counts_per_sec;
+	QueryPerformanceFrequency(reinterpret_cast<LARGE_INTEGER*>(&counts_per_sec));
+	float seconds_per_count = 1.0 / static_cast<double>(counts_per_sec);
+
+	if (time.QuadPart < 1) {
 		resetforce(ALP_physicses[Sce]);
+		return true;
 	}
 
-	//1/60s毎に更新を行う
-#ifdef Update60fps
-	is_updated_physics = false;
-	if (frame_count > inv60) {
-		is_updated_physics = true;
+	// 追加したものを配列に加える
+	adapt_added_data(Sce);
 
-		float timeratio_60 = 1 / (frame_count * 60); // framecountが大きい->大きすぎる力がかかっている 力を0.016s秒に直す
-#endif
-		// 追加したものを配列に加える
-		adapt_added_data(Sce);
+	// Colliderのframe毎に保存するdataをreset
+	if(is_updated_mainthred)
+	reset_data_per_frame(ALP_colliders[Sce], ALP_physicses[Sce]);
 
-	    // Colliderのframe毎に保存するdataをreset
-		reset_data_per_frame(ALP_colliders[Sce], ALP_physicses[Sce]);
+	is_updated_mainthred = false;
 
-#ifdef Update60fps
-			physicsParams.timeStep = ALmin(inv60, physicsParams.max_timeStep);
-			for (; frame_count - inv60 > 0;)frame_count -= inv60;
-#else
-			// 0.016秒ごとに更新するとアタッチしたGOへの追跡カメラがバグるため
-			physicsParams.timeStep = ALmin(Al_Global::second_per_frame, physicsParams.max_timeStep);
-#endif
+	{
+		physicsParams.timeStep = ALmin((float)(time.QuadPart - frame_count.QuadPart) * seconds_per_count, physicsParams.max_timeStep);
+		frame_count = time;
 
-			int vvv = 1;
-			physicsParams.timeStep /= vvv;
+		Work_meter::set("physicsParams.timeStep", physicsParams.timeStep);
+
+		int vvv = 1;
+		physicsParams.timeStep /= vvv;
 
 		for (int i = 0; i < vvv; i++) {
 			// ColliderのWorld情報の更新
 			update_world_trans(ALP_colliders[Sce]);
 
 			// 外力の更新
-			applyexternalforce(ALP_physicses[Sce], timeratio_60);
+			applyexternalforce(ALP_physicses[Sce], 1);
 
 			pairs_new_num = 1 - pairs_new_num;
 
@@ -129,45 +130,36 @@ bool Phyisics_manager::update(Scenelist Sce)
 			Work_meter::start("Broad,Mid,Narrow");
 
 			Work_meter::start("Broadphase");
-			Work_meter::tag_start("Broadphase");
 			BroadMidphase(Sce,
 				ALP_colliders[Sce], pairs[pairs_new_num],
 				moved_collider[Sce], added_collider[Sce]
 			);
-			Work_meter::tag_stop();
 			Work_meter::stop("Broadphase");
 
 			Work_meter::start("Midphase");
-			Work_meter::tag_start("Midphase");
 			Midphase(pairs[1 - pairs_new_num], pairs[pairs_new_num]);
-			Work_meter::tag_stop();
 			Work_meter::stop("Midphase");
 
 			// 衝突生成
 			Work_meter::start("Narrowphase");
-			Work_meter::tag_start("Narrowphase");
 			generate_contact(pairs[pairs_new_num]);
-			Work_meter::tag_stop();
 			Work_meter::stop("Narrowphase");
 
 			Work_meter::stop("Broad,Mid,Narrow");
 
 			// 衝突解決
 			Work_meter::start("Resolve");
-			Work_meter::tag_start("Resolve");
 			resolve_contact(ALP_colliders[Sce], pairs[pairs_new_num], ALP_joints);
-			Work_meter::tag_stop();
 			Work_meter::stop("Resolve");
 
 			// 位置の更新
 			integrate(ALP_physicses[Sce]);
 		}
 
-		adapt_to_gameobject_transform(Sce);
+		//adapt_to_gameobject_transform(Sce);
 	}
 
-
-	frame_count += Al_Global::second_per_frame;
+	Work_meter::stop("Phyisics_manager");
 
 #ifdef Draw_JointContact
 	static bool init = true;
