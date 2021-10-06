@@ -79,9 +79,7 @@ void Gameobject_manager::initialize(Scenelist Sce) {
 	for (auto& GO : gameobjects[Sce]) {
 		GO->initialize();
 	}
-
-	//std::thread update_physics_(update_physics);
-	//update_physics_.join();
+	//static std::thread update_physics_(update_physics);
 
 }
 
@@ -91,12 +89,12 @@ void Gameobject_manager::update(Scenelist Sce) {
 	auto& gos = gameobjects[Sce];
 
 	//一番上のの親を保存
-	std::vector<object*> masters; //GO親子ツリーの頂点を保存
+	std::vector<Object*> masters; //GO親子ツリーの頂点を保存
 	masters.clear();
 	{
-		std::unordered_map<object*, bool> masters_manag;
+		std::unordered_map<Object*, bool> masters_manag;
 		for (auto& GO : gos) {
-			object* master = GO->top_pearent();
+			Object* master = GO->top_parent();
 			if (masters_manag.count(master) == 0) {
 				masters.emplace_back(master);
 			}
@@ -108,9 +106,9 @@ void Gameobject_manager::update(Scenelist Sce) {
 
 	//親から子に座標の更新を行う
 	{
-		std::unordered_map<object*, bool> masters_manag;
+		std::unordered_map<Object*, bool> masters_manag;
 		for (auto& GO : gos) {
-			object* master = GO->top_pearent();
+			Object* master = GO->top_parent();
 			if (masters_manag.count(master) == 0) {
 				master->update_world_trans_to_children();
 			}
@@ -119,7 +117,7 @@ void Gameobject_manager::update(Scenelist Sce) {
 	}
 
 	//親から子へupdateを呼ぶ update中に、親objectが削除されたときに対応できないためNG
-	std::for_each(masters.begin(), masters.end(), [](object* ob) {ob->update_to_children(); });
+	std::for_each(masters.begin(), masters.end(), [](Object* ob) {ob->update_to_children(); });
 
 #ifdef UseImgui
 	//ヒエラルキー
@@ -128,10 +126,10 @@ void Gameobject_manager::update(Scenelist Sce) {
 
 	//親から子に座標の更新を行う
 	{
-		std::unordered_map<object*, bool> masters_manag;
+		std::unordered_map<Object*, bool> masters_manag;
 
 		for (auto& GO : gos) {
-			object* master = GO->top_pearent();
+			Object* master = GO->top_parent();
 			if (masters_manag.count(master) == 0) {
 				master->update_world_trans_to_children();
 			}
@@ -270,7 +268,7 @@ Gameobject* Gameobject_manager::create(const std::string& go_name, const u_int& 
 
 	Value->tag = tag;
 	Value->name = go_name;
-	Value->transform = std::make_shared<Transfome>();
+	Value->transform = std::make_shared<Transform>();
 
 	Value->initialize();
 	++go_count;
@@ -288,7 +286,7 @@ Gameobject* Gameobject_manager::createFromFBX(const std::string go_name, const s
 
 	Value->tag = tag;
 	Value->name = go_name;
-	Value->transform = std::make_shared<Transfome>();
+	Value->transform = std::make_shared<Transform>();
 
 	Value->material = std::make_shared<Material>();
 	Value->material->Load_VS("./DefaultShader/default_vs.cso");
@@ -309,7 +307,7 @@ Gameobject* Gameobject_manager::createSphere(const std::string go_name, u_int ta
 
 	Value->tag = tag;
 	Value->name = go_name;
-	Value->transform = std::make_shared<Transfome>();
+	Value->transform = std::make_shared<Transform>();
 
 	Value->material = std::make_shared<Material>();
 	Value->material->Load_VS("./DefaultShader/default_vs.cso");
@@ -330,7 +328,7 @@ Gameobject* Gameobject_manager::createCube(const std::string go_name, u_int tag,
 
 	Value->tag = tag;
 	Value->name = go_name;
-	Value->transform = std::make_shared<Transfome>();
+	Value->transform = std::make_shared<Transform>();
 
 	Value->material = std::make_shared<Material>();
 	Value->material->Load_VS("./DefaultShader/default_vs.cso");
@@ -351,7 +349,7 @@ Gameobject* Gameobject_manager::createCapsule(const std::string go_name, u_int t
 
 	Value->tag = tag;
 	Value->name = go_name;
-	Value->transform = std::make_shared<Transfome>();
+	Value->transform = std::make_shared<Transform>();
 
 	Value->material = std::make_shared<Material>();
 	Value->material->Load_VS("./DefaultShader/default_vs.cso");
@@ -374,7 +372,7 @@ Gameobject* Gameobject_manager::createCylinder(const std::string go_name, u_int 
 
 	Value->tag = tag;
 	Value->name = go_name;
-	Value->transform = std::make_shared<Transfome>();
+	Value->transform = std::make_shared<Transform>();
 
 	Value->material = std::make_shared<Material>();
 	Value->material->Load_VS("./DefaultShader/default_vs.cso");

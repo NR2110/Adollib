@@ -90,5 +90,17 @@ void Physics_function::reset_data_per_frame(std::list<Physics_function::ALP_Coll
 	);
 }
 
+//void Physics_function::adapt_added_data(std::list<Physics_function::ALP_Collider*>& ALP_colliders, std::list<Physics_function::ALP_Physics*>& ALP_physics, std::list<Physics_function::ALP_Joint*>& ALP_joints) {
+//
+//	std::for_each(ALP_colliders.begin(), ALP_colliders.end(), [](ALP_Collider* coll) {
+//		coll->reset_data_per_frame();
+//		}
+//	);
+//	std::for_each(ALP_physics.begin(), ALP_physics.end(), [](ALP_Physics* phys) {
+//		phys->reset_data_per_frame();
+//		}
+//	);
+//}
+
 #pragma endregion
 //:::::::::::::::::::::::::::::::::::::::::::::::::::

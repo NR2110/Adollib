@@ -68,7 +68,7 @@ Matrix33 ALP_Physics::inverse_inertial_tensor() const {
 		if (isnan(matrix_determinant(inverse_inertial_tensor))) assert(0 && "toooooo laaarrrrrrrrgge");
 
 		Matrix33 rotation, transposed_rotation;
-		rotation = transform.orientation.get_rotate_matrix();
+		rotation = transform->orientation.get_rotate_matrix();
 		transposed_rotation = matrix_trans(rotation);
 		inverse_inertial_tensor = rotation * inverse_inertial_tensor * transposed_rotation;
 	}
@@ -99,7 +99,7 @@ void ALP_Physics::reset_force() {
 }
 
 void ALP_Physics::reset_data_per_frame() {
-	transform = *gameobject->transform;
+	transform = &ALPcollider->transform;
 }
 
 void ALP_Physics::apply_external_force(float duration, const float timeratio_60) {
@@ -139,7 +139,7 @@ void ALP_Physics::apply_external_force(float duration, const float timeratio_60)
 
 		//並進移動に加える力(accumulated_force)から加速度を出して並進速度を更新する 向きを間違えないように!!
 		linear_acceleration = linear_acceleration / duration;
-		angula_acceleration = vector3_quatrotate(angula_acceleration, transform.orientation) / duration;
+		angula_acceleration = vector3_quatrotate(angula_acceleration, transform->orientation) / duration;
 
 		linear_acceleration += accumulated_force * inv_mass / duration;
 		if (is_fallable) linear_acceleration += Vector3(0, -Phyisics_manager::physicsParams.gravity, 0); //落下
@@ -148,8 +148,8 @@ void ALP_Physics::apply_external_force(float duration, const float timeratio_60)
 		//各回転に加える力(accumulated_torque)から加速度を出して角速度を更新する
 		Matrix33 inverse_inertia_tensor = matrix_inverse(inertial_tensor_);
 		//Matrix rotation = ALPcollider->local_orientation.get_rotate_matrix();
-		Matrix33 rotation = transform.orientation.get_rotate_matrix();
-		Matrix33 transposed_rotation = matrix_trans(rotation);
+		const Matrix33 rotation = transform->orientation.get_rotate_matrix();
+		const Matrix33 transposed_rotation = matrix_trans(rotation);
 		inverse_inertia_tensor = rotation * inverse_inertia_tensor * transposed_rotation * rotation;
 		angula_acceleration += vector3_trans(accumulated_torque / duration, inverse_inertia_tensor);
 
@@ -175,7 +175,7 @@ void ALP_Physics::apply_external_force(float duration, const float timeratio_60)
 	angula_acceleration = Vector3(0, 0, 0);
 }
 void ALP_Physics::integrate(float duration) {
-	std::lock_guard <std::mutex> lock(mtx);
+	std::lock_guard <std::mutex> lock(mtx); //linear_velocity_ = Vector3(0)があるため
 
 	if (is_movable() == false)return;
 

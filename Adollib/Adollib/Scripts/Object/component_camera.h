@@ -1,6 +1,6 @@
 #pragma once
 
-#include "object.h"
+#include "Object.h"
 #include "component.h"
 #include "../Main/input.h"
 #include "time.h"

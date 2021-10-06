@@ -9,7 +9,7 @@
 namespace Adollib {
 
 	//•`‰æ—ptransfome
-	class Transfome {
+	class Transform {
 	public:
 		//•`‰æ—p‚Ìî•ñ
 		Vector3 position = Vector3(0, 0, 0);

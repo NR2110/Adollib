@@ -36,7 +36,7 @@ namespace Adollib {
 		// oncoll_bits‚âtrnsform‚ÌƒŠƒZƒbƒg
 		void reset_data_per_frame(std::list<Physics_function::ALP_Collider*>& ALP_colliders, std::list<Physics_function::ALP_Physics*>& ALP_physics);
 
-
+		//void adapt_added_data(std::list<Physics_function::ALP_Collider*>& ALP_colliders, std::list<Physics_function::ALP_Physics*>& ALP_physics, std::list<Physics_function::ALP_Joint*>& ALP_joints);
 
 	}
 }

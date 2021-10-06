@@ -12,14 +12,14 @@ namespace Adollib
 	// GOの基本クラス
 	// 雑に作りすぎたため用調整
 	// :::::::::::::::::::::
-	class object
+	class Object
 	{
 	private:
 		virtual void update() = 0;
 	public:
 		bool is_hierarchy = true;
 		bool active = true; //falseなら更新、描画を止める
-		std::shared_ptr<Transfome> transform; //不本意なtransform
+		std::shared_ptr<Transform> transform; //不本意なtransform
 
 	public:
 
@@ -35,30 +35,30 @@ namespace Adollib
 		virtual const Vector3 world_scale() const { return Vector3();	};
 
 	private:
-		object* pearent_ = nullptr; //親へのポインタ
-		std::list<object*> children_; //子へのポインタ
+		Object* parent_ = nullptr; //親へのポインタ
+		std::list<Object*> children_; //子へのポインタ
 
 	public:
-		object* pearent() const{ return pearent_;}
-		void set_pearent(object* obj) { pearent_ = obj; }
-		const std::list<object*>* children() { return &children_; }
+		Object* parent() const{ return parent_;}
+		void set_parent(Object* obj) { parent_ = obj; }
+		const std::list<Object*>* children() const { return &children_; }
 
 		//一番の親を返す
-		object* top_pearent() {
-			if (pearent_ != nullptr) return pearent_->top_pearent();
+		Object* top_parent() {
+			if (parent_ != nullptr) return parent_->top_parent();
 			return this;
 		};
 
 		//thisの子にする
-		void add_child(object* obj) {
-			if (obj->pearent() == this) return; //すでにこのGOが親として登録されていた
-			if (obj->pearent() != nullptr)obj->pearent()->remove_child(obj);  //前の親から削除
-			obj->set_pearent(this);
+		void add_child(Object* obj) {
+			if (obj->parent() == this) return; //すでにこのGOが親として登録されていた
+			if (obj->parent() != nullptr)obj->parent()->remove_child(obj);  //前の親から削除
+			obj->set_parent(this);
 			children_.emplace_back(obj);
 		};
 
 		//子からobjをremoveする
-		void remove_child(object* obj) {
+		void remove_child(Object* obj) {
 			auto itr = children_.begin();
 			auto itr_end = children_.end();
 			for (; itr != itr_end; ++itr) {
@@ -77,7 +77,7 @@ namespace Adollib
 			if (active == true)
 				update();
 			//transform->local_orient = transform->local_orient.unit_vect();
-			std::for_each(children_.begin(), children_.end(), [](object* obj) {obj->update_to_children(); });
+			std::for_each(children_.begin(), children_.end(), [](Object* obj) {obj->update_to_children(); });
 		}
 
 		//自身のupdateしてから子のupdateを呼ぶ
@@ -85,22 +85,22 @@ namespace Adollib
 			if (active == true)
 				update_worldtrans();
 			//transform->local_orient = transform->local_orient.unit_vect();
-			std::for_each(children_.begin(), children_.end(), [](object* obj) {obj->update_world_trans_to_children(); });
+			std::for_each(children_.begin(), children_.end(), [](Object* obj) {obj->update_world_trans_to_children(); });
 		}
 
 
 
 
-		object() = default;
-		virtual ~object()
+		Object() = default;
+		virtual ~Object()
 		{
 
 		};
-		object(const object&) = default;
-		void operator=(const object&) = delete;
+		Object(const Object&) = default;
+		void operator=(const Object&) = delete;
 
 		//Object(Object&&)noexcept = default;
-		object& operator=(object&&) = default;
+		Object& operator=(Object&&) = default;
 
 		//template<class Archive>
 		//void serialize(Archive& archive)

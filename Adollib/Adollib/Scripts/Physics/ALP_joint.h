@@ -4,16 +4,18 @@
 #include "ALP_contact.h"
 #include "ALP_anchor.h"
 
+#include "ALP_world_transform.h"
+
 namespace Adollib {
 	class Joint_base;
 
 	namespace Physics_function {
 
-		//phasics_managerに保存されている
+		//physics_managerに保存されている
 		class ALP_Joint {
 
 		public:
-			ALP_Joint(std::list<ALP_Joint*>::iterator l_this_itr) :this_itr(l_this_itr) {};
+			explicit ALP_Joint(const std::list<ALP_Joint*>::iterator l_this_itr) :this_itr(l_this_itr) {};
 
 		public:
 			float bias = 0; // 拘束の強さの調整値
@@ -21,7 +23,7 @@ namespace Adollib {
 			float limit_bias = 0;
 
 			int anchor_count = 0; //anchorがいくつあるか
-			const Anchor* anchor; // 剛体のローカル座標系における接続点
+			const Anchor* anchor = nullptr; // 剛体のローカル座標系における接続点
 
 			//Collider* collider_comp[2] = { nullptr }; // 剛体のcomponentへのポインタ
 			ALP_Collider* ALPcollider[2] = { nullptr }; // 剛体へのポインタ
@@ -34,10 +36,11 @@ namespace Adollib {
 			Adollib::Joint_base* joint = nullptr; //ユーザーの触る情報へのポインタ
 
 		private:
-			std::list<ALP_Joint*>::iterator this_itr; //physics_manager内の自身へのイテレータ
+			std::list<ALP_Joint*>::iterator this_itr{}; //physics_manager内の自身へのイテレータ
 
 		public:
 			void set_this_itr(std::list<ALP_Joint*>::iterator itr) { this_itr = itr; };
+
 
 		public:
 			void reset();

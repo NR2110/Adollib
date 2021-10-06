@@ -350,7 +350,7 @@ namespace Adollib
 
 			rope_pearent->add_child(coll->gameobject);
 
-			if (old_coll != nullptr) Joint::add_balljoint(old_coll, coll, Vector3(0, -scale, 0), Vector3(0, scale, 0), 0.1f);
+			if (old_coll != nullptr) Joint::add_balljoint(old_coll, coll, Vector3(0, -scale * 1.05f, 0), Vector3(0, scale * 1.05f, 0), 0.1f);
 
 			old_coll = coll;
 			old_go = go;

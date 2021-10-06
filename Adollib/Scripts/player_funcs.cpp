@@ -160,6 +160,8 @@ void Player::catch_things() {
 					min_data->contacted_pointB
 				);
 
+				joint->slop = 0.1f;
+
 				//elbow‚Éjoint‚ðì‚éê‡
 				/*
 				auto& elbow_collider = colliders[i + 2];
@@ -563,7 +565,7 @@ bool Player::check_respown() {
 	if (Waist->world_position().y < stage->y_player_respown_limit + 50) {
 
 		// À•WˆÚ“®
-		Vector3 off = vector3_quatrotate(stage->player_respown_pos - Waist->world_position(), Waist->pearent()->world_orientate().inverse());
+		Vector3 off = vector3_quatrotate(stage->player_respown_pos - Waist->world_position(), Waist->parent()->world_orientate().inverse());
 		for (int i = 0; i < Human_gameobject_size; i++) {
 			Human_gameobjects[i]->transform->local_pos += off;
 		}
@@ -648,7 +650,7 @@ void Player::respown() {
 	auto stage = stage_manager->get_current_stage();
 
 	// À•WˆÚ“®
-	Vector3 off = vector3_quatrotate(stage->player_respown_pos - Waist->world_position(), Waist->pearent()->world_orientate().inverse());
+	Vector3 off = vector3_quatrotate(stage->player_respown_pos - Waist->world_position(), Waist->parent()->world_orientate().inverse());
 	for (int i = 0; i < Human_gameobject_size; i++) {
 		Human_gameobjects[i]->transform->local_pos += off;
 	}

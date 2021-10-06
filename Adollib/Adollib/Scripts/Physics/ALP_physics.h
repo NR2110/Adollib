@@ -59,8 +59,9 @@ namespace Adollib {
 			//::: アタッチされたGOへのポインタ :::
 			Gameobject* gameobject = nullptr;
 
-			//::: マルチスレッド用にtransformをコピー :::
-			Transfome transform;
+			//::: マルチスレッド用にcolliderにコピーされたtransformのポインタ physicsからは読み取りのみ :::
+			world_trans* transform = nullptr;
+
 			std::mutex mtx;
 
 		public:

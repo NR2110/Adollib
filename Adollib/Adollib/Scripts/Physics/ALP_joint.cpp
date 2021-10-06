@@ -24,7 +24,6 @@ void ALP_Joint::adapt_Jointdata() {
 	limit_bias = joint->limit_bias;
 }
 
-
 void ALP_Joint::destroy(ALP_Collider* coll_ptr, const bool is_delete_userjoint) {
 	Phyisics_manager::remove_Joint(this_itr);
 

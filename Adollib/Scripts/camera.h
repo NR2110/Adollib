@@ -15,7 +15,7 @@ namespace Adollib
 
 		bool is_lock_cursol = false;
 
-		std::shared_ptr<Transfome> player;
+		std::shared_ptr<Transform> player;
 		Vector3 cursol_pos_save;
 		Vector3 rotate_vec_save;
 

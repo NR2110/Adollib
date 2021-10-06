@@ -1,6 +1,6 @@
 #pragma once
 
-#include "object.h"
+#include "Object.h"
 #include "../Main/input.h"
 #include "time.h"
 #include <string>
@@ -9,7 +9,7 @@
 namespace Adollib
 {
 	class Gameobject;
-	class Transfome;
+	class Transform;
 
 	// gameobjectにアタッチされるベースクラス
 	class Component
@@ -18,7 +18,7 @@ namespace Adollib
 		std::list<Component*>::iterator com_itr; //自身へのイテレータ
 
 		Gameobject* gameobject = nullptr;	// このコンポーネントがアタッチされているGameObject
-		Transfome*  transform = nullptr;	// GameObjectのTransformへのポインタ
+		Transform*  transform = nullptr;	// GameObjectのTransformへのポインタ
 
 		MonoInput* input = nullptr;
 		Time* time = nullptr;

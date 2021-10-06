@@ -123,7 +123,7 @@ namespace Adollib
 
 			static std::unordered_map<Scenelist, u_int> collider_index_count; //colliderにuniqueな値を割り振るため作成総数を保存
 
-			//各dataの実態配列
+			// 各dataの実態配列
 			static std::unordered_map<Scenelist, std::list<Physics_function::ALP_Collider*>> ALP_colliders;
 			static std::unordered_map<Scenelist, std::list<Physics_function::ALP_Physics*>>  ALP_physicses;
 			static std::map<Scenelist, std::list<Physics_function::ALP_Collider*>> added_ALP_colliders; //マルチスレッド用 処理の途中で追加された要素
@@ -134,14 +134,14 @@ namespace Adollib
 			static std::vector<Physics_function::Contacts::Contact_pair*> pairs[2];
 			static u_int pairs_new_num; //pairsのどっちが新しい衝突なのか
 
-			//そのフレーム間で変化したもの(broad_phase用)
-			static std::unordered_map<Scenelist, std::vector<Physics_function::ALP_Collider*>> moved_collider;   //動いた
-			static std::unordered_map<Scenelist, std::vector<Physics_function::ALP_Collider*>> added_collider;   //追加された
+			// そのフレーム間で変化したもの(broad_phase用)
+			static std::unordered_map<Scenelist, std::vector<Physics_function::ALP_Collider*>> moved_collider; //挿入ソート用 動いた
+			static std::unordered_map<Scenelist, std::vector<Physics_function::ALP_Collider*>> added_collider; //挿入ソート用 追加された
 
 		public:
 			static bool is_updated_physics; //physicsを更新したframeだけtrueになる
 
-			//生成時のphysicsの値
+			// 生成時のphysicsの値
 			static Physics_function::PhysicsParams physicsParams;
 
 			static bool is_draw_collider; //COlliderの表示
@@ -231,7 +231,7 @@ namespace Adollib
 				ALP_joints.erase(joint_itr);
 			};
 
-			//deleteはしない
+			// deleteはしない
 			static void remove_ALPcollider(
 				const Scenelist Sce,
 				std::list<Physics_function::ALP_Collider*>::iterator ALPcoll_itr
@@ -240,7 +240,7 @@ namespace Adollib
 				ALP_colliders[Sce].erase(ALPcoll_itr);
 			}
 
-			//deleteはしない
+			// deleteはしない
 			static void remove_ALPphysics(
 				const Scenelist Sce,
 				std::list<Physics_function::ALP_Physics*>::iterator ALPphs_itr
@@ -331,6 +331,13 @@ namespace Adollib
 					for (save_itr; save_itr != ALP_joints.end(); ++save_itr) {
 						(*save_itr)->set_this_itr(save_itr);
 					}
+				}
+			}
+
+			// gameobject.transformをALPcollider.transformで上書きする
+			static void adapt_to_gameobject_transform(Scenelist Sce) {
+				for (auto coll : ALP_colliders[Sce]) {
+					coll->adapt_to_gameobject_transform();
 				}
 			}
 		public:

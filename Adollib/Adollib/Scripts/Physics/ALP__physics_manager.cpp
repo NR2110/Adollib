@@ -55,7 +55,7 @@ namespace Adollib
 
 	std::mutex Phyisics_manager::mtx;
 
-	//各dataの実態配列
+	// 各dataの実態配列
 	std::unordered_map<Scenelist, std::list<Physics_function::ALP_Collider*>> Phyisics_manager::ALP_colliders;
 	std::unordered_map<Scenelist, std::list<Physics_function::ALP_Physics*>>  Phyisics_manager::ALP_physicses;
 	std::map<Scenelist, std::list<Physics_function::ALP_Collider*>> Phyisics_manager::added_ALP_colliders;
@@ -65,10 +65,10 @@ namespace Adollib
 
 	std::vector<Physics_function::Contacts::Contact_pair*> Phyisics_manager::pairs[2];
 	u_int Phyisics_manager::pairs_new_num = 0; //pairsのどっちが新しい衝突なのか
-	//std::vector<Physics_function::Contacts::Collider_2> Phyisics_manager::broad_mid_pair;
+	// std::vector<Physics_function::Contacts::Collider_2> Phyisics_manager::broad_mid_pair;
 
-	std::unordered_map<Scenelist, std::vector<Physics_function::ALP_Collider*>> Phyisics_manager::moved_collider;   //動いた
-	std::unordered_map<Scenelist, std::vector<Physics_function::ALP_Collider*>> Phyisics_manager::added_collider;   //追加された
+	std::unordered_map<Scenelist, std::vector<Physics_function::ALP_Collider*>> Phyisics_manager::moved_collider;   //挿入ソート用 動いた
+	std::unordered_map<Scenelist, std::vector<Physics_function::ALP_Collider*>> Phyisics_manager::added_collider;   //挿入ソート用 追加された
 
 	std::unordered_map<Scenelist, u_int> Phyisics_manager::collider_index_count;
 
@@ -84,7 +84,7 @@ namespace Adollib
 bool Phyisics_manager::update(Scenelist Sce)
 {
 #ifdef UseImgui
-	update_Gui();
+	//update_Gui();
 #endif
 	if (Al_Global::second_per_game < 1) {
 		frame_count = 0;
@@ -105,60 +105,65 @@ bool Phyisics_manager::update(Scenelist Sce)
 	    // Colliderのframe毎に保存するdataをreset
 		reset_data_per_frame(ALP_colliders[Sce], ALP_physicses[Sce]);
 
-		// ColliderのWorld情報の更新
-		update_world_trans(ALP_colliders[Sce]);
-
-
 #ifdef Update60fps
-		physicsParams.timeStep = ALmin(inv60, physicsParams.max_timeStep);
-		for (; frame_count - inv60 > 0;)frame_count -= inv60;
+			physicsParams.timeStep = ALmin(inv60, physicsParams.max_timeStep);
+			for (; frame_count - inv60 > 0;)frame_count -= inv60;
 #else
-		// 0.016秒ごとに更新するとアタッチしたGOへの追跡カメラがバグるため
-		physicsParams.timeStep = ALmin(Al_Global::second_per_frame, physicsParams.max_timeStep);
+			// 0.016秒ごとに更新するとアタッチしたGOへの追跡カメラがバグるため
+			physicsParams.timeStep = ALmin(Al_Global::second_per_frame, physicsParams.max_timeStep);
 #endif
 
-		// 外力の更新
-		applyexternalforce(ALP_physicses[Sce], timeratio_60);
+			int vvv = 1;
+			physicsParams.timeStep /= vvv;
 
-		pairs_new_num = 1 - pairs_new_num;
+		for (int i = 0; i < vvv; i++) {
+			// ColliderのWorld情報の更新
+			update_world_trans(ALP_colliders[Sce]);
 
-		// 大雑把な当たり判定
-		Work_meter::start("Broad,Mid,Narrow");
+			// 外力の更新
+			applyexternalforce(ALP_physicses[Sce], timeratio_60);
 
-		Work_meter::start("Broadphase");
-		Work_meter::tag_start("Broadphase");
-		BroadMidphase(Sce,
-			ALP_colliders[Sce], pairs[pairs_new_num],
-			moved_collider[Sce], added_collider[Sce]
-		);
-		Work_meter::tag_stop();
-		Work_meter::stop("Broadphase");
+			pairs_new_num = 1 - pairs_new_num;
 
-		Work_meter::start("Midphase");
-		Work_meter::tag_start("Midphase");
-		Midphase(pairs[1 - pairs_new_num], pairs[pairs_new_num]);
-		Work_meter::tag_stop();
-		Work_meter::stop("Midphase");
+			// 大雑把な当たり判定
+			Work_meter::start("Broad,Mid,Narrow");
 
-		// 衝突生成
-		Work_meter::start("Narrowphase");
-		Work_meter::tag_start("Narrowphase");
-		generate_contact(pairs[pairs_new_num]);
-		Work_meter::tag_stop();
-		Work_meter::stop("Narrowphase");
+			Work_meter::start("Broadphase");
+			Work_meter::tag_start("Broadphase");
+			BroadMidphase(Sce,
+				ALP_colliders[Sce], pairs[pairs_new_num],
+				moved_collider[Sce], added_collider[Sce]
+			);
+			Work_meter::tag_stop();
+			Work_meter::stop("Broadphase");
 
-		Work_meter::stop("Broad,Mid,Narrow");
+			Work_meter::start("Midphase");
+			Work_meter::tag_start("Midphase");
+			Midphase(pairs[1 - pairs_new_num], pairs[pairs_new_num]);
+			Work_meter::tag_stop();
+			Work_meter::stop("Midphase");
 
-		// 衝突解決
-		Work_meter::start("Resolve");
-		Work_meter::tag_start("Resolve");
-		resolve_contact(ALP_colliders[Sce], pairs[pairs_new_num], ALP_joints);
-		Work_meter::tag_stop();
-		Work_meter::stop("Resolve");
+			// 衝突生成
+			Work_meter::start("Narrowphase");
+			Work_meter::tag_start("Narrowphase");
+			generate_contact(pairs[pairs_new_num]);
+			Work_meter::tag_stop();
+			Work_meter::stop("Narrowphase");
 
-		// 位置の更新
-		integrate(ALP_physicses[Sce]);
+			Work_meter::stop("Broad,Mid,Narrow");
 
+			// 衝突解決
+			Work_meter::start("Resolve");
+			Work_meter::tag_start("Resolve");
+			resolve_contact(ALP_colliders[Sce], pairs[pairs_new_num], ALP_joints);
+			Work_meter::tag_stop();
+			Work_meter::stop("Resolve");
+
+			// 位置の更新
+			integrate(ALP_physicses[Sce]);
+		}
+
+		adapt_to_gameobject_transform(Sce);
 	}
 
 

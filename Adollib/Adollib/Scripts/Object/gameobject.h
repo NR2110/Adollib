@@ -1,3 +1,4 @@
+// ReSharper disable All
 #pragma once
 
 #include <list>
@@ -5,7 +6,7 @@
 
 #include "../Main/input.h"
 #include "time.h"
-#include "object.h"
+#include "Object.h"
 #include "component.h"
 #include "transform.h"
 #include "gameobject_tags.h"
@@ -14,16 +15,16 @@
 
 namespace Adollib {
 
-	class Gameobject : public object {
+	class Gameobject : public Object {
 	public:
-		Gameobject(bool l_no_material, Scenelist l_this_scene, std::list<Gameobject*>::iterator l_this_itr) :
+		Gameobject(const bool l_no_material, const Scenelist l_this_scene, std::list<Gameobject*>::iterator l_this_itr) :
 			no_material(l_no_material),
 			this_scene(l_this_scene),
 			this_itr(l_this_itr)
 		{};
 
 	private:
-		void update();
+		void update() override;
 		void update_worldtrans() override {
 			transform->orientation = world_orientate();
 			transform->position = world_position();
@@ -35,14 +36,14 @@ namespace Adollib {
 		bool no_material = false; //material情報を所持しているか
 
 
-		std::list <Component*> components; //アタッチされているConponentのポインタ
+		std::list <Component*> components; //アタッチされているComponentのポインタ
 
 		Scenelist this_scene = Scenelist::scene_null; //このgoのあるscene
 
 		std::list<Gameobject*>::iterator this_itr;
 	public:
-		//このGOが存在するシーンを返す
-		Scenelist get_scene() { return this_scene; };
+		// このGOが存在するシーンを返す
+		Scenelist get_scene() const { return this_scene; };
 
 		u_int tag = GO_tag::None; //このgoのtag(bit)
 
@@ -53,7 +54,7 @@ namespace Adollib {
 
 	public:
 
-		//アタッチされたコンポーネントの処理
+		// アタッチされたコンポーネントの処理
 		void initialize()override;
 
 		void render()override;
@@ -63,29 +64,29 @@ namespace Adollib {
 
 
 	public:
-		//goのworld空間上でのの姿勢を返す
+		// goのworld空間上でのの姿勢を返す
 		const Quaternion world_orientate() const override {
-			if (pearent() != nullptr) {
-				return transform->local_orient * pearent()->transform->orientation;
+			if (parent() != nullptr) {
+				return transform->local_orient * parent()->transform->orientation;
 			}
 			else return transform->local_orient;
 		};
-		//goのworld空間上での座標を返す
+		// goのworld空間上での座標を返す
 		const Vector3 world_position() const override {
-			if (pearent() != nullptr) {
-				return pearent()->transform->position + vector3_quatrotate(transform->local_pos * pearent()->transform->scale, pearent()->transform->orientation);
+			if (parent() != nullptr) {
+				return parent()->transform->position + vector3_quatrotate(transform->local_pos * parent()->transform->scale, parent()->transform->orientation);
 			}
 			else return transform->local_pos;
 		};
-		//goのworld空間上でのscaleを返す
+		// goのworld空間上でのscaleを返す
 		const Vector3 world_scale() const override {
-			if (pearent() != nullptr) {
-				return pearent()->transform->scale * transform->local_scale;
+			if (parent() != nullptr) {
+				return parent()->transform->scale * transform->local_scale;
 			}
 			else return transform->local_scale;
 		};
 
-		//activeが変更されたときの処理を呼び出す
+		// activeが変更されたときの処理を呼び出す
 		void set_active(bool value) {
 			if (active == value)return;
 			active = value;
@@ -97,13 +98,9 @@ namespace Adollib {
 
 			}
 		};
-		// ==============================================================
+
+
 		// このGameObjectにコンポーネントをアタッチする
-		// ==============================================================
-		// typename T	:	追加するコンポーネント名
-		// ==============================================================
-		// 戻り値 T*		:	追加したコンポーネントを返す。既にあるか、Componentから派生していない場合nullptr
-		// ==============================================================
 		template<typename T>
 		T* addComponent()
 		{
@@ -154,13 +151,8 @@ namespace Adollib {
 			return nullptr;
 		}
 
-		// ==============================================================
+
 		// このGameObjectにアタッチされているコンポーネントを削除する
-		// ==============================================================
-		// typename T	:	削除したいコンポーネント名
-		// ==============================================================
-		// 戻り値 bool	:	削除したらtrue、していないならfalse
-		// ==============================================================
 		template<typename T>
 		bool removeComponent()
 		{
@@ -180,9 +172,7 @@ namespace Adollib {
 		}
 
 
-		// ==============================================================
 		// このGameObjectにアタッチされているコンポーネントをすべて開放する
-		// ==============================================================
 		void clearComponent() {
 			//componentの終了処理を行う
 			for (auto& comp : components)
@@ -197,7 +187,7 @@ namespace Adollib {
 
 		//}
 
-		//解放処理
+		// 解放処理
 		void destroy();
 	};
 

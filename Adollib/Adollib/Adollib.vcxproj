@@ -220,6 +220,7 @@
     <ClInclude Include="Scripts\Object\transform.h" />
     <ClInclude Include="Scripts\Physics\ALP_anchor.h" />
     <ClInclude Include="Scripts\Physics\ALP_joint.h" />
+    <ClInclude Include="Scripts\Physics\ALP_world_transform.h" />
     <ClInclude Include="Scripts\Physics\balljoint.h" />
     <ClInclude Include="Scripts\Physics\conejoint.h" />
     <ClInclude Include="Scripts\Physics\coneTwistjoint.h" />
@@ -316,14 +317,19 @@
     <ClCompile Include="Scripts\Physics\ALP_raycast.cpp" />
     <ClCompile Include="Scripts\Physics\ALP_resolve_contact.cpp" />
     <ClCompile Include="Scripts\Physics\ALP_resolve_contact_SIM.cpp" />
+    <ClCompile Include="Scripts\Physics\balljoint.cpp" />
     <ClCompile Include="Scripts\Physics\collider_shape.cpp" />
     <ClCompile Include="Scripts\Physics\ALP__physics_manager.cpp" />
     <ClCompile Include="Scripts\Physics\collider.cpp" />
     <ClCompile Include="Scripts\Physics\ALP_contact.cpp" />
+    <ClCompile Include="Scripts\Physics\conejoint.cpp" />
+    <ClCompile Include="Scripts\Physics\coneTwistjoint.cpp" />
+    <ClCompile Include="Scripts\Physics\hingejoint.cpp" />
     <ClCompile Include="Scripts\Physics\joint.cpp" />
     <ClCompile Include="Scripts\Physics\joint_base.cpp" />
     <ClCompile Include="Scripts\Physics\meshcoll_resorce_manager.cpp" />
     <ClCompile Include="Scripts\Physics\ray.cpp" />
+    <ClCompile Include="Scripts\Physics\twistjoint.cpp" />
     <ClCompile Include="Scripts\Scene\scene_game.cpp" />
     <ClCompile Include="Scripts\Scene\scene_manager.cpp" />
     <ClCompile Include="Scripts\Scene\scene_title.cpp" />

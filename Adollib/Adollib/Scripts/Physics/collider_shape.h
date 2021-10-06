@@ -80,7 +80,7 @@ namespace Adollib {
 
 		const Physics_function::Meshcollider_data* get_mesh_data() const { return mesh_data; };
 
-		//TODO : ALPCollider::oncoll_tagをgenerate_contactで変更する必要があるためconstを外している 用修正
+		// TODO : ALPCollider::oncoll_tagをgenerate_contactで変更する必要があるためconstを外している 用修正
 		Physics_function::ALP_Collider* get_ALPcollider() { return ALPcollider_ptr; };
 
 		const u_int get_tag() const; //このspaheがアタッチされた collider : public component のtagを返す
@@ -89,40 +89,29 @@ namespace Adollib {
 
 	public:
 
-		//world情報の更新 動いていればtrueを変えす inertial_tensor更新の是非を確認するため
+		// world情報の更新 動いていればtrueを変えす inertial_tensor更新の是非を確認するため
 		void update_world_trans(const Vector3& GO_Wposiiton, const Quaternion& GO_Worientation, const Vector3& GO_Wscale,
 			bool& is_chenged_position, bool& is_chenged_orientation, bool& is_chenged_scale
 		);
 
 
 	protected:
-		//各shapeのユーザー用の情報(box:center,size)から計算用の情報(position,scale)に治す
+		// 各shapeのユーザー用の情報(box:center,size)から計算用の情報(position,scale)に治す
 		virtual void adapt_Colliderdata() = 0;
 
-		//shapeの中心を回転中心とした慣性モーメント
+		// shapeの中心を回転中心とした慣性モーメント
 		virtual const Matrix33 local_tensor() const = 0;
 
 	public:
-		//
+		// 派生クラスの情報を基底クラスのdataに直す
 		void update_Colliderdata() {
-			Vector3 old_pos = local_position;
-			Quaternion old_orient = local_orientation;
-			Vector3 old_scale = local_scale;
-
 			adapt_Colliderdata();
-
-			if (old_pos != local_position ||
-				old_orient != local_orientation ||
-				old_scale != local_scale
-				) {
-
-			}
 		};
 
-		//ヒエラルキーへの表示
+		// ヒエラルキーへの表示
 		virtual void Update_hierarchy() = 0;
 
-		//DOPの更新
+		// DOPの更新
 		virtual void update_dop14() = 0;
 
 

@@ -38,7 +38,7 @@ namespace Adollib
 	void Camera::awake()
 	{
 		gameobject->transform->local_pos = Vector3(0, 30, -50);
-		input->setCursorPos(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
+		//input->setCursorPos(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
 	}
 
 	void Camera::start()

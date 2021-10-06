@@ -284,8 +284,6 @@ void Physics_function::BroadMidphase(Scenelist Sce,
 		Work_meter::stop("insert_sort");
 	}
 
-	auto b = axis_list;
-
 	Work_meter::start("Sweep&Prune");
 	//Sweep&Prune
 	std::list<Collider_shape*> actives;
@@ -295,7 +293,6 @@ void Physics_function::BroadMidphase(Scenelist Sce,
 	{
 		for (auto& insert_edge_itr : axis_list) {
 			auto& insert_edge = *insert_edge_itr;
-			auto c = axis_list;
 
 			//collider‚Ìn“_‚È‚çactivelist‚É‚ ‚é‚à‚Ì‚ÆÕ“Ë‚Ì‰Â”\«‚ ‚è
 			if (insert_edge.edge_start == true) {

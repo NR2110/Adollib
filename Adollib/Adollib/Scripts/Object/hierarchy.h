@@ -1,12 +1,12 @@
 #pragma once
 
 #include <vector>
-#include "object.h"
+#include "Object.h"
 #include "transform.h"
 #include "../Imgui/imgui_all.h"
 
 namespace Adollib {
 	namespace Hierarchy {
-		void update_hierarchy(std::vector<object*>& masters /*一番親のobject配列*/);
+		void update_hierarchy(std::vector<Object*>& masters /*一番親のobject配列*/);
 	}
 }

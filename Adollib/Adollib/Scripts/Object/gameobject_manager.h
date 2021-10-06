@@ -65,6 +65,7 @@ namespace Adollib {
 			itr--;
 			return itr;
 		};
+		// 基本的にuserが呼ばない!
 		static void remove_camera_component(const Scenelist& scene, std::list<Camera_component*>::iterator itr) {
 			cameras[scene].erase(itr);
 		};
@@ -75,6 +76,7 @@ namespace Adollib {
 			itr--;
 			return itr;
 		};
+		// 基本的にuserが呼ばない!
 		static void remove_light_component(const Scenelist& scene, std::list<Light_component*>::iterator itr) {
 			lights[scene].erase(itr);
 		};
@@ -109,6 +111,7 @@ namespace Adollib {
 			return createSprite(std::string("GO_" + std::to_string(go_count)), tag, Sce);
 		}
 
+		// 基本的にuserが呼ばない!
 		static void removeGameobject(Scenelist Sce,std::list<Gameobject*>::iterator itr) { gameobjects[Sce].erase(itr); };
 
 		//GOの削除を行う

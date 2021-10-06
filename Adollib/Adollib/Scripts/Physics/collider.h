@@ -8,7 +8,7 @@
 #include "../Object/component.h"
 
 #include "ALP__tags.h"
-#include "ALP_collider.h"
+//#include "ALP_collider.h"
 #include "ALP_physics.h"
 
 #include "../Imgui/imgui_all.h"
@@ -143,6 +143,7 @@ namespace Adollib {
 
 		void awake() override;
 
+		// user‚ªŒÄ‚Î‚È‚¢‚æ‚¤‚É!!
 		void finalize() override;
 
 	};

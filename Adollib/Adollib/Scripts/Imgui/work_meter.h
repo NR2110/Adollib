@@ -3,10 +3,13 @@
 #include <unordered_map>
 #include <vector>
 #include <Windows.h>
+#include <mutex>
 
 namespace Adollib {
 	class Work_meter {
 	private:
+		static std::mutex mtx;
+
 		struct meter {
 			LARGE_INTEGER start;
 			LARGE_INTEGER stop;

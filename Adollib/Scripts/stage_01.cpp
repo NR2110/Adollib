@@ -25,8 +25,9 @@ namespace Adollib
 		//set_desk(Vector3(0, 0, 0), Vector3(30, 15, 25), Vector3(0, 0, 0), 0);
 		set_box(Vector3(0, -60, 0), Vector3(80, 60, 40), Vector3(0), Vector3(188, 214, 54) / 255.0f,  true);
 
+		set_sphere_rope(Vector3(-40, 15, 40), 1.5f, Vector3(-90, 0, 0), 28, 5);
 #if _DEBUG
-#else
+//#else
 		//gear
 		set_gear(Vector3(+22, 1, 25), Vector3(0.8f, 2.2f, 2), Vector3(0), 5, 7);
 		set_gear(Vector3(+11, 1, 25), Vector3(0.8f, 2.2f, 2), Vector3(0), 5, 7);

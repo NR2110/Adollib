@@ -54,6 +54,7 @@ namespace Adollib {
 		//limit‚Ì‰e‹¿‚ð•Ô‚·
 		virtual bool limit_effect(Vector3& contactP0, Vector3& contactP1, float& penetrate) const = 0;
 
+		// user‚ªŒÄ‚Î‚È‚¢‚æ‚¤‚É!!
 		void destroy();
 	};
 

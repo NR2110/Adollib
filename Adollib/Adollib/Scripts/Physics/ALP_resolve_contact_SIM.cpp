@@ -82,7 +82,7 @@ bool Calc_joint_effect(ALP_Joint* joint)
 {
 	ALP_Physics* ALPphysics[2];
 	ALP_Solverbody* solverbody[2];
-	Transfome* transform[2];
+	world_trans* transform[2];
 	DirectX::XMVECTOR position[2];
 
 	transform[0] = &joint->ALPcollider[0]->transform;
@@ -201,7 +201,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 	Work_meter::start("Setup_solver_joint");
 	// S‘©‚ÌƒZƒbƒgƒAƒbƒv
 	{
-		Transfome* transform[2];
+		world_trans* transform[2];
 		DirectX::XMVECTOR position[2];
 		for (auto& joint : joints) {
 			joint->adapt_Jointdata();
@@ -458,7 +458,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 	}
 
 	{
-		Transfome* transform[2];
+		world_trans* transform[2];
 		DirectX::XMVECTOR position[2];
 		for (auto& joint : joints) {
 			transform[0] = &joint->ALPcollider[0]->transform;
@@ -515,7 +515,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 
 	for (int solver_iterations_count = 0; solver_iterations_count < Phyisics_manager::physicsParams.solver_iterations; solver_iterations_count++) {
 		// S‘©‚Ì‰‰ŽZ
-		Transfome* transform[2];
+		world_trans* transform[2];
 		for (auto& joint : joints) {
 
 			{

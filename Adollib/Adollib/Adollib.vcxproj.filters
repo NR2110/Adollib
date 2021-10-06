@@ -89,6 +89,9 @@
     <Filter Include="ソース ファイル\scene_game\stage\stage\stage_01">
       <UniqueIdentifier>{3f98db6c-a379-43e7-b67f-827a81fa4f0b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00_Adollib\22_physics\Joint\base">
+      <UniqueIdentifier>{c1365332-cec2-4643-9d90-027c299b9470}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Scripts\player.cpp">
@@ -244,12 +247,6 @@
     <ClCompile Include="Scripts\Physics\ALP_resolve_contact_SIM.cpp">
       <Filter>00_Adollib\22_physics\ALP</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Physics\joint.cpp">
-      <Filter>00_Adollib\22_physics\Joint</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Physics\joint_base.cpp">
-      <Filter>00_Adollib\22_physics\Joint</Filter>
-    </ClCompile>
     <ClCompile Include="Scripts\Physics\ALP_joint.cpp">
       <Filter>00_Adollib\22_physics\base</Filter>
     </ClCompile>
@@ -288,6 +285,27 @@
     </ClCompile>
     <ClCompile Include="..\Scripts\stage_01_funcs.cpp">
       <Filter>ソース ファイル\scene_game\stage\stage\stage_01</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Physics\twistjoint.cpp">
+      <Filter>00_Adollib\22_physics\Joint</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Physics\balljoint.cpp">
+      <Filter>00_Adollib\22_physics\Joint</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Physics\conejoint.cpp">
+      <Filter>00_Adollib\22_physics\Joint</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Physics\coneTwistjoint.cpp">
+      <Filter>00_Adollib\22_physics\Joint</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Physics\hingejoint.cpp">
+      <Filter>00_Adollib\22_physics\Joint</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Physics\joint.cpp">
+      <Filter>00_Adollib\22_physics\Joint\base</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Physics\joint_base.cpp">
+      <Filter>00_Adollib\22_physics\Joint\base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -564,29 +582,11 @@
     <ClInclude Include="Scripts\Math\matrix3x3_e.h">
       <Filter>00_Adollib\11_math</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Physics\joint.h">
-      <Filter>00_Adollib\22_physics\Joint</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Physics\joint_base.h">
-      <Filter>00_Adollib\22_physics\Joint</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Physics\balljoint.h">
-      <Filter>00_Adollib\22_physics\Joint</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts\Physics\ALP_joint.h">
       <Filter>00_Adollib\22_physics\base</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Physics\hingejoint.h">
-      <Filter>00_Adollib\22_physics\Joint</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts\Physics\ALP_anchor.h">
       <Filter>00_Adollib\22_physics\base</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Physics\coneTwistjoint.h">
-      <Filter>00_Adollib\22_physics\Joint</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Physics\conejoint.h">
-      <Filter>00_Adollib\22_physics\Joint</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Physics\twistjoint.h">
       <Filter>00_Adollib\22_physics\Joint</Filter>
@@ -635,6 +635,27 @@
     </ClInclude>
     <ClInclude Include="..\Scripts\stage_01.h">
       <Filter>ソース ファイル\scene_game\stage\stage\stage_01</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\ALP_world_transform.h">
+      <Filter>00_Adollib\22_physics\base</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\balljoint.h">
+      <Filter>00_Adollib\22_physics\Joint</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\conejoint.h">
+      <Filter>00_Adollib\22_physics\Joint</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\coneTwistjoint.h">
+      <Filter>00_Adollib\22_physics\Joint</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\hingejoint.h">
+      <Filter>00_Adollib\22_physics\Joint</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\joint.h">
+      <Filter>00_Adollib\22_physics\Joint\base</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\joint_base.h">
+      <Filter>00_Adollib\22_physics\Joint\base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -6,8 +6,7 @@
 
 #include "ALP__tags.h"
 #include "collider_shape.h"
-
-#include "../Object/transform.h"
+#include "ALP_world_transform.h"
 
 #include <mutex>
 
@@ -35,24 +34,24 @@ namespace Adollib {
 				Collider* l_collitr,
 				std::list<ALP_Collider*>::iterator l_itr,
 				ALP_Physics* l_ALPphysics,
-				Scenelist l_scene,
-				u_int l_index
+				const Scenelist l_scene,
+				const u_int l_index
 			) :
-				gameobject(l_go), coll_ptr(l_collitr), this_itr(l_itr), ALPphysics(l_ALPphysics), scene(l_scene), index(l_index) {};
+				this_itr(l_itr), index(l_index), scene(l_scene), coll_ptr(l_collitr), ALPphysics(l_ALPphysics), gameobject(l_go) {};
 
 		private:
 			//::: 自身へのイテレータ(remove用) :::
-			std::list<ALP_Collider*>::iterator this_itr;
+			std::list<ALP_Collider*>::iterator this_itr{};
 
 			//::: このColliderが属しているjointへのポインタ配列 :::
-			std::list<ALP_Joint*> joints;
+			std::list<ALP_Joint*> joints{};
 
 			u_int index = 0; //このcolliderのuniqueなID
-			Scenelist scene = Scenelist::scene_null; //このcolldierが存在するscene
+			Scenelist scene = Scenelist::scene_null; //このcolliderが存在するscene
 
 			//::: アタッチされたshapeの配列 :::
-			std::list<Collider_shape*> shapes;
-			std::list<Collider_shape*> added_shapes; // マルチスレッド用 処理の途中で追加された要素
+			std::list<Collider_shape*> shapes{};
+			std::list<Collider_shape*> added_shapes{}; // マルチスレッド用 処理の途中で追加された要素
 
 			//
 			std::mutex mtx;
@@ -62,7 +61,7 @@ namespace Adollib {
 			void adapt_added_data() {
 				if (added_shapes.size() == 0)return;
 
-				//std::lock_guard <std::mutex> lock(mtx);
+				std::lock_guard <std::mutex> lock(mtx);
 
 				shapes.splice(shapes.end(), std::move(added_shapes));
 
@@ -85,27 +84,29 @@ namespace Adollib {
 
 
 		public:
-			// このcolliderのuniqueなID
-			const u_int get_index() const { return index; };
+			//[[nodiscard]]
 
-			// このcolldierが存在するscene
-			const Scenelist get_scene() const { return scene; };
+			// このcolliderのuniqueなID
+			u_int get_index() const { return index; };
+
+			// このcolliderが存在するscene
+			Scenelist get_scene() const { return scene; };
 
 			// on collision enterを行うtagの情報
-			const Collider_tagbit get_oncoll_check_bits() const { return oncoll_check_bits; };
+			Collider_tagbit get_oncoll_check_bits() const { return oncoll_check_bits; };
 
-			const std::list<ALP_Joint*> get_joints() const { return joints; };
+			std::list<ALP_Joint*> get_joints() const { return joints; };
 
 			// アタッチされたshapeの配列
-			const std::list<Collider_shape*> get_shapes() const { return shapes; };
-			const std::list<Collider_shape*> get_added_shapes() const { return added_shapes; };
+			std::list<Collider_shape*> get_shapes() const { return shapes; };
+			std::list<Collider_shape*> get_added_shapes() const { return added_shapes; };
 
 			// 衝突したcolliderのtagを保存
 			void add_oncoll_bits(Collider_tagbit bit) { oncoll_bits |= bit; };
 
 		private:
 			//::: ComponentがアタッチされたColliderへのイテレータ :::
-			Collider* coll_ptr;
+			Collider* coll_ptr= nullptr;
 
 			//::: Physicsへのポインタ :::
 			ALP_Physics* ALPphysics = nullptr;
@@ -114,8 +115,9 @@ namespace Adollib {
 			Gameobject* gameobject = nullptr;
 
 		public:
-			//::: マルチスレッドにするためtransformをコピー :::
-			Transfome transform;
+			//::: マルチスレッドにするためtransformのworld情報を保存する :::
+			world_trans start_transform; //初めの値
+			world_trans transform; //計算している値 (初めの値との差を移動量としてgameobject.transformに入れる)
 
 		public:
 			Collider* get_collptr() const { return coll_ptr; };
@@ -132,14 +134,14 @@ namespace Adollib {
 			void update_world_trans();
 
 			//座標,姿勢によるworld情報の更新
-			void integrate(float duration, Vector3 linear_velocity, Vector3 anglar_velocity, Vector3 old_linear_velocity, Vector3 old_angula_velocity);
+			void integrate(float duration, const Vector3& linear_velocity, const Vector3& angula_velocity, const Vector3& old_linear_velocity,const Vector3& old_angula_velocity);
 
 			// 毎フレーム行うreset
 			void reset_data_per_frame();
 
 			//::: 親のtagを獲得 :::::::::::::
-			const Collider_tagbit get_tag() const; //自身のtag(bit)
-			const Collider_tagbit get_ignore_tags() const; //衝突しないtags
+			Collider_tagbit get_tag() const; //自身のtag(bit)
+			Collider_tagbit get_ignore_tags() const; //衝突しないtags
 
 			//:::::::::::::::::::::::::::
 			// 規定のshapeをアタッチする
@@ -155,24 +157,29 @@ namespace Adollib {
 				//adapt_added_data();
 				return shape;
 			};
-			Meshcoll_part* add_mesh_shape(const char* filepass, Physics_function::Meshcollider_data* mesh_data);
+			Meshcoll_part* add_mesh_shape(const char* filepath, Physics_function::Meshcollider_data* mesh_data);
 
 			// gameobjectのtransformからcolliderのworld空間での情報を更新
 			void update_world_trans_contain_added();
 
-			//このcolliderが属するjointを追加
+			// このcolliderが属するjointを追加
 			void add_joint(ALP_Joint* joint);
 
-			//jointから外された
+			// jointから外された
 			void remove_joint(ALP_Joint* joint);
 
-			//衝突情報を保存
-			void add_contacted_collider(Contacts::Contact_pair* pair, u_int num);
+			// 衝突情報を保存
+			void add_contacted_collider(const Contacts::Contact_pair* pair, u_int num) const;
 
-			//ヒエラルキー描画用
+
+			//::: mainthreadから呼ばれる :::
+			// gameobjectのtransformへ自身の保持するtransformを入れる
+			void adapt_to_gameobject_transform() const;
+
+			// ヒエラルキー描画用
 			void Update_hierarchy();
 
-			//managerから自身のremove & shapesのdelete
+			// managerから自身のremove & shapesのdelete
 			void destroy();
 
 

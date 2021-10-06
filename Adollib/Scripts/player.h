@@ -81,7 +81,7 @@ namespace Adollib
 		float respown_timer = 0; //respown処理用のtimer >0の時 check_respown()でPlayer::updateをreturn (入力を受け付けない、gunyattoする)
 
 	private:
-		std::shared_ptr<Transfome> camera; //cameraへのポインタ
+		std::shared_ptr<Transform> camera; //cameraへのポインタ
 		Stage_manager* stage_manager = nullptr; //cameraへのポインタ
 
 	private:

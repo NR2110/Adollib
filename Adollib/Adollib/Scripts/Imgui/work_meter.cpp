@@ -6,6 +6,8 @@
 
 using namespace Adollib;
 
+std::mutex Work_meter::mtx;
+
 std::unordered_map<std::string, std::unordered_map<std::string, Work_meter::meter>> Work_meter::start_stop;
 std::unordered_map<std::string, std::unordered_map<std::string, float[Work_meter::max_ * 2]>> Work_meter::meters;
 
@@ -17,6 +19,8 @@ std::string Work_meter::now_tag = std::string("");
 
 
 bool Work_meter::render() {
+	std::lock_guard <std::mutex> lock(mtx);
+
 #ifdef UseImgui
 
 	static float max_num = 0.016f;
@@ -197,6 +201,7 @@ bool Work_meter::render() {
 }
 
 bool Work_meter::start(const std::string& name) {
+	std::lock_guard <std::mutex> lock(mtx);
 
 #ifdef UseImgui
 	if (meters[now_tag].count(name) == 0) {
@@ -212,6 +217,8 @@ bool Work_meter::start(const std::string& name) {
 }
 
 bool Work_meter::stop(const std::string& name) {
+	std::lock_guard <std::mutex> lock(mtx);
+
 #ifdef UseImgui
 	if (meters[now_tag].count(name) == 0) {
 		names[now_tag].push_back(name);
