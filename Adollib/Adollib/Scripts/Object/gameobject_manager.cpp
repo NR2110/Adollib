@@ -81,7 +81,7 @@ void Gameobject_manager::initialize(Scenelist Sce) {
 	}
 
 	static std::thread update_physics_(update_physics);
-
+	Phyisics_manager::is_updated_mainthread = false;
 }
 
 void Gameobject_manager::update(Scenelist Sce) {
@@ -103,7 +103,30 @@ void Gameobject_manager::update(Scenelist Sce) {
 		}
 	}
 
+	//Phyisics_manager::update();
+
+	//while (true){	if (Phyisics_manager::is_updated_physicsthread == true)break; }
+	//Phyisics_manager::is_updated_physicsthread = false;
+	//Phyisics_manager::is_updated_mainthread = true;
+	//Phyisics_manager::update();
+	//while (true) { if (Phyisics_manager::is_updated_physicsthread == true)break; }
+	Phyisics_manager::update_Gui();
 	Phyisics_manager::adapt_to_gameobject_transform(Sce);
+	//親から子に座標の更新を行う
+	{
+		std::unordered_map<Object*, bool> masters_manag;
+		for (auto& GO : gos) {
+			Object* master = GO->top_parent();
+			if (masters_manag.count(master) == 0) {
+				master->update_world_trans_to_children();
+			}
+			masters_manag[master] = true;
+		}
+
+		Phyisics_manager::is_updated_mainthread = true;
+	}
+
+
 
 	//親から子に座標の更新を行う
 	{
@@ -119,6 +142,21 @@ void Gameobject_manager::update(Scenelist Sce) {
 
 	//親から子へupdateを呼ぶ update中に、親objectが削除されたときに対応できないためNG
 	std::for_each(masters.begin(), masters.end(), [](Object* ob) {ob->update_to_children(); });
+
+	//親から子に座標の更新を行う
+	{
+		std::unordered_map<Object*, bool> masters_manag;
+
+		for (auto& GO : gos) {
+			Object* master = GO->top_parent();
+			if (masters_manag.count(master) == 0) {
+				master->update_world_trans_to_children();
+			}
+			masters_manag[master] = true;
+		}
+
+	}
+
 
 #ifdef UseImgui
 	//ヒエラルキー
@@ -138,7 +176,6 @@ void Gameobject_manager::update(Scenelist Sce) {
 		}
 
 	}
-
 
 	delete_gameobjects();
 

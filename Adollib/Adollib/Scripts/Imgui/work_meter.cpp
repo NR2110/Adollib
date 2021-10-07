@@ -123,7 +123,8 @@ bool Work_meter::render() {
 			// •`‰æ
 			ImGui::PlotLines("", &meters[tag][name][start_num], max_, 0, name.c_str(), 0.0f, max_num, ImVec2(500, 50));
 
-			start_stop[tag][name].duration_time = 0;
+			if (start_stop[tag][name].is_reset_duration_time)
+				start_stop[tag][name].duration_time = 0;
 
 		}
 
@@ -153,6 +154,7 @@ bool Work_meter::render() {
 						// •`‰æ
 						ImGui::PlotLines("", &meters[tag][name][start_num], 120, 0, name.c_str(), 0.0f, max_num, ImVec2(500, 50));
 
+						if(start_stop[tag][name].is_reset_duration_time)
 						start_stop[tag][name].duration_time = 0;
 				}
 			}
@@ -174,7 +176,8 @@ bool Work_meter::render() {
 					if (before < 0)
 						meters[tag][name][start_num + max_] = (float)(start_stop[tag][name].duration_time) * F;
 
-					start_stop[tag][name].duration_time = 0;
+					if (start_stop[tag][name].is_reset_duration_time)
+						start_stop[tag][name].duration_time = 0;
 				}
 			}
 		}
@@ -268,7 +271,7 @@ bool Work_meter::stop(const std::string& name, const std::string& tag) {
 
 	QueryPerformanceCounter(&start_stop[tag][name].stop);
 
-	start_stop[now_tag][name].duration_time += start_stop[tag][name].stop.QuadPart - start_stop[tag][name].start.QuadPart;
+	start_stop[tag][name].duration_time += start_stop[tag][name].stop.QuadPart - start_stop[tag][name].start.QuadPart;
 
 #endif
 	return true;
@@ -287,6 +290,7 @@ void Work_meter::set(const std::string& name, const float& value) {
 	start_stop[now_tag][name].stop.QuadPart = (LONGLONG)(value * 10000000.f);
 
 	start_stop[now_tag][name].duration_time = start_stop[now_tag][name].stop.QuadPart - start_stop[now_tag][name].start.QuadPart;
+	start_stop[now_tag][name].is_reset_duration_time = false;
 }
 
 bool Work_meter::tag_start(const std::string& tag) {

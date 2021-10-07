@@ -49,7 +49,11 @@ using namespace Contacts;
 
 namespace Adollib
 {
-	bool Phyisics_manager::is_updated_mainthred = true; //physicsを更新したframeだけtrueになる
+	bool Phyisics_manager::is_updated_mainthread = true; //physicsを更新したframeだけtrueになる
+	bool Phyisics_manager::is_updated_physicsthread = true; //physicsを更新したframeだけtrueになる
+
+	int Phyisics_manager::count_mainthread = 0;
+	int Phyisics_manager::count_physicsthread = 0;
 
 	LARGE_INTEGER Phyisics_manager::frame_count;
 
@@ -83,6 +87,14 @@ namespace Adollib
 
 bool Phyisics_manager::update(Scenelist Sce)
 {
+	while (true) {
+		// 最適化されないように
+		// この他のthreadからis_updated_mainthreadは変更されるが 最適化されるとこのwhileを省略されてしまう
+		// volatileをつけた変数を経由することで最適化を防ぐ
+		volatile bool buf = Phyisics_manager::is_updated_mainthread;
+		if (buf)break;
+	}
+
 #ifdef UseImgui
 	//update_Gui();
 #endif
@@ -94,19 +106,31 @@ bool Phyisics_manager::update(Scenelist Sce)
 	QueryPerformanceFrequency(reinterpret_cast<LARGE_INTEGER*>(&counts_per_sec));
 	float seconds_per_count = 1.0 / static_cast<double>(counts_per_sec);
 
-	if (time.QuadPart < 1) {
+	if (Al_Global::second_per_game < 1) {
 		resetforce(ALP_physicses[Sce]);
+		is_updated_physicsthread = true;
+		is_updated_mainthread = false;
 		return true;
 	}
 
-	// 追加したものを配列に加える
-	adapt_added_data(Sce);
 
-	// Colliderのframe毎に保存するdataをreset
-	if(is_updated_mainthred)
-	reset_data_per_frame(ALP_colliders[Sce], ALP_physicses[Sce]);
+	if (is_updated_mainthread) {
+		is_updated_mainthread = false;
 
-	is_updated_mainthred = false;
+		// 追加したものを配列に加える
+		adapt_added_data(Sce);
+
+		// Colliderのframe毎に保存するdataをreset
+		reset_data_per_frame(ALP_colliders[Sce], ALP_physicses[Sce]);
+	}
+
+	count_physicsthread += 1;
+	if (count_physicsthread != 0 && count_mainthread != 0) {
+		Work_meter::set("physics_per_mainthreadfreame* 0.001f", (float)count_physicsthread / count_mainthread * 0.01f);
+
+		count_physicsthread = 0;
+		count_mainthread = 0;
+	}
 
 	{
 		physicsParams.timeStep = ALmin((float)(time.QuadPart - frame_count.QuadPart) * seconds_per_count, physicsParams.max_timeStep);
@@ -114,7 +138,7 @@ bool Phyisics_manager::update(Scenelist Sce)
 
 		Work_meter::set("physicsParams.timeStep", physicsParams.timeStep);
 
-		int vvv = 1;
+		int vvv = 4;
 		physicsParams.timeStep /= vvv;
 
 		for (int i = 0; i < vvv; i++) {
@@ -156,7 +180,6 @@ bool Phyisics_manager::update(Scenelist Sce)
 			integrate(ALP_physicses[Sce]);
 		}
 
-		//adapt_to_gameobject_transform(Sce);
 	}
 
 	Work_meter::stop("Phyisics_manager");
@@ -239,6 +262,9 @@ bool Phyisics_manager::update(Scenelist Sce)
 	}
 
 #endif // DEBUG
+
+
+	is_updated_physicsthread = true;
 	return true;
 
 }

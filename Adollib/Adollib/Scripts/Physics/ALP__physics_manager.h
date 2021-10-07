@@ -138,8 +138,11 @@ namespace Adollib
 			static std::unordered_map<Scenelist, std::vector<Physics_function::ALP_Collider*>> moved_collider; //挿入ソート用 動いた
 			static std::unordered_map<Scenelist, std::vector<Physics_function::ALP_Collider*>> added_collider; //挿入ソート用 追加された
 
+			static int count_mainthread;
+			static int count_physicsthread;
 		public:
-			static bool is_updated_mainthred; //physicsを更新したframeだけtrueになる
+			static bool is_updated_mainthread;    //mainthread更新したframeだけtrueになる
+			static bool is_updated_physicsthread; //physicsを更新したframeだけtrueになる
 
 			// 生成時のphysicsの値
 			static Physics_function::PhysicsParams physicsParams;
@@ -337,11 +340,12 @@ namespace Adollib
 		public:
 			// gameobject.transformをALPcollider.transformで上書きする
 			static void adapt_to_gameobject_transform(Scenelist Sce) {
+				std::lock_guard <std::mutex> lock(mtx);
 				for (auto coll : ALP_colliders[Sce]) {
 					coll->adapt_to_gameobject_transform();
 				}
-
-				is_updated_mainthred = true;
+				//is_updated_mainthread = true;
+				count_mainthread += 1;
 			}
 
 			//static bool init();

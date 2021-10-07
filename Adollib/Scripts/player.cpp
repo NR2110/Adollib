@@ -91,7 +91,7 @@ namespace Adollib
 	// 毎フレーム呼ばれる更新処理
 	void Player::update()
 	{
-
+		return;
 		// Update_pnground
 		{
 			onground_collider_GO->transform->local_pos = waist_pillar->center;

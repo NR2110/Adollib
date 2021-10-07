@@ -183,7 +183,6 @@ void ALP_Collider::adapt_to_gameobject_transform() const
 	gameobject->transform->local_pos += vector3_quatrotate(transform.position - start_transform.position, parent_orientate_inv);
 	const Quaternion buffer = start_transform.orientation.inverse() * transform.orientation;
 	gameobject->transform->local_orient *= quaternion_axis_radian(vector3_quatrotate(buffer.axis(), parent_orientate_inv), buffer.radian());
-	//gameobject->transform->local_orient = transform.orientation;
 	//gameobject->transform->local_scale *= transform.scale / start_transform.scale;
 }
 
