@@ -154,13 +154,21 @@ void ALP_Collider::reset_data_per_frame() {
 	oncoll_bits = 0;
 	coll_ptr->contacted_colliders.clear();
 
+	Vector3 off_pos = Vector3(0);
+	Quaternion off_quat = quaternion_identity();
+
+	if (Phyisics_manager::is_called_adapt_transform_to_gameobject_for_calculate_phsics) {
+		Vector3 off_pos = transform.position - start_transform.position;
+		Quaternion off_quat = start_transform.orientation.inverse() * transform.orientation;
+	}
+
 	start_transform.position = gameobject->transform->position;
 	start_transform.orientation = gameobject->transform->orientation;
 	start_transform.scale = gameobject->transform->scale;
 
-	transform.position = gameobject->transform->position;
-	transform.orientation = gameobject->transform->orientation;
-	transform.scale = gameobject->transform->scale;
+	transform.position = start_transform.position + off_pos;
+	transform.orientation = start_transform.orientation;
+	transform.scale = start_transform.scale;
 };
 
 void ALP_Collider::Update_hierarchy(){

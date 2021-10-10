@@ -143,6 +143,8 @@ namespace Adollib
 		public:
 			static bool is_updated_mainthread;    //mainthread更新したframeだけtrueになる
 			static bool is_updated_physicsthread; //physicsを更新したframeだけtrueになる
+			static bool is_calculate_physics;      //reset_data_per_frameからintegrateの間trueになる この間にadapt_transform_to_gameobjectが呼ばれると下のをtrueにする
+			static bool is_called_adapt_transform_to_gameobject_for_calculate_phsics;      //これがtrueの時reset_data_per_frameのtransformのコピーの時、offsetを適応する
 
 			// 生成時のphysicsの値
 			static Physics_function::PhysicsParams physicsParams;
@@ -339,13 +341,17 @@ namespace Adollib
 
 		public:
 			// gameobject.transformをALPcollider.transformで上書きする
-			static void adapt_to_gameobject_transform(Scenelist Sce) {
+			static void adapt_transform_to_gameobject(Scenelist Sce) {
+				count_mainthread += 1;
+				if (is_updated_physicsthread == false)
+					return;
+
 				std::lock_guard <std::mutex> lock(mtx);
 				for (auto coll : ALP_colliders[Sce]) {
 					coll->adapt_to_gameobject_transform();
 				}
 				//is_updated_mainthread = true;
-				count_mainthread += 1;
+				is_updated_physicsthread = false;
 			}
 
 			//static bool init();

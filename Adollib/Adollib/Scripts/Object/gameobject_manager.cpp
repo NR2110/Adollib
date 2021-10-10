@@ -89,7 +89,7 @@ void Gameobject_manager::update(Scenelist Sce) {
 
 	auto& gos = gameobjects[Sce];
 
-	//一番上のの親を保存
+	//一番上の親を保存
 	std::vector<Object*> masters; //GO親子ツリーの頂点を保存
 	masters.clear();
 	{
@@ -105,13 +105,17 @@ void Gameobject_manager::update(Scenelist Sce) {
 
 	//Phyisics_manager::update();
 
-	//while (true){	if (Phyisics_manager::is_updated_physicsthread == true)break; }
+#ifdef UseImgui
+	Phyisics_manager::update_Gui();
+#endif
+
+	//while (true) { if (Phyisics_manager::is_updated_physicsthread == true)break; }
 	//Phyisics_manager::is_updated_physicsthread = false;
 	//Phyisics_manager::is_updated_mainthread = true;
-	//Phyisics_manager::update();
+	////Phyisics_manager::update();
 	//while (true) { if (Phyisics_manager::is_updated_physicsthread == true)break; }
-	Phyisics_manager::update_Gui();
-	Phyisics_manager::adapt_to_gameobject_transform(Sce);
+
+	Phyisics_manager::adapt_transform_to_gameobject(Sce);
 	//親から子に座標の更新を行う
 	{
 		std::unordered_map<Object*, bool> masters_manag;
@@ -127,20 +131,7 @@ void Gameobject_manager::update(Scenelist Sce) {
 	}
 
 
-
-	//親から子に座標の更新を行う
-	{
-		std::unordered_map<Object*, bool> masters_manag;
-		for (auto& GO : gos) {
-			Object* master = GO->top_parent();
-			if (masters_manag.count(master) == 0) {
-				master->update_world_trans_to_children();
-			}
-			masters_manag[master] = true;
-		}
-	}
-
-	//親から子へupdateを呼ぶ update中に、親objectが削除されたときに対応できないためNG
+	//親から子へupdateを呼ぶ update中に、親objectが削除されたときに対応できないため削除はいったんbufferに保管している
 	std::for_each(masters.begin(), masters.end(), [](Object* ob) {ob->update_to_children(); });
 
 	//親から子に座標の更新を行う
@@ -178,7 +169,6 @@ void Gameobject_manager::update(Scenelist Sce) {
 	}
 
 	delete_gameobjects();
-
 
 }
 

@@ -51,6 +51,8 @@ namespace Adollib
 {
 	bool Phyisics_manager::is_updated_mainthread = true; //physicsを更新したframeだけtrueになる
 	bool Phyisics_manager::is_updated_physicsthread = true; //physicsを更新したframeだけtrueになる
+	bool Phyisics_manager::is_calculate_physics = true; //physicsを更新したframeだけtrueになる
+	bool Phyisics_manager::is_called_adapt_transform_to_gameobject_for_calculate_phsics = true; //physicsを更新したframeだけtrueになる
 
 	int Phyisics_manager::count_mainthread = 0;
 	int Phyisics_manager::count_physicsthread = 0;
@@ -87,24 +89,31 @@ namespace Adollib
 
 bool Phyisics_manager::update(Scenelist Sce)
 {
-	while (true) {
-		// 最適化されないように
-		// この他のthreadからis_updated_mainthreadは変更されるが 最適化されるとこのwhileを省略されてしまう
-		// volatileをつけた変数を経由することで最適化を防ぐ
-		volatile bool buf = Phyisics_manager::is_updated_mainthread;
-		if (buf)break;
-	}
+	//while (true) {
+	//	// 最適化されないように
+	//	// この他のthreadからis_updated_mainthreadは変更されるが 最適化されるとこのwhileを省略されてしまう
+	//	// volatileをつけた変数を経由することで最適化を防ぐ
+	//	volatile bool buf = Phyisics_manager::is_updated_mainthread;
+	//	if (buf)break;
+	//}
+	//Phyisics_manager::is_updated_mainthread = false;
+	//Phyisics_manager::is_updated_physicsthread = true;
 
-#ifdef UseImgui
-	//update_Gui();
-#endif
+	//while (true) {
+	//	// 最適化されないように
+	//	// この他のthreadからis_updated_mainthreadは変更されるが 最適化されるとこのwhileを省略されてしまう
+	//	// volatileをつけた変数を経由することで最適化を防ぐ
+	//	volatile bool buf = Phyisics_manager::is_updated_mainthread;
+	//	if (buf)break;
+	//}
+
 	Work_meter::start("Phyisics_manager");
 
 	LARGE_INTEGER time;
 	QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&time));
 	LONGLONG counts_per_sec;
 	QueryPerformanceFrequency(reinterpret_cast<LARGE_INTEGER*>(&counts_per_sec));
-	float seconds_per_count = 1.0 / static_cast<double>(counts_per_sec);
+	float seconds_per_count = 1.0f / static_cast<double>(counts_per_sec);
 
 	if (Al_Global::second_per_game < 1) {
 		resetforce(ALP_physicses[Sce]);
@@ -114,31 +123,37 @@ bool Phyisics_manager::update(Scenelist Sce)
 	}
 
 
+	count_physicsthread += 1;
+	if (count_physicsthread != 0 && count_mainthread != 0) {
+		Work_meter::set("physicsthread_per_mainthread* 0.001f", (float)count_physicsthread / count_mainthread * 0.01f);
+		Work_meter::set("mainthread_per_physicsthread* 0.001f", (float)count_mainthread / count_physicsthread * 0.01f);
+
+		count_physicsthread = 0;
+		count_mainthread = 0;
+	}
+
 	if (is_updated_mainthread) {
-		is_updated_mainthread = false;
+		is_updated_mainthread = false; // mainthreadがgameobject_transformを呼んだあと gameobjectのtransformをphysicsにコピーする
+		is_updated_physicsthread = false; // is_updated_physicsthreadがtrueになっていると  adapt_to_gameobject_transformが呼ばれてis_updated_mainthreadがtrueになる可能性がある
 
 		// 追加したものを配列に加える
 		adapt_added_data(Sce);
 
 		// Colliderのframe毎に保存するdataをreset
 		reset_data_per_frame(ALP_colliders[Sce], ALP_physicses[Sce]);
+
+		is_called_adapt_transform_to_gameobject_for_calculate_phsics = false;
 	}
 
-	count_physicsthread += 1;
-	if (count_physicsthread != 0 && count_mainthread != 0) {
-		Work_meter::set("physics_per_mainthreadfreame* 0.001f", (float)count_physicsthread / count_mainthread * 0.01f);
-
-		count_physicsthread = 0;
-		count_mainthread = 0;
-	}
-
+	// physicsの計算部分の時trueにする
+	is_calculate_physics = true;
 	{
 		physicsParams.timeStep = ALmin((float)(time.QuadPart - frame_count.QuadPart) * seconds_per_count, physicsParams.max_timeStep);
 		frame_count = time;
 
 		Work_meter::set("physicsParams.timeStep", physicsParams.timeStep);
 
-		int vvv = 4;
+		int vvv = 1;
 		physicsParams.timeStep /= vvv;
 
 		for (int i = 0; i < vvv; i++) {
@@ -181,6 +196,7 @@ bool Phyisics_manager::update(Scenelist Sce)
 		}
 
 	}
+	is_calculate_physics = false;
 
 	Work_meter::stop("Phyisics_manager");
 
