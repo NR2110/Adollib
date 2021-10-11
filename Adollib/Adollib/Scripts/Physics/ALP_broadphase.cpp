@@ -299,7 +299,7 @@ void Physics_function::BroadMidphase(Scenelist Sce,
 			//colliderの始点ならactivelistにあるものと衝突の可能性あり
 			if (insert_edge.edge_start == true) {
 
-				if (insert_edge.shape->get_ALPcollider()->get_collptr()->is_static == true) {
+				if (insert_edge.shape->get_ALPcollider()->get_ALPphysics()->is_static == true) { // get_collptr()が
 
 					//staticなオブジェクトはstatic_activesとは衝突しない
 					for (auto& shape : actives) {
@@ -331,7 +331,7 @@ void Physics_function::BroadMidphase(Scenelist Sce,
 
 			else {
 
-				if (insert_edge.shape->get_ALPcollider()->get_collptr()->is_static == true)
+				if (insert_edge.shape->get_ALPcollider()->get_ALPphysics()->is_static == true)
 					static_actives.erase(insert_edge.active_list_pair_itr);
 				else
 					actives.erase(insert_edge.active_list_pair_itr);

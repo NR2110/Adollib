@@ -20,7 +20,7 @@ BallJoint* Joint::add_balljoint(
 	colliderB->set_ptr_to_joint(joint);
 
 	BallJoint* balljoint = newD BallJoint(colliderA, colliderB, joint);
-	joint->joint = balljoint;
+	joint->userjoint = balljoint;
 
 	balljoint->anchor.posA = anchorA;
 	balljoint->anchor.posB = anchorB;
@@ -42,7 +42,7 @@ HingeJoint* Joint::add_Hingejoint(
 	colliderB->set_ptr_to_joint(joint);
 
 	HingeJoint* hingejoint = newD HingeJoint(colliderA, colliderB, joint);
-	joint->joint = hingejoint;
+	joint->userjoint = hingejoint;
 
 	colliderA->physics_data.drag = 0.8f;
 	colliderB->physics_data.drag = 0.8f;
@@ -70,7 +70,7 @@ ConeJoint* Joint::add_Conejoint(
 	colliderB->set_ptr_to_joint(joint);
 
 	ConeJoint* conetwist = newD ConeJoint(colliderA, colliderB, joint);
-	joint->joint = conetwist;
+	joint->userjoint = conetwist;
 
 	conetwist->anchor.posA = anchorA;
 	conetwist->anchor.posB = anchorB;
@@ -95,7 +95,7 @@ ConetwistJoint* Joint::add_Conetwistjoint(
 	colliderB->set_ptr_to_joint(joint);
 
 	ConetwistJoint* conetwist = newD ConetwistJoint(colliderA, colliderB, joint);
-	joint->joint = conetwist;
+	joint->userjoint = conetwist;
 
 	conetwist->anchor.posA = anchorA;
 	conetwist->anchor.posB = anchorB;
@@ -119,7 +119,7 @@ TwistJoint* Joint::add_Twistjoint(
 	colliderB->set_ptr_to_joint(joint);
 
 	TwistJoint* twistjoint = newD TwistJoint(colliderA, colliderB, joint);
-	joint->joint = twistjoint;
+	joint->userjoint = twistjoint;
 
 	twistjoint->vec1 = axisB;
 

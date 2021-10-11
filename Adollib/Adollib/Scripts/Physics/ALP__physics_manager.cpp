@@ -51,8 +51,6 @@ namespace Adollib
 {
 	bool Phyisics_manager::is_updated_mainthread = true; //physicsを更新したframeだけtrueになる
 	bool Phyisics_manager::is_updated_physicsthread = true; //physicsを更新したframeだけtrueになる
-	bool Phyisics_manager::is_calculate_physics = true; //physicsを更新したframeだけtrueになる
-	bool Phyisics_manager::is_called_adapt_transform_to_gameobject_for_calculate_phsics = true; //physicsを更新したframeだけtrueになる
 
 	int Phyisics_manager::count_mainthread = 0;
 	int Phyisics_manager::count_physicsthread = 0;
@@ -66,8 +64,12 @@ namespace Adollib
 	std::unordered_map<Scenelist, std::list<Physics_function::ALP_Physics*>>  Phyisics_manager::ALP_physicses;
 	std::map<Scenelist, std::list<Physics_function::ALP_Collider*>> Phyisics_manager::added_ALP_colliders;
 	std::map<Scenelist, std::list<Physics_function::ALP_Physics*>>  Phyisics_manager::added_ALP_physicses;
+	std::map<Scenelist, std::list<Physics_function::ALP_Collider*>> Phyisics_manager::dalated_ALP_colliders; //マルチスレッド用 処理の途中でGOが削除された要素
+	std::map<Scenelist, std::list<Physics_function::ALP_Physics*>>  Phyisics_manager::dalated_ALP_physicses; //マルチスレッド用 処理の途中でGOが削除された要素
+
 	std::list<Physics_function::ALP_Joint*> Phyisics_manager::ALP_joints;
 	std::list<Physics_function::ALP_Joint*> Phyisics_manager::added_ALP_joints;
+	std::list<Physics_function::ALP_Joint*> Phyisics_manager::dalated_ALP_joints;
 
 	std::vector<Physics_function::Contacts::Contact_pair*> Phyisics_manager::pairs[2];
 	u_int Phyisics_manager::pairs_new_num = 0; //pairsのどっちが新しい衝突なのか
@@ -116,6 +118,9 @@ bool Phyisics_manager::update(Scenelist Sce)
 	float seconds_per_count = 1.0f / static_cast<double>(counts_per_sec);
 
 	if (Al_Global::second_per_game < 1) {
+		adapt_added_data(Sce);
+		reset_data_per_frame(ALP_colliders[Sce], ALP_physicses[Sce]);
+
 		resetforce(ALP_physicses[Sce]);
 		is_updated_physicsthread = true;
 		is_updated_mainthread = false;
@@ -132,9 +137,13 @@ bool Phyisics_manager::update(Scenelist Sce)
 		count_mainthread = 0;
 	}
 
+	// mainthreadが更新したら
 	if (is_updated_mainthread) {
 		is_updated_mainthread = false; // mainthreadがgameobject_transformを呼んだあと gameobjectのtransformをphysicsにコピーする
 		is_updated_physicsthread = false; // is_updated_physicsthreadがtrueになっていると  adapt_to_gameobject_transformが呼ばれてis_updated_mainthreadがtrueになる可能性がある
+
+		// 削除したものを配列から消す
+		dadapt_delete_data(Sce);
 
 		// 追加したものを配列に加える
 		adapt_added_data(Sce);
@@ -142,22 +151,34 @@ bool Phyisics_manager::update(Scenelist Sce)
 		// Colliderのframe毎に保存するdataをreset
 		reset_data_per_frame(ALP_colliders[Sce], ALP_physicses[Sce]);
 
-		is_called_adapt_transform_to_gameobject_for_calculate_phsics = false;
 	}
 
-	// physicsの計算部分の時trueにする
-	is_calculate_physics = true;
+	// collider::componentのdataをコピーする。 deleteしたcomponentにアクセスしないようにdadapt_delete_dataを同mutex内で行う
 	{
+		// deleteの更新、physicsのdataの更新は同mutex内でやりたいため(update_world_transがcoliider::componentを参照するため)
+		// dadapt_delete_data関数内部のmutexのlockをfalseにし、外に出している
+		std::lock_guard <std::mutex> lock(mtx);
+		dadapt_delete_data(Sce, false);
+
+		// ColliderのWorld情報の更新
+		adapt_collider_component_data(ALP_colliders[Sce], ALP_physicses[Sce]);
+	}
+
+
+	// physicsの計算部分の時trueにする
+	{
+		//	std::lock_guard <std::mutex> lock(mtx);
+
 		physicsParams.timeStep = ALmin((float)(time.QuadPart - frame_count.QuadPart) * seconds_per_count, physicsParams.max_timeStep);
 		frame_count = time;
 
 		Work_meter::set("physicsParams.timeStep", physicsParams.timeStep);
 
-		int vvv = 1;
-		physicsParams.timeStep /= vvv;
+		physicsParams.timeStep /= physicsParams.calculate_iteration;
 
-		for (int i = 0; i < vvv; i++) {
-			// ColliderのWorld情報の更新
+		for (int i = 0; i < physicsParams.calculate_iteration; i++) {
+
+			// shapeのworld情報, physicsのtensorなどの更新
 			update_world_trans(ALP_colliders[Sce]);
 
 			// 外力の更新
@@ -191,12 +212,23 @@ bool Phyisics_manager::update(Scenelist Sce)
 			resolve_contact(ALP_colliders[Sce], pairs[pairs_new_num], ALP_joints);
 			Work_meter::stop("Resolve");
 
-			// 位置の更新
-			integrate(ALP_physicses[Sce]);
+			{
+				std::lock_guard <std::mutex> lock(mtx);
+				// 計算中にgameobjectへtransformが適応されていた場合 ちゃんとtransformを更新してからintegrateを行う
+				if (is_updated_mainthread) {
+					is_updated_mainthread = false; // mainthreadがgameobject_transformを呼んだあと gameobjectのtransformをphysicsにコピーする
+					is_updated_physicsthread = false; // is_updated_physicsthreadがtrueになっていると  adapt_to_gameobject_transformが呼ばれてis_updated_mainthreadがtrueになる可能性がある
+
+					// Colliderのframe毎に保存するdataをreset
+					reset_data_per_frame(ALP_colliders[Sce], ALP_physicses[Sce]);
+				}
+
+				// 位置の更新
+				integrate(ALP_physicses[Sce]);
+			}
 		}
 
 	}
-	is_calculate_physics = false;
 
 	Work_meter::stop("Phyisics_manager");
 
@@ -302,7 +334,8 @@ bool Phyisics_manager::update_Gui() {
 		ImGui::InputFloat("gravity", &physicsParams.gravity, 0.1f, 1.0f, "%.2f");
 
 		//正確さの調整
-		ImGui::InputInt("accuracy", &physicsParams.solver_iterations, 1, 200);
+		ImGui::InputInt("solver_iteration", &physicsParams.solver_iteration, 1, 200);
+		ImGui::InputInt("calculate_iteration", &physicsParams.calculate_iteration, 1, 200);
 
 		//sleepの閾値
 		ImGui::InputFloat("linear_sleep_threrhold", &physicsParams.linear_sleep_threrhold, 0.01f);
@@ -358,7 +391,7 @@ bool Phyisics_manager::ray_cast(
 	bool ret = false;
 
 	for (const auto coll : ALP_colliders[Sce]) {
-		if (!(coll->get_tag() & tag))continue;
+		if (!(coll->tag & tag))continue;
 
 		if (Physics_function::ray_cast(
 			Ray_pos, Ray_dir,
@@ -378,6 +411,101 @@ bool Phyisics_manager::ray_cast(
 
 	return ret;
 }
+
+
+void Phyisics_manager::adapt_added_data(Scenelist Sce) {
+	std::lock_guard <std::mutex> lock(mtx); //呼び出しのところでlockしている
+
+	for (auto added_coll : added_ALP_colliders) {
+		// 追加されたcollider
+		for (auto& coll : added_coll.second) {
+			added_collider[added_coll.first].emplace_back(coll);
+		}
+
+		// 引っ越す
+		int save_size = ALP_colliders[added_coll.first].size();
+		ALP_colliders[added_coll.first].splice(ALP_colliders[added_coll.first].end(), std::move(added_coll.second));
+
+		// listを引っ越したためitrが変化している 自身のitrを更新
+		auto save_itr = ALP_colliders[added_coll.first].begin();
+		for (save_itr; save_itr != ALP_colliders[added_coll.first].end(); ++save_itr) {
+			save_size--;
+			if (save_size >= 0)continue;
+			(*save_itr)->set_this_itr(save_itr);
+		}
+	}
+	for (auto& added_phys : added_ALP_physicses) {
+
+		int save_size = ALP_colliders[added_phys.first].size();
+		ALP_physicses[added_phys.first].splice(ALP_physicses[added_phys.first].end(), std::move(added_phys.second));
+
+		// listを引っ越したためitrが変化している 自身のitrを更新
+		auto save_itr = ALP_physicses[added_phys.first].begin();
+		for (save_itr; save_itr != ALP_physicses[added_phys.first].end(); ++save_itr) {
+			save_size--;
+			if (save_size >= 0)continue;
+			(*save_itr)->set_this_itr(save_itr);
+		}
+	}
+
+	added_ALP_colliders.clear();
+	added_ALP_physicses.clear();
+
+	for (auto added_coll : ALP_colliders[Sce]) {
+		// 各colliderのshapeのadded_dataを処理
+		added_coll->adapt_added_data();
+	}
+
+	{
+		// 引っ越す
+		ALP_joints.splice(ALP_joints.end(), std::move(added_ALP_joints));
+
+		// listを引っ越したためitrが変化している 自身のitrを更新
+		auto save_itr = ALP_joints.begin();
+		for (save_itr; save_itr != ALP_joints.end(); ++save_itr) {
+			(*save_itr)->set_this_itr(save_itr);
+		}
+	}
+}
+
+void Phyisics_manager::dadapt_delete_data(Scenelist Sce, bool is_mutex_lock) {
+	//TODO : Added_dataにおり、ALPcolliderにadaptされていないものはitr参照が死ぬ。
+	if(is_mutex_lock)std::lock_guard <std::mutex> lock(mtx); //呼び出しのところでlockしている
+
+	for (auto deleted_coll : dalated_ALP_colliders) {
+		// 削除されたcollider
+		for (auto& coll : deleted_coll.second) {
+			coll->destroy();
+			delete coll;
+		}
+	}
+
+	for (auto& deleted_phys : dalated_ALP_physicses) {
+		// 削除されたphysics
+		for (auto& phys : deleted_phys.second) {
+			phys->destroy();
+			delete phys;
+		}
+	}
+
+	dalated_ALP_colliders.clear();
+	dalated_ALP_physicses.clear();
+
+	for (auto& deleted_joint : dalated_ALP_joints) {
+		deleted_joint->destroy(nullptr, true);
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
 
 #include "../Main/systems.h"
 #include "../Mesh/material_for_collider.h"
@@ -420,7 +548,7 @@ bool Phyisics_manager::render_joint(Scenelist Sce) {
 void Phyisics_manager::destroy(Scenelist Sce) {
 
 	for (auto& joint : ALP_joints) {
-		auto& base = joint->joint;
+		auto& base = joint->userjoint;
 		base->destroy();
 		delete base;
 	}

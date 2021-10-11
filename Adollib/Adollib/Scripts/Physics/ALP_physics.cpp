@@ -213,7 +213,7 @@ Matrix33 ALP_Physics::get_tensor_contain_added() {
 	ALPcollider->update_world_trans_contain_added();
 
 	// 質量などをcomponent::colliderからコピーする
-	update_physics_data();
+	adapt_collider_component_data();
 
 	{
 		const auto& shapes = ALPcollider->get_shapes();
@@ -258,7 +258,7 @@ Matrix33 ALP_Physics::get_tensor_contain_added() {
 
 
 			for (const auto& joint : joints) {
-				inertial_tensor_ += joint->joint->tensor_effect(ALPcollider->get_collptr());
+				inertial_tensor_ += joint->userjoint->tensor_effect();
 			}
 		}
 	}
@@ -371,7 +371,7 @@ void ALP_Physics::update_tensor_and_barycenter(const std::list<Collider_shape*>&
 
 		for (auto& joint : joints) {
 			//auto a = joint->joint->get_colliderA();
-			inertial_tensor_ += joint->joint->tensor_effect(ALPcollider->get_collptr());
+			inertial_tensor_ += joint->userjoint->tensor_effect();
 		}
 
 
@@ -400,7 +400,7 @@ void ALP_Physics::update_tensor_and_barycenter(const std::list<Collider_shape*>&
 
 }
 
-void ALP_Physics::update_physics_data() {
+void ALP_Physics::adapt_collider_component_data() {
 	Physics_data Cdata = ALPcollider->get_collptr()->physics_data;
 
 	inertial_mass = Cdata.inertial_mass;
@@ -415,6 +415,7 @@ void ALP_Physics::update_physics_data() {
 	is_kinmatic_linear = Cdata.is_kinmatic_linear; //ほかの物体からの影響で並進速度が変化しない
 	is_moveable = Cdata.is_moveable;
 	is_hitable = Cdata.is_hitable;
+	is_static = Cdata.is_static;
 }
 
 void ALP_Physics::destroy() {

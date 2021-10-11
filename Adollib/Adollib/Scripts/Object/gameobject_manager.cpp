@@ -107,12 +107,13 @@ void Gameobject_manager::update(Scenelist Sce) {
 
 #ifdef UseImgui
 	Phyisics_manager::update_Gui();
+
 #endif
 
 	//while (true) { if (Phyisics_manager::is_updated_physicsthread == true)break; }
 	//Phyisics_manager::is_updated_physicsthread = false;
 	//Phyisics_manager::is_updated_mainthread = true;
-	////Phyisics_manager::update();
+	//Phyisics_manager::update();
 	//while (true) { if (Phyisics_manager::is_updated_physicsthread == true)break; }
 
 	Phyisics_manager::adapt_transform_to_gameobject(Sce);
@@ -152,6 +153,7 @@ void Gameobject_manager::update(Scenelist Sce) {
 #ifdef UseImgui
 	//ヒエラルキー
 	Hierarchy::update_hierarchy(masters);
+
 #endif // UseImgui
 
 	//親から子に座標の更新を行う

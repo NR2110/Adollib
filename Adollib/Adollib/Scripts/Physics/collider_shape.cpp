@@ -31,9 +31,9 @@ void Collider_shape::update_world_trans(const Vector3& GO_Wposiiton, const Quate
 };
 
 const u_int Collider_shape::get_tag() const {
-	return ALPcollider_ptr->get_tag();
+	return ALPcollider_ptr->tag;
 }
 
 const u_int Collider_shape::get_ignore_tags() const {
-	return ALPcollider_ptr->get_ignore_tags();
+	return ALPcollider_ptr->ignore_tags;
 }

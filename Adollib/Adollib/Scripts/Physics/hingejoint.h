@@ -34,10 +34,12 @@ namespace Adollib {
 			anchors[1] = anchor_g;
 		}
 
-		Matrix33 tensor_effect(const Collider* coll) const override {
+		Matrix33 tensor_effect() const override {
+			// hinge•ûŒüˆÈŠO‚É‚Í‹È‚ª‚è‚É‚­‚­‚·‚é
 			Vector3 axis;
-			if (coll == collider_comp[0])axis = anchor_s.posA - anchor_g.posA;
-			else axis = anchor_s.posB - anchor_g.posB;
+			//if (coll == collider_comp[0])axis = anchor_s.posA - anchor_g.posA;
+			//else axis = anchor_s.posB - anchor_g.posB;
+			axis = anchor_s.posA - anchor_g.posA;
 
 			Matrix33 mat = matrix33_zero();
 

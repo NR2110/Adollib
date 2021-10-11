@@ -48,10 +48,6 @@ void ALP_Collider::update_world_trans() {
 		shape->update_dop14();
 	}
 
-
-	// ユーザーに入力されたphysicsデータ(massなど)を計算用のデータに直す
-	ALPphysics->update_physics_data();
-
 	// 慣性モーメントの更新
 	ALPphysics->update_tensor_and_barycenter(shapes, joints);
 }
@@ -150,26 +146,28 @@ void ALP_Collider::integrate(const float duration, const Vector3& linear_velocit
 
 void ALP_Collider::reset_data_per_frame() {
 	//std::lock_guard <std::mutex> lock(mtx);
+	//
+	if (is_deleted)return;  //goがすでにdeleteされていればreturn
 
 	oncoll_bits = 0;
-	coll_ptr->contacted_colliders.clear();
 
 	Vector3 off_pos = Vector3(0);
 	Quaternion off_quat = quaternion_identity();
-
-	if (Phyisics_manager::is_called_adapt_transform_to_gameobject_for_calculate_phsics) {
-		Vector3 off_pos = transform.position - start_transform.position;
-		Quaternion off_quat = start_transform.orientation.inverse() * transform.orientation;
-	}
 
 	start_transform.position = gameobject->transform->position;
 	start_transform.orientation = gameobject->transform->orientation;
 	start_transform.scale = gameobject->transform->scale;
 
-	transform.position = start_transform.position + off_pos;
+	transform.position = start_transform.position;
 	transform.orientation = start_transform.orientation;
 	transform.scale = start_transform.scale;
 };
+
+void ALP_Collider::adapt_collider_component_data() {
+	tag = coll_ptr->tag;
+	ignore_tags = coll_ptr->ignore_tags;
+	coll_ptr->contacted_colliders.clear();
+}
 
 void ALP_Collider::Update_hierarchy(){
 	std::lock_guard <std::mutex> lock(mtx); //shapesに範囲forでアクセスするため
@@ -181,6 +179,9 @@ void ALP_Collider::Update_hierarchy(){
 
 void ALP_Collider::adapt_to_gameobject_transform() const
 {
+	// mainthreaddから呼ばれるためここでis_deletedチェックを行えばよい
+	if (is_deleted) return; // gameobjectが削除されていたらreturn
+
 	//親のorientationの逆をとる
 	Quaternion parent_orientate_inv = Quaternion(1, 0, 0, 0);
 	if (gameobject->parent() != nullptr) {
@@ -218,7 +219,10 @@ void ALP_Collider::remove_joint(ALP_Joint* joint) {
 
 void ALP_Collider::add_contacted_collider(const Contacts::Contact_pair* pair, const u_int num) const
 {
+	//TODO : contacted_collidersをALPcolliderが持つように変更する
+	return;
 
+	if (is_deleted)return; //GOが削除されていたらcollider::componentも存在しないためreturn
 	if (coll_ptr->is_save_contacted_colls == false) return; //保存するflagが立っていなければ保存しない
 
 	Contacted_data data;
@@ -254,12 +258,15 @@ void ALP_Collider::destroy(){
 		delete shape;
 	}
 
+	//jointの削除
 	for (const auto& j : joints) {
 		j->destroy(this, true);
 		delete j;
 	}
 
+	//physics_managerの配列から削除
 	Phyisics_manager::remove_ALPcollider(scene, this_itr);
+
 };
 
 Collider_tagbit ALP_Collider::get_tag()const { return coll_ptr->tag; }; //自身のtag(bit)

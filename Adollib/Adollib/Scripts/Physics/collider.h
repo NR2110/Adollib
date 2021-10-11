@@ -27,12 +27,13 @@ namespace Adollib {
 		float static_friction = 0; //Ã–€C
 		float restitution = 0;	 //”½”­ŒW”
 
-		bool is_fallable = 0; //—‚¿‚È‚¢
-		bool is_kinematic = 0;//‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
-		bool is_kinmatic_anglar = 0; //‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å‰ñ“]‘¬“x‚ª•Ï‰»‚µ‚È‚¢
-		bool is_kinmatic_linear = 0; //‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å•Ài‘¬“x‚ª•Ï‰»‚µ‚È‚¢
-		bool is_moveable = 0; //“®‚©‚È‚¢
-		bool is_hitable = 0;  //Õ“Ë‚µ‚È‚¢
+		bool is_fallable = false; // —‚¿‚È‚¢
+		bool is_kinematic = false;// ‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
+		bool is_kinmatic_anglar = false; // ‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å‰ñ“]‘¬“x‚ª•Ï‰»‚µ‚È‚¢
+		bool is_kinmatic_linear = false; // ‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å•Ài‘¬“x‚ª•Ï‰»‚µ‚È‚¢
+		bool is_moveable = false; // “®‚©‚È‚¢
+		bool is_hitable = false;  // Õ“Ë‚µ‚È‚¢
+		bool is_static = false;  // static“¯m‚Íoncoll_enter‚ªg‚¦‚È‚¢ ‚¯‚ÇŒy‚­‚È‚é
 	};
 
 	struct Contacted_data {

@@ -49,7 +49,7 @@ namespace Adollib {
 		virtual void adapt_anchor() = 0;
 
 		//joint‚Ìtensor‚Ö‚Ì‰e‹¿‚ð‚©‚¦‚·
-		virtual Matrix33 tensor_effect(const Collider* coll) const = 0;
+		virtual Matrix33 tensor_effect() const = 0;
 
 		//limit‚Ì‰e‹¿‚ð•Ô‚·
 		virtual bool limit_effect(Vector3& contactP0, Vector3& contactP1, float& penetrate) const = 0;

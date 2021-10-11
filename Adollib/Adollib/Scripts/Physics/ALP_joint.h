@@ -33,7 +33,7 @@ namespace Adollib {
 			Vector3 limit_constraint_pos[2]; //limit拘束計算用 拘束点
 			Contacts::Constraint constraint_limit; // limit拘束計算用
 
-			Adollib::Joint_base* joint = nullptr; //ユーザーの触る情報へのポインタ
+			Adollib::Joint_base* userjoint = nullptr; //ユーザーの触る情報へのポインタ
 
 		private:
 			std::list<ALP_Joint*>::iterator this_itr{}; //physics_manager内の自身へのイテレータ

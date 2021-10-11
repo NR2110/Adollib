@@ -40,6 +40,15 @@ namespace Adollib {
 				this_itr(l_itr), index(l_index), scene(l_scene), coll_ptr(l_collitr), ALPphysics(l_ALPphysics), gameobject(l_go) {};
 
 		private:
+			//::: ComponentがアタッチされたColliderへのイテレータ :::
+			Collider* coll_ptr = nullptr;
+
+			//::: Physicsへのポインタ :::
+			ALP_Physics* ALPphysics = nullptr;
+
+			//::: アタッチされたGOへのポインタ :::
+			Gameobject* gameobject = nullptr;
+
 			//::: 自身へのイテレータ(remove用) :::
 			std::list<ALP_Collider*>::iterator this_itr{};
 
@@ -57,31 +66,25 @@ namespace Adollib {
 			std::mutex mtx;
 
 		public:
-			// added_dataをmainのdata配列に引っ越す
-			void adapt_added_data() {
-				if (added_shapes.size() == 0)return;
+			// privateにしたかった........
+			//::: oncoll_enter :::::::
+			Collider_tagbit oncoll_check_bits = 0; //on collision enterを行うtagの情報(互いに衝突しないけどoncollenterが必要な場合)
+			Collider_tagbit oncoll_bits = 0; //oncollision enterで使用するbit情報
 
-				std::lock_guard <std::mutex> lock(mtx);
+			//::: tag ::::::::
+			Collider_tagbit tag = 0; //自身のtag(bit)
+			Collider_tagbit ignore_tags = 0; //衝突しないtags(bit)
 
-				shapes.splice(shapes.end(), std::move(added_shapes));
-
-				added_shapes.clear();
-			};
+		public:
+			Collider* get_collptr() const { return coll_ptr; };
+			ALP_Physics* get_ALPphysics() const { return ALPphysics; };
+			//Gameobject* get_gameobject() const { return gameobject; };
 
 			// ALPphysics_ptrのset
 			void set_ALPphysics_ptr(ALP_Physics* ptr) { ALPphysics = ptr; };
 
 			// マルチスレッド化するにあたり、add_colliderした時点ではメインのlistに入れずbufferのlistに入れるため 自身のitrが生成時に決まらないため set関数を準備
 			void set_this_itr(std::list<ALP_Collider*>::iterator itr) { this_itr = itr; };
-
-
-		public:
-			// ここをすべてprivateにしたかった........
-			//::: oncoll_enter :::::::
-			Collider_tagbit oncoll_check_bits = 0; //on collision enterを行うtagの情報(互いに衝突しないけどoncollenterが必要な場合)
-			Collider_tagbit oncoll_bits = 0; //oncollision enterで使用するbit情報
-
-
 
 		public:
 			//[[nodiscard]]
@@ -104,25 +107,26 @@ namespace Adollib {
 			// 衝突したcolliderのtagを保存
 			void add_oncoll_bits(Collider_tagbit bit) { oncoll_bits |= bit; };
 
-		private:
-			//::: ComponentがアタッチされたColliderへのイテレータ :::
-			Collider* coll_ptr= nullptr;
-
-			//::: Physicsへのポインタ :::
-			ALP_Physics* ALPphysics = nullptr;
-
-			//::: アタッチされたGOへのポインタ :::
-			Gameobject* gameobject = nullptr;
-
 		public:
 			//::: マルチスレッドにするためtransformのworld情報を保存する :::
 			world_trans start_transform; //初めの値
 			world_trans transform; //計算している値 (初めの値との差を移動量としてgameobject.transformに入れる)
 
+			//::: アタッチされたgameobjectが削除されたとき trueにする 別スレッドなので削除するタイミングが異なるから
+			bool is_deleted = false;
+
 		public:
-			Collider* get_collptr() const { return coll_ptr; };
-			ALP_Physics* get_ALPphysics() const { return ALPphysics; };
-			//Gameobject* get_gameobject() const { return gameobject; };
+			// added_dataをmainのdata配列に引っ越す
+			void adapt_added_data() {
+				if (added_shapes.size() == 0)return;
+
+				std::lock_guard <std::mutex> lock(mtx);
+
+				shapes.splice(shapes.end(), std::move(added_shapes));
+
+				added_shapes.clear();
+			};
+
 
 		public:
 
@@ -136,10 +140,13 @@ namespace Adollib {
 			//座標,姿勢によるworld情報の更新
 			void integrate(float duration, const Vector3& linear_velocity, const Vector3& angula_velocity, const Vector3& old_linear_velocity,const Vector3& old_angula_velocity);
 
-			// 毎フレーム行うreset
+			// main_threadが更新したフレームに呼ばれる
 			void reset_data_per_frame();
 
-			//::: 親のtagを獲得 :::::::::::::
+			// 毎フレーム行う collider::componentのtagなどのデータをコピーする
+			void adapt_collider_component_data();
+
+			//::: collider::componentのtagを獲得 :::::::::::::
 			Collider_tagbit get_tag() const; //自身のtag(bit)
 			Collider_tagbit get_ignore_tags() const; //衝突しないtags
 
@@ -179,7 +186,7 @@ namespace Adollib {
 			// ヒエラルキー描画用
 			void Update_hierarchy();
 
-			// managerから自身のremove & shapesのdelete
+			// managerから自身のremove,shapeの削除,jointの削除
 			void destroy();
 
 

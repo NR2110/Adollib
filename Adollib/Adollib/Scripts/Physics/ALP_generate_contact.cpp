@@ -68,8 +68,8 @@ void Physics_function::generate_contact(std::vector<Contacts::Contact_pair*>& pa
 
 		//‚à‚µŒğ·‚µ‚Ä‚¢‚½‚ç‚»‚ê‚¼‚ê‚Ìoncoll_bit‚É‘Šè‚Ìtag‚ğ’Ç‰Á
 		if (is_crossing) {
-			pair->body[0]->get_ALPcollider()->add_oncoll_bits(pair->body[1]->get_ALPcollider()->get_tag());
-			pair->body[1]->get_ALPcollider()->add_oncoll_bits(pair->body[0]->get_ALPcollider()->get_tag());
+			pair->body[0]->get_ALPcollider()->add_oncoll_bits(pair->body[1]->get_ALPcollider()->tag);
+			pair->body[1]->get_ALPcollider()->add_oncoll_bits(pair->body[0]->get_ALPcollider()->tag);
 
 			if (!pair->check_oncoll_only) {
 				pair->body[0]->get_ALPcollider()->add_contacted_collider(pair, 0); //©g‚ÌŠÖ‚í‚éÕ“Ëî•ñ‚ğ•Û‘¶‚·‚é

@@ -19,8 +19,8 @@ void Stage_manager::awake() {
 	add_stage<Stage_01>(Stage_types::stage_0);
 	//add_stage<Stage_01>(Stage_types::stage_1);
 
-	now_stage = Stage_types::demo; //¡‚Ìstagetype
-	next_stage = Stage_types::demo; //Ÿ‚Ìstagetype
+	now_stage = Stage_types::stage_0; //¡‚Ìstagetype
+	next_stage = Stage_types::stage_0; //Ÿ‚Ìstagetype
 
 	stages[now_stage]->stage_awake();
 

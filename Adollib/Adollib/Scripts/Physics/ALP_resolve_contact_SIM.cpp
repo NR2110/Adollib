@@ -94,7 +94,7 @@ bool Calc_joint_effect(ALP_Joint* joint)
 
 	float penetrate = 0;
 
-	if (joint->joint->limit_effect(joint->limit_constraint_pos[0], joint->limit_constraint_pos[1], penetrate)) {
+	if (joint->userjoint->limit_effect(joint->limit_constraint_pos[0], joint->limit_constraint_pos[1], penetrate)) {
 		if (penetrate == 0)return false;
 
 		//anchor‚»‚ê‚¼‚ê‚ÌlocalÀ•W
@@ -513,7 +513,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 
 	Work_meter::start("solver", work_meter_tag);
 
-	for (int solver_iterations_count = 0; solver_iterations_count < Phyisics_manager::physicsParams.solver_iterations; solver_iterations_count++) {
+	for (int solver_iterations_count = 0; solver_iterations_count < Phyisics_manager::physicsParams.solver_iteration; solver_iterations_count++) {
 		// S‘©‚Ì‰‰Z
 		world_trans* transform[2];
 		for (auto& joint : joints) {

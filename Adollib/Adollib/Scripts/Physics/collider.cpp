@@ -53,13 +53,16 @@ void Collider::awake() {
 
 void Collider::finalize() {
 
-	//アタッチされたALP_Collider,ALP_Physicsの終了処理
-	ALPcollider_ptr->destroy();
-	ALPphysics_ptr->destroy();
+	//Phyisics_manager::add_delete_buffer_ALPCollider(ALPcollider_ptr);
+	//Phyisics_manager::add_delete_buffer_ALPPhysics(ALPphysics_ptr);
+	Phyisics_manager::add_delete_buffer_ALPCollider_and_ALPPhsics(ALPcollider_ptr, ALPphysics_ptr);
+	////アタッチされたALP_Collider,ALP_Physicsの終了処理
+	//ALPcollider_ptr->destroy();
+	//ALPphysics_ptr->destroy();
 
-	//削除
-	delete ALPcollider_ptr;
-	delete ALPphysics_ptr;
+	////削除
+	//delete ALPcollider_ptr;
+	//delete ALPphysics_ptr;
 }
 
 

@@ -65,6 +65,8 @@ namespace Adollib {
 			std::mutex mtx;
 
 		public:
+			// このphysicsが存在するscene
+			Scenelist get_scene() const { return scene; };
 
 			// マルチスレッド化するにあたり、add_colliderした時点ではメインのlistに入れずbufferのlistに入れるため 自身のitrが生成時に決まらないため set関数を準備
 			void set_this_itr(std::list<ALP_Physics*>::iterator itr) { this_itr = itr; };
@@ -85,6 +87,7 @@ namespace Adollib {
 			bool is_kinmatic_linear = false; //ほかの物体からの影響で並進速度が変化しない
 			bool is_moveable = false;//動かない
 			bool is_hitable = false;  //衝突しない
+			bool is_static = false;  //static同士はoncoll_enterが使えない けど軽くなる
 
 
 
@@ -174,7 +177,7 @@ namespace Adollib {
 			void update_tensor_and_barycenter(const std::list<Collider_shape*>& shapes, const std::list<ALP_Joint*>& joints);
 
 			// Colliderから情報の獲得
-			void update_physics_data(); //component::colliderの情報をコピーする mutexのlockは必要ないと判断
+			void adapt_collider_component_data(); //component::colliderの情報をコピーする mutexのlockは必要ないと判断
 
 
 			//::: 必要な時に呼ぶもの(mutexのlockが必要ない) :::::::::

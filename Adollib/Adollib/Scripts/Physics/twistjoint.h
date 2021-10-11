@@ -31,7 +31,7 @@ namespace Adollib {
 			anchor_count = 0;
 		}
 
-		Matrix33 tensor_effect(const Collider* coll) const override {
+		Matrix33 tensor_effect() const override {
 			return matrix33_zero();
 		}
 
