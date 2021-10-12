@@ -132,7 +132,7 @@ int Contact::find_contact_point(
 	const Vector3& normal
 ) {
 	int ret = -1;
-	float min = Phyisics_manager::physicsParams.contact_allowable_error;
+	float min = Physics_manager::physicsParams.contact_allowable_error;
 	for (int i = 0; i < contact_num; i++) {
 		float lenA = (contactpoints[i].point[0] - contact_pointA).norm();
 		float lenB = (contactpoints[i].point[1] - contact_pointB).norm();
@@ -159,7 +159,7 @@ bool Contact::chack_remove_contact_point(
 
 		// normal•ûŒü‚Ì‹——£‚ð”ä‚×‚é
 		const float dis_N = vector3_dot(normal, contactpointB - contactpointA);
-		if ( dis_N < -Phyisics_manager::physicsParams.contact_threrhold_normal) {
+		if ( dis_N < -Physics_manager::physicsParams.contact_threrhold_normal) {
 			remove_contactpoint(i);
 			ret = true;
 			continue;
@@ -170,7 +170,7 @@ bool Contact::chack_remove_contact_point(
 		// contactpointA‚ðcontactpointB‚ÆnormalŽ²ã‚Å“¯‚¶êŠ‚ÉŽ‚Á‚Ä‚­‚é
 		contactpointA = contactpointA - contactpoints[i].distance * normal;
 		float dis_T = (contactpointA - contactpointB).norm();
-		if (dis_T > Phyisics_manager::physicsParams.contact_threrhold_tangent) {
+		if (dis_T > Physics_manager::physicsParams.contact_threrhold_tangent) {
 			remove_contactpoint(i);
 			ret = true;
 			continue;

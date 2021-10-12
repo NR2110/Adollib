@@ -67,7 +67,7 @@ void update_physics() {
 
 	while (true)
 	{
-		Phyisics_manager::update();
+		Physics_manager::update();
 	}
 
 }
@@ -80,8 +80,13 @@ void Gameobject_manager::initialize(Scenelist Sce) {
 		GO->initialize();
 	}
 
-	static std::thread update_physics_(update_physics);
-	Phyisics_manager::is_updated_mainthread = false;
+	static std::thread update_physics_;
+
+
+	//update_physics_ = std::thread(update_physics);
+	//Physics_manager::is_updated_mainthread = false;
+
+	Physics_manager::thread_start();
 }
 
 void Gameobject_manager::update(Scenelist Sce) {
@@ -106,17 +111,17 @@ void Gameobject_manager::update(Scenelist Sce) {
 	//Phyisics_manager::update();
 
 #ifdef UseImgui
-	Phyisics_manager::update_Gui();
+	Physics_manager::update_Gui();
 
 #endif
 
-	//while (true) { if (Phyisics_manager::is_updated_physicsthread == true)break; }
-	//Phyisics_manager::is_updated_physicsthread = false;
-	//Phyisics_manager::is_updated_mainthread = true;
-	//Phyisics_manager::update();
-	//while (true) { if (Phyisics_manager::is_updated_physicsthread == true)break; }
+	//while (true) { if (Physics_manager::is_updated_physicsthread == true)break; }
+	//Physics_manager::is_updated_physicsthread = false;
+	//Physics_manager::is_updated_mainthread = true;
+	//Physics_manager::update();
+	//while (true) { if (Physics_manager::is_updated_physicsthread == true)break; }
 
-	Phyisics_manager::adapt_transform_to_gameobject(Sce);
+	Physics_manager::adapt_transform_to_gameobject(Sce);
 	//親から子に座標の更新を行う
 	{
 		std::unordered_map<Object*, bool> masters_manag;
@@ -128,7 +133,7 @@ void Gameobject_manager::update(Scenelist Sce) {
 			masters_manag[master] = true;
 		}
 
-		Phyisics_manager::is_updated_mainthread = true;
+		Physics_manager::is_updated_mainthread = true;
 	}
 
 
@@ -261,7 +266,7 @@ void Gameobject_manager::render(Scenelist Sce) {
 		Work_meter::stop("render_obj");
 
 
-		Phyisics_manager::render_collider(Sce);
+		Physics_manager::render_collider(Sce);
 	}
 	Work_meter::stop("drawobj_per_camera");
 
@@ -287,6 +292,7 @@ void Gameobject_manager::destroy(Scenelist Sce) {
 	lights[Sce].clear();
 
 }
+
 
 Gameobject* Gameobject_manager::create(const std::string& go_name, const u_int& tag, Scenelist Sce) {
 	Gameobject* null = nullptr;

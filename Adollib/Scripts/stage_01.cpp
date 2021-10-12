@@ -27,7 +27,7 @@ namespace Adollib
 
 		set_sphere_rope(Vector3(-40, 15, 40), 1.5f, Vector3(-90, 0, 0), 28, 5);
 #if _DEBUG
-//#else
+#else
 		//gear
 		set_gear(Vector3(+22, 1, 25), Vector3(0.8f, 2.2f, 2), Vector3(0), 5, 7);
 		set_gear(Vector3(+11, 1, 25), Vector3(0.8f, 2.2f, 2), Vector3(0), 5, 7);

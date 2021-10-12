@@ -26,7 +26,7 @@ void ALP_Joint::adapt_Jointdata() {
 
 void ALP_Joint::destroy(ALP_Collider* coll_ptr, const bool is_delete_userjoint) {
 	// physics_manager‚©‚çíœ
-	Phyisics_manager::remove_Joint(this_itr);
+	Physics_manager::remove_Joint(this_itr);
 
 	// coll_ptr‚Ì‘Š•û‚Ì•ÛŽ‚·‚éjoint”z—ñ‚©‚çŽ©g‚ðíœ
 	if (ALPcollider[0] != coll_ptr) ALPcollider[0]->remove_joint(this);

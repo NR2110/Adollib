@@ -1,4 +1,19 @@
-﻿  ALP__physics_manager.cpp
+﻿  loop.cpp
+  gameobject_manager.cpp
+  ALP__physics_manager.cpp
+  ALP_broadphase.cpp
   ALP_collider.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.cpp(118,26): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
+  ALP_contact.cpp
+  ALP_integrate.cpp
+  ALP_joint.cpp
+  ALP_physics.cpp
+  ALP_resolve_contact.cpp
+  ALP_resolve_contact_SIM.cpp
+  collider.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact_SIM.cpp(462,21): warning C4101: 'position': ローカル変数は 1 度も使われていません。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.cpp(98,26): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
+  collider_shape.cpp
+  joint.cpp
+  joint_base.cpp
+  ray.cpp
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

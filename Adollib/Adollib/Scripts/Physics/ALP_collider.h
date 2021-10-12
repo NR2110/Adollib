@@ -115,6 +115,9 @@ namespace Adollib {
 			//::: アタッチされたgameobjectが削除されたとき trueにする 別スレッドなので削除するタイミングが異なるから
 			bool is_deleted = false;
 
+			//::: addedの配列からメインの配列にadaptされたらtrueにする (itrがaddedを指すのかmainの配列を刺すのかわからないため)
+			bool is_added = false;
+
 		public:
 			// added_dataをmainのdata配列に引っ越す
 			void adapt_added_data() {

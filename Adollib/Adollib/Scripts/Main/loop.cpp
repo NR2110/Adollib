@@ -49,12 +49,15 @@ bool loop::Render(){
 }
 
 bool loop::destroy() {
-	Adollib::Imgui_manager::destroy();
+
 	for (int i = 0; i < static_cast<int>(Scenelist::scene_list_size); i++) {
 		Gameobject_manager::destroy(static_cast<Scenelist>(i));
 	}
 
-	Physics_function::Phyisics_manager::destroy();
+	Physics_function::Physics_manager::thread_stop_and_join();
+	Physics_function::Physics_manager::destroy();
+
+	Adollib::Imgui_manager::destroy();
 
 	return true;
 }

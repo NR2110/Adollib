@@ -74,6 +74,9 @@ namespace Adollib {
 		public:
 			ALP_Solverbody* solve = nullptr; //衝突解決用
 
+			//::: addedの配列からメインの配列にadaptされたらtrueにする (itrがaddedを指すのかmainの配列を刺すのかわからないため)
+			bool is_added = false;
+
 			//::: 変更可 :::::::::::::::::::::::::::::
 			float inertial_mass = 0; //質量
 			float linear_drag = 0; //空気抵抗
@@ -191,7 +194,7 @@ namespace Adollib {
 			// 慣性モーメントの逆行列を返す
 			Matrix33 inverse_inertial_tensor() const;
 
-			// マネージャーからこのクラスのremove itrがprivateなためメンバ関数でremoveする
+			// マネージャーからこのクラスのremove, itrがprivateなためメンバ関数でremoveする
 			void destroy();
 
 		};

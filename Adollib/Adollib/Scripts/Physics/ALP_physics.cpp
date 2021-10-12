@@ -142,7 +142,7 @@ void ALP_Physics::apply_external_force(float duration, const float timeratio_60)
 		angula_acceleration = vector3_quatrotate(angula_acceleration, transform->orientation) / duration;
 
 		linear_acceleration += accumulated_force * inv_mass / duration;
-		if (is_fallable) linear_acceleration += Vector3(0, -Phyisics_manager::physicsParams.gravity, 0); //落下
+		if (is_fallable) linear_acceleration += Vector3(0, -Physics_manager::physicsParams.gravity, 0); //落下
 		linear_velocity_ += linear_acceleration * duration;
 
 		//各回転に加える力(accumulated_torque)から加速度を出して角速度を更新する
@@ -179,8 +179,8 @@ void ALP_Physics::integrate(float duration) {
 
 	if (is_movable() == false)return;
 
-	if (linear_velocity_.norm() < Phyisics_manager::physicsParams.linear_sleep_threrhold * Phyisics_manager::physicsParams.linear_sleep_threrhold &&
-		angula_velocity_.norm() < Phyisics_manager::physicsParams.angula_sleep_threrhold * Phyisics_manager::physicsParams.angula_sleep_threrhold) {
+	if (linear_velocity_.norm() < Physics_manager::physicsParams.linear_sleep_threrhold * Physics_manager::physicsParams.linear_sleep_threrhold &&
+		angula_velocity_.norm() < Physics_manager::physicsParams.angula_sleep_threrhold * Physics_manager::physicsParams.angula_sleep_threrhold) {
 		sleep_timer += duration;
 	}
 	else sleep_timer = 0;
@@ -419,5 +419,5 @@ void ALP_Physics::adapt_collider_component_data() {
 }
 
 void ALP_Physics::destroy() {
-	Phyisics_manager::remove_ALPphysics(scene, this_itr);
+	Physics_manager::remove_ALPphysics(scene, this_itr);
 }

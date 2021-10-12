@@ -35,6 +35,9 @@ namespace Adollib {
 
 			Adollib::Joint_base* userjoint = nullptr; //ユーザーの触る情報へのポインタ
 
+			//::: addedの配列からメインの配列にadaptされたらtrueにする (itrがaddedを指すのかmainの配列を刺すのかわからないため)
+			bool is_added = false;
+
 		private:
 			std::list<ALP_Joint*>::iterator this_itr{}; //physics_manager内の自身へのイテレータ
 

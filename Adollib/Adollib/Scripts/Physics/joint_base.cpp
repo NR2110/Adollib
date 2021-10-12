@@ -8,7 +8,7 @@ using namespace Physics_function;
 
 void Joint_base::destroy() {
 
-	Phyisics_manager::add_delete_buffer_ALPJoint(ALPjoint);
+	Physics_manager::add_delete_buffer_ALPJoint(ALPjoint);
 	//ALPjoint->destroy(nullptr, false);
 	//delete ALPjoint;
 

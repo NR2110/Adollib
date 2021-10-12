@@ -114,7 +114,7 @@ namespace Adollib
 			bool is_static = false; //static同士は衝突せず oncoll_enterが発生しない けど軽くなる
 		};
 
-		class Phyisics_manager
+		class Physics_manager
 		{
 		private:
 			static LARGE_INTEGER frame_count; //
@@ -144,6 +144,10 @@ namespace Adollib
 
 			static int count_mainthread;
 			static int count_physicsthread;
+
+			static std::thread physics_thread; //trueになったときthread_updateを止める
+			static bool is_stop_physics_thread; //trueになったときthread_updateを止める
+
 		public:
 			static bool is_updated_mainthread;    //mainthread更新したframeだけtrueになる
 			static bool is_updated_physicsthread; //physicsを更新したframeだけtrueになる
@@ -154,6 +158,7 @@ namespace Adollib
 			static bool is_draw_collider; //COlliderの表示
 			static bool is_draw_dop; //dopの表示(14-DOPを表示するのがめんどくさいためAABBを表示する)
 			static bool is_draw_joint; //jointの表示
+
 
 		public:
 			struct ColliderPhysics_ptrs {
@@ -254,20 +259,30 @@ namespace Adollib
 
 			//::: 配列からの削除。deleteはしない :::
 			static void remove_Joint(std::list<Physics_function::ALP_Joint*>::iterator joint_itr) {
-				ALP_joints.erase(joint_itr);
+				if((*joint_itr)->is_added)
+					ALP_joints.erase(joint_itr);
+				else
+					added_ALP_joints.erase(joint_itr);
 			};
 			static void remove_ALPcollider(
 				const Scenelist Sce,
 				std::list<Physics_function::ALP_Collider*>::iterator ALPcoll_itr
 			) {
 				remove_collider_broad_phase(*ALPcoll_itr);
-				ALP_colliders[Sce].erase(ALPcoll_itr);
+
+				if ((*ALPcoll_itr)->is_added)
+					ALP_colliders[Sce].erase(ALPcoll_itr);
+				else
+					added_ALP_colliders[Sce].erase(ALPcoll_itr);
 			}
 			static void remove_ALPphysics(
 				const Scenelist Sce,
 				std::list<Physics_function::ALP_Physics*>::iterator ALPphs_itr
 			) {
-				ALP_physicses[Sce].erase(ALPphs_itr);
+				if((*ALPphs_itr)->is_added)
+					ALP_physicses[Sce].erase(ALPphs_itr);
+				else
+					added_ALP_physicses[Sce].erase(ALPphs_itr);
 			}
 
 		public:
@@ -299,34 +314,32 @@ namespace Adollib
 			}
 
 		private:
+			// スレッド用 update while分でupdateを回している
+			static void thread_update();
 
 			// 追加されたものを適応する(マルチスレッドだと処理途中に追加されるためbufferを挟む)
 			static void adapt_added_data(Scenelist Sce);
 
 			// 削除されたものを適応する(マルチスレッドだと処理途中にGOが削除されるためbufferを挟む)
-			static void dadapt_delete_data(Scenelist Sce, bool is_mutex_lock = true);
+			static void dadapt_delete_data(bool is_mutex_lock = true);
 
 		public:
 			// gameobject.transformをALPcollider.transformで上書きする
-			static void adapt_transform_to_gameobject(Scenelist Sce) {
-				count_mainthread += 1;
-				if (is_updated_physicsthread == false)
-					return;
+			static void adapt_transform_to_gameobject(Scenelist Sce);
 
-				std::lock_guard <std::mutex> lock(mtx);
-				for (auto coll : ALP_colliders[Sce]) {
-					coll->adapt_to_gameobject_transform();
-				}
-				//if (is_calculating_physics)is_called_adapt_transform_to_gameobject_for_calculate_phsics = true;
-				//is_updated_mainthread = true;
-				is_updated_physicsthread = false;
-			}
+			// 別threadでupdateを回す
+			static void thread_start();
 
-			//static bool init();
+			// 別threadでのupdateを止めて、joinを行う
+			static void thread_stop_and_join();
+
+		public:
+			// main threadから呼ばれる
 
 			// 毎フレーム呼ばれる更新処理
 			static bool update(Scenelist Sce = Scene::now_scene);
 
+			// Guiの表示
 			static bool update_Gui();
 
 			// colliderの表示

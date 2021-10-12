@@ -40,9 +40,9 @@ void Collider::add_angula_acc(const Vector3& acc) {
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 void Collider::awake() {
-	Phyisics_manager::ColliderPhysics_ptrs data;
+	Physics_manager::ColliderPhysics_ptrs data;
 
-	data = Phyisics_manager::add_collider(this);
+	data = Physics_manager::add_collider(this);
 
 	ALPcollider_ptr = data.ALPcollider_ptr;
 	ALPphysics_ptr = data.ALPphysics_ptr;
@@ -55,7 +55,7 @@ void Collider::finalize() {
 
 	//Phyisics_manager::add_delete_buffer_ALPCollider(ALPcollider_ptr);
 	//Phyisics_manager::add_delete_buffer_ALPPhysics(ALPphysics_ptr);
-	Phyisics_manager::add_delete_buffer_ALPCollider_and_ALPPhsics(ALPcollider_ptr, ALPphysics_ptr);
+	Physics_manager::add_delete_buffer_ALPCollider_and_ALPPhsics(ALPcollider_ptr, ALPphysics_ptr);
 	////アタッチされたALP_Collider,ALP_Physicsの終了処理
 	//ALPcollider_ptr->destroy();
 	//ALPphysics_ptr->destroy();

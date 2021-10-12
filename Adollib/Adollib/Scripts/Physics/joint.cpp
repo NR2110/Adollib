@@ -15,7 +15,7 @@ BallJoint* Joint::add_balljoint(
 	const float& bias
 ) {
 	//joint‚Ì¶¬
-	auto joint = Phyisics_manager::add_Joint();
+	auto joint = Physics_manager::add_Joint();
 	colliderA->set_ptr_to_joint(joint);
 	colliderB->set_ptr_to_joint(joint);
 
@@ -37,7 +37,7 @@ HingeJoint* Joint::add_Hingejoint(
 	const float& hingepow
 ) {
 	//joint‚Ì¶¬
-	auto joint = Phyisics_manager::add_Joint();
+	auto joint = Physics_manager::add_Joint();
 	colliderA->set_ptr_to_joint(joint);
 	colliderB->set_ptr_to_joint(joint);
 
@@ -65,7 +65,7 @@ ConeJoint* Joint::add_Conejoint(
 	const float& bias
 ) {
 	//joint‚Ì¶¬
-	auto joint = Phyisics_manager::add_Joint();
+	auto joint = Physics_manager::add_Joint();
 	colliderA->set_ptr_to_joint(joint);
 	colliderB->set_ptr_to_joint(joint);
 
@@ -90,7 +90,7 @@ ConetwistJoint* Joint::add_Conetwistjoint(
 	const float& bias
 ) {
 	//joint‚Ì¶¬
-	auto joint = Phyisics_manager::add_Joint();
+	auto joint = Physics_manager::add_Joint();
 	colliderA->set_ptr_to_joint(joint);
 	colliderB->set_ptr_to_joint(joint);
 
@@ -114,7 +114,7 @@ TwistJoint* Joint::add_Twistjoint(
 	const float& bias
 ) {
 	//joint‚Ì¶¬
-	auto joint = Phyisics_manager::add_Joint();
+	auto joint = Physics_manager::add_Joint();
 	colliderA->set_ptr_to_joint(joint);
 	colliderB->set_ptr_to_joint(joint);
 
