@@ -28,7 +28,7 @@ void Physics_function::adapt_joint_limit(std::list<Physics_function::ALP_Joint*>
 #pragma region ALP_colliders
 //:::::::::::::::::::::::::::::::::::::::::::::::::::
 
-void Physics_function::update_world_trans(std::list<Physics_function::ALP_Collider*>& ALP_colliders){
+void Physics_function::update_world_trans(std::list<Physics_function::ALP_Collider*>& ALP_colliders) {
 
 	std::for_each(ALP_colliders.begin(), ALP_colliders.end(), [](ALP_Collider* coll) {
 		coll->update_world_trans();
@@ -54,7 +54,7 @@ void Physics_function::resetforce(std::list<Physics_function::ALP_Physics*>& ALP
 }
 
 //外力による速度などの更新
-void Physics_function::applyexternalforce(std::list<Physics_function::ALP_Physics*>& ALP_physics,const float timeratio_60) {
+void Physics_function::applyexternalforce(std::list<Physics_function::ALP_Physics*>& ALP_physics, const float timeratio_60) {
 
 	std::for_each(ALP_physics.begin(), ALP_physics.end(), [&](ALP_Physics* phys) {
 		phys->apply_external_force(Physics_manager::physicsParams.timeStep, timeratio_60);

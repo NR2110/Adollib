@@ -25,9 +25,8 @@ namespace Adollib
 		//set_desk(Vector3(0, 0, 0), Vector3(30, 15, 25), Vector3(0, 0, 0), 0);
 		set_box(Vector3(0, -60, 0), Vector3(80, 60, 40), Vector3(0), Vector3(188, 214, 54) / 255.0f,  true);
 
-		set_sphere_rope(Vector3(-40, 15, 40), 1.5f, Vector3(-90, 0, 0), 28, 5);
 #if _DEBUG
-#else
+//#else
 		//gear
 		set_gear(Vector3(+22, 1, 25), Vector3(0.8f, 2.2f, 2), Vector3(0), 5, 7);
 		set_gear(Vector3(+11, 1, 25), Vector3(0.8f, 2.2f, 2), Vector3(0), 5, 7);
@@ -72,8 +71,11 @@ namespace Adollib
 					),
 						sphere_size,
 						Vector3(1, 0, (1.0f / (sphere_count * sphere_count)) * index),
-						false
+						true
 					);
+					coll->physics_data.is_moveable = true;
+					coll->tag = Collider_tags::Sphere | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Kinematic_Stage | Collider_tags::Jumpable_Stage;
+
 					go = coll->gameobject;
 
 					pearent->add_child(go);
@@ -88,8 +90,8 @@ namespace Adollib
 				for (int zaxis = 0; zaxis < sphere_count; zaxis++) {
 					int index = xaxis * sphere_count + zaxis;
 
-					if (xaxis > 0) Joint::add_balljoint(colls[index], colls[index - sphere_count], Vector3(-sphere_size, 0, 0), Vector3(sphere_size, 0, 0), 0.1f);
-					if (zaxis > 0) Joint::add_balljoint(colls[index], colls[index - 1], Vector3(0, 0, -sphere_size), Vector3(0, 0, sphere_size), 0.1f);
+					if (xaxis > 0) Joint::add_balljoint(colls[index], colls[index - sphere_count], Vector3(-sphere_size, 0, 0), Vector3(sphere_size, 0, 0), 1);
+					if (zaxis > 0) Joint::add_balljoint(colls[index], colls[index - 1], Vector3(0, 0, -sphere_size), Vector3(0, 0, sphere_size), 1);
 				}
 			}
 		}

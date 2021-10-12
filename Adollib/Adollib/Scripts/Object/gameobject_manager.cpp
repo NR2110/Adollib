@@ -63,15 +63,6 @@ void Gameobject_manager::awake() {
 
 }
 
-void update_physics() {
-
-	while (true)
-	{
-		Physics_manager::update();
-	}
-
-}
-
 void Gameobject_manager::initialize(Scenelist Sce) {
 	if (Sce == Scenelist::scene_null)return;
 
@@ -81,10 +72,6 @@ void Gameobject_manager::initialize(Scenelist Sce) {
 	}
 
 	static std::thread update_physics_;
-
-
-	//update_physics_ = std::thread(update_physics);
-	//Physics_manager::is_updated_mainthread = false;
 
 	Physics_manager::thread_start();
 }
@@ -107,8 +94,6 @@ void Gameobject_manager::update(Scenelist Sce) {
 			masters_manag[master] = true;
 		}
 	}
-
-	//Phyisics_manager::update();
 
 #ifdef UseImgui
 	Physics_manager::update_Gui();
@@ -134,6 +119,7 @@ void Gameobject_manager::update(Scenelist Sce) {
 		}
 
 		Physics_manager::is_updated_mainthread = true;
+		//Physics_manager::is_updated_physicsthread = true;
 	}
 
 

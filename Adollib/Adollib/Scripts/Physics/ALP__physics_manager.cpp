@@ -26,8 +26,8 @@ using namespace Contacts;
 
 namespace Adollib
 {
-	bool Physics_manager::is_updated_mainthread = true; //physicsを更新したframeだけtrueになる
-	bool Physics_manager::is_updated_physicsthread = true; //physicsを更新したframeだけtrueになる
+	volatile bool Physics_manager::is_updated_mainthread = true; //physicsを更新したframeだけtrueになる
+	volatile bool Physics_manager::is_updated_physicsthread = true; //physicsを更新したframeだけtrueになる
 
 	int Physics_manager::count_mainthread = 0;   //デバッグ用 main,physicsのupdateの割合を求める
 	int Physics_manager::count_physicsthread = 0;//デバッグ用 main,physicsのupdateの割合を求める
@@ -75,18 +75,7 @@ bool Physics_manager::update(Scenelist Sce)
 	//	// 最適化されないように
 	//	// この他のthreadからis_updated_mainthreadは変更されるが 最適化されるとこのwhileを省略されてしまう
 	//	// volatileをつけた変数を経由することで最適化を防ぐ
-	//	volatile bool buf = Phyisics_manager::is_updated_mainthread;
-	//	if (buf)break;
-	//}
-	//Phyisics_manager::is_updated_mainthread = false;
-	//Phyisics_manager::is_updated_physicsthread = true;
-
-	//while (true) {
-	//	// 最適化されないように
-	//	// この他のthreadからis_updated_mainthreadは変更されるが 最適化されるとこのwhileを省略されてしまう
-	//	// volatileをつけた変数を経由することで最適化を防ぐ
-	//	volatile bool buf = Phyisics_manager::is_updated_mainthread;
-	//	if (buf)break;
+	//	if (Physics_manager::is_updated_mainthread)break;
 	//}
 
 	Work_meter::start("Phyisics_manager");
@@ -145,16 +134,15 @@ bool Physics_manager::update(Scenelist Sce)
 	}
 
 
-	// physicsの計算部分の時trueにする
+	physicsParams.timeStep = ALmin((float)(time.QuadPart - frame_count.QuadPart) * seconds_per_count, physicsParams.max_timeStep);
+	if(physicsParams.timeStep > inv60)
 	{
-		//	std::lock_guard <std::mutex> lock(mtx);
-
-		physicsParams.timeStep = ALmin((float)(time.QuadPart - frame_count.QuadPart) * seconds_per_count, physicsParams.max_timeStep);
 		frame_count = time;
+		physicsParams.timeStep = inv60;
 
 		Work_meter::set("physicsParams.timeStep", physicsParams.timeStep);
 
-		physicsParams.timeStep /= physicsParams.calculate_iteration;
+		//physicsParams.timeStep /= physicsParams.calculate_iteration;
 
 		for (int i = 0; i < physicsParams.calculate_iteration; i++) {
 
@@ -520,6 +508,7 @@ void Physics_manager::thread_start() {
 // 別threadでのupdateを止めて、joinを行う
 void Physics_manager::thread_stop_and_join() {
 	is_stop_physics_thread = true;
+	is_updated_mainthread = true;
 	if(physics_thread.joinable())physics_thread.join();
 }
 
