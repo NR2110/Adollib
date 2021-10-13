@@ -91,7 +91,7 @@ namespace Adollib
 			float slop = 0.003f;//衝突の許容値
 
 			int solver_iteration = 5; //衝突の精度
-			int calculate_iteration = 1; //計算の精度
+			int calculate_iteration = 2; //計算の精度
 			bool hit_backfaces_flag = false;//meshの後ろから衝突するか
 
 			float timeStep = 0.016f;
@@ -324,8 +324,8 @@ namespace Adollib
 			static void dadapt_delete_data(bool is_mutex_lock = true);
 
 		public:
-			// gameobject.transformをALPcollider.transformで更新する
-			static void adapt_transform_to_gameobject(Scenelist Sce);
+			// gameobject.transformをALPcollider.transformで更新する gameobjectのtransformが変化したらtrueを返す
+			static bool adapt_transform_to_gameobject(Scenelist Sce);
 
 			// 別threadでupdateを回す
 			static void thread_start();

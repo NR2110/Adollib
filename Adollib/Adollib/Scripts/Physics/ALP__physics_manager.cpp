@@ -97,14 +97,14 @@ bool Physics_manager::update(Scenelist Sce)
 	}
 
 
-	count_physicsthread += 1;
-	if (count_physicsthread != 0 && count_mainthread != 0) {
-		Work_meter::set("physicsthread_per_mainthread* 0.001f", (float)count_physicsthread / count_mainthread * 0.01f);
-		Work_meter::set("mainthread_per_physicsthread* 0.001f", (float)count_mainthread / count_physicsthread * 0.01f);
+	//count_physicsthread += 1;
+	//if (count_physicsthread != 0 && count_mainthread != 0) {
+	//	Work_meter::set("physicsthread_per_mainthread* 0.001f", (float)count_physicsthread / count_mainthread * 0.01f);
+	//	Work_meter::set("mainthread_per_physicsthread* 0.001f", (float)count_mainthread / count_physicsthread * 0.01f);
 
-		count_physicsthread = 0;
-		count_mainthread = 0;
-	}
+	//	count_physicsthread = 0;
+	//	count_mainthread = 0;
+	//}
 
 	// mainthreadが更新したら
 	if (is_updated_mainthread) {
@@ -135,14 +135,15 @@ bool Physics_manager::update(Scenelist Sce)
 
 
 	physicsParams.timeStep = ALmin((float)(time.QuadPart - frame_count.QuadPart) * seconds_per_count, physicsParams.max_timeStep);
+	Work_meter::set("physicsParams.timeStep", physicsParams.timeStep);
 	if(physicsParams.timeStep > inv60)
 	{
+
+
 		frame_count = time;
 		physicsParams.timeStep = inv60;
 
-		Work_meter::set("physicsParams.timeStep", physicsParams.timeStep);
-
-		//physicsParams.timeStep /= physicsParams.calculate_iteration;
+		physicsParams.timeStep /= physicsParams.calculate_iteration;
 
 		for (int i = 0; i < physicsParams.calculate_iteration; i++) {
 
@@ -185,14 +186,14 @@ bool Physics_manager::update(Scenelist Sce)
 				// 計算中にgameobjectへtransformが適応されていた場合 ちゃんとtransformを更新してからintegrateを行う
 				if (is_updated_mainthread) {
 					is_updated_mainthread = false; // mainthreadがgameobject_transformを呼んだあと gameobjectのtransformをphysicsにコピーする
-					is_updated_physicsthread = false; // is_updated_physicsthreadがtrueになっていると  adapt_to_gameobject_transformが呼ばれてis_updated_mainthreadがtrueになる可能性がある
 
 					// Colliderのframe毎に保存するdataをreset
 					reset_data_per_frame(ALP_colliders[Sce], ALP_physicses[Sce]);
 				}
-
 				// 位置の更新
 				integrate(ALP_physicses[Sce]);
+				is_updated_physicsthread = true;
+
 			}
 		}
 
@@ -280,7 +281,8 @@ bool Physics_manager::update(Scenelist Sce)
 #endif // DEBUG
 
 
-	is_updated_physicsthread = true;
+	//is_updated_mainthread = false;
+	//is_updated_physicsthread = true;
 	return true;
 
 }
@@ -482,18 +484,21 @@ void Physics_manager::dadapt_delete_data(bool is_mutex_lock) {
 
 }
 
-void Physics_manager::adapt_transform_to_gameobject(Scenelist Sce) {
+bool Physics_manager::adapt_transform_to_gameobject(Scenelist Sce) {
 	count_mainthread += 1;
+
 	if (is_updated_physicsthread == false)
-		return;
+		return false;
 
 	std::lock_guard <std::mutex> lock(mtx);
+
 	for (auto coll : ALP_colliders[Sce]) {
 		coll->adapt_to_gameobject_transform();
 	}
-	//if (is_calculating_physics)is_called_adapt_transform_to_gameobject_for_calculate_phsics = true;
-	//is_updated_mainthread = true;
+
 	is_updated_physicsthread = false;
+
+	return true;
 }
 
 

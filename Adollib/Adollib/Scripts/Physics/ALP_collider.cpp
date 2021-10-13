@@ -151,9 +151,6 @@ void ALP_Collider::reset_data_per_frame() {
 
 	oncoll_bits = 0;
 
-	Vector3 off_pos = Vector3(0);
-	Quaternion off_quat = quaternion_identity();
-
 	start_transform.position = gameobject->transform->position;
 	start_transform.orientation = gameobject->transform->orientation;
 	start_transform.scale = gameobject->transform->scale;

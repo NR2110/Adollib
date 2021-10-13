@@ -87,6 +87,9 @@ void Collider::Update_hierarchy() {
 		ImGui::DragFloat("linear_drag", &physics_data.drag, 0.01f, 0, 1);
 		ImGui::DragFloat("anglar_drag", &physics_data.anglar_drag, 0.01f, 0, 1);
 
+		ImGui::Text("linear_velocity : %f", linear_velocity().norm_sqr());
+		ImGui::Text("angula_velocity : %f", angula_velocity().norm_sqr());
+
 
 		ImGui::EndTabBar();
 	}

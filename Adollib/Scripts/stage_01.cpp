@@ -26,7 +26,7 @@ namespace Adollib
 		set_box(Vector3(0, -60, 0), Vector3(80, 60, 40), Vector3(0), Vector3(188, 214, 54) / 255.0f,  true);
 
 #if _DEBUG
-//#else
+#else
 		//gear
 		set_gear(Vector3(+22, 1, 25), Vector3(0.8f, 2.2f, 2), Vector3(0), 5, 7);
 		set_gear(Vector3(+11, 1, 25), Vector3(0.8f, 2.2f, 2), Vector3(0), 5, 7);
@@ -47,7 +47,7 @@ namespace Adollib
 		//croth
 		{
 			Gameobject* pearent = Gameobject_manager::create("BallJoint_Shperenet");
-			pearent->transform->local_pos = Vector3(75, 30, 27);
+			pearent->transform->local_pos = Vector3(72, 30, 22);
 			pearent->transform->local_orient = quaternion_from_euler(0, 45, 0);
 			std::vector<Collider*>colls;
 			stage_parts.emplace_back(pearent);

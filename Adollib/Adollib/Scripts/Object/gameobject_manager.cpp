@@ -73,7 +73,7 @@ void Gameobject_manager::initialize(Scenelist Sce) {
 
 	static std::thread update_physics_;
 
-	Physics_manager::thread_start();
+	//Physics_manager::thread_start();
 }
 
 void Gameobject_manager::update(Scenelist Sce) {
@@ -103,10 +103,28 @@ void Gameobject_manager::update(Scenelist Sce) {
 	//while (true) { if (Physics_manager::is_updated_physicsthread == true)break; }
 	//Physics_manager::is_updated_physicsthread = false;
 	//Physics_manager::is_updated_mainthread = true;
-	//Physics_manager::update();
+	Physics_manager::update();
 	//while (true) { if (Physics_manager::is_updated_physicsthread == true)break; }
 
 	Physics_manager::adapt_transform_to_gameobject(Sce);
+
+	//親から子に座標の更新を行う
+	{
+		std::unordered_map<Object*, bool> masters_manag;
+		for (auto& GO : gos) {
+			Object* master = GO->top_parent();
+			if (masters_manag.count(master) == 0) {
+				master->update_world_trans_to_children();
+			}
+			masters_manag[master] = true;
+		}
+
+		Physics_manager::is_updated_mainthread = true;
+		//Physics_manager::is_updated_physicsthread = true;
+	}
+
+	Physics_manager::adapt_transform_to_gameobject(Sce);
+
 	//親から子に座標の更新を行う
 	{
 		std::unordered_map<Object*, bool> masters_manag;
