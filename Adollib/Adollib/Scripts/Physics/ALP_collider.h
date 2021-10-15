@@ -109,8 +109,9 @@ namespace Adollib {
 
 		public:
 			//::: マルチスレッドにするためtransformのworld情報を保存する :::
-			world_trans start_transform; //初めの値
+			world_trans transform_start; //初めの値
 			world_trans transform; //計算している値 (初めの値との差を移動量としてgameobject.transformに入れる)
+			world_trans transform_for_GO; //gameobjectへ渡すためのtransform
 
 			//::: アタッチされたgameobjectが削除されたとき trueにする 別スレッドなので削除するタイミングが異なるから
 			bool is_deleted = false;
@@ -185,6 +186,8 @@ namespace Adollib {
 			//::: mainthreadから呼ばれる :::
 			// gameobjectのtransformへ自身の保持するtransformを入れる
 			void adapt_to_gameobject_transform() const;
+
+			void adapt_transform_for_GO();
 
 			// ヒエラルキー描画用
 			void Update_hierarchy();

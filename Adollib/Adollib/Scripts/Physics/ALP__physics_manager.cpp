@@ -89,6 +89,9 @@ bool Physics_manager::update(Scenelist Sce)
 	if (Al_Global::second_per_game < 1) {
 		adapt_added_data(Sce);
 		reset_data_per_frame(ALP_colliders[Sce], ALP_physicses[Sce]);
+		for (auto& coll : ALP_colliders[Sce]) {
+			coll->adapt_transform_for_GO();
+		}
 
 		resetforce(ALP_physicses[Sce]);
 		is_updated_physicsthread = true;
@@ -97,29 +100,32 @@ bool Physics_manager::update(Scenelist Sce)
 	}
 
 
-	//count_physicsthread += 1;
-	//if (count_physicsthread != 0 && count_mainthread != 0) {
-	//	Work_meter::set("physicsthread_per_mainthread* 0.001f", (float)count_physicsthread / count_mainthread * 0.01f);
-	//	Work_meter::set("mainthread_per_physicsthread* 0.001f", (float)count_mainthread / count_physicsthread * 0.01f);
 
-	//	count_physicsthread = 0;
-	//	count_mainthread = 0;
-	//}
+	// データの受け渡し部分
+	{
+		std::lock_guard <std::mutex> lock(mtx);
+		// mainthreadが更新したら
+		if (is_updated_mainthread) {
+			is_updated_mainthread = false; // mainthreadがgameobject_transformを呼んだあと gameobjectのtransformをphysicsにコピーする
+			//is_updated_physicsthread = false; // is_updated_physicsthreadがtrueになっていると  adapt_to_gameobject_transformが呼ばれてis_updated_mainthreadがtrueになる可能性がある
 
-	// mainthreadが更新したら
-	if (is_updated_mainthread) {
-		is_updated_mainthread = false; // mainthreadがgameobject_transformを呼んだあと gameobjectのtransformをphysicsにコピーする
-		is_updated_physicsthread = false; // is_updated_physicsthreadがtrueになっていると  adapt_to_gameobject_transformが呼ばれてis_updated_mainthreadがtrueになる可能性がある
+			// 削除したものを配列から消す
+			dadapt_delete_data(false);
 
-		// 削除したものを配列から消す
-		dadapt_delete_data();
+			// 追加したものを配列に加える
+			adapt_added_data(Sce, false);
 
-		// 追加したものを配列に加える
-		adapt_added_data(Sce);
+			// Colliderのframe毎に保存するdataをreset
+			reset_data_per_frame(ALP_colliders[Sce], ALP_physicses[Sce]);
+		}
 
-		// Colliderのframe毎に保存するdataをreset
-		reset_data_per_frame(ALP_colliders[Sce], ALP_physicses[Sce]);
-
+		{
+			// transform_for_GOの更新
+			for (auto& coll : ALP_colliders[Sce]) {
+				coll->adapt_transform_for_GO();
+			}
+			is_updated_physicsthread = true;
+		}
 	}
 
 	// collider::componentのdataをコピーする。 deleteしたcomponentにアクセスしないようにdadapt_delete_dataを同mutex内で行う
@@ -136,9 +142,9 @@ bool Physics_manager::update(Scenelist Sce)
 
 	physicsParams.timeStep = ALmin((float)(time.QuadPart - frame_count.QuadPart) * seconds_per_count, physicsParams.max_timeStep);
 	Work_meter::set("physicsParams.timeStep", physicsParams.timeStep);
-	if(physicsParams.timeStep > inv60)
+	if (physicsParams.timeStep > inv60)
 	{
-
+		//is_updated_physicsthread = false;
 
 		frame_count = time;
 		physicsParams.timeStep = inv60;
@@ -182,18 +188,17 @@ bool Physics_manager::update(Scenelist Sce)
 			Work_meter::stop("Resolve");
 
 			{
-				std::lock_guard <std::mutex> lock(mtx);
-				// 計算中にgameobjectへtransformが適応されていた場合 ちゃんとtransformを更新してからintegrateを行う
-				if (is_updated_mainthread) {
-					is_updated_mainthread = false; // mainthreadがgameobject_transformを呼んだあと gameobjectのtransformをphysicsにコピーする
+				//std::lock_guard <std::mutex> lock(mtx);
+				//// 計算中にgameobjectへtransformが適応されていた場合 ちゃんとtransformを更新してからintegrateを行う
+				//if (is_updated_mainthread) {
+				//	is_updated_mainthread = false; // mainthreadがgameobject_transformを呼んだあと gameobjectのtransformをphysicsにコピーする
 
-					// Colliderのframe毎に保存するdataをreset
-					reset_data_per_frame(ALP_colliders[Sce], ALP_physicses[Sce]);
-				}
+				//	//Colliderのframe毎に保存するdataをreset
+				//	reset_data_per_frame(ALP_colliders[Sce], ALP_physicses[Sce]);
+				//}
 				// 位置の更新
 				integrate(ALP_physicses[Sce]);
-				is_updated_physicsthread = true;
-
+				//is_updated_physicsthread = true;
 			}
 		}
 
@@ -392,8 +397,8 @@ void Physics_manager::thread_update() {
 	}
 }
 
-void Physics_manager::adapt_added_data(Scenelist Sce) {
-	std::lock_guard <std::mutex> lock(mtx); //呼び出しのところでlockしている
+void Physics_manager::adapt_added_data(Scenelist Sce, bool is_mutex_lock) {
+	if (is_mutex_lock)std::lock_guard <std::mutex> lock(mtx); //呼び出しのところでlockしている
 
 	for (auto added_coll : added_ALP_colliders) {
 		// 追加されたcolliderをbroadphase:sweep&prune用に
@@ -457,7 +462,7 @@ void Physics_manager::adapt_added_data(Scenelist Sce) {
 }
 
 void Physics_manager::dadapt_delete_data(bool is_mutex_lock) {
-	if(is_mutex_lock)std::lock_guard <std::mutex> lock(mtx); //呼び出しのところでlockしている
+	if (is_mutex_lock)std::lock_guard <std::mutex> lock(mtx); //呼び出しのところでlockしている
 
 	for (auto deleted_coll : dalated_ALP_colliders) {
 		// 削除されたcollider
@@ -490,7 +495,7 @@ bool Physics_manager::adapt_transform_to_gameobject(Scenelist Sce) {
 	if (is_updated_physicsthread == false)
 		return false;
 
-	std::lock_guard <std::mutex> lock(mtx);
+	//std::lock_guard <std::mutex> lock(mtx);
 
 	for (auto coll : ALP_colliders[Sce]) {
 		coll->adapt_to_gameobject_transform();
@@ -506,7 +511,7 @@ bool Physics_manager::adapt_transform_to_gameobject(Scenelist Sce) {
 void Physics_manager::thread_start() {
 	is_stop_physics_thread = false;
 	is_updated_mainthread = false;
-	is_updated_physicsthread = true;
+	is_updated_physicsthread = false;
 	physics_thread = std::thread(thread_update);
 }
 
@@ -514,7 +519,7 @@ void Physics_manager::thread_start() {
 void Physics_manager::thread_stop_and_join() {
 	is_stop_physics_thread = true;
 	is_updated_mainthread = true;
-	if(physics_thread.joinable())physics_thread.join();
+	if (physics_thread.joinable())physics_thread.join();
 }
 
 

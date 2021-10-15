@@ -27,6 +27,8 @@
 
 #include <thread>
 
+//#define Use_physics_thread
+
 using namespace Adollib;
 using namespace Physics_function;
 using namespace ConstantBuffer;
@@ -73,7 +75,11 @@ void Gameobject_manager::initialize(Scenelist Sce) {
 
 	static std::thread update_physics_;
 
-	//Physics_manager::thread_start();
+#ifdef Use_physics_thread
+	Physics_manager::thread_start();
+
+#endif // Use_physics_thread
+
 }
 
 void Gameobject_manager::update(Scenelist Sce) {
@@ -100,45 +106,38 @@ void Gameobject_manager::update(Scenelist Sce) {
 
 #endif
 
+#ifndef Use_physics_thread
+	Physics_manager::update();
+
+#endif // Use_physics_thread
+
+	{
+		std::lock_guard <std::mutex> lock(Physics_manager::mtx);
+
+		if(Physics_manager::is_updated_physicsthread)
+		Physics_manager::adapt_transform_to_gameobject(Sce);
+
+		//親から子に座標の更新を行う
+		{
+			std::unordered_map<Object*, bool> masters_manag;
+			for (auto& GO : gos) {
+				Object* master = GO->top_parent();
+				if (masters_manag.count(master) == 0) {
+					master->update_world_trans_to_children();
+				}
+				masters_manag[master] = true;
+			}
+
+			Physics_manager::is_updated_mainthread = true;
+			//Physics_manager::is_updated_physicsthread = true;
+		}
+	}
+
 	//while (true) { if (Physics_manager::is_updated_physicsthread == true)break; }
 	//Physics_manager::is_updated_physicsthread = false;
 	//Physics_manager::is_updated_mainthread = true;
-	Physics_manager::update();
+	///////////Physics_manager::update();
 	//while (true) { if (Physics_manager::is_updated_physicsthread == true)break; }
-
-	Physics_manager::adapt_transform_to_gameobject(Sce);
-
-	//親から子に座標の更新を行う
-	{
-		std::unordered_map<Object*, bool> masters_manag;
-		for (auto& GO : gos) {
-			Object* master = GO->top_parent();
-			if (masters_manag.count(master) == 0) {
-				master->update_world_trans_to_children();
-			}
-			masters_manag[master] = true;
-		}
-
-		Physics_manager::is_updated_mainthread = true;
-		//Physics_manager::is_updated_physicsthread = true;
-	}
-
-	Physics_manager::adapt_transform_to_gameobject(Sce);
-
-	//親から子に座標の更新を行う
-	{
-		std::unordered_map<Object*, bool> masters_manag;
-		for (auto& GO : gos) {
-			Object* master = GO->top_parent();
-			if (masters_manag.count(master) == 0) {
-				master->update_world_trans_to_children();
-			}
-			masters_manag[master] = true;
-		}
-
-		Physics_manager::is_updated_mainthread = true;
-		//Physics_manager::is_updated_physicsthread = true;
-	}
 
 
 	//親から子へupdateを呼ぶ update中に、親objectが削除されたときに対応できないため削除はいったんbufferに保管している

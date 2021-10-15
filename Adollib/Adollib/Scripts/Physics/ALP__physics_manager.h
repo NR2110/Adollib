@@ -119,7 +119,9 @@ namespace Adollib
 		private:
 			static LARGE_INTEGER frame_count; //
 
+		public:
 			static std::mutex mtx; //主にadd_collder,phsics,jointと added_dataの扱いの時
+		private:
 
 			static std::unordered_map<Scenelist, u_int> collider_index_count; //colliderにuniqueな値を割り振るため作成総数を保存
 
@@ -318,7 +320,7 @@ namespace Adollib
 			static void thread_update();
 
 			// 追加されたものを適応する(マルチスレッドだと処理途中に追加されるためbufferを挟む)
-			static void adapt_added_data(Scenelist Sce);
+			static void adapt_added_data(Scenelist Sce, bool is_mutex_lock = true);
 
 			// 削除されたものを適応する(マルチスレッドだと処理途中にGOが削除されるためbufferを挟む)
 			static void dadapt_delete_data(bool is_mutex_lock = true);

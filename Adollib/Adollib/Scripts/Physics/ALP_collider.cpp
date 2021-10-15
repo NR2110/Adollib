@@ -151,13 +151,29 @@ void ALP_Collider::reset_data_per_frame() {
 
 	oncoll_bits = 0;
 
-	start_transform.position = gameobject->transform->position;
-	start_transform.orientation = gameobject->transform->orientation;
-	start_transform.scale = gameobject->transform->scale;
+	//transform_start; //旧データ
+	//transform; //最新データ
+	//transform_for_GO; //旧データ
+	//gameobject.transform //旧データ+α
 
-	transform.position = start_transform.position;
-	transform.orientation = start_transform.orientation;
-	transform.scale = start_transform.scale;
+
+	transform.position = gameobject->transform->position + transform.position - transform_for_GO.position;
+	transform.orientation = (transform.orientation * transform_for_GO.orientation.inverse()) * gameobject->transform->orientation;
+	transform.scale = gameobject->transform->scale;
+	//transform.position = gameobject->transform->position;
+	//transform.orientation = gameobject->transform->orientation;
+	//transform.scale = gameobject->transform->scale;
+
+	transform_start.position     = gameobject->transform->position;
+	transform_start.orientation  = gameobject->transform->orientation;
+	transform_start.scale        = gameobject->transform->scale;
+	//transform_start.position     = gameobject->transform->position;
+	//transform_start.orientation  = gameobject->transform->orientation;
+	//transform_start.scale        = gameobject->transform->scale;
+
+	//transform_for_GO.position    = transform_start.position;
+	//transform_for_GO.orientation = transform_start.orientation;
+	//transform_for_GO.scale       = transform_start.scale;
 };
 
 void ALP_Collider::adapt_collider_component_data() {
@@ -186,10 +202,19 @@ void ALP_Collider::adapt_to_gameobject_transform() const
 		parent_orientate_inv = parent_orientate_inv.inverse();
 	}
 
-	gameobject->transform->local_pos += vector3_quatrotate(transform.position - start_transform.position, parent_orientate_inv);
-	const Quaternion buffer = start_transform.orientation.inverse() * transform.orientation;
+	//gameobject->transform->local_pos += vector3_quatrotate(transform.position - transform_start.position, parent_orientate_inv);
+	//const Quaternion buffer = transform_start.orientation.inverse() * transform.orientation;
+	//gameobject->transform->local_orient *= quaternion_axis_radian(vector3_quatrotate(buffer.axis(), parent_orientate_inv), buffer.radian());
+
+	gameobject->transform->local_pos += vector3_quatrotate(transform_for_GO.position - transform_start.position, parent_orientate_inv);
+	const Quaternion buffer = transform_start.orientation.inverse() * transform_for_GO.orientation;
 	gameobject->transform->local_orient *= quaternion_axis_radian(vector3_quatrotate(buffer.axis(), parent_orientate_inv), buffer.radian());
-	//gameobject->transform->local_scale *= transform.scale / start_transform.scale;
+
+	//gameobject->transform->local_scale *= transform_for_GO.scale / start_transform.scale;
+}
+
+void ALP_Collider::adapt_transform_for_GO() {
+	transform_for_GO = transform;
 }
 
 //:::::

@@ -47,7 +47,7 @@ namespace Adollib
 		//croth
 		{
 			Gameobject* pearent = Gameobject_manager::create("BallJoint_Shperenet");
-			pearent->transform->local_pos = Vector3(72, 30, 22);
+			pearent->transform->local_pos = Vector3(62, 30, 22);
 			pearent->transform->local_orient = quaternion_from_euler(0, 45, 0);
 			std::vector<Collider*>colls;
 			stage_parts.emplace_back(pearent);
@@ -90,8 +90,8 @@ namespace Adollib
 				for (int zaxis = 0; zaxis < sphere_count; zaxis++) {
 					int index = xaxis * sphere_count + zaxis;
 
-					if (xaxis > 0) Joint::add_balljoint(colls[index], colls[index - sphere_count], Vector3(-sphere_size, 0, 0), Vector3(sphere_size, 0, 0), 1);
-					if (zaxis > 0) Joint::add_balljoint(colls[index], colls[index - 1], Vector3(0, 0, -sphere_size), Vector3(0, 0, sphere_size), 1);
+					if (xaxis > 0) Joint::add_balljoint(colls[index], colls[index - sphere_count], Vector3(-sphere_size * 1.1f, 0, 0), Vector3(sphere_size * 1.1f, 0, 0), 1);
+					if (zaxis > 0) Joint::add_balljoint(colls[index], colls[index - 1], Vector3(0, 0, -sphere_size * 1.1f), Vector3(0, 0, sphere_size * 1.1f), 1);
 				}
 			}
 		}
