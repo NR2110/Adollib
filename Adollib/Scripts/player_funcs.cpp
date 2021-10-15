@@ -139,7 +139,7 @@ void Player::catch_things() {
 		//‚Â
 		if (input->getMouseState(key) && joint == nullptr && *is_maked_joint[i] == false) { //Key‚ª‰Ÿ‚³‚ê‚Ä‚¢‚é joint‚ª‘¶İ‚µ‚È‚¢ “¯state’†‚É•¨‚ğ‚Â‚©‚ñ‚Å‚¢‚È‚¢
 			collider->is_save_contacted_colls = true;
-			auto& contacted_colls = collider->contacted_colliders;
+			auto& contacted_colls = collider->get_Contacted_data();
 
 			//Õ“Ë‚µ‚Ä‚¢‚écollider‚©‚çˆê”Ô‹ß‚¢‚à‚Ì‚ğ’T¸
 			Contacted_data* min_data = nullptr;

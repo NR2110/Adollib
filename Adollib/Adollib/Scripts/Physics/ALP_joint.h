@@ -4,7 +4,7 @@
 #include "ALP_contact.h"
 #include "ALP_anchor.h"
 
-#include "ALP_world_transform.h"
+#include "ALP_struct_world_transform.h"
 
 namespace Adollib {
 	class Joint_base;

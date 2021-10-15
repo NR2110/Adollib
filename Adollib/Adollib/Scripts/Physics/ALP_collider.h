@@ -6,9 +6,12 @@
 
 #include "ALP__tags.h"
 #include "collider_shape.h"
-#include "ALP_world_transform.h"
+
+#include "ALP_struct_world_transform.h"
+#include "ALP_struct_contacted_data.h"
 
 #include <mutex>
+#include <vector>
 
 namespace Adollib {
 
@@ -50,17 +53,17 @@ namespace Adollib {
 			Gameobject* gameobject = nullptr;
 
 			//::: 自身へのイテレータ(remove用) :::
-			std::list<ALP_Collider*>::iterator this_itr{};
+			std::list<ALP_Collider*>::iterator this_itr;
 
 			//::: このColliderが属しているjointへのポインタ配列 :::
-			std::list<ALP_Joint*> joints{};
+			std::list<ALP_Joint*> joints;
 
 			u_int index = 0; //このcolliderのuniqueなID
 			Scenelist scene = Scenelist::scene_null; //このcolliderが存在するscene
 
 			//::: アタッチされたshapeの配列 :::
-			std::list<Collider_shape*> shapes{};
-			std::list<Collider_shape*> added_shapes{}; // マルチスレッド用 処理の途中で追加された要素
+			std::list<Collider_shape*> shapes;
+			std::list<Collider_shape*> added_shapes; // マルチスレッド用 処理の途中で追加された要素
 
 			//
 			std::mutex mtx;
@@ -111,13 +114,19 @@ namespace Adollib {
 			//::: マルチスレッドにするためtransformのworld情報を保存する :::
 			world_trans transform_start; //初めの値
 			world_trans transform; //計算している値 (初めの値との差を移動量としてgameobject.transformに入れる)
-			world_trans transform_for_GO; //gameobjectへ渡すためのtransform
 
 			//::: アタッチされたgameobjectが削除されたとき trueにする 別スレッドなので削除するタイミングが異なるから
 			bool is_deleted = false;
 
 			//::: addedの配列からメインの配列にadaptされたらtrueにする (itrがaddedを指すのかmainの配列を刺すのかわからないため)
 			bool is_added = false;
+
+
+			//::: 衝突したcolliderの情報を保存しておくか :::
+			bool is_save_contacted_colls = false;
+
+			//::: is_save_contacted_collsがtrueの時 自身の関わるcontact_pairの情報を保存する :::
+			std::vector<Contacted_data> contacted_colliders;
 
 		public:
 			// added_dataをmainのdata配列に引っ越す
@@ -180,7 +189,7 @@ namespace Adollib {
 			void remove_joint(ALP_Joint* joint);
 
 			// 衝突情報を保存
-			void add_contacted_collider(const Contacts::Contact_pair* pair, u_int num) const;
+			void add_contacted_collider(const Contacts::Contact_pair* pair, u_int num);
 
 
 			//::: mainthreadから呼ばれる :::

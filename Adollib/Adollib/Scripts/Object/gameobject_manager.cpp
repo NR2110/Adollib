@@ -27,7 +27,7 @@
 
 #include <thread>
 
-//#define Use_physics_thread
+#define Use_physics_thread
 
 using namespace Adollib;
 using namespace Physics_function;
@@ -114,8 +114,8 @@ void Gameobject_manager::update(Scenelist Sce) {
 	{
 		std::lock_guard <std::mutex> lock(Physics_manager::mtx);
 
-		if(Physics_manager::is_updated_physicsthread)
-		Physics_manager::adapt_transform_to_gameobject(Sce);
+		if (Physics_manager::is_updated_physicsthread)
+			Physics_manager::adapt_transform_to_gameobject(Sce);
 
 		//親から子に座標の更新を行う
 		{
@@ -132,6 +132,8 @@ void Gameobject_manager::update(Scenelist Sce) {
 			//Physics_manager::is_updated_physicsthread = true;
 		}
 	}
+
+
 
 	//while (true) { if (Physics_manager::is_updated_physicsthread == true)break; }
 	//Physics_manager::is_updated_physicsthread = false;

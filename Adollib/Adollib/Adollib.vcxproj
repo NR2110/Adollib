@@ -219,8 +219,9 @@
     <ClInclude Include="Scripts\Object\object.h" />
     <ClInclude Include="Scripts\Object\transform.h" />
     <ClInclude Include="Scripts\Physics\ALP_anchor.h" />
+    <ClInclude Include="Scripts\Physics\ALP_struct_contacted_data.h" />
     <ClInclude Include="Scripts\Physics\ALP_joint.h" />
-    <ClInclude Include="Scripts\Physics\ALP_world_transform.h" />
+    <ClInclude Include="Scripts\Physics\ALP_struct_world_transform.h" />
     <ClInclude Include="Scripts\Physics\balljoint.h" />
     <ClInclude Include="Scripts\Physics\conejoint.h" />
     <ClInclude Include="Scripts\Physics\coneTwistjoint.h" />

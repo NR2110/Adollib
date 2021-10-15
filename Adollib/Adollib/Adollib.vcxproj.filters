@@ -636,9 +636,6 @@
     <ClInclude Include="..\Scripts\stage_01.h">
       <Filter>ソース ファイル\scene_game\stage\stage\stage_01</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Physics\ALP_world_transform.h">
-      <Filter>00_Adollib\22_physics\base</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts\Physics\balljoint.h">
       <Filter>00_Adollib\22_physics\Joint</Filter>
     </ClInclude>
@@ -656,6 +653,12 @@
     </ClInclude>
     <ClInclude Include="Scripts\Physics\joint_base.h">
       <Filter>00_Adollib\22_physics\Joint\base</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\ALP_struct_world_transform.h">
+      <Filter>00_Adollib\22_physics\base</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\ALP_struct_contacted_data.h">
+      <Filter>00_Adollib\22_physics\base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

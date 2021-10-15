@@ -149,37 +149,22 @@ void ALP_Collider::reset_data_per_frame() {
 	//
 	if (is_deleted)return;  //goがすでにdeleteされていればreturn
 
-	oncoll_bits = 0;
-
-	//transform_start; //旧データ
-	//transform; //最新データ
-	//transform_for_GO; //旧データ
-	//gameobject.transform //旧データ+α
-
-
-	transform.position = gameobject->transform->position + transform.position - transform_for_GO.position;
-	transform.orientation = (transform.orientation * transform_for_GO.orientation.inverse()) * gameobject->transform->orientation;
+	transform.position = gameobject->transform->position;
+	transform.orientation = gameobject->transform->orientation;
 	transform.scale = gameobject->transform->scale;
-	//transform.position = gameobject->transform->position;
-	//transform.orientation = gameobject->transform->orientation;
-	//transform.scale = gameobject->transform->scale;
 
 	transform_start.position     = gameobject->transform->position;
 	transform_start.orientation  = gameobject->transform->orientation;
 	transform_start.scale        = gameobject->transform->scale;
-	//transform_start.position     = gameobject->transform->position;
-	//transform_start.orientation  = gameobject->transform->orientation;
-	//transform_start.scale        = gameobject->transform->scale;
 
-	//transform_for_GO.position    = transform_start.position;
-	//transform_for_GO.orientation = transform_start.orientation;
-	//transform_for_GO.scale       = transform_start.scale;
 };
 
 void ALP_Collider::adapt_collider_component_data() {
-	tag = coll_ptr->tag;
-	ignore_tags = coll_ptr->ignore_tags;
-	coll_ptr->contacted_colliders.clear();
+	tag = coll_ptr->tag; //tag
+	ignore_tags = coll_ptr->ignore_tags; //衝突しないtag
+	is_save_contacted_colls = coll_ptr->is_save_contacted_colls; //衝突したcolliderを保存するかのフラグ
+	contacted_colliders.clear(); //collider::componentように保存していた 衝突したcolliderの情報を削除
+	oncoll_bits = 0; //oncollision enterの情報を0に
 }
 
 void ALP_Collider::Update_hierarchy(){
@@ -202,19 +187,19 @@ void ALP_Collider::adapt_to_gameobject_transform() const
 		parent_orientate_inv = parent_orientate_inv.inverse();
 	}
 
-	//gameobject->transform->local_pos += vector3_quatrotate(transform.position - transform_start.position, parent_orientate_inv);
-	//const Quaternion buffer = transform_start.orientation.inverse() * transform.orientation;
-	//gameobject->transform->local_orient *= quaternion_axis_radian(vector3_quatrotate(buffer.axis(), parent_orientate_inv), buffer.radian());
-
-	gameobject->transform->local_pos += vector3_quatrotate(transform_for_GO.position - transform_start.position, parent_orientate_inv);
-	const Quaternion buffer = transform_start.orientation.inverse() * transform_for_GO.orientation;
+	gameobject->transform->local_pos += vector3_quatrotate(transform.position - transform_start.position, parent_orientate_inv);
+	const Quaternion buffer = transform_start.orientation.inverse() * transform.orientation;
 	gameobject->transform->local_orient *= quaternion_axis_radian(vector3_quatrotate(buffer.axis(), parent_orientate_inv), buffer.radian());
+
+	//gameobject->transform->local_pos += vector3_quatrotate(transform_for_GO.position - transform_start.position, parent_orientate_inv);
+	//const Quaternion buffer = transform_start.orientation.inverse() * transform_for_GO.orientation;
+	//gameobject->transform->local_orient *= quaternion_axis_radian(vector3_quatrotate(buffer.axis(), parent_orientate_inv), buffer.radian());
 
 	//gameobject->transform->local_scale *= transform_for_GO.scale / start_transform.scale;
 }
 
 void ALP_Collider::adapt_transform_for_GO() {
-	transform_for_GO = transform;
+	//transform_for_GO = transform;
 }
 
 //:::::
@@ -239,13 +224,10 @@ void ALP_Collider::remove_joint(ALP_Joint* joint) {
 	joints.remove(joint);
 }
 
-void ALP_Collider::add_contacted_collider(const Contacts::Contact_pair* pair, const u_int num) const
+void ALP_Collider::add_contacted_collider(const Contacts::Contact_pair* pair, const u_int num)
 {
-	//TODO : contacted_collidersをALPcolliderが持つように変更する
-	return;
-
 	if (is_deleted)return; //GOが削除されていたらcollider::componentも存在しないためreturn
-	if (coll_ptr->is_save_contacted_colls == false) return; //保存するflagが立っていなければ保存しない
+	if (is_save_contacted_colls == false) return; //保存するflagが立っていなければ保存しない
 
 	Contacted_data data;
 	data.coll = pair->body[1 - num]->get_ALPcollider()->get_collptr();
@@ -259,7 +241,7 @@ void ALP_Collider::add_contacted_collider(const Contacts::Contact_pair* pair, co
 		data.normal = contact_point.normal; //ワールド情報
 		data.penetrate = contact_point.distance;
 
-		coll_ptr->contacted_colliders.push_back(data);
+		contacted_colliders.emplace_back(data);
 	}
 
 }

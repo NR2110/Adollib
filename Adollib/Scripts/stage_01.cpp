@@ -28,11 +28,11 @@ namespace Adollib
 #if _DEBUG
 #else
 		//gear
-		set_gear(Vector3(+22, 1, 25), Vector3(0.8f, 2.2f, 2), Vector3(0), 5, 7);
-		set_gear(Vector3(+11, 1, 25), Vector3(0.8f, 2.2f, 2), Vector3(0), 5, 7);
-		set_gear(Vector3(+-0, 1, 25), Vector3(0.8f, 2.2f, 2), Vector3(0), 5, 7);
-		set_gear(Vector3(-11, 1, 25), Vector3(0.8f, 2.2f, 2), Vector3(0), 5, 7);
-		set_gear(Vector3(-22, 1, 25), Vector3(0.8f, 2.2f, 2), Vector3(0), 5, 7);
+		//set_gear(Vector3(+22, 1, 25), Vector3(0.8f, 2.2f, 2), Vector3(0), 5, 7);
+		//set_gear(Vector3(+11, 1, 25), Vector3(0.8f, 2.2f, 2), Vector3(0), 5, 7);
+		//set_gear(Vector3(+-0, 1, 25), Vector3(0.8f, 2.2f, 2), Vector3(0), 5, 7);
+		//set_gear(Vector3(-11, 1, 25), Vector3(0.8f, 2.2f, 2), Vector3(0), 5, 7);
+		//set_gear(Vector3(-22, 1, 25), Vector3(0.8f, 2.2f, 2), Vector3(0), 5, 7);
 
 		set_gear(Vector3(+8, 15, 0), Vector3(1, 5, 5), Vector3(0), 12, 8);
 
@@ -52,7 +52,7 @@ namespace Adollib
 			std::vector<Collider*>colls;
 			stage_parts.emplace_back(pearent);
 
-			int sphere_count = 20;
+			int sphere_count = 30;
 			float sphere_size = 1.5f;
 			const int colls_size = sphere_count * sphere_count;
 			colls.resize(colls_size);

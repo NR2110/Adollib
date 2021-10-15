@@ -13,6 +13,8 @@
 
 #include "../Imgui/imgui_all.h"
 
+#include "ALP_struct_contacted_data.h"
+
 namespace Adollib {
 	class Collider;
 
@@ -35,16 +37,7 @@ namespace Adollib {
 		bool is_hitable = false;  // 衝突しない
 		bool is_static = false;  // static同士はoncoll_enterが使えない けど軽くなる
 	};
-
-	struct Contacted_data {
-		Collider* coll; //相手のcollider
-		float penetrate = 0; //貫通量
-		Vector3 normal; //衝突法線 world座標系
-		Vector3 contacted_pointA; //自身のGO座標系の衝突点
-		Vector3 contacted_pointB; //相手のGO座標系の衝突点
-	};
 	//:::::::::::::::::::::::::
-
 
 
 	namespace Physics_function {
@@ -72,9 +65,6 @@ namespace Adollib {
 
 		//::: 自身の関わるcontact_pairの情報をメンバに保存するかどうか :::
 		bool is_save_contacted_colls = false;
-
-		//::: is_save_contacted_collsがtrueの時 自身の関わるcontact_pairの情報を保存する :::
-		std::vector<Contacted_data> contacted_colliders;
 
 	private:
 		Physics_function::ALP_Physics* ALPphysics_ptr = nullptr;
@@ -131,13 +121,16 @@ namespace Adollib {
 		void set_tensor(const Matrix33& tensor) { ALPphysics_ptr->set_tensor(tensor); };
 
 		// 現在の慣性モーメントの値
-		const Matrix33 get_tensor() {return ALPphysics_ptr->get_tensor_contain_added();};
+		const Matrix33 get_tensor() { return ALPphysics_ptr->get_tensor_contain_added(); };
 
 		// 重心をユーザー定義で設定する
 		void set_barycenter(const Vector3& cent) { ALPphysics_ptr->set_barycenter(cent); };
 
 		// 重心のlocal座標を返す
 		const Vector3 get_barycenter() const { return ALPphysics_ptr->get_barycenter_contain_added(); };
+
+		// 衝突したcolliderの配列を返す is_save_contacted_collsがtrueになっていないと衝突したcolliderの情報は保存されない
+		std::vector<Contacted_data>& get_Contacted_data() const;
 
 	public:
 		void Update_hierarchy();
