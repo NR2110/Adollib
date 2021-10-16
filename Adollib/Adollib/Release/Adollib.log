@@ -1,7 +1,17 @@
-﻿  ALP_collider.cpp
-  コード生成しています。
-  10 of 8999 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    51 functions had inline decision re-evaluated but remain unchanged
-  コード生成が終了しました。
-  Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Release\Adollib.exe
+﻿  demo_house.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(78,26): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(75,38): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(73,45): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+  object_rotate.cpp
+  player.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_manager.h(23): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_manager::Stage_types' の左辺を無視します。
+  player_funcs.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_manager.h(23): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_manager::Stage_types' の左辺を無視します。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(60,70): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(312,46): warning C4305: '=': 'double' から 'float' へ切り詰めます。
+  player_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(177,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(410,192): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(495,60): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+  stage_01.cpp
+  stage_01_funcs.cpp

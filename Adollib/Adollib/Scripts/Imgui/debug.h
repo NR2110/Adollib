@@ -22,6 +22,18 @@ namespace Adollib {
 		static bool stop_flag;
 
 	public:
+	static void log(const char* format, ...)
+	{
+		char message[1024];
+		va_list args;
+		va_start(args, format);
+		vsnprintf(message, sizeof(message), format, args);
+		va_end(args);
+
+		::OutputDebugStringA(message);
+	}
+
+	public:
 		static void set(std::string name, DirectX::XMFLOAT4 xyzw);
 		static void set(std::string name, DirectX::XMFLOAT3 xyz);
 		static void set(std::string name, float x = 0, float y = 0, float z = 0, float w = 0);

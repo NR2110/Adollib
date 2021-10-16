@@ -63,7 +63,7 @@ namespace Adollib {
 
 			//::: アタッチされたshapeの配列 :::
 			std::list<Collider_shape*> shapes;
-			std::list<Collider_shape*> added_shapes; // マルチスレッド用 処理の途中で追加された要素
+			std::list<Collider_shape*> added_buffer_shapes; // マルチスレッド用 処理の途中で追加された要素
 
 			//
 			std::mutex mtx;
@@ -105,7 +105,7 @@ namespace Adollib {
 
 			// アタッチされたshapeの配列
 			std::list<Collider_shape*> get_shapes() const { return shapes; };
-			std::list<Collider_shape*> get_added_shapes() const { return added_shapes; };
+			std::list<Collider_shape*> get_added_shapes() const { return added_buffer_shapes; };
 
 			// 衝突したcolliderのtagを保存
 			void add_oncoll_bits(Collider_tagbit bit) { oncoll_bits |= bit; };
@@ -131,13 +131,13 @@ namespace Adollib {
 		public:
 			// added_dataをmainのdata配列に引っ越す
 			void adapt_added_data() {
-				if (added_shapes.size() == 0)return;
+				if (added_buffer_shapes.size() == 0)return;
 
 				std::lock_guard <std::mutex> lock(mtx);
 
-				shapes.splice(shapes.end(), std::move(added_shapes));
+				shapes.splice(shapes.end(), std::move(added_buffer_shapes));
 
-				added_shapes.clear();
+				added_buffer_shapes.clear();
 			};
 
 
@@ -173,7 +173,7 @@ namespace Adollib {
 
 				T* shape = newD T(this);
 
-				added_shapes.emplace_back(shape);
+				added_buffer_shapes.emplace_back(shape);
 				//adapt_added_data();
 				return shape;
 			};

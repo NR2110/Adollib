@@ -112,8 +112,6 @@ void Gameobject_manager::update(Scenelist Sce) {
 #endif // Use_physics_thread
 
 	{
-		std::lock_guard <std::mutex> lock(Physics_manager::mtx);
-
 		if (Physics_manager::is_updated_physicsthread)
 			Physics_manager::adapt_transform_to_gameobject(Sce);
 

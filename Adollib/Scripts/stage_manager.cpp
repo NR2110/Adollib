@@ -42,6 +42,8 @@ void Stage_manager::update() {
 
 		player->delete_catchjoint();
 		player->respown();
+
+		Debug::log("Stage_manager::chengestage %d \n", static_cast<int>(next_stage));
 	}
 
 	if (input->getKeyTrigger(Key::R)) player->respown();

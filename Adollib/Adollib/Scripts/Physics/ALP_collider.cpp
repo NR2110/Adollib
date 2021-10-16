@@ -70,7 +70,7 @@ void ALP_Collider::update_world_trans_contain_added() {
 			is_changPos, is_changRot, is_changSiz
 		);
 	}
-	for (const auto& shape : added_shapes) {
+	for (const auto& shape : added_buffer_shapes) {
 
 		// ユーザーに入力されたcolliderデータ(center,sizeなど)を計算用のデータに治す
 		shape->update_Colliderdata();
@@ -250,7 +250,7 @@ Meshcoll_part* ALP_Collider::add_mesh_shape(const char* filepath, Physics_functi
 	std::lock_guard <std::mutex> lock(mtx);
 	auto shape = newD Meshcoll_part(this, filepath, mesh_data);
 
-	added_shapes.emplace_back(shape);
+	added_buffer_shapes.emplace_back(shape);
 	return shape;
 };
 
@@ -259,6 +259,9 @@ void ALP_Collider::destroy(){
 
 	//shapeの解放
 	for (const auto& shape : shapes) {
+		delete shape;
+	}
+	for (const auto& shape : added_buffer_shapes) {
 		delete shape;
 	}
 

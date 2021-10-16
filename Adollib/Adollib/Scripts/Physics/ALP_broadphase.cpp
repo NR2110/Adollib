@@ -144,10 +144,11 @@ void Physics_function::BroadMidphase(Scenelist Sce,
 	//auto& axis_list_edge = access_axislist_itr;
 
 	Work_meter::start("make_axis_list", work_meter_tag);
-
 	//::: ’Ç‰Á‚³‚ê‚½‚à‚Ì‚ğaxis_list‚É’Ç‰Á :::
 	{
 		for (auto& added : added_collider) {
+			if (added == nullptr)continue;
+
 			const u_int collider_index = added->get_index(); //collider‚Ìunique‚ÈID
 
 			access_axislist_itr[collider_index].clear(); // ‰Šú‰»
@@ -203,6 +204,7 @@ void Physics_function::BroadMidphase(Scenelist Sce,
 	{
 		Work_meter::start("update_Value", work_meter_tag);
 		for (auto& moved : moved_collider) {
+			if (moved == nullptr)continue;
 
 			for (auto& edge_itr : access_axislist_itr[moved->get_index()]) {
 				auto& edge = *edge_itr;
@@ -216,6 +218,8 @@ void Physics_function::BroadMidphase(Scenelist Sce,
 		}
 
 		for (auto& moved : added_collider) {
+			if (moved == nullptr)continue;
+
 			u_int index_count = 0;
 
 			for (auto& edge_itr : access_axislist_itr[moved->get_index()]) {
