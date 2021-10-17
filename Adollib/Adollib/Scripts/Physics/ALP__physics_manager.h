@@ -91,11 +91,12 @@ namespace Adollib
 			float slop = 0.003f;//衝突の許容値
 
 			int solver_iteration = 5; //衝突の精度
-			int calculate_iteration = 2; //計算の精度
+			int calculate_iteration = 3; //計算の精度
 			bool hit_backfaces_flag = false;//meshの後ろから衝突するか
 
 			float timeStep = 0.016f;
-			float max_timeStep = 0.032f;
+			//float max_timeStep = 0.032f;
+			float max_timeStep = 0.05f;
 
 			//::: Physicsの初期値部分 :::
 

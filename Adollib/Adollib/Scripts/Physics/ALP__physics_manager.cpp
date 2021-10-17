@@ -128,11 +128,10 @@ bool Physics_manager::update(Scenelist Sce)
 	Work_meter::set("physicsParams.timeStep", physicsParams.timeStep);
 	if (physicsParams.timeStep > inv60)
 	{
-		//is_updated_physicsthread = false;
-		Debug::log("Physics_manager::calculate \n");
 
 		frame_count = time;
-		physicsParams.timeStep = inv60;
+		physicsParams.timeStep;
+		const float inv60_per_timeStep = inv60 / physicsParams.timeStep;
 
 		physicsParams.timeStep /= physicsParams.calculate_iteration;
 
@@ -142,7 +141,7 @@ bool Physics_manager::update(Scenelist Sce)
 			update_world_trans(ALP_colliders[Sce]);
 
 			// äOóÕÇÃçXêV
-			applyexternalforce(ALP_physicses[Sce], 1);
+			applyexternalforce(ALP_physicses[Sce], inv60_per_timeStep);
 
 			pairs_new_num = 1 - pairs_new_num;
 
