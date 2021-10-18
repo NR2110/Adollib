@@ -111,7 +111,7 @@ void Player::reach_out_hands() {
 //•¨‚ð‚Â‚©‚Þ
 void Player::catch_things() {
 	const Mouse keys[2] = {
-		Mouse::LBUTTON ,
+		Mouse::LBUTTON,
 		Mouse::RBUTTON
 	};
 
@@ -131,6 +131,13 @@ void Player::catch_things() {
 		&is_maked_left_joint,
 		&is_maked_right_joint
 	};
+
+	// stage‚ª•ÏX‚³‚ê‚½‚çgameobject‚Ìíœ‚Åjoint‚ÍÁ‚¦‚Ä‚¢‚é‚Ì‚Å joint‚ðíœ
+	if (stage_manager->get_is_changed_stage()) {
+		joints[0] = nullptr;
+		joints[1] = nullptr;
+		return;
+	}
 
 	for (int i = 0; i < 2; i++) {
 		const Mouse key = keys[i];
@@ -161,26 +168,6 @@ void Player::catch_things() {
 				);
 
 				joint->slop = 0.1f;
-
-				//elbow‚Éjoint‚ðì‚éê‡
-				/*
-				auto& elbow_collider = colliders[i + 2];
-
-				Vector3 contacted_pointA_world = vector3_quatrotate(min_data->contacted_pointA, collider->transform->orientation) + collider->transform->position;
-				Vector3 contacted_pointA_elbowcoord = vector3_quatrotate(contacted_pointA_world - elbow_collider->transform->position, elbow_collider->transform->orientation.inverse());
-
-				Vector3 contacted_pointB_world = vector3_quatrotate(min_data->contacted_pointB, min_data->coll->transform->orientation) + min_data->coll->transform->position;
-				Vector3 contacted_pointB_elbowcoord = vector3_quatrotate(contacted_pointA_world - elbow_collider->transform->position, elbow_collider->transform->orientation.inverse());
-
-				Vector3 elbow0_point_world = elbow_collider->transform->position;
-				Vector3 elbow0_point_collBcoord = vector3_quatrotate(elbow0_point_world - min_data->coll->transform->position, min_data->coll->transform->orientation.inverse());
-
-				joint = Joint::add_balljoint(
-					elbow_collider,
-					min_data->coll,
-					Vector3(0,0,0),
-					elbow0_point_collBcoord
-				);*/
 
 			}
 		}

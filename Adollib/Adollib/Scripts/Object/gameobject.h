@@ -11,14 +11,13 @@
 #include "transform.h"
 #include "gameobject_tags.h"
 #include "../Scene/scene_list.h"
-#include "../Mesh/material.h"
+#include "../Renderer/Mesh/material.h"
 
 namespace Adollib {
 
 	class Gameobject : public Object {
 	public:
 		Gameobject(const bool l_no_material, const Scenelist l_this_scene, std::list<Gameobject*>::iterator l_this_itr) :
-			no_material(l_no_material),
 			this_scene(l_this_scene),
 			this_itr(l_this_itr)
 		{};
@@ -31,16 +30,12 @@ namespace Adollib {
 			transform->scale = world_scale();
 		}
 
-		ComPtr<ID3D11Buffer> world_cb; //WVP行列用バッファ
-
-		bool no_material = false; //material情報を所持しているか
-
-
 		std::list <Component*> components; //アタッチされているComponentのポインタ
 
 		Scenelist this_scene = Scenelist::scene_null; //このgoのあるscene
 
-		std::list<Gameobject*>::iterator this_itr;
+		std::list<Gameobject*>::iterator this_itr; //Gomanagerに保存された自身へのポインタ
+
 	public:
 		// このGOが存在するシーンを返す
 		Scenelist get_scene() const { return this_scene; };
@@ -49,15 +44,14 @@ namespace Adollib {
 
 		std::string name; //このgoの名前
 
-		std::shared_ptr<Material> material; //このGOのマテリアル
+		// このGOのマテリアルへのポインタ cppから楽にアクセスできるようにここに置いている ここになくてもちゃんと動く
+		Material* material = nullptr;
 
 
 	public:
 
 		// アタッチされたコンポーネントの処理
 		void initialize()override;
-
-		void render()override;
 
 		void update_imgui_toChildren() override;
 	private:
@@ -182,10 +176,6 @@ namespace Adollib {
 			}
 			components.clear();
 		}
-
-		//void removeGO() {
-
-		//}
 
 		// 解放処理
 		void destroy();

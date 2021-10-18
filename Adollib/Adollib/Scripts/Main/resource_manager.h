@@ -1,9 +1,9 @@
 #pragma once
 #include <d3d11.h>
 #include <unordered_map>
-#include "../Mesh/mesh.h"
-#include "../Mesh/texture.h"
-#include "../Shader/shader.h"
+#include "../Renderer/Mesh/mesh.h"
+#include "../Renderer/Mesh/texture.h"
+#include "../Renderer/Shader/shader.h"
 
 namespace Adollib
 {

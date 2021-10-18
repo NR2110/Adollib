@@ -8,7 +8,7 @@ ComPtr<ID3D11Device>		Systems::Device;
 ComPtr<IDXGISwapChain>		Systems::SwapChain;
 
 ComPtr<ID3D11DeviceContext>		Systems::DeviceContext;
-ComPtr<ID3D11RenderTargetView> Systems::RenderTargetView;
+ComPtr<ID3D11RenderTargetView>  Systems::RenderTargetView;
 
 ComPtr<ID3D11Texture2D>				Systems::DepthStencilTexture;
 ComPtr<ID3D11DepthStencilView>		Systems::DepthStencilView;
@@ -657,10 +657,6 @@ void Systems::Clear(DWORD color)
 
 
 	float clearColor[4] = { clear_color.x,  clear_color.y,  clear_color.z,  clear_color.w };
-	//float clearColor[4] = { 0.5, 0.5, 1, 1.0f };
-	//for (int i = 3; i >= 0; i--) {
-	//	clearColor[i] = ((color >> 8 * (3 - i)) & 0x000000FF) / 255.0f;
-	//}
 
 	DeviceContext->OMSetDepthStencilState(DepthStencilState[static_cast<int>(State_manager::DStypes::DS_TRUE)].Get(), 1);
 	DeviceContext->OMSetRenderTargets(1, RenderTargetView.GetAddressOf(), DepthStencilView.Get());

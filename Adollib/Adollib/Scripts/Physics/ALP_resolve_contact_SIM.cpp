@@ -201,10 +201,9 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 	Work_meter::start("Setup_solver_joint", work_meter_tag);
 	// 拘束のセットアップ
 	{
-		world_trans* transform[2];
+		world_trans* transform[2] = { nullptr };
 		DirectX::XMVECTOR position[2];
 		for (auto& joint : joints) {
-			joint->adapt_Jointdata();
 
 			transform[0] = &joint->ALPcollider[0]->transform;
 			transform[1] = &joint->ALPcollider[1]->transform;

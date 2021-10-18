@@ -33,6 +33,8 @@ void Stage_manager::start() {
 
 void Stage_manager::update() {
 	if (Al_Global::second_per_game < 2)return;
+	is_changed_stage = false;
+
 	if (now_stage != next_stage) {
 
 		stages[now_stage]->stage_destroy();
@@ -43,7 +45,7 @@ void Stage_manager::update() {
 		player->delete_catchjoint();
 		player->respown();
 
-		Debug::log("Stage_manager::chengestage %d \n", static_cast<int>(next_stage));
+		is_changed_stage = true;
 	}
 
 	if (input->getKeyTrigger(Key::R)) player->respown();

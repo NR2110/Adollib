@@ -23,6 +23,8 @@ namespace Adollib {
 		};
 
 	private:
+		bool is_changed_stage = false;
+
 		Stage_types now_stage =  Stage_types::demo; //¡‚Ìstagetype
 		Stage_types next_stage = Stage_types::demo; //Ÿ‚Ìstagetype
 
@@ -51,7 +53,7 @@ namespace Adollib {
 	public:
 		void set_next_stage_type   (Stage_types next_stge); //next_stge‚ğset‚·‚é (Ÿ‚Ìstage‚Éi‚Ş)
 		Stage_base* get_current_stage() { return stages[now_stage]; };
-
+		bool get_is_changed_stage() const { return is_changed_stage; };
 	public:
 
 		void awake() override;

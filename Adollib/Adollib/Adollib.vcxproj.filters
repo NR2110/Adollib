@@ -26,15 +26,6 @@
     <Filter Include="00_Adollib\33_object">
       <UniqueIdentifier>{ba801f30-dc48-437a-b82e-1c30330c227f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00_Adollib\33_object\mesh">
-      <UniqueIdentifier>{d2534fb1-3e0f-4465-bf38-05c093fa394f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00_Adollib\44_shader">
-      <UniqueIdentifier>{36de64fc-7e7c-4b76-a489-b6c226ddc5d4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00_Adollib\44_shader\hlsli">
-      <UniqueIdentifier>{2ee81938-f4b8-4424-be0e-212cafffefba}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00_Adollib\22_physics">
       <UniqueIdentifier>{948ff940-3127-440f-a355-36b477c57395}</UniqueIdentifier>
     </Filter>
@@ -92,6 +83,18 @@
     <Filter Include="00_Adollib\22_physics\Joint\base">
       <UniqueIdentifier>{c1365332-cec2-4643-9d90-027c299b9470}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00_Adollib\44_render">
+      <UniqueIdentifier>{36de64fc-7e7c-4b76-a489-b6c226ddc5d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Adollib\44_render\shader">
+      <UniqueIdentifier>{3174d617-5d73-43a8-90e4-a147987a3daa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Adollib\44_render\shader\hlsli">
+      <UniqueIdentifier>{2ee81938-f4b8-4424-be0e-212cafffefba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Adollib\44_render\mesh">
+      <UniqueIdentifier>{d2534fb1-3e0f-4465-bf38-05c093fa394f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Scripts\player.cpp">
@@ -121,32 +124,11 @@
     <ClCompile Include="Imgui\imgui_widgets.cpp">
       <Filter>00_Adollib\99_imgui</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Mesh\frustum_culling.cpp">
-      <Filter>00_Adollib\33_object\mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Mesh\material.cpp">
-      <Filter>00_Adollib\33_object\mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Mesh\material_for_collider.cpp">
-      <Filter>00_Adollib\33_object\mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Mesh\mesh.cpp">
-      <Filter>00_Adollib\33_object\mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Mesh\texture.cpp">
-      <Filter>00_Adollib\33_object\mesh</Filter>
-    </ClCompile>
     <ClCompile Include="Scripts\Object\gameobject.cpp">
       <Filter>00_Adollib\33_object</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Object\gameobject_manager.cpp">
       <Filter>00_Adollib\33_object</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Shader\compute_shader.cpp">
-      <Filter>00_Adollib\44_shader</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Shader\shader.cpp">
-      <Filter>00_Adollib\44_shader</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Scene\scene_game.cpp">
       <Filter>ソース ファイル\scene_game</Filter>
@@ -307,6 +289,33 @@
     <ClCompile Include="Scripts\Physics\joint_base.cpp">
       <Filter>00_Adollib\22_physics\Joint\base</Filter>
     </ClCompile>
+    <ClCompile Include="Scripts\Renderer\Mesh\frustum_culling.cpp">
+      <Filter>00_Adollib\44_render\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Renderer\Mesh\material.cpp">
+      <Filter>00_Adollib\44_render\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Renderer\Mesh\material_for_collider.cpp">
+      <Filter>00_Adollib\44_render\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Renderer\Mesh\mesh.cpp">
+      <Filter>00_Adollib\44_render\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Renderer\Mesh\texture.cpp">
+      <Filter>00_Adollib\44_render\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Renderer\Shader\compute_shader.cpp">
+      <Filter>00_Adollib\44_render\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Renderer\Shader\shader.cpp">
+      <Filter>00_Adollib\44_render\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Renderer\renderer.cpp">
+      <Filter>00_Adollib\44_render</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Renderer\renderer_manager.cpp">
+      <Filter>00_Adollib\44_render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Scripts\player.h">
@@ -345,21 +354,6 @@
     <ClInclude Include="Imgui\imstb_truetype.h">
       <Filter>00_Adollib\99_imgui</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Mesh\frustum_culling.h">
-      <Filter>00_Adollib\33_object\mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Mesh\material.h">
-      <Filter>00_Adollib\33_object\mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Mesh\material_for_collider.h">
-      <Filter>00_Adollib\33_object\mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Mesh\mesh.h">
-      <Filter>00_Adollib\33_object\mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Mesh\texture.h">
-      <Filter>00_Adollib\33_object\mesh</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts\Object\component.h">
       <Filter>00_Adollib\33_object</Filter>
     </ClInclude>
@@ -380,18 +374,6 @@
     </ClInclude>
     <ClInclude Include="Scripts\Object\transform.h">
       <Filter>00_Adollib\33_object</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Shader\cbuffer_manager.h">
-      <Filter>00_Adollib\44_shader</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Shader\compute_shader.h">
-      <Filter>00_Adollib\44_shader</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Shader\light_types.h">
-      <Filter>00_Adollib\44_shader</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Shader\shader.h">
-      <Filter>00_Adollib\44_shader</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Scene\scene_game.h">
       <Filter>ソース ファイル\scene_game</Filter>
@@ -534,9 +516,6 @@
     <ClInclude Include="Scripts\Physics\ALP__meshcoll_data.h">
       <Filter>00_Adollib\22_physics\base</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Shader\constant_buffer.h">
-      <Filter>00_Adollib\44_shader</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts\Math\closest_func.h">
       <Filter>00_Adollib\11_math\functions</Filter>
     </ClInclude>
@@ -660,40 +639,76 @@
     <ClInclude Include="Scripts\Physics\ALP_struct_contacted_data.h">
       <Filter>00_Adollib\22_physics\base</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Renderer\Mesh\frustum_culling.h">
+      <Filter>00_Adollib\44_render\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\Mesh\material.h">
+      <Filter>00_Adollib\44_render\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\Mesh\material_for_collider.h">
+      <Filter>00_Adollib\44_render\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\Mesh\mesh.h">
+      <Filter>00_Adollib\44_render\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\Mesh\texture.h">
+      <Filter>00_Adollib\44_render\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\Shader\cbuffer_manager.h">
+      <Filter>00_Adollib\44_render\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\Shader\compute_shader.h">
+      <Filter>00_Adollib\44_render\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\Shader\constant_buffer.h">
+      <Filter>00_Adollib\44_render\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\Shader\light_types.h">
+      <Filter>00_Adollib\44_render\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\Shader\shader.h">
+      <Filter>00_Adollib\44_render\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\renderer.h">
+      <Filter>00_Adollib\44_render</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\renderer_manager.h">
+      <Filter>00_Adollib\44_render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="DefaultShader\default.hlsli">
-      <Filter>00_Adollib\44_shader\hlsli</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsli</Filter>
     </None>
     <None Include="DefaultShader\light_type.hlsli">
-      <Filter>00_Adollib\44_shader\hlsli</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsli</Filter>
     </None>
     <None Include="DefaultShader\head.hlsli">
-      <Filter>00_Adollib\44_shader\hlsli</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsli</Filter>
     </None>
     <None Include="DefaultShader\func.hlsli">
-      <Filter>00_Adollib\44_shader\hlsli</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsli</Filter>
     </None>
     <None Include="DefaultShader\quaternion.hlsli">
-      <Filter>00_Adollib\44_shader\hlsli</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsli</Filter>
     </None>
     <None Include="DefaultShader\base_math.hlsli">
-      <Filter>00_Adollib\44_shader\hlsli</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsli</Filter>
     </None>
     <None Include="DefaultShader\math.hlsli">
-      <Filter>00_Adollib\44_shader\hlsli</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsli</Filter>
     </None>
     <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="DefaultShader\default_ps.hlsl">
-      <Filter>00_Adollib\44_shader\hlsli</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsli</Filter>
     </FxCompile>
     <FxCompile Include="DefaultShader\default_vs.hlsl">
-      <Filter>00_Adollib\44_shader\hlsli</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsli</Filter>
     </FxCompile>
     <FxCompile Include="DefaultShader\default_ps_notex.hlsl">
-      <Filter>00_Adollib\44_shader\hlsli</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsli</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

@@ -45,15 +45,12 @@ namespace Adollib {
 		static ComPtr<ID3D11BlendState>		BlendState[BLEND_TYPE];
 		static bool CreateBlendState();
 
-		static bool CreateImgui(); //Imgui‚Ì‚½‚ß‚Ì
-
 	private:
 	public:
 		static MonoInput* inputManager;
 		static Time* time;
 		static Vector4 clear_color;
 		//static MonoAudio* audioManager;
-		//static Debug* debug;
 
 	public:
 		static ComPtr<ID3D11Device>			Device;

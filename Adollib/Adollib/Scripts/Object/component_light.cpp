@@ -1,6 +1,6 @@
 #include "component_light.h"
 
-#include "../Shader/light_types.h"
+#include "../Renderer/Shader/light_types.h"
 
 #include "../Imgui/imgui_all.h"
 #include "../Main/Adollib.h"

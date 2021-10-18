@@ -24,7 +24,6 @@ namespace Adollib
 	public:
 
 		virtual void initialize() {};
-		virtual void render() {};
 		virtual void destroy() {};
 
 		virtual void update_worldtrans() {};

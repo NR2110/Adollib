@@ -4,21 +4,20 @@
 #include "component_camera.h"
 #include "component_light.h"
 
-
+#include "../Main/resource_manager.h"
 #include "../Main/systems.h"
 
 #include "../Scene/scene.h"
-#include "../Main/resource_manager.h"
-#include "../Shader/cbuffer_manager.h"
-#include "../Shader/light_types.h"
+
+#include "../Renderer/renderer_manager.h"
+#include "../Renderer/renderer.h"
+#include "../Renderer/Shader/constant_buffer.h"
+#include "../Renderer/Shader/cbuffer_manager.h"
+#include "../Renderer/Shader/light_types.h"
+#include "../Renderer/Mesh/frustum_culling.h"
+#include "../Renderer/Mesh/material_for_collider.h"
+
 #include "../Physics/ALP__physics_manager.h"
-
-#include "../Mesh/frustum_culling.h"
-#include "../Mesh/material_for_collider.h"
-
-#include "../Shader/constant_buffer.h"
-#include "../Physics/ALP__physics_manager.h"
-
 #include "hierarchy.h"
 
 #include "../Imgui/work_meter.h"
@@ -131,15 +130,6 @@ void Gameobject_manager::update(Scenelist Sce) {
 		}
 	}
 
-
-
-	//while (true) { if (Physics_manager::is_updated_physicsthread == true)break; }
-	//Physics_manager::is_updated_physicsthread = false;
-	//Physics_manager::is_updated_mainthread = true;
-	///////////Physics_manager::update();
-	//while (true) { if (Physics_manager::is_updated_physicsthread == true)break; }
-
-
 	//親から子へupdateを呼ぶ update中に、親objectが削除されたときに対応できないため削除はいったんbufferに保管している
 	std::for_each(masters.begin(), masters.end(), [](Object* ob) {ob->update_to_children(); });
 
@@ -185,8 +175,6 @@ void Gameobject_manager::update(Scenelist Sce) {
 void Gameobject_manager::render(Scenelist Sce) {
 	Work_meter::tag_start("render");
 	if (Sce == Scenelist::scene_null)return;
-
-	//std::list<std::shared_ptr<Light>>::iterator itr_li = lights[Sce].begin();
 
 	//CB : ConstantBufferPerLight
 	ConstantBufferPerLight l_cb;
@@ -259,16 +247,15 @@ void Gameobject_manager::render(Scenelist Sce) {
 		//視錐台カリングにカメラ情報のセット
 		//FrustumCulling::update_frustum(camera);
 
-		//Sceのsceneにアタッチされたgoのrenderを呼ぶ
 
 		Work_meter::start("render_obj");
-		for (auto& go : gameobjects[Sce]) {
-			if (go->active == false)continue;
-			go->render();
-		}
+
+		// renderを呼ぶ
+		Renderer_manager::render(Sce);
+
 		Work_meter::stop("render_obj");
 
-
+		// colliderのrender
 		Physics_manager::render_collider(Sce);
 	}
 	Work_meter::stop("drawobj_per_camera");
@@ -327,10 +314,16 @@ Gameobject* Gameobject_manager::createFromFBX(const std::string go_name, const s
 	Value->name = go_name;
 	Value->transform = std::make_shared<Transform>();
 
-	Value->material = std::make_shared<Material>();
+	auto renderer = Value->addComponent<Renderer>();
+	Value->material = newD Material;
 	Value->material->Load_VS("./DefaultShader/default_vs.cso");
 	Value->material->Load_PS("./DefaultShader/default_ps.cso");
-	ResourceManager::CreateModelFromFBX(&Value->material->meshes, FBX_pass.c_str(), "");
+	renderer->set_material(Value->material);
+
+	std::vector<Mesh::mesh>* meshes = nullptr;
+	ResourceManager::CreateModelFromFBX(&meshes, FBX_pass.c_str(), "");
+	renderer->set_meshes(meshes);
+
 	Value->initialize();
 	++go_count;
 	return Value;
@@ -348,10 +341,16 @@ Gameobject* Gameobject_manager::createSphere(const std::string go_name, u_int ta
 	Value->name = go_name;
 	Value->transform = std::make_shared<Transform>();
 
-	Value->material = std::make_shared<Material>();
+	auto renderer = Value->addComponent<Renderer>();
+	Value->material = newD Material;
 	Value->material->Load_VS("./DefaultShader/default_vs.cso");
 	Value->material->Load_PS("./DefaultShader/default_ps.cso");
-	ResourceManager::CreateModelFromFBX(&Value->material->meshes, "./DefaultModel/sphere.fbx", "");
+	renderer->set_material(Value->material);
+
+	std::vector<Mesh::mesh>* meshes = nullptr;
+	ResourceManager::CreateModelFromFBX(&meshes, "./DefaultModel/sphere.fbx", "");
+	renderer->set_meshes(meshes);
+
 	Value->initialize();
 	++go_count;
 	return Value;
@@ -369,10 +368,16 @@ Gameobject* Gameobject_manager::createCube(const std::string go_name, u_int tag,
 	Value->name = go_name;
 	Value->transform = std::make_shared<Transform>();
 
-	Value->material = std::make_shared<Material>();
+	auto renderer = Value->addComponent<Renderer>();
+	Value->material = newD Material;
 	Value->material->Load_VS("./DefaultShader/default_vs.cso");
 	Value->material->Load_PS("./DefaultShader/default_ps.cso");
-	ResourceManager::CreateModelFromFBX(&Value->material->meshes, "./DefaultModel/cube.fbx", "");
+	renderer->set_material(Value->material);
+
+	std::vector<Mesh::mesh>* meshes = nullptr;
+	ResourceManager::CreateModelFromFBX(&meshes, "./DefaultModel/cube.fbx", "");
+	renderer->set_meshes(meshes);
+
 	++go_count;
 	Value->initialize();
 	return Value;
@@ -390,10 +395,16 @@ Gameobject* Gameobject_manager::createCapsule(const std::string go_name, u_int t
 	Value->name = go_name;
 	Value->transform = std::make_shared<Transform>();
 
-	Value->material = std::make_shared<Material>();
+	auto renderer = Value->addComponent<Renderer>();
+	Value->material = newD Material;
 	Value->material->Load_VS("./DefaultShader/default_vs.cso");
 	Value->material->Load_PS("./DefaultShader/default_ps.cso");
-	ResourceManager::CreateModelFromFBX(&Value->material->meshes, "./DefaultModel/cube.fbx", "");
+	renderer->set_material(Value->material);
+
+	std::vector<Mesh::mesh>* meshes = nullptr;
+	ResourceManager::CreateModelFromFBX(&meshes, "./DefaultModel/cube.fbx", "");
+	renderer->set_meshes(meshes);
+
 	++go_count;
 	Value->initialize();
 	return Value;
@@ -413,10 +424,16 @@ Gameobject* Gameobject_manager::createCylinder(const std::string go_name, u_int 
 	Value->name = go_name;
 	Value->transform = std::make_shared<Transform>();
 
-	Value->material = std::make_shared<Material>();
+	auto renderer = Value->addComponent<Renderer>();
+	Value->material = newD Material;
 	Value->material->Load_VS("./DefaultShader/default_vs.cso");
 	Value->material->Load_PS("./DefaultShader/default_ps.cso");
-	ResourceManager::CreateModelFromFBX(&Value->material->meshes, "./DefaultModel/cylinder.fbx", "");
+	renderer->set_material(Value->material);
+
+	std::vector<Mesh::mesh>* meshes = nullptr;
+	ResourceManager::CreateModelFromFBX(&meshes, "./DefaultModel/cylinder.fbx", "");
+	renderer->set_meshes(meshes);
+
 	Value->initialize();
 	++go_count;
 	return Value;

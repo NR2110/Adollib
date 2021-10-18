@@ -82,7 +82,7 @@ namespace Adollib
 
 	private:
 		std::shared_ptr<Transform> camera; //cameraへのポインタ
-		Stage_manager* stage_manager = nullptr; //cameraへのポインタ
+		Stage_manager* stage_manager = nullptr; //stage_managerへのポインタ
 
 	private:
 		//::: 毎フレーム呼び出す

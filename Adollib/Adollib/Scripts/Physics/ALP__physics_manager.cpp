@@ -72,13 +72,6 @@ namespace Adollib
 
 bool Physics_manager::update(Scenelist Sce)
 {
-	//while (true) {
-	//	// 最適化されないように
-	//	// この他のthreadからis_updated_mainthreadは変更されるが 最適化されるとこのwhileを省略されてしまう
-	//	// volatileをつけた変数を経由することで最適化を防ぐ
-	//	if (Physics_manager::is_updated_mainthread)break;
-	//}
-
 	Work_meter::start("Phyisics_manager");
 
 	LARGE_INTEGER time;
@@ -109,7 +102,6 @@ bool Physics_manager::update(Scenelist Sce)
 		if (is_updated_mainthread) {
 
 			is_updated_mainthread = false; // mainthreadがgameobject_transformを呼んだあと gameobjectのtransformをphysicsにコピーする
-			//is_updated_physicsthread = false; // is_updated_physicsthreadがtrueになっていると  adapt_to_gameobject_transformが呼ばれてis_updated_mainthreadがtrueになる可能性がある
 
 			// 追加したものを配列に加える (is_updated_mainthreadがtrueでないとworld情報が更新されていない可能性がある)
 			adapt_added_data(Sce, false);
@@ -120,7 +112,7 @@ bool Physics_manager::update(Scenelist Sce)
 		}
 
 		// ColliderのWorld情報の更新
-		adapt_collider_component_data(ALP_colliders[Sce], ALP_physicses[Sce]);
+		adapt_component_data(ALP_colliders[Sce], ALP_physicses[Sce], ALP_joints);
 
 	}
 
@@ -472,7 +464,8 @@ void Physics_manager::dadapt_delete_data(bool is_mutex_lock) {
 	dalated_buffer_ALP_physicses.clear();
 
 	for (auto& deleted_joint : dalated_buffer_ALP_joints) {
-		deleted_joint->destroy(nullptr, false);
+		deleted_joint->destroy(nullptr, true);
+		delete deleted_joint;
 	}
 	dalated_buffer_ALP_joints.clear();
 
@@ -513,10 +506,8 @@ void Physics_manager::thread_stop_and_join() {
 
 
 
-
-
 #include "../Main/systems.h"
-#include "../Mesh/material_for_collider.h"
+#include "../Renderer/Mesh/material_for_collider.h"
 
 bool Physics_manager::render_collider(Scenelist Sce) {
 	render_dop(Sce);

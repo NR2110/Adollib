@@ -124,6 +124,7 @@ namespace Adollib {
 		{
 			for (auto& go : gameobjects[Sce])
 			{
+				auto a = go->name;
 				if (go->name == name) return go;
 			}
 			return nullptr;

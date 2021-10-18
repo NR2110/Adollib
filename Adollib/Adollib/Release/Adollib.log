@@ -1,43 +1,24 @@
-﻿  demo_house.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(78,26): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(75,38): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(73,45): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+﻿  object_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(947,63): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(1156,182): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(1167,181): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+  player.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_manager.h(23): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_manager::Stage_types' の左辺を無視します。
+  player_funcs.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_manager.h(23): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_manager::Stage_types' の左辺を無視します。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(60,70): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(299,46): warning C4305: '=': 'double' から 'float' へ切り詰めます。
   player_manager.cpp
 C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(177,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(410,192): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(495,60): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-  stage_01.cpp
-  stage_01_funcs.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(349,66): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-  stage_base.cpp
-  stage_demo.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo.cpp(50,26): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo.cpp(47,38): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo.cpp(45,45): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-  stage_demo_funcs.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_funcs.cpp(213,66): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-  loop.cpp
-  gameobject_manager.cpp
-  ALP__physics_manager.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.cpp(88,26): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
-  ALP_broadphase.cpp
-  ALP_collider.cpp
-  ALP_contact.cpp
-  ALP_integrate.cpp
-  ALP_joint.cpp
-  ALP_physics.cpp
-  ALP_resolve_contact.cpp
-  ALP_resolve_contact_SIM.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact_SIM.cpp(462,21): warning C4101: 'position': ローカル変数は 1 度も使われていません。
-  collider.cpp
-  collider_shape.cpp
-  コンパイル中...
-  joint.cpp
-  joint_base.cpp
-  ray.cpp
+  stage_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_manager.h(23): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_manager::Stage_types' の左辺を無視します。
+  scene_game.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_manager.h(23): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_manager::Stage_types' の左辺を無視します。
   コード生成しています。
-  2 of 9001 functions (<0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    51 functions had inline decision re-evaluated but remain unchanged
+  18 of 9180 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
+    1 functions were new in current compilation
+    53 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Release\Adollib.exe
