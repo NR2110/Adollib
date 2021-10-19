@@ -20,9 +20,6 @@ namespace Adollib {
 
 	class Gameobject_manager{
 	private:
-		static Microsoft::WRL::ComPtr<ID3D11Buffer> light_cb;
-		static Microsoft::WRL::ComPtr<ID3D11Buffer> view_cb;
-		static Microsoft::WRL::ComPtr<ID3D11Buffer> projection_cb;
 
 		static int go_count;
 

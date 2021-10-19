@@ -7,6 +7,9 @@
 #include <string>
 #include <memory>
 
+#include <d3d11.h>
+#include <wrl.h>
+
 namespace Adollib
 {
 	//カメラ用のコンポーネントクラス 継承不可!
@@ -20,28 +23,23 @@ namespace Adollib
 
 
 	private:
-		//managerに保存されている 自身へのitr
+		// managerに保存されている 自身へのitr
 		std::list<Camera_component*>::iterator this_itr;
+
+		Microsoft::WRL::ComPtr<ID3D11Buffer> view_cb;
+		Microsoft::WRL::ComPtr<ID3D11Buffer> projection_cb;
+
+	public:
+		// ConstantBufferにcamera情報をsetする
+		void set_Constantbuffer();
 
 	public:
 
 		// addComponentされたときに呼ばれる
 		void awake() override;
 
-		// 所属するシーンの初期化時に一度だけ呼ばれる
-		virtual void start() override {};
-
 		// Hierarchyの表示(Imguiの関数 Imgui::begin,Imgui::endはいらない)
 		virtual void Update_hierarchy() override;
-
-		// 毎フレーム呼ばれる更新処理
-		virtual void update() override {};
-
-		// このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる(GO生成時にスクリプトが有効な時も呼ばれる)
-		virtual void onEnable() override {};
-
-		// このスクリプトがアタッチされているGOのactiveSelfがfalseになった時呼ばれる
-		virtual void onDisable() override {};
 
 		// removeComponent()、clear()時に呼ぶ
 		void finalize() override;

@@ -40,19 +40,13 @@ std::vector<Gameobject*>	Gameobject_manager::save_delete_gameobject;
 
 int Gameobject_manager::go_count = 0;
 
-ComPtr<ID3D11Buffer> Gameobject_manager::light_cb;
-ComPtr<ID3D11Buffer> Gameobject_manager::view_cb;
-ComPtr<ID3D11Buffer> Gameobject_manager::projection_cb;
-
 void Gameobject_manager::awake() {
-
-	Systems::CreateConstantBuffer(&light_cb, sizeof(ConstantBufferPerLight));
-	Systems::CreateConstantBuffer(&view_cb, sizeof(ConstantBufferPerCamera));
-	Systems::CreateConstantBuffer(&projection_cb, sizeof(ConstantBufferPerSystem));
 
 	Systems::SetDephtStencilState(State_manager::DStypes::DS_TRUE);
 	Systems::SetRasterizerState(State_manager::RStypes::RS_CULL_BACK);
 	Systems::SetBlendState(State_manager::BStypes::BS_ADD);
+
+	Renderer_manager::awake();
 
 	//sceneの数だけgo_managerを生成
 	for (int i = 0; i < static_cast<int>(Scenelist::scene_list_size); i++) {
@@ -173,97 +167,8 @@ void Gameobject_manager::update(Scenelist Sce) {
 }
 
 void Gameobject_manager::render(Scenelist Sce) {
-	Work_meter::tag_start("render");
-	if (Sce == Scenelist::scene_null)return;
-
-	//CB : ConstantBufferPerLight
-	ConstantBufferPerLight l_cb;
-	l_cb.AmbientColor = Ambient.get_XM4();
-	l_cb.LightDir = LightDir.get_XM4();
-	l_cb.LightColor = DirLightColor.get_XM4();
-
-	//コンスタントバッファに渡すためにpointlight,spotlightの配列を整理
-	POINTLIGHT PointLight[POINTMAX] = { 0 };
-	SPOTLIGHT SpotLight[SPOTMAX] = { 0 };
-	{
-		int point_num = 0;
-		int spot_num = 0;
-		for (const auto& light : lights[Sce]) {
-			for (u_int o = 0; o < light->PointLight.size(); o++) {
-				if (light->gameobject->active == false)return;
-				PointLight[point_num] = *light->PointLight[o];
-				//	PointLight[point_num].pos = (*itr_li->get()->PointLight[o]->pos )+( *itr_li->get()->transform->position);
-				point_num++;
-			}
-
-			for (u_int o = 0; o < light->SpotLight.size(); o++) {
-				if (light->gameobject->active == false)return;
-				SpotLight[spot_num] = *light->SpotLight[o];
-				spot_num++;
-			}
-		}
-	}
-
-	memcpy(l_cb.PointLight, PointLight, sizeof(POINTLIGHT) * POINTMAX);
-	memcpy(l_cb.SpotLight, SpotLight, sizeof(SPOTLIGHT) * SPOTMAX);
-	Systems::DeviceContext->UpdateSubresource(light_cb.Get(), 0, NULL, &l_cb, 0, 0);
-	Systems::DeviceContext->VSSetConstantBuffers(4, 1, light_cb.GetAddressOf());
-	Systems::DeviceContext->PSSetConstantBuffers(4, 1, light_cb.GetAddressOf());
-
-	ConstantBufferPerCamera c_cb;
-	ConstantBufferPerSystem s_sb;
-	//そのシーンのカメラの数だけ回す
-
-	Work_meter::start("drawobj_per_camera");
-	for (const auto& camera : cameras[Sce]) {
-		if (camera->gameobject->active == false)continue;
-
-		//CB : ConstantBufferPerCamera
-		// ビュー行列
-		Vector3 pos = camera->transform->position;
-		Quaternion orient = camera->transform->orientation;
-		Vector3 look_pos = pos + vector3_quatrotate(Vector3(0, 0, 1), orient);
-
-		DirectX::XMVECTOR eye = DirectX::XMVectorSet(pos.x, pos.y, pos.z, 1.0f);
-		DirectX::XMVECTOR focus = DirectX::XMVectorSet(look_pos.x, look_pos.y, look_pos.z, 1.0f);
-		DirectX::XMVECTOR up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f);
-		XMStoreFloat4x4(&c_cb.View, DirectX::XMMatrixLookAtLH(eye, focus, up));
-		c_cb.Eyepos = DirectX::XMFLOAT4(pos.x, pos.y, pos.z, 1.0f);
-		Systems::DeviceContext->UpdateSubresource(view_cb.Get(), 0, NULL, &c_cb, 0, 0);
-		Systems::DeviceContext->VSSetConstantBuffers(1, 1, view_cb.GetAddressOf());
-		Systems::DeviceContext->PSSetConstantBuffers(1, 1, view_cb.GetAddressOf());
-
-		//CB : ConstantBufferPerSystem
-		float fov = ToRadian(camera->fov);
-		float aspect = camera->aspect;
-		float nearZ = camera->nearZ;
-		float farZ = camera->farZ;
-		DirectX::XMStoreFloat4x4(&s_sb.Projection, DirectX::XMMatrixPerspectiveFovLH(fov, aspect, nearZ, farZ));
-		Systems::DeviceContext->UpdateSubresource(projection_cb.Get(), 0, NULL, &s_sb, 0, 0);
-		Systems::DeviceContext->VSSetConstantBuffers(2, 1, projection_cb.GetAddressOf());
-		Systems::DeviceContext->PSSetConstantBuffers(2, 1, projection_cb.GetAddressOf());
-
-
-		//視錐台カリングにカメラ情報のセット
-		//FrustumCulling::update_frustum(camera);
-
-
-		Work_meter::start("render_obj");
-
-		// renderを呼ぶ
-		Renderer_manager::render(Sce);
-
-		Work_meter::stop("render_obj");
-
-		// colliderのrender
-		Physics_manager::render_collider(Sce);
-	}
-	Work_meter::stop("drawobj_per_camera");
-
-	Work_meter::tag_stop();
+	Renderer_manager::render(cameras[Sce], lights[Sce], Sce);
 }
-
-
 
 
 

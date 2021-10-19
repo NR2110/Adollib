@@ -29,9 +29,6 @@ void Renderer::render() {
 	Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 	Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 
-	// OŠpŒ`‚Ì•`‰æ•û–@
-	Systems::DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
 	// shader‚Ìactivate
 	material->shader_activate();
 

@@ -32,6 +32,7 @@ namespace Adollib {
 			DirectX::XMFLOAT4X4 Mesh_world;
 		};
 		//material
+		static constexpr int MAX_BONES = 4;
 		struct ConstantBufferPerMaterial
 		{
 			DirectX::XMFLOAT4X4 boneTransforms[MAX_BONES];

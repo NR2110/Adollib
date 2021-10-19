@@ -22,7 +22,7 @@ namespace Adollib {
 		return M - i * F;
 	};
 
-	Vector3 Al_Global::get_gaming(int time, float change_time, float min, float max ) {
+	Vector3 Al_Global::get_gaming(float time, float change_time, float min, float max ) {
 		Vector3 color;
 		float T = (float)time;
 

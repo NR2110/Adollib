@@ -13,8 +13,6 @@
 using Microsoft::WRL::ComPtr;
 #include <assert.h>
 
-#define MAX_BONES (4)
-
 namespace Adollib
 {
 

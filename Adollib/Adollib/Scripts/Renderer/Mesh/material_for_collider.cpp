@@ -15,6 +15,7 @@
 
 using namespace Adollib;
 using namespace Physics_function;
+using namespace ConstantBuffer;
 
 Microsoft::WRL::ComPtr<ID3D11InputLayout> Collider_renderer::vertexLayout;
 
