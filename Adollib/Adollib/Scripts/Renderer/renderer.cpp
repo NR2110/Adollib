@@ -76,8 +76,8 @@ void Renderer::render() {
 			cb.materialColor = material->color.get_XM4();
 		}
 		Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
-		Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
-		Systems::DeviceContext->PSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
+		Systems::DeviceContext->VSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
+		Systems::DeviceContext->PSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
 
 		//CB : ConstantBufferPerMesh
 		{

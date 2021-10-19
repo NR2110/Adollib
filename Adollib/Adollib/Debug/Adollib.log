@@ -1,4 +1,2 @@
-﻿  gameobject_manager.cpp
-  renderer.cpp
-  renderer_manager.cpp
+﻿  component_camera.cpp
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

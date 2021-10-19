@@ -41,18 +41,4 @@ namespace Adollib {
 
 	};
 
-
-	//----------------------------------------------
-	//
-	//	頂点データ構造体定義
-	//
-	//----------------------------------------------
-
-	struct VERTEX
-	{
-		DirectX::XMFLOAT3 Pos;	//位置
-		DirectX::XMFLOAT3 Normal;//法線
-		DirectX::XMFLOAT2 Tex;	//UV座標
-		DirectX::XMFLOAT4 Color;	//頂点色
-	};
 }

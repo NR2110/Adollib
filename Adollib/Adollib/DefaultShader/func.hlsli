@@ -1,4 +1,6 @@
 
+#ifndef Func
+
 //--------------------------------------------
 //	ŠgU”½ËŠÖ”
 //--------------------------------------------
@@ -167,3 +169,5 @@ float3	GetShadow(Texture2D st, SamplerState ss, float3 Tex, float3 Scolor, float
 	return Scolor;
 }
 
+#define Func
+#endif

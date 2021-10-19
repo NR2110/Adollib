@@ -2,16 +2,19 @@
 
 #include "Object.h"
 #include "component.h"
-#include "../Main/input.h"
 #include "time.h"
+#include "../Main/input.h"
+#include "../Renderer/Shader/shader.h"
+
 #include <string>
 #include <memory>
-
 #include <d3d11.h>
 #include <wrl.h>
 
 namespace Adollib
 {
+	class Texture;
+
 	//カメラ用のコンポーネントクラス 継承不可!
 	class Camera_component final : public Component
 	{
@@ -28,10 +31,20 @@ namespace Adollib
 
 		Microsoft::WRL::ComPtr<ID3D11Buffer> view_cb;
 		Microsoft::WRL::ComPtr<ID3D11Buffer> projection_cb;
+		Microsoft::WRL::ComPtr<ID3D11Buffer> sprite_cb;
+
+		Texture* color_texture = nullptr;
+		Texture* normal_texture = nullptr;
+		Texture* depth_texture = nullptr;
+
+		Shader shader;
 
 	public:
 		// ConstantBufferにcamera情報をsetする
 		void set_Constantbuffer();
+
+		// それぞれのTextureを表示する
+		void MRT_render();
 
 	public:
 

@@ -255,7 +255,6 @@
     <ClInclude Include="Scripts\Renderer\Mesh\texture.h" />
     <ClInclude Include="Scripts\Renderer\renderer.h" />
     <ClInclude Include="Scripts\Renderer\renderer_manager.h" />
-    <ClInclude Include="Scripts\Renderer\Shader\cbuffer_manager.h" />
     <ClInclude Include="Scripts\Renderer\Shader\compute_shader.h" />
     <ClInclude Include="Scripts\Renderer\Shader\constant_buffer.h" />
     <ClInclude Include="Scripts\Renderer\Shader\light_types.h" />

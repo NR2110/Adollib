@@ -2,15 +2,6 @@
 //--------------------------------------------
 //	データーフォーマット
 //--------------------------------------------
-#define MAX_BONE_INFLUENCES 32
-struct VSInput
-{
-	float3 Position : POSITION;
-	float3 Normal   : NORMAL;
-	float2 Tex      : TEXCOORD;
-	float4 BoneWeights : WEIGHTS;
-	uint4  BoneIndices : BONES;
-};
 
 struct PSInput
 {

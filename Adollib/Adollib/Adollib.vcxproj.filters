@@ -92,9 +92,6 @@
     <Filter Include="00_Adollib\44_render\shader\hlsli">
       <UniqueIdentifier>{2ee81938-f4b8-4424-be0e-212cafffefba}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00_Adollib\44_render\mesh">
-      <UniqueIdentifier>{d2534fb1-3e0f-4465-bf38-05c093fa394f}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Scripts\player.cpp">
@@ -289,21 +286,6 @@
     <ClCompile Include="Scripts\Physics\joint_base.cpp">
       <Filter>00_Adollib\22_physics\Joint\base</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Renderer\Mesh\frustum_culling.cpp">
-      <Filter>00_Adollib\44_render\mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Renderer\Mesh\material.cpp">
-      <Filter>00_Adollib\44_render\mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Renderer\Mesh\material_for_collider.cpp">
-      <Filter>00_Adollib\44_render\mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Renderer\Mesh\mesh.cpp">
-      <Filter>00_Adollib\44_render\mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Renderer\Mesh\texture.cpp">
-      <Filter>00_Adollib\44_render\mesh</Filter>
-    </ClCompile>
     <ClCompile Include="Scripts\Renderer\Shader\compute_shader.cpp">
       <Filter>00_Adollib\44_render\shader</Filter>
     </ClCompile>
@@ -314,6 +296,21 @@
       <Filter>00_Adollib\44_render</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Renderer\renderer_manager.cpp">
+      <Filter>00_Adollib\44_render</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Renderer\Mesh\frustum_culling.cpp">
+      <Filter>00_Adollib\44_render</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Renderer\Mesh\material.cpp">
+      <Filter>00_Adollib\44_render</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Renderer\Mesh\material_for_collider.cpp">
+      <Filter>00_Adollib\44_render</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Renderer\Mesh\mesh.cpp">
+      <Filter>00_Adollib\44_render</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Renderer\Mesh\texture.cpp">
       <Filter>00_Adollib\44_render</Filter>
     </ClCompile>
   </ItemGroup>
@@ -639,24 +636,6 @@
     <ClInclude Include="Scripts\Physics\ALP_struct_contacted_data.h">
       <Filter>00_Adollib\22_physics\base</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Renderer\Mesh\frustum_culling.h">
-      <Filter>00_Adollib\44_render\mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Renderer\Mesh\material.h">
-      <Filter>00_Adollib\44_render\mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Renderer\Mesh\material_for_collider.h">
-      <Filter>00_Adollib\44_render\mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Renderer\Mesh\mesh.h">
-      <Filter>00_Adollib\44_render\mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Renderer\Mesh\texture.h">
-      <Filter>00_Adollib\44_render\mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Renderer\Shader\cbuffer_manager.h">
-      <Filter>00_Adollib\44_render\shader</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts\Renderer\Shader\compute_shader.h">
       <Filter>00_Adollib\44_render\shader</Filter>
     </ClInclude>
@@ -673,6 +652,21 @@
       <Filter>00_Adollib\44_render</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Renderer\renderer_manager.h">
+      <Filter>00_Adollib\44_render</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\Mesh\texture.h">
+      <Filter>00_Adollib\44_render</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\Mesh\frustum_culling.h">
+      <Filter>00_Adollib\44_render</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\Mesh\material.h">
+      <Filter>00_Adollib\44_render</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\Mesh\material_for_collider.h">
+      <Filter>00_Adollib\44_render</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\Mesh\mesh.h">
       <Filter>00_Adollib\44_render</Filter>
     </ClInclude>
   </ItemGroup>

@@ -154,3 +154,51 @@ bool Texture::Create(u_int width, u_int height, DXGI_FORMAT format)
 
 	return true;
 }
+
+bool Texture::CreateDepth(u_int width, u_int height, DXGI_FORMAT format)
+{
+
+	ComPtr<ID3D11Texture2D> Texture2D;
+	HRESULT hr = S_OK;
+	//	テクスチャ作成
+	ZeroMemory(&texture2d_desc, sizeof(texture2d_desc));
+	texture2d_desc.Width = width;
+	texture2d_desc.Height = height;
+	texture2d_desc.MipLevels = 1;
+	texture2d_desc.ArraySize = 1;
+	texture2d_desc.Format = format;
+	texture2d_desc.SampleDesc.Count = 1;
+	texture2d_desc.SampleDesc.Quality = 0;
+	texture2d_desc.Usage = D3D11_USAGE_DEFAULT;
+	texture2d_desc.CPUAccessFlags = 0;
+	texture2d_desc.MiscFlags = 0;
+	texture2d_desc.BindFlags = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE;
+
+	hr = Systems::Device->CreateTexture2D(&texture2d_desc, NULL, Texture2D.GetAddressOf());
+	assert(SUCCEEDED(hr));
+
+	// 深度ステンシルビュー設定
+	D3D11_DEPTH_STENCIL_VIEW_DESC dsvd;
+	ZeroMemory(&dsvd, sizeof(D3D11_DEPTH_STENCIL_VIEW_DESC));
+	dsvd.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	dsvd.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	dsvd.Texture2D.MipSlice = 0;
+	hr = Systems::Device->CreateDepthStencilView(Texture2D.Get(), &dsvd, DepthStencilView.GetAddressOf());
+	assert(SUCCEEDED(hr));
+
+	//	シェーダーリソースビュー作成
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvd;
+	ZeroMemory(&srvd, sizeof(srvd));
+	srvd.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+	srvd.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	srvd.Texture2D.MostDetailedMip = 0;
+	srvd.Texture2D.MipLevels = 1;
+	hr = Systems::Device->CreateShaderResourceView(Texture2D.Get(), &srvd, ShaderResourceView.GetAddressOf());
+
+	assert(SUCCEEDED(hr));
+
+	return true;
+}
+
+
+
