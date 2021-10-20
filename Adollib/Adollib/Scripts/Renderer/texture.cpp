@@ -1,6 +1,6 @@
 
 #include "texture.h"
-#include "../../Main/resource_manager.h"
+#include "../Main/resource_manager.h"
 #include "../../DirectXTK-master/Inc/WICTextureLoader.h"
 
 using namespace Adollib;

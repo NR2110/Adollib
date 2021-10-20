@@ -4,7 +4,7 @@
 #include "../Main/Adollib.h"
 #include "../Main/systems.h"
 #include "../Renderer/Shader/constant_buffer.h"
-#include "../Renderer/Mesh/texture.h"
+#include "../Renderer/texture.h"
 #include "gameobject_manager.h"
 
 using namespace Adollib;

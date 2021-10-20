@@ -3,9 +3,9 @@
 #include <map>
 #include <memory>
 #include "mesh.h"
-#include "../Shader/shader.h"
-#include "../../Physics/ALP_Collider.h"
-#include "../../Physics/collider_shape.h"
+#include "Shader/shader.h"
+#include "../Physics/ALP_Collider.h"
+#include "../Physics/collider_shape.h"
 
 namespace Adollib {
 	namespace Physics_function {

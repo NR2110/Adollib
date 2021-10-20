@@ -2,10 +2,10 @@
 
 #include <vector>
 #include <string>
-#include "../../Math/vector.h"
-#include "../Shader/shader.h"
+#include "../Main/states_manager.h"
+#include "../Math/vector.h"
+#include "Shader/shader.h"
 #include "mesh.h"
-#include "../../Main/states_manager.h"
 
 namespace Adollib {
 

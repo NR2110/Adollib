@@ -13,8 +13,8 @@
 #include "../Renderer/renderer.h"
 #include "../Renderer/Shader/constant_buffer.h"
 #include "../Renderer/Shader/light_types.h"
-#include "../Renderer/Mesh/frustum_culling.h"
-#include "../Renderer/Mesh/material_for_collider.h"
+#include "../Renderer/frustum_culling.h"
+#include "../Renderer/material_for_collider.h"
 
 #include "../Physics/ALP__physics_manager.h"
 #include "hierarchy.h"

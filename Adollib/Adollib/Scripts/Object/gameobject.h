@@ -11,7 +11,7 @@
 #include "transform.h"
 #include "gameobject_tags.h"
 #include "../Scene/scene_list.h"
-#include "../Renderer/Mesh/material.h"
+#include "../Renderer/material.h"
 
 namespace Adollib {
 

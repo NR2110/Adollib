@@ -5,7 +5,7 @@
 #include <fstream>
 #include <wrl.h>
 #include <fbxsdk.h>
-#include "../../Math/math.h"
+#include "../Math/math.h"
 
 #include <d3dcompiler.h>
 #include <memory>

@@ -3,8 +3,8 @@
 #include <vector>
 #include <string>
 #include "../Object/component.h"
-#include "Mesh/mesh.h"
-#include "Mesh/material.h"
+#include "mesh.h"
+#include "material.h"
 
 namespace Adollib {
 	class Gameobject;

@@ -1,3 +1,2 @@
-﻿  ALP__physics_manager.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.cpp(81,26): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
+﻿  material_for_collider.cpp
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

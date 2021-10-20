@@ -6,8 +6,8 @@
 #include <map>
 #include <unordered_map>
 
-#include "Mesh/mesh.h"
-#include "Mesh/material.h"
+#include "mesh.h"
+#include "material.h"
 #include "../Scene/scene_list.h"
 
 

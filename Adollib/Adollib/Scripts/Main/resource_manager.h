@@ -1,8 +1,8 @@
 #pragma once
 #include <d3d11.h>
 #include <unordered_map>
-#include "../Renderer/Mesh/mesh.h"
-#include "../Renderer/Mesh/texture.h"
+#include "../Renderer/mesh.h"
+#include "../Renderer/texture.h"
 #include "../Renderer/Shader/shader.h"
 
 namespace Adollib

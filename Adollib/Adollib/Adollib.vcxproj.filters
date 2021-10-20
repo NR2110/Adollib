@@ -301,26 +301,26 @@
     <ClCompile Include="Scripts\Renderer\renderer_manager.cpp">
       <Filter>00_Adollib\44_render</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Renderer\Mesh\frustum_culling.cpp">
-      <Filter>00_Adollib\44_render</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Renderer\Mesh\material.cpp">
-      <Filter>00_Adollib\44_render</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Renderer\Mesh\material_for_collider.cpp">
-      <Filter>00_Adollib\44_render</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Renderer\Mesh\mesh.cpp">
-      <Filter>00_Adollib\44_render</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Renderer\Mesh\texture.cpp">
-      <Filter>00_Adollib\44_render</Filter>
-    </ClCompile>
     <ClCompile Include="Scripts\Scene\scene_title.cpp">
       <Filter>ソース ファイル\scene_title</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\scene_shader.cpp">
       <Filter>ソース ファイル\scene_shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Renderer\frustum_culling.cpp">
+      <Filter>00_Adollib\44_render</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Renderer\material.cpp">
+      <Filter>00_Adollib\44_render</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Renderer\material_for_collider.cpp">
+      <Filter>00_Adollib\44_render</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Renderer\mesh.cpp">
+      <Filter>00_Adollib\44_render</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Renderer\texture.cpp">
+      <Filter>00_Adollib\44_render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -660,26 +660,26 @@
     <ClInclude Include="Scripts\Renderer\renderer_manager.h">
       <Filter>00_Adollib\44_render</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Renderer\Mesh\texture.h">
-      <Filter>00_Adollib\44_render</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Renderer\Mesh\frustum_culling.h">
-      <Filter>00_Adollib\44_render</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Renderer\Mesh\material.h">
-      <Filter>00_Adollib\44_render</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Renderer\Mesh\material_for_collider.h">
-      <Filter>00_Adollib\44_render</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Renderer\Mesh\mesh.h">
-      <Filter>00_Adollib\44_render</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts\Scene\scene_title.h">
       <Filter>ソース ファイル\scene_title</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\scene_shader.h">
       <Filter>ソース ファイル\scene_shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\frustum_culling.h">
+      <Filter>00_Adollib\44_render</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\material.h">
+      <Filter>00_Adollib\44_render</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\material_for_collider.h">
+      <Filter>00_Adollib\44_render</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\mesh.h">
+      <Filter>00_Adollib\44_render</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\texture.h">
+      <Filter>00_Adollib\44_render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

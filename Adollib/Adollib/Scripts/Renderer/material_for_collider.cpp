@@ -1,17 +1,17 @@
 
 #include "material_for_collider.h"
 
-#include "../../Main/systems.h"
-#include "../../Main/resource_manager.h"
+#include "../Main/systems.h"
+#include "../Main/resource_manager.h"
 
-#include "../../Object/gameobject.h"
+#include "../Object/gameobject.h"
 
-#include "../Shader/constant_buffer.h"
+#include "Shader/constant_buffer.h"
 
-#include "../../Physics/ALP__meshcoll_data.h"
-#include "../../Physics/ALP_physics.h"
-#include "../../Physics/ALP_collider.h"
-#include "../../Physics/ALP_joint.h"
+#include "../Physics/ALP__meshcoll_data.h"
+#include "../Physics/ALP_physics.h"
+#include "../Physics/ALP_collider.h"
+#include "../Physics/ALP_joint.h"
 
 using namespace Adollib;
 using namespace Physics_function;
@@ -565,8 +565,8 @@ void Collider_renderer::render_capsule(const Collider_shape* shape, const Vector
 	}
 }
 
-#include "../../Physics/collider.h"
-#include "../../Main/states_manager.h"
+#include "../Physics/collider.h"
+#include "../Main/states_manager.h"
 
 void Collider_renderer::render_AABB(const  Physics_function::ALP_Collider* coll) {
 

@@ -520,7 +520,7 @@ void Physics_manager::thread_stop_and_join() {
 
 
 #include "../Main/systems.h"
-#include "../Renderer/Mesh/material_for_collider.h"
+#include "../Renderer/material_for_collider.h"
 
 bool Physics_manager::render_collider(Scenelist Sce) {
 	render_dop(Sce);
