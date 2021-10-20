@@ -473,6 +473,8 @@ void Physics_manager::dadapt_delete_data(bool is_mutex_lock) {
 }
 
 bool Physics_manager::adapt_transform_to_gameobject(Scenelist Sce) {
+	std::lock_guard <std::mutex> lock(mtx);
+
 	count_mainthread += 1;
 
 	if (is_updated_physicsthread == false) return false;
