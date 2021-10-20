@@ -14,3 +14,12 @@ struct PSInput
 	float3 wNormal:	TEXCOORD3;
 
 };
+
+
+struct PSOutput
+{
+    float4 Color : SV_TARGET0;
+    float4 Normal : SV_TARGET1;
+    float4 SVPosiiton : SV_TARGET2;
+
+};

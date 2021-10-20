@@ -40,6 +40,8 @@ void Renderer_manager::remove_renderer(std::list<Renderer*>::iterator itr) {
 
 void Renderer_manager::render(const std::list<Camera_component*>& cameras,const std::list<Light_component*>& lights, Scenelist Sce) {
 
+	Systems::Clear();
+
 	// ŽOŠpŒ`‚Ì•`‰æ•û–@
 	Systems::DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 

@@ -157,6 +157,7 @@
     <ClInclude Include="..\Scripts\player_manager.h" />
     <ClInclude Include="..\Scripts\respown_area.h" />
     <ClInclude Include="..\Scripts\scene_game_all.h" />
+    <ClInclude Include="..\Scripts\scene_shader.h" />
     <ClInclude Include="..\Scripts\stageparts_base.h" />
     <ClInclude Include="..\Scripts\stageparts_tags.h" />
     <ClInclude Include="..\Scripts\stage_01.h" />
@@ -273,6 +274,7 @@
     <ClCompile Include="..\Scripts\player.cpp" />
     <ClCompile Include="..\Scripts\player_funcs.cpp" />
     <ClCompile Include="..\Scripts\player_manager.cpp" />
+    <ClCompile Include="..\Scripts\scene_shader.cpp" />
     <ClCompile Include="..\Scripts\stage_01.cpp" />
     <ClCompile Include="..\Scripts\stage_01_funcs.cpp" />
     <ClCompile Include="..\Scripts\stage_base.cpp" />

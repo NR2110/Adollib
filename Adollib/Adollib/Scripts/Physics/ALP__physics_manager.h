@@ -331,6 +331,9 @@ namespace Adollib
 			// gameobject.transformをALPcollider.transformで更新する gameobjectのtransformが変化したらtrueを返す
 			static bool adapt_transform_to_gameobject(Scenelist Sce);
 
+			// gameobjectのtransformをコピーする
+			static void copy_gameobject_transform(Scenelist Sce);
+
 			// 別threadでupdateを回す
 			static void thread_start();
 

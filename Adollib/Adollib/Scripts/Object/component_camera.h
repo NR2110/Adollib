@@ -22,7 +22,7 @@ namespace Adollib
 		float fov = 60.0f;
 		float aspect = 1280 / 720.0f;
 		float nearZ = 0.1f;
-		float farZ = 1000000.0f;
+		float farZ = 10000.0f;
 
 
 	private:
@@ -38,6 +38,9 @@ namespace Adollib
 		Texture* depth_texture = nullptr;
 
 		Shader shader;
+
+	private:
+		void clear();
 
 	public:
 		// ConstantBuffer‚Écameraî•ñ‚ğset‚·‚é

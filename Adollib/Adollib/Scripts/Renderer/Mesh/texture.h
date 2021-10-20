@@ -7,7 +7,7 @@ namespace Adollib {
 	{
 	protected:
 
-	public:
+	private:
 		ComPtr<ID3D11ShaderResourceView> ShaderResourceView = nullptr;
 		ComPtr<ID3D11SamplerState> sampler = nullptr;
 		ComPtr<ID3D11RenderTargetView> RenderTargetView = nullptr;
@@ -15,6 +15,8 @@ namespace Adollib {
 
 		// テクスチャ情報
 		D3D11_TEXTURE2D_DESC texture2d_desc;
+	public:
+
 
 		Texture();
 		virtual ~Texture();
@@ -28,7 +30,7 @@ namespace Adollib {
 
 		ID3D11RenderTargetView* GetRenderTargetView() { return RenderTargetView.Get(); }
 		ID3D11DepthStencilView* GetDepthStencilView() { return DepthStencilView.Get(); }
-
+		ID3D11ShaderResourceView* GetShaderResourceView() { return ShaderResourceView.Get();  }
 	};
 
 }

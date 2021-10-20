@@ -382,6 +382,7 @@ void Physics_manager::adapt_added_data(Scenelist Sce, bool is_mutex_lock) {
 	for (auto added_coll : added_buffer_ALP_colliders) {
 		// ’Ç‰Á‚³‚ê‚½collider‚ðbroadphase:sweep&prune—p‚É
 		for (auto& coll : added_coll.second) {
+			coll->copy_transform_gameobject();
 			added_collider_for_insertsort[added_coll.first].emplace_back(coll);
 		}
 
@@ -474,10 +475,7 @@ void Physics_manager::dadapt_delete_data(bool is_mutex_lock) {
 bool Physics_manager::adapt_transform_to_gameobject(Scenelist Sce) {
 	count_mainthread += 1;
 
-	if (is_updated_physicsthread == false)
-		return false;
-
-	//std::lock_guard <std::mutex> lock(mtx);
+	if (is_updated_physicsthread == false) return false;
 
 	for (auto coll : ALP_colliders[Sce]) {
 		coll->adapt_to_gameobject_transform();
@@ -487,6 +485,19 @@ bool Physics_manager::adapt_transform_to_gameobject(Scenelist Sce) {
 
 	return true;
 }
+
+void Physics_manager::copy_gameobject_transform(Scenelist Sce) {
+	std::lock_guard <std::mutex> lock(mtx);
+
+	for (auto& coll : ALP_colliders[Sce]) {
+		coll->copy_transform_gameobject();
+	}
+
+	Physics_manager::is_updated_mainthread = true;
+}
+
+
+
 
 
 // •Êthread‚Åupdate‚ð‰ñ‚·

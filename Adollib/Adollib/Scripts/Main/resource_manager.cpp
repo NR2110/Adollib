@@ -299,7 +299,7 @@ namespace Adollib
 		HRESULT hr = S_OK;
 		Microsoft::WRL::ComPtr<ID3D11Resource> resource;
 
-		pSRV = texturs[(std::wstring)fileName].ShaderResourceView.GetAddressOf();
+		//pSRV = texturs[(std::wstring)fileName].GetShaderResourceView();
 		//if(texturs.count((std::wstring)fileName) == 1)
 		//{
 		//	pSRV = texturs[(std::wstring)fileName].ShaderResourceView.GetAddressOf();

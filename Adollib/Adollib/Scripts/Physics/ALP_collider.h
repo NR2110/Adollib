@@ -81,7 +81,6 @@ namespace Adollib {
 		public:
 			Collider* get_collptr() const { return coll_ptr; };
 			ALP_Physics* get_ALPphysics() const { return ALPphysics; };
-			//Gameobject* get_gameobject() const { return gameobject; };
 
 			// ALPphysics_ptrのset
 			void set_ALPphysics_ptr(ALP_Physics* ptr) { ALPphysics = ptr; };
@@ -114,6 +113,7 @@ namespace Adollib {
 			//::: マルチスレッドにするためtransformのworld情報を保存する :::
 			world_trans transform_start; //初めの値
 			world_trans transform; //計算している値 (初めの値との差を移動量としてgameobject.transformに入れる)
+			world_trans transform_gameobject; //gameobjectのtransform
 
 			//::: アタッチされたgameobjectが削除されたとき trueにする 別スレッドなので削除するタイミングが異なるから
 			bool is_deleted = false;
@@ -139,7 +139,6 @@ namespace Adollib {
 
 				added_buffer_shapes.clear();
 			};
-
 
 		public:
 
@@ -196,7 +195,8 @@ namespace Adollib {
 			// gameobjectのtransformへ自身の保持するtransformを入れる
 			void adapt_to_gameobject_transform() const;
 
-			void adapt_transform_for_GO();
+			// gameobjectのtransformをコピーする
+			void copy_transform_gameobject();
 
 			// ヒエラルキー描画用
 			void Update_hierarchy();

@@ -87,6 +87,9 @@ void Camera_component::set_Constantbuffer() {
 }
 
 void Camera_component::MRT_render() {
+
+	clear();
+
 	//D3D11_VIEWPORT vp;
 	//UINT num = 1;
 
@@ -179,4 +182,16 @@ void Camera_component::MRT_render() {
 	//Systems::DeviceContext->Draw(4, 0);
 	////シェーダ無効か
 	//shader->Inactivate();
+}
+
+
+void Camera_component::clear() {
+
+	float clearColor[4] = { 0,0,0,1 };
+
+	Systems::DeviceContext->ClearRenderTargetView(color_texture->GetRenderTargetView(), clearColor);
+	Systems::DeviceContext->ClearRenderTargetView(normal_texture->GetRenderTargetView(), clearColor);
+	Systems::DeviceContext->ClearRenderTargetView(depth_texture->GetRenderTargetView(), clearColor);
+	Systems::DeviceContext->ClearRenderTargetView(Systems::GetRenderTargetView(), clearColor);
+	Systems::DeviceContext->ClearDepthStencilView(Systems::GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 }

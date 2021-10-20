@@ -31,8 +31,6 @@ bool loop::Update(MSG hMsg, HWND hWnd, int width, int height) {
 
 bool loop::Render(){
 
-	Systems::Clear();
-
 	//loop::initで一度呼ばれているためコメント化
 	//何かあれば適当に
 	//Systems::SetViewPort(Systems::SCREEN_WIDTH, Systems::SCREEN_HEIGHT);

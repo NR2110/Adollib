@@ -149,13 +149,16 @@ void ALP_Collider::reset_data_per_frame() {
 	//
 	if (is_deleted)return;  //go‚ª‚·‚Å‚Édelete‚³‚ê‚Ä‚¢‚ê‚Îreturn
 
-	transform.position = gameobject->transform->position;
-	transform.orientation = gameobject->transform->orientation;
-	transform.scale = gameobject->transform->scale;
+	//transform.position = gameobject->transform->position;
+	//transform.orientation = gameobject->transform->orientation;
+	//transform.scale = gameobject->transform->scale;
 
-	transform_start.position     = gameobject->transform->position;
-	transform_start.orientation  = gameobject->transform->orientation;
-	transform_start.scale        = gameobject->transform->scale;
+	//transform_start.position     = gameobject->transform->position;
+	//transform_start.orientation  = gameobject->transform->orientation;
+	//transform_start.scale        = gameobject->transform->scale;
+
+	transform = transform_gameobject;
+	transform_start = transform_gameobject;
 
 };
 
@@ -198,8 +201,11 @@ void ALP_Collider::adapt_to_gameobject_transform() const
 	//gameobject->transform->local_scale *= transform_for_GO.scale / start_transform.scale;
 }
 
-void ALP_Collider::adapt_transform_for_GO() {
-	//transform_for_GO = transform;
+void ALP_Collider::copy_transform_gameobject() {
+	if (is_deleted)return;
+	transform_gameobject.position = gameobject->transform->position;
+	transform_gameobject.orientation = gameobject->transform->orientation;
+	transform_gameobject.scale = gameobject->transform->scale;
 }
 
 //:::::

@@ -104,8 +104,8 @@ void Gameobject_manager::update(Scenelist Sce) {
 #endif // Use_physics_thread
 
 	{
-		if (Physics_manager::is_updated_physicsthread)
-			Physics_manager::adapt_transform_to_gameobject(Sce);
+
+		Physics_manager::adapt_transform_to_gameobject(Sce);
 
 		//親から子に座標の更新を行う
 		{
@@ -118,9 +118,10 @@ void Gameobject_manager::update(Scenelist Sce) {
 				masters_manag[master] = true;
 			}
 
-			Physics_manager::is_updated_mainthread = true;
 			//Physics_manager::is_updated_physicsthread = true;
 		}
+
+		Physics_manager::copy_gameobject_transform(Sce);
 	}
 
 	//親から子へupdateを呼ぶ update中に、親objectが削除されたときに対応できないため削除はいったんbufferに保管している
