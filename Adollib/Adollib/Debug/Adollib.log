@@ -1,2 +1,31 @@
-﻿  material_for_collider.cpp
+﻿  material.cpp
+  mesh.cpp
+scene_title.obj : warning LNK4099: PDB 'vc142.pdb' が 'scene_title.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+frustum_culling.obj : warning LNK4099: PDB 'vc142.pdb' が 'frustum_culling.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+meshcoll_resorce_manager.obj : warning LNK4099: PDB 'vc142.pdb' が 'meshcoll_resorce_manager.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+coneTwistjoint.obj : warning LNK4099: PDB 'vc142.pdb' が 'coneTwistjoint.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+conejoint.obj : warning LNK4099: PDB 'vc142.pdb' が 'conejoint.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+balljoint.obj : warning LNK4099: PDB 'vc142.pdb' が 'balljoint.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ALP_raycast.obj : warning LNK4099: PDB 'vc142.pdb' が 'ALP_raycast.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ALP_midphase.obj : warning LNK4099: PDB 'vc142.pdb' が 'ALP_midphase.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ALP_generate_contact.obj : warning LNK4099: PDB 'vc142.pdb' が 'ALP_generate_contact.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+hierarchy.obj : warning LNK4099: PDB 'vc142.pdb' が 'hierarchy.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+crossing_func.obj : warning LNK4099: PDB 'vc142.pdb' が 'crossing_func.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+complex.obj : warning LNK4099: PDB 'vc142.pdb' が 'complex.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+closest_func.obj : warning LNK4099: PDB 'vc142.pdb' が 'closest_func.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+systems.obj : warning LNK4099: PDB 'vc142.pdb' が 'systems.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+sprite.obj : warning LNK4099: PDB 'vc142.pdb' が 'sprite.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+input.obj : warning LNK4099: PDB 'vc142.pdb' が 'input.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+Adollib.obj : warning LNK4099: PDB 'vc142.pdb' が 'Adollib.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+work_meter.obj : warning LNK4099: PDB 'vc142.pdb' が 'work_meter.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+inspector.obj : warning LNK4099: PDB 'vc142.pdb' が 'inspector.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+imgui_manager.obj : warning LNK4099: PDB 'vc142.pdb' が 'imgui_manager.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+debug.obj : warning LNK4099: PDB 'vc142.pdb' が 'debug.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+imgui_widgets.obj : warning LNK4099: PDB 'vc142.pdb' が 'imgui_widgets.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+imgui_impl_win32.obj : warning LNK4099: PDB 'vc142.pdb' が 'imgui_impl_win32.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+imgui_impl_dx11.obj : warning LNK4099: PDB 'vc142.pdb' が 'imgui_impl_dx11.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+imgui_draw.obj : warning LNK4099: PDB 'vc142.pdb' が 'imgui_draw.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+imgui_demo.obj : warning LNK4099: PDB 'vc142.pdb' が 'imgui_demo.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+imgui.obj : warning LNK4099: PDB 'vc142.pdb' が 'imgui.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+scene_shader.obj : warning LNK4099: PDB 'vc142.pdb' が 'scene_shader.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

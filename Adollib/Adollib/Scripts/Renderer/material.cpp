@@ -1,10 +1,10 @@
 
-#include "../../Main/systems.h"
+#include "../Main/systems.h"
 #include "material.h"
-#include "../../Math/matrix.h"
+#include "../Math/matrix.h"
 #include "frustum_culling.h"
 
-#include "../Shader/constant_buffer.h"
+#include "Shader/constant_buffer.h"
 
 using namespace Adollib;
 using namespace ConstantBuffer;

@@ -4,9 +4,9 @@
 #include <sstream>
 #include <iostream>
 
-#include "../../Main/resource_manager.h"
-#include "../mesh/mesh.h"
-#include "../Shader/constant_buffer.h"
+#include "../Main/resource_manager.h"
+#include "mesh.h"
+#include "Shader/constant_buffer.h"
 
 using namespace fbxsdk;
 
