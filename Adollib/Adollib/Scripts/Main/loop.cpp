@@ -31,10 +31,6 @@ bool loop::Update(MSG hMsg, HWND hWnd, int width, int height) {
 
 bool loop::Render(){
 
-	//loop::initで一度呼ばれているためコメント化
-	//何かあれば適当に
-	//Systems::SetViewPort(Systems::SCREEN_WIDTH, Systems::SCREEN_HEIGHT);
-
 	Work_meter::start(std::string("render_all"));
 	go_manager.render();
 	Work_meter::stop(std::string("render_all"));

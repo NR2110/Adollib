@@ -1,5 +1,7 @@
 
 
+#include "resource_manager.h"
+
 #include <memory>
 #include <wrl.h>
 #include <map>
@@ -7,11 +9,16 @@
 #include <fbxsdk.h>
 #include <vector>
 #include <functional>
+
 #include "../../DirectXTK-master/Inc/WICTextureLoader.h"
 #include "misc.h"
 #include "systems.h"
-#include "resource_manager.h"
+
+#include "../Renderer/texture.h"
+#include "../Renderer/material.h"
+#include "../Renderer/vertex_format.h"
 #include "../Renderer/Shader/constant_buffer.h"
+
 using namespace std;
 
 using namespace Adollib;
@@ -20,7 +27,7 @@ using namespace DOP;
 namespace Adollib
 {
 	std::unordered_map<std::string, std::vector<Mesh::mesh>> ResourceManager::meshes;
-	std::unordered_map<std::wstring, Texture> ResourceManager::texturs;
+	std::unordered_map<std::wstring, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>> ResourceManager::ShaderResourceViews;
 	std::unordered_map<std::string, ResourceManager::VS_resorce>   ResourceManager::VSshaders;
 	std::unordered_map<std::string, Microsoft::WRL::ComPtr<ID3D11PixelShader>>     ResourceManager::PSshaders;
 	std::unordered_map<std::string, Microsoft::WRL::ComPtr<ID3D11GeometryShader>>  ResourceManager::GSshaders;
@@ -39,7 +46,10 @@ namespace Adollib
 	{
 		VS_resorce VS;
 		if (VSshaders.count((string)csoName) == 1) {
-			VS = VSshaders[(string)csoName];
+			*vertexShader = VSshaders[(string)csoName].VSshader.Get();
+			*inputLayout =  VSshaders[(string)csoName].layout.Get();
+
+
 		}
 		else {
 			HRESULT hr;
@@ -297,16 +307,15 @@ namespace Adollib
 	)
 	{
 		HRESULT hr = S_OK;
-		Microsoft::WRL::ComPtr<ID3D11Resource> resource;
+		//Microsoft::WRL::ComPtr<ID3D11Resource> resource;
 
-		//pSRV = texturs[(std::wstring)fileName].GetShaderResourceView();
-		//if(texturs.count((std::wstring)fileName) == 1)
+		//if(ShaderResourceViews.count((std::wstring)fileName) != 0)
 		//{
-		//	pSRV = texturs[(std::wstring)fileName].ShaderResourceView.GetAddressOf();
+		//	pSRV = ShaderResourceViews[(std::wstring)fileName].GetAddressOf();
 		//}
 		//else
 		//{
-		//	Texture& tex = texturs[(std::wstring)fileName];
+		//	ID3D11ShaderResourceView** tex = ShaderResourceViews[(std::wstring)fileName];
 
 		//	// 見つからなかった場合は生成する
 		//	hr = DirectX::CreateWICTextureFromFile(Systems::Device.Get(), fileName, resource.GetAddressOf(), &tex.ShaderResourceView);
@@ -380,7 +389,7 @@ namespace Adollib
 		traverse(scene->GetRootNode());
 
 		// メッシュデータの取得
-		vector<Mesh::VertexFormat> vertices;
+		vector<VertexFormat> vertices;
 		vector<u_int> indices;
 		u_int vertex_count = 0;
 
@@ -520,7 +529,7 @@ namespace Adollib
 				Mesh::subset& subset = mesh.subsets.at(index_of_material);
 				const int index_offset = subset.indexStart + subset.indexCount;
 				for (int index_of_vertex = 0; index_of_vertex < 3; index_of_vertex++) {
-					Mesh::VertexFormat vertex;
+					VertexFormat vertex;
 					// 頂点
 					const int index_of_control_point = fbxMesh->GetPolygonVertex(index_of_polygon, index_of_vertex);
 					vertex.position.x = static_cast<float>(array_of_control_points[index_of_control_point][0]);
@@ -551,11 +560,11 @@ namespace Adollib
 					{
 						for (int bone_influence_count = 0; bone_influence_count < bone_influences[index_of_control_point].size(); bone_influence_count++)
 						{
-							if (bone_influence_count < MAX_BONE_INFLUENCES)
-							{
-								vertex.bone_weights[bone_influence_count] = bone_influences[index_of_control_point][bone_influence_count].weight;
-								vertex.bone_indices[bone_influence_count] = bone_influences[index_of_control_point][bone_influence_count].index;
-							}
+							//if (bone_influence_count < MAX_BONE_INFLUENCES)
+							//{
+								//vertex.bone_weights[bone_influence_count] = bone_influences[index_of_control_point][bone_influence_count].weight;
+								//vertex.bone_indices[bone_influence_count] = bone_influences[index_of_control_point][bone_influence_count].index;
+							//}
 						}
 					}
 					// push_back
@@ -591,7 +600,7 @@ namespace Adollib
 
 		// 頂点バッファの設定
 			D3D11_BUFFER_DESC vertexDesc = {};
-			vertexDesc.ByteWidth = sizeof(Mesh::VertexFormat) * vertices.size();   // バッファのサイズ
+			vertexDesc.ByteWidth = sizeof(VertexFormat) * vertices.size();   // バッファのサイズ
 			vertexDesc.Usage = D3D11_USAGE_IMMUTABLE;	        // バッファの読み書き法
 			vertexDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;    // パイプラインにどうバインドするか指定
 			vertexDesc.CPUAccessFlags = 0;                      // CPUのアクセスフラグ　0でアクセスしない

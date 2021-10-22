@@ -7,6 +7,8 @@
 
 namespace Adollib
 {
+	class Material;
+
 	//next ResourceManagerÇÃreleaceèàóù
 	class ResourceManager
 	{
@@ -29,12 +31,12 @@ namespace Adollib
 		static void fetch_animations(FbxMesh* fbx_mesh, std::vector<Mesh::skeletal_animation>& skeletal_animation, u_int sampling_rate = 0);
 
 		static std::unordered_map<std::string, std::vector<Mesh::mesh>> meshes;
-		static std::unordered_map<std::wstring, Texture> texturs;
+		static std::unordered_map<std::wstring, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>> ShaderResourceViews;
+
 		struct VS_resorce {
 			Microsoft::WRL::ComPtr<ID3D11VertexShader> VSshader;
 			Microsoft::WRL::ComPtr<ID3D11InputLayout> layout;
 		};
-
 		static std::unordered_map <std::string, VS_resorce>			   VSshaders;
 		static std::unordered_map <std::string, Microsoft::WRL::ComPtr<ID3D11PixelShader>>    PSshaders;
 		static std::unordered_map <std::string, Microsoft::WRL::ComPtr<ID3D11GeometryShader>> GSshaders;

@@ -43,8 +43,10 @@ namespace Adollib
 		void clear();
 
 	public:
+		void set_rendertargetview();
+
 		// ConstantBuffer‚Écameraî•ñ‚ğset‚·‚é
-		void set_Constantbuffer();
+		void set_constantbuffer();
 
 		// ‚»‚ê‚¼‚ê‚ÌTexture‚ğ•\¦‚·‚é
 		void MRT_render();

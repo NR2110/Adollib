@@ -56,7 +56,7 @@ void Renderer_manager::render(const std::list<Camera_component*>& cameras,const 
 		if (camera->gameobject->active == false)continue;
 
 		// camera情報をコンスタントバッファーにセットする
-		camera->set_Constantbuffer();
+		camera->set_constantbuffer();
 
 		//視錐台カリングにカメラ情報のセット
 		//FrustumCulling::update_frustum(camera);
@@ -68,6 +68,7 @@ void Renderer_manager::render(const std::list<Camera_component*>& cameras,const 
 		}
 		Work_meter::stop("render_obj");
 
+		camera->MRT_render();
 
 		// colliderのrender
 		Physics_function::Physics_manager::render_collider(Sce);

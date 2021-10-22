@@ -5,6 +5,7 @@
 #include "../Main/systems.h"
 #include "../Renderer/Shader/constant_buffer.h"
 #include "../Renderer/texture.h"
+#include "../Renderer/sprite.h"
 #include "gameobject_manager.h"
 
 using namespace Adollib;
@@ -50,16 +51,16 @@ void Camera_component::Update_hierarchy() {
 	ImGui::DragFloat("farZ", &farZ, 0.1f, 0, 0, "%.2f");
 }
 
-void Camera_component::set_Constantbuffer() {
+void Camera_component::set_constantbuffer() {
 
 	ConstantBufferPerCamera c_cb;
 	ConstantBufferPerSystem s_sb;
 
 	ID3D11RenderTargetView* rtv[3] = {
 		Systems::GetRenderTargetView(),
-		color_texture->GetRenderTargetView(),
+		//color_texture->GetRenderTargetView(),
 		normal_texture->GetRenderTargetView(),
-		//depth_texture->GetRenderTargetView()
+		depth_texture->GetRenderTargetView()
 	};
 	ID3D11DepthStencilView* dsv = Systems::GetDepthStencilView();
 	Systems::DeviceContext->OMSetRenderTargets(3, rtv, dsv);
@@ -88,7 +89,27 @@ void Camera_component::set_Constantbuffer() {
 
 void Camera_component::MRT_render() {
 
-	clear();
+	//clear();
+
+	//Sprite sprite;
+
+	//for (int i = 0; i < 100; i++) {
+	//	Shader shader;
+	//	//shader.Load_VS("./DefaultShader/sprite_vs.cso");
+	//	shader.Load_PS("./DefaultShader/sprite_ps.cso");
+	//}
+
+
+	//sprite.set_texture(normal_texture);
+	//sprite.sprite_data.dw = Al_Global::SCREEN_WIDTH;
+	//sprite.sprite_data.dh = Al_Global::SCREEN_HEIGHT;
+	//sprite.sprite_data.sw = Al_Global::SCREEN_WIDTH;
+	//sprite.sprite_data.sh = Al_Global::SCREEN_HEIGHT;
+	//sprite.render();
+
+
+
+
 
 	//D3D11_VIEWPORT vp;
 	//UINT num = 1;
@@ -192,6 +213,5 @@ void Camera_component::clear() {
 	Systems::DeviceContext->ClearRenderTargetView(color_texture->GetRenderTargetView(), clearColor);
 	Systems::DeviceContext->ClearRenderTargetView(normal_texture->GetRenderTargetView(), clearColor);
 	Systems::DeviceContext->ClearRenderTargetView(depth_texture->GetRenderTargetView(), clearColor);
-	Systems::DeviceContext->ClearRenderTargetView(Systems::GetRenderTargetView(), clearColor);
 	Systems::DeviceContext->ClearDepthStencilView(Systems::GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 }

@@ -322,6 +322,9 @@
     <ClCompile Include="Scripts\Renderer\texture.cpp">
       <Filter>00_Adollib\44_render</Filter>
     </ClCompile>
+    <ClCompile Include="Scripts\Renderer\sprite.cpp">
+      <Filter>00_Adollib\44_render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Scripts\player.h">
@@ -681,6 +684,12 @@
     <ClInclude Include="Scripts\Renderer\texture.h">
       <Filter>00_Adollib\44_render</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Renderer\sprite.h">
+      <Filter>00_Adollib\44_render</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\vertex_format.h">
+      <Filter>00_Adollib\44_render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="DefaultShader\default.hlsli">
@@ -705,6 +714,9 @@
       <Filter>00_Adollib\44_render\shader\hlsli</Filter>
     </None>
     <None Include="ClassDiagram1.cd" />
+    <None Include="DefaultShader\sprite.hlsli">
+      <Filter>00_Adollib\44_render\shader\hlsli</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="DefaultShader\default_ps.hlsl">
@@ -714,6 +726,12 @@
       <Filter>00_Adollib\44_render\shader\hlsli</Filter>
     </FxCompile>
     <FxCompile Include="DefaultShader\default_ps_notex.hlsl">
+      <Filter>00_Adollib\44_render\shader\hlsli</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\sprite_vs.hlsl">
+      <Filter>00_Adollib\44_render\shader\hlsli</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\sprite_ps.hlsl">
       <Filter>00_Adollib\44_render\shader\hlsli</Filter>
     </FxCompile>
   </ItemGroup>

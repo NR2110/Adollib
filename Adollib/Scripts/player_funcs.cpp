@@ -133,7 +133,7 @@ void Player::catch_things() {
 	};
 
 	// stage‚ª•ÏX‚³‚ê‚½‚çgameobject‚Ìíœ‚Åjoint‚ÍÁ‚¦‚Ä‚¢‚é‚Ì‚Å joint‚ðíœ
-	if (stage_manager->get_is_changed_stage()) {
+	if (stage_manager->get_is_changed_stage()){
 		joints[0] = nullptr;
 		joints[1] = nullptr;
 		return;
