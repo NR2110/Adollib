@@ -11,12 +11,12 @@ namespace Adollib
 	class ResourceManager
 	{
 	public:
-		static HRESULT CreateVsFromCso(const char* cso_name, ID3D11VertexShader** vertex_shader, ID3D11InputLayout** input_layout, D3D11_INPUT_ELEMENT_DESC* input_element_desc, UINT num_elements);
-		static HRESULT CreatePsFromCso(const char* cso_name, ID3D11PixelShader** pixel_shader);
-		static HRESULT CreateGsFromCso(const char* cso_name, ID3D11GeometryShader** geometry_shader);
-		static HRESULT CreateHsFromCso(const char* cso_name, ID3D11HullShader** hull_shader);
-		static HRESULT CreateDsFromCso(const char* cso_name, ID3D11DomainShader** domain_shader);
-		static HRESULT CreateCsFromCso(const char* cso_name, ID3D11ComputeShader** computeShader);
+		static HRESULT CreateVsFromCso(const char* cso_name, Microsoft::WRL::ComPtr<ID3D11VertexShader>& vertex_shader, Microsoft::WRL::ComPtr<ID3D11InputLayout>& input_layout, D3D11_INPUT_ELEMENT_DESC* input_element_desc, UINT num_elements);
+		static HRESULT CreatePsFromCso(const char* cso_name, Microsoft::WRL::ComPtr<ID3D11PixelShader>& pixel_shader);
+		static HRESULT CreateGsFromCso(const char* cso_name, Microsoft::WRL::ComPtr<ID3D11GeometryShader>& geometry_shader);
+		static HRESULT CreateHsFromCso(const char* cso_name, Microsoft::WRL::ComPtr<ID3D11HullShader>& hull_shader);
+		static HRESULT CreateDsFromCso(const char* cso_name, Microsoft::WRL::ComPtr<ID3D11DomainShader>& domain_shader);
+		static HRESULT CreateCsFromCso(const char* cso_name, Microsoft::WRL::ComPtr<ID3D11ComputeShader>& computeShader);
 		static HRESULT LoadTextureFromFile(const wchar_t* file_name, ID3D11ShaderResourceView** pSRV, D3D11_TEXTURE2D_DESC* pTex2dDesc);
 		static HRESULT CreateModelFromFBX(std::vector<Mesh::mesh>** meshes, const char* fileName, const char* filePath = "");
 

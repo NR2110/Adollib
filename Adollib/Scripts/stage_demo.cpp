@@ -17,7 +17,6 @@ namespace Adollib
 {
 	void Stage_demo::stage_awake()
 	{
-
 		Gameobject* GO = nullptr;
 
 		player_respown_pos = Vector3(-2.7f, 100, -150);

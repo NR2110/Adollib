@@ -179,8 +179,11 @@ void ALP_Physics::integrate(float duration) {
 
 	if (is_movable() == false)return;
 
-	if (linear_velocity_.norm() < Physics_manager::physicsParams.linear_sleep_threrhold * Physics_manager::physicsParams.linear_sleep_threrhold &&
-		angula_velocity_.norm() < Physics_manager::physicsParams.angula_sleep_threrhold * Physics_manager::physicsParams.angula_sleep_threrhold) {
+	//float threrhold_pow = (duration * 60) * (duration * 60);
+	float threrhold_pow = 1;
+
+	if (linear_velocity_.norm() < Physics_manager::physicsParams.linear_sleep_threrhold * Physics_manager::physicsParams.linear_sleep_threrhold * threrhold_pow &&
+		angula_velocity_.norm() < Physics_manager::physicsParams.angula_sleep_threrhold * Physics_manager::physicsParams.angula_sleep_threrhold * threrhold_pow ) {
 		sleep_timer += duration;
 	}
 	else sleep_timer = 0;

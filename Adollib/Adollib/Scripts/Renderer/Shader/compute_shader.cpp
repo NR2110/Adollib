@@ -19,7 +19,7 @@ void ComputeShader::activate() {
 }
 
 void ComputeShader::Load(std::string csname) {
-	assert(SUCCEEDED(ResourceManager::CreateCsFromCso(csname.c_str(), computeShader.GetAddressOf())));
+	assert(SUCCEEDED(ResourceManager::CreateCsFromCso(csname.c_str(), computeShader)));
 }
 
 

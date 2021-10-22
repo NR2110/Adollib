@@ -58,20 +58,20 @@ namespace Adollib {
 		};
 		UINT numElements = ARRAYSIZE(layout);
 
-		ResourceManager::CreateVsFromCso(cso_name, VS.GetAddressOf(), &vertexLayout, layout, numElements);
+		ResourceManager::CreateVsFromCso(cso_name, VS, vertexLayout, layout, numElements);
 	}
 
 	void Shader::Load_PS(const char* cso_name) {
-		ResourceManager::CreatePsFromCso(cso_name, PS.GetAddressOf());
+		ResourceManager::CreatePsFromCso(cso_name, PS);
 	}
 	void Shader::Load_GS(const char* cso_name) {
-		ResourceManager::CreateGsFromCso(cso_name, GS.GetAddressOf());
+		ResourceManager::CreateGsFromCso(cso_name, GS);
 	}
 	void Shader::Load_DS(const char* cso_name) {
-		ResourceManager::CreateDsFromCso(cso_name, DS.GetAddressOf());
+		ResourceManager::CreateDsFromCso(cso_name, DS);
 	}
 	void Shader::Load_HS(const char* cso_name) {
-		ResourceManager::CreateHsFromCso(cso_name, HS.GetAddressOf());
+		ResourceManager::CreateHsFromCso(cso_name, HS);
 	}
 
 	//****************************************************************

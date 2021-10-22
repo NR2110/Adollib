@@ -34,8 +34,8 @@ namespace Adollib
 
 	HRESULT ResourceManager::CreateVsFromCso(
 		const char* csoName,	           // 頂点シェーダーファイル名
-		ID3D11VertexShader** vertexShader, // 頂点シェーダーオブジェクトのポインタの格納先
-		ID3D11InputLayout** inputLayout,   // 入力レイアウトオブジェクトのポインタの格納先
+		Microsoft::WRL::ComPtr<ID3D11VertexShader>& vertexShader, // 頂点シェーダーオブジェクトのポインタの格納先
+		Microsoft::WRL::ComPtr<ID3D11InputLayout>& inputLayout,   // 入力レイアウトオブジェクトのポインタの格納先
 		D3D11_INPUT_ELEMENT_DESC* inputElementDesc, // 頂点データ
 		UINT numElements)                  // 頂点データの要素数
 	{
@@ -66,7 +66,7 @@ namespace Adollib
 				cso_data.get(),  // 頂点シェーダーデータのポインタ
 				cso_sz,		     // 頂点シェーダーデータのサイズ
 				nullptr,
-				&VS.VSshader
+				VS.VSshader.GetAddressOf()
 			);
 			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 
@@ -76,14 +76,14 @@ namespace Adollib
 				numElements,	  // 頂点データの要素数
 				cso_data.get(),	  // 頂点シェーダーデータ（input_element_descの内容と sprite_vs.hlslの内容に不一致がないかチェックするため）
 				cso_sz,			  // 頂点シェーダーデータサイズ
-				&VS.layout		  // 入力レイアウトオブジェクトのポインタの格納先。
+				VS.layout.GetAddressOf()		  // 入力レイアウトオブジェクトのポインタの格納先。
 			);
 			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 
 			VSshaders[(string)csoName] = VS;
 		}
-		*vertexShader = VS.VSshader.Get();
-		*inputLayout  = VS.layout.Get();
+		vertexShader = VS.VSshader;
+		inputLayout  = VS.layout;
 
 		return S_OK;
 	}
@@ -91,11 +91,11 @@ namespace Adollib
 
 	HRESULT ResourceManager::CreatePsFromCso(
 		const char* csoName, // ピクセルシェーダーファイル名
-		ID3D11PixelShader** pixel_shader // 格納するポインタ
+		Microsoft::WRL::ComPtr<ID3D11PixelShader>& pixel_shader // 格納するポインタ
 	)
 	{
 		if (PSshaders.count((string)csoName) == 1) {
-			*pixel_shader = PSshaders[(string)csoName].Get();
+			pixel_shader = PSshaders[(string)csoName];
 		}
 		else {
 			// ピクセルシェーダーファイルを開く
@@ -118,11 +118,11 @@ namespace Adollib
 				cso_data.get(), // ピクセルシェーダーデータのポインタ
 				cso_sz,			// ピクセルシェーダーデータサイズ
 				nullptr,
-				pixel_shader    // ピクセルシェーダーオブジェクトのポインタの格納先
+				pixel_shader.GetAddressOf()    // ピクセルシェーダーオブジェクトのポインタの格納先
 			);
 			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 
-			PSshaders[(string)csoName] = *pixel_shader;
+			PSshaders[(string)csoName] = pixel_shader;
 		}
 
 		return S_OK;
@@ -131,11 +131,11 @@ namespace Adollib
 
 	HRESULT ResourceManager::CreateGsFromCso(
 		const char* csoName, // ピクセルシェーダーファイル名
-		ID3D11GeometryShader** geometry_shader // 格納するポインタ
+		Microsoft::WRL::ComPtr<ID3D11GeometryShader>& geometry_shader // 格納するポインタ
 	)
 	{
 		if (PSshaders.count((string)csoName) == 1) {
-			*geometry_shader = GSshaders[(string)csoName].Get();
+			geometry_shader = GSshaders[(string)csoName];
 		}
 		else {
 			// シェーダーファイルを開く
@@ -158,11 +158,11 @@ namespace Adollib
 				cso_data.get(), // シェーダーデータのポインタ
 				cso_sz,			// シェーダーデータサイズ
 				nullptr,
-				geometry_shader    // シェーダーオブジェクトのポインタの格納先
+				geometry_shader.GetAddressOf()    // シェーダーオブジェクトのポインタの格納先
 			);
 			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 
-			GSshaders[(string)csoName] = *geometry_shader;
+			GSshaders[(string)csoName] = geometry_shader;
 		}
 
 		return S_OK;
@@ -170,11 +170,11 @@ namespace Adollib
 
 	HRESULT ResourceManager::CreateHsFromCso(
 		const char* csoName, // ピクセルシェーダーファイル名
-		ID3D11HullShader** hull_shader // 格納するポインタ
+		Microsoft::WRL::ComPtr<ID3D11HullShader>& hull_shader // 格納するポインタ
 	)
 	{
 		if (PSshaders.count((string)csoName) == 1) {
-			*hull_shader = HSshaders[(string)csoName].Get();
+			hull_shader = HSshaders[(string)csoName];
 		}
 		else {
 			// シェーダーファイルを開く
@@ -197,11 +197,11 @@ namespace Adollib
 				cso_data.get(), // シェーダーデータのポインタ
 				cso_sz,			// シェーダーデータサイズ
 				nullptr,
-				hull_shader    // シェーダーオブジェクトのポインタの格納先
+				hull_shader.GetAddressOf()    // シェーダーオブジェクトのポインタの格納先
 			);
 			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 
-			HSshaders[(string)csoName] = *hull_shader;
+			HSshaders[(string)csoName] = hull_shader;
 		}
 
 		return S_OK;
@@ -209,11 +209,11 @@ namespace Adollib
 
 	HRESULT ResourceManager::CreateDsFromCso(
 		const char* csoName, // ピクセルシェーダーファイル名
-		ID3D11DomainShader** domain_shader // 格納するポインタ
+		Microsoft::WRL::ComPtr<ID3D11DomainShader>& domain_shader // 格納するポインタ
 	)
 	{
 		if (PSshaders.count((string)csoName) == 1) {
-			*domain_shader = DSshaders[(string)csoName].Get();
+			domain_shader = DSshaders[(string)csoName];
 		}
 		else {
 			// シェーダーファイルを開く
@@ -236,11 +236,11 @@ namespace Adollib
 				cso_data.get(), // シェーダーデータのポインタ
 				cso_sz,			// シェーダーデータサイズ
 				nullptr,
-				domain_shader    // シェーダーオブジェクトのポインタの格納先
+				domain_shader.GetAddressOf()    // シェーダーオブジェクトのポインタの格納先
 			);
 			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 
-			DSshaders[(string)csoName] = *domain_shader;
+			DSshaders[(string)csoName] = domain_shader;
 		}
 
 		return S_OK;
@@ -248,13 +248,11 @@ namespace Adollib
 
 	HRESULT ResourceManager::CreateCsFromCso(
 		const char* csoName, // ピクセルシェーダーファイル名
-		ID3D11ComputeShader** compute_shader // 格納するポインタ
+		Microsoft::WRL::ComPtr<ID3D11ComputeShader>& compute_shader // 格納するポインタ
 	)
 	{
 		if (CSshaders.count((string)csoName) == 1) {
-
-			*compute_shader = CSshaders[(string)csoName].Get();
-
+			compute_shader = CSshaders[(string)csoName];
 		}
 		else {
 			//コンピュートシェーダーファイルを開く
@@ -277,11 +275,11 @@ namespace Adollib
 				cso_data.get(), // ピクセルシェーダーデータのポインタ
 				cso_sz,			// ピクセルシェーダーデータサイズ
 				nullptr,
-				compute_shader    // ピクセルシェーダーオブジェクトのポインタの格納先
+				compute_shader.GetAddressOf()    // ピクセルシェーダーオブジェクトのポインタの格納先
 			);
 			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 
-			CSshaders[(string)csoName] = *compute_shader;
+			CSshaders[(string)csoName] = compute_shader;
 		}
 
 		return S_OK;
@@ -636,7 +634,7 @@ namespace Adollib
 
 #pragma endregion
 
-		 //FBXロード完了
+		//FBXロード完了
 		meshes[(string)filePath + (string)fileName] = skinMeshes;
 		*ret_mesh = &meshes[(string)filePath + (string)fileName];
 
