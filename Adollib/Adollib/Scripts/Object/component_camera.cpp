@@ -91,8 +91,8 @@ void Camera_component::MRT_render() {
 	clear();
 
 
-	//Shader shader;
-	//shader.Load_VS("./DefaultShader/default_ps_notex.cso");
+	Shader shader;
+	shader.Load_PS("./DefaultShader/default_ps_notex.cso");
 
 	//D3D11_VIEWPORT vp;
 	//UINT num = 1;
