@@ -24,17 +24,6 @@ namespace Adollib
 		//ComPtr<ID3D11Buffer> mesh_cb; //mesh_world行列用バッファ
 	public:
 
-		// 頂点フォーマット
-		struct VertexFormat
-		{
-#define MAX_BONE_INFLUENCES (4)
-			DirectX::XMFLOAT3 position;
-			DirectX::XMFLOAT3 normal;
-			DirectX::XMFLOAT2 texcoord;
-			FLOAT bone_weights[MAX_BONE_INFLUENCES] = { 0 };
-			INT bone_indices[MAX_BONE_INFLUENCES] = {};
-		};
-
 		// マテリアル
 		struct material
 		{

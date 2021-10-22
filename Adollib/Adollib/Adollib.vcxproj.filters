@@ -322,6 +322,9 @@
     <ClCompile Include="Scripts\Renderer\texture.cpp">
       <Filter>00_Adollib\44_render</Filter>
     </ClCompile>
+    <ClCompile Include="Scripts\Renderer\sprite.cpp">
+      <Filter>00_Adollib\44_render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Scripts\player.h">
@@ -680,6 +683,12 @@
     </ClInclude>
     <ClInclude Include="Scripts\Renderer\texture.h">
       <Filter>00_Adollib\44_render</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\sprite.h">
+      <Filter>00_Adollib\44_render</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\Shader\vertex_format.h">
+      <Filter>00_Adollib\44_render\shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

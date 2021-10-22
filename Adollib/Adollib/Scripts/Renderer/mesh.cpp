@@ -7,6 +7,7 @@
 #include "../Main/resource_manager.h"
 #include "mesh.h"
 #include "Shader/constant_buffer.h"
+#include "Shader/vertex_format.h"
 
 using namespace fbxsdk;
 

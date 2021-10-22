@@ -12,6 +12,8 @@
 #include "systems.h"
 #include "resource_manager.h"
 #include "../Renderer/Shader/constant_buffer.h"
+#include "../Renderer/Shader/vertex_format.h"
+
 using namespace std;
 
 using namespace Adollib;
@@ -380,7 +382,7 @@ namespace Adollib
 		traverse(scene->GetRootNode());
 
 		// メッシュデータの取得
-		vector<Mesh::VertexFormat> vertices;
+		vector<VertexFormat> vertices;
 		vector<u_int> indices;
 		u_int vertex_count = 0;
 
@@ -520,7 +522,7 @@ namespace Adollib
 				Mesh::subset& subset = mesh.subsets.at(index_of_material);
 				const int index_offset = subset.indexStart + subset.indexCount;
 				for (int index_of_vertex = 0; index_of_vertex < 3; index_of_vertex++) {
-					Mesh::VertexFormat vertex;
+					VertexFormat vertex;
 					// 頂点
 					const int index_of_control_point = fbxMesh->GetPolygonVertex(index_of_polygon, index_of_vertex);
 					vertex.position.x = static_cast<float>(array_of_control_points[index_of_control_point][0]);
@@ -591,7 +593,7 @@ namespace Adollib
 
 		// 頂点バッファの設定
 			D3D11_BUFFER_DESC vertexDesc = {};
-			vertexDesc.ByteWidth = sizeof(Mesh::VertexFormat) * vertices.size();   // バッファのサイズ
+			vertexDesc.ByteWidth = sizeof(VertexFormat) * vertices.size();   // バッファのサイズ
 			vertexDesc.Usage = D3D11_USAGE_IMMUTABLE;	        // バッファの読み書き法
 			vertexDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;    // パイプラインにどうバインドするか指定
 			vertexDesc.CPUAccessFlags = 0;                      // CPUのアクセスフラグ　0でアクセスしない

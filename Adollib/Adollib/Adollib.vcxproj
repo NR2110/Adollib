@@ -259,6 +259,8 @@
     <ClInclude Include="Scripts\Renderer\Shader\constant_buffer.h" />
     <ClInclude Include="Scripts\Renderer\Shader\light_types.h" />
     <ClInclude Include="Scripts\Renderer\Shader\shader.h" />
+    <ClInclude Include="Scripts\Renderer\Shader\vertex_format.h" />
+    <ClInclude Include="Scripts\Renderer\sprite.h" />
     <ClInclude Include="Scripts\Renderer\texture.h" />
     <ClInclude Include="Scripts\Scene\scene.h" />
     <ClInclude Include="Scripts\Scene\scene_game.h" />
@@ -337,6 +339,7 @@
     <ClCompile Include="Scripts\Renderer\renderer_manager.cpp" />
     <ClCompile Include="Scripts\Renderer\Shader\compute_shader.cpp" />
     <ClCompile Include="Scripts\Renderer\Shader\shader.cpp" />
+    <ClCompile Include="Scripts\Renderer\sprite.cpp" />
     <ClCompile Include="Scripts\Renderer\texture.cpp" />
     <ClCompile Include="Scripts\Scene\scene_game.cpp" />
     <ClCompile Include="Scripts\Scene\scene_manager.cpp" />
