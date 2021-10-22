@@ -90,6 +90,10 @@ void Camera_component::MRT_render() {
 
 	clear();
 
+
+	//Shader shader;
+	//shader.Load_VS("./DefaultShader/default_ps_notex.cso");
+
 	//D3D11_VIEWPORT vp;
 	//UINT num = 1;
 
@@ -192,6 +196,5 @@ void Camera_component::clear() {
 	Systems::DeviceContext->ClearRenderTargetView(color_texture->GetRenderTargetView(), clearColor);
 	Systems::DeviceContext->ClearRenderTargetView(normal_texture->GetRenderTargetView(), clearColor);
 	Systems::DeviceContext->ClearRenderTargetView(depth_texture->GetRenderTargetView(), clearColor);
-	Systems::DeviceContext->ClearRenderTargetView(Systems::GetRenderTargetView(), clearColor);
 	Systems::DeviceContext->ClearDepthStencilView(Systems::GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 }

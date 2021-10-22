@@ -68,6 +68,7 @@ void Renderer_manager::render(const std::list<Camera_component*>& cameras,const 
 		}
 		Work_meter::stop("render_obj");
 
+		camera->MRT_render();
 
 		// collider‚Ìrender
 		Physics_function::Physics_manager::render_collider(Sce);
