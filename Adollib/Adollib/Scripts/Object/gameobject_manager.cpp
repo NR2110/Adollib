@@ -220,10 +220,7 @@ Gameobject* Gameobject_manager::createFromFBX(const std::string go_name, const s
 	Value->transform = std::make_shared<Transform>();
 
 	auto renderer = Value->addComponent<Renderer>();
-	Value->material = std::make_shared<Material>();
-	Value->material->Load_VS("./DefaultShader/default_vs.cso");
-	Value->material->Load_PS("./DefaultShader/default_ps.cso");
-	renderer->set_material(Value->material);
+	Value->material = renderer->get_material();
 
 	std::vector<Mesh::mesh>* meshes = nullptr;
 	ResourceManager::CreateModelFromFBX(&meshes, FBX_pass.c_str(), "");
@@ -247,10 +244,7 @@ Gameobject* Gameobject_manager::createSphere(const std::string go_name, u_int ta
 	Value->transform = std::make_shared<Transform>();
 
 	auto renderer = Value->addComponent<Renderer>();
-	Value->material = std::make_shared<Material>();
-	Value->material->Load_VS("./DefaultShader/default_vs.cso");
-	Value->material->Load_PS("./DefaultShader/default_ps.cso");
-	renderer->set_material(Value->material);
+	Value->material = renderer->get_material();
 
 	std::vector<Mesh::mesh>* meshes = nullptr;
 	ResourceManager::CreateModelFromFBX(&meshes, "./DefaultModel/sphere.fbx", "");
@@ -274,10 +268,7 @@ Gameobject* Gameobject_manager::createCube(const std::string go_name, u_int tag,
 	Value->transform = std::make_shared<Transform>();
 
 	auto renderer = Value->addComponent<Renderer>();
-	Value->material = std::make_shared<Material>();
-	Value->material->Load_VS("./DefaultShader/default_vs.cso");
-	Value->material->Load_PS("./DefaultShader/default_ps.cso");
-	renderer->set_material(Value->material);
+	Value->material = renderer->get_material();
 
 	std::vector<Mesh::mesh>* meshes = nullptr;
 	ResourceManager::CreateModelFromFBX(&meshes, "./DefaultModel/cube.fbx", "");
@@ -301,10 +292,7 @@ Gameobject* Gameobject_manager::createCapsule(const std::string go_name, u_int t
 	Value->transform = std::make_shared<Transform>();
 
 	auto renderer = Value->addComponent<Renderer>();
-	Value->material = std::make_shared<Material>();
-	Value->material->Load_VS("./DefaultShader/default_vs.cso");
-	Value->material->Load_PS("./DefaultShader/default_ps.cso");
-	renderer->set_material(Value->material);
+	Value->material = renderer->get_material();
 
 	std::vector<Mesh::mesh>* meshes = nullptr;
 	ResourceManager::CreateModelFromFBX(&meshes, "./DefaultModel/cube.fbx", "");
@@ -330,10 +318,7 @@ Gameobject* Gameobject_manager::createCylinder(const std::string go_name, u_int 
 	Value->transform = std::make_shared<Transform>();
 
 	auto renderer = Value->addComponent<Renderer>();
-	Value->material = std::make_shared<Material>();
-	Value->material->Load_VS("./DefaultShader/default_vs.cso");
-	Value->material->Load_PS("./DefaultShader/default_ps.cso");
-	renderer->set_material(Value->material);
+	Value->material = renderer->get_material();
 
 	std::vector<Mesh::mesh>* meshes = nullptr;
 	ResourceManager::CreateModelFromFBX(&meshes, "./DefaultModel/cylinder.fbx", "");

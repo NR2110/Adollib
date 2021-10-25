@@ -6,6 +6,10 @@
 
 #include "../Main/systems.h"
 #include "Shader/constant_buffer.h"
+#include "Shader/vertex_format.h"
+
+#include "material.h"
+#include "texture.h"
 
 using namespace Adollib;
 using namespace ConstantBuffer;
@@ -15,6 +19,14 @@ void Renderer::awake() {
 
 	Systems::CreateConstantBuffer(&world_cb, sizeof(ConstantBufferPerGO));
 	Systems::CreateConstantBuffer(&Mat_cb, sizeof(ConstantBufferPerMaterial));
+
+	material = std::make_shared<Material>();
+	texture  = std::make_shared<Texture>();
+
+	material->Load_VS("./DefaultShader/default_vs.cso");
+	material->Load_PS("./DefaultShader/default_ps.cso");
+
+	texture->Load(L"./DefaultModel/white.png");
 }
 
 
@@ -31,6 +43,9 @@ void Renderer::render() {
 
 	// shader‚Ìactivate
 	material->shader_activate();
+
+	// texture‚ðSRV‚ÉƒZƒbƒg
+	texture->Set(0);
 
 	//
 	if (Systems::BS_type != material->BS_state) Systems::SetBlendState(material->BS_state);
@@ -90,7 +105,9 @@ void Renderer::render() {
 
 		for (auto& subset : mesh.subsets)
 		{
+			//TODO : model‚ÌtextureÝ’è
 			Systems::DeviceContext->PSSetShaderResources(0, 1, subset.diffuse.shaderResourceVirw.GetAddressOf());
+			texture->Set(0);
 
 			// •`‰æ
 			Systems::DeviceContext->DrawIndexed(subset.indexCount, subset.indexStart, 0);
@@ -101,6 +118,8 @@ void Renderer::render() {
 
 
 }
+
+void Renderer::load_texture(const wchar_t* filename) { texture->Load(filename); };
 
 void Renderer::finalize() {
 	Renderer_manager::remove_renderer(this_itr);

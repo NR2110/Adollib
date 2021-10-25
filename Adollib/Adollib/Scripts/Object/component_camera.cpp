@@ -88,8 +88,15 @@ void Camera_component::set_Constantbuffer() {
 	Systems::DeviceContext->PSSetConstantBuffers(2, 1, projection_cb.GetAddressOf());
 }
 
-void Camera_component::MRT_render() {
+void Camera_component::posteffect_render() {
 
+	// Šeposteffect‚Ì‚ðˆ—‚µ‚Ä‚¢‚­
+	for (auto& posteffect : posteffects) {
+		posteffect->render(color_texture.get(), normal_texture.get(), depth_texture.get());
+	}
+
+	// main‚ÌRTV‚É•`‰æ‚µ‚È‚¢‚È‚ç‚±‚±‚Åreturn
+	if (is_draw_main_RenderTargetView == false)return;
 	ID3D11RenderTargetView* rtv = Systems::GetRenderTargetView();
 	ID3D11DepthStencilView* dsv = Systems::GetDepthStencilView();
 	Systems::DeviceContext->OMSetRenderTargets(1, &rtv, dsv);
@@ -104,11 +111,6 @@ void Camera_component::MRT_render() {
 	sprite.shader.Load_VS("./DefaultShader/sprite_vs.cso");
 	sprite.shader.Load_PS("./DefaultShader/sprite_ps.cso");
 	sprite.render();
-
-	// Šeposteffect‚Ì‚ðˆ—‚µ‚Ä‚¢‚­
-	for (auto& posteffect : posteffects) {
-		posteffect->render(color_texture.get(), normal_texture.get(), depth_texture.get());
-	}
 }
 
 

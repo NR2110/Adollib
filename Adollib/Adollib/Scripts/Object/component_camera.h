@@ -25,6 +25,8 @@ namespace Adollib
 		float nearZ = 0.1f;
 		float farZ = 10000.0f;
 
+		// 画面に出力するか
+		bool is_draw_main_RenderTargetView = true;
 
 	private:
 		std::list<Posteffect_base*> posteffects;
@@ -50,14 +52,17 @@ namespace Adollib
 		void posteffect_initialize(Posteffect_base* posteffect);
 
 	public:
+		std::shared_ptr<Texture> get_color_texture() { return color_texture; };
+
+	public:
 		// redertargetviewなどをclearする
 		void clear();
 
 		// ConstantBufferにcamera情報をsetする
 		void set_Constantbuffer();
 
-		// それぞれのTextureを表示する
-		void MRT_render();
+		// ポストエフェクトの処理 & 描画
+		void posteffect_render();
 
 		// ポストエフェクトの追加
 		template<typename T>
