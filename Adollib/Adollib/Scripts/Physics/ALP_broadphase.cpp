@@ -112,15 +112,13 @@ void Physics_function::BroadMidphase(Scenelist Sce,
 	std::vector<Physics_function::ALP_Collider*>& added_collider //追加されたもの
 ) {
 
-	const std::string work_meter_tag = std::string("Broadphase");
-
 	//適当に20コ点を取って適当に?
 	int SAP_axis = 0;
 
 	//DOPの更新
-	Work_meter::start("update_dop14", work_meter_tag);
+	Work_meter::start("update_dop14", 1);
 
-	Work_meter::stop("update_dop14", work_meter_tag);
+	Work_meter::stop("update_dop14", 1);
 
 	//Work_meter::start("delete_colldier_from_axislist");
 	////::: 削除されたものをaxis_listから削除する :::
@@ -143,7 +141,7 @@ void Physics_function::BroadMidphase(Scenelist Sce,
 	//auto& axis_list = axis_list;
 	//auto& axis_list_edge = access_axislist_itr;
 
-	Work_meter::start("make_axis_list", work_meter_tag);
+	Work_meter::start("make_axis_list", 1);
 	//::: 追加されたものをaxis_listに追加 :::
 	{
 		for (auto& added : added_collider) {
@@ -198,11 +196,11 @@ void Physics_function::BroadMidphase(Scenelist Sce,
 	auto a = axis_list;
 
 
-	Work_meter::stop("make_axis_list", work_meter_tag);
+	Work_meter::stop("make_axis_list", 1);
 
 	//::: 動いたもののvalueを更新
 	{
-		Work_meter::start("update_Value", work_meter_tag);
+		Work_meter::start("update_Value", 1);
 		for (auto& moved : moved_collider) {
 			if (moved == nullptr)continue;
 
@@ -233,13 +231,13 @@ void Physics_function::BroadMidphase(Scenelist Sce,
 			}
 		}
 
-		Work_meter::stop("update_Value", work_meter_tag);
+		Work_meter::stop("update_Value", 1);
 	}
 
 	//::: 挿入ソート ::::::::::::::
 	//small ----> big
 	{
-		Work_meter::start("insert_sort", work_meter_tag);
+		Work_meter::start("insert_sort", 1);
 		auto a = axis_list;
 
 		std::list<Insert_edge*>::iterator itr[2] = { axis_list.begin(),axis_list.begin() };
@@ -287,10 +285,10 @@ void Physics_function::BroadMidphase(Scenelist Sce,
 			next_num = now_num;
 		}
 
-		Work_meter::stop("insert_sort", work_meter_tag);
+		Work_meter::stop("insert_sort", 1);
 	}
 
-	Work_meter::start("Sweep&Prune", work_meter_tag);
+	Work_meter::start("Sweep&Prune", 1);
 	//Sweep&Prune
 	std::list<Collider_shape*> actives;
 	std::list<Collider_shape*> static_actives;
@@ -347,7 +345,7 @@ void Physics_function::BroadMidphase(Scenelist Sce,
 	moved_collider.clear();
 	added_collider.clear();
 
-	Work_meter::stop("Sweep&Prune", work_meter_tag);
+	Work_meter::stop("Sweep&Prune", 1);
 }
 
 void Physics_function::remove_collider_broad_phase(Physics_function::ALP_Collider* removed) {

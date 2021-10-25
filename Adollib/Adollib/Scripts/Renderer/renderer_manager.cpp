@@ -55,11 +55,11 @@ void Renderer_manager::render(const std::list<Camera_component*>& cameras,const 
 	for (const auto& camera : cameras) {
 		if (camera->gameobject->active == false)continue;
 
+		// cameraの持つtextureのclear
+		camera->clear();
+
 		// camera情報をコンスタントバッファーにセットする
 		camera->set_Constantbuffer();
-
-		//視錐台カリングにカメラ情報のセット
-		//FrustumCulling::update_frustum(camera);
 
 		Work_meter::start("render_obj");
 		// renderを呼ぶ
@@ -68,6 +68,7 @@ void Renderer_manager::render(const std::list<Camera_component*>& cameras,const 
 		}
 		Work_meter::stop("render_obj");
 
+		// posteffectの処理 & mainのRTVに描画
 		camera->MRT_render();
 
 		// colliderのrender

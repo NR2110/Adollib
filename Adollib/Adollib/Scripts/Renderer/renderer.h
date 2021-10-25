@@ -25,7 +25,7 @@ namespace Adollib {
 
 		std::vector<Mesh::mesh>* meshes = nullptr; //
 
-		Material* material = nullptr; //
+		std::shared_ptr<Material> material = nullptr; //
 
 		std::list<Renderer*>::iterator this_itr; //renderer_managerÇ…ï€ë∂Ç≥ÇÍÇΩé©êgÇÃitr
 
@@ -36,7 +36,7 @@ namespace Adollib {
 		int animeIndex = 0;
 
 	public:
-		void set_material(Material* l_material) { material = l_material; };
+		void set_material(std::shared_ptr<Material>& l_material) { material = l_material; };
 		void set_meshes(std::vector<Mesh::mesh>* l_meshes) { meshes = l_meshes; };
 
 	public:

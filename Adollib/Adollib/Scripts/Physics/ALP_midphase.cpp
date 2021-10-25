@@ -105,11 +105,9 @@ using namespace DOP;
 
 void Physics_function::Midphase(std::vector<Contacts::Contact_pair*>& old_pairs, std::vector<Contacts::Contact_pair*>& new_pairs) {
 
-	const std::string work_meter_tag = std::string("Midphase");
-
 	//new_pairs.clear();
 
-	Work_meter::start("Mid_Dop14", work_meter_tag);
+	Work_meter::start("Mid_Dop14", 1);
 	////DOP_14‚É‚æ‚é‘åŽG”c‚È“–‚½‚è”»’è
 	// Broadphase‚É‚¨ˆø‰z‚µ‚µ‚Ü‚µ‚½
 	//for (auto& pair : in_pair) {
@@ -120,13 +118,13 @@ void Physics_function::Midphase(std::vector<Contacts::Contact_pair*>& old_pairs,
 	//		Midphase_DOP_14(new_pairs, pair.body, meshB);
 	//	}
 	//}
-	Work_meter::stop("Mid_Dop14", work_meter_tag);
+	Work_meter::stop("Mid_Dop14", 1);
 
 
 	const int old_pair_size = old_pairs.size();
 	const int new_pair_size = new_pairs.size();
 
-	Work_meter::start("Contact_pair_quick_sort", work_meter_tag);
+	Work_meter::start("Contact_pair_quick_sort", 1);
 	{
 
 		if (new_pair_size != 0) {
@@ -155,9 +153,9 @@ void Physics_function::Midphase(std::vector<Contacts::Contact_pair*>& old_pairs,
 			//Contact_pair_quick_sort(new_pairs.data(), pair_buff.data(), new_pair_size);
 		}
 	}
-	Work_meter::stop("Contact_pair_quick_sort", work_meter_tag);
+	Work_meter::stop("Contact_pair_quick_sort", 1);
 
-	Work_meter::start("Mid_check_alive", work_meter_tag);
+	Work_meter::start("Mid_check_alive", 1);
 	{
 		int oldId = 0, newId = 0;
 		while (oldId < old_pair_size && newId < new_pair_size)
@@ -202,9 +200,9 @@ void Physics_function::Midphase(std::vector<Contacts::Contact_pair*>& old_pairs,
 		old_pairs.clear();
 	}
 
-	Work_meter::stop("Mid_check_alive", work_meter_tag);
+	Work_meter::stop("Mid_check_alive", 1);
 
-	Work_meter::start("Mid_remove_contact_point", work_meter_tag);
+	Work_meter::start("Mid_remove_contact_point", 1);
 	//Œ»ÝŽg—p‚µ‚Ä‚¢‚È‚¢Õ“Ë“_‚ðíœ
 	for (auto& new_p : new_pairs) {
 		if (new_p->contacts.chack_remove_contact_point(
@@ -216,7 +214,7 @@ void Physics_function::Midphase(std::vector<Contacts::Contact_pair*>& old_pairs,
 		}
 	}
 
-	Work_meter::stop("Mid_remove_contact_point", work_meter_tag);
+	Work_meter::stop("Mid_remove_contact_point", 1);
 }
 #pragma endregion
 //:::::::::::::::::::::::::::

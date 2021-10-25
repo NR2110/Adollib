@@ -26,7 +26,7 @@ struct SPOTLIGHT {
 	float4 color;
 	float4 dir;
 };
-#define SPOTMAX 32
+#define SPOTMAX 4
 //-----------------------------------------
 //	ä€âeç\ë¢ëÃ
 //-----------------------------------------
@@ -38,5 +38,5 @@ struct CIRCLESHADOW {
 	float inner;
 	float4 pos;
 };
-#define CIRCLEMAX 32
+#define CIRCLEMAX 4
 

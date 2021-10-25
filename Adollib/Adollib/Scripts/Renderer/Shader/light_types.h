@@ -2,8 +2,8 @@
 #include "../../Math/vector.h"
 namespace Adollib {
 
-	static const int POINTMAX = 32;
-	static const int SPOTMAX = 32;
+	static const int POINTMAX = 4;
+	static const int SPOTMAX = 4;
 
 	static Vector4 LightDir = Vector4(0, 0, 0, 0);
 	static Vector4 DirLightColor = Vector4(1, 1, 1, 1);

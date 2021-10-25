@@ -107,6 +107,9 @@
     <Filter Include="00_Adollib\44_render\shader\hlsli\sprite">
       <UniqueIdentifier>{808eaa2c-0a21-4451-ad46-7c9b0e9489a5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00_Adollib\44_render\shader\posteffect">
+      <UniqueIdentifier>{6c08b8ef-f6ef-4fa7-8668-7db469c33b7c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Scripts\player.cpp">
@@ -698,6 +701,9 @@
     </ClInclude>
     <ClInclude Include="Scripts\Renderer\Shader\vertex_format.h">
       <Filter>00_Adollib\44_render\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\posteffect_base.h">
+      <Filter>00_Adollib\44_render\shader\posteffect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

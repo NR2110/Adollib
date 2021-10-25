@@ -14,6 +14,7 @@
 namespace Adollib
 {
 	class Texture;
+	class Posteffect_base;
 
 	//カメラ用のコンポーネントクラス 継承不可!
 	class Camera_component final : public Component
@@ -26,28 +27,64 @@ namespace Adollib
 
 
 	private:
-		// managerに保存されている 自身へのitr
-		std::list<Camera_component*>::iterator this_itr;
+		std::list<Posteffect_base*> posteffects;
 
 		Microsoft::WRL::ComPtr<ID3D11Buffer> view_cb;
 		Microsoft::WRL::ComPtr<ID3D11Buffer> projection_cb;
 		Microsoft::WRL::ComPtr<ID3D11Buffer> sprite_cb;
 
-		Texture* color_texture = nullptr;
-		Texture* normal_texture = nullptr;
-		Texture* depth_texture = nullptr;
+		std::shared_ptr<Texture> color_texture = nullptr;
+		std::shared_ptr<Texture> normal_texture = nullptr;
+		std::shared_ptr<Texture> depth_texture = nullptr;
 
 		Shader shader;
 
+
 	private:
-		void clear();
+
+		// managerに保存されている 自身へのitr
+		std::list<Camera_component*>::iterator this_itr;
+
+	private:
+		// addされたposteffectを初期化する ヘッダーでできないため関数にした
+		void posteffect_initialize(Posteffect_base* posteffect);
 
 	public:
+		// redertargetviewなどをclearする
+		void clear();
+
 		// ConstantBufferにcamera情報をsetする
 		void set_Constantbuffer();
 
 		// それぞれのTextureを表示する
 		void MRT_render();
+
+		// ポストエフェクトの追加
+		template<typename T>
+		T* add_posteffect() {
+
+			// Posteffect_baseクラスから派生したものかチェック
+			static_assert(std::is_base_of<Posteffect_base, T>::value == true, "template T must inherit Posteffect_base");
+
+			// 既に同一posteffectが存在する場合、Addしない
+			for (auto&& com : posteffects)
+			{
+				//if (dynamic_cast<T*>(com) != nullptr)
+				if (typeid(T) == typeid(*com))
+				{
+					//static_assert(0, "ERROR");
+					return nullptr;
+				}
+			}
+
+			// 生成
+			T* newCom = newD T();
+
+			// 初期化
+			posteffect_initialize(newCom);
+
+			return newCom;
+		};
 
 	public:
 

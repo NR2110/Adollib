@@ -45,7 +45,7 @@ namespace Adollib {
 		std::string name; //このgoの名前
 
 		// このGOのマテリアルへのポインタ cppから楽にアクセスできるようにここに置いている ここになくてもちゃんと動く
-		Material* material = nullptr;
+		std::shared_ptr<Material> material = nullptr;
 
 
 	public:

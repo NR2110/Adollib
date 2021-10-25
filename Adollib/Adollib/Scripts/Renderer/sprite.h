@@ -28,7 +28,7 @@ namespace Adollib {
 	private:
 		ComPtr<ID3D11Buffer> VertexBuffer;
 		ComPtr<ID3D11DepthStencilState> DepthStencilState;
-		Texture* texture = nullptr;
+		std::shared_ptr<Texture> texture = nullptr;
 
 	public:
 		Sprite_data sprite_data;
@@ -39,7 +39,7 @@ namespace Adollib {
 
 		Sprite();
 
-		void set_texture(Texture* texture);
+		void set_texture(std::shared_ptr<Texture>& texture);
 
 		void set_default();
 

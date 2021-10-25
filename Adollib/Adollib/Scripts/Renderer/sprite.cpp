@@ -53,8 +53,11 @@ Sprite::Sprite() {
 	shader.Load_PS("./DefaultShader/sprite_ps.cso");
 }
 
-void Sprite::set_texture(Texture* tex) {
+void Sprite::set_texture(std::shared_ptr<Texture>& tex) {
 	texture = tex;
+}
+void Sprite::set_default() {
+
 }
 
 void Sprite::render() {
@@ -67,7 +70,8 @@ void Sprite::render() {
 	float screen_height = vp.Height;
 
 	shader.Activate();
-	//頂点データ設定
+
+	// 頂点データ設定
 	VertexFormat data[4];
 
 	data[0].position.x = sprite_data.dx;
@@ -86,11 +90,11 @@ void Sprite::render() {
 	data[3].position.y = sprite_data.dy + sprite_data.dh;
 	data[3].position.z = 0.0f;
 
-	//回転の中心
+	// 回転の中心
 	float workPosX = sprite_data.dx + sprite_data.dw * 0.5f;
 	float workPosY = sprite_data.dy + sprite_data.dh * 0.5f;
 
-	//回転処理
+	// 回転処理
 	for (int i = 0; i < 4; i++) {
 
 		float workX = data[i].position.x - workPosX;
@@ -108,7 +112,7 @@ void Sprite::render() {
 	}
 
 
-	//テクスチャ座標設定
+	// テクスチャ座標設定
 	data[0].texcoord.x = sprite_data.sx;
 	data[0].texcoord.y = sprite_data.sy;
 	data[1].texcoord.x = sprite_data.sx + sprite_data.sw;
@@ -126,13 +130,13 @@ void Sprite::render() {
 			data[i].texcoord.y = data[i].texcoord.y / texture->GetHeight();
 		}
 	}
-	//法線
+	// 法線
 	data[0].normal = Vector3(0, 0, 1);
 	data[1].normal = Vector3(0, 0, 1);
 	data[2].normal = Vector3(0, 0, 1);
 	data[3].normal = Vector3(0, 0, 1);
 
-	//頂点データ更新
+	// 頂点データ更新
 	Systems::DeviceContext->UpdateSubresource(VertexBuffer.Get(), 0, NULL, data, 0, 0);
 
 	//	頂点バッファの指定

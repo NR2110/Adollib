@@ -15,7 +15,7 @@ std::unordered_map<std::string, std::vector<std::string>> Work_meter::names;
 std::unordered_map < std::string, std::vector<bool>> Work_meter::name_flags;
 std::vector<std::string> Work_meter::tags;
 
-std::string Work_meter::now_tag = std::string("");
+std::string  Work_meter::now_tag[10] = { std::string("") };
 
 
 bool Work_meter::render() {
@@ -198,45 +198,9 @@ bool Work_meter::render() {
 	return true;
 }
 
-bool Work_meter::start(const std::string& name) {
+bool Work_meter::start(const std::string& name, int thread_num) {
 	std::lock_guard <std::mutex> lock(mtx);
-
-	start_stop[now_tag][name].stop.QuadPart = 0;
-	start_stop[now_tag][name].start.QuadPart = 0;
-
-#ifdef UseImgui
-	if (meters[now_tag].count(name) == 0) {
-		names[now_tag].push_back(name);
-		name_flags[now_tag].push_back(1);
-		memset(meters[now_tag][name], 0, max_ * 2 * sizeof(float));
-	}
-
-	QueryPerformanceCounter(&start_stop[now_tag][name].start);
-
-#endif
-	return true;
-}
-
-bool Work_meter::stop(const std::string& name) {
-	std::lock_guard <std::mutex> lock(mtx);
-
-#ifdef UseImgui
-	if (meters[now_tag].count(name) == 0) {
-		names[now_tag].push_back(name);
-		name_flags[now_tag].push_back(1);
-		memset(meters[now_tag][name], 0, max_ * 2 * sizeof(float));
-	}
-
-	QueryPerformanceCounter(&start_stop[now_tag][name].stop);
-
-	start_stop[now_tag][name].duration_time += start_stop[now_tag][name].stop.QuadPart - start_stop[now_tag][name].start.QuadPart;
-
-#endif
-	return true;
-}
-
-bool Work_meter::start(const std::string& name, const std::string& tag) {
-	std::lock_guard <std::mutex> lock(mtx);
+	const auto& tag = now_tag[thread_num];
 
 	start_stop[tag][name].stop.QuadPart = 0;
 	start_stop[tag][name].start.QuadPart = 0;
@@ -259,8 +223,9 @@ bool Work_meter::start(const std::string& name, const std::string& tag) {
 	return true;
 }
 
-bool Work_meter::stop(const std::string& name, const std::string& tag) {
+bool Work_meter::stop(const std::string& name, int thread_num) {
 	std::lock_guard <std::mutex> lock(mtx);
+	const auto& tag = now_tag[thread_num];
 
 #ifdef UseImgui
 	if (meters[tag].count(name) == 0) {
@@ -277,37 +242,38 @@ bool Work_meter::stop(const std::string& name, const std::string& tag) {
 	return true;
 }
 
-void Work_meter::set(const std::string& name, const float& value) {
+void Work_meter::set(const std::string& name, const float& value, int thread_num) {
 	std::lock_guard <std::mutex> lock(mtx);
+	const auto& tag = now_tag[thread_num];
 
-	if (meters[now_tag].count(name) == 0) {
-		names[now_tag].push_back(name);
-		name_flags[now_tag].push_back(1);
-		memset(meters[now_tag][name], 0, max_ * 2 * sizeof(float));
+	if (meters[tag].count(name) == 0) {
+		names[tag].push_back(name);
+		name_flags[tag].push_back(1);
+		memset(meters[tag][name], 0, max_ * 2 * sizeof(float));
 	}
 
-	start_stop[now_tag][name].start.QuadPart = (LONGLONG)0;
-	start_stop[now_tag][name].stop.QuadPart = (LONGLONG)(value * 10000000.f);
+	start_stop[tag][name].start.QuadPart = (LONGLONG)0;
+	start_stop[tag][name].stop.QuadPart = (LONGLONG)(value * 10000000.f);
 
-	start_stop[now_tag][name].duration_time = start_stop[now_tag][name].stop.QuadPart - start_stop[now_tag][name].start.QuadPart;
-	start_stop[now_tag][name].is_reset_duration_time = false;
+	start_stop[tag][name].duration_time = start_stop[tag][name].stop.QuadPart - start_stop[tag][name].start.QuadPart;
+	start_stop[tag][name].is_reset_duration_time = false;
 }
 
-bool Work_meter::tag_start(const std::string& tag) {
+bool Work_meter::tag_start(const std::string& tag, int thread_num) {
 	std::lock_guard <std::mutex> lock(mtx);
 
 	if (meters.count(tag) == 0) {
 		tags.push_back(tag);
 		meters[tag];
 	}
-	now_tag = tag;
+	now_tag[thread_num] = tag;
 
 	return 1;
 }
-bool Work_meter::tag_stop() {
+bool Work_meter::tag_stop(int thread_num) {
 	std::lock_guard <std::mutex> lock(mtx);
 
-	now_tag = std::string("");
+	now_tag[thread_num] = std::string("");
 
 	return 1;
 }

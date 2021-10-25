@@ -253,6 +253,7 @@
     <ClInclude Include="Scripts\Renderer\material.h" />
     <ClInclude Include="Scripts\Renderer\material_for_collider.h" />
     <ClInclude Include="Scripts\Renderer\mesh.h" />
+    <ClInclude Include="Scripts\Renderer\posteffect_base.h" />
     <ClInclude Include="Scripts\Renderer\renderer.h" />
     <ClInclude Include="Scripts\Renderer\renderer_manager.h" />
     <ClInclude Include="Scripts\Renderer\Shader\compute_shader.h" />

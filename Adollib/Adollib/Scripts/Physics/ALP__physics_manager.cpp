@@ -72,7 +72,7 @@ namespace Adollib
 
 bool Physics_manager::update(Scenelist Sce)
 {
-	Work_meter::start("Phyisics_manager");
+	Work_meter::start("Phyisics_manager", 1);
 
 	LARGE_INTEGER time;
 	QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&time));
@@ -138,31 +138,38 @@ bool Physics_manager::update(Scenelist Sce)
 			pairs_new_num = 1 - pairs_new_num;
 
 			// ‘åG”c‚È“–‚½‚è”»’è
-			Work_meter::start("Broad,Mid,Narrow");
+			Work_meter::start("Broad,Mid,Narrow", 1);
 
-			Work_meter::start("Broadphase");
-
+			Work_meter::start("Broadphase", 1);
+			Work_meter::tag_start("Broadphase", 1);
 			BroadMidphase(Sce,
 				ALP_colliders[Sce], pairs[pairs_new_num],
 				moved_collider_for_insertsort[Sce], added_collider_for_insertsort[Sce]
 			);
-			Work_meter::stop("Broadphase");
+			Work_meter::tag_stop(1);
+			Work_meter::stop("Broadphase", 1);
 
-			Work_meter::start("Midphase");
+			Work_meter::start("Midphase", 1);
+			Work_meter::tag_start("Midphase", 1);
 			Midphase(pairs[1 - pairs_new_num], pairs[pairs_new_num]);
-			Work_meter::stop("Midphase");
+			Work_meter::tag_stop(1);
+			Work_meter::stop("Midphase", 1);
 
 			// Õ“Ë¶¬
-			Work_meter::start("Narrowphase");
+			Work_meter::start("Narrowphase", 1);
+			Work_meter::tag_start("Narrowphase", 1);
 			generate_contact(pairs[pairs_new_num]);
-			Work_meter::stop("Narrowphase");
+			Work_meter::tag_stop(1);
+			Work_meter::stop("Narrowphase", 1);
 
-			Work_meter::stop("Broad,Mid,Narrow");
+			Work_meter::stop("Broad,Mid,Narrow", 1);
 
 			// Õ“Ë‰ğŒˆ
-			Work_meter::start("Resolve");
+			Work_meter::start("Resolve", 1);
+			Work_meter::tag_start("Resolve", 1);
 			resolve_contact(ALP_colliders[Sce], pairs[pairs_new_num], ALP_joints);
-			Work_meter::stop("Resolve");
+			Work_meter::tag_stop(1);
+			Work_meter::stop("Resolve", 1);
 
 			{
 				std::lock_guard <std::mutex> lock(mtx);
@@ -182,7 +189,7 @@ bool Physics_manager::update(Scenelist Sce)
 
 	}
 
-	Work_meter::stop("Phyisics_manager");
+	Work_meter::stop("Phyisics_manager", 1);
 
 #ifdef Draw_JointContact
 	static bool init = true;
@@ -258,8 +265,8 @@ bool Physics_manager::update(Scenelist Sce)
 			debug_go[count - 1]->transform->local_pos = p->body[0]->world_position() + vector3_quatrotate(p->contacts.contactpoints[i].point[0], p->body[0]->world_orientation());
 			debug_go[count - 2]->transform->local_pos = p->body[1]->world_position() + vector3_quatrotate(p->contacts.contactpoints[i].point[1], p->body[1]->world_orientation());
 			int adfsdg = 0;
+			}
 		}
-	}
 
 #endif // DEBUG
 
@@ -267,7 +274,7 @@ bool Physics_manager::update(Scenelist Sce)
 	//is_updated_physicsthread = true;
 	return true;
 
-}
+	}
 
 
 bool Physics_manager::update_Gui() {

@@ -105,5 +105,5 @@ void Renderer::render() {
 void Renderer::finalize() {
 	Renderer_manager::remove_renderer(this_itr);
 
-	delete material;
+	//delete material;
 }

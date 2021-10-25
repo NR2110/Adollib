@@ -26,18 +26,17 @@ namespace Adollib {
 		static std::unordered_map < std::string, std::vector<bool>> name_flags;
 		static std::vector<std::string> tags;
 
-		static std::string now_tag;
+		// Šethread•ª •Û‘¶‚·‚é
+		static std::string now_tag[10];
 	public:
 
 		static bool render();
-		static bool start(const std::string&);
-		static bool stop(const std::string&);
-		static bool start(const std::string&, const std::string&);
-		static bool stop(const std::string&,const std::string&);
-		static void set(const std::string& name, const float& value);
+		static bool start(const std::string&, int thread_num = 0);
+		static bool stop(const std::string&,int thread_num = 0);
+		static void set(const std::string& name, const float& value, int thread_num = 0);
 
-		static bool tag_start(const std::string&); //tag
-		static bool tag_stop (); //tag
+		static bool tag_start(const std::string& ,int thread_num = 0); //tag
+		static bool tag_stop (int thread_num = 0); //tag
 
 
 	};
