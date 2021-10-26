@@ -13,6 +13,12 @@
 #include "../Adollib/Scripts/Imgui/debug.h"
 #include "../Adollib/Scripts/Physics/joint.h"
 
+#include "../Adollib/Scripts/Renderer/mesh_renderer.h"
+#include "../Adollib/Scripts/Renderer/sprite_renderer.h"
+#include "../Adollib/Scripts/Object/component_camera.h"
+
+#include "../Adollib/Scripts/Main/systems.h"
+
 namespace Adollib
 {
 	void Stage_01::stage_awake()
@@ -24,6 +30,13 @@ namespace Adollib
 
 		//set_desk(Vector3(0, 0, 0), Vector3(30, 15, 25), Vector3(0, 0, 0), 0);
 		set_box(Vector3(0, -60, 0), Vector3(80, 60, 40), Vector3(0), Vector3(188, 214, 54) / 255.0f,  true);
+		{
+			//auto stage = set_box(Vector3(0, -60, 0), Vector3(80, 60, 40), Vector3(0), Vector3(255,255,255) / 255.0f,  true);
+			//auto R = stage->gameobject->findComponent<Mesh_renderer>();
+			//auto C = Gameobject_manager::find("camera")->findComponent<Camera_component>();
+			//R->set_texture(C->get_color_texture());
+			//R->load_texture(L"./DefaultModel/demo.png");
+		}
 
 #if _DEBUG
 #else

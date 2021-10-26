@@ -1,7 +1,7 @@
 
 #include "renderer_manager.h"
 
-#include "renderer.h"
+#include "renderer_base.h"
 
 #include "Shader/constant_buffer.h"
 #include "../Main/systems.h"
@@ -11,11 +11,12 @@
 #include "../Physics/ALP__physics_manager.h"
 
 #include "../Imgui/work_meter.h"
+#include "../Imgui/imgui_manager.h"
 
 using namespace Adollib;
 using namespace ConstantBuffer;
 
-std::unordered_map<Scenelist, std::list<Renderer*>> Renderer_manager::renderers;
+std::unordered_map<Scenelist, std::list<Renderer_base*>> Renderer_manager::renderers;
 
 ComPtr<ID3D11Buffer> Renderer_manager::light_cb;
 
@@ -24,7 +25,7 @@ void Renderer_manager::awake() {
 	Systems::CreateConstantBuffer(&light_cb, sizeof(ConstantBufferPerLight));
 }
 
-std::list<Renderer*>::iterator Renderer_manager::add_renderer(Renderer* renderer) {
+std::list<Renderer_base*>::iterator Renderer_manager::add_renderer(Renderer_base* renderer) {
 	const auto& Sce = renderer->gameobject->get_scene();
 	renderers[Sce].emplace_back(renderer);
 
@@ -34,7 +35,7 @@ std::list<Renderer*>::iterator Renderer_manager::add_renderer(Renderer* renderer
 	return itr;
 };
 
-void Renderer_manager::remove_renderer(std::list<Renderer*>::iterator itr) {
+void Renderer_manager::remove_renderer(std::list<Renderer_base*>::iterator itr) {
 	renderers[(*itr)->gameobject->get_scene()].erase(itr);
 }
 
@@ -53,6 +54,8 @@ void Renderer_manager::render(const std::list<Camera_component*>& cameras,const 
 
 	//そのシーンのカメラの数だけ回す
 	for (const auto& camera : cameras) {
+		Systems::DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
 		if (camera->gameobject->active == false)continue;
 
 		// cameraの持つtextureのclear
@@ -61,9 +64,12 @@ void Renderer_manager::render(const std::list<Camera_component*>& cameras,const 
 		// camera情報をコンスタントバッファーにセットする
 		camera->set_Constantbuffer();
 
+		// 描画するscene
+		auto render_scene = camera->render_scene;
+
 		Work_meter::start("render_obj");
 		// renderを呼ぶ
-		for (auto& renderer : renderers[Sce]) {
+		for (auto& renderer : renderers[render_scene]) {
 			renderer->render();
 		}
 		Work_meter::stop("render_obj");
@@ -76,10 +82,11 @@ void Renderer_manager::render(const std::list<Camera_component*>& cameras,const 
 
 
 		Work_meter::tag_stop();
+
 	}
 
-
-
+	Systems::SetRenderTargetView();
+	Adollib::Imgui_manager::render();
 
 }
 

@@ -39,8 +39,6 @@ bool loop::Render(){
 	go_manager.render();
 	Work_meter::stop(std::string("render_all"));
 
-	Adollib::Imgui_manager::render();
-
 	Systems::Flip();
 
 	return true;

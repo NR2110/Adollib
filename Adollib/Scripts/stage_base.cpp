@@ -146,25 +146,17 @@ Collider* Stage_base::set_meshbox(Vector3 pos, Vector3 size, Vector3 rotate, Vec
 	return coll;
 }
 
-Collider* Stage_base::set_plane(Vector3 pos, Vector3 normal, Vector3 color, bool is_static ) {
+Gameobject* Stage_base::set_plane(Vector3 pos, Vector3 size, Vector3 rotate, Vector3 color, bool is_static ) {
 	Gameobject* object = nullptr;
-	object = Gameobject_manager::createCube("plane",GO_tag::Plane);
+	object = Gameobject_manager::createPlane("plane",GO_tag::Plane);
 	Vector4 C = Vector4(color.x, color.y, color.z, 1);
 	object->material->color = C;
 
-	object->transform->local_orient = quaternion_from_euler(normal);
+	object->transform->local_orient = quaternion_from_euler(rotate);
 	object->transform->local_pos = pos;
-	object->transform->local_scale = Vector3(30, 0.1f, 30);
-
-	Collider* coll = object->addComponent<Collider>();
-	Plane* plane = coll->add_shape<Plane>();
-
-	if (is_static) {
-		coll->tag = Collider_tags::Plane | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Static_Stage | Collider_tags::Jumpable_Stage;
-		coll->physics_data.is_moveable = false;
-	}
+	object->transform->local_scale = size;
 
 	stage_parts.emplace_back(object);
-	return coll;
+	return object;
 }
 

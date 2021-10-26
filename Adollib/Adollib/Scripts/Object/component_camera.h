@@ -5,6 +5,7 @@
 #include "time.h"
 #include "../Main/input.h"
 #include "../Renderer/Shader/shader.h"
+#include "../Scene/scene_list.h"
 
 #include <string>
 #include <memory>
@@ -24,9 +25,12 @@ namespace Adollib
 		float aspect = 1280 / 720.0f;
 		float nearZ = 0.1f;
 		float farZ = 10000.0f;
+		Vector4 clear_color = Vector4(0, 0, 0, 0);
 
 		// âÊñ Ç…èoóÕÇ∑ÇÈÇ©
 		bool is_draw_main_RenderTargetView = true;
+
+		Scenelist render_scene = Scenelist::scene_null;
 
 	private:
 		std::list<Posteffect_base*> posteffects;

@@ -99,6 +99,9 @@ namespace Adollib
 				rotate_vec.y = input->getCursorPosX() - cursol_pos_save.x;
 				rotate_vec.x = input->getCursorPosY() - cursol_pos_save.y;
 
+				rotate_vec.x = ALClamp(rotate_vec.x, -170 - rotate_vec_save.x, 170 - rotate_vec_save.x);
+				rotate_vec_save += rotate_vec;
+
 				rotate *= quaternion_axis_angle(Vector3(0, 1, 0), +rotate_vec.y * rotate_pow);
 				rotate *= quaternion_axis_angle(vector3_cross(Vector3(0, 1, 0), vector3_quatrotate(Vector3(0, 0, 1), transform->local_orient)).unit_vect(), +rotate_vec.x * rotate_pow);
 			}

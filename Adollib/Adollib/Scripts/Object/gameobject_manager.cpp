@@ -10,7 +10,8 @@
 #include "../Scene/scene.h"
 
 #include "../Renderer/renderer_manager.h"
-#include "../Renderer/renderer.h"
+#include "../Renderer/mesh_renderer.h"
+#include "../Renderer/sprite_renderer.h"
 #include "../Renderer/Shader/constant_buffer.h"
 #include "../Renderer/Shader/light_types.h"
 #include "../Renderer/frustum_culling.h"
@@ -219,7 +220,7 @@ Gameobject* Gameobject_manager::createFromFBX(const std::string go_name, const s
 	Value->name = go_name;
 	Value->transform = std::make_shared<Transform>();
 
-	auto renderer = Value->addComponent<Renderer>();
+	auto renderer = Value->addComponent<Mesh_renderer>();
 	Value->material = renderer->get_material();
 
 	std::vector<Mesh::mesh>* meshes = nullptr;
@@ -243,7 +244,7 @@ Gameobject* Gameobject_manager::createSphere(const std::string go_name, u_int ta
 	Value->name = go_name;
 	Value->transform = std::make_shared<Transform>();
 
-	auto renderer = Value->addComponent<Renderer>();
+	auto renderer = Value->addComponent<Mesh_renderer>();
 	Value->material = renderer->get_material();
 
 	std::vector<Mesh::mesh>* meshes = nullptr;
@@ -267,7 +268,7 @@ Gameobject* Gameobject_manager::createCube(const std::string go_name, u_int tag,
 	Value->name = go_name;
 	Value->transform = std::make_shared<Transform>();
 
-	auto renderer = Value->addComponent<Renderer>();
+	auto renderer = Value->addComponent<Mesh_renderer>();
 	Value->material = renderer->get_material();
 
 	std::vector<Mesh::mesh>* meshes = nullptr;
@@ -291,7 +292,7 @@ Gameobject* Gameobject_manager::createCapsule(const std::string go_name, u_int t
 	Value->name = go_name;
 	Value->transform = std::make_shared<Transform>();
 
-	auto renderer = Value->addComponent<Renderer>();
+	auto renderer = Value->addComponent<Mesh_renderer>();
 	Value->material = renderer->get_material();
 
 	std::vector<Mesh::mesh>* meshes = nullptr;
@@ -317,7 +318,7 @@ Gameobject* Gameobject_manager::createCylinder(const std::string go_name, u_int 
 	Value->name = go_name;
 	Value->transform = std::make_shared<Transform>();
 
-	auto renderer = Value->addComponent<Renderer>();
+	auto renderer = Value->addComponent<Mesh_renderer>();
 	Value->material = renderer->get_material();
 
 	std::vector<Mesh::mesh>* meshes = nullptr;
@@ -328,6 +329,27 @@ Gameobject* Gameobject_manager::createCylinder(const std::string go_name, u_int 
 	++go_count;
 	return Value;
 }
-//Gameobject* Gameobject_manager::createPlane( u_int go_name) {
 
-//}
+Gameobject* Gameobject_manager::createPlane(const std::string go_name, u_int tag, Scenelist Sce) {
+	Gameobject* null = nullptr;
+	gameobjects[Sce].emplace_back(null);
+	auto itr = gameobjects[Sce].end();
+	itr--;
+	*itr = newD Gameobject(false, Sce, itr);
+	Gameobject* Value = *itr;
+
+	Value->tag = tag;
+	Value->name = go_name;
+	Value->transform = std::make_shared<Transform>();
+
+	auto renderer = Value->addComponent<Sprite_renderer>();
+	Value->material = renderer->get_material();
+
+	std::vector<Mesh::mesh>* meshes = nullptr;
+	ResourceManager::CreateModelFromFBX(&meshes, "./DefaultModel/plane.fbx", "");
+	renderer->set_meshes(meshes);
+
+	++go_count;
+	Value->initialize();
+	return Value;
+}

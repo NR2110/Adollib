@@ -254,7 +254,8 @@
     <ClInclude Include="Scripts\Renderer\material_for_collider.h" />
     <ClInclude Include="Scripts\Renderer\mesh.h" />
     <ClInclude Include="Scripts\Renderer\posteffect_base.h" />
-    <ClInclude Include="Scripts\Renderer\renderer.h" />
+    <ClInclude Include="Scripts\Renderer\mesh_renderer.h" />
+    <ClInclude Include="Scripts\Renderer\renderer_base.h" />
     <ClInclude Include="Scripts\Renderer\renderer_manager.h" />
     <ClInclude Include="Scripts\Renderer\Shader\compute_shader.h" />
     <ClInclude Include="Scripts\Renderer\Shader\constant_buffer.h" />
@@ -262,6 +263,7 @@
     <ClInclude Include="Scripts\Renderer\Shader\shader.h" />
     <ClInclude Include="Scripts\Renderer\Shader\vertex_format.h" />
     <ClInclude Include="Scripts\Renderer\sprite.h" />
+    <ClInclude Include="Scripts\Renderer\sprite_renderer.h" />
     <ClInclude Include="Scripts\Renderer\texture.h" />
     <ClInclude Include="Scripts\Scene\scene.h" />
     <ClInclude Include="Scripts\Scene\scene_game.h" />
@@ -336,11 +338,13 @@
     <ClCompile Include="Scripts\Renderer\material.cpp" />
     <ClCompile Include="Scripts\Renderer\material_for_collider.cpp" />
     <ClCompile Include="Scripts\Renderer\mesh.cpp" />
-    <ClCompile Include="Scripts\Renderer\renderer.cpp" />
+    <ClCompile Include="Scripts\Renderer\mesh_renderer.cpp" />
+    <ClCompile Include="Scripts\Renderer\renderer_base.cpp" />
     <ClCompile Include="Scripts\Renderer\renderer_manager.cpp" />
     <ClCompile Include="Scripts\Renderer\Shader\compute_shader.cpp" />
     <ClCompile Include="Scripts\Renderer\Shader\shader.cpp" />
     <ClCompile Include="Scripts\Renderer\sprite.cpp" />
+    <ClCompile Include="Scripts\Renderer\sprite_renderer.cpp" />
     <ClCompile Include="Scripts\Renderer\texture.cpp" />
     <ClCompile Include="Scripts\Scene\scene_game.cpp" />
     <ClCompile Include="Scripts\Scene\scene_manager.cpp" />

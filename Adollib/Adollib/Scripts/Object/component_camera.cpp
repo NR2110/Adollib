@@ -32,6 +32,8 @@ void Camera_component::awake() {
 
 	depth_texture = std::make_shared<Texture>();
 	depth_texture->Create(Al_Global::SCREEN_WIDTH, Al_Global::SCREEN_HEIGHT, DXGI_FORMAT_R16G16B16A16_FLOAT);
+
+	render_scene = gameobject->get_scene();
 }
 
 void Camera_component::finalize() {
@@ -116,11 +118,9 @@ void Camera_component::posteffect_render() {
 
 void Camera_component::clear() {
 
-	float clearColor[4] = { 0,0,0,0 };
-
-	Systems::DeviceContext->ClearRenderTargetView(color_texture->GetRenderTargetView(), clearColor);
-	Systems::DeviceContext->ClearRenderTargetView(normal_texture->GetRenderTargetView(), clearColor);
-	Systems::DeviceContext->ClearRenderTargetView(depth_texture->GetRenderTargetView(), clearColor);
+	Systems::DeviceContext->ClearRenderTargetView(color_texture->GetRenderTargetView(), &clear_color[0]);
+	Systems::DeviceContext->ClearRenderTargetView(normal_texture->GetRenderTargetView(), &clear_color[0]);
+	Systems::DeviceContext->ClearRenderTargetView(depth_texture->GetRenderTargetView(), &clear_color[0]);
 	Systems::DeviceContext->ClearDepthStencilView(Systems::GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 }
 

@@ -91,6 +91,7 @@ namespace Adollib {
 		static State_manager::BStypes GetBS_type() { return BS_type; }
 
 		static void SetViewPort(int width, int height);
+		static void SetRenderTargetView() { DeviceContext->OMSetRenderTargets(1, RenderTargetView.GetAddressOf(), DepthStencilView.Get()); }
 
 		static void CreateConstantBuffer(ID3D11Buffer** ppCB, u_int size) {
 

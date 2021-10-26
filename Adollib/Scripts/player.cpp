@@ -7,8 +7,6 @@
 
 #include "stage_manager.h"
 
-#include "../Adollib/Scripts/Renderer/renderer.h"
-#include "../Adollib/Scripts/Object/component_camera.h"
 namespace Adollib
 {
 	// Š‘®‚·‚éƒV[ƒ“‚Ì‰Šú‰»Žž‚Éˆê“x‚¾‚¯ŒÄ‚Î‚ê‚é
@@ -29,9 +27,9 @@ namespace Adollib
 		camera = Gameobject_manager::find("camera")->transform;
 		stage_manager = Gameobject_manager::find("Stage_manager")->findComponent<Stage_manager>();
 
-		//auto R = Head->findComponent<Renderer>();
-		//auto C = Gameobject_manager::find("camera")->findComponent<Camera_component>();
-		//R->set_texture(C->get_color_texture());
+		//auto R = Head->findComponent<Mesh_renderer>();
+		////auto C = Gameobject_manager::find("camera")->findComponent<Camera_component>();
+		////R->set_texture(C->get_color_texture());
 		//R->load_texture(L"./DefaultModel/demo.png");
 
 		head_rot_max_speed = 20;
