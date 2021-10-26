@@ -39,10 +39,27 @@ void Renderer_manager::remove_renderer(std::list<Renderer_base*>::iterator itr) 
 	renderers[(*itr)->gameobject->get_scene()].erase(itr);
 }
 
-void Renderer_manager::render(const std::list<Camera_component*>& cameras,const std::list<Light_component*>& lights, Scenelist Sce) {
+void Renderer_manager::render(const std::map<Scenelist, std::list<Camera_component*>>& cameras,const std::map<Scenelist, std::list<Light_component*>>& lights, Scenelist Sce) {
+
+	// TODO : Sceが複数あるときのclearのタイミングが適当 要修正
+
 	Work_meter::tag_start("render");
 
+	// メインのRTVのclear
 	Systems::Clear();
+
+
+	// Imguiがgpuの処理を全部待ちやがる & depthで上書きしちゃうので 前フレームのtextureを描画して Imguiの描画をここで行う
+	// camera->clearにgpu負荷があり、Imguiがその処理を待つので 下に置くと重くなる
+	{
+		for (const auto& camera : cameras.at(Sce)) {
+			// posteffectの処理 & mainのRTVに描画
+			camera->posteffect_render();
+		}
+		Work_meter::start(std::string("renderImgui"));
+		Adollib::Imgui_manager::render();
+		Work_meter::stop(std::string("renderImgui"));
+	}
 
 	// 三角形の描画方法
 	Systems::DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -50,17 +67,17 @@ void Renderer_manager::render(const std::list<Camera_component*>& cameras,const 
 	if (Sce == Scenelist::scene_null)return;
 
 	// light情報をコンスタントバッファーにセットする
-	set_light_Constantbuffer(lights);
-
+	set_light_Constantbuffer(lights.at(Sce));
 
 	//そのシーンのカメラの数だけ回す
-	for (const auto& camera : cameras) {
-		Systems::DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	for (const auto& camera : cameras.at(Sce)) {
 
 		if (camera->gameobject->active == false)continue;
 
+		Work_meter::start("clear");
 		// cameraの持つtextureのclear
 		camera->clear();
+		Work_meter::stop("clear");
 
 		// camera情報をコンスタントバッファーにセットする
 		camera->set_Constantbuffer();
@@ -75,19 +92,11 @@ void Renderer_manager::render(const std::list<Camera_component*>& cameras,const 
 		}
 		Work_meter::stop("render_obj");
 
-		// posteffectの処理 & mainのRTVに描画
-		camera->posteffect_render();
-
 		// colliderのrender
 		Physics_function::Physics_manager::render_collider(Sce);
 
-
-
 	}
-	Systems::SetRenderTargetView();
-	Work_meter::start(std::string("renderImgui"));
-	Adollib::Imgui_manager::render();
-	Work_meter::stop(std::string("renderImgui"));
+
 
 	Work_meter::tag_stop();
 }
@@ -122,7 +131,7 @@ void Renderer_manager::set_light_Constantbuffer(const std::list<Light_component*
 	}
 
 	memcpy(l_cb.PointLight, PointLight, sizeof(POINTLIGHT) * POINTMAX);
-	memcpy(l_cb.SpotLight, SpotLight, sizeof(SPOTLIGHT) * SPOTMAX);
+	memcpy(l_cb.SpotLight,  SpotLight, sizeof(SPOTLIGHT) * SPOTMAX);
 	Systems::DeviceContext->UpdateSubresource(light_cb.Get(), 0, NULL, &l_cb, 0, 0);
 	Systems::DeviceContext->VSSetConstantBuffers(4, 1, light_cb.GetAddressOf());
 	Systems::DeviceContext->PSSetConstantBuffers(4, 1, light_cb.GetAddressOf());

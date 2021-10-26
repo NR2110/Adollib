@@ -36,7 +36,7 @@ namespace Adollib {
 	public:
 		static void awake();
 
-		static void render(const std::list<Camera_component*>& cameras, const std::list<Light_component*>& lights, Scenelist Sce);
+		static void render(const std::map<Scenelist, std::list<Camera_component*>>& cameras, const std::map<Scenelist, std::list<Light_component*>>& lights, Scenelist Sce);
 
 	};
 

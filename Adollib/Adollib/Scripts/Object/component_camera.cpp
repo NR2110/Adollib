@@ -99,6 +99,9 @@ void Camera_component::posteffect_render() {
 
 	// main‚ÌRTV‚É•`‰æ‚µ‚È‚¢‚È‚ç‚±‚±‚Åreturn
 	if (is_draw_main_RenderTargetView == false)return;
+
+	Systems::DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
 	ID3D11RenderTargetView* rtv = Systems::GetRenderTargetView();
 	ID3D11DepthStencilView* dsv = Systems::GetDepthStencilView();
 	Systems::DeviceContext->OMSetRenderTargets(1, &rtv, dsv);

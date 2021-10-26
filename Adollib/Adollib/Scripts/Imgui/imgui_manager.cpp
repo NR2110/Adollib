@@ -77,6 +77,8 @@ bool Imgui_manager::update(MSG hMsg) {
 
 bool Imgui_manager::render() {
 
+	Systems::SetRenderTargetView();
+
 #ifdef UseImgui
 	static bool draw_flags[2] = { true };
 

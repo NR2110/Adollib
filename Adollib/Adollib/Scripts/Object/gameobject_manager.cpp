@@ -168,7 +168,10 @@ void Gameobject_manager::update(Scenelist Sce) {
 }
 
 void Gameobject_manager::render(Scenelist Sce) {
-	Renderer_manager::render(cameras[Sce], lights[Sce], Sce);
+
+	cameras[Sce];
+	lights[Sce];
+	Renderer_manager::render(cameras, lights, Sce);
 }
 
 

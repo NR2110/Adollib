@@ -104,6 +104,7 @@ namespace Adollib {
 
 			// アタッチされたshapeの配列
 			std::list<Collider_shape*> get_shapes() const { return shapes; };
+
 			std::list<Collider_shape*> get_added_shapes() const { return added_buffer_shapes; };
 
 			// 衝突したcolliderのtagを保存
