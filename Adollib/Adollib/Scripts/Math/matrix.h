@@ -67,8 +67,8 @@ namespace Adollib {
 		Matrix44& operator*= (const Matrix44& M);
 		Matrix44& operator*= (float S);
 		Matrix44& operator/= (float S);
-		bool operator== (const Matrix44& M);
-		bool operator!= (const Matrix44& M);
+		bool operator== (const Matrix44& M) const;
+		bool operator!= (const Matrix44& M) const;
 
 		friend Matrix44 operator*(float S, const Matrix44& M);
 
@@ -117,8 +117,8 @@ namespace Adollib {
 		Matrix33& operator*= (const Matrix33& M);
 		Matrix33& operator*= (float S);
 		Matrix33& operator/= (float S);
-		bool operator== (const Matrix33& M);
-		bool operator!= (const Matrix33& M);
+		bool operator== (const Matrix33& M) const;
+		bool operator!= (const Matrix33& M) const;
 
 		friend Matrix33 operator*(float S, const Matrix33& M);
 

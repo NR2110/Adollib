@@ -92,7 +92,7 @@ namespace Adollib {
 		(*this) = (*this) / S;
 		return *this;
 	}
-	inline bool Matrix33::operator== (const Matrix33& M) {
+	inline bool Matrix33::operator== (const Matrix33& M) const {
 
 		return (
 			_11 == M._11 && _12 == M._12 && _13 == M._13 &&
@@ -100,7 +100,7 @@ namespace Adollib {
 			_31 == M._31 && _32 == M._32 && _33 == M._33
 			);
 	}
-	inline bool Matrix33::operator!= (const Matrix33& M) {
+	inline bool Matrix33::operator!= (const Matrix33& M) const {
 
 		return (!(*this == M));
 	}
@@ -141,6 +141,7 @@ namespace Adollib {
 	inline Matrix33 Adollib::matrix_inverse(const Matrix33& M) {
 
 		const float det = matrix_determinant(M);
+		if (det == 0)return matrix33_zero();
 
 		Matrix33 Ret;
 

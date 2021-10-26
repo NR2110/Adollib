@@ -93,7 +93,7 @@ namespace Adollib {
 		(*this) = (*this) / S;
 		return *this;
 	}
-	inline bool Matrix44::operator== (const Matrix44& M) {
+	inline bool Matrix44::operator== (const Matrix44& M) const {
 
 		return (
 			_11 == M._11 && _12 == M._12 && _13 == M._13 && _14 == M._14 &&
@@ -102,7 +102,7 @@ namespace Adollib {
 			_41 == M._41 && _42 == M._42 && _43 == M._43 && _44 == M._44
 			);
 	}
-	inline bool Matrix44::operator!= (const Matrix44& M) {
+	inline bool Matrix44::operator!= (const Matrix44& M) const {
 
 		return (!(*this == M));
 	}

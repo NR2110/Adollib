@@ -3,7 +3,7 @@
 #include <map>
 #include "../Object/component.h"
 #include "../Object/gameobject.h"
-#include "../Scene/scene.h"
+#include "../Scene/scene_manager.h"
 
 #include "collider.h"
 #include "ALP_collider.h"
@@ -220,6 +220,11 @@ namespace Adollib
 
 				collider_index_count[Sce]++;
 
+				for (auto& debug : added_buffer_ALP_colliders[Sce]) {
+					if (debug == nullptr) {
+						int adsfdg = 0;
+					}
+				}
 				return ret;
 			}
 
@@ -310,10 +315,10 @@ namespace Adollib
 				float& tmin, float& tmax,
 				Vector3& normal,
 				Collider* coll,
-				Scenelist Sce = Scene::now_scene);
+				Scenelist Sce = Scene_manager::get_nowscene());
 
 			// 動いたものとしてmoved_colliderに登録(sweep&pruneでの挿入ソートにて使う)
-			static void add_moved(Physics_function::ALP_Collider* coll, Scenelist Sce = Scene::now_scene) {
+			static void add_moved(Physics_function::ALP_Collider* coll, Scenelist Sce = Scene_manager::get_nowscene()) {
 				moved_collider_for_insertsort[Sce].push_back(coll);
 			}
 
@@ -344,19 +349,19 @@ namespace Adollib
 			// main threadから呼ばれる
 
 			// 毎フレーム呼ばれる更新処理
-			static bool update(Scenelist Sce = Scene::now_scene);
+			static bool update(Scenelist Sce = Scene_manager::get_nowscene());
 
 			// Guiの表示
 			static bool update_Gui();
 
 			// colliderの表示
-			static bool render_collider(Scenelist Sce = Scene::now_scene);
+			static bool render_collider(Scenelist Sce = Scene_manager::get_nowscene());
 			// kdopの表示
-			static bool render_dop(Scenelist Sce = Scene::now_scene);
+			static bool render_dop(Scenelist Sce = Scene_manager::get_nowscene());
 			// jointの表示
-			static bool render_joint(Scenelist Sce = Scene::now_scene);
+			static bool render_joint(Scenelist Sce = Scene_manager::get_nowscene());
 
-			static void destroy(Scenelist Sce = Scene::now_scene);
+			static void destroy(Scenelist Sce = Scene_manager::get_nowscene());
 
 		};
 

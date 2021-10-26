@@ -8,8 +8,8 @@ using namespace Adollib;
 
 bool loop::init(HWND hWnd) {
 
-	scene_manager.initialize();
-	go_manager.awake();
+	Scene_manager::initialize();
+	Gameobject_manager::awake();
 
 	Systems::SetViewPort(Al_Global::SCREEN_WIDTH, Al_Global::SCREEN_HEIGHT);
 	Adollib::Imgui_manager::init(hWnd);
@@ -22,8 +22,8 @@ bool loop::Update(MSG hMsg, HWND hWnd, int width, int height) {
 	Work_meter::start(std::string("update_all"));
 	Systems::inputManager->update();
 
-	scene_manager.update();
-	go_manager.update();
+	Scene_manager::update();
+	//Gameobject_manager::update();
 
 	Work_meter::stop(std::string("update_all"));
 	return true;
@@ -31,13 +31,9 @@ bool loop::Update(MSG hMsg, HWND hWnd, int width, int height) {
 
 bool loop::Render(){
 
-	//loop::initで一度呼ばれているためコメント化
-	//何かあれば適当に
-	//Systems::SetViewPort(Systems::SCREEN_WIDTH, Systems::SCREEN_HEIGHT);
-
-	Work_meter::start(std::string("render_all"));
-	go_manager.render();
-	Work_meter::stop(std::string("render_all"));
+	Work_meter::start(std::string("render"));
+	Scene_manager::render();
+	Work_meter::start(std::string("render"));
 
 	Systems::Flip();
 
@@ -46,13 +42,16 @@ bool loop::Render(){
 
 bool loop::destroy() {
 
+	// すべてのsceneのgameobjectを削除
 	for (int i = 0; i < static_cast<int>(Scenelist::scene_list_size); i++) {
 		Gameobject_manager::destroy(static_cast<Scenelist>(i));
 	}
 
+	// phtsics_managerのthreadを止める
 	Physics_function::Physics_manager::thread_stop_and_join();
 	Physics_function::Physics_manager::destroy();
 
+	// imgu.iを止める
 	Adollib::Imgui_manager::destroy();
 
 	return true;

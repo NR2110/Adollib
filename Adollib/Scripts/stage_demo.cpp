@@ -38,6 +38,8 @@ namespace Adollib
 			plane->add_child(subcamera_go);
 			subcamera_go->transform->local_orient = quaternion_from_euler(-90, 0, 0);
 
+			stage_parts.emplace_back(subcamera_go);
+
 			plane->transform->local_orient = quaternion_from_euler(90, 180, 0);
 
 			R->set_texture(subcamera_comp->get_color_texture());

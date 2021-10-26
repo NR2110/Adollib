@@ -14,8 +14,8 @@ namespace Adollib {
 		bool destroy();
 
 	private:
-		Scene_manager scene_manager;
-		Gameobject_manager go_manager;
+		//Scene_manager scene_manager;
+		//Gameobject_manager go_manager;
 
 	};
 

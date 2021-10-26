@@ -48,23 +48,14 @@ void Gameobject_manager::awake() {
 
 	Renderer_manager::awake();
 
-	//scene‚Ì”‚¾‚¯go_manager‚ğ¶¬
+	//scene‚Ì”‚¾‚¯list‚ğ¶¬
 	for (int i = 0; i < static_cast<int>(Scenelist::scene_list_size); i++) {
 		std::list<Gameobject*> go_manager;
 		gameobjects[static_cast<Scenelist>(i)] = go_manager;
 	}
 
-	Physics_function::Collider_renderer::initialize();
+	Physics_function::Collider_renderer::awake();
 
-}
-
-void Gameobject_manager::initialize(Scenelist Sce) {
-	if (Sce == Scenelist::scene_null)return;
-
-
-	for (auto& GO : gameobjects[Sce]) {
-		GO->initialize();
-	}
 
 	static std::thread update_physics_;
 
@@ -72,6 +63,15 @@ void Gameobject_manager::initialize(Scenelist Sce) {
 	Physics_manager::thread_start();
 
 #endif // Use_physics_thread
+
+}
+
+void Gameobject_manager::initialize(Scenelist Sce) {
+	if (Sce == Scenelist::scene_null)return;
+
+	for (auto& GO : gameobjects[Sce]) {
+		GO->initialize();
+	}
 
 }
 

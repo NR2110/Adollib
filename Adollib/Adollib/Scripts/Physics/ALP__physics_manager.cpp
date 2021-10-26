@@ -384,7 +384,7 @@ void Physics_manager::thread_update() {
 }
 
 void Physics_manager::adapt_added_data(Scenelist Sce, bool is_mutex_lock) {
-	if (is_mutex_lock)std::lock_guard <std::mutex> lock(mtx); //呼び出しのところでlockしている
+	if (is_mutex_lock) mtx.lock(); //呼び出しのところでlockしている if文中なのでstd::lock_guard <std::mutex> lock(mtx)は使えない
 
 	for (auto added_coll : added_buffer_ALP_colliders) {
 		// 追加されたcolliderをbroadphase:sweep&prune用に
@@ -446,10 +446,12 @@ void Physics_manager::adapt_added_data(Scenelist Sce, bool is_mutex_lock) {
 			(*save_itr)->is_added = true;
 		}
 	}
+
+	if (is_mutex_lock) mtx.unlock();
 }
 
 void Physics_manager::dadapt_delete_data(bool is_mutex_lock) {
-	if (is_mutex_lock)std::lock_guard <std::mutex> lock(mtx); //呼び出しのところでlockしている
+	if (is_mutex_lock) mtx.lock(); //呼び出しのところでlockしている if文中なのでstd::lock_guard <std::mutex> lock(mtx)は使えない
 
 	for (auto deleted_coll : dalated_buffer_ALP_colliders) {
 		// 削除されたcollider
@@ -477,6 +479,7 @@ void Physics_manager::dadapt_delete_data(bool is_mutex_lock) {
 	}
 	dalated_buffer_ALP_joints.clear();
 
+	if (is_mutex_lock) mtx.unlock();
 }
 
 bool Physics_manager::adapt_transform_to_gameobject(Scenelist Sce) {

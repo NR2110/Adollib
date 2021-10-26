@@ -31,8 +31,8 @@ namespace Adollib {
 			static Shader shader; //shader
 		public:
 
-
-			static void initialize();
+			// constantbuffer‚Ìİ’è ‚È‚Ç
+			static void awake();
 			static void render_collider(const Physics_function::ALP_Collider*);
 			static void render_joint(const Physics_function::ALP_Joint*);
 

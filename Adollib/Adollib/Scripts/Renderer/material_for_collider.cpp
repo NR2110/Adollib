@@ -28,7 +28,7 @@ Shader Collider_renderer::shader; //shader
 //カプセルを描画し、ほかのollider表示をoffにする
 //#define draw_cupsule_cullback
 
-void Collider_renderer::initialize() {
+void Collider_renderer::awake() {
 	//::: コンスタントバッファ :::
 	Systems::CreateConstantBuffer(&world_cb, sizeof(ConstantBufferPerGO));    //枠確保
 	Systems::CreateConstantBuffer(&Mat_cb, sizeof(ConstantBufferPerMaterial));//枠確保

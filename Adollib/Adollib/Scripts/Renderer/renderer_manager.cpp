@@ -40,17 +40,18 @@ void Renderer_manager::remove_renderer(std::list<Renderer_base*>::iterator itr) 
 }
 
 void Renderer_manager::render(const std::list<Camera_component*>& cameras,const std::list<Light_component*>& lights, Scenelist Sce) {
+	Work_meter::tag_start("render");
 
 	Systems::Clear();
 
 	// 三角形の描画方法
 	Systems::DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	Work_meter::tag_start("render");
 	if (Sce == Scenelist::scene_null)return;
 
 	// light情報をコンスタントバッファーにセットする
 	set_light_Constantbuffer(lights);
+
 
 	//そのシーンのカメラの数だけ回す
 	for (const auto& camera : cameras) {
@@ -81,13 +82,14 @@ void Renderer_manager::render(const std::list<Camera_component*>& cameras,const 
 		Physics_function::Physics_manager::render_collider(Sce);
 
 
-		Work_meter::tag_stop();
 
 	}
-
 	Systems::SetRenderTargetView();
+	Work_meter::start(std::string("renderImgui"));
 	Adollib::Imgui_manager::render();
+	Work_meter::stop(std::string("renderImgui"));
 
+	Work_meter::tag_stop();
 }
 
 void Renderer_manager::set_light_Constantbuffer(const std::list<Light_component*>& lights) {
