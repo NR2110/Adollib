@@ -253,7 +253,7 @@ void Work_meter::set(const std::string& name, const float& value, int thread_num
 	}
 
 	start_stop[tag][name].start.QuadPart = (LONGLONG)0;
-	start_stop[tag][name].stop.QuadPart = (LONGLONG)(value * 10000000.f);
+	start_stop[tag][name].stop.QuadPart = (LONGLONG)(value * 10000000);
 
 	start_stop[tag][name].duration_time = start_stop[tag][name].stop.QuadPart - start_stop[tag][name].start.QuadPart;
 	start_stop[tag][name].is_reset_duration_time = false;

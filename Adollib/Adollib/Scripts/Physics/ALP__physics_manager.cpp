@@ -144,7 +144,7 @@ bool Physics_manager::update(Scenelist Sce)
 			Work_meter::tag_start("Broadphase", 1);
 			BroadMidphase(Sce,
 				ALP_colliders[Sce], pairs[pairs_new_num],
-				moved_collider_for_insertsort[Sce], added_collider_for_insertsort[Sce]
+				moved_collider_for_insertsort[Sce], added_collider_for_insertsort[Sce], mtx
 			);
 			Work_meter::tag_stop(1);
 			Work_meter::stop("Broadphase", 1);

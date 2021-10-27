@@ -90,9 +90,7 @@ namespace Adollib {
 	public:
 
 		// world情報の更新 動いていればtrueを変えす inertial_tensor更新の是非を確認するため
-		void update_world_trans(const Vector3& GO_Wposiiton, const Quaternion& GO_Worientation, const Vector3& GO_Wscale,
-			bool& is_chenged_position, bool& is_chenged_orientation, bool& is_chenged_scale
-		);
+		void update_world_trans(const Vector3& GO_Wposiiton, const Quaternion& GO_Worientation, const Vector3& GO_Wscale);
 
 
 	protected:

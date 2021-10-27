@@ -22,7 +22,7 @@ using namespace DOP;
 namespace Adollib
 {
 	std::unordered_map<std::string, std::vector<Mesh::mesh>> ResourceManager::meshes;
-	std::unordered_map<std::wstring, Texture> ResourceManager::texturs;
+	std::unordered_map<std::wstring, ResourceManager::Texture_data> ResourceManager::texturs;
 	std::unordered_map<std::string, ResourceManager::VS_resorce>   ResourceManager::VSshaders;
 	std::unordered_map<std::string, Microsoft::WRL::ComPtr<ID3D11PixelShader>>     ResourceManager::PSshaders;
 	std::unordered_map<std::string, Microsoft::WRL::ComPtr<ID3D11GeometryShader>>  ResourceManager::GSshaders;
@@ -83,7 +83,7 @@ namespace Adollib
 			VSshaders[(string)csoName] = VS;
 		}
 		vertexShader = VS.VSshader;
-		inputLayout  = VS.layout;
+		inputLayout = VS.layout;
 
 		return S_OK;
 	}
@@ -292,35 +292,36 @@ namespace Adollib
 
 	HRESULT ResourceManager::LoadTextureFromFile(
 		const wchar_t* fileName,
-		ID3D11ShaderResourceView** pSRV,
+		ComPtr<ID3D11ShaderResourceView>& pSRV,
 		D3D11_TEXTURE2D_DESC* pTex2dDesc
-	)
-	{
+	) {
+
+		if (texturs.count((std::wstring)fileName) != 0)
+		{
+			pSRV = texturs[(std::wstring)fileName].ShaderResourceView;
+			*pTex2dDesc = texturs[(std::wstring)fileName].Tex2dDesc;
+			return S_OK;
+		}
+
 		HRESULT hr = S_OK;
 		Microsoft::WRL::ComPtr<ID3D11Resource> resource;
 
-		//pSRV = texturs[(std::wstring)fileName].GetShaderResourceView();
-		//if(texturs.count((std::wstring)fileName) == 1)
-		//{
-		//	pSRV = texturs[(std::wstring)fileName].ShaderResourceView.GetAddressOf();
-		//}
-		//else
-		//{
-		//	Texture& tex = texturs[(std::wstring)fileName];
+		auto& srv = texturs[(std::wstring)fileName].ShaderResourceView;
+		auto& t2dec = texturs[(std::wstring)fileName].Tex2dDesc;
 
-		//	// 見つからなかった場合は生成する
-		//	hr = DirectX::CreateWICTextureFromFile(Systems::Device.Get(), fileName, resource.GetAddressOf(), &tex.ShaderResourceView);
-		//	_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
-		//	pSRV = &tex.ShaderResourceView;
+		// 見つからなかった場合は生成する
+		hr = DirectX::CreateWICTextureFromFile(Systems::Device.Get(), fileName, resource.GetAddressOf(), srv.GetAddressOf());
+		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 
-		//	Microsoft::WRL::ComPtr<ID3D11Texture2D> texture2d;
-		//	hr = resource.Get()->QueryInterface<ID3D11Texture2D>(texture2d.GetAddressOf());
-		//	_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
+		Microsoft::WRL::ComPtr<ID3D11Texture2D> texture2d;
+		hr = resource.Get()->QueryInterface<ID3D11Texture2D>(texture2d.GetAddressOf());
+		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 
-		//	// テクスチャリースのプロパティを取得する
-		//	texture2d->GetDesc(&tex.texture2d_desc);
-		//	pTex2dDesc = &tex.texture2d_desc;
-		//}
+		// テクスチャリースのプロパティを取得する
+		texture2d->GetDesc(&t2dec);
+
+		pSRV = texturs[(std::wstring)fileName].ShaderResourceView;
+		pTex2dDesc = &texturs[(std::wstring)fileName].Tex2dDesc;
 
 		return hr;
 	}
@@ -482,8 +483,8 @@ namespace Adollib
 							size_t ret = 0;
 							mbstowcs_s(&ret, texName, MAX_PATH, texPath.c_str(), _TRUNCATE);
 
-							D3D11_TEXTURE2D_DESC texture2D_Desc = {};
-							hr = ResourceManager::LoadTextureFromFile(texName, mesh.subsets.at(index_of_material).diffuse.shaderResourceVirw.GetAddressOf(), &texture2D_Desc);
+							D3D11_TEXTURE2D_DESC texture2D_Desc;
+							hr = ResourceManager::LoadTextureFromFile(texName, mesh.subsets.at(index_of_material).diffuse.shaderResourceVirw, &texture2D_Desc);
 							_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 
 							// ピクセルシェーダーオブジェクトの生成

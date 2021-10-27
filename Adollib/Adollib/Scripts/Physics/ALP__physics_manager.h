@@ -345,6 +345,9 @@ namespace Adollib
 			// •Êthread‚Å‚Ìupdate‚ğ~‚ß‚ÄAjoin‚ğs‚¤
 			static void thread_stop_and_join();
 
+			static void mutex_lock() { mtx.lock(); };
+			static void mutex_unlock() { mtx.unlock(); };
+
 		public:
 			// main thread‚©‚çŒÄ‚Î‚ê‚é
 

@@ -219,10 +219,14 @@ Matrix33 ALP_Physics::get_tensor_contain_added() {
 	adapt_collider_component_data();
 
 	{
+		// collider‚ÌshapesAaddedshapes‚ğG‚é‚½‚ß
+		ALPcollider->lock_mtx();
+
 		const auto& shapes = ALPcollider->get_shapes();
 		const auto& added_shapes = ALPcollider->get_added_shapes();
 		const auto& joints = ALPcollider->get_joints();
 		float sum_valume = 0;
+
 
 		{
 			Vector3 bary = Vector3(0);
@@ -264,6 +268,8 @@ Matrix33 ALP_Physics::get_tensor_contain_added() {
 				inertial_tensor_ += joint->userjoint->tensor_effect();
 			}
 		}
+
+		ALPcollider->unlock_mtx();
 	}
 
 	return inertial_tensor_;
@@ -304,6 +310,7 @@ const Vector3 ALP_Physics::get_barycenter_contain_added() {
 	// shape‚È‚Ç‚Ìadapt‚ğs‚¤
 	ALPcollider->update_world_trans_contain_added();
 
+	// collider‚ÌshapesAaddedshapes‚ğG‚é‚½‚ß
 	ALPcollider->lock_mtx();
 
 	const auto& shapes = ALPcollider->get_shapes();

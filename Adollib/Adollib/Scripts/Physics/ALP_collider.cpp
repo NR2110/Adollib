@@ -26,23 +26,13 @@ const bool ALP_Collider::concoll_enter(const unsigned int tag_name) {
 void ALP_Collider::update_world_trans() {
 	std::lock_guard <std::mutex> lock(mtx); //userの任意のタイミングで呼ぶことが可能なためshapesのaddedの処理が重なる可能性がある
 
-	bool is_changed_Size = false;
-
-	bool is_changPos = false;
-	bool is_changRot = false;
-	bool is_changSiz = false;
-
 	for (const auto& shape : shapes) {
 
 		// ユーザーに入力されたcolliderデータ(center,sizeなど)を計算用のデータに直す
 		shape->update_Colliderdata();
 
 		// world情報の更新
-		shape->update_world_trans(transform.position, transform.orientation, transform.scale,
-			is_changPos, is_changRot, is_changSiz
-		);
-
-		is_changed_Size |= is_changSiz;
+		shape->update_world_trans(transform.position, transform.orientation, transform.scale);
 
 		// DOPの更新
 		shape->update_dop14();
@@ -55,20 +45,13 @@ void ALP_Collider::update_world_trans() {
 void ALP_Collider::update_world_trans_contain_added() {
 	std::lock_guard <std::mutex> lock(mtx); //shapes,addedの処理が重なる可能性がある
 
-	bool is_changPos = false;
-	bool is_changRot = false;
-	bool is_changSiz = false;
-
-
 	for (const auto& shape : shapes) {
 
 		// ユーザーに入力されたcolliderデータ(center,sizeなど)を計算用のデータに治す
 		shape->update_Colliderdata();
 
 		// world情報の更新
-		shape->update_world_trans(transform.position, transform.orientation, transform.scale,
-			is_changPos, is_changRot, is_changSiz
-		);
+		shape->update_world_trans(transform.position, transform.orientation, transform.scale );
 	}
 	for (const auto& shape : added_buffer_shapes) {
 
@@ -76,9 +59,7 @@ void ALP_Collider::update_world_trans_contain_added() {
 		shape->update_Colliderdata();
 
 		// world情報の更新
-		shape->update_world_trans(transform.position, transform.orientation, transform.scale,
-			is_changPos, is_changRot, is_changSiz
-		);
+		shape->update_world_trans(transform.position, transform.orientation, transform.scale );
 	}
 }
 

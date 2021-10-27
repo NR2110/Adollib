@@ -17,7 +17,7 @@ namespace Adollib
 		static HRESULT CreateHsFromCso(const char* cso_name, Microsoft::WRL::ComPtr<ID3D11HullShader>& hull_shader);
 		static HRESULT CreateDsFromCso(const char* cso_name, Microsoft::WRL::ComPtr<ID3D11DomainShader>& domain_shader);
 		static HRESULT CreateCsFromCso(const char* cso_name, Microsoft::WRL::ComPtr<ID3D11ComputeShader>& computeShader);
-		static HRESULT LoadTextureFromFile(const wchar_t* file_name, ID3D11ShaderResourceView** pSRV, D3D11_TEXTURE2D_DESC* pTex2dDesc);
+		static HRESULT LoadTextureFromFile(const wchar_t* file_name, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>& pSRV, D3D11_TEXTURE2D_DESC* pTex2dDesc);
 		static HRESULT CreateModelFromFBX(std::vector<Mesh::mesh>** meshes, const char* fileName, const char* filePath = "");
 
 		static void destroy();
@@ -28,8 +28,12 @@ namespace Adollib
 		static void fetch_bone_matrices(FbxMesh* fbx_mesh, std::vector<Mesh::bone>& skeletal, FbxTime time);
 		static void fetch_animations(FbxMesh* fbx_mesh, std::vector<Mesh::skeletal_animation>& skeletal_animation, u_int sampling_rate = 0);
 
+		struct Texture_data {
+			ComPtr<ID3D11ShaderResourceView> ShaderResourceView;
+			D3D11_TEXTURE2D_DESC Tex2dDesc;
+		};
 		static std::unordered_map<std::string, std::vector<Mesh::mesh>> meshes;
-		static std::unordered_map<std::wstring, Texture> texturs;
+		static std::unordered_map<std::wstring, Texture_data> texturs;
 		struct VS_resorce {
 			Microsoft::WRL::ComPtr<ID3D11VertexShader> VSshader;
 			Microsoft::WRL::ComPtr<ID3D11InputLayout> layout;

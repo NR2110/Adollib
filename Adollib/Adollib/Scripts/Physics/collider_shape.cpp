@@ -5,8 +5,7 @@ using namespace Adollib;
 using namespace Physics_function;
 
 
-void Collider_shape::update_world_trans(const Vector3& GO_Wposiiton, const Quaternion& GO_Worientation, const Vector3& GO_Wscale,
-	bool& is_chenged_position, bool& is_chenged_orientation, bool& is_chenged_scale
+void Collider_shape::update_world_trans(const Vector3& GO_Wposiiton, const Quaternion& GO_Worientation, const Vector3& GO_Wscale
 )
 {
 	old_world_position_ = world_position_;
@@ -19,9 +18,9 @@ void Collider_shape::update_world_trans(const Vector3& GO_Wposiiton, const Quate
 	world_orientation_ = local_orientation * GO_Worientation;
 	world_scale_ = GO_Wscale * local_scale;
 
-	is_chenged_position = (old_world_position_ != world_position_) ? true : false;
-	is_chenged_orientation = (old_world_orientation_ != world_orientation_) ? true : false;
-	is_chenged_scale = (old_world_scale_ != world_scale_) ? true : false;
+	bool is_chenged_position = (old_world_position_ != world_position_) ? true : false;
+	bool is_chenged_orientation = (old_world_orientation_ != world_orientation_) ? true : false;
+	bool is_chenged_scale = (old_world_scale_ != world_scale_) ? true : false;
 
 	if (is_chenged_position || is_chenged_orientation || is_chenged_scale
 		) {

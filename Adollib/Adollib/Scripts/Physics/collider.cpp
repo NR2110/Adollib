@@ -1,3 +1,4 @@
+
 #include "ALP__physics_manager.h"
 
 #include "../Object/gameobject.h"
@@ -122,3 +123,26 @@ void Collider::set_ptr_to_joint(Physics_function::ALP_Joint*& joint) {
 std::vector<Contacted_data>& Collider::get_Contacted_data() const {
 	return ALPcollider_ptr->contacted_colliders;
 }
+
+// 現在の慣性モーメントの値
+const Matrix33 Collider::get_tensor() {
+
+	// shapeの情報などを変更するためmutexをlockする
+	Physics_function::Physics_manager::mutex_lock();
+	auto ret = ALPphysics_ptr->get_tensor_contain_added();
+
+	Physics_function::Physics_manager::mutex_unlock();
+
+	return ret;
+};
+
+// 重心のlocal座標を返す
+const Vector3 Collider::get_barycenter() const {
+
+	Physics_function::Physics_manager::mutex_lock();
+	auto ret = ALPphysics_ptr->get_barycenter_contain_added();
+
+	Physics_function::Physics_manager::mutex_unlock();
+
+	return ret;
+};

@@ -120,14 +120,14 @@ namespace Adollib {
 		// 慣性モーメントをユーザー定義で設定する
 		void set_tensor(const Matrix33& tensor) { ALPphysics_ptr->set_tensor(tensor); };
 
-		// 現在の慣性モーメントの値
-		const Matrix33 get_tensor() { return ALPphysics_ptr->get_tensor_contain_added(); };
-
 		// 重心をユーザー定義で設定する
 		void set_barycenter(const Vector3& cent) { ALPphysics_ptr->set_barycenter(cent); };
 
+		// 現在の慣性モーメントの値
+		const Matrix33 get_tensor();
+
 		// 重心のlocal座標を返す
-		const Vector3 get_barycenter() const { return ALPphysics_ptr->get_barycenter_contain_added(); };
+		const Vector3 get_barycenter() const;
 
 		// 衝突したcolliderの配列を返す is_save_contacted_collsがtrueになっていないと衝突したcolliderの情報は保存されない
 		std::vector<Contacted_data>& get_Contacted_data() const;

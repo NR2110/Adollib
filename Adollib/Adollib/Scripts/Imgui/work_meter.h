@@ -11,8 +11,8 @@ namespace Adollib {
 		static std::mutex mtx;
 
 		struct meter {
-			LARGE_INTEGER start;
-			LARGE_INTEGER stop;
+			LARGE_INTEGER start = {};
+			LARGE_INTEGER stop = {};
 			long long duration_time = 0;
 			bool is_reset_duration_time = true;
 		};

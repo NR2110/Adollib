@@ -109,7 +109,9 @@ void Physics_function::BroadMidphase(Scenelist Sce,
 	const std::list<ALP_Collider*>& ALP_collider,
 	std::vector<Contacts::Contact_pair*>& out_pair,
 	std::vector<Physics_function::ALP_Collider*>& moved_collider, //動いたもの
-	std::vector<Physics_function::ALP_Collider*>& added_collider //追加されたもの
+	std::vector<Physics_function::ALP_Collider*>& added_collider,
+	std::mutex& mtx
+	//追加されたもの
 ) {
 
 	//適当に20コ点を取って適当に?
@@ -193,32 +195,31 @@ void Physics_function::BroadMidphase(Scenelist Sce,
 		}
 	}
 
-	auto a = axis_list;
-
 
 	Work_meter::stop("make_axis_list", 1);
 
 	//::: 動いたもののvalueを更新
 	{
 		Work_meter::start("update_Value", 1);
-		for (auto& moved : moved_collider) {
-			if (moved == nullptr)continue;
+		{
+			std::lock_guard<std::mutex> lock(mtx);
+			for (auto& moved : moved_collider) {
+				if (moved == nullptr)continue;
 
-			for (auto& edge_itr : access_axislist_itr[moved->get_index()]) {
-				auto& edge = *edge_itr;
+				for (auto& edge_itr : access_axislist_itr[moved->get_index()]) {
+					auto& edge = *edge_itr;
 
-				if (edge->edge_start == false)
-					edge->value = edge->shape->get_DOP().pos[SAP_axis] + edge->shape->get_DOP().max[SAP_axis];
-				else
-					edge->value = edge->shape->get_DOP().pos[SAP_axis] + edge->shape->get_DOP().min[SAP_axis];
+					if (edge->edge_start == false)
+						edge->value = edge->shape->get_DOP().pos[SAP_axis] + edge->shape->get_DOP().max[SAP_axis];
+					else
+						edge->value = edge->shape->get_DOP().pos[SAP_axis] + edge->shape->get_DOP().min[SAP_axis];
+				}
+
 			}
-
 		}
 
 		for (auto& moved : added_collider) {
 			if (moved == nullptr)continue;
-
-			u_int index_count = 0;
 
 			for (auto& edge_itr : access_axislist_itr[moved->get_index()]) {
 				auto& edge = *edge_itr;
@@ -238,7 +239,6 @@ void Physics_function::BroadMidphase(Scenelist Sce,
 	//small ----> big
 	{
 		Work_meter::start("insert_sort", 1);
-		auto a = axis_list;
 
 		std::list<Insert_edge*>::iterator itr[2] = { axis_list.begin(),axis_list.begin() };
 		u_int next_num = 0;

@@ -9,6 +9,8 @@ Texture::Texture()
 {
 	ShaderResourceView = nullptr;
 	sampler = nullptr;
+	RenderTargetView = nullptr;
+	DepthStencilView = nullptr;
 }
 
 
@@ -20,27 +22,12 @@ bool Texture::Load(const wchar_t* filename)
 {
 	HRESULT hr = S_OK;
 
-	hr = ResourceManager::LoadTextureFromFile(filename, ShaderResourceView.GetAddressOf(), &texture2d_desc);
+	hr = ResourceManager::LoadTextureFromFile(filename, ShaderResourceView, &texture2d_desc);
 
 	if(FAILED(hr)){
 		assert(!"テクスチャ画像読み込み失敗");
 		return false;
 	}
-
-	//	シェーダーリソースビュー作成
-	ComPtr<ID3D11Resource>resource;
-	hr = DirectX::CreateWICTextureFromFile(Systems::Device.Get(),
-		filename, resource.GetAddressOf(), ShaderResourceView.GetAddressOf());
-	if (FAILED(hr))
-	{
-		assert(SUCCEEDED(hr));
-		return false;
-	}
-
-	//テクスチャ情報取得
-	ComPtr<ID3D11Texture2D> texture2D;
-	resource.Get()->QueryInterface(texture2D.GetAddressOf());
-	texture2D.Get()->GetDesc(&texture2d_desc);
 
 	//	サンプラステート作成
 	D3D11_SAMPLER_DESC sd;
