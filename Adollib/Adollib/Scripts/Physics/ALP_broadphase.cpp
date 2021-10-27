@@ -203,6 +203,7 @@ void Physics_function::BroadMidphase(Scenelist Sce,
 		Work_meter::start("update_Value", 1);
 		{
 			std::lock_guard<std::mutex> lock(mtx);
+
 			for (auto& moved : moved_collider) {
 				if (moved == nullptr)continue;
 

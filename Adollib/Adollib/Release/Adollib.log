@@ -1,9 +1,125 @@
-﻿  sprite_renderer.cpp
+﻿  camera.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\camera.cpp(152,82): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\camera.cpp(152,49): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\camera.cpp(217,30): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\camera.cpp(229,82): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\camera.cpp(229,49): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+  demo_house.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(78,26): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(75,38): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(73,45): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+  object_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(947,63): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(1156,182): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(1167,181): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+  object_rotate.cpp
+  player.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_manager.h(23): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_manager::Stage_types' の左辺を無視します。
+  player_funcs.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_manager.h(23): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_manager::Stage_types' の左辺を無視します。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(60,70): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(299,46): warning C4305: '=': 'double' から 'float' へ切り詰めます。
+  player_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(176,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(409,192): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(494,60): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+  stage_01.cpp
+  stage_01_funcs.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(345,66): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+  stage_base.cpp
+  stage_demo.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo.cpp(69,26): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo.cpp(66,38): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo.cpp(64,45): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+  stage_demo_funcs.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_funcs.cpp(213,66): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+  stage_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_manager.h(23): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_manager::Stage_types' の左辺を無視します。
+  imgui.cpp
+  imgui_manager.cpp
+  work_meter.cpp
+  Adollib.cpp
+  input.cpp
+  loop.cpp
+  main.cpp
+  コンパイル中...
+  resource_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(551,82): warning C4018: '>': signed と unsigned の数値を比較しようとしました。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(553,63): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(577,27): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(668,35): warning C4244: '=': 'double' から 'Adollib::u_int' への変換です。データが失われる可能性があります。
+  systems.cpp
+  closest_func.cpp
+  crossing_func.cpp
+  component_camera.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\component_camera.cpp(110,29): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\component_camera.cpp(111,29): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\component_camera.cpp(112,29): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\component_camera.cpp(113,29): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+  component_light.cpp
+  gameobject.cpp
+  gameobject_manager.cpp
+  hierarchy.cpp
+  ALP__physics_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.cpp(81,26): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
+  ALP_broadphase.cpp
+  ALP_collider.cpp
+  ALP_contact.cpp
+  ALP_generate_contact.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(2152,26): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+  ALP_integrate.cpp
+  ALP_joint.cpp
+  ALP_midphase.cpp
+  ALP_physics.cpp
+  ALP_raycast.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(108,23): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+  ALP_resolve_contact.cpp
+  コンパイル中...
+  ALP_resolve_contact_SIM.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact_SIM.cpp(460,21): warning C4101: 'position': ローカル変数は 1 度も使われていません。
+  collider.cpp
+  collider_shape.cpp
+  coneTwistjoint.cpp
+  conejoint.cpp
+  hingejoint.cpp
+  joint.cpp
+  joint_base.cpp
+  meshcoll_resorce_manager.cpp
+  ray.cpp
+  twistjoint.cpp
+  compute_shader.cpp
+  shader.cpp
+  UI.cpp
+  material.cpp
+  material_for_collider.cpp
+  mesh.cpp
+  mesh_renderer.cpp
+  renderer_base.cpp
+  renderer_manager.cpp
+  コンパイル中...
+  sprite_renderer.cpp
+  texture.cpp
+  scene_game.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_manager.h(23): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_manager::Stage_types' の左辺を無視します。
+  scene_manager.cpp
+  scene_title.cpp
   コード生成しています。
-  1 of 9366 functions (<0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    50 functions had inline decision re-evaluated but remain unchanged
+  2631 of 9366 functions (28.1%) were compiled, the rest were copied from previous compilation.
+    270 functions were new in current compilation
+    847 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
+stage_demo.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+stage_demo_funcs.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+stage_manager.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+imgui.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+imgui_demo.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+imgui_draw.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+imgui_impl_dx11.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+imgui_impl_win32.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+imgui_widgets.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+debug.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+imgui_manager.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+inspector.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
 work_meter.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
 Adollib.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
 input.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
