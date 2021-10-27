@@ -110,27 +110,23 @@ namespace Adollib
 		boxes[6]->rotate = Vector3(0, 0, 0);
 
 
-
-		for (int i = 0; i < Tree_size; i++) {
-			boxes[i]->adapt_Colliderdata();
-		}
 		Vector3 barycenter = coll->get_barycenter();
-		for (int i = 0; i < Tree_size; i++) {
-			boxes[i]->center -= barycenter;
-			tree_parts[i]->transform->local_pos -= barycenter;
-		}
-		tree->transform->local_pos += barycenter;
-		tree->transform->local_pos += barycenter * (scale.y - 1);
+		//for (int i = 0; i < Tree_size; i++) {
+		//	boxes[i]->center -= barycenter;
+		//	tree_parts[i]->transform->local_pos -= barycenter;
+		//}
+		//tree->transform->local_pos += barycenter;
+		//tree->transform->local_pos += barycenter * (scale.y - 1);
 
-		// 動くのであれば所定のcomponentをアタッチする
-		auto comp = tree->addComponent<Stage_parts::Kinematic_block>();
-		comp->this_stage = this;
-		comp->this_coll = coll;
-		comp->respown_pos = pos;
-		comp->respown_rotate = quaternion_identity();
+		//// 動くのであれば所定のcomponentをアタッチする
+		//auto comp = tree->addComponent<Stage_parts::Kinematic_block>();
+		//comp->this_stage = this;
+		//comp->this_coll = coll;
+		//comp->respown_pos = pos;
+		//comp->respown_rotate = quaternion_identity();
 
-		for (int i = 0; i < Tree_size; i++) stage_parts.emplace_back(tree_parts[i]);
-		stage_parts.emplace_back(tree);
+		//for (int i = 0; i < Tree_size; i++) stage_parts.emplace_back(tree_parts[i]);
+		//stage_parts.emplace_back(tree);
 
 		return tree;
 	}

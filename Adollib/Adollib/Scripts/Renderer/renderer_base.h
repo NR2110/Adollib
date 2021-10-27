@@ -29,9 +29,9 @@ namespace Adollib {
 		int animeIndex = 0;
 
 	public:
-		void set_material(std::shared_ptr<Material>& l_material) { material = l_material; };
+		void set_material(std::shared_ptr<Material> l_material) { material = l_material; };
 		void set_meshes(std::vector<Mesh::mesh>* l_meshes) { meshes = l_meshes; };
-		void set_texture(std::shared_ptr<Texture>& l_texture) { texture = l_texture; };
+		void set_texture(std::shared_ptr<Texture> l_texture) { texture = l_texture; };
 
 		std::shared_ptr<Material> get_material() { return material; };
 		std::shared_ptr<Texture>  get_texture() { return texture; };
@@ -39,6 +39,7 @@ namespace Adollib {
 	public:
 	    void awake() override final;
 
+		virtual void init() = 0;  //awake‚Ì’†‚ÅŒÄ‚Ô ”h¶ƒNƒ‰ƒX—p‚Ìinitialize
 		virtual void render() = 0;
 
 		void finalize() override final;

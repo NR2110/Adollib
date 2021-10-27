@@ -33,7 +33,7 @@ bool loop::Render(){
 
 	Work_meter::start(std::string("render"));
 	Scene_manager::render();
-	Work_meter::start(std::string("render"));
+	Work_meter::stop(std::string("render"));
 
 	Systems::Flip();
 

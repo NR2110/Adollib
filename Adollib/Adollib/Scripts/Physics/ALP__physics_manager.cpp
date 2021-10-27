@@ -117,7 +117,7 @@ bool Physics_manager::update(Scenelist Sce)
 	}
 
 	physicsParams.timeStep = ALmin((float)(time.QuadPart - frame_count.QuadPart) * seconds_per_count, physicsParams.max_timeStep);
-	Work_meter::set("physicsParams.timeStep", physicsParams.timeStep);
+	Work_meter::set("physicsParams.timeStep", physicsParams.timeStep, 1);
 	if (physicsParams.timeStep > inv60)
 	{
 

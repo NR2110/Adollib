@@ -1,2 +1,0 @@
-C:\Users\waaaa\Documents\Adollib\Adollib\Release\sprite_ps.cso
-C:\Users\waaaa\Documents\Adollib\Adollib\Release\sprite_vs.cso

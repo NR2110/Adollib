@@ -5,7 +5,7 @@
 #include "../Main/systems.h"
 #include "../Renderer/Shader/constant_buffer.h"
 #include "../Renderer/texture.h"
-#include "../Renderer/sprite.h"
+#include "../Renderer/UI.h"
 #include "../Renderer/posteffect_base.h"
 #include "gameobject_manager.h"
 
@@ -106,24 +106,24 @@ void Camera_component::posteffect_render() {
 	ID3D11DepthStencilView* dsv = Systems::GetDepthStencilView();
 	Systems::DeviceContext->OMSetRenderTargets(1, &rtv, dsv);
 
-	Sprite sprite;
-	sprite.sprite_data.dh = Al_Global::SCREEN_HEIGHT;
-	sprite.sprite_data.dw = Al_Global::SCREEN_WIDTH;
-	sprite.sprite_data.sh = Al_Global::SCREEN_HEIGHT;
-	sprite.sprite_data.sw = Al_Global::SCREEN_WIDTH;
+	UI ui;
+	ui.ui_data.dh = Al_Global::SCREEN_HEIGHT;
+	ui.ui_data.dw = Al_Global::SCREEN_WIDTH;
+	ui.ui_data.sh = Al_Global::SCREEN_HEIGHT;
+	ui.ui_data.sw = Al_Global::SCREEN_WIDTH;
 
-	sprite.set_texture(color_texture);
-	sprite.shader.Load_VS("./DefaultShader/sprite_vs.cso");
-	sprite.shader.Load_PS("./DefaultShader/sprite_ps.cso");
-	sprite.render();
+	ui.set_texture(color_texture);
+	ui.shader.Load_VS("./DefaultShader/ui_vs.cso");
+	ui.shader.Load_PS("./DefaultShader/ui_ps.cso");
+	ui.render();
 }
 
 
 void Camera_component::clear() {
 
 	Systems::DeviceContext->ClearRenderTargetView(color_texture->GetRenderTargetView(), &clear_color[0]);
-	Systems::DeviceContext->ClearRenderTargetView(normal_texture->GetRenderTargetView(), &clear_color[0]);
-	Systems::DeviceContext->ClearRenderTargetView(depth_texture->GetRenderTargetView(), &clear_color[0]);
+	//Systems::DeviceContext->ClearRenderTargetView(normal_texture->GetRenderTargetView(), &clear_color[0]);
+	//Systems::DeviceContext->ClearRenderTargetView(depth_texture->GetRenderTargetView(), &clear_color[0]);
 	Systems::DeviceContext->ClearDepthStencilView(Systems::GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 }
 

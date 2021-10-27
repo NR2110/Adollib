@@ -41,13 +41,10 @@ void Renderer_manager::remove_renderer(std::list<Renderer_base*>::iterator itr) 
 
 void Renderer_manager::render(const std::map<Scenelist, std::list<Camera_component*>>& cameras,const std::map<Scenelist, std::list<Light_component*>>& lights, Scenelist Sce) {
 
-	// TODO : Sceが複数あるときのclearのタイミングが適当 要修正
-
 	Work_meter::tag_start("render");
 
 	// メインのRTVのclear
 	Systems::Clear();
-
 
 	// Imguiがgpuの処理を全部待ちやがる & depthで上書きしちゃうので 前フレームのtextureを描画して Imguiの描画をここで行う
 	// camera->clearにgpu負荷があり、Imguiがその処理を待つので 下に置くと重くなる
@@ -83,10 +80,10 @@ void Renderer_manager::render(const std::map<Scenelist, std::list<Camera_compone
 		camera->set_Constantbuffer();
 
 		// 描画するscene
-		auto render_scene = camera->render_scene;
 
 		Work_meter::start("render_obj");
 		// renderを呼ぶ
+		auto render_scene = camera->render_scene; //カメラがrenderするscene
 		for (auto& renderer : renderers[render_scene]) {
 			renderer->render();
 		}

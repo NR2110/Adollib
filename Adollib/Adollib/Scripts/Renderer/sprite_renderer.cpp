@@ -14,18 +14,48 @@
 using namespace Adollib;
 using namespace ConstantBuffer;
 
+void Sprite_renderer::init() {
+
+	//	頂点バッファ作成
+	VertexFormat v[4];
+
+	D3D11_BUFFER_DESC bd;
+	ZeroMemory(&bd, sizeof(bd));
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.ByteWidth = sizeof(VertexFormat) * 4;
+	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+
+	D3D11_SUBRESOURCE_DATA res;
+	ZeroMemory(&res, sizeof(res));
+	res.pSysMem = v;
+
+	Systems::Device->CreateBuffer(&bd, &res, VertexBuffer.GetAddressOf());
+
+	material->Load_VS("./DefaultShader/sprite_vs.cso");
+	material->Load_PS("./DefaultShader/sprite_ps.cso");
+}
+
 void Sprite_renderer::render() {
 	if (material == nullptr) return;
 
 	// CB : ConstantBufferPerOBJ
 	// GOのtransformの情報をConstantBufferへセットする
 	ConstantBufferPerGO g_cb;
-	Vector3 scale = transform->scale;
-	scale.y = 1;
-	g_cb.world = matrix_world(scale, transform->orientation.get_rotate_matrix(), transform->position);
+	g_cb.world = matrix_world(transform->scale, transform->orientation.get_rotate_matrix(), transform->position);
 	Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
 	Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 	Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
+
+	//CB : ConstantBufferPerMaterial
+	ConstantBufferPerMaterial cb;
+	// specular
+	cb.shininess = 1;
+	cb.ambientColor = DirectX::XMFLOAT4(0.1f, 0.1f, 0.1f, 1);
+	cb.materialColor = material->color.get_XM4();
+
+	Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
+	Systems::DeviceContext->VSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
+	Systems::DeviceContext->PSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
 
 	// shaderのactivate
 	material->shader_activate();
@@ -35,70 +65,40 @@ void Sprite_renderer::render() {
 	if (Systems::RS_type != material->RS_state) Systems::SetRasterizerState(material->RS_state);
 	if (Systems::DS_type != material->DS_state) Systems::SetDephtStencilState(material->DS_state);
 
-	for (Mesh::mesh& mesh : *meshes)
-	{
-		//if (FrustumCulling::frustum_culling(&mesh) == false) continue;
+	VertexFormat data[4];
+	// 頂点
+	data[0].position = Vector3(-1, +1, 0);
+	data[1].position = Vector3(-1, -1, 0);
+	data[2].position = Vector3(+1, +1, 0);
+	data[3].position = Vector3(+1, -1, 0);
 
-		UINT stride = sizeof(VertexFormat);
-		UINT offset = 0;
-		Systems::DeviceContext->IASetVertexBuffers(0, 1, mesh.vertexBuffer.GetAddressOf(), &stride, &offset);
-		Systems::DeviceContext->IASetIndexBuffer(mesh.indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+	// uv座標
+	data[0].texcoord = uv_pos[0];
+	data[1].texcoord = uv_pos[1];
+	data[2].texcoord = uv_pos[2];
+	data[3].texcoord = uv_pos[3];
 
-		//CB : ConstantBufferPerMaterial
-		ConstantBufferPerMaterial cb;
-		for (int i = 0; i < MAX_BONES; i++) {
-			cb.boneTransforms[i] = matrix44_identity();
-		}
-		{
-			// boneTransform
-			if (mesh.skeletalAnimation.size() > 0 && mesh.skeletalAnimation[animeIndex].size() > 0)
-			{
-				int frame = (int)(mesh.skeletalAnimation.at(animeIndex).animation_tick / mesh.skeletalAnimation.at(animeIndex).sampling_time);
-				if (frame > (int)mesh.skeletalAnimation.at(animeIndex).size() - 1)
-				{
-					frame = 0;
-					mesh.skeletalAnimation.at(animeIndex).animation_tick = 0;
-				}
-				std::vector<Mesh::bone>& skeletal = mesh.skeletalAnimation.at(animeIndex).at(frame);
-				size_t number_of_bones = skeletal.size();
-				_ASSERT_EXPR(number_of_bones < MAX_BONES, L"'the number_of_bones' exceeds MAX_BONES.");
-				for (size_t i = 0; i < number_of_bones; i++)
-				{
-					XMStoreFloat4x4(&cb.boneTransforms[i], DirectX::XMLoadFloat4x4(&skeletal.at(i).transform));
-				}
-				mesh.skeletalAnimation.at(animeIndex).animation_tick += 1;
-			}
-			// specular
-			cb.shininess = 1;
-			cb.ambientColor = DirectX::XMFLOAT4(0.1f, 0.1f, 0.1f, 1);
-			cb.materialColor = material->color.get_XM4();
-		}
-		Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
-		Systems::DeviceContext->VSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
-		Systems::DeviceContext->PSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
+	// 法線
+	data[0].normal = Vector3(0, 0, 1);
+	data[1].normal = Vector3(0, 0, 1);
+	data[2].normal = Vector3(0, 0, 1);
+	data[3].normal = Vector3(0, 0, 1);
 
-		//CB : ConstantBufferPerMesh
-		{
-			ConstantBuffer::ConstantBufferPerMesh g_cb;
-			g_cb.Mesh_world = mesh.globalTransform;
-			Systems::DeviceContext->UpdateSubresource(mesh.mesh_cb.Get(), 0, NULL, &g_cb, 0, 0);
-			Systems::DeviceContext->VSSetConstantBuffers(3, 1, mesh.mesh_cb.GetAddressOf());
-			Systems::DeviceContext->PSSetConstantBuffers(3, 1, mesh.mesh_cb.GetAddressOf());
-		}
+	// 頂点データ更新
+	Systems::DeviceContext->UpdateSubresource(VertexBuffer.Get(), 0, NULL, data, 0, 0);
 
-		for (auto& subset : mesh.subsets)
-		{
-			//TODO : modelのtexture設定
-			Systems::DeviceContext->PSSetShaderResources(0, 1, subset.diffuse.shaderResourceVirw.GetAddressOf());
-			texture->Set(0);
+	// 頂点バッファの指定
+	UINT stride = sizeof(VertexFormat);
+	UINT offset = 0;
+	Systems::DeviceContext->IASetVertexBuffers(0, 1, VertexBuffer.GetAddressOf(), &stride, &offset);
 
-			// 描画
-			Systems::DeviceContext->DrawIndexed(subset.indexCount, subset.indexStart, 0);
+	Systems::DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
-		}
-	}
+	//テクスチャの設定
+	if (texture) texture->Set(0);
 
-
+	// 描画
+	Systems::DeviceContext->Draw(4, 0);
 
 }
 

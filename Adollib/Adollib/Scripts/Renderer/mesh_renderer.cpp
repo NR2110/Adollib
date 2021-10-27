@@ -17,6 +17,8 @@ using namespace ConstantBuffer;
 void Mesh_renderer::render() {
 	if (material == nullptr) return;
 
+	Systems::DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
 	// CB : ConstantBufferPerOBJ
 	// GO‚Ìtransform‚Ìî•ñ‚ğConstantBuffer‚ÖƒZƒbƒg‚·‚é
 	ConstantBufferPerGO g_cb;

@@ -19,7 +19,8 @@ namespace Adollib {
 
 	public:
 
-		void render();
+		void init() override {};
+		void render() override;
 
 
 	};

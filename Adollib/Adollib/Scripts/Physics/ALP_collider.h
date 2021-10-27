@@ -88,6 +88,8 @@ namespace Adollib {
 			// マルチスレッド化するにあたり、add_colliderした時点ではメインのlistに入れずbufferのlistに入れるため 自身のitrが生成時に決まらないため set関数を準備
 			void set_this_itr(std::list<ALP_Collider*>::iterator itr) { this_itr = itr; };
 
+			void lock_mtx() { mtx.lock(); };
+			void unlock_mtx() { mtx.unlock(); };
 		public:
 			//[[nodiscard]]
 

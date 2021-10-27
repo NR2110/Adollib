@@ -262,7 +262,7 @@
     <ClInclude Include="Scripts\Renderer\Shader\light_types.h" />
     <ClInclude Include="Scripts\Renderer\Shader\shader.h" />
     <ClInclude Include="Scripts\Renderer\Shader\vertex_format.h" />
-    <ClInclude Include="Scripts\Renderer\sprite.h" />
+    <ClInclude Include="Scripts\Renderer\UI.h" />
     <ClInclude Include="Scripts\Renderer\sprite_renderer.h" />
     <ClInclude Include="Scripts\Renderer\texture.h" />
     <ClInclude Include="Scripts\Scene\scene.h" />
@@ -343,7 +343,7 @@
     <ClCompile Include="Scripts\Renderer\renderer_manager.cpp" />
     <ClCompile Include="Scripts\Renderer\Shader\compute_shader.cpp" />
     <ClCompile Include="Scripts\Renderer\Shader\shader.cpp" />
-    <ClCompile Include="Scripts\Renderer\sprite.cpp" />
+    <ClCompile Include="Scripts\Renderer\UI.cpp" />
     <ClCompile Include="Scripts\Renderer\sprite_renderer.cpp" />
     <ClCompile Include="Scripts\Renderer\texture.cpp" />
     <ClCompile Include="Scripts\Scene\scene_game.cpp" />
@@ -388,7 +388,12 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
-    <None Include="DefaultShader\sprite.hlsli" />
+    <None Include="DefaultShader\sprite.hlsli">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="DefaultShader\ui.hlsli">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="DefaultShader\default_ps.hlsl">
@@ -446,6 +451,7 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">DefaultShader/%(Filename).cso</ObjectFileOutput>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="DefaultShader\sprite_vs.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
@@ -454,6 +460,25 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">DefaultShader/%(Filename).cso</ObjectFileOutput>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\ui_ps.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">DefaultShader/%(Filename).cso</ObjectFileOutput>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\ui_vs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">DefaultShader/%(Filename).cso</ObjectFileOutput>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

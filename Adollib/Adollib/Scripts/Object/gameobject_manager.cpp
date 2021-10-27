@@ -57,7 +57,6 @@ void Gameobject_manager::awake() {
 	Physics_function::Collider_renderer::awake();
 
 
-	static std::thread update_physics_;
 
 #ifdef Use_physics_thread
 	Physics_manager::thread_start();
@@ -76,6 +75,7 @@ void Gameobject_manager::initialize(Scenelist Sce) {
 }
 
 void Gameobject_manager::update(Scenelist Sce) {
+
 	if (Sce == Scenelist::scene_null)return;
 
 	auto& gos = gameobjects[Sce];
@@ -348,9 +348,9 @@ Gameobject* Gameobject_manager::createPlane(const std::string go_name, u_int tag
 	auto renderer = Value->addComponent<Sprite_renderer>();
 	Value->material = renderer->get_material();
 
-	std::vector<Mesh::mesh>* meshes = nullptr;
-	ResourceManager::CreateModelFromFBX(&meshes, "./DefaultModel/plane.fbx", "");
-	renderer->set_meshes(meshes);
+	//std::vector<Mesh::mesh>* meshes = nullptr;
+	//ResourceManager::CreateModelFromFBX(&meshes, "./DefaultModel/plane.fbx", "");
+	//renderer->set_meshes(meshes);
 
 	++go_count;
 	Value->initialize();

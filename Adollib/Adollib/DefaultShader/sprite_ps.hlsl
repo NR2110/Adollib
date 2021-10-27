@@ -1,13 +1,18 @@
 #include "sprite.hlsli"
 
-//--------------------------------------------
-//
-//--------------------------------------------
-
-float4 main(PSInput input) : SV_TARGET0
+//	ピクセルシェーダー
+PSOutput main(PSInput input)
 {
-    float4 color = (float4) 0;
-    color = DiffuseTexture.Sample(DecalSampler, input.Tex) * input.Color;
+    PSOutput Out = (PSOutput) 0;
 
-    return color;
+    float4 Color = input.Color * DiffuseTexture.Sample(DecalSampler, input.Tex);
+    Color.w = input.Color.w;
+
+    //Color = input.Color;
+
+    Out.Color = Color;
+    Out.Normal = float4(input.wNormal, 1.0f);
+    Out.SVPosiiton = input.Position;
+
+    return Out;
 }

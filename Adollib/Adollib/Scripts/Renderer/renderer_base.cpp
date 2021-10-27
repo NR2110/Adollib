@@ -27,6 +27,8 @@ void Renderer_base::awake() {
 	material->Load_PS("./DefaultShader/default_ps.cso");
 
 	texture->Load(L"./DefaultModel/white.png");
+
+	init();
 }
 
 void Renderer_base::finalize() {

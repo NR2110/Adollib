@@ -25,7 +25,8 @@ namespace Adollib
 		float aspect = 1280 / 720.0f;
 		float nearZ = 0.1f;
 		float farZ = 10000.0f;
-		Vector4 clear_color = Vector4(0, 0, 0, 0);
+		//Vector4 clear_color = Vector4(0, 0, 0, 0);
+		Vector4 clear_color = Vector4(0, 0.5f, 0.5f, 1);
 
 		// âÊñ Ç…èoóÕÇ∑ÇÈÇ©
 		bool is_draw_main_RenderTargetView = true;

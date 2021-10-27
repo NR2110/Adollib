@@ -29,18 +29,18 @@ namespace Adollib
 		set_box(Vector3(0, -60, -98), Vector3(30, 30, 60), Vector3(0), Vector3(188, 214, 54) / 255.0f, true);
 
 		{
-			auto plane = set_plane(Vector3(0, 5, 0), Vector3(80, 1, 40), Vector3(0));
+			auto plane = set_plane(Vector3(0, 10, 0), Vector3(40, 20, 0), Vector3(0));
 			auto R = plane->findComponent<Sprite_renderer>();
 
 			auto subcamera_go = Gameobject_manager::create("camera_02");
 			auto subcamera_comp = subcamera_go->addComponent<Camera_component>();
 			subcamera_comp->is_draw_main_RenderTargetView = false;
 			plane->add_child(subcamera_go);
-			subcamera_go->transform->local_orient = quaternion_from_euler(-90, 0, 0);
+			///subcamera_go->transform->local_orient = quaternion_from_euler(-90, 0, 0);
 
 			stage_parts.emplace_back(subcamera_go);
 
-			plane->transform->local_orient = quaternion_from_euler(90, 180, 0);
+			plane->transform->local_orient = quaternion_from_euler(0, 180, 0);
 
 			R->set_texture(subcamera_comp->get_color_texture());
 		}

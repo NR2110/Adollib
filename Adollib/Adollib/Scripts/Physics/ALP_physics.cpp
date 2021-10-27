@@ -304,8 +304,10 @@ const Vector3 ALP_Physics::get_barycenter_contain_added() {
 	// shape‚È‚Ç‚Ìadapt‚ğs‚¤
 	ALPcollider->update_world_trans_contain_added();
 
-	const auto shapes = ALPcollider->get_shapes();
-	const auto added_shapes = ALPcollider->get_added_shapes();
+	ALPcollider->lock_mtx();
+
+	const auto& shapes = ALPcollider->get_shapes();
+	const auto& added_shapes = ALPcollider->get_added_shapes();
 	Vector3 val;
 	float sum_valume = 0;
 	{
@@ -323,6 +325,8 @@ const Vector3 ALP_Physics::get_barycenter_contain_added() {
 
 		val /= sum_valume;
 	}
+
+	ALPcollider->unlock_mtx();
 
 	return val;
 }

@@ -104,14 +104,17 @@
     <Filter Include="00_Adollib\44_render\shader\hlsli\default">
       <UniqueIdentifier>{6f67a6ae-154c-4201-96be-4301ae9a0448}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00_Adollib\44_render\shader\hlsli\sprite">
-      <UniqueIdentifier>{808eaa2c-0a21-4451-ad46-7c9b0e9489a5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00_Adollib\44_render\shader\posteffect">
       <UniqueIdentifier>{6c08b8ef-f6ef-4fa7-8668-7db469c33b7c}</UniqueIdentifier>
     </Filter>
     <Filter Include="00_Adollib\44_render\renderer">
       <UniqueIdentifier>{622ecb35-466a-41d0-819e-0e71a54345ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Adollib\44_render\shader\hlsli\ui">
+      <UniqueIdentifier>{808eaa2c-0a21-4451-ad46-7c9b0e9489a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Adollib\44_render\shader\hlsli\sprite">
+      <UniqueIdentifier>{25a55cea-c0ac-45a9-a0df-cfbcc60c5597}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -331,9 +334,6 @@
     <ClCompile Include="Scripts\Renderer\texture.cpp">
       <Filter>00_Adollib\44_render</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Renderer\sprite.cpp">
-      <Filter>00_Adollib\44_render</Filter>
-    </ClCompile>
     <ClCompile Include="Scripts\Renderer\renderer_manager.cpp">
       <Filter>00_Adollib\44_render\renderer</Filter>
     </ClCompile>
@@ -345,6 +345,9 @@
     </ClCompile>
     <ClCompile Include="Scripts\Renderer\sprite_renderer.cpp">
       <Filter>00_Adollib\44_render\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Renderer\UI.cpp">
+      <Filter>00_Adollib\44_render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -699,9 +702,6 @@
     <ClInclude Include="Scripts\Renderer\texture.h">
       <Filter>00_Adollib\44_render</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Renderer\sprite.h">
-      <Filter>00_Adollib\44_render</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts\Renderer\Shader\vertex_format.h">
       <Filter>00_Adollib\44_render\shader</Filter>
     </ClInclude>
@@ -719,6 +719,9 @@
     </ClInclude>
     <ClInclude Include="Scripts\Renderer\sprite_renderer.h">
       <Filter>00_Adollib\44_render\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\UI.h">
+      <Filter>00_Adollib\44_render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -744,6 +747,9 @@
     <None Include="DefaultShader\default.hlsli">
       <Filter>00_Adollib\44_render\shader\hlsli\default</Filter>
     </None>
+    <None Include="DefaultShader\ui.hlsli">
+      <Filter>00_Adollib\44_render\shader\hlsli\ui</Filter>
+    </None>
     <None Include="DefaultShader\sprite.hlsli">
       <Filter>00_Adollib\44_render\shader\hlsli\sprite</Filter>
     </None>
@@ -758,10 +764,16 @@
     <FxCompile Include="DefaultShader\default_vs.hlsl">
       <Filter>00_Adollib\44_render\shader\hlsli\default</Filter>
     </FxCompile>
-    <FxCompile Include="DefaultShader\sprite_vs.hlsl">
-      <Filter>00_Adollib\44_render\shader\hlsli\sprite</Filter>
+    <FxCompile Include="DefaultShader\ui_vs.hlsl">
+      <Filter>00_Adollib\44_render\shader\hlsli\ui</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\ui_ps.hlsl">
+      <Filter>00_Adollib\44_render\shader\hlsli\ui</Filter>
     </FxCompile>
     <FxCompile Include="DefaultShader\sprite_ps.hlsl">
+      <Filter>00_Adollib\44_render\shader\hlsli\sprite</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\sprite_vs.hlsl">
       <Filter>00_Adollib\44_render\shader\hlsli\sprite</Filter>
     </FxCompile>
   </ItemGroup>
