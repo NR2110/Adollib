@@ -79,8 +79,6 @@ void Renderer_manager::render(const std::map<Scenelist, std::list<Camera_compone
 		// camera情報をコンスタントバッファーにセットする
 		camera->set_Constantbuffer();
 
-		// 描画するscene
-
 		Work_meter::start("render_obj");
 		// renderを呼ぶ
 		auto render_scene = camera->render_scene; //カメラがrenderするscene

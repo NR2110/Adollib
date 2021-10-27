@@ -92,8 +92,8 @@ void Mesh_renderer::render() {
 		for (auto& subset : mesh.subsets)
 		{
 			//TODO : model‚ÌtextureÝ’è
-			Systems::DeviceContext->PSSetShaderResources(0, 1, subset.diffuse.shaderResourceVirw.GetAddressOf());
-			texture->Set(0);
+			//Systems::DeviceContext->PSSetShaderResources(0, 1, subset.diffuse.shaderResourceVirw.GetAddressOf());
+			//texture->Set(0);
 
 			// •`‰æ
 			Systems::DeviceContext->DrawIndexed(subset.indexCount, subset.indexStart, 0);
