@@ -12,7 +12,7 @@ namespace Adollib {
 
 	class Sprite_renderer : public Renderer_base {
 	private:
-		ComPtr<ID3D11Buffer> VertexBuffer;
+		Microsoft::WRL::ComPtr<ID3D11Buffer> VertexBuffer;
 
 	public:
 		Vector2 uv_pos[4] = {
@@ -29,7 +29,7 @@ namespace Adollib {
 	public:
 
 		void init() override;
-		void render() override;
+		void render(const Frustum_data& frustum_data) override;
 
 
 	};

@@ -319,9 +319,6 @@
     <ClCompile Include="..\Scripts\scene_shader.cpp">
       <Filter>ソース ファイル\scene_shader</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Renderer\frustum_culling.cpp">
-      <Filter>00_Adollib\44_render</Filter>
-    </ClCompile>
     <ClCompile Include="Scripts\Renderer\material.cpp">
       <Filter>00_Adollib\44_render</Filter>
     </ClCompile>
@@ -687,9 +684,6 @@
     <ClInclude Include="..\Scripts\scene_shader.h">
       <Filter>ソース ファイル\scene_shader</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Renderer\frustum_culling.h">
-      <Filter>00_Adollib\44_render</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts\Renderer\material.h">
       <Filter>00_Adollib\44_render</Filter>
     </ClInclude>
@@ -722,6 +716,9 @@
     </ClInclude>
     <ClInclude Include="Scripts\Renderer\UI.h">
       <Filter>00_Adollib\44_render</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\frustum_data.h">
+      <Filter>00_Adollib\44_render\renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -4,6 +4,7 @@
 #include <string>
 #include "../Object/component.h"
 #include "mesh.h"
+#include "frustum_data.h"
 
 namespace Adollib {
 	class Gameobject;
@@ -12,8 +13,8 @@ namespace Adollib {
 
 	class Renderer_base : public Component {
 	protected:
-		ComPtr<ID3D11Buffer> world_cb; //WVP行列用バッファ
-		ComPtr<ID3D11Buffer> Mat_cb; //マテリアル情報用バッファ
+		Microsoft::WRL::ComPtr<ID3D11Buffer> world_cb; //WVP行列用バッファ
+		Microsoft::WRL::ComPtr<ID3D11Buffer> Mat_cb; //マテリアル情報用バッファ
 
 		std::vector<Mesh::mesh>* meshes = nullptr; //mesh情報 resorcemanagerに保存された実体へのポインタ
 
@@ -40,7 +41,7 @@ namespace Adollib {
 	    void awake() override final;
 
 		virtual void init() = 0;  //awakeの中で呼ぶ 派生クラス用のinitialize
-		virtual void render() = 0;
+		virtual void render(const Frustum_data& frustum_data) = 0;
 
 		void finalize() override final;
 

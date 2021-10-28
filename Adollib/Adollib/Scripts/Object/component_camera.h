@@ -5,12 +5,14 @@
 #include "time.h"
 #include "../Main/input.h"
 #include "../Renderer/Shader/shader.h"
+#include "../Renderer/frustum_data.h"
 #include "../Scene/scene_list.h"
 
 #include <string>
 #include <memory>
 #include <d3d11.h>
 #include <wrl.h>
+#include <DirectXCollision.h>
 
 namespace Adollib
 {
@@ -31,10 +33,12 @@ namespace Adollib
 		// 画面に出力するか
 		bool is_draw_main_RenderTargetView = true;
 
+		// 描画を行うscene 変更しなければアタッチした時のsceneになっている
 		Scenelist render_scene = Scenelist::scene_null;
 
+
 	private:
-		std::list<Posteffect_base*> posteffects;
+		std::list<Posteffect_base*> posteffects; //ポストエフェクト関係の保存
 
 		Microsoft::WRL::ComPtr<ID3D11Buffer> view_cb;
 		Microsoft::WRL::ComPtr<ID3D11Buffer> projection_cb;
@@ -45,7 +49,6 @@ namespace Adollib
 		std::shared_ptr<Texture> depth_texture = nullptr;
 
 		Shader shader;
-
 
 	private:
 
@@ -59,6 +62,7 @@ namespace Adollib
 	public:
 		std::shared_ptr<Texture> get_color_texture() { return color_texture; };
 
+
 	public:
 		// redertargetviewなどをclearする
 		void clear();
@@ -68,6 +72,9 @@ namespace Adollib
 
 		// ポストエフェクトの処理 & 描画
 		void posteffect_render();
+
+		// frustum情報の計算
+		Frustum_data calculate_frustum_data();
 
 		// ポストエフェクトの追加
 		template<typename T>

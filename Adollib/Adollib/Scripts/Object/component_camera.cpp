@@ -118,6 +118,43 @@ void Camera_component::posteffect_render() {
 	ui.render();
 }
 
+Frustum_data Camera_component::calculate_frustum_data() {
+
+	Frustum_data data;
+
+	const float y_sloop = cosf(ToRadian(fov * 0.5f));
+	const float x_sloop = cosf(ToRadian(fov * aspect * 0.5f));
+
+	const DirectX::XMVECTOR vOrigin = DirectX::XMLoadFloat3(&transform->position);
+	const DirectX::XMVECTOR vOrientation = DirectX::XMLoadFloat4(&transform->orientation);
+
+	// Create 6 planes (do it inline to encourage use of registers)
+	data.NearPlane = DirectX::XMVectorSet(0.0f, 0.0f, -1.0f, nearZ);
+	data.NearPlane = DirectX::Internal::XMPlaneTransform(data.NearPlane, vOrientation, vOrigin);
+	data.NearPlane = DirectX::XMPlaneNormalize(data.NearPlane);
+
+	data.FarPlane = DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, -farZ);
+	data.FarPlane = DirectX::Internal::XMPlaneTransform(data.FarPlane, vOrientation, vOrigin);
+	data.FarPlane = DirectX::XMPlaneNormalize(data.FarPlane);
+
+	data.RightPlane = DirectX::XMVectorSet(1.0f, 0.0f, -x_sloop, 0.0f);
+	data.RightPlane = DirectX::Internal::XMPlaneTransform(data.RightPlane, vOrientation, vOrigin);
+	data.RightPlane = DirectX::XMPlaneNormalize(data.RightPlane);
+
+	data.LeftPlane = DirectX::XMVectorSet(-1.0f, 0.0f, x_sloop, 0.0f);
+	data.LeftPlane = DirectX::Internal::XMPlaneTransform(data.LeftPlane, vOrientation, vOrigin);
+	data.LeftPlane = DirectX::XMPlaneNormalize(data.LeftPlane);
+
+	data.TopPlane = DirectX::XMVectorSet(0.0f, 1.0f, -y_sloop, 0.0f);
+	data.TopPlane = DirectX::Internal::XMPlaneTransform(data.TopPlane, vOrientation, vOrigin);
+	data.TopPlane = DirectX::XMPlaneNormalize(data.TopPlane);
+
+	data.BottomPlane = DirectX::XMVectorSet(0.0f, -1.0f, y_sloop, 0.0f);
+	data.BottomPlane = DirectX::Internal::XMPlaneTransform(data.BottomPlane, vOrientation, vOrigin);
+	data.BottomPlane = DirectX::XMPlaneNormalize(data.BottomPlane);
+
+	return data;
+}
 
 void Camera_component::clear() {
 

@@ -14,7 +14,7 @@
 using namespace Adollib;
 using namespace ConstantBuffer;
 
-void Mesh_renderer::render() {
+void Mesh_renderer::render(const Frustum_data& frustum_data) {
 	if (material == nullptr) return;
 
 	Systems::DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -30,15 +30,12 @@ void Mesh_renderer::render() {
 	// shaderのactivate
 	material->shader_activate();
 
-	// textureをSRVにセット
-	texture->Set(0);
-
 	//
 	if (Systems::BS_type != material->BS_state) Systems::SetBlendState(material->BS_state);
 	if (Systems::RS_type != material->RS_state) Systems::SetRasterizerState(material->RS_state);
 	if (Systems::DS_type != material->DS_state) Systems::SetDephtStencilState(material->DS_state);
 
-	for (Mesh::mesh& mesh : *meshes)
+	for (Mesh::mesh& mesh : (*meshes))
 	{
 		//if (FrustumCulling::frustum_culling(&mesh) == false) continue;
 
@@ -46,6 +43,7 @@ void Mesh_renderer::render() {
 		UINT offset = 0;
 		Systems::DeviceContext->IASetVertexBuffers(0, 1, mesh.vertexBuffer.GetAddressOf(), &stride, &offset);
 		Systems::DeviceContext->IASetIndexBuffer(mesh.indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+
 
 		//CB : ConstantBufferPerMaterial
 		ConstantBufferPerMaterial cb;
@@ -75,6 +73,7 @@ void Mesh_renderer::render() {
 			cb.shininess = 1;
 			cb.ambientColor = DirectX::XMFLOAT4(0.1f, 0.1f, 0.1f, 1);
 			cb.materialColor = material->color.get_XM4();
+		//continue;
 		}
 		Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
 		Systems::DeviceContext->VSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
@@ -89,11 +88,55 @@ void Mesh_renderer::render() {
 			Systems::DeviceContext->PSSetConstantBuffers(3, 1, mesh.mesh_cb.GetAddressOf());
 		}
 
+		// frustum_cullingを行う
+		{
+			Vector3 AABB_center = Vector3(0);
+			// 中心位置を求める
+			{
+				for (int i = 0; i < 3; ++i) {
+					AABB_center += DOP::AABB_axis[i] * (-mesh.dop.min[i] + mesh.dop.max[i]) * 0.5f;
+				}
+				AABB_center = vector3_quatrotate(AABB_center, transform->orientation);
+			}
+
+			// サイズを求める
+			Vector3 AABB_size = Vector3(0);
+			{
+				Vector3 world_size =
+					vector3_quatrotate(DOP::AABB_axis[0], transform->orientation) * (-mesh.dop.min[0] + mesh.dop.max[0]) * 0.5f +
+					vector3_quatrotate(DOP::AABB_axis[1], transform->orientation) * (-mesh.dop.min[1] + mesh.dop.max[1]) * 0.5f +
+					vector3_quatrotate(DOP::AABB_axis[2], transform->orientation) * (-mesh.dop.min[2] + mesh.dop.max[2]) * 0.5f;
+
+				for (int i = 0; i < 3; ++i) {
+					AABB_size[i] += vector3_dot(DOP::AABB_axis[i], world_size);
+				}
+			}
+			DirectX::BoundingBox box;
+			box.Center = transform->position + AABB_center;
+			box.Extents = AABB_size;
+
+			auto hr = box.ContainedBy(
+				frustum_data.NearPlane,
+				frustum_data.FarPlane,
+				frustum_data.RightPlane,
+				frustum_data.LeftPlane,
+				frustum_data.TopPlane,
+				frustum_data.BottomPlane
+			);
+
+			if (hr != DirectX::ContainmentType::CONTAINS)continue;
+		}
+
 		for (auto& subset : mesh.subsets)
 		{
 			//TODO : modelのtexture設定
 			//Systems::DeviceContext->PSSetShaderResources(0, 1, subset.diffuse.shaderResourceVirw.GetAddressOf());
 			//texture->Set(0);
+
+
+
+			// textureをSRVにセット
+			texture->Set(0);
 
 			// 描画
 			Systems::DeviceContext->DrawIndexed(subset.indexCount, subset.indexStart, 0);
@@ -106,3 +149,11 @@ void Mesh_renderer::render() {
 }
 
 void Mesh_renderer::load_texture(const wchar_t* filename) { texture->Load(filename); };
+
+void Mesh_renderer::calculate_boundingbox() {
+	//for (auto& mesh : *meshes) {
+
+	//}
+	//box.Center = transform->position;
+	//box.Extents = meshes
+}

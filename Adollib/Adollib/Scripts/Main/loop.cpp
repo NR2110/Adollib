@@ -19,24 +19,24 @@ bool loop::init(HWND hWnd) {
 
 bool loop::Update(MSG hMsg, HWND hWnd, int width, int height) {
 
-	Work_meter::start(std::string("update_all"));
+	Work_meter::start(std::string("loop_update"));
 	Systems::inputManager->update();
 
 	Scene_manager::update();
 	//Gameobject_manager::update();
 
-	Work_meter::stop(std::string("update_all"));
+	Work_meter::stop(std::string("loop_update"));
 	return true;
 }
 
 bool loop::Render(){
 
-	Work_meter::start(std::string("render"));
+	Work_meter::start(std::string("loop_render"));
 	Scene_manager::render();
-	Work_meter::stop(std::string("render"));
 
 	Systems::Flip();
 
+	Work_meter::stop(std::string("loop_render"));
 	return true;
 }
 

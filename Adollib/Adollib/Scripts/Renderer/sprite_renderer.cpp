@@ -35,7 +35,7 @@ void Sprite_renderer::init() {
 	material->Load_PS("./DefaultShader/sprite_ps.cso");
 }
 
-void Sprite_renderer::render() {
+void Sprite_renderer::render(const Frustum_data& frustum_data) {
 	if (material == nullptr) return;
 
 	// CB : ConstantBufferPerOBJ

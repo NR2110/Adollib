@@ -41,6 +41,8 @@ void Renderer_manager::remove_renderer(std::list<Renderer_base*>::iterator itr) 
 
 void Renderer_manager::render(const std::map<Scenelist, std::list<Camera_component*>>& cameras,const std::map<Scenelist, std::list<Light_component*>>& lights, Scenelist Sce) {
 
+	Work_meter::start(std::string("Renderer_manager"));
+
 	Work_meter::tag_start("render");
 
 	// メインのRTVのclear
@@ -68,8 +70,10 @@ void Renderer_manager::render(const std::map<Scenelist, std::list<Camera_compone
 
 	//そのシーンのカメラの数だけ回す
 	for (const auto& camera : cameras.at(Sce)) {
-
 		if (camera->gameobject->active == false)continue;
+
+
+		auto frustum_data = camera->calculate_frustum_data();
 
 		Work_meter::start("clear");
 		// cameraの持つtextureのclear
@@ -83,7 +87,7 @@ void Renderer_manager::render(const std::map<Scenelist, std::list<Camera_compone
 		// renderを呼ぶ
 		auto render_scene = camera->render_scene; //カメラがrenderするscene
 		for (auto& renderer : renderers[render_scene]) {
-			renderer->render();
+			renderer->render(frustum_data);
 		}
 		Work_meter::stop("render_obj");
 
@@ -94,6 +98,8 @@ void Renderer_manager::render(const std::map<Scenelist, std::list<Camera_compone
 
 
 	Work_meter::tag_stop();
+
+	Work_meter::stop(std::string("Renderer_manager"));
 }
 
 void Renderer_manager::set_light_Constantbuffer(const std::list<Light_component*>& lights) {

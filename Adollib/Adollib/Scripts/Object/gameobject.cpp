@@ -5,7 +5,6 @@
 #include "../Main/systems.h"
 
 #include "../Renderer/material_for_collider.h"
-#include "../Renderer/frustum_culling.h"
 #include "../Main/Adollib.h"
 
 #include "../Renderer/Shader/constant_buffer.h"

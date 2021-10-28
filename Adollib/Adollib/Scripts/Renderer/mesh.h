@@ -10,7 +10,6 @@
 #include <d3dcompiler.h>
 #include <memory>
 #include <wrl.h>
-using Microsoft::WRL::ComPtr;
 #include <assert.h>
 
 namespace Adollib
@@ -65,11 +64,11 @@ namespace Adollib
 		// メッシュ
 		struct mesh
 		{
-			ComPtr<ID3D11Buffer> mesh_cb; //mesh_world行列用バッファ
+			Microsoft::WRL::ComPtr<ID3D11Buffer> mesh_cb; //mesh_world行列用バッファ
 			Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer = nullptr;
 			Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer = nullptr;
 			std::vector<subset> subsets;
-			DOP::DOP_14 dop7; //meshのローカル座標系でのk-DOP
+			DOP::DOP_14 dop; //meshのローカル座標系でのk-DOP
 			DirectX::XMFLOAT4X4 globalTransform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
 			std::vector<skeletal_animation> skeletalAnimation;
 		};

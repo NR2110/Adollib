@@ -14,7 +14,6 @@
 #include "../Renderer/sprite_renderer.h"
 #include "../Renderer/Shader/constant_buffer.h"
 #include "../Renderer/Shader/light_types.h"
-#include "../Renderer/frustum_culling.h"
 #include "../Renderer/material_for_collider.h"
 
 #include "../Physics/ALP__physics_manager.h"

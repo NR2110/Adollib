@@ -275,7 +275,7 @@ namespace Adollib
 				if ((*ALPcoll_itr)->is_added) {
 					// メインの配列に引っ越したが Broadphaseが呼ばれていない場合added_colliderがポインタを持っているためnullptrにする
 					// 追加して、broadphaseが呼ばれる前にdeleteされる必要があるためおこる可能性が低い
-					// addedの数が多くなる可能性も低いため 総当たりにする
+					// addedの数が常に多くなる可能性も低いため 総当たりにする
 					for (auto& coll : added_collider_for_insertsort[Sce]) if (coll == *ALPcoll_itr)coll = nullptr;
 
 					ALP_colliders[Sce].erase(ALPcoll_itr);

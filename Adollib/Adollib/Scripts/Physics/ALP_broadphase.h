@@ -8,7 +8,7 @@
 
 namespace Adollib {
 	namespace Physics_function {
-		//挿入法の
+		// 挿入法の
 		struct Insert_edge {
 			Collider_shape* shape; //shapeへのポインタ
 			float value = 0; //値
@@ -27,8 +27,8 @@ namespace Adollib {
 
 		}
 
-		//とても大雑把な当たり判定(Boardphase) と DOP(Midphase)を行う
-		//sweep&pruneの情報をコピーするのが重いため、Midphaseもここで行う
+		// とても大雑把な当たり判定(Boardphase) と DOP(Midphase)を行う
+		// sweep&pruneの情報をコピーするのが重いため、Midphaseもここで行う
 		void BroadMidphase(Scenelist Sce,
 			const std::list<ALP_Collider*>& ALP_collider,
 			//std::vector<Contacts::Collider_2>& out_pair,
