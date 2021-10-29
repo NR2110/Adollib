@@ -72,7 +72,6 @@ void Renderer_manager::render(const std::map<Scenelist, std::list<Camera_compone
 	for (const auto& camera : cameras.at(Sce)) {
 		if (camera->gameobject->active == false)continue;
 
-
 		auto frustum_data = camera->calculate_frustum_data();
 
 		Work_meter::start("clear");

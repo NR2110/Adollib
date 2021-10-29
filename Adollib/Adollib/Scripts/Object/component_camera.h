@@ -24,7 +24,7 @@ namespace Adollib
 	{
 	public:
 		float fov = 60.0f;
-		float aspect = 1280 / 720.0f;
+		float aspect = 1; //awake‚ÅŒvŽZ‚µ‚Ä‚¢‚é
 		float nearZ = 0.1f;
 		float farZ = 10000.0f;
 		//Vector4 clear_color = Vector4(0, 0, 0, 0);

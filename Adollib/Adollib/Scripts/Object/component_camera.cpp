@@ -9,6 +9,8 @@
 #include "../Renderer/posteffect_base.h"
 #include "gameobject_manager.h"
 
+#include "../Imgui/debug.h"
+
 using namespace Adollib;
 using namespace ConstantBuffer;
 
@@ -120,40 +122,113 @@ void Camera_component::posteffect_render() {
 
 Frustum_data Camera_component::calculate_frustum_data() {
 
-	Frustum_data data;
+	Frustum_data data__;
 
-	const float y_sloop = cosf(ToRadian(fov * 0.5f));
-	const float x_sloop = cosf(ToRadian(fov * aspect * 0.5f));
+	float x_rad = ToRadian(fov * 0.5f);
+	float y_rad = PI_inv2 - atanf(1 / (aspect * tanf(x_rad)));
+	const Quaternion rot_y_p = quaternion_axis_radian(Vector3(0, 1, 0), +y_rad);
+	const Quaternion rot_y_d = quaternion_axis_radian(Vector3(0, 1, 0), -y_rad);
+	const Quaternion rot_x_p = quaternion_axis_radian(Vector3(1, 0, 0), +x_rad);
+	const Quaternion rot_x_d = quaternion_axis_radian(Vector3(1, 0, 0), -x_rad);
 
-	const DirectX::XMVECTOR vOrigin = DirectX::XMLoadFloat3(&transform->position);
-	const DirectX::XMVECTOR vOrientation = DirectX::XMLoadFloat4(&transform->orientation);
+	const Quaternion& orientation = transform->orientation;
 
-	// Create 6 planes (do it inline to encourage use of registers)
-	data.NearPlane = DirectX::XMVectorSet(0.0f, 0.0f, -1.0f, nearZ);
-	data.NearPlane = DirectX::Internal::XMPlaneTransform(data.NearPlane, vOrientation, vOrigin);
-	data.NearPlane = DirectX::XMPlaneNormalize(data.NearPlane);
+	// near
+	data__.normals[0] = Vector3(0, 0, +1);
+	data__.normals[0] = vector3_quatrotate(data__.normals[0], orientation);
+	data__.distances[0] = vector3_dot(data__.normals[0], transform->position) + nearZ;
 
-	data.FarPlane = DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, -farZ);
-	data.FarPlane = DirectX::Internal::XMPlaneTransform(data.FarPlane, vOrientation, vOrigin);
-	data.FarPlane = DirectX::XMPlaneNormalize(data.FarPlane);
+	// far
+	data__.normals[1] = Vector3(0, 0, -1);
+	data__.normals[1] = vector3_quatrotate(data__.normals[1], orientation);
+	data__.distances[1] = vector3_dot(data__.normals[1], transform->position) - farZ;
 
-	data.RightPlane = DirectX::XMVectorSet(1.0f, 0.0f, -x_sloop, 0.0f);
-	data.RightPlane = DirectX::Internal::XMPlaneTransform(data.RightPlane, vOrientation, vOrigin);
-	data.RightPlane = DirectX::XMPlaneNormalize(data.RightPlane);
+	// left
+	data__.normals[2] = Vector3(+1, 0, 0);
+	data__.normals[2] = vector3_quatrotate(data__.normals[2], rot_y_d * orientation);
+	data__.distances[2] = vector3_dot(data__.normals[2], transform->position);
 
-	data.LeftPlane = DirectX::XMVectorSet(-1.0f, 0.0f, x_sloop, 0.0f);
-	data.LeftPlane = DirectX::Internal::XMPlaneTransform(data.LeftPlane, vOrientation, vOrigin);
-	data.LeftPlane = DirectX::XMPlaneNormalize(data.LeftPlane);
+	// right
+	data__.normals[3] = Vector3(-1, 0, 0);
+	data__.normals[3] = vector3_quatrotate(data__.normals[3], rot_y_p * orientation);
+	data__.distances[3] = vector3_dot(data__.normals[3], transform->position);
 
-	data.TopPlane = DirectX::XMVectorSet(0.0f, 1.0f, -y_sloop, 0.0f);
-	data.TopPlane = DirectX::Internal::XMPlaneTransform(data.TopPlane, vOrientation, vOrigin);
-	data.TopPlane = DirectX::XMPlaneNormalize(data.TopPlane);
+	// bottom
+	data__.normals[4] = Vector3(0, +1, 0);
+	data__.normals[4] = vector3_quatrotate(data__.normals[4], rot_x_p * orientation);
+	data__.distances[4] = vector3_dot(data__.normals[4], transform->position);
 
-	data.BottomPlane = DirectX::XMVectorSet(0.0f, -1.0f, y_sloop, 0.0f);
-	data.BottomPlane = DirectX::Internal::XMPlaneTransform(data.BottomPlane, vOrientation, vOrigin);
-	data.BottomPlane = DirectX::XMPlaneNormalize(data.BottomPlane);
+	// top
+	data__.normals[5] = Vector3(0, -1, 0);
+	data__.normals[5] = vector3_quatrotate(data__.normals[5], rot_x_d * orientation);
+	data__.distances[5] = vector3_dot(data__.normals[5], transform->position);
 
-	return data;
+
+	Debug::set(std::string("x_rad") , ToAngle(x_rad));
+	Debug::set(std::string("y_rad") , ToAngle(y_rad));
+
+	Debug::set(std::string("near")  , data__.normals[0]);
+	Debug::set(std::string("far")   , data__.normals[1]);
+	Debug::set(std::string("left")  , data__.normals[2]);
+	Debug::set(std::string("right") , data__.normals[3]);
+	Debug::set(std::string("bottom"), data__.normals[4]);
+	Debug::set(std::string("top")   , data__.normals[5]);
+
+	//Vector3 normal = Vector3(0, 0, 1);
+
+	//{
+	//	auto matrix = DirectX::XMMatrixPerspectiveFovLH(ToRadian(fov), aspect, nearZ, farZ);
+	//	DirectX::BoundingFrustum bounding;
+	//	DirectX::BoundingFrustum::CreateFromMatrix(bounding, matrix);
+
+	//	Frustum_data data_;
+
+	//	bounding.Origin = transform->position;
+	//	bounding.Orientation = transform->orientation;
+	//	bounding.GetPlanes(
+	//		&data_.NearPlane, &data_.FarPlane,
+	//		&data_.RightPlane, &data_.LeftPlane,
+	//		&data_.TopPlane, &data_.BottomPlane
+	//	);
+
+	//	Frustum_data data;
+	//	//const float y_sloop = tanf(ToRadian(90 - fov * 0.5f));
+	//	//const float x_sloop = tanf(ToRadian(90 - fov * aspect * 0.5f));
+	//	const float y_sloop = tanf(ToRadian(fov * 0.5f));
+	//	const float x_sloop = tanf(ToRadian(fov * aspect * 0.5f));
+
+	//	const DirectX::XMVECTOR vOrigin = DirectX::XMLoadFloat3(&transform->position);
+	//	const DirectX::XMVECTOR vOrientation = DirectX::XMLoadFloat4(&transform->orientation);
+
+	//	// Create 6 planes (do it inline to encourage use of registers)
+	//	data.NearPlane = DirectX::XMVectorSet(0.0f, 0.0f, -1.0f, nearZ);
+	//	data.NearPlane = DirectX::Internal::XMPlaneTransform(data.NearPlane, vOrientation, vOrigin);
+	//	data.NearPlane = DirectX::XMPlaneNormalize(data.NearPlane);
+
+	//	data.FarPlane = DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, -farZ);
+	//	data.FarPlane = DirectX::Internal::XMPlaneTransform(data.FarPlane, vOrientation, vOrigin);
+	//	data.FarPlane = DirectX::XMPlaneNormalize(data.FarPlane);
+
+	//	data.RightPlane = DirectX::XMVectorSet(1.0f, 0.0f, -x_sloop, 0.0f);
+	//	data.RightPlane = DirectX::Internal::XMPlaneTransform(data.RightPlane, vOrientation, vOrigin);
+	//	data.RightPlane = DirectX::XMPlaneNormalize(data.RightPlane);
+
+	//	data.LeftPlane = DirectX::XMVectorSet(-1.0f, 0.0f, -x_sloop, 0.0f);
+	//	data.LeftPlane = DirectX::Internal::XMPlaneTransform(data.LeftPlane, vOrientation, vOrigin);
+	//	data.LeftPlane = DirectX::XMPlaneNormalize(data.LeftPlane);
+
+	//	data.TopPlane = DirectX::XMVectorSet(0.0f, 1.0f, -y_sloop, 0.0f);
+	//	data.TopPlane = DirectX::Internal::XMPlaneTransform(data.TopPlane, vOrientation, vOrigin);
+	//	data.TopPlane = DirectX::XMPlaneNormalize(data.TopPlane);
+
+	//	data.BottomPlane = DirectX::XMVectorSet(0.0f, -1.0f, -y_sloop, 0.0f);
+	//	data.BottomPlane = DirectX::Internal::XMPlaneTransform(data.BottomPlane, vOrientation, vOrigin);
+	//	data.BottomPlane = DirectX::XMPlaneNormalize(data.BottomPlane);
+
+	//	return data_;
+	//}
+
+	return data__;
 }
 
 void Camera_component::clear() {

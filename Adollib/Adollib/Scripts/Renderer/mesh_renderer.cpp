@@ -73,7 +73,7 @@ void Mesh_renderer::render(const Frustum_data& frustum_data) {
 			cb.shininess = 1;
 			cb.ambientColor = DirectX::XMFLOAT4(0.1f, 0.1f, 0.1f, 1);
 			cb.materialColor = material->color.get_XM4();
-		//continue;
+			//continue;
 		}
 		Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
 		Systems::DeviceContext->VSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
@@ -88,44 +88,41 @@ void Mesh_renderer::render(const Frustum_data& frustum_data) {
 			Systems::DeviceContext->PSSetConstantBuffers(3, 1, mesh.mesh_cb.GetAddressOf());
 		}
 
+
 		// frustum_cullingを行う
 		{
-			Vector3 AABB_center = Vector3(0);
-			// 中心位置を求める
-			{
-				for (int i = 0; i < 3; ++i) {
-					AABB_center += DOP::AABB_axis[i] * (-mesh.dop.min[i] + mesh.dop.max[i]) * 0.5f;
+			const Vector3& box_position = transform->position;
+			Vector3 box_axis[3] = {
+				vector3_quatrotate(Vector3(1,0,0),transform->orientation),
+				vector3_quatrotate(Vector3(0,1,0),transform->orientation),
+				vector3_quatrotate(Vector3(0,0,1),transform->orientation)
+			};
+
+			Vector3 dop_average = Vector3(
+				fabsf(mesh.dop.min[0]) + fabsf(mesh.dop.max[0]),
+				fabsf(mesh.dop.min[0]) + fabsf(mesh.dop.max[0]),
+				fabsf(mesh.dop.min[0]) + fabsf(mesh.dop.max[0])
+			) * 0.5f;
+
+
+			bool is_contain = true;
+			for (int i = 0; i < 6; i++) {
+
+				float dis =
+					fabsf(vector3_dot(frustum_data.normals[i], box_axis[0] * (dop_average[0] * transform->scale[0]))) +
+					fabsf(vector3_dot(frustum_data.normals[i], box_axis[1] * (dop_average[1] * transform->scale[1]))) +
+					fabsf(vector3_dot(frustum_data.normals[i], box_axis[2] * (dop_average[2] * transform->scale[2])));
+
+				if (frustum_data.distances[i] > vector3_dot(frustum_data.normals[i], box_position) + dis) {
+					is_contain = false;
+					break;
 				}
-				AABB_center = vector3_quatrotate(AABB_center, transform->orientation);
 			}
+			if (is_contain == false) continue;
 
-			// サイズを求める
-			Vector3 AABB_size = Vector3(0);
-			{
-				Vector3 world_size =
-					vector3_quatrotate(DOP::AABB_axis[0], transform->orientation) * (-mesh.dop.min[0] + mesh.dop.max[0]) * 0.5f +
-					vector3_quatrotate(DOP::AABB_axis[1], transform->orientation) * (-mesh.dop.min[1] + mesh.dop.max[1]) * 0.5f +
-					vector3_quatrotate(DOP::AABB_axis[2], transform->orientation) * (-mesh.dop.min[2] + mesh.dop.max[2]) * 0.5f;
 
-				for (int i = 0; i < 3; ++i) {
-					AABB_size[i] += vector3_dot(DOP::AABB_axis[i], world_size);
-				}
-			}
-			DirectX::BoundingBox box;
-			box.Center = transform->position + AABB_center;
-			box.Extents = AABB_size;
-
-			auto hr = box.ContainedBy(
-				frustum_data.NearPlane,
-				frustum_data.FarPlane,
-				frustum_data.RightPlane,
-				frustum_data.LeftPlane,
-				frustum_data.TopPlane,
-				frustum_data.BottomPlane
-			);
-
-			if (hr != DirectX::ContainmentType::CONTAINS)continue;
 		}
+
 
 		for (auto& subset : mesh.subsets)
 		{
