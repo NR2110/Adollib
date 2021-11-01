@@ -78,8 +78,6 @@ void Mesh_renderer::render(const Frustum_data& frustum_data) {
 
 		}
 
-		//if (FrustumCulling::frustum_culling(&mesh) == false) continue;
-
 		UINT stride = sizeof(VertexFormat);
 		UINT offset = 0;
 		Systems::DeviceContext->IASetVertexBuffers(0, 1, mesh.vertexBuffer.GetAddressOf(), &stride, &offset);
@@ -132,12 +130,6 @@ void Mesh_renderer::render(const Frustum_data& frustum_data) {
 
 		for (auto& subset : mesh.subsets)
 		{
-			//TODO : model‚Ìtextureİ’è
-			//Systems::DeviceContext->PSSetShaderResources(0, 1, subset.diffuse.shaderResourceVirw.GetAddressOf());
-			//texture->Set(0);
-
-
-
 			// texture‚ğSRV‚ÉƒZƒbƒg
 			texture->Set(0);
 
