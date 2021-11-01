@@ -45,16 +45,21 @@ void Renderer_manager::render(const std::map<Scenelist, std::list<Camera_compone
 
 	Work_meter::tag_start("render");
 
+	Work_meter::start(std::string("Systems::Clear"));
 	// メインのRTVのclear
 	Systems::Clear();
+	Work_meter::stop(std::string("Systems::Clear"));
 
 	// Imguiがgpuの処理を全部待ちやがる & depthで上書きしちゃうので 前フレームのtextureを描画して Imguiの描画をここで行う
 	// camera->clearにgpu負荷があり、Imguiがその処理を待つので 下に置くと重くなる
 	{
+		Work_meter::start(std::string("posteffect_render"));
 		for (const auto& camera : cameras.at(Sce)) {
 			// posteffectの処理 & mainのRTVに描画
 			camera->posteffect_render();
 		}
+		Work_meter::stop(std::string("posteffect_render"));
+
 		Work_meter::start(std::string("renderImgui"));
 		Adollib::Imgui_manager::render();
 		Work_meter::stop(std::string("renderImgui"));
@@ -65,22 +70,28 @@ void Renderer_manager::render(const std::map<Scenelist, std::list<Camera_compone
 
 	if (Sce == Scenelist::scene_null)return;
 
+	Work_meter::start(std::string("set_light_Constantbuffer"));
 	// light情報をコンスタントバッファーにセットする
 	set_light_Constantbuffer(lights.at(Sce));
+	Work_meter::stop(std::string("set_light_Constantbuffer"));
 
 	//そのシーンのカメラの数だけ回す
 	for (const auto& camera : cameras.at(Sce)) {
 		if (camera->gameobject->active == false)continue;
 
+		Work_meter::start("calculate_frustum_data");
 		auto frustum_data = camera->calculate_frustum_data();
+		Work_meter::stop("calculate_frustum_data");
 
 		Work_meter::start("clear");
 		// cameraの持つtextureのclear
 		camera->clear();
 		Work_meter::stop("clear");
 
+		Work_meter::start(std::string("set_Constantbuffer"));
 		// camera情報をコンスタントバッファーにセットする
 		camera->set_Constantbuffer();
+		Work_meter::stop(std::string("set_Constantbuffer"));
 
 		Work_meter::start("render_obj");
 		// renderを呼ぶ
@@ -90,9 +101,10 @@ void Renderer_manager::render(const std::map<Scenelist, std::list<Camera_compone
 		}
 		Work_meter::stop("render_obj");
 
+		Work_meter::start(std::string("render_collider"));
 		// colliderのrender
 		Physics_function::Physics_manager::render_collider(Sce);
-
+		Work_meter::stop(std::string("render_collider"));
 	}
 
 

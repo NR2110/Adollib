@@ -1,2 +1,13 @@
-﻿  mesh_renderer.cpp
-  Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe
+﻿  camera.cpp
+  demo_house.cpp
+  object_manager.cpp
+  object_rotate.cpp
+  player.cpp
+  player_funcs.cpp
+  player_manager.cpp
+  scene_shader.cpp
+  stage_01.cpp
+  stage_01_funcs.cpp
+  stage_base.cpp
+  stage_demo.cpp
+  stage_demo_funcs.cpp

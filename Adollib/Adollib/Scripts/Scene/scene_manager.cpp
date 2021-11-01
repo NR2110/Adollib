@@ -34,7 +34,7 @@ void Scene_manager::update() {
 }
 
 void Scene_manager::render() {
-	for (auto& scene : active_scenes) {
+	for (const auto& scene : active_scenes) {
 		Gameobject_manager::render(scene);
 	}
 }

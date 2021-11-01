@@ -37,6 +37,47 @@ void Mesh_renderer::render(const Frustum_data& frustum_data) {
 
 	for (Mesh::mesh& mesh : (*meshes))
 	{
+		// frustum_culling‚ðs‚¤
+		{
+			const Vector3& box_position = transform->position;
+			Vector3 box_axis[3] = {
+				vector3_quatrotate(Vector3(1,0,0),transform->orientation),
+				vector3_quatrotate(Vector3(0,1,0),transform->orientation),
+				vector3_quatrotate(Vector3(0,0,1),transform->orientation)
+			};
+
+			Vector3 dop_average = Vector3(
+				fabsf(mesh.dop.min[0]) + fabsf(mesh.dop.max[0]),
+				fabsf(mesh.dop.min[1]) + fabsf(mesh.dop.max[1]),
+				fabsf(mesh.dop.min[2]) + fabsf(mesh.dop.max[2])
+			) * 0.5f;
+
+			Vector3 dop_center_offset = Vector3(
+				mesh.dop.min[0] + mesh.dop.max[0],
+				mesh.dop.min[1] + mesh.dop.max[1],
+				mesh.dop.min[2] + mesh.dop.max[2]
+			) * 0.5f;
+			dop_center_offset = vector3_quatrotate(dop_center_offset, transform->orientation);
+
+
+			bool is_contain = true;
+			for (int i = 0; i < 6; i++) {
+
+				float dis =
+					fabsf(vector3_dot(frustum_data.normals[i], box_axis[0] * (dop_average[0] * transform->scale[0]))) +
+					fabsf(vector3_dot(frustum_data.normals[i], box_axis[1] * (dop_average[1] * transform->scale[1]))) +
+					fabsf(vector3_dot(frustum_data.normals[i], box_axis[2] * (dop_average[2] * transform->scale[2])));
+
+				if (frustum_data.distances[i] > vector3_dot(frustum_data.normals[i], box_position + dop_center_offset) + dis) {
+					is_contain = false;
+					break;
+				}
+			}
+			if (is_contain == false) continue;
+
+
+		}
+
 		//if (FrustumCulling::frustum_culling(&mesh) == false) continue;
 
 		UINT stride = sizeof(VertexFormat);
@@ -86,49 +127,6 @@ void Mesh_renderer::render(const Frustum_data& frustum_data) {
 			Systems::DeviceContext->UpdateSubresource(mesh.mesh_cb.Get(), 0, NULL, &g_cb, 0, 0);
 			Systems::DeviceContext->VSSetConstantBuffers(3, 1, mesh.mesh_cb.GetAddressOf());
 			Systems::DeviceContext->PSSetConstantBuffers(3, 1, mesh.mesh_cb.GetAddressOf());
-		}
-
-
-		// frustum_culling‚ðs‚¤
-		{
-			const Vector3& box_position = transform->position;
-			Vector3 box_axis[3] = {
-				vector3_quatrotate(Vector3(1,0,0),transform->orientation),
-				vector3_quatrotate(Vector3(0,1,0),transform->orientation),
-				vector3_quatrotate(Vector3(0,0,1),transform->orientation)
-			};
-
-			Vector3 dop_average = Vector3(
-				fabsf(mesh.dop.min[0]) + fabsf(mesh.dop.max[0]),
-				fabsf(mesh.dop.min[1]) + fabsf(mesh.dop.max[1]),
-				fabsf(mesh.dop.min[2]) + fabsf(mesh.dop.max[2])
-			) * 0.5f;
-
-			Vector3 dop_center_offset = Vector3(
-				mesh.dop.min[0] + mesh.dop.max[0],
-				mesh.dop.min[1] + mesh.dop.max[1],
-				mesh.dop.min[2] + mesh.dop.max[2]
-			) * 0.5f;
-			dop_center_offset = vector3_quatrotate(dop_center_offset, transform->orientation);
-
-
-			bool is_contain = true;
-			for (int i = 0; i < 6; i++) {
-
-				float dis =
-					fabsf(vector3_dot(frustum_data.normals[i], box_axis[0] * (dop_average[0] * transform->scale[0]))) +
-					fabsf(vector3_dot(frustum_data.normals[i], box_axis[1] * (dop_average[1] * transform->scale[1]))) +
-					fabsf(vector3_dot(frustum_data.normals[i], box_axis[2] * (dop_average[2] * transform->scale[2])));
-
-				if (frustum_data.distances[i] > vector3_dot(frustum_data.normals[i], box_position + dop_center_offset) + dis) {
-					is_contain = false;
-					break;
-				}
-			}
-			if (is_contain == false)
-				continue;
-
-
 		}
 
 

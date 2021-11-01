@@ -13,8 +13,8 @@ PSOutput main(PSInput input)
     //Color = input.Color;
 
     Out.Color = Color;
-    Out.Normal = float4(input.wNormal, 1.0f);
-    Out.SVPosiiton = input.Position;
+    //Out.Normal = float4(input.wNormal, 1.0f);
+    //Out.SVPosiiton = input.Position;
 
     return Out;
 }
