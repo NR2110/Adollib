@@ -214,7 +214,7 @@ namespace Adollib {
 
 
 #if _DEBUG || !USE_SIMD
-#include "vector_e.h"
+#include "vector.inl"
 #else
 #include "vectorSIM_e.h"
 #endif

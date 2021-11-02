@@ -132,7 +132,7 @@ namespace Adollib {
 };
 
 #if _DEBUG || !USE_SIMD
-#include "quaternion_e.h"
+#include "quaternion.inl"
 #else
 #include "quaternionSIM_e.h"
 #endif

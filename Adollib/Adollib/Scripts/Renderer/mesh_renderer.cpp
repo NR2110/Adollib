@@ -27,9 +27,6 @@ void Mesh_renderer::render(const Frustum_data& frustum_data) {
 	Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 	Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 
-	// shader‚Ìactivate
-	material->shader_activate();
-
 	//
 	if (Systems::BS_type != material->BS_state) Systems::SetBlendState(material->BS_state);
 	if (Systems::RS_type != material->RS_state) Systems::SetRasterizerState(material->RS_state);

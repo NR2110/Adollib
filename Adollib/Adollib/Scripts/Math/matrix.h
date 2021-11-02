@@ -19,9 +19,7 @@ namespace Adollib {
 				0, 0, 0, 0,
 				0, 0, 0, 0,
 				0, 0, 0, 0
-			)
-		{
-		}
+			) {}
 
 		Matrix44(
 			float _11, float _12, float _13,
@@ -33,9 +31,7 @@ namespace Adollib {
 				_21, _22, _23, 0,
 				_31, _32, _33, 0,
 				0, 0, 0, 1
-			)
-		{
-		}
+			) {}
 
 		Matrix44(
 			float _11, float _12, float _13, float _14,
@@ -48,9 +44,17 @@ namespace Adollib {
 				_21, _22, _23, _24,
 				_31, _32, _33, _34,
 				_41, _42, _43, _44
-			)
-		{
-		}
+			){}
+
+		Matrix44(
+			XMFLOAT4X4 mat
+		)  noexcept :
+			XMFLOAT4X4(
+				_11, _12, _13, _14,
+				_21, _22, _23, _24,
+				_31, _32, _33, _34,
+				_41, _42, _43, _44
+			) {}
 
 		Matrix44 operator+ () const;
 		Matrix44 operator- () const;
@@ -199,8 +203,8 @@ namespace Adollib {
 }
 
 #if _DEBUG || !USE_SIMD
-#include "matrix4x4_e.h"
-#include "matrix3x3_e.h"
+#include "matrix4x4.inl"
+#include "matrix3x3.inl"
 #else
 #include "matrixSIM_e.h"
 #endif

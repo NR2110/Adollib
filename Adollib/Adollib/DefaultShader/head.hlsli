@@ -5,6 +5,7 @@
 
 //:::::::::::::::::::::::::::::::::::::::::::::
 Texture2D DiffuseTexture : register(t0);
+Texture2D ShadowTexture : register(t1);
 SamplerState DecalSampler : register(s0);
 
 
@@ -77,5 +78,11 @@ cbuffer CBPerSprite : register(b6)
     float3 Normal; //法線
     float2 Tex; //UV座標
     float4 Color; //頂点色
+
+};
+
+cbuffer CBPerShadow : register(b7)
+{
+    row_major float4x4 shadow_viewprojection;
 
 };

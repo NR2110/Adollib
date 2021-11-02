@@ -48,6 +48,7 @@ bool Texture::Load(const wchar_t* filename)
 }
 void Texture::Set(UINT Slot, BOOL flg)
 {
+
 	if (flg == FALSE) {
 		ID3D11ShaderResourceView* rtv[1] = { NULL };
 		ID3D11SamplerState* ss[1] = { NULL };
@@ -80,7 +81,7 @@ bool Texture::Create(u_int width, u_int height, DXGI_FORMAT format)
 	texture2d_desc.Format = format;
 	texture2d_desc.SampleDesc.Count = 1;
 	texture2d_desc.Usage = D3D11_USAGE_DEFAULT;
-	texture2d_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	texture2d_desc.CPUAccessFlags = 0;
 	texture2d_desc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 
 	hr = Systems::Device->CreateTexture2D(&texture2d_desc, NULL, Texture2D.GetAddressOf());

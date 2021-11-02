@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project>
   <ProjectOutputs>C:\Users\waaaa\Documents\Adollib\Adollib\Release\Adollib.exe</ProjectOutputs>
-  <ContentFiles></ContentFiles>
+  <ContentFiles>C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\default_ps.cso;C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\default_ps_notex.cso;C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\default_vs.cso;C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\sprite_ps.cso;C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\sprite_vs.cso;C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\ui_ps.cso;C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\ui_vs.cso;C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\render_directional_shadow_ps.cso;C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\render_directional_shadow_vs.cso</ContentFiles>
   <SatelliteDlls></SatelliteDlls>
   <NonRecipeFileRefs></NonRecipeFileRefs>
 </Project>

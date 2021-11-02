@@ -116,6 +116,9 @@
     <Filter Include="00_Adollib\44_render\shader\hlsli\sprite">
       <UniqueIdentifier>{25a55cea-c0ac-45a9-a0df-cfbcc60c5597}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00_Adollib\44_render\shader\hlsli\directional_shadow">
+      <UniqueIdentifier>{9ed3b920-6c29-4a31-ac62-1a122af91531}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Scripts\player.cpp">
@@ -346,6 +349,9 @@
     <ClCompile Include="Scripts\Renderer\UI.cpp">
       <Filter>00_Adollib\44_render</Filter>
     </ClCompile>
+    <ClCompile Include="Scripts\Renderer\directional_shadow.cpp">
+      <Filter>00_Adollib\44_render\renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Scripts\player.h">
@@ -435,13 +441,7 @@
     <ClInclude Include="Scripts\Math\quaternion.h">
       <Filter>00_Adollib\11_math</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Math\quaternion_e.h">
-      <Filter>00_Adollib\11_math</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts\Math\vector.h">
-      <Filter>00_Adollib\11_math</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Math\vector_e.h">
       <Filter>00_Adollib\11_math</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Main\Adollib.h">
@@ -582,12 +582,6 @@
     <ClInclude Include="Scripts\Physics\collider_types.h">
       <Filter>00_Adollib\22_physics\collider</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Math\matrix4x4_e.h">
-      <Filter>00_Adollib\11_math</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Math\matrix3x3_e.h">
-      <Filter>00_Adollib\11_math</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts\Physics\ALP_joint.h">
       <Filter>00_Adollib\22_physics\base</Filter>
     </ClInclude>
@@ -720,6 +714,21 @@
     <ClInclude Include="Scripts\Renderer\frustum_data.h">
       <Filter>00_Adollib\44_render\renderer</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Renderer\directional_shadow.h">
+      <Filter>00_Adollib\44_render\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Math\vector.inl">
+      <Filter>00_Adollib\11_math</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Math\matrix4x4.inl">
+      <Filter>00_Adollib\11_math</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Math\matrix3x3.inl">
+      <Filter>00_Adollib\11_math</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Math\quaternion.inl">
+      <Filter>00_Adollib\11_math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
@@ -750,6 +759,9 @@
     <None Include="DefaultShader\sprite.hlsli">
       <Filter>00_Adollib\44_render\shader\hlsli\sprite</Filter>
     </None>
+    <None Include="DefaultShader\render_directional_shadow.hlsli">
+      <Filter>00_Adollib\44_render\shader\hlsli\directional_shadow</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="DefaultShader\default_ps.hlsl">
@@ -772,6 +784,12 @@
     </FxCompile>
     <FxCompile Include="DefaultShader\sprite_vs.hlsl">
       <Filter>00_Adollib\44_render\shader\hlsli\sprite</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\render_directional_shadow_ps.hlsl">
+      <Filter>00_Adollib\44_render\shader\hlsli\directional_shadow</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\render_directional_shadow_vs.hlsl">
+      <Filter>00_Adollib\44_render\shader\hlsli\directional_shadow</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

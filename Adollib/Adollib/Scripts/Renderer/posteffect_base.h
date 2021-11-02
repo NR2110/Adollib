@@ -25,7 +25,7 @@ namespace Adollib {
 
 	public:
 		Camera_component* camera = nullptr;
-		std::list<Posteffect_base*>::iterator this_itr;
+		std::list<std::shared_ptr<Posteffect_base>>::iterator this_itr;
 
 	public:
 		virtual void awake();

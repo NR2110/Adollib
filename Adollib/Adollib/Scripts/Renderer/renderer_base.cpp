@@ -14,6 +14,11 @@
 using namespace Adollib;
 using namespace ConstantBuffer;
 
+void Renderer_base::shader_activete() {
+	material->shader_activate();
+}
+
+
 void Renderer_base::awake() {
 	this_itr = Renderer_manager::add_renderer(this);
 

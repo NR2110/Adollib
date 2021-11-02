@@ -37,6 +37,9 @@ namespace Adollib {
 		std::shared_ptr<Material> get_material() { return material; };
 		std::shared_ptr<Texture>  get_texture() { return texture; };
 
+		// shader‚Ìactivate
+		void shader_activete();
+
 	public:
 	    void awake() override final;
 

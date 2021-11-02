@@ -18,6 +18,7 @@ namespace Adollib
 {
 	class Texture;
 	class Posteffect_base;
+	class Directional_shadow;
 
 	//カメラ用のコンポーネントクラス 継承不可!
 	class Camera_component final : public Component
@@ -36,39 +37,39 @@ namespace Adollib
 		// 描画を行うscene 変更しなければアタッチした時のsceneになっている
 		Scenelist render_scene = Scenelist::scene_null;
 
+		std::shared_ptr<Directional_shadow> directional_shadow = nullptr;
 
 	private:
-		std::list<Posteffect_base*> posteffects; //ポストエフェクト関係の保存
+		std::list<std::shared_ptr<Posteffect_base>> posteffects; //ポストエフェクト関係の保存
 
 		Microsoft::WRL::ComPtr<ID3D11Buffer> view_cb;
 		Microsoft::WRL::ComPtr<ID3D11Buffer> projection_cb;
 		Microsoft::WRL::ComPtr<ID3D11Buffer> sprite_cb;
+		Microsoft::WRL::ComPtr<ID3D11Buffer> shadow_viewprojection_cb;
 
-		std::shared_ptr<Texture> color_texture = nullptr;
+		std::shared_ptr<Texture> color_texture  = nullptr;
 		std::shared_ptr<Texture> normal_texture = nullptr;
-		std::shared_ptr<Texture> depth_texture = nullptr;
+		std::shared_ptr<Texture> depth_texture  = nullptr;
 
 		Shader shader;
 
 	private:
-
 		// managerに保存されている 自身へのitr
 		std::list<Camera_component*>::iterator this_itr;
 
 	private:
 		// addされたposteffectを初期化する ヘッダーでできないため関数にした
-		void posteffect_initialize(Posteffect_base* posteffect);
+		void posteffect_initialize(std::shared_ptr<Posteffect_base>);
 
 	public:
 		std::shared_ptr<Texture> get_color_texture() { return color_texture; };
-
 
 	public:
 		// redertargetviewなどをclearする
 		void clear();
 
-		// ConstantBufferにcamera情報をsetする
-		void set_Constantbuffer();
+		// ConstantBufferにcamera情報をset, RenderetrgetViewの変更
+		void setup();
 
 		// ポストエフェクトの処理 & 描画
 		void posteffect_render();
