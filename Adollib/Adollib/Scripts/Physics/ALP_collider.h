@@ -65,14 +65,16 @@ namespace Adollib {
 			std::list<Collider_shape*> shapes;
 			std::list<Collider_shape*> added_buffer_shapes; // マルチスレッド用 処理の途中で追加された要素
 
+			Collider_tagbit oncoll_bits_buffer = 0; //oncollision enterで衝突したbit情報 mainthreadに渡すためのbuffer
+
 			//
 			std::mutex mtx;
 
 		public:
-			// privateにしたかった........
+			// privateにしたかった けどprivateにするとbitの変更めんどくさいから取り合えずpublic
 			//::: oncoll_enter :::::::
 			Collider_tagbit oncoll_check_bits = 0; //on collision enterを行うtagの情報(互いに衝突しないけどoncollenterが必要な場合)
-			Collider_tagbit oncoll_bits = 0; //oncollision enterで使用するbit情報
+			Collider_tagbit oncoll_bits = 0; //oncollision enterで衝突したbit情報
 
 			//::: tag ::::::::
 			Collider_tagbit tag = 0; //自身のtag(bit)
@@ -90,8 +92,9 @@ namespace Adollib {
 
 			void lock_mtx() { mtx.lock(); };
 			void unlock_mtx() { mtx.unlock(); };
+
 		public:
-			//[[nodiscard]]
+			//[[nodiscard]] /
 
 			// このcolliderのuniqueなID
 			u_int get_index() const { return index; };

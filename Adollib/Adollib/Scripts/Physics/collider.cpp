@@ -19,7 +19,7 @@ using namespace Physics_function;
 #pragma region Rigitbody
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-const bool Collider::concoll_enter(const Collider_tagbit tag_name) const {
+const bool Collider::concoll_enter(const Collider_tagbit tag_name) {
 	return ALPcollider_ptr->concoll_enter(tag_name);
 }
 

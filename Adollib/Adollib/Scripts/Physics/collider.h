@@ -68,9 +68,9 @@ namespace Adollib {
 
 	private:
 		Physics_function::ALP_Physics* ALPphysics_ptr = nullptr;
+		Physics_function::ALP_Collider* ALPcollider_ptr = nullptr;
 
 	public:
-		Physics_function::ALP_Collider* ALPcollider_ptr = nullptr;
 		//::: Œã‚Å•ÏX‚·‚é :::
 		const Vector3 linear_velocity() const { return ALPphysics_ptr->linear_velocity(); }
 		const Vector3 angula_velocity() const { return ALPphysics_ptr->angula_velocity(); }
@@ -89,7 +89,7 @@ namespace Adollib {
 
 	public:
 		// Œğ·‚µ‚Ä‚¢‚½‚çtrue‚ğ•Ô‚·
-		const bool concoll_enter(const Collider_tagbit tag_name) const;
+		const bool concoll_enter(const Collider_tagbit tag_name);
 
 		// •ÀiˆÚ“®‚É—Í‚ğ‰Á‚¦‚é
 		void add_force(const Vector3& force);
