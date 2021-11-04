@@ -23,7 +23,7 @@ void Camera_component::awake() {
 	Systems::CreateConstantBuffer(&projection_cb, sizeof(ConstantBufferPerSystem));
 
 	// gameobject_manager‚Ì”z—ñ‚É“o˜^
-	//this_itr = Gameobject_manager::add_camera_component(gameobject->get_scene(), this);
+	this_itr = Gameobject_manager::add_camera_component(gameobject->get_scene(), this);
 	aspect = (float)Al_Global::SCREEN_WIDTH / Al_Global::SCREEN_HEIGHT;
 
 	// MRT—ptexture‚Ì¶¬
@@ -127,7 +127,8 @@ Frustum_data Camera_component::calculate_frustum_data() {
 
 	return Frustum_data::create_frustum_data(
 		transform->position,
-		transform->orientation,
+		//transform->orientation,
+		vector3_quatrotate(Vector3(0,0,1), transform->orientation),
 		nearZ,
 		farZ,
 		fov,

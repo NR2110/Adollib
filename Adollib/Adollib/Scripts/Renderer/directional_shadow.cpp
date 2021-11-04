@@ -21,14 +21,20 @@ void Directional_shadow::awake() {
 
 	// shaodow用texの準備
 	shadow_texture = std::make_shared<Texture>();
-	shadow_texture->CreateDepth(3000, 3000, DXGI_FORMAT_R24G8_TYPELESS);
+	shadow_texture->CreateDepth(10000, 10000, DXGI_FORMAT_R24G8_TYPELESS);
 
 	shader = std::make_shared<Shader>();
 	shader->Load_VS("./DefaultShader/render_directional_shadow_vs.cso");
 }
 void Directional_shadow::shader_activate() { shader->Activate(); };
 
-void Directional_shadow::set_ShaderResourceView() { shadow_texture->Set(1); }
+void Directional_shadow::set_ShaderResourceView() {
+
+	Systems::DeviceContext->OMSetRenderTargets(0, nullptr, nullptr);
+
+	shadow_texture->Set(1);
+
+}
 
 void Directional_shadow::setup() {
 
@@ -36,10 +42,10 @@ void Directional_shadow::setup() {
 	ConstantBufferPerSystem s_sb;
 	ConstantBufferPerShadow shadow_sb;
 
+	Systems::DeviceContext->ClearDepthStencilView(shadow_texture->GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
 	ID3D11DepthStencilView* dsv = shadow_texture->GetDepthStencilView();
 	Systems::DeviceContext->OMSetRenderTargets(0, nullptr, dsv);
-
-	Systems::DeviceContext->ClearDepthStencilView(shadow_texture->GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	//CB : ConstantBufferPerCamera
 	// ビュー行列
@@ -63,32 +69,18 @@ void Directional_shadow::setup() {
 
 
 	//CB : ConstantBufferPerShadow
-	shadow_sb.shadow_viewprojection = Matrix44(s_sb.Projection) * c_cb.View;
+	shadow_sb.shadow_viewprojection = Matrix44(s_sb.Projection) * Matrix44(c_cb.View);
+	shadow_sb.right_dir = direction;
 	Systems::DeviceContext->UpdateSubresource(shadow_viewprojection_cb.Get(), 0, NULL, &shadow_sb, 0, 0);
 	Systems::DeviceContext->VSSetConstantBuffers(7, 1, shadow_viewprojection_cb.GetAddressOf());
 	Systems::DeviceContext->PSSetConstantBuffers(7, 1, shadow_viewprojection_cb.GetAddressOf());
 }
 
 Frustum_data Directional_shadow::calculate_frustum_data() {
-	Frustum_data data;
-	data.normals[0] = Vector3(0, 0, 1);
-	data.normals[1] = Vector3(0, 0, 1);
-	data.normals[2] = Vector3(0, 0, 1);
-	data.normals[3] = Vector3(0, 0, 1);
-	data.normals[4] = Vector3(0, 0, 1);
-	data.normals[5] = Vector3(0, 0, 1);
-
-	data.distances[0] = -FLT_MAX;
-	data.distances[1] = -FLT_MAX;
-	data.distances[2] = -FLT_MAX;
-	data.distances[3] = -FLT_MAX;
-	data.distances[4] = -FLT_MAX;
-	data.distances[5] = -FLT_MAX;
-	return data;
 
 	return Frustum_data::create_frustum_data(
 		position,
-		quaternion_from_to_rotate(Vector3(0, 0, 1), direction),
+		direction,
 		nearZ,
 		farZ,
 		fov,

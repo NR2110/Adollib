@@ -26,7 +26,7 @@ namespace Adollib {
 		float fov = 120.0f;
 		float aspect = 1;
 		float nearZ = 0.1f;
-		float farZ = 10000.0f;
+		float farZ = 1000.0f;
 
 		Vector3 position;
 		Vector3 direction;

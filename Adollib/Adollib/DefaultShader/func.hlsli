@@ -152,7 +152,7 @@ float3	GetShadowTex(float4x4 vp, float3 wPos)
 	float4	wvpPos;
 	wvpPos.xyz = wPos;
 	wvpPos.w = 1;
-	wvpPos = mul(vp, wvpPos);
+    wvpPos = mul(wvpPos, vp);
 	wvpPos /= wvpPos.w;
 	// テクスチャ座標系
 	wvpPos.y = -wvpPos.y;

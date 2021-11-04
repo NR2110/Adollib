@@ -56,6 +56,8 @@ namespace Adollib {
 		struct ConstantBufferPerShadow
 		{
 			DirectX::XMFLOAT4X4 shadow_viewprojection;
+			DirectX::XMFLOAT3 right_dir;
+			float dummy;
 		};
 	}
 }

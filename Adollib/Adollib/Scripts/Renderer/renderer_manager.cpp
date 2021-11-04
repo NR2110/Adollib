@@ -74,18 +74,23 @@ void Renderer_manager::render(const std::map<Scenelist, std::list<Camera_compone
 
 		// ‰e—p‚Ì•`‰æ
 		{
-			Systems::SetViewPort(3000,3000);
-			camera->directional_shadow->position = camera->transform->position;
-			camera->directional_shadow->direction = vector3_quatrotate(Vector3(0, 0, 1), camera->transform->orientation);
+			Systems::SetViewPort(10000,10000);
+			camera->directional_shadow->position = Vector3(200, 200, 200);
+			camera->directional_shadow->direction = Vector3(-1, -1, -1).unit_vect();
+			camera->directional_shadow->nearZ = 150;
 			camera->directional_shadow->fov;
 			camera->directional_shadow->aspect;
 			camera->directional_shadow->setup();
 			camera->directional_shadow->shader_activate();
-			for (auto& renderer : renderers[render_scene]) {
-				renderer->render(frustum_data);
+			auto shadow_frustum = camera->directional_shadow->calculate_frustum_data();
+ 			for (auto& renderer : renderers[render_scene]) {
+				renderer->render(shadow_frustum);
 			}
-			Work_meter::stop("render_obj");
+
+			camera->directional_shadow->set_ShaderResourceView();
 		}
+
+
 
 		Systems::SetViewPort(Al_Global::SCREEN_WIDTH, Al_Global::SCREEN_HEIGHT);
 

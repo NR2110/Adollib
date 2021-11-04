@@ -27,26 +27,26 @@ struct VSInput
 cbuffer CBPerObj : register(b0)
 {
 	// world
-	row_major float4x4  World;
+    row_major matrix World;
 };
 
 cbuffer CBPerCamera : register(b1)
 {
 	// view
-	row_major float4x4  View;
+    row_major matrix View;
 	float4	EyePos;
 };
 
 cbuffer CBPerSystem : register(b2)
 {
 	// projection
-	row_major float4x4  Projection;
+    row_major matrix Projection;
 };
 
 cbuffer CBPerMesh : register(b3)
 {
 	// mesh data
-    row_major float4x4 Mesh_World;
+    row_major matrix Mesh_World;
 };
 
 cbuffer CBPerLight : register(b4)
@@ -83,6 +83,7 @@ cbuffer CBPerSprite : register(b6)
 
 cbuffer CBPerShadow : register(b7)
 {
-    row_major float4x4 shadow_viewprojection;
-
+    row_major matrix shadow_viewprojection;
+    float3 right_dir;
+    float dummy;
 };
