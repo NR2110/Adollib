@@ -76,7 +76,7 @@ void Renderer_manager::render(const std::map<Scenelist, std::list<Camera_compone
 		{
 			Systems::SetViewPort(10000,10000);
 			camera->directional_shadow->position = Vector3(200, 200, 200);
-			camera->directional_shadow->direction = Vector3(-1, -1, -1).unit_vect();
+			camera->directional_shadow->direction = Vector3(-1, -2, -1).unit_vect();
 			camera->directional_shadow->nearZ = 150;
 			camera->directional_shadow->fov;
 			camera->directional_shadow->aspect;

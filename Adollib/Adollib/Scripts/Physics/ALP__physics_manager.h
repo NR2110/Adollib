@@ -152,6 +152,7 @@ namespace Adollib
 		public:
 			static volatile bool is_updated_mainthread;    //mainthread更新したframeだけtrueになる
 			static volatile bool is_updated_physicsthread; //physicsを更新したframeだけtrueになる
+			static volatile bool is_added_ALPcollider;    //mainthread更新したframeだけtrueになる
 
 			// 生成時のphysicsの値
 			static Physics_function::PhysicsParams physicsParams;
@@ -169,6 +170,8 @@ namespace Adollib
 
 			static ColliderPhysics_ptrs add_collider(Collider* coll) {
 				std::lock_guard <std::mutex> lock(mtx);
+
+				is_added_ALPcollider = true;
 
 				Scenelist Sce = coll->gameobject->get_scene();
 

@@ -28,18 +28,29 @@ namespace Adollib
 		Gameobject* Head = Gameobject_manager::createCube("Head");
 
 		Gameobject* Lsholder = Gameobject_manager::createCube("Lsholder");
-		Gameobject* Lelbow = Gameobject_manager::createCube("Lelbow");
-		Gameobject* Lhand = Gameobject_manager::create("Lhand");
+		Gameobject* Lelbow   = Gameobject_manager::createCube("Lelbow");
+		Gameobject* Lhand    = Gameobject_manager::create("Lhand");
 		Gameobject* Rsholder = Gameobject_manager::createCube("Rsholder");
-		Gameobject* Relbow = Gameobject_manager::createCube("Relbow");
-		Gameobject* Rhand = Gameobject_manager::create("Rhand");
-		Gameobject* Body = Gameobject_manager::createCube("Body");
-		Gameobject* Waist = Gameobject_manager::createCube("Waist");
-		Gameobject* Rleg = Gameobject_manager::createCube("Rleg");
-		Gameobject* Rfoot = Gameobject_manager::createCube("Rfoot");
-		Gameobject* Lleg = Gameobject_manager::createCube("Lleg");
-		Gameobject* Lfoot = Gameobject_manager::createCube("Lfoot");
+		Gameobject* Relbow   = Gameobject_manager::createCube("Relbow");
+		Gameobject* Rhand    = Gameobject_manager::create("Rhand");
+		Gameobject* Body     = Gameobject_manager::createCube("Body");
+		Gameobject* Waist    = Gameobject_manager::createCube("Waist");
+		Gameobject* Rleg     = Gameobject_manager::createCube("Rleg");
+		Gameobject* Rfoot    = Gameobject_manager::createCube("Rfoot");
+		Gameobject* Lleg     = Gameobject_manager::createCube("Lleg");
+		Gameobject* Lfoot    = Gameobject_manager::createCube("Lfoot");
 
+		Head->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		Lsholder->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		Lelbow->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		Rsholder->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		Relbow->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		Body->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		Waist->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		Rleg->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		Rfoot->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		Lleg->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		Lfoot->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
 
 		//::: collider,shapeのアタッチ :::
 		Collider* Head_collider     = Head->addComponent<Collider>();

@@ -22,7 +22,7 @@ namespace Adollib
 
 	void Player::start()
 	{
-		respown_timer = 1;
+		//respown_timer = 1;
 
 		camera = Gameobject_manager::find("camera")->transform;
 		stage_manager = Gameobject_manager::find("Stage_manager")->findComponent<Stage_manager>();

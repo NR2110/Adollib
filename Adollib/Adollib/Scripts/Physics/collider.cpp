@@ -120,8 +120,8 @@ void Collider::set_ptr_to_joint(Physics_function::ALP_Joint*& joint) {
 	ALPcollider_ptr->add_joint(joint);
 };
 
-std::vector<Contacted_data>& Collider::get_Contacted_data() const {
-	return ALPcollider_ptr->contacted_colliders;
+std::vector<Contacted_data> Collider::get_Contacted_data() const {
+	return ALPcollider_ptr->get_contacted_collider();
 }
 
 // Œ»İ‚ÌŠµ«ƒ‚[ƒƒ“ƒg‚Ì’l

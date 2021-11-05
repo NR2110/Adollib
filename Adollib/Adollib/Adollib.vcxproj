@@ -435,7 +435,7 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">DefaultShader/%(Filename).cso</ObjectFileOutput>
     </FxCompile>
-    <FxCompile Include="DefaultShader\default_ps_notex.hlsl">
+    <FxCompile Include="DefaultShader\default_ps_noshadow.hlsl">
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">DefaultShader/%(Filename).cso</ObjectFileOutput>

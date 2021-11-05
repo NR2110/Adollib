@@ -67,6 +67,10 @@ namespace Adollib {
 
 			Collider_tagbit oncoll_bits_buffer = 0; //oncollision enterで衝突したbit情報 mainthreadに渡すためのbuffer
 
+			//::: is_save_contacted_collsがtrueの時 自身の関わるcontact_pairの情報を保存する :::
+			int contacted_colliders_num = 0; //前のものを保存しておきたいため contacted_colliders_num:現在のもの とする
+			std::vector<Contacted_data> contacted_colliders[2];
+
 			//
 			std::mutex mtx;
 
@@ -112,6 +116,9 @@ namespace Adollib {
 
 			std::list<Collider_shape*> get_added_shapes() const { return added_buffer_shapes; };
 
+			// 別スレッドのため配列の参照渡しができない コピー渡しのため多用非推奨
+			std::vector<Contacted_data> get_contacted_collider() const { return contacted_colliders[1 - contacted_colliders_num]; };
+
 			// 衝突したcolliderのtagを保存
 			void add_oncoll_bits(Collider_tagbit bit) { oncoll_bits |= bit; };
 
@@ -130,9 +137,6 @@ namespace Adollib {
 
 			//::: 衝突したcolliderの情報を保存しておくか :::
 			bool is_save_contacted_colls = false;
-
-			//::: is_save_contacted_collsがtrueの時 自身の関わるcontact_pairの情報を保存する :::
-			std::vector<Contacted_data> contacted_colliders;
 
 		public:
 			// added_dataをmainのdata配列に引っ越す
@@ -154,6 +158,9 @@ namespace Adollib {
 
 			// gameobjectのtransformからcolliderのworld空間での情報を更新
 			void update_world_trans();
+
+			// contacted_dataの保存先の変更、clear
+			void update_contacted_collider_data();
 
 			//座標,姿勢によるworld情報の更新
 			void integrate(float duration, const Vector3& linear_velocity, const Vector3& angula_velocity, const Vector3& old_linear_velocity,const Vector3& old_angula_velocity);

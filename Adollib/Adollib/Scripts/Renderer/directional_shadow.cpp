@@ -62,7 +62,8 @@ void Directional_shadow::setup() {
 	Systems::DeviceContext->PSSetConstantBuffers(1, 1, view_cb.GetAddressOf());
 
 	//CB : ConstantBufferPerSystem
-	DirectX::XMStoreFloat4x4(&s_sb.Projection, DirectX::XMMatrixPerspectiveFovLH(ToRadian(fov), aspect, nearZ, farZ));
+	//DirectX::XMStoreFloat4x4(&s_sb.Projection, DirectX::XMMatrixPerspectiveFovLH(ToRadian(fov), aspect, nearZ, farZ));
+	DirectX::XMStoreFloat4x4(&s_sb.Projection, DirectX::XMMatrixOrthographicLH(500, 500, nearZ, farZ));
 	Systems::DeviceContext->UpdateSubresource(projection_cb.Get(), 0, NULL, &s_sb, 0, 0);
 	Systems::DeviceContext->VSSetConstantBuffers(2, 1, projection_cb.GetAddressOf());
 	Systems::DeviceContext->PSSetConstantBuffers(2, 1, projection_cb.GetAddressOf());

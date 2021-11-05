@@ -347,7 +347,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 			DirectX::XMVECTOR axis;
 			// Normal
 			{
-				//Baraff[1997]‚Ì®(8-18)‚Ì•ª•ê(denominator)‚ğ‹‚ß‚é
+				// Baraff[1997]‚Ì®(8-18)‚Ì•ª•ê(denominator)‚ğ‹‚ß‚é
 				axis = DirectX::XMLoadFloat3(&cp.normal);
 				tA = DirectX::XMVector3Cross(rA, axis);
 				tB = DirectX::XMVector3Cross(rB, axis);

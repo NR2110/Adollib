@@ -35,6 +35,14 @@ void Physics_function::update_world_trans(std::list<Physics_function::ALP_Collid
 		}
 	);
 }
+void Physics_function::update_per_calculate(std::list<Physics_function::ALP_Collider*>& ALP_colliders) {
+
+	std::for_each(ALP_colliders.begin(), ALP_colliders.end(), [](ALP_Collider* coll) {
+		coll->update_contacted_collider_data();
+		}
+	);
+}
+
 
 
 #pragma endregion

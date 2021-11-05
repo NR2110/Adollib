@@ -41,6 +41,10 @@ void ALP_Collider::update_world_trans() {
 	// 慣性モーメントの更新
 	ALPphysics->update_tensor_and_barycenter(shapes, joints);
 }
+void ALP_Collider::update_contacted_collider_data() {
+	contacted_colliders_num = 1 - contacted_colliders_num;
+	contacted_colliders[contacted_colliders_num].clear();
+}
 
 void ALP_Collider::update_world_trans_contain_added() {
 	std::lock_guard <std::mutex> lock(mtx); //shapes,addedの処理が重なる可能性がある
@@ -138,6 +142,11 @@ void ALP_Collider::reset_data_per_frame() {
 	//transform_start.orientation  = gameobject->transform->orientation;
 	//transform_start.scale        = gameobject->transform->scale;
 
+	if (transform_gameobject.position == Vector3(0, 0, 0) &&
+		transform_gameobject.orientation.z == Quaternion(0, 0, 0, 0).z) {
+		rand();
+	}
+
 	transform = transform_gameobject;
 	transform_start = transform_gameobject;
 
@@ -149,7 +158,16 @@ void ALP_Collider::adapt_collider_component_data() {
 	tag = coll_ptr->tag; //tag
 	ignore_tags = coll_ptr->ignore_tags; //衝突しないtag
 	is_save_contacted_colls = coll_ptr->is_save_contacted_colls; //衝突したcolliderを保存するかのフラグ
-	contacted_colliders.clear(); //collider::componentように保存していた 衝突したcolliderの情報を削除
+
+	//contacted_colliders_num = 1 - contacted_colliders_num;
+	//if (
+	//	contacted_colliders[contacted_colliders_num].size() != 0 ||
+	//	contacted_colliders[1 - contacted_colliders_num].size() != 0
+	//	) {
+	//	int dasfgh = 0;
+	//}
+
+	//contacted_colliders[contacted_colliders_num].clear(); //collider::componentように保存していた 衝突したcolliderの情報を削除
 }
 
 void ALP_Collider::Update_hierarchy(){
@@ -229,7 +247,7 @@ void ALP_Collider::add_contacted_collider(const Contacts::Contact_pair* pair, co
 		data.normal = contact_point.normal; //ワールド情報
 		data.penetrate = contact_point.distance;
 
-		contacted_colliders.emplace_back(data);
+		contacted_colliders[contacted_colliders_num].emplace_back(data);
 	}
 
 }

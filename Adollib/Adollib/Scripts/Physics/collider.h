@@ -130,7 +130,7 @@ namespace Adollib {
 		const Vector3 get_barycenter() const;
 
 		// Õ“Ë‚µ‚½collider‚Ì”z—ñ‚ğ•Ô‚· is_save_contacted_colls‚ªtrue‚É‚È‚Á‚Ä‚¢‚È‚¢‚ÆÕ“Ë‚µ‚½collider‚Ìî•ñ‚Í•Û‘¶‚³‚ê‚È‚¢
-		std::vector<Contacted_data>& get_Contacted_data() const;
+		std::vector<Contacted_data> get_Contacted_data() const;
 
 	public:
 		void Update_hierarchy();

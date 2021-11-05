@@ -29,6 +29,7 @@ namespace Adollib
 {
 	volatile bool Physics_manager::is_updated_mainthread = true; //physicsを更新したframeだけtrueになる
 	volatile bool Physics_manager::is_updated_physicsthread = true; //physicsを更新したframeだけtrueになる
+	volatile bool Physics_manager::is_added_ALPcollider = true; //physicsを更新したframeだけtrueになる
 
 	int Physics_manager::count_mainthread = 0;   //デバッグ用 main,physicsのupdateの割合を求める
 	int Physics_manager::count_physicsthread = 0;//デバッグ用 main,physicsのupdateの割合を求める
@@ -93,18 +94,26 @@ bool Physics_manager::update(Scenelist Sce)
 
 	// データの受け渡し部分
 	{
-		std::lock_guard <std::mutex> lock(mtx);
+		std::lock_guard<std::mutex>lock(mtx);
 
 		// 削除したものを配列から消す
 		dadapt_delete_data(false);
+
+		//
+		if (is_added_ALPcollider == false) {
+			// 追加したものを配列に加える (is_updated_mainthreadがtrueでないとworld情報が更新されていない可能性がある)
+			adapt_added_data(Sce, false);
+			std::for_each(ALP_physicses[Sce].begin(), ALP_physicses[Sce].end(), [](ALP_Physics* phys) {
+				phys->reset_data_per_frame();
+				}
+			);
+		}
 
 		// mainthreadが更新したら
 		if (is_updated_mainthread) {
 
 			is_updated_mainthread = false; // mainthreadがgameobject_transformを呼んだあと gameobjectのtransformをphysicsにコピーする
 
-			// 追加したものを配列に加える (is_updated_mainthreadがtrueでないとworld情報が更新されていない可能性がある)
-			adapt_added_data(Sce, false);
 
 			// Colliderのframe毎に保存するdataをreset
 			reset_data_per_frame(ALP_colliders[Sce], ALP_physicses[Sce]);
@@ -116,16 +125,18 @@ bool Physics_manager::update(Scenelist Sce)
 
 	}
 
-	physicsParams.timeStep = ALmin((float)(time.QuadPart - frame_count.QuadPart) * seconds_per_count, physicsParams.max_timeStep);
+	physicsParams.timeStep = (float)(time.QuadPart - frame_count.QuadPart) * seconds_per_count;
+	physicsParams.timeStep = ALmin(physicsParams.timeStep, physicsParams.max_timeStep);
 	Work_meter::set("physicsParams.timeStep", physicsParams.timeStep, 1);
 	if (physicsParams.timeStep > inv60)
 	{
 
 		frame_count = time;
-		physicsParams.timeStep;
 		const float inv60_per_timeStep = inv60 / physicsParams.timeStep;
 
 		physicsParams.timeStep /= physicsParams.calculate_iteration;
+
+		update_per_calculate(ALP_colliders[Sce]);
 
 		for (int i = 0; i < physicsParams.calculate_iteration; i++) {
 
@@ -433,12 +444,13 @@ void Physics_manager::adapt_added_data(Scenelist Sce, bool is_mutex_lock) {
 		added_coll->adapt_added_data();
 	}
 
+	if(added_buffer_ALP_joints.size() != 0)
 	{
 		// 引っ越す
+		auto save_itr = added_buffer_ALP_joints.begin();
 		ALP_joints.splice(ALP_joints.end(), std::move(added_buffer_ALP_joints));
 
 		// listを引っ越したためitrが変化している 自身のitrを更新
-		auto save_itr = ALP_joints.begin();
 		for (save_itr; save_itr != ALP_joints.end(); ++save_itr) {
 			(*save_itr)->set_this_itr(save_itr);
 
@@ -501,11 +513,15 @@ bool Physics_manager::adapt_transform_to_gameobject(Scenelist Sce) {
 void Physics_manager::copy_gameobject_transform(Scenelist Sce) {
 	std::lock_guard <std::mutex> lock(mtx);
 
+	for (auto& coll : added_buffer_ALP_colliders[Sce]) {
+		coll->copy_transform_gameobject();
+	}
 	for (auto& coll : ALP_colliders[Sce]) {
 		coll->copy_transform_gameobject();
 	}
 
 	Physics_manager::is_updated_mainthread = true;
+	is_added_ALPcollider = false;
 }
 
 

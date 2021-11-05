@@ -28,6 +28,7 @@ namespace Adollib
 		set_box(Vector3(0, -60, 0), Vector3(80, 60, 80), Vector3(0), Vector3(188, 214, 54) / 255.0f, true);
 		set_box(Vector3(0, -60, -98), Vector3(30, 30, 60), Vector3(0), Vector3(188, 214, 54) / 255.0f, true);
 
+		if(0)
 		{
 			auto plane = set_plane(Vector3(0, 10, 0), Vector3(40, 20, 0), Vector3(0));
 			auto R = plane->findComponent<Sprite_renderer>();

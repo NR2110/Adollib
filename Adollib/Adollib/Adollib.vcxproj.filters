@@ -767,9 +767,6 @@
     <FxCompile Include="DefaultShader\default_ps.hlsl">
       <Filter>00_Adollib\44_render\shader\hlsli\default</Filter>
     </FxCompile>
-    <FxCompile Include="DefaultShader\default_ps_notex.hlsl">
-      <Filter>00_Adollib\44_render\shader\hlsli\default</Filter>
-    </FxCompile>
     <FxCompile Include="DefaultShader\default_vs.hlsl">
       <Filter>00_Adollib\44_render\shader\hlsli\default</Filter>
     </FxCompile>
@@ -790,6 +787,9 @@
     </FxCompile>
     <FxCompile Include="DefaultShader\render_directional_shadow_vs.hlsl">
       <Filter>00_Adollib\44_render\shader\hlsli\directional_shadow</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\default_ps_noshadow.hlsl">
+      <Filter>00_Adollib\44_render\shader\hlsli\default</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

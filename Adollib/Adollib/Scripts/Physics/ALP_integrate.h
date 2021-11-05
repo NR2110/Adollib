@@ -15,8 +15,8 @@ namespace Adollib {
 		// gameobjectのtransformからcolliderのworld空間での情報を更新
 		void update_world_trans(std::list<Physics_function::ALP_Collider*>& ALP_colliders);
 
-		// k-DOPの更新 update_world_transでおこなっている
-		//void update_dop(std::list<Physics_function::ALP_Collider*>& ALP_shapes);
+		// calculateが行われるたび更新する情報に
+		void update_per_calculate(std::list<Physics_function::ALP_Collider*>& ALP_colliders);
 
 
 
