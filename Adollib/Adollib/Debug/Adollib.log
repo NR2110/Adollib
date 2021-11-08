@@ -1,27 +1,2 @@
-﻿  compilation object save succeeded; see C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\collider_render_ps.cso
-  compilation object save succeeded; see C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\collider_render_vs.cso
-  object_manager.cpp
-  player.cpp
-  player_funcs.cpp
-  player_manager.cpp
-  stage_manager.cpp
-  material_for_collider.cpp
-  scene_game.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_manager.h(23): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_manager::Stage_types' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\stage_manager.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_manager.h(23): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_manager::Stage_types' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\player_funcs.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(60,70): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(299,46): warning C4305: '=': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_manager.h(23): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_manager::Stage_types' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_manager.h(23): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_manager::Stage_types' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Scene\scene_game.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(187,47): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(420,112): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(505,59): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(947,62): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(1156,114): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(1167,93): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(1167,113): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\vector.inl(339): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
-balljoint.obj : warning LNK4099: PDB 'vc142.pdb' が 'balljoint.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
-complex.obj : warning LNK4099: PDB 'vc142.pdb' が 'complex.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
-inspector.obj : warning LNK4099: PDB 'vc142.pdb' が 'inspector.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Debug\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+﻿  ALP_collider.cpp
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

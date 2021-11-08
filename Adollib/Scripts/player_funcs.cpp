@@ -168,6 +168,7 @@ void Player::catch_things() {
 				);
 
 				joint->slop = 0.1f;
+				//joint->slop = 10000000;
 
 			}
 		}

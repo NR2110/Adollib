@@ -38,7 +38,8 @@ namespace Adollib
 			//R->load_texture(L"./DefaultModel/demo.png");
 		}
 
-#if 0 && _DEBUG
+#if _DEBUG
+		set_tree(Vector3(-22, 0, -25), Vector3(1, 1.5f, 1), Vector3(0));
 #else
 		//gear
 		//set_gear(Vector3(+22, 1, 25), Vector3(0.8f, 2.2f, 2), Vector3(0), 5, 7);

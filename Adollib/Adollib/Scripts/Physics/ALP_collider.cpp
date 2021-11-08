@@ -55,7 +55,7 @@ void ALP_Collider::update_world_trans_contain_added() {
 		shape->update_Colliderdata();
 
 		// world情報の更新
-		shape->update_world_trans(transform.position, transform.orientation, transform.scale );
+		shape->update_world_trans(transform.position, transform.orientation, transform.scale);
 	}
 	for (const auto& shape : added_buffer_shapes) {
 
@@ -63,7 +63,7 @@ void ALP_Collider::update_world_trans_contain_added() {
 		shape->update_Colliderdata();
 
 		// world情報の更新
-		shape->update_world_trans(transform.position, transform.orientation, transform.scale );
+		shape->update_world_trans(transform.position, transform.orientation, transform.scale);
 	}
 }
 
@@ -134,14 +134,6 @@ void ALP_Collider::reset_data_per_frame() {
 	//
 	if (is_deleted)return;  //goがすでにdeleteされていればgameobject->transformにアクセスできないからreturn
 
-	//transform.position = gameobject->transform->position;
-	//transform.orientation = gameobject->transform->orientation;
-	//transform.scale = gameobject->transform->scale;
-
-	//transform_start.position     = gameobject->transform->position;
-	//transform_start.orientation  = gameobject->transform->orientation;
-	//transform_start.scale        = gameobject->transform->scale;
-
 	transform = transform_gameobject;
 	transform_start = transform_gameobject;
 
@@ -153,19 +145,9 @@ void ALP_Collider::adapt_collider_component_data() {
 	tag = coll_ptr->tag; //tag
 	ignore_tags = coll_ptr->ignore_tags; //衝突しないtag
 	is_save_contacted_colls = coll_ptr->is_save_contacted_colls; //衝突したcolliderを保存するかのフラグ
-
-	//contacted_colliders_num = 1 - contacted_colliders_num;
-	//if (
-	//	contacted_colliders[contacted_colliders_num].size() != 0 ||
-	//	contacted_colliders[1 - contacted_colliders_num].size() != 0
-	//	) {
-	//	int dasfgh = 0;
-	//}
-
-	//contacted_colliders[contacted_colliders_num].clear(); //collider::componentように保存していた 衝突したcolliderの情報を削除
 }
 
-void ALP_Collider::Update_hierarchy(){
+void ALP_Collider::Update_hierarchy() {
 	std::lock_guard <std::mutex> lock(mtx); //shapesに範囲forでアクセスするため
 
 	for (const auto& shape : shapes) {
@@ -237,8 +219,8 @@ void ALP_Collider::add_contacted_collider(const Contacts::Contact_pair* pair, co
 		const auto& contact_point = pair->contacts.contactpoints[contact_num];
 
 		//shape座標系からGO座標系に直して保存(縦を合わせたいから"0+"を入れている)
-		data.contacted_pointA = vector3_quatrotate(contact_point.point[0 + num], pair->body[0 + num]->local_orientation) + pair->body[0 + num]->local_position;
-		data.contacted_pointB = vector3_quatrotate(contact_point.point[1 - num], pair->body[1 - num]->local_orientation) + pair->body[1 - num]->local_position;
+		data.contacted_pointA = vector3_quatrotate(contact_point.point[0 + num], pair->body[0 + num]->local_orientation) + pair->body[0 + num]->local_position * pair->body[0 + num]->get_ALPcollider()->transform.scale;
+		data.contacted_pointB = vector3_quatrotate(contact_point.point[1 - num], pair->body[1 - num]->local_orientation) + pair->body[1 - num]->local_position * pair->body[1 - num]->get_ALPcollider()->transform.scale;
 		data.normal = contact_point.normal; //ワールド情報
 		data.penetrate = contact_point.distance;
 
@@ -255,7 +237,7 @@ Meshcoll_part* ALP_Collider::add_mesh_shape(const char* filepath, Physics_functi
 	return shape;
 };
 
-void ALP_Collider::destroy(){
+void ALP_Collider::destroy() {
 	//std::lock_guard <std::mutex> lock(mtx);
 
 	//shapeの解放
