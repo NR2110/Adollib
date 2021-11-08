@@ -1,10 +1,2 @@
-﻿  player_funcs.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_manager.h(23): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_manager::Stage_types' の左辺を無視します。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(60,70): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(300,46): warning C4305: '=': 'double' から 'float' へ切り詰めます。
-  コード生成しています。
-  2 of 9459 functions (<0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    50 functions had inline decision re-evaluated but remain unchanged
-  コード生成が終了しました。
+﻿  compilation object save succeeded; see C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\default_ps.cso
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Release\Adollib.exe

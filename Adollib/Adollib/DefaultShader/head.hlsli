@@ -1,5 +1,5 @@
 
-#include "func.hlsli"
+#include "light_func.hlsli"
 #include "light_type.hlsli"
 
 

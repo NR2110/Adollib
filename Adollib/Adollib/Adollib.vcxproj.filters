@@ -738,9 +738,6 @@
     <None Include="DefaultShader\base_math.hlsli">
       <Filter>00_Adollib\44_render\shader\hlsli\base</Filter>
     </None>
-    <None Include="DefaultShader\func.hlsli">
-      <Filter>00_Adollib\44_render\shader\hlsli\base</Filter>
-    </None>
     <None Include="DefaultShader\head.hlsli">
       <Filter>00_Adollib\44_render\shader\hlsli\base</Filter>
     </None>
@@ -767,6 +764,12 @@
     </None>
     <None Include="DefaultShader\collider_render.hlsli">
       <Filter>00_Adollib\44_render\shader\hlsli\collider_render</Filter>
+    </None>
+    <None Include="DefaultShader\light_func.hlsli">
+      <Filter>00_Adollib\44_render\shader\hlsli\base</Filter>
+    </None>
+    <None Include="DefaultShader\barrymatrix_func.hlsli">
+      <Filter>00_Adollib\44_render\shader\hlsli\base</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
