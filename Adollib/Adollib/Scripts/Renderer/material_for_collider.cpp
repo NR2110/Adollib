@@ -785,6 +785,8 @@ void Collider_renderer::render_AABB(const  Physics_function::ALP_Collider* coll)
 			(shape->get_DOP().max[2] - shape->get_DOP().min[2]) * 0.5f
 		);
 
+		shader.Activate();
+
 		//CB : ConstantBufferPerCO_OBJ
 		ConstantBufferPerGO g_cb;
 		g_cb.world = matrix_world(w_scale * 1.001f, matrix44_identity(), w_pos + shape->get_DOP().pos);
