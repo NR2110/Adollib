@@ -132,7 +132,7 @@ void ALP_Collider::integrate(const float duration, const Vector3& linear_velocit
 void ALP_Collider::reset_data_per_frame() {
 	//std::lock_guard <std::mutex> lock(mtx);
 	//
-	if (is_deleted)return;  //goがすでにdeleteされていればreturn
+	if (is_deleted)return;  //goがすでにdeleteされていればgameobject->transformにアクセスできないからreturn
 
 	//transform.position = gameobject->transform->position;
 	//transform.orientation = gameobject->transform->orientation;
@@ -141,11 +141,6 @@ void ALP_Collider::reset_data_per_frame() {
 	//transform_start.position     = gameobject->transform->position;
 	//transform_start.orientation  = gameobject->transform->orientation;
 	//transform_start.scale        = gameobject->transform->scale;
-
-	if (transform_gameobject.position == Vector3(0, 0, 0) &&
-		transform_gameobject.orientation.z == Quaternion(0, 0, 0, 0).z) {
-		rand();
-	}
 
 	transform = transform_gameobject;
 	transform_start = transform_gameobject;

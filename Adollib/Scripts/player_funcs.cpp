@@ -330,8 +330,6 @@ void Player::angula_move() {
 		if (vector3_cross(player_vec, rot_vec).y < 0)angle *= -1;
 
 		rotate *= quaternion_axis_angle(Vector3(0, 1, 0), angle * Al_Global::second_per_frame * 100);
-
-		debug_coll->transform->local_pos = Waist_collider->transform->position + vector3_quatrotate(Vector3(0, 0, 1), rotate);
 	}
 
 };

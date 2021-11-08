@@ -398,9 +398,10 @@ void Physics_manager::adapt_added_data(Scenelist Sce, bool is_mutex_lock) {
 	if (is_mutex_lock) mtx.lock(); //ŒÄ‚Ño‚µ‚Ì‚Æ‚±‚ë‚Ålock‚µ‚Ä‚¢‚é if•¶’†‚È‚Ì‚Åstd::lock_guard <std::mutex> lock(mtx)‚Íg‚¦‚È‚¢
 
 	for (auto added_coll : added_buffer_ALP_colliders) {
-		// ’Ç‰Á‚³‚ê‚½collider‚ğbroadphase:sweep&prune—p‚É
+		// ’Ç‰Á‚³‚ê‚½collider‚Ì‰Šú‰»&Broadphase‚É“o˜^
 		for (auto& coll : added_coll.second) {
 			coll->copy_transform_gameobject();
+			coll->reset_data_per_frame();
 			added_collider_for_insertsort[added_coll.first].emplace_back(coll);
 		}
 
@@ -420,6 +421,11 @@ void Physics_manager::adapt_added_data(Scenelist Sce, bool is_mutex_lock) {
 		}
 	}
 	for (auto& added_phys : added_buffer_ALP_physicses) {
+
+		// ’Ç‰Á‚³‚ê‚½physics‚Ì‰Šú‰»
+		for (auto& phys : added_phys.second) {
+			phys->reset_data_per_frame();
+		}
 
 		int save_size = ALP_physicses[added_phys.first].size();
 		ALP_physicses[added_phys.first].splice(ALP_physicses[added_phys.first].end(), std::move(added_phys.second));

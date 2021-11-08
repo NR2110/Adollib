@@ -117,8 +117,6 @@ void Gameobject_manager::update(Scenelist Sce) {
 				}
 				masters_manag[master] = true;
 			}
-
-			//Physics_manager::is_updated_physicsthread = true;
 		}
 
 		Physics_manager::copy_gameobject_transform(Sce);

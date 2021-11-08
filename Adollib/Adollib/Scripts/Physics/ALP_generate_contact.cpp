@@ -2068,8 +2068,8 @@ bool Physics_function::generate_contact_box_mesh(const Collider_shape* box, cons
 		obb.world_orientation = box->world_orientation();
 		assert(!isnan(obb.world_orientation.norm()));
 
-		const Vector3 box_relative_movement_from_triangle = +(box->world_position() - box->old_world_position()) - (mesh->world_position() - mesh->old_world_position());
-		const Vector3 triangle_relative_movement_from_box = -(box->world_position() - box->old_world_position()) + (mesh->world_position() - mesh->old_world_position());
+		//const Vector3 box_relative_movement_from_triangle = +(box->world_position() - box->old_world_position()) - (mesh->world_position() - mesh->old_world_position());
+		//const Vector3 triangle_relative_movement_from_box = -(box->world_position() - box->old_world_position()) + (mesh->world_position() - mesh->old_world_position());
 
 
 		Triangle_struct smallest_triangle;

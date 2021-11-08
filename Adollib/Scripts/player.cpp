@@ -14,10 +14,10 @@ namespace Adollib
 		rotate = quaternion_from_euler(0, 180, 1);
 
 		auto GO = Gameobject_manager::create("debugGO");
-		debug_coll = GO->addComponent<Collider>();
-		debug_coll->add_shape<Sphere>();
-		debug_coll->physics_data.is_hitable = false;
-		debug_coll->physics_data.is_moveable = false;
+		//debug_coll = GO->addComponent<Collider>();
+		//debug_coll->add_shape<Sphere>();
+		//debug_coll->physics_data.is_hitable = false;
+		//debug_coll->physics_data.is_moveable = false;
 	}
 
 	void Player::start()
