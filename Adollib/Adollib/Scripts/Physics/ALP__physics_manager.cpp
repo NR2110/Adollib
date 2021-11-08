@@ -555,6 +555,8 @@ void Physics_manager::thread_stop_and_join() {
 #include "../Renderer/material_for_collider.h"
 
 bool Physics_manager::render_collider(Scenelist Sce) {
+	std::lock_guard<std::mutex> lock(mtx);
+
 	render_dop(Sce);
 	render_joint(Sce);
 

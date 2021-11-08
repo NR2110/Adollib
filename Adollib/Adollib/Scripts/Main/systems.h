@@ -74,14 +74,17 @@ namespace Adollib {
 		static ID3D11BlendState* GetBlendState(State_manager::BStypes state)			   { 	return BlendState[static_cast<int>(state)].Get();			}
 
 		static void SetDephtStencilState(State_manager::DStypes state) {
+			if (DS_type == state)return;
 			DeviceContext->OMSetDepthStencilState(GetDephtStencilState(state), 1);
 			DS_type = state;
 		}
 		static void SetRasterizerState(State_manager::RStypes state) {
+			if (RS_type == state)return;
 			DeviceContext->RSSetState(GetRasterizerState(state));
 			RS_type = state;
 		}
 		static void SetBlendState(State_manager::BStypes state) {
+			if (BS_type == state)return;
 			DeviceContext->OMSetBlendState(GetBlendState(state), nullptr, 0xFFFFFFFF);
 			BS_type = state;
 		}

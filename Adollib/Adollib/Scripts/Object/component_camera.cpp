@@ -111,6 +111,10 @@ void Camera_component::posteffect_render() {
 	ID3D11DepthStencilView* dsv = Systems::GetDepthStencilView();
 	Systems::DeviceContext->OMSetRenderTargets(1, &rtv, dsv);
 
+	Systems::SetBlendState(State_manager::BStypes::BS_ALPHA);
+	Systems::SetRasterizerState(State_manager::RStypes::RS_CULL_BACK);
+	Systems::SetDephtStencilState(State_manager::DStypes::DS_TRUE);
+
 	UI ui;
 	ui.ui_data.dh = Al_Global::SCREEN_HEIGHT;
 	ui.ui_data.dw = Al_Global::SCREEN_WIDTH;

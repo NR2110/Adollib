@@ -34,8 +34,8 @@ void Collider_renderer::awake() {
 	Systems::CreateConstantBuffer(&Mat_cb, sizeof(ConstantBufferPerMaterial));//˜gŠm•Û
 
 	//::: shaderload :::::::
-	shader.Load_VS("./DefaultShader/default_vs.cso");
-	shader.Load_PS("./DefaultShader/default_ps.cso");
+	shader.Load_VS("./DefaultShader/collider_render_vs.cso");
+	shader.Load_PS("./DefaultShader/collider_render_ps.cso");
 
 
 	//::: •`‰æ—pmodel‚Ì“Ç‚Ýž‚Ý :::::::
@@ -139,8 +139,8 @@ void Collider_renderer::render_joint(const Physics_function::ALP_Joint* joint) {
 				cb.materialColor = Vector4(Al_Global::get_gaming((Al_Global::second_per_game + 30 + color_num * 2) * 60, 600), 1);
 			else cb.materialColor = color;
 			Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
-			Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
-			Systems::DeviceContext->PSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
+			Systems::DeviceContext->VSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
+			Systems::DeviceContext->PSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
 
 			//CB : ConstantBufferPerMesh
 			{
@@ -206,8 +206,8 @@ void Collider_renderer::render_box(const Collider_shape* shape, const Vector3& c
 		else
 			cb.materialColor = Vector4(color, 1);
 		Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
-		Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
-		Systems::DeviceContext->PSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
+		Systems::DeviceContext->VSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
+		Systems::DeviceContext->PSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
 
 		//CB : ConstantBufferPerMesh
 		{
@@ -271,8 +271,8 @@ void Collider_renderer::render_sphere(const Collider_shape* shape, const Vector3
 		else
 			cb.materialColor = Vector4(color, 1);
 		Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
-		Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
-		Systems::DeviceContext->PSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
+		Systems::DeviceContext->VSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
+		Systems::DeviceContext->PSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
 
 		//CB : ConstantBufferPerMesh
 		{
@@ -337,8 +337,8 @@ void Collider_renderer::render_meshcoll(const Collider_shape* shape, const Vecto
 		else
 			cb.materialColor = Vector4(color, 1);
 		Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
-		Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
-		Systems::DeviceContext->PSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
+		Systems::DeviceContext->VSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
+		Systems::DeviceContext->PSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
 
 		//CB : ConstantBufferPerMesh
 		{
@@ -406,8 +406,8 @@ void Collider_renderer::render_capsule(const Collider_shape* shape, const Vector
 			else
 				cb.materialColor = Vector4(color, 1);
 			Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
-			Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
-			Systems::DeviceContext->PSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
+			Systems::DeviceContext->VSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
+			Systems::DeviceContext->PSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
 
 			//CB : ConstantBufferPerMesh
 			{
@@ -472,8 +472,8 @@ void Collider_renderer::render_capsule(const Collider_shape* shape, const Vector
 			else
 				cb.materialColor = Vector4(color, 1);
 			Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
-			Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
-			Systems::DeviceContext->PSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
+			Systems::DeviceContext->VSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
+			Systems::DeviceContext->PSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
 
 			//CB : ConstantBufferPerMesh
 			{
@@ -538,8 +538,8 @@ void Collider_renderer::render_capsule(const Collider_shape* shape, const Vector
 			else
 				cb.materialColor = Vector4(color, 1);
 			Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
-			Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
-			Systems::DeviceContext->PSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
+			Systems::DeviceContext->VSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
+			Systems::DeviceContext->PSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
 
 			//CB : ConstantBufferPerMesh
 			{
@@ -810,8 +810,8 @@ void Collider_renderer::render_AABB(const  Physics_function::ALP_Collider* coll)
 			cb.materialColor = Vector4(Al_Global::get_gaming((Al_Global::second_per_game + color_num) * 60, 600), 0.3f).get_XM4();
 			//cb.materialColor = color16[color_num].get_XM4();
 			Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
-			Systems::DeviceContext->VSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
-			Systems::DeviceContext->PSSetConstantBuffers(4, 1, Mat_cb.GetAddressOf());
+			Systems::DeviceContext->VSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
+			Systems::DeviceContext->PSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
 
 			for (auto& subset : mesh.subsets)
 			{

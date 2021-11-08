@@ -28,9 +28,9 @@ void Mesh_renderer::render(const Frustum_data& frustum_data) {
 	Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 
 	//
-	if (Systems::BS_type != material->BS_state) Systems::SetBlendState(material->BS_state);
-	if (Systems::RS_type != material->RS_state) Systems::SetRasterizerState(material->RS_state);
-	if (Systems::DS_type != material->DS_state) Systems::SetDephtStencilState(material->DS_state);
+	Systems::SetBlendState(material->BS_state);
+	Systems::SetRasterizerState(material->RS_state);
+	Systems::SetDephtStencilState(material->DS_state);
 
 	for (Mesh::mesh& mesh : (*meshes))
 	{

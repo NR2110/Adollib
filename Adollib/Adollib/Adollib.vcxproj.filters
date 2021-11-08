@@ -119,6 +119,9 @@
     <Filter Include="00_Adollib\44_render\shader\hlsli\directional_shadow">
       <UniqueIdentifier>{9ed3b920-6c29-4a31-ac62-1a122af91531}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00_Adollib\44_render\shader\hlsli\collider_render">
+      <UniqueIdentifier>{741d4a78-c44c-48cc-9d57-9e0cda3c0ff0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Scripts\player.cpp">
@@ -762,6 +765,9 @@
     <None Include="DefaultShader\render_directional_shadow.hlsli">
       <Filter>00_Adollib\44_render\shader\hlsli\directional_shadow</Filter>
     </None>
+    <None Include="DefaultShader\collider_render.hlsli">
+      <Filter>00_Adollib\44_render\shader\hlsli\collider_render</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="DefaultShader\default_ps.hlsl">
@@ -790,6 +796,12 @@
     </FxCompile>
     <FxCompile Include="DefaultShader\default_ps_noshadow.hlsl">
       <Filter>00_Adollib\44_render\shader\hlsli\default</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\collider_render_vs.hlsl">
+      <Filter>00_Adollib\44_render\shader\hlsli\collider_render</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\collider_render_ps.hlsl">
+      <Filter>00_Adollib\44_render\shader\hlsli\collider_render</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
