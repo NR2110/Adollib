@@ -35,6 +35,7 @@ cbuffer CBPerCamera : register(b1)
 	// view
     row_major matrix View;
 	float4	EyePos;
+    float4  Eyedir;
 };
 
 cbuffer CBPerSystem : register(b2)
@@ -86,4 +87,9 @@ cbuffer CBPerShadow : register(b7)
     row_major matrix shadow_viewprojection;
     float3 right_dir;
     float dummy;
+};
+
+cbuffer CBPerDither : register(b8)
+{
+    float range = 10;
 };

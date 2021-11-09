@@ -18,6 +18,7 @@ namespace Adollib {
 		struct ConstantBufferPerCamera {
 			DirectX::XMFLOAT4X4 View;
 			DirectX::XMFLOAT4 Eyepos = DirectX::XMFLOAT4(1, 1, 1, 1);
+			DirectX::XMFLOAT4 Eyedir = DirectX::XMFLOAT4(0, 0, 1, 1);
 		};
 		// system (b2)
 		struct ConstantBufferPerSystem {

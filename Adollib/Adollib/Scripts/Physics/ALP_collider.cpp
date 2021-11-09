@@ -204,7 +204,12 @@ void ALP_Collider::add_joint(ALP_Joint* joint) {
 void ALP_Collider::remove_joint(ALP_Joint* joint) {
 	//std::lock_guard <std::mutex> lock(mtx);
 
-	joints.remove(joint);
+	// ‘¶İ‚·‚ê‚Îíœ‚·‚é
+	auto itr = joints.begin();
+	for (; itr != joints.end(); ++itr) {
+		if (*itr == joint)break;
+	}
+	if(itr != joints.end()) joints.remove(joint);
 }
 
 void ALP_Collider::add_contacted_collider(const Contacts::Contact_pair* pair, const u_int num)
@@ -249,9 +254,10 @@ void ALP_Collider::destroy() {
 	}
 
 	//joint‚Ìíœ
-	for (const auto& j : joints) {
-		j->destroy(this, true);
+	for (auto& j : joints) {
+		j->destroy(this);
 		delete j;
+		j = nullptr;
 	}
 
 	//physics_manager‚Ì”z—ñ‚©‚çíœ

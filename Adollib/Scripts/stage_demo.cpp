@@ -113,7 +113,7 @@ namespace Adollib
 								color + Vector3(rand() % 5 / 255.0f),
 								false
 							);
-							coll->tag &= ~Collider_tags::Caera_not_sunk_Stage;
+							//coll->tag &= ~Collider_tags::Caera_not_sunk_Stage;
 							coll->physics_data.inertial_mass = mass;
 							wall_pearent->add_child(coll->gameobject);
 						}
@@ -130,7 +130,7 @@ namespace Adollib
 								color + Vector3(rand() % 5 / 255.0f),
 								false
 							);
-							coll->tag &= ~Collider_tags::Caera_not_sunk_Stage;
+							//coll->tag &= ~Collider_tags::Caera_not_sunk_Stage;
 							coll->physics_data.inertial_mass = mass;
 							wall_pearent->add_child(coll->gameobject);
 						}
@@ -166,7 +166,8 @@ namespace Adollib
 					desk->transform->local_scale = Vector3(1, 1, 1) * 0.5f;
 
 					Collider* coll = desk->addComponent<Collider>();
-					coll->tag = Collider_tags::Stage | Collider_tags::Kinematic_Stage | Collider_tags::Jumpable_Stage;
+					//coll->tag = Collider_tags::Stage | Collider_tags::Kinematic_Stage | Collider_tags::Jumpable_Stage;
+					coll->tag = Collider_tags::Stage | Collider_tags::Kinematic_Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Jumpable_Stage;
 					coll->physics_data.inertial_mass = 5;
 					//coll->set_tensor(tensor);
 					//{

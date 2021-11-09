@@ -30,23 +30,16 @@ namespace Adollib
 
 		//set_desk(Vector3(0, 0, 0), Vector3(30, 15, 25), Vector3(0, 0, 0), 0);
 		set_box(Vector3(0, -60, 0), Vector3(80, 60, 40), Vector3(0), Vector3(188, 214, 54) / 255.0f,  true);
-		{
-			//auto stage = set_box(Vector3(0, -60, 0), Vector3(80, 60, 40), Vector3(0), Vector3(255,255,255) / 255.0f,  true);
-			//auto R = stage->gameobject->findComponent<Mesh_renderer>();
-			//auto C = Gameobject_manager::find("camera")->findComponent<Camera_component>();
-			//R->set_texture(C->get_color_texture());
-			//R->load_texture(L"./DefaultModel/demo.png");
-		}
 
 #if _DEBUG
 		set_tree(Vector3(-22, 0, -25), Vector3(1, 1.5f, 1), Vector3(0));
 #else
-		//gear
-		//set_gear(Vector3(+22, 1, 25), Vector3(0.8f, 2.2f, 2), Vector3(0), 5, 7);
-		//set_gear(Vector3(+11, 1, 25), Vector3(0.8f, 2.2f, 2), Vector3(0), 5, 7);
-		//set_gear(Vector3(+-0, 1, 25), Vector3(0.8f, 2.2f, 2), Vector3(0), 5, 7);
-		//set_gear(Vector3(-11, 1, 25), Vector3(0.8f, 2.2f, 2), Vector3(0), 5, 7);
-		//set_gear(Vector3(-22, 1, 25), Vector3(0.8f, 2.2f, 2), Vector3(0), 5, 7);
+		////gear
+		set_gear(Vector3(+22, 1, 25), Vector3(0.8f, 2.2f, 2), Vector3(0), 5, 7);
+		set_gear(Vector3(+11, 1, 25), Vector3(0.8f, 2.2f, 2), Vector3(0), 5, 7);
+		set_gear(Vector3(+-0, 1, 25), Vector3(0.8f, 2.2f, 2), Vector3(0), 5, 7);
+		set_gear(Vector3(-11, 1, 25), Vector3(0.8f, 2.2f, 2), Vector3(0), 5, 7);
+		set_gear(Vector3(-22, 1, 25), Vector3(0.8f, 2.2f, 2), Vector3(0), 5, 7);
 
 		set_gear(Vector3(+8, 15, 0), Vector3(1, 5, 5), Vector3(0), 12, 8);
 
@@ -56,7 +49,7 @@ namespace Adollib
 
 		set_tree(Vector3(-22, 0, -25), Vector3(1, 1.2f, 1), Vector3(0));
 		set_tree(Vector3(+22, 0, -25), Vector3(1, 1.2f, 1), Vector3(0));
-		{}
+		//{}
 
 		//croth
 		{
@@ -66,7 +59,7 @@ namespace Adollib
 			std::vector<Collider*>colls;
 			stage_parts.emplace_back(pearent);
 
-			int sphere_count = 30;
+			int sphere_count = 20;
 			float sphere_size = 1.5f;
 			const int colls_size = sphere_count * sphere_count;
 			colls.resize(colls_size);
@@ -85,7 +78,7 @@ namespace Adollib
 					),
 						sphere_size,
 						Vector3(1, 0, (1.0f / (sphere_count * sphere_count)) * index),
-						true
+						false
 					);
 					coll->physics_data.is_moveable = true;
 					coll->tag = Collider_tags::Sphere | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Kinematic_Stage | Collider_tags::Jumpable_Stage;

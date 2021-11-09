@@ -50,7 +50,7 @@ namespace Adollib {
 
 			void adapt_Jointdata();
 
-			void destroy(ALP_Collider* coll_ptr = nullptr, const bool is_delete_userjoint = true);
+			void destroy(ALP_Collider* coll_ptr = nullptr);
 
 		};
 	}

@@ -1,15 +1,15 @@
 #include "default.hlsli"
 
-#include "barrymatrix_func.hlsli"
+#include "bayermatrix_func.hlsli"
 
 //	ピクセルシェーダー
 PSOutput main(PSInput input)
 {
-    float camera_dis = length(input.wPos - EyePos.xyz);
-    clip(camera_dis - Barrymatrix(input.Position.xy) * 10);
+    //float camera_dis = dot(Eyedir.xyz, input.wPos - EyePos.xyz);
+    //clip(camera_dis - Bayermatrix(input.Position.xy) * 30 + 10);
 
 
-        PSOutput Out = (PSOutput) 0;
+    PSOutput Out = (PSOutput) 0;
 
     float A = (dot(input.wNormal, -right_dir) + 0) * 0.2 + 0.8; //影
     float4 Color = input.Color * DiffuseTexture.Sample(DecalSampler, input.Tex) * A;

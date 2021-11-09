@@ -14,7 +14,6 @@ void ALP_Joint::reset() {
 }
 
 void ALP_Joint::adapt_Jointdata() {
-
 	userjoint->adapt_anchor();
 
 	anchor = userjoint->get_anchors();
@@ -24,18 +23,18 @@ void ALP_Joint::adapt_Jointdata() {
 	limit_bias = userjoint->limit_bias;
 }
 
-void ALP_Joint::destroy(ALP_Collider* coll_ptr, const bool is_delete_userjoint) {
+void ALP_Joint::destroy(ALP_Collider* coll_ptr) {
 	// physics_managerから削除
 	Physics_manager::remove_Joint(this_itr);
 
 	// coll_ptrの相方の保持するjoint配列から自身を削除
+	// coll_ptrがnullでないとき coll_ptrが保持するjointsからdestroyを呼んでいるため remove_jointすると死ぬ
 	if (ALPcollider[0] != coll_ptr) ALPcollider[0]->remove_joint(this);
 	if (ALPcollider[1] != coll_ptr) ALPcollider[1]->remove_joint(this);
 
-	// ALPColliderから呼ばれた場合はuserjointを削除
-	if (is_delete_userjoint == true) {
-		delete userjoint;
-	}
+	// user用に準備していた実体を削除
+	delete userjoint;
+	userjoint = nullptr;
 
 	//::::::::::::
 	// Joint::destroyは "ALPColliderの削除" "userjointの削除" の2個所から呼ばれる可能性がある

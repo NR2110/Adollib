@@ -76,7 +76,8 @@ namespace Adollib
 		Box* boxes[Tree_size];
 		Collider* coll = tree->addComponent<Collider>();
 		coll->physics_data.inertial_mass = 35;
-		coll->tag = Collider_tags::Stage | Collider_tags::Kinematic_Stage | Collider_tags::Jumpable_Stage;
+		coll->tag = Collider_tags::Stage | Collider_tags::Kinematic_Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Jumpable_Stage;
+		//coll->tag = Collider_tags::Stage | Collider_tags::Kinematic_Stage | Collider_tags::Jumpable_Stage;
 
 		for (int i = 0; i < Tree_size; i++) {
 			boxes[i] = coll->add_shape<Box>();
@@ -224,7 +225,8 @@ namespace Adollib
 		GEAR->transform->local_orient = quaternion_from_euler(rotate);
 
 		Collider* coll = GEAR->addComponent<Collider>();
-		coll->tag |= Collider_tags::Stage | Collider_tags::Kinematic_Stage | Collider_tags::Jumpable_Stage;
+		//coll->tag |= Collider_tags::Stage | Collider_tags::Kinematic_Stage | Collider_tags::Jumpable_Stage;
+		coll->tag |= Collider_tags::Stage | Collider_tags::Kinematic_Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Jumpable_Stage;
 		coll->physics_data.inertial_mass = mass;
 		coll->physics_data.anglar_drag = 0;
 		coll->ignore_tags = Collider_tags::Static_Stage;

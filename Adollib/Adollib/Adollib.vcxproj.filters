@@ -768,7 +768,7 @@
     <None Include="DefaultShader\light_func.hlsli">
       <Filter>00_Adollib\44_render\shader\hlsli\base</Filter>
     </None>
-    <None Include="DefaultShader\barrymatrix_func.hlsli">
+    <None Include="DefaultShader\bayermatrix_func.hlsli">
       <Filter>00_Adollib\44_render\shader\hlsli\base</Filter>
     </None>
   </ItemGroup>
@@ -805,6 +805,9 @@
     </FxCompile>
     <FxCompile Include="DefaultShader\collider_render_ps.hlsl">
       <Filter>00_Adollib\44_render\shader\hlsli\collider_render</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\default_ps_dither_noshadow.hlsl">
+      <Filter>00_Adollib\44_render\shader\hlsli\default</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

@@ -77,13 +77,15 @@ void Camera_component::setup() {
 	// ƒrƒ…[s—ñ
 	Vector3 pos = transform->position;
 	Quaternion orient = transform->orientation;
-	Vector3 look_pos = pos + vector3_quatrotate(Vector3(0, 0, 1), orient);
+	Vector3 dir = vector3_quatrotate(Vector3(0, 0, 1), orient).unit_vect();
+	Vector3 look_pos = pos + dir;
 
 	DirectX::XMVECTOR eye = DirectX::XMVectorSet(pos.x, pos.y, pos.z, 1.0f);
 	DirectX::XMVECTOR focus = DirectX::XMVectorSet(look_pos.x, look_pos.y, look_pos.z, 1.0f);
 	DirectX::XMVECTOR up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f);
 	XMStoreFloat4x4(&c_cb.View, DirectX::XMMatrixLookAtLH(eye, focus, up));
 	c_cb.Eyepos = DirectX::XMFLOAT4(pos.x, pos.y, pos.z, 1.0f);
+	c_cb.Eyedir = DirectX::XMFLOAT4(dir.x, dir.y, dir.z, 1.0f);
 	Systems::DeviceContext->UpdateSubresource(view_cb.Get(), 0, NULL, &c_cb, 0, 0);
 	Systems::DeviceContext->VSSetConstantBuffers(1, 1, view_cb.GetAddressOf());
 	Systems::DeviceContext->PSSetConstantBuffers(1, 1, view_cb.GetAddressOf());

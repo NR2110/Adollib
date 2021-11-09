@@ -42,7 +42,7 @@ void Stage_manager::update() {
 
 		now_stage = next_stage;
 
-		player->delete_catchjoint();
+		//player->delete_catchjoint();
 		player->respown();
 
 		is_changed_stage = true;

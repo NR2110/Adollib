@@ -129,12 +129,12 @@ namespace Adollib
 			static std::unordered_map<Scenelist, std::list<Physics_function::ALP_Physics*>>  ALP_physicses;
 			static std::map<Scenelist, std::list<Physics_function::ALP_Collider*>> added_buffer_ALP_colliders; //マルチスレッド用 処理の途中で追加された要素
 			static std::map<Scenelist, std::list<Physics_function::ALP_Physics*>>  added_buffer_ALP_physicses; //マルチスレッド用 処理の途中で追加された要素
-			static std::map<Scenelist, std::list<Physics_function::ALP_Collider*>> dalated_buffer_ALP_colliders; //マルチスレッド用 処理の途中でGOが削除された要素
-			static std::map<Scenelist, std::list<Physics_function::ALP_Physics*>>  dalated_buffer_ALP_physicses; //マルチスレッド用 処理の途中でGOが削除された要素
+			static std::map<Scenelist, std::list<Physics_function::ALP_Collider*>> deleted_buffer_ALP_colliders; //マルチスレッド用 処理の途中でGOが削除された要素
+			static std::map<Scenelist, std::list<Physics_function::ALP_Physics*>>  deleted_buffer_ALP_physicses; //マルチスレッド用 処理の途中でGOが削除された要素
 
 			static std::list<Physics_function::ALP_Joint*> ALP_joints;
 			static std::list<Physics_function::ALP_Joint*> added_buffer_ALP_joints; //マルチスレッド用 処理の途中で追加された要素
-			static std::list<Physics_function::ALP_Joint*> dalated_buffer_ALP_joints; //マルチスレッド用 処理の途中で追加された要素
+			static std::list<Physics_function::ALP_Joint*> deleted_buffer_ALP_joints; //マルチスレッド用 処理の途中で追加された要素
 
 			static std::vector<Physics_function::Contacts::Contact_pair*> pairs[2];
 			static u_int pairs_new_num; //pairsのどっちが新しい衝突なのか
@@ -223,16 +223,13 @@ namespace Adollib
 
 				collider_index_count[Sce]++;
 
-				for (auto& debug : added_buffer_ALP_colliders[Sce]) {
-					if (debug == nullptr) {
-						int adsfdg = 0;
-					}
-				}
 				return ret;
 			}
 
 			static ALP_Joint* add_Joint() {
 				std::lock_guard <std::mutex> lock(mtx);
+
+				is_added_ALPcollider = true;
 
 				//空っぽのポインタで枠だけ確保(itrをコンストラクタで使いたいから)
 				ALP_Joint* null_ptr;
@@ -252,19 +249,33 @@ namespace Adollib
 			//::: マルチスレッド化に 削除する物をbufferにいったんしまう :::
 			static void add_delete_buffer_ALPCollider_and_ALPPhsics(Physics_function::ALP_Collider* coll, Physics_function::ALP_Physics* phys) {
 				std::lock_guard <std::mutex> lock(mtx);
-				dalated_buffer_ALP_colliders[coll->get_scene()].emplace_back(coll);
+				deleted_buffer_ALP_colliders[coll->get_scene()].emplace_back(coll);
 				coll->is_deleted = true;
 
-				dalated_buffer_ALP_physicses[phys->get_scene()].emplace_back(phys);
+				deleted_buffer_ALP_physicses[phys->get_scene()].emplace_back(phys);
 			}
 			static void add_delete_buffer_ALPJoint(Physics_function::ALP_Joint* joint) {
 				std::lock_guard <std::mutex> lock(mtx);
-				dalated_buffer_ALP_joints.emplace_back(joint);
+				deleted_buffer_ALP_joints.emplace_back(joint);
 			}
 
 			//::: 配列からの削除。deleteはしない(physics_managerのloopから呼ぶためmutexは不要) :::
 			static void remove_Joint(std::list<Physics_function::ALP_Joint*>::iterator joint_itr) {
-				if((*joint_itr)->is_added)
+				{
+					// jointの削除とそのjointのついたcolliderの削除が同時に発生した時 deleteが2回行われて死ぬため
+					// jointの削除時に保存されるbufferから対応するptrをnullptrにする
+					auto itr = deleted_buffer_ALP_joints.begin();
+					auto itr_end = deleted_buffer_ALP_joints.end();
+					for (; itr != itr_end; ++itr) {
+						if (*itr == *joint_itr) {
+							//deleted_buffer_ALP_joints.erase(joint_itr);
+							*itr = nullptr;
+							//return;
+						}
+					}
+				}
+
+				if ((*joint_itr)->is_added)
 					ALP_joints.erase(joint_itr);
 				else
 					added_buffer_ALP_joints.erase(joint_itr);
@@ -280,6 +291,7 @@ namespace Adollib
 					// 追加して、broadphaseが呼ばれる前にdeleteされる必要があるためおこる可能性が低い
 					// addedの数が常に多くなる可能性も低いため 総当たりにする
 					for (auto& coll : added_collider_for_insertsort[Sce]) if (coll == *ALPcoll_itr)coll = nullptr;
+					for (auto& coll : moved_collider_for_insertsort[Sce]) if (coll == *ALPcoll_itr)coll = nullptr;
 
 					ALP_colliders[Sce].erase(ALPcoll_itr);
 				}
@@ -291,7 +303,7 @@ namespace Adollib
 				const Scenelist Sce,
 				std::list<Physics_function::ALP_Physics*>::iterator ALPphs_itr
 			) {
-				if((*ALPphs_itr)->is_added)
+				if ((*ALPphs_itr)->is_added)
 					ALP_physicses[Sce].erase(ALPphs_itr);
 				else
 					added_buffer_ALP_physicses[Sce].erase(ALPphs_itr);

@@ -46,12 +46,12 @@ namespace Adollib
 	std::unordered_map<Scenelist, std::list<Physics_function::ALP_Physics*>>  Physics_manager::ALP_physicses;
 	std::map<Scenelist, std::list<Physics_function::ALP_Collider*>> Physics_manager::added_buffer_ALP_colliders;
 	std::map<Scenelist, std::list<Physics_function::ALP_Physics*>>  Physics_manager::added_buffer_ALP_physicses;
-	std::map<Scenelist, std::list<Physics_function::ALP_Collider*>> Physics_manager::dalated_buffer_ALP_colliders; //マルチスレッド用 処理の途中でGOが削除された要素
-	std::map<Scenelist, std::list<Physics_function::ALP_Physics*>>  Physics_manager::dalated_buffer_ALP_physicses; //マルチスレッド用 処理の途中でGOが削除された要素
+	std::map<Scenelist, std::list<Physics_function::ALP_Collider*>> Physics_manager::deleted_buffer_ALP_colliders; //マルチスレッド用 処理の途中でGOが削除された要素
+	std::map<Scenelist, std::list<Physics_function::ALP_Physics*>>  Physics_manager::deleted_buffer_ALP_physicses; //マルチスレッド用 処理の途中でGOが削除された要素
 
 	std::list<Physics_function::ALP_Joint*> Physics_manager::ALP_joints;
 	std::list<Physics_function::ALP_Joint*> Physics_manager::added_buffer_ALP_joints;
-	std::list<Physics_function::ALP_Joint*> Physics_manager::dalated_buffer_ALP_joints;
+	std::list<Physics_function::ALP_Joint*> Physics_manager::deleted_buffer_ALP_joints;
 
 	std::vector<Physics_function::Contacts::Contact_pair*> Physics_manager::pairs[2];
 	u_int Physics_manager::pairs_new_num = 0; //pairsのどっちが新しい衝突なのか
@@ -471,7 +471,7 @@ void Physics_manager::adapt_added_data(Scenelist Sce, bool is_mutex_lock) {
 void Physics_manager::dadapt_delete_data(bool is_mutex_lock) {
 	if (is_mutex_lock) mtx.lock(); //呼び出しのところでlockしている if文中なのでstd::lock_guard <std::mutex> lock(mtx)は使えない
 
-	for (auto deleted_coll : dalated_buffer_ALP_colliders) {
+	for (auto deleted_coll : deleted_buffer_ALP_colliders) {
 		// 削除されたcollider
 		for (auto& coll : deleted_coll.second) {
 			coll->destroy();
@@ -480,7 +480,7 @@ void Physics_manager::dadapt_delete_data(bool is_mutex_lock) {
 	}
 
 
-	for (auto& deleted_phys : dalated_buffer_ALP_physicses) {
+	for (auto& deleted_phys : deleted_buffer_ALP_physicses) {
 		// 削除されたphysics
 		for (auto& phys : deleted_phys.second) {
 			phys->destroy();
@@ -488,14 +488,17 @@ void Physics_manager::dadapt_delete_data(bool is_mutex_lock) {
 		}
 	}
 
-	dalated_buffer_ALP_colliders.clear();
-	dalated_buffer_ALP_physicses.clear();
+	deleted_buffer_ALP_colliders.clear();
+	deleted_buffer_ALP_physicses.clear();
 
-	for (auto& deleted_joint : dalated_buffer_ALP_joints) {
-		deleted_joint->destroy(nullptr, true);
+	// deleted_joint->destroyでdeleted_buffer_ALP_jointsの対応するdeleted_jointをnullptrにするためコピー渡しにする
+	for (auto deleted_joint : deleted_buffer_ALP_joints) {
+		if (deleted_joint == nullptr)continue;
+		deleted_joint->destroy(nullptr);
 		delete deleted_joint;
+		deleted_joint = nullptr;
 	}
-	dalated_buffer_ALP_joints.clear();
+	deleted_buffer_ALP_joints.clear();
 
 	if (is_mutex_lock) mtx.unlock();
 }
