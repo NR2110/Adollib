@@ -192,7 +192,10 @@ void Player::catch_things() {
 				Vector3 world_posA = joint->get_colliderA()->transform->position + vector3_quatrotate(joint->get_anchors()[0].posA, joint->get_colliderA()->transform->orientation);
 				Vector3 world_posB = joint->get_colliderB()->transform->position + vector3_quatrotate(joint->get_anchors()[0].posB, joint->get_colliderB()->transform->orientation);
 
-				if((world_posA - world_posB).norm() > 3 * 3){
+				if(
+					(world_posA - world_posB).norm() > 3 * 3 ||
+					(colliders[i]->transform->position - colliders[i + 2]->transform->position).norm() > 3 * 3
+					){
 					joint->get_colliderB()->tag &= ~Collider_tags::Having_Stage;
 					joint->get_colliderB()->tag |= Collider_tags::Jumpable_Stage;
 					Joint::delete_joint(joint);
@@ -213,67 +216,29 @@ void Player::catch_things() {
 	}
 };
 
-//腰を支えるwaist_pillarを調整
-void Player::tuning_waist_pillar() {
-	const Mouse keys[2] = {
-		Mouse::LBUTTON ,
-		Mouse::RBUTTON
-	};
-	Collider* colliders[6] = {
-		Lhand_collider,
-		Rhand_collider,
-		Lelbow_collider,
-		Relbow_collider,
-		Lsholder_collider,
-		Rsholder_collider
-	};
-	Joint_base** joints[2] = {
-		&catch_left_joint,
-		&catch_right_joint
-	};
+//rayを飛ばして腰を立たせる
+void Player::push_waist_for_stand() {
+	waist_pillar->center = Vector3(0, 100, 0);
 
-	//waist_sphereのy方向の調整
-	float center_y = waist_pillar->center.y;
-	{
-		float anchor_move_vec = 0;
-		if (!check_standable_collider->concoll_enter(Collider_tags::Stage) && is_jumping == false) {
-			// しばらく地面にいなければ徐々にwaist_Sphereを上にあげる
-			anchor_move_vec = -0.2f;
+	float dot = vector3_dot(Vector3(0, -1, 0), vector3_quatrotate(Vector3(0, -1, 0), Waist_collider->transform->orientation));
+	Debug::set("dot", dot);
+	if (dot < 0)return; //腰が下を向いていなければreturn
+
+	// rayを飛ばして
+	Ray ray;
+	ray.direction = Vector3(0, -1, 0);
+	ray.position = Waist_collider->transform->position;
+
+	// 距離によってaddforce
+	constexpr float stand_dis = 2;
+	constexpr float stand_pow = 7000;
+	Ray::Raycast_struct data;
+	data.collider_tag = Collider_tags::Stage;
+	if (ray.ray_cast(data)) {
+		if (data.raymin - stand_dis * dot < 0) {
+			Waist_collider->add_force(Vector3(0, 1, 0) * (stand_dis * dot - data.raymin) * stand_pow);
 		}
-		else anchor_move_vec = 3; // 接地していればwaist_Sphereを下げる
-
-		//両手がstaticなものを持っているとき、
-		if ((catch_left_joint != nullptr  && catch_left_joint ->get_colliderB()->tag & Collider_tags::Static_Stage) &&
-			(catch_right_joint != nullptr && catch_right_joint->get_colliderB()->tag & Collider_tags::Static_Stage)
-			) {
-			// timerを設定する
-			check_standable_collider_timer = 0.5f;
-		}
-
-		{
-			check_standable_collider_timer -= Al_Global::second_per_frame;
-			// timerが0より大きい時 waist_Sphereを上にあげる
-			if (check_standable_collider_timer > 0)anchor_move_vec = -1;
-		}
-
-		center_y += -1 * anchor_move_vec * Al_Global::second_per_frame;
-		center_y = ALClamp(center_y, Waist_pillar_max_y, -1.0f);
-	}
-
-	Vector3 center_xz = waist_pillar->center;
-	{
-		center_xz.y = 0;
-		center_xz += vector3_quatrotate(-dir, Waist->transform->orientation) * 0.01f;
-
-		if (center_xz.norm() > Waist_pillar_max_xz * Waist_pillar_max_xz)center_xz = center_xz.unit_vect() * Waist_pillar_max_xz;
-	}
-
-	//waist_pillar->center = Vector3(center_xz.x, center_y, center_xz.z);
-	waist_pillar->center = Vector3(0, center_y, -0.3f);
-	//waist_pillar->center = Vector3(0, center_y, -0);
-	//waist_pillar->center = vector3_quatrotate(-dir, Waist->transform->orientation) +Vector3(0, waist_pillar->center.y,0);
-
-	//if()
+	};
 
 }
 
@@ -297,6 +262,7 @@ void Player::linear_move() {
 	if (dir.norm() == 0 && onground_collider->concoll_enter(Collider_tags::Stage)) {
 		Waist_collider->physics_data.drag = 0.8f;
 	}
+	// 入力があれば動きやすいように0.1にする
 	else Waist_collider->physics_data.drag = 0.1;
 };
 

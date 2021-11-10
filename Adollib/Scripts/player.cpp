@@ -61,25 +61,13 @@ namespace Adollib
 		turn_speed = 1.5f;
 
 		{
-			auto GO = Gameobject_manager::create("waist_sphere_stand");
-			check_standable_collider = GO->addComponent<Collider>();
-			auto shape = check_standable_collider->add_shape<Sphere>();
-
-			Waist->add_child(GO);
-			GO->transform->local_pos = Vector3(0, -3.0f, 0);
-			GO->transform->local_scale = Vector3(0.5f) / Waist->transform->local_scale;
-
-			check_standable_collider->physics_data.is_moveable = false;
-			check_standable_collider->physics_data.is_hitable = false;
-
-		}
-		{
 			onground_collider_GO = Gameobject_manager::create("check_onglound_go");
 			onground_collider = onground_collider_GO->addComponent<Collider>();
 			auto shape = onground_collider->add_shape<Sphere>();
 
 			Waist->add_child(onground_collider_GO);
 			onground_collider_GO->transform->local_scale = Vector3(0.4f) / Waist->transform->local_scale;
+			onground_collider_GO->transform->local_pos = Vector3(0, -3.0f, 0);
 
 			onground_collider->physics_data.is_moveable = false;
 			onground_collider->physics_data.is_hitable = false;
@@ -94,11 +82,11 @@ namespace Adollib
 	{
 		// Update_pnground
 		{
-			onground_collider_GO->transform->local_pos = waist_pillar->center;
+			//onground_collider_GO->transform->local_pos = waist_pillar->center;
 		}
 
 		// respownˆ—
-		if (check_respown() == true)return;
+		//if (check_respown() == true)return;
 
 		// è‚ğL‚Î‚·
 		reach_out_hands();
@@ -107,7 +95,7 @@ namespace Adollib
 		catch_things();
 
 		// ˜‚ğx‚¦‚éwaist_pillar‚ğ’²®
-		tuning_waist_pillar();
+		push_waist_for_stand();
 
 		// ˆÚ“®
 		linear_move();

@@ -58,10 +58,6 @@ namespace Adollib
 		bool is_maked_right_joint = false; //つかんでいたものが距離で離れたとき、stateのみだと即座に次のものをつかんでします 嫌なのでboolで管理
 		bool is_maked_left_joint = false;
 
-		// このcolliderが接地していた場合 立つことができる しばらくこのcolliderが接地していないと ぐにゃぐにゃになる
-		Collider* check_standable_collider = nullptr;
-		float check_standable_collider_timer = 0;
-
 		// 接地判定を行う
 		Collider* onground_collider = nullptr;
 		Gameobject* onground_collider_GO = nullptr; //立たせるためのsphereの座標に持ってくる必要があるため 変数で持って管理
@@ -87,7 +83,7 @@ namespace Adollib
 		bool check_respown(); //respown処理
 		void reach_out_hands(); //手を伸ばす
 		void catch_things(); //物をつかむ
-		void tuning_waist_pillar(); //腰を支えるwaist_pillarを調整
+		void push_waist_for_stand(); //rayを飛ばして腰を立たせる
 		void linear_move(); //移動
 		void angula_move(); //回転
 		void accume_move_dir(); //移動方向を計算

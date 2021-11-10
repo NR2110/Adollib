@@ -20,7 +20,7 @@ const bool ALP_Collider::concoll_enter(const unsigned int tag_name) {
 	//std::lock_guard <std::mutex> lock(mtx); //oncoll_check_bitsÇÕphysicsÇ≈ïœçXÇ≥ÇÍÇ»Ç¢ÇΩÇﬂ
 
 	oncoll_check_bits |= tag_name;
-	return (oncoll_bits_buffer & tag_name);
+	return (oncoll_bits[1 - oncoll_bits_num] & tag_name);
 }
 
 void ALP_Collider::update_world_trans() {
@@ -44,6 +44,9 @@ void ALP_Collider::update_world_trans() {
 void ALP_Collider::update_contacted_collider_data() {
 	contacted_colliders_num = 1 - contacted_colliders_num;
 	contacted_colliders[contacted_colliders_num].clear();
+
+	oncoll_bits_num = 1 - oncoll_bits_num;
+	oncoll_bits[oncoll_bits_num] = 0;
 }
 
 void ALP_Collider::update_world_trans_contain_added() {
@@ -136,9 +139,6 @@ void ALP_Collider::reset_data_per_frame() {
 
 	transform = transform_gameobject;
 	transform_start = transform_gameobject;
-
-	oncoll_bits_buffer = oncoll_bits;
-	oncoll_bits = 0;
 };
 
 void ALP_Collider::adapt_collider_component_data() {

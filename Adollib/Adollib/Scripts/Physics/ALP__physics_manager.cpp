@@ -103,10 +103,10 @@ bool Physics_manager::update(Scenelist Sce)
 		if (is_added_ALPcollider == false) {
 			// 追加したものを配列に加える (is_updated_mainthreadがtrueでないとworld情報が更新されていない可能性がある)
 			adapt_added_data(Sce, false);
-			std::for_each(ALP_physicses[Sce].begin(), ALP_physicses[Sce].end(), [](ALP_Physics* phys) {
-				phys->reset_data_per_frame();
-				}
-			);
+			//std::for_each(ALP_physicses[Sce].begin(), ALP_physicses[Sce].end(), [](ALP_Physics* phys) {
+			//	phys->reset_data_per_frame();
+			//	}
+			//);
 		}
 
 		// mainthreadが更新したら

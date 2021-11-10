@@ -65,8 +65,6 @@ namespace Adollib {
 			std::list<Collider_shape*> shapes;
 			std::list<Collider_shape*> added_buffer_shapes; // マルチスレッド用 処理の途中で追加された要素
 
-			Collider_tagbit oncoll_bits_buffer = 0; //oncollision enterで衝突したbit情報 mainthreadに渡すためのbuffer
-
 			//::: is_save_contacted_collsがtrueの時 自身の関わるcontact_pairの情報を保存する :::
 			int contacted_colliders_num = 0; //前のものを保存しておきたいため contacted_colliders_num:現在のもの とする
 			std::vector<Contacted_data> contacted_colliders[2];
@@ -78,7 +76,8 @@ namespace Adollib {
 			// privateにしたかった けどprivateにするとbitの変更めんどくさいから取り合えずpublic
 			//::: oncoll_enter :::::::
 			Collider_tagbit oncoll_check_bits = 0; //on collision enterを行うtagの情報(互いに衝突しないけどoncollenterが必要な場合)
-			Collider_tagbit oncoll_bits = 0; //oncollision enterで衝突したbit情報
+			int oncoll_bits_num = 0; //前のものを保存しておきたいため oncoll_bits_num:現在のもの とする
+			Collider_tagbit oncoll_bits[2] = { 0 }; //oncollision enterで衝突したbit情報
 
 			//::: tag ::::::::
 			Collider_tagbit tag = 0; //自身のtag(bit)
@@ -116,11 +115,11 @@ namespace Adollib {
 
 			std::list<Collider_shape*> get_added_shapes() const { return added_buffer_shapes; };
 
-			// 別スレッドのため配列の参照渡しができない コピー渡しのため多用非推奨
+			// 衝突した情報を返す。別スレッドのため配列の参照渡しができない コピー渡しのため多用非推奨
 			std::vector<Contacted_data> get_contacted_collider() const { return contacted_colliders[1 - contacted_colliders_num]; };
 
 			// 衝突したcolliderのtagを保存
-			void add_oncoll_bits(Collider_tagbit bit) { oncoll_bits |= bit; };
+			void add_oncoll_bits(Collider_tagbit bit) { oncoll_bits[oncoll_bits_num] |= bit; };
 
 		public:
 			//::: マルチスレッドにするためtransformのworld情報を保存する :::
