@@ -131,8 +131,9 @@ bool Physics_manager::update(Scenelist Sce)
 	if (physicsParams.timeStep > inv60)
 	{
 
-		frame_count = time;
+		frame_count.QuadPart = time.QuadPart;
 		const float inv60_per_timeStep = inv60 / physicsParams.timeStep;
+		//const float inv60_per_timeStep = 1;
 
 		physicsParams.timeStep /= physicsParams.calculate_iteration;
 
@@ -349,7 +350,7 @@ bool Physics_manager::ray_cast(
 	const float ray_min,
 	float& tmin, float& tmax,
 	Vector3& normal,
-	Collider* ret_coll,
+	Collider*& ret_coll,
 	Scenelist Sce) {
 
 	std::lock_guard <std::mutex> lock(mtx);
@@ -374,6 +375,8 @@ bool Physics_manager::ray_cast(
 		) == false) continue;
 
 		ret = true;
+		ret_coll = coll->get_collptr();
+
 		if (tmin > min) {
 			tmin = min;
 			normal = norm;

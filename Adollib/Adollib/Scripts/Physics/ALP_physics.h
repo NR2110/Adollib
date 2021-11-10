@@ -131,6 +131,7 @@ namespace Adollib {
 
 			// •ÀiˆÚ“®‚É—Í‚ğ‰Á‚¦‚é
 			void add_force(const Vector3& force);
+			void add_force_local(const Vector3& force, const Vector3& position);
 			// Šp‰ñ“]‚É—Í‚ğ‰Á‚¦‚é
 			void add_torque(const Vector3& force);
 

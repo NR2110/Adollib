@@ -236,7 +236,9 @@ void Player::push_waist_for_stand() {
 	data.collider_tag = Collider_tags::Stage;
 	if (ray.ray_cast(data)) {
 		if (data.raymin - stand_dis * dot < 0) {
-			Waist_collider->add_force(Vector3(0, 1, 0) * (stand_dis * dot - data.raymin) * stand_pow);
+			Vector3 force = Vector3(0, 1, 0) * (stand_dis * dot - data.raymin) * stand_pow;
+			Waist_collider->add_force(force);
+			data.coll->add_force_local(-force, ray.position + ray.direction * data.raymin);
 		}
 	};
 
@@ -260,7 +262,7 @@ void Player::linear_move() {
 	}
 	// ’n–Ê‚ÉÚ‚µ‚Ä‚¢‚é & “ü—Í‚ª–³‚¢Žž
 	if (dir.norm() == 0 && onground_collider->concoll_enter(Collider_tags::Stage)) {
-		Waist_collider->physics_data.drag = 0.8f;
+		Waist_collider->physics_data.drag = 0.98f;
 	}
 	// “ü—Í‚ª‚ ‚ê‚Î“®‚«‚â‚·‚¢‚æ‚¤‚É0.1‚É‚·‚é
 	else Waist_collider->physics_data.drag = 0.1;
@@ -341,15 +343,8 @@ void Player::add_pow_for_stand() {
 
 		}
 		{
-			//“·‘Ì‚ð‚½‚½‚¹‚é
+			//˜‚ð‚½‚½‚¹‚é
 			Quaternion off = rotate * Waist_collider->gameobject->transform->orientation.inverse();
-
-			//float k = 1;
-			//float t = inv60;
-			//float omega = sqrtf(k / Waist_collider->physics_data.inertial_mass);
-			//float next = off.radian() * k * cosf(t * omega);
-			//float pow = k * (next * t + 0.5f * t * (off.radian() - next));
-			//pow = ALClamp(pow * waist_rot_pow, 0, waist_rot_max_pow);
 
 			float rad = off.radian();
 			if (rad > PI)rad = 2 * PI - rad;
@@ -358,7 +353,7 @@ void Player::add_pow_for_stand() {
 
 		}
 		{
-			//“·‘Ì‚ð‚½‚½‚¹‚é
+			//‘Ì‚ð‚½‚½‚¹‚é
 			Quaternion off = rotate * Body_collider->gameobject->transform->orientation.inverse();
 
 			float rad = off.radian();
@@ -477,23 +472,22 @@ void Player::make_jump() {
 	if (is_jumping == false && !onground_collider->concoll_enter(Collider_tags::Jumpable_Stage)) coyote -= Al_Global::second_per_frame;
 
 	if (is_gunyatto == false && coyote >= 0 && input->getKeyTrigger(Key::Space)) {
+		//Ray ray;
+		//ray.direction = Vector3(0, -1, 0);
+		//ray.position = Waist_collider->transform->position;
+		//Ray::Raycast_struct data;
+		//data.collider_tag = Collider_tags::Stage;
+		//if (ray.ray_cast(data)) {
+		//	data.coll->add_force_local(Vector3(0, -100, 0) * jump_power, ray.position + ray.direction * data.raymin);
+		//}
+
 		for (int i = 0; i < Human_collider_size; i++) {
 			Human_colliders[i]->linear_velocity(Vector3(Human_colliders[i]->linear_velocity().x, jump_power, Human_colliders[i]->linear_velocity().z));
 		}
-		//Lsholder_collider->linear_velocity(Vector3(Lleg_collider->linear_velocity().x, jump_power * 2, Lleg_collider->linear_velocity().z));
-		//Rsholder_collider->linear_velocity(Vector3(Lleg_collider->linear_velocity().x, jump_power * 2, Lleg_collider->linear_velocity().z));
-		//Lelbow_collider->linear_velocity(Vector3(Lleg_collider->linear_velocity().x, jump_power * 2, Lleg_collider->linear_velocity().z));
-		//Relbow_collider->linear_velocity(Vector3(Lleg_collider->linear_velocity().x, jump_power * 2, Lleg_collider->linear_velocity().z));
-		//Lhand_collider->linear_velocity(Vector3(Lleg_collider->linear_velocity().x, jump_power * 2, Lleg_collider->linear_velocity().z));
-		//Rhand_collider->linear_velocity(Vector3(Lleg_collider->linear_velocity().x, jump_power * 2, Lleg_collider->linear_velocity().z));
-
 		Lleg_collider->linear_velocity(Vector3(Lleg_collider->linear_velocity().x, jump_power * 0.1f, Lleg_collider->linear_velocity().z));
 		Rleg_collider->linear_velocity(Vector3(Rleg_collider->linear_velocity().x, jump_power * 0.1f, Rleg_collider->linear_velocity().z));
 		Lfoot_collider->linear_velocity(Vector3(Lfoot_collider->linear_velocity().x, jump_power * 0.1f, Lfoot_collider->linear_velocity().z));
 		Rfoot_collider->linear_velocity(Vector3(Rfoot_collider->linear_velocity().x, jump_power * 0.1f, Rfoot_collider->linear_velocity().z));
-		//Head_collider->linear_velocity(Vector3(Head_collider->linear_velocity().x, jump_power, Head_collider->linear_velocity().z));
-		//Body_collider->linear_velocity(Vector3(Body_collider->linear_velocity().x, jump_power, Body_collider->linear_velocity().z));
-		//Waist_collider->linear_velocity(Vector3(Waist_collider->linear_velocity().x, jump_power, Waist_collider->linear_velocity().z));
 
 		is_jumping = true;
 		coyote = -0.3f;

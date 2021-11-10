@@ -59,7 +59,7 @@ namespace Adollib
 			std::vector<Collider*>colls;
 			stage_parts.emplace_back(pearent);
 
-			int sphere_count = 20;
+			int sphere_count = 1;
 			float sphere_size = 1.5f;
 			const int colls_size = sphere_count * sphere_count;
 			colls.resize(colls_size);

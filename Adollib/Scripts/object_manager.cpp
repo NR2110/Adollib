@@ -1195,8 +1195,9 @@ namespace Adollib
 
 			float tmin = 0, tmax = 0;
 			Vector3 nor;
+			Collider* coll;
 			float ray_min = 0;
-			ray.ray_cast(UINT_MAX, ray_min, tmin, tmax, nor);
+			ray.ray_cast(UINT_MAX, ray_min, tmin, tmax, nor, coll);
 
 			Debug::set("", nor.get_XM3());
 

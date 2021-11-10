@@ -94,7 +94,7 @@ namespace Adollib
 		// •¨‚ğ‚Â‚©‚Ş
 		catch_things();
 
-		// ˜‚ğx‚¦‚éwaist_pillar‚ğ’²®
+		// ray‚ğ”ò‚Î‚µ‚Ä˜‚ğ—§‚½‚¹‚é
 		push_waist_for_stand();
 
 		// ˆÚ“®

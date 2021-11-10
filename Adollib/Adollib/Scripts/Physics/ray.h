@@ -21,7 +21,7 @@ namespace Adollib {
 	public:
 		bool ray_cast(u_int tag,
 			const float ray_min,
-			float& tmin, float& tmax, Vector3& normal, Collider* coll = nullptr);
+			float& tmin, float& tmax, Vector3& normal, Collider*& coll);
 
 		bool ray_cast(Raycast_struct& str) {
 			Vector3 normal;

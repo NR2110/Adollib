@@ -55,12 +55,6 @@ namespace Adollib
 	void Camera::update()
 	{
 
-		//static float frame_count = 0;
-		//frame_count += Al_Global::second_per_frame();
-		//if (frame_count < 0.016f) {
-		//	return;
-		//}
-
 		static float rotate_speed = 0.5f;
 		static float linear_speed = 30;
 

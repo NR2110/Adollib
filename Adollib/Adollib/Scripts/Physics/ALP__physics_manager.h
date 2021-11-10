@@ -329,7 +329,7 @@ namespace Adollib
 				const float ray_min,
 				float& tmin, float& tmax,
 				Vector3& normal,
-				Collider* coll,
+				Collider*& coll,
 				Scenelist Sce = Scene_manager::get_nowscene());
 
 			// “®‚¢‚½‚à‚Ì‚Æ‚µ‚Ämoved_collider‚É“o˜^(sweep&prune‚Å‚Ì‘}“üƒ\[ƒg‚É‚Äg‚¤)
