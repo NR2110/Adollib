@@ -37,7 +37,7 @@ namespace Adollib {
 
 		void update_dop14() override {
 				dop14.pos = world_position();
-				for (int i = 0; i < DOP::DOP14_size; i++) {
+				for (int i = 0; i < DOP::DOP_size; i++) {
 					dop14.max[i] = FLT_MAX;
 				}
 

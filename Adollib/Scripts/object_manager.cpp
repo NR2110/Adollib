@@ -1193,17 +1193,12 @@ namespace Adollib
 			ray.position = camera->transform->position;
 			ray.direction = vector3_quatrotate(Vector3(0, 0, 1), camera->transform->orientation);
 
-			float tmin = 0, tmax = 0;
-			Vector3 nor;
-			Collider* coll;
-			float ray_min = 0;
-			ray.ray_cast(UINT_MAX, ray_min, tmin, tmax, nor, coll);
+			Ray::Raycast_struct data;
+			ray.ray_cast(data);
 
-			Debug::set("", nor.get_XM3());
-
-			sphere_go->transform->local_pos = ray.position + tmin * ray.direction;
-			normal_go->transform->local_orient = quaternion_from_to_rotate(Vector3(0, 0, 1), nor);
-			normal_go->transform->local_pos = sphere_go->transform->local_pos + nor * (sphere_go->transform->scale.x + normal_go->transform->scale.z);
+			sphere_go->transform->local_pos = ray.position + data.raymin * ray.direction;
+			normal_go->transform->local_orient = quaternion_from_to_rotate(Vector3(0, 0, 1), data.normal);
+			normal_go->transform->local_pos = sphere_go->transform->local_pos + data.normal * (sphere_go->transform->scale.x + normal_go->transform->scale.z);
 		}
 		else {
 			normal_go->transform->local_pos = Vector3(10000, 10000, 10000);

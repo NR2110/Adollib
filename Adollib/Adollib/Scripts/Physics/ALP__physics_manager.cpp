@@ -347,7 +347,7 @@ bool Physics_manager::update_Gui() {
 bool Physics_manager::ray_cast(
 	const Vector3& Ray_pos, const Vector3& Ray_dir,
 	u_int tag,
-	const float ray_min,
+	const float& ray_min,
 	float& tmin, float& tmax,
 	Vector3& normal,
 	Collider*& ret_coll,
@@ -375,11 +375,60 @@ bool Physics_manager::ray_cast(
 		) == false) continue;
 
 		ret = true;
-		ret_coll = coll->get_collptr();
 
 		if (tmin > min) {
 			tmin = min;
 			normal = norm;
+			ret_coll = coll->get_collptr();
+		}
+		//tmin = ALmin(tmin, min);
+		tmax = ALmax(tmax, max);
+	}
+
+	return ret;
+}
+
+
+bool Physics_manager::sphere_cast(
+	const Vector3& Ray_pos, const Vector3& Ray_dir,
+	const float& radius,
+	Vector3& contact_point,
+	u_int tag,
+	const float& ray_min,
+	float& tmin, float& tmax,
+	Vector3& normal,
+	Collider*& ret_coll,
+	Scenelist Sce) {
+
+	std::lock_guard <std::mutex> lock(mtx);
+
+	//tmin‚©‚çtmax‚É‚©‚¯‚Äray‚ªŒð·‚µ‚Ä‚¢‚é
+	tmin = +FLT_MAX;
+	tmax = -FLT_MAX;
+	float min = -FLT_MAX;
+	float max = +FLT_MAX;
+	Vector3 norm;
+	Vector3 contactp;
+
+	bool ret = false;
+
+	for (const auto coll : ALP_colliders[Sce]) {
+		if (!(coll->tag & tag))continue;
+
+		if (Physics_function::sphere_cast(
+			Ray_pos, Ray_dir, radius, contactp,
+			ray_min,
+			coll,
+			min, max, norm
+		) == false) continue;
+
+		ret = true;
+
+		if (tmin > min) {
+			tmin = min;
+			normal = norm;
+			ret_coll = coll->get_collptr();
+			contact_point = contactp;
 		}
 		//tmin = ALmin(tmin, min);
 		tmax = ALmax(tmax, max);

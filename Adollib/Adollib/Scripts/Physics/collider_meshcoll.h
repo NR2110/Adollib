@@ -90,8 +90,8 @@ namespace Adollib {
 				dop14.pos = world_position();
 
 				//各軸のmin,maxのリセット
-				Vector3 rotated_axis[DOP::DOP14_size];
-				for (int i = 0; i < DOP::DOP14_size; i++) {
+				Vector3 rotated_axis[DOP::DOP_size];
+				for (int i = 0; i < DOP::DOP_size; i++) {
 					rotated_axis[i] = vector3_quatrotate(DOP::DOP_14_axis[i], world_orientation().inverse()).unit_vect();
 					dop14.max[i] = -FLT_MAX;
 					dop14.min[i] = +FLT_MAX;
@@ -101,7 +101,7 @@ namespace Adollib {
 					const Vector3& pos = mesh_data->base_pos[v_num] * world_scale();
 
 					//DOPの更新
-					for (int i = 0; i < DOP::DOP14_size; i++) {
+					for (int i = 0; i < DOP::DOP_size; i++) {
 						const float dis = vector3_dot(rotated_axis[i], pos);
 						if (dop14.min[i] > dis) dop14.min[i] = dis * 1.00000001f;//確実にするためちょっと大きめにとる
 						if (dop14.max[i] < dis) dop14.max[i] = dis * 1.00000001f;//確実にするためちょっと大きめにとる

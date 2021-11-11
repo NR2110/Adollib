@@ -62,7 +62,7 @@ namespace Adollib {
 
 			//DOP‚ÌXV
 			float max_len = 0;
-			for (int i = 0; i < DOP::DOP14_size; i++) {
+			for (int i = 0; i < DOP::DOP_size; i++) {
 				max_len = 0;
 				for (int o = 0; o < 4; o++) {
 					float dis = fabsf(vector3_dot(DOP::DOP_14_axis[i], half[o]));

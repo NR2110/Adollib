@@ -258,13 +258,13 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 		//::
 		DOP::DOP_14& dopbase = mesh.dopbase;
 
-		for (int i = 0; i < DOP::DOP14_size; i++) {
+		for (int i = 0; i < DOP::DOP_size; i++) {
 			dopbase.max[i] = -FLT_MAX;
 			dopbase.min[i] = +FLT_MAX;
 		}
 
 		//‰Šúó‘Ô‚ÌDOP‚Ì•Û‘¶ loop’†‚ÉŒvŽZ‚·‚éDOP‚Í‚±‚ÌDOP‚ðŠî€‚É‚·‚é
-		for (int i = 0; i < DOP::DOP14_size; i++) {
+		for (int i = 0; i < DOP::DOP_size; i++) {
 			for (int& ind : indices) {
 
 				float dis = vector3_dot(DOP::DOP_14_axis[i], vertices.at(ind));

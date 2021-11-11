@@ -8,6 +8,8 @@
 #include "stage_manager.h"
 #include "stage_base.h"
 
+#include "../Adollib/Scripts/Imgui/work_meter.h"
+
 using namespace Adollib;
 
 //è‚ğL‚Î‚·
@@ -224,21 +226,53 @@ void Player::push_waist_for_stand() {
 	Debug::set("dot", dot);
 	if (dot < 0)return; //˜‚ª‰º‚ğŒü‚¢‚Ä‚¢‚È‚¯‚ê‚Îreturn
 
-	// ray‚ğ”ò‚Î‚µ‚Ä
+	{
+		static Gameobject* debug_go = nullptr;
+		if (debug_go == nullptr) {
+			debug_go = Gameobject_manager::createSphere("debug");
+			debug_go->transform->local_scale = Vector3(1) * 0.6f;
+		}
+		static Gameobject* debug_go_0 = nullptr;
+		if (debug_go_0 == nullptr) {
+			debug_go_0 = Gameobject_manager::createSphere("debug");
+			debug_go_0->transform->local_scale = Vector3(0.2f, 0.2f, 0.2f);
+		}
+
+		Ray ray;
+		ray.direction = Vector3(0, -1, 0);
+		ray.position = Waist_collider->transform->position;
+		Ray::Raycast_struct data;
+		data.collider_tag = Collider_tags::Stage;
+
+		Vector3 cp;
+		ray.sphere_cast(0.6f, cp, data);
+
+		debug_go_0->transform->local_pos = cp;
+		debug_go->transform->local_pos = ray.position + ray.direction * data.raymin;
+	}
+
+
+
+	// sphere‚ğ”ò‚Î‚µ‚Ä
 	Ray ray;
 	ray.direction = Vector3(0, -1, 0);
 	ray.position = Waist_collider->transform->position;
 
 	// ‹——£‚É‚æ‚Á‚Äaddforce
-	constexpr float stand_dis = 2;
+	constexpr float stand_dis = 2.0f;
+	constexpr float stand_radius = 0.6f;
 	constexpr float stand_pow = 7000;
 	Ray::Raycast_struct data;
 	data.collider_tag = Collider_tags::Stage;
-	if (ray.ray_cast(data)) {
-		if (data.raymin - stand_dis * dot < 0) {
-			Vector3 force = Vector3(0, 1, 0) * (stand_dis * dot - data.raymin) * stand_pow;
+	Vector3 contact_posint;
+	if (ray.sphere_cast(stand_radius, contact_posint, data)) {
+		float dis = vector3_dot(contact_posint - Waist_collider->transform->position, ray.direction);
+
+		if (dis - stand_dis * dot < 0) {
+			Vector3 force = Vector3(0, 1, 0) * (stand_dis * dot - dis) * stand_pow;
+			Debug::set("pow : ", force);
 			Waist_collider->add_force(force);
-			data.coll->add_force_local(-force, ray.position + ray.direction * data.raymin);
+			data.coll->add_force(-force, contact_posint);
 		}
 	};
 
@@ -472,14 +506,25 @@ void Player::make_jump() {
 	if (is_jumping == false && !onground_collider->concoll_enter(Collider_tags::Jumpable_Stage)) coyote -= Al_Global::second_per_frame;
 
 	if (is_gunyatto == false && coyote >= 0 && input->getKeyTrigger(Key::Space)) {
-		//Ray ray;
-		//ray.direction = Vector3(0, -1, 0);
-		//ray.position = Waist_collider->transform->position;
-		//Ray::Raycast_struct data;
-		//data.collider_tag = Collider_tags::Stage;
-		//if (ray.ray_cast(data)) {
-		//	data.coll->add_force_local(Vector3(0, -100, 0) * jump_power, ray.position + ray.direction * data.raymin);
+		Ray ray;
+		ray.direction = Vector3(0, -1, 0);
+		ray.position = Waist_collider->transform->position + Vector3(0,1,0);
+		Ray::Raycast_struct data;
+		data.collider_tag = Collider_tags::Stage;
+		if (ray.ray_cast(data) && data.raymin < 2) {
+			data.coll->add_force(Vector3(0, -1000, 0) * jump_power, ray.position + ray.direction * data.raymin);
+			if (data.coll->gameobject->material != nullptr)
+				data.coll->gameobject->material->color = Vector4(Al_Global::get_gaming(rand(), 800, 0, 1),1);
+		}
+		//auto& contacted_datas = onground_collider->get_Contacted_data();
+		//for (auto& contacted : contacted_datas) {
+		//	contacted.coll->add_force(contacted.contacted_pointB, Vector3(0, -1000, 0) * jump_power, true, false);
+
+		//	if (contacted.coll->gameobject->material != nullptr)
+		//	contacted.coll->gameobject->material->color = Vector4(Al_Global::get_gaming(rand(), 800, 0, 1), 1);
+
 		//}
+
 
 		for (int i = 0; i < Human_collider_size; i++) {
 			Human_colliders[i]->linear_velocity(Vector3(Human_colliders[i]->linear_velocity().x, jump_power, Human_colliders[i]->linear_velocity().z));

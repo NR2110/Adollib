@@ -33,6 +33,9 @@ namespace Adollib
 
 #if _DEBUG
 		set_tree(Vector3(-22, 0, -25), Vector3(1, 1.5f, 1), Vector3(0));
+		set_gear(Vector3(+8, 15, 0), Vector3(1, 5, 5), Vector3(0), 12, 8);
+
+		set_box(Vector3(32, 4, 0), Vector3(14.5f, 2.21f, 4), Vector3(0, 0, -43.3f), Vector3(188, 214, 54) / 255.0f);
 #else
 		////gear
 		set_gear(Vector3(+22, 1, 25), Vector3(0.8f, 2.2f, 2), Vector3(0), 5, 7);

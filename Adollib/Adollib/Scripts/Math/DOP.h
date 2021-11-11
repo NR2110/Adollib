@@ -3,7 +3,7 @@
 
 namespace Adollib {
 	namespace DOP {
-		static const int DOP14_size = 6 / 2;
+		static const int DOP_size = 6 / 2;
 
 		//::::::::::::::::::
 		//Boardphase用のDOP_14
@@ -15,7 +15,7 @@ namespace Adollib {
 		// c : (+0.3,0.3,-0.3)
 		// d : (-0.3,0.3,-0.3)
 		//:::::::::::::::::::
-		static const Vector3 DOP_14_axis[DOP14_size] = {
+		static const Vector3 DOP_14_axis[DOP_size] = {
 		Vector3(1,0,0),
 		Vector3(0,1,0),
 		Vector3(0,0,1)/*,
@@ -29,7 +29,7 @@ namespace Adollib {
 			Vector3 pos;
 
 			//::::::::::::::::::
-			//Boardphase用のDOP_6
+			//Boardphase用のDOP
 			// x : (1,0,0)
 			// y : (0,1,0)
 			// z : (0,0,1)
@@ -38,10 +38,10 @@ namespace Adollib {
 			// c : (1,1,-1)
 			// d : (-1,1,-1)
 			//:::::::::::::::::::
-			float max[DOP14_size] = { 0 };
+			float max[DOP_size] = { 0 };
 
 			//::::::::::::::::::
-			//Boardphase用のDOP_6
+			//Boardphase用のDOP
 			// x : (1,0,0)
 			// y : (0,1,0)
 			// z : (0,0,1)
@@ -50,7 +50,7 @@ namespace Adollib {
 			// c : (1,1,-1)
 			// d : (-1,1,-1)
 			//:::::::::::::::::::
-			float min[DOP14_size] = { 0 };
+			float min[DOP_size] = { 0 };
 		};
 
 

@@ -19,7 +19,7 @@ bool Check_insert_DOP14(const Collider_shape* meshA, const Collider_shape* meshB
 	//無限PlaneはDOPが作れないためnarrowに投げる?
 	//if (meshA->shape == ALP_Collider_shape::Plane || meshB->shape == ALP_Collider_shape::Plane) return true;
 
-	for (int i = 0; i < DOP14_size; i++) {
+	for (int i = 0; i < DOP_size; i++) {
 		const float dis = vector3_dot(DOP_14_axis[i], meshA->get_DOP().pos - meshB->get_DOP().pos);
 
 		if (
@@ -41,7 +41,7 @@ bool Check_insert_Plane(const Collider_shape* plane, const Collider_shape* mesh)
 	V = vector3_quatrotate(Vector3(0, 1, 0), plane->world_orientation());
 	plane_dis = vector3_dot(V, plane->world_position());
 
-	for (int i = 0; i < DOP14_size; i++) {
+	for (int i = 0; i < DOP_size; i++) {
 		float coll_len = vector3_dot(V, mesh->world_position() + DOP_14_axis[i] * mesh->get_DOP().max[i]);
 		if (plane_dis > coll_len)return true;
 	}
@@ -116,11 +116,6 @@ void Physics_function::BroadMidphase(Scenelist Sce,
 
 	//適当に20コ点を取って適当に?
 	int SAP_axis = 0;
-
-	//DOPの更新
-	Work_meter::start("update_dop14", 1);
-
-	Work_meter::stop("update_dop14", 1);
 
 	//Work_meter::start("delete_colldier_from_axislist");
 	////::: 削除されたものをaxis_listから削除する :::

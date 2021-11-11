@@ -33,12 +33,18 @@ void ALP_Physics::add_force(const Vector3& force) {
 
 	accumulated_force += force;
 }
-void ALP_Physics::add_force_local(const Vector3& force,const Vector3& position) {
+void ALP_Physics::add_force(const Vector3& force,const Vector3& position, const bool& is_position_local, const bool& is_force_local) {
 
 	std::lock_guard <std::mutex> lock(mtx);
 
-	const Vector3 local_position = vector3_quatrotate(position - transform->position, transform->orientation.inverse());
-	const Vector3 local_force = vector3_quatrotate(force, transform->orientation.inverse());
+	Vector3 local_position;
+	Vector3 local_force;
+	if (is_force_local)local_force = force;
+	else local_force = vector3_quatrotate(force, transform->orientation.inverse());
+
+	if (is_position_local)local_position = position;
+	else local_position = vector3_quatrotate(position - transform->position, transform->orientation.inverse());
+
 
 	accumulated_force += force;
 	accumulated_torque += vector3_cross(local_position, local_force.unit_vect()) * local_force.norm_sqr();

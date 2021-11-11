@@ -49,7 +49,7 @@ namespace Adollib {
 		void update_dop14() override {
 			Vector3 p = vector3_quatrotate(Vector3(0, world_scale().y, 0), world_orientation());
 			dop14.pos = world_position();
-			for (int i = 0; i < DOP::DOP14_size; i++) {
+			for (int i = 0; i < DOP::DOP_size; i++) {
 				float v0, v1, v2, v3;
 				v0 = vector3_dot(+p, DOP::DOP_14_axis[i]) + +world_scale().x * 1.0000001f;
 				v1 = vector3_dot(+p, DOP::DOP_14_axis[i]) + -world_scale().x * 1.0000001f;

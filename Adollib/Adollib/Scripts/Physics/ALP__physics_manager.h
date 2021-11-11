@@ -316,17 +316,41 @@ namespace Adollib
 			// ray_dir : rayの向き
 			// tag : rayの衝突するtag
 			// ray_min
+			// Sce  : Rayの衝突するcolliderの存在するscene
 			// ---out---
 			// tmin : rayの最近点
 			// tmax : rayの最遠点
 			// normal : 衝突した面のnormal
 			// coll : 衝突したcoiiderへのポインタ
-			// Sce  : Rayの衝突するcolliderの存在するscene
 			//:::::::
 			static bool ray_cast(
 				const Vector3& Ray_pos, const Vector3& Ray_dir,
 				u_int tag,
-				const float ray_min,
+				const float& ray_min,
+				float& tmin, float& tmax,
+				Vector3& normal,
+				Collider*& coll,
+				Scenelist Sce = Scene_manager::get_nowscene());
+
+			//::::::
+			//spherecastを行う
+			// ray_pos : rayの始点
+			// ray_dir : rayの向き
+			// tag : rayの衝突するtag
+			// ray_min
+			// Sce  : Rayの衝突するcolliderの存在するscene
+			// ---out---
+			// tmin : rayの最近点
+			// tmax : rayの最遠点
+			// normal : 衝突した面のnormal
+			// coll : 衝突したcoiiderへのポインタ
+			//:::::::
+				static bool sphere_cast(
+				const Vector3& Ray_pos, const Vector3& Ray_dir,
+				const float& radius,
+				Vector3& contact_point,
+				u_int tag,
+				const float& ray_min,
 				float& tmin, float& tmax,
 				Vector3& normal,
 				Collider*& coll,

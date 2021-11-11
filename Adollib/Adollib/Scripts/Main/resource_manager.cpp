@@ -569,12 +569,12 @@ namespace Adollib
 
 			// DOP‚Ì“o˜^
 			{
-				for (int i = 0; i < DOP14_size; i++) {
+				for (int i = 0; i < DOP_size; i++) {
 					mesh.dop.max[i] = -FLT_MAX;
 					mesh.dop.min[i] = +FLT_MAX;
 				}
 				for (int ver = 0; ver < vertices.size(); ver++) {
-					for (int axi = 0; axi < DOP14_size; axi++) {
+					for (int axi = 0; axi < DOP_size; axi++) {
 						float V = vector3_dot(DOP_14_axis[axi].unit_vect(), vertices[ver].position);
 
 						if (mesh.dop.max[axi] < V)mesh.dop.max[axi] = V;

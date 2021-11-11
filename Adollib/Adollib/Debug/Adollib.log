@@ -1,2 +1,16 @@
-﻿  ALP_physics.cpp
+﻿  ALP_raycast.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(120,23): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(377,23): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(423,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(424,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(425,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(427,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(428,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(429,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(486,21): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(487,21): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(488,21): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(517,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(518,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(519,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe
