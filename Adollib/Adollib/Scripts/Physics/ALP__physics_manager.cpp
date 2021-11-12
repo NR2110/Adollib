@@ -31,9 +31,6 @@ namespace Adollib
 	volatile bool Physics_manager::is_updated_physicsthread = true; //physicsを更新したframeだけtrueになる
 	volatile bool Physics_manager::is_added_ALPcollider = true; //physicsを更新したframeだけtrueになる
 
-	int Physics_manager::count_mainthread = 0;   //デバッグ用 main,physicsのupdateの割合を求める
-	int Physics_manager::count_physicsthread = 0;//デバッグ用 main,physicsのupdateの割合を求める
-
 	std::thread Physics_manager::physics_thread; //physicsのthread用
 	bool Physics_manager::is_stop_physics_thread = false; //trueになったときthread_updateを止める
 
@@ -83,7 +80,7 @@ bool Physics_manager::update(Scenelist Sce)
 
 	if (Al_Global::second_per_game < 1) {
 		adapt_added_data(Sce);
-		reset_data_per_frame(ALP_colliders[Sce], ALP_physicses[Sce]);
+		copy_transform(ALP_colliders[Sce], ALP_physicses[Sce]);
 
 		resetforce(ALP_physicses[Sce]);
 		is_updated_physicsthread = true;
@@ -101,22 +98,17 @@ bool Physics_manager::update(Scenelist Sce)
 
 		//
 		if (is_added_ALPcollider == false) {
-			// 追加したものを配列に加える (is_updated_mainthreadがtrueでないとworld情報が更新されていない可能性がある)
+			// 追加したものを配列に加える 追加された瞬間はis_added_ALPcolliderがtrue worldtransformが更新されたら毎フレームfalseになる
 			adapt_added_data(Sce, false);
-			//std::for_each(ALP_physicses[Sce].begin(), ALP_physicses[Sce].end(), [](ALP_Physics* phys) {
-			//	phys->reset_data_per_frame();
-			//	}
-			//);
+
 		}
 
 		// mainthreadが更新したら
 		if (is_updated_mainthread) {
-
 			is_updated_mainthread = false; // mainthreadがgameobject_transformを呼んだあと gameobjectのtransformをphysicsにコピーする
 
-
-			// Colliderのframe毎に保存するdataをreset
-			reset_data_per_frame(ALP_colliders[Sce], ALP_physicses[Sce]);
+			// gameobjectが更新したworld_trnsformの更新
+			copy_transform(ALP_colliders[Sce], ALP_physicses[Sce]);
 
 		}
 
@@ -190,7 +182,7 @@ bool Physics_manager::update(Scenelist Sce)
 					is_updated_mainthread = false; // mainthreadがgameobject_transformを呼んだあと gameobjectのtransformをphysicsにコピーする
 
 					//Colliderのframe毎に保存するdataをreset
-					reset_data_per_frame(ALP_colliders[Sce], ALP_physicses[Sce]);
+					copy_transform(ALP_colliders[Sce], ALP_physicses[Sce]);
 				}
 				// 位置の更新
 				integrate(ALP_physicses[Sce]);
@@ -453,7 +445,7 @@ void Physics_manager::adapt_added_data(Scenelist Sce, bool is_mutex_lock) {
 		// 追加されたcolliderの初期化&Broadphaseに登録
 		for (auto& coll : added_coll.second) {
 			coll->copy_transform_gameobject();
-			coll->reset_data_per_frame();
+			coll->copy_transform();
 			added_collider_for_insertsort[added_coll.first].emplace_back(coll);
 		}
 
@@ -476,7 +468,7 @@ void Physics_manager::adapt_added_data(Scenelist Sce, bool is_mutex_lock) {
 
 		// 追加されたphysicsの初期化
 		for (auto& phys : added_phys.second) {
-			phys->reset_data_per_frame();
+			phys->copy_transform_ptr();
 		}
 
 		int save_size = ALP_physicses[added_phys.first].size();
@@ -557,8 +549,6 @@ void Physics_manager::dadapt_delete_data(bool is_mutex_lock) {
 
 bool Physics_manager::adapt_transform_to_gameobject(Scenelist Sce) {
 	std::lock_guard <std::mutex> lock(mtx);
-
-	count_mainthread += 1;
 
 	if (is_updated_physicsthread == false) return false;
 

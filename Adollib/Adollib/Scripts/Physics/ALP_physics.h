@@ -169,7 +169,7 @@ namespace Adollib {
 			//::: 毎フレームphysics_managerが呼ぶもの(mutexのlockが必要ない) ::::::::::::
 
 			// transformの更新(transformの値をコピーする 最終的には速度の影響量をtransformに与えるためmutexのlockは必要ないと判断)
-			void reset_data_per_frame();
+			void copy_transform_ptr();
 
 			// 外力の更新
 			void apply_external_force(float duration = 1,float timeratio_60 = 1);

@@ -5,6 +5,8 @@
 
 #include "ALP_collider.h"
 
+#include "../Imgui/debug.h"
+
 using namespace Adollib;
 using namespace Physics_function;
 
@@ -114,7 +116,7 @@ void ALP_Physics::reset_force() {
 	angula_acceleration = Vector3(0, 0, 0);
 }
 
-void ALP_Physics::reset_data_per_frame() {
+void ALP_Physics::copy_transform_ptr() {
 	transform = &ALPcollider->transform;
 }
 

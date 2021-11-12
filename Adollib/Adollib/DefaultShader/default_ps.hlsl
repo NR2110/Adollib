@@ -27,7 +27,10 @@ PSOutput main(PSInput input)
     //Scolor = (ShadowPos.z - d > 0.0008f) ? Scolor : 1.0;
     //Color.xyz *= Scolor;
 
-    Color.xyz *= GetShadow(ShadowTexture, DecalSampler, ShadowPos, Color.xyz * 0.8f, 0.00008f);
+    float shadow_pow = 0;
+    shadow_pow += GetShadow(ShadowTexture, DecalSampler, ShadowPos, 0.00008f);
+
+    Color.xyz *= Color.xyz * 0.8f * shadow_pow + float3(1,1,1) * (1 - shadow_pow);
 
     Out.Color = Color;
     Out.Normal = float4(input.wNormal, 1.0f);

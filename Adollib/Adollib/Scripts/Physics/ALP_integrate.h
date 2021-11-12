@@ -33,8 +33,8 @@ namespace Adollib {
 
 
 		//::: どっちも ::::
-		// oncoll_bitsやtrnsformのリセット
-		void reset_data_per_frame(std::list<Physics_function::ALP_Collider*>& ALP_colliders, std::list<Physics_function::ALP_Physics*>& ALP_physics);
+		// gameobjectが更新したworld_trnsformの更新
+		void copy_transform(std::list<Physics_function::ALP_Collider*>& ALP_colliders, std::list<Physics_function::ALP_Physics*>& ALP_physics);
 
 		// collider::componentのtagやphysics_dataを更新する
 		void adapt_component_data(std::list<Physics_function::ALP_Collider*>& ALP_colliders, std::list<Physics_function::ALP_Physics*>& ALP_physics, std::list<Physics_function::ALP_Joint*>& ALP_joints);

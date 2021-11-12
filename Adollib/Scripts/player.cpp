@@ -35,15 +35,15 @@ namespace Adollib
 		waist_move_max_speed = 10;
 		waist_move_pow = 1500;
 
-		waist_rot_max_speed = 100;
-		waist_rot_max_pow = 5000;
+		waist_rot_max_speed = 200;
+		waist_rot_max_pow = 50000;
 		waist_rot_pow = 10000;
 
 		body_rot_max_speed = 10;
 		//body_rot_max_pow = 2000;
 		//body_rot_pow = 1500;
 		body_rot_max_pow = 4000;
-		body_rot_pow = 5000;
+		body_rot_pow = 3000;
 
 		leg_rot_max_speed = 60;
 		leg_rot_max_pow = 200;
@@ -57,7 +57,7 @@ namespace Adollib
 		hand_camera_rot_pow = 3;
 		hand_camera_rot_center = ToRadian(43);
 
-		jump_power = 25;
+		jump_power = 20;
 		turn_speed = 1.5f;
 
 		{
@@ -82,7 +82,13 @@ namespace Adollib
 	{
 		// Update_pnground
 		{
-			//onground_collider_GO->transform->local_pos = waist_pillar->center;
+			if (input->getKeyTrigger(Key::P)) {
+				bool next = Human_colliders[0]->physics_data.is_moveable;
+				next = !next;
+				for (int i = 0; i < Human_collider_size; i++) {
+					Human_colliders[i]->physics_data.is_moveable = next;
+				}
+			}
 		}
 
 		// respownˆ—

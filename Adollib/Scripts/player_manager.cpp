@@ -40,17 +40,17 @@ namespace Adollib
 		Gameobject* Lleg     = Gameobject_manager::createCube("Lleg");
 		Gameobject* Lfoot    = Gameobject_manager::createCube("Lfoot");
 
-		Head->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		Head    ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
 		Lsholder->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Lelbow->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		Lelbow  ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
 		Rsholder->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Relbow->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Body->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Waist->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Rleg->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Rfoot->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Lleg->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Lfoot->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		Relbow  ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		Body    ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		Waist   ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		Rleg    ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		Rfoot   ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		Lleg    ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		Lfoot   ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
 
 		//::: collider,shapeのアタッチ :::
 		Collider* Head_collider     = Head->addComponent<Collider>();
@@ -81,20 +81,6 @@ namespace Adollib
 		Sphere* Rfoot_shape    = Rfoot_collider->add_shape<Sphere>();
 		Sphere* Lleg_shape     = Lleg_collider->add_shape<Sphere>();
 		Sphere* Lfoot_shape    = Lfoot_collider->add_shape<Sphere>();
-
-		//Head_collider    ->ALPcollider_ptr->adapt_added_data();
-		//Lsholder_collider->ALPcollider_ptr->adapt_added_data();
-		//Lelbow_collider  ->ALPcollider_ptr->adapt_added_data();
-		//Lhand_collider   ->ALPcollider_ptr->adapt_added_data();
-		//Rsholder_collider->ALPcollider_ptr->adapt_added_data();
-		//Relbow_collider  ->ALPcollider_ptr->adapt_added_data();
-		//Rhand_collider   ->ALPcollider_ptr->adapt_added_data();
-		//Body_collider    ->ALPcollider_ptr->adapt_added_data();
-		//Waist_collider   ->ALPcollider_ptr->adapt_added_data();
-		//Rleg_collider    ->ALPcollider_ptr->adapt_added_data();
-		//Rfoot_collider   ->ALPcollider_ptr->adapt_added_data();
-		//Lleg_collider    ->ALPcollider_ptr->adapt_added_data();
-		//Lfoot_collider   ->ALPcollider_ptr->adapt_added_data();
 
 		{
 			//::: 親子関係の設定 :::
@@ -216,7 +202,8 @@ namespace Adollib
 
 			//::: 慣性モーメントの調整 :::
 			Head_collider	 ->set_barycenter(Vector3(0, +0.5f, 0));
-			Body_collider	 ->set_barycenter(Vector3(0, -0.2f, 0));
+			//Body_collider	 ->set_barycenter(Vector3(0, -0.2f, 0));
+			Body_collider	 ->set_barycenter(Vector3(0, +0.5f, 0));
 
 			Lhand_collider->physics_data.inertial_mass = 100;
 			Lhand_collider->set_tensor(Lhand_collider->get_tensor());

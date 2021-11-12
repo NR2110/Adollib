@@ -165,7 +165,7 @@ namespace Adollib {
 			void integrate(float duration, const Vector3& linear_velocity, const Vector3& angula_velocity, const Vector3& old_linear_velocity,const Vector3& old_angula_velocity);
 
 			// main_threadが更新したフレームに呼ばれる
-			void reset_data_per_frame();
+			void copy_transform();
 
 			// 毎フレーム行う collider::componentのtagなどのデータをコピーする
 			void adapt_collider_component_data();

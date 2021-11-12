@@ -3,6 +3,7 @@
 #include "../Adollib/Scripts/Main/Adollib.h"
 #include "../Adollib/Scripts/Object/gameobject_manager.h"
 
+#include "../Adollib/Scripts/Physics/ALP__physics_manager.h"
 #include "../Adollib/Scripts/Physics/ray.h"
 
 #include "stage_manager.h"
@@ -108,6 +109,74 @@ void Player::reach_out_hands() {
 		}
 	}
 
+};
+
+//立つように力を加える
+void Player::add_pow_for_stand() {
+
+	float gnyat_pow = 0.9f;
+	if (!input->getKeyState(Key::LeftControl) && is_gunyatto == false)
+	{
+		{
+			//顔が赤ちゃんなのを治す
+			Head_collider->physics_data.anglar_drag = 1.f;
+			Quaternion off = Body_collider->gameobject->transform->orientation * Head_collider->gameobject->transform->orientation.inverse();
+			float rad = off.radian();
+			if (rad > PI)rad = 2 * PI - rad;
+			float pow = ALClamp(rad * head_rot_pow, 0, head_rot_max_pow);
+			Head_collider->add_torque(off.axis() * pow * gnyat_pow);
+
+		}
+		{
+			//腰をたたせる
+			Quaternion off = rotate * Waist_collider->gameobject->transform->orientation.inverse();
+
+			float rad = off.radian();
+			if (rad > PI)rad = 2 * PI - rad;
+			float pow = ALClamp(rad * waist_rot_pow, 0, waist_rot_max_pow);
+			Waist_collider->add_torque(off.axis() * pow * gnyat_pow);
+
+		}
+		{
+			//体をたたせる
+			Quaternion off = rotate * Body_collider->gameobject->transform->orientation.inverse();
+
+			float rad = off.radian();
+			if (rad > PI)rad = 2 * PI - rad;
+			float pow = ALClamp(rad * body_rot_pow, 0, body_rot_max_pow);
+			Body_collider->add_torque(off.axis() * pow * gnyat_pow);
+		}
+
+	}
+	// gunyattoしていた時は
+	else { turn_gunyatto_dir(); }
+
+	{
+		//jointでつなげると重力が弱くなるから & 一定のパーツは重力の影響を受けないようにしているから  下向きに力を加える
+		Waist_collider->add_force(Vector3(0, -1, 0) * 150);
+		Body_collider->add_force(Vector3(0, -1, 0) * 150);
+		Lfoot_collider->add_force(Vector3(0, -1, 0) * 50);
+		Rfoot_collider->add_force(Vector3(0, -1, 0) * 50);
+	}
+
+	is_gunyatto = false;
+	//両手がstaticなものを持っているとき、ぐにゃっと
+	if ((catch_left_joint  != nullptr && catch_left_joint ->get_colliderB()->tag & Collider_tags::Static_Stage) &&
+		(catch_right_joint != nullptr && catch_right_joint->get_colliderB()->tag & Collider_tags::Static_Stage)
+		) {
+		is_gunyatto = true;
+	}
+
+	if (!onground_collider->concoll_enter(Collider_tags::Jumpable_Stage)) {
+		Waist_collider->physics_data.dynamic_friction = 0;
+		Body_collider->physics_data.dynamic_friction = 0;
+
+	}
+	else{
+		Waist_collider->physics_data.dynamic_friction = 0.4f;
+		Body_collider->physics_data.dynamic_friction =  0.4f;
+
+	}
 };
 
 //物をつかむ
@@ -223,7 +292,6 @@ void Player::push_waist_for_stand() {
 	waist_pillar->center = Vector3(0, 100, 0);
 
 	float dot = vector3_dot(Vector3(0, -1, 0), vector3_quatrotate(Vector3(0, -1, 0), Waist_collider->transform->orientation));
-	Debug::set("dot", dot);
 	if (dot < 0)return; //腰が下を向いていなければreturn
 
 	{
@@ -261,7 +329,7 @@ void Player::push_waist_for_stand() {
 	// 距離によってaddforce
 	constexpr float stand_dis = 2.0f;
 	constexpr float stand_radius = 0.6f;
-	constexpr float stand_pow = 7000;
+	constexpr float stand_pow = 2000;
 	Ray::Raycast_struct data;
 	data.collider_tag = Collider_tags::Stage;
 	Vector3 contact_posint;
@@ -269,22 +337,35 @@ void Player::push_waist_for_stand() {
 		float dis = vector3_dot(contact_posint - Waist_collider->transform->position, ray.direction);
 
 		if (dis - stand_dis * dot < 0) {
-			Vector3 force = Vector3(0, 1, 0) * (stand_dis * dot - dis) * stand_pow;
-			Debug::set("pow : ", force);
-			Waist_collider->add_force(force);
-			data.coll->add_force(-force, contact_posint);
+			float mass = 10 * 4; //パーツによって質量がまちまちなので だいたいの質量
+			Vector3 gravity_pow = Vector3(0, 1, 0) * Physics_function::Physics_manager::physicsParams.gravity * mass; //playerが滞空出来る力
+			Vector3 force = Vector3(0, 1, 0) * (stand_dis * dot - dis) * stand_pow ; //めり込みを治す力
+			Vector3 fall_force = Vector3(0, 1, 0) * Waist_collider->linear_velocity().y * mass;
+
+			Waist_collider->add_force(gravity_pow + force);
+			data.coll->add_force(-(gravity_pow + fall_force), contact_posint);
 		}
 	};
-
 }
 
 //移動
 void Player::linear_move() {
-	const float gnyat_pow = 0.9f;
+	// 地面に接している & 入力が無い時
+	if (dir.norm() == 0 && onground_collider->concoll_enter(Collider_tags::Stage)) {
+		Waist_collider->physics_data.drag = 0.98f;
+	}
+	// 入力があれば動きやすいように0.1にする
+	else Waist_collider->physics_data.drag = 0.1;
+
+	float move_pow = 1;
+	if (!onground_collider->concoll_enter(Collider_tags::Stage)) {
+		move_pow = 0.3f;
+	}
+
 	if (!input->getKeyState(Key::LeftControl))
 	{
 		//移動
-		Waist_collider->add_force(dir * waist_move_pow * gnyat_pow);
+		Waist_collider->add_force(dir * waist_move_pow * move_pow);
 
 		// 速度制限
 		Vector3 speed = Waist_collider->linear_velocity();
@@ -294,12 +375,6 @@ void Player::linear_move() {
 			Waist_collider->linear_velocity(speed.unit_vect() * waist_move_max_speed + Yspeed);
 		}
 	}
-	// 地面に接している & 入力が無い時
-	if (dir.norm() == 0 && onground_collider->concoll_enter(Collider_tags::Stage)) {
-		Waist_collider->physics_data.drag = 0.98f;
-	}
-	// 入力があれば動きやすいように0.1にする
-	else Waist_collider->physics_data.drag = 0.1;
 };
 
 //回転
@@ -360,73 +435,6 @@ void Player::accume_move_dir() {
 	//debug_coll->transform->local_pos = Waist->world_position() + dir * 5;
 };
 
-//立つように力を加える
-void Player::add_pow_for_stand() {
-
-	float gnyat_pow = 0.9f;
-	if (!input->getKeyState(Key::LeftControl) && is_gunyatto == false)
-	{
-		{
-			//顔が赤ちゃんなのを治す
-			Head_collider->physics_data.anglar_drag = 1.f;
-			Quaternion off = Body_collider->gameobject->transform->orientation * Head_collider->gameobject->transform->orientation.inverse();
-			float rad = off.radian();
-			if (rad > PI)rad = 2 * PI - rad;
-			float pow = ALClamp(rad * head_rot_pow, 0, head_rot_max_pow);
-			Head_collider->add_torque(off.axis() * pow * gnyat_pow);
-
-		}
-		{
-			//腰をたたせる
-			Quaternion off = rotate * Waist_collider->gameobject->transform->orientation.inverse();
-
-			float rad = off.radian();
-			if (rad > PI)rad = 2 * PI - rad;
-			float pow = ALClamp(rad * waist_rot_pow, 0, waist_rot_max_pow);
-			Waist_collider->add_torque(off.axis() * pow * gnyat_pow);
-
-		}
-		{
-			//体をたたせる
-			Quaternion off = rotate * Body_collider->gameobject->transform->orientation.inverse();
-
-			float rad = off.radian();
-			if (rad > PI)rad = 2 * PI - rad;
-			float pow = ALClamp(rad * body_rot_pow, 0, body_rot_max_pow);
-			Body_collider->add_torque(off.axis() * pow * gnyat_pow);
-		}
-
-	}
-	// gunyattoしていた時は
-	else { turn_gunyatto_dir(); }
-
-	{
-		//jointでつなげると重力が弱くなるから & 一定のパーツは重力の影響を受けないようにしているから  下向きに力を加える
-		Waist_collider->add_force(Vector3(0, -1, 0) * 150);
-		Body_collider->add_force(Vector3(0, -1, 0) * 150);
-		Lfoot_collider->add_force(Vector3(0, -1, 0) * 50);
-		Rfoot_collider->add_force(Vector3(0, -1, 0) * 50);
-	}
-
-	is_gunyatto = false;
-	//両手がstaticなものを持っているとき、ぐにゃっと
-	if ((catch_left_joint  != nullptr && catch_left_joint ->get_colliderB()->tag & Collider_tags::Static_Stage) &&
-		(catch_right_joint != nullptr && catch_right_joint->get_colliderB()->tag & Collider_tags::Static_Stage)
-		) {
-		is_gunyatto = true;
-	}
-
-	if (!onground_collider->concoll_enter(Collider_tags::Jumpable_Stage)) {
-		Waist_collider->physics_data.dynamic_friction = 0;
-		Body_collider->physics_data.dynamic_friction = 0;
-
-	}
-	else{
-		Waist_collider->physics_data.dynamic_friction = 0.4f;
-		Body_collider->physics_data.dynamic_friction =  0.4f;
-
-	}
-};
 
 //足を動かす
 void Player::move_legs() {

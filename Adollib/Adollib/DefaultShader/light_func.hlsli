@@ -161,12 +161,11 @@ float3	GetShadowTex(float4x4 vp, float3 wPos)
 	return wvpPos.xyz;
 }
 //シャドーマップからライト空間座標に変換とZ値比較
-float3	GetShadow(Texture2D st, SamplerState ss, float3 Tex, float3 Scolor, float Bias)
+float3	GetShadow(Texture2D st, SamplerState ss, float3 Tex, float Bias)
 {	// シャドウマップから深度を取り出す
 	float d = st.Sample(ss, Tex.xy).r;
 	// シャドウマップの深度値と現実の深度の比較
-	Scolor = (Tex.z - d > Bias) ? Scolor : 1.0;
-	return Scolor;
+    return (Tex.z - d > Bias) ? 1 : 0;
 }
 
 #define LightFunc

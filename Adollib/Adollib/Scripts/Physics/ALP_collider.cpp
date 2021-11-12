@@ -8,7 +8,7 @@
 #include "ALP_physics.h"
 #include "ALP_joint.h"
 #include "ALP__meshcoll_data.h"
-
+#include "../Imgui/debug.h"
 using namespace Adollib;
 using namespace Physics_function;
 
@@ -114,8 +114,10 @@ void ALP_Collider::integrate(const float duration, const Vector3& linear_velocit
 	//}
 
 	//現在の速度が 前の速度から加速度一定で変化したとして移動距離を求める
-	const Vector3 linear_move = old_linear_velocity * duration + 0.5f * (linear_velocity - old_linear_velocity) * duration;
-	const Vector3 angula_move = old_angula_velocity * duration + 0.5f * (angula_velocity - old_angula_velocity) * duration;
+	//const Vector3 linear_move = old_linear_velocity  + 0.5f * (linear_velocity - old_linear_velocity) ;
+	//const Vector3 angula_move = old_angula_velocity  + 0.5f * (angula_velocity - old_angula_velocity) ;
+	const Vector3 linear_move = linear_velocity;
+	const Vector3 angula_move = angula_velocity;
 
 	//アタッチされているGOの親子関係に対応 親が回転していても落下は"下"方向に
 	const Vector3 local_linear_move = vector3_quatrotate(linear_move, parent_orientate_inv);
@@ -123,16 +125,19 @@ void ALP_Collider::integrate(const float duration, const Vector3& linear_velocit
 
 	// transformに適応する
 	const Vector3 local_linear_velocity = vector3_quatrotate(linear_velocity, parent_orientate_inv);
-	transform.position += local_linear_velocity * duration;
+	transform.position += local_linear_move * duration;
 
 	const Vector3 local_angula_velocity = vector3_quatrotate(angula_velocity, parent_orientate_inv);
-	transform.orientation *= quaternion_axis_radian(local_angula_velocity.unit_vect(), local_angula_velocity.norm_sqr() * duration);
+	if (local_linear_move.norm_sqr() * duration == 0  && local_angula_move.norm_sqr() * duration == 0) {
+		int dasfg = 0;
+	}
+	transform.orientation *= quaternion_axis_radian(local_angula_move.unit_vect(), local_angula_move.norm_sqr() * duration);
 	transform.orientation = transform.orientation.unit_vect();
 
 #endif
 }
 
-void ALP_Collider::reset_data_per_frame() {
+void ALP_Collider::copy_transform() {
 	//std::lock_guard <std::mutex> lock(mtx);
 	//
 	if (is_deleted)return;  //goがすでにdeleteされていればgameobject->transformにアクセスできないからreturn
@@ -159,6 +164,7 @@ void ALP_Collider::adapt_to_gameobject_transform() const
 {
 	// mainthreaddから呼ばれるためここでis_deletedチェックを行えばよい
 	if (is_deleted) return; // gameobjectが削除されていたらreturn
+	if (ALPphysics->is_movable() == false)return;
 
 	//親のorientationの逆をとる
 	Quaternion parent_orientate_inv = Quaternion(1, 0, 0, 0);
@@ -168,14 +174,9 @@ void ALP_Collider::adapt_to_gameobject_transform() const
 	}
 
 	gameobject->transform->local_pos += vector3_quatrotate(transform.position - transform_start.position, parent_orientate_inv);
-	const Quaternion buffer = transform_start.orientation.inverse() * transform.orientation;
+
+	const Quaternion buffer = (transform_start.orientation.inverse() * transform.orientation).unit_vect();
 	gameobject->transform->local_orient *= quaternion_axis_radian(vector3_quatrotate(buffer.axis(), parent_orientate_inv), buffer.radian());
-
-	//gameobject->transform->local_pos += vector3_quatrotate(transform_for_GO.position - transform_start.position, parent_orientate_inv);
-	//const Quaternion buffer = transform_start.orientation.inverse() * transform_for_GO.orientation;
-	//gameobject->transform->local_orient *= quaternion_axis_radian(vector3_quatrotate(buffer.axis(), parent_orientate_inv), buffer.radian());
-
-	//gameobject->transform->local_scale *= transform_for_GO.scale / start_transform.scale;
 }
 
 void ALP_Collider::copy_transform_gameobject() {

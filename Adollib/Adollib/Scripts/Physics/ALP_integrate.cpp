@@ -86,14 +86,14 @@ void Physics_function::integrate(std::list<Physics_function::ALP_Physics*>& ALP_
 #pragma region colliders & phyicses
 //:::::::::::::::::::::::::::::::::::::::::::::::::::
 
-void Physics_function::reset_data_per_frame(std::list<Physics_function::ALP_Collider*>& ALP_colliders, std::list<Physics_function::ALP_Physics*>& ALP_physics) {
+void Physics_function::copy_transform(std::list<Physics_function::ALP_Collider*>& ALP_colliders, std::list<Physics_function::ALP_Physics*>& ALP_physics) {
 
 	std::for_each(ALP_colliders.begin(), ALP_colliders.end(), [](ALP_Collider* coll) {
-		coll->reset_data_per_frame();
+		coll->copy_transform();
 		}
 	);
 	std::for_each(ALP_physics.begin(), ALP_physics.end(), [](ALP_Physics* phys) {
-		phys->reset_data_per_frame();
+		phys->copy_transform_ptr();
 		}
 	);
 }

@@ -104,7 +104,6 @@ void Gameobject_manager::update(Scenelist Sce) {
 #endif // Use_physics_thread
 
 	{
-
 		Physics_manager::adapt_transform_to_gameobject(Sce);
 
 		//親から子に座標の更新を行う

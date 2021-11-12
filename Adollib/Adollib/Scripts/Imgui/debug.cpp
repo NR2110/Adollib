@@ -90,6 +90,14 @@ void Debug::reset() {
 
 void Debug::set(std::string name, float x, float y, float z, float w) {
 	if (stop_flag == true)return;
+	for (auto& param : notag_debug_param) {
+		if (param.param_name == name) {
+			param.param = DirectX::XMFLOAT4(x, y, z, w);
+			param.param_num = 3;
+			return;
+		}
+	}
+
 	base b;
 	b.param_name = name;
 	b.param = DirectX::XMFLOAT4(x, y, z, w);
@@ -99,6 +107,14 @@ void Debug::set(std::string name, float x, float y, float z, float w) {
 }
 void Debug::set(std::string name, DirectX::XMFLOAT4 xyzw) {
 	if (stop_flag == true)return;
+	for (auto& param : notag_debug_param) {
+		if (param.param_name == name) {
+			param.param = xyzw;
+			param.param_num = 3;
+			return;
+		}
+	}
+
 	base b;
 	b.param_name = name;
 	b.param = xyzw;
@@ -108,6 +124,14 @@ void Debug::set(std::string name, DirectX::XMFLOAT4 xyzw) {
 }
 void Debug::set(std::string name, DirectX::XMFLOAT3 xyz) {
 	if (stop_flag == true)return;
+	for (auto& param : notag_debug_param) {
+		if (param.param_name == name) {
+			param.param = DirectX::XMFLOAT4(xyz.x, xyz.y, xyz.z, 0);
+			param.param_num = 3;
+			return;
+		}
+	}
+
 	base b;
 	b.param_name = name;
 	b.param = DirectX::XMFLOAT4(xyz.x, xyz.y, xyz.z, 0);
@@ -118,6 +142,14 @@ void Debug::set(std::string name, DirectX::XMFLOAT3 xyz) {
 
 void Debug::set(std::string tabname, std::string name, float x, float y, float z, float w) {
 	if (stop_flag == true)return;
+	for (auto& param : notag_debug_param) {
+		if (param.param_name == name) {
+			param.param = DirectX::XMFLOAT4(x, y, z, w);
+			param.param_num = 3;
+			return;
+		}
+	}
+
 	base b;
 	b.param_name = name;
 	b.param = DirectX::XMFLOAT4(x, y, z, w);
@@ -131,6 +163,14 @@ void Debug::set(std::string tabname, std::string name, float x, float y, float z
 }
 void Debug::set(std::string tabname, std::string name, DirectX::XMFLOAT4 xyzw) {
 	if (stop_flag == true)return;
+	for (auto& param : notag_debug_param) {
+		if (param.param_name == name) {
+			param.param = xyzw;
+			param.param_num = 3;
+			return;
+		}
+	}
+
 	base b;
 	b.param_name = name;
 	b.param = xyzw;
@@ -144,6 +184,14 @@ void Debug::set(std::string tabname, std::string name, DirectX::XMFLOAT4 xyzw) {
 }
 void Debug::set(std::string tabname, std::string name, DirectX::XMFLOAT3 xyz) {
 	if (stop_flag == true)return;
+	for (auto& param : notag_debug_param) {
+		if (param.param_name == name) {
+			param.param = DirectX::XMFLOAT4(xyz.x, xyz.y, xyz.z, 0);
+			param.param_num = 3;
+			return;
+		}
+	}
+
 	base b;
 	b.param_name = name;
 	b.param = DirectX::XMFLOAT4(xyz.x, xyz.y, xyz.z, 0);
