@@ -1,118 +1,103 @@
-﻿  camera_manager.cpp
-  camera_s.cpp
+﻿  camera.cpp
+  demo_house.cpp
   object_manager.cpp
   object_rotate.cpp
   player.cpp
+  player_funcs.cpp
+  player_manager.cpp
+  stage_01.cpp
+  stage_01_funcs.cpp
+  stage_base.cpp
+  stage_demo.cpp
+  stage_demo_funcs.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_manager.h(23): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_manager::Stage_types' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(173,47): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(407,112): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_funcs.cpp(214,66): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(495,59): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(347,66): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_manager.h(23): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_manager::Stage_types' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\player_funcs.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(75,38): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(73,45): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(78,26): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(63,70): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(358,46): warning C4305: '=': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(526,80): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(947,62): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(1156,114): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(1167,93): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(1167,113): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\camera.cpp(146,82): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\camera.cpp(146,49): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\camera.cpp(211,30): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\camera.cpp(223,82): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\camera.cpp(223,49): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+  stage_manager.cpp
   imgui_manager.cpp
   Adollib.cpp
   input.cpp
   loop.cpp
   main.cpp
   resource_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\vector.inl(339): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
   systems.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\Adollib.cpp(23,11): warning C4244: '初期化中': 'int' から 'float' への変換です。データが失われる可能性があります。
-  frustum_culling.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています ..\Scripts\camera_manager.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています ..\Scripts\camera_manager.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_meshcoll.h(30,1): warning C4267: '初期化中': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\Scripts\object_rotate.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_meshcoll.h(30,1): warning C4267: '初期化中': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\Scripts\object_manager.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Main\main.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Main\main.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Main\loop.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Main\loop.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
+  component_camera.cpp
+  component_light.cpp
+  gameobject.cpp
+  gameobject_manager.cpp
+  ALP_broadphase.cpp
+  ALP_collider.cpp
+  ALP_integrate.cpp
+  ALP_joint.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_manager.h(23): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_manager::Stage_types' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\stage_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(473,34): warning C4267: '初期化中': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(594,65): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(619,56): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(667,35): warning C4244: '=': 'double' から 'Adollib::u_int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject.cpp(26,5): warning C4311: '型キャスト': ポインターを 'Adollib::Gameobject *' から 'int' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject.cpp(26,5): warning C4302: '型キャスト': 'Adollib::Gameobject *' から 'int' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject.cpp(38,6): warning C4311: '型キャスト': ポインターを 'Adollib::Gameobject *' から 'int' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject.cpp(38,6): warning C4302: '型キャスト': 'Adollib::Gameobject *' から 'int' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject.cpp(38,6): warning C4312: '型キャスト': 'int' からより大きいサイズの 'void *' へ変換します。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\component_camera.cpp(121,29): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\component_camera.cpp(122,29): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\component_camera.cpp(123,29): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\component_camera.cpp(124,29): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+  ALP_physics.cpp
+  ALP_resolve_contact.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\vector.inl(339): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
+  ALP_resolve_contact_SIM.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\vector.inl(339): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
+  collider_shape.cpp
+  ALP__physics_manager.cpp
+  collider.cpp
+  ALP_contact.cpp
+  conejoint.cpp
+  coneTwistjoint.cpp
+  hingejoint.cpp
+  joint.cpp
+  joint_base.cpp
+  meshcoll_resorce_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact_SIM.cpp(460,21): warning C4101: 'position': ローカル変数は 1 度も使われていません。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.cpp(79,26): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.cpp(453,57): warning C4267: '初期化中': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.cpp(474,57): warning C4267: '初期化中': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+  ray.cpp
+  twistjoint.cpp
   material.cpp
   material_for_collider.cpp
   mesh.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(465,34): warning C4267: '初期化中': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(587,71): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(612,56): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(660,35): warning C4244: '=': 'double' から 'Adollib::u_int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_meshcoll.h(30,1): warning C4267: '初期化中': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\Scripts\camera_manager.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_meshcoll.h(30,1): warning C4267: '初期化中': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\Scripts\camera_s.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_meshcoll.h(30,1): warning C4267: '初期化中': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(60,61): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+  mesh_renderer.cpp
+  renderer_base.cpp
+  renderer_manager.cpp
+  compute_shader.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\meshcoll_resorce_manager.cpp(156,30): warning C4267: '=': 'size_t' から 'Adollib::u_int' に変換しました。データが失われているかもしれません。
+  shader.cpp
+  directional_shadow.cpp
+  UI.cpp
+  sprite_renderer.cpp
   texture.cpp
-  gameobject.cpp
-  gameobject_camera.cpp
-  gameobject_light.cpp
-  gameobject_manager.cpp
-  ALP_broadphase.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Mesh\frustum_culling.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Mesh\frustum_culling.cpp)
-  ALP_collider.cpp
-  ALP_integrate.cpp
-  ALP_physics.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Mesh\material.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Mesh\material.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_collider.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ALP_collider.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Object\gameobject.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(67,50): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(99,97): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject_light.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Object\gameobject_light.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(122,50): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(154,97): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(177,50): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(209,97): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(235,96): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(264,98): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(288,62): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(317,98): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject_camera.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Object\gameobject_camera.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(341,62): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(370,98): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Mesh\material_for_collider.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Mesh\material_for_collider.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_integrate.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ALP_integrate.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject_manager.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Object\gameobject_manager.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_meshcoll.h(30,1): warning C4267: '初期化中': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています Scripts\Mesh\material_for_collider.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(602,44): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(622,94): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_broadphase.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ALP_broadphase.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_broadphase.cpp(92,45): warning C4267: '初期化中': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_broadphase.cpp(132,45): warning C4267: '初期化中': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_physics.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ALP_physics.cpp)
-  ALP_resolve_contact.cpp
-  ALP__physics_manager.cpp
-  collider__base.cpp
-  contact.cpp
-  meshcoll_resorce_manager.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP__physics_manager.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ALP__physics_manager.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Physics\collider__base.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\collider__base.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\gameobject_camera.cpp(41,84): warning C4305: '引数': 'unsigned __int64' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Physics\contact.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\contact.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_resolve_contact.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ALP_resolve_contact.cpp)
-  ray.cpp
   scene_game.cpp
   scene_manager.cpp
-  compute_shader.cpp
-  shader.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Physics\ray.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ray.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Scene\scene_manager.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Scene\scene_manager.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\object.h(9,1): warning C4005: 'DBG_NEW': マクロが再定義されました。 (ソース ファイルをコンパイルしています Scripts\Scene\scene_game.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\singleton.h(9): message : 'DBG_NEW' の以前の定義を確認してください (ソース ファイルをコンパイルしています Scripts\Scene\scene_game.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_meshcoll.h(30,1): warning C4267: '初期化中': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP__physics_manager.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\meshcoll_resorce_manager.cpp(136,30): warning C4267: '=': 'size_t' から 'Adollib::u_int' に変換しました。データが失われているかもしれません。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_meshcoll.h(30,1): warning C4267: '初期化中': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています Scripts\Scene\scene_game.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_manager.h(23): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_manager::Stage_types' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Scene\scene_game.cpp)
 libfbxsdk-md.lib(fbxtime.obj) : fatal error LNK1112: モジュールのコンピューターの種類 'x86' は対象コンピューターの種類 'x64' と競合しています。

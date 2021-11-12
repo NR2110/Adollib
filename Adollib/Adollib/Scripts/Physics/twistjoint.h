@@ -22,6 +22,7 @@ namespace Adollib {
 			: Joint_base(l_colliderA_comp, l_colliderB_comp, l_ALPjoint) {}
 
 		// collider_component1‚ÌŽ²
+		Vector3 vec0 = Vector3(1, 0, 0);
 		Vector3 vec1 = Vector3(1, 0, 0);
 
 		Vector2 limit = Vector2(0, 360);

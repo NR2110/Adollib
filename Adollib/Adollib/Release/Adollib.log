@@ -1,8 +1,7 @@
-﻿  player_funcs.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_manager.h(23): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_manager::Stage_types' の左辺を無視します。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(63,70): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(359,46): warning C4305: '=': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(526,80): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+﻿  player_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(173,48): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(407,192): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(495,60): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
   コード生成しています。
   1 of 9436 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation

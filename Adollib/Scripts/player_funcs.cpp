@@ -438,11 +438,12 @@ void Player::accume_move_dir() {
 
 //‘«‚ğ“®‚©‚·
 void Player::move_legs() {
-	if (input->getKeyState(Key::LeftControl))return;
+	//return;
+	//if (is_gunyatto || input->getKeyState(Key::LeftControl))return;
 
 	//Waist_collider->physics_data.is_moveable = false;
-		//Rleg_collider->physics_data.is_moveable = false;
-		//Lleg_collider->physics_data.is_moveable = false;
+	//Rleg_collider->physics_data.is_moveable = false;
+	//Lleg_collider->physics_data.is_moveable = false;
 	if (dir.norm() != 0) {
 		float front_value = ToRadian(30); //‘«‚Í“·‘Ì‚æ‚è’x‚ê‚é‚½‚ß ‘«‚ğ‘O‚Éo‚·‚½‚ß‚É—]•ª‚É‚©‚¯‚é‰ñ“]‚Ì—Í
 		float max_theata = ToRadian(60) * 0.5f;
