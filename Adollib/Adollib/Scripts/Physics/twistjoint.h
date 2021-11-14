@@ -21,9 +21,10 @@ namespace Adollib {
 		TwistJoint(Collider* l_colliderA_comp, Collider* l_colliderB_comp, Physics_function::ALP_Joint* l_ALPjoint)
 			: Joint_base(l_colliderA_comp, l_colliderB_comp, l_ALPjoint) {}
 
-		// collider_component1の軸
-		Vector3 vec0 = Vector3(1, 0, 0);
-		Vector3 vec1 = Vector3(1, 0, 0);
+		Vector3 vec0 = Vector3(1, 0, 0); //collider_comp[0]の軸
+		Vector3 vec1 = Vector3(1, 0, 0); //collider_comp[1]の軸
+
+		float max_radian_pow = 10; //角度の差が大きすぎると跳ねてきもいので limit_effectで力を加える時に考慮する角度の最大値
 
 		Vector2 limit = Vector2(0, 360);
 

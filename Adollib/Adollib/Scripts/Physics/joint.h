@@ -50,6 +50,7 @@ namespace Adollib {
 
 		static TwistJoint* add_Twistjoint(
 			Collider* colliderA, Collider* colliderB,
+			const Vector3& axisA,
 			const Vector3& axisB,
 			const float& bias = 0.1f
 		);

@@ -20,7 +20,7 @@ using namespace Contacts;
 //ContactPoint‚Ì•\Ž¦
 #define Update60fps
 //#define Draw_Contact
-//#define Draw_JointContact
+#define Draw_JointContact
 
 //::: staticƒƒ“ƒo‚Ì‰Šú‰» :::::
 #pragma region static_initialize
@@ -220,8 +220,8 @@ bool Physics_manager::update(Scenelist Sce)
 
 		count += 2;
 		if (count > size)break;
-		const auto coll0 = p->joint->get_colliderA();
-		const auto coll1 = p->joint->get_colliderB();
+		const auto coll0 = p->userjoint->get_colliderA();
+		const auto coll1 = p->userjoint->get_colliderB();
 
 		//debug_go[count - 1]->transform->local_pos = vector3_quatrotate((p.contacts.contactpoints[i].point[0]), coll0.get_gameobject()->world_orientate()) + coll0.get_gameobject()->world_position();
 		//debug_go[count - 2]->transform->local_pos = vector3_quatrotate((p.contacts.contactpoints[i].point[1]), coll1.get_gameobject()->world_orientate()) + coll1.get_gameobject()->world_position();

@@ -82,8 +82,8 @@ void Debug::render() {
 }
 
 void Debug::reset() {
-	debug_params.clear();
-	notag_debug_param.clear();
+	//debug_params.clear();
+	//notag_debug_param.clear();
 	tags.clear();
 }
 

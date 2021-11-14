@@ -110,6 +110,7 @@ ConetwistJoint* Joint::add_Conetwistjoint(
 
 TwistJoint* Joint::add_Twistjoint(
 	Collider* colliderA, Collider* colliderB,
+	const Vector3& axisA,
 	const Vector3& axisB,
 	const float& bias
 ) {
@@ -121,6 +122,7 @@ TwistJoint* Joint::add_Twistjoint(
 	TwistJoint* twistjoint = newD TwistJoint(colliderA, colliderB, joint);
 	joint->userjoint = twistjoint;
 
+	twistjoint->vec0 = axisA;
 	twistjoint->vec1 = axisB;
 
 	twistjoint->bias = bias;
