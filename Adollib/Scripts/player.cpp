@@ -32,8 +32,8 @@ namespace Adollib
 		head_rot_max_pow = 1000;
 		head_rot_pow = 1000;
 
-		waist_move_max_speed = 10;
-		waist_move_pow = 1500;
+		waist_move_max_speed = 7;
+		waist_move_pow = 1000;
 
 		waist_rot_max_speed = 200;
 		waist_rot_max_pow = 50000;

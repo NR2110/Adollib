@@ -319,7 +319,7 @@ namespace Adollib
 		{
 			auto coll = set_box(Vector3(0, -29, -100), Vector3(2, 2, 2), Vector3(0), Vector3(0.8f), false);
 			coll->tag &= ~Collider_tags::Caera_not_sunk_Stage;
-			coll->physics_data.inertial_mass = 10;
+			coll->physics_data.inertial_mass = 50;
 		}
 
 		//buttan
