@@ -45,6 +45,16 @@ namespace Adollib {
 
 			//float intensity;
 		};
+		// shadow (b7)
+		struct ConstantBufferPerShadow
+		{
+			DirectX::XMFLOAT4X4 shadow_viewprojection;
+			DirectX::XMFLOAT3 right_dir;
+			float dummy;
+		};
+
+
+
 		// Sprite (b6)
 		struct ConstantBufferPerSprite
 		{
@@ -53,12 +63,16 @@ namespace Adollib {
 			DirectX::XMFLOAT2 Tex;	    //UVç¿ïW
 			DirectX::XMFLOAT4 Color;	//í∏ì_êF
 		};
-		// shadow (b7)
-		struct ConstantBufferPerShadow
+
+		// Gaussian_filter (b6)
+		static	constexpr	u_int	KARNEL_SIZE = 16;
+		static	constexpr	u_int	BUFFER_SIZE = KARNEL_SIZE * KARNEL_SIZE;
+		struct ConstantBufferPerGaussianFilter
 		{
-			DirectX::XMFLOAT4X4 shadow_viewprojection;
-			DirectX::XMFLOAT3 right_dir;
-			float dummy;
+			DirectX::XMFLOAT4	Weight[BUFFER_SIZE];
+			float		KarnelSize;
+			DirectX::XMFLOAT2	texcel;
+			float		dummy;
 		};
 	}
 }

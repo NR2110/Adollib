@@ -23,6 +23,9 @@ void Directional_shadow::awake() {
 	shadow_texture = std::make_shared<Texture>();
 	shadow_texture->CreateDepth(10000, 10000, DXGI_FORMAT_R24G8_TYPELESS);
 
+	gaussianshadow_texture = std::make_shared<Texture>();
+	gaussianshadow_texture->CreateDepth(10000, 10000, DXGI_FORMAT_R24G8_TYPELESS);
+
 	shader = std::make_shared<Shader>();
 	shader->Load_VS("./DefaultShader/render_directional_shadow_vs.cso");
 }
@@ -75,6 +78,13 @@ void Directional_shadow::setup() {
 	Systems::DeviceContext->UpdateSubresource(shadow_viewprojection_cb.Get(), 0, NULL, &shadow_sb, 0, 0);
 	Systems::DeviceContext->VSSetConstantBuffers(7, 1, shadow_viewprojection_cb.GetAddressOf());
 	Systems::DeviceContext->PSSetConstantBuffers(7, 1, shadow_viewprojection_cb.GetAddressOf());
+}
+
+void Directional_shadow::gaussian_filter() {
+	Systems::DeviceContext->OMSetRenderTargets(0, nullptr, nullptr);
+	shadow_texture->Set(1);
+
+
 }
 
 Frustum_data Directional_shadow::calculate_frustum_data() {

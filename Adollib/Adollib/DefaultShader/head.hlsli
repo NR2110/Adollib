@@ -73,14 +73,7 @@ cbuffer CBPerMaterial : register(b5)
     float shininess; // スペキュラ係数
 };
 
-cbuffer CBPerSprite : register(b6)
-{
-    float3 Pos; //位置
-    float3 Normal; //法線
-    float2 Tex; //UV座標
-    float4 Color; //頂点色
-
-};
+//::::::::::::::::
 
 cbuffer CBPerShadow : register(b7)
 {

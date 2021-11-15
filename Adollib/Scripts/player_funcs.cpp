@@ -475,7 +475,7 @@ void Player::accume_move_dir() {
 //‘«‚ð“®‚©‚·
 void Player::move_legs() {
 	//return;
-	//if (is_gunyatto || input->getKeyState(Key::LeftControl))return;
+	if (is_gunyatto || input->getKeyState(Key::LeftControl))return;
 
 	//Waist_collider->physics_data.is_moveable = false;
 	//Rleg_collider->physics_data.is_moveable = false;

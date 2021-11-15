@@ -86,8 +86,9 @@ void Renderer_manager::render(const std::map<Scenelist, std::list<Camera_compone
  			for (auto& renderer : renderers[render_scene]) {
 				renderer->render(shadow_frustum);
 			}
-
 			camera->directional_shadow->set_ShaderResourceView();
+
+
 		}
 
 

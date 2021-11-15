@@ -20,6 +20,7 @@ namespace Adollib {
 		Microsoft::WRL::ComPtr<ID3D11Buffer> shadow_viewprojection_cb;
 
 		std::shared_ptr<Texture> shadow_texture = nullptr;
+		std::shared_ptr<Texture> gaussianshadow_texture = nullptr;
 		std::shared_ptr<Shader> shader = nullptr;
 
 	public:
@@ -39,6 +40,8 @@ namespace Adollib {
 		void setup();
 
 		void shader_activate();
+
+		void gaussian_filter();
 
 		// shadow_‚Ì[“xî•ñ‚ğshader‚É
 		void set_ShaderResourceView();

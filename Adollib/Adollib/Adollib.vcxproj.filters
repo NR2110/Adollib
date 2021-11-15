@@ -89,38 +89,41 @@
     <Filter Include="00_Adollib\44_render\shader">
       <UniqueIdentifier>{3174d617-5d73-43a8-90e4-a147987a3daa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00_Adollib\44_render\shader\hlsli">
-      <UniqueIdentifier>{2ee81938-f4b8-4424-be0e-212cafffefba}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\scene_shader">
       <UniqueIdentifier>{ab7202cd-6565-436d-ab6e-88778cf9470f}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\scene_title">
       <UniqueIdentifier>{f1c58b24-84bc-4a88-bdda-fc57d1d89abc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00_Adollib\44_render\shader\hlsli\base">
+    <Filter Include="00_Adollib\44_render\renderer">
+      <UniqueIdentifier>{622ecb35-466a-41d0-819e-0e71a54345ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Adollib\44_render\shader\hlsl">
+      <UniqueIdentifier>{2ee81938-f4b8-4424-be0e-212cafffefba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Adollib\44_render\shader\hlsl\base">
       <UniqueIdentifier>{1ba0e749-172b-428d-b533-94ff56ba6f5b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00_Adollib\44_render\shader\hlsli\default">
+    <Filter Include="00_Adollib\44_render\shader\hlsl\default">
       <UniqueIdentifier>{6f67a6ae-154c-4201-96be-4301ae9a0448}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Adollib\44_render\shader\hlsl\ui">
+      <UniqueIdentifier>{808eaa2c-0a21-4451-ad46-7c9b0e9489a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Adollib\44_render\shader\hlsl\sprite">
+      <UniqueIdentifier>{25a55cea-c0ac-45a9-a0df-cfbcc60c5597}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Adollib\44_render\shader\hlsl\directional_shadow">
+      <UniqueIdentifier>{9ed3b920-6c29-4a31-ac62-1a122af91531}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Adollib\44_render\shader\hlsl\collider_render">
+      <UniqueIdentifier>{741d4a78-c44c-48cc-9d57-9e0cda3c0ff0}</UniqueIdentifier>
     </Filter>
     <Filter Include="00_Adollib\44_render\shader\posteffect">
       <UniqueIdentifier>{6c08b8ef-f6ef-4fa7-8668-7db469c33b7c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00_Adollib\44_render\renderer">
-      <UniqueIdentifier>{622ecb35-466a-41d0-819e-0e71a54345ef}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00_Adollib\44_render\shader\hlsli\ui">
-      <UniqueIdentifier>{808eaa2c-0a21-4451-ad46-7c9b0e9489a5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00_Adollib\44_render\shader\hlsli\sprite">
-      <UniqueIdentifier>{25a55cea-c0ac-45a9-a0df-cfbcc60c5597}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00_Adollib\44_render\shader\hlsli\directional_shadow">
-      <UniqueIdentifier>{9ed3b920-6c29-4a31-ac62-1a122af91531}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00_Adollib\44_render\shader\hlsli\collider_render">
-      <UniqueIdentifier>{741d4a78-c44c-48cc-9d57-9e0cda3c0ff0}</UniqueIdentifier>
+    <Filter Include="00_Adollib\44_render\shader\hlsl\gaussian_filter">
+      <UniqueIdentifier>{4c76dcf8-fa8c-40ad-a842-cd31cdd338b4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -696,9 +699,6 @@
     <ClInclude Include="Scripts\Renderer\Shader\vertex_format.h">
       <Filter>00_Adollib\44_render\shader</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Renderer\posteffect_base.h">
-      <Filter>00_Adollib\44_render\shader\posteffect</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts\Renderer\renderer_manager.h">
       <Filter>00_Adollib\44_render\renderer</Filter>
     </ClInclude>
@@ -732,82 +732,94 @@
     <ClInclude Include="Scripts\Math\quaternion.inl">
       <Filter>00_Adollib\11_math</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Renderer\posteffect_base.h">
+      <Filter>00_Adollib\44_render\shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
     <None Include="DefaultShader\base_math.hlsli">
-      <Filter>00_Adollib\44_render\shader\hlsli\base</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsl\base</Filter>
     </None>
     <None Include="DefaultShader\head.hlsli">
-      <Filter>00_Adollib\44_render\shader\hlsli\base</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsl\base</Filter>
     </None>
     <None Include="DefaultShader\light_type.hlsli">
-      <Filter>00_Adollib\44_render\shader\hlsli\base</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsl\base</Filter>
     </None>
     <None Include="DefaultShader\math.hlsli">
-      <Filter>00_Adollib\44_render\shader\hlsli\base</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsl\base</Filter>
     </None>
     <None Include="DefaultShader\quaternion.hlsli">
-      <Filter>00_Adollib\44_render\shader\hlsli\base</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsl\base</Filter>
     </None>
     <None Include="DefaultShader\default.hlsli">
-      <Filter>00_Adollib\44_render\shader\hlsli\default</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsl\default</Filter>
     </None>
     <None Include="DefaultShader\ui.hlsli">
-      <Filter>00_Adollib\44_render\shader\hlsli\ui</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsl\ui</Filter>
     </None>
     <None Include="DefaultShader\sprite.hlsli">
-      <Filter>00_Adollib\44_render\shader\hlsli\sprite</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsl\sprite</Filter>
     </None>
     <None Include="DefaultShader\render_directional_shadow.hlsli">
-      <Filter>00_Adollib\44_render\shader\hlsli\directional_shadow</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsl\directional_shadow</Filter>
     </None>
     <None Include="DefaultShader\collider_render.hlsli">
-      <Filter>00_Adollib\44_render\shader\hlsli\collider_render</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsl\collider_render</Filter>
     </None>
     <None Include="DefaultShader\light_func.hlsli">
-      <Filter>00_Adollib\44_render\shader\hlsli\base</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsl\base</Filter>
     </None>
     <None Include="DefaultShader\bayermatrix_func.hlsli">
-      <Filter>00_Adollib\44_render\shader\hlsli\base</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsl\base</Filter>
+    </None>
+    <None Include="DefaultShader\gaussian_filter.hlsli">
+      <Filter>00_Adollib\44_render\shader\hlsl\gaussian_filter</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="DefaultShader\default_ps.hlsl">
-      <Filter>00_Adollib\44_render\shader\hlsli\default</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsl\default</Filter>
     </FxCompile>
     <FxCompile Include="DefaultShader\default_vs.hlsl">
-      <Filter>00_Adollib\44_render\shader\hlsli\default</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsl\default</Filter>
     </FxCompile>
     <FxCompile Include="DefaultShader\ui_vs.hlsl">
-      <Filter>00_Adollib\44_render\shader\hlsli\ui</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsl\ui</Filter>
     </FxCompile>
     <FxCompile Include="DefaultShader\ui_ps.hlsl">
-      <Filter>00_Adollib\44_render\shader\hlsli\ui</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsl\ui</Filter>
     </FxCompile>
     <FxCompile Include="DefaultShader\sprite_ps.hlsl">
-      <Filter>00_Adollib\44_render\shader\hlsli\sprite</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsl\sprite</Filter>
     </FxCompile>
     <FxCompile Include="DefaultShader\sprite_vs.hlsl">
-      <Filter>00_Adollib\44_render\shader\hlsli\sprite</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsl\sprite</Filter>
     </FxCompile>
     <FxCompile Include="DefaultShader\render_directional_shadow_ps.hlsl">
-      <Filter>00_Adollib\44_render\shader\hlsli\directional_shadow</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsl\directional_shadow</Filter>
     </FxCompile>
     <FxCompile Include="DefaultShader\render_directional_shadow_vs.hlsl">
-      <Filter>00_Adollib\44_render\shader\hlsli\directional_shadow</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsl\directional_shadow</Filter>
     </FxCompile>
     <FxCompile Include="DefaultShader\default_ps_noshadow.hlsl">
-      <Filter>00_Adollib\44_render\shader\hlsli\default</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsl\default</Filter>
     </FxCompile>
     <FxCompile Include="DefaultShader\collider_render_vs.hlsl">
-      <Filter>00_Adollib\44_render\shader\hlsli\collider_render</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsl\collider_render</Filter>
     </FxCompile>
     <FxCompile Include="DefaultShader\collider_render_ps.hlsl">
-      <Filter>00_Adollib\44_render\shader\hlsli\collider_render</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsl\collider_render</Filter>
     </FxCompile>
     <FxCompile Include="DefaultShader\default_ps_dither_noshadow.hlsl">
-      <Filter>00_Adollib\44_render\shader\hlsli\default</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsl\default</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\gaussian_filter_ps.hlsl">
+      <Filter>00_Adollib\44_render\shader\hlsl\gaussian_filter</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\gaussian_filter_vs.hlsl">
+      <Filter>00_Adollib\44_render\shader\hlsl\gaussian_filter</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
