@@ -32,32 +32,39 @@ namespace Adollib
 		head_rot_max_pow = 1000;
 		head_rot_pow = 1000;
 
-		waist_move_max_speed = 7;
+		waist_move_max_speed = 10;
 		waist_move_pow = 1000;
 
-		waist_rot_max_speed = 200;
-		waist_rot_max_pow = 50000;
+		//waist_rot_max_speed = 200;
+		//waist_rot_max_pow = 50000;
+		//waist_rot_pow = 10000;
+		waist_rot_max_speed = 3;
+		waist_rot_max_pow = 10000;
 		waist_rot_pow = 10000;
 
-		body_rot_max_speed = 10;
-		//body_rot_max_pow = 2000;
-		//body_rot_pow = 1500;
-		body_rot_max_pow = 4000;
-		body_rot_pow = 3000;
+		//body_rot_max_speed = 100;
+		//body_rot_max_pow = 4000;
+		//body_rot_pow = 3000;
+		body_rot_max_speed = 3;
+		body_rot_max_pow = 10000;
+		body_rot_pow = 10000;
 
 		leg_rot_max_speed = 60;
-		leg_rot_max_pow = 200;
-		leg_rot_pow = 250;
+		leg_rot_max_pow = 300;
+		leg_rot_pow = 400;
 
-		hand_rot_max_speed = 11;
-		hand_rot_max_pow = 200;
-		hand_rot_pow = 200;
+		//hand_rot_max_speed = 11;
+		//hand_rot_max_pow = 200;
+		//hand_rot_pow = 200;
+		hand_rot_max_speed = 8;
+		hand_rot_max_pow = 300;
+		hand_rot_pow = 300;
 
 		hand_camera_max_rot = ToRadian(80);
 		hand_camera_rot_pow = 3;
 		hand_camera_rot_center = ToRadian(43);
 
-		jump_power = 20;
+		jump_power = 21;
 		turn_speed = 1.5f;
 
 		{

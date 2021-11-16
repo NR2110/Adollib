@@ -24,6 +24,7 @@ namespace Adollib
 		Gameobject* GO = nullptr;
 
 		player_respown_pos = Vector3(-2.7f, 100, -150);
+		player_respown_pos = Vector3(-2.7f, 100, -50);
 
 		set_box(Vector3(0, -60, 0), Vector3(80, 60, 80), Vector3(0), Vector3(188, 214, 54) / 255.0f, true);
 		set_box(Vector3(0, -60, -98), Vector3(30, 30, 60), Vector3(0), Vector3(188, 214, 54) / 255.0f, true);

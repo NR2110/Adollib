@@ -118,14 +118,13 @@ bool Physics_manager::update(Scenelist Sce)
 	}
 
 	physicsParams.timeStep = (float)(time.QuadPart - frame_count.QuadPart) * seconds_per_count;
-	physicsParams.timeStep = ALmin(physicsParams.timeStep, physicsParams.max_timeStep);
 	Work_meter::set("physicsParams.timeStep", physicsParams.timeStep, 1);
 	if (physicsParams.timeStep > inv60)
 	{
 
-		frame_count.QuadPart = time.QuadPart;
 		const float inv60_per_timeStep = inv60 / physicsParams.timeStep;
-		//const float inv60_per_timeStep = 1;
+		physicsParams.timeStep = ALmin(physicsParams.timeStep, physicsParams.max_timeStep);
+		frame_count.QuadPart = time.QuadPart;
 
 		physicsParams.timeStep /= physicsParams.calculate_iteration;
 
@@ -139,6 +138,7 @@ bool Physics_manager::update(Scenelist Sce)
 			// 外力の更新
 			applyexternalforce(ALP_physicses[Sce], inv60_per_timeStep);
 
+			// pairのnew/oldを入れ替える
 			pairs_new_num = 1 - pairs_new_num;
 
 			// 大雑把な当たり判定
@@ -274,9 +274,7 @@ bool Physics_manager::update(Scenelist Sce)
 
 #endif // DEBUG
 
-	//is_updated_mainthread = false;
-	//is_updated_physicsthread = true;
-	return true;
+		return true;
 
 	}
 
@@ -310,7 +308,7 @@ bool Physics_manager::update_Gui() {
 		//貫通許容誤差
 		ImGui::InputFloat("slop", &physicsParams.slop, 0.0001f, 0.001f, "%.4f");
 
-		//毎フレーム回すのはおもいので 何秒毎に回すのか
+		//最大のtimestep
 		ImGui::DragFloat("max_timeStep", &physicsParams.max_timeStep, 0.001f, 0.001f, 100000000);
 		ImGui::Text("timeStep : %f", physicsParams.timeStep);
 

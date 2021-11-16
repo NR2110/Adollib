@@ -4,6 +4,9 @@
 #include "../Adollib/Scripts/Imgui/debug.h"
 #include "../Adollib/Scripts/Object/transform.h"
 #include "../Adollib/Scripts/Object/gameobject_manager.h"
+#include "../Adollib/Scripts/Object/component_camera.h"
+#include "../Adollib/Scripts/Renderer/directional_shadow.h"
+
 #include "Camera.h"
 
 #include "../Adollib/Imgui/imgui.h"
@@ -12,6 +15,7 @@
 
 #include "../Adollib/Scripts/Physics/ray.h"
 #include "../Adollib/Scripts/Physics/ALP__physics_manager.h"
+
 
 namespace Adollib
 {
@@ -44,8 +48,13 @@ namespace Adollib
 	void Camera::start()
 	{
 		player = Gameobject_manager::find("Body")->transform;
+		player = Gameobject_manager::find("Waist")->transform;
 		follow_player = true;
 
+		auto c = gameobject->findComponent<Camera_component>();
+		c->directional_shadow->position = Vector3(200, 200, 200);
+		c->directional_shadow->direction = Vector3(-1, -2, -1).unit_vect();
+		c->directional_shadow->nearZ = 150;
 		//is_lock_cursol = true;
 		//ShowCursor(FALSE);
 		//input->setCursorPos(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
@@ -169,7 +178,7 @@ namespace Adollib
 
 			{
 				//pos_buffer = ALEasing(pos_buffer, player->position, 1, timeStep);
-				pos_buffer = player->position + Vector3(0, 1, 0);
+				pos_buffer = player->position + Vector3(0, 4, 0);
 
 			}
 
