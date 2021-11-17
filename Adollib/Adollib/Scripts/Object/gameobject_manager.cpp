@@ -25,7 +25,7 @@
 
 #include <thread>
 
-#define Use_physics_thread
+//#define Use_physics_thread
 
 using namespace Adollib;
 using namespace Physics_function;

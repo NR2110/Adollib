@@ -1,5 +1,2 @@
-﻿  player_manager.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(173,47): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(407,112): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(495,59): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+﻿  twistjoint.cpp
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

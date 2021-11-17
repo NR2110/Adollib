@@ -15,45 +15,40 @@ bool TwistJoint::limit_effect(Vector3& contactP0, Vector3& contactP1, float& pen
 		&ALPjoint->ALPcollider[0]->transform,
 		&ALPjoint->ALPcollider[1]->transform
 	};
-	Vector3 V = vector3_quatrotate(vec0, transforms[0]->orientation);
-	const Vector3 vec[2]{
-		V,
-		V
-	};
 
-	float radian_local[2] = { 0 };
-
-	for (int i = 0; i < 2; ++i)
+	float radian = 0;
 	{
+		// quaternoinのoffset
+		Quaternion off = transforms[1]->orientation * transforms[0]->orientation.inverse();
 
-		Vector3 vec_dir = vector3_quatrotate(vec[i], transforms[i]->orientation); //回転後のtwistの軸
+		// 回転後のtwistの軸
+		Vector3 vec_dir = vector3_quatrotate(vec0, off);
 
-		Vector3 axis = vector3_cross(vec[i], vec_dir); //回転後と後のどちらにも垂直なベクトル
+		Vector3 axis = vector3_cross(vec0, vec_dir); //回転後と後のどちらにも垂直なベクトル
 		if (axis.norm() < FLT_EPSILON) {
 			// 回転前、後が平行の時 適当な垂直なものを準備する
-			if (fabsf(vector3_dot(vec[i], Vector3(1, 0, 0))) < FLT_EPSILON)axis = vector3_cross(vec[i], Vector3(1, 0, 0));
-			else axis = vector3_cross(vec[i], Vector3(0, 1, 0));
+			if (fabsf(vector3_dot(vec0, Vector3(1, 0, 0))) < FLT_EPSILON)axis = vector3_cross(vec0, Vector3(1, 0, 0));
+			else axis = vector3_cross(vec0, Vector3(0, 1, 0));
 		}
 		axis = axis.unit_vect();
 
-
-		Vector3 rotated_axis = vector3_quatrotate(axis, transforms[i]->orientation).unit_vect(); //回転後の垂直なベクトル
+		Vector3 rotated_axis = vector3_quatrotate(axis, off).unit_vect(); //回転後の垂直なベクトル
 
 		// 回転の角度を得る
-		radian_local[i] = vector3_radian(rotated_axis, axis);
+		radian = vector3_radian(rotated_axis, axis);
 		if (vector3_dot(vector3_cross(rotated_axis, axis), vec_dir) < 0) {
-			radian_local[i] = DirectX::XM_PI + DirectX::XM_PI - radian_local[i]; //0~180~0 を -360~0~360に治す
+			radian = DirectX::XM_PI + DirectX::XM_PI - radian; //0~180~0 を -360~0~360に治す
 			axis *= -1;
 			rotated_axis *= -1;
 		}
 
 
-		if (0 && i == 0) {
-			Debug::set("vec[i]", vec[i]);
-			Debug::set("vec_dir", vec_dir);
-			Debug::set("axis", axis);
-			Debug::set("rotated_axis", rotated_axis);
-			Debug::set("radian_local[i]", ToAngle(radian_local[i]));
+		if (0) {
+			Debug::set("1_vec[i]", vec0);
+			Debug::set("1_vec_dir", vec_dir);
+			Debug::set("1_axis", axis);
+			Debug::set("1_rotated_axis", rotated_axis);
+			Debug::set("1_radian_local[i]", ToAngle(radian));
 
 			static Gameobject* debug[4] = { nullptr };
 			if (debug[0] == nullptr) {
@@ -73,26 +68,27 @@ bool TwistJoint::limit_effect(Vector3& contactP0, Vector3& contactP1, float& pen
 				debug[3]->material->color = Vector4(0, 1, 0, 1);
 			}
 			{
-				debug[0]->transform->local_orient = quaternion_from_to_rotate(Vector3(0, 0, 1), vec[i]);
+				debug[0]->transform->local_orient = quaternion_from_to_rotate(Vector3(0, 0, 1), vec0);
 				debug[1]->transform->local_orient = quaternion_from_to_rotate(Vector3(0, 0, 1), vec_dir);
 				debug[2]->transform->local_orient = quaternion_from_to_rotate(Vector3(0, 0, 1), axis);
 				debug[3]->transform->local_orient = quaternion_from_to_rotate(Vector3(0, 0, 1), rotated_axis);
 
-				debug[0]->transform->local_pos = transforms[i]->position + Vector3(0, 3, 0) + vec[i] * 2;
-				debug[1]->transform->local_pos = transforms[i]->position + Vector3(0, 3, 0) + vec_dir * 2;
-				debug[2]->transform->local_pos = transforms[i]->position + Vector3(0, 3, 0) + axis * 2;
-				debug[3]->transform->local_pos = transforms[i]->position + Vector3(0, 3, 0) + rotated_axis * 2;
+				debug[0]->transform->local_pos = transforms[1]->position + Vector3(0, 3, 0) + vec0 * 2;
+				debug[1]->transform->local_pos = transforms[1]->position + Vector3(0, 3, 0) + vec_dir * 2;
+				debug[2]->transform->local_pos = transforms[1]->position + Vector3(0, 3, 0) + axis * 2;
+				debug[3]->transform->local_pos = transforms[1]->position + Vector3(0, 3, 0) + rotated_axis * 2;
 			}
 
 		}
 
-
 	}
 
 	const Vector2 limit_rad = Vector2(ToRadian(limit.x), ToRadian(limit.y)); //limitをradianに治した
-	float radian = radian_local[1] - radian_local[0]; //radianの差分から collider[1]の回転量を計算
+	//float radian = radian_local[1] - radian_local[0]; //radianの差分から collider[1]の回転量を計算
 	if (radian < 0)radian += 2 * PI;
 	if (radian > 2 * PI)radian -= 2 * PI;
+
+	Debug::set("radian", ToAngle(radian));
 
 	// もしlimitの影響を受ける位置に入なければfalseをreturn
 	if (limit_rad.x <= limit_rad.y) {
@@ -110,12 +106,12 @@ bool TwistJoint::limit_effect(Vector3& contactP0, Vector3& contactP1, float& pen
 	Vector3 axis;
 	{
 		int i = 1;
-		Vector3 vec_dir = vector3_quatrotate(vec[i], transforms[i]->orientation); //回転後のtwistの軸
-		axis = vector3_cross(vec[i], vec_dir).unit_vect(); //回転後と後のどちらにも垂直なベクトル
+		Vector3 vec_dir = vector3_quatrotate(vec0, transforms[i]->orientation); //回転後のtwistの軸
+		axis = vector3_cross(vec0, vec_dir).unit_vect(); //回転後と後のどちらにも垂直なベクトル
 		if (axis.norm() == 0) {
 			// 回転前、後が平行の時 適当な垂直なものを準備する
-			if (vec[i].x != 1)axis = vector3_cross(vec[i], Vector3(1, 0, 0));
-			else axis = vector3_cross(vec[i], Vector3(0, 1, 0));
+			if (vec0.x != 1)axis = vector3_cross(vec0, Vector3(1, 0, 0));
+			else axis = vector3_cross(vec0, Vector3(0, 1, 0));
 		}
 	}
 	Vector3 tangent = vector3_cross(axis, vec1);

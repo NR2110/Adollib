@@ -331,7 +331,11 @@ void Player::add_pow_for_stand() {
 
 	}
 	// gunyattoしていた時は
-	else { turn_gunyatto_dir(); }
+	else {
+		turn_gunyatto_dir();
+		//Waist_collider->set_max_angula_velocity(FLT_MAX);
+		//Body_collider->set_max_angula_velocity(FLT_MAX);
+	}
 
 	{
 		//jointでつなげると重力が弱くなるから & 一定のパーツは重力の影響を受けないようにしているから  下向きに力を加える
@@ -363,6 +367,8 @@ void Player::add_pow_for_stand() {
 
 //rayを飛ばして腰を立たせる
 void Player::push_waist_for_stand() {
+	if (input->getKeyState(Key::LeftControl) || is_gunyatto == true)return;
+
 	waist_pillar->center = Vector3(0, 100, 0);
 
 	float dot = vector3_dot(Vector3(0, -1, 0), vector3_quatrotate(Vector3(0, -1, 0), Waist_collider->transform->orientation));
