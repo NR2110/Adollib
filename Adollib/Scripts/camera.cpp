@@ -185,16 +185,22 @@ namespace Adollib
 			//カメラの距離
 			{
 				//wheelから距離の調整
-				static float easing_value = 3 * Al_Global::second_per_frame;
+				float easing_pow = 0.1f;
+				float easing_value = 4 * timeStep; //イージングでの移動距離
+				if (ray_timer > 0)easing_value = 0;
+				ray_timer -= timeStep;
+
+				// ホイールが動いていれば 現在の距離からwheelで動かしたところをdisにおく
 				if (input->getMouseWheel() != 0) {
-					easing_value = 100 * Al_Global::second_per_frame;
+					easing_value = 100000 * timeStep; // 自然に戻るより早くする
+					easing_pow = 0.8f;
 					dis = dis_buffer;
+					dis -= input->getMouseWheel() * 0.02f;
 				}
-				dis -= input->getMouseWheel() * 0.03f;
-				dis = ALClamp(dis, 10, 50);
+				dis = ALClamp(dis, 10, 50); //マウスホイールで調整可能な最低距離 / 最大距離
 
 				//disをイージングのためにdis_bufferに保存
-				float next = ALEasing(dis_buffer, dis, 0.1f, timeStep);
+				const float next = ALEasing(dis_buffer, dis, easing_pow, timeStep);
 				dis_buffer += ALClamp(next - dis_buffer, -easing_value, easing_value);
 
 				//rayを飛ばしてcameraがstageにめり込まないように
@@ -205,14 +211,16 @@ namespace Adollib
 				str.collider_tag = Collider_tags::Caera_not_sunk_Stage;
 				ray.ray_cast(str);
 
-				//カメラがめり込んでいたら位置を調整
-				if (str.raymin - 1 < dis_buffer) {
-					easing_value = 5 * Al_Global::second_per_frame;
-					dis_buffer = str.raymin - 1;
-					if (dis > 30)dis = 30;
-				}
+				const float camera_off = 1; //壁の中が描画されないようにこの分だけrayの衝突点から前にcameraを置く
 
-				//dis_buffer = ALClamp(dis_buffer, 10, 50);
+				// カメラの後ろに壁があればtimerをset timerが>0の時自然に元の距離まで戻らない
+				if (str.raymin - (camera_off - 0.2f)< dis_buffer) ray_timer = 1;
+				//カメラがめり込んでいたら位置を調整
+				if (str.raymin - camera_off < dis_buffer) {
+					easing_value = 5 * timeStep;
+					dis_buffer = str.raymin - 1;
+					if (dis > 30)dis = 30; //最大距離
+				}
 
 			}
 

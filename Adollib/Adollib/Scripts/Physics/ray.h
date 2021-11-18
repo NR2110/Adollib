@@ -12,7 +12,7 @@ namespace Adollib {
 
 		struct Raycast_struct {
 			u_int collider_tag = UINT_MAX; // 衝突するtag
-			float ray_min = 0;             // Rayminの最小の値
+			float ray_offset = 0;          // Rayminの最小の値
 			float raymin = 0;              // Rayの衝突した最小値
 			float raymax = 0;              // Rayの衝突した最大値
 			Vector3 normal;                // Rayの衝突した最近の場所の法線
