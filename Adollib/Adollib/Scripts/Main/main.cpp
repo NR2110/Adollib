@@ -13,6 +13,7 @@
 
 #include <math.h>
 
+#include "../Physics/ALP__physics_manager.h"
 
 #include "../../Imgui/imgui.h"
 #include "../../Imgui/imgui_impl_win32.h"
@@ -78,11 +79,13 @@ LRESULT CALLBACK fnWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 	case WM_ENTERSIZEMOVE:
 		// WM_EXITSIZEMOVE is sent when the user grabs the resize bars.
 		Systems::time->stop();
+		Physics_function::Physics_manager::timer_stop();
 		break;
 	case WM_EXITSIZEMOVE:
 		// WM_EXITSIZEMOVE is sent when the user releases the resize bars.
 		// Here we reset everything based on the new window dimensions.
 		Systems::time->start();
+		Physics_function::Physics_manager::timer_start();
 		break;
 	default:
 		return DefWindowProc(hwnd, msg, wparam, lparam);

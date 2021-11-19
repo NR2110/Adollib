@@ -24,18 +24,23 @@ const bool Collider::concoll_enter(const Collider_tagbit tag_name) {
 }
 
 void Collider::add_force(const Vector3& force) {
+	if (Al_Global::second_per_frame > inv60)return;
 	ALPphysics_ptr->add_force(force * Al_Global::second_per_frame);
 }
 void Collider::add_force(const Vector3& force, const Vector3& position, const bool& is_position_local, const bool& is_force_local) {
+	if (Al_Global::second_per_frame > inv60)return;
 	ALPphysics_ptr->add_force(force * Al_Global::second_per_frame, position, is_position_local, is_force_local);
 }
 void Collider::add_torque(const Vector3& force) {
+	if (Al_Global::second_per_frame > inv60)return;
 	ALPphysics_ptr->add_torque(force * Al_Global::second_per_frame);
 }
 void Collider::add_linear_acc(const Vector3& acc) {
+	if (Al_Global::second_per_frame > inv60)return;
 	ALPphysics_ptr->add_linear_acc(acc * Al_Global::second_per_frame);
 }
 void Collider::add_angula_acc(const Vector3& acc) {
+	if (Al_Global::second_per_frame > inv60)return;
 	ALPphysics_ptr->add_angula_acc(acc * Al_Global::second_per_frame);
 }
 

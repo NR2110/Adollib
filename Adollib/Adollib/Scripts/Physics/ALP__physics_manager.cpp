@@ -35,6 +35,8 @@ namespace Adollib
 	bool Physics_manager::is_stop_physics_thread = false; //true‚É‚È‚Á‚½‚Æ‚«thread_update‚ðŽ~‚ß‚é
 
 	LARGE_INTEGER Physics_manager::frame_count;
+	LARGE_INTEGER Physics_manager::frame_count_stop; //;
+	Time Physics_manager::time;
 
 	std::mutex Physics_manager::mtx;
 
@@ -72,13 +74,8 @@ bool Physics_manager::update(Scenelist Sce)
 {
 	Work_meter::start("Phyisics_manager", 1);
 
-	LARGE_INTEGER time;
-	QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&time));
-	LONGLONG counts_per_sec;
-	QueryPerformanceFrequency(reinterpret_cast<LARGE_INTEGER*>(&counts_per_sec));
-	float seconds_per_count = 1.0f / static_cast<double>(counts_per_sec);
-
 	if (Al_Global::second_per_game < 1) {
+
 		adapt_added_data(Sce);
 		copy_transform(ALP_colliders[Sce], ALP_physicses[Sce]);
 
@@ -117,7 +114,24 @@ bool Physics_manager::update(Scenelist Sce)
 
 	}
 
-	physicsParams.timeStep = (float)(time.QuadPart - frame_count.QuadPart) * seconds_per_count;
+
+	LARGE_INTEGER time;
+	{
+		std::lock_guard<std::mutex> lock(mtx);
+
+		QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&time));
+		LONGLONG counts_per_sec;
+		QueryPerformanceFrequency(reinterpret_cast<LARGE_INTEGER*>(&counts_per_sec));
+		float seconds_per_count = 1.0f / static_cast<double>(counts_per_sec);
+
+		if (frame_count_stop.QuadPart != 0) {
+			frame_count.QuadPart += time.QuadPart - frame_count_stop.QuadPart;
+			frame_count_stop.QuadPart = time.QuadPart;
+		}
+
+		physicsParams.timeStep = (float)(time.QuadPart - frame_count.QuadPart) * seconds_per_count;
+	}
+
 	Work_meter::set("physicsParams.timeStep", physicsParams.timeStep, 1);
 	if (physicsParams.timeStep > inv60)
 	{
@@ -592,6 +606,15 @@ void Physics_manager::thread_stop_and_join() {
 	if (physics_thread.joinable())physics_thread.join();
 }
 
+void Physics_manager::timer_stop() {
+	std::lock_guard<std::mutex> lock(mtx);
+	if(frame_count_stop.QuadPart == 0)
+	QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&frame_count_stop));
+}
+void Physics_manager::timer_start() {
+	std::lock_guard<std::mutex> lock(mtx);
+	frame_count_stop.QuadPart = 0;
+}
 
 
 #include "../Main/systems.h"
@@ -643,26 +666,6 @@ void Physics_manager::destroy(Scenelist Sce) {
 		base->destroy();
 		delete base;
 	}
-
-
-	//for (auto& joint : added_ALP_joints) {
-	//	auto& base = joint->userjoint;
-	//	base->destroy();
-	//	delete base;
-	//}
-	//for (auto& coll_pair : added_ALP_colliders) {
-	//	for (auto& coll : coll_pair.second) {
-	//		coll->destroy();
-	//		delete coll;
-	//	}
-	//}
-	//for (auto& phys_pair : added_ALP_physicses) {
-	//	for (auto& phys : phys_pair.second) {
-	//		phys->destroy();
-	//		delete phys;
-	//	}
-	//}
-
 
 
 	for (auto& p : pairs[0]) {

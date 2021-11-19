@@ -48,7 +48,7 @@ namespace Adollib {
 	private:
 	public:
 		static MonoInput* inputManager;
-		static Time* time;
+		static std::shared_ptr<Time> time;
 		static Vector4 clear_color;
 		//static MonoAudio* audioManager;
 

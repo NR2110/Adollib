@@ -119,6 +119,8 @@ namespace Adollib
 		{
 		private:
 			static LARGE_INTEGER frame_count; //
+			static LARGE_INTEGER frame_count_stop; //
+			static Time time;
 
 			static std::mutex mtx; //Žå‚Éadd_collder,phsics,joint‚Æ added_data‚Ìˆµ‚¢‚ÌŽž
 
@@ -386,6 +388,9 @@ namespace Adollib
 
 			static void mutex_lock() { mtx.lock(); };
 			static void mutex_unlock() { mtx.unlock(); };
+
+			static void timer_stop();
+			static void timer_start();
 
 		public:
 			// main thread‚©‚çŒÄ‚Î‚ê‚é

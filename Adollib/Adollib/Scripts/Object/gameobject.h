@@ -14,6 +14,7 @@
 #include "../Renderer/material.h"
 
 namespace Adollib {
+	class Time;
 
 	class Gameobject : public Object {
 	public:
@@ -29,6 +30,8 @@ namespace Adollib {
 			transform->position = world_position();
 			transform->scale = world_scale();
 		}
+
+		std::shared_ptr<Time>& get_time_ptr();
 
 		std::list <Component*> components; //アタッチされているComponentのポインタ
 
@@ -46,7 +49,6 @@ namespace Adollib {
 
 		// このGOのマテリアルへのポインタ cppから楽にアクセスできるようにここに置いている ここになくてもちゃんと動く
 		std::shared_ptr<Material> material = nullptr;
-
 
 	public:
 
@@ -125,7 +127,7 @@ namespace Adollib {
 				pCom->transform = this->transform.get();
 				pCom->gameobject = this;
 				pCom->input = MonoInput::getInstancePtr();
-				pCom->time = Time::getInstancePtr();
+				pCom->time = get_time_ptr();
 				pCom->awake();		// 初期化処理を定義してあるコンポーネントならばそれを呼ぶ
 				return newCom;
 			}

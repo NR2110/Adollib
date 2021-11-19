@@ -20,7 +20,7 @@ ComPtr<ID3D11BlendState>			Systems::BlendState[BLEND_TYPE];
 MonoInput* Systems::inputManager = nullptr;
 //MonoAudio* Systems::audioManager = nullptr;
 //Debug* framework::debug = nullptr;
-Time* Systems::time = nullptr;
+std::shared_ptr<Time>  Systems::time = nullptr;
 Vector4 Systems::clear_color = Vector4(0, 0.5f, 0.5f, 1);
 
 State_manager::DStypes Systems::DS_type = State_manager::DStypes::DS_TRUE;
@@ -38,8 +38,7 @@ bool Systems::Initialize(HWND hWnd, int width, int height)
 	CreateRasterizerState();
 	CreateBlendState();
 
-	Time::create();
-	time = Time::getInstancePtr();
+	time = std::make_shared<Time>();
 	time->initialize();
 	time->setFrameRate(60.0f);
 	time->isFloatFPS(true);
@@ -643,8 +642,8 @@ bool Systems::CreateBlendState()
 void Systems::Release()
 {
 
-	Time::destroy();
-	time = nullptr;
+	//delete time;
+	//time = nullptr;
 	MonoInput::destroy();
 	inputManager = nullptr;
 }

@@ -101,3 +101,7 @@ void Gameobject::destroy() {
 	}
 
 }
+
+std::shared_ptr<Time>& Gameobject::get_time_ptr() {
+	return Systems::time;
+}

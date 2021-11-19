@@ -21,7 +21,7 @@ namespace Adollib
 		Transform*  transform = nullptr;	// GameObjectのTransformへのポインタ
 
 		MonoInput* input = nullptr;
-		Time* time = nullptr;
+		std::shared_ptr<Time> time = nullptr;
 
 		std::string name; //Hierarchyに表示する名前
 

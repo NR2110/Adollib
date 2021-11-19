@@ -8,7 +8,7 @@
 
 namespace Adollib
 {
-	class Time : public Singleton<Time>
+	class Time
 	{
 	public:
 		Time() = default;
