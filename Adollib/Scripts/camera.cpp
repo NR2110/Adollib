@@ -155,30 +155,17 @@ namespace Adollib
 				input->setCursorPos(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
 				cursol_pos_save = Vector3(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f, 0);
 			}
-			else if(0){
-				{
-					//float rotate_pow = 70 * Al_Global::second_per_frame;
-					float rotate_pow = rotate_speed;
-					Vector3 rotate_vec = Vector3(0, 0, 0);
-					rotate_vec.y = input->getCursorPosX() - cursol_pos_save.x;
-					rotate_vec.x = input->getCursorPosY() - cursol_pos_save.y;
-
-					rotate_vec.x = ALClamp(rotate_vec.x, -170 - rotate_vec_save.x, 170 - rotate_vec_save.x);
-					rotate_vec_save += rotate_vec;
-
-
-					rotate *= quaternion_axis_angle(Vector3(0, 1, 0), +rotate_vec.y * rotate_pow);
-					rotate *= quaternion_axis_angle(vector3_cross(Vector3(0, 1, 0), vector3_quatrotate(Vector3(0, 0, 1), transform->local_orient)).unit_vect(), +rotate_vec.x * rotate_pow);
-
-				}
-				cursol_pos_save.x = (float)input->getCursorPosX();
-				cursol_pos_save.y = (float)input->getCursorPosY();
-			}
 
 
 			{
 				//pos_buffer = ALEasing(pos_buffer, player->position, 1, timeStep);
-				pos_buffer = player->position + Vector3(0, 4, 0);
+				Vector3 goal = player->position + Vector3(0, 4, 0);
+				Vector3 dir = goal - pos_buffer;
+				if (dir.norm() > pos_slop * pos_slop) {
+					pos_buffer += dir.unit_vect() * (dir.norm_sqr() - pos_slop);
+				}
+
+				//pos_buffer = player->position + Vector3(0, 4, 0);
 
 			}
 

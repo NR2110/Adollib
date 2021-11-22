@@ -9,10 +9,11 @@ namespace Adollib
 	{
 	private:
 		bool follow_player = false;
-		float dis = 20;
-		float dis_buffer = 20;
-		float ray_timer = 0;
-		Vector3 pos_buffer;
+		float dis = 20; //距離
+		float dis_buffer = 20; //距離のbuffer easing用
+		float ray_timer = 0; //カメラがRayの影響でがくがくしないように Rayの影響を受けてからしばらくは自動的に戻らないように
+		Vector3 pos_buffer; //座標のeasing用
+		float pos_slop = 1; //カメラの座標の許容誤差
 
 		bool is_lock_cursol = false;
 
