@@ -13,7 +13,7 @@
 
 using namespace Adollib;
 
-//Žè‚ðL‚Î‚·
+// Žè‚ðL‚Î‚·
 void Player::reach_out_hands() {
 
 	if (input->getKeyState(Key::LeftControl))return;
@@ -183,7 +183,7 @@ void Player::reach_out_hands() {
 
 };
 
-//•¨‚ð‚Â‚©‚Þ
+// •¨‚ð‚Â‚©‚Þ
 void Player::catch_things() {
 	const Mouse keys[2] = {
 		Mouse::LBUTTON,
@@ -235,6 +235,22 @@ void Player::catch_things() {
 			if (min_data != nullptr && min_data->coll->tag != Collider_tags::Human) {
 				*is_maked_joint[i] = true;
 
+				//Vector3 x_dir = Vector3(1, 0, 0) * -(i * 2 - 1);
+				//Vector3 z_dir = Vector3(0, 0, 1);
+				//Vector3 world_x_dir = vector3_quatrotate(x_dir, collider->transform->orientation);
+				//Vector3 local_x_dir_Bcoord = vector3_quatrotate(world_x_dir, min_data->coll->transform->orientation.inverse());
+
+				//Vector3 world_contactpoint_A = vector3_quatrotate(min_data->contacted_pointA, collider->transform->orientation) + collider->transform->position;
+				//Vector3 elbow_pos = vector3_quatrotate(world_contactpoint_A - colliders[i + 2]->transform->position, colliders[i + 2]->transform->orientation.inverse());
+
+
+				//joint = Joint::add_Hingejoint(
+				//	colliders[i + 2],
+				//	min_data->coll,
+				//	elbow_pos + z_dir, elbow_pos - z_dir,
+				//	min_data->contacted_pointB + local_x_dir_Bcoord, min_data->contacted_pointB - local_x_dir_Bcoord
+				//);
+
 				joint = Joint::add_balljoint(
 					collider,
 					min_data->coll,
@@ -243,14 +259,12 @@ void Player::catch_things() {
 				);
 
 				joint->slop = 0.1f;
-				//joint->slop = 10000000;
 
 			}
 		}
 
 		//—£‚·
 		{
-
 			if (!input->getMouseState(key)) {
 				*is_maked_joint[i] = false;
 			}
@@ -268,8 +282,8 @@ void Player::catch_things() {
 				Vector3 world_posB = joint->get_colliderB()->transform->position + vector3_quatrotate(joint->get_anchors()[0].posB, joint->get_colliderB()->transform->orientation);
 
 				if (
-					(world_posA - world_posB).norm() > 3 * 3 ||
-					(colliders[i]->transform->position - colliders[i + 2]->transform->position).norm() > 3 * 3
+					(world_posA - world_posB).norm() > 2 * 2 ||
+					(colliders[i]->transform->position - colliders[i + 2]->transform->position).norm() > 1 * 1
 					) {
 					joint->get_colliderB()->tag &= ~Collider_tags::Having_Stage;
 					joint->get_colliderB()->tag |= Collider_tags::Jumpable_Stage;
@@ -291,7 +305,7 @@ void Player::catch_things() {
 	}
 };
 
-//—§‚Â‚æ‚¤‚É—Í‚ð‰Á‚¦‚é
+// —§‚Â‚æ‚¤‚É—Í‚ð‰Á‚¦‚é
 void Player::add_pow_for_stand() {
 
 	float gnyat_pow = 0.9f;
@@ -353,11 +367,11 @@ void Player::add_pow_for_stand() {
 		is_gunyatto = true;
 	}
 
-	if (!onground_collider->concoll_enter(Collider_tags::Jumpable_Stage)) {
-		Waist_collider->physics_data.dynamic_friction = 0;
-		Body_collider->physics_data.dynamic_friction = 0;
+	//if (!onground_collider->concoll_enter(Collider_tags::Jumpable_Stage)) {
+	//	Waist_collider->physics_data.dynamic_friction = 0;
+	//	Body_collider->physics_data.dynamic_friction = 0;
 
-	}
+	//}
 	else {
 		Waist_collider->physics_data.dynamic_friction = 0.4f;
 		Body_collider->physics_data.dynamic_friction = 0.4f;
@@ -365,7 +379,7 @@ void Player::add_pow_for_stand() {
 	}
 };
 
-//ray‚ð”ò‚Î‚µ‚Ä˜‚ð—§‚½‚¹‚é
+// ray‚ð”ò‚Î‚µ‚Ä˜‚ð—§‚½‚¹‚é
 void Player::push_waist_for_stand() {
 	if (input->getKeyState(Key::LeftControl) || is_gunyatto == true)return;
 
@@ -402,17 +416,17 @@ void Player::push_waist_for_stand() {
 	};
 }
 
-//ˆÚ“®
+// ˆÚ“®
 void Player::linear_move() {
 	// ’n–Ê‚ÉÚ‚µ‚Ä‚¢‚é & “ü—Í‚ª–³‚¢Žž
-	if (dir.norm() == 0 && onground_collider->concoll_enter(Collider_tags::Stage)) {
+	if (is_gunyatto == false && dir.norm() == 0 && onground_collider != nullptr) {
 		Waist_collider->physics_data.drag = 0.98f;
 	}
 	// “ü—Í‚ª‚ ‚ê‚Î“®‚«‚â‚·‚¢‚æ‚¤‚É0.1‚É‚·‚é
 	else Waist_collider->physics_data.drag = 0.1;
 
 	float move_pow = 1;
-	if (!onground_collider->concoll_enter(Collider_tags::Stage)) {
+	if (onground_collider == nullptr) {
 		move_pow = 0.3f;
 	}
 
@@ -431,7 +445,7 @@ void Player::linear_move() {
 	}
 };
 
-//‰ñ“]
+// ‰ñ“]
 void Player::angula_move() {
 	Vector3 rot_vec = Vector3(0);
 	if (input->getKeyState(Key::W)) {
@@ -466,7 +480,7 @@ void Player::angula_move() {
 
 };
 
-//ˆÚ“®•ûŒü‚ðŒvŽZ
+// ˆÚ“®•ûŒü‚ðŒvŽZ
 void Player::accume_move_dir() {
 	Vector3 move_vec = Vector3(0);
 	if (input->getKeyState(Key::W)) {
@@ -490,7 +504,7 @@ void Player::accume_move_dir() {
 };
 
 
-//‘«‚ð“®‚©‚·
+// ‘«‚ð“®‚©‚·
 void Player::move_legs() {
 	//return;
 	if (is_gunyatto || input->getKeyState(Key::LeftControl))return;
@@ -564,48 +578,66 @@ void Player::move_legs() {
 	}
 };
 
-//jump‚³‚¹‚é
+// jump‚³‚¹‚é
 void Player::make_jump() {
+	bool is_jumpable = false;
+	if (onground_collider != nullptr && //Ú’n‚µ‚Ä‚¢‚é
+		(catch_right_joint == nullptr || catch_right_joint->get_colliderB() != onground_collider) && //‰EŽè‚ÅŽ‚Á‚Ä‚¢‚é‚à‚Ì‚Å‚Í‚È‚¢
+		(catch_left_joint  == nullptr || catch_left_joint->get_colliderB()  != onground_collider)    //¶Žè‚ÅŽ‚Á‚Ä‚¢‚é‚à‚Ì‚Å‚Í‚È‚¢
+		)is_jumpable = true;
+
+	//if (onground_collider != nullptr )is_jumpable = true;
+
+
 	if (is_jumping == true)coyote += Al_Global::second_per_frame;
 	if (coyote >= 0)is_jumping = false;
-	if (is_jumping == false && onground_collider->concoll_enter(Collider_tags::Jumpable_Stage)) coyote = 0.3f;
-	if (is_jumping == false && !onground_collider->concoll_enter(Collider_tags::Jumpable_Stage)) coyote -= Al_Global::second_per_frame;
+	//if (is_jumping == false && onground_collider->concoll_enter(Collider_tags::Jumpable_Stage)) coyote = 0.3f;
+	//if (is_jumping == false && !onground_collider->concoll_enter(Collider_tags::Jumpable_Stage)) coyote -= Al_Global::second_per_frame;
+	if (is_jumping == false && is_jumpable) coyote = 0.3f;
+	if (is_jumping == false && !is_jumpable) coyote -= Al_Global::second_per_frame;
 
 	if (is_gunyatto == false && coyote >= 0 && input->getKeyTrigger(Key::Space)) {
-		Ray ray;
-		ray.direction = Vector3(0, -1, 0);
-		ray.position = Waist_collider->transform->position + Vector3(0, 1, 0);
-		Ray::Raycast_struct data;
-		data.collider_tag = Collider_tags::Stage;
-		if (ray.ray_cast(data) && data.raymin < 2) {
-			data.coll->add_force(Vector3(0, -1000, 0) * jump_power, ray.position + ray.direction * data.raymin);
-			if (data.coll->gameobject->material != nullptr)
-				data.coll->gameobject->material->color = Vector4(Al_Global::get_gaming(rand(), 800, 0, 1), 1);
-		}
-		//auto& contacted_datas = onground_collider->get_Contacted_data();
-		//for (auto& contacted : contacted_datas) {
-		//	contacted.coll->add_force(contacted.contacted_pointB, Vector3(0, -1000, 0) * jump_power, true, false);
+		//constexpr float stand_dis = 2.0f;
+		//constexpr float stand_radius = 0.6f;
+		//Vector3 contact_posint;
 
-		//	if (contacted.coll->gameobject->material != nullptr)
-		//	contacted.coll->gameobject->material->color = Vector4(Al_Global::get_gaming(rand(), 800, 0, 1), 1);
+		//Ray ray;
+		//ray.direction = Vector3(0, -1, 0);
+		//ray.position = Waist_collider->transform->position;
+		//Ray::Raycast_struct data;
+		//data.collider_tag = Collider_tags::Stage;
+		//if (ray.sphere_cast(stand_radius, contact_posint, data) && data.raymin < stand_dis) {
 
+		//	data.coll->add_force(Vector3(0, -10, 0) * jump_power, contact_posint);
+
+		//	if (data.coll->gameobject->material != nullptr)
+		//		data.coll->gameobject->material->color = Vector4(Al_Global::get_gaming(rand(), 800, 0, 1), 1);
 		//}
 
+		if (onground_collider != nullptr) {
 
-		for (int i = 0; i < Human_collider_size; i++) {
-			Human_colliders[i]->linear_velocity(Vector3(Human_colliders[i]->linear_velocity().x, jump_power, Human_colliders[i]->linear_velocity().z));
+			float mass = 10 * 50;
+			onground_collider->add_force(Vector3(0, -mass, 0) * jump_power, onground_contactpoint);
+
+			//if (onground_collider->gameobject->material != nullptr)
+			//	onground_collider->gameobject->material->color = Vector4(Al_Global::get_gaming(rand(), 800, 0, 1), 1);
+
+
+			for (int i = 0; i < Human_collider_size; i++) {
+				Human_colliders[i]->linear_velocity(Vector3(Human_colliders[i]->linear_velocity().x, jump_power, Human_colliders[i]->linear_velocity().z));
+			}
+			Lleg_collider->linear_velocity(Vector3(Lleg_collider->linear_velocity().x, jump_power * 0.1f, Lleg_collider->linear_velocity().z));
+			Rleg_collider->linear_velocity(Vector3(Rleg_collider->linear_velocity().x, jump_power * 0.1f, Rleg_collider->linear_velocity().z));
+			Lfoot_collider->linear_velocity(Vector3(Lfoot_collider->linear_velocity().x, jump_power * 0.1f, Lfoot_collider->linear_velocity().z));
+			Rfoot_collider->linear_velocity(Vector3(Rfoot_collider->linear_velocity().x, jump_power * 0.1f, Rfoot_collider->linear_velocity().z));
+
+			is_jumping = true;
+			coyote = -0.3f;
 		}
-		Lleg_collider->linear_velocity(Vector3(Lleg_collider->linear_velocity().x, jump_power * 0.1f, Lleg_collider->linear_velocity().z));
-		Rleg_collider->linear_velocity(Vector3(Rleg_collider->linear_velocity().x, jump_power * 0.1f, Rleg_collider->linear_velocity().z));
-		Lfoot_collider->linear_velocity(Vector3(Lfoot_collider->linear_velocity().x, jump_power * 0.1f, Lfoot_collider->linear_velocity().z));
-		Rfoot_collider->linear_velocity(Vector3(Rfoot_collider->linear_velocity().x, jump_power * 0.1f, Rfoot_collider->linear_velocity().z));
-
-		is_jumping = true;
-		coyote = -0.3f;
 	}
 };
 
-//respownˆ—
+// respownˆ—
 bool Player::check_respown() {
 
 	if (respown_timer > 0) {
@@ -654,7 +686,7 @@ bool Player::check_respown() {
 	return false;
 }
 
-//player‚ÌŒü‚«‚ð’²®
+// player‚ÌŒü‚«‚ð’²®
 void Player::turn_gunyatto_dir() {
 	//Vector3 dir = vector3_quatrotate(Vector3(0, 0, 1), Waist->transform->orientation);
 
@@ -686,7 +718,7 @@ void Player::turn_gunyatto_dir() {
 }
 
 
-//"•¨‚ðŽ‚Â"joint‚ðíœ‚·‚é
+// "•¨‚ðŽ‚Â"joint‚ðíœ‚·‚é
 void Player::delete_catchjoint() {
 	Joint_base** joints[2] = {
 		&catch_left_joint,
@@ -702,7 +734,7 @@ void Player::delete_catchjoint() {
 	}
 }
 
-//respownˆ—
+// respownˆ—
 void Player::respown() {
 	auto stage = stage_manager->get_current_stage();
 
@@ -731,5 +763,23 @@ void Player::respown() {
 		}
 	}
 	respown_timer = 1;
+
+}
+
+// onground_collider‚ðXV
+void Player::update_onground() {
+
+	onground_collider = nullptr;
+
+	float dot = vector3_dot(Vector3(0, -1, 0), vector3_quatrotate(Vector3(0, -1, 0), Waist_collider->transform->orientation));
+	if (dot < 0)return; //˜‚ª‰º‚ðŒü‚¢‚Ä‚¢‚È‚¯‚ê‚Îreturn
+	dot = dot * dot;
+
+	// sphere‚ð”ò‚Î‚µ‚ÄŠm”F
+	Ray ray;
+	ray.direction = Vector3(0, -1, 0);
+	ray.position = Waist_collider->transform->position;
+	onground_ray_data.collider_tag = Collider_tags::Stage;
+	if (ray.sphere_cast(onground_radius, onground_contactpoint, onground_ray_data) && onground_ray_data.raymin < onground_dis) onground_collider = onground_ray_data.coll;
 
 }

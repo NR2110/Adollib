@@ -49,7 +49,7 @@ namespace Adollib
 		body_rot_max_pow = 10000;
 		body_rot_pow = 10000;
 
-		leg_rot_max_speed = 60;
+		leg_rot_max_speed = 5;
 		leg_rot_max_pow = 300;
 		leg_rot_pow = 400;
 
@@ -67,20 +67,20 @@ namespace Adollib
 		jump_power = 21;
 		turn_speed = 1.5f;
 
-		{
-			onground_collider_GO = Gameobject_manager::create("check_onglound_go");
-			onground_collider = onground_collider_GO->addComponent<Collider>();
-			auto shape = onground_collider->add_shape<Sphere>();
+		//{
+		//	onground_collider_GO = Gameobject_manager::create("check_onglound_go");
+		//	onground_collider = onground_collider_GO->addComponent<Collider>();
+		//	auto shape = onground_collider->add_shape<Sphere>();
 
-			Waist->add_child(onground_collider_GO);
-			onground_collider_GO->transform->local_scale = Vector3(0.4f) / Waist->transform->local_scale;
-			onground_collider_GO->transform->local_pos = Vector3(0, -3.0f, 0);
+		//	Waist->add_child(onground_collider_GO);
+		//	onground_collider_GO->transform->local_scale = Vector3(0.4f) / Waist->transform->local_scale;
+		//	onground_collider_GO->transform->local_pos = Vector3(0, -3.0f, 0);
 
-			onground_collider->physics_data.is_moveable = false;
-			onground_collider->physics_data.is_hitable = false;
-			onground_collider->ignore_tags |= Collider_tags::Human;
+		//	onground_collider->physics_data.is_moveable = false;
+		//	onground_collider->physics_data.is_hitable = false;
+		//	onground_collider->ignore_tags |= Collider_tags::Human;
 
-		}
+		//}
 
 	}
 
@@ -100,6 +100,8 @@ namespace Adollib
 
 		// respownˆ—
 		//if (check_respown() == true)return;
+
+		update_onground();
 
 		// è‚ğL‚Î‚·
 		reach_out_hands();

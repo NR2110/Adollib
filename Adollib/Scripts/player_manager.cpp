@@ -282,22 +282,22 @@ namespace Adollib
 			//Lfoot_collider   ->physics_data.inertial_mass = 1;
 
 
-			Head_collider->physics_data.anglar_drag = 0.5f;
+			//Head_collider->physics_data.anglar_drag = 0.5f;
 			Lsholder_collider->physics_data.anglar_drag = 0.5f;
 			Lelbow_collider->physics_data.anglar_drag = 0.5f;
 			Lhand_collider->physics_data.anglar_drag = 0.5f;
 			Rsholder_collider->physics_data.anglar_drag = 0.5f;
 			Relbow_collider->physics_data.anglar_drag = 0.5f;
 			Rhand_collider->physics_data.anglar_drag = 0.5f;
-			Body_collider->physics_data.anglar_drag = 0.9f;
+			//Body_collider->physics_data.anglar_drag = 0.9f;
 			Waist_collider->physics_data.anglar_drag = 0.8f;
-			Rleg_collider->physics_data.anglar_drag = 0.5f;
-			Rfoot_collider->physics_data.anglar_drag = 0.5f;
-			Lleg_collider->physics_data.anglar_drag = 0.5f;
-			Lfoot_collider->physics_data.anglar_drag = 0.5f;
+			//Rleg_collider->physics_data.anglar_drag = 0.5f;
+			//Rfoot_collider->physics_data.anglar_drag = 0.5f;
+			//Lleg_collider->physics_data.anglar_drag = 0.5f;
+			//Lfoot_collider->physics_data.anglar_drag = 0.5f;
 
-			Rleg_collider->physics_data.anglar_drag = 0.95f;
-			Lleg_collider->physics_data.anglar_drag = 0.95f;
+			////Rleg_collider->physics_data.anglar_drag = 0.95f;
+			////Lleg_collider->physics_data.anglar_drag = 0.95f;
 
 			//::: d—Í“K—p‚Ì’²® :::
 			Head_collider->physics_data.is_fallable = false;
@@ -376,6 +376,7 @@ namespace Adollib
 			}
 			{
 				auto ball = Joint::add_balljoint(Lelbow_collider, Lhand_collider, Vector3(-0.2f, -0.25f, 0), Vector3(0, 0, 0), joint_bias);
+				//auto hinge = Joint::add_Hingejoint(Lelbow_collider, Lhand_collider, Vector3(-0.2f, -0.25f, -1), Vector3(-0.2f, -0.25f, +1), Vector3(0, 0, -1), Vector3(0, 0, +1), joint_bias);
 			}
 			{
 				auto Cone = Joint::add_Conejoint(Body_collider, Rsholder_collider, Vector3(-1.1f, 0.2f, 0), Vector3(0, 0.5f, 0), Vector3(+1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);

@@ -2,6 +2,7 @@
 #include "../Adollib/Scripts/Object/component.h"
 #include "../Adollib/Scripts/Physics/collider.h"
 #include "../Adollib/Scripts/Physics/joint.h"
+#include "../Adollib/Scripts/Physics/ray.h"
 
 namespace Adollib
 {
@@ -59,8 +60,12 @@ namespace Adollib
 		bool is_maked_left_joint = false;
 
 		// 接地判定を行う
+		//Gameobject* onground_collider_GO = nullptr; //立たせるためのsphereの座標に持ってくる必要があるため 変数で持って管理
 		Collider* onground_collider = nullptr;
-		Gameobject* onground_collider_GO = nullptr; //立たせるためのsphereの座標に持ってくる必要があるため 変数で持って管理
+		Ray::Raycast_struct onground_ray_data;
+		Vector3 onground_contactpoint;
+		const float onground_dis = 2.0f;
+		const float onground_radius = 0.6f;
 
 		// waist_colliderにアタッチされている waistをたたせるためのshape
 		Sphere* waist_pillar = nullptr;
@@ -81,6 +86,7 @@ namespace Adollib
 	private:
 		//::: 毎フレーム呼び出す
 		bool check_respown(); //respown処理
+		void update_onground(); //onground_colliderを更新
 		void reach_out_hands(); //手を伸ばす
 		void catch_things(); //物をつかむ
 		void push_waist_for_stand(); //rayを飛ばして腰を立たせる
