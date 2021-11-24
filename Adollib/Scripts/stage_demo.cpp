@@ -116,6 +116,7 @@ namespace Adollib
 							);
 							//coll->tag &= ~Collider_tags::Caera_not_sunk_Stage;
 							coll->physics_data.inertial_mass = mass;
+							//coll->physics_data.dynamic_friction = 0.8f;
 							wall_pearent->add_child(coll->gameobject);
 						}
 					}

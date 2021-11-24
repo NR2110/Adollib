@@ -84,6 +84,8 @@ c:\users\waaaa\documents\adollib\adollib\adollib\defaultshader\default_ps.cso
 c:\users\waaaa\documents\adollib\adollib\adollib\defaultshader\default_ps_dither_noshadow.cso
 c:\users\waaaa\documents\adollib\adollib\adollib\defaultshader\default_ps_noshadow.cso
 c:\users\waaaa\documents\adollib\adollib\adollib\defaultshader\default_vs.cso
+c:\users\waaaa\documents\adollib\adollib\adollib\defaultshader\gaussian_filter_ps.cso
+c:\users\waaaa\documents\adollib\adollib\adollib\defaultshader\gaussian_filter_vs.cso
 c:\users\waaaa\documents\adollib\adollib\adollib\defaultshader\render_directional_shadow_ps.cso
 c:\users\waaaa\documents\adollib\adollib\adollib\defaultshader\render_directional_shadow_vs.cso
 c:\users\waaaa\documents\adollib\adollib\adollib\defaultshader\sprite_ps.cso

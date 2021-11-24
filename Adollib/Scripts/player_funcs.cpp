@@ -442,6 +442,11 @@ void Player::linear_move() {
 			Vector3 Yspeed = Vector3(0, Waist_collider->linear_velocity().y, 0);
 			Waist_collider->linear_velocity(speed.unit_vect() * waist_move_max_speed + Yspeed);
 		}
+
+		if (onground_collider != nullptr) {
+			if(onground_collider->physics_data.inertial_mass > 20) //•à‚­‚Æ‚«‚É¬‚³‚ÈÎ‚±‚ë‚É‘S—Í‚ð‰Á‚¦‚È‚¢
+			onground_collider->add_force(-dir * waist_move_pow * move_pow, onground_contactpoint);
+		}
 	}
 };
 
