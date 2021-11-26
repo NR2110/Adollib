@@ -20,8 +20,8 @@ namespace Adollib {
 		static const Collider_tagbit Human = (1 << 11);
 
 		static const Collider_tagbit Stage = (1 << 12);
-		static const Collider_tagbit Jumpable_Stage = (1 << 13);
-		static const Collider_tagbit Having_Stage = (1 << 14);
+		//static const Collider_tagbit Jumpable_Stage = (1 << 13);
+		//static const Collider_tagbit Having_Stage = (1 << 14);
 		static const Collider_tagbit Static_Stage = (1 << 15);
 		static const Collider_tagbit Kinematic_Stage = (1 << 16);
 		static const Collider_tagbit Caera_not_sunk_Stage = (1 << 17);

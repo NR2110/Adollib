@@ -31,11 +31,11 @@ namespace Adollib {
 		void tag_reset() { tags = 0; };
 
 	protected:
-		Collider* set_sphere (Vector3 pos = Vector3(0), float r = 1, Vector3 color = Vector3(1, 1, 1), bool is_static = true);
-		Collider* set_capsule(Vector3 pos = Vector3(0), float r = 1, float length = 1, Vector3 rotate = Vector3(0), Vector3 color = Vector3(1, 1, 1), bool is_static = true);
-		Collider* set_box    (Vector3 pos = Vector3(0), Vector3 size = Vector3(1), Vector3 rotate = Vector3(0), Vector3 color = Vector3(1, 1, 1), bool is_static = true);
-		Collider* set_meshbox(Vector3 pos = Vector3(0), Vector3 size = Vector3(1), Vector3 rotate = Vector3(0), Vector3 color = Vector3(1, 1, 1), bool is_static = true);
-		Gameobject* set_plane  (Vector3 pos = Vector3(0), Vector3 size = Vector3(1), Vector3 rotate = Vector3(0), Vector3 color = Vector3(1, 1, 1), bool is_static = true);
+		Collider* set_sphere (Vector3 pos = Vector3(0), float r = 1, Vector3 color = Vector3(1, 1, 1), Gameobject* pearent = nullptr, bool is_static = true);
+		Collider* set_capsule(Vector3 pos = Vector3(0), float r = 1, float length = 1, Vector3 rotate = Vector3(0), Vector3 color = Vector3(1, 1, 1), Gameobject* pearent = nullptr, bool is_static = true);
+		Collider* set_box    (Vector3 pos = Vector3(0), Vector3 size = Vector3(1), Vector3 rotate = Vector3(0), Vector3 color = Vector3(1, 1, 1), Gameobject* pearent = nullptr,bool is_static = true);
+		Collider* set_meshbox(Vector3 pos = Vector3(0), Vector3 size = Vector3(1), Vector3 rotate = Vector3(0), Vector3 color = Vector3(1, 1, 1), Gameobject* pearent = nullptr, bool is_static = true);
+		Gameobject* set_plane  (Vector3 pos = Vector3(0), Vector3 size = Vector3(1), Vector3 rotate = Vector3(0), Vector3 color = Vector3(1, 1, 1), Gameobject* pearent = nullptr, bool is_static = true);
 
 	public:
 		// stage_managerÇ™åƒÇ‘awake Ç±ÇÃstageÇ…êÿÇËë÷ÇÌÇ¡ÇΩÇ∆Ç´Ç…åƒÇŒÇÍÇÈ

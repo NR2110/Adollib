@@ -130,7 +130,7 @@ namespace Adollib {
 			//::: userのタイミングで呼ぶもの(だいたいmutexのlockが必要) :::::::
 
 			// 並進移動に力を加える
-			void add_force(const Vector3& force);
+			void add_force(const Vector3& force, const bool& is_force_local = false);
 			void add_force(const Vector3& force, const Vector3& position, const bool& is_position_local = false,const bool& is_force_local = false);
 			// 角回転に力を加える
 			void add_torque(const Vector3& force);

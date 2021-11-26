@@ -92,7 +92,7 @@ namespace Adollib {
 		const bool concoll_enter(const Collider_tagbit tag_name);
 
 		// •ÀiˆÚ“®‚É—Í‚ğ‰Á‚¦‚é
-		void add_force(const Vector3& force);
+		void add_force(const Vector3& force, const bool& is_force_local = false);
 
 		// •ÀiˆÚ“®‚É—Í‚ğ‰Á‚¦‚é
 		void add_force(const Vector3& force, const Vector3& position, const bool& is_position_local = false, const bool& is_force_local = false);

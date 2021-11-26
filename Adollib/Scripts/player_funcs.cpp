@@ -270,8 +270,6 @@ void Player::catch_things() {
 			}
 
 			if (!input->getMouseState(key) && joint != nullptr) {
-				joint->get_colliderB()->tag &= ~Collider_tags::Having_Stage;
-				joint->get_colliderB()->tag |= Collider_tags::Jumpable_Stage;
 				Joint::delete_joint(joint);
 			}
 
@@ -285,8 +283,6 @@ void Player::catch_things() {
 					(world_posA - world_posB).norm() > 2 * 2 ||
 					(colliders[i]->transform->position - colliders[i + 2]->transform->position).norm() > 1 * 1
 					) {
-					joint->get_colliderB()->tag &= ~Collider_tags::Having_Stage;
-					joint->get_colliderB()->tag |= Collider_tags::Jumpable_Stage;
 					Joint::delete_joint(joint);
 				}
 
@@ -294,14 +290,6 @@ void Player::catch_things() {
 
 		}
 
-	}
-
-	//TODO : つかんでいるもののStage tagを消して、乗っているときにjumpできないようにしている
-	for (int i = 0; i < 2; i++) {
-		Joint_base*& joint = *joints[i];
-		if (joint == nullptr)continue;
-		joint->get_colliderB()->tag |= Collider_tags::Having_Stage;
-		joint->get_colliderB()->tag &= ~Collider_tags::Jumpable_Stage;
 	}
 };
 
@@ -420,10 +408,14 @@ void Player::push_waist_for_stand() {
 void Player::linear_move() {
 	// 地面に接している & 入力が無い時
 	if (is_gunyatto == false && dir.norm() == 0 && onground_collider != nullptr) {
-		Waist_collider->physics_data.drag = 0.98f;
+		Waist_collider->physics_data.drag = 0.985f;
+		Body_collider->physics_data.drag = 0.985f;
 	}
 	// 入力があれば動きやすいように0.1にする
-	else Waist_collider->physics_data.drag = 0.1;
+	else {
+		Waist_collider->physics_data.drag = 0.1f;
+		Body_collider->physics_data.drag = 0.1f;
+	}
 
 	float move_pow = 1;
 	if (onground_collider == nullptr) {
@@ -444,7 +436,7 @@ void Player::linear_move() {
 		}
 
 		if (onground_collider != nullptr) {
-			if(onground_collider->physics_data.inertial_mass > 20) //歩くときに小さな石ころに全力を加えない
+		if(onground_collider->physics_data.inertial_mass > 20) //歩くときに小さな石ころに全力を加えない
 			onground_collider->add_force(-dir * waist_move_pow * move_pow, onground_contactpoint);
 		}
 	}
@@ -591,43 +583,28 @@ void Player::make_jump() {
 		(catch_left_joint  == nullptr || catch_left_joint->get_colliderB()  != onground_collider)    //左手で持っているものではない
 		)is_jumpable = true;
 
-	//if (onground_collider != nullptr )is_jumpable = true;
-
-
 	if (is_jumping == true)coyote += Al_Global::second_per_frame;
 	if (coyote >= 0)is_jumping = false;
-	//if (is_jumping == false && onground_collider->concoll_enter(Collider_tags::Jumpable_Stage)) coyote = 0.3f;
-	//if (is_jumping == false && !onground_collider->concoll_enter(Collider_tags::Jumpable_Stage)) coyote -= Al_Global::second_per_frame;
 	if (is_jumping == false && is_jumpable) coyote = 0.3f;
 	if (is_jumping == false && !is_jumpable) coyote -= Al_Global::second_per_frame;
 
 	if (is_gunyatto == false && coyote >= 0 && input->getKeyTrigger(Key::Space)) {
-		//constexpr float stand_dis = 2.0f;
-		//constexpr float stand_radius = 0.6f;
-		//Vector3 contact_posint;
-
-		//Ray ray;
-		//ray.direction = Vector3(0, -1, 0);
-		//ray.position = Waist_collider->transform->position;
-		//Ray::Raycast_struct data;
-		//data.collider_tag = Collider_tags::Stage;
-		//if (ray.sphere_cast(stand_radius, contact_posint, data) && data.raymin < stand_dis) {
-
-		//	data.coll->add_force(Vector3(0, -10, 0) * jump_power, contact_posint);
-
-		//	if (data.coll->gameobject->material != nullptr)
-		//		data.coll->gameobject->material->color = Vector4(Al_Global::get_gaming(rand(), 800, 0, 1), 1);
-		//}
 
 		if (onground_collider != nullptr) {
 
-			float mass = 10 * 50;
-			onground_collider->add_force(Vector3(0, -mass, 0) * jump_power, onground_contactpoint);
+			//float sum_pow = 0;
+			//// 各部位の速度から掛かっている力を計算、
+			//for (int i = 0; i < Human_collider_size; i++) {
+			//	//Human_colliders[i]->linear_velocity(Vector3(Human_colliders[i]->linear_velocity().x, jump_power, Human_colliders[i]->linear_velocity().z));
+			//	float pow = Human_colliders[i]->linear_velocity().y * Human_colliders[i]->physics_data.inertial_mass;
+			//	Human_colliders[i]->add_force(Vector3(0, 1, 0) * (-pow + jump_power));
+			//	sum_pow += -pow + jump_power;
+			//}
 
-			//if (onground_collider->gameobject->material != nullptr)
-			//	onground_collider->gameobject->material->color = Vector4(Al_Global::get_gaming(rand(), 800, 0, 1), 1);
+			//Debug::set("jump_pow", sum_pow);
+			//onground_collider->add_force(Vector3(0, -sum_pow, 0), onground_contactpoint);
 
-
+			// Y方向に力を加える
 			for (int i = 0; i < Human_collider_size; i++) {
 				Human_colliders[i]->linear_velocity(Vector3(Human_colliders[i]->linear_velocity().x, jump_power, Human_colliders[i]->linear_velocity().z));
 			}
@@ -636,8 +613,21 @@ void Player::make_jump() {
 			Lfoot_collider->linear_velocity(Vector3(Lfoot_collider->linear_velocity().x, jump_power * 0.1f, Lfoot_collider->linear_velocity().z));
 			Rfoot_collider->linear_velocity(Vector3(Rfoot_collider->linear_velocity().x, jump_power * 0.1f, Rfoot_collider->linear_velocity().z));
 
+
+			// 足元の物体に力を加える
+			float mass = 1000;
+			onground_collider->add_force(Vector3(0, -mass, 0) * jump_power, onground_contactpoint);
+
+
 			is_jumping = true;
 			coyote = -0.3f;
+
+			//// X方向に力を加える(Junmp加速)
+			//for (int i = 0; i < Human_collider_size; i++) {
+			//	Human_colliders[i]->add_force(dir * 10000);
+			//}
+
+
 		}
 	}
 };
@@ -677,8 +667,6 @@ bool Player::check_respown() {
 		for (int i = 0; i < 2; i++) {
 			Joint_base*& joint = *joints[i];
 			if (joint != nullptr) {
-				joint->get_colliderB()->tag &= ~Collider_tags::Having_Stage;
-				joint->get_colliderB()->tag |= Collider_tags::Jumpable_Stage;
 				Joint::delete_joint(joint);
 			}
 		}
@@ -722,7 +710,6 @@ void Player::turn_gunyatto_dir() {
 
 }
 
-
 // "物を持つ"jointを削除する
 void Player::delete_catchjoint() {
 	Joint_base** joints[2] = {
@@ -732,8 +719,6 @@ void Player::delete_catchjoint() {
 	for (int i = 0; i < 2; i++) {
 		Joint_base*& joint = *joints[i];
 		if (joint != nullptr) {
-			joint->get_colliderB()->tag &= ~Collider_tags::Having_Stage;
-			joint->get_colliderB()->tag |= Collider_tags::Jumpable_Stage;
 			Joint::delete_joint(joint);
 		}
 	}
@@ -762,8 +747,6 @@ void Player::respown() {
 	for (int i = 0; i < 2; i++) {
 		Joint_base*& joint = *joints[i];
 		if (joint != nullptr) {
-			joint->get_colliderB()->tag &= ~Collider_tags::Having_Stage;
-			joint->get_colliderB()->tag |= Collider_tags::Jumpable_Stage;
 			Joint::delete_joint(joint);
 		}
 	}

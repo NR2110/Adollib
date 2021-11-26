@@ -30,26 +30,40 @@ using namespace Physics_function;
 //
 //};
 
-void ALP_Physics::add_force(const Vector3& force) {
+void ALP_Physics::add_force(const Vector3& force, const bool& is_force_local) {
 	std::lock_guard <std::mutex> lock(mtx);
 
-	accumulated_force += force;
+	if (is_force_local)accumulated_force += vector3_quatrotate(force, transform->orientation);
+	else accumulated_force += force;
+
 }
-void ALP_Physics::add_force(const Vector3& force,const Vector3& position, const bool& is_position_local, const bool& is_force_local) {
+void ALP_Physics::add_force(const Vector3& force, const Vector3& position, const bool& is_position_local, const bool& is_force_local) {
 
-	std::lock_guard <std::mutex> lock(mtx);
+	//std::lock_guard <std::mutex> lock(mtx);
 
-	Vector3 local_position;
-	Vector3 local_force;
-	if (is_force_local)local_force = force;
-	else local_force = vector3_quatrotate(force, transform->orientation.inverse());
+	//Vector3 local_position;
+	//Vector3 local_force;
+	//if (is_force_local)local_force = force;
+	//else local_force = vector3_quatrotate(force, transform->orientation.inverse());
 
-	if (is_position_local)local_position = position;
-	else local_position = vector3_quatrotate(position - transform->position, transform->orientation.inverse());
+	//if (is_position_local)local_position = position;
+	//else local_position = vector3_quatrotate(position - transform->position, transform->orientation.inverse());
 
 
-	accumulated_force += force;
-	accumulated_torque += vector3_cross(local_position, local_force.unit_vect()) * local_force.norm_sqr();
+	//accumulated_force += local_force;
+	//accumulated_torque += vector3_cross(local_position, local_force.unit_vect()) * local_force.norm_sqr();
+
+	Vector3 world_position;
+	Vector3 world_force;
+	if (is_force_local)world_force = vector3_quatrotate(force, transform->orientation);
+	else world_force = force;
+
+	if (is_position_local)world_position = vector3_quatrotate(position, transform->orientation);
+	else world_position = position - transform->position;
+
+	accumulated_force += world_force;
+	accumulated_torque += vector3_cross(world_position, world_force.unit_vect()) * world_force.norm_sqr();
+
 }
 void ALP_Physics::add_torque(const Vector3& force) {
 	std::lock_guard <std::mutex> lock(mtx);

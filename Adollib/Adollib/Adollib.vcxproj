@@ -171,8 +171,10 @@
     <ClInclude Include="..\Scripts\stage_01.h" />
     <ClInclude Include="..\Scripts\stage_base.h" />
     <ClInclude Include="..\Scripts\stage_demo.h" />
+    <ClInclude Include="..\Scripts\stage_demo_1.h" />
     <ClInclude Include="..\Scripts\stage_manager.h" />
     <ClInclude Include="..\Scripts\stage_types.h" />
+    <ClInclude Include="..\Scripts\tag_andcircuit.h" />
     <ClInclude Include="Imgui\imconfig.h" />
     <ClInclude Include="Imgui\imgui.h" />
     <ClInclude Include="Imgui\imgui_impl_dx11.h" />
@@ -293,6 +295,8 @@
     <ClCompile Include="..\Scripts\stage_01_funcs.cpp" />
     <ClCompile Include="..\Scripts\stage_base.cpp" />
     <ClCompile Include="..\Scripts\stage_demo.cpp" />
+    <ClCompile Include="..\Scripts\stage_demo_1.cpp" />
+    <ClCompile Include="..\Scripts\stage_demo_1_funcs.cpp" />
     <ClCompile Include="..\Scripts\stage_demo_funcs.cpp" />
     <ClCompile Include="..\Scripts\stage_manager.cpp" />
     <ClCompile Include="Imgui\imgui.cpp" />

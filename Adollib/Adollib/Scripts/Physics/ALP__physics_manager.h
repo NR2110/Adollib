@@ -103,8 +103,8 @@ namespace Adollib
 			float inertial_mass = 1.f; //¿—Ê
 			float linear_drag = 0.1f; //‹ó‹C’ïR
 			float anglar_drag = 0.1f; //‹ó‹C’ïR
-			float dynamic_friction = 0.4f;//“®–€C
-			float static_friction = 0.4f; //Ã–€C
+			float dynamic_friction = 0.8f;//“®–€C
+			float static_friction = 0.8f; //Ã–€C
 			float restitution = 0.1f;	 //”½”­ŒW”
 
 			bool is_fallable = true; //—‚¿‚é‚©

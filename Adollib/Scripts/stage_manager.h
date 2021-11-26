@@ -16,8 +16,10 @@ namespace Adollib {
 	public:
 		static enum class Stage_types {
 			demo,
-			stage_0,
+			demo_1,
+
 			stage_1,
+			stage_2,
 
 			stagetype_max
 		};

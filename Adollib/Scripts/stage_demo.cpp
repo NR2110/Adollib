@@ -26,8 +26,8 @@ namespace Adollib
 		player_respown_pos = Vector3(-2.7f, 100, -150);
 		player_respown_pos = Vector3(-2.7f, 100, -50);
 
-		set_box(Vector3(0, -60, 0), Vector3(80, 60, 80), Vector3(0), Vector3(188, 214, 54) / 255.0f, true);
-		set_box(Vector3(0, -60, -98), Vector3(30, 30, 60), Vector3(0), Vector3(188, 214, 54) / 255.0f, true);
+		set_box(Vector3(0, -60, 0), Vector3(80, 60, 80), Vector3(0), Vector3(188, 214, 54) / 255.0f);
+		set_box(Vector3(0, -60, -98), Vector3(30, 30, 60), Vector3(0), Vector3(188, 214, 54) / 255.0f);
 
 		if(0)
 		{
@@ -112,6 +112,7 @@ namespace Adollib
 								size,
 								Vector3(0, 0, 0),
 								color + Vector3(rand() % 5 / 255.0f),
+								nullptr,
 								false
 							);
 							//coll->tag &= ~Collider_tags::Caera_not_sunk_Stage;
@@ -130,6 +131,7 @@ namespace Adollib
 								size,
 								Vector3(0, 0, 0),
 								color + Vector3(rand() % 5 / 255.0f),
+								nullptr,
 								false
 							);
 							//coll->tag &= ~Collider_tags::Caera_not_sunk_Stage;
@@ -169,7 +171,7 @@ namespace Adollib
 
 					Collider* coll = desk->addComponent<Collider>();
 					//coll->tag = Collider_tags::Stage | Collider_tags::Kinematic_Stage | Collider_tags::Jumpable_Stage;
-					coll->tag = Collider_tags::Stage | Collider_tags::Kinematic_Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Jumpable_Stage;
+					coll->tag = Collider_tags::Stage | Collider_tags::Kinematic_Stage | Collider_tags::Caera_not_sunk_Stage;
 					coll->physics_data.inertial_mass = 5;
 					//coll->set_tensor(tensor);
 					//{
@@ -285,6 +287,7 @@ namespace Adollib
 					),
 						1,
 						Vector3(1, 0, (1.0f / (sphere_size * sphere_size)) * index),
+						nullptr,
 						false
 					);
 					go = coll->gameobject;
@@ -312,14 +315,14 @@ namespace Adollib
 			Vector3 base_pos = Vector3(120, 2, 0);
 			Vector3 off = Vector3(0);
 			for (int i = 0; i < 5; i++) {
-				set_box(base_pos + off, Vector3(40, 4, 40), Vector3(0), Vector3(188, 214, 54) / 255.0f * pow(1.03f, i + 1), true);
+				set_box(base_pos + off, Vector3(40, 4, 40), Vector3(0), Vector3(188, 214, 54) / 255.0f * pow(1.03f, i + 1));
 				off += Vector3(10, 8, 0);
 			}
 		}
-		set_box(Vector3(140, 18, 60), Vector3(65, 20, 20), Vector3(0), Vector3(188, 214, 54) / 255.0f, true);
+		set_box(Vector3(140, 18, 60), Vector3(65, 20, 20), Vector3(0), Vector3(188, 214, 54) / 255.0f);
 
 		{
-			auto coll = set_box(Vector3(0, -29, -100), Vector3(2, 2, 2), Vector3(0), Vector3(0.8f), false);
+			auto coll = set_box(Vector3(0, -29, -100), Vector3(2, 2, 2), Vector3(0), Vector3(0.8f),nullptr, false);
 			coll->tag &= ~Collider_tags::Caera_not_sunk_Stage;
 			coll->physics_data.inertial_mass = 50;
 		}

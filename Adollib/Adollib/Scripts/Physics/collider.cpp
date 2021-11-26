@@ -23,9 +23,9 @@ const bool Collider::concoll_enter(const Collider_tagbit tag_name) {
 	return ALPcollider_ptr->concoll_enter(tag_name);
 }
 
-void Collider::add_force(const Vector3& force) {
+void Collider::add_force(const Vector3& force, const bool& is_force_local) {
 	if (Al_Global::second_per_frame > inv60)return;
-	ALPphysics_ptr->add_force(force * Al_Global::second_per_frame);
+	ALPphysics_ptr->add_force(force * Al_Global::second_per_frame, is_force_local);
 }
 void Collider::add_force(const Vector3& force, const Vector3& position, const bool& is_position_local, const bool& is_force_local) {
 	if (Al_Global::second_per_frame > inv60)return;

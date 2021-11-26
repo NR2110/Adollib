@@ -79,8 +79,8 @@ namespace Adollib
 			ImGui::InputFloat("rotate_speed", &rotate_speed, 0.01f, 10.0f, "%.2f");
 			ImGui::InputFloat("linear_speed", &linear_speed, 1.0f, 300.0f, "%.2f");
 			ImGui::Checkbox("follow_player", &follow_player);
-			if (follow_player)
-				ImGui::DragFloat("dis", &dis, 0.1f);
+			if (follow_player) ImGui::DragFloat("dis", &dis, 0.1f);
+
 			ImGui::End();
 		}
 #endif // UseImgui
@@ -156,9 +156,14 @@ namespace Adollib
 				cursol_pos_save = Vector3(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f, 0);
 			}
 
+			{
+				camera_rot *= rotate;
+				transform->local_orient = ALEasing(transform->local_orient, camera_rot, 1, timeStep);
+			}
 
 			{
 				//pos_buffer = ALEasing(pos_buffer, player->position, 1, timeStep);
+				//Vector3 goal = player->position + vector3_quatrotate(Vector3(3 * ALClamp(0,1, dis_buffer / 50), 4, 0), transform->local_orient);
 				Vector3 goal = player->position + Vector3(0, 4, 0);
 				Vector3 dir = goal - pos_buffer;
 				if (dir.norm() > pos_slop * pos_slop) {
@@ -216,9 +221,6 @@ namespace Adollib
 				}
 
 			}
-
-			camera_rot *= rotate;
-			transform->local_orient = ALEasing(transform->local_orient, camera_rot, 1, timeStep);
 
 			transform->local_pos = pos_buffer + vector3_quatrotate(dis_buffer * Vector3(0, 0, -1), camera_rot);
 

@@ -77,7 +77,7 @@ namespace Adollib
 		Collider* coll = tree->addComponent<Collider>();
 		coll->physics_data.inertial_mass = 35;
 		//coll->tag = Collider_tags::Stage | Collider_tags::Kinematic_Stage | Collider_tags::Jumpable_Stage;
-		coll->tag = Collider_tags::Stage | Collider_tags::Kinematic_Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Jumpable_Stage;
+		coll->tag = Collider_tags::Stage | Collider_tags::Kinematic_Stage | Collider_tags::Caera_not_sunk_Stage;
 
 		for (int i = 0; i < Tree_size; i++) {
 			boxes[i] = coll->add_shape<Box>();
@@ -209,7 +209,7 @@ namespace Adollib
 		for (int i = 0; i < quantity; i++) {
 
 			Gameobject* go = nullptr;
-			auto coll = set_sphere(pos - Vector3(0, scale * (i + 1) * 2, 0), scale, color, false);
+			auto coll = set_sphere(pos - Vector3(0, scale * (i + 1) * 2, 0), scale, color, nullptr, false);
 			coll->tag &= ~Collider_tags::Caera_not_sunk_Stage;
 			coll->physics_data.inertial_mass = mass * powf(1.1f, quantity - i);
 
