@@ -56,7 +56,7 @@ namespace Adollib
 
 		Joint_base* catch_right_joint = nullptr; //右手がつかんでいるjoint
 		Joint_base* catch_left_joint = nullptr;	 //左手がつかんでいるjoint
-		bool is_maked_right_joint = false; //つかんでいたものが距離で離れたとき、stateのみだと即座に次のものをつかんでします 嫌なのでboolで管理
+		bool is_maked_right_joint = false; //つかんでいたものが距離で離れたとき、stateのみだと即座に次のものをつかんでしまう 嫌なのでboolで管理
 		bool is_maked_left_joint = false;
 
 		// 接地判定を行う
@@ -66,11 +66,6 @@ namespace Adollib
 		Vector3 onground_contactpoint;
 		const float onground_dis = 2.0f;
 		const float onground_radius = 0.6f;
-
-		// waist_colliderにアタッチされている waistをたたせるためのshape
-		Sphere* waist_pillar = nullptr;
-		float Waist_pillar_max_y = 0; //waist_pillarのy方向の最大値
-		float Waist_pillar_max_xz = 0.5f;//waist_pillarのtangent方向の最大値
 
 		bool is_jumping = false; //今ジャンプしているか
 		float coyote = 0.3f; //jumpの許容時間
@@ -162,8 +157,7 @@ namespace Adollib
 		Collider* l_Rleg_collider		,
 		Collider* l_Rfoot_collider		,
 		Collider* l_Lleg_collider		,
-		Collider* l_Lfoot_collider		,
-		Sphere* l_waist_pillar
+		Collider* l_Lfoot_collider
 		) {
 			Head_collider		= l_Head_collider;
 			Lsholder_collider	= l_Lsholder_collider;
@@ -178,7 +172,6 @@ namespace Adollib
 			Rfoot_collider		= l_Rfoot_collider;
 			Lleg_collider		= l_Lleg_collider;
 			Lfoot_collider		= l_Lfoot_collider;
-			waist_pillar		= l_waist_pillar;
 
 			Head		=Head_collider		->gameobject;
 			Lsholder	=Lsholder_collider	->gameobject;
@@ -193,8 +186,6 @@ namespace Adollib
 			Rfoot		=Rfoot_collider		->gameobject;
 			Lleg		=Lleg_collider		->gameobject;
 			Lfoot		=Lfoot_collider		->gameobject;
-
-			Waist_pillar_max_y = l_waist_pillar->center.y;
 		}
 
 	public:

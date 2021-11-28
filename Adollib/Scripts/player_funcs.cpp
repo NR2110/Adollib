@@ -371,8 +371,6 @@ void Player::add_pow_for_stand() {
 void Player::push_waist_for_stand() {
 	if (input->getKeyState(Key::LeftControl) || is_gunyatto == true)return;
 
-	waist_pillar->center = Vector3(0, 100, 0);
-
 	float dot = vector3_dot(Vector3(0, -1, 0), vector3_quatrotate(Vector3(0, -1, 0), Waist_collider->transform->orientation));
 	if (dot < 0)return; //˜‚ª‰º‚ðŒü‚¢‚Ä‚¢‚È‚¯‚ê‚Îreturn
 	dot = dot * dot;

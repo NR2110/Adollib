@@ -69,7 +69,7 @@ namespace Adollib
 		tree_parts[6]->transform->local_pos = Vector3(0, 0.2f, 0);
 		tree_parts[6]->transform->local_scale = Vector3(3, 0.2f, 3);
 		tree_parts[6]->transform->local_orient = quaternion_from_euler(0, 0, 0);
-		tree_parts[6]->material->color = floar_color;
+		tree_parts[6]->material->color = Vector4(grass_color, 1);
 
 		for (int i = 0; i < Tree_size; i++) {
 			tree->add_child(tree_parts[i]);
@@ -142,11 +142,13 @@ namespace Adollib
 		pillar_pearent->transform->local_orient = quaternion_from_euler(rotate);
 		pillar_pearent->transform->local_scale = scale;
 
-		set_box(Vector3(0, base_length, 0),                             Vector3(2, base_length, 2),         Vector3(0), Vector3(255, 255, 255) / 255.0f * 0.9f, pillar_pearent);
-		set_box(Vector3(0, base_length * 2 + pillar_length, 0),         Vector3(1.5f, pillar_length, 1.5f), Vector3(0), Vector3(255, 255, 255) / 255.0f * 0.9f, pillar_pearent);
-		set_box(Vector3(0, base_length * 2 + pillar_length * 2 + 0.5f, 0), Vector3(2, 0.5f, 2),                Vector3(0), Vector3(255, 255, 255) / 255.0f * 0.9f, pillar_pearent);
+		set_box(Vector3(0, base_length, 0),                             Vector3(2, base_length, 2),         Vector3(0), base_color * 0.9f, pillar_pearent);
+		set_box(Vector3(0, base_length * 2 + pillar_length, 0),         Vector3(1.5f, pillar_length, 1.5f), Vector3(0), base_color * 0.9f, pillar_pearent);
+		set_box(Vector3(0, base_length * 2 + pillar_length * 2 + 0.5f, 0), Vector3(2, 0.5f, 2),                Vector3(0), base_color * 0.9f, pillar_pearent);
 
 		if (pearent != nullptr)pearent->add_child(pillar_pearent);
+
+		return pillar_pearent;
 	}
 
 	Gameobject* Stage_01::set_fence(const Vector3& pos, const Vector3& scale, const Vector3& rotate, Gameobject* pearent, const int fence_count) {
@@ -157,14 +159,16 @@ namespace Adollib
 		fence_pearent->transform->local_orient = quaternion_from_euler(rotate);
 		fence_pearent->transform->local_scale = scale;
 
-		set_box(Vector3(0, 4, 0),     Vector3(6.5f, 0.5f, 1), Vector3(0), Vector3(255, 255, 255) / 255.0f * 0.9f, fence_pearent);
+		set_box(Vector3(0, 4, 0),     Vector3(6.5f, 0.5f, 1), Vector3(0), base_color * 0.9f, fence_pearent);
 
-		set_box(Vector3(-4.5f, 2, 0), Vector3(0.5f, 2, 0.5f), Vector3(0), Vector3(255, 255, 255) / 255.0f * 0.9f, fence_pearent);
-		set_box(Vector3(-1.5f, 2, 0), Vector3(0.5f, 2, 0.5f), Vector3(0), Vector3(255, 255, 255) / 255.0f * 0.9f, fence_pearent);
-		set_box(Vector3(+1.5f, 2, 0), Vector3(0.5f, 2, 0.5f), Vector3(0), Vector3(255, 255, 255) / 255.0f * 0.9f, fence_pearent);
-		set_box(Vector3(+4.5f, 2, 0), Vector3(0.5f, 2, 0.5f), Vector3(0), Vector3(255, 255, 255) / 255.0f * 0.9f, fence_pearent);
+		set_box(Vector3(-4.5f, 2, 0), Vector3(0.5f, 2, 0.5f), Vector3(0), base_color * 0.9f, fence_pearent);
+		set_box(Vector3(-1.5f, 2, 0), Vector3(0.5f, 2, 0.5f), Vector3(0), base_color * 0.9f, fence_pearent);
+		set_box(Vector3(+1.5f, 2, 0), Vector3(0.5f, 2, 0.5f), Vector3(0), base_color * 0.9f, fence_pearent);
+		set_box(Vector3(+4.5f, 2, 0), Vector3(0.5f, 2, 0.5f), Vector3(0), base_color * 0.9f, fence_pearent);
 
 		if (pearent != nullptr)pearent->add_child(fence_pearent);
+
+		return fence_pearent;
 	}
 
 	Gameobject* Stage_01::set_door(const Vector3& pos, const Vector3& scale, const Vector3& rotate, const int is_left, Gameobject* pearent) {
@@ -208,12 +212,14 @@ namespace Adollib
 		joint_pos[0].y *= +5;
 		joint_pos[1].y *= -5;
 
-		Joint::add_Hingejoint(coll, door,
-			vector3_quatrotate(joint_pos[0], door->transform->local_orient) + door->transform->local_pos,
-			vector3_quatrotate(joint_pos[1], door->transform->local_orient) + door->transform->local_pos,
-			joint_pos[0], joint_pos[1],
-			0.05f
-		);
+		//Joint::add_Hingejoint(coll, door,
+		//	vector3_quatrotate(joint_pos[0], door->transform->local_orient) + door->transform->local_pos,
+		//	vector3_quatrotate(joint_pos[1], door->transform->local_orient) + door->transform->local_pos,
+		//	joint_pos[0], joint_pos[1],
+		//	0.05f
+		//);
+
+		return door_joint;
 	}
 
 	Gameobject* Stage_01::set_buttan(const Vector3& pos, const Vector3& scale, const Vector3& rotate, Stage_parts::Stageparts_tagbit tag, Gameobject* pearent, bool is_use_trigger) {
@@ -280,7 +286,354 @@ namespace Adollib
 		comp->this_stage = this;
 
 		if (pearent != nullptr)pearent->add_child(go);
+		return go;
 	}
+
+	Gameobject* Stage_01::set_player_statue(const Vector3& pos, const float& scale, const Vector3& rotate) {
+		Gameobject* Human = Gameobject_manager::create("Human");
+		Human->transform->local_pos = pos;
+		Human->transform->local_orient = quaternion_from_euler(rotate);
+		//Human->transform->local_scale = Vector3(scale);
+
+		//::: Gameobjectの生成 :::
+		Gameobject* Head = Gameobject_manager::createCube("Head");
+
+		Gameobject* Lsholder = Gameobject_manager::createCube("Lsholder");
+		Gameobject* Lelbow   = Gameobject_manager::createCube("Lelbow");
+		Gameobject* Rsholder = Gameobject_manager::createCube("Rsholder");
+		Gameobject* Relbow   = Gameobject_manager::createCube("Relbow");
+		Gameobject* Body     = Gameobject_manager::createCube("Body");
+		Gameobject* Waist    = Gameobject_manager::createCube("Waist");
+		Gameobject* Rleg     = Gameobject_manager::createCube("Rleg");
+		Gameobject* Rfoot    = Gameobject_manager::createCube("Rfoot");
+		Gameobject* Lleg     = Gameobject_manager::createCube("Lleg");
+		Gameobject* Lfoot    = Gameobject_manager::createCube("Lfoot");
+
+		Head    ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		Lsholder->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		Lelbow  ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		Rsholder->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		Relbow  ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		Body    ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		Waist   ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		Rleg    ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		Rfoot   ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		Lleg    ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		Lfoot   ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+
+		//::: collider,shapeのアタッチ :::
+		Collider* Head_collider     = Head->addComponent<Collider>();
+		Collider* Lsholder_collider = Lsholder->addComponent<Collider>();
+		Collider* Lelbow_collider   = Lelbow->addComponent<Collider>();
+		Collider* Rsholder_collider = Rsholder->addComponent<Collider>();
+		Collider* Relbow_collider   = Relbow->addComponent<Collider>();
+		Collider* Body_collider     = Body->addComponent<Collider>();
+		Collider* Waist_collider    = Waist->addComponent<Collider>();
+		Collider* Rleg_collider     = Rleg->addComponent<Collider>();
+		Collider* Rfoot_collider    = Rfoot->addComponent<Collider>();
+		Collider* Lleg_collider     = Lleg->addComponent<Collider>();
+		Collider* Lfoot_collider    = Lfoot->addComponent<Collider>();
+
+
+		Sphere* Head_shape     = Head_collider->add_shape<Sphere>();
+		Sphere* Lsholder_shape = Lsholder_collider->add_shape<Sphere>();
+		Sphere* Lelbow_shape   = Lelbow_collider->add_shape<Sphere>();
+		Sphere* Rsholder_shape = Rsholder_collider->add_shape<Sphere>();
+		Sphere* Relbow_shape   = Relbow_collider->add_shape<Sphere>();
+		Box* Body_shape        = Body_collider->add_shape<Box>();
+		Box* Waist_shape       = Waist_collider->add_shape<Box>();
+		Sphere* Rleg_shape     = Rleg_collider->add_shape<Sphere>();
+		Sphere* Rfoot_shape    = Rfoot_collider->add_shape<Sphere>();
+		Sphere* Lleg_shape     = Lleg_collider->add_shape<Sphere>();
+		Sphere* Lfoot_shape    = Lfoot_collider->add_shape<Sphere>();
+
+		{
+			//::: 親子関係の設定 :::
+			Human->add_child(Body);
+
+			Human->add_child(Head);
+
+			Human->add_child(Lsholder);
+			Human->add_child(Lelbow);
+			Human->add_child(Rsholder);
+			Human->add_child(Relbow);
+
+			Human->add_child(Waist);
+
+			Human->add_child(Rleg);
+			Human->add_child(Rfoot);
+			Human->add_child(Lleg);
+			Human->add_child(Lfoot);
+
+			//::: gameobjectの座標設定 :::
+			Vector3 head_size  = Vector3(1, 1, 1);
+			Vector3 body_size  = Vector3(0.8f, 0.6f, 0.8f);
+			Vector3 Waist_size = Vector3(0.81f, 0.7f, 0.81f);
+			{
+				{
+					Head->transform->local_scale = head_size * scale;
+					Head->transform->local_pos = Vector3(0, body_size.y + head_size.y + 0.2f, 0) * scale;
+				}
+			}
+
+			{
+				{
+					auto& GO = Body;
+					GO->transform->local_scale = body_size * scale;
+					GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
+					GO->transform->local_pos = Vector3(0, 0, 0) * scale;
+				}
+				{
+					auto& GO = Waist;
+					GO->transform->local_scale = Waist_size * scale;
+					GO->transform->local_pos = Vector3(0, -0.7f * 2, 0) * scale;
+				}
+			}
+
+			Vector3 sholder_size = Vector3(0.4f, 0.5f, 0.4f);
+			Vector3 arm_size = Vector3(0.4f, 0.5f, 0.4f);
+			Vector3 hand_size = Vector3(0.45f, 0.45f, 0.45f);
+			float arm_y_pos = 0.18f;
+			{
+				{
+					auto& GO = Lsholder;
+					GO->transform->local_scale = sholder_size * scale;
+					GO->transform->local_orient = quaternion_from_euler(0, 0, +90);
+					GO->transform->local_pos = Vector3(+(body_size.x + arm_size.x * 2), arm_y_pos, 0) * scale;
+				}
+				{
+					auto& GO = Lelbow;
+					GO->transform->local_scale = arm_size * scale;
+					GO->transform->local_orient = quaternion_from_euler(0, 0, +90);
+					GO->transform->local_pos = Vector3(+(body_size.x + arm_size.x * 5), arm_y_pos, 0) * scale;
+				}
+				{
+					auto& GO = Rsholder;
+					GO->transform->local_scale = sholder_size * scale;
+					GO->transform->local_orient = quaternion_from_euler(0, 0, -90);
+					GO->transform->local_pos = Vector3(-(body_size.x + arm_size.x * 2), arm_y_pos, 0) * scale;
+				}
+				{
+					auto& GO = Relbow;
+					GO->transform->local_scale = arm_size * scale;
+					GO->transform->local_orient = quaternion_from_euler(0, 0, -90);
+					GO->transform->local_pos = Vector3(-(body_size.x + arm_size.x * 5), arm_y_pos, 0) * scale;
+				}
+			}
+
+			Vector3 Leg_size = Vector3(0.3f, 0.15, 0.3f);
+			Vector3 Foot_size = Vector3(0.4f, 0.25, 0.4f);
+			float leg_x_pos = 0.6f;
+			{
+				{
+					auto& GO = Rleg;
+					GO->transform->local_scale = Foot_size * scale;
+					GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
+					GO->transform->local_pos = Vector3(-leg_x_pos, -(body_size.y + Waist_size.y * 2 + Foot_size.y * 2), 0) * scale;
+				}
+				{
+					auto& GO = Rfoot;
+					GO->transform->local_scale = Foot_size * scale;
+					GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
+					GO->transform->local_pos = Vector3(-leg_x_pos, -(body_size.y + Waist_size.y * 2 + Foot_size.y * 5), 0) * scale;
+				}
+				{
+					auto& GO = Lleg;
+					GO->transform->local_scale = Foot_size * scale;
+					GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
+					GO->transform->local_pos = Vector3(+leg_x_pos, -(body_size.y + Waist_size.y * 2 + Foot_size.y * 2), 0) * scale;
+				}
+				{
+					auto& GO = Lfoot;
+					GO->transform->local_scale = Foot_size * scale;
+					GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
+					GO->transform->local_pos = Vector3(+leg_x_pos, -(body_size.y + Waist_size.y * 2 + Foot_size.y * 5), 0) * scale;
+				}
+			}
+
+			//::: 慣性モーメントの調整 :::
+			Head_collider->set_barycenter(Vector3(0, +0.5f, 0)* scale);
+			Body_collider->set_barycenter(Vector3(0, +0.5f, 0)* scale);
+
+			Lsholder_collider->set_barycenter(Vector3(0, 0.5f, 0)* scale);
+			Rsholder_collider->set_barycenter(Vector3(0, 0.5f, 0)* scale);
+			Lelbow_collider->set_barycenter(Vector3(0, 0.5f, 0)* scale);
+			Relbow_collider->set_barycenter(Vector3(0, 0.5f, 0)* scale);
+
+			Lleg_collider->set_barycenter(Vector3(0, 1, 0)* scale);
+			Rleg_collider->set_barycenter(Vector3(0, 1, 0)* scale);
+			Lfoot_collider->set_barycenter(Vector3(0, 1, 0)* scale);
+			Rfoot_collider->set_barycenter(Vector3(0, 1, 0)* scale);
+
+
+			//::: 質量の調整 :::
+			Head_collider->physics_data.inertial_mass     = 3;
+			Lsholder_collider->physics_data.inertial_mass = 4;
+			Rsholder_collider->physics_data.inertial_mass = 4;
+			Lelbow_collider->physics_data.inertial_mass   = 3;
+			Relbow_collider->physics_data.inertial_mass   = 3;
+			Body_collider->physics_data.inertial_mass     = 5;
+			Waist_collider->physics_data.inertial_mass    = 4;
+			Lleg_collider->physics_data.inertial_mass     = 2;
+			Rleg_collider->physics_data.inertial_mass     = 2;
+			Lfoot_collider->physics_data.inertial_mass    = 1;
+			Rfoot_collider->physics_data.inertial_mass    = 1;
+
+			Lsholder_collider->physics_data.anglar_drag = 0.5f;
+			Lelbow_collider->physics_data.anglar_drag = 0.5f;
+			Rsholder_collider->physics_data.anglar_drag = 0.5f;
+			Relbow_collider->physics_data.anglar_drag = 0.5f;
+			Waist_collider->physics_data.anglar_drag = 0.8f;
+
+			//::: 重力適用の調整 :::
+			//
+
+			//::: tagの設定 :::
+			auto tag = Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Kinematic_Stage;
+			Head_collider->tag = tag;
+			Lsholder_collider->tag = tag;
+			Lelbow_collider->tag =  tag;
+			Rsholder_collider->tag =tag;
+			Relbow_collider->tag =  tag;
+			Body_collider->tag =    tag;
+			Waist_collider->tag =   tag;
+			Rleg_collider->tag =    tag;
+			Rfoot_collider->tag =   tag;
+			Lleg_collider->tag =    tag;
+			Lfoot_collider->tag =   tag;
+
+			////::: capsuleの調整 :::
+			Head_collider->physics_data.is_moveable = false;
+			Lsholder_collider->physics_data.is_moveable = false;
+			Rsholder_collider->physics_data.is_moveable = false;
+			Lelbow_collider->physics_data.is_moveable = false;
+			Relbow_collider->physics_data.is_moveable = false;
+			Body_collider->physics_data.is_moveable = false;
+			Waist_collider->physics_data.is_moveable = false;
+			Lleg_collider->physics_data.is_moveable = false;
+			Rleg_collider->physics_data.is_moveable = false;
+			Lfoot_collider->physics_data.is_moveable = false;
+			Rfoot_collider->physics_data.is_moveable = false;
+
+
+			//::: sphereの調整 :::
+			Lleg_shape->r = Lleg->transform->local_scale.y * 2;
+			Lfoot_shape->r = Lfoot->transform->local_scale.y * 2;
+			Rleg_shape->r = Rleg->transform->local_scale.y * 2;
+			Rfoot_shape->r = Rfoot->transform->local_scale.y * 2;
+
+
+			//::: Jointの設定
+			float joint_bias = 0.1f;
+			//頭
+			//{
+			//	auto Ball = Joint::add_Conejoint(Head_collider, Body_collider, Vector3(0, -1, 0) * scale, Vector3(0, 0.8f, 0) * scale, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
+			//	Ball->limit = 30;
+
+			//	auto Twist = Joint::add_Twistjoint(Body_collider, Head_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
+			//	Twist->limit = Vector2(360 - 90, 90);
+			//}
+			//腕
+			{
+				//auto Cone = Joint::add_Conejoint(Body_collider, Lsholder_collider, Vector3(+1.1f, 0.2f, 0) * scale, Vector3(0, 0.5f, 0) * scale, Vector3(-1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
+				//Cone->limit = 85;
+
+				//auto Twist = Joint::add_Twistjoint(Body_collider, Lsholder_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
+				//Twist->limit = Vector2(360 - 90, 90);
+			}
+			{
+				auto hinge = Joint::add_Hingejoint(Lsholder_collider, Lelbow_collider, Vector3(-1, -0.6f, 0) * scale, Vector3(+1, -0.6f, 0) * scale, Vector3(-1, 0.6f, 0) * scale, Vector3(+1, 0.6f, 0) * scale, joint_bias);
+				hinge->bias = 0.5f;
+				hinge->limit = Vector2(230, 360);
+			}
+			//{
+			//	auto Cone = Joint::add_Conejoint(Body_collider, Rsholder_collider, Vector3(-1.1f, 0.2f, 0) * scale, Vector3(0, 0.5f, 0) * scale, Vector3(+1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
+			//	Cone->limit = 85;
+
+			//	auto Twist = Joint::add_Twistjoint(Body_collider, Rsholder_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
+			//	Twist->limit = Vector2(360 - 90, 90);
+			//}
+			//{
+			//	auto hinge = Joint::add_Hingejoint(Rsholder_collider, Relbow_collider, Vector3(-1, -0.6f, 0) * scale, Vector3(+1, -0.6f, 0) * scale, Vector3(-1, 0.6f, 0) * scale, Vector3(+1, 0.6f, 0) * scale, joint_bias);
+			//	hinge->bias = 0.5f;
+			//	hinge->limit = Vector2(230, 360);
+			//}
+			////腰
+			//{
+			//	auto Cone = Joint::add_Conejoint(Body_collider, Waist_collider, Vector3(0, -1.0f, 0) * scale, Vector3(0, 0.5f, 0) * scale, Vector3(0, 1, 0).unit_vect(), Vector3(0, 1.5f, -1).unit_vect(), 0.1f);
+			//	Cone->limit = 60;
+
+			//	auto Twist = Joint::add_Twistjoint(Body_collider, Waist_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
+			//	Twist->limit = Vector2(360 - 30, 30);
+			//}
+			////足
+			//{
+			//	auto Cone = Joint::add_Conejoint(Waist_collider, Rleg_collider, Vector3(-0.6f, -0.8f, 0) * scale, Vector3(0, 0.3, 0) * scale, Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
+			//	Cone->limit = 80;
+
+			//	auto Twist = Joint::add_Twistjoint(Waist_collider, Rleg_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
+			//	Twist->limit = Vector2(360 - 5, 15);
+			//}
+			//{
+			//	auto hinge = Joint::add_Hingejoint(Rleg_collider, Rfoot_collider, Vector3(-1, -0.4f, 0) * scale, Vector3(+1, -0.3f, 0) * scale, Vector3(-1, +0.3f, 0) * scale, Vector3(+1, +0.3f, 0) * scale, joint_bias);
+			//	hinge->limit = Vector2(0, 60);
+			//}
+			//{
+			//	auto Cone = Joint::add_Conejoint(Waist_collider, Lleg_collider, Vector3(+0.6f, -0.8f, 0) * scale, Vector3(0, 0.3f, 0) * scale, Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
+			//	Cone->limit = 80;
+
+			//	auto Twist = Joint::add_Twistjoint(Waist_collider, Lleg_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
+			//	Twist->limit = Vector2(360 - 15, 5);
+			//}
+			//{
+			//	auto hinge = Joint::add_Hingejoint(Lleg_collider, Lfoot_collider, Vector3(-1, -0.4f, 0) * scale, Vector3(+1, -0.3f, 0) * scale, Vector3(-1, +0.3f, 0) * scale, Vector3(+1, +0.3f, 0) * scale, joint_bias);
+			//	hinge->limit = Vector2(0, 60);
+			//}
+		}
+
+		//顔とかベルトを着けてみる
+		{
+			Vector4 face_color = Vector4(0.5f, 0.5f, 0.5f, 1);
+			{
+				Gameobject* eye0 = Gameobject_manager::createSphere("eye0");
+				Head->add_child(eye0);
+				eye0->transform->local_pos = Vector3(+0.5f, 0.5f, -1);
+				eye0->transform->local_scale = Vector3(0.25f, 0.25f, 0.25f);
+				eye0->material->color = face_color;
+				eye0->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+			}
+			{
+				Gameobject* eye1 = Gameobject_manager::createSphere("eye1");
+				Head->add_child(eye1);
+				eye1->transform->local_pos = Vector3(-0.5f, 0.5f, -1);
+				eye1->transform->local_scale = Vector3(0.25f, 0.25f, 0.25f);
+				eye1->material->color = face_color;
+				eye1->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+			}
+			{
+				Gameobject* mouth = Gameobject_manager::createCube("mouth");
+				Head->add_child(mouth);
+				mouth->transform->local_pos = Vector3(0, -0.45f, -1);
+				mouth->transform->local_scale = Vector3(0.7f, 0.25f, 0.3f);
+				mouth->material->color = face_color;
+				mouth->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+			}
+
+			{
+				Gameobject* belt = Gameobject_manager::createCube("belt");
+				Waist->add_child(belt);
+				belt->transform->local_pos = Vector3(0, -0.45f, 0);
+				belt->transform->local_scale = Vector3(1.1, 0.25f, 1.1);
+				belt->material->color = face_color;
+				belt->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+			}
+		}
+
+		return Human;
+	}
+
+
+
 
 	Gameobject* Stage_01::set_sphere_rope(const Vector3& pos, const float& scale, const Vector3& rotate, int quantity, float mass, const Vector3& color) {
 
@@ -319,10 +672,6 @@ namespace Adollib
 		return rope_pearent;
 
 	}
-
-
-
-
 
 	Gameobject* Stage_01::set_desk(const Vector3& pos, const Vector3& scale, const Vector3& rotate, float mass) {
 

@@ -43,7 +43,7 @@ bool HingeJoint::limit_effect(Vector3& contactP0, Vector3& contactP1, float& pen
 
 	const Vector2 limit_rad = Vector2(ToRadian(limit.x), ToRadian(limit.y)); //limit‚ðradian‚ÉŽ¡‚µ‚½
 
-	//Debug::set("hinge_angle", ToAngle(radian));
+	Debug::set("hinge_angle", ToAngle(radian));
 
 	// ‚à‚µlimit‚Ì‰e‹¿‚ðŽó‚¯‚éˆÊ’u‚É“ü‚È‚¯‚ê‚Îfalse‚ðreturn
 	if (limit_rad.x <= limit_rad.y) {

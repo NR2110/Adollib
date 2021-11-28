@@ -1,7 +1,2 @@
-﻿  camera.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\camera.cpp(155,82): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\camera.cpp(155,49): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\camera.cpp(222,30): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\camera.cpp(234,82): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\camera.cpp(234,49): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+﻿  hingejoint.cpp
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

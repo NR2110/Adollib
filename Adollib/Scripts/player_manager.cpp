@@ -351,89 +351,89 @@ namespace Adollib
 
 
 
-			//::: Joint‚ÌÝ’è
-			float joint_bias = 0.1f;
-			//“ª
-			{
-				auto Ball = Joint::add_Conejoint(Head_collider, Body_collider, Vector3(0, -1, 0), Vector3(0, 0.8f, 0), Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
-				Ball->limit = 30;
+		//	//::: Joint‚ÌÝ’è
+		//	float joint_bias = 0.1f;
+		//	//“ª
+		//	{
+		//		auto Ball = Joint::add_Conejoint(Head_collider, Body_collider, Vector3(0, -1, 0), Vector3(0, 0.8f, 0), Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
+		//		Ball->limit = 30;
 
-				auto Twist = Joint::add_Twistjoint(Body_collider, Head_collider, Vector3(0, 1, 0),Vector3(0, 1, 0), joint_bias);
-				Twist->limit = Vector2(360 - 90, 90);
-			}
-			//˜r
-			{
-				auto Cone = Joint::add_Conejoint(Body_collider, Lsholder_collider, Vector3(+1.1f, 0.2f, 0), Vector3(0, 0.5f, 0), Vector3(-1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
-				Cone->limit = 85;
+		//		auto Twist = Joint::add_Twistjoint(Body_collider, Head_collider, Vector3(0, 1, 0),Vector3(0, 1, 0), joint_bias);
+		//		Twist->limit = Vector2(360 - 90, 90);
+		//	}
+		//	//˜r
+		//	{
+		//		auto Cone = Joint::add_Conejoint(Body_collider, Lsholder_collider, Vector3(+1.1f, 0.2f, 0), Vector3(0, 0.5f, 0), Vector3(-1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
+		//		Cone->limit = 85;
 
-				auto Twist = Joint::add_Twistjoint(Body_collider, Lsholder_collider, Vector3(0, 1, 0),Vector3(0, 1, 0), joint_bias);
-				Twist->limit = Vector2(360 - 90, 90);
-			}
-			{
-				auto hinge = Joint::add_Hingejoint(Lsholder_collider, Lelbow_collider, Vector3(-1, -0.6f, 0), Vector3(+1, -0.6f, 0), Vector3(-1, 0.6f, 0), Vector3(+1, 0.6f, 0), joint_bias);
-				hinge->bias = 0.5f;
-				hinge->limit = Vector2(230, 360);
-			}
-			{
-				auto ball = Joint::add_balljoint(Lelbow_collider, Lhand_collider, Vector3(-0.2f, -0.25f, 0), Vector3(0, 0, 0), joint_bias);
-				//auto hinge = Joint::add_Hingejoint(Lelbow_collider, Lhand_collider, Vector3(-0.2f, -0.25f, -1), Vector3(-0.2f, -0.25f, +1), Vector3(0, 0, -1), Vector3(0, 0, +1), joint_bias);
-			}
-			{
-				auto Cone = Joint::add_Conejoint(Body_collider, Rsholder_collider, Vector3(-1.1f, 0.2f, 0), Vector3(0, 0.5f, 0), Vector3(+1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
-				Cone->limit = 85;
+		//		auto Twist = Joint::add_Twistjoint(Body_collider, Lsholder_collider, Vector3(0, 1, 0),Vector3(0, 1, 0), joint_bias);
+		//		Twist->limit = Vector2(360 - 90, 90);
+		//	}
+		//	{
+		//		auto hinge = Joint::add_Hingejoint(Lsholder_collider, Lelbow_collider, Vector3(-1, -0.6f, 0), Vector3(+1, -0.6f, 0), Vector3(-1, 0.6f, 0), Vector3(+1, 0.6f, 0), joint_bias);
+		//		hinge->bias = 0.5f;
+		//		hinge->limit = Vector2(230, 360);
+		//	}
+		//	{
+		//		auto ball = Joint::add_balljoint(Lelbow_collider, Lhand_collider, Vector3(-0.2f, -0.25f, 0), Vector3(0, 0, 0), joint_bias);
+		//		//auto hinge = Joint::add_Hingejoint(Lelbow_collider, Lhand_collider, Vector3(-0.2f, -0.25f, -1), Vector3(-0.2f, -0.25f, +1), Vector3(0, 0, -1), Vector3(0, 0, +1), joint_bias);
+		//	}
+		//	{
+		//		auto Cone = Joint::add_Conejoint(Body_collider, Rsholder_collider, Vector3(-1.1f, 0.2f, 0), Vector3(0, 0.5f, 0), Vector3(+1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
+		//		Cone->limit = 85;
 
-				auto Twist = Joint::add_Twistjoint(Body_collider, Rsholder_collider, Vector3(0, 1, 0),Vector3(0, 1, 0), joint_bias);
-				Twist->limit = Vector2(360 - 90, 90);
-			}
-			{
-				auto hinge = Joint::add_Hingejoint(Rsholder_collider, Relbow_collider, Vector3(-1, -0.6f, 0), Vector3(+1, -0.6f, 0), Vector3(-1, 0.6f, 0), Vector3(+1, 0.6f, 0), joint_bias);
-				hinge->bias = 0.5f;
-				hinge->limit = Vector2(230, 360);
-			}
-			{
-				auto ball = Joint::add_balljoint(Relbow_collider, Rhand_collider, Vector3(0.2f, -0.25f, 0), Vector3(0, 0, 0), joint_bias);
-			}
-			//˜
-			{
-				auto Cone = Joint::add_Conejoint(Body_collider, Waist_collider, Vector3(0, -1.0f, 0), Vector3(0, 0.5f, 0), Vector3(0, 1, 0).unit_vect(), Vector3(0, 1.5f, -1).unit_vect(),0.1f);
-				Cone->limit = 60;
+		//		auto Twist = Joint::add_Twistjoint(Body_collider, Rsholder_collider, Vector3(0, 1, 0),Vector3(0, 1, 0), joint_bias);
+		//		Twist->limit = Vector2(360 - 90, 90);
+		//	}
+		//	{
+		//		auto hinge = Joint::add_Hingejoint(Rsholder_collider, Relbow_collider, Vector3(-1, -0.6f, 0), Vector3(+1, -0.6f, 0), Vector3(-1, 0.6f, 0), Vector3(+1, 0.6f, 0), joint_bias);
+		//		hinge->bias = 0.5f;
+		//		hinge->limit = Vector2(230, 360);
+		//	}
+		//	{
+		//		auto ball = Joint::add_balljoint(Relbow_collider, Rhand_collider, Vector3(0.2f, -0.25f, 0), Vector3(0, 0, 0), joint_bias);
+		//	}
+		//	//˜
+		//	{
+		//		auto Cone = Joint::add_Conejoint(Body_collider, Waist_collider, Vector3(0, -1.0f, 0), Vector3(0, 0.5f, 0), Vector3(0, 1, 0).unit_vect(), Vector3(0, 1.5f, -1).unit_vect(),0.1f);
+		//		Cone->limit = 60;
 
-				auto Twist = Joint::add_Twistjoint(Body_collider, Waist_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
-				Twist->limit = Vector2(360 - 30, 30);
+		//		auto Twist = Joint::add_Twistjoint(Body_collider, Waist_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
+		//		Twist->limit = Vector2(360 - 30, 30);
 
-				//auto ball = Joint::add_balljoint(Body_collider, Waist_collider, Vector3(0, -1.0f, 0), Vector3(0, 0.5f, 0));
-			}
-			//‘«
-			{
-				auto Cone = Joint::add_Conejoint(Waist_collider, Rleg_collider, Vector3(-0.6f, -0.8f, 0), Vector3(0, 0.3, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
-				//Cone->limit = 48;
-				Cone->limit = 80;
+		//		//auto ball = Joint::add_balljoint(Body_collider, Waist_collider, Vector3(0, -1.0f, 0), Vector3(0, 0.5f, 0));
+		//	}
+		//	//‘«
+		//	{
+		//		auto Cone = Joint::add_Conejoint(Waist_collider, Rleg_collider, Vector3(-0.6f, -0.8f, 0), Vector3(0, 0.3, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
+		//		//Cone->limit = 48;
+		//		Cone->limit = 80;
 
-				auto Twist = Joint::add_Twistjoint(Waist_collider, Rleg_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
-				Twist->limit = Vector2(360 - 5, 15);
-			}
-			{
-				auto hinge = Joint::add_Hingejoint(Rleg_collider, Rfoot_collider, Vector3(-1, -0.4f, 0), Vector3(+1, -0.3f, 0), Vector3(-1, +0.3f, 0), Vector3(+1, +0.3f, 0), joint_bias);
-				//hinge->hinge_pow = 0.01f;
-				hinge->limit = Vector2(0, 60);
-			}
-			{
-				auto Cone = Joint::add_Conejoint(Waist_collider, Lleg_collider, Vector3(+0.6f, -0.8f, 0), Vector3(0, 0.3f, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
-				//Cone->limit = 48;
-				Cone->limit = 80;
+		//		auto Twist = Joint::add_Twistjoint(Waist_collider, Rleg_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
+		//		Twist->limit = Vector2(360 - 5, 15);
+		//	}
+		//	{
+		//		auto hinge = Joint::add_Hingejoint(Rleg_collider, Rfoot_collider, Vector3(-1, -0.4f, 0), Vector3(+1, -0.3f, 0), Vector3(-1, +0.3f, 0), Vector3(+1, +0.3f, 0), joint_bias);
+		//		//hinge->hinge_pow = 0.01f;
+		//		hinge->limit = Vector2(0, 60);
+		//	}
+		//	{
+		//		auto Cone = Joint::add_Conejoint(Waist_collider, Lleg_collider, Vector3(+0.6f, -0.8f, 0), Vector3(0, 0.3f, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
+		//		//Cone->limit = 48;
+		//		Cone->limit = 80;
 
-				auto Twist = Joint::add_Twistjoint(Waist_collider, Lleg_collider, Vector3(0, 1, 0),Vector3(0, 1, 0), joint_bias);
-				Twist->limit = Vector2(360 - 15, 5);
-			}
-			{
-				auto hinge = Joint::add_Hingejoint(Lleg_collider, Lfoot_collider, Vector3(-1, -0.4f, 0), Vector3(+1, -0.3f, 0), Vector3(-1, +0.3f, 0), Vector3(+1, +0.3f, 0), joint_bias);
-				//hinge->hinge_pow = 0.01f;
-				hinge->limit = Vector2(0, 60);
-			}
-		}
+		//		auto Twist = Joint::add_Twistjoint(Waist_collider, Lleg_collider, Vector3(0, 1, 0),Vector3(0, 1, 0), joint_bias);
+		//		Twist->limit = Vector2(360 - 15, 5);
+		//	}
+		//	{
+		//		auto hinge = Joint::add_Hingejoint(Lleg_collider, Lfoot_collider, Vector3(-1, -0.4f, 0), Vector3(+1, -0.3f, 0), Vector3(-1, +0.3f, 0), Vector3(+1, +0.3f, 0), joint_bias);
+		//		//hinge->hinge_pow = 0.01f;
+		//		hinge->limit = Vector2(0, 60);
+		//	}
+		//}
 
-		//ŠÖß‚ð‚Â‚È‚°‚éGO,shape,joint‚Ì¶¬
-		{
+		////ŠÖß‚ð‚Â‚È‚°‚éGO,shape,joint‚Ì¶¬
+		//{
 
 			//auto connect_parts = Gameobject_manager::create("connect_parts");
 			//Human->add_child(connect_parts);
@@ -521,17 +521,17 @@ namespace Adollib
 		//	waist_sphere_joint = Joint::add_balljoint(Waist_collider, Waist_sphere_collider, Vector3(0, -1.8f, 0), Vector3(0), 0.1f);
 		//}
 		//auto Waist_sphere = Gameobject_manager::create("Waist_sphere");
-		auto Waist_sphere = Waist_collider->add_shape<Sphere>();
-		{
+		//auto Waist_sphere = Waist_collider->add_shape<Sphere>();
+		//{
 
-			Waist_sphere->r = 6.f;
-			Waist_sphere->center = Vector3(0, -2.8f, 0);
-			Waist_collider->set_tensor(Waist_collider->get_tensor());
+		//	Waist_sphere->r = 6.f;
+		//	Waist_sphere->center = Vector3(0, -2.8f, 0);
+		//	Waist_collider->set_tensor(Waist_collider->get_tensor());
 
-			Waist_sphere->center = Vector3(0, -2.6f, 0);
-			Waist_sphere->r = 0.25f;
-			Waist_collider->physics_data.restitution = 0;
-		}
+		//	Waist_sphere->center = Vector3(0, -2.6f, 0);
+		//	Waist_sphere->r = 0.25f;
+		//	Waist_collider->physics_data.restitution = 0;
+		//}
 
 		{
 
@@ -551,8 +551,7 @@ namespace Adollib
 				Rleg_collider,
 				Rfoot_collider,
 				Lleg_collider,
-				Lfoot_collider,
-				Waist_sphere
+				Lfoot_collider
 			);
 		}
 

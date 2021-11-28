@@ -20,7 +20,7 @@ using namespace Contacts;
 //ContactPoint‚Ì•\¦
 #define Update60fps
 //#define Draw_Contact
-//#define Draw_JointContact
+#define Draw_JointContact
 
 //::: staticƒƒ“ƒo‚Ì‰Šú‰» :::::
 #pragma region static_initialize

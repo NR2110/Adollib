@@ -7,6 +7,12 @@ namespace Adollib {
 
 
 	private:
+		const Vector3 base_color = Vector3(233, 225, 217) / 255.0f;
+		const Vector3 grass_color = Vector3(188, 214, 54) / 255.0f * 0.7f;
+		const Vector3 wood_color = Vector3(90, 47, 27) / 255.0f;
+		const Vector3 roof_color = Vector3(233, 225, 217) / 255.0f;
+		const Vector3 stair_color = Vector3(215, 205, 197) / 255.0f;
+
 
 		// ñÿÇçÏÇÈ
 		Gameobject* set_tree(const Vector3& pos, const Vector3& scale, const Vector3& rotate, const float y_scale = 1, const float tan_scale = 1, Gameobject* pearent = nullptr);
@@ -18,6 +24,7 @@ namespace Adollib {
 		Gameobject* set_door(const Vector3& pos, const Vector3& scale, const Vector3& rotate, const int is_left, Gameobject* pearent = nullptr);
 
 
+		Gameobject* set_player_statue(const Vector3& pos, const float& scale, const Vector3& rotate);
 
 		Gameobject* set_desk(const Vector3& pos, const Vector3& scale, const Vector3& rotate, float mass);
 		Gameobject* set_gear(const Vector3& pos, const Vector3& scale, const Vector3& rotate, float mass, int tooth_count);
