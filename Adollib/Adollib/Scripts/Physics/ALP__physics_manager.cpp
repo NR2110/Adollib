@@ -216,7 +216,7 @@ bool Physics_manager::update(Scenelist Sce)
 	if (init) {
 		for (int i = 0; i < size; i++) {
 			debug_go[i] = Gameobject_manager::createSphere();
-			debug_go[i]->transform->local_scale = Vector3(1) * 0.3f;
+			debug_go[i]->transform->local_scale = Vector3(1) * 0.3f * 10;
 			if (i % 2 == 0)debug_go[i]->material->color = Vector4(1, 0.5f, 0.5f, 1);
 			else debug_go[i]->material->color = Vector4(0.5f, 1, 0.5f, 1);
 

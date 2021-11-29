@@ -747,6 +747,9 @@
     <ClInclude Include="..\Scripts\tag_andcircuit.h">
       <Filter>ソース ファイル\scene_game\stage\parts</Filter>
     </ClInclude>
+    <ClInclude Include="..\Scripts\touch_moveable.h">
+      <Filter>ソース ファイル\scene_game\stage\parts</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />

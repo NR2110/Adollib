@@ -43,8 +43,6 @@ bool HingeJoint::limit_effect(Vector3& contactP0, Vector3& contactP1, float& pen
 
 	const Vector2 limit_rad = Vector2(ToRadian(limit.x), ToRadian(limit.y)); //limitをradianに治した
 
-	Debug::set("hinge_angle", ToAngle(radian));
-
 	// もしlimitの影響を受ける位置に入なければfalseをreturn
 	if (limit_rad.x <= limit_rad.y) {
 		if (limit_rad.x <= radian && radian <= limit_rad.y)return false;
@@ -61,38 +59,40 @@ bool HingeJoint::limit_effect(Vector3& contactP0, Vector3& contactP1, float& pen
 	//contactP1の基準に
 	//contactP0を持ってくる
 
+	float scale = (fabsf(vector3_dot(transforms[1]->scale, hinge_vec[1])) + fabsf(vector3_dot(transforms[0]->scale, hinge_vec[0]))) * 0.5f * 2;
+
 	if (cosf(limit_rad_off.x) < cosf(limit_rad_off.y)) {
 
+		int p = 1;
 		float off = fabsf(limit_rad_off.y);
 		if (off > +DirectX::XM_PI) off = DirectX::XM_2PI - off;
 		if (off < -DirectX::XM_PI) off = DirectX::XM_2PI + off;
-		penetrate = DirectX::XM_2PI * power * off * DirectX::XM_1DIV2PI; //余分な弧の長さ
+		if (off != fabsf(limit_rad_off.y))p *= -1;
+		penetrate = DirectX::XM_2PI * power * off * DirectX::XM_1DIV2PI * scale; //余分な弧の長さ
 
-		Vector3 contactP0_world = vector3_quatrotate((hinge_vec_rot90[1] - tangent * penetrate), transforms[1]->orientation) + transforms[1]->position;
+		Vector3 contactP0_world = vector3_quatrotate((hinge_vec_rot90[1] * scale + tangent * penetrate), transforms[1]->orientation) + transforms[1]->position;
 
 		//limit_xのほうが近い
 		contactP0 = vector3_quatrotate(contactP0_world - transforms[0]->position, transforms[0]->orientation.inverse());
-		contactP1 = hinge_vec_rot90[1];
+		contactP1 = hinge_vec_rot90[1] * scale;
 
 	}
 	else {
 
+		int p = 1;
 		float off = fabsf(limit_rad_off.x);
 		if (off > +DirectX::XM_PI) off = DirectX::XM_2PI - off;
 		if (off < -DirectX::XM_PI) off = DirectX::XM_2PI + off;
-		penetrate = DirectX::XM_2PI * power * off * DirectX::XM_1DIV2PI; //余分な弧の長さ
+		if (off != fabsf(limit_rad_off.x))p *= -1;
+		penetrate = DirectX::XM_2PI * power * off * DirectX::XM_1DIV2PI * scale; //余分な弧の長さ
 
-		Vector3 contactP0_world = vector3_quatrotate((hinge_vec_rot90[1] + tangent * penetrate), transforms[1]->orientation) + transforms[1]->position;
+		Vector3 contactP0_world = vector3_quatrotate((hinge_vec_rot90[1] * scale + p * tangent * penetrate), transforms[1]->orientation) + transforms[1]->position;
 
 		//limit_yのほうが近い
 		contactP0 = vector3_quatrotate(contactP0_world - transforms[0]->position, transforms[0]->orientation.inverse());
-		contactP1 = hinge_vec_rot90[1];
+		contactP1 = hinge_vec_rot90[1] * scale;
 
 	}
-
-	Debug::set("contactP1", contactP0);
-	Debug::set("contactP0", contactP1);
-	Debug::set("hinge_penetrate", penetrate);
 
 	return true;
 }

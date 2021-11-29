@@ -42,53 +42,12 @@ bool TwistJoint::limit_effect(Vector3& contactP0, Vector3& contactP1, float& pen
 			rotated_axis *= -1;
 		}
 
-
-		if (0) {
-			Debug::set("1_vec[i]", vec0);
-			Debug::set("1_vec_dir", vec_dir);
-			Debug::set("1_axis", axis);
-			Debug::set("1_rotated_axis", rotated_axis);
-			Debug::set("1_radian_local[i]", ToAngle(radian));
-
-			static Gameobject* debug[4] = { nullptr };
-			if (debug[0] == nullptr) {
-				debug[0] = Gameobject_manager::createCube();
-				debug[1] = Gameobject_manager::createCube();
-				debug[2] = Gameobject_manager::createCube();
-				debug[3] = Gameobject_manager::createCube();
-
-				debug[0]->transform->local_scale = Vector3(0.2f, 0.2f, 1);
-				debug[1]->transform->local_scale = Vector3(0.2f, 0.2f, 1);
-				debug[2]->transform->local_scale = Vector3(0.2f, 0.2f, 1);
-				debug[3]->transform->local_scale = Vector3(0.2f, 0.2f, 1);
-
-				debug[0]->material->color = Vector4(1, 0, 0, 1);
-				debug[1]->material->color = Vector4(0, 0, 1, 1);
-				debug[2]->material->color = Vector4(1, 0, 1, 1);
-				debug[3]->material->color = Vector4(0, 1, 0, 1);
-			}
-			{
-				debug[0]->transform->local_orient = quaternion_from_to_rotate(Vector3(0, 0, 1), vec0);
-				debug[1]->transform->local_orient = quaternion_from_to_rotate(Vector3(0, 0, 1), vec_dir);
-				debug[2]->transform->local_orient = quaternion_from_to_rotate(Vector3(0, 0, 1), axis);
-				debug[3]->transform->local_orient = quaternion_from_to_rotate(Vector3(0, 0, 1), rotated_axis);
-
-				debug[0]->transform->local_pos = transforms[1]->position + Vector3(0, 3, 0) + vec0 * 2;
-				debug[1]->transform->local_pos = transforms[1]->position + Vector3(0, 3, 0) + vec_dir * 2;
-				debug[2]->transform->local_pos = transforms[1]->position + Vector3(0, 3, 0) + axis * 2;
-				debug[3]->transform->local_pos = transforms[1]->position + Vector3(0, 3, 0) + rotated_axis * 2;
-			}
-
-		}
-
 	}
 
 	const Vector2 limit_rad = Vector2(ToRadian(limit.x), ToRadian(limit.y)); //limitをradianに治した
 	//float radian = radian_local[1] - radian_local[0]; //radianの差分から collider[1]の回転量を計算
 	if (radian < 0)radian += 2 * PI;
 	if (radian > 2 * PI)radian -= 2 * PI;
-
-	Debug::set("radian", ToAngle(radian));
 
 	// もしlimitの影響を受ける位置に入なければfalseをreturn
 	if (limit_rad.x <= limit_rad.y) {
@@ -100,8 +59,8 @@ bool TwistJoint::limit_effect(Vector3& contactP0, Vector3& contactP1, float& pen
 
 	// radianを基準にcosで一番近いlimitを求める
 	Vector2 limit_rad_off = Vector2(limit_rad.x - radian, limit_rad.y - radian);
-	if (fabsf(limit_rad_off.x) > ToRadian(max_radian_pow))limit_rad_off.x *= ToRadian(max_radian_pow) * limit_rad_off.x / fabsf(limit_rad_off.x);
-	if (fabsf(limit_rad_off.y) > ToRadian(max_radian_pow))limit_rad_off.y *= ToRadian(max_radian_pow) * limit_rad_off.y / fabsf(limit_rad_off.y);
+	//if (fabsf(limit_rad_off.x) > ToRadian(max_radian_pow))limit_rad_off.x = ToRadian(max_radian_pow) * limit_rad_off.x / fabsf(limit_rad_off.x);
+	//if (fabsf(limit_rad_off.y) > ToRadian(max_radian_pow))limit_rad_off.y = ToRadian(max_radian_pow) * limit_rad_off.y / fabsf(limit_rad_off.y);
 
 	Vector3 axis;
 	{
@@ -120,7 +79,14 @@ bool TwistJoint::limit_effect(Vector3& contactP0, Vector3& contactP1, float& pen
 	// contactP0を持ってくる
 	if (cosf(limit_rad_off.x) < cosf(limit_rad_off.y)) {
 
-		penetrate = DirectX::XM_2PI * power * fabsf(limit_rad_off.y) * DirectX::XM_1DIV2PI; //余分な弧の長さ
+		//penetrate = DirectX::XM_2PI * power * fabsf(limit_rad_off.y) * DirectX::XM_1DIV2PI; //余分な弧の長さ
+		int p = 1;
+		float off = limit_rad_off.y;
+		if (off < 0)off *= -1;
+		//if (off > +DirectX::XM_PI) off = DirectX::XM_2PI - off;
+		//if (off < -DirectX::XM_PI) off = DirectX::XM_2PI + off;
+		if (off != limit_rad_off.y)p *= -1;
+		penetrate = DirectX::XM_2PI * power * off * DirectX::XM_1DIV2PI; //余分な弧の長さ
 
 		Vector3 contactP0_world = vector3_quatrotate((axis - tangent * penetrate), transforms[1]->orientation) + transforms[1]->position;
 		// limit_xのほうが近い
@@ -129,9 +95,15 @@ bool TwistJoint::limit_effect(Vector3& contactP0, Vector3& contactP1, float& pen
 
 	}
 	else {
-		// Vector3 contactP0_world = vector3_quatrotate(axis_comp0coord, quaternion_axis_radian(vec1_comp0coord, -limit_rad_off.x));
 
-		penetrate = DirectX::XM_2PI * power * fabsf(limit_rad_off.x) * DirectX::XM_1DIV2PI; //余分な弧の長さ
+		//penetrate = DirectX::XM_2PI * power * fabsf(limit_rad_off.x) * DirectX::XM_1DIV2PI; //余分な弧の長さ
+		int p = 1;
+		float off = limit_rad_off.x;
+		if (off < 0)off *= -1;
+		//if (off > +DirectX::XM_PI) off = DirectX::XM_2PI - off;
+		//if (off < -DirectX::XM_PI) off = DirectX::XM_2PI + off;
+		if (off != limit_rad_off.x)p *= -1;
+		penetrate = DirectX::XM_2PI * power * off * DirectX::XM_1DIV2PI; //余分な弧の長さ
 
 		Vector3 contactP0_world = vector3_quatrotate((axis + tangent * penetrate), transforms[1]->orientation) + transforms[1]->position;
 

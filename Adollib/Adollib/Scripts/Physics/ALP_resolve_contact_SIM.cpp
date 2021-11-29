@@ -114,7 +114,6 @@ bool Calc_joint_effect(ALP_Joint* joint)
 		term4 = DirectX::XMVectorGetX(DirectX::XMVector3Dot(axis, tB));
 		denominator = term1 + term2 + term3 + term4;
 
-
 		joint->constraint_limit.jacDiagInv = 1.0f / denominator;
 
 		joint->constraint_limit.rhs = -DirectX::XMVectorGetX(DirectX::XMVector3Dot(relativeVelocity, direction)); // velocity error
@@ -128,8 +127,6 @@ bool Calc_joint_effect(ALP_Joint* joint)
 		DirectX::XMStoreFloat3(&linervec, direction);
 
 		joint->constraint_limit.accuminpulse = 0.0f;
-
-
 	}
 	else {
 		return false;

@@ -98,7 +98,7 @@ namespace Adollib {
 		void add_force(const Vector3& force, const Vector3& position, const bool& is_position_local = false, const bool& is_force_local = false);
 
 		// äpâÒì]Ç…óÕÇâ¡Ç¶ÇÈ
-		void add_torque(const Vector3& force);
+		void add_torque(const Vector3& force, const bool& is_local = false);
 
 		// ï¿êiâ¡ë¨Ç…ílÇâ¡Ç¶ÇÈ
 		void add_linear_acc(const Vector3& force);

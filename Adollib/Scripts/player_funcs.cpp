@@ -91,7 +91,7 @@ void Player::reach_out_hands() {
 						//axis *= -1;
 					}
 					float pow = ALClamp(rad * hand_rot_pow, 0, hand_rot_max_pow);
-					collider->add_torque(axis * pow * catch_obje_mass * collider->physics_data.inertial_mass);
+					collider->add_torque(axis * pow * catch_obje_mass * collider->physics_data.inertial_mass, true);
 					collider->set_max_angula_velocity(hand_rot_max_speed);
 				}
 				{
@@ -106,7 +106,7 @@ void Player::reach_out_hands() {
 					}
 
 					float pow = ALClamp(rad * hand_rot_pow, 0, hand_rot_max_pow);
-					collider->add_torque(axis * pow * catch_obje_mass * collider->physics_data.inertial_mass);
+					collider->add_torque(axis * pow * catch_obje_mass * collider->physics_data.inertial_mass, true);
 					collider->set_max_angula_velocity(hand_rot_max_speed * 0.8f);
 				}
 
@@ -171,7 +171,7 @@ void Player::reach_out_hands() {
 					if (rad > PI)rad = 2 * PI - rad;
 
 					float pow = ALClamp(rad * hand_rot_pow, 0, hand_rot_max_pow);
-					collider->add_torque(off.axis() * pow * catch_obje_mass * collider->physics_data.inertial_mass);
+					collider->add_torque(off.axis() * pow * catch_obje_mass * collider->physics_data.inertial_mass, true);
 					collider->set_max_angula_velocity(hand_rot_max_speed * 0.8f);
 				}
 
@@ -306,7 +306,7 @@ void Player::add_pow_for_stand() {
 			float rad = off.radian();
 			if (rad > PI)rad = 2 * PI - rad;
 			float pow = ALClamp(rad * head_rot_pow, 0, head_rot_max_pow);
-			Head_collider->add_torque(off.axis() * pow * gnyat_pow);
+			Head_collider->add_torque(off.axis() * pow * gnyat_pow, true);
 
 		}
 		{
@@ -316,7 +316,7 @@ void Player::add_pow_for_stand() {
 			float rad = off.radian();
 			if (rad > PI)rad = 2 * PI - rad;
 			float pow = ALClamp(rad * waist_rot_pow, 0, waist_rot_max_pow);
-			Waist_collider->add_torque(off.axis() * pow * gnyat_pow);
+			Waist_collider->add_torque(off.axis() * pow * gnyat_pow, true);
 			Waist_collider->set_max_angula_velocity(waist_rot_max_speed);
 
 		}
@@ -327,7 +327,7 @@ void Player::add_pow_for_stand() {
 			float rad = off.radian();
 			if (rad > PI)rad = 2 * PI - rad;
 			float pow = ALClamp(rad * body_rot_pow, 0, body_rot_max_pow);
-			Body_collider->add_torque(off.axis() * pow * gnyat_pow);
+			Body_collider->add_torque(off.axis() * pow * gnyat_pow, true);
 			Body_collider->set_max_angula_velocity(body_rot_max_speed);
 		}
 
@@ -335,8 +335,6 @@ void Player::add_pow_for_stand() {
 	// gunyattoしていた時は
 	else {
 		turn_gunyatto_dir();
-		//Waist_collider->set_max_angula_velocity(FLT_MAX);
-		//Body_collider->set_max_angula_velocity(FLT_MAX);
 	}
 
 	{
@@ -354,12 +352,6 @@ void Player::add_pow_for_stand() {
 		) {
 		is_gunyatto = true;
 	}
-
-	//if (!onground_collider->concoll_enter(Collider_tags::Jumpable_Stage)) {
-	//	Waist_collider->physics_data.dynamic_friction = 0;
-	//	Body_collider->physics_data.dynamic_friction = 0;
-
-	//}
 	else {
 		Waist_collider->physics_data.dynamic_friction = 0.4f;
 		Body_collider->physics_data.dynamic_friction = 0.4f;
@@ -375,31 +367,47 @@ void Player::push_waist_for_stand() {
 	if (dot < 0)return; //腰が下を向いていなければreturn
 	dot = dot * dot;
 
-	// sphereを飛ばして
-	Ray ray;
-	ray.direction = Vector3(0, -1, 0);
-	ray.position = Waist_collider->transform->position;
+	//// sphereを飛ばして
+	//Ray ray;
+	//ray.direction = Vector3(0, -1, 0);
+	//ray.position = Waist_collider->transform->position;
 
-	// 距離によってaddforce
-	constexpr float stand_dis = 2.0f;
-	constexpr float stand_radius = 0.6f;
-	constexpr float stand_pow = 2000;
-	Ray::Raycast_struct data;
-	data.collider_tag = Collider_tags::Stage;
-	Vector3 contact_posint;
-	if (ray.sphere_cast(stand_radius, contact_posint, data)) {
-		float dis = vector3_dot(contact_posint - Waist_collider->transform->position, ray.direction);
+	//// 距離によってaddforce
+	//constexpr float stand_radius = 0.6f;
+	//Ray::Raycast_struct data;
+	//data.collider_tag = Collider_tags::Stage;
+	//Vector3 contact_posint;
+	//if (ray.sphere_cast(stand_radius, contact_posint, data)) {
+	//	float dis = vector3_dot(contact_posint - Waist_collider->transform->position, ray.direction);
 
-		if (dis - stand_dis * dot < 0) {
-			float mass = 10 * 4; //パーツによって質量がまちまちなので だいたいの質量
-			Vector3 gravity_pow = Vector3(0, 1, 0) * Physics_function::Physics_manager::physicsParams.gravity * mass; //playerが滞空出来る力
-			Vector3 force = Vector3(0, 1, 0) * (stand_dis * dot - dis) * stand_pow; //めり込みを治す力
-			Vector3 fall_force = Vector3(0, 1, 0) * Waist_collider->linear_velocity().y * mass;
+	//	if (dis - stand_dis * dot < 0) {
+	//		float mass = 10 * 4; //パーツによって質量がまちまちなので だいたいの質量
+	//		Vector3 gravity_pow = Vector3(0, 1, 0) * Physics_function::Physics_manager::physicsParams.gravity * mass; //playerが滞空出来る力
+	//		Vector3 force = Vector3(0, 1, 0) * (stand_dis * dot - dis) * stand_pow; //めり込みを治す力
+	//		Vector3 fall_force = Vector3(0, 1, 0) * Waist_collider->linear_velocity().y * mass;
 
-			Waist_collider->add_force(gravity_pow + force);
-			data.coll->add_force(-(gravity_pow + fall_force) * 0.7f, contact_posint);
-		}
-	};
+	//		Waist_collider->add_force(gravity_pow + force);
+	//		data.coll->add_force(-(gravity_pow + fall_force) * 0.7f, contact_posint);
+	//	}
+	//};
+
+
+	if (onground_collider != nullptr) {
+		constexpr float mass = 10 * 4; //パーツによって質量がまちまちなので だいたいの質量
+		constexpr float stand_pow = 2000;
+
+		float dis = vector3_dot(onground_contactpoint - Waist_collider->transform->position, Vector3(0, -1, 0));
+
+		Debug::set("onground_contactpoint_vec", (onground_contactpoint - Waist_collider->transform->position).unit_vect());
+
+		Vector3 gravity_pow = Vector3(0, 1, 0) * Physics_function::Physics_manager::physicsParams.gravity * mass; //playerが滞空出来る力
+		Vector3 force = Vector3(0, 1, 0) * (onground_dis * dot - dis) * stand_pow; //めり込みを治す力
+		Vector3 fall_force = Vector3(0, 1, 0) * Waist_collider->linear_velocity().y * mass;
+
+		Waist_collider->add_force(gravity_pow + force);
+		onground_ray_data.coll->add_force(-(gravity_pow + fall_force) * 0.7f, onground_contactpoint);
+	}
+
 }
 
 // 移動
@@ -420,6 +428,7 @@ void Player::linear_move() {
 		move_pow = 0.3f;
 	}
 
+	Debug::set("dir", dir.unit_vect());
 	if (!input->getKeyState(Key::LeftControl))
 	{
 		//移動
@@ -434,8 +443,9 @@ void Player::linear_move() {
 		}
 
 		if (onground_collider != nullptr) {
-		if(onground_collider->physics_data.inertial_mass > 20) //歩くときに小さな石ころに全力を加えない
-			onground_collider->add_force(-dir * waist_move_pow * move_pow, onground_contactpoint);
+			if (onground_collider->physics_data.inertial_mass > 20) //歩くときに小さな石ころに全力を加えない
+				onground_collider->add_force(-dir * waist_move_pow * move_pow, onground_contactpoint);
+				//int isdf = 0;
 		}
 	}
 };
@@ -565,7 +575,7 @@ void Player::move_legs() {
 			}
 			float pow = ALClamp(rad * leg_rot_pow, 0, leg_rot_max_pow);
 
-			collider[i]->add_torque(axis * pow);
+			collider[i]->add_torque(axis * pow, true);
 			collider[i]->set_max_angula_velocity(leg_rot_max_speed);
 		}
 
@@ -590,18 +600,6 @@ void Player::make_jump() {
 
 		if (onground_collider != nullptr) {
 
-			//float sum_pow = 0;
-			//// 各部位の速度から掛かっている力を計算、
-			//for (int i = 0; i < Human_collider_size; i++) {
-			//	//Human_colliders[i]->linear_velocity(Vector3(Human_colliders[i]->linear_velocity().x, jump_power, Human_colliders[i]->linear_velocity().z));
-			//	float pow = Human_colliders[i]->linear_velocity().y * Human_colliders[i]->physics_data.inertial_mass;
-			//	Human_colliders[i]->add_force(Vector3(0, 1, 0) * (-pow + jump_power));
-			//	sum_pow += -pow + jump_power;
-			//}
-
-			//Debug::set("jump_pow", sum_pow);
-			//onground_collider->add_force(Vector3(0, -sum_pow, 0), onground_contactpoint);
-
 			// Y方向に力を加える
 			for (int i = 0; i < Human_collider_size; i++) {
 				Human_colliders[i]->linear_velocity(Vector3(Human_colliders[i]->linear_velocity().x, jump_power, Human_colliders[i]->linear_velocity().z));
@@ -619,12 +617,6 @@ void Player::make_jump() {
 
 			is_jumping = true;
 			coyote = -0.3f;
-
-			//// X方向に力を加える(Junmp加速)
-			//for (int i = 0; i < Human_collider_size; i++) {
-			//	Human_colliders[i]->add_force(dir * 10000);
-			//}
-
 
 		}
 	}

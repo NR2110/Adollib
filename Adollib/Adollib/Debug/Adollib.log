@@ -1,16 +1,2 @@
-﻿  stage_01_funcs.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(45,81): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(45,55): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(50,81): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(50,55): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(55,81): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(55,55): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(60,81): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(60,55): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(65,81): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(65,55): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(424,47): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(571,120): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(626,59): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(662,66): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+﻿  stage_01.cpp
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

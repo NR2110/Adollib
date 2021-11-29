@@ -37,6 +37,7 @@ void ALP_Physics::add_force(const Vector3& force, const bool& is_force_local) {
 	else accumulated_force += force;
 
 }
+
 void ALP_Physics::add_force(const Vector3& force, const Vector3& position, const bool& is_position_local, const bool& is_force_local) {
 
 	//std::lock_guard <std::mutex> lock(mtx);
@@ -65,10 +66,12 @@ void ALP_Physics::add_force(const Vector3& force, const Vector3& position, const
 	accumulated_torque += vector3_cross(world_position, world_force.unit_vect()) * world_force.norm_sqr();
 
 }
-void ALP_Physics::add_torque(const Vector3& force) {
+
+void ALP_Physics::add_torque(const Vector3& force, const bool& is_local) {
 	std::lock_guard <std::mutex> lock(mtx);
 
-	accumulated_torque += force;
+	if(is_local)accumulated_torque += vector3_quatrotate(force, transform->orientation);
+	else accumulated_torque += force;
 }
 void ALP_Physics::add_linear_acc(const Vector3& acc) {
 	std::lock_guard <std::mutex> lock(mtx);
@@ -182,7 +185,7 @@ void ALP_Physics::apply_external_force(float duration, const float timeratio_60)
 		//Matrix rotation = ALPcollider->local_orientation.get_rotate_matrix();
 		const Matrix33 rotation = transform->orientation.get_rotate_matrix();
 		const Matrix33 transposed_rotation = matrix_trans(rotation);
-		inverse_inertia_tensor = rotation * inverse_inertia_tensor * transposed_rotation * rotation;
+		inverse_inertia_tensor = rotation * inverse_inertia_tensor * transposed_rotation;
 		angula_acceleration += vector3_trans(accumulated_torque / duration, inverse_inertia_tensor);
 
 		angula_velocity_ += angula_acceleration * duration;

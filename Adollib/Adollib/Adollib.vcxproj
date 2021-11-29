@@ -175,6 +175,7 @@
     <ClInclude Include="..\Scripts\stage_manager.h" />
     <ClInclude Include="..\Scripts\stage_types.h" />
     <ClInclude Include="..\Scripts\tag_andcircuit.h" />
+    <ClInclude Include="..\Scripts\touch_moveable.h" />
     <ClInclude Include="Imgui\imconfig.h" />
     <ClInclude Include="Imgui\imgui.h" />
     <ClInclude Include="Imgui\imgui_impl_dx11.h" />

@@ -23,8 +23,8 @@ namespace Adollib
 {
 	void Stage_01::stage_awake()
 	{
-		//player_respown_pos = Vector3(-2.7f, 50, -5);
-		player_respown_pos = Vector3(90, 16.0f, 66.0f);
+		player_respown_pos = Vector3(-2.7f, 50, -5);
+		//player_respown_pos = Vector3(90, 16.0f, 66.0f);
 		y_respown_pos = 30; // respown‚µ‚½‚Æ‚«‚ÌY‚ÌÀ•W
 
 		//set_box(Vector3(0, -60, -98), Vector3(30, 30, 60), Vector3(0), Vector3(188, 214, 54) / 255.0f, true);
@@ -32,7 +32,7 @@ namespace Adollib
 		//set_desk(Vector3(0, 0, 0), Vector3(30, 15, 25), Vector3(0, 0, 0), 0);
 
 #if _DEBUG
-		set_player_statue(Vector3(104, 17.6f, 132), 20, Vector3(0));
+		set_player_statue(Vector3(104, 17.6f, 132), 100, Vector3(0));
 #else
 
 		// first_zone
@@ -43,11 +43,11 @@ namespace Adollib
 			{
 				Gameobject* stairs_pearent = Gameobject_manager::create("stairs_pearent");
 				first_zone->add_child(stairs_pearent);
-				set_box(Vector3(-15, 2, 23), Vector3(15, 2, 15), Vector3(0, 0, 0),     base_color, stairs_pearent);
+				set_box(Vector3(-15, 2, 23), Vector3(15, 2, 15), Vector3(0, 0, 0), base_color, stairs_pearent);
 				set_box(Vector3(28, 2, 29.5f), Vector3(28, 2, 8.5f), Vector3(0, 0, 0), base_color, stairs_pearent);
-				set_box(Vector3(28, 1, 24), Vector3(28, 2, 8), Vector3(0, 0, 0),       base_color, stairs_pearent);
-				set_box(Vector3(28, 0, 20), Vector3(28, 2, 8), Vector3(0, 0, 0),       base_color, stairs_pearent);
-				set_box(Vector3(28, -1, 16), Vector3(28, 2, 8), Vector3(0, 0, 0),      base_color, stairs_pearent);
+				set_box(Vector3(28, 1, 24), Vector3(28, 2, 8), Vector3(0, 0, 0), base_color, stairs_pearent);
+				set_box(Vector3(28, 0, 20), Vector3(28, 2, 8), Vector3(0, 0, 0), base_color, stairs_pearent);
+				set_box(Vector3(28, -1, 16), Vector3(28, 2, 8), Vector3(0, 0, 0), base_color, stairs_pearent);
 			}
 
 			// •Ç
@@ -57,8 +57,8 @@ namespace Adollib
 
 				set_box(Vector3(-9, 10, 39), Vector3(31, 10, 1), Vector3(0), base_color, wallAnddoor_pearent);
 				set_box(Vector3(60, 10, 39), Vector3(30, 10, 1), Vector3(0), base_color, wallAnddoor_pearent);
-				set_box(Vector3(26, 16, 39), Vector3(4, 4, 1), Vector3(0),   base_color, wallAnddoor_pearent);
-				set_box(Vector3(26, 3, 39), Vector3(4, 1, 1), Vector3(0),    base_color, wallAnddoor_pearent);
+				set_box(Vector3(26, 16, 39), Vector3(4, 4, 1), Vector3(0), base_color, wallAnddoor_pearent);
+				set_box(Vector3(26, 3, 39), Vector3(4, 1, 1), Vector3(0), base_color, wallAnddoor_pearent);
 
 				set_door(Vector3(24, 8, 39.25f), Vector3(2, 4, 0.5f), Vector3(0), true, wallAnddoor_pearent);
 				set_door(Vector3(28, 8, 39.25f), Vector3(2, 4, 0.5f), Vector3(0), false, wallAnddoor_pearent);
@@ -146,7 +146,7 @@ namespace Adollib
 				second_zone->add_child(wall_pearent);
 				set_box(Vector3(83, 20.0f, 84.0f), Vector3(1, 8.0f, 16), Vector3(0), base_color, wall_pearent);
 				set_box(Vector3(83, 20.0f, 50.0f), Vector3(1, 8.0f, 10), Vector3(0), base_color, wall_pearent);
-				set_box(Vector3(83, 24.0f, 64.0f), Vector3(1, 4.0f, 4), Vector3(0),  base_color, wall_pearent);
+				set_box(Vector3(83, 24.0f, 64.0f), Vector3(1, 4.0f, 4), Vector3(0), base_color, wall_pearent);
 
 				set_gimmickdoor(Vector3(83, 16.0f, 62.0f), Vector3(83, 16.0f, 58.5f),
 					Vector3(0), Vector3(0),
@@ -167,7 +167,7 @@ namespace Adollib
 				);
 
 
-				set_buttan(Vector3(82.80, 16, 54), Vector3(2, 0.9f, 2), Vector3(0,0,-90), Stage_parts::Stageparts_tags::Flag_0, wall_pearent, true);
+				set_buttan(Vector3(82.80, 16, 54), Vector3(2, 0.9f, 2), Vector3(0, 0, -90), Stage_parts::Stageparts_tags::Flag_0, wall_pearent, true);
 			}
 		}
 
@@ -180,12 +180,12 @@ namespace Adollib
 				third_zone->add_child(stairs_pearent);
 
 				set_box(Vector3(92.0f, 10.f, 69.0f), Vector3(8, 2, 11), Vector3(0), base_color, stairs_pearent);
-				set_box(Vector3(89.0f, 4.0f, 49.0f), Vector3(7, 8, 9), Vector3(0),  base_color, stairs_pearent);
+				set_box(Vector3(89.0f, 4.0f, 49.0f), Vector3(7, 8, 9), Vector3(0), base_color, stairs_pearent);
 				set_box(Vector3(98.00f, 3.5f, 49.0f), Vector3(2, 7.5f, 9), Vector3(0), base_color, stairs_pearent);
 				set_box(Vector3(102.0f, 3.0f, 49.0f), Vector3(2, 7.0f, 9), Vector3(0), base_color, stairs_pearent);
 				set_box(Vector3(106.0f, 2.5f, 49.0f), Vector3(2, 6.5f, 9), Vector3(0), base_color, stairs_pearent);
 
-				set_box(Vector3(92.0f, 12.f, 81.0f), Vector3(8, 4.5f, 1), Vector3(0),  base_color, stairs_pearent);
+				set_box(Vector3(92.0f, 12.f, 81.0f), Vector3(8, 4.5f, 1), Vector3(0), base_color, stairs_pearent);
 				set_box(Vector3(101.f, 12.f, 70.0f), Vector3(1, 4.5f, 12), Vector3(0), base_color, stairs_pearent);
 			}
 
@@ -249,11 +249,11 @@ namespace Adollib
 				Gameobject* wall_pearent = Gameobject_manager::create("wall_pearent");
 				third_zone->add_child(wall_pearent);
 
-				set_box(Vector3(144, 10, 99), Vector3(4, 2, 1), Vector3(0),  base_color, wall_pearent);
-				set_box(Vector3(144, 24, 99), Vector3(4, 4, 1), Vector3(0),  base_color, wall_pearent);
+				set_box(Vector3(144, 10, 99), Vector3(4, 2, 1), Vector3(0), base_color, wall_pearent);
+				set_box(Vector3(144, 24, 99), Vector3(4, 4, 1), Vector3(0), base_color, wall_pearent);
 				set_box(Vector3(155, 18, 99), Vector3(7, 10, 1), Vector3(0), base_color, wall_pearent);
-				set_box(Vector3(112, 18, 99), Vector3(28, 10, 1), Vector3(0),base_color, wall_pearent);
-				set_box(Vector3(123, 2, 99), Vector3(39, 6, 1), Vector3(0),  base_color, wall_pearent);
+				set_box(Vector3(112, 18, 99), Vector3(28, 10, 1), Vector3(0), base_color, wall_pearent);
+				set_box(Vector3(123, 2, 99), Vector3(39, 6, 1), Vector3(0), base_color, wall_pearent);
 
 				set_gimmickdoor(Vector3(146, 16, 99), Vector3(149.5f, 16, 99),
 					Vector3(0), Vector3(0),
@@ -288,12 +288,12 @@ namespace Adollib
 
 		// fourth_zone
 		{
-			Gameobject* third_zone = Gameobject_manager::create("fourth_zone");
+			Gameobject* fourth_zone = Gameobject_manager::create("fourth_zone");
 
 			// ‹´
 			{
 				Gameobject* bridge_pearent = Gameobject_manager::create("bridge_pearent");
-				third_zone->add_child(bridge_pearent);
+				fourth_zone->add_child(bridge_pearent);
 
 				set_box(Vector3(144, 10.81f, 101.89f), Vector3(5, 1, 2), Vector3(5.5f, 0, 0), base_color, bridge_pearent);
 				set_box(Vector3(144, 10.23f, 105.74f), Vector3(5, 1, 2), Vector3(11.5f, 0, 0), base_color, bridge_pearent);
@@ -306,7 +306,7 @@ namespace Adollib
 			// °
 			{
 				Gameobject* floor_pearent = Gameobject_manager::create("floor_pearent");
-				third_zone->add_child(floor_pearent);
+				fourth_zone->add_child(floor_pearent);
 
 				set_box(Vector3(110, 5, 119), Vector3(40, 1, 7), Vector3(0), roof_color, floor_pearent);
 				set_box(Vector3(104, 5, 136), Vector3(20, 1, 10), Vector3(0), wood_color, floor_pearent);
@@ -328,7 +328,7 @@ namespace Adollib
 			// ‘œ
 			{
 				Gameobject* statue_pearent = Gameobject_manager::create("statue_pearent");
-				third_zone->add_child(statue_pearent);
+				fourth_zone->add_child(statue_pearent);
 
 				set_box(Vector3(104, 8.5f, 132), Vector3(4, 0.5f, 3), Vector3(0), base_color, statue_pearent);
 				set_box(Vector3(104, 7, 132), Vector3(5, 1, 5), Vector3(0), base_color, statue_pearent);
@@ -340,7 +340,7 @@ namespace Adollib
 			// ŠK’i
 			{
 				Gameobject* stair_pearent = Gameobject_manager::create("stair_pearent");
-				third_zone->add_child(stair_pearent);
+				fourth_zone->add_child(stair_pearent);
 				const Vector3 color = Vector3(255, 255, 255) / 255.0f;
 				const Vector3 roof_color = Vector3(233, 225, 217) / 255.0f;
 				const Vector3 stair_color = Vector3(215, 205, 197) / 255.0f;
@@ -362,29 +362,29 @@ namespace Adollib
 			// ’Œ
 			{
 				Gameobject* pillar_pearent = Gameobject_manager::create("pillar_pearent");
-				third_zone->add_child(pillar_pearent);
+				fourth_zone->add_child(pillar_pearent);
 
-				set_pillar(Vector3(120, 13, 148), Vector3(1), Vector3(0),pillar_pearent);
-				set_pillar(Vector3(136, 12, 148), Vector3(1), Vector3(0),pillar_pearent);
-				set_pillar(Vector3(136, 14, 164), Vector3(1), Vector3(0),pillar_pearent);
-				set_pillar(Vector3(136, 14, 180), Vector3(1), Vector3(0),pillar_pearent);
-				set_pillar(Vector3(120, 14, 180), Vector3(1), Vector3(0),pillar_pearent);
-				set_pillar(Vector3(120, 14, 196), Vector3(1), Vector3(0),pillar_pearent);
-				set_pillar(Vector3(120, 14, 212), Vector3(1), Vector3(0),pillar_pearent);
+				set_pillar(Vector3(120, 13, 148), Vector3(1), Vector3(0), pillar_pearent);
+				set_pillar(Vector3(136, 12, 148), Vector3(1), Vector3(0), pillar_pearent);
+				set_pillar(Vector3(136, 14, 164), Vector3(1), Vector3(0), pillar_pearent);
+				set_pillar(Vector3(136, 14, 180), Vector3(1), Vector3(0), pillar_pearent);
+				set_pillar(Vector3(120, 14, 180), Vector3(1), Vector3(0), pillar_pearent);
+				set_pillar(Vector3(120, 14, 196), Vector3(1), Vector3(0), pillar_pearent);
+				set_pillar(Vector3(120, 14, 212), Vector3(1), Vector3(0), pillar_pearent);
 
-				set_pillar(Vector3(88, 13, 148), Vector3(1), Vector3(0),pillar_pearent);
-				set_pillar(Vector3(72, 12, 148), Vector3(1), Vector3(0),pillar_pearent);
-				set_pillar(Vector3(72, 14, 164), Vector3(1), Vector3(0),pillar_pearent);
-				set_pillar(Vector3(88, 14, 180), Vector3(1), Vector3(0),pillar_pearent);
-				set_pillar(Vector3(88, 14, 180), Vector3(1), Vector3(0),pillar_pearent);
-				set_pillar(Vector3(88, 14, 196), Vector3(1), Vector3(0),pillar_pearent);
-				set_pillar(Vector3(88, 14, 212), Vector3(1), Vector3(0),pillar_pearent);
+				set_pillar(Vector3(88, 13, 148), Vector3(1), Vector3(0), pillar_pearent);
+				set_pillar(Vector3(72, 12, 148), Vector3(1), Vector3(0), pillar_pearent);
+				set_pillar(Vector3(72, 14, 164), Vector3(1), Vector3(0), pillar_pearent);
+				set_pillar(Vector3(88, 14, 180), Vector3(1), Vector3(0), pillar_pearent);
+				set_pillar(Vector3(88, 14, 180), Vector3(1), Vector3(0), pillar_pearent);
+				set_pillar(Vector3(88, 14, 196), Vector3(1), Vector3(0), pillar_pearent);
+				set_pillar(Vector3(88, 14, 212), Vector3(1), Vector3(0), pillar_pearent);
 			}
 
 			// •Ç
 			{
 				Gameobject* wall_pearent = Gameobject_manager::create("wall_pearent");
-				third_zone->add_child(wall_pearent);
+				fourth_zone->add_child(wall_pearent);
 				const Vector3 color = Vector3(255, 255, 255) / 255.0f;
 
 				set_box(Vector3(93, 18, 215), Vector3(7, 4, 1), Vector3(0), base_color, wall_pearent);
@@ -399,14 +399,37 @@ namespace Adollib
 
 			}
 
-			set_box(Vector3(104, 8, 203), Vector3(26, 4, 13), Vector3(0), base_color);
-			set_box(Vector3(104, 8, 203), Vector3(26, 4, 13), Vector3(0), base_color);
-			set_box(Vector3(104, 8, 203), Vector3(26, 4, 13), Vector3(0), base_color);
-			set_box(Vector3(104, 8, 203), Vector3(26, 4, 13), Vector3(0), base_color);
-			set_box(Vector3(104, 8, 203), Vector3(26, 4, 13), Vector3(0), base_color);
-			set_box(Vector3(104, 8, 203), Vector3(26, 4, 13), Vector3(0), base_color);
-			set_box(Vector3(104, 8, 203), Vector3(26, 4, 13), Vector3(0), base_color);
-			set_box(Vector3(104, 8, 203), Vector3(26, 4, 13), Vector3(0), base_color);
+			// ò
+			{
+				Gameobject* fence_pearent = Gameobject_manager::create("wall_pearent");
+				fourth_zone->add_child(fence_pearent);
+
+				set_fence(Vector3(95, 14, 148.05f), Vector3(1), Vector3(0, 0, 0), fence_pearent);
+				set_fence(Vector3(104, 14, 148.05f), Vector3(1), Vector3(0, 0, 0), fence_pearent);
+				set_fence(Vector3(113, 14, 148.05f), Vector3(1), Vector3(0, 0, 0), fence_pearent);
+			}
+
+			// –Ø
+			{
+				Gameobject* fence_pearent = Gameobject_manager::create("wall_pearent");
+				fourth_zone->add_child(fence_pearent);
+
+				set_tree(Vector3(82, 14, 213), Vector3(1, 1.2f, 1), Vector3(0), 2.5f, 0.5f, fence_pearent);
+				set_tree(Vector3(82, 13, 199), Vector3(1, 1.2f, 1), Vector3(0), 2.5f, 0.5f, fence_pearent);
+				set_tree(Vector3(82, 13, 186), Vector3(1, 1.2f, 1), Vector3(0), 2.5f, 0.5f, fence_pearent);
+				set_tree(Vector3(74, 13, 186), Vector3(1, 1.2f, 1), Vector3(0), 2.5f, 0.5f, fence_pearent);
+
+				set_tree(Vector3(126, 14, 213), Vector3(1, 1.2f, 1), Vector3(0), 2.5f, 0.5f, fence_pearent);
+				set_tree(Vector3(126, 13, 199), Vector3(1, 1.2f, 1), Vector3(0), 2.5f, 0.5f, fence_pearent);
+				set_tree(Vector3(126, 13, 186), Vector3(1, 1.2f, 1), Vector3(0), 2.5f, 0.5f, fence_pearent);
+				set_tree(Vector3(134, 13, 186), Vector3(1, 1.2f, 1), Vector3(0), 2.5f, 0.5f, fence_pearent);
+
+				set_tree(Vector3(90.0f, 6, 140), Vector3(1, 1.2f, 1), Vector3(0), 1.2f, 0.8f, fence_pearent);
+				set_tree(Vector3(99.5f, 6, 140), Vector3(1, 1.2f, 1), Vector3(0), 1.2f, 0.8f, fence_pearent);
+				set_tree(Vector3(108.5f, 6, 140), Vector3(1, 1.2f, 1), Vector3(0), 1.2f, 0.8f, fence_pearent);
+				set_tree(Vector3(118.0f, 6, 140), Vector3(1, 1.2f, 1), Vector3(0), 1.2f, 0.8f, fence_pearent);
+
+			}
 
 
 		}

@@ -15,6 +15,7 @@
 #include "kinematic_block.h"
 #include "door.h"
 #include "tag_andcircuit.h"
+#include "touch_moveable.h"
 
 namespace Adollib
 {
@@ -212,12 +213,12 @@ namespace Adollib
 		joint_pos[0].y *= +5;
 		joint_pos[1].y *= -5;
 
-		//Joint::add_Hingejoint(coll, door,
-		//	vector3_quatrotate(joint_pos[0], door->transform->local_orient) + door->transform->local_pos,
-		//	vector3_quatrotate(joint_pos[1], door->transform->local_orient) + door->transform->local_pos,
-		//	joint_pos[0], joint_pos[1],
-		//	0.05f
-		//);
+		Joint::add_Hingejoint(coll, door,
+			vector3_quatrotate(joint_pos[0], door->transform->local_orient) + door->transform->local_pos,
+			vector3_quatrotate(joint_pos[1], door->transform->local_orient) + door->transform->local_pos,
+			joint_pos[0], joint_pos[1],
+			0.05f
+		);
 
 		return door_joint;
 	}
@@ -502,20 +503,6 @@ namespace Adollib
 			Lleg_collider->tag =    tag;
 			Lfoot_collider->tag =   tag;
 
-			////::: capsule‚Ì’²® :::
-			Head_collider->physics_data.is_moveable = false;
-			Lsholder_collider->physics_data.is_moveable = false;
-			Rsholder_collider->physics_data.is_moveable = false;
-			Lelbow_collider->physics_data.is_moveable = false;
-			Relbow_collider->physics_data.is_moveable = false;
-			Body_collider->physics_data.is_moveable = false;
-			Waist_collider->physics_data.is_moveable = false;
-			Lleg_collider->physics_data.is_moveable = false;
-			//Rleg_collider->physics_data.is_moveable = false;
-			Lfoot_collider->physics_data.is_moveable = false;
-			//Rfoot_collider->physics_data.is_moveable = false;
-
-
 			//::: sphere‚Ì’²® :::
 			Lleg_shape->r =  Lleg_collider->transform->local_scale.y / Lleg_collider->transform->local_scale.x;
 			Lfoot_shape->r = Lfoot_collider->transform->local_scale.y / Lfoot_collider->transform->local_scale.x;
@@ -525,15 +512,15 @@ namespace Adollib
 
 			//::: Joint‚ÌÝ’è
 			float joint_bias = 0.1f;
-			////“ª
-			//{
-			//	auto Ball = Joint::add_Conejoint(Head_collider, Body_collider, Vector3(0, -1, 0) * scale, Vector3(0, 0.8f, 0) * scale, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
-			//	Ball->limit = 30;
+			//“ª
+			{
+				auto Ball = Joint::add_Conejoint(Head_collider, Body_collider, Vector3(0, -1, 0) * scale, Vector3(0, 0.8f, 0) * scale, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
+				Ball->limit = 30;
 
-			//	auto Twist = Joint::add_Twistjoint(Body_collider, Head_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
-			//	Twist->limit = Vector2(360 - 90, 90);
-			//}
-			////˜r
+				auto Twist = Joint::add_Twistjoint(Body_collider, Head_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
+				Twist->limit = Vector2(360 - 90, 90);
+			}
+			//˜r
 			{
 				auto Cone = Joint::add_Conejoint(Body_collider, Lsholder_collider, Vector3(+1.1f, 0.2f, 0) * scale, Vector3(0, 0.5f, 0) * scale, Vector3(-1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
 				Cone->limit = 85;
@@ -546,49 +533,49 @@ namespace Adollib
 				hinge->bias = 0.5f;
 				hinge->limit = Vector2(230, 360);
 			}
-			//{
-			//	auto Cone = Joint::add_Conejoint(Body_collider, Rsholder_collider, Vector3(-1.1f, 0.2f, 0) * scale, Vector3(0, 0.5f, 0) * scale, Vector3(+1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
-			//	Cone->limit = 85;
+			{
+				auto Cone = Joint::add_Conejoint(Body_collider, Rsholder_collider, Vector3(-1.1f, 0.2f, 0) * scale, Vector3(0, 0.5f, 0) * scale, Vector3(+1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
+				Cone->limit = 85;
 
-			//	auto Twist = Joint::add_Twistjoint(Body_collider, Rsholder_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
-			//	Twist->limit = Vector2(360 - 90, 90);
-			//}
-			//{
-			//	auto hinge = Joint::add_Hingejoint(Rsholder_collider, Relbow_collider, Vector3(-1, -0.6f, 0) * scale, Vector3(+1, -0.6f, 0) * scale, Vector3(-1, 0.6f, 0) * scale, Vector3(+1, 0.6f, 0) * scale, joint_bias);
-			//	hinge->bias = 0.5f;
-			//	hinge->limit = Vector2(230, 360);
-			//}
-			////˜
-			//{
-			//	auto Cone = Joint::add_Conejoint(Body_collider, Waist_collider, Vector3(0, -1.0f, 0) * scale, Vector3(0, 0.5f, 0) * scale, Vector3(0, 1, 0).unit_vect(), Vector3(0, 1.5f, -1).unit_vect(), 0.1f);
-			//	Cone->limit = 60;
+				auto Twist = Joint::add_Twistjoint(Body_collider, Rsholder_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
+				Twist->limit = Vector2(360 - 90, 90);
+			}
+			{
+				auto hinge = Joint::add_Hingejoint(Rsholder_collider, Relbow_collider, Vector3(-1, -0.6f, 0) * scale, Vector3(+1, -0.6f, 0) * scale, Vector3(-1, 0.6f, 0) * scale, Vector3(+1, 0.6f, 0) * scale, joint_bias);
+				hinge->bias = 0.5f;
+				hinge->limit = Vector2(230, 360);
+			}
+			//˜
+			{
+				auto Cone = Joint::add_Conejoint(Body_collider, Waist_collider, Vector3(0, -1.0f, 0) * scale, Vector3(0, 0.5f, 0) * scale, Vector3(0, 1, 0).unit_vect(), Vector3(0, 1.5f, -1).unit_vect(), 0.1f);
+				Cone->limit = 60;
 
-			//	auto Twist = Joint::add_Twistjoint(Body_collider, Waist_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
-			//	Twist->limit = Vector2(360 - 30, 30);
-			//}
+				auto Twist = Joint::add_Twistjoint(Body_collider, Waist_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
+				Twist->limit = Vector2(360 - 30, 30);
+			}
 			//‘«
 			{
 				auto Cone = Joint::add_Conejoint(Waist_collider, Rleg_collider, Vector3(-0.6f, -0.8f, 0) * scale, Vector3(0, 0.3, 0) * scale, Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
 				Cone->limit = 80;
 
-				//auto Twist = Joint::add_Twistjoint(Waist_collider, Rleg_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
-				//Twist->limit = Vector2(360 - 5, 15);
+				auto Twist = Joint::add_Twistjoint(Waist_collider, Rleg_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
+				Twist->limit = Vector2(360 - 5, 15);
 			}
 			{
 				auto hinge = Joint::add_Hingejoint(Rleg_collider, Rfoot_collider, Vector3(-1, -0.4f, 0) * scale, Vector3(+1, -0.3f, 0) * scale, Vector3(-1, +0.3f, 0) * scale, Vector3(+1, +0.3f, 0) * scale, joint_bias);
 				hinge->limit = Vector2(0, 60);
 			}
-			//{
-			//	auto Cone = Joint::add_Conejoint(Waist_collider, Lleg_collider, Vector3(+0.6f, -0.8f, 0) * scale, Vector3(0, 0.3f, 0) * scale, Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
-			//	Cone->limit = 80;
+			{
+				auto Cone = Joint::add_Conejoint(Waist_collider, Lleg_collider, Vector3(+0.6f, -0.8f, 0) * scale, Vector3(0, 0.3f, 0) * scale, Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
+				Cone->limit = 80;
 
-			//	auto Twist = Joint::add_Twistjoint(Waist_collider, Lleg_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
-			//	Twist->limit = Vector2(360 - 15, 5);
-			//}
-			//{
-			//	auto hinge = Joint::add_Hingejoint(Lleg_collider, Lfoot_collider, Vector3(-1, -0.4f, 0) * scale, Vector3(+1, -0.3f, 0) * scale, Vector3(-1, +0.3f, 0) * scale, Vector3(+1, +0.3f, 0) * scale, joint_bias);
-			//	hinge->limit = Vector2(0, 60);
-			//}
+				auto Twist = Joint::add_Twistjoint(Waist_collider, Lleg_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
+				Twist->limit = Vector2(360 - 15, 5);
+			}
+			{
+				auto hinge = Joint::add_Hingejoint(Lleg_collider, Lfoot_collider, Vector3(-1, -0.4f, 0) * scale, Vector3(+1, -0.3f, 0) * scale, Vector3(-1, +0.3f, 0) * scale, Vector3(+1, +0.3f, 0) * scale, joint_bias);
+				hinge->limit = Vector2(0, 60);
+			}
 		}
 
 		//Šç‚Æ‚©ƒxƒ‹ƒg‚ð’…‚¯‚Ä‚Ý‚é
@@ -627,6 +614,46 @@ namespace Adollib
 				belt->material->color = face_color;
 				belt->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
 			}
+		}
+
+		// player‚ªG‚ê‚½‚Æ‚«‚Émoveable‚ðtrue‚É‚·‚é
+		{
+			auto comp = Human->addComponent<Stage_parts::Touch_moveable>();
+			comp->tag = Collider_tags::Human;
+			comp->move_colliders.emplace_back (Head_collider);
+			comp->move_colliders.emplace_back(Lsholder_collider);
+			comp->move_colliders.emplace_back(Rsholder_collider);
+			comp->move_colliders.emplace_back(Lelbow_collider);
+			comp->move_colliders.emplace_back(Relbow_collider);
+			comp->move_colliders.emplace_back(Body_collider);
+			comp->move_colliders.emplace_back(Waist_collider);
+			comp->move_colliders.emplace_back(Lleg_collider);
+			comp->move_colliders.emplace_back(Rleg_collider);
+			comp->move_colliders.emplace_back(Lfoot_collider);
+			comp->move_colliders.emplace_back(Rfoot_collider);
+			comp->judge_colliders.emplace_back (Head_collider);
+			comp->judge_colliders.emplace_back(Lsholder_collider);
+			comp->judge_colliders.emplace_back(Rsholder_collider);
+			comp->judge_colliders.emplace_back(Lelbow_collider);
+			comp->judge_colliders.emplace_back(Relbow_collider);
+			comp->judge_colliders.emplace_back(Body_collider);
+			comp->judge_colliders.emplace_back(Waist_collider);
+			comp->judge_colliders.emplace_back(Lleg_collider);
+			comp->judge_colliders.emplace_back(Rleg_collider);
+			comp->judge_colliders.emplace_back(Lfoot_collider);
+			comp->judge_colliders.emplace_back(Rfoot_collider);
+
+			Head_collider->physics_data.is_moveable = false;
+			Lsholder_collider->physics_data.is_moveable = false;
+			Rsholder_collider->physics_data.is_moveable = false;
+			Lelbow_collider->physics_data.is_moveable = false;
+			Relbow_collider->physics_data.is_moveable = false;
+			Body_collider->physics_data.is_moveable = false;
+			Waist_collider->physics_data.is_moveable = false;
+			Lleg_collider->physics_data.is_moveable = false;
+			Rleg_collider->physics_data.is_moveable = false;
+			Lfoot_collider->physics_data.is_moveable = false;
+			Rfoot_collider->physics_data.is_moveable = false;
 		}
 
 		return Human;

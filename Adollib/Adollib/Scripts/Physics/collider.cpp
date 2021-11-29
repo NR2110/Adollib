@@ -31,9 +31,9 @@ void Collider::add_force(const Vector3& force, const Vector3& position, const bo
 	if (Al_Global::second_per_frame > inv60)return;
 	ALPphysics_ptr->add_force(force * Al_Global::second_per_frame, position, is_position_local, is_force_local);
 }
-void Collider::add_torque(const Vector3& force) {
+void Collider::add_torque(const Vector3& force, const bool& is_local) {
 	if (Al_Global::second_per_frame > inv60)return;
-	ALPphysics_ptr->add_torque(force * Al_Global::second_per_frame);
+	ALPphysics_ptr->add_torque(force * Al_Global::second_per_frame, is_local);
 }
 void Collider::add_linear_acc(const Vector3& acc) {
 	if (Al_Global::second_per_frame > inv60)return;
