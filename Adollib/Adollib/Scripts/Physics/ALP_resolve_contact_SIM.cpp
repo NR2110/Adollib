@@ -21,23 +21,6 @@ using namespace Contacts;
 #if 1
 
 //衝突解決
-// ソルバーボディ(解決用のなんか)
-// ボールジョイント
-struct Balljoint {
-	float bias; // 拘束の強さの調整値
-	int rigidBodyA; // 剛体Aへのインデックス
-	int rigidBodyB; // 剛体Bへのインデックス
-	Vector3 anchorA; // 剛体Aのローカル座標系における接続点
-	Vector3 anchorB; // 剛体Bのローカル座標系における接続点
-	Constraint constraint; // 拘束
-
-	// 初期化
-	void reset()
-	{
-		bias = 0.1f;
-		constraint.accuminpulse = 0.0f;
-	}
-};
 
 void CalcTangentVector(const Vector3& normal, const DirectX::XMVECTOR& vrel, DirectX::XMVECTOR& tangent1, DirectX::XMVECTOR& tangent2)
 {

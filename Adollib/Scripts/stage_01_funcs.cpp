@@ -511,21 +511,21 @@ namespace Adollib
 			Body_collider->physics_data.is_moveable = false;
 			Waist_collider->physics_data.is_moveable = false;
 			Lleg_collider->physics_data.is_moveable = false;
-			Rleg_collider->physics_data.is_moveable = false;
+			//Rleg_collider->physics_data.is_moveable = false;
 			Lfoot_collider->physics_data.is_moveable = false;
-			Rfoot_collider->physics_data.is_moveable = false;
+			//Rfoot_collider->physics_data.is_moveable = false;
 
 
 			//::: sphere‚Ì’²® :::
-			Lleg_shape->r = Lleg->transform->local_scale.y * 2;
-			Lfoot_shape->r = Lfoot->transform->local_scale.y * 2;
-			Rleg_shape->r = Rleg->transform->local_scale.y * 2;
-			Rfoot_shape->r = Rfoot->transform->local_scale.y * 2;
+			Lleg_shape->r =  Lleg_collider->transform->local_scale.y / Lleg_collider->transform->local_scale.x;
+			Lfoot_shape->r = Lfoot_collider->transform->local_scale.y / Lfoot_collider->transform->local_scale.x;
+			Rleg_shape->r =  Rleg_collider->transform->local_scale.y /  Rleg_collider->transform->local_scale.x;
+			Rfoot_shape->r = Rfoot_collider->transform->local_scale.y / Rfoot_collider->transform->local_scale.x;
 
 
 			//::: Joint‚Ìİ’è
 			float joint_bias = 0.1f;
-			//“ª
+			////“ª
 			//{
 			//	auto Ball = Joint::add_Conejoint(Head_collider, Body_collider, Vector3(0, -1, 0) * scale, Vector3(0, 0.8f, 0) * scale, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
 			//	Ball->limit = 30;
@@ -533,13 +533,13 @@ namespace Adollib
 			//	auto Twist = Joint::add_Twistjoint(Body_collider, Head_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
 			//	Twist->limit = Vector2(360 - 90, 90);
 			//}
-			//˜r
+			////˜r
 			{
-				//auto Cone = Joint::add_Conejoint(Body_collider, Lsholder_collider, Vector3(+1.1f, 0.2f, 0) * scale, Vector3(0, 0.5f, 0) * scale, Vector3(-1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
-				//Cone->limit = 85;
+				auto Cone = Joint::add_Conejoint(Body_collider, Lsholder_collider, Vector3(+1.1f, 0.2f, 0) * scale, Vector3(0, 0.5f, 0) * scale, Vector3(-1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
+				Cone->limit = 85;
 
-				//auto Twist = Joint::add_Twistjoint(Body_collider, Lsholder_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
-				//Twist->limit = Vector2(360 - 90, 90);
+				auto Twist = Joint::add_Twistjoint(Body_collider, Lsholder_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
+				Twist->limit = Vector2(360 - 90, 90);
 			}
 			{
 				auto hinge = Joint::add_Hingejoint(Lsholder_collider, Lelbow_collider, Vector3(-1, -0.6f, 0) * scale, Vector3(+1, -0.6f, 0) * scale, Vector3(-1, 0.6f, 0) * scale, Vector3(+1, 0.6f, 0) * scale, joint_bias);
@@ -566,18 +566,18 @@ namespace Adollib
 			//	auto Twist = Joint::add_Twistjoint(Body_collider, Waist_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
 			//	Twist->limit = Vector2(360 - 30, 30);
 			//}
-			////‘«
-			//{
-			//	auto Cone = Joint::add_Conejoint(Waist_collider, Rleg_collider, Vector3(-0.6f, -0.8f, 0) * scale, Vector3(0, 0.3, 0) * scale, Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
-			//	Cone->limit = 80;
+			//‘«
+			{
+				auto Cone = Joint::add_Conejoint(Waist_collider, Rleg_collider, Vector3(-0.6f, -0.8f, 0) * scale, Vector3(0, 0.3, 0) * scale, Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
+				Cone->limit = 80;
 
-			//	auto Twist = Joint::add_Twistjoint(Waist_collider, Rleg_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
-			//	Twist->limit = Vector2(360 - 5, 15);
-			//}
-			//{
-			//	auto hinge = Joint::add_Hingejoint(Rleg_collider, Rfoot_collider, Vector3(-1, -0.4f, 0) * scale, Vector3(+1, -0.3f, 0) * scale, Vector3(-1, +0.3f, 0) * scale, Vector3(+1, +0.3f, 0) * scale, joint_bias);
-			//	hinge->limit = Vector2(0, 60);
-			//}
+				//auto Twist = Joint::add_Twistjoint(Waist_collider, Rleg_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
+				//Twist->limit = Vector2(360 - 5, 15);
+			}
+			{
+				auto hinge = Joint::add_Hingejoint(Rleg_collider, Rfoot_collider, Vector3(-1, -0.4f, 0) * scale, Vector3(+1, -0.3f, 0) * scale, Vector3(-1, +0.3f, 0) * scale, Vector3(+1, +0.3f, 0) * scale, joint_bias);
+				hinge->limit = Vector2(0, 60);
+			}
 			//{
 			//	auto Cone = Joint::add_Conejoint(Waist_collider, Lleg_collider, Vector3(+0.6f, -0.8f, 0) * scale, Vector3(0, 0.3f, 0) * scale, Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
 			//	Cone->limit = 80;

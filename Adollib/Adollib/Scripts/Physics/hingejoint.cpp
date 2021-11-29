@@ -56,26 +56,43 @@ bool HingeJoint::limit_effect(Vector3& contactP0, Vector3& contactP1, float& pen
 	//radian‚ğŠî€‚Écos‚Åˆê”Ô‹ß‚¢limit‚ğ‹‚ß‚é
 	const Vector2 limit_rad_off = Vector2(limit_rad.x - radian, limit_rad.y - radian);
 
+	Vector3 tangent = vector3_cross(hinge_vec_rot90[1], hinge_vec[1]);
+
 	//contactP1‚ÌŠî€‚É
 	//contactP0‚ğ‚Á‚Ä‚­‚é
+
 	if (cosf(limit_rad_off.x) < cosf(limit_rad_off.y)) {
-		Vector3 contactP0_world = vector3_quatrotate(hinge_vec_rot90_world[1], quaternion_axis_radian(hinge_vec_world[1], limit_rad_off.y)) + transforms[1]->position;
+
+		float off = fabsf(limit_rad_off.y);
+		if (off > +DirectX::XM_PI) off = DirectX::XM_2PI - off;
+		if (off < -DirectX::XM_PI) off = DirectX::XM_2PI + off;
+		penetrate = DirectX::XM_2PI * power * off * DirectX::XM_1DIV2PI; //—]•ª‚ÈŒÊ‚Ì’·‚³
+
+		Vector3 contactP0_world = vector3_quatrotate((hinge_vec_rot90[1] - tangent * penetrate), transforms[1]->orientation) + transforms[1]->position;
 
 		//limit_x‚Ì‚Ù‚¤‚ª‹ß‚¢
 		contactP0 = vector3_quatrotate(contactP0_world - transforms[0]->position, transforms[0]->orientation.inverse());
 		contactP1 = hinge_vec_rot90[1];
 
-		penetrate = 2 * cosf(DirectX::XM_PIDIV2 - fabsf(limit_rad_off.y) * 0.5f) * power;
 	}
 	else {
-		Vector3 contactP0_world = vector3_quatrotate(hinge_vec_rot90_world[1], quaternion_axis_radian(hinge_vec_world[1], limit_rad_off.x)) + transforms[1]->position;
+
+		float off = fabsf(limit_rad_off.x);
+		if (off > +DirectX::XM_PI) off = DirectX::XM_2PI - off;
+		if (off < -DirectX::XM_PI) off = DirectX::XM_2PI + off;
+		penetrate = DirectX::XM_2PI * power * off * DirectX::XM_1DIV2PI; //—]•ª‚ÈŒÊ‚Ì’·‚³
+
+		Vector3 contactP0_world = vector3_quatrotate((hinge_vec_rot90[1] + tangent * penetrate), transforms[1]->orientation) + transforms[1]->position;
 
 		//limit_y‚Ì‚Ù‚¤‚ª‹ß‚¢
 		contactP0 = vector3_quatrotate(contactP0_world - transforms[0]->position, transforms[0]->orientation.inverse());
 		contactP1 = hinge_vec_rot90[1];
 
-		penetrate = 2 * cosf(DirectX::XM_PIDIV2 - fabsf(limit_rad_off.x) * 0.5f) * power;
 	}
+
+	Debug::set("contactP1", contactP0);
+	Debug::set("contactP0", contactP1);
+	Debug::set("hinge_penetrate", penetrate);
 
 	return true;
 }
