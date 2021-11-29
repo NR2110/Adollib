@@ -367,31 +367,6 @@ void Player::push_waist_for_stand() {
 	if (dot < 0)return; //腰が下を向いていなければreturn
 	dot = dot * dot;
 
-	//// sphereを飛ばして
-	//Ray ray;
-	//ray.direction = Vector3(0, -1, 0);
-	//ray.position = Waist_collider->transform->position;
-
-	//// 距離によってaddforce
-	//constexpr float stand_radius = 0.6f;
-	//Ray::Raycast_struct data;
-	//data.collider_tag = Collider_tags::Stage;
-	//Vector3 contact_posint;
-	//if (ray.sphere_cast(stand_radius, contact_posint, data)) {
-	//	float dis = vector3_dot(contact_posint - Waist_collider->transform->position, ray.direction);
-
-	//	if (dis - stand_dis * dot < 0) {
-	//		float mass = 10 * 4; //パーツによって質量がまちまちなので だいたいの質量
-	//		Vector3 gravity_pow = Vector3(0, 1, 0) * Physics_function::Physics_manager::physicsParams.gravity * mass; //playerが滞空出来る力
-	//		Vector3 force = Vector3(0, 1, 0) * (stand_dis * dot - dis) * stand_pow; //めり込みを治す力
-	//		Vector3 fall_force = Vector3(0, 1, 0) * Waist_collider->linear_velocity().y * mass;
-
-	//		Waist_collider->add_force(gravity_pow + force);
-	//		data.coll->add_force(-(gravity_pow + fall_force) * 0.7f, contact_posint);
-	//	}
-	//};
-
-
 	if (onground_collider != nullptr) {
 		constexpr float mass = 10 * 4; //パーツによって質量がまちまちなので だいたいの質量
 		constexpr float stand_pow = 2000;
@@ -602,17 +577,21 @@ void Player::make_jump() {
 
 			// Y方向に力を加える
 			for (int i = 0; i < Human_collider_size; i++) {
-				Human_colliders[i]->linear_velocity(Vector3(Human_colliders[i]->linear_velocity().x, jump_power, Human_colliders[i]->linear_velocity().z));
+				Human_colliders[i]->linear_velocity(Vector3(Human_colliders[i]->linear_velocity().x, jump_y_power, Human_colliders[i]->linear_velocity().z));
 			}
-			Lleg_collider->linear_velocity(Vector3(Lleg_collider->linear_velocity().x, jump_power * 0.1f, Lleg_collider->linear_velocity().z));
-			Rleg_collider->linear_velocity(Vector3(Rleg_collider->linear_velocity().x, jump_power * 0.1f, Rleg_collider->linear_velocity().z));
-			Lfoot_collider->linear_velocity(Vector3(Lfoot_collider->linear_velocity().x, jump_power * 0.1f, Lfoot_collider->linear_velocity().z));
-			Rfoot_collider->linear_velocity(Vector3(Rfoot_collider->linear_velocity().x, jump_power * 0.1f, Rfoot_collider->linear_velocity().z));
+			Lleg_collider->linear_velocity(Vector3(Lleg_collider->linear_velocity().x, jump_y_power * 0.1f, Lleg_collider->linear_velocity().z));
+			Rleg_collider->linear_velocity(Vector3(Rleg_collider->linear_velocity().x, jump_y_power * 0.1f, Rleg_collider->linear_velocity().z));
+			Lfoot_collider->linear_velocity(Vector3(Lfoot_collider->linear_velocity().x, jump_y_power * 0.1f, Lfoot_collider->linear_velocity().z));
+			Rfoot_collider->linear_velocity(Vector3(Rfoot_collider->linear_velocity().x, jump_y_power * 0.1f, Rfoot_collider->linear_velocity().z));
 
+			// Z方向に力を加える
+			for (int i = 0; i < Human_collider_size; i++) {
+				Human_colliders[i]->add_force(dir * jump_front_power);
+			}
 
 			// 足元の物体に力を加える
 			float mass = 1000;
-			onground_collider->add_force(Vector3(0, -mass, 0) * jump_power, onground_contactpoint);
+			onground_collider->add_force(Vector3(0, -mass, 0) * jump_y_power, onground_contactpoint);
 
 
 			is_jumping = true;

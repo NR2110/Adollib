@@ -44,7 +44,8 @@ namespace Adollib
 
 
 
-		float jump_power = 150;
+		float jump_y_power = 150;
+		float jump_front_power = 150;
 
 		float turn_speed = 200;
 

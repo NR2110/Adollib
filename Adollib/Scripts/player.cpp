@@ -55,7 +55,9 @@ namespace Adollib
 		hand_camera_rot_pow = 3;
 		hand_camera_rot_center = ToRadian(43);
 
-		jump_power = 25;
+		jump_y_power = 21;
+		jump_front_power = 5500;
+
 		turn_speed = 1.5f;
 
 
@@ -161,7 +163,8 @@ namespace Adollib
 		ImGui::DragFloat("hand_updown_rot_center", &hand_camera_rot_center, 0.1f);
 		ImGui::Separator();
 
-		ImGui::DragFloat("jump_power", &jump_power, 0.1f);
+		ImGui::DragFloat("jump_y_power", &jump_y_power, 0.1f);
+		ImGui::DragFloat("jump_front_power", &jump_front_power, 0.1f);
 		ImGui::DragFloat("turn_speed", &turn_speed, 0.1f);
 
 	};

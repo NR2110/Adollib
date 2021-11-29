@@ -147,6 +147,37 @@ namespace Adollib
 		set_box(Vector3(0, base_length * 2 + pillar_length, 0),         Vector3(1.5f, pillar_length, 1.5f), Vector3(0), base_color * 0.9f, pillar_pearent);
 		set_box(Vector3(0, base_length * 2 + pillar_length * 2 + 0.5f, 0), Vector3(2, 0.5f, 2),                Vector3(0), base_color * 0.9f, pillar_pearent);
 
+
+		//Gameobject* object = nullptr;
+		//object = Gameobject_manager::createCube("Cube", GO_tag::Box);
+		//object->material->color = Vector4(color.x, color.y, color.z, 1);
+
+		//object->transform->local_orient = quaternion_from_euler(rotate);
+		//object->transform->local_pos = pos;
+		//object->transform->local_scale = size;
+
+		//Collider* coll = object->addComponent<Collider>();
+		//coll->add_shape<Box>();
+
+		//if (is_static) {
+		//	coll->tag = Collider_tags::Box | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Static_Stage;
+		//	coll->physics_data.is_moveable = false;
+		//}
+		//else {
+		//	coll->tag = Collider_tags::Box | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Kinematic_Stage;
+		//	// 動くのであれば所定のcomponentをアタッチする
+		//	auto comp = object->addComponent<Kinematic_block>();
+		//	comp->this_stage = this;
+		//	comp->this_coll = coll;
+		//	comp->respown_pos = pos;
+		//	comp->respown_rotate = quaternion_identity();
+
+		//}
+
+		//stage_parts.emplace_back(object);
+		//if (pearent != nullptr)pearent->add_child(object);
+		//return coll;
+
 		if (pearent != nullptr)pearent->add_child(pillar_pearent);
 
 		return pillar_pearent;
