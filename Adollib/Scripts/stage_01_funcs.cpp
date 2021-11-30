@@ -381,17 +381,17 @@ namespace Adollib
 		Gameobject* Lleg     = Gameobject_manager::createCube("Lleg");
 		Gameobject* Lfoot    = Gameobject_manager::createCube("Lfoot");
 
-		Head    ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Lsholder->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Lelbow  ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Rsholder->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Relbow  ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Body    ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Waist   ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Rleg    ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Rfoot   ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Lleg    ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Lfoot   ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		Head    ->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		Lsholder->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		Lelbow  ->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		Rsholder->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		Relbow  ->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		Body    ->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		Waist   ->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		Rleg    ->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		Rfoot   ->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		Lleg    ->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		Lfoot   ->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
 
 		//::: collider,shapeのアタッチ :::
 		Collider* Head_collider     = Head->addComponent<Collider>();
@@ -593,26 +593,26 @@ namespace Adollib
 			}
 			//腕
 			{
-				auto Cone = Joint::add_Conejoint(Body_collider, Lsholder_collider, Vector3(+1.1f, 0.2f, 0) * scale, Vector3(0, 0.5f, 0) * scale, Vector3(-1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
+				auto Cone = Joint::add_Conejoint(Body_collider, Lsholder_collider, Vector3(+1.1f, 0.2f, 0) * scale, Vector3(0, arm_size.y, 0) * scale, Vector3(-1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
 				Cone->limit = 85;
 
 				auto Twist = Joint::add_Twistjoint(Body_collider, Lsholder_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
 				Twist->limit = Vector2(360 - 90, 90);
 			}
 			{
-				auto hinge = Joint::add_Hingejoint(Lsholder_collider, Lelbow_collider, Vector3(-1, -0.6f, 0) * scale, Vector3(+1, -0.6f, 0) * scale, Vector3(-1, 0.6f, 0) * scale, Vector3(+1, 0.6f, 0) * scale, joint_bias);
+				auto hinge = Joint::add_Hingejoint(Lsholder_collider, Lelbow_collider, Vector3(-1, -(arm_size.y + 0.1f), 0) * scale, Vector3(+1, -(arm_size.y + 0.1f), 0) * scale, Vector3(-1, (arm_size.y + 0.1f), 0) * scale, Vector3(+1, (arm_size.y + 0.1f), 0) * scale, joint_bias);
 				hinge->bias = 0.5f;
 				hinge->limit = Vector2(230, 360);
 			}
 			{
-				auto Cone = Joint::add_Conejoint(Body_collider, Rsholder_collider, Vector3(-1.1f, 0.2f, 0) * scale, Vector3(0, 0.5f, 0) * scale, Vector3(+1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
+				auto Cone = Joint::add_Conejoint(Body_collider, Rsholder_collider, Vector3(-1.1f, 0.2f, 0) * scale, Vector3(0, arm_size.y, 0) * scale, Vector3(+1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
 				Cone->limit = 85;
 
 				auto Twist = Joint::add_Twistjoint(Body_collider, Rsholder_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
 				Twist->limit = Vector2(360 - 90, 90);
 			}
 			{
-				auto hinge = Joint::add_Hingejoint(Rsholder_collider, Relbow_collider, Vector3(-1, -0.6f, 0) * scale, Vector3(+1, -0.6f, 0) * scale, Vector3(-1, 0.6f, 0) * scale, Vector3(+1, 0.6f, 0) * scale, joint_bias);
+				auto hinge = Joint::add_Hingejoint(Rsholder_collider, Relbow_collider, Vector3(-1, -(arm_size.y + 0.1f), 0) * scale, Vector3(+1, -(arm_size.y + 0.1f), 0) * scale, Vector3(-1, (arm_size.y + 0.1f), 0) * scale, Vector3(+1, (arm_size.y + 0.1f), 0) * scale, joint_bias);
 				hinge->bias = 0.5f;
 				hinge->limit = Vector2(230, 360);
 			}

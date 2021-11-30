@@ -37,6 +37,7 @@ namespace Adollib
 		// 描画を行うscene 変更しなければアタッチした時のsceneになっている
 		Scenelist render_scene = Scenelist::scene_null;
 
+		// 影のptr
 		std::shared_ptr<Directional_shadow> directional_shadow = nullptr;
 
 	private:

@@ -127,8 +127,8 @@ namespace Adollib
 				}
 			}
 
-			Vector3 sholder_size = Vector3(0.4f, 0.5f, 0.4f);
-			Vector3 arm_size = Vector3(0.4f, 0.5f, 0.4f);
+			Vector3 sholder_size = Vector3(0.35f, 0.6f, 0.4f);
+			Vector3 arm_size = sholder_size;
 			Vector3 hand_size = Vector3(0.45f, 0.45f, 0.45f);
 			float arm_y_pos = 0.18f;
 			{
@@ -136,37 +136,37 @@ namespace Adollib
 					auto& GO = Lsholder;
 					GO->transform->local_scale = sholder_size;
 					GO->transform->local_orient = quaternion_from_euler(0, 0, +90);
-					GO->transform->local_pos = Vector3(+(body_size.x + arm_size.x * 2), arm_y_pos, 0);
+					GO->transform->local_pos = Vector3(+(body_size.x + arm_size.y * 1 + 0.1f), arm_y_pos, 0);
 				}
 				{
 					auto& GO = Lelbow;
 					GO->transform->local_scale = arm_size;
 					GO->transform->local_orient = quaternion_from_euler(0, 0, +90);
-					GO->transform->local_pos = Vector3(+(body_size.x + arm_size.x * 5), arm_y_pos, 0);
+					GO->transform->local_pos = Vector3(+(body_size.x + arm_size.y * 3 + 0.2f), arm_y_pos, 0);
 				}
 				{
 					auto& GO = Lhand;
 					GO->transform->local_scale = hand_size;
 					GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
-					GO->transform->local_pos = Vector3(+(body_size.x + arm_size.x * 6), arm_y_pos, 0);
+					GO->transform->local_pos = Vector3(+(body_size.x + arm_size.y * 4), arm_y_pos, 0);
 				}
 				{
 					auto& GO = Rsholder;
 					GO->transform->local_scale = sholder_size;
 					GO->transform->local_orient = quaternion_from_euler(0, 0, -90);
-					GO->transform->local_pos = Vector3(-(body_size.x + arm_size.x * 2), arm_y_pos, 0);
+					GO->transform->local_pos = Vector3(-(body_size.x + arm_size.y * 1 + 0.1f), arm_y_pos, 0);
 				}
 				{
 					auto& GO = Relbow;
 					GO->transform->local_scale = arm_size;
 					GO->transform->local_orient = quaternion_from_euler(0, 0, -90);
-					GO->transform->local_pos = Vector3(-(body_size.x + arm_size.x * 5), arm_y_pos, 0);
+					GO->transform->local_pos = Vector3(-(body_size.x + arm_size.y * 3 + 0.2f), arm_y_pos, 0);
 				}
 				{
 					auto& GO = Rhand;
 					GO->transform->local_scale = hand_size;
 					GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
-					GO->transform->local_pos = Vector3(-(body_size.x + arm_size.x * 6), arm_y_pos, 0);
+					GO->transform->local_pos = Vector3(-(body_size.x + arm_size.y * 4), arm_y_pos, 0);
 				}
 			}
 
@@ -219,19 +219,6 @@ namespace Adollib
 			Rleg_collider->set_barycenter(Vector3(0, 1, 0));
 			Lfoot_collider->set_barycenter(Vector3(0, 1, 0));
 			Rfoot_collider->set_barycenter(Vector3(0, 1, 0));
-			//Rsholder_collider->set_tensor(Rsholder_collider->get_tensor());
-
-
-			//Relbow_collider  ->set_tensor(Head_collider->get_tensor());
-			//Lsholder_collider->set_tensor(Head_collider->get_tensor());
-			//Lelbow_collider  ->set_tensor(Head_collider->get_tensor());
-			//Body_collider    ->set_tensor(Head_collider->get_tensor());
-			//Waist_collider   ->set_tensor(Head_collider->get_tensor());
-			//Rleg_collider    ->set_tensor(Head_collider->get_tensor());
-			//Rfoot_collider   ->set_tensor(Head_collider->get_tensor());
-			//Lleg_collider    ->set_tensor(Head_collider->get_tensor());
-			//Lfoot_collider   ->set_tensor(Head_collider->get_tensor());
-
 
 			//::: 質量の調整 :::
 			Head_collider->physics_data.inertial_mass = 3;
@@ -248,39 +235,6 @@ namespace Adollib
 			Lfoot_collider->physics_data.inertial_mass = 1;
 			Rfoot_collider->physics_data.inertial_mass = 1;
 
-			//Lsholder_collider->physics_data.inertial_mass = 3;
-			//Rsholder_collider->physics_data.inertial_mass = 3;
-			//Lelbow_collider->physics_data.inertial_mass = 4;
-			//Relbow_collider->physics_data.inertial_mass = 4;
-			//Lhand_collider->physics_data.inertial_mass = 4;
-			//Rhand_collider->physics_data.inertial_mass = 4;
-			//Head_collider    ->physics_data.inertial_mass = 6;
-			//Lsholder_collider->physics_data.inertial_mass = 6;
-			//Lelbow_collider  ->physics_data.inertial_mass = 4;
-			//Lhand_collider   ->physics_data.inertial_mass = 2;
-			//Rsholder_collider->physics_data.inertial_mass = 6;
-			//Relbow_collider  ->physics_data.inertial_mass = 4;
-			//Rhand_collider   ->physics_data.inertial_mass = 2;
-			//Body_collider    ->physics_data.inertial_mass = 10;
-			//Waist_collider   ->physics_data.inertial_mass = 8;
-			//Rleg_collider    ->physics_data.inertial_mass = 4;
-			//Rfoot_collider   ->physics_data.inertial_mass = 2;
-			//Lleg_collider    ->physics_data.inertial_mass = 4;
-			//Lfoot_collider   ->physics_data.inertial_mass = 2;
-			//Head_collider    ->physics_data.inertial_mass = 1;
-			//Lsholder_collider->physics_data.inertial_mass = 1;
-			//Lelbow_collider  ->physics_data.inertial_mass = 1;
-			//Lhand_collider   ->physics_data.inertial_mass = 1;
-			//Rsholder_collider->physics_data.inertial_mass = 1;
-			//Relbow_collider  ->physics_data.inertial_mass = 1;
-			//Rhand_collider   ->physics_data.inertial_mass = 1;
-			//Body_collider    ->physics_data.inertial_mass = 1;
-			//Waist_collider   ->physics_data.inertial_mass = 1;
-			//Rleg_collider    ->physics_data.inertial_mass = 1;
-			//Rfoot_collider   ->physics_data.inertial_mass = 1;
-			//Lleg_collider    ->physics_data.inertial_mass = 1;
-			//Lfoot_collider   ->physics_data.inertial_mass = 1;
-
 
 			//Head_collider->physics_data.anglar_drag = 0.5f;
 			Lsholder_collider->physics_data.anglar_drag = 0.5f;
@@ -289,15 +243,7 @@ namespace Adollib
 			Rsholder_collider->physics_data.anglar_drag = 0.5f;
 			Relbow_collider->physics_data.anglar_drag = 0.5f;
 			Rhand_collider->physics_data.anglar_drag = 0.5f;
-			//Body_collider->physics_data.anglar_drag = 0.9f;
 			Waist_collider->physics_data.anglar_drag = 0.8f;
-			//Rleg_collider->physics_data.anglar_drag = 0.5f;
-			//Rfoot_collider->physics_data.anglar_drag = 0.5f;
-			//Lleg_collider->physics_data.anglar_drag = 0.5f;
-			//Lfoot_collider->physics_data.anglar_drag = 0.5f;
-
-			////Rleg_collider->physics_data.anglar_drag = 0.95f;
-			////Lleg_collider->physics_data.anglar_drag = 0.95f;
 
 			//::: 重力適用の調整 :::
 			Head_collider->physics_data.is_fallable = false;
@@ -324,18 +270,6 @@ namespace Adollib
 			Lhand_collider->ignore_tags |= Collider_tags::Human;
 			Rhand_collider->ignore_tags |= Collider_tags::Human;
 
-			//::: capsuleの調整 :::
-			//Lelbow_shape->length *= (Lelbow->transform->local_scale.y - Lelbow->transform->local_scale.x) / (Lelbow->transform->local_scale.y);
-			//Lsholder_shape->length *= (Lsholder->transform->local_scale.y - Lsholder->transform->local_scale.x) / (Lsholder->transform->local_scale.y);
-			//Relbow_shape->length *= (Relbow->transform->local_scale.y - Relbow->transform->local_scale.x) / (Relbow->transform->local_scale.y);
-			//Rsholder_shape->length *= (Rsholder->transform->local_scale.y - Rsholder->transform->local_scale.x) / (Rsholder->transform->local_scale.y);
-
-			//Body_shape->length *= (Body->transform->local_scale.y - Body->transform->local_scale.x) / (Body->transform->local_scale.y);
-
-			//Rleg_shape->length *= Rleg->transform->local_scale.y / (Rleg->transform->local_scale.x + Rleg->transform->local_scale.y);
-			//Rfoot_shape->length *= Rfoot->transform->local_scale.y / (Rfoot->transform->local_scale.x + Rfoot->transform->local_scale.y);
-			//Lleg_shape->length *= Lleg->transform->local_scale.y / (Lleg->transform->local_scale.x + Lleg->transform->local_scale.y);
-			//Lfoot_shape->length *= Lfoot->transform->local_scale.y / (Lfoot->transform->local_scale.x + Lfoot->transform->local_scale.y);
 
 			//::: sphereの調整 :::
 			Lleg_shape->r = Lleg->transform->local_scale.y * 2;
@@ -343,15 +277,12 @@ namespace Adollib
 			Rleg_shape->r = Rleg->transform->local_scale.y * 2;
 			Rfoot_shape->r = Rfoot->transform->local_scale.y * 2;
 
-			//Body_shape->r = Body->transform->local_scale.y;
-			//Waist_shape->r = Waist->transform->local_scale.y;
-
-
-			//auto a = Body_collider->get_tensor();
+			Lhand_collider->physics_data.dynamic_friction = 0;
+			Rhand_collider->physics_data.dynamic_friction = 0;
 
 
 
-		//	//::: Jointの設定
+			//::: Jointの設定
 			float joint_bias = 0.1f;
 			//頭
 			{
@@ -363,35 +294,34 @@ namespace Adollib
 			}
 			//腕
 			{
-				auto Cone = Joint::add_Conejoint(Body_collider, Lsholder_collider, Vector3(+1.1f, 0.2f, 0), Vector3(0, 0.5f, 0), Vector3(-1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
+				auto Cone = Joint::add_Conejoint(Body_collider, Lsholder_collider, Vector3(+1.1f, 0.2f, 0), Vector3(0, arm_size.y, 0), Vector3(-1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
 				Cone->limit = 85;
 
 				auto Twist = Joint::add_Twistjoint(Body_collider, Lsholder_collider, Vector3(0, 1, 0),Vector3(0, 1, 0), joint_bias);
 				Twist->limit = Vector2(360 - 90, 90);
 			}
 			{
-				auto hinge = Joint::add_Hingejoint(Lsholder_collider, Lelbow_collider, Vector3(-1, -0.6f, 0), Vector3(+1, -0.6f, 0), Vector3(-1, 0.6f, 0), Vector3(+1, 0.6f, 0), joint_bias);
+				auto hinge = Joint::add_Hingejoint(Lsholder_collider, Lelbow_collider, Vector3(-1, -(arm_size.y + 0.1f), 0), Vector3(+1, -(arm_size.y + 0.1f), 0), Vector3(-1, (arm_size.y + 0.1f), 0), Vector3(+1, (arm_size.y + 0.1f), 0), joint_bias);
 				hinge->bias = 0.5f;
 				hinge->limit = Vector2(230, 360);
 			}
 			{
-				auto ball = Joint::add_balljoint(Lelbow_collider, Lhand_collider, Vector3(-0.2f, -0.25f, 0), Vector3(0, 0, 0), joint_bias);
-				//auto hinge = Joint::add_Hingejoint(Lelbow_collider, Lhand_collider, Vector3(-0.2f, -0.25f, -1), Vector3(-0.2f, -0.25f, +1), Vector3(0, 0, -1), Vector3(0, 0, +1), joint_bias);
+				auto ball = Joint::add_balljoint(Lelbow_collider, Lhand_collider, Vector3(-0.2f, -0.15f, 0), Vector3(0, 0, 0), joint_bias);
 			}
 			{
-				auto Cone = Joint::add_Conejoint(Body_collider, Rsholder_collider, Vector3(-1.1f, 0.2f, 0), Vector3(0, 0.5f, 0), Vector3(+1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
+				auto Cone = Joint::add_Conejoint(Body_collider, Rsholder_collider, Vector3(-1.1f, 0.2f, 0), Vector3(0, arm_size.y, 0), Vector3(+1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
 				Cone->limit = 85;
 
 				auto Twist = Joint::add_Twistjoint(Body_collider, Rsholder_collider, Vector3(0, 1, 0),Vector3(0, 1, 0), joint_bias);
 				Twist->limit = Vector2(360 - 90, 90);
 			}
 			{
-				auto hinge = Joint::add_Hingejoint(Rsholder_collider, Relbow_collider, Vector3(-1, -0.6f, 0), Vector3(+1, -0.6f, 0), Vector3(-1, 0.6f, 0), Vector3(+1, 0.6f, 0), joint_bias);
+				auto hinge = Joint::add_Hingejoint(Rsholder_collider, Relbow_collider, Vector3(-1, -(arm_size.y + 0.1f), 0), Vector3(+1, -(arm_size.y + 0.1f), 0), Vector3(-1, (arm_size.y + 0.1f), 0), Vector3(+1, (arm_size.y + 0.1f), 0), joint_bias);
 				hinge->bias = 0.5f;
 				hinge->limit = Vector2(230, 360);
 			}
 			{
-				auto ball = Joint::add_balljoint(Relbow_collider, Rhand_collider, Vector3(0.2f, -0.25f, 0), Vector3(0, 0, 0), joint_bias);
+				auto ball = Joint::add_balljoint(Relbow_collider, Rhand_collider, Vector3(0.2f, -0.15f, 0), Vector3(0, 0, 0), joint_bias);
 			}
 			//腰
 			{
@@ -430,34 +360,6 @@ namespace Adollib
 				//hinge->hinge_pow = 0.01f;
 				hinge->limit = Vector2(0, 60);
 			}
-		//}
-
-		////関節をつなげるGO,shape,jointの生成
-		//{
-
-			//auto connect_parts = Gameobject_manager::create("connect_parts");
-			//Human->add_child(connect_parts);
-
-			//Physics_data defult_data;
-			//{
-			//	auto Go = Gameobject_manager::create("Body_Waist");
-			//	Human->add_child(Go);
-
-			//	auto collider = Go->addComponent<Collider>();
-			//	collider->ignore_tags |= Collider_tags::Human;
-			//	collider->tag |= Collider_tags::Human;
-
-			//	defult_data = collider->physics_data; //physics_dataの初期値をここで決める
-
-			//	auto waist_body = collider->add_shape<Capsule>();
-			//	waist_body->r = Waist_shape->r * Waist->transform->local_scale.x;
-			//	waist_body->length = 1.5f * 0.5f;
-
-			//	Joint::add_balljoint(Body_collider , collider, Vector3(0, 0, 0), Vector3(0, +0.75f, 0));
-			//	Joint::add_balljoint(Waist_collider, collider, Vector3(0, 0, 0), Vector3(0, -0.75f, 0));
-			//}
-
-
 
 		}
 
@@ -498,40 +400,6 @@ namespace Adollib
 				belt->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
 			}
 		}
-
-		//onground用のcolliderのアタッチ 上でアタッチしたsphereと同じ位置へ
-		//Collider* Waist_sphere_collider = nullptr;
-		//BallJoint* waist_sphere_joint = nullptr;
-		//{
-		//	auto Waist_sphere = Gameobject_manager::create("Waist_sphere");
-		//	Human->add_child(Waist_sphere);
-		//	Waist_sphere->transform->local_scale = Vector3(0.4f);
-		//	Waist_sphere->transform->local_pos = Vector3(0, -2.5f, 0);
-
-		//	Waist_sphere_collider = Waist_sphere->addComponent<Collider>();
-
-		//	Waist_sphere_collider->physics_data.inertial_mass = 10;
-		//	Waist_sphere_collider->physics_data.is_fallable = false;
-		//	Waist_sphere_collider->physics_data.is_kinmatic_anglar = false;
-		//	Waist_sphere_collider->ignore_tags |= Collider_tags::Human;
-
-
-		//	auto Waist_sphere_shape = Waist_sphere_collider->add_shape<Sphere>();
-
-		//	waist_sphere_joint = Joint::add_balljoint(Waist_collider, Waist_sphere_collider, Vector3(0, -1.8f, 0), Vector3(0), 0.1f);
-		//}
-		//auto Waist_sphere = Gameobject_manager::create("Waist_sphere");
-		//auto Waist_sphere = Waist_collider->add_shape<Sphere>();
-		//{
-
-		//	Waist_sphere->r = 6.f;
-		//	Waist_sphere->center = Vector3(0, -2.8f, 0);
-		//	Waist_collider->set_tensor(Waist_collider->get_tensor());
-
-		//	Waist_sphere->center = Vector3(0, -2.6f, 0);
-		//	Waist_sphere->r = 0.25f;
-		//	Waist_collider->physics_data.restitution = 0;
-		//}
 
 		{
 

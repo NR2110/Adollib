@@ -60,19 +60,19 @@ namespace Adollib
 		bool is_maked_right_joint = false; //つかんでいたものが距離で離れたとき、stateのみだと即座に次のものをつかんでしまう 嫌なのでboolで管理
 		bool is_maked_left_joint = false;
 
-		// 接地判定を行う
-		//Gameobject* onground_collider_GO = nullptr; //立たせるためのsphereの座標に持ってくる必要があるため 変数で持って管理
-		Collider* onground_collider = nullptr;
-		Ray::Raycast_struct onground_ray_data;
-		Vector3 onground_contactpoint;
-		const float onground_dis = 2.0f;
-		const float onground_radius = 0.6f;
+		// 接地判定を行う(sphere_cast)
+		Collider* onground_collider = nullptr; //立っているcollider情報
+		Ray::Raycast_struct onground_ray_data; //ongroundで使ったdata rayminなど入っている
+		Vector3 onground_contactpoint; //ongroundの衝突点
+		const float onground_dis = 2.0f; //rayminがこれ以下なら立っている
+		const float onground_radius = 0.6f; //sphere_castの半径
 
 		bool is_jumping = false; //今ジャンプしているか
 		float coyote = 0.3f; //jumpの許容時間
 
 		float move_timer = 0; //足の回転を求めるために 入力時間を保存
 
+		Collider* check_onplayer_coll = nullptr; //respownの接地判定を行うCollider
 		float respown_timer = 0; //respown処理用のtimer >0の時 check_respown()でPlayer::updateをreturn (入力を受け付けない、gunyattoする)
 
 	private:

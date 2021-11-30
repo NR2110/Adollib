@@ -535,8 +535,7 @@ void Player::make_jump() {
 bool Player::check_respown() {
 
 	if (respown_timer > 0) {
-		if (Waist_collider->concoll_enter(Collider_tags::Stage))respown_timer -= Al_Global::second_per_frame;
-		else if (Head_collider->concoll_enter(Collider_tags::Stage))respown_timer -= Al_Global::second_per_frame * 0.5f;
+		if (check_onplayer_coll->concoll_enter(Collider_tags::Stage))respown_timer -= Al_Global::second_per_frame;
 	}
 	if (respown_timer > 0) {
 		turn_gunyatto_dir();

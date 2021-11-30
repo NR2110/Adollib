@@ -20,8 +20,8 @@ namespace Adollib{
 			bool is_use_trigger = false;
 		private:
 			float timer = 0; //離れても少しの間はONになるようにするため(ちかちかさせたくない)
+			float trigger_timer = 0;
 
-			bool is_trigger = false; //trigger用
 			bool is_trigger_pushed = false;
 
 		public:
@@ -36,17 +36,17 @@ namespace Adollib{
 				if (is_use_trigger) {
 
 					// 前のフレーム押されていないとき
-					if (is_trigger == false){
+					if (trigger_timer < 0){
 						// 押されたら
 						if (this_coll->concoll_enter(Collider_tags::Human | Collider_tags::Kinematic_Stage)) is_trigger_pushed = !is_trigger_pushed; //切り替える
 					}
 
-					if (this_coll->concoll_enter(Collider_tags::Human | Collider_tags::Kinematic_Stage))is_trigger = true;
-					else is_trigger = false;
+					if (this_coll->concoll_enter(Collider_tags::Human | Collider_tags::Kinematic_Stage))trigger_timer = 0.5f;
+					else trigger_timer -= Al_Global::second_per_frame;
 
 					//
-					if(is_trigger_pushed)  timer = 0.25f;
-					else timer -= Al_Global::second_per_frame;
+					if (is_trigger_pushed)  timer = 1;
+					else timer = -1;
 
 				}
 				else {

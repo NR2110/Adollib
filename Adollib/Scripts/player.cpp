@@ -51,8 +51,8 @@ namespace Adollib
 		hand_rot_pow = 300;
 
 		hand_camera_max_rot = ToRadian(80);
-		hand_camera_rot_pow = 3;
-		hand_camera_rot_center = ToRadian(43);
+		hand_camera_rot_pow = 2;
+		hand_camera_rot_center = ToRadian(15);
 
 		jump_y_power = 21;
 		jump_front_power = 5500;
@@ -75,6 +75,22 @@ namespace Adollib
 
 			Waist->add_child(check_onplayer_go);
 		}
+		{
+			auto check_respown_go = Gameobject_manager::create("check_respown_go");
+			auto check_onplayer_coll = check_respown_go->addComponent<Collider>();
+			auto shape = check_onplayer_coll->add_shape<Sphere>();
+
+			check_respown_go->transform->local_pos = Vector3(0, 0, 0);
+			check_respown_go->transform->local_scale = Vector3(1) * 2.5f;
+
+			check_onplayer_coll->physics_data.is_moveable = false;
+			check_onplayer_coll->physics_data.is_hitable = false;
+			shape->r = 1;
+
+			Waist->add_child(check_respown_go);
+
+			this->check_onplayer_coll = check_onplayer_coll;
+		}
 
 	}
 
@@ -93,8 +109,9 @@ namespace Adollib
 		}
 
 		// respownˆ—
-		//if (check_respown() == true)return;
+		if (check_respown() == true)return;
 
+		// onground‚Ìî•ñ‚ÌXV
 		update_onground();
 
 		// è‚ğL‚Î‚·

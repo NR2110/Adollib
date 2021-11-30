@@ -276,6 +276,7 @@
     <ClInclude Include="Scripts\Renderer\Shader\shader.h" />
     <ClInclude Include="Scripts\Renderer\Shader\vertex_format.h" />
     <ClInclude Include="Scripts\Renderer\directional_shadow.h" />
+    <ClInclude Include="Scripts\Renderer\sky_sphere.h" />
     <ClInclude Include="Scripts\Renderer\UI.h" />
     <ClInclude Include="Scripts\Renderer\sprite_renderer.h" />
     <ClInclude Include="Scripts\Renderer\texture.h" />
@@ -361,6 +362,7 @@
     <ClCompile Include="Scripts\Renderer\Shader\compute_shader.cpp" />
     <ClCompile Include="Scripts\Renderer\Shader\shader.cpp" />
     <ClCompile Include="Scripts\Renderer\directional_shadow.cpp" />
+    <ClCompile Include="Scripts\Renderer\sky_sphere.cpp" />
     <ClCompile Include="Scripts\Renderer\UI.cpp" />
     <ClCompile Include="Scripts\Renderer\sprite_renderer.cpp" />
     <ClCompile Include="Scripts\Renderer\texture.cpp" />

@@ -370,6 +370,9 @@
     <ClCompile Include="..\Scripts\area_respown_set.cpp">
       <Filter>ソース ファイル\scene_game\stage\parts</Filter>
     </ClCompile>
+    <ClCompile Include="Scripts\Renderer\sky_sphere.cpp">
+      <Filter>00_Adollib\44_render\renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Scripts\player.h">
@@ -761,6 +764,9 @@
     </ClInclude>
     <ClInclude Include="..\Scripts\area_respown_set.h">
       <Filter>ソース ファイル\scene_game\stage\parts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\sky_sphere.h">
+      <Filter>00_Adollib\44_render\renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -59,7 +59,7 @@ bool HingeJoint::limit_effect(Vector3& contactP0, Vector3& contactP1, float& pen
 	//contactP1‚ÌŠî€‚É
 	//contactP0‚ðŽ‚Á‚Ä‚­‚é
 
-	float scale = (fabsf(vector3_dot(transforms[1]->scale, hinge_vec[1])) + fabsf(vector3_dot(transforms[0]->scale, hinge_vec[0]))) * 0.5f * 2;
+	float scale = (fabsf(vector3_dot(transforms[1]->scale, hinge_vec[1])) + fabsf(vector3_dot(transforms[0]->scale, hinge_vec[0]))) * 0.5f * 10;
 
 	if (cosf(limit_rad_off.x) < cosf(limit_rad_off.y)) {
 

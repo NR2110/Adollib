@@ -74,7 +74,7 @@ void Renderer_manager::render(const std::map<Scenelist, std::list<Camera_compone
 
 		// ‰e—p‚Ì•`‰æ
 		{
-			Systems::SetViewPort(10000,10000);
+			Systems::SetViewPort(10000, 10000);
 			camera->directional_shadow->setup();
 			camera->directional_shadow->shader_activate();
 			auto shadow_frustum = camera->directional_shadow->calculate_frustum_data();
@@ -103,6 +103,8 @@ void Renderer_manager::render(const std::map<Scenelist, std::list<Camera_compone
 			renderer->render(frustum_data);
 		}
 		Work_meter::stop("render_obj");
+
+
 
 		// collider‚Ìrender
 		Physics_function::Physics_manager::render_collider(Sce);

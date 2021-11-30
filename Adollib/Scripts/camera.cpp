@@ -82,7 +82,7 @@ namespace Adollib
 				rotate_vec.y = input->getCursorPosX() - cursol_pos_save.x;
 				rotate_vec.x = input->getCursorPosY() - cursol_pos_save.y;
 
-				rotate_vec.x = ALClamp(rotate_vec.x, -170 - rotate_vec_save.x, 170 - rotate_vec_save.x);
+				rotate_vec.x = ALClamp(rotate_vec.x, -100 - rotate_vec_save.x, 120 - rotate_vec_save.x);
 				rotate_vec_save += rotate_vec;
 
 				rotate *= quaternion_axis_angle(Vector3(0, 1, 0), +rotate_vec.y * rotate_pow);
@@ -126,7 +126,7 @@ namespace Adollib
 				rotate_vec.y = input->getCursorPosX() - cursol_pos_save.x;
 				rotate_vec.x = input->getCursorPosY() - cursol_pos_save.y;
 
-				rotate_vec.x = ALClamp(rotate_vec.x, -170 - rotate_vec_save.x, 170 - rotate_vec_save.x);
+				rotate_vec.x = ALClamp(rotate_vec.x, -100 - rotate_vec_save.x, 120 - rotate_vec_save.x);
 				rotate_vec_save += rotate_vec;
 
 				rotate *= quaternion_axis_angle(vector3_cross(Vector3(0, 1, 0), vector3_quatrotate(Vector3(0, 0, 1), transform->local_orient)).unit_vect(), +rotate_vec.x * rotate_pow);
@@ -170,11 +170,11 @@ namespace Adollib
 					dis += -input->getMouseWheel() * 0.02f;
 
 					if (dis_buffer < 10 && dis < dis_buffer)dis = dis_buffer;
-					if (dis_buffer > 50 && dis > dis_buffer)dis = dis_buffer;
+					if (dis_buffer > 20 && dis > dis_buffer)dis = dis_buffer;
 
 					if (dis_buffer == ALClamp(dis_buffer, 10, 50)) dis = ALClamp(dis, 10, 50);
 				}
-				else dis = ALClamp(dis, 10, 50); //マウスホイールで調整可能な最低距離 / 最大距離
+				else dis = ALClamp(dis, 10, 20); //マウスホイールで調整可能な最低距離 / 最大距離
 
 				//disをイージングのためにdis_bufferに保存
 				const float next = ALEasing(dis_buffer, dis, easing_pow, timeStep);
@@ -187,7 +187,7 @@ namespace Adollib
 				Ray::Raycast_struct str;
 				str.collider_tag = Collider_tags::Caera_not_sunk_Stage;
 
-				const float sphere_radius = 1.5f;
+				const float sphere_radius = 1.0f;
 
 				ray.sphere_cast(sphere_radius, str);
 

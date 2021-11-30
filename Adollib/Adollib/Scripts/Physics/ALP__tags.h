@@ -28,7 +28,7 @@ namespace Adollib {
 
 
 
-		static const Collider_tagbit Tags_max = (1 << 31);
+		static const Collider_tagbit Tags_max = UINT_MAX;
 	};
 
 
