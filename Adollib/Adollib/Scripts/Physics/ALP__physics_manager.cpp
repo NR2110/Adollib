@@ -136,7 +136,7 @@ bool Physics_manager::update(Scenelist Sce)
 	if (physicsParams.timeStep > inv60)
 	{
 
-		const float inv60_per_timeStep = inv60 / physicsParams.timeStep;
+		//const float inv60_per_timeStep = inv60 / physicsParams.timeStep;
 		physicsParams.timeStep = ALmin(physicsParams.timeStep, physicsParams.max_timeStep);
 		frame_count.QuadPart = time.QuadPart;
 
@@ -150,7 +150,8 @@ bool Physics_manager::update(Scenelist Sce)
 			update_world_trans(ALP_colliders[Sce]);
 
 			// ŠO—Í‚ÌXV
-			applyexternalforce(ALP_physicses[Sce], inv60_per_timeStep);
+			applyexternalforce(ALP_physicses[Sce], 1);
+			//applyexternalforce(ALP_physicses[Sce], inv60_per_timeStep);
 
 			// pair‚Ìnew/old‚ğ“ü‚ê‘Ö‚¦‚é
 			pairs_new_num = 1 - pairs_new_num;
