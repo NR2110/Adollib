@@ -13,7 +13,7 @@ namespace Adollib {
 		// 指定のtagが1であれば動くギミック
 		class Area_goal : public Stageparts_base {
 		public:
-			Stage_types Next_stage = Stage_types::demo;
+			Stage_types next_stage = Stage_types::none;
 
 		private:
 			Stage_manager* stage_manager = nullptr; //stage_managerへのポインタ

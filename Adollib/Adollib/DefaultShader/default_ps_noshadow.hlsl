@@ -12,8 +12,8 @@ PSOutput main(PSInput input)
 
     //Color = input.Color;
 
-    float3 ShadowPos = 0;
-    ShadowPos = GetShadowTex(shadow_viewprojection, input.wPos.xyz);
+    //float3 ShadowPos = 0;
+    //ShadowPos = GetShadowTex(shadow_viewprojection, input.wPos.xyz);
     //シャドーマップから深度取得と比較
 
 

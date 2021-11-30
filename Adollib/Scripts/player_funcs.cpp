@@ -231,7 +231,6 @@ void Player::add_pow_for_stand() {
 	{
 		{
 			//顔が赤ちゃんなのを治す
-			Head_collider->physics_data.anglar_drag = 1.f;
 			Quaternion off = Body_collider->gameobject->transform->orientation * Head_collider->gameobject->transform->orientation.inverse();
 			float rad = off.radian();
 			if (rad > PI)rad = 2 * PI - rad;
@@ -516,7 +515,8 @@ void Player::make_jump() {
 
 			// Z方向に力を加える
 			for (int i = 0; i < Human_collider_size; i++) {
-				Human_colliders[i]->add_force(dir * jump_front_power);
+				float pow = vector3_dot(Human_colliders[i]->linear_velocity(), dir) * Human_colliders[i]->physics_data.inertial_mass;
+				Human_colliders[i]->add_force(dir * (jump_front_power - pow * 2));
 			}
 
 			// 足元の物体に力を加える
@@ -534,17 +534,15 @@ void Player::make_jump() {
 // respown処理
 bool Player::check_respown() {
 
-	if (respown_timer > 0) {
-		if (check_onplayer_coll->concoll_enter(Collider_tags::Stage))respown_timer -= Al_Global::second_per_frame;
-	}
-	if (respown_timer > 0) {
-		turn_gunyatto_dir();
-		return true;
-	}
-
 	auto stage = stage_manager->get_current_stage();
 	// stage指定のY座標よりPlayerが低ければrespown
 	if (Waist->world_position().y < stage->y_player_respown_limit + 50) {
+
+		// goalしていたら respown処理を行わず stage切替処理を呼ぶ
+		if (stage->next_stage != Stage_types::none) {
+			stage_manager->set_next_stage_type(stage->next_stage);
+			return true;
+		}
 
 		// 座標移動
 		Vector3 off = vector3_quatrotate(stage->player_respown_pos - Waist->world_position(), Waist->parent()->world_orientate().inverse());
@@ -569,7 +567,22 @@ bool Player::check_respown() {
 			}
 		}
 
-		respown_timer = 1;
+		respown_timer = 3;
+	}
+
+	// respowntimerが>0なら respown中
+	if (respown_timer > 0) {
+
+		if (check_onplayer_coll->concoll_enter(Collider_tags::Stage)) {
+			// respown中 stageに接触していれば timerを減らす
+			respown_timer -= Al_Global::second_per_frame;
+		}
+		else {
+			// respown中 stageに接触していなければ dragを0
+			for (int i = 0; i < Human_collider_size; i++) {
+				Human_colliders[i]->physics_data.drag = 0.2f;
+			}
+		}
 
 		return true;
 	}
@@ -606,6 +619,12 @@ void Player::turn_gunyatto_dir() {
 
 	rotate *= quaternion_axis_angle(Vector3(0, 1, 0), angle);
 
+}
+
+void Player::set_default_drag() {
+	for (int i = 0; i < Human_collider_size; i++) {
+		Human_colliders[i]->physics_data.drag = Human_default_drags[i];
+	}
 }
 
 // "物を持つ"jointを削除する
@@ -648,7 +667,7 @@ void Player::respown() {
 			Joint::delete_joint(joint);
 		}
 	}
-	respown_timer = 1;
+	respown_timer = 3;
 
 }
 

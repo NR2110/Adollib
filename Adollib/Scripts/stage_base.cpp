@@ -205,7 +205,7 @@ Gameobject* Stage_base::set_goal_area(const Vector3& pos, const Vector3& size, c
 	comp->this_stage = this;
 	comp->this_coll = coll;
 
-	comp->Next_stage = next_stage;
+	comp->next_stage = next_stage;
 
 	if (pearent != nullptr)pearent->add_child(go);
 	return go;

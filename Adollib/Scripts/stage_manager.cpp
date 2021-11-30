@@ -31,7 +31,7 @@ void Stage_manager::awake() {
 
 void Stage_manager::start() {
 	player = Gameobject_manager::find("player")->findComponent<Player>();
-	//player->respown();
+	player->respown();
 }
 
 void Stage_manager::update() {

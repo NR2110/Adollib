@@ -27,6 +27,7 @@ namespace Adollib
 
 		auto floar_go = Gameobject_manager::create("floar");
 		stage_parts.emplace_back(floar_go);
+		//set_box(Vector3(0, -60, 0), Vector3(10,10,10), Vector3(0), Vector3(188, 214, 54) / 255.0f);
 		set_box(Vector3(0, -60, 0), Vector3(80, 60, 80), Vector3(0), Vector3(188, 214, 54) / 255.0f, floar_go);
 		set_box(Vector3(0, -60, -98), Vector3(30, 30, 60), Vector3(0), Vector3(188, 214, 54) / 255.0f, floar_go);
 
@@ -49,6 +50,8 @@ namespace Adollib
 			R->set_texture(subcamera_comp->get_color_texture());
 		}
 
+
+
 #if _DEBUG
 #else
 		//Tree
@@ -63,15 +66,15 @@ namespace Adollib
 					if (1 < z_num && z_num < 6 &&
 						1 < x_num && x_num < 6)continue;
 
-					pearent->add_child(
-						set_tree(
-							Vector3(x_num * 17 - 60 + rand() % 6 - 3,
-								0,
-								z_num * 17 - 60 + rand() % 6 - 3
-							),
-							Vector3(1, 0.9f + (rand() % 100) * 0.01f * 0.5f, 1),
-							Vector3(0, rand() % 180, 0)
-						));
+					set_tree(
+						Vector3(x_num * 17 - 60 + rand() % 6 - 3,
+							0,
+							z_num * 17 - 60 + rand() % 6 - 3
+						),
+						Vector3(1, 0.9f + (rand() % 100) * 0.01f * 0.5f, 1),
+						Vector3(0, rand() % 180, 0),
+						pearent
+					);
 				}
 			}
 
@@ -79,6 +82,9 @@ namespace Adollib
 
 		//house
 		{
+			Gameobject* house = Gameobject_manager::create("House");
+			stage_parts.emplace_back(house);
+
 			float mass = 4;
 			Vector3 color = Vector3(187, 185, 181) / 255;
 			//Vector3 color = Vector3(220, 220, 220) / 255;
@@ -99,9 +105,9 @@ namespace Adollib
 
 			for (int c = 0; c < 4; c++) {
 				Gameobject* wall_pearent = Gameobject_manager::create("Wall");
+				house->add_child(wall_pearent);
 				wall_pearent->transform->local_pos = pos[c];
 				wall_pearent->transform->local_orient = quaternion_from_euler(rotate[c]);
-				stage_parts.emplace_back(wall_pearent);
 
 				for (int i = 0; i < count.y; i++) {
 					if ((i + c) % 2 == 0) {
@@ -148,6 +154,8 @@ namespace Adollib
 
 		//desk
 		{
+			Gameobject* desks = Gameobject_manager::create("desks");
+			stage_parts.emplace_back(desks);
 
 			int count = 5;
 			Vector3 pos = Vector3(0);
@@ -168,6 +176,8 @@ namespace Adollib
 					// darumaの生成とcolliderのアタッチ
 					Gameobject* desk = nullptr;
 					desk = Gameobject_manager::create("Desk", GO_tag::Sphere);
+					desks->add_child(desk);
+
 					desk->transform->local_pos = Vector3(position[0], position[1], position[2]);
 					desk->transform->local_scale = Vector3(1, 1, 1) * 0.5f;
 
@@ -238,9 +248,6 @@ namespace Adollib
 					desk->add_child(parts[4]);
 
 
-					stage_parts.emplace_back(desk);
-
-
 				}
 
 			}
@@ -297,35 +304,52 @@ namespace Adollib
 		}
 #endif
 
+		// 壁
 		{
-			Vector3 base_pos = Vector3(120, 2, 0);
-			Vector3 off = Vector3(0);
-			for (int i = 0; i < 5; i++) {
-				set_box(base_pos + off, Vector3(40, 4, 40), Vector3(0), Vector3(188, 214, 54) / 255.0f * pow(1.03f, i + 1), floar_go);
-				off += Vector3(10, 8, 0);
+			set_box(Vector3(-10, 8, 81), Vector3(6, 8, 1), Vector3(0), Vector3(188, 214, 54) / 255.0f * 0.95f, floar_go);
+			set_box(Vector3(+10, 8, 81), Vector3(6, 8, 1), Vector3(0), Vector3(188, 214, 54) / 255.0f * 0.95f, floar_go);
+			set_box(Vector3(0, -1, 83), Vector3(4, 1, 3), Vector3(0), Vector3(188, 214, 54) / 255.0f * 0.95f, floar_go);
+			set_box(Vector3(0, 16, 81), Vector3(4, 8, 1), Vector3(0), Vector3(188, 214, 54) / 255.0f * 0.95f, floar_go);
+
+			set_door(Vector3(-2, 4, 81), Vector3(2, 4, 0.5f), Vector3(0),true , floar_go);
+			set_door(Vector3(+2, 4, 81), Vector3(2, 4, 0.5f), Vector3(0),false, floar_go);
+
+			set_goal_area(Vector3(0, -8, 90), Vector3(10, 4, 10), Vector3(0), Stage_types::demo_1, floar_go);
+		}
+
+		// 下
+		{
+			{
+				Vector3 base_pos = Vector3(120, 2, 0);
+				Vector3 off = Vector3(0);
+				for (int i = 0; i < 5; i++) {
+					set_box(base_pos + off, Vector3(40, 4, 40), Vector3(0), Vector3(188, 214, 54) / 255.0f * pow(1.03f, i + 1), floar_go);
+					off += Vector3(10, 8, 0);
+				}
 			}
+			set_box(Vector3(140, 18, 60), Vector3(65, 20, 20), Vector3(0), Vector3(188, 214, 54) / 255.0f, floar_go);
+
+			{
+				auto coll = set_box(Vector3(0, -29, -100), Vector3(2, 2, 2), Vector3(0), Vector3(0.8f), floar_go, false);
+				coll->tag &= ~Collider_tags::Caera_not_sunk_Stage;
+				coll->physics_data.inertial_mass = 50;
+			}
+
+			//buttan
+			set_buttan(Vector3(0, -2.9f - 30, -115), Vector3(3, 3, 3), Vector3(0), Stage_parts::Stageparts_tags::Flag_0, Vector3(255, 80, 80) / 255.0f, floar_go);
+
+			set_gimmickdoor(
+				Vector3(0, -89.5f, -95), Vector3(0, -60, -95),
+				Vector3(0, 0, 0), Vector3(0, 0, 0),
+				3, 1,
+				Vector3(25, 60, 15),
+				Stage_parts::Stageparts_tags::Flag_0,
+				Vector3(188, 214, 54) / 255.0f * 0.8f,
+				floar_go
+			);
+
+			set_sphere_rope(Vector3(64, 60, 65), 1, Vector3(0, 0, 0), 10, 5);
 		}
-		set_box(Vector3(140, 18, 60), Vector3(65, 20, 20), Vector3(0), Vector3(188, 214, 54) / 255.0f, floar_go);
-
-		{
-			auto coll = set_box(Vector3(0, -29, -100), Vector3(2, 2, 2), Vector3(0), Vector3(0.8f), floar_go, false);
-			coll->tag &= ~Collider_tags::Caera_not_sunk_Stage;
-			coll->physics_data.inertial_mass = 50;
-		}
-
-		//buttan
-		set_buttan(Vector3(0, -2.9f - 30, -115), Vector3(3, 3, 3), Vector3(0), Stage_parts::Stageparts_tags::Flag_0, Vector3(255, 80, 80) / 255.0f);
-
-		set_door(
-			Vector3(0, -89.5f, -95), Vector3(0, -60, -95),
-			Vector3(0, 0, 0), Vector3(0, 0, 0),
-			3, 1,
-			Vector3(25,60,15),
-			Stage_parts::Stageparts_tags::Flag_0,
-			Vector3(188, 214, 54) / 255.0f * 0.8f
-		);
-
-		set_sphere_rope(Vector3(64, 60, 65), 1, Vector3(0, 0, 0), 10, 5);
 	}
 
 	// 毎フレーム呼ばれる更新処理

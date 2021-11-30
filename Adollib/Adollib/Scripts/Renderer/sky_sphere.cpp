@@ -1,10 +1,13 @@
 #include "sky_sphere.h"
 
 #include "../Imgui/imgui_all.h"
+#include "../Main/resource_manager.h"
 #include "../Main/Adollib.h"
 #include "../Main/systems.h"
+#include "material.h"
 #include "Shader/shader.h"
 #include "Shader/constant_buffer.h"
+#include "Shader/vertex_format.h"
 #include "texture.h"
 
 #include "../Imgui/debug.h"
@@ -15,55 +18,89 @@ using namespace ConstantBuffer;
 void Sky_sphere::awake() {
 
 	// コンスタントバッファーの生成
-	Systems::CreateConstantBuffer(&view_cb, sizeof(ConstantBufferPerCamera));
+	Systems::CreateConstantBuffer(&view_cb,       sizeof(ConstantBufferPerCamera));
 	Systems::CreateConstantBuffer(&projection_cb, sizeof(ConstantBufferPerSystem));
 
-	// shaodow用texの準備
+	// sky用textureの準備
 	sky_texture = std::make_shared<Texture>();
-	sky_texture->CreateDepth(10000, 10000, DXGI_FORMAT_R24G8_TYPELESS);
+	sky_texture->Load(L"./DefaultTexture/sky_map.png");
 
 	shader = std::make_shared<Shader>();
-	shader->Load_VS("./DefaultShader/render_directional_shadow_vs.cso");
+	shader->Load_VS("./DefaultShader/default_vs.cso");
+	shader->Load_PS("./DefaultShader/default_ps_skysphere.cso");
+
+	Systems::CreateConstantBuffer(&projection_cb, sizeof(ConstantBufferPerSystem));
+	Systems::CreateConstantBuffer(&world_cb, sizeof(ConstantBufferPerGO));
+	Systems::CreateConstantBuffer(&Mat_cb, sizeof(ConstantBufferPerMaterial));
+
+	ResourceManager::CreateModelFromFBX(&meshes, "./DefaultModel/sphere.fbx", "");
+
 }
 void Sky_sphere::shader_activate() { shader->Activate(); };
 
-void Sky_sphere::setup() {
 
-	ConstantBufferPerCamera c_cb;
-	ConstantBufferPerSystem s_sb;
-	ConstantBufferPerShadow shadow_sb;
+void Sky_sphere::render() {
 
-	Systems::DeviceContext->ClearDepthStencilView(sky_texture->GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	Systems::DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	ID3D11DepthStencilView* dsv = shadow_texture->GetDepthStencilView();
-	Systems::DeviceContext->OMSetRenderTargets(0, nullptr, dsv);
-
-	//CB : ConstantBufferPerCamera
-	// ビュー行列
-	Vector3 pos = position;
-	Vector3 look_pos = position + direction;
-
-	DirectX::XMVECTOR eye = DirectX::XMVectorSet(pos.x, pos.y, pos.z, 1.0f);
-	DirectX::XMVECTOR focus = DirectX::XMVectorSet(look_pos.x, look_pos.y, look_pos.z, 1.0f);
-	DirectX::XMVECTOR up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f);
-	XMStoreFloat4x4(&c_cb.View, DirectX::XMMatrixLookAtLH(eye, focus, up));
-	c_cb.Eyepos = DirectX::XMFLOAT4(pos.x, pos.y, pos.z, 1.0f);
-	Systems::DeviceContext->UpdateSubresource(view_cb.Get(), 0, NULL, &c_cb, 0, 0);
-	Systems::DeviceContext->VSSetConstantBuffers(1, 1, view_cb.GetAddressOf());
-	Systems::DeviceContext->PSSetConstantBuffers(1, 1, view_cb.GetAddressOf());
+	// CB : ConstantBufferPerOBJ
+	// GOのtransformの情報をConstantBufferへセットする
+	ConstantBufferPerGO g_cb;
+	g_cb.world = matrix_world(Vector3(10000), quaternion_from_euler(rotate).get_rotate_matrix(), position);
+	Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
+	Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
+	Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 
 	//CB : ConstantBufferPerSystem
-	//DirectX::XMStoreFloat4x4(&s_sb.Projection, DirectX::XMMatrixPerspectiveFovLH(ToRadian(fov), aspect, nearZ, farZ));
-	DirectX::XMStoreFloat4x4(&s_sb.Projection, DirectX::XMMatrixOrthographicLH(500, 500, nearZ, farZ));
+	ConstantBufferPerSystem s_sb;
+	DirectX::XMStoreFloat4x4(&s_sb.Projection, DirectX::XMMatrixPerspectiveFovLH(ToRadian(fov), aspect, nearZ, farZ));
 	Systems::DeviceContext->UpdateSubresource(projection_cb.Get(), 0, NULL, &s_sb, 0, 0);
 	Systems::DeviceContext->VSSetConstantBuffers(2, 1, projection_cb.GetAddressOf());
 	Systems::DeviceContext->PSSetConstantBuffers(2, 1, projection_cb.GetAddressOf());
 
+	//
+	Systems::SetBlendState(State_manager::BStypes::BS_NONE);
+	Systems::SetRasterizerState(State_manager::RStypes::RS_CULL_FRONT);
+	Systems::SetDephtStencilState(State_manager::DStypes::DS_TRUE);
 
-	//CB : ConstantBufferPerShadow
-	shadow_sb.shadow_viewprojection = Matrix44(s_sb.Projection) * Matrix44(c_cb.View);
-	shadow_sb.right_dir = direction;
-	Systems::DeviceContext->UpdateSubresource(shadow_viewprojection_cb.Get(), 0, NULL, &shadow_sb, 0, 0);
-	Systems::DeviceContext->VSSetConstantBuffers(7, 1, shadow_viewprojection_cb.GetAddressOf());
-	Systems::DeviceContext->PSSetConstantBuffers(7, 1, shadow_viewprojection_cb.GetAddressOf());
+	//CB : ConstantBufferPerMaterial
+	ConstantBufferPerMaterial cb;
+	// specular
+	cb.shininess = 1;
+	cb.ambientColor = DirectX::XMFLOAT4(0.1f, 0.1f, 0.1f, 1);
+	cb.materialColor = Vector4(1, 0.99f, 0.9f, 1) * 0.9f;
+
+	Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
+	Systems::DeviceContext->VSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
+	Systems::DeviceContext->PSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
+
+	for (Mesh::mesh& mesh : (*meshes))
+	{
+		UINT stride = sizeof(VertexFormat);
+		UINT offset = 0;
+		Systems::DeviceContext->IASetVertexBuffers(0, 1, mesh.vertexBuffer.GetAddressOf(), &stride, &offset);
+		Systems::DeviceContext->IASetIndexBuffer(mesh.indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+
+		//CB : ConstantBufferPerMesh
+		{
+			ConstantBuffer::ConstantBufferPerMesh g_cb;
+			g_cb.Mesh_world = mesh.globalTransform;
+			Systems::DeviceContext->UpdateSubresource(mesh.mesh_cb.Get(), 0, NULL, &g_cb, 0, 0);
+			Systems::DeviceContext->VSSetConstantBuffers(3, 1, mesh.mesh_cb.GetAddressOf());
+			Systems::DeviceContext->PSSetConstantBuffers(3, 1, mesh.mesh_cb.GetAddressOf());
+		}
+
+
+		for (auto& subset : mesh.subsets)
+		{
+			// textureをSRVにセット
+			sky_texture->Set(0);
+
+			// 描画
+			Systems::DeviceContext->DrawIndexed(subset.indexCount, subset.indexStart, 0);
+
+		}
+	}
+
+
 }

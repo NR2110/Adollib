@@ -42,8 +42,6 @@ namespace Adollib
 		float hand_camera_rot_pow = 2;
 		float hand_camera_rot_center = ToRadian(30);
 
-
-
 		float jump_y_power = 150;
 		float jump_front_power = 150;
 
@@ -95,6 +93,8 @@ namespace Adollib
 		//:::
 
 		void turn_gunyatto_dir();
+		void set_default_drag();
+
 	public:
 		void delete_catchjoint(); //"•¨‚ðŽ‚Â"joint‚ðíœ‚·‚é
 		void respown(); //respownˆ—
@@ -143,6 +143,10 @@ namespace Adollib
 			};
 		};
 
+		//::: dafault_drag :::
+		union {
+			float Human_default_drags[Human_collider_size] = { 0 };
+		};
 
 	public:
 		void set_player_colliders(
@@ -174,19 +178,23 @@ namespace Adollib
 			Lleg_collider		= l_Lleg_collider;
 			Lfoot_collider		= l_Lfoot_collider;
 
-			Head		=Head_collider		->gameobject;
-			Lsholder	=Lsholder_collider	->gameobject;
-			Lelbow		=Lelbow_collider	->gameobject;
-			Lhand		=Lhand_collider	    ->gameobject;
-			Rsholder	=Rsholder_collider	->gameobject;
-			Relbow		=Relbow_collider	->gameobject;
-			Rhand		=Rhand_collider	    ->gameobject;
-			Body		=Body_collider		->gameobject;
-			Waist		=Waist_collider		->gameobject;
-			Rleg		=Rleg_collider		->gameobject;
-			Rfoot		=Rfoot_collider		->gameobject;
-			Lleg		=Lleg_collider		->gameobject;
-			Lfoot		=Lfoot_collider		->gameobject;
+			Head		= Head_collider		->gameobject;
+			Lsholder	= Lsholder_collider	->gameobject;
+			Lelbow		= Lelbow_collider	->gameobject;
+			Lhand		= Lhand_collider	->gameobject;
+			Rsholder	= Rsholder_collider	->gameobject;
+			Relbow		= Relbow_collider	->gameobject;
+			Rhand		= Rhand_collider	->gameobject;
+			Body		= Body_collider		->gameobject;
+			Waist		= Waist_collider	->gameobject;
+			Rleg		= Rleg_collider		->gameobject;
+			Rfoot		= Rfoot_collider	->gameobject;
+			Lleg		= Lleg_collider		->gameobject;
+			Lfoot		= Lfoot_collider	->gameobject;
+
+			for (int i = 0; i < Human_collider_size; i++) {
+				Human_default_drags[i] = Human_colliders[i]->physics_data.drag;
+			}
 		}
 
 	public:

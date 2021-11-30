@@ -12,6 +12,6 @@ void Area_goal::awake() {
 
 void Area_goal::update() {
 	if (this_coll->concoll_enter(Collider_tags::Human)) {
-		stage_manager->set_next_stage_type(Next_stage);
+		this_stage->next_stage = next_stage;
 	}
 }

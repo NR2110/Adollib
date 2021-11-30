@@ -8,6 +8,7 @@
 #include "../Renderer/UI.h"
 #include "../Renderer/posteffect_base.h"
 #include "../Renderer/directional_shadow.h"
+#include "../Renderer/sky_sphere.h"
 #include "gameobject_manager.h"
 
 #include "../Imgui/debug.h"
@@ -40,6 +41,9 @@ void Camera_component::awake() {
 
 	directional_shadow = std::make_shared<Directional_shadow>();
 	directional_shadow->awake();
+
+	sky_sphere = std::make_shared<Sky_sphere>();
+	sky_sphere->awake();
 }
 
 void Camera_component::finalize() {

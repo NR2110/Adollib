@@ -19,16 +19,6 @@ namespace Adollib {
 			RS_CULL_NONE,
 			RS_SIZE
 		};
-		////RasterizerState
-		//static enum class RStypes {
-		//	RS_CULL_NONE,
-		//	RS_CULL_BACK,
-		//	RS_CULL_FRONT,
-		//	RS_WIRE_NONE,
-		//	RS_WIRE_BACK,
-		//	RS_WIRE_FRONT,
-		//	RS_SIZE
-		//};
 
 		//BlendState
 		enum class BStypes {

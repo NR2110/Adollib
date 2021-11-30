@@ -32,7 +32,7 @@ namespace Adollib
 		head_rot_pow = 1000;
 
 		waist_move_max_speed = 100000;
-		waist_move_pow = 500;
+		waist_move_pow = 470;
 
 		waist_rot_max_speed = 3;
 		waist_rot_max_pow = 10000;
@@ -55,7 +55,7 @@ namespace Adollib
 		hand_camera_rot_center = ToRadian(15);
 
 		jump_y_power = 21;
-		jump_front_power = 5500;
+		jump_front_power = 3000;
 
 		turn_speed = 1.5f;
 
@@ -92,6 +92,9 @@ namespace Adollib
 			this->check_onplayer_coll = check_onplayer_coll;
 		}
 
+		respown_timer = -1;
+		update();
+
 	}
 
 	// 毎フレーム呼ばれる更新処理
@@ -107,6 +110,9 @@ namespace Adollib
 				}
 			}
 		}
+
+		// playerのdragを初期値にする
+		set_default_drag();
 
 		// respown処理
 		if (check_respown() == true)return;

@@ -17,7 +17,7 @@
 
 namespace Adollib
 {
-	Gameobject* Stage_demo::set_tree(const Vector3& pos, const Vector3& scale, const Vector3& rotate) {
+	Gameobject* Stage_demo::set_tree(const Vector3& pos, const Vector3& scale, const Vector3& rotate, Gameobject* pearent) {
 		Gameobject* tree = nullptr;
 		tree = Gameobject_manager::create("tree",GO_tag::None);
 
@@ -130,10 +130,11 @@ namespace Adollib
 		comp->respown_pos = pos;
 		comp->respown_rotate = quaternion_identity();
 
+		if (pearent != nullptr) pearent->add_child(tree);
 		return tree;
 	}
 
-	Gameobject* Stage_demo::set_buttan(const Vector3& pos, const Vector3& scale, const Vector3& rotate, Stage_parts::Stageparts_tagbit tag, const Vector3& color) {
+	Gameobject* Stage_demo::set_buttan(const Vector3& pos, const Vector3& scale, const Vector3& rotate, Stage_parts::Stageparts_tagbit tag, const Vector3& color, Gameobject* pearent) {
 		auto coll = set_box(pos, scale, rotate, color);
 		auto go = coll->gameobject;
 		auto buttan_comp = go->addComponent<Stage_parts::Buttan>();
@@ -149,17 +150,95 @@ namespace Adollib
 		buttan_comp->base_scale_y = scale.y;
 		buttan_comp->base_material_color = color;
 
-		stage_parts.emplace_back(go);
+		if (pearent != nullptr) pearent->add_child(go);
 		return go;
 	}
 
-	Gameobject* Stage_demo::set_door(
+	Gameobject* Stage_demo::set_door(const Vector3& pos, const Vector3& scale, const Vector3& rotate, const int is_left, Gameobject* pearent) {
+
+		// joint用に動かないcolliderを作成
+		auto door_joint = Gameobject_manager::create("door_joint");
+
+		auto coll = door_joint->addComponent<Collider>();
+		coll->physics_data.is_moveable = false;
+
+		Collider* door = nullptr;
+
+		//boxを生成
+		{
+			auto object = Gameobject_manager::createCube("Door", GO_tag::Box);
+			object->material->color = Vector4(Vector3(90, 47, 27) / 255.0f, 1);
+
+			object->transform->local_pos = pos;
+			object->transform->local_orient = quaternion_from_euler(rotate);
+			object->transform->local_scale = scale;
+
+			door = object->addComponent<Collider>();
+			auto box = door->add_shape<Box>();
+			box->size = Vector3(1) * 0.9f; //突っかからないようにColliderのサイズを小さめにする
+
+			door->tag = Collider_tags::Box | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Kinematic_Stage;
+
+			if (pearent != nullptr)pearent->add_child(object);
+
+			{
+				auto totte = Gameobject_manager::createCube("Totte_front", GO_tag::Box);
+				totte->material->color = Vector4(Vector3(207, 145, 64) / 255.0f, 1);
+				object->add_child(totte);
+				if (is_left) {
+					totte->transform->local_pos = Vector3(+0.75f, -0.05f, -0.10f);
+					totte->transform->local_scale = Vector3(+0.24f, +0.20f, 1);
+				}
+				else {
+					totte->transform->local_pos = Vector3(-0.75f, -0.05f, -0.10f);
+					totte->transform->local_scale = Vector3(+0.24f, +0.20f, 1);
+				}
+			}
+			{
+				auto totte = Gameobject_manager::createSphere("Totte_back", GO_tag::Box);
+				totte->material->color = Vector4(Vector3(207, 145, 64) / 255.0f, 1);
+				object->add_child(totte);
+				if (is_left) {
+					totte->transform->local_pos = Vector3(+0.75f, -0.05f, 1.28f);
+					totte->transform->local_scale = Vector3(0.2f) / object->transform->local_scale;
+				}
+				else {
+					totte->transform->local_pos = Vector3(-0.75f, -0.05f, 1.28f);
+					totte->transform->local_scale = Vector3(0.2f) / object->transform->local_scale;
+				}
+			}
+		}
+
+		door->physics_data.inertial_mass = 20;
+		door->physics_data.is_moveable = true;
+
+		Vector3 joint_pos[2] = { scale, scale };
+		if (is_left) { joint_pos[0].x *= -1; joint_pos[1].x *= -1; }
+
+		// 変な方向に動きにくくするために大きめにとる
+		joint_pos[0].y *= +5;
+		joint_pos[1].y *= -5;
+
+		Joint::add_Hingejoint(coll, door,
+			vector3_quatrotate(joint_pos[0], door->transform->local_orient) + door->transform->local_pos,
+			vector3_quatrotate(joint_pos[1], door->transform->local_orient) + door->transform->local_pos,
+			joint_pos[0], joint_pos[1],
+			0.05f
+		);
+
+		if (pearent != nullptr)pearent->add_child(door_joint);
+
+		return door_joint;
+	}
+
+	Gameobject* Stage_demo::set_gimmickdoor(
 		const Vector3& start_pos, const Vector3& goal_pos,
 		const Vector3& start_rot, const Vector3& goal_rot,
 		float pos_speed, float rot_speed,
 		const Vector3& scale,
 		Stage_parts::Stageparts_tagbit tag,
-		const Vector3& color
+		const Vector3& color,
+		Gameobject* pearent
 	) {
 
 		auto coll = set_box(start_pos, scale, start_rot, color);
@@ -181,8 +260,8 @@ namespace Adollib
 		door_comp->goal_rot = goal_rot;
 		door_comp->pos_speed = pos_speed;
 		door_comp->rot_speed = rot_speed;
-		stage_parts.emplace_back(go);
 
+		if (pearent != nullptr) pearent->add_child(go);
 		return go;
 	}
 

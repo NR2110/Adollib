@@ -23,8 +23,6 @@ namespace Adollib
 
 		Quaternion camera_rot;
 
-		Vector3 eular_xy(Vector3 V);
-
 	public:
 		void awake();
 

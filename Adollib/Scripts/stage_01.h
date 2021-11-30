@@ -7,11 +7,11 @@ namespace Adollib {
 
 
 	private:
-		const Vector3 base_color = Vector3(233, 225, 217) / 255.0f;
-		const Vector3 grass_color = Vector3(188, 214, 54) / 255.0f * 0.7f;
-		const Vector3 wood_color = Vector3(90, 47, 27) / 255.0f;
-		const Vector3 roof_color = Vector3(233, 225, 217) / 255.0f;
-		const Vector3 stair_color = Vector3(215, 205, 197) / 255.0f;
+		const Vector3 base_color = Vector3(233, 225, 217) / 255.0f * 0.9f;
+		const Vector3 grass_color = Vector3(188, 214, 54) / 255.0f * 0.7f * 0.9f;
+		const Vector3 wood_color = Vector3(90, 47, 27) / 255.0f * 0.9f;
+		const Vector3 roof_color = Vector3(233, 225, 217) / 255.0f * 0.9f;
+		const Vector3 stair_color = Vector3(215, 205, 197) / 255.0f * 0.9f;
 
 
 		// ñÿÇçÏÇÈ

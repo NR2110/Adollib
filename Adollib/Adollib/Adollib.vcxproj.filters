@@ -854,6 +854,9 @@
     <FxCompile Include="DefaultShader\gaussian_filter_vs.hlsl">
       <Filter>00_Adollib\44_render\shader\hlsl\gaussian_filter</Filter>
     </FxCompile>
+    <FxCompile Include="DefaultShader\default_ps_skysphere.hlsl">
+      <Filter>00_Adollib\44_render\shader\hlsl\default</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="native\value.natvis">

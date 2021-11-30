@@ -19,6 +19,7 @@ namespace Adollib
 	class Texture;
 	class Posteffect_base;
 	class Directional_shadow;
+	class Sky_sphere;
 
 	//カメラ用のコンポーネントクラス 継承不可!
 	class Camera_component final : public Component
@@ -39,6 +40,9 @@ namespace Adollib
 
 		// 影のptr
 		std::shared_ptr<Directional_shadow> directional_shadow = nullptr;
+
+		// skysphereのptr
+		std::shared_ptr<Sky_sphere> sky_sphere = nullptr;
 
 	private:
 		std::list<std::shared_ptr<Posteffect_base>> posteffects; //ポストエフェクト関係の保存

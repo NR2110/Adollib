@@ -17,7 +17,10 @@ namespace Adollib
 	// 所属するシーンの初期化時に一度だけ呼ばれる
 	void Player_manager::awake() {
 
-		Vector3 player_start_pos = Vector3(-2.7f, 23, -150);
+		//Vector3 player_start_pos = Vector3(-2.7f, 23, -150);
+		//Vector3 player_start_pos = Vector3(-2.7f, 80, -5);
+		Vector3 player_start_pos = Vector3(-2.7f, 50, -5);
+
 		Quaternion player_start_rotate = quaternion_from_euler(2, 180, 0);
 
 		Gameobject* Human = Gameobject_manager::create("Human");
@@ -148,7 +151,7 @@ namespace Adollib
 					auto& GO = Lhand;
 					GO->transform->local_scale = hand_size;
 					GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
-					GO->transform->local_pos = Vector3(+(body_size.x + arm_size.y * 4), arm_y_pos, 0);
+					GO->transform->local_pos = Vector3(+(body_size.x + arm_size.y * 4 - 0.2f), arm_y_pos - 0.15f, 0);
 				}
 				{
 					auto& GO = Rsholder;
@@ -166,7 +169,7 @@ namespace Adollib
 					auto& GO = Rhand;
 					GO->transform->local_scale = hand_size;
 					GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
-					GO->transform->local_pos = Vector3(-(body_size.x + arm_size.y * 4), arm_y_pos, 0);
+					GO->transform->local_pos = Vector3(-(body_size.x + arm_size.y * 4 - 0.2f), arm_y_pos - 0.15f, 0);
 				}
 			}
 
@@ -235,8 +238,7 @@ namespace Adollib
 			Lfoot_collider->physics_data.inertial_mass = 1;
 			Rfoot_collider->physics_data.inertial_mass = 1;
 
-
-			//Head_collider->physics_data.anglar_drag = 0.5f;
+			Head_collider->physics_data.anglar_drag = 1;
 			Lsholder_collider->physics_data.anglar_drag = 0.5f;
 			Lelbow_collider->physics_data.anglar_drag = 0.5f;
 			Lhand_collider->physics_data.anglar_drag = 0.5f;
@@ -244,6 +246,20 @@ namespace Adollib
 			Relbow_collider->physics_data.anglar_drag = 0.5f;
 			Rhand_collider->physics_data.anglar_drag = 0.5f;
 			Waist_collider->physics_data.anglar_drag = 0.8f;
+
+			Head_collider	 ->physics_data.restitution = 0.01f;
+			Lsholder_collider->physics_data.restitution = 0.01f;
+			Rsholder_collider->physics_data.restitution = 0.01f;
+			Lelbow_collider  ->physics_data.restitution = 0.01f;
+			Relbow_collider  ->physics_data.restitution = 0.01f;
+			Lhand_collider   ->physics_data.restitution = 0.01f;
+			Rhand_collider   ->physics_data.restitution = 0.01f;
+			Body_collider    ->physics_data.restitution = 0.01f;
+			Waist_collider   ->physics_data.restitution = 0.01f;
+			Lleg_collider    ->physics_data.restitution = 0.01f;
+			Rleg_collider    ->physics_data.restitution = 0.01f;
+			Lfoot_collider   ->physics_data.restitution = 0.01f;
+			Rfoot_collider   ->physics_data.restitution = 0.01f;
 
 			//::: 重力適用の調整 :::
 			Head_collider->physics_data.is_fallable = false;
