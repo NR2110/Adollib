@@ -11,15 +11,15 @@
 #include "../Adollib/Scripts/Imgui/debug.h"
 #include "../Adollib/Scripts/Physics/joint.h"
 
-#include "buttan.h"
-#include "door.h"
 #include "kinematic_block.h"
+#include "area_respown_set.h"
+#include "area_goal.h"
 
 using namespace Adollib;
 using namespace Stage_parts;
 
 
-Collider* Stage_base::set_sphere(Vector3 pos, float r, Vector3 color, Gameobject* pearent, bool is_static ) {
+Collider* Stage_base::set_sphere(const Vector3& pos, const float& r, const Vector3& color, Gameobject* pearent, bool is_static ) {
 
 	Gameobject* object = nullptr;
 	object = Gameobject_manager::createSphere("sphere",GO_tag::Sphere);
@@ -51,7 +51,7 @@ Collider* Stage_base::set_sphere(Vector3 pos, float r, Vector3 color, Gameobject
 	return coll;
 }
 
-Collider* Stage_base::set_box(Vector3 pos, Vector3 size, Vector3 rotate, Vector3 color, Gameobject* pearent, bool is_static ) {
+Collider* Stage_base::set_box(const Vector3& pos, const Vector3& size, const Vector3& rotate, const Vector3& color, Gameobject* pearent, bool is_static ) {
 	Gameobject* object = nullptr;
 	object = Gameobject_manager::createCube("Cube",GO_tag::Box);
 	object->material->color = Vector4(color.x, color.y, color.z, 1);
@@ -84,7 +84,7 @@ Collider* Stage_base::set_box(Vector3 pos, Vector3 size, Vector3 rotate, Vector3
 	return coll;
 }
 
-Collider* Stage_base::set_capsule(Vector3 pos, float r, float length, Vector3 rotate, Vector3 color, Gameobject* pearent, bool is_static ) {
+Collider* Stage_base::set_capsule(const Vector3& pos, const float& r, const float& length, const Vector3& rotate, const Vector3& color, Gameobject* pearent, bool is_static ) {
 	Gameobject* object = nullptr;
 	object = Gameobject_manager::createCube("capsule",GO_tag::Capsule);
 	object->material->color = Vector4(color.x, color.y, color.z, 1);
@@ -117,7 +117,7 @@ Collider* Stage_base::set_capsule(Vector3 pos, float r, float length, Vector3 ro
 	return coll;
 }
 
-Collider* Stage_base::set_meshbox(Vector3 pos, Vector3 size, Vector3 rotate, Vector3 color, Gameobject* pearent, bool is_static ) {
+Collider* Stage_base::set_meshbox(const Vector3& pos, const Vector3& size, const Vector3& rotate, const Vector3& color, Gameobject* pearent, bool is_static ) {
 	Gameobject* object = nullptr;
 	object = Gameobject_manager::createFromFBX("./DefaultModel/cone.fbx");
 	object->material->color = Vector4(color.x, color.y, color.z, 1);
@@ -151,7 +151,7 @@ Collider* Stage_base::set_meshbox(Vector3 pos, Vector3 size, Vector3 rotate, Vec
 	return coll;
 }
 
-Gameobject* Stage_base::set_plane(Vector3 pos, Vector3 size, Vector3 rotate, Vector3 color, Gameobject* pearent, bool is_static ) {
+Gameobject* Stage_base::set_plane(const Vector3& pos, const Vector3& size, const Vector3& rotate, const Vector3& color, Gameobject* pearent, bool is_static ) {
 	Gameobject* object = nullptr;
 	object = Gameobject_manager::createPlane("plane",GO_tag::Plane);
 	Vector4 C = Vector4(color.x, color.y, color.z, 1);
@@ -164,5 +164,50 @@ Gameobject* Stage_base::set_plane(Vector3 pos, Vector3 size, Vector3 rotate, Vec
 	//stage_parts.emplace_back(object);
 	if (pearent != nullptr)pearent->add_child(object);
 	return object;
+}
+
+Gameobject* Stage_base::set_respown_area(const Vector3& pos, const Vector3& size, const Vector3& rotate, float respown_num, Vector3 respown_pos, Gameobject* pearent) {
+
+	auto go = Gameobject_manager::create("respown_area" + std::to_string(respown_num));
+	go->transform->local_pos = pos;
+	go->transform->local_scale = size;
+	go->transform->local_orient = quaternion_from_euler(rotate);
+
+	auto coll = go->addComponent<Collider>();
+	coll->add_shape<Box>();
+	coll->physics_data.is_hitable = false;
+	coll->physics_data.is_moveable = false;
+
+	auto comp = go->addComponent<Stage_parts::Area_respown_set>();
+	comp->this_stage = this;
+	comp->this_coll = coll;
+
+	comp->respown_num = respown_num;
+	comp->respown_position = respown_pos;
+
+	if (pearent != nullptr)pearent->add_child(go);
+	return go;
+}
+
+Gameobject* Stage_base::set_goal_area(const Vector3& pos, const Vector3& size, const Vector3& rotate, Stage_types next_stage, Gameobject* pearent) {
+
+	auto go = Gameobject_manager::create("goal_area");
+	go->transform->local_pos = pos;
+	go->transform->local_scale = size;
+	go->transform->local_orient = quaternion_from_euler(rotate);
+
+	auto coll = go->addComponent<Collider>();
+	coll->add_shape<Box>();
+	coll->physics_data.is_hitable = false;
+	coll->physics_data.is_moveable = false;
+
+	auto comp = go->addComponent<Stage_parts::Area_goal>();
+	comp->this_stage = this;
+	comp->this_coll = coll;
+
+	comp->Next_stage = next_stage;
+
+	if (pearent != nullptr)pearent->add_child(go);
+	return go;
 }
 

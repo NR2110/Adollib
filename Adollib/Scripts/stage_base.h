@@ -4,6 +4,7 @@
 
 #include <vector>
 #include "stageparts_tags.h"
+#include "stage_types.h"
 
 namespace Adollib {
 
@@ -33,11 +34,14 @@ namespace Adollib {
 		void tag_reset() { tags = 0; };
 
 	protected:
-		Collider* set_sphere (Vector3 pos = Vector3(0), float r = 1, Vector3 color = Vector3(1, 1, 1), Gameobject* pearent = nullptr, bool is_static = true);
-		Collider* set_capsule(Vector3 pos = Vector3(0), float r = 1, float length = 1, Vector3 rotate = Vector3(0), Vector3 color = Vector3(1, 1, 1), Gameobject* pearent = nullptr, bool is_static = true);
-		Collider* set_box    (Vector3 pos = Vector3(0), Vector3 size = Vector3(1), Vector3 rotate = Vector3(0), Vector3 color = Vector3(1, 1, 1), Gameobject* pearent = nullptr,bool is_static = true);
-		Collider* set_meshbox(Vector3 pos = Vector3(0), Vector3 size = Vector3(1), Vector3 rotate = Vector3(0), Vector3 color = Vector3(1, 1, 1), Gameobject* pearent = nullptr, bool is_static = true);
-		Gameobject* set_plane  (Vector3 pos = Vector3(0), Vector3 size = Vector3(1), Vector3 rotate = Vector3(0), Vector3 color = Vector3(1, 1, 1), Gameobject* pearent = nullptr, bool is_static = true);
+		Collider* set_sphere (const Vector3& pos = Vector3(0), const float& r = 1, const Vector3& color = Vector3(1, 1, 1), Gameobject* pearent = nullptr, bool is_static = true);
+		Collider* set_capsule(const Vector3& pos = Vector3(0), const float& r = 1, const float& length = 1, const Vector3& rotate = Vector3(0), const Vector3& color = Vector3(1, 1, 1), Gameobject* pearent = nullptr, bool is_static = true);
+		Collider* set_box    (const Vector3& pos = Vector3(0), const Vector3& size = Vector3(1), const Vector3& rotate = Vector3(0), const Vector3& color = Vector3(1, 1, 1), Gameobject* pearent = nullptr,bool is_static = true);
+		Collider* set_meshbox(const Vector3& pos = Vector3(0), const Vector3& size = Vector3(1), const Vector3& rotate = Vector3(0), const Vector3& color = Vector3(1, 1, 1), Gameobject* pearent = nullptr, bool is_static = true);
+		Gameobject* set_plane  (const Vector3& pos = Vector3(0), const Vector3& size = Vector3(1), const Vector3& rotate = Vector3(0), const Vector3& color = Vector3(1, 1, 1), Gameobject* pearent = nullptr, bool is_static = true);
+
+		Gameobject* set_respown_area(const Vector3& pos, const Vector3& size, const Vector3& rotate, float respown_num, Vector3 respown_pos, Gameobject* pearent = nullptr);
+		Gameobject* set_goal_area(const Vector3& pos, const Vector3& size, const Vector3& rotate, Stage_types next_stage, Gameobject* pearent = nullptr);
 
 	public:
 		// stage_managerÇ™åƒÇ‘awake Ç±ÇÃstageÇ…êÿÇËë÷ÇÌÇ¡ÇΩÇ∆Ç´Ç…åƒÇŒÇÍÇÈ

@@ -410,11 +410,13 @@ namespace Adollib
 				set_box(Vector3(104, 26, 216.05f), Vector3(18, 4, 0.05f), Vector3(0), color, wall_pearent);
 				set_box(Vector3(104, 13.5f, 217), Vector3(4, 0.5f, 1), Vector3(0), color, wall_pearent);
 
+				set_door(Vector3(102, 18, 215), Vector3(2, 4, 0.5f), Vector3(0), true, wall_pearent);
+				set_door(Vector3(106, 18, 215), Vector3(2, 4, 0.5f), Vector3(0), false, wall_pearent);
 			}
 
 			// ò
 			{
-				Gameobject* fence_pearent = Gameobject_manager::create("wall_pearent");
+				Gameobject* fence_pearent = Gameobject_manager::create("fence_pearent");
 				fourth_zone->add_child(fence_pearent);
 
 				set_fence(Vector3(95, 14, 148.05f), Vector3(1), Vector3(0, 0, 0), fence_pearent);
@@ -424,28 +426,42 @@ namespace Adollib
 
 			// –Ø
 			{
-				Gameobject* fence_pearent = Gameobject_manager::create("wall_pearent");
-				fourth_zone->add_child(fence_pearent);
+				Gameobject* tree_pearent = Gameobject_manager::create("tree_pearent");
+				fourth_zone->add_child(tree_pearent);
 
-				set_tree(Vector3(82, 14, 213), Vector3(1, 1.2f, 1), Vector3(0), 2.5f, 0.5f, fence_pearent);
-				set_tree(Vector3(82, 13, 199), Vector3(1, 1.2f, 1), Vector3(0), 2.5f, 0.5f, fence_pearent);
-				set_tree(Vector3(82, 13, 186), Vector3(1, 1.2f, 1), Vector3(0), 2.5f, 0.5f, fence_pearent);
-				set_tree(Vector3(74, 13, 186), Vector3(1, 1.2f, 1), Vector3(0), 2.5f, 0.5f, fence_pearent);
+				set_tree(Vector3(82, 14, 213), Vector3(1, 1.2f, 1), Vector3(0), 2.5f, 0.5f, tree_pearent);
+				set_tree(Vector3(82, 13, 199), Vector3(1, 1.2f, 1), Vector3(0), 2.5f, 0.5f, tree_pearent);
+				set_tree(Vector3(82, 13, 186), Vector3(1, 1.2f, 1), Vector3(0), 2.5f, 0.5f, tree_pearent);
+				set_tree(Vector3(74, 13, 186), Vector3(1, 1.2f, 1), Vector3(0), 2.5f, 0.5f, tree_pearent);
 
-				set_tree(Vector3(126, 14, 213), Vector3(1, 1.2f, 1), Vector3(0), 2.5f, 0.5f, fence_pearent);
-				set_tree(Vector3(126, 13, 199), Vector3(1, 1.2f, 1), Vector3(0), 2.5f, 0.5f, fence_pearent);
-				set_tree(Vector3(126, 13, 186), Vector3(1, 1.2f, 1), Vector3(0), 2.5f, 0.5f, fence_pearent);
-				set_tree(Vector3(134, 13, 186), Vector3(1, 1.2f, 1), Vector3(0), 2.5f, 0.5f, fence_pearent);
+				set_tree(Vector3(126, 14, 213), Vector3(1, 1.2f, 1), Vector3(0), 2.5f, 0.5f, tree_pearent);
+				set_tree(Vector3(126, 13, 199), Vector3(1, 1.2f, 1), Vector3(0), 2.5f, 0.5f, tree_pearent);
+				set_tree(Vector3(126, 13, 186), Vector3(1, 1.2f, 1), Vector3(0), 2.5f, 0.5f, tree_pearent);
+				set_tree(Vector3(134, 13, 186), Vector3(1, 1.2f, 1), Vector3(0), 2.5f, 0.5f, tree_pearent);
 
-				set_tree(Vector3(90.0f, 6, 140), Vector3(1, 1.2f, 1), Vector3(0), 1.2f, 0.8f, fence_pearent);
-				set_tree(Vector3(99.5f, 6, 140), Vector3(1, 1.2f, 1), Vector3(0), 1.2f, 0.8f, fence_pearent);
-				set_tree(Vector3(108.5f, 6, 140), Vector3(1, 1.2f, 1), Vector3(0), 1.2f, 0.8f, fence_pearent);
-				set_tree(Vector3(118.0f, 6, 140), Vector3(1, 1.2f, 1), Vector3(0), 1.2f, 0.8f, fence_pearent);
+				set_tree(Vector3(90.0f, 6, 140), Vector3(1, 1.2f, 1), Vector3(0), 1.2f, 0.8f, tree_pearent);
+				set_tree(Vector3(99.5f, 6, 140), Vector3(1, 1.2f, 1), Vector3(0), 1.2f, 0.8f, tree_pearent);
+				set_tree(Vector3(108.5f, 6, 140), Vector3(1, 1.2f, 1), Vector3(0), 1.2f, 0.8f, tree_pearent);
+				set_tree(Vector3(118.0f, 6, 140), Vector3(1, 1.2f, 1), Vector3(0), 1.2f, 0.8f, tree_pearent);
 
 			}
 
 
 		}
+
+		// goal&respown_areas
+		{
+			Gameobject* goal_and_respown_areas = Gameobject_manager::create("goal&respown_areas");
+			stage_parts.emplace_back(goal_and_respown_areas);
+
+			set_respown_area(Vector3(24, 9, 57),    Vector3(14, 5, 15),  Vector3(0), 2, Vector3(24,  50, 57), goal_and_respown_areas);
+			set_respown_area(Vector3(100, 18, 61),  Vector3(16, 10, 19), Vector3(0), 3, Vector3(102, 50, 50), goal_and_respown_areas);
+			set_respown_area(Vector3(126, 16, 116), Vector3(24, 10, 10), Vector3(0), 4, Vector3(104, 50,120), goal_and_respown_areas);
+
+			set_goal_area(Vector3(104, 6, 224), Vector3(10, 2, 8), Vector3(0), Stage_types::demo, goal_and_respown_areas);
+		}
+
+
 #endif
 
 		//set_sphere_rope(Vector3(64, 60, 65), 1, Vector3(0, 0, 0), 10, 5);

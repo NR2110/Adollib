@@ -129,9 +129,6 @@ namespace Adollib
 		comp->respown_pos = pos;
 		comp->respown_rotate = quaternion_identity();
 
-		//for (int i = 0; i < Tree_size; i++) stage_parts.emplace_back(tree_parts[i]);
-		//stage_parts.emplace_back(tree);
-
 		return tree;
 	}
 
@@ -164,9 +161,6 @@ namespace Adollib
 			mid->material->color = Vector4(base_color * 0.9f, 1);
 			top->material->color = Vector4(base_color * 0.9f, 1);
 
-			//stage_parts.emplace_back(bot);
-			//stage_parts.emplace_back(mid);
-			//stage_parts.emplace_back(top);
 		}
 		// Collider
 		auto coll = pillar_pearent->addComponent<Collider>();
@@ -199,8 +193,6 @@ namespace Adollib
 			coll->physics_data.is_moveable = false;
 		}
 
-		//stage_parts.emplace_back(pillar_pearent);
-
 		if (pearent != nullptr)pearent->add_child(pillar_pearent);
 		return pillar_pearent;
 	}
@@ -222,7 +214,6 @@ namespace Adollib
 
 		if (pearent != nullptr)pearent->add_child(fence_pearent);
 
-		//stage_parts.emplace_back(fence_pearent);
 		return fence_pearent;
 	}
 
@@ -238,8 +229,7 @@ namespace Adollib
 
 		//box‚ð¶¬
 		{
-			Gameobject* object = nullptr;
-			object = Gameobject_manager::createCube("Door", GO_tag::Box);
+			auto object = Gameobject_manager::createCube("Door", GO_tag::Box);
 			object->material->color = Vector4(Vector3(90, 47, 27) / 255.0f, 1);
 
 			object->transform->local_pos = pos;
@@ -252,8 +242,34 @@ namespace Adollib
 
 			door->tag = Collider_tags::Box | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Kinematic_Stage;
 
-			//stage_parts.emplace_back(object);
 			if (pearent != nullptr)pearent->add_child(object);
+
+			{
+				auto totte = Gameobject_manager::createCube("Totte_front", GO_tag::Box);
+				totte->material->color = Vector4(Vector3(207, 145, 64) / 255.0f, 1);
+				object->add_child(totte);
+				if (is_left) {
+					totte->transform->local_pos = Vector3(+0.75f, -0.05f, -0.10f);
+					totte->transform->local_scale = Vector3(+0.24f, +0.20f, 1);
+				}
+				else {
+					totte->transform->local_pos = Vector3(-0.75f, -0.05f, -0.10f);
+					totte->transform->local_scale = Vector3(+0.24f, +0.20f, 1);
+				}
+			}
+			{
+				auto totte = Gameobject_manager::createSphere("Totte_back", GO_tag::Box);
+				totte->material->color = Vector4(Vector3(207, 145, 64) / 255.0f, 1);
+				object->add_child(totte);
+				if (is_left) {
+					totte->transform->local_pos = Vector3(+0.75f, -0.05f, 1.28f);
+					totte->transform->local_scale = Vector3(0.2f) / object->transform->local_scale;
+				}
+				else {
+					totte->transform->local_pos = Vector3(-0.75f, -0.05f, 1.28f);
+					totte->transform->local_scale = Vector3(0.2f) / object->transform->local_scale;
+				}
+			}
 		}
 
 		door->physics_data.inertial_mass = 20;
@@ -274,7 +290,6 @@ namespace Adollib
 		);
 
 		if (pearent != nullptr)pearent->add_child(door_joint);
-		//stage_parts.emplace_back(door_joint);
 
 		return door_joint;
 	}
@@ -343,7 +358,6 @@ namespace Adollib
 		comp->this_stage = this;
 
 		if (pearent != nullptr)pearent->add_child(go);
-		//stage_parts.emplace_back(go);
 
 		return go;
 	}
@@ -352,7 +366,6 @@ namespace Adollib
 		Gameobject* Human = Gameobject_manager::create("Human");
 		Human->transform->local_pos = pos;
 		Human->transform->local_orient = quaternion_from_euler(rotate);
-		//Human->transform->local_scale = Vector3(scale);
 
 		//::: Gameobject‚Ì¶¬ :::
 		Gameobject* Head = Gameobject_manager::createCube("Head");
@@ -733,19 +746,6 @@ namespace Adollib
 			Lsholder->transform->local_orient = quaternion_from_euler(13.95f, 98.08f, 163.60f);
 		}
 
-		//stage_parts.emplace_back(Human);
-		//stage_parts.emplace_back(Head);
-		//stage_parts.emplace_back(Lsholder);
-		//stage_parts.emplace_back(Lelbow);
-		//stage_parts.emplace_back(Rsholder);
-		//stage_parts.emplace_back(Relbow);
-		//stage_parts.emplace_back(Body);
-		//stage_parts.emplace_back(Waist);
-		//stage_parts.emplace_back(Rleg);
-		//stage_parts.emplace_back(Rfoot);
-		//stage_parts.emplace_back(Lleg);
-		//stage_parts.emplace_back(Lfoot);
-
 		if (pearent != nullptr)pearent->add_child(Human);
 
 		return Human;
@@ -758,8 +758,6 @@ namespace Adollib
 
 		Gameobject* rope_pearent = Gameobject_manager::create("sphere_rope");
 		rope_pearent->transform->local_orient = quaternion_from_euler(rotate + Vector3(0.1f, 0, 0.1f));
-
-		//stage_parts.emplace_back(rope_pearent);
 
 		Collider* old_coll = nullptr;
 		Gameobject* old_go = nullptr;
