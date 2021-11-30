@@ -126,7 +126,7 @@ namespace Adollib
 		comp->respown_pos = pos;
 		comp->respown_rotate = quaternion_identity();
 
-		for (int i = 0; i < Tree_size; i++) stage_parts.emplace_back(tree_parts[i]);
+		//for (int i = 0; i < Tree_size; i++) stage_parts.emplace_back(tree_parts[i]);
 		stage_parts.emplace_back(tree);
 
 		return tree;
@@ -240,7 +240,6 @@ namespace Adollib
 
 			GO->material->color = Vector4(1, 1, 0, 1);
 			GEAR->add_child(GO);
-			stage_parts.emplace_back(GO);
 		}
 
 		for (int gear_tooth_num = 0; gear_tooth_num < tooth_count; gear_tooth_num++) {

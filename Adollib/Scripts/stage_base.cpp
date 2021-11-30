@@ -46,7 +46,7 @@ Collider* Stage_base::set_sphere(Vector3 pos, float r, Vector3 color, Gameobject
 
 	}
 
-	stage_parts.emplace_back(object);
+	//stage_parts.emplace_back(object);
 	if (pearent != nullptr)pearent->add_child(object);
 	return coll;
 }
@@ -75,10 +75,11 @@ Collider* Stage_base::set_box(Vector3 pos, Vector3 size, Vector3 rotate, Vector3
 		comp->this_coll = coll;
 		comp->respown_pos = pos;
 		comp->respown_rotate = quaternion_identity();
+		coll->physics_data.inertial_mass = size.x * size.y * size.z;
 
 	}
 
-	stage_parts.emplace_back(object);
+	//stage_parts.emplace_back(object);
 	if (pearent != nullptr)pearent->add_child(object);
 	return coll;
 }
@@ -111,7 +112,7 @@ Collider* Stage_base::set_capsule(Vector3 pos, float r, float length, Vector3 ro
 
 	}
 
-	stage_parts.emplace_back(object);
+	//stage_parts.emplace_back(object);
 	if (pearent != nullptr)pearent->add_child(object);
 	return coll;
 }
@@ -145,7 +146,7 @@ Collider* Stage_base::set_meshbox(Vector3 pos, Vector3 size, Vector3 rotate, Vec
 
 	}
 
-	stage_parts.emplace_back(object);
+	//stage_parts.emplace_back(object);
 	if (pearent != nullptr)pearent->add_child(object);
 	return coll;
 }
@@ -160,7 +161,7 @@ Gameobject* Stage_base::set_plane(Vector3 pos, Vector3 size, Vector3 rotate, Vec
 	object->transform->local_pos = pos;
 	object->transform->local_scale = size;
 
-	stage_parts.emplace_back(object);
+	//stage_parts.emplace_back(object);
 	if (pearent != nullptr)pearent->add_child(object);
 	return object;
 }

@@ -18,6 +18,7 @@ void Stage_manager::awake() {
 
 	add_stage<Stage_demo>(Stage_types::demo);
 	add_stage<Stage_demo_01>(Stage_types::demo_1);
+
 	add_stage<Stage_01>(Stage_types::stage_1);
 	//add_stage<Stage_01>(Stage_types::stage_1);
 

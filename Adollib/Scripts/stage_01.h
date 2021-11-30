@@ -17,14 +17,14 @@ namespace Adollib {
 		// ñÿÇçÏÇÈ
 		Gameobject* set_tree(const Vector3& pos, const Vector3& scale, const Vector3& rotate, const float y_scale = 1, const float tan_scale = 1, Gameobject* pearent = nullptr);
 		// íåÇçÏÇÈ
-		Gameobject* set_pillar(const Vector3& pos, const Vector3& scale, const Vector3& rotate, Gameobject* pearent = nullptr, const float base_length = 0.5f, const float pillar_length = 7);
+		Gameobject* set_pillar(const Vector3& pos, const Vector3& scale, const Vector3& rotate, Gameobject* pearent = nullptr, const float base_length = 0.5f, const float pillar_length = 7, const bool moveable = true);
 		// çÚÇçÏÇÈ
 		Gameobject* set_fence(const Vector3& pos, const Vector3& scale, const Vector3& rotate, Gameobject* pearent = nullptr, const int fence_count = 1);
 		// ÉhÉAÇçÏÇÈ
 		Gameobject* set_door(const Vector3& pos, const Vector3& scale, const Vector3& rotate, const int is_left, Gameobject* pearent = nullptr);
 
 
-		Gameobject* set_player_statue(const Vector3& pos, const float& scale, const Vector3& rotate);
+		Gameobject* set_player_statue(const Vector3& pos, const float& scale, const Vector3& rotate, Gameobject* pearent = nullptr);
 
 		Gameobject* set_desk(const Vector3& pos, const Vector3& scale, const Vector3& rotate, float mass);
 		Gameobject* set_gear(const Vector3& pos, const Vector3& scale, const Vector3& rotate, float mass, int tooth_count);

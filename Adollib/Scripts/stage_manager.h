@@ -13,17 +13,6 @@ namespace Adollib {
 
 	class Stage_manager : public Component{
 
-	public:
-		static enum class Stage_types {
-			demo,
-			demo_1,
-
-			stage_1,
-			stage_2,
-
-			stagetype_max
-		};
-
 	private:
 		bool is_changed_stage = false;
 

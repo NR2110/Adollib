@@ -19,24 +19,6 @@
 
 namespace Adollib
 {
-	Vector3 Camera::eular_xy(Vector3 V) {
-
-		//::: X-Yで表す(Zは0) ::::::::::::
-		Vector3 ret;
-
-		Vector3 Q = vector3_quatrotate(Vector3(0, 0, 1), quaternion_from_euler(V.x, V.y, V.z));
-
-		ret.x = vector3_angle(Vector3(Q.x, 0, Q.z).unit_vect(), Vector3(0, 0, 1));
-		if (vector3_cross(Vector3(Q.x, 0, Q.z), Vector3(0, 0, 1)).y < 0) ret.y *= -1;
-		Q = vector3_quatrotate(Q, quaternion_axis_angle(Vector3(0, 1, 0), -ret.y));
-
-		ret.y = vector3_angle(Vector3(0, Q.y, Q.z).unit_vect(), Vector3(0, 0, 1));
-		if (vector3_cross(Vector3(0, Q.y, Q.z), Vector3(0, 0, 1)).x < 0) ret.x *= -1;
-		Q = vector3_quatrotate(Q, quaternion_axis_angle(Vector3(1, 0, 0), -ret.x));
-
-
-		return ret;
-	}
 
 	// 所属するシーンの初期化時に一度だけ呼ばれる
 	void Camera::awake()
@@ -52,12 +34,10 @@ namespace Adollib
 		follow_player = true;
 
 		auto c = gameobject->findComponent<Camera_component>();
-		c->directional_shadow->position = Vector3(200, 200, 200);
-		c->directional_shadow->direction = Vector3(-1, -2, -1).unit_vect();
+		c->directional_shadow->position = Vector3(200, 200, -200);
+		c->directional_shadow->direction = Vector3(-1, -2, 1).unit_vect();
 		c->directional_shadow->nearZ = 150;
-		//is_lock_cursol = true;
-		//ShowCursor(FALSE);
-		//input->setCursorPos(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
+		c->directional_shadow->nearZ = 0.1f;
 	}
 
 	// 毎フレーム呼ばれる更新処理

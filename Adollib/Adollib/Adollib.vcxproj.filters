@@ -364,6 +364,12 @@
     <ClCompile Include="..\Scripts\stage_demo_1_funcs.cpp">
       <Filter>ソース ファイル\scene_game\stage\stage\stage_demo</Filter>
     </ClCompile>
+    <ClCompile Include="..\Scripts\area_goal.cpp">
+      <Filter>ソース ファイル\scene_game\stage\parts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\area_respown_set.cpp">
+      <Filter>ソース ファイル\scene_game\stage\parts</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Scripts\player.h">
@@ -748,6 +754,12 @@
       <Filter>ソース ファイル\scene_game\stage\parts</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\touch_moveable.h">
+      <Filter>ソース ファイル\scene_game\stage\parts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\area_goal.h">
+      <Filter>ソース ファイル\scene_game\stage\parts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\area_respown_set.h">
       <Filter>ソース ファイル\scene_game\stage\parts</Filter>
     </ClInclude>
   </ItemGroup>

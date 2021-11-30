@@ -32,12 +32,14 @@ namespace Adollib
 		//set_desk(Vector3(0, 0, 0), Vector3(30, 15, 25), Vector3(0, 0, 0), 0);
 
 #if _DEBUG
-		set_player_statue(Vector3(104, 17.6f, 132), 100, Vector3(0));
+		//set_player_statue(Vector3(104, 17.6f, 132), 100, Vector3(0));
+		set_pillar(Vector3(16, 4, 23), Vector3(1), Vector3(0));
 #else
 
 		// first_zone
 		{
 			Gameobject* first_zone = Gameobject_manager::create("first_zone");
+			stage_parts.emplace_back(first_zone);
 			set_box(Vector3(25, -2, 10), Vector3(65, 2, 30), Vector3(0), Vector3(188, 214, 54) / 255.0f * 0.8f, first_zone);
 			// ŠK’i
 			{
@@ -60,6 +62,9 @@ namespace Adollib
 				set_box(Vector3(26, 16, 39), Vector3(4, 4, 1), Vector3(0), base_color, wallAnddoor_pearent);
 				set_box(Vector3(26, 3, 39), Vector3(4, 1, 1), Vector3(0), base_color, wallAnddoor_pearent);
 
+				set_box(Vector3(18, 12, 37), Vector3(2, 8, 1), Vector3(0), base_color, wallAnddoor_pearent);
+				set_box(Vector3(34, 12, 37), Vector3(2, 8, 1), Vector3(0), base_color, wallAnddoor_pearent);
+
 				set_door(Vector3(24, 8, 39.25f), Vector3(2, 4, 0.5f), Vector3(0), true, wallAnddoor_pearent);
 				set_door(Vector3(28, 8, 39.25f), Vector3(2, 4, 0.5f), Vector3(0), false, wallAnddoor_pearent);
 			}
@@ -69,12 +74,12 @@ namespace Adollib
 			{
 				Gameobject* pillars_pearent = Gameobject_manager::create("pillars");
 				first_zone->add_child(pillars_pearent);
-				set_pillar(Vector3(-02, 4, 23), Vector3(1), Vector3(0), pillars_pearent, 2.5f, 5);
-				set_pillar(Vector3(-02, 4, 10), Vector3(1), Vector3(0), pillars_pearent, 2.5f, 5);
-				set_pillar(Vector3(-15, 4, 10), Vector3(1), Vector3(0), pillars_pearent, 2.5f, 5);
-				set_pillar(Vector3(-28, 4, 10), Vector3(1), Vector3(0), pillars_pearent, 2.5f, 5);
-				set_pillar(Vector3(-28, 4, 23), Vector3(1), Vector3(0), pillars_pearent, 2.5f, 5);
-				set_pillar(Vector3(-28, 4, 36), Vector3(1), Vector3(0), pillars_pearent, 2.5f, 5);
+				set_pillar(Vector3(-02, 4, 23), Vector3(1), Vector3(0), pillars_pearent, 2.5f, 5, false);
+				set_pillar(Vector3(-02, 4, 10), Vector3(1), Vector3(0), pillars_pearent, 2.5f, 5, false);
+				set_pillar(Vector3(-15, 4, 10), Vector3(1), Vector3(0), pillars_pearent, 2.5f, 5, false);
+				set_pillar(Vector3(-28, 4, 10), Vector3(1), Vector3(0), pillars_pearent, 2.5f, 5, false);
+				set_pillar(Vector3(-28, 4, 23), Vector3(1), Vector3(0), pillars_pearent, 2.5f, 5, false);
+				set_pillar(Vector3(-28, 4, 36), Vector3(1), Vector3(0), pillars_pearent, 2.5f, 5, false);
 
 				set_pillar(Vector3(16, 4, 23), Vector3(1), Vector3(0), pillars_pearent);
 				set_pillar(Vector3(36, 4, 23), Vector3(1), Vector3(0), pillars_pearent);
@@ -111,6 +116,7 @@ namespace Adollib
 		// second_zone
 		{
 			Gameobject* second_zone = Gameobject_manager::create("second_zone");
+			stage_parts.emplace_back(second_zone);
 			// °
 			{
 				Gameobject* stairs_pearent = Gameobject_manager::create("stairs_pearent");
@@ -174,7 +180,9 @@ namespace Adollib
 		// third_zone
 		{
 			Gameobject* third_zone = Gameobject_manager::create("third_zone");
+			stage_parts.emplace_back(third_zone);
 
+			// ŠK’i
 			{
 				Gameobject* stairs_pearent = Gameobject_manager::create("stairs_pearent");
 				third_zone->add_child(stairs_pearent);
@@ -189,6 +197,7 @@ namespace Adollib
 				set_box(Vector3(101.f, 12.f, 70.0f), Vector3(1, 4.5f, 12), Vector3(0), base_color, stairs_pearent);
 			}
 
+			// °
 			{
 				Gameobject* floor_pearent = Gameobject_manager::create("floor_pearent");
 				third_zone->add_child(floor_pearent);
@@ -211,6 +220,7 @@ namespace Adollib
 				set_box(Vector3(156, 8.5f, 72), Vector3(6, 0.5f, 2), Vector3(0), base_color, floor_pearent);
 			}
 
+			// ’Œ ‚Æã‚Ì–_
 			{
 				Gameobject* pillar_pearent = Gameobject_manager::create("pillar_pearent");
 				third_zone->add_child(pillar_pearent);
@@ -227,15 +237,16 @@ namespace Adollib
 				set_pillar(Vector3(128.0f, 8, 76), Vector3(1), Vector3(0), pillar_pearent);
 				set_pillar(Vector3(146.0f, 8, 76), Vector3(1), Vector3(0), pillar_pearent);
 
-				set_box(Vector3(110.0f, 24.5f, 53), Vector3(0.5f, 0.5f, 26), Vector3(0), wood_color, pillar_pearent);
-				set_box(Vector3(128.0f, 24.5f, 53), Vector3(0.5f, 0.5f, 26), Vector3(0), wood_color, pillar_pearent);
-				set_box(Vector3(146.0f, 24.5f, 53), Vector3(0.5f, 0.5f, 26), Vector3(0), wood_color, pillar_pearent);
+				set_box(Vector3(110.0f, 24.5f, 53), Vector3(0.5f, 0.5f, 26), Vector3(0), wood_color, pillar_pearent, false);
+				set_box(Vector3(128.0f, 24.5f, 53), Vector3(0.5f, 0.5f, 26), Vector3(0), wood_color, pillar_pearent, false);
+				set_box(Vector3(146.0f, 24.5f, 53), Vector3(0.5f, 0.5f, 26), Vector3(0), wood_color, pillar_pearent, false);
 
-				set_box(Vector3(128.0f, 24.5f, 30), Vector3(21, 0.5f, 0.5f), Vector3(0), wood_color, pillar_pearent);
-				set_box(Vector3(128.0f, 24.5f, 62), Vector3(21, 0.5f, 0.5f), Vector3(0), wood_color, pillar_pearent);
-				set_box(Vector3(128.0f, 24.5f, 76), Vector3(21, 0.5f, 0.5f), Vector3(0), wood_color, pillar_pearent);
+				set_box(Vector3(128.0f, 25.5f, 30), Vector3(21, 0.5f, 0.5f), Vector3(0), wood_color, pillar_pearent, false);
+				set_box(Vector3(128.0f, 25.5f, 62), Vector3(21, 0.5f, 0.5f), Vector3(0), wood_color, pillar_pearent, false);
+				set_box(Vector3(128.0f, 25.5f, 76), Vector3(21, 0.5f, 0.5f), Vector3(0), wood_color, pillar_pearent, false);
 			}
 
+			// –Ø
 			{
 				Gameobject* tree_pearent = Gameobject_manager::create("tree_pearent");
 				third_zone->add_child(tree_pearent);
@@ -245,6 +256,7 @@ namespace Adollib
 				set_tree(Vector3(148, 4, 8), Vector3(1, 1.2f, 1), Vector3(0, 12, 0), 1.2f, 0.8f, tree_pearent);
 			}
 
+			// •Ç
 			{
 				Gameobject* wall_pearent = Gameobject_manager::create("wall_pearent");
 				third_zone->add_child(wall_pearent);
@@ -289,6 +301,7 @@ namespace Adollib
 		// fourth_zone
 		{
 			Gameobject* fourth_zone = Gameobject_manager::create("fourth_zone");
+			stage_parts.emplace_back(fourth_zone);
 
 			// ‹´
 			{
@@ -333,8 +346,8 @@ namespace Adollib
 				set_box(Vector3(104, 8.5f, 132), Vector3(4, 0.5f, 3), Vector3(0), base_color, statue_pearent);
 				set_box(Vector3(104, 7, 132), Vector3(5, 1, 5), Vector3(0), base_color, statue_pearent);
 
-				set_player_statue(Vector3(104, 17.6f, 132), 2, Vector3(0));
-
+				auto go = set_player_statue(Vector3(104, 17.6f, 132), 2, Vector3(0));
+				statue_pearent->add_child(go);
 			}
 
 			// ŠK’i
@@ -364,7 +377,7 @@ namespace Adollib
 				Gameobject* pillar_pearent = Gameobject_manager::create("pillar_pearent");
 				fourth_zone->add_child(pillar_pearent);
 
-				set_pillar(Vector3(120, 13, 148), Vector3(1), Vector3(0), pillar_pearent);
+				set_pillar(Vector3(120, 13, 148), Vector3(1), Vector3(0), pillar_pearent, 0.5f, 7.0f, false);
 				set_pillar(Vector3(136, 12, 148), Vector3(1), Vector3(0), pillar_pearent);
 				set_pillar(Vector3(136, 14, 164), Vector3(1), Vector3(0), pillar_pearent);
 				set_pillar(Vector3(136, 14, 180), Vector3(1), Vector3(0), pillar_pearent);
@@ -372,10 +385,10 @@ namespace Adollib
 				set_pillar(Vector3(120, 14, 196), Vector3(1), Vector3(0), pillar_pearent);
 				set_pillar(Vector3(120, 14, 212), Vector3(1), Vector3(0), pillar_pearent);
 
-				set_pillar(Vector3(88, 13, 148), Vector3(1), Vector3(0), pillar_pearent);
+				set_pillar(Vector3(88, 13, 148), Vector3(1), Vector3(0), pillar_pearent, 0.5f, 7.0f, false);
 				set_pillar(Vector3(72, 12, 148), Vector3(1), Vector3(0), pillar_pearent);
 				set_pillar(Vector3(72, 14, 164), Vector3(1), Vector3(0), pillar_pearent);
-				set_pillar(Vector3(88, 14, 180), Vector3(1), Vector3(0), pillar_pearent);
+				set_pillar(Vector3(72, 14, 180), Vector3(1), Vector3(0), pillar_pearent);
 				set_pillar(Vector3(88, 14, 180), Vector3(1), Vector3(0), pillar_pearent);
 				set_pillar(Vector3(88, 14, 196), Vector3(1), Vector3(0), pillar_pearent);
 				set_pillar(Vector3(88, 14, 212), Vector3(1), Vector3(0), pillar_pearent);
@@ -449,7 +462,7 @@ namespace Adollib
 
 	void Stage_01::stage_destroy() {
 		for (auto& object : stage_parts) {
-			Gameobject_manager::deleteGameobject(object);
+			Gameobject_manager::deleteGameobject(object, true);
 		}
 		stage_parts.clear();
 	}

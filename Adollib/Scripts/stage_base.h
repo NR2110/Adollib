@@ -14,6 +14,8 @@ namespace Adollib {
 	public:
 		Stage_parts::Stageparts_tagbit tags; //このstageが持つtag スイッチなどのflagの管理
 
+		int respown_num = -1; // 前のrespown位置でrespownしないように respown毎にintの値を持たせる
+
 		float y_respown_limit = -150; // Yがこれ以下だとrespownされる
 		float y_respown_pos = 100; // respownしたときのYの座標
 

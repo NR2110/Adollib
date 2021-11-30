@@ -159,7 +159,7 @@ namespace Adollib {
 			void set_tensor(const Matrix33& tensor); //慣性モーメントをユーザー指定のものに固定する
 
 			// 重心を返す
-			const Vector3 get_barycenter() const; //shapeのみの重心
+			const Vector3 get_barycenter(bool is_calculate = true) const; //shapeのみの重心
 			const Vector3 get_barycenter_contain_added(); //added_shapeを含めた重心(mutexをlockするためconstにできない)
 			void set_barycenter(const Vector3& cent); //重心をユーザー指定のものに固定する
 

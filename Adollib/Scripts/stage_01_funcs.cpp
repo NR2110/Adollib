@@ -129,13 +129,13 @@ namespace Adollib
 		comp->respown_pos = pos;
 		comp->respown_rotate = quaternion_identity();
 
-		for (int i = 0; i < Tree_size; i++) stage_parts.emplace_back(tree_parts[i]);
-		stage_parts.emplace_back(tree);
+		//for (int i = 0; i < Tree_size; i++) stage_parts.emplace_back(tree_parts[i]);
+		//stage_parts.emplace_back(tree);
 
 		return tree;
 	}
 
-	Gameobject* Stage_01::set_pillar(const Vector3& pos, const Vector3& scale, const Vector3& rotate, Gameobject* pearent, const float base_length , const float pillar_length) {
+	Gameobject* Stage_01::set_pillar(const Vector3& pos, const Vector3& scale, const Vector3& rotate, Gameobject* pearent, const float base_length , const float pillar_length, bool moveable) {
 
 		Gameobject* pillar_pearent = Gameobject_manager::create("pillar_pearent");
 
@@ -143,43 +143,65 @@ namespace Adollib
 		pillar_pearent->transform->local_orient = quaternion_from_euler(rotate);
 		pillar_pearent->transform->local_scale = scale;
 
-		set_box(Vector3(0, base_length, 0),                             Vector3(2, base_length, 2),         Vector3(0), base_color * 0.9f, pillar_pearent);
-		set_box(Vector3(0, base_length * 2 + pillar_length, 0),         Vector3(1.5f, pillar_length, 1.5f), Vector3(0), base_color * 0.9f, pillar_pearent);
-		set_box(Vector3(0, base_length * 2 + pillar_length * 2 + 0.5f, 0), Vector3(2, 0.5f, 2),                Vector3(0), base_color * 0.9f, pillar_pearent);
+		Vector3 barycenter = Vector3(0, base_length * 2 + pillar_length, 0);
+		pillar_pearent->transform->local_pos += barycenter;
 
+		// 表示用
+		{
+			auto bot = Gameobject_manager::createCube("bot", GO_tag::Box);
+			auto mid = Gameobject_manager::createCube("mid", GO_tag::Box);
+			auto top = Gameobject_manager::createCube("top", GO_tag::Box);
+			pillar_pearent->add_child(bot);
+			pillar_pearent->add_child(mid);
+			pillar_pearent->add_child(top);
+			bot->transform->local_pos = Vector3(0, base_length, 0) - barycenter;
+			mid->transform->local_pos = Vector3(0, base_length * 2 + pillar_length, 0) - barycenter;
+			top->transform->local_pos = Vector3(0, base_length * 2 + pillar_length * 2 + 0.5f, 0) - barycenter;
+			bot->transform->local_scale = Vector3(2, base_length, 2);
+			mid->transform->local_scale = Vector3(1.5f, pillar_length, 1.5f);
+			top->transform->local_scale = Vector3(2, 0.5f, 2);
+			bot->material->color = Vector4(base_color * 0.9f, 1);
+			mid->material->color = Vector4(base_color * 0.9f, 1);
+			top->material->color = Vector4(base_color * 0.9f, 1);
 
-		//Gameobject* object = nullptr;
-		//object = Gameobject_manager::createCube("Cube", GO_tag::Box);
-		//object->material->color = Vector4(color.x, color.y, color.z, 1);
+			//stage_parts.emplace_back(bot);
+			//stage_parts.emplace_back(mid);
+			//stage_parts.emplace_back(top);
+		}
+		// Collider
+		auto coll = pillar_pearent->addComponent<Collider>();
+		{
+			// shapeのアタッチ
+			auto bot = coll->add_shape<Box>();
+			auto mid = coll->add_shape<Box>();
+			auto top = coll->add_shape<Box>();
+			bot->center = Vector3(0, base_length, 0) - barycenter;
+			mid->center = Vector3(0, base_length * 2 + pillar_length, 0) - barycenter;
+			top->center = Vector3(0, base_length * 2 + pillar_length * 2 + 0.5f, 0) - barycenter;
+			bot->size = Vector3(2, base_length, 2);
+			mid->size = Vector3(1.5f, pillar_length, 1.5f);
+			top->size = Vector3(2, 0.5f, 2);
+		}
 
-		//object->transform->local_orient = quaternion_from_euler(rotate);
-		//object->transform->local_pos = pos;
-		//object->transform->local_scale = size;
+		if (moveable) {
+			// 動くのであれば所定のcomponentをアタッチする
+			auto comp = pillar_pearent->addComponent<Stage_parts::Kinematic_block>();
+			comp->this_stage = this;
+			comp->this_coll = coll;
+			comp->respown_pos = pos;
+			comp->respown_rotate = quaternion_identity();
 
-		//Collider* coll = object->addComponent<Collider>();
-		//coll->add_shape<Box>();
+			coll->tag = Collider_tags::Box | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Kinematic_Stage;
+			coll->physics_data.inertial_mass = 50;
+		}
+		else {
+			coll->tag = Collider_tags::Box | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Static_Stage;
+			coll->physics_data.is_moveable = false;
+		}
 
-		//if (is_static) {
-		//	coll->tag = Collider_tags::Box | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Static_Stage;
-		//	coll->physics_data.is_moveable = false;
-		//}
-		//else {
-		//	coll->tag = Collider_tags::Box | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Kinematic_Stage;
-		//	// 動くのであれば所定のcomponentをアタッチする
-		//	auto comp = object->addComponent<Kinematic_block>();
-		//	comp->this_stage = this;
-		//	comp->this_coll = coll;
-		//	comp->respown_pos = pos;
-		//	comp->respown_rotate = quaternion_identity();
-
-		//}
-
-		//stage_parts.emplace_back(object);
-		//if (pearent != nullptr)pearent->add_child(object);
-		//return coll;
+		//stage_parts.emplace_back(pillar_pearent);
 
 		if (pearent != nullptr)pearent->add_child(pillar_pearent);
-
 		return pillar_pearent;
 	}
 
@@ -200,6 +222,7 @@ namespace Adollib
 
 		if (pearent != nullptr)pearent->add_child(fence_pearent);
 
+		//stage_parts.emplace_back(fence_pearent);
 		return fence_pearent;
 	}
 
@@ -207,7 +230,6 @@ namespace Adollib
 
 		// joint用に動かないcolliderを作成
 		auto door_joint = Gameobject_manager::create("door_joint");
-		if (pearent != nullptr)pearent->add_child(door_joint);
 
 		auto coll = door_joint->addComponent<Collider>();
 		coll->physics_data.is_moveable = false;
@@ -230,7 +252,7 @@ namespace Adollib
 
 			door->tag = Collider_tags::Box | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Kinematic_Stage;
 
-			stage_parts.emplace_back(object);
+			//stage_parts.emplace_back(object);
 			if (pearent != nullptr)pearent->add_child(object);
 		}
 
@@ -250,6 +272,9 @@ namespace Adollib
 			joint_pos[0], joint_pos[1],
 			0.05f
 		);
+
+		if (pearent != nullptr)pearent->add_child(door_joint);
+		//stage_parts.emplace_back(door_joint);
 
 		return door_joint;
 	}
@@ -318,10 +343,12 @@ namespace Adollib
 		comp->this_stage = this;
 
 		if (pearent != nullptr)pearent->add_child(go);
+		//stage_parts.emplace_back(go);
+
 		return go;
 	}
 
-	Gameobject* Stage_01::set_player_statue(const Vector3& pos, const float& scale, const Vector3& rotate) {
+	Gameobject* Stage_01::set_player_statue(const Vector3& pos, const float& scale, const Vector3& rotate, Gameobject* pearent) {
 		Gameobject* Human = Gameobject_manager::create("Human");
 		Human->transform->local_pos = pos;
 		Human->transform->local_orient = quaternion_from_euler(rotate);
@@ -619,6 +646,7 @@ namespace Adollib
 				eye0->transform->local_scale = Vector3(0.25f, 0.25f, 0.25f);
 				eye0->material->color = face_color;
 				eye0->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+				//stage_parts.emplace_back(eye0);
 			}
 			{
 				Gameobject* eye1 = Gameobject_manager::createSphere("eye1");
@@ -627,6 +655,7 @@ namespace Adollib
 				eye1->transform->local_scale = Vector3(0.25f, 0.25f, 0.25f);
 				eye1->material->color = face_color;
 				eye1->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+				//stage_parts.emplace_back(eye1);
 			}
 			{
 				Gameobject* mouth = Gameobject_manager::createCube("mouth");
@@ -635,6 +664,7 @@ namespace Adollib
 				mouth->transform->local_scale = Vector3(0.7f, 0.25f, 0.3f);
 				mouth->material->color = face_color;
 				mouth->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+				//stage_parts.emplace_back(mouth);
 			}
 
 			{
@@ -644,6 +674,7 @@ namespace Adollib
 				belt->transform->local_scale = Vector3(1.1, 0.25f, 1.1);
 				belt->material->color = face_color;
 				belt->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+				//stage_parts.emplace_back(belt);
 			}
 		}
 
@@ -687,6 +718,36 @@ namespace Adollib
 			Rfoot_collider->physics_data.is_moveable = false;
 		}
 
+		// ポーズをつける
+		{
+			Relbow->transform->local_pos = Vector3(-2.63f, 3.59f, -1.07f);
+			Relbow->transform->local_orient = quaternion_from_euler(1.19f, -91.03f, -161.72f);
+
+			Rsholder->transform->local_pos = Vector3(-2.39f, 1.33f, -0.31f);
+			Rsholder->transform->local_orient = quaternion_from_euler(10.77f, -87.81f, -161.38f);
+
+			Lelbow->transform->local_pos = Vector3(2.62f, 3.61f, -1.03f);
+			Lelbow->transform->local_orient = quaternion_from_euler(3.46f, -101.18f, -164.07f);
+
+			Lsholder->transform->local_pos = Vector3(2.39f, 1.34f, -0.31f);
+			Lsholder->transform->local_orient = quaternion_from_euler(13.95f, 98.08f, 163.60f);
+		}
+
+		//stage_parts.emplace_back(Human);
+		//stage_parts.emplace_back(Head);
+		//stage_parts.emplace_back(Lsholder);
+		//stage_parts.emplace_back(Lelbow);
+		//stage_parts.emplace_back(Rsholder);
+		//stage_parts.emplace_back(Relbow);
+		//stage_parts.emplace_back(Body);
+		//stage_parts.emplace_back(Waist);
+		//stage_parts.emplace_back(Rleg);
+		//stage_parts.emplace_back(Rfoot);
+		//stage_parts.emplace_back(Lleg);
+		//stage_parts.emplace_back(Lfoot);
+
+		if (pearent != nullptr)pearent->add_child(Human);
+
 		return Human;
 	}
 
@@ -698,7 +759,7 @@ namespace Adollib
 		Gameobject* rope_pearent = Gameobject_manager::create("sphere_rope");
 		rope_pearent->transform->local_orient = quaternion_from_euler(rotate + Vector3(0.1f, 0, 0.1f));
 
-		stage_parts.emplace_back(rope_pearent);
+		//stage_parts.emplace_back(rope_pearent);
 
 		Collider* old_coll = nullptr;
 		Gameobject* old_go = nullptr;
@@ -807,12 +868,12 @@ namespace Adollib
 		desk->add_child(parts[4]);
 
 
-		stage_parts.emplace_back(desk);
-		stage_parts.emplace_back(parts[0]);
-		stage_parts.emplace_back(parts[1]);
-		stage_parts.emplace_back(parts[2]);
-		stage_parts.emplace_back(parts[3]);
-		stage_parts.emplace_back(parts[4]);
+		//stage_parts.emplace_back(desk);
+		//stage_parts.emplace_back(parts[0]);
+		//stage_parts.emplace_back(parts[1]);
+		//stage_parts.emplace_back(parts[2]);
+		//stage_parts.emplace_back(parts[3]);
+		//stage_parts.emplace_back(parts[4]);
 
 		return desk;
 	}
@@ -839,7 +900,7 @@ namespace Adollib
 
 			GO->material->color = Vector4(1, 1, 0, 1);
 			GEAR->add_child(GO);
-			stage_parts.emplace_back(GO);
+			//stage_parts.emplace_back(GO);
 		}
 
 		for (int gear_tooth_num = 0; gear_tooth_num < tooth_count; gear_tooth_num++) {
@@ -860,8 +921,8 @@ namespace Adollib
 
 		Joint::add_Hingejoint(gear_joint_collider, coll, Vector3(0, 0, +10), Vector3(0, 0, -10), Vector3(0, 0, +10), Vector3(0, 0, -10), 0.1f, 0.1f);
 
-		stage_parts.emplace_back(gear_joint);
-		stage_parts.emplace_back(GEAR);
+		//stage_parts.emplace_back(gear_joint);
+		//stage_parts.emplace_back(GEAR);
 
 		return GEAR;
 

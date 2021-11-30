@@ -21,15 +21,17 @@ namespace Adollib
 {
 	void Stage_demo::stage_awake()
 	{
-		Gameobject* GO = nullptr;
-
 		player_respown_pos = Vector3(-2.7f, 100, -150);
 		player_respown_pos = Vector3(-2.7f, 100, -50);
 
-		set_box(Vector3(0, -60, 0), Vector3(80, 60, 80), Vector3(0), Vector3(188, 214, 54) / 255.0f);
-		set_box(Vector3(0, -60, -98), Vector3(30, 30, 60), Vector3(0), Vector3(188, 214, 54) / 255.0f);
 
-		if(0)
+		auto floar_go = Gameobject_manager::create("floar");
+		stage_parts.emplace_back(floar_go);
+		set_box(Vector3(0, -60, 0), Vector3(80, 60, 80), Vector3(0), Vector3(188, 214, 54) / 255.0f, floar_go);
+		set_box(Vector3(0, -60, -98), Vector3(30, 30, 60), Vector3(0), Vector3(188, 214, 54) / 255.0f, floar_go);
+
+
+		if (0)
 		{
 			auto plane = set_plane(Vector3(0, 10, 0), Vector3(40, 20, 0), Vector3(0));
 			auto R = plane->findComponent<Sprite_renderer>();
@@ -173,17 +175,6 @@ namespace Adollib
 					//coll->tag = Collider_tags::Stage | Collider_tags::Kinematic_Stage | Collider_tags::Jumpable_Stage;
 					coll->tag = Collider_tags::Stage | Collider_tags::Kinematic_Stage | Collider_tags::Caera_not_sunk_Stage;
 					coll->physics_data.inertial_mass = 5;
-					//coll->set_tensor(tensor);
-					//{
-					//	Sphere* sphere[2] = { nullptr };
-					//	sphere[0] = coll->add_shape<Sphere>();
-					//	sphere[1] = coll->add_shape<Sphere>();
-
-					//	sphere[0]->center = Vector3(0, 1, 0);
-					//	sphere[0]->r = 1;
-					//	sphere[1]->center = Vector3(0, 2, 0);
-					//	sphere[1]->r = 0.5f;
-					//}
 
 					{
 						Box* box[5] = { nullptr };
@@ -248,11 +239,6 @@ namespace Adollib
 
 
 					stage_parts.emplace_back(desk);
-					stage_parts.emplace_back(parts[0]);
-					stage_parts.emplace_back(parts[1]);
-					stage_parts.emplace_back(parts[2]);
-					stage_parts.emplace_back(parts[3]);
-					stage_parts.emplace_back(parts[4]);
 
 
 				}
@@ -315,14 +301,14 @@ namespace Adollib
 			Vector3 base_pos = Vector3(120, 2, 0);
 			Vector3 off = Vector3(0);
 			for (int i = 0; i < 5; i++) {
-				set_box(base_pos + off, Vector3(40, 4, 40), Vector3(0), Vector3(188, 214, 54) / 255.0f * pow(1.03f, i + 1));
+				set_box(base_pos + off, Vector3(40, 4, 40), Vector3(0), Vector3(188, 214, 54) / 255.0f * pow(1.03f, i + 1), floar_go);
 				off += Vector3(10, 8, 0);
 			}
 		}
-		set_box(Vector3(140, 18, 60), Vector3(65, 20, 20), Vector3(0), Vector3(188, 214, 54) / 255.0f);
+		set_box(Vector3(140, 18, 60), Vector3(65, 20, 20), Vector3(0), Vector3(188, 214, 54) / 255.0f, floar_go);
 
 		{
-			auto coll = set_box(Vector3(0, -29, -100), Vector3(2, 2, 2), Vector3(0), Vector3(0.8f),nullptr, false);
+			auto coll = set_box(Vector3(0, -29, -100), Vector3(2, 2, 2), Vector3(0), Vector3(0.8f), floar_go, false);
 			coll->tag &= ~Collider_tags::Caera_not_sunk_Stage;
 			coll->physics_data.inertial_mass = 50;
 		}
@@ -353,7 +339,7 @@ namespace Adollib
 
 	void Stage_demo::stage_destroy() {
 		for (auto& object : stage_parts) {
-			Gameobject_manager::deleteGameobject(object);
+			Gameobject_manager::deleteGameobject(object, true);
 		}
 		stage_parts.clear();
 	}

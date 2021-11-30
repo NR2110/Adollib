@@ -13,7 +13,6 @@ namespace Adollib
 	void Player::awake() {
 		rotate = quaternion_from_euler(0, 180, 1);
 
-		auto GO = Gameobject_manager::create("debugGO");
 	}
 
 	void Player::start()
@@ -60,7 +59,7 @@ namespace Adollib
 
 		turn_speed = 1.5f;
 
-
+		// playerが上に乗っているか、gimick側が感知できるようにplayerの下方向に適当なcolliderを置く
 		{
 			auto check_onplayer_go = Gameobject_manager::create("check_onplayer_go");
 			auto check_onplayer_coll = check_onplayer_go->addComponent<Collider>();

@@ -321,9 +321,10 @@ void ALP_Physics::set_tensor(const Matrix33& tensor) {
 
 
 
-const Vector3 ALP_Physics::get_barycenter() const {
+const Vector3 ALP_Physics::get_barycenter(bool is_calculate) const {
 
 	if (is_user_barycnter) return barycenter;
+	if (is_calculate == false) return barycenter;
 
 	const auto shapes = ALPcollider->get_shapes();
 	Vector3 val;

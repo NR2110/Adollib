@@ -130,9 +130,6 @@ namespace Adollib
 		comp->respown_pos = pos;
 		comp->respown_rotate = quaternion_identity();
 
-		for (int i = 0; i < Tree_size; i++) stage_parts.emplace_back(tree_parts[i]);
-		stage_parts.emplace_back(tree);
-
 		return tree;
 	}
 
@@ -152,6 +149,7 @@ namespace Adollib
 		buttan_comp->base_scale_y = scale.y;
 		buttan_comp->base_material_color = color;
 
+		stage_parts.emplace_back(go);
 		return go;
 	}
 
@@ -183,6 +181,7 @@ namespace Adollib
 		door_comp->goal_rot = goal_rot;
 		door_comp->pos_speed = pos_speed;
 		door_comp->rot_speed = rot_speed;
+		stage_parts.emplace_back(go);
 
 		return go;
 	}

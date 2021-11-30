@@ -112,7 +112,12 @@ namespace Adollib {
 		static void removeGameobject(Scenelist Sce,std::list<Gameobject*>::iterator itr) { gameobjects[Sce].erase(itr); };
 
 		//GO‚Ìíœ‚ðs‚¤
-		static void deleteGameobject(Gameobject* gameobject) {
+		static void deleteGameobject(Gameobject* gameobject, bool is_delete_children = false) {
+			if (is_delete_children) {
+				for (auto& go : *gameobject->children()) {
+					deleteGameobject(static_cast<Gameobject*>(go), true);
+				}
+			}
 			save_delete_gameobject.emplace_back(gameobject);
 		};
 

@@ -39,146 +39,76 @@ void Player::reach_out_hands() {
 		catch_right_joint
 	};
 
-	if (1)
-	{
-		for (int i = 0; i < 2; i++) {
-			const Mouse key = keys[i];
-			if (input->getMouseState(key)) {
-				Joint_base* joint = joints[i];
+	for (int i = 0; i < 2; i++) {
+		const Mouse key = keys[i];
+		if (input->getMouseState(key)) {
+			Joint_base* joint = joints[i];
 
-				//ÉJÉÅÉâÇÃâÒì]Ç©ÇÁòrÇè„Ç∞ÇÈçÇÇ≥ÇïœÇ¶ÇÈ
-				Quaternion camera_off;
-				{
-					Vector3 camera_vec = vector3_quatrotate(Vector3(0, 0, 1), camera->orientation).unit_vect();
-					Vector3 camera_vec_y0 = camera_vec;
-					camera_vec_y0.y = 0;
-					camera_vec_y0 = camera_vec_y0.unit_vect();
+			//ÉJÉÅÉâÇÃâÒì]Ç©ÇÁòrÇè„Ç∞ÇÈçÇÇ≥ÇïœÇ¶ÇÈ
+			Quaternion camera_off;
+			{
+				Vector3 camera_vec = vector3_quatrotate(Vector3(0, 0, 1), camera->orientation).unit_vect();
+				Vector3 camera_vec_y0 = camera_vec;
+				camera_vec_y0.y = 0;
+				camera_vec_y0 = camera_vec_y0.unit_vect();
 
-					Vector3 rot_axis = vector3_cross(camera_vec, camera_vec_y0).unit_vect();
-					float radian = vector3_radian(camera_vec, camera_vec_y0) * hand_camera_rot_pow;
-					if (camera_vec.y < 0)
-						radian *= -1;
-					radian = ALClamp(radian + hand_camera_rot_center * hand_camera_rot_pow, -hand_camera_max_rot, +hand_camera_max_rot);
-					camera_off = quaternion_axis_radian(Vector3(1, 0, 0), radian);
-				}
+				Vector3 rot_axis = vector3_cross(camera_vec, camera_vec_y0).unit_vect();
+				float radian = vector3_radian(camera_vec, camera_vec_y0) * hand_camera_rot_pow;
+				if (camera_vec.y < 0)
+					radian *= -1;
+				radian = ALClamp(radian + hand_camera_rot_center * hand_camera_rot_pow, -hand_camera_max_rot, +hand_camera_max_rot);
+				camera_off = quaternion_axis_radian(Vector3(1, 0, 0), radian);
+			}
 
-				Quaternion goal = quaternion_axis_angle(Vector3(0, 1, 0), sign[i] * 90) * quaternion_axis_angle(Vector3(1, 0, 0), 90) * camera_off * Body_collider->transform->orientation;
+			Quaternion goal = quaternion_axis_angle(Vector3(0, 1, 0), sign[i] * 90) * quaternion_axis_angle(Vector3(1, 0, 0), 90) * camera_off * Body_collider->transform->orientation;
 
-				//quaternionÇ™-QÇÃéûÅAê∂ê¨Ç∑ÇÈâÒì]Ç™ãtâÒì]Ç…Ç»ÇÈÇΩÇﬂlocalorintÇ… - ÇÇ©ÇØÇÈ
-				{
-					const Quaternion& off = colliders[i]->transform->orientation * goal.inverse();
-					if (off.angle() < 180) {
-						const Vector3& sholder_dir = vector3_quatrotate(Vector3(0, -1, 0), colliders[i]->transform->orientation);
-						const Vector3& waist_dir = vector3_quatrotate(Vector3(0, -1, 0), Waist_collider->transform->orientation);
-						if (vector3_dot(sholder_dir, waist_dir) > 0) {
-							colliders[i]->transform->local_orient *= -1;
-							colliders[i + 2]->transform->local_orient *= -1;
-						}
+			//quaternionÇ™-QÇÃéûÅAê∂ê¨Ç∑ÇÈâÒì]Ç™ãtâÒì]Ç…Ç»ÇÈÇΩÇﬂlocalorintÇ… - ÇÇ©ÇØÇÈ
+			{
+				const Quaternion& off = colliders[i]->transform->orientation * goal.inverse();
+				if (off.angle() < 180) {
+					const Vector3& sholder_dir = vector3_quatrotate(Vector3(0, -1, 0), colliders[i]->transform->orientation);
+					const Vector3& waist_dir = vector3_quatrotate(Vector3(0, -1, 0), Waist_collider->transform->orientation);
+					if (vector3_dot(sholder_dir, waist_dir) > 0) {
+						colliders[i]->transform->local_orient *= -1;
+						colliders[i + 2]->transform->local_orient *= -1;
 					}
-
-				}
-
-				float catch_obje_mass = 1;
-
-				{
-					// å®
-					auto& collider = colliders[i];
-					Quaternion off = collider->transform->orientation * goal.inverse();
-					Vector3 axis = off.axis();
-					float rad = off.radian();
-					if (rad > PI) {
-						rad = 2 * PI - rad;
-						//axis *= -1;
-					}
-					float pow = ALClamp(rad * hand_rot_pow, 0, hand_rot_max_pow);
-					collider->add_torque(axis * pow * catch_obje_mass * collider->physics_data.inertial_mass, true);
-					collider->set_max_angula_velocity(hand_rot_max_speed);
-				}
-				{
-					//òr
-					auto& collider = colliders[i + 2];
-					Quaternion off = collider->transform->orientation * goal.inverse();
-					Vector3 axis = off.axis();
-					float rad = off.radian();
-					if (rad > PI) {
-						rad = 2 * PI - rad;
-						//axis *= -1;
-					}
-
-					float pow = ALClamp(rad * hand_rot_pow, 0, hand_rot_max_pow);
-					collider->add_torque(axis * pow * catch_obje_mass * collider->physics_data.inertial_mass, true);
-					collider->set_max_angula_velocity(hand_rot_max_speed * 0.8f);
 				}
 
 			}
-		}
-	}
-	else
-	{
-		for (int i = 0; i < 2; i++) {
-			const Mouse key = keys[i];
-			if (input->getMouseState(key)) {
-				Joint_base* joint = joints[i];
 
-				//ÉJÉÅÉâÇÃâÒì]Ç©ÇÁòrÇè„Ç∞ÇÈçÇÇ≥ÇïœÇ¶ÇÈ
-				Quaternion camera_off;
-				{
-					Vector3 camera_vec = vector3_quatrotate(Vector3(0, 0, 1), camera->orientation).unit_vect();
-					Vector3 camera_vec_y0 = camera_vec;
-					camera_vec_y0.y = 0;
-					camera_vec_y0 = camera_vec_y0.unit_vect();
+			float catch_obje_mass = 1;
 
-					Vector3 rot_axis = vector3_cross(camera_vec, camera_vec_y0).unit_vect();
-					float radian = vector3_radian(camera_vec, camera_vec_y0) * hand_camera_rot_pow;
-					if (camera_vec.y < 0)
-						radian *= -1;
-					radian = ALClamp(radian + hand_camera_rot_center * hand_camera_rot_pow, -hand_camera_max_rot, +hand_camera_max_rot);
-					camera_off = quaternion_axis_radian(Vector3(1, 0, 0), radian);
+			{
+				// å®
+				auto& collider = colliders[i];
+				Quaternion off = collider->transform->orientation * goal.inverse();
+				Vector3 axis = off.axis();
+				float rad = off.radian();
+				if (rad > PI) {
+					rad = 2 * PI - rad;
+					//axis *= -1;
 				}
-
-				Quaternion goal = quaternion_axis_angle(Vector3(0, 1, 0), sign[i] * 90) * quaternion_axis_angle(Vector3(1, 0, 0), 90) * camera_off * Body_collider->transform->orientation;
-
-				//quaternionÇ™-QÇÃéûÅAê∂ê¨Ç∑ÇÈâÒì]Ç™ãtâÒì]Ç…Ç»ÇÈÇΩÇﬂlocalorintÇ… - ÇÇ©ÇØÇÈ
-				{
-					const Quaternion& off = colliders[i]->transform->orientation * goal.inverse();
-					if (off.angle() < 180) {
-						const Vector3& sholder_dir = vector3_quatrotate(Vector3(0, -1, 0), colliders[i]->transform->orientation);
-						const Vector3& waist_dir = vector3_quatrotate(Vector3(0, -1, 0), Waist_collider->transform->orientation);
-						if (vector3_dot(sholder_dir, waist_dir) > 0) {
-							colliders[i]->transform->local_orient *= -1;
-							colliders[i + 2]->transform->local_orient *= -1;
-						}
-					}
-
-				}
-
-				float catch_obje_mass = 1;
-				//{
-				//	// å®
-				//	auto& collider = colliders[i];
-				//	Quaternion off = collider->transform->orientation * goal.inverse();
-				//	float rad = off.radian();
-				//	if (rad > PI)rad = 2 * PI - rad;
-				//	float pow = ALClamp(rad * hand_rot_pow, 0, hand_rot_max_pow);
-				//	collider->add_torque(off.axis() * pow * catch_obje_mass * collider->physics_data.inertial_mass);
-				//	collider->set_max_angula_velocity(hand_rot_max_speed);
-				//}
-				{
-					//òr
-					auto& collider = colliders[i + 2];
-					Quaternion off = collider->transform->orientation * goal.inverse();
-					float rad = off.radian();
-					if (rad > PI)rad = 2 * PI - rad;
-
-					float pow = ALClamp(rad * hand_rot_pow, 0, hand_rot_max_pow);
-					collider->add_torque(off.axis() * pow * catch_obje_mass * collider->physics_data.inertial_mass, true);
-					collider->set_max_angula_velocity(hand_rot_max_speed * 0.8f);
-				}
-
+				float pow = ALClamp(rad * hand_rot_pow, 0, hand_rot_max_pow);
+				collider->add_torque(axis * pow * catch_obje_mass * collider->physics_data.inertial_mass, true);
+				collider->set_max_angula_velocity(hand_rot_max_speed);
 			}
+			{
+				//òr
+				auto& collider = colliders[i + 2];
+				Quaternion off = collider->transform->orientation * goal.inverse();
+				Vector3 axis = off.axis();
+				float rad = off.radian();
+				if (rad > PI) {
+					rad = 2 * PI - rad;
+					//axis *= -1;
+				}
+
+				float pow = ALClamp(rad * hand_rot_pow, 0, hand_rot_max_pow);
+				collider->add_torque(axis * pow * catch_obje_mass * collider->physics_data.inertial_mass, true);
+				collider->set_max_angula_velocity(hand_rot_max_speed * 0.8f);
+			}
+
 		}
-
-
 	}
 
 };
@@ -420,7 +350,7 @@ void Player::linear_move() {
 		if (onground_collider != nullptr) {
 			if (onground_collider->physics_data.inertial_mass > 20) //ï‡Ç≠Ç∆Ç´Ç…è¨Ç≥Ç»êŒÇ±ÇÎÇ…ëSóÕÇâ¡Ç¶Ç»Ç¢
 				onground_collider->add_force(-dir * waist_move_pow * move_pow, onground_contactpoint);
-				//int isdf = 0;
+			//int isdf = 0;
 		}
 	}
 };
@@ -563,7 +493,7 @@ void Player::make_jump() {
 	bool is_jumpable = false;
 	if (onground_collider != nullptr && //ê⁄ínÇµÇƒÇ¢ÇÈ
 		(catch_right_joint == nullptr || catch_right_joint->get_colliderB() != onground_collider) && //âEéËÇ≈éùÇ¡ÇƒÇ¢ÇÈÇ‡ÇÃÇ≈ÇÕÇ»Ç¢
-		(catch_left_joint  == nullptr || catch_left_joint->get_colliderB()  != onground_collider)    //ç∂éËÇ≈éùÇ¡ÇƒÇ¢ÇÈÇ‡ÇÃÇ≈ÇÕÇ»Ç¢
+		(catch_left_joint == nullptr || catch_left_joint->get_colliderB() != onground_collider)    //ç∂éËÇ≈éùÇ¡ÇƒÇ¢ÇÈÇ‡ÇÃÇ≈ÇÕÇ»Ç¢
 		)is_jumpable = true;
 
 	if (is_jumping == true)coyote += Al_Global::second_per_frame;

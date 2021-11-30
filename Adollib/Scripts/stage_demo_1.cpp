@@ -28,8 +28,11 @@ namespace Adollib
 
 		//set_box(Vector3(0, -60, -98), Vector3(30, 30, 60), Vector3(0), Vector3(188, 214, 54) / 255.0f, true);
 
+		auto floar_go = Gameobject_manager::create("floar_go");
+		stage_parts.emplace_back(floar_go);
+
 		//set_desk(Vector3(0, 0, 0), Vector3(30, 15, 25), Vector3(0, 0, 0), 0);
-		set_box(Vector3(0, -60, 0), Vector3(80, 60, 40), Vector3(0), Vector3(188, 214, 54) / 255.0f);
+		set_box(Vector3(0, -60, 0), Vector3(80, 60, 40), Vector3(0), Vector3(188, 214, 54) / 255.0f, floar_go);
 
 #if _DEBUG
 		set_tree(Vector3(-22, 0, -25), Vector3(1, 1.5f, 1), Vector3(0));
@@ -46,15 +49,16 @@ namespace Adollib
 
 		set_gear(Vector3(+8, 15, 0), Vector3(1, 5, 5), Vector3(0), 12, 8);
 
-		set_box(Vector3(32, 4, 0), Vector3(14.5f, 2.21f, 4), Vector3(0, 0, -43.3f), Vector3(188, 214, 54) / 255.0f);
+		set_box(Vector3(32, 4, 0), Vector3(14.5f, 2.21f, 4), Vector3(0, 0, -43.3f), Vector3(188, 214, 54) / 255.0f, floar_go);
 
+		if (0)
 		set_sphere_rope(Vector3(-40, 15, 40), 1.5f, Vector3(-90, 0, 0), 28, 5);
 
 		set_tree(Vector3(-22, 0, -25), Vector3(1, 1.2f, 1), Vector3(0));
 		set_tree(Vector3(+22, 0, -25), Vector3(1, 1.2f, 1), Vector3(0));
 		//{}
 
-		//croth
+		//croth]
 		{
 			Gameobject* pearent = Gameobject_manager::create("BallJoint_Shperenet");
 			pearent->transform->local_pos = Vector3(62, 30, 22);
@@ -107,16 +111,16 @@ namespace Adollib
 			}
 		}
 
-		set_box(Vector3(65, 5, 31), Vector3(4, 7, 4), Vector3(0), Vector3(0.9f, 0.9f, 1) * 0.97f);
-		set_box(Vector3(69, 5, 23), Vector3(4, 7, 4), Vector3(0), Vector3(0.9f, 0.9f, 1) * 0.97f);
-		set_box(Vector3(61, 5, 23), Vector3(4, 7, 4), Vector3(0), Vector3(0.9f, 0.9f, 1) * 0.97f);
-		set_box(Vector3(65, 15, 27), Vector3(4, 7, 4), Vector3(0), Vector3(0.9f, 0.9f, 1) * 0.97f);
+		set_box(Vector3(65, 5, 31), Vector3(4, 7, 4), Vector3(0), Vector3(0.9f, 0.9f, 1) * 0.97f,floar_go);
+		set_box(Vector3(69, 5, 23), Vector3(4, 7, 4), Vector3(0), Vector3(0.9f, 0.9f, 1) * 0.97f,floar_go);
+		set_box(Vector3(61, 5, 23), Vector3(4, 7, 4), Vector3(0), Vector3(0.9f, 0.9f, 1) * 0.97f,floar_go);
+		set_box(Vector3(65, 15, 27), Vector3(4, 7, 4), Vector3(0), Vector3(0.9f, 0.9f, 1) * 0.97f, floar_go);
 
 
-		set_box(Vector3(55, 4, -31), Vector3(4, 4, 4), Vector3(0), Vector3(188, 214, 54) / 255.0f * 0.9f);
-		set_box(Vector3(59, 4, -23), Vector3(4, 4, 4), Vector3(0), Vector3(188, 214, 54) / 255.0f * 0.8f);
-		set_box(Vector3(51, 4, -23), Vector3(4, 4, 4), Vector3(0), Vector3(188, 214, 54) / 255.0f * 0.7f);
-		set_box(Vector3(55, 12, -27), Vector3(4, 4, 4), Vector3(0), Vector3(188, 214, 54) / 255.0f * 0.6f);
+		set_box(Vector3(55, 4, -31), Vector3(4, 4, 4), Vector3(0), Vector3(188, 214, 54) / 255.0f * 0.9f,floar_go);
+		set_box(Vector3(59, 4, -23), Vector3(4, 4, 4), Vector3(0), Vector3(188, 214, 54) / 255.0f * 0.8f,floar_go);
+		set_box(Vector3(51, 4, -23), Vector3(4, 4, 4), Vector3(0), Vector3(188, 214, 54) / 255.0f * 0.7f,floar_go);
+		set_box(Vector3(55, 12, -27), Vector3(4, 4, 4), Vector3(0), Vector3(188, 214, 54) / 255.0f * 0.6f, floar_go);
 #endif
 
 		//set_sphere_rope(Vector3(64, 60, 65), 1, Vector3(0, 0, 0), 10, 5);
@@ -133,7 +137,7 @@ namespace Adollib
 
 	void Stage_demo_01::stage_destroy() {
 		for (auto& object : stage_parts) {
-			Gameobject_manager::deleteGameobject(object);
+			Gameobject_manager::deleteGameobject(object, true);
 		}
 		stage_parts.clear();
 	}
