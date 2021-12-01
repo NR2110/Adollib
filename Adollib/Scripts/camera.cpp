@@ -158,7 +158,7 @@ namespace Adollib
 			{
 				//wheelから距離の調整
 				float easing_pow = 0.1f;
-				float easing_value = 20 * timeStep; //イージングでの移動距離
+				float easing_value = 10 * timeStep; //イージングでの移動距離
 				if (ray_timer > 0)easing_value = 0;
 				ray_timer -= timeStep;
 
@@ -192,12 +192,12 @@ namespace Adollib
 				ray.sphere_cast(sphere_radius, str);
 
 				// カメラの後ろに壁があればtimerをset timerが>0の時自然に元の距離まで戻らない
-				if (ray_timer > 0 && str.raymin - 1 < dis_buffer) ray_timer = 0.1f;
+				if (ray_timer > 0 && str.raymin - 1 < dis_buffer) ray_timer = 0.4f;
 				//カメラがめり込んでいたら位置を調整
 				if (str.raymin < dis_buffer) {
 					easing_value = 5 * timeStep;
 					dis_buffer = str.raymin;
-					ray_timer = 0.1f;
+					ray_timer = 0.4f;
 					if (dis > 30)dis = 30; //最大距離
 				}
 

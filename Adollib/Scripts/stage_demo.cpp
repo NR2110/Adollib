@@ -23,7 +23,7 @@ namespace Adollib
 	{
 		player_respown_pos = Vector3(-2.7f, 100, -150);
 		player_respown_pos = Vector3(-2.7f, 100, -50);
-
+		respown_num = -1;
 
 		auto floar_go = Gameobject_manager::create("floar");
 		stage_parts.emplace_back(floar_go);
@@ -256,13 +256,14 @@ namespace Adollib
 		{}
 
 		//croth
+		if(0)
 		{
 			Gameobject* pearent = Gameobject_manager::create("BallJoint_Shperenet");
 			pearent->transform->local_pos = Vector3(0, 60, 0);
 			std::vector<Collider*>colls;
 			stage_parts.emplace_back(pearent);
 
-			int sphere_size = 10;
+			int sphere_size = 8;
 			const int colls_size = sphere_size * sphere_size;
 			colls.resize(colls_size);
 

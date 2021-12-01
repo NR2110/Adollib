@@ -489,6 +489,8 @@ void Player::move_legs() {
 
 // jump‚³‚¹‚é
 void Player::make_jump() {
+	if (is_gunyatto || input->getKeyState(Key::LeftControl))return;
+
 	bool is_jumpable = false;
 	if (onground_collider != nullptr && //Ú’n‚µ‚Ä‚¢‚é
 		(catch_right_joint == nullptr || catch_right_joint->get_colliderB() != onground_collider) && //‰Eè‚Å‚Á‚Ä‚¢‚é‚à‚Ì‚Å‚Í‚È‚¢
@@ -520,7 +522,7 @@ void Player::make_jump() {
 			}
 
 			// ‘«Œ³‚Ì•¨‘Ì‚É—Í‚ğ‰Á‚¦‚é
-			float mass = 1000;
+			float mass = 1500;
 			onground_collider->add_force(Vector3(0, -mass, 0) * jump_y_power, onground_contactpoint);
 
 
@@ -651,9 +653,10 @@ void Player::respown() {
 		Human_gameobjects[i]->transform->local_pos += off;
 	}
 
-	// —Í‚Ìreset
+	// —Í‚Ìreset& Œy‚­‰º‚É‘¬“x‚ğ‰Á‚¦‚é
 	for (int i = 0; i < Human_collider_size; i++) {
 		Human_colliders[i]->reset_force();
+		Human_colliders[i]->linear_velocity(Vector3(0, -1, 0)); //fleeze‚Éˆø‚Á‚©‚©‚ç‚È‚¢‚æ‚¤‚ÉŒy‚­—Í‚ğ‰Á‚¦‚é
 	}
 
 	// ‚Á‚Ä‚¢‚é‚à‚Ì‚ğ—£‚·

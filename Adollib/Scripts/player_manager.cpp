@@ -43,17 +43,28 @@ namespace Adollib
 		Gameobject* Lleg     = Gameobject_manager::createCube("Lleg");
 		Gameobject* Lfoot    = Gameobject_manager::createCube("Lfoot");
 
-		Head    ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Lsholder->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Lelbow  ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Rsholder->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Relbow  ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Body    ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Waist   ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Rleg    ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Rfoot   ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Lleg    ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Lfoot   ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		//Head    ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		//Lsholder->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		//Lelbow  ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		//Rsholder->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		//Relbow  ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		//Body    ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		//Waist   ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		//Rleg    ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		//Rfoot   ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		//Lleg    ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		//Lfoot   ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		Head    ->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		Lsholder->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		Lelbow  ->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		Rsholder->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		Relbow  ->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		Body    ->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		Waist   ->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		Rleg    ->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		Rfoot   ->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		Lleg    ->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		Lfoot   ->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
 
 		//::: collider,shapeのアタッチ :::
 		Collider* Head_collider     = Head->addComponent<Collider>();
@@ -241,10 +252,10 @@ namespace Adollib
 			Head_collider->physics_data.anglar_drag = 1;
 			Lsholder_collider->physics_data.anglar_drag = 0.5f;
 			Lelbow_collider->physics_data.anglar_drag = 0.5f;
-			Lhand_collider->physics_data.anglar_drag = 0.5f;
+			Lhand_collider->physics_data.anglar_drag = 1;
 			Rsholder_collider->physics_data.anglar_drag = 0.5f;
 			Relbow_collider->physics_data.anglar_drag = 0.5f;
-			Rhand_collider->physics_data.anglar_drag = 0.5f;
+			Rhand_collider->physics_data.anglar_drag = 1;
 			Waist_collider->physics_data.anglar_drag = 0.8f;
 
 			Head_collider	 ->physics_data.restitution = 0.01f;

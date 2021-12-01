@@ -25,6 +25,7 @@ namespace Adollib {
 			void update() override {
 				if (transform->position.y < this_stage->y_respown_limit) {
 					this_coll->reset_force();
+					this_coll->linear_velocity(Vector3(0, -1, 0)); //feeze‚Éˆø‚Á‚©‚©‚ç‚È‚¢‚æ‚¤‚É
 					transform->local_pos = respown_pos;
 					transform->local_pos.y = this_stage->y_respown_pos;
 					transform->local_orient = respown_rotate;

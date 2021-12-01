@@ -145,15 +145,13 @@ void ALP_Physics::apply_external_force(float duration, const float timeratio_60)
 
 	if (is_movable()) {
 		// 力を所定の秒数のの量に直す
-		accumulated_force *= timeratio_60;
-		accumulated_torque *= timeratio_60;
-		//inv_rotate = Quaternion(1, 0, 0, 0);
+		//accumulated_force *= timeratio_60;
+		//accumulated_torque *= timeratio_60;
 
 		angula_velocity_ = angula_velocity_ * pow(1 - angula_drag, duration);
 		linear_velocity_ = linear_velocity_ * pow(1 - linear_drag, duration);
 
 		const float inv_mass = 1 / inertial_mass;
-		//if (is_fallable) accumulated_force += Vector3(0, -Phyisics_manager::physicsParams.gravity, 0) * inertial_mass; //落下
 
 		//空気抵抗の求め方
 		// k は流体の密度やらなんやらを考慮した定数
@@ -173,8 +171,6 @@ void ALP_Physics::apply_external_force(float duration, const float timeratio_60)
 		//_angula_velocity = _angula_velocity * exp(-ka * duration); // 空気抵抗
 
 		//並進移動に加える力(accumulated_force)から加速度を出して並進速度を更新する 向きを間違えないように!!
-		linear_acceleration = linear_acceleration / duration;
-		angula_acceleration = vector3_quatrotate(angula_acceleration, transform->orientation) / duration;
 
 		linear_acceleration += accumulated_force * inv_mass / duration;
 		if (is_fallable) linear_acceleration += Vector3(0, -Physics_manager::physicsParams.gravity, 0); //落下
@@ -182,7 +178,6 @@ void ALP_Physics::apply_external_force(float duration, const float timeratio_60)
 
 		//各回転に加える力(accumulated_torque)から加速度を出して角速度を更新する
 		Matrix33 inverse_inertia_tensor = matrix_inverse(inertial_tensor_);
-		//Matrix rotation = ALPcollider->local_orientation.get_rotate_matrix();
 		const Matrix33 rotation = transform->orientation.get_rotate_matrix();
 		const Matrix33 transposed_rotation = matrix_trans(rotation);
 		inverse_inertia_tensor = rotation * inverse_inertia_tensor * transposed_rotation;
@@ -191,9 +186,6 @@ void ALP_Physics::apply_external_force(float duration, const float timeratio_60)
 		angula_velocity_ += angula_acceleration * duration;
 		if (angula_velocity_.norm() < FLT_EPSILON)angula_velocity_ = Vector3(0, 0, 0);
 
-		if (max_linear_velocity == 0 || max_angula_velocity == 0) {
-			int dafsgd = 0;
-		}
 		if (linear_velocity_.norm() > max_linear_velocity * max_linear_velocity) linear_velocity_ = linear_velocity_.unit_vect() * max_linear_velocity;
 		if (angula_velocity_.norm() > max_angula_velocity * max_angula_velocity) angula_velocity_ = angula_velocity_.unit_vect() * max_angula_velocity;
 

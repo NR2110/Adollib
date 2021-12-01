@@ -24,7 +24,7 @@ namespace Adollib
 	void Stage_demo_01::stage_awake()
 	{
 		player_respown_pos = Vector3(-2.7f, 50, 0);
-
+		respown_num = -1;
 
 		//set_box(Vector3(0, -60, -98), Vector3(30, 30, 60), Vector3(0), Vector3(188, 214, 54) / 255.0f, true);
 

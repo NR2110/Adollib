@@ -29,7 +29,7 @@ namespace Adollib
 
 		head_rot_max_speed = 20;
 		head_rot_max_pow = 1000;
-		head_rot_pow = 1000;
+		head_rot_pow = 10000;
 
 		waist_move_max_speed = 100000;
 		waist_move_pow = 470;

@@ -658,7 +658,7 @@ namespace Adollib
 				eye0->transform->local_pos = Vector3(+0.5f, 0.5f, -1);
 				eye0->transform->local_scale = Vector3(0.25f, 0.25f, 0.25f);
 				eye0->material->color = face_color;
-				eye0->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+				eye0->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
 				//stage_parts.emplace_back(eye0);
 			}
 			{
@@ -667,7 +667,7 @@ namespace Adollib
 				eye1->transform->local_pos = Vector3(-0.5f, 0.5f, -1);
 				eye1->transform->local_scale = Vector3(0.25f, 0.25f, 0.25f);
 				eye1->material->color = face_color;
-				eye1->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+				eye1->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
 				//stage_parts.emplace_back(eye1);
 			}
 			{
@@ -676,7 +676,7 @@ namespace Adollib
 				mouth->transform->local_pos = Vector3(0, -0.45f, -1);
 				mouth->transform->local_scale = Vector3(0.7f, 0.25f, 0.3f);
 				mouth->material->color = face_color;
-				mouth->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+				mouth->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
 				//stage_parts.emplace_back(mouth);
 			}
 
@@ -686,7 +686,7 @@ namespace Adollib
 				belt->transform->local_pos = Vector3(0, -0.45f, 0);
 				belt->transform->local_scale = Vector3(1.1, 0.25f, 1.1);
 				belt->material->color = face_color;
-				belt->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+				belt->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
 				//stage_parts.emplace_back(belt);
 			}
 		}
