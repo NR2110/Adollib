@@ -80,12 +80,12 @@ void Gameobject_manager::update(Scenelist Sce) {
 	auto& gos = gameobjects[Sce];
 
 	//一番上の親を保存
-	std::vector<Object*> masters; //GO親子ツリーの頂点を保存
+	std::vector<Gameobject*> masters; //GO親子ツリーの頂点を保存
 	masters.clear();
 	{
-		std::unordered_map<Object*, bool> masters_manag;
+		std::unordered_map<Gameobject*, bool> masters_manag;
 		for (auto& GO : gos) {
-			Object* master = GO->top_parent();
+			Gameobject* master = GO->top_parent();
 			if (masters_manag.count(master) == 0) {
 				masters.emplace_back(master);
 			}
@@ -108,9 +108,9 @@ void Gameobject_manager::update(Scenelist Sce) {
 
 		//親から子に座標の更新を行う
 		{
-			std::unordered_map<Object*, bool> masters_manag;
+			std::unordered_map<Gameobject*, bool> masters_manag;
 			for (auto& GO : gos) {
-				Object* master = GO->top_parent();
+				Gameobject* master = GO->top_parent();
 				if (masters_manag.count(master) == 0) {
 					master->update_world_trans_to_children();
 				}
@@ -122,14 +122,14 @@ void Gameobject_manager::update(Scenelist Sce) {
 	}
 
 	//親から子へupdateを呼ぶ update中に、親objectが削除されたときに対応できないため削除はいったんbufferに保管している
-	std::for_each(masters.begin(), masters.end(), [](Object* ob) {ob->update_to_children(); });
+	std::for_each(masters.begin(), masters.end(), [](Gameobject* ob) {ob->update_to_children(); });
 
 	//親から子に座標の更新を行う
 	{
-		std::unordered_map<Object*, bool> masters_manag;
+		std::unordered_map<Gameobject*, bool> masters_manag;
 
 		for (auto& GO : gos) {
-			Object* master = GO->top_parent();
+			Gameobject* master = GO->top_parent();
 			if (masters_manag.count(master) == 0) {
 				master->update_world_trans_to_children();
 			}
@@ -147,10 +147,10 @@ void Gameobject_manager::update(Scenelist Sce) {
 
 	//親から子に座標の更新を行う
 	{
-		std::unordered_map<Object*, bool> masters_manag;
+		std::unordered_map<Gameobject*, bool> masters_manag;
 
 		for (auto& GO : gos) {
-			Object* master = GO->top_parent();
+			Gameobject* master = GO->top_parent();
 			if (masters_manag.count(master) == 0) {
 				master->update_world_trans_to_children();
 			}

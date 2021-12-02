@@ -5,7 +5,7 @@
 using namespace Adollib;
 using namespace Hierarchy;
 
-void Hierarchy::update_hierarchy(std::vector<Object*>& masters) {
+void Hierarchy::update_hierarchy(std::vector<Gameobject*>& masters) {
 	ImGuiWindowFlags flag = 0;
 	flag |= ImGuiWindowFlags_::ImGuiWindowFlags_NoDocking;
 

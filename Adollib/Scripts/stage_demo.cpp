@@ -90,17 +90,23 @@ namespace Adollib
 			//Vector3 color = Vector3(220, 220, 220) / 255;
 			Vector3 size = Vector3(2, 1, 1);
 			Vector2 count = Vector2(10, 10);
+			//Vector3 pos[4] = {
+			//Vector3(-21,0,-2),
+			//Vector3(+2,0,-21),
+			//Vector3(+21,0,-2),
+			//Vector3(+2,0,+21)
+			//};
 			Vector3 pos[4] = {
-			Vector3(-21,0,-2),
-			Vector3(+2,0,-21),
-			Vector3(+21,0,-2),
-			Vector3(+2,0,+21)
+				Vector3(0,0,0),
+				Vector3(0,30,0),
+				Vector3(0,60,0),
+				Vector3(0,90,0)
 			};
 			Vector3 rotate[4] = {
-			Vector3(0,90,0),
-			Vector3(0,0,0),
-			Vector3(0,90,0),
-			Vector3(0,0,0)
+				Vector3(0,90,0),
+				Vector3(0,0,0),
+				Vector3(0,90,0),
+				Vector3(0,0,0)
 			};
 
 			for (int c = 0; c < 4; c++) {

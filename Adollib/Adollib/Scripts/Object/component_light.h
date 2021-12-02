@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Object.h"
+#include "gameobject.h"
 #include "component.h"
 
 //#include "../Shader/light_types.h"

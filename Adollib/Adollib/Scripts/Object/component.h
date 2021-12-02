@@ -1,10 +1,12 @@
 #pragma once
 
-#include "Object.h"
 #include "../Main/input.h"
+#include "../Math/math.h"
+#include "transform.h"
 #include "time.h"
 #include <string>
 #include <memory>
+#include <list>
 
 namespace Adollib
 {

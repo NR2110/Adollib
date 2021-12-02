@@ -746,6 +746,15 @@ namespace Adollib
 			Lsholder->transform->local_orient = quaternion_from_euler(13.95f, 98.08f, 163.60f);
 		}
 
+		{
+			auto comp = Waist->addComponent<Stage_parts::Kinematic_block>();
+			comp->this_stage = this;
+			comp->this_coll = Waist_collider;
+			comp->pearent = Human;
+			comp->respown_pos = Vector3(0);
+			comp->respown_rotate = quaternion_identity();
+		}
+
 		if (pearent != nullptr)pearent->add_child(Human);
 
 		return Human;

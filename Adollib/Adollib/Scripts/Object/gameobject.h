@@ -1,12 +1,14 @@
 // ReSharper disable All
 #pragma once
 
+#include <string>
 #include <list>
 #include <memory>
 
+#include "../Math/math.h"
 #include "../Main/input.h"
 #include "time.h"
-#include "Object.h"
+//#include "Gameobject.h"
 #include "component.h"
 #include "transform.h"
 #include "gameobject_tags.h"
@@ -16,7 +18,7 @@
 namespace Adollib {
 	class Time;
 
-	class Gameobject : public Object {
+	class Gameobject {
 	public:
 		Gameobject(const bool l_no_material, const Scenelist l_this_scene, std::list<Gameobject*>::iterator l_this_itr) :
 			this_scene(l_this_scene),
@@ -24,8 +26,8 @@ namespace Adollib {
 		{};
 
 	private:
-		void update() override;
-		void update_worldtrans() override {
+		void update();
+		void update_worldtrans() {
 			transform->orientation = world_orientate();
 			transform->position = world_position();
 			transform->scale = world_scale();
@@ -39,43 +41,66 @@ namespace Adollib {
 
 		std::list<Gameobject*>::iterator this_itr; //Gomanagerに保存された自身へのポインタ
 
+		Gameobject* parent_ = nullptr; //親へのポインタ
+		std::list<Gameobject*> children_; //子へのポインタ
+
 	public:
 		// このGOが存在するシーンを返す
 		Scenelist get_scene() const { return this_scene; };
 
-		u_int tag = GO_tag::None; //このgoのtag(bit)
-
-		std::string name; //このgoの名前
-
 		// このGOのマテリアルへのポインタ cppから楽にアクセスできるようにここに置いている ここになくてもちゃんと動く
 		std::shared_ptr<Material> material = nullptr;
 
+		std::shared_ptr<Transform> transform; //不本意なtransform
+
+		std::string name; //このgoの名前
+
+		bool active = true; //falseなら更新、描画を止める
+
+		bool is_hierarchy = true;
+
+		u_int tag = GO_tag::None; //このgoのtag(bit)
+
+
 	public:
-
 		// アタッチされたコンポーネントの処理
-		void initialize()override;
+		void initialize();
 
-		void update_imgui_toChildren() override;
-	private:
+		void update_imgui_toChildren();
 
+		//自身のupdateしてから子のupdateを呼ぶ
+		void update_to_children() {
+			if (active == true)
+				update();
+			//transform->local_orient = transform->local_orient.unit_vect();
+			std::for_each(children_.begin(), children_.end(), [](Gameobject* obj) {obj->update_to_children(); });
+		}
+
+		//自身のupdateしてから子のupdateを呼ぶ
+		void update_world_trans_to_children() {
+			if (active == true)
+				update_worldtrans();
+			//transform->local_orient = transform->local_orient.unit_vect();
+			std::for_each(children_.begin(), children_.end(), [](Gameobject* obj) {obj->update_world_trans_to_children(); });
+		}
 
 	public:
 		// goのworld空間上でのの姿勢を返す
-		const Quaternion world_orientate() const override {
+		const Quaternion world_orientate() const {
 			if (parent() != nullptr) {
 				return transform->local_orient * parent()->transform->orientation;
 			}
 			else return transform->local_orient;
 		};
 		// goのworld空間上での座標を返す
-		const Vector3 world_position() const override {
+		const Vector3 world_position() const {
 			if (parent() != nullptr) {
 				return parent()->transform->position + vector3_quatrotate(transform->local_pos * parent()->transform->scale, parent()->transform->orientation);
 			}
 			else return transform->local_pos;
 		};
 		// goのworld空間上でのscaleを返す
-		const Vector3 world_scale() const override {
+		const Vector3 world_scale() const {
 			if (parent() != nullptr) {
 				return parent()->transform->scale * transform->local_scale;
 			}
@@ -95,6 +120,39 @@ namespace Adollib {
 			}
 		};
 
+	public:
+
+		Gameobject* parent() const { return parent_; }
+		void set_parent(Gameobject* obj) { parent_ = obj; }
+		const std::list<Gameobject*>* children() const { return &children_; }
+
+		//一番の親を返す
+		Gameobject* top_parent() {
+			if (parent_ != nullptr) return parent_->top_parent();
+			return this;
+		};
+
+		//thisの子にする
+		void add_child(Gameobject* obj) {
+			if (obj->parent() == this) return; //すでにこのGOが親として登録されていた
+			if (obj->parent() != nullptr)obj->parent()->remove_child(obj);  //前の親から削除
+			obj->set_parent(this);
+			children_.emplace_back(obj);
+		};
+
+		//子からobjをremoveする
+		void remove_child(Gameobject* obj) {
+			auto itr = children_.begin();
+			auto itr_end = children_.end();
+			for (; itr != itr_end; ++itr) {
+				if (*itr == obj) {
+					children_.erase(itr);
+					break;
+				}
+			}
+		};
+
+	public:
 
 		// このGameObjectにコンポーネントをアタッチする
 		template<typename T>
