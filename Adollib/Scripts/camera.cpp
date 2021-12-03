@@ -79,14 +79,14 @@ namespace Adollib
 				//float rotate_pow = 70 * Al_Global::second_per_frame;
 				float rotate_pow = rotate_speed;
 				Vector3 rotate_vec = Vector3(0, 0, 0);
-				rotate_vec.y = input->getCursorPosX() - cursol_pos_save.x;
-				rotate_vec.x = input->getCursorPosY() - cursol_pos_save.y;
+				rotate_vec.y = (input->getCursorPosX() - cursol_pos_save.x) * rotate_pow;
+				rotate_vec.x = (input->getCursorPosY() - cursol_pos_save.y) * rotate_pow;
 
-				rotate_vec.x = ALClamp(rotate_vec.x, -100 - rotate_vec_save.x, 120 - rotate_vec_save.x);
+				rotate_vec.x = ALClamp(rotate_vec.x, max_rotate.x - rotate_vec_save.x, max_rotate.y - rotate_vec_save.x);
 				rotate_vec_save += rotate_vec;
 
-				rotate *= quaternion_axis_angle(Vector3(0, 1, 0), +rotate_vec.y * rotate_pow);
-				rotate *= quaternion_axis_angle(vector3_cross(Vector3(0, 1, 0), vector3_quatrotate(Vector3(0, 0, 1), transform->local_orient)).unit_vect(), +rotate_vec.x * rotate_pow);
+				rotate *= quaternion_axis_angle(Vector3(0, 1, 0), +rotate_vec.y);
+				rotate *= quaternion_axis_angle(vector3_cross(Vector3(0, 1, 0), vector3_quatrotate(Vector3(0, 0, 1), camera_rot)).unit_vect(), +rotate_vec.x);
 			}
 			cursol_pos_save.x = (float)input->getCursorPosX();
 			cursol_pos_save.y = (float)input->getCursorPosY();
@@ -102,7 +102,7 @@ namespace Adollib
 				if (input->getKeyState(Key::A))move_vec += Vector3(-1, 0, 0);
 
 				//‚¢‚ç‚È‚¢‰ñ“]‚ðœ‚­
-				Vector3 eu = transform->local_orient.euler();
+				Vector3 eu = camera_rot.euler();
 				Quaternion y_axis_rotate = quaternion_from_euler(0, eu.y, 0);
 				position += vector3_quatrotate(move_vec, y_axis_rotate).unit_vect() * move_pow;
 
@@ -112,7 +112,7 @@ namespace Adollib
 			}
 
 			transform->local_pos += position;
-			transform->local_orient *= rotate;
+			camera_rot *= rotate;
 
 		}
 		else {
@@ -123,34 +123,69 @@ namespace Adollib
 				//float rotate_pow = 70 * Al_Global::second_per_frame;
 				float rotate_pow = rotate_speed;
 				Vector3 rotate_vec = Vector3(0, 0, 0);
-				rotate_vec.y = input->getCursorPosX() - cursol_pos_save.x;
-				rotate_vec.x = input->getCursorPosY() - cursol_pos_save.y;
+				rotate_vec.y = (input->getCursorPosX() - cursol_pos_save.x) * rotate_pow;
+				rotate_vec.x = (input->getCursorPosY() - cursol_pos_save.y) * rotate_pow;
 
-				rotate_vec.x = ALClamp(rotate_vec.x, -100 - rotate_vec_save.x, 120 - rotate_vec_save.x);
+				// min,max‚É‚Ü‚Æ‚ß‚é
+				rotate_vec.x = ALClamp(rotate_vec.x, max_rotate.x - rotate_vec_save.x, max_rotate.y - rotate_vec_save.x);
 				rotate_vec_save += rotate_vec;
 
-				rotate *= quaternion_axis_angle(vector3_cross(Vector3(0, 1, 0), vector3_quatrotate(Vector3(0, 0, 1), transform->local_orient)).unit_vect(), +rotate_vec.x * rotate_pow);
-				rotate *= quaternion_axis_angle(Vector3(0, 1, 0), +rotate_vec.y * rotate_pow);
+				rotate *= quaternion_axis_angle(vector3_cross(Vector3(0, 1, 0), vector3_quatrotate(Vector3(0, 0, 1), camera_rot)).unit_vect(), +rotate_vec.x);
+				rotate *= quaternion_axis_angle(Vector3(0, 1, 0), +rotate_vec.y);
 
 				input->setCursorPos(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
 				cursol_pos_save = Vector3(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f, 0);
 			}
 
+			// easing
 			{
-				camera_rot *= rotate;
-				transform->local_orient = ALEasing(transform->local_orient, camera_rot, 1, timeStep);
+				camera_rot_goal *= rotate;
+				camera_rot = ALEasing(camera_rot, camera_rot_goal, 1, timeStep);
 			}
 
+			// ˆÚ“®’†‚Írad‚É’l‚ð‚©‚¯‚Ä‚¢‚­
+			//// ˆÚ“®’†‚ÍÅ‘åŠp“x‚ð’²®
 			{
-				//pos_buffer = ALEasing(pos_buffer, player->position, 1, timeStep);
-				//Vector3 goal = player->position + vector3_quatrotate(Vector3(3 * ALClamp(0,1, dis_buffer / 50), 4, 0), transform->local_orient);
+				transform->local_orient = camera_rot;
+				if (input->getKeyState(Key::W) ||
+					input->getKeyState(Key::A) ||
+					input->getKeyState(Key::S) ||
+					input->getKeyState(Key::D)
+					)//ˆÚ“®’†‚Í
+				{
+					//max_rotate_buffer += (max_rotate_moving - max_rotate_buffer).unit_vect() * 0.5f;
+					//max_rotate_buffer = ALEasing(max_rotate_buffer, max_rotate_moving, 0.05f, time->deltaTime());
+					rotate_min_pow_bufer -= 0.5f * time->deltaTime();
+					if (rotate_min_pow_bufer < rotate_min_pow)rotate_min_pow_bufer = rotate_min_pow;
+				}
+				else
+				{
+					//max_rotate_buffer += (max_rotate - max_rotate_buffer).unit_vect() * 0.5f;
+					//max_rotate_buffer = ALEasing(max_rotate_buffer, max_rotate, 0.05f, time->deltaTime());
+					rotate_min_pow_bufer += 0.5f * time->deltaTime();
+					if (rotate_min_pow_bufer > 1)rotate_min_pow_bufer = 1;
+				}
+				{
+					const Vector3 dir = vector3_quatrotate(Vector3(0, 0, 1), camera_rot);
+					const Vector3 right = vector3_cross(Vector3(0, 1, 0), vector3_quatrotate(Vector3(0, 0, 1), camera_rot));
+
+					float tan_rad = vector3_radian(vector3_cross(right, Vector3(0, 1, 0)), dir);
+					if (dir.y > 0)tan_rad *= -1;
+					const float tan_rad_cl = tan_rad * rotate_min_pow_bufer;
+
+					if (tan_rad != tan_rad_cl) {
+						transform->local_orient *= quaternion_axis_radian(vector3_cross(Vector3(0, 1, 0), vector3_quatrotate(Vector3(0, 0, 1), camera_rot)), tan_rad_cl - tan_rad);
+					}
+				}
+			}
+
+			// ‰æ–Ê’†S‚©‚çplayer‚ª—£‚ê‚·‚¬‚½‚ç’²®
+			{
 				Vector3 goal = player->position + Vector3(0, 4, 0);
 				Vector3 dir = goal - pos_buffer;
 				if (dir.norm() > pos_slop * pos_slop) {
 					pos_buffer += dir.unit_vect() * (dir.norm_sqr() - pos_slop);
 				}
-
-				//pos_buffer = player->position + Vector3(0, 4, 0);
 
 			}
 
@@ -183,7 +218,7 @@ namespace Adollib
 				//ray‚ð”ò‚Î‚µ‚Äcamera‚ªstage‚É‚ß‚èž‚Ü‚È‚¢‚æ‚¤‚É
 				Ray ray;
 				ray.position = pos_buffer;
-				ray.direction = vector3_quatrotate(Vector3(0, 0, -1), camera_rot);
+				ray.direction = vector3_quatrotate(Vector3(0, 0, -1), transform->local_orient);
 				Ray::Raycast_struct str;
 				str.collider_tag = Collider_tags::Caera_not_sunk_Stage;
 
@@ -203,7 +238,7 @@ namespace Adollib
 
 			}
 
-			transform->local_pos = pos_buffer + vector3_quatrotate(dis_buffer * Vector3(0, 0, -1), camera_rot);
+			transform->local_pos = pos_buffer + vector3_quatrotate(dis_buffer * Vector3(0, 0, -1), transform->local_orient);
 
 		}
 

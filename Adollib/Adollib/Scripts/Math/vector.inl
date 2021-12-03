@@ -517,6 +517,7 @@ namespace Adollib {
 
 	inline Vector2 Vector2::unit_vect() const {
 		float V = norm_sqr();
+		if (V == 0)return Vector2(0);
 		Vector2 R = *this;
 		return R / V;
 	}

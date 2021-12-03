@@ -16,12 +16,20 @@ namespace Adollib
 		float pos_slop = 1; //カメラの座標の許容誤差
 
 		bool is_lock_cursol = false;
+		Vector2 max_rotate = Vector2(-50, 60); //カメラの上下の最大角度
+		//Vector2 max_rotate_moving = Vector2(-15, 15); //移動中のカメラの上下の最大角度
+		float rotate_min_pow_bufer = 1;
+		float rotate_min_pow = 0.3f;
+		//Vector2 max_rotate_buffer = Vector2(-50, 60); //カメラの最大角度のイージングのbuffer
 
 		std::shared_ptr<Transform> player;
 		Vector3 cursol_pos_save;
 		Vector3 rotate_vec_save;
 
-		Quaternion camera_rot;
+		Quaternion camera_rot_goal; //Easing用
+
+	public:
+		Quaternion camera_rot; //cameraの向き
 
 	public:
 		void awake();

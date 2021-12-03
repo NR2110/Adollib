@@ -6,6 +6,7 @@
 #include "../Adollib/Scripts/Physics/ray.h"
 
 #include "stage_manager.h"
+#include "camera.h"
 
 namespace Adollib
 {
@@ -19,7 +20,7 @@ namespace Adollib
 	{
 		//respown_timer = 1;
 
-		camera = Gameobject_manager::find("camera")->transform;
+		camera = Gameobject_manager::find("camera")->findComponent<Camera>();
 		stage_manager = Gameobject_manager::find("Stage_manager")->findComponent<Stage_manager>();
 
 		//auto R = Head->findComponent<Mesh_renderer>();

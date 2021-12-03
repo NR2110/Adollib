@@ -8,15 +8,15 @@
 
 namespace Adollib {
 
-	//描画用transfome
+	// 描画用transfome
 	class Transform {
 	public:
-		//描画用の情報
+		// 描画用の情報
 		Vector3 position = Vector3(0, 0, 0);
 		Quaternion orientation = Quaternion(1, 0, 0, 0);
 		Vector3 scale = Vector3(1, 1, 1);
 
-		//親からの相対情報
+		// 親からの相対情報
 		Vector3 local_pos = Vector3(0, 0, 0);
 		Quaternion local_orient = Quaternion(1, 0, 0, 0);
 		Vector3 local_scale = Vector3(1, 1, 1);

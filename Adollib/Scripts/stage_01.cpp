@@ -456,9 +456,9 @@ namespace Adollib
 			Gameobject* goal_and_respown_areas = Gameobject_manager::create("goal&respown_areas");
 			stage_parts.emplace_back(goal_and_respown_areas);
 
-			set_respown_area(Vector3(24, 9, 57),    Vector3(14, 5, 15),  Vector3(0), 2, Vector3(24,  80, 57), goal_and_respown_areas);
-			set_respown_area(Vector3(100, 18, 61),  Vector3(16, 10, 19), Vector3(0), 3, Vector3(102, 80, 50), goal_and_respown_areas);
-			set_respown_area(Vector3(126, 16, 116), Vector3(24, 10, 10), Vector3(0), 4, Vector3(104, 80,120), goal_and_respown_areas);
+			set_respown_area(Vector3(24, 9, 57),    Vector3(14, 5, 15),  Vector3(0), 2, Vector3(24,  50, 57), goal_and_respown_areas);
+			set_respown_area(Vector3(100, 18, 61),  Vector3(16, 10, 19), Vector3(0), 3, Vector3(102, 50, 50), goal_and_respown_areas);
+			set_respown_area(Vector3(126, 16, 116), Vector3(24, 10, 10), Vector3(0), 4, Vector3(104, 50,120), goal_and_respown_areas);
 
 			set_goal_area(Vector3(104, 6, 224), Vector3(10, 2, 8), Vector3(0), Stage_types::demo, goal_and_respown_areas);
 		}

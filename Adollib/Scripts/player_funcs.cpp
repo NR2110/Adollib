@@ -5,11 +5,13 @@
 
 #include "../Adollib/Scripts/Physics/ALP__physics_manager.h"
 #include "../Adollib/Scripts/Physics/ray.h"
+#include "../Adollib/Scripts/Imgui/work_meter.h"
 
 #include "stage_manager.h"
 #include "stage_base.h"
+#include "camera.h"
 
-#include "../Adollib/Scripts/Imgui/work_meter.h"
+
 
 using namespace Adollib;
 
@@ -45,7 +47,7 @@ void Player::reach_out_hands() {
 			//カメラの回転から腕を上げる高さを変える
 			Quaternion camera_off;
 			{
-				Vector3 camera_vec = vector3_quatrotate(Vector3(0, 0, 1), camera->orientation).unit_vect();
+				Vector3 camera_vec = vector3_quatrotate(Vector3(0, 0, 1), camera->camera_rot).unit_vect();
 				Vector3 camera_vec_y0 = camera_vec;
 				camera_vec_y0.y = 0;
 				camera_vec_y0 = camera_vec_y0.unit_vect();
@@ -81,17 +83,13 @@ void Player::reach_out_hands() {
 				Quaternion off = collider->transform->orientation * goal.inverse();
 				Vector3 axis = off.axis();
 				float rad = off.radian();
-				if (rad > PI) {
-					rad = 2 * PI - rad;
-					//axis *= -1;
-				}
+				if (rad > PI) rad = 2 * PI - rad;
 
 				float pow = ALClamp(rad * hand_rot_pow, 0, hand_rot_max_pow);
 				Vector3 world_axis = vector3_quatrotate(axis, collider->transform->orientation);
 				collider->add_torque(world_axis* pow * collider->physics_data.inertial_mass);
 				collider->set_max_angula_velocity(ALmin(hand_rot_max_speed, hand_rot_max_speed * ToAngle(rad) * 0.03f));
 
-				//colliders[i]->add_torque(-world_axis * pow * colliders[i]->physics_data.inertial_mass * 0.5f);
 			}
 
 			{
@@ -100,14 +98,13 @@ void Player::reach_out_hands() {
 				Quaternion off = collider->transform->orientation * goal.inverse();
 				Vector3 axis = off.axis();
 				float rad = off.radian();
-				if (rad > PI) {
-					rad = 2 * PI - rad;
-					//axis *= -1;
-				}
+				if (rad > PI) rad = 2 * PI - rad;
+
 				float pow = ALClamp(rad * hand_rot_pow,  0, hand_rot_max_pow);
 				Vector3 world_axis = vector3_quatrotate(axis, collider->transform->orientation);
 				collider->add_torque(world_axis * pow * collider->physics_data.inertial_mass);
 				collider->set_max_angula_velocity(ALmin(hand_rot_max_speed, hand_rot_max_speed * ToAngle(rad) * 0.03f));
+
 			}
 
 		}
@@ -271,11 +268,13 @@ void Player::add_pow_for_stand() {
 	}
 	// gunyattoしていた時は
 	else {
+		// 向きのみ更新
 		turn_gunyatto_dir();
 	}
 
 	{
 		//jointでつなげると重力が弱くなるから & 一定のパーツは重力の影響を受けないようにしているから  下向きに力を加える
+		Head_collider->add_force(Vector3(0, -1, 0) * 150);
 		Waist_collider->add_force(Vector3(0, -1, 0) * 150);
 		Body_collider->add_force(Vector3(0, -1, 0) * 150);
 		Lfoot_collider->add_force(Vector3(0, -1, 0) * 50);
@@ -376,7 +375,7 @@ void Player::angula_move() {
 	if (rot_vec.norm() != 0) {
 		rot_vec = rot_vec.unit_vect();
 
-		rot_vec = vector3_quatrotate(Vector3(0, 0, -1), camera->orientation);
+		rot_vec = vector3_quatrotate(Vector3(0, 0, -1), camera->camera_rot);
 		rot_vec.y = 0;
 		rot_vec = rot_vec.unit_vect();
 
@@ -407,7 +406,7 @@ void Player::accume_move_dir() {
 	if (input->getKeyState(Key::D)) {
 		move_vec += Vector3(+1, 0, 0);
 	}
-	dir = vector3_quatrotate(move_vec, camera->orientation).unit_vect();
+	dir = vector3_quatrotate(move_vec, camera->camera_rot).unit_vect();
 	dir.y = 0;
 	//dir = vector3_quatrotate(dir, quaternion_from_euler(0, 180, 0));
 	dir = dir.unit_vect();

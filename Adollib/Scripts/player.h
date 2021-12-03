@@ -7,6 +7,7 @@
 namespace Adollib
 {
 	class Stage_manager;
+	class Camera;
 
 	class Player : public Component
 	{
@@ -51,7 +52,7 @@ namespace Adollib
 		Quaternion rotate; //rotateのbuffer
 		Vector3 dir; //向きのbuffer
 
-		bool is_gunyatto = false; //trueの時体がぐにゃっとする
+		bool is_gunyatto = false; //trueの時、体がぐにゃっとする
 
 		Joint_base* catch_right_joint = nullptr; //右手がつかんでいるjoint
 		Joint_base* catch_left_joint = nullptr;	 //左手がつかんでいるjoint
@@ -74,7 +75,7 @@ namespace Adollib
 		float respown_timer = 0; //respown処理用のtimer >0の時 check_respown()でPlayer::updateをreturn (入力を受け付けない、gunyattoする)
 
 	private:
-		std::shared_ptr<Transform> camera; //cameraへのポインタ
+		Camera* camera; //cameraへのポインタ
 		Stage_manager* stage_manager = nullptr; //stage_managerへのポインタ
 
 	private:
