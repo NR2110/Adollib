@@ -31,6 +31,16 @@ namespace Adollib {
 						transform->local_pos = respown_pos;
 						transform->local_pos.y = this_stage->y_respown_pos;
 						transform->local_orient = respown_rotate;
+
+						// player‚É•ß‚Ü‚ê‚Ä‚¢‚½‚ç ‚»‚Ìjoint‚ðíœ‚·‚é
+						int joint_size = this_coll->get_joint_count();
+						for (int i = 0; i < joint_size; ++i) {
+							auto joint = this_coll->get_joint(i);
+							if (joint->get_colliderB()->tag & Collider_tags::Human) {
+								Joint::delete_joint(joint);
+							}
+						}
+
 					}
 					else {
 						Vector3 off = Vector3(respown_pos.x, this_stage->y_respown_pos, respown_pos.y) - transform->local_pos;
@@ -40,7 +50,17 @@ namespace Adollib {
 							if (coll == nullptr)continue;
 							coll->reset_force();
 							coll->linear_velocity(Vector3(0, -1, 0)); //feeze‚Éˆø‚Á‚©‚©‚ç‚È‚¢‚æ‚¤‚É
+
+							// player‚É•ß‚Ü‚ê‚Ä‚¢‚½‚ç ‚»‚Ìjoint‚ðíœ‚·‚é
+							int joint_size = coll->get_joint_count();
+							for (int i = 0; i < joint_size; ++i) {
+								auto joint = coll->get_joint(i);
+								if (joint->get_colliderB()->tag & Collider_tags::Human) {
+									Joint::delete_joint(joint);
+								}
+							}
 						}
+
 					}
 				}
 			};

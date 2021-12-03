@@ -6,6 +6,7 @@
 
 #include "ALP__tags.h"
 #include "collider_shape.h"
+#include "joint_base.h"
 
 #include "ALP_struct_world_transform.h"
 #include "ALP_struct_contacted_data.h"

@@ -373,6 +373,12 @@
     <ClCompile Include="Scripts\Renderer\sky_sphere.cpp">
       <Filter>00_Adollib\44_render\renderer</Filter>
     </ClCompile>
+    <ClCompile Include="..\Scripts\stage_demo_meishi.cpp">
+      <Filter>ソース ファイル\scene_game\stage\stage\stage_demo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\stage_demo_meishi_funcs.cpp">
+      <Filter>ソース ファイル\scene_game\stage\stage\stage_demo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Scripts\player.h">
@@ -767,6 +773,9 @@
     </ClInclude>
     <ClInclude Include="Scripts\Renderer\sky_sphere.h">
       <Filter>00_Adollib\44_render\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\stage_demo_meishi.h">
+      <Filter>ソース ファイル\scene_game\stage\stage\stage_demo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

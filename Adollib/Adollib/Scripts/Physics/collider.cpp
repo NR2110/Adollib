@@ -48,6 +48,22 @@ void Collider::add_angula_acc(const Vector3& acc) {
 #pragma endregion
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+// アタッチされたjointの数
+const int Collider::get_joint_count() {
+	return ALPcollider_ptr->get_joints().size();
+}
+// 指定した番号にアタッチされているjointの情報を得る
+Joint_base* Collider::get_joint(const int num) {
+	int size =  ALPcollider_ptr->get_joints().size();
+	if (size < num + 1)return nullptr;
+
+	auto itr = ALPcollider_ptr->get_joints().begin();
+	for (int i = 0; i < num; ++i) ++itr;
+
+	return (*itr)->userjoint;
+}
+
+
 void Collider::awake() {
 	Physics_manager::ColliderPhysics_ptrs data;
 

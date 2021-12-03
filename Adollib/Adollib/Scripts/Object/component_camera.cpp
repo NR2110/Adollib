@@ -62,6 +62,18 @@ void Camera_component::Update_hierarchy() {
 	ImGui::DragFloat("aspect", &aspect, 0.1f, 0, 0, "%.2f");
 	ImGui::DragFloat("nearZ", &nearZ, 0.1f, 0, 0, "%.2f");
 	ImGui::DragFloat("farZ", &farZ, 0.1f, 0, 0, "%.2f");
+	ImGui::Separator();
+	{
+		float buf[3] = { directional_shadow->direction.x, directional_shadow->direction.y,directional_shadow->direction.z };
+		ImGui::DragFloat3("direction_light_dir", buf, 0.1f, 0, 0, "%.2f");
+		directional_shadow->direction = Vector3(buf[0], buf[1], buf[2]).unit_vect();
+	}
+
+	{
+		float buf[3] = { directional_shadow->position.x, directional_shadow->position.y,directional_shadow->position.z };
+		ImGui::DragFloat3("direction_light_position", buf, 0.1f, 0, 0, "%.2f");
+		directional_shadow->position = Vector3(buf[0], buf[1], buf[2]);
+	}
 }
 
 void Camera_component::setup() {

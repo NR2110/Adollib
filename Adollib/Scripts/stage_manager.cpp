@@ -7,6 +7,7 @@
 
 #include "stage_demo.h"
 #include "stage_demo_1.h"
+#include "stage_demo_meishi.h"
 #include "stage_01.h"
 
 #include "player.h"
@@ -18,6 +19,7 @@ void Stage_manager::awake() {
 
 	add_stage<Stage_demo>(Stage_types::demo);
 	add_stage<Stage_demo_01>(Stage_types::demo_1);
+	add_stage<Stage_demo_meishi>(Stage_types::demo_meishi);
 
 	add_stage<Stage_01>(Stage_types::stage_1);
 	//add_stage<Stage_01>(Stage_types::stage_1);

@@ -149,38 +149,41 @@ namespace Adollib
 				{
 					auto& GO = Lsholder;
 					GO->transform->local_scale = sholder_size;
-					GO->transform->local_orient = quaternion_from_euler(0, 0, +90);
-					GO->transform->local_pos = Vector3(+(body_size.x + arm_size.y * 1 + 0.1f), arm_y_pos, 0);
+					GO->transform->local_orient = quaternion_from_euler(0, +30, +90);
+					//GO->transform->local_pos = Vector3(+(body_size.x + arm_size.y * 1 + 0.1f), arm_y_pos, 0);
+					GO->transform->local_pos = Vector3(+1.62, arm_y_pos, -0.30f);
 				}
 				{
 					auto& GO = Lelbow;
 					GO->transform->local_scale = arm_size;
-					GO->transform->local_orient = quaternion_from_euler(0, 0, +90);
-					GO->transform->local_pos = Vector3(+(body_size.x + arm_size.y * 3 + 0.2f), arm_y_pos, 0);
+					GO->transform->local_orient = quaternion_from_euler(0, +30, +90);
+					GO->transform->local_pos = Vector3(+(body_size.x + arm_size.y * 3 + 0.2f), arm_y_pos, -0.98f);
 				}
 				{
 					auto& GO = Lhand;
 					GO->transform->local_scale = hand_size;
 					GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
-					GO->transform->local_pos = Vector3(+(body_size.x + arm_size.y * 4 - 0.2f), arm_y_pos - 0.15f, 0);
+					GO->transform->local_pos = Vector3(+(body_size.x + arm_size.y * 4 - 0.2f), arm_y_pos - 0.15f, -1.07f);
 				}
 				{
 					auto& GO = Rsholder;
 					GO->transform->local_scale = sholder_size;
-					GO->transform->local_orient = quaternion_from_euler(0, 0, -90);
-					GO->transform->local_pos = Vector3(-(body_size.x + arm_size.y * 1 + 0.1f), arm_y_pos, 0);
+					GO->transform->local_orient = quaternion_from_euler(0, -30, -90);
+					//GO->transform->local_pos = Vector3(1.08f, arm_y_pos, 1.86f);
+					//GO->transform->local_pos = Vector3(3.78f, arm_y_pos, 4.02f);
+					GO->transform->local_pos = Vector3(-1.62, arm_y_pos, -0.30f);
 				}
 				{
 					auto& GO = Relbow;
 					GO->transform->local_scale = arm_size;
-					GO->transform->local_orient = quaternion_from_euler(0, 0, -90);
-					GO->transform->local_pos = Vector3(-(body_size.x + arm_size.y * 3 + 0.2f), arm_y_pos, 0);
+					GO->transform->local_orient = quaternion_from_euler(0, -30, -90);
+					GO->transform->local_pos = Vector3(-(body_size.x + arm_size.y * 3 + 0.2f), arm_y_pos, -0.98f);
 				}
 				{
 					auto& GO = Rhand;
 					GO->transform->local_scale = hand_size;
 					GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
-					GO->transform->local_pos = Vector3(-(body_size.x + arm_size.y * 4 - 0.2f), arm_y_pos - 0.15f, 0);
+					GO->transform->local_pos = Vector3(-(body_size.x + arm_size.y * 4 - 0.2f), arm_y_pos - 0.15f, -1.07f);
 				}
 			}
 
@@ -249,7 +252,7 @@ namespace Adollib
 			Lfoot_collider->physics_data.inertial_mass = 1;
 			Rfoot_collider->physics_data.inertial_mass = 1;
 
-			Head_collider->physics_data.anglar_drag = 1;
+			Head_collider->physics_data.anglar_drag = 0.5f;
 			Lsholder_collider->physics_data.anglar_drag = 0.5f;
 			Lelbow_collider->physics_data.anglar_drag = 0.5f;
 			Lhand_collider->physics_data.anglar_drag = 1;
@@ -307,6 +310,20 @@ namespace Adollib
 			Lhand_collider->physics_data.dynamic_friction = 0;
 			Rhand_collider->physics_data.dynamic_friction = 0;
 
+
+			//Head_collider    ->physics_data.is_moveable = false;
+			//Lsholder_collider->physics_data.is_moveable = false;
+			//Rsholder_collider->physics_data.is_moveable = false;
+			//Lelbow_collider  ->physics_data.is_moveable = false;
+			//Relbow_collider  ->physics_data.is_moveable = false;
+			//Lhand_collider   ->physics_data.is_moveable = false;
+			//Rhand_collider   ->physics_data.is_moveable = false;
+			//Body_collider    ->physics_data.is_moveable = false;
+			//Waist_collider   ->physics_data.is_moveable = false;
+			//Lleg_collider    ->physics_data.is_moveable = false;
+			//Rleg_collider    ->physics_data.is_moveable = false;
+			//Lfoot_collider   ->physics_data.is_moveable = false;
+			//Rfoot_collider   ->physics_data.is_moveable = false;
 
 
 			//::: Joint‚Ìİ’è

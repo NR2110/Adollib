@@ -51,7 +51,7 @@ namespace Adollib
 		Quaternion rotate; //rotate‚Ìbuffer
 		Vector3 dir; //Œü‚«‚Ìbuffer
 
-		bool is_gunyatto = false; //true‚Ì‚®‚É‚á‚Á‚Æ‚·‚é
+		bool is_gunyatto = false; //true‚Ì‘Ì‚ª‚®‚É‚á‚Á‚Æ‚·‚é
 
 		Joint_base* catch_right_joint = nullptr; //‰Eè‚ª‚Â‚©‚ñ‚Å‚¢‚éjoint
 		Joint_base* catch_left_joint = nullptr;	 //¶è‚ª‚Â‚©‚ñ‚Å‚¢‚éjoint

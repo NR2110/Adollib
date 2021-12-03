@@ -27,16 +27,16 @@ namespace Adollib
 		////R->set_texture(C->get_color_texture());
 		//R->load_texture(L"./DefaultModel/demo.png");
 
-		head_rot_max_speed = 20;
+		head_rot_max_speed = 3;
 		head_rot_max_pow = 1000;
-		head_rot_pow = 10000;
+		head_rot_pow = 1000;
 
 		waist_move_max_speed = 100000;
 		waist_move_pow = 470;
 
 		waist_rot_max_speed = 3;
 		waist_rot_max_pow = 10000;
-		waist_rot_pow = 1000;
+		waist_rot_pow = 500;
 
 		body_rot_max_speed = 10;
 		body_rot_max_pow = 10000;
