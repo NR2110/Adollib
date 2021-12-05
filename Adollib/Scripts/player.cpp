@@ -7,6 +7,7 @@
 
 #include "stage_manager.h"
 #include "camera.h"
+#include "input_changer.h"
 
 namespace Adollib
 {
@@ -22,6 +23,7 @@ namespace Adollib
 
 		camera = Gameobject_manager::find("camera")->findComponent<Camera>();
 		stage_manager = Gameobject_manager::find("Stage_manager")->findComponent<Stage_manager>();
+		input_changer = gameobject->findComponent<Input_changer>();
 
 		//auto R = Head->findComponent<Mesh_renderer>();
 		////auto C = Gameobject_manager::find("camera")->findComponent<Camera_component>();
@@ -101,16 +103,6 @@ namespace Adollib
 	// 毎フレーム呼ばれる更新処理
 	void Player::update()
 	{
-		// Update_pnground
-		{
-			if (input->getKeyTrigger(Key::P)) {
-				bool next = Human_colliders[0]->physics_data.is_moveable;
-				next = !next;
-				for (int i = 0; i < Human_collider_size; i++) {
-					Human_colliders[i]->physics_data.is_moveable = next;
-				}
-			}
-		}
 
 		// playerのdragを初期値にする
 		set_default_drag();

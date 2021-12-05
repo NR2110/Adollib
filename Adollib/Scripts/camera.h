@@ -32,19 +32,19 @@ namespace Adollib
 		Quaternion camera_rot; //cameraの向き
 
 	public:
-		void awake();
+		void awake() override;
 
 		// 所属するシーンの初期化時に一度だけ呼ばれる
-		void start();
+		void start() override;
 
 		// 毎フレーム呼ばれる更新処理
-		void update();
+		void update() override;
 
 		// このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる
-		void onEnable();
+		void onEnable() override;
 
 		// このスクリプトがアタッチされているGOのactiveSelfがfalseになった時呼ばれる
-		void onDisable();
+		void onDisable() override;
 
 	};
 

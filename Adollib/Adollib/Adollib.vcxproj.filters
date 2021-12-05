@@ -379,6 +379,9 @@
     <ClCompile Include="..\Scripts\stage_demo_meishi_funcs.cpp">
       <Filter>ソース ファイル\scene_game\stage\stage\stage_demo</Filter>
     </ClCompile>
+    <ClCompile Include="..\Scripts\input_changer.cpp">
+      <Filter>ソース ファイル\scene_game\player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Scripts\player.h">
@@ -776,6 +779,9 @@
     </ClInclude>
     <ClInclude Include="..\Scripts\stage_demo_meishi.h">
       <Filter>ソース ファイル\scene_game\stage\stage\stage_demo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\input_changer.h">
+      <Filter>ソース ファイル\scene_game\player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

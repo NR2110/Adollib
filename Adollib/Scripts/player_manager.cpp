@@ -12,6 +12,8 @@
 #include "../Adollib/Scripts/Imgui/debug.h"
 
 #include "player.h"
+#include "input_changer.h"
+
 namespace Adollib
 {
 	// 所属するシーンの初期化時に一度だけ呼ばれる
@@ -21,11 +23,26 @@ namespace Adollib
 		//Vector3 player_start_pos = Vector3(-2.7f, 80, -5);
 		Vector3 player_start_pos = Vector3(-2.7f, 50, -5);
 
-		Quaternion player_start_rotate = quaternion_from_euler(2, 180, 0);
+		Quaternion player_start_rotate = quaternion_from_euler(20, 180, 0);
+
+		add_player(0, player_start_pos, Vector3(20, 180, 0), Vector3(1), Vector3(0.5f));
+
+	}
+
+	// 毎フレーム呼ばれる更新処理
+	void Player_manager::update()
+	{
+
+	}
+
+
+	void Player_manager::add_player(int player_num, const Vector3& position, const Vector3& rotate, const Vector3& main_color, const Vector3& sub_color) {
+
+		Player*& player = players[player_num];
 
 		Gameobject* Human = Gameobject_manager::create("Human");
-		Human->transform->local_pos = player_start_pos;
-		Human->transform->local_orient = player_start_rotate;
+		Human->transform->local_pos = position;
+		Human->transform->local_orient = quaternion_from_euler(rotate);
 
 		//::: Gameobjectの生成 :::
 		Gameobject* Head = Gameobject_manager::createCube("Head");
@@ -43,58 +60,59 @@ namespace Adollib
 		Gameobject* Lleg     = Gameobject_manager::createCube("Lleg");
 		Gameobject* Lfoot    = Gameobject_manager::createCube("Lfoot");
 
-		//Head    ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		//Lsholder->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		//Lelbow  ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		//Rsholder->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		//Relbow  ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		//Body    ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		//Waist   ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		//Rleg    ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		//Rfoot   ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		//Lleg    ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		//Lfoot   ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Head    ->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
-		Lsholder->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
-		Lelbow  ->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
-		Rsholder->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
-		Relbow  ->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
-		Body    ->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
-		Waist   ->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
-		Rleg    ->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
-		Rfoot   ->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
-		Lleg    ->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
-		Lfoot   ->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		Head    ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		Lsholder->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		Lelbow  ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		Rsholder->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		Relbow  ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		Body    ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		Waist   ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		Rleg    ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		Rfoot   ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		Lleg    ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		Lfoot   ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+
+		Head    ->material->color = Vector4(main_color, 1);
+		Lsholder->material->color = Vector4(main_color, 1);
+		Lelbow  ->material->color = Vector4(main_color, 1);
+		Rsholder->material->color = Vector4(main_color, 1);
+		Relbow  ->material->color = Vector4(main_color, 1);
+		Body    ->material->color = Vector4(main_color, 1);
+		Waist   ->material->color = Vector4(main_color, 1);
+		Rleg    ->material->color = Vector4(main_color, 1);
+		Rfoot   ->material->color = Vector4(main_color, 1);
+		Lleg    ->material->color = Vector4(main_color, 1);
+		Lfoot   ->material->color = Vector4(main_color, 1);
 
 		//::: collider,shapeのアタッチ :::
-		Collider* Head_collider     = Head->addComponent<Collider>();
+		Collider* Head_collider = Head->addComponent<Collider>();
 		Collider* Lsholder_collider = Lsholder->addComponent<Collider>();
-		Collider* Lelbow_collider   = Lelbow->addComponent<Collider>();
-		Collider* Lhand_collider    = Lhand->addComponent<Collider>();
+		Collider* Lelbow_collider = Lelbow->addComponent<Collider>();
+		Collider* Lhand_collider = Lhand->addComponent<Collider>();
 		Collider* Rsholder_collider = Rsholder->addComponent<Collider>();
-		Collider* Relbow_collider   = Relbow->addComponent<Collider>();
-		Collider* Rhand_collider    = Rhand->addComponent<Collider>();
-		Collider* Body_collider     = Body->addComponent<Collider>();
-		Collider* Waist_collider    = Waist->addComponent<Collider>();
-		Collider* Rleg_collider     = Rleg->addComponent<Collider>();
-		Collider* Rfoot_collider    = Rfoot->addComponent<Collider>();
-		Collider* Lleg_collider     = Lleg->addComponent<Collider>();
-		Collider* Lfoot_collider    = Lfoot->addComponent<Collider>();
+		Collider* Relbow_collider = Relbow->addComponent<Collider>();
+		Collider* Rhand_collider = Rhand->addComponent<Collider>();
+		Collider* Body_collider = Body->addComponent<Collider>();
+		Collider* Waist_collider = Waist->addComponent<Collider>();
+		Collider* Rleg_collider = Rleg->addComponent<Collider>();
+		Collider* Rfoot_collider = Rfoot->addComponent<Collider>();
+		Collider* Lleg_collider = Lleg->addComponent<Collider>();
+		Collider* Lfoot_collider = Lfoot->addComponent<Collider>();
 
 
-		Sphere* Head_shape     = Head_collider->add_shape<Sphere>();
+		Sphere* Head_shape = Head_collider->add_shape<Sphere>();
 		Sphere* Lsholder_shape = Lsholder_collider->add_shape<Sphere>();
-		Sphere* Lelbow_shape   = Lelbow_collider->add_shape<Sphere>();
-		Sphere* Lhand_shape    = Lhand_collider->add_shape<Sphere>();
+		Sphere* Lelbow_shape = Lelbow_collider->add_shape<Sphere>();
+		Sphere* Lhand_shape = Lhand_collider->add_shape<Sphere>();
 		Sphere* Rsholder_shape = Rsholder_collider->add_shape<Sphere>();
-		Sphere* Relbow_shape   = Relbow_collider->add_shape<Sphere>();
-		Sphere* Rhand_shape    = Rhand_collider->add_shape<Sphere>();
-		Box* Body_shape        = Body_collider->add_shape<Box>();
-		Box* Waist_shape       = Waist_collider->add_shape<Box>();
-		Sphere* Rleg_shape     = Rleg_collider->add_shape<Sphere>();
-		Sphere* Rfoot_shape    = Rfoot_collider->add_shape<Sphere>();
-		Sphere* Lleg_shape     = Lleg_collider->add_shape<Sphere>();
-		Sphere* Lfoot_shape    = Lfoot_collider->add_shape<Sphere>();
+		Sphere* Relbow_shape = Relbow_collider->add_shape<Sphere>();
+		Sphere* Rhand_shape = Rhand_collider->add_shape<Sphere>();
+		Box* Body_shape = Body_collider->add_shape<Box>();
+		Box* Waist_shape = Waist_collider->add_shape<Box>();
+		Sphere* Rleg_shape = Rleg_collider->add_shape<Sphere>();
+		Sphere* Rfoot_shape = Rfoot_collider->add_shape<Sphere>();
+		Sphere* Lleg_shape = Lleg_collider->add_shape<Sphere>();
+		Sphere* Lfoot_shape = Lfoot_collider->add_shape<Sphere>();
 
 		{
 			//::: 親子関係の設定 :::
@@ -218,9 +236,9 @@ namespace Adollib
 			}
 
 			//::: 慣性モーメントの調整 :::
-			Head_collider	 ->set_barycenter(Vector3(0, +0.5f, 0));
+			Head_collider->set_barycenter(Vector3(0, +0.5f, 0));
 			//Body_collider	 ->set_barycenter(Vector3(0, -0.2f, 0));
-			Body_collider	 ->set_barycenter(Vector3(0, +0.5f, 0));
+			Body_collider->set_barycenter(Vector3(0, +0.5f, 0));
 
 			Lhand_collider->physics_data.inertial_mass = 100;
 			Lhand_collider->set_tensor(Lhand_collider->get_tensor());
@@ -261,19 +279,19 @@ namespace Adollib
 			Rhand_collider->physics_data.anglar_drag = 1;
 			Waist_collider->physics_data.anglar_drag = 0.8f;
 
-			Head_collider	 ->physics_data.restitution = 0.01f;
+			Head_collider->physics_data.restitution = 0.01f;
 			Lsholder_collider->physics_data.restitution = 0.01f;
 			Rsholder_collider->physics_data.restitution = 0.01f;
-			Lelbow_collider  ->physics_data.restitution = 0.01f;
-			Relbow_collider  ->physics_data.restitution = 0.01f;
-			Lhand_collider   ->physics_data.restitution = 0.01f;
-			Rhand_collider   ->physics_data.restitution = 0.01f;
-			Body_collider    ->physics_data.restitution = 0.01f;
-			Waist_collider   ->physics_data.restitution = 0.01f;
-			Lleg_collider    ->physics_data.restitution = 0.01f;
-			Rleg_collider    ->physics_data.restitution = 0.01f;
-			Lfoot_collider   ->physics_data.restitution = 0.01f;
-			Rfoot_collider   ->physics_data.restitution = 0.01f;
+			Lelbow_collider->physics_data.restitution = 0.01f;
+			Relbow_collider->physics_data.restitution = 0.01f;
+			Lhand_collider->physics_data.restitution = 0.01f;
+			Rhand_collider->physics_data.restitution = 0.01f;
+			Body_collider->physics_data.restitution = 0.01f;
+			Waist_collider->physics_data.restitution = 0.01f;
+			Lleg_collider->physics_data.restitution = 0.01f;
+			Rleg_collider->physics_data.restitution = 0.01f;
+			Lfoot_collider->physics_data.restitution = 0.01f;
+			Rfoot_collider->physics_data.restitution = 0.01f;
 
 			//::: 重力適用の調整 :::
 			Head_collider->physics_data.is_fallable = false;
@@ -333,7 +351,7 @@ namespace Adollib
 				auto Ball = Joint::add_Conejoint(Head_collider, Body_collider, Vector3(0, -1, 0), Vector3(0, 0.8f, 0), Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
 				Ball->limit = 30;
 
-				auto Twist = Joint::add_Twistjoint(Body_collider, Head_collider, Vector3(0, 1, 0),Vector3(0, 1, 0), joint_bias);
+				auto Twist = Joint::add_Twistjoint(Body_collider, Head_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
 				Twist->limit = Vector2(360 - 90, 90);
 			}
 			//腕
@@ -341,7 +359,7 @@ namespace Adollib
 				auto Cone = Joint::add_Conejoint(Body_collider, Lsholder_collider, Vector3(+1.1f, 0.2f, 0), Vector3(0, arm_size.y, 0), Vector3(-1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
 				Cone->limit = 85;
 
-				auto Twist = Joint::add_Twistjoint(Body_collider, Lsholder_collider, Vector3(0, 1, 0),Vector3(0, 1, 0), joint_bias);
+				auto Twist = Joint::add_Twistjoint(Body_collider, Lsholder_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
 				Twist->limit = Vector2(360 - 90, 90);
 			}
 			{
@@ -356,7 +374,7 @@ namespace Adollib
 				auto Cone = Joint::add_Conejoint(Body_collider, Rsholder_collider, Vector3(-1.1f, 0.2f, 0), Vector3(0, arm_size.y, 0), Vector3(+1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
 				Cone->limit = 85;
 
-				auto Twist = Joint::add_Twistjoint(Body_collider, Rsholder_collider, Vector3(0, 1, 0),Vector3(0, 1, 0), joint_bias);
+				auto Twist = Joint::add_Twistjoint(Body_collider, Rsholder_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
 				Twist->limit = Vector2(360 - 90, 90);
 			}
 			{
@@ -369,7 +387,7 @@ namespace Adollib
 			}
 			//腰
 			{
-				auto Cone = Joint::add_Conejoint(Body_collider, Waist_collider, Vector3(0, -1.0f, 0), Vector3(0, 0.5f, 0), Vector3(0, 1, 0).unit_vect(), Vector3(0, 1.5f, -1).unit_vect(),0.1f);
+				auto Cone = Joint::add_Conejoint(Body_collider, Waist_collider, Vector3(0, -1.0f, 0), Vector3(0, 0.5f, 0), Vector3(0, 1, 0).unit_vect(), Vector3(0, 1.5f, -1).unit_vect(), 0.1f);
 				Cone->limit = 60;
 
 				auto Twist = Joint::add_Twistjoint(Body_collider, Waist_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
@@ -396,7 +414,7 @@ namespace Adollib
 				//Cone->limit = 48;
 				Cone->limit = 80;
 
-				auto Twist = Joint::add_Twistjoint(Waist_collider, Lleg_collider, Vector3(0, 1, 0),Vector3(0, 1, 0), joint_bias);
+				auto Twist = Joint::add_Twistjoint(Waist_collider, Lleg_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
 				Twist->limit = Vector2(360 - 15, 5);
 			}
 			{
@@ -409,13 +427,12 @@ namespace Adollib
 
 		//顔とかベルトを着けてみる
 		{
-			Vector4 face_color = Vector4(0.5f, 0.5f, 0.5f, 1);
 			{
 				Gameobject* eye0 = Gameobject_manager::createSphere("eye0");
 				Head->add_child(eye0);
 				eye0->transform->local_pos = Vector3(+0.5f, 0.5f, -1);
 				eye0->transform->local_scale = Vector3(0.25f, 0.25f, 0.25f);
-				eye0->material->color = face_color;
+				eye0->material->color = Vector4(sub_color, 1);
 				eye0->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
 			}
 			{
@@ -423,7 +440,7 @@ namespace Adollib
 				Head->add_child(eye1);
 				eye1->transform->local_pos = Vector3(-0.5f, 0.5f, -1);
 				eye1->transform->local_scale = Vector3(0.25f, 0.25f, 0.25f);
-				eye1->material->color = face_color;
+				eye1->material->color = Vector4(sub_color, 1);
 				eye1->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
 			}
 			{
@@ -431,7 +448,7 @@ namespace Adollib
 				Head->add_child(mouth);
 				mouth->transform->local_pos = Vector3(0, -0.45f, -1);
 				mouth->transform->local_scale = Vector3(0.7f, 0.25f, 0.3f);
-				mouth->material->color = face_color;
+				mouth->material->color = Vector4(sub_color, 1);
 				mouth->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
 			}
 
@@ -440,7 +457,7 @@ namespace Adollib
 				Waist->add_child(belt);
 				belt->transform->local_pos = Vector3(0, -0.45f, 0);
 				belt->transform->local_scale = Vector3(1.1, 0.25f, 1.1);
-				belt->material->color = face_color;
+				belt->material->color = Vector4(sub_color, 1);
 				belt->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
 			}
 		}
@@ -465,33 +482,11 @@ namespace Adollib
 				Lleg_collider,
 				Lfoot_collider
 			);
+
+			auto input_changer = GO->addComponent<Input_changer>();
+			input_changer->pad_num = player_num;
 		}
 
-	}
-
-	void Player_manager::start()
-	{
-
-	}
-
-	// 毎フレーム呼ばれる更新処理
-	void Player_manager::update()
-	{
-
-	}
-
-
-
-
-	// このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる
-	void Player_manager::onEnable()
-	{
-
-	}
-
-	// このスクリプトがアタッチされているGOのactiveSelfがfalseになった時呼ばれる
-	void Player_manager::onDisable()
-	{
 
 	}
 

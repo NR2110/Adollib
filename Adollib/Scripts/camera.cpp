@@ -151,7 +151,7 @@ namespace Adollib
 					input->getKeyState(Key::A) ||
 					input->getKeyState(Key::S) ||
 					input->getKeyState(Key::D)
-					)//ˆÚ“®’†‚Í
+					)
 				{
 					//max_rotate_buffer += (max_rotate_moving - max_rotate_buffer).unit_vect() * 0.5f;
 					//max_rotate_buffer = ALEasing(max_rotate_buffer, max_rotate_moving, 0.05f, time->deltaTime());

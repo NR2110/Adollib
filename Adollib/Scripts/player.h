@@ -6,8 +6,10 @@
 
 namespace Adollib
 {
+
 	class Stage_manager;
 	class Camera;
+	class Input_changer;
 
 	class Player : public Component
 	{
@@ -75,7 +77,8 @@ namespace Adollib
 		float respown_timer = 0; //respown処理用のtimer >0の時 check_respown()でPlayer::updateをreturn (入力を受け付けない、gunyattoする)
 
 	private:
-		Camera* camera; //cameraへのポインタ
+		Input_changer* input_changer = nullptr; //自身の保持するinput_changerへのポインタ
+		Camera* camera = nullptr; //cameraへのポインタ
 		Stage_manager* stage_manager = nullptr; //stage_managerへのポインタ
 
 	private:

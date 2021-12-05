@@ -23,7 +23,7 @@ namespace Adollib
 {
 	void Stage_01::stage_awake()
 	{
-		player_respown_pos = Vector3(-2.7f, 80, -5.f);
+		player_respown_pos = Vector3(-2.7f, 50, -5.f);
 		respown_num = -1;
 		//player_respown_pos = Vector3(-2.7f, 10, -5);
 		//player_respown_pos = Vector3(90, 16.0f, 66.0f);

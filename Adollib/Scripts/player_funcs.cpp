@@ -335,7 +335,6 @@ void Player::linear_move() {
 		move_pow = 0.3f;
 	}
 
-	Debug::set("dir", dir.unit_vect());
 	{
 		//ˆÚ“®
 		Waist_collider->add_force(dir * waist_move_pow * move_pow);
@@ -360,16 +359,16 @@ void Player::linear_move() {
 void Player::angula_move() {
 	Vector3 rot_vec = Vector3(0);
 	if (input->getKeyState(Key::W)) {
-		rot_vec += Vector3(0, 0, -1);
-	}
-	if (input->getKeyState(Key::S)) {
 		rot_vec += Vector3(0, 0, +1);
 	}
+	if (input->getKeyState(Key::S)) {
+		rot_vec += Vector3(0, 0, -1);
+	}
 	if (input->getKeyState(Key::A)) {
-		rot_vec += Vector3(+1, 0, 0);
+		rot_vec += Vector3(-1, 0, 0);
 	}
 	if (input->getKeyState(Key::D)) {
-		rot_vec += Vector3(-1, 0, 0);
+		rot_vec += Vector3(+1, 0, 0);
 	}
 
 	if (rot_vec.norm() != 0) {

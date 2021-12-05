@@ -159,6 +159,7 @@
     <ClInclude Include="..\Scripts\demo_house.h" />
     <ClInclude Include="..\Scripts\door.h" />
     <ClInclude Include="..\Scripts\area_goal.h" />
+    <ClInclude Include="..\Scripts\input_changer.h" />
     <ClInclude Include="..\Scripts\kinematic_block.h" />
     <ClInclude Include="..\Scripts\object_manager.h" />
     <ClInclude Include="..\Scripts\object_rotate.h" />
@@ -292,6 +293,7 @@
     <ClCompile Include="..\Scripts\area_respown_set.cpp" />
     <ClCompile Include="..\Scripts\camera.cpp" />
     <ClCompile Include="..\Scripts\demo_house.cpp" />
+    <ClCompile Include="..\Scripts\input_changer.cpp" />
     <ClCompile Include="..\Scripts\object_manager.cpp" />
     <ClCompile Include="..\Scripts\object_rotate.cpp" />
     <ClCompile Include="..\Scripts\player.cpp" />

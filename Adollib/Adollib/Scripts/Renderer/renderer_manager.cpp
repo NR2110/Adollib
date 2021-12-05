@@ -105,17 +105,17 @@ void Renderer_manager::render(const std::map<Scenelist, std::list<Camera_compone
 		}
 		Work_meter::stop("render_obj");
 
-		//// sky sphere
-		//{
-		//	camera->sky_sphere->position = camera->transform->position + Vector3(0,-500,0);
-		//	camera->sky_sphere->rotate = Vector3(0,180,0);
-		//	camera->sky_sphere->fov = camera->fov;
-		//	camera->sky_sphere->aspect = camera->aspect;
-		//	camera->sky_sphere->nearZ = camera->nearZ;
-		//	camera->sky_sphere->farZ = 100000.0f;
-		//	camera->sky_sphere->shader_activate();
-		//	camera->sky_sphere->render();
-		//}
+		// sky sphere
+		{
+			camera->sky_sphere->position = camera->transform->position + Vector3(0,-500,0);
+			camera->sky_sphere->rotate = Vector3(0,180,0);
+			camera->sky_sphere->fov = camera->fov;
+			camera->sky_sphere->aspect = camera->aspect;
+			camera->sky_sphere->nearZ = camera->nearZ;
+			camera->sky_sphere->farZ = 100000.0f;
+			camera->sky_sphere->shader_activate();
+			camera->sky_sphere->render();
+		}
 
 		// collider‚Ìrender
 		Physics_function::Physics_manager::render_collider(Sce);
