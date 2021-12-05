@@ -73,62 +73,62 @@ namespace Adollib
 
 		if (follow_player == false) {
 
-			Vector3 position = Vector3(0, 0, 0);
-			Quaternion rotate = quaternion_identity();
+			//Vector3 position = Vector3(0, 0, 0);
+			//Quaternion rotate = quaternion_identity();
 
-			static bool set_carsol_stop = true;
+			//static bool set_carsol_stop = true;
 
-			//ƒJƒƒ‰‚Ì‰ñ“]
-			if (input->getMouseState(Mouse::RBUTTON)) {
-				//float rotate_pow = 70 * Al_Global::second_per_frame;
-				float rotate_pow = rotate_speed;
-				Vector3 rotate_vec = Vector3(0, 0, 0);
-				rotate_vec.y = (input->getCursorPosX() - cursol_pos_save.x) * rotate_pow;
-				rotate_vec.x = (input->getCursorPosY() - cursol_pos_save.y) * rotate_pow;
+			////ƒJƒƒ‰‚Ì‰ñ“]
+			//if (input->getMouseState(Mouse::RBUTTON)) {
+			//	//float rotate_pow = 70 * Al_Global::second_per_frame;
+			//	float rotate_pow = rotate_speed;
+			//	Vector3 rotate_vec = Vector3(0, 0, 0);
+			//	rotate_vec.y = (input->getCursorPosX() - cursol_pos_save.x) * rotate_pow;
+			//	rotate_vec.x = (input->getCursorPosY() - cursol_pos_save.y) * rotate_pow;
 
-				rotate_vec.x = ALClamp(rotate_vec.x, max_rotate.x - rotate_vec_save.x, max_rotate.y - rotate_vec_save.x);
-				rotate_vec_save += rotate_vec;
+			//	rotate_vec.x = ALClamp(rotate_vec.x, max_rotate.x - rotate_vec_save.x, max_rotate.y - rotate_vec_save.x);
+			//	rotate_vec_save += rotate_vec;
 
-				rotate *= quaternion_axis_angle(Vector3(0, 1, 0), +rotate_vec.y);
-				rotate *= quaternion_axis_angle(vector3_cross(Vector3(0, 1, 0), vector3_quatrotate(Vector3(0, 0, 1), camera_rot)).unit_vect(), +rotate_vec.x);
-			}
-			cursol_pos_save.x = (float)input->getCursorPosX();
-			cursol_pos_save.y = (float)input->getCursorPosY();
+			//	rotate *= quaternion_axis_angle(Vector3(0, 1, 0), +rotate_vec.y);
+			//	rotate *= quaternion_axis_angle(vector3_cross(Vector3(0, 1, 0), vector3_quatrotate(Vector3(0, 0, 1), camera_rot)).unit_vect(), +rotate_vec.x);
+			//}
+			//cursol_pos_save.x = (float)input->getCursorPosX();
+			//cursol_pos_save.y = (float)input->getCursorPosY();
 
-			//ƒJƒƒ‰‚ÌˆÚ“®
-			{
-				Vector3 move_vec = Vector3(0, 0, 0);
-				float   move_pow = linear_speed * Al_Global::second_per_frame;
-				if (input->getKeyState(Key::LeftShift)) move_pow = linear_speed * 2 * Al_Global::second_per_frame;
-				if (input->getKeyState(Key::W))move_vec += Vector3(0, 0, +1);
-				if (input->getKeyState(Key::S))move_vec += Vector3(0, 0, -1);
-				if (input->getKeyState(Key::D))move_vec += Vector3(+1, 0, 0);
-				if (input->getKeyState(Key::A))move_vec += Vector3(-1, 0, 0);
+			////ƒJƒƒ‰‚ÌˆÚ“®
+			//{
+			//	Vector3 move_vec = Vector3(0, 0, 0);
+			//	float   move_pow = linear_speed * Al_Global::second_per_frame;
+			//	if (input->getKeyState(Key::LeftShift)) move_pow = linear_speed * 2 * Al_Global::second_per_frame;
+			//	if (input->getKeyState(Key::W))move_vec += Vector3(0, 0, +1);
+			//	if (input->getKeyState(Key::S))move_vec += Vector3(0, 0, -1);
+			//	if (input->getKeyState(Key::D))move_vec += Vector3(+1, 0, 0);
+			//	if (input->getKeyState(Key::A))move_vec += Vector3(-1, 0, 0);
 
-				//‚¢‚ç‚È‚¢‰ñ“]‚ðœ‚­
-				Vector3 eu = camera_rot.euler();
-				Quaternion y_axis_rotate = quaternion_from_euler(0, eu.y, 0);
-				position += vector3_quatrotate(move_vec, y_axis_rotate).unit_vect() * move_pow;
+			//	//‚¢‚ç‚È‚¢‰ñ“]‚ðœ‚­
+			//	Vector3 eu = camera_rot.euler();
+			//	Quaternion y_axis_rotate = quaternion_from_euler(0, eu.y, 0);
+			//	position += vector3_quatrotate(move_vec, y_axis_rotate).unit_vect() * move_pow;
 
-				//yŽ²•ûŒü‚ÌˆÚ“®
-				if (input->getKeyState(Key::Space))position += Vector3(0, 1, 0) * move_pow;
-				if (input->getKeyState(Key::LeftControl))position += Vector3(0, -1, 0) * move_pow;
-			}
+			//	//yŽ²•ûŒü‚ÌˆÚ“®
+			//	if (input->getKeyState(Key::Space))position += Vector3(0, 1, 0) * move_pow;
+			//	if (input->getKeyState(Key::LeftControl))position += Vector3(0, -1, 0) * move_pow;
+			//}
 
-			transform->local_pos += position;
-			camera_rot *= rotate;
+			//transform->local_pos += position;
+			//camera_rot *= rotate;
 
 		}
 		else {
 			Quaternion rotate = quaternion_identity();
 
 			//ƒJƒƒ‰‚Ì‰ñ“]
-			if (is_lock_cursol == true) {
+			if (input_changer->get_lockcursol()) {
 				//float rotate_pow = 70 * Al_Global::second_per_frame;
 				float rotate_pow = rotate_speed;
 				Vector3 rotate_vec = Vector3(0, 0, 0);
-				rotate_vec.y = (input->getCursorPosX() - cursol_pos_save.x) * rotate_pow;
-				rotate_vec.x = (input->getCursorPosY() - cursol_pos_save.y) * rotate_pow;
+				rotate_vec.y = input_changer->cursol_move.y;
+				rotate_vec.x = input_changer->cursol_move.x;
 
 				// min,max‚É‚Ü‚Æ‚ß‚é
 				rotate_vec.x = ALClamp(rotate_vec.x, max_rotate.x - rotate_vec_save.x, max_rotate.y - rotate_vec_save.x);
@@ -136,9 +136,6 @@ namespace Adollib
 
 				rotate *= quaternion_axis_angle(vector3_cross(Vector3(0, 1, 0), vector3_quatrotate(Vector3(0, 0, 1), camera_rot)).unit_vect(), +rotate_vec.x);
 				rotate *= quaternion_axis_angle(Vector3(0, 1, 0), +rotate_vec.y);
-
-				input->setCursorPos(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
-				cursol_pos_save = Vector3(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f, 0);
 			}
 
 			// easing
@@ -198,11 +195,11 @@ namespace Adollib
 				ray_timer -= timeStep;
 
 				// ƒzƒC[ƒ‹‚ª“®‚¢‚Ä‚¢‚ê‚Î Œ»Ý‚Ì‹——£‚©‚çwheel‚Å“®‚©‚µ‚½‚Æ‚±‚ë‚ðdis‚É‚¨‚­
-				if (input->getMouseWheel() != 0) {
+				if (input_changer->wheel_move != 0) {
 					easing_value = 10000 * timeStep; // Ž©‘R‚É–ß‚é‚æ‚è‘‚­‚·‚é
 					easing_pow = 0.8f;
 					dis = dis_buffer;
-					dis += -input->getMouseWheel() * 0.02f;
+					dis += -input_changer->wheel_move * 0.02f;
 
 					if (dis_buffer < 10 && dis < dis_buffer)dis = dis_buffer;
 					if (dis_buffer > 20 && dis > dis_buffer)dis = dis_buffer;
@@ -243,14 +240,15 @@ namespace Adollib
 		}
 
 		if (input->getKeyTrigger(Key::RightControl)) {
-			is_lock_cursol = !is_lock_cursol;
-			if (is_lock_cursol) ShowCursor(FALSE);
-			else ShowCursor(TRUE);
+			//is_lock_cursol = !is_lock_cursol;
+			//if (is_lock_cursol) ShowCursor(FALSE);
+			//else ShowCursor(TRUE);
 
-			if (is_lock_cursol == true) {
-				input->setCursorPos(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
-				cursol_pos_save = Vector3(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f, 0);
-			}
+			//if (is_lock_cursol == true) {
+			//	input->setCursorPos(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
+			//	cursol_pos_save = Vector3(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f, 0);
+			//}
+			input_changer->set_lockcursol(!input_changer->get_lockcursol());
 		}
 
 		timeStep = 0;

@@ -17,6 +17,8 @@ namespace Adollib
 		bool is_gunyatto_state = false;
 		bool is_respown_trigger = false;
 
+		float wheel_move = 0;
+
 		// cursolŠÖŒW
 		Vector2 cursol_move; //cursol‚ÌˆÚ“®—Ê
 		Vector2 cursol_pos_save; //cursol‚Ì‘O‚ÌÀ•W
@@ -36,12 +38,11 @@ namespace Adollib
 		//const GamePad Larm_up_pad = GamePad::RSHOULDER;
 
 	private:
-		bool is_lock_cursol = false;
-		bool is_show_cursol = false;
+		bool is_lock_cursol_ = false;
 
 	public:
-		void set_showcursol(bool is_show);
-		bool get_showcursol() { return is_show_cursol; };
+		void set_lockcursol(bool is_show);
+		bool get_lockcursol() { return is_lock_cursol_; };
 
 	public:
 		void awake() override;

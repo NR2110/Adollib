@@ -595,7 +595,7 @@ void Player::turn_gunyatto_dir() {
 
 }
 
-//
+// drag‚ğ‰Šú’l‚É‚·‚é
 void Player::set_default_drag() {
 	for (int i = 0; i < Human_collider_size; i++) {
 		Human_colliders[i]->physics_data.drag = Human_default_drags[i];

@@ -18,7 +18,6 @@ namespace Adollib
 		Vector3 pos_buffer; //座標のeasing用
 		float pos_slop = 1; //カメラの座標の許容誤差
 
-		bool is_lock_cursol = false;
 		Vector2 max_rotate = Vector2(-50, 60); //カメラの上下の最大角度
 		//Vector2 max_rotate_moving = Vector2(-15, 15); //移動中のカメラの上下の最大角度
 		float rotate_min_pow_bufer = 1;
@@ -27,7 +26,6 @@ namespace Adollib
 
 		std::shared_ptr<Transform> player;
 		Input_changer* input_changer;
-		Vector3 cursol_pos_save;
 		Vector3 rotate_vec_save;
 
 		Quaternion camera_rot_goal; //Easing用

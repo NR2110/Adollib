@@ -1,6 +1,7 @@
 #include "input_changer.h"
 
 #include "../Adollib/Scripts/Main/Adollib.h"
+#include "../Adollib/Scripts/Imgui/debug.h"
 
 using namespace Adollib;
 
@@ -51,41 +52,57 @@ void Input_changer::update() {
 	is_Rarm_state = (pad_num == 0 && input->getMouseState(Mouse::RBUTTON)) || input->getPadState(pad_num, GamePad::RSHOULDER);
 	is_Larm_state = (pad_num == 0 && input->getMouseState(Mouse::LBUTTON)) || input->getPadState(pad_num, GamePad::LSHOULDER);
 
+	// wheel
+	wheel_move = 0;
+	if (pad_num == 0) {
+		wheel_move += input->getMouseWheel();
+	}
 
-	//// cursol_move
-	//if (pad_num == 0) {
-	//	cursol_move.y = (input->getCursorPosX() - cursol_pos_save.x) * rotate_speed;
-	//	cursol_move.x = (input->getCursorPosY() - cursol_pos_save.y) * rotate_speed;
-	//}
+	if (input->getPadState(pad_num, GamePad::UP))
+		wheel_move += 1;
+	if (input->getPadState(pad_num, GamePad::DOWN))
+		wheel_move -= 1;
 
-	//cursol_move.y += input->getLStickX(pad_num);
-	//cursol_move.x += input->getLStickY(pad_num);
+	// cursol_move
+	cursol_move = Vector2(0);
+	if (pad_num == 0) {
+		cursol_move.y = (input->getCursorPosX() - cursol_pos_save.x) * rotate_speed;
+		cursol_move.x = (input->getCursorPosY() - cursol_pos_save.y) * rotate_speed;
+	}
+
+	Debug::set("cursol_move", cursol_move.x, cursol_move.y);
+
+	cursol_move.y += input->getRStickX(pad_num);
+	cursol_move.x -= input->getRStickY(pad_num);
 
 
-	//// cursol‚ªlock‚³‚ê‚Ä‚¢‚½‚ç’†‰›‚Ö
-	//// ˆá‚Á‚½‚ç‚¢‚¢Š´‚¶‚É
-	//if (pad_num == 0 && !is_lock_cursol) {
-	//	input->setCursorPos(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
+	// cursol‚ªlock‚³‚ê‚Ä‚¢‚½‚ç’†‰›‚Ö
+	// ˆá‚Á‚½‚ç‚¢‚¢Š´‚¶‚É
+	if (pad_num == 0 && !is_lock_cursol_) {
+		//cursol_pos_save.x = (float)cursol_pos_save.x + cursol_move.y;
+		//cursol_pos_save.y = (float)cursol_pos_save.y + cursol_move.x;
 
-	//	cursol_pos_save.x = (float)cursol_pos_save.x + cursol_move.y;
-	//	cursol_pos_save.y = (float)cursol_pos_save.y + cursol_move.x;
-	//}
-	//else {
-	//	cursol_pos_save = Vector2(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
-	//}
+		//input->setCursorPos(cursol_pos_save.x, cursol_pos_save.y);
+		cursol_pos_save.x = (float)input->getCursorPosX();
+		cursol_pos_save.y = (float)input->getCursorPosY();
+	}
+	else {
+		input->setCursorPos(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
+		cursol_pos_save = Vector2(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
+	}
 }
 
-void Input_changer::set_showcursol(bool is_show) {
-	if (is_show_cursol == is_show)return;
+void Input_changer::set_lockcursol(bool is_show) {
+	if (is_lock_cursol_ == is_show)return;
 
-	is_lock_cursol = is_show;
+	is_lock_cursol_ = is_show;
 
 	// lock‚³‚ê‚Ä‚½‚Æ‚«‚Ícurso‚ðŒ©‚¦‚È‚¢‚æ‚¤‚É
-	if (is_lock_cursol) ShowCursor(FALSE);
+	if (is_lock_cursol_) ShowCursor(FALSE);
 	else ShowCursor(TRUE);
 
 	// lock‚³‚ê‚½‚Æ‚«‚Ícursol‚ð’†‰›‚ÉŽ‚Á‚Ä‚­‚é
-	if (is_lock_cursol == true) {
+	if (is_lock_cursol_ == true) {
 		input->setCursorPos(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
 		cursol_pos_save = Vector2(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
 	}

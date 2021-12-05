@@ -1,7 +1,6 @@
-﻿  camera.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\camera.cpp(136,82): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\camera.cpp(136,49): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\camera.cpp(143,18): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\camera.cpp(247,82): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\camera.cpp(247,49): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+﻿  input_changer.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\input_changer.cpp(90,80): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\input_changer.cpp(90,47): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\input_changer.cpp(106,80): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\input_changer.cpp(106,47): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe
