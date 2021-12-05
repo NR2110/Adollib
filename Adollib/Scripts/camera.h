@@ -5,6 +5,9 @@
 
 namespace Adollib
 {
+	class Input_changer;
+
+
 	class Camera : public Component
 	{
 	private:
@@ -23,6 +26,7 @@ namespace Adollib
 		//Vector2 max_rotate_buffer = Vector2(-50, 60); //カメラの最大角度のイージングのbuffer
 
 		std::shared_ptr<Transform> player;
+		Input_changer* input_changer;
 		Vector3 cursol_pos_save;
 		Vector3 rotate_vec_save;
 

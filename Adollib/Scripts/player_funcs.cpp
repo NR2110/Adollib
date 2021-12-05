@@ -10,6 +10,7 @@
 #include "stage_manager.h"
 #include "stage_base.h"
 #include "camera.h"
+#include "input_changer.h"
 
 
 
@@ -18,10 +19,11 @@ using namespace Adollib;
 // Žè‚ðL‚Î‚·
 void Player::reach_out_hands() {
 
-	const Mouse keys[2] = {
-		Mouse::LBUTTON ,
-		Mouse::RBUTTON
+	const bool input_arm[2] = {
+		input_changer->is_Larm_state,
+		input_changer->is_Rarm_state
 	};
+
 	Collider* colliders[6] = {
 		Lsholder_collider,
 		Rsholder_collider,
@@ -40,8 +42,7 @@ void Player::reach_out_hands() {
 	};
 
 	for (int i = 0; i < 2; i++) {
-		const Mouse key = keys[i];
-		if (input->getMouseState(key)) {
+		if (input_arm[i]) {
 			Joint_base* joint = joints[i];
 
 			//ƒJƒƒ‰‚Ì‰ñ“]‚©‚ç˜r‚ðã‚°‚é‚‚³‚ð•Ï‚¦‚é
@@ -118,9 +119,10 @@ void Player::reach_out_hands() {
 
 // •¨‚ð‚Â‚©‚Þ
 void Player::catch_things() {
-	const Mouse keys[2] = {
-		Mouse::LBUTTON,
-		Mouse::RBUTTON
+
+	const bool input_arm[2] = {
+		input_changer->is_Larm_state,
+		input_changer->is_Rarm_state
 	};
 
 	Collider* colliders[6] = {
@@ -148,11 +150,10 @@ void Player::catch_things() {
 	}
 
 	for (int i = 0; i < 2; i++) {
-		const Mouse key = keys[i];
 		auto& collider = colliders[i];
 		Joint_base*& joint = *joints[i];
 		//Ž‚Â
-		if (input->getMouseState(key) && joint == nullptr && *is_maked_joint[i] == false) { //Key‚ª‰Ÿ‚³‚ê‚Ä‚¢‚é joint‚ª‘¶Ý‚µ‚È‚¢ “¯state’†‚É•¨‚ð‚Â‚©‚ñ‚Å‚¢‚È‚¢
+		if (input_arm[i] && joint == nullptr && *is_maked_joint[i] == false) { //Key‚ª‰Ÿ‚³‚ê‚Ä‚¢‚é joint‚ª‘¶Ý‚µ‚È‚¢ “¯state’†‚É•¨‚ð‚Â‚©‚ñ‚Å‚¢‚È‚¢
 			collider->is_save_contacted_colls = true;
 			auto contacted_colls = collider->get_Contacted_data();
 
@@ -198,11 +199,11 @@ void Player::catch_things() {
 
 		//—£‚·
 		{
-			if (!input->getMouseState(key)) {
+			if (!input_arm[i]) {
 				*is_maked_joint[i] = false;
 			}
 
-			if (!input->getMouseState(key) && joint != nullptr) {
+			if (!input_arm[i] && joint != nullptr) {
 				Joint::delete_joint(joint);
 			}
 
@@ -357,22 +358,9 @@ void Player::linear_move() {
 
 // ‰ñ“]
 void Player::angula_move() {
-	Vector3 rot_vec = Vector3(0);
-	if (input->getKeyState(Key::W)) {
-		rot_vec += Vector3(0, 0, +1);
-	}
-	if (input->getKeyState(Key::S)) {
-		rot_vec += Vector3(0, 0, -1);
-	}
-	if (input->getKeyState(Key::A)) {
-		rot_vec += Vector3(-1, 0, 0);
-	}
-	if (input->getKeyState(Key::D)) {
-		rot_vec += Vector3(+1, 0, 0);
-	}
 
-	if (rot_vec.norm() != 0) {
-		rot_vec = rot_vec.unit_vect();
+	if (input_changer->dir.norm() != 0) {
+		Vector3 rot_vec = rot_vec.unit_vect();
 
 		rot_vec = vector3_quatrotate(Vector3(0, 0, -1), camera->camera_rot);
 		rot_vec.y = 0;
@@ -392,20 +380,7 @@ void Player::angula_move() {
 
 // ˆÚ“®•ûŒü‚ðŒvŽZ
 void Player::accume_move_dir() {
-	Vector3 move_vec = Vector3(0);
-	if (input->getKeyState(Key::W)) {
-		move_vec += Vector3(0, 0, +1);
-	}
-	if (input->getKeyState(Key::S)) {
-		move_vec += Vector3(0, 0, -1);
-	}
-	if (input->getKeyState(Key::A)) {
-		move_vec += Vector3(-1, 0, 0);
-	}
-	if (input->getKeyState(Key::D)) {
-		move_vec += Vector3(+1, 0, 0);
-	}
-	dir = vector3_quatrotate(move_vec, camera->camera_rot).unit_vect();
+	dir = vector3_quatrotate(input_changer->dir, camera->camera_rot).unit_vect();
 	dir.y = 0;
 	//dir = vector3_quatrotate(dir, quaternion_from_euler(0, 180, 0));
 	dir = dir.unit_vect();
@@ -494,7 +469,7 @@ void Player::make_jump() {
 	if (is_jumping == false && is_jumpable) coyote = 0.3f;
 	if (is_jumping == false && !is_jumpable) coyote -= Al_Global::second_per_frame;
 
-	if (is_gunyatto == false && coyote >= 0 && input->getKeyTrigger(Key::Space)) {
+	if (is_gunyatto == false && coyote >= 0 && input_changer->is_jump_trigger) {
 
 		if (onground_collider != nullptr) {
 
@@ -529,8 +504,8 @@ void Player::make_jump() {
 bool Player::check_respown() {
 
 	auto stage = stage_manager->get_current_stage();
-	// stageŽw’è‚ÌYÀ•W‚æ‚èPlayer‚ª’á‚¯‚ê‚Îrespown
-	if (Waist->world_position().y < stage->y_player_respown_limit + 50) {
+	// “ü—Í‚ª‚ ‚é || stageŽw’è‚ÌYÀ•W‚æ‚èPlayer‚ª’á‚¯‚ê‚Îrespown
+	if (input_changer->is_respown_trigger || Waist->world_position().y < stage->y_player_respown_limit + 50) {
 
 		// goal‚µ‚Ä‚¢‚½‚ç respownˆ—‚ðs‚í‚¸ stageØ‘Öˆ—‚ðŒÄ‚Ô
 		if (stage->next_stage != Stage_types::none) {

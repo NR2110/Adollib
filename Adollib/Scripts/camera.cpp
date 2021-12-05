@@ -16,6 +16,7 @@
 #include "../Adollib/Scripts/Physics/ray.h"
 #include "../Adollib/Scripts/Physics/ALP__physics_manager.h"
 
+#include "input_changer.h"
 
 namespace Adollib
 {
@@ -29,8 +30,11 @@ namespace Adollib
 
 	void Camera::start()
 	{
-		player = Gameobject_manager::find("Body")->transform;
+		//player = Gameobject_manager::find("Body")->transform;
 		player = Gameobject_manager::find("Waist")->transform;
+
+		input_changer = Gameobject_manager::find("player")->findComponent<Input_changer>();
+
 		follow_player = true;
 
 		auto c = gameobject->findComponent<Camera_component>();
@@ -147,11 +151,7 @@ namespace Adollib
 			//// ˆÚ“®’†‚ÍÅ‘åŠp“x‚ð’²®
 			{
 				transform->local_orient = camera_rot;
-				if (input->getKeyState(Key::W) ||
-					input->getKeyState(Key::A) ||
-					input->getKeyState(Key::S) ||
-					input->getKeyState(Key::D)
-					)
+				if (input_changer->dir.norm() != 0)
 				{
 					//max_rotate_buffer += (max_rotate_moving - max_rotate_buffer).unit_vect() * 0.5f;
 					//max_rotate_buffer = ALEasing(max_rotate_buffer, max_rotate_moving, 0.05f, time->deltaTime());

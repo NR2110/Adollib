@@ -77,9 +77,9 @@ namespace Adollib
 		float respown_timer = 0; //respown処理用のtimer >0の時 check_respown()でPlayer::updateをreturn (入力を受け付けない、gunyattoする)
 
 	private:
-		Input_changer* input_changer = nullptr; //自身の保持するinput_changerへのポインタ
-		Camera* camera = nullptr; //cameraへのポインタ
 		Stage_manager* stage_manager = nullptr; //stage_managerへのポインタ
+		Camera* camera = nullptr; //cameraへのポインタ
+		Input_changer* input_changer = nullptr; //自身の保持するinput_changerへのポインタ
 
 	private:
 		//::: 毎フレーム呼び出す

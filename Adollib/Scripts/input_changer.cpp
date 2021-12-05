@@ -1,5 +1,7 @@
 #include "input_changer.h"
 
+#include "../Adollib/Scripts/Main/Adollib.h"
+
 using namespace Adollib;
 
 void Input_changer::awake() {
@@ -36,23 +38,55 @@ void Input_changer::update() {
 
 	dir = dir.unit_vect();
 
+	// jump
+	is_jump_trigger = (pad_num == 0 && input->getKeyState(Key::Space)) || input->getPadState(pad_num, GamePad::A);
+
+	// gunyatto
+	is_gunyatto_state = (pad_num == 0 && input->getKeyState(Key::LeftControl)) || input->getPadState(pad_num, GamePad::X);
+
+	// respown
+	is_respown_trigger = (pad_num == 0 && input->getKeyTrigger(Key::R)) || input->getPadTrigger(pad_num, GamePad::START);
 
 	// 手を持ち上げる
 	is_Rarm_state = (pad_num == 0 && input->getMouseState(Mouse::RBUTTON)) || input->getPadState(pad_num, GamePad::RSHOULDER);
 	is_Larm_state = (pad_num == 0 && input->getMouseState(Mouse::LBUTTON)) || input->getPadState(pad_num, GamePad::LSHOULDER);
 
-	is_respown_trigger = (pad_num == 0 && input->getKeyTrigger(Key::R)) || input->getPadTrigger(pad_num, GamePad::START);
 
+	//// cursol_move
+	//if (pad_num == 0) {
+	//	cursol_move.y = (input->getCursorPosX() - cursol_pos_save.x) * rotate_speed;
+	//	cursol_move.x = (input->getCursorPosY() - cursol_pos_save.y) * rotate_speed;
+	//}
+
+	//cursol_move.y += input->getLStickX(pad_num);
+	//cursol_move.x += input->getLStickY(pad_num);
+
+
+	//// cursolがlockされていたら中央へ
+	//// 違ったらいい感じに
+	//if (pad_num == 0 && !is_lock_cursol) {
+	//	input->setCursorPos(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
+
+	//	cursol_pos_save.x = (float)cursol_pos_save.x + cursol_move.y;
+	//	cursol_pos_save.y = (float)cursol_pos_save.y + cursol_move.x;
+	//}
+	//else {
+	//	cursol_pos_save = Vector2(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
+	//}
 }
 
-// このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる
-void Input_changer::onEnable()
-{
+void Input_changer::set_showcursol(bool is_show) {
+	if (is_show_cursol == is_show)return;
 
-}
+	is_lock_cursol = is_show;
 
-// このスクリプトがアタッチされているGOのactiveSelfがfalseになった時呼ばれる
-void Input_changer::onDisable()
-{
+	// lockされてたときはcursoを見えないように
+	if (is_lock_cursol) ShowCursor(FALSE);
+	else ShowCursor(TRUE);
 
+	// lockされたときはcursolを中央に持ってくる
+	if (is_lock_cursol == true) {
+		input->setCursorPos(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
+		cursol_pos_save = Vector2(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
+	}
 }

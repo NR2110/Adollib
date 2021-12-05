@@ -53,8 +53,6 @@ void Stage_manager::update() {
 		is_changed_stage = true;
 	}
 
-	if (input->getKeyTrigger(Key::R)) player->respown();
-
 	if (input->getKeyTrigger(Key::F1))
 		set_next_stage_type(Stage_types::demo);
 	if (input->getKeyTrigger(Key::F2))
