@@ -56,10 +56,13 @@ namespace Adollib
 
 		bool is_gunyatto = false; //trueの時、体がぐにゃっとする
 
+		// つかみ
 		Joint_base* catch_right_joint = nullptr; //右手がつかんでいるjoint
 		Joint_base* catch_left_joint = nullptr;	 //左手がつかんでいるjoint
 		bool is_maked_right_joint = false; //つかんでいたものが距離で離れたとき、stateのみだと即座に次のものをつかんでしまう 嫌なのでboolで管理
 		bool is_maked_left_joint = false;
+		Collider* catch_check_right_collider = nullptr; //つかみ可能かどうかを確認する
+		Collider* catch_check_left_collider = nullptr; //つかみ可能かどうかを確認する
 
 		// 接地判定を行う(sphere_cast)
 		Collider* onground_collider = nullptr; //立っているcollider情報

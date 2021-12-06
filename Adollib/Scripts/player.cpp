@@ -78,6 +78,7 @@ namespace Adollib
 
 			Waist->add_child(check_onplayer_go);
 		}
+		// respownŽž‚ÌÚ’n”»’è—p player‚ð•ï‚Þsphere
 		{
 			auto check_respown_go = Gameobject_manager::create("check_respown_go");
 			auto check_onplayer_coll = check_respown_go->addComponent<Collider>();
@@ -93,6 +94,45 @@ namespace Adollib
 			Waist->add_child(check_respown_go);
 
 			this->check_onplayer_coll = check_onplayer_coll;
+		}
+		// ‚Â‚©‚Ýcheck—pcollider‚ÌÝ’è
+		{
+			{
+				auto check_Rcatch_go = Gameobject_manager::create("check_Rcatch_go");
+				auto catch_check_right_collider = check_Rcatch_go->addComponent<Collider>();
+				auto shape = catch_check_right_collider->add_shape<Sphere>();
+
+				check_Rcatch_go->transform->local_pos = Vector3(+1, -0.5f, 0) ;
+				check_Rcatch_go->transform->local_scale = Vector3(1);
+
+				catch_check_right_collider->is_save_contacted_colls = true;
+				catch_check_right_collider->physics_data.is_moveable = false;
+				catch_check_right_collider->ignore_tags |= Collider_tags::Human;
+				//catch_check_right_collider->physics_data.is_hitable = false;
+				shape->r = 1;
+
+				Relbow->add_child(check_Rcatch_go);
+
+				this->catch_check_right_collider = catch_check_right_collider;
+			}
+			{
+				auto check_Lcatch_go = Gameobject_manager::create("check_Rcatch_go");
+				auto catch_check_left_collider = check_Lcatch_go->addComponent<Collider>();
+				auto shape = catch_check_left_collider->add_shape<Sphere>();
+
+				check_Lcatch_go->transform->local_pos = Vector3(-1, -0.5f, 0) ;
+				check_Lcatch_go->transform->local_scale = Vector3(1);
+
+				catch_check_left_collider->is_save_contacted_colls = true;
+				catch_check_left_collider->physics_data.is_moveable = false;
+				catch_check_left_collider->ignore_tags |= Collider_tags::Human;
+				//catch_check_left_collider->physics_data.is_hitable = false;
+				shape->r = 1;
+
+				Lelbow->add_child(check_Lcatch_go);
+
+				this->catch_check_left_collider = catch_check_left_collider;
+			}
 		}
 
 		respown_timer = -1;

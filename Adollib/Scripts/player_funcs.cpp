@@ -125,13 +125,17 @@ void Player::catch_things() {
 		input_changer->is_Rarm_state
 	};
 
+	Collider* check_catch_colliders[2] = {
+		catch_check_left_collider,
+		catch_check_right_collider
+	};
 	Collider* colliders[6] = {
 		Lhand_collider,
 		Rhand_collider,
 		Lelbow_collider,
 		Relbow_collider,
 		Lsholder_collider,
-		Rsholder_collider
+		Rsholder_collider,
 	};
 	Joint_base** joints[2] = {
 		&catch_left_joint,
@@ -140,6 +144,10 @@ void Player::catch_things() {
 	bool* is_maked_joint[2] = {
 		&is_maked_left_joint,
 		&is_maked_right_joint
+	};
+	const int sign[2]{
+		+1,
+		-1
 	};
 
 	// stage‚ª•ÏX‚³‚ê‚½‚çgameobject‚Ìíœ‚Åjoint‚ÍÁ‚¦‚Ä‚¢‚é‚Ì‚Å joint‚ðíœ
@@ -155,7 +163,8 @@ void Player::catch_things() {
 		//Ž‚Â
 		if (input_arm[i] && joint == nullptr && *is_maked_joint[i] == false) { //Key‚ª‰Ÿ‚³‚ê‚Ä‚¢‚é joint‚ª‘¶Ý‚µ‚È‚¢ “¯state’†‚É•¨‚ð‚Â‚©‚ñ‚Å‚¢‚È‚¢
 			collider->is_save_contacted_colls = true;
-			auto contacted_colls = collider->get_Contacted_data();
+			//auto contacted_colls = collider->get_Contacted_data();
+			auto contacted_colls = check_catch_colliders[i]->get_Contacted_data();
 
 			//Õ“Ë‚µ‚Ä‚¢‚écollider‚©‚çˆê”Ô‹ß‚¢‚à‚Ì‚ð’T¸
 			Contacted_data const* min_data = nullptr;
@@ -169,7 +178,7 @@ void Player::catch_things() {
 			if (min_data != nullptr && min_data->coll->tag != Collider_tags::Human) {
 				*is_maked_joint[i] = true;
 
-				//Vector3 x_dir = Vector3(1, 0, 0) * -(i * 2 - 1);
+				//Vector3 x_dir = Vector3(1, 0, 0) * -sign[i];
 				//Vector3 z_dir = Vector3(0, 0, 1);
 				//Vector3 world_x_dir = vector3_quatrotate(x_dir, collider->transform->orientation);
 				//Vector3 local_x_dir_Bcoord = vector3_quatrotate(world_x_dir, min_data->coll->transform->orientation.inverse());
@@ -185,12 +194,37 @@ void Player::catch_things() {
 				//	min_data->contacted_pointB + local_x_dir_Bcoord, min_data->contacted_pointB - local_x_dir_Bcoord
 				//);
 
+
+				//Vector3 elbow_contact_pos = Vector3(colliders[i + 2]->transform->scale.x * -sign[i], -colliders[i + 2]->transform->scale.y, 0) * 1.1f;
+				//Vector3 world_contactpoint = vector3_quatrotate(elbow_contact_pos, colliders[i + 2]->transform->orientation) + colliders[i + 2]->transform->position;
+
+				//Vector3 mindata_contact_pos = vector3_quatrotate(world_contactpoint - min_data->coll->transform->position, min_data->coll->transform->orientation);
+
+				//joint = Joint::add_balljoint(
+				//	colliders[i + 2],
+				//	min_data->coll,
+				//	elbow_contact_pos,
+				//	mindata_contact_pos
+				//);
+
+				Vector3 world_contactpoint_B = vector3_quatrotate(min_data->contacted_pointB, min_data->coll->transform->orientation) + min_data->coll->transform->position;
+				Vector3 world_hand_pos = collider->transform->position;
+				Vector3 world_hand_contactpoint = world_hand_pos + (world_contactpoint_B - world_hand_pos).unit_vect() * collider->transform->scale.x;
+				Vector3 local_hand_contactpoint = vector3_quatrotate(world_hand_contactpoint - collider->transform->position, collider->transform->orientation);
+
 				joint = Joint::add_balljoint(
 					collider,
 					min_data->coll,
-					min_data->contacted_pointA,
+					local_hand_contactpoint,
 					min_data->contacted_pointB
 				);
+
+				//joint = Joint::add_balljoint(
+				//	collider,
+				//	min_data->coll,
+				//	min_data->contacted_pointA,
+				//	min_data->contacted_pointB
+				//);
 
 				joint->slop = 0.1f;
 
@@ -198,6 +232,7 @@ void Player::catch_things() {
 		}
 
 		//—£‚·
+		//if(0)
 		{
 			if (!input_arm[i]) {
 				*is_maked_joint[i] = false;

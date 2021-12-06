@@ -162,7 +162,8 @@ namespace Adollib
 
 			Vector3 sholder_size = Vector3(0.35f, 0.6f, 0.4f);
 			Vector3 arm_size = sholder_size;
-			Vector3 hand_size = Vector3(0.45f, 0.45f, 0.45f);
+			//Vector3 hand_size = Vector3(0.45f, 0.45f, 0.45f);
+			Vector3 hand_size = Vector3(0.25f, 0.45f, 0.45f);
 			float arm_y_pos = 0.18f;
 			{
 				{
@@ -188,8 +189,6 @@ namespace Adollib
 					auto& GO = Rsholder;
 					GO->transform->local_scale = sholder_size;
 					GO->transform->local_orient = quaternion_from_euler(0, -30, -90);
-					//GO->transform->local_pos = Vector3(1.08f, arm_y_pos, 1.86f);
-					//GO->transform->local_pos = Vector3(3.78f, arm_y_pos, 4.02f);
 					GO->transform->local_pos = Vector3(-1.62, arm_y_pos, -0.30f);
 				}
 				{
@@ -301,6 +300,9 @@ namespace Adollib
 			Rleg_collider->physics_data.is_fallable = false;
 			Lleg_collider->physics_data.is_fallable = false;
 
+			Lhand_collider->physics_data.is_hitable = false;
+			Rhand_collider->physics_data.is_hitable = false;
+
 			//::: tagÇÃê›íË :::
 			Head_collider->tag = Collider_tags::Human;
 			Lsholder_collider->tag = Collider_tags::Human;
@@ -315,9 +317,8 @@ namespace Adollib
 			Rfoot_collider->tag = Collider_tags::Human;
 			Lleg_collider->tag = Collider_tags::Human;
 			Lfoot_collider->tag = Collider_tags::Human;
-
-			Lhand_collider->ignore_tags |= Collider_tags::Human;
-			Rhand_collider->ignore_tags |= Collider_tags::Human;
+			//Lhand_collider->ignore_tags |= Collider_tags::Human;
+			//Rhand_collider->ignore_tags |= Collider_tags::Human;
 
 
 			//::: sphereÇÃí≤êÆ :::
@@ -376,7 +377,8 @@ namespace Adollib
 				hinge->limit = Vector2(230, 360);
 			}
 			{
-				auto ball = Joint::add_balljoint(Lelbow_collider, Lhand_collider, Vector3(-0.2f, -0.15f, 0), Vector3(0, 0, 0), joint_bias);
+				auto ball = Joint::add_balljoint(Lelbow_collider, Lhand_collider, Vector3(-Lelbow_collider->transform->local_scale.x, -Lelbow_collider->transform->local_scale.y, 0), Vector3(0, 0, 0), joint_bias);
+				//auto ball = Joint::add_balljoint(Lelbow_collider, Lhand_collider, Vector3(-0.2f, -0.15f, 0), Vector3(0, 0, 0), joint_bias);
 			}
 			{
 				auto Cone = Joint::add_Conejoint(Body_collider, Rsholder_collider, Vector3(-1.1f, 0.2f, 0), Vector3(0, arm_size.y, 0), Vector3(+1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
@@ -391,7 +393,8 @@ namespace Adollib
 				hinge->limit = Vector2(230, 360);
 			}
 			{
-				auto ball = Joint::add_balljoint(Relbow_collider, Rhand_collider, Vector3(0.2f, -0.15f, 0), Vector3(0, 0, 0), joint_bias);
+				auto ball = Joint::add_balljoint(Relbow_collider, Rhand_collider, Vector3(+Relbow_collider->transform->local_scale.x, -Relbow_collider->transform->local_scale.y, 0), Vector3(0, 0, 0), joint_bias);
+				//auto ball = Joint::add_balljoint(Relbow_collider, Rhand_collider, Vector3(0.2f, -0.15f, 0), Vector3(0, 0, 0), joint_bias);
 			}
 			//çò
 			{
