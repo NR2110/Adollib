@@ -19,16 +19,9 @@ namespace Adollib
 
 	void Player::start()
 	{
-		//respown_timer = 1;
-
 		camera = Gameobject_manager::find("camera")->findComponent<Camera>();
 		stage_manager = Gameobject_manager::find("Stage_manager")->findComponent<Stage_manager>();
 		input_changer = gameobject->findComponent<Input_changer>();
-
-		//auto R = Head->findComponent<Mesh_renderer>();
-		////auto C = Gameobject_manager::find("camera")->findComponent<Camera_component>();
-		////R->set_texture(C->get_color_texture());
-		//R->load_texture(L"./DefaultModel/demo.png");
 
 		head_rot_max_speed = 3;
 		head_rot_max_pow = 1000;
@@ -78,6 +71,7 @@ namespace Adollib
 
 			Waist->add_child(check_onplayer_go);
 		}
+		// respownŽž‚ÉÚ’n”»’è‚ðs‚¤ player‚ð•ï‚Þsphere
 		{
 			auto check_respown_go = Gameobject_manager::create("check_respown_go");
 			auto check_onplayer_coll = check_respown_go->addComponent<Collider>();
@@ -93,6 +87,12 @@ namespace Adollib
 			Waist->add_child(check_respown_go);
 
 			this->check_onplayer_coll = check_onplayer_coll;
+		}
+
+		{
+			// anchor‚Ì‰Šúî•ñ‚ð•Û‘¶
+			Rhand_joint_ylength_default = Rhand_joint->anchor.posA.y;
+			Lhand_joint_ylength_default = Lhand_joint->anchor.posA.y;
 		}
 
 		respown_timer = -1;

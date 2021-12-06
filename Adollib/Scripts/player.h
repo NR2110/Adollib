@@ -56,10 +56,16 @@ namespace Adollib
 
 		bool is_gunyatto = false; //trueの時、体がぐにゃっとする
 
+		// つかみ関係
 		Joint_base* catch_right_joint = nullptr; //右手がつかんでいるjoint
 		Joint_base* catch_left_joint = nullptr;	 //左手がつかんでいるjoint
 		bool is_maked_right_joint = false; //つかんでいたものが距離で離れたとき、stateのみだと即座に次のものをつかんでしまう 嫌なのでboolで管理
 		bool is_maked_left_joint = false;
+		BallJoint* Rhand_joint = nullptr; //elbowとhandをつなぐjoint
+		BallJoint* Lhand_joint = nullptr; //elbowとhandをつなぐjoint
+		float Rhand_joint_ylength_default = 0;
+		float Lhand_joint_ylength_default = 0;
+
 
 		// 接地判定を行う(sphere_cast)
 		Collider* onground_collider = nullptr; //立っているcollider情報
@@ -68,11 +74,14 @@ namespace Adollib
 		const float onground_dis = 2.0f; //rayminがこれ以下なら立っている
 		const float onground_radius = 0.6f; //sphere_castの半径
 
+		// jump
 		bool is_jumping = false; //今ジャンプしているか
 		float coyote = 0.3f; //jumpの許容時間
 
+		// 足
 		float move_timer = 0; //足の回転を求めるために 入力時間を保存
 
+		// respown関係
 		Collider* check_onplayer_coll = nullptr; //respownの接地判定を行うCollider
 		float respown_timer = 0; //respown処理用のtimer >0の時 check_respown()でPlayer::updateをreturn (入力を受け付けない、gunyattoする)
 
@@ -199,6 +208,14 @@ namespace Adollib
 			for (int i = 0; i < Human_collider_size; i++) {
 				Human_default_drags[i] = Human_colliders[i]->physics_data.drag;
 			}
+		}
+
+		void set_player_joints(
+			BallJoint* l_Lhand_joint,
+			BallJoint* l_Rhand_joint
+		) {
+			Lhand_joint = l_Lhand_joint;
+			Rhand_joint = l_Rhand_joint;
 		}
 
 	public:

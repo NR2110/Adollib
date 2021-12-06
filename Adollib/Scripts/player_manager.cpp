@@ -85,35 +85,38 @@ namespace Adollib
 		Lfoot   ->material->color = Vector4(main_color, 1);
 
 		//::: collider,shapeのアタッチ :::
-		Collider* Head_collider = Head->addComponent<Collider>();
+		Collider* Head_collider     = Head->addComponent<Collider>();
 		Collider* Lsholder_collider = Lsholder->addComponent<Collider>();
-		Collider* Lelbow_collider = Lelbow->addComponent<Collider>();
-		Collider* Lhand_collider = Lhand->addComponent<Collider>();
+		Collider* Lelbow_collider   = Lelbow->addComponent<Collider>();
+		Collider* Lhand_collider    = Lhand->addComponent<Collider>();
 		Collider* Rsholder_collider = Rsholder->addComponent<Collider>();
-		Collider* Relbow_collider = Relbow->addComponent<Collider>();
-		Collider* Rhand_collider = Rhand->addComponent<Collider>();
-		Collider* Body_collider = Body->addComponent<Collider>();
-		Collider* Waist_collider = Waist->addComponent<Collider>();
-		Collider* Rleg_collider = Rleg->addComponent<Collider>();
-		Collider* Rfoot_collider = Rfoot->addComponent<Collider>();
-		Collider* Lleg_collider = Lleg->addComponent<Collider>();
-		Collider* Lfoot_collider = Lfoot->addComponent<Collider>();
+		Collider* Relbow_collider   = Relbow->addComponent<Collider>();
+		Collider* Rhand_collider    = Rhand->addComponent<Collider>();
+		Collider* Body_collider     = Body->addComponent<Collider>();
+		Collider* Waist_collider    = Waist->addComponent<Collider>();
+		Collider* Rleg_collider     = Rleg->addComponent<Collider>();
+		Collider* Rfoot_collider    = Rfoot->addComponent<Collider>();
+		Collider* Lleg_collider     = Lleg->addComponent<Collider>();
+		Collider* Lfoot_collider    = Lfoot->addComponent<Collider>();
 
 
-		Sphere* Head_shape = Head_collider->add_shape<Sphere>();
+		Sphere* Head_shape     = Head_collider->add_shape<Sphere>();
 		Sphere* Lsholder_shape = Lsholder_collider->add_shape<Sphere>();
-		Sphere* Lelbow_shape = Lelbow_collider->add_shape<Sphere>();
-		Sphere* Lhand_shape = Lhand_collider->add_shape<Sphere>();
+		Sphere* Lelbow_shape   = Lelbow_collider->add_shape<Sphere>();
+		Sphere* Lhand_shape    = Lhand_collider->add_shape<Sphere>();
 		Sphere* Rsholder_shape = Rsholder_collider->add_shape<Sphere>();
-		Sphere* Relbow_shape = Relbow_collider->add_shape<Sphere>();
-		Sphere* Rhand_shape = Rhand_collider->add_shape<Sphere>();
-		Box* Body_shape = Body_collider->add_shape<Box>();
-		Box* Waist_shape = Waist_collider->add_shape<Box>();
-		//Sphere* Waist_shape = Waist_collider->add_shape<Sphere>();
-		Sphere* Rleg_shape = Rleg_collider->add_shape<Sphere>();
-		Sphere* Rfoot_shape = Rfoot_collider->add_shape<Sphere>();
-		Sphere* Lleg_shape = Lleg_collider->add_shape<Sphere>();
-		Sphere* Lfoot_shape = Lfoot_collider->add_shape<Sphere>();
+		Sphere* Relbow_shape   = Relbow_collider->add_shape<Sphere>();
+		Sphere* Rhand_shape    = Rhand_collider->add_shape<Sphere>();
+		Box* Body_shape        = Body_collider->add_shape<Box>();
+		Box* Waist_shape       = Waist_collider->add_shape<Box>();
+		//Sphere* Waist_shape  = Waist_collider->add_shape<Sphere>();
+		Sphere* Rleg_shape     = Rleg_collider->add_shape<Sphere>();
+		Sphere* Rfoot_shape    = Rfoot_collider->add_shape<Sphere>();
+		Sphere* Lleg_shape     = Lleg_collider->add_shape<Sphere>();
+		Sphere* Lfoot_shape    = Lfoot_collider->add_shape<Sphere>();
+
+		BallJoint* Lhand_joint = nullptr;
+		BallJoint* Rhand_joint = nullptr;
 
 		{
 			//::: 親子関係の設定 :::
@@ -351,7 +354,6 @@ namespace Adollib
 			//Lfoot_collider   ->physics_data.is_moveable = false;
 			//Rfoot_collider   ->physics_data.is_moveable = false;
 
-
 			//::: Jointの設定
 			float joint_bias = 0.1f;
 			//頭
@@ -377,6 +379,7 @@ namespace Adollib
 			}
 			{
 				auto ball = Joint::add_balljoint(Lelbow_collider, Lhand_collider, Vector3(-0.2f, -0.15f, 0), Vector3(0, 0, 0), joint_bias);
+				Lhand_joint = ball;
 			}
 			{
 				auto Cone = Joint::add_Conejoint(Body_collider, Rsholder_collider, Vector3(-1.1f, 0.2f, 0), Vector3(0, arm_size.y, 0), Vector3(+1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
@@ -392,6 +395,7 @@ namespace Adollib
 			}
 			{
 				auto ball = Joint::add_balljoint(Relbow_collider, Rhand_collider, Vector3(0.2f, -0.15f, 0), Vector3(0, 0, 0), joint_bias);
+				Rhand_joint = ball;
 			}
 			//腰
 			{
@@ -400,13 +404,10 @@ namespace Adollib
 
 				auto Twist = Joint::add_Twistjoint(Body_collider, Waist_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
 				Twist->limit = Vector2(360 - 30, 30);
-
-				//auto ball = Joint::add_balljoint(Body_collider, Waist_collider, Vector3(0, -1.0f, 0), Vector3(0, 0.5f, 0));
 			}
 			//足
 			{
 				auto Cone = Joint::add_Conejoint(Waist_collider, Rleg_collider, Vector3(-0.6f, -0.8f, 0), Vector3(0, 0.3, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
-				//Cone->limit = 48;
 				Cone->limit = 80;
 
 				auto Twist = Joint::add_Twistjoint(Waist_collider, Rleg_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
@@ -414,12 +415,10 @@ namespace Adollib
 			}
 			{
 				auto hinge = Joint::add_Hingejoint(Rleg_collider, Rfoot_collider, Vector3(-1, -0.4f, 0), Vector3(+1, -0.3f, 0), Vector3(-1, +0.3f, 0), Vector3(+1, +0.3f, 0), joint_bias);
-				//hinge->hinge_pow = 0.01f;
 				hinge->limit = Vector2(0, 60);
 			}
 			{
 				auto Cone = Joint::add_Conejoint(Waist_collider, Lleg_collider, Vector3(+0.6f, -0.8f, 0), Vector3(0, 0.3f, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
-				//Cone->limit = 48;
 				Cone->limit = 80;
 
 				auto Twist = Joint::add_Twistjoint(Waist_collider, Lleg_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
@@ -427,7 +426,6 @@ namespace Adollib
 			}
 			{
 				auto hinge = Joint::add_Hingejoint(Lleg_collider, Lfoot_collider, Vector3(-1, -0.4f, 0), Vector3(+1, -0.3f, 0), Vector3(-1, +0.3f, 0), Vector3(+1, +0.3f, 0), joint_bias);
-				//hinge->hinge_pow = 0.01f;
 				hinge->limit = Vector2(0, 60);
 			}
 
@@ -489,6 +487,11 @@ namespace Adollib
 				Rfoot_collider,
 				Lleg_collider,
 				Lfoot_collider
+			);
+
+			player->set_player_joints(
+				Lhand_joint,
+				Rhand_joint
 			);
 
 			auto input_changer = GO->addComponent<Input_changer>();

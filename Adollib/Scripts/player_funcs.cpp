@@ -137,6 +137,15 @@ void Player::catch_things() {
 		&catch_left_joint,
 		&catch_right_joint
 	};
+	BallJoint* hand_joints[2] = {
+		Lhand_joint,
+		Rhand_joint
+	};
+	float hand_joint_ylength_default[2] = {
+		Lhand_joint_ylength_default,
+		Rhand_joint_ylength_default
+	};
+
 	bool* is_maked_joint[2] = {
 		&is_maked_left_joint,
 		&is_maked_right_joint
@@ -169,22 +178,6 @@ void Player::catch_things() {
 			if (min_data != nullptr && min_data->coll->tag != Collider_tags::Human) {
 				*is_maked_joint[i] = true;
 
-				//Vector3 x_dir = Vector3(1, 0, 0) * -(i * 2 - 1);
-				//Vector3 z_dir = Vector3(0, 0, 1);
-				//Vector3 world_x_dir = vector3_quatrotate(x_dir, collider->transform->orientation);
-				//Vector3 local_x_dir_Bcoord = vector3_quatrotate(world_x_dir, min_data->coll->transform->orientation.inverse());
-
-				//Vector3 world_contactpoint_A = vector3_quatrotate(min_data->contacted_pointA, collider->transform->orientation) + collider->transform->position;
-				//Vector3 elbow_pos = vector3_quatrotate(world_contactpoint_A - colliders[i + 2]->transform->position, colliders[i + 2]->transform->orientation.inverse());
-
-
-				//joint = Joint::add_Hingejoint(
-				//	colliders[i + 2],
-				//	min_data->coll,
-				//	elbow_pos + z_dir, elbow_pos - z_dir,
-				//	min_data->contacted_pointB + local_x_dir_Bcoord, min_data->contacted_pointB - local_x_dir_Bcoord
-				//);
-
 				joint = Joint::add_balljoint(
 					collider,
 					min_data->coll,
@@ -199,29 +192,41 @@ void Player::catch_things() {
 
 		//離す
 		{
+			// 何かつかんでいたらflagをfalseに(距離ではがれたとき、死んだときに押しっぱなしでもつかまないように)
 			if (!input_arm[i]) {
 				*is_maked_joint[i] = false;
 			}
 
+			// ボタンが押されていなくて、何かつかんでいたら
 			if (!input_arm[i] && joint != nullptr) {
 				Joint::delete_joint(joint);
 			}
 
-
+			// 距離制限
 			if (joint != nullptr) {
 				joint->adapt_anchor();
 				Vector3 world_posA = joint->get_colliderA()->transform->position + vector3_quatrotate(joint->get_anchors()[0].posA, joint->get_colliderA()->transform->orientation);
 				Vector3 world_posB = joint->get_colliderB()->transform->position + vector3_quatrotate(joint->get_anchors()[0].posB, joint->get_colliderB()->transform->orientation);
 
 				if (
-					(world_posA - world_posB).norm() > 2 * 2 ||
-					(colliders[i]->transform->position - colliders[i + 2]->transform->position).norm() > 1 * 1
+					(world_posA - world_posB).norm() > 2 * 2
+					//(colliders[i]->transform->position - colliders[i + 2]->transform->position).norm() > 1 * 1
 					) {
 					Joint::delete_joint(joint);
 				}
 
 			}
 
+		}
+
+		// つかんでいるときhandのjointの位置を伸ばす
+		if (joint != nullptr) {
+			hand_joints[i]->anchor.posA.y -= 0.1f * time->deltaTime();
+			if (hand_joints[i]->anchor.posA.y < -0.5f)hand_joints[i]->anchor.posA.y = -0.5f;
+		}
+		else {
+			hand_joints[i]->anchor.posA.y += 0.1f * time->deltaTime();
+			if (hand_joints[i]->anchor.posA.y > hand_joint_ylength_default[i]) hand_joints[i]->anchor.posA.y = hand_joint_ylength_default[i];
 		}
 
 	}

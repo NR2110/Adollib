@@ -4,6 +4,7 @@
 
 namespace Adollib
 {
+	// keyboard、Gamepadの入力を統一し、ゲームで使いやすいように変換する
 	class Input_changer : public Component
 	{
 	public:
