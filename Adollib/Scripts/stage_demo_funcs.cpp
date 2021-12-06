@@ -65,7 +65,7 @@ namespace Adollib
 		tree_parts[5]->material->color = reaf_color;
 
 		tree_parts[6]->transform->local_pos = Vector3(0, 0.2f, 0);
-		tree_parts[6]->transform->local_scale = Vector3(3, 0.2f, 3);
+		tree_parts[6]->transform->local_scale = Vector3(2, 0.2f, 2);
 		tree_parts[6]->transform->local_orient = quaternion_from_euler(0, 0, 0);
 		tree_parts[6]->material->color = floar_color;
 
@@ -107,7 +107,7 @@ namespace Adollib
 		boxes[5]->rotate = Vector3(0, 14, 0);
 
 		boxes[6]->center = Vector3(0, 0.2f, 0);
-		boxes[6]->size = Vector3(3, 0.2f, 3);
+		boxes[6]->size = Vector3(2, 0.2f, 2);
 		boxes[6]->rotate = Vector3(0, 0, 0);
 
 

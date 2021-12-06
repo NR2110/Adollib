@@ -231,6 +231,10 @@ void Player::catch_things() {
 void Player::add_pow_for_stand() {
 
 	float gnyat_pow = 0.9f;
+	if ((Lfoot_collider->concoll_enter(Collider_tags::Stage) || Rfoot_collider->concoll_enter(Collider_tags::Stage)) &&
+		onground_collider == nullptr
+		) gnyat_pow = 0;
+
 	if (is_gunyatto == false)
 	{
 		{
@@ -251,7 +255,6 @@ void Player::add_pow_for_stand() {
 			float pow = ALClamp(rad * waist_rot_pow, 0, waist_rot_max_pow);
 			Waist_collider->add_torque(off.axis() * pow * gnyat_pow, true);
 			Waist_collider->set_max_angula_velocity(waist_rot_max_speed);
-			//Waist_collider->set_max_angula_velocity(ALmin(waist_rot_max_speed, waist_rot_max_speed * ToAngle(rad) * 0.05f));
 
 		}
 		{
@@ -299,21 +302,28 @@ void Player::push_waist_for_stand() {
 	float dot = vector3_dot(Vector3(0, -1, 0), vector3_quatrotate(Vector3(0, -1, 0), Waist_collider->transform->orientation));
 	if (dot < 0)return; //腰が下を向いていなければreturn
 	dot = dot * dot;
+	//dot = 1;
 
 	if (onground_collider != nullptr) {
-		constexpr float mass = 10 * 4; //パーツによって質量がまちまちなので だいたいの質量
-		constexpr float stand_pow = 2000;
 
 		float dis = vector3_dot(onground_contactpoint - Waist_collider->transform->position, Vector3(0, -1, 0));
 
-		Debug::set("onground_contactpoint_vec", (onground_contactpoint - Waist_collider->transform->position).unit_vect());
+		if (dis < onground_dis) {
+			constexpr float mass = 10 * 4.5f; //パーツによって質量がまちまちなので だいたいの質量
+			constexpr float stand_pow = 1000;
 
-		Vector3 gravity_pow = Vector3(0, 1, 0) * Physics_function::Physics_manager::physicsParams.gravity * mass; //playerが滞空出来る力
-		Vector3 force = Vector3(0, 1, 0) * (onground_dis * dot - dis) * stand_pow; //めり込みを治す力
-		Vector3 fall_force = Vector3(0, 1, 0) * Waist_collider->linear_velocity().y * mass;
 
-		Waist_collider->add_force(gravity_pow + force);
-		onground_ray_data.coll->add_force(-(gravity_pow + fall_force) * 0.7f, onground_contactpoint);
+			Debug::set("onground_contactpoint_vec", (onground_contactpoint - Waist_collider->transform->position).unit_vect());
+
+			Vector3 gravity_pow = Vector3(0, 1, 0) * Physics_function::Physics_manager::physicsParams.gravity * mass; //playerが滞空出来る力
+			Vector3 force = Vector3(0, 1, 0) * (onground_dis * dot - dis) * stand_pow; //めり込みを治す力
+			Vector3 fall_force = Vector3(0, 1, 0) * Waist_collider->linear_velocity().y * mass;
+
+			Waist_collider->add_force(gravity_pow + force);
+			onground_ray_data.coll->add_force(-(gravity_pow + fall_force) , onground_contactpoint);
+
+		}
+			Debug::set("dis", dis);
 	}
 
 }
@@ -351,8 +361,8 @@ void Player::linear_move() {
 		if (onground_collider != nullptr) {
 			if (onground_collider->physics_data.inertial_mass > 20) //歩くときに小さな石ころに全力を加えない
 				onground_collider->add_force(-dir * waist_move_pow * move_pow, onground_contactpoint);
-			//int isdf = 0;
 		}
+
 	}
 };
 
@@ -387,7 +397,6 @@ void Player::accume_move_dir() {
 
 	//debug_coll->transform->local_pos = Waist->world_position() + dir * 5;
 };
-
 
 // 足を動かす
 void Player::move_legs() {
@@ -557,7 +566,10 @@ bool Player::check_respown() {
 	}
 
 	// ついでにCTR押しているときにぐにゃっとさせる
-	if (input->getKeyState(Key::LeftControl)) {
+	if (input_changer->is_gunyatto_state) {
+		//for (int i = 0; i < Human_collider_size; i++) {
+		//	Human_colliders[i]->physics_data.drag = 0.2f;
+		//}
 		return true;
 	}
 

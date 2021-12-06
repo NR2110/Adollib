@@ -40,7 +40,7 @@ void Input_changer::update() {
 	dir = dir.unit_vect();
 
 	// jump
-	is_jump_trigger = (pad_num == 0 && input->getKeyState(Key::Space)) || input->getPadState(pad_num, GamePad::A);
+	is_jump_trigger = (pad_num == 0 && input->getKeyTrigger(Key::Space)) || input->getPadTrigger(pad_num, GamePad::A);
 
 	// gunyatto
 	is_gunyatto_state = (pad_num == 0 && input->getKeyState(Key::LeftControl)) || input->getPadState(pad_num, GamePad::X);
@@ -79,10 +79,6 @@ void Input_changer::update() {
 	// cursol‚ªlock‚³‚ê‚Ä‚¢‚½‚ç’†‰›‚Ö
 	// ˆá‚Á‚½‚ç‚¢‚¢Š´‚¶‚É
 	if (pad_num == 0 && !is_lock_cursol_) {
-		//cursol_pos_save.x = (float)cursol_pos_save.x + cursol_move.y;
-		//cursol_pos_save.y = (float)cursol_pos_save.y + cursol_move.x;
-
-		//input->setCursorPos(cursol_pos_save.x, cursol_pos_save.y);
 		cursol_pos_save.x = (float)input->getCursorPosX();
 		cursol_pos_save.y = (float)input->getCursorPosY();
 	}

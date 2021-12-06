@@ -19,13 +19,11 @@ bool loop::init(HWND hWnd) {
 
 bool loop::Update(MSG hMsg, HWND hWnd, int width, int height) {
 
-	Work_meter::start(std::string("loop_update"));
 	Systems::inputManager->update();
 
 	Scene_manager::update();
 	//Gameobject_manager::update();
 
-	Work_meter::stop(std::string("loop_update"));
 	return true;
 }
 

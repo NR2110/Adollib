@@ -109,6 +109,7 @@ namespace Adollib
 		Sphere* Rhand_shape = Rhand_collider->add_shape<Sphere>();
 		Box* Body_shape = Body_collider->add_shape<Box>();
 		Box* Waist_shape = Waist_collider->add_shape<Box>();
+		//Sphere* Waist_shape = Waist_collider->add_shape<Sphere>();
 		Sphere* Rleg_shape = Rleg_collider->add_shape<Sphere>();
 		Sphere* Rfoot_shape = Rfoot_collider->add_shape<Sphere>();
 		Sphere* Lleg_shape = Lleg_collider->add_shape<Sphere>();
@@ -324,6 +325,13 @@ namespace Adollib
 			Lfoot_shape->r = Lfoot->transform->local_scale.y * 2;
 			Rleg_shape->r = Rleg->transform->local_scale.y * 2;
 			Rfoot_shape->r = Rfoot->transform->local_scale.y * 2;
+
+			// —§‚¿ã‚ª‚è‚â‚·‚¢‚æ‚¤‚É waist‚Ì“–‚½‚è”»’è‚ğ’²®
+			Waist_collider->set_tensor(Waist_collider->get_tensor());
+			Waist_shape->center.y += Waist->transform->local_scale.y * 0.5f;
+			Waist_shape->size.y = 0.64f;
+			//Waist_shape->size.x *= 0.9f;
+			//Waist_shape->size.z *= 0.9f;
 
 			Lhand_collider->physics_data.dynamic_friction = 0;
 			Rhand_collider->physics_data.dynamic_friction = 0;

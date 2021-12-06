@@ -77,6 +77,9 @@ void Gameobject_manager::update(Scenelist Sce) {
 
 	if (Sce == Scenelist::scene_null)return;
 
+	Work_meter::start("update");
+	Work_meter::tag_start("update");
+
 	auto& gos = gameobjects[Sce];
 
 	//ˆê”Ôã‚Ìe‚ğ•Û‘¶
@@ -161,6 +164,8 @@ void Gameobject_manager::update(Scenelist Sce) {
 
 	delete_gameobjects();
 
+	Work_meter::tag_stop();
+	Work_meter::stop("update");
 }
 
 void Gameobject_manager::render(Scenelist Sce) {

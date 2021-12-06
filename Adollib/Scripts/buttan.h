@@ -41,7 +41,7 @@ namespace Adollib{
 						if (this_coll->concoll_enter(Collider_tags::Human | Collider_tags::Kinematic_Stage)) is_trigger_pushed = !is_trigger_pushed; //Ø‚è‘Ö‚¦‚é
 					}
 
-					if (this_coll->concoll_enter(Collider_tags::Human | Collider_tags::Kinematic_Stage))trigger_timer = 0.5f;
+					if (this_coll->concoll_enter(Collider_tags::Human | Collider_tags::Kinematic_Stage))trigger_timer = 1;
 					else trigger_timer -= Al_Global::second_per_frame;
 
 					//

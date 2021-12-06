@@ -39,7 +39,7 @@ namespace Adollib
 
 		waist_rot_max_speed = 3;
 		waist_rot_max_pow = 10000;
-		waist_rot_pow = 500;
+		waist_rot_pow = 1500;
 
 		body_rot_max_speed = 10;
 		body_rot_max_pow = 10000;
