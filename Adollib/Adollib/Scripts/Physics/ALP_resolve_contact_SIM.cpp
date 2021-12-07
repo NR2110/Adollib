@@ -137,11 +137,11 @@ bool Calc_joint_effect(ALP_Joint* joint, float inv_duration)
 }
 
 
-void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std::vector<Contacts::Contact_pair*>& pairs, std::list<Physics_function::ALP_Joint*> joints) {
+void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std::vector<Contacts::Contact_pair*>& pairs, std::list<Physics_function::ALP_Joint*> joints, const float timescale) {
 
 	Work_meter::start("Make_solver", 1);
 
-	const float inv_duration = 1 / ( Physics_manager::physicsParams.timeStep / Physics_manager::physicsParams.timescale);
+	const float inv_duration = 1 / ( Physics_manager::physicsParams.timeStep / timescale);
 
 	//::: 解決用オブジェクトの生成 :::::::::::
 	std::vector<ALP_Solverbody> SBs;

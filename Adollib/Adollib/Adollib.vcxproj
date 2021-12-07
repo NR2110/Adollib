@@ -180,6 +180,7 @@
     <ClInclude Include="..\Scripts\stage_types.h" />
     <ClInclude Include="..\Scripts\tag_andcircuit.h" />
     <ClInclude Include="..\Scripts\touch_moveable.h" />
+    <ClInclude Include="..\Scripts\ui_manager.h" />
     <ClInclude Include="Imgui\imconfig.h" />
     <ClInclude Include="Imgui\imgui.h" />
     <ClInclude Include="Imgui\imgui_impl_dx11.h" />
@@ -310,6 +311,7 @@
     <ClCompile Include="..\Scripts\stage_demo_meishi.cpp" />
     <ClCompile Include="..\Scripts\stage_demo_meishi_funcs.cpp" />
     <ClCompile Include="..\Scripts\stage_manager.cpp" />
+    <ClCompile Include="..\Scripts\ui_manager.cpp" />
     <ClCompile Include="Imgui\imgui.cpp" />
     <ClCompile Include="Imgui\imgui_demo.cpp" />
     <ClCompile Include="Imgui\imgui_draw.cpp" />

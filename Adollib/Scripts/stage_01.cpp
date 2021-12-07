@@ -64,8 +64,8 @@ namespace Adollib
 				set_box(Vector3(26, 16, 39), Vector3(4, 4, 1), Vector3(0), base_color, wallAnddoor_pearent);
 				set_box(Vector3(26, 3, 39), Vector3(4, 1, 1), Vector3(0), base_color, wallAnddoor_pearent);
 
-				set_box(Vector3(18, 12, 37), Vector3(2, 8, 1), Vector3(0), base_color, wallAnddoor_pearent);
-				set_box(Vector3(34, 12, 37), Vector3(2, 8, 1), Vector3(0), base_color, wallAnddoor_pearent);
+				set_box(Vector3(18, 12, 37), Vector3(2, 8, 1), Vector3(0), base_color * 0.9f, wallAnddoor_pearent);
+				set_box(Vector3(34, 12, 37), Vector3(2, 8, 1), Vector3(0), base_color * 0.9f, wallAnddoor_pearent);
 
 				set_door(Vector3(24, 8, 39.25f), Vector3(2, 4, 0.5f), Vector3(0), true, wallAnddoor_pearent);
 				set_door(Vector3(28, 8, 39.25f), Vector3(2, 4, 0.5f), Vector3(0), false, wallAnddoor_pearent);

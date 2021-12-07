@@ -125,6 +125,12 @@
     <Filter Include="00_Adollib\44_render\shader\hlsl\gaussian_filter">
       <UniqueIdentifier>{4c76dcf8-fa8c-40ad-a842-cd31cdd338b4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\scene_game\ui">
+      <UniqueIdentifier>{b5c011fd-f561-4618-9e49-083f69a12300}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\scene_game\ui\ui_base">
+      <UniqueIdentifier>{7c868ad2-36ca-401f-8e2a-ef3a50652dd3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Scripts\player.cpp">
@@ -381,6 +387,9 @@
     </ClCompile>
     <ClCompile Include="..\Scripts\input_changer.cpp">
       <Filter>ソース ファイル\scene_game\player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\ui_manager.cpp">
+      <Filter>ソース ファイル\scene_game\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -782,6 +791,9 @@
     </ClInclude>
     <ClInclude Include="..\Scripts\input_changer.h">
       <Filter>ソース ファイル\scene_game\player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\ui_manager.h">
+      <Filter>ソース ファイル\scene_game\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

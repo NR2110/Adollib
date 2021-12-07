@@ -141,8 +141,11 @@ bool Physics_manager::update(Scenelist Sce)
 
 		physicsParams.timeStep /= physicsParams.calculate_iteration;
 
+		// そのまま使うとmainthreadで0を入れられたら突然死ぬ可能性があるため保存する
+		const float time_scale = physicsParams.timescale;
+
 		// timescaleの影響は座標の更新のみなので
-		physicsParams.timeStep *= physicsParams.timescale;
+		physicsParams.timeStep *= time_scale;
 
 		update_per_calculate(ALP_colliders[Sce]);
 
@@ -154,7 +157,7 @@ bool Physics_manager::update(Scenelist Sce)
 
 			// 外力の更新
 			//applyexternalforce(ALP_physicses[Sce], 1);
-			applyexternalforce(ALP_physicses[Sce], inv60_per_timeStep);
+			applyexternalforce(ALP_physicses[Sce], inv60_per_timeStep, time_scale);
 
 			// pairのnew/oldを入れ替える
 			pairs_new_num = 1 - pairs_new_num;
@@ -189,7 +192,7 @@ bool Physics_manager::update(Scenelist Sce)
 			// 衝突解決
 			Work_meter::start("Resolve", 1);
 			Work_meter::tag_start("Resolve", 1);
-			resolve_contact(ALP_colliders[Sce], pairs[pairs_new_num], ALP_joints);
+			resolve_contact(ALP_colliders[Sce], pairs[pairs_new_num], ALP_joints, time_scale);
 			Work_meter::tag_stop(1);
 			Work_meter::stop("Resolve", 1);
 

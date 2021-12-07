@@ -336,8 +336,8 @@ namespace Adollib
 			Waist_shape->size.x *= 0.9f;
 			Waist_shape->size.z *= 0.9f;
 
-			Waist_shape->center.y += Waist->transform->local_scale.y * 0.1f;
-			Waist_shape->size.y = 0.3f;
+			//Waist_shape->center.y += Waist->transform->local_scale.y * 0.1f;
+			//Waist_shape->size.y = 0.3f;
 			//Waist_shape->size.x *= 0.9f;
 			//Waist_shape->size.z *= 0.9f;
 

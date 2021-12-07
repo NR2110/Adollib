@@ -62,10 +62,10 @@ void Physics_function::resetforce(std::list<Physics_function::ALP_Physics*>& ALP
 }
 
 //外力による速度などの更新
-void Physics_function::applyexternalforce(std::list<Physics_function::ALP_Physics*>& ALP_physics, const float timeratio_60) {
+void Physics_function::applyexternalforce(std::list<Physics_function::ALP_Physics*>& ALP_physics, const float timeratio_60, const float time_scale) {
 
 	std::for_each(ALP_physics.begin(), ALP_physics.end(), [&](ALP_Physics* phys) {
-		phys->apply_external_force(Physics_manager::physicsParams.timeStep / Physics_manager::physicsParams.timescale, timeratio_60);
+		phys->apply_external_force(Physics_manager::physicsParams.timeStep / time_scale, timeratio_60);
 		}
 	);
 }

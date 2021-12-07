@@ -15,6 +15,8 @@ PSOutput main(PSInput input)
     float4 Color = input.Color * DiffuseTexture.Sample(DecalSampler, input.Tex) * A;
     Color.w = input.Color.w;
 
+
+
     //Color = input.Color;
 
     float3 ShadowPos = 0;

@@ -90,7 +90,6 @@ void Player::reach_out_hands() {
 				Vector3 world_axis = vector3_quatrotate(axis, collider->transform->orientation);
 				collider->add_torque(world_axis* pow * collider->physics_data.inertial_mass);
 				collider->set_max_angula_velocity(ALmin(hand_rot_max_speed, hand_rot_max_speed * ToAngle(rad) * 0.03f));
-
 			}
 
 			{
@@ -105,7 +104,9 @@ void Player::reach_out_hands() {
 				Vector3 world_axis = vector3_quatrotate(axis, collider->transform->orientation);
 				collider->add_torque(world_axis * pow * collider->physics_data.inertial_mass);
 				collider->set_max_angula_velocity(ALmin(hand_rot_max_speed, hand_rot_max_speed * ToAngle(rad) * 0.03f));
+			}
 
+			{
 			}
 
 		}
@@ -243,7 +244,7 @@ void Player::add_pow_for_stand() {
 			float rad = off.radian();
 			if (rad > PI)rad = 2 * PI - rad;
 			float pow = ALClamp(rad * waist_rot_pow, 0, waist_rot_max_pow);
-			Waist_collider->add_torque(off.axis() * pow * gunyatto_pow, true);
+			Waist_collider->add_torque(off.axis() * pow * 1, true);
 			Waist_collider->set_max_angula_velocity(waist_rot_max_speed);
 
 		}
@@ -717,7 +718,6 @@ void Player::update_gnyat_pow() {
 	//	)gunyatto_pows[2] = 0.1f;
 
 	gunyatto_pow = ALClamp(hand_gunyatto_pow * ((gunyatto_pows[0] * gunyatto_pows[1] * gunyatto_pows[2])), 0, 1);
-	//gunyatto_pow = 1;
 	////—¼Žè‚ªstatic‚È‚à‚Ì‚ðŽ‚Á‚Ä‚¢‚é‚Æ‚«A‚®‚É‚á‚Á‚Æ
 	//if ((catch_left_joint != nullptr && catch_left_joint->get_colliderB()->tag & Collider_tags::Static_Stage) &&
 	//	(catch_right_joint != nullptr && catch_right_joint->get_colliderB()->tag & Collider_tags::Static_Stage) &&
