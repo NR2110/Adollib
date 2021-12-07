@@ -186,7 +186,6 @@ void Player::catch_things() {
 				);
 
 				joint->slop = 0.1f;
-
 			}
 		}
 
@@ -235,22 +234,8 @@ void Player::catch_things() {
 // 立つように力を加える
 void Player::add_pow_for_stand() {
 
-	float gnyat_pow = 0.9f;
-	if ((Lfoot_collider->concoll_enter(Collider_tags::Stage) || Rfoot_collider->concoll_enter(Collider_tags::Stage)) &&
-		onground_collider == nullptr
-		) gnyat_pow = 0;
-
 	if (is_gunyatto == false)
 	{
-		{
-			//顔が赤ちゃんなのを治す
-			Quaternion off = Body_collider->gameobject->transform->orientation * Head_collider->gameobject->transform->orientation.inverse();
-			float rad = off.radian();
-			if (rad > PI)rad = 2 * PI - rad;
-			float pow = ALClamp(rad * head_rot_pow, 0, head_rot_max_pow);
-			Head_collider->add_torque(off.axis() * pow * gnyat_pow, true);
-			Head_collider->set_max_angula_velocity(ALmin(head_rot_max_speed, head_rot_max_speed * ToAngle(rad) * 0.03f)); //角度の差によって最大速度を調整
-		}
 		{
 			//腰をたたせる
 			Quaternion off = rotate * Waist_collider->gameobject->transform->orientation.inverse();
@@ -258,20 +243,30 @@ void Player::add_pow_for_stand() {
 			float rad = off.radian();
 			if (rad > PI)rad = 2 * PI - rad;
 			float pow = ALClamp(rad * waist_rot_pow, 0, waist_rot_max_pow);
-			Waist_collider->add_torque(off.axis() * pow * gnyat_pow, true);
+			Waist_collider->add_torque(off.axis() * pow * gunyatto_pow, true);
 			Waist_collider->set_max_angula_velocity(waist_rot_max_speed);
 
 		}
 		{
 			//体をたたせる
 			Quaternion off = rotate * Body_collider->gameobject->transform->orientation.inverse();
+			//Quaternion off = Waist_collider->gameobject->transform->orientation * Body_collider->gameobject->transform->orientation.inverse();
 
 			float rad = off.radian();
 			if (rad > PI)rad = 2 * PI - rad;
 			float pow = ALClamp(rad * body_rot_pow, 0, body_rot_max_pow);
-			Body_collider->add_torque(off.axis() * pow * gnyat_pow, true);
+			Body_collider->add_torque(off.axis() * pow * gunyatto_pow, true);
 			Body_collider->set_max_angula_velocity(body_rot_max_speed);
 			//Body_collider->set_max_angula_velocity(ALmin(body_rot_max_speed, body_rot_max_speed * ToAngle(rad) * 0.1f));
+		}
+		{
+			//顔が赤ちゃんなのを治す
+			Quaternion off = Body_collider->gameobject->transform->orientation * Head_collider->gameobject->transform->orientation.inverse();
+			float rad = off.radian();
+			if (rad > PI)rad = 2 * PI - rad;
+			float pow = ALClamp(rad * head_rot_pow, 0, head_rot_max_pow);
+			Head_collider->add_torque(off.axis() * pow * gunyatto_pow, true);
+			Head_collider->set_max_angula_velocity(ALmin(head_rot_max_speed, head_rot_max_speed * ToAngle(rad) * 0.03f)); //角度の差によって最大速度を調整
 		}
 
 	}
@@ -281,22 +276,7 @@ void Player::add_pow_for_stand() {
 		turn_gunyatto_dir();
 	}
 
-	{
-		//jointでつなげると重力が弱くなるから & 一定のパーツは重力の影響を受けないようにしているから  下向きに力を加える
-		Head_collider->add_force(Vector3(0, -1, 0) * 150);
-		Waist_collider->add_force(Vector3(0, -1, 0) * 150);
-		Body_collider->add_force(Vector3(0, -1, 0) * 150);
-		Lfoot_collider->add_force(Vector3(0, -1, 0) * 50);
-		Rfoot_collider->add_force(Vector3(0, -1, 0) * 50);
-	}
 
-	is_gunyatto = false;
-	//両手がstaticなものを持っているとき、ぐにゃっと
-	if ((catch_left_joint != nullptr && catch_left_joint->get_colliderB()->tag & Collider_tags::Static_Stage) &&
-		(catch_right_joint != nullptr && catch_right_joint->get_colliderB()->tag & Collider_tags::Static_Stage)
-		) {
-		is_gunyatto = true;
-	}
 
 };
 
@@ -336,7 +316,8 @@ void Player::push_waist_for_stand() {
 // 移動
 void Player::linear_move() {
 	// 地面に接している & 入力が無い時
-	if (is_gunyatto == false && dir.norm() == 0 && onground_collider != nullptr) {
+	//if (is_gunyatto == false && dir.norm() == 0 && onground_collider != nullptr) {
+	if (is_gunyatto == false && dir.norm() == 0 ) {
 		Waist_collider->physics_data.drag = 0.985f;
 		Body_collider->physics_data.drag = 0.985f;
 	}
@@ -375,9 +356,7 @@ void Player::linear_move() {
 void Player::angula_move() {
 
 	if (input_changer->dir.norm() != 0) {
-		Vector3 rot_vec = rot_vec.unit_vect();
-
-		rot_vec = vector3_quatrotate(Vector3(0, 0, -1), camera->camera_rot);
+		Vector3 rot_vec = vector3_quatrotate(Vector3(0, 0, -1), camera->camera_rot);
 		rot_vec.y = 0;
 		rot_vec = rot_vec.unit_vect();
 
@@ -570,6 +549,14 @@ bool Player::check_respown() {
 		return true;
 	}
 
+	{
+		//jointでつなげると重力が弱くなるから & 一定のパーツは重力の影響を受けないようにしているから  下向きに力を加える
+		Head_collider->add_force(Vector3(0, -1, 0) * 150);
+		Waist_collider->add_force(Vector3(0, -1, 0) * 150);
+		Body_collider->add_force(Vector3(0, -1, 0) * 150);
+		Lfoot_collider->add_force(Vector3(0, -1, 0) * 50);
+		Rfoot_collider->add_force(Vector3(0, -1, 0) * 50);
+	}
 	// ついでにCTR押しているときにぐにゃっとさせる
 	if (input_changer->is_gunyatto_state) {
 		//for (int i = 0; i < Human_collider_size; i++) {
@@ -686,4 +673,58 @@ void Player::update_onground() {
 	onground_ray_data.collider_tag = Collider_tags::Stage;
 	if (ray.sphere_cast(onground_radius, onground_contactpoint, onground_ray_data) && onground_ray_data.raymin < onground_dis) onground_collider = onground_ray_data.coll;
 
+}
+
+void Player::update_gnyat_pow() {
+	float gunyatto_pows[3] = { 1,1,1 };
+	//gnyat_pow = 1;
+
+	// 腕の情報から値を計算
+	if (catch_left_joint != nullptr && catch_right_joint != nullptr &&
+		onground_collider == nullptr &&
+		is_jumping == false
+		) {
+		// 両手でつかんでいる&接地していない&jumpした直後ではない
+		hand_gunyatto_pow -= 5 * time->deltaTime(); //ぐにゃっとさせていく
+
+	}
+	else if (catch_left_joint != nullptr && catch_right_joint != nullptr) {
+		// 両手でつかんでいる&そこそこ腰が立っており接地している
+		if (vector3_dot(Vector3(0, -1, 0), vector3_quatrotate(Vector3(0, -1, 0), Waist->transform->orientation)) > 0.7f)
+			hand_gunyatto_pow += 1 * time->deltaTime(); //しっかりさせていく
+	}
+
+	else if (catch_left_joint == nullptr || catch_right_joint == nullptr) {
+		// 片方でもつかんでいないとき
+		hand_gunyatto_pow = 1; //しっかりする
+	}
+	hand_gunyatto_pow = ALClamp(hand_gunyatto_pow, -1, 1);
+
+	// 足、腕、腰がongroundしていないのに引っかかることが多々あるため 調整
+	if (
+		(Lfoot_collider->concoll_enter(Collider_tags::Stage) || Rfoot_collider->concoll_enter(Collider_tags::Stage)) &&
+		onground_collider == nullptr
+		)gunyatto_pows[0] = 0.1f;
+
+	if (
+		(Lelbow_collider->concoll_enter(Collider_tags::Stage) || Relbow_collider->concoll_enter(Collider_tags::Stage)) &&
+		onground_collider == nullptr
+		)gunyatto_pows[1] = 0.1f;
+
+	//if (
+	//	(Waist_collider->concoll_enter(Collider_tags::Stage)) &&
+	//	onground_collider == nullptr
+	//	)gunyatto_pows[2] = 0.1f;
+
+	gunyatto_pow = ALClamp(hand_gunyatto_pow * ((gunyatto_pows[0] * gunyatto_pows[1] * gunyatto_pows[2])), 0, 1);
+	//gunyatto_pow = 1;
+	////両手がstaticなものを持っているとき、ぐにゃっと
+	//if ((catch_left_joint != nullptr && catch_left_joint->get_colliderB()->tag & Collider_tags::Static_Stage) &&
+	//	(catch_right_joint != nullptr && catch_right_joint->get_colliderB()->tag & Collider_tags::Static_Stage) &&
+	//	(is_catch_start_yplus = true && vector3_quatrotate(Vector3(0, 0, 1), camera->camera_rot).y < 0)
+	//	) {
+	//	gnyat_pow = 0;
+	//}
+	//is_gunyatto = false;
+	//if (gnyat_pow == 0)is_gunyatto = true;
 }

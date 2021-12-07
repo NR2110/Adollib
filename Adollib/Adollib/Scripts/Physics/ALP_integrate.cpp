@@ -65,7 +65,7 @@ void Physics_function::resetforce(std::list<Physics_function::ALP_Physics*>& ALP
 void Physics_function::applyexternalforce(std::list<Physics_function::ALP_Physics*>& ALP_physics, const float timeratio_60) {
 
 	std::for_each(ALP_physics.begin(), ALP_physics.end(), [&](ALP_Physics* phys) {
-		phys->apply_external_force(Physics_manager::physicsParams.timeStep, timeratio_60);
+		phys->apply_external_force(Physics_manager::physicsParams.timeStep / Physics_manager::physicsParams.timescale, timeratio_60);
 		}
 	);
 }

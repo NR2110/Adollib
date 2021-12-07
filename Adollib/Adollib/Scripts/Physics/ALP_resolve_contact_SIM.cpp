@@ -61,7 +61,7 @@ void CalcTangentVector(const Vector3& normal, const DirectX::XMVECTOR& vrel, Dir
 #endif
 
 }
-bool Calc_joint_effect(ALP_Joint* joint)
+bool Calc_joint_effect(ALP_Joint* joint, float inv_duration)
 {
 	ALP_Physics* ALPphysics[2];
 	ALP_Solverbody* solverbody[2];
@@ -117,7 +117,7 @@ bool Calc_joint_effect(ALP_Joint* joint)
 		joint->constraint_limit.jacDiagInv = 1.0f / denominator;
 
 		joint->constraint_limit.rhs = -DirectX::XMVectorGetX(DirectX::XMVector3Dot(relativeVelocity, direction)); // velocity error
-		joint->constraint_limit.rhs += joint->limit_bias * penetrate / Physics_manager::physicsParams.timeStep; // position error
+		joint->constraint_limit.rhs += joint->limit_bias * penetrate * inv_duration; // position error
 		joint->constraint_limit.rhs *= joint->constraint_limit.jacDiagInv;
 		joint->constraint_limit.lowerlimit = -FLT_MAX;
 		joint->constraint_limit.upperlimit = +FLT_MAX;
@@ -140,6 +140,8 @@ bool Calc_joint_effect(ALP_Joint* joint)
 void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std::vector<Contacts::Contact_pair*>& pairs, std::list<Physics_function::ALP_Joint*> joints) {
 
 	Work_meter::start("Make_solver", 1);
+
+	const float inv_duration = 1 / ( Physics_manager::physicsParams.timeStep / Physics_manager::physicsParams.timescale);
 
 	//::: 解決用オブジェクトの生成 :::::::::::
 	std::vector<ALP_Solverbody> SBs;
@@ -194,7 +196,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 			//::: limitの影響を計算
 			Work_meter::start("Setup_solver_joint_effect", 1);
 
-			if (Calc_joint_effect(joint) == false) {
+			if (Calc_joint_effect(joint, inv_duration) == false) {
 				//limitに引っかかっていない -> 何も起きない
 				joint->constraint_limit.jacDiagInv = 0.0f;
 				joint->constraint_limit.rhs = 0.0f;
@@ -259,7 +261,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 				constraint.rhs = -DirectX::XMVectorGetX(DirectX::XMVector3Dot(relativeVelocity, direction)); // velocity error
 
 				if (0.0f < DirectX::XMVectorGetX(distance) - joint->slop)
-					constraint.rhs += joint->bias * (DirectX::XMVectorGetX(distance) - joint->slop) / Physics_manager::physicsParams.timeStep; // position error
+					constraint.rhs += joint->bias * (DirectX::XMVectorGetX(distance) - joint->slop)* inv_duration; // position error
 				constraint.rhs *= constraint.jacDiagInv;
 				constraint.lowerlimit = -FLT_MAX;
 				constraint.upperlimit = +FLT_MAX;
@@ -343,7 +345,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 				cp.constraint[0].rhs = -(1.0f + restitution) * DirectX::XMVectorGetX(DirectX::XMVector3Dot(axis, vrel)); //Baraff1997(8-18)の分子
 
 				if (0.0f < cp.distance - Physics_manager::physicsParams.slop)
-					cp.constraint[0].rhs += (Physics_manager::physicsParams.bias * (cp.distance - Physics_manager::physicsParams.slop)) / Physics_manager::physicsParams.timeStep; //めり込みを直す力
+					cp.constraint[0].rhs += (Physics_manager::physicsParams.bias * (cp.distance - Physics_manager::physicsParams.slop))* inv_duration; //めり込みを直す力
 
 				cp.constraint[0].rhs *= cp.constraint[0].jacDiagInv;
 				cp.constraint[0].lowerlimit = 0.0f;

@@ -80,26 +80,21 @@ namespace Adollib
 			float contact_threrhold_normal = 0.01f; //衝突点の閾値
 			float contact_threrhold_tangent = 0.002f;//衝突点の閾値
 
-			//float linear_sleep_threrhold = 0.2f; //freezeの閾値
-			//float angula_sleep_threrhold = 0.02f; //freezeの閾値
 			float linear_sleep_threrhold = 0.4f; //freezeの閾値
-			//float angula_sleep_threrhold = 0.15f; //freezeの閾値
 			float angula_sleep_threrhold = 0.2f; //freezeの閾値
-
 
 			float bias = 0.15f;//めり込みを直す力
 			float slop = 0.003f;//衝突の許容値
 
 			int solver_iteration = 5; //衝突の精度
 			int calculate_iteration = 3; //計算の精度
-			bool hit_backfaces_flag = false;//meshの後ろから衝突するか
 
-			float timeStep = 0.016f;
-			//float max_timeStep = 0.032f;
+			float timescale = 1.0f;
+			float timeStep = inv60;
+			float caluculate_time = inv60; //timeStepがこれ以上の時に更新が入る
 			float max_timeStep = 0.05f;
 
 			//::: Physicsの初期値部分 :::
-
 			float inertial_mass = 1.f; //質量
 			float linear_drag = 0.1f; //空気抵抗
 			float anglar_drag = 0.1f; //空気抵抗
@@ -120,7 +115,6 @@ namespace Adollib
 		private:
 			static LARGE_INTEGER frame_count; //
 			static LARGE_INTEGER frame_count_stop; //
-			static Time time;
 
 			static std::mutex mtx; //主にadd_collder,phsics,jointと added_dataの扱いの時
 

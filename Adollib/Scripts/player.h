@@ -54,7 +54,10 @@ namespace Adollib
 		Quaternion rotate; //rotateのbuffer
 		Vector3 dir; //向きのbuffer
 
+		// 力関係
 		bool is_gunyatto = false; //trueの時、体がぐにゃっとする
+		float gunyatto_pow = 1; //体を起こす力に掛ける値
+		float hand_gunyatto_pow = 1; //腕のつかみなどの情報から求たgunyatto_powへのbuffer
 
 		// つかみ関係
 		Joint_base* catch_right_joint = nullptr; //右手がつかんでいるjoint
@@ -63,9 +66,8 @@ namespace Adollib
 		bool is_maked_left_joint = false;
 		BallJoint* Rhand_joint = nullptr; //elbowとhandをつなぐjoint
 		BallJoint* Lhand_joint = nullptr; //elbowとhandをつなぐjoint
-		float Rhand_joint_ylength_default = 0;
+		float Rhand_joint_ylength_default = 0; //つかんでいるときhandのjointのanchorを伸ばすため 初期値を保存
 		float Lhand_joint_ylength_default = 0;
-
 
 		// 接地判定を行う(sphere_cast)
 		Collider* onground_collider = nullptr; //立っているcollider情報
@@ -94,6 +96,7 @@ namespace Adollib
 		//::: 毎フレーム呼び出す
 		bool check_respown(); //respown処理
 		void update_onground(); //onground_colliderを更新
+		void update_gnyat_pow(); //体を起こす力の更新
 		void reach_out_hands(); //手を伸ばす
 		void catch_things(); //物をつかむ
 		void push_waist_for_stand(); //rayを飛ばして腰を立たせる

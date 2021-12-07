@@ -46,7 +46,7 @@ namespace Adollib
 		hand_rot_max_pow = 300;
 		hand_rot_pow = 300;
 
-		hand_camera_max_rot = ToRadian(80);
+		hand_camera_max_rot = ToRadian(85);
 		hand_camera_rot_pow = 2;
 		hand_camera_rot_center = ToRadian(15);
 
@@ -112,6 +112,9 @@ namespace Adollib
 
 		// onground‚Ìî•ñ‚ÌXV
 		update_onground();
+
+		// ‘Ì‚ğ‹N‚±‚·—Í‚ğ‹‚ß‚é
+		update_gnyat_pow();
 
 		// è‚ğL‚Î‚·
 		reach_out_hands();

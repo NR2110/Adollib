@@ -128,9 +128,6 @@ void ALP_Collider::integrate(const float duration, const Vector3& linear_velocit
 	transform.position += local_linear_move * duration;
 
 	const Vector3 local_angula_velocity = vector3_quatrotate(angula_velocity, parent_orientate_inv);
-	if (local_linear_move.norm_sqr() * duration == 0  && local_angula_move.norm_sqr() * duration == 0) {
-		int dasfg = 0;
-	}
 	transform.orientation *= quaternion_axis_radian(local_angula_move.unit_vect(), local_angula_move.norm_sqr() * duration);
 	transform.orientation = transform.orientation.unit_vect();
 

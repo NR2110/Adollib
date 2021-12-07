@@ -99,7 +99,7 @@ void Input_changer::set_lockcursol(bool is_show) {
 
 	// lock‚³‚ê‚½‚Æ‚«‚Ícursol‚ð’†‰›‚ÉŽ‚Á‚Ä‚­‚é
 	if (is_lock_cursol_ == true) {
-		input->setCursorPos(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
-		cursol_pos_save = Vector2(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
+		//input->setCursorPos(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
+		///cursol_pos_save = Vector2(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
 	}
 }

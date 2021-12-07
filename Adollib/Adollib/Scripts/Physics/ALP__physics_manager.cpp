@@ -36,7 +36,6 @@ namespace Adollib
 
 	LARGE_INTEGER Physics_manager::frame_count;
 	LARGE_INTEGER Physics_manager::frame_count_stop; //;
-	Time Physics_manager::time;
 
 	std::mutex Physics_manager::mtx;
 
@@ -129,21 +128,25 @@ bool Physics_manager::update(Scenelist Sce)
 			frame_count_stop.QuadPart = time.QuadPart;
 		}
 
-		physicsParams.timeStep = (float)(time.QuadPart - frame_count.QuadPart) * seconds_per_count;
+		physicsParams.timeStep += (float)(time.QuadPart - frame_count.QuadPart) * seconds_per_count;
+		frame_count.QuadPart = time.QuadPart;
 	}
 
 	Work_meter::set("physicsParams.timeStep", physicsParams.timeStep, 1);
-	if (physicsParams.timeStep > inv60)
+	if (physicsParams.timeStep > physicsParams.caluculate_time)
 	{
 
-		const float inv60_per_timeStep = inv60 / physicsParams.timeStep;
+		const float inv60_per_timeStep = physicsParams.caluculate_time / physicsParams.timeStep;
 		physicsParams.timeStep = ALmin(physicsParams.timeStep, physicsParams.max_timeStep);
-		frame_count.QuadPart = time.QuadPart;
 
 		physicsParams.timeStep /= physicsParams.calculate_iteration;
 
+		// timescaleの影響は座標の更新のみなので
+		physicsParams.timeStep *= physicsParams.timescale;
+
 		update_per_calculate(ALP_colliders[Sce]);
 
+		if (physicsParams.timeStep != 0)
 		for (int i = 0; i < physicsParams.calculate_iteration; i++) {
 
 			// shapeのworld情報, physicsのtensorなどの更新
@@ -206,6 +209,7 @@ bool Physics_manager::update(Scenelist Sce)
 			}
 		}
 
+		physicsParams.timeStep = 0;
 	}
 
 	Work_meter::stop("Phyisics_manager", 1);
@@ -293,7 +297,6 @@ bool Physics_manager::update(Scenelist Sce)
 
 	}
 
-
 bool Physics_manager::update_Gui() {
 	ImGuiWindowFlags flag = 0;
 	//flag |= ImGuiWindowFlags_AlwaysAutoResize;
@@ -325,6 +328,7 @@ bool Physics_manager::update_Gui() {
 
 		//最大のtimestep
 		ImGui::DragFloat("max_timeStep", &physicsParams.max_timeStep, 0.001f, 0.001f, 100000000);
+		ImGui::DragFloat("timescale", &physicsParams.timescale, 0.01f, 0, 100000000);
 		ImGui::Text("timeStep : %f", physicsParams.timeStep);
 
 		//physics_defaultの表示
@@ -393,7 +397,6 @@ bool Physics_manager::ray_cast(
 	return ret;
 }
 
-
 bool Physics_manager::sphere_cast(
 	const Vector3& Ray_pos, const Vector3& Ray_dir,
 	const float& radius,
@@ -441,7 +444,6 @@ bool Physics_manager::sphere_cast(
 
 	return ret;
 }
-
 
 
 void Physics_manager::thread_update() {
