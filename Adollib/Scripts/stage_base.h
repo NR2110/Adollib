@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Adollib/Scripts/Object/component.h"
+#include "../Adollib/Scripts/Renderer/renderer_base.h"
 
 #include <vector>
 #include "stageparts_tags.h"

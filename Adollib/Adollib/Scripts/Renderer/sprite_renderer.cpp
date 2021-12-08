@@ -92,11 +92,11 @@ void Sprite_renderer::render(const Frustum_data& frustum_data) {
 	Systems::DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
 	//テクスチャの設定
-	if (texture) texture->Set(0);
+	if (material->get_texture()) material->get_texture()->Set(0);
 
 	// 描画
 	Systems::DeviceContext->Draw(4, 0);
 
 }
 
-void Sprite_renderer::load_texture(const wchar_t* filename) { texture->Load(filename); };
+void Sprite_renderer::load_texture(const wchar_t* filename) { material->get_texture()->Load(filename); };

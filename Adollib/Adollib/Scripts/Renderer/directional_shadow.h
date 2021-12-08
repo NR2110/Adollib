@@ -28,6 +28,7 @@ namespace Adollib {
 		float aspect = 1;
 		float nearZ = 0.1f;
 		float farZ = 1000.0f;
+		const Vector2 texture_size = Vector2(10000, 10000);
 
 		Vector3 position;
 		Vector3 direction;

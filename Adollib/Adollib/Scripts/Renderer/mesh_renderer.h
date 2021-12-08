@@ -18,12 +18,15 @@ namespace Adollib {
 	public:
 		void load_texture(const wchar_t* filename = nullptr);
 
-		void calculate_boundingbox();
+		bool check_frustum(const Frustum_data& data) override;
 
 	public:
 
 		void init() override {};
+
 		void render(const Frustum_data& frustum_data) override;
+
+		void render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& instance_buffer, int bufferStart, int bufferCount) override;
 
 
 	};

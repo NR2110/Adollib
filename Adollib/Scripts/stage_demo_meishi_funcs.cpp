@@ -40,37 +40,37 @@ namespace Adollib
 
 		tree_parts[0]->transform->local_pos = Vector3(0, 7, 0);
 		tree_parts[0]->transform->local_scale = Vector3(1, 6.9f, 1);
-		tree_parts[0]->material->color = stem_color;
+		tree_parts[0]->renderer->color = stem_color;
 
 		tree_parts[1]->transform->local_pos = Vector3(0, 5 + y_scale * 2 * 5, 0);
 		tree_parts[1]->transform->local_scale = Vector3(1.5 * tan_scale, y_scale, 1.5 * tan_scale);
 		tree_parts[1]->transform->local_orient = quaternion_from_euler(0, 0, 0);
-		tree_parts[1]->material->color = reaf_color;
+		tree_parts[1]->renderer->color = reaf_color;
 
 		tree_parts[2]->transform->local_pos = Vector3(0, 5 + y_scale * 2 * 4, 0);
 		tree_parts[2]->transform->local_scale = Vector3(2.0 * tan_scale, y_scale, 2.0 * tan_scale);
 		tree_parts[2]->transform->local_orient = quaternion_from_euler(0, 1.7f, 0);
-		tree_parts[2]->material->color = reaf_color;
+		tree_parts[2]->renderer->color = reaf_color;
 
 		tree_parts[3]->transform->local_pos = Vector3(0, 5 + y_scale * 2 * 3, 0);
 		tree_parts[3]->transform->local_scale = Vector3(3.0 * tan_scale, y_scale, 3.0 * tan_scale);
 		tree_parts[3]->transform->local_orient = quaternion_from_euler(0, 13, 0);
-		tree_parts[3]->material->color = reaf_color;
+		tree_parts[3]->renderer->color = reaf_color;
 
 		tree_parts[4]->transform->local_pos = Vector3(0, 5 + y_scale * 2 * 2, 0);
 		tree_parts[4]->transform->local_scale = Vector3(3.5 * tan_scale, y_scale, 3.5 * tan_scale);
 		tree_parts[4]->transform->local_orient = quaternion_from_euler(0, 28, 0);
-		tree_parts[4]->material->color = reaf_color;
+		tree_parts[4]->renderer->color = reaf_color;
 
 		tree_parts[5]->transform->local_pos = Vector3(0, 5 + y_scale * 2 * 1, 0);
 		tree_parts[5]->transform->local_scale = Vector3(4.5 * tan_scale, y_scale, 4.5 * tan_scale);
 		tree_parts[5]->transform->local_orient = quaternion_from_euler(0, 14, 0);
-		tree_parts[5]->material->color = reaf_color;
+		tree_parts[5]->renderer->color = reaf_color;
 
 		tree_parts[6]->transform->local_pos = Vector3(0, 0.2f, 0);
 		tree_parts[6]->transform->local_scale = Vector3(3, 0.2f, 3);
 		tree_parts[6]->transform->local_orient = quaternion_from_euler(0, 0, 0);
-		tree_parts[6]->material->color = Vector4(grass_color, 1);
+		tree_parts[6]->renderer->color = Vector4(grass_color, 1);
 
 		for (int i = 0; i < Tree_size; i++) {
 			tree->add_child(tree_parts[i]);
@@ -157,9 +157,9 @@ namespace Adollib
 			bot->transform->local_scale = Vector3(2, base_length, 2);
 			mid->transform->local_scale = Vector3(1.5f, pillar_length, 1.5f);
 			top->transform->local_scale = Vector3(2, 0.5f, 2);
-			bot->material->color = Vector4(base_color * 0.9f, 1);
-			mid->material->color = Vector4(base_color * 0.9f, 1);
-			top->material->color = Vector4(base_color * 0.9f, 1);
+			bot->renderer->color = Vector4(base_color * 0.9f, 1);
+			mid->renderer->color = Vector4(base_color * 0.9f, 1);
+			top->renderer->color = Vector4(base_color * 0.9f, 1);
 
 		}
 		// Collider
@@ -230,7 +230,7 @@ namespace Adollib
 		//boxを生成
 		{
 			auto object = Gameobject_manager::createCube("Door", GO_tag::Box);
-			object->material->color = Vector4(Vector3(90, 47, 27) / 255.0f, 1);
+			object->renderer->color = Vector4(Vector3(90, 47, 27) / 255.0f, 1);
 
 			object->transform->local_pos = pos;
 			object->transform->local_orient = quaternion_from_euler(rotate);
@@ -246,7 +246,7 @@ namespace Adollib
 
 			{
 				auto totte = Gameobject_manager::createCube("Totte_front", GO_tag::Box);
-				totte->material->color = Vector4(Vector3(207, 145, 64) / 255.0f, 1);
+				totte->renderer->color = Vector4(Vector3(207, 145, 64) / 255.0f, 1);
 				object->add_child(totte);
 				if (is_left) {
 					totte->transform->local_pos = Vector3(+0.75f, -0.05f, -0.10f);
@@ -259,7 +259,7 @@ namespace Adollib
 			}
 			{
 				auto totte = Gameobject_manager::createSphere("Totte_back", GO_tag::Box);
-				totte->material->color = Vector4(Vector3(207, 145, 64) / 255.0f, 1);
+				totte->renderer->color = Vector4(Vector3(207, 145, 64) / 255.0f, 1);
 				object->add_child(totte);
 				if (is_left) {
 					totte->transform->local_pos = Vector3(+0.75f, -0.05f, 1.28f);
@@ -381,17 +381,17 @@ namespace Adollib
 		Gameobject* Lleg = Gameobject_manager::createCube("Lleg");
 		Gameobject* Lfoot = Gameobject_manager::createCube("Lfoot");
 
-		Head->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
-		Lsholder->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
-		Lelbow->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
-		Rsholder->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
-		Relbow->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
-		Body->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
-		Waist->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
-		Rleg->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
-		Rfoot->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
-		Lleg->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
-		Lfoot->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		//Head->renderer->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		//Lsholder->renderer->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		//Lelbow->renderer->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		//Rsholder->renderer->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		//Relbow->renderer->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		//Body->renderer->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		//Waist->renderer->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		//Rleg->renderer->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		//Rfoot->renderer->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		//Lleg->renderer->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		//Lfoot->renderer->Load_PS("./DefaultShader/default_ps_noshadow.cso");
 
 		//::: collider,shapeのアタッチ :::
 		Collider* Head_collider = Head->addComponent<Collider>();
@@ -651,44 +651,44 @@ namespace Adollib
 
 		//顔とかベルトを着けてみる
 		{
-			Vector4 face_color = Vector4(0.5f, 0.5f, 0.5f, 1);
-			{
-				Gameobject* eye0 = Gameobject_manager::createSphere("eye0");
-				Head->add_child(eye0);
-				eye0->transform->local_pos = Vector3(+0.5f, 0.5f, -1);
-				eye0->transform->local_scale = Vector3(0.25f, 0.25f, 0.25f);
-				eye0->material->color = face_color;
-				eye0->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
-				//stage_parts.emplace_back(eye0);
-			}
-			{
-				Gameobject* eye1 = Gameobject_manager::createSphere("eye1");
-				Head->add_child(eye1);
-				eye1->transform->local_pos = Vector3(-0.5f, 0.5f, -1);
-				eye1->transform->local_scale = Vector3(0.25f, 0.25f, 0.25f);
-				eye1->material->color = face_color;
-				eye1->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
-				//stage_parts.emplace_back(eye1);
-			}
-			{
-				Gameobject* mouth = Gameobject_manager::createCube("mouth");
-				Head->add_child(mouth);
-				mouth->transform->local_pos = Vector3(0, -0.45f, -1);
-				mouth->transform->local_scale = Vector3(0.7f, 0.25f, 0.3f);
-				mouth->material->color = face_color;
-				mouth->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
-				//stage_parts.emplace_back(mouth);
-			}
+			//Vector4 face_color = Vector4(0.5f, 0.5f, 0.5f, 1);
+			//{
+			//	Gameobject* eye0 = Gameobject_manager::createSphere("eye0");
+			//	Head->add_child(eye0);
+			//	eye0->transform->local_pos = Vector3(+0.5f, 0.5f, -1);
+			//	eye0->transform->local_scale = Vector3(0.25f, 0.25f, 0.25f);
+			//	eye0->renderer->color = face_color;
+			//	eye0->renderer->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+			//	//stage_parts.emplace_back(eye0);
+			//}
+			//{
+			//	Gameobject* eye1 = Gameobject_manager::createSphere("eye1");
+			//	Head->add_child(eye1);
+			//	eye1->transform->local_pos = Vector3(-0.5f, 0.5f, -1);
+			//	eye1->transform->local_scale = Vector3(0.25f, 0.25f, 0.25f);
+			//	eye1->renderer->color = face_color;
+			//	eye1->renderer->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+			//	//stage_parts.emplace_back(eye1);
+			//}
+			//{
+			//	Gameobject* mouth = Gameobject_manager::createCube("mouth");
+			//	Head->add_child(mouth);
+			//	mouth->transform->local_pos = Vector3(0, -0.45f, -1);
+			//	mouth->transform->local_scale = Vector3(0.7f, 0.25f, 0.3f);
+			//	mouth->renderer->color = face_color;
+			//	mouth->renderer->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+			//	//stage_parts.emplace_back(mouth);
+			//}
 
-			{
-				Gameobject* belt = Gameobject_manager::createCube("belt");
-				Waist->add_child(belt);
-				belt->transform->local_pos = Vector3(0, -0.45f, 0);
-				belt->transform->local_scale = Vector3(1.1, 0.25f, 1.1);
-				belt->material->color = face_color;
-				belt->material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
-				//stage_parts.emplace_back(belt);
-			}
+			//{
+			//	Gameobject* belt = Gameobject_manager::createCube("belt");
+			//	Waist->add_child(belt);
+			//	belt->transform->local_pos = Vector3(0, -0.45f, 0);
+			//	belt->transform->local_scale = Vector3(1.1, 0.25f, 1.1);
+			//	belt->renderer->color = face_color;
+			//	belt->renderer->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+			//	//stage_parts.emplace_back(belt);
+			//}
 		}
 
 		// playerが触れたときにmoveableをtrueにする
@@ -843,15 +843,15 @@ namespace Adollib
 		parts[3] = Gameobject_manager::createCube();
 		parts[4] = Gameobject_manager::createCube();
 		Vector4 C = Vector4(207, 171, 142, 255) / 255;
-		//parts[0]->material->color = Vector4(238, 229, 224, 255) / 255;
-		////parts[1]->material->color = Vector4(207, 171, 142, 255) / 255;
-		//parts[1]->material->color = Vector4(255, 77, 17, 255) / 255;
+		//parts[0]->renderer->color = Vector4(238, 229, 224, 255) / 255;
+		////parts[1]->renderer->color = Vector4(207, 171, 142, 255) / 255;
+		//parts[1]->renderer->color = Vector4(255, 77, 17, 255) / 255;
 
-		parts[0]->material->color = C;
-		parts[1]->material->color = C;
-		parts[2]->material->color = C;
-		parts[3]->material->color = C;
-		parts[4]->material->color = C;
+		parts[0]->renderer->color = C;
+		parts[1]->renderer->color = C;
+		parts[2]->renderer->color = C;
+		parts[3]->renderer->color = C;
+		parts[4]->renderer->color = C;
 
 		parts[0]->transform->local_pos = Vector3(0, 0.75f, 0);
 		parts[0]->transform->local_scale = Vector3(4, 0.5f, 3);
@@ -905,7 +905,7 @@ namespace Adollib
 			GO->transform->local_pos = Vector3(0, size.y * 2, 0);
 			GO->transform->local_pos = vector3_quatrotate(GO->transform->local_pos, quaternion_axis_angle(Vector3(0, 0, 1), 360.0f / tooth_count * gear_tooth_num));
 
-			GO->material->color = Vector4(1, 1, 0, 1);
+			GO->renderer->color = Vector4(1, 1, 0, 1);
 			GEAR->add_child(GO);
 			//stage_parts.emplace_back(GO);
 		}

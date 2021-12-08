@@ -21,10 +21,10 @@ void Directional_shadow::awake() {
 
 	// shaodowóptexÇÃèÄîı
 	shadow_texture = std::make_shared<Texture>();
-	shadow_texture->CreateDepth(10000, 10000, DXGI_FORMAT_R24G8_TYPELESS);
+	shadow_texture->CreateDepth(texture_size.x, texture_size.y, DXGI_FORMAT_R24G8_TYPELESS);
 
 	gaussianshadow_texture = std::make_shared<Texture>();
-	gaussianshadow_texture->CreateDepth(10000, 10000, DXGI_FORMAT_R24G8_TYPELESS);
+	gaussianshadow_texture->CreateDepth(texture_size.x, texture_size.y, DXGI_FORMAT_R24G8_TYPELESS);
 
 	shader = std::make_shared<Shader>();
 	shader->Load_VS("./DefaultShader/render_directional_shadow_vs.cso");
@@ -40,6 +40,8 @@ void Directional_shadow::set_ShaderResourceView() {
 }
 
 void Directional_shadow::setup() {
+
+	Systems::SetViewPort(texture_size.x, texture_size.y);
 
 	ConstantBufferPerCamera c_cb;
 	ConstantBufferPerSystem s_sb;

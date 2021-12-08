@@ -47,7 +47,7 @@ namespace Adollib
 
 			plane->transform->local_orient = quaternion_from_euler(0, 180, 0);
 
-			R->set_texture(subcamera_comp->get_color_texture());
+			R->get_material()->set_texture(subcamera_comp->get_color_texture());
 		}
 
 
@@ -220,11 +220,11 @@ namespace Adollib
 					////parts[1]->material->color = Vector4(207, 171, 142, 255) / 255;
 					//parts[1]->material->color = Vector4(255, 77, 17, 255) / 255;
 
-					parts[0]->material->color = C;
-					parts[1]->material->color = C;
-					parts[2]->material->color = C;
-					parts[3]->material->color = C;
-					parts[4]->material->color = C;
+					parts[0]->renderer->color = C;
+					parts[1]->renderer->color = C;
+					parts[2]->renderer->color = C;
+					parts[3]->renderer->color = C;
+					parts[4]->renderer->color = C;
 
 					parts[0]->transform->local_pos = Vector3(0, 0.75f, 0);
 					parts[0]->transform->local_scale = Vector3(4, 0.5f, 3);

@@ -24,7 +24,7 @@ Collider* Stage_base::set_sphere(const Vector3& pos, const float& r, const Vecto
 	Gameobject* object = nullptr;
 	object = Gameobject_manager::createSphere("sphere",GO_tag::Sphere);
 
-	object->material->color = Vector4(color.x, color.y, color.z, 1);
+	object->renderer->color = Vector4(color.x, color.y, color.z , 1);
 	object->transform->local_pos = pos;
 	object->transform->local_scale = Vector3(r, r, r);
 
@@ -54,7 +54,7 @@ Collider* Stage_base::set_sphere(const Vector3& pos, const float& r, const Vecto
 Collider* Stage_base::set_box(const Vector3& pos, const Vector3& size, const Vector3& rotate, const Vector3& color, Gameobject* pearent, bool is_static ) {
 	Gameobject* object = nullptr;
 	object = Gameobject_manager::createCube("Cube",GO_tag::Box);
-	object->material->color = Vector4(color.x, color.y, color.z, 1);
+	object->renderer->color = Vector4(color.x, color.y, color.z, 1);
 
 	object->transform->local_orient = quaternion_from_euler(rotate);
 	object->transform->local_pos = pos;
@@ -87,7 +87,7 @@ Collider* Stage_base::set_box(const Vector3& pos, const Vector3& size, const Vec
 Collider* Stage_base::set_capsule(const Vector3& pos, const float& r, const float& length, const Vector3& rotate, const Vector3& color, Gameobject* pearent, bool is_static ) {
 	Gameobject* object = nullptr;
 	object = Gameobject_manager::createCube("capsule",GO_tag::Capsule);
-	object->material->color = Vector4(color.x, color.y, color.z, 1);
+	object->renderer->color = Vector4(color.x, color.y, color.z, 1);
 
 	object->transform->local_orient = quaternion_from_euler(rotate);
 	object->transform->local_pos = pos;
@@ -120,7 +120,7 @@ Collider* Stage_base::set_capsule(const Vector3& pos, const float& r, const floa
 Collider* Stage_base::set_meshbox(const Vector3& pos, const Vector3& size, const Vector3& rotate, const Vector3& color, Gameobject* pearent, bool is_static ) {
 	Gameobject* object = nullptr;
 	object = Gameobject_manager::createFromFBX("./DefaultModel/cone.fbx");
-	object->material->color = Vector4(color.x, color.y, color.z, 1);
+	object->renderer->color = Vector4(color.x, color.y, color.z, 1);
 
 	//object->addComponent<object_fall>();
 	object->transform->local_orient = quaternion_from_euler(rotate);
@@ -154,8 +154,7 @@ Collider* Stage_base::set_meshbox(const Vector3& pos, const Vector3& size, const
 Gameobject* Stage_base::set_plane(const Vector3& pos, const Vector3& size, const Vector3& rotate, const Vector3& color, Gameobject* pearent, bool is_static ) {
 	Gameobject* object = nullptr;
 	object = Gameobject_manager::createPlane("plane",GO_tag::Plane);
-	Vector4 C = Vector4(color.x, color.y, color.z, 1);
-	object->material->color = C;
+	object->renderer->color = Vector4(color.x, color.y, color.z, 1);
 
 	object->transform->local_orient = quaternion_from_euler(rotate);
 	object->transform->local_pos = pos;

@@ -21,6 +21,14 @@ struct VSInput
     uint4 BoneIndices : BONES;
 };
 
+struct VSInput_INSTANCE
+{
+    row_major float4x4 transform : TRANSFORM_MATRIX;
+    float4 texcoord_transform : TEXCOORD_TRANSFORM;
+    float4 color : COLOR;
+    uint instanceID : SV_InstanceID;
+};
+
 
 
 //:::::::::::::::::::::::::::::::::::::::::::::

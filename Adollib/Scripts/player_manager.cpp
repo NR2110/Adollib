@@ -4,12 +4,14 @@
 #include "../Adollib/Scripts/Object/gameobject_manager.h"
 
 #include "../Adollib/Scripts/Imgui/imgui_all.h"
+#include "../Adollib/Scripts/Imgui/debug.h"
 
 #include "../Adollib/Scripts/Physics/ALP__physics_manager.h"
 #include "../Adollib/Scripts/Physics/collider.h"
 #include "../Adollib/Scripts/Physics/joint.h"
 
-#include "../Adollib/Scripts/Imgui/debug.h"
+#include "../Adollib/Scripts/Renderer/material_manager.h"
+#include "../Adollib/Scripts/Renderer/renderer_base.h"
 
 #include "player.h"
 #include "input_changer.h"
@@ -44,6 +46,10 @@ namespace Adollib
 		Human->transform->local_pos = position;
 		Human->transform->local_orient = quaternion_from_euler(rotate);
 
+		auto player_material_01 = Material_manager::make_material("player_material_01");
+		player_material_01->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		player_material_01->color = Vector4(main_color, 1);
+
 		//::: Gameobjectの生成 :::
 		Gameobject* Head = Gameobject_manager::createCube("Head");
 
@@ -60,29 +66,17 @@ namespace Adollib
 		Gameobject* Lleg     = Gameobject_manager::createCube("Lleg");
 		Gameobject* Lfoot    = Gameobject_manager::createCube("Lfoot");
 
-		Head    ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Lsholder->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Lelbow  ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Rsholder->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Relbow  ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Body    ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Waist   ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Rleg    ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Rfoot   ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Lleg    ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-		Lfoot   ->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
-
-		Head    ->material->color = Vector4(main_color, 1);
-		Lsholder->material->color = Vector4(main_color, 1);
-		Lelbow  ->material->color = Vector4(main_color, 1);
-		Rsholder->material->color = Vector4(main_color, 1);
-		Relbow  ->material->color = Vector4(main_color, 1);
-		Body    ->material->color = Vector4(main_color, 1);
-		Waist   ->material->color = Vector4(main_color, 1);
-		Rleg    ->material->color = Vector4(main_color, 1);
-		Rfoot   ->material->color = Vector4(main_color, 1);
-		Lleg    ->material->color = Vector4(main_color, 1);
-		Lfoot   ->material->color = Vector4(main_color, 1);
+		Head	->findComponent<Renderer_base>()->set_material(player_material_01);
+		Lsholder->findComponent<Renderer_base>()->set_material(player_material_01);
+		Lelbow  ->findComponent<Renderer_base>()->set_material(player_material_01);
+		Rsholder->findComponent<Renderer_base>()->set_material(player_material_01);
+		Relbow  ->findComponent<Renderer_base>()->set_material(player_material_01);
+		Body    ->findComponent<Renderer_base>()->set_material(player_material_01);
+		Waist   ->findComponent<Renderer_base>()->set_material(player_material_01);
+		Rleg    ->findComponent<Renderer_base>()->set_material(player_material_01);
+		Rfoot   ->findComponent<Renderer_base>()->set_material(player_material_01);
+		Lleg    ->findComponent<Renderer_base>()->set_material(player_material_01);
+		Lfoot   ->findComponent<Renderer_base>()->set_material(player_material_01);
 
 		//::: collider,shapeのアタッチ :::
 		Collider* Head_collider     = Head->addComponent<Collider>();
@@ -438,29 +432,29 @@ namespace Adollib
 
 		//顔とかベルトを着けてみる
 		{
+			auto player_material_02 = Material_manager::make_material("player_material_02");
+			player_material_02->color = Vector4(sub_color, 1);
+			player_material_02->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
 			{
 				Gameobject* eye0 = Gameobject_manager::createSphere("eye0");
 				Head->add_child(eye0);
 				eye0->transform->local_pos = Vector3(+0.5f, 0.5f, -1);
 				eye0->transform->local_scale = Vector3(0.25f, 0.25f, 0.25f);
-				eye0->material->color = Vector4(sub_color, 1);
-				eye0->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+				eye0->findComponent<Renderer_base>()->set_material(player_material_02);
 			}
 			{
 				Gameobject* eye1 = Gameobject_manager::createSphere("eye1");
 				Head->add_child(eye1);
 				eye1->transform->local_pos = Vector3(-0.5f, 0.5f, -1);
 				eye1->transform->local_scale = Vector3(0.25f, 0.25f, 0.25f);
-				eye1->material->color = Vector4(sub_color, 1);
-				eye1->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+				eye1->findComponent<Renderer_base>()->set_material(player_material_02);
 			}
 			{
 				Gameobject* mouth = Gameobject_manager::createCube("mouth");
 				Head->add_child(mouth);
 				mouth->transform->local_pos = Vector3(0, -0.45f, -1);
 				mouth->transform->local_scale = Vector3(0.7f, 0.25f, 0.3f);
-				mouth->material->color = Vector4(sub_color, 1);
-				mouth->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+				mouth->findComponent<Renderer_base>()->set_material(player_material_02);
 			}
 
 			{
@@ -468,8 +462,7 @@ namespace Adollib
 				Waist->add_child(belt);
 				belt->transform->local_pos = Vector3(0, -0.45f, 0);
 				belt->transform->local_scale = Vector3(1.1, 0.25f, 1.1);
-				belt->material->color = Vector4(sub_color, 1);
-				belt->material->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+				belt->findComponent<Renderer_base>()->set_material(player_material_02);
 			}
 		}
 

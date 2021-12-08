@@ -224,12 +224,11 @@ Gameobject* Gameobject_manager::createFromFBX(const std::string go_name, const s
 	Value->name = go_name;
 	Value->transform = std::make_shared<Transform>();
 
-	auto renderer = Value->addComponent<Mesh_renderer>();
-	Value->material = renderer->get_material();
+	Value->renderer = Value->addComponent<Mesh_renderer>();
 
 	std::vector<Mesh::mesh>* meshes = nullptr;
 	ResourceManager::CreateModelFromFBX(&meshes, FBX_pass.c_str(), "");
-	renderer->set_meshes(meshes);
+	Value->renderer->set_meshes(meshes);
 
 	Value->initialize();
 	++go_count;
@@ -248,12 +247,11 @@ Gameobject* Gameobject_manager::createSphere(const std::string go_name, u_int ta
 	Value->name = go_name;
 	Value->transform = std::make_shared<Transform>();
 
-	auto renderer = Value->addComponent<Mesh_renderer>();
-	Value->material = renderer->get_material();
+	Value->renderer = Value->addComponent<Mesh_renderer>();
 
 	std::vector<Mesh::mesh>* meshes = nullptr;
 	ResourceManager::CreateModelFromFBX(&meshes, "./DefaultModel/sphere.fbx", "");
-	renderer->set_meshes(meshes);
+	Value->renderer->set_meshes(meshes);
 
 	Value->initialize();
 	++go_count;
@@ -272,12 +270,11 @@ Gameobject* Gameobject_manager::createCube(const std::string go_name, u_int tag,
 	Value->name = go_name;
 	Value->transform = std::make_shared<Transform>();
 
-	auto renderer = Value->addComponent<Mesh_renderer>();
-	Value->material = renderer->get_material();
+	Value->renderer = Value->addComponent<Mesh_renderer>();
 
 	std::vector<Mesh::mesh>* meshes = nullptr;
 	ResourceManager::CreateModelFromFBX(&meshes, "./DefaultModel/cube.fbx", "");
-	renderer->set_meshes(meshes);
+	Value->renderer->set_meshes(meshes);
 
 	++go_count;
 	Value->initialize();
@@ -296,12 +293,11 @@ Gameobject* Gameobject_manager::createCapsule(const std::string go_name, u_int t
 	Value->name = go_name;
 	Value->transform = std::make_shared<Transform>();
 
-	auto renderer = Value->addComponent<Mesh_renderer>();
-	Value->material = renderer->get_material();
+	Value->renderer = Value->addComponent<Mesh_renderer>();
 
 	std::vector<Mesh::mesh>* meshes = nullptr;
 	ResourceManager::CreateModelFromFBX(&meshes, "./DefaultModel/cube.fbx", "");
-	renderer->set_meshes(meshes);
+	Value->renderer->set_meshes(meshes);
 
 	++go_count;
 	Value->initialize();
@@ -322,12 +318,11 @@ Gameobject* Gameobject_manager::createCylinder(const std::string go_name, u_int 
 	Value->name = go_name;
 	Value->transform = std::make_shared<Transform>();
 
-	auto renderer = Value->addComponent<Mesh_renderer>();
-	Value->material = renderer->get_material();
+	Value->renderer = Value->addComponent<Mesh_renderer>();
 
 	std::vector<Mesh::mesh>* meshes = nullptr;
 	ResourceManager::CreateModelFromFBX(&meshes, "./DefaultModel/cylinder.fbx", "");
-	renderer->set_meshes(meshes);
+	Value->renderer->set_meshes(meshes);
 
 	Value->initialize();
 	++go_count;
@@ -346,8 +341,7 @@ Gameobject* Gameobject_manager::createPlane(const std::string go_name, u_int tag
 	Value->name = go_name;
 	Value->transform = std::make_shared<Transform>();
 
-	auto renderer = Value->addComponent<Sprite_renderer>();
-	Value->material = renderer->get_material();
+	Value->renderer = Value->addComponent<Sprite_renderer>();
 
 	//std::vector<Mesh::mesh>* meshes = nullptr;
 	//ResourceManager::CreateModelFromFBX(&meshes, "./DefaultModel/plane.fbx", "");

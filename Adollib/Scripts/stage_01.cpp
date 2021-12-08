@@ -14,6 +14,7 @@
 #include "../Adollib/Scripts/Physics/joint.h"
 
 #include "../Adollib/Scripts/Renderer/mesh_renderer.h"
+#include "../Adollib/Scripts/Renderer/material_manager.h"
 #include "../Adollib/Scripts/Renderer/sprite_renderer.h"
 #include "../Adollib/Scripts/Object/component_camera.h"
 
@@ -45,6 +46,7 @@ namespace Adollib
 			set_box(Vector3(25, -2, 10), Vector3(65, 2, 30), Vector3(0), Vector3(188, 214, 54) / 255.0f * 0.8f * 0.9f, first_zone);
 			// ŠK’i
 			{
+
 				Gameobject* stairs_pearent = Gameobject_manager::create("stairs_pearent");
 				first_zone->add_child(stairs_pearent);
 				set_box(Vector3(-15, 2, 23), Vector3(15, 2, 15), Vector3(0, 0, 0), base_color, stairs_pearent);
@@ -52,6 +54,7 @@ namespace Adollib
 				set_box(Vector3(28, 1, 24), Vector3(28, 2, 8), Vector3(0, 0, 0), base_color, stairs_pearent);
 				set_box(Vector3(28, 0, 20), Vector3(28, 2, 8), Vector3(0, 0, 0), base_color, stairs_pearent);
 				set_box(Vector3(28, -1, 16), Vector3(28, 2, 8), Vector3(0, 0, 0), base_color, stairs_pearent);
+
 			}
 
 			// •Ç
@@ -462,8 +465,6 @@ namespace Adollib
 
 			set_goal_area(Vector3(104, 6, 224), Vector3(10, 2, 8), Vector3(0), Stage_types::demo, goal_and_respown_areas);
 		}
-
-
 #endif
 
 		//set_sphere_rope(Vector3(64, 60, 65), 1, Vector3(0, 0, 0), 10, 5);

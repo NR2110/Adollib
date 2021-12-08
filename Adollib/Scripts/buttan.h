@@ -71,8 +71,8 @@ namespace Adollib{
 					this_stage->tags |= tag;
 
 					// 色の変更
-					gameobject->material->color.x = ALClamp(gameobject->material->color.x + (base_material_color.y - base_material_color.x) * color_cheng_time * Al_Global::second_per_frame, base_material_color.y, base_material_color.x);
-					gameobject->material->color.y = ALClamp(gameobject->material->color.y + (base_material_color.x - base_material_color.y) * color_cheng_time * Al_Global::second_per_frame, base_material_color.y, base_material_color.x);
+					gameobject->renderer->color.x = ALClamp(gameobject->renderer->color.x + (base_material_color.y - base_material_color.x) * color_cheng_time * Al_Global::second_per_frame, base_material_color.y, base_material_color.x);
+					gameobject->renderer->color.y = ALClamp(gameobject->renderer->color.y + (base_material_color.x - base_material_color.y) * color_cheng_time * Al_Global::second_per_frame, base_material_color.y, base_material_color.x);
 
 				}
 				else {
@@ -80,8 +80,8 @@ namespace Adollib{
 					this_stage->tags &= ~tag;
 
 					// 色の変更
-					gameobject->material->color.x = ALClamp(gameobject->material->color.x - (base_material_color.y - base_material_color.x) * color_cheng_time * Al_Global::second_per_frame, base_material_color.y, base_material_color.x);
-					gameobject->material->color.y = ALClamp(gameobject->material->color.y - (base_material_color.x - base_material_color.y) * color_cheng_time * Al_Global::second_per_frame, base_material_color.y, base_material_color.x);
+					gameobject->renderer->color.x = ALClamp(gameobject->renderer->color.x - (base_material_color.y - base_material_color.x) * color_cheng_time * Al_Global::second_per_frame, base_material_color.y, base_material_color.x);
+					gameobject->renderer->color.y = ALClamp(gameobject->renderer->color.y - (base_material_color.x - base_material_color.y) * color_cheng_time * Al_Global::second_per_frame, base_material_color.y, base_material_color.x);
 				}
 
 			};

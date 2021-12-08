@@ -37,37 +37,37 @@ namespace Adollib
 
 		tree_parts[0]->transform->local_pos = Vector3(0, 7, 0);
 		tree_parts[0]->transform->local_scale = Vector3(1, 6.9f, 1);
-		tree_parts[0]->material->color = stem_color;
+		tree_parts[0]->renderer->color = stem_color;
 
 		tree_parts[1]->transform->local_pos = Vector3(0, 15, 0);
 		tree_parts[1]->transform->local_scale = Vector3(1.5, 1, 1.5);
 		tree_parts[1]->transform->local_orient = quaternion_from_euler(0, 0, 0);
-		tree_parts[1]->material->color = reaf_color;
+		tree_parts[1]->renderer->color = reaf_color;
 
 		tree_parts[2]->transform->local_pos = Vector3(0, 13, 0);
 		tree_parts[2]->transform->local_scale = Vector3(2.0, 1, 2.0);
 		tree_parts[2]->transform->local_orient = quaternion_from_euler(0, 1.7f, 0);
-		tree_parts[2]->material->color = reaf_color;
+		tree_parts[2]->renderer->color = reaf_color;
 
 		tree_parts[3]->transform->local_pos = Vector3(0, 11, 0);
 		tree_parts[3]->transform->local_scale = Vector3(3.0, 1, 3.0);
 		tree_parts[3]->transform->local_orient = quaternion_from_euler(0, 13, 0);
-		tree_parts[3]->material->color = reaf_color;
+		tree_parts[3]->renderer->color = reaf_color;
 
 		tree_parts[4]->transform->local_pos = Vector3(0, 9, 0);
 		tree_parts[4]->transform->local_scale = Vector3(3.5, 1, 3.5);
 		tree_parts[4]->transform->local_orient = quaternion_from_euler(0, 28, 0);
-		tree_parts[4]->material->color = reaf_color;
+		tree_parts[4]->renderer->color = reaf_color;
 
 		tree_parts[5]->transform->local_pos = Vector3(0, 7, 0);
 		tree_parts[5]->transform->local_scale = Vector3(4.5, 1, 4.5);
 		tree_parts[5]->transform->local_orient = quaternion_from_euler(0, 14, 0);
-		tree_parts[5]->material->color = reaf_color;
+		tree_parts[5]->renderer->color = reaf_color;
 
 		tree_parts[6]->transform->local_pos = Vector3(0, 0.2f, 0);
 		tree_parts[6]->transform->local_scale = Vector3(2, 0.2f, 2);
 		tree_parts[6]->transform->local_orient = quaternion_from_euler(0, 0, 0);
-		tree_parts[6]->material->color = floar_color;
+		tree_parts[6]->renderer->color = floar_color;
 
 		for (int i = 0; i < Tree_size; i++) {
 			tree->add_child(tree_parts[i]);
@@ -167,7 +167,7 @@ namespace Adollib
 		//box‚ð¶¬
 		{
 			auto object = Gameobject_manager::createCube("Door", GO_tag::Box);
-			object->material->color = Vector4(Vector3(90, 47, 27) / 255.0f, 1);
+			object->renderer->color = Vector4(Vector3(90, 47, 27) / 255.0f, 1);
 
 			object->transform->local_pos = pos;
 			object->transform->local_orient = quaternion_from_euler(rotate);
@@ -183,7 +183,7 @@ namespace Adollib
 
 			{
 				auto totte = Gameobject_manager::createCube("Totte_front", GO_tag::Box);
-				totte->material->color = Vector4(Vector3(207, 145, 64) / 255.0f, 1);
+				totte->renderer->color = Vector4(Vector3(207, 145, 64) / 255.0f, 1);
 				object->add_child(totte);
 				if (is_left) {
 					totte->transform->local_pos = Vector3(+0.75f, -0.05f, -0.10f);
@@ -196,7 +196,7 @@ namespace Adollib
 			}
 			{
 				auto totte = Gameobject_manager::createSphere("Totte_back", GO_tag::Box);
-				totte->material->color = Vector4(Vector3(207, 145, 64) / 255.0f, 1);
+				totte->renderer->color = Vector4(Vector3(207, 145, 64) / 255.0f, 1);
 				object->add_child(totte);
 				if (is_left) {
 					totte->transform->local_pos = Vector3(+0.75f, -0.05f, 1.28f);

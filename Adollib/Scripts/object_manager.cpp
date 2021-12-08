@@ -15,6 +15,8 @@
 
 #include "../Adollib/Scripts/Main/systems.h"
 
+#include "../Adollib/Scripts/Renderer/renderer_base.h"
+
 #include "player.h"
 
 
@@ -31,12 +33,12 @@ namespace Adollib
 		{
 			sphere_go = Gameobject_manager::createSphere(std::string("render_notmal_s"));
 			sphere_go->transform->local_scale = Vector3(1) * 0.05f;
-			sphere_go->material->color = Vector4(1, 0, 0, 1);
+			sphere_go->renderer->color = Vector4(1, 0, 0, 1);
 		}
 		{
 			normal_go = Gameobject_manager::createCube(std::string("render_normal"));
 			normal_go->transform->local_scale = Vector3(1, 1, 20) * 0.025f;
-			normal_go->material->color = Vector4(1, 0, 0, 1);
+			normal_go->renderer->color = Vector4(1, 0, 0, 1);
 		}
 
 		enum class Stage_types {
@@ -60,7 +62,7 @@ namespace Adollib
 				GO->transform->local_pos = Vector3(0, -60, 0);
 				GO->transform->local_scale = Vector3(60, 60, 60);
 				//GO->transform->local_orient = quaternion_from_euler(0, 45, 0);
-				GO->material->color = Vector4(1, 1, 1, 1);
+				GO->renderer->color = Vector4(1, 1, 1, 1);
 
 				Collider* coll = GO->addComponent<Collider>();
 				Box* box = coll->add_shape<Box>();
@@ -79,7 +81,7 @@ namespace Adollib
 				GO->transform->local_pos = Vector3(0, -60, 0);
 				GO->transform->local_scale = Vector3(60, 60, 60);
 				//GO->transform->local_orient = quaternion_from_euler(0, 45, 0);
-				GO->material->color = Vector4(1, 1, 1, 1);
+				GO->renderer->color = Vector4(1, 1, 1, 1);
 
 				Collider* coll = GO->addComponent<Collider>();
 				coll->add_shape("../Adollib/DefaultModel/cube.fbx", true);
@@ -93,7 +95,7 @@ namespace Adollib
 				GO = Gameobject_manager::createSphere("stage");
 				GO->transform->local_pos = Vector3(0, -6000, 0);
 				GO->transform->local_scale = Vector3(6000, 6000, 6000);
-				GO->material->color = Vector4(1, 1, 1, 1);
+				GO->renderer->color = Vector4(1, 1, 1, 1);
 				Collider* coll = GO->addComponent<Collider>();
 				Sphere* sphere = coll->add_shape<Sphere>();
 				//Meshcoll* R = GO->addComponent<Meshcoll>();
@@ -435,15 +437,15 @@ namespace Adollib
 							parts[3] = Gameobject_manager::createCube();
 							parts[4] = Gameobject_manager::createCube();
 							Vector4 C = Vector4(207, 171, 142, 255) / 255;
-							//parts[0]->material->color = Vector4(238, 229, 224, 255) / 255;
-							////parts[1]->material->color = Vector4(207, 171, 142, 255) / 255;
-							//parts[1]->material->color = Vector4(255, 77, 17, 255) / 255;
+							//parts[0]->renderer->color = Vector4(238, 229, 224, 255) / 255;
+							////parts[1]->renderer->color = Vector4(207, 171, 142, 255) / 255;
+							//parts[1]->renderer->color = Vector4(255, 77, 17, 255) / 255;
 
-							parts[0]->material->color = C;
-							parts[1]->material->color = C;
-							parts[2]->material->color = C;
-							parts[3]->material->color = C;
-							parts[4]->material->color = C;
+							parts[0]->renderer->color = C;
+							parts[1]->renderer->color = C;
+							parts[2]->renderer->color = C;
+							parts[3]->renderer->color = C;
+							parts[4]->renderer->color = C;
 
 							parts[0]->transform->local_pos = Vector3(0, 0.75f, 0);
 							parts[0]->transform->local_scale = Vector3(4, 0.5f, 3);
@@ -734,7 +736,7 @@ namespace Adollib
 						GO->transform->local_pos = Vector3(0, size.y * 2, 0);
 						GO->transform->local_pos = vector3_quatrotate(GO->transform->local_pos, quaternion_axis_angle(Vector3(0, 0, 1), 360.0f / TREE_pyramid_count * gear_tooth_num));
 
-						GO->material->color = Vector4(1, 1, 0, 1);
+						GO->renderer->color = Vector4(1, 1, 0, 1);
 						GEAR->add_child(GO);
 					}
 
@@ -789,7 +791,7 @@ namespace Adollib
 						GO->transform->local_pos = Vector3(0, size.y * 0, 0);
 						GO->transform->local_pos = vector3_quatrotate(GO->transform->local_pos, quaternion_axis_angle(Vector3(0, 1, 0), 360.0f / TREE_pyramid_count * gear_tooth_num));
 
-						GO->material->color = Vector4(1, 1, 0, 1);
+						GO->renderer->color = Vector4(1, 1, 0, 1);
 						PATAPATA->add_child(GO);
 					}
 
@@ -874,7 +876,7 @@ namespace Adollib
 						}
 
 						save_coll = coll;
-						GO->material->color = Vector4(1, 1, 0, 1);
+						GO->renderer->color = Vector4(1, 1, 0, 1);
 						Twist->add_child(GO);
 
 						GOs.emplace_back(GO);
@@ -923,21 +925,21 @@ namespace Adollib
 						Head->add_child(eye0);
 						eye0->transform->local_pos = Vector3(+0.5f, 0.5f, -1);
 						eye0->transform->local_scale = Vector3(0.25f, 0.25f, 0.25f);
-						eye0->material->color = face_color;
+						eye0->renderer->color = face_color;
 					}
 					{
 						Gameobject* eye1 = Gameobject_manager::createSphere("eye1");
 						Head->add_child(eye1);
 						eye1->transform->local_pos = Vector3(-0.5f, 0.5f, -1);
 						eye1->transform->local_scale = Vector3(0.25f, 0.25f, 0.25f);
-						eye1->material->color = face_color;
+						eye1->renderer->color = face_color;
 					}
 					{
 						Gameobject* mouth = Gameobject_manager::createCube("mouth");
 						Head->add_child(mouth);
 						mouth->transform->local_pos = Vector3(0, -0.45f, -1);
 						mouth->transform->local_scale = Vector3(0.7f, 0.25f, 0.3f);
-						mouth->material->color = face_color;
+						mouth->renderer->color = face_color;
 					}
 
 					{
@@ -945,7 +947,7 @@ namespace Adollib
 						Waist->add_child(belt);
 						belt->transform->local_pos = Vector3(0, -0.45f, 0);
 						belt->transform->local_scale = Vector3(1.1, 0.25f, 1.1f);
-						belt->material->color = face_color;
+						belt->renderer->color = face_color;
 					}
 
 
@@ -1230,7 +1232,7 @@ namespace Adollib
 		object = Gameobject_manager::createSphere(GO_tag::Sphere);
 		//Vector4 C = Vector4(color.x, color.y, color.z, 1);
 		Vector4 C = Vector4(color, 1);
-		object->material->color = C;
+		object->renderer->color = C;
 
 		//object->addComponent<object_fall>();
 		object->transform->local_pos = pos;
@@ -1254,7 +1256,7 @@ namespace Adollib
 		Gameobject* object = nullptr;
 		object = Gameobject_manager::createCube(GO_tag::Box);
 		Vector4 C = Vector4(color.x, color.y, color.z, 1);
-		object->material->color = C;
+		object->renderer->color = C;
 
 		//object->addComponent<object_fall>();
 		object->transform->local_orient = quaternion_from_euler(rotate);
@@ -1276,7 +1278,7 @@ namespace Adollib
 		Gameobject* object = nullptr;
 		object = Gameobject_manager::create(GO_tag::Box);
 		Vector4 C = Vector4(color.x, color.y, color.z, 1);
-		//object->material->color = C;
+		//object->renderer->color = C;
 
 		//object->addComponent<object_fall>();
 		object->transform->local_orient = quaternion_from_euler(rotate);
@@ -1298,7 +1300,7 @@ namespace Adollib
 		Gameobject* object = nullptr;
 		object = Gameobject_manager::createFromFBX("./DefaultModel/cone.fbx");
 		Vector4 C = Vector4(color.x, color.y, color.z, 1);
-		object->material->color = C;
+		object->renderer->color = C;
 
 		//object->addComponent<object_fall>();
 		object->transform->local_orient = quaternion_from_euler(rotate);
@@ -1318,7 +1320,7 @@ namespace Adollib
 		Gameobject* object = nullptr;
 		object = Gameobject_manager::createCube(GO_tag::Plane);
 		Vector4 C = Vector4(color.x, color.y, color.z, 1);
-		object->material->color = C;
+		object->renderer->color = C;
 
 		object->transform->local_orient = quaternion_from_euler(normal);
 		object->transform->local_pos = pos;
@@ -1351,37 +1353,37 @@ namespace Adollib
 
 		tree_parts[0]->transform->local_pos = Vector3(0, 7, 0);
 		tree_parts[0]->transform->local_scale = Vector3(1, 6.9f, 1);
-		tree_parts[0]->material->color = stem_color;
+		tree_parts[0]->renderer->color = stem_color;
 
 		tree_parts[1]->transform->local_pos = Vector3(0, 15, 0);
 		tree_parts[1]->transform->local_scale = Vector3(1.5, 1, 1.5);
 		tree_parts[1]->transform->local_orient = quaternion_from_euler(0, 0, 0);
-		tree_parts[1]->material->color = reaf_color;
+		tree_parts[1]->renderer->color = reaf_color;
 
 		tree_parts[2]->transform->local_pos = Vector3(0, 13, 0);
 		tree_parts[2]->transform->local_scale = Vector3(2.0, 1, 2.0);
 		tree_parts[2]->transform->local_orient = quaternion_from_euler(0, 1.7f, 0);
-		tree_parts[2]->material->color = reaf_color;
+		tree_parts[2]->renderer->color = reaf_color;
 
 		tree_parts[3]->transform->local_pos = Vector3(0, 11, 0);
 		tree_parts[3]->transform->local_scale = Vector3(3.0, 1, 3.0);
 		tree_parts[3]->transform->local_orient = quaternion_from_euler(0, 13, 0);
-		tree_parts[3]->material->color = reaf_color;
+		tree_parts[3]->renderer->color = reaf_color;
 
 		tree_parts[4]->transform->local_pos = Vector3(0, 9, 0);
 		tree_parts[4]->transform->local_scale = Vector3(3.5, 1, 3.5);
 		tree_parts[4]->transform->local_orient = quaternion_from_euler(0, 28, 0);
-		tree_parts[4]->material->color = reaf_color;
+		tree_parts[4]->renderer->color = reaf_color;
 
 		tree_parts[5]->transform->local_pos = Vector3(0, 7, 0);
 		tree_parts[5]->transform->local_scale = Vector3(4.5, 1, 4.5);
 		tree_parts[5]->transform->local_orient = quaternion_from_euler(0, 14, 0);
-		tree_parts[5]->material->color = reaf_color;
+		tree_parts[5]->renderer->color = reaf_color;
 
 		tree_parts[6]->transform->local_pos = Vector3(0, 0.2f, 0);
 		tree_parts[6]->transform->local_scale = Vector3(3, 0.2f, 3);
 		tree_parts[6]->transform->local_orient = quaternion_from_euler(0, 0, 0);
-		tree_parts[6]->material->color = floar_color;
+		tree_parts[6]->renderer->color = floar_color;
 
 		for (int i = 0; i < Tree_size; i++) {
 			tree->add_child(tree_parts[i]);

@@ -3,6 +3,7 @@
 
 #include "../Object/gameobject.h"
 #include "renderer_manager.h"
+#include "material_manager.h"
 
 #include "../Main/systems.h"
 #include "Shader/constant_buffer.h"
@@ -25,19 +26,20 @@ void Renderer_base::awake() {
 	Systems::CreateConstantBuffer(&world_cb, sizeof(ConstantBufferPerGO));
 	Systems::CreateConstantBuffer(&Mat_cb, sizeof(ConstantBufferPerMaterial));
 
-	material = std::make_shared<Material>();
-	texture = std::make_shared<Texture>();
-
-	material->Load_VS("./DefaultShader/default_vs.cso");
-	material->Load_PS("./DefaultShader/default_ps.cso");
-
-	texture->Load(L"./DefaultModel/white.png");
+	//material = std::make_shared<Material>();
+	material = Material_manager::find_material("default_material");
 
 	init();
 }
 
 void Renderer_base::finalize() {
 	Renderer_manager::remove_renderer(this_itr);
+}
 
-	//delete material;
+void Renderer_base::set_instance(Instance& instance) {
+
+	auto world = matrix_world(transform->scale, transform->orientation.get_rotate_matrix(), transform->position);
+	instance.transformMatrix = world;
+	instance.texcoordTransform = DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
+	instance.color = color;
 }

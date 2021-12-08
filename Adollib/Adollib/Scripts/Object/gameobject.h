@@ -17,6 +17,7 @@
 
 namespace Adollib {
 	class Time;
+	class Renderer_base;
 
 	class Gameobject {
 	public:
@@ -49,7 +50,8 @@ namespace Adollib {
 		Scenelist get_scene() const { return this_scene; };
 
 		// このGOのマテリアルへのポインタ cppから楽にアクセスできるようにここに置いている ここになくてもちゃんと動く
-		std::shared_ptr<Material> material = nullptr;
+		//std::shared_ptr<Renderer> renderer = nullptr;
+		Renderer_base* renderer = nullptr;
 
 		std::shared_ptr<Transform> transform; //不本意なtransform
 

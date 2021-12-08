@@ -26,7 +26,7 @@ void Sky_sphere::awake() {
 	sky_texture->Load(L"./DefaultTexture/sky_map.png");
 
 	shader = std::make_shared<Shader>();
-	shader->Load_VS("./DefaultShader/default_vs.cso");
+	shader->Load_VS("./DefaultShader/sky_map_vs.cso");
 	shader->Load_PS("./DefaultShader/default_ps_skysphere.cso");
 
 	Systems::CreateConstantBuffer(&projection_cb, sizeof(ConstantBufferPerSystem));

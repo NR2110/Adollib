@@ -6,9 +6,11 @@
 #include <map>
 #include <unordered_map>
 
+#include "../Scene/scene_list.h"
+#include "instance.h"
+#include "frustum_data.h"
 #include "mesh.h"
 #include "material.h"
-#include "../Scene/scene_list.h"
 
 
 namespace Adollib {
@@ -17,21 +19,34 @@ namespace Adollib {
 	class Light_component;
 	class Renderer_base;
 
+
 	class Renderer_manager {
 
 	private:
+		static Microsoft::WRL::ComPtr<ID3D11Buffer> instanceBuffer;
+		static std::vector<Renderer_base*> sorted_renderers; //instansingのためにソートされたデータ vectorにしたいためrenderersとは別に管理
+		static std::vector<Render_count> render_counts; //instancing描画のための配列 こいつをforで回して描画を行う
+
 		static std::unordered_map<Scenelist, std::list<Renderer_base*>> renderers;
 
 		// lightは全部まとめてcbをsetするため lightcomponentでは処理できない
 		static Microsoft::WRL::ComPtr<ID3D11Buffer> light_cb;
 
-		static void set_light_Constantbuffer(const std::list<Light_component*>& lights);
 	public:
 		// renderer::componentがアタッチされたとき コンストラクタで呼ばれる
 		static std::list<Renderer_base*>::iterator add_renderer(Renderer_base* renderer);
 
 		// renderer::componentが削除されるとき呼ばれる
 		static void remove_renderer(std::list<Renderer_base*>::iterator itr);
+
+	private:
+		static void set_light_Constantbuffer(const std::list<Light_component*>& lights);
+
+		static void sort_update(Scenelist Sce);
+
+		static void instance_update(const Frustum_data& frustum_data, Scenelist Sce);
+
+		static void render_instance(bool is_shader_activate = true);
 
 	public:
 		static void awake();

@@ -131,6 +131,9 @@
     <Filter Include="ソース ファイル\scene_game\ui\ui_base">
       <UniqueIdentifier>{7c868ad2-36ca-401f-8e2a-ef3a50652dd3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00_Adollib\44_render\shader\hlsl\sky_map">
+      <UniqueIdentifier>{ee6380cf-4cdd-4bd6-9bc1-7550be794e2f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Scripts\player.cpp">
@@ -390,6 +393,9 @@
     </ClCompile>
     <ClCompile Include="..\Scripts\ui_manager.cpp">
       <Filter>ソース ファイル\scene_game\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Renderer\material_manager.cpp">
+      <Filter>00_Adollib\44_render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -795,6 +801,12 @@
     <ClInclude Include="..\Scripts\ui_manager.h">
       <Filter>ソース ファイル\scene_game\ui</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Renderer\instance.h">
+      <Filter>00_Adollib\44_render\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\material_manager.h">
+      <Filter>00_Adollib\44_render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
@@ -881,8 +893,11 @@
     <FxCompile Include="DefaultShader\gaussian_filter_vs.hlsl">
       <Filter>00_Adollib\44_render\shader\hlsl\gaussian_filter</Filter>
     </FxCompile>
+    <FxCompile Include="DefaultShader\sky_map_vs.hlsl">
+      <Filter>00_Adollib\44_render\shader\hlsl\sky_map</Filter>
+    </FxCompile>
     <FxCompile Include="DefaultShader\default_ps_skysphere.hlsl">
-      <Filter>00_Adollib\44_render\shader\hlsl\default</Filter>
+      <Filter>00_Adollib\44_render\shader\hlsl\sky_map</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
