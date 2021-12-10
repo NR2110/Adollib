@@ -28,7 +28,7 @@ namespace Adollib
 		head_rot_pow = 1000;
 
 		waist_move_max_speed = 100000;
-		waist_move_pow = 470;
+		waist_move_pow = 490;
 
 		waist_rot_max_speed = 3;
 		waist_rot_max_pow = 10000;
@@ -51,7 +51,7 @@ namespace Adollib
 		hand_camera_rot_center = ToRadian(15);
 
 		jump_y_power = 21;
-		jump_front_power = 3000;
+		jump_front_power = 10000;
 
 		turn_speed = 1.5f;
 

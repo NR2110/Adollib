@@ -382,12 +382,6 @@
     <ClCompile Include="Scripts\Renderer\sky_sphere.cpp">
       <Filter>00_Adollib\44_render\renderer</Filter>
     </ClCompile>
-    <ClCompile Include="..\Scripts\stage_demo_meishi.cpp">
-      <Filter>ソース ファイル\scene_game\stage\stage\stage_demo</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Scripts\stage_demo_meishi_funcs.cpp">
-      <Filter>ソース ファイル\scene_game\stage\stage\stage_demo</Filter>
-    </ClCompile>
     <ClCompile Include="..\Scripts\input_changer.cpp">
       <Filter>ソース ファイル\scene_game\player</Filter>
     </ClCompile>
@@ -396,6 +390,15 @@
     </ClCompile>
     <ClCompile Include="Scripts\Renderer\material_manager.cpp">
       <Filter>00_Adollib\44_render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\stage_demo_2.cpp">
+      <Filter>ソース ファイル\scene_game\stage\stage\stage_demo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\stage_demo_2_funcs.cpp">
+      <Filter>ソース ファイル\scene_game\stage\stage\stage_demo</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Renderer\croth_renderer.cpp">
+      <Filter>00_Adollib\44_render\renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -792,9 +795,6 @@
     <ClInclude Include="Scripts\Renderer\sky_sphere.h">
       <Filter>00_Adollib\44_render\renderer</Filter>
     </ClInclude>
-    <ClInclude Include="..\Scripts\stage_demo_meishi.h">
-      <Filter>ソース ファイル\scene_game\stage\stage\stage_demo</Filter>
-    </ClInclude>
     <ClInclude Include="..\Scripts\input_changer.h">
       <Filter>ソース ファイル\scene_game\player</Filter>
     </ClInclude>
@@ -806,6 +806,12 @@
     </ClInclude>
     <ClInclude Include="Scripts\Renderer\material_manager.h">
       <Filter>00_Adollib\44_render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\stage_demo_2.h">
+      <Filter>ソース ファイル\scene_game\stage\stage\stage_demo</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\croth_renderer.h">
+      <Filter>00_Adollib\44_render\renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

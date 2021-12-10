@@ -35,7 +35,7 @@ void Renderer_manager::awake() {
 
 	Systems::CreateConstantBuffer(&light_cb, sizeof(ConstantBufferPerLight));
 
-	constexpr int maxElements = 1000;
+	constexpr int maxElements = 10000;
 	HRESULT hr = S_OK;
 	std::shared_ptr<Instance> instances(new Instance[maxElements]);
 	{
@@ -257,7 +257,7 @@ void Renderer_manager::sort_update(Scenelist Sce) {
 			// “¯‚¶mesh‚Å‚È‚¢‚Æ‚±‚ë‚ðŒ©‚Â‚¯‚½‚ç‚»‚Ì”ÍˆÍ‚ðsort
 			if ((*itr)->get_meshnum() != mesh_num) {
 				sort_itr_end = itr;
-				--sort_itr_end;
+				//--sort_itr_end;
 				std::sort(sort_itr_begin, sort_itr_end, sortmaterial);
 
 				sort_itr_begin = itr;
@@ -338,7 +338,6 @@ void Renderer_manager::instance_update(const Frustum_data& frustum_data, Sceneli
 }
 
 void Renderer_manager::render_instance(bool is_shader_activate) {
-	Debug::set("render_counts", render_counts.size());
 	//return;
 	for (const auto& render : render_counts) {
 		Work_meter::start("shader_activete");

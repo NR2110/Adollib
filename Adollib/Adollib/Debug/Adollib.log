@@ -1,5 +1,4 @@
 ﻿  renderer_manager.cpp
 C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Renderer\renderer_manager.cpp(122,55): warning C4244: '引数': 'unsigned int' から 'float' への変換です。データが失われる可能性があります。
 C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Renderer\renderer_manager.cpp(123,52): warning C4244: '引数': 'unsigned int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Renderer\renderer_manager.cpp(341,48): warning C4244: '引数': 'unsigned int' から 'float' への変換です。データが失われる可能性があります。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

@@ -15,6 +15,10 @@ void Input_changer::start() {
 
 void Input_changer::update() {
 
+	static int y_sign = 1; //y”½“]‚³‚¹‚é‚©
+
+	if (input->getKeyTrigger(Key::M))y_sign *= -1;
+
 	// Œü‚«
 	dir = Vector3(0);
 
@@ -67,13 +71,13 @@ void Input_changer::update() {
 	cursol_move = Vector2(0);
 	if (pad_num == 0) {
 		cursol_move.y = (input->getCursorPosX() - cursol_pos_save.x) * rotate_speed;
-		cursol_move.x = (input->getCursorPosY() - cursol_pos_save.y) * rotate_speed;
+		cursol_move.x = (input->getCursorPosY() - cursol_pos_save.y) * rotate_speed * y_sign;
 	}
 
 	Debug::set("cursol_move", cursol_move.x, cursol_move.y);
 
-	cursol_move.y += input->getRStickX(pad_num);
-	cursol_move.x -= input->getRStickY(pad_num);
+	cursol_move.y += input->getRStickX(pad_num) * time->deltaTime() * 130;
+	cursol_move.x -= input->getRStickY(pad_num) * time->deltaTime() * 130 * y_sign;
 
 
 	// cursol‚ªlock‚³‚ê‚Ä‚¢‚½‚ç’†‰›‚Ö

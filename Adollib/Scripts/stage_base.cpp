@@ -95,7 +95,7 @@ Collider* Stage_base::set_capsule(const Vector3& pos, const float& r, const floa
 
 	Collider* coll = object->addComponent<Collider>();
 	Capsule* capsule = coll->add_shape<Capsule>();
-	capsule->length = ALmax(0, capsule->length - r);
+	capsule->length = length * 0.5f;
 
 	if (is_static) {
 		coll->tag = Collider_tags::Capsule | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Static_Stage ;

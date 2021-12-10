@@ -36,7 +36,7 @@ namespace Adollib
 
 #if _DEBUG
 		//set_player_statue(Vector3(104, 17.6f, 132), 100, Vector3(0));
-		set_pillar(Vector3(16, 4, 23), Vector3(1), Vector3(0));
+		//set_pillar(Vector3(16, 4, 23), Vector3(1), Vector3(0));
 #else
 
 		// first_zone

@@ -7,7 +7,7 @@
 
 #include "stage_demo.h"
 #include "stage_demo_1.h"
-#include "stage_demo_meishi.h"
+#include "stage_demo_2.h"
 #include "stage_01.h"
 
 #include "player.h"
@@ -19,7 +19,7 @@ void Stage_manager::awake() {
 
 	add_stage<Stage_demo>(Stage_types::demo);
 	add_stage<Stage_demo_01>(Stage_types::demo_1);
-	add_stage<Stage_demo_meishi>(Stage_types::demo_meishi);
+	add_stage<Stage_demo_02>(Stage_types::demo_2);
 
 	add_stage<Stage_01>(Stage_types::stage_1);
 	//add_stage<Stage_01>(Stage_types::stage_1);
@@ -53,11 +53,14 @@ void Stage_manager::update() {
 		is_changed_stage = true;
 	}
 
-	if (input->getKeyTrigger(Key::F1))
-		set_next_stage_type(Stage_types::demo);
 	if (input->getKeyTrigger(Key::F2))
-		set_next_stage_type(Stage_types::demo_1);
+		set_next_stage_type(Stage_types::demo);
 	if (input->getKeyTrigger(Key::F3))
+		set_next_stage_type(Stage_types::demo_1);
+	if (input->getKeyTrigger(Key::F4))
+		set_next_stage_type(Stage_types::demo_2);
+
+	if (input->getKeyTrigger(Key::F1))
 		set_next_stage_type(Stage_types::stage_1);
 }
 

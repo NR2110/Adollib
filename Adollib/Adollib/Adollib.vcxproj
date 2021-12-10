@@ -175,7 +175,7 @@
     <ClInclude Include="..\Scripts\stage_base.h" />
     <ClInclude Include="..\Scripts\stage_demo.h" />
     <ClInclude Include="..\Scripts\stage_demo_1.h" />
-    <ClInclude Include="..\Scripts\stage_demo_meishi.h" />
+    <ClInclude Include="..\Scripts\stage_demo_2.h" />
     <ClInclude Include="..\Scripts\stage_manager.h" />
     <ClInclude Include="..\Scripts\stage_types.h" />
     <ClInclude Include="..\Scripts\tag_andcircuit.h" />
@@ -265,6 +265,7 @@
     <ClInclude Include="Scripts\Physics\ray.h" />
     <ClInclude Include="Scripts\Physics\springjoint.h" />
     <ClInclude Include="Scripts\Physics\twistjoint.h" />
+    <ClInclude Include="Scripts\Renderer\croth_renderer.h" />
     <ClInclude Include="Scripts\Renderer\frustum_data.h" />
     <ClInclude Include="Scripts\Renderer\instance.h" />
     <ClInclude Include="Scripts\Renderer\material.h" />
@@ -310,8 +311,8 @@
     <ClCompile Include="..\Scripts\stage_demo_1.cpp" />
     <ClCompile Include="..\Scripts\stage_demo_1_funcs.cpp" />
     <ClCompile Include="..\Scripts\stage_demo_funcs.cpp" />
-    <ClCompile Include="..\Scripts\stage_demo_meishi.cpp" />
-    <ClCompile Include="..\Scripts\stage_demo_meishi_funcs.cpp" />
+    <ClCompile Include="..\Scripts\stage_demo_2.cpp" />
+    <ClCompile Include="..\Scripts\stage_demo_2_funcs.cpp" />
     <ClCompile Include="..\Scripts\stage_manager.cpp" />
     <ClCompile Include="..\Scripts\ui_manager.cpp" />
     <ClCompile Include="Imgui\imgui.cpp" />
@@ -376,6 +377,7 @@
     <ClCompile Include="Scripts\Renderer\UI.cpp" />
     <ClCompile Include="Scripts\Renderer\sprite_renderer.cpp" />
     <ClCompile Include="Scripts\Renderer\texture.cpp" />
+    <ClCompile Include="Scripts\Renderer\croth_renderer.cpp" />
     <ClCompile Include="Scripts\Scene\scene_game.cpp" />
     <ClCompile Include="Scripts\Scene\scene_manager.cpp" />
     <ClCompile Include="Scripts\Scene\scene_title.cpp" />

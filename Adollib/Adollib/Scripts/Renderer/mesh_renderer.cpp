@@ -142,6 +142,8 @@ void Mesh_renderer::render(const Frustum_data& frustum_data) {
 
 void Mesh_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& instance_buffer, int bufferStart, int bufferCount) {
 	if (material == nullptr) return;
+	if (bufferCount == 0) return;
+
 	Systems::DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	//

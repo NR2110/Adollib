@@ -6,7 +6,7 @@ namespace Adollib {
 		none,
 		demo,
 		demo_1,
-		demo_meishi,
+		demo_2,
 
 		stage_1,
 		stage_2,

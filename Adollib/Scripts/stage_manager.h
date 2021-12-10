@@ -13,11 +13,12 @@ namespace Adollib {
 
 	class Stage_manager : public Component{
 
-	private:
+	public:
 		bool is_changed_stage = false;
 
 		Stage_types now_stage =  Stage_types::demo; //¡‚Ìstagetype
 		Stage_types next_stage = Stage_types::demo; //Ÿ‚Ìstagetype
+	private:
 
 		Vector3 player_respown_pos; //player‚Ìrespown‚·‚éÀ•W
 
