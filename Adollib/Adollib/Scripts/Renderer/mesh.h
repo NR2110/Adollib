@@ -12,6 +12,8 @@
 #include <wrl.h>
 #include <assert.h>
 
+#include "../Renderer/Shader/vertex_format.h"
+
 namespace Adollib
 {
 
@@ -21,6 +23,7 @@ namespace Adollib
 		//Microsoft::WRL::ComPtr<ID3D11InputLayout> vertexLayout;
 
 		//ComPtr<ID3D11Buffer> mesh_cb; //mesh_world行列用バッファ
+
 	public:
 
 		// マテリアル
@@ -67,6 +70,8 @@ namespace Adollib
 			Microsoft::WRL::ComPtr<ID3D11Buffer> mesh_cb; //mesh_world行列用バッファ
 			Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer = nullptr;
 			Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer = nullptr;
+			std::vector<VertexFormat> vertices;
+			std::vector<u_int> indexces;
 			std::vector<subset> subsets;
 			DOP::DOP_14 dop; //meshのローカル座標系でのk-DOP
 			DirectX::XMFLOAT4X4 globalTransform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };

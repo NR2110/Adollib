@@ -40,7 +40,6 @@ namespace Adollib {
 			bool is_Convex = true; //convexなオブジェクトかどうか 一つでも凹なedgeがあればfalse
 			DOP::DOP_14	dopbase; //初期k-dopのdata
 			Vector3 base_pos[8];//初期k-dopの頂点データ
-			Vector3 half_size = Vector3(1, 1, 1);
 		};
 
 		//struct Meshcoll_data {

@@ -117,11 +117,6 @@ void Renderer_manager::render(const std::map<Scenelist, std::list<Camera_compone
 		// ƒJƒƒ‰‚Ì‘¶İ‚·‚éƒV[ƒ“‚ğƒJƒƒ‰‚ª•`‰æ‚·‚éƒV[ƒ“‚ªˆá‚¦‚Îupdate‚ğ‚µ‚Ä‚¢‚È‚¢‚Ì‚Å update‚ğŒÄ‚Ô
 		if (Sce != render_scene) sort_update(Sce);
 
-
-
-		Debug::set("sorted_renderers", sorted_renderers.size());
-		Debug::set("sorted_renderers", render_counts.size());
-
 		// ‰e—p‚Ì•`‰æ
 		{
 			camera->directional_shadow->setup();

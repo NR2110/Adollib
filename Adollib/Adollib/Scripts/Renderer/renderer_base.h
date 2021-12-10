@@ -49,10 +49,12 @@ namespace Adollib {
 		// frustumに含まれているかを確認する
 		virtual bool check_frustum(const Frustum_data& data) = 0;
 
+	protected:
+		virtual void init() = 0;  //awakeの中で呼ぶ 派生クラス用のinitialize
+
 	public:
 	    void awake() override final;
 
-		virtual void init() = 0;  //awakeの中で呼ぶ 派生クラス用のinitialize
 		virtual void render(const Frustum_data& frustum_data) = 0;
 
 		virtual void render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& instance_buffer, int bufferStart, int bufferCount) = 0;

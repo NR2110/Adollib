@@ -6,7 +6,10 @@
 
 namespace Adollib {
 
-	//add_shape(Meshcoll.load_mesh)でmeshをアタッチ
+	// Meshshapeを一つのshapeにまとめることができないので
+	// Collider::add_shape(const char* filepass, bool is_right_rtiangle, bool is_permit_edge_have_many_facet)
+	// で自動的に複数meshをshapeに治してアタッチするようにしている
+
 	//class Meshcoll {
 	//private:
 	//	Physics_function::Meshcollider_data* collider_mesh = nullptr;

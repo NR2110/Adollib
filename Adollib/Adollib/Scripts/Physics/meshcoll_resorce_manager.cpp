@@ -352,10 +352,6 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 
 #pragma endregion
 
-
-		//::
-		Vector3& halfsize = mesh.half_size;
-		halfsize = Vector3(dopbase.max[0] - dopbase.min[0], dopbase.max[1] - dopbase.min[1], dopbase.max[2] - dopbase.min[2]) / 2.0f;
 	}
 
 	//meshcoll_datas[fbxname] = _mesh;

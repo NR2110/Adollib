@@ -5,15 +5,6 @@
 
 namespace Adollib {
 	namespace ConstantBuffer {
-		// light (b4)
-		struct ConstantBufferPerLight {
-			DirectX::XMFLOAT4	LightColor = DirectX::XMFLOAT4(1,1,1,1);		//ライトの色
-			DirectX::XMFLOAT4	LightDir = DirectX::XMFLOAT4(1, 1, 1, 1);		//ライトの方向
-			DirectX::XMFLOAT4	AmbientColor = DirectX::XMFLOAT4(1, 1, 1, 1);	//環境光
-
-			POINTLIGHT  PointLight[POINTMAX];//ポイントライト
-			SPOTLIGHT  SpotLight[SPOTMAX];	 //スポットライト
-		};
 		// camera (b1)
 		struct ConstantBufferPerCamera {
 			DirectX::XMFLOAT4X4 View;
@@ -31,6 +22,15 @@ namespace Adollib {
 		// Mesh (b3)
 		struct ConstantBufferPerMesh {
 			DirectX::XMFLOAT4X4 Mesh_world;
+		};
+		// light (b4)
+		struct ConstantBufferPerLight {
+			DirectX::XMFLOAT4	LightColor = DirectX::XMFLOAT4(1, 1, 1, 1);		//ライトの色
+			DirectX::XMFLOAT4	LightDir = DirectX::XMFLOAT4(1, 1, 1, 1);		//ライトの方向
+			DirectX::XMFLOAT4	AmbientColor = DirectX::XMFLOAT4(1, 1, 1, 1);	//環境光
+
+			POINTLIGHT  PointLight[POINTMAX];//ポイントライト
+			SPOTLIGHT  SpotLight[SPOTMAX];	 //スポットライト
 		};
 		// material (b5)
 		static constexpr int MAX_BONES = 4;
