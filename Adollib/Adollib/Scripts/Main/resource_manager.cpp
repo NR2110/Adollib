@@ -383,8 +383,7 @@ namespace Adollib
 		// メッシュデータの取得
 		//vector<VertexFormat> vertices;
 		//vector<u_int> indices;
-		u_int old_vertex_count = 0;
-		u_int vertex_count = 0;
+		//u_int vertex_count = 0;
 
 		//skinMeshes.resize(1);
 		//for (size_t mesh_num = 0; mesh_num < 1; mesh_num++)
@@ -393,11 +392,10 @@ namespace Adollib
 		{
 			FbxMesh* fbxMesh = fetched_meshes.at(mesh_num)->GetMesh();
 			Mesh::mesh& mesh = skinMeshes.at(mesh_num);
+
 			vector<VertexFormat>& vertices = mesh.vertices;
 			vector<u_int>& indices = mesh.indexces;
-
-			old_vertex_count = vertex_count;
-			vertex_count = 0;
+			u_int vertex_count = 0;
 
 			Systems::CreateConstantBuffer(&mesh.mesh_cb, sizeof(ConstantBuffer::ConstantBufferPerMesh));
 
@@ -567,7 +565,7 @@ namespace Adollib
 					}
 					// push_back
 					vertices.push_back(vertex);
-					indices.at(index_offset + index_of_vertex - old_vertex_count) = static_cast<u_int>(vertex_count);
+					indices.at(index_offset + index_of_vertex) = static_cast<u_int>(vertex_count);
 					vertex_count++;
 				}
 				subset.indexCount += 3;

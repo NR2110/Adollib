@@ -253,7 +253,6 @@ bool Mesh_renderer::check_frustum(const Frustum_data& frustum_data) {
 		) * 0.5f;
 		dop_center_offset = vector3_quatrotate(dop_center_offset, transform->orientation);
 
-
 		bool is_contain = true;
 		for (int i = 0; i < 6; i++) {
 
@@ -267,7 +266,7 @@ bool Mesh_renderer::check_frustum(const Frustum_data& frustum_data) {
 				break;
 			}
 		}
-		if (is_contain) return true;;
+		if (is_contain) return true;
 	}
 
 	return false;

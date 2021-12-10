@@ -279,9 +279,45 @@ bool Croth_renderer::check_frustum(const Frustum_data& frustum_data) { return tr
 
 void Croth_renderer::instance_update(const Frustum_data& frustum_data) {
 
+	Instance* instances = nullptr;
+
+	// instance_buffer‚ðMap‚·‚é
+	HRESULT hr = S_OK;
+	const D3D11_MAP map = D3D11_MAP_WRITE_DISCARD;
+	D3D11_MAPPED_SUBRESOURCE mappedBuffer = {};
+	hr = Systems::DeviceContext->Map(instanceBuffer.Get(), 0, map, 0, &mappedBuffer);
+
+	if (FAILED(hr))
+	{
+		assert(0 && "failed Map InstanceBuffer dynamic(RenderManager)");
+		return;
+	}
+	instances = static_cast<Instance*>(mappedBuffer.pData);
+
+	int instance_num = 0;
+	int index_count = 0;
+
 	for (Mesh::mesh& mesh : (*meshes))
 	{
-		//mesh.
+
+		//for (const auto& index : mesh.indexces) {
+
+		//	if (index_count == 3) {
+		//		index_count = 0;
+
+		//		++instance_num;
+		//	}
+
+		//	auto& instance = instances[instance_num];
+
+
+		//	instance.transformMatrix._11 = mesh.vertices[index].position.x;
+		//	instance.transformMatrix._12 = mesh.vertices[index].position.y;
+		//	instance.transformMatrix._13 = mesh.vertices[index].position.z;
+
+		//	++index_count;
+		//}
 
 	}
+
 }

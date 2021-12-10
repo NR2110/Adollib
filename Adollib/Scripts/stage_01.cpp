@@ -34,10 +34,13 @@ namespace Adollib
 
 		//set_desk(Vector3(0, 0, 0), Vector3(30, 15, 25), Vector3(0, 0, 0), 0);
 
+		Gameobject_manager::createFromFBX("sponza", "../Data/FBX/Model_Shaclo_Winter_Edit.fbx");
+
 #if _DEBUG
 		//set_player_statue(Vector3(104, 17.6f, 132), 100, Vector3(0));
 		//set_pillar(Vector3(16, 4, 23), Vector3(1), Vector3(0));
 #else
+
 
 		// first_zone
 		{
