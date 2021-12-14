@@ -67,6 +67,7 @@ namespace Adollib
 		// メッシュ
 		struct mesh
 		{
+			std::string file_pass;
 			Microsoft::WRL::ComPtr<ID3D11Buffer> mesh_cb; //mesh_world行列用バッファ
 			Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer = nullptr;
 			Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer = nullptr;

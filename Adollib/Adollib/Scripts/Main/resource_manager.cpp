@@ -392,6 +392,7 @@ namespace Adollib
 		{
 			FbxMesh* fbxMesh = fetched_meshes.at(mesh_num)->GetMesh();
 			Mesh::mesh& mesh = skinMeshes.at(mesh_num);
+			mesh.file_pass = (string)fileName;
 
 			vector<VertexFormat>& vertices = mesh.vertices;
 			vector<u_int>& indices = mesh.indexces;

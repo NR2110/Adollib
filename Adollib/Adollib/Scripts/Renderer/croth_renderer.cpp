@@ -12,9 +12,15 @@
 #include "texture.h"
 
 #include "material_manager.h"
+#include "../Main/resource_manager.h"
+
+#include "Shader/compute_shader.h"
+
+#
 
 using namespace Adollib;
 using namespace ConstantBuffer;
+using namespace Compute_S;
 
 
 void Croth_renderer::init() {
@@ -56,8 +62,9 @@ void Croth_renderer::init() {
 
 	}
 
+	// instanceバッファ生成
 	{
-		constexpr int maxElements = 500000;
+		constexpr int maxElements = 300000;
 		HRESULT hr = S_OK;
 		std::shared_ptr<Instance> instances(new Instance[maxElements]);
 		{
@@ -83,6 +90,24 @@ void Croth_renderer::init() {
 		}
 	}
 
+
+	// computeshaderのload
+	{
+		compute_shader = std::make_shared<ComputeShader>();
+		compute_shader->Load("./DefaultShader/croth_calculate_cs.cso");
+	}
+
+
+	// すでにmeshが存在すれば そのmeshをvertexをmargeする形でloadし直す
+	{
+		if (meshes != nullptr) {
+			std::vector<Mesh::mesh>* no_marge_vertex_mesh;
+			ResourceManager::CreateModelFromFBX(&no_marge_vertex_mesh, (*meshes).at(0).file_pass.c_str(), true);
+			meshes = no_marge_vertex_mesh;
+		}
+	}
+
+	// 初期maerialの設定
 	{
 		material = Material_manager::find_material("croth_material");
 
@@ -227,62 +252,121 @@ void Croth_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& ins
 	if (material == nullptr) return;
 	if (bufferCount == 0) return;
 
+	/*
 	//::: update_instancing ::::::::
+	//{
+	//	static float debug_timer_count = 0;
+	//	debug_timer_count += time->deltaTime();
+
+	//	instance_count = 0;
+	//	Instance_polygon* instances = nullptr;
+
+	//	// instance_bufferをMapする
+	//	HRESULT hr = S_OK;
+	//	const D3D11_MAP map = D3D11_MAP_WRITE_DISCARD;
+	//	D3D11_MAPPED_SUBRESOURCE mappedBuffer = {};
+	//	hr = Systems::DeviceContext->Map(instanceBuffer.Get(), 0, map, 0, &mappedBuffer);
+
+	//	if (FAILED(hr))
+	//	{
+	//		assert(0 && "failed Map InstanceBuffer dynamic(RenderManager)");
+	//		return;
+	//	}
+	//	instances = static_cast<Instance_polygon*>(mappedBuffer.pData);
+
+	//	// meshから
+	//	for (Mesh::mesh& mesh : (*meshes))
+	//	{
+	//		int index_count = 0;
+	//		for (const auto& index : mesh.indexces) {
+
+	//			if (index_count == 3) {
+	//				index_count = 0;
+
+	//				++instance_count;
+	//			}
+
+	//			auto& instance = instances[instance_count];
+
+	//			instance.position[index_count] = Vector3(mesh.vertices[index].position)
+	//				+ Vector3(0, 1, 0) * 0.5f * cosf(debug_timer_count + index)
+	//				+ Vector3(0, 0, 1) * 0.5f * sinf(debug_timer_count + index);
+
+	//			instance.normal[index_count] = Vector3(mesh.vertices[index].normal);
+	//			instance.color = color;
+	//			instance.texcoordTransform = Vector2(0, 0);
+
+	//			++index_count;
+	//		}
+	//		++instance_count;
+
+	//		// ポリゴンの途中で終わっていたらエラー
+	//		if (index_count != 3) {
+	//			assert(0 && "bug");
+	//		}
+	//	}
+
+	//	// instance_bufferをUnmapする
+	//	Systems::DeviceContext->Unmap(instanceBuffer.Get(), 0);
+
+	//}
+	*/
+
 	{
 		static float debug_timer_count = 0;
 		debug_timer_count += time->deltaTime();
-
 		instance_count = 0;
-		Instance_polygon* instances = nullptr;
-
-		// instance_bufferをMapする
-		HRESULT hr = S_OK;
-		const D3D11_MAP map = D3D11_MAP_WRITE_DISCARD;
-		D3D11_MAPPED_SUBRESOURCE mappedBuffer = {};
-		hr = Systems::DeviceContext->Map(instanceBuffer.Get(), 0, map, 0, &mappedBuffer);
-
-		if (FAILED(hr))
-		{
-			assert(0 && "failed Map InstanceBuffer dynamic(RenderManager)");
-			return;
-		}
-		instances = static_cast<Instance_polygon*>(mappedBuffer.pData);
 
 		// meshから
 		for (Mesh::mesh& mesh : (*meshes))
 		{
+			int indexes_count = mesh.indexces.size();
+			int vertices_count = mesh.vertices.size();
+			int instances_count = indexes_count / 3;
 
-			int index_count = 0;
-			for (const auto& index : mesh.indexces) {
+			// structure bufferの作成
+			compute_shader->create_StructureBuffer(sizeof(u_int),			 indexes_count, &mesh.indexces[0], computeBuf_index);
+			compute_shader->create_StructureBuffer(sizeof(VertexFormat),	 vertices_count, &mesh.vertices[0], computeBuf_vertex);
+			compute_shader->create_StructureBuffer(sizeof(Vector4), 1, &color, computeBuf_color);
+			compute_shader->create_StructureBuffer(sizeof(Instance_polygon), instances_count, nullptr, computeBuf_result);
 
-				if (index_count == 3) {
-					index_count = 0;
+			compute_shader->createSRV_fromSB(computeBuf_index,  computeBufSRV_index.GetAddressOf());
+			compute_shader->createSRV_fromSB(computeBuf_vertex, computeBufSRV_vertex.GetAddressOf());
+			compute_shader->createSRV_fromSB(computeBuf_color,  computeBufSRV_color.GetAddressOf());
+			compute_shader->createUAV_fromSB(computeBuf_result, computeBufUAV_result.GetAddressOf());
 
-					++instance_count;
-				}
+			ID3D11ShaderResourceView* pSRVs[3] = { computeBufSRV_index.Get(), computeBufSRV_vertex.Get(), computeBufSRV_color.Get() };
 
-				auto& instance = instances[instance_count];
+			int loop_count = indexes_count / 64 + 1;
+			compute_shader->run(pSRVs, 3, computeBufUAV_result, loop_count, 1, 1);
 
-				instance.position[index_count] = Vector3(mesh.vertices[index].position) + Vector3(1, 0, 0) * 0.1f * cosf(debug_timer_count + index);
-				instance.normal[index_count] = Vector3(mesh.vertices[index].normal);
-				instance.color = color;
-				instance.texcoordTransform = Vector2(0, 0);
+			auto instance_poly = compute_shader->Read_UAV<Instance_polygon>(computeBuf_result);
 
-				++index_count;
+			Instance_polygon* instances = nullptr;
+			// instance_bufferをMapする
+			HRESULT hr = S_OK;
+			const D3D11_MAP map = D3D11_MAP_WRITE_DISCARD;
+			D3D11_MAPPED_SUBRESOURCE mappedBuffer = {};
+			hr = Systems::DeviceContext->Map(instanceBuffer.Get(), 0, map, 0, &mappedBuffer);
+
+			if (FAILED(hr))
+			{
+				assert(0 && "failed Map InstanceBuffer dynamic(RenderManager)");
+				return;
 			}
-			++instance_count;
 
-			// ポリゴンの途中で終わっていたらエラー
-			if (index_count != 3) {
-				assert(0 && "bug");
+			instances = static_cast<Instance_polygon*>(mappedBuffer.pData);
+			for (int i = 0; i < instances_count; ++i) {
+				instances[i + instance_count] = instance_poly[i];
 			}
+
+			// instance_bufferをUnmapする
+			Systems::DeviceContext->Unmap(instanceBuffer.Get(), 0);
+
+			instance_count += instances_count;
 		}
 
-		// instance_bufferをUnmapする
-		Systems::DeviceContext->Unmap(instanceBuffer.Get(), 0);
-
 	}
-
 
 	//::: render ::::::::
 	{
@@ -330,6 +414,17 @@ void Croth_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& ins
 void Croth_renderer::load_texture(const wchar_t* filename) { material->get_texture()->Load(filename); };
 
 bool Croth_renderer::check_frustum(const Frustum_data& frustum_data) { return true; };
+
+void Croth_renderer::set_meshes(std::vector<Mesh::mesh>* l_meshes) {
+
+	// meshをvertexをmargeする形でloadし直す
+	if (l_meshes != nullptr) {
+		std::vector<Mesh::mesh>* no_marge_vertex_mesh;
+		ResourceManager::CreateModelFromFBX(&no_marge_vertex_mesh, (*l_meshes).at(0).file_pass.c_str(), true);
+		meshes = no_marge_vertex_mesh;
+	}
+
+}
 
 void Croth_renderer::instance_update(const Frustum_data& frustum_data) {
 

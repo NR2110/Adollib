@@ -77,7 +77,7 @@ namespace Adollib
 		else if (stage_type == Stage_types::Mesh_Cube) {
 			{
 				//C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultModel
-				GO = Gameobject_manager::createFromFBX("../Adollib/DefaultModel/cube.fbx");
+				GO = Gameobject_manager::createFromFBX("", "../Adollib/DefaultModel/cube.fbx");
 				GO->transform->local_pos = Vector3(0, -60, 0);
 				GO->transform->local_scale = Vector3(60, 60, 60);
 				//GO->transform->local_orient = quaternion_from_euler(0, 45, 0);
@@ -124,7 +124,7 @@ namespace Adollib
 		}
 		else if (stage_type == Stage_types::Shaclo) {
 			{
-				GO = Gameobject_manager::createFromFBX("../Data/FBX/Model_Shaclo_Winter_Edit.fbx");
+				GO = Gameobject_manager::createFromFBX("","../Data/FBX/Model_Shaclo_Winter_Edit.fbx");
 				//objGO = Gameobject_manager::create();
 				//objGO = Gameobject_manager::createFromFBX("../Adollib/DefaultModel/cylinder.fbx");
 				//GO->transform->local_pos = Vector3(-10, 15, -25);
@@ -165,7 +165,7 @@ namespace Adollib
 		}
 		else if (stage_type == Stage_types::Teach) {
 			{
-				GO = Gameobject_manager::createFromFBX("../Data/FBX/0311_collisions.fbx");
+				GO = Gameobject_manager::createFromFBX("", "../Data/FBX/0311_collisions.fbx");
 				//objGO = Gameobject_manager::create();
 				//objGO = Gameobject_manager::createFromFBX("../Adollib/DefaultModel/cylinder.fbx");
 				GO->transform->local_pos = Vector3(-10, 15, -25);
@@ -184,7 +184,7 @@ namespace Adollib
 		else if (stage_type == Stage_types::Sponza) {
 			{
 				//objGO = Gameobject_manager::createFromFBX("../Data/FBX/big_plane.fbx");
-				GO = Gameobject_manager::createFromFBX("../Data/FBX/sponza.obj");
+				GO = Gameobject_manager::createFromFBX("", "../Data/FBX/sponza.obj");
 				//objGO = Gameobject_manager::createFromFBX("../Data/FBX/0311_collisions.fbx");
 				//objGO = Gameobject_manager::create();
 				//objGO = Gameobject_manager::createFromFBX("../Adollib/DefaultModel/cylinder.fbx");
@@ -1298,7 +1298,7 @@ namespace Adollib
 
 	Gameobject* object_manager::set_meshbox(Vector3 pos, Vector3 size, Vector3 rotate, Vector3 color) {
 		Gameobject* object = nullptr;
-		object = Gameobject_manager::createFromFBX("./DefaultModel/cone.fbx");
+		object = Gameobject_manager::createFromFBX("", "./DefaultModel/cone.fbx");
 		Vector4 C = Vector4(color.x, color.y, color.z, 1);
 		object->renderer->color = C;
 

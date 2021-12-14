@@ -212,7 +212,7 @@ Gameobject* Gameobject_manager::create(const std::string& go_name, const u_int& 
 }
 
 
-Gameobject* Gameobject_manager::createFromFBX(const std::string go_name, const std::string& FBX_pass, u_int tag, Scenelist Sce) {
+Gameobject* Gameobject_manager::createFromFBX(const std::string go_name, const std::string FBX_pass, const bool is_marge_vertex, u_int tag, Scenelist Sce) {
 	Gameobject* null = nullptr;
 	gameobjects[Sce].emplace_back(null);
 	auto itr = gameobjects[Sce].end();
@@ -227,7 +227,7 @@ Gameobject* Gameobject_manager::createFromFBX(const std::string go_name, const s
 	Value->renderer = Value->addComponent<Mesh_renderer>();
 
 	std::vector<Mesh::mesh>* meshes = nullptr;
-	ResourceManager::CreateModelFromFBX(&meshes, FBX_pass.c_str());
+	ResourceManager::CreateModelFromFBX(&meshes, FBX_pass.c_str(), is_marge_vertex);
 	Value->renderer->set_meshes(meshes);
 
 	Value->initialize();

@@ -917,6 +917,9 @@
     <FxCompile Include="DefaultShader\croth_shader_vs.hlsl">
       <Filter>00_Adollib\44_render\shader\hlsl\croth</Filter>
     </FxCompile>
+    <FxCompile Include="DefaultShader\croth_calculate_cs.hlsl">
+      <Filter>00_Adollib\44_render\shader\hlsl\croth</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="native\value.natvis">

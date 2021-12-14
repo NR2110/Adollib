@@ -7,6 +7,8 @@
 
 namespace Adollib {
 
+	namespace Compute_S { class ComputeShader; }
+
 	// polygon•`‰æ—p‚ÌInstance
 	//struct Instance
 	//{
@@ -32,6 +34,19 @@ namespace Adollib {
 		Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer;
 		Microsoft::WRL::ComPtr<ID3D11Buffer> instanceBuffer;
 
+		// compute_Shader
+		std::shared_ptr<Compute_S::ComputeShader> compute_shader = nullptr;
+
+		Microsoft::WRL::ComPtr<ID3D11Buffer> computeBuf_vertex = nullptr;
+		Microsoft::WRL::ComPtr<ID3D11Buffer> computeBuf_index  = nullptr;
+		Microsoft::WRL::ComPtr<ID3D11Buffer> computeBuf_color  = nullptr;
+		Microsoft::WRL::ComPtr<ID3D11Buffer> computeBuf_result = nullptr;
+
+		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  computeBufSRV_vertex = nullptr;
+		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  computeBufSRV_index  = nullptr;
+		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  computeBufSRV_color  = nullptr;
+		Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> computeBufUAV_result = nullptr;
+
 		void instance_update(const Frustum_data& frustum_data);
 
 		int instance_count = 0;
@@ -41,6 +56,7 @@ namespace Adollib {
 
 		bool check_frustum(const Frustum_data& data) override;
 
+		void set_meshes(std::vector<Mesh::mesh>* l_meshes) override;
 	protected:
 
 	public:

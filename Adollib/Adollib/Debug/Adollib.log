@@ -1,5 +1,3 @@
-﻿C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\croth_shader_ps.hlsl(34,5-77): warning X3206: implicit truncation of vector type
-  
-  compilation object save succeeded; see C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\croth_shader_ps.cso
-  croth_renderer.cpp
+﻿  stage_01.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(15,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

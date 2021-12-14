@@ -119,7 +119,7 @@ Collider* Stage_base::set_capsule(const Vector3& pos, const float& r, const floa
 
 Collider* Stage_base::set_meshbox(const Vector3& pos, const Vector3& size, const Vector3& rotate, const Vector3& color, Gameobject* pearent, bool is_static ) {
 	Gameobject* object = nullptr;
-	object = Gameobject_manager::createFromFBX("./DefaultModel/cone.fbx");
+	object = Gameobject_manager::createFromFBX("", "./DefaultModel/cone.fbx");
 	object->renderer->color = Vector4(color.x, color.y, color.z, 1);
 
 	//object->addComponent<object_fall>();

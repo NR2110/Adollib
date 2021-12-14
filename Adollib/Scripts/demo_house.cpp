@@ -793,7 +793,7 @@ namespace Adollib
 
 	Gameobject* Demo_house::set_meshbox(Vector3 pos, Vector3 size, Vector3 rotate, Vector3 color) {
 		Gameobject* object = nullptr;
-		object = Gameobject_manager::createFromFBX("./DefaultModel/cone.fbx");
+		object = Gameobject_manager::createFromFBX("", "./DefaultModel/cone.fbx");
 		Vector4 C = Vector4(color.x, color.y, color.z, 1);
 		object->renderer->color = C;
 

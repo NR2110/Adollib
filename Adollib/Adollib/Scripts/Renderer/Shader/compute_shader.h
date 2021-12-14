@@ -32,7 +32,7 @@ namespace Adollib {
 			// y : スレッド数
 			// z : スレッド数
 			//::::::::::
-			void run(ID3D11ShaderResourceView** pSRVs, UINT numViews, ID3D11UnorderedAccessView* pUAV, UINT x = 32, UINT y = 1, UINT z = 1);
+			void run(ID3D11ShaderResourceView** pSRVs, UINT numViews, Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> pUAV, UINT x = 32, UINT y = 1, UINT z = 1);
 
 			// StructureBufferの作成
 			HRESULT create_StructureBuffer(UINT elementSize, UINT count, void* InitData, Microsoft::WRL::ComPtr<StructureBuffer>& ppBufferOut);
@@ -46,7 +46,67 @@ namespace Adollib {
 			// UAVを任意のクラスに直す
 			template<class T>
 			T* Read_UAV(Microsoft::WRL::ComPtr<UAVBuffer> pBuffer) {
-				HRESULT hr;
+
+				// バッファを生成とコピー.
+				ID3D11Buffer* pBufDbg = nullptr;
+				{
+					D3D11_BUFFER_DESC desc;
+					memset(&desc, 0, sizeof(desc));
+
+					pBuffer->GetDesc(&desc);
+					desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+					desc.Usage = D3D11_USAGE_STAGING;
+					desc.BindFlags = 0;
+					desc.MiscFlags = 0;
+
+					if (SUCCEEDED(get_device()->CreateBuffer(&desc, nullptr, &pBufDbg)))
+					{
+						get_context()->CopyResource(pBufDbg, pBuffer.Get());
+					}
+				}
+
+				D3D11_MAPPED_SUBRESOURCE subRes;
+				get_context()->Map(pBufDbg, 0, D3D11_MAP_READ, 0, &subRes);
+				get_context()->Unmap(pBufDbg, 0);
+
+				return static_cast<T*>(subRes.pData);
+
+				/*
+
+				bool isSuccess = true;
+
+				for (int i = 0; i < NUM_ELEMENTS; ++i)
+				{
+					// CPUで演算.
+					int   value0 = g_Buf0[i].s32 + g_Buf1[i].s32;
+					float value1 = g_Buf0[i].f32 * g_Buf1[i].f32;
+
+					// GPUの演算結果とCPUの演算結果を比較.
+					if ((pBufType[i].s32 != value0)
+						|| (pBufType[i].f32 != value1))
+					{
+						ILOG("Failure.");
+						ILOG("  index = %d", i);
+						ILOG("  cpu value0 = %d, value1 = %f", value0, value1);
+						ILOG("  gpu value0 = %d, value1 = %f", pBufType[i].s32, pBufType[i].f32);
+						isSuccess = false;
+						break;
+					}
+				}
+
+				// CPUとGPUの結果がすべて一致したら成功のログを出力.
+				if (isSuccess)
+				{
+					ILOG("Succeded!!");
+				}
+
+				// アンマップ.
+				g_pContext->Unmap(pBufDbg, 0);
+
+				// 解放処理.
+				ASDX_RELEASE(pBufDbg);
+
+				/*HRESULT hr;
 				ID3D11Buffer* pCloneBuf = nullptr;
 
 				D3D11_BUFFER_DESC desc;
@@ -61,13 +121,30 @@ namespace Adollib {
 				{
 					get_context()->CopyResource(pCloneBuf, pBuffer.Get());
 				}
+				if (pCloneBuf == nullptr) {
+					HRESULT hr;
+					ID3D11Buffer* pCloneBuf = nullptr;
+
+					D3D11_BUFFER_DESC desc;
+					memset(&desc, 0, sizeof(desc));
+					pBuffer->GetDesc(&desc);
+					desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+					desc.Usage = D3D11_USAGE_STAGING;
+					desc.BindFlags = 0;
+					desc.MiscFlags = 0;
+
+					if (SUCCEEDED(get_device()->CreateBuffer(&desc, nullptr, &pCloneBuf)))
+					{
+						get_context()->CopyResource(pCloneBuf, pBuffer.Get());
+					}
+				}
 
 				D3D11_MAPPED_SUBRESOURCE subRes;
 				hr = get_context()->Map(pCloneBuf, 0, D3D11_MAP_READ, 0, &subRes);
 				assert(!FAILED(hr) && "convert UAV to templete<T> is failed ");
 				get_context().Get()->Unmap(pCloneBuf, 0);
 
-				return static_cast<T*>(subRes.pData);
+				return static_cast<T*>(subRes.pData);*/
 			}
 
 		};

@@ -79,10 +79,7 @@ namespace Adollib {
 		};
 
 		// meshrenderer
-		static Gameobject* createFromFBX(const std::string go_name, const std::string& FBX_pass, const u_int = GO_tag::FBX, Scenelist Sce = Scene_manager::get_nowscene());
-		static Gameobject* createFromFBX(const std::string& FBX_pass, const u_int tag = GO_tag::FBX, Scenelist Sce = Scene_manager::get_nowscene()) {
-			return createFromFBX(std::string("GO_" + std::to_string(go_count)), FBX_pass, tag, Sce);
-		};
+		static Gameobject* createFromFBX(const std::string go_name, const std::string FBX_pass, const bool is_marge_vertex = false, const u_int = GO_tag::FBX, Scenelist Sce = Scene_manager::get_nowscene());
 		static Gameobject* createSphere(const std::string go_name, const u_int = GO_tag::Sphere, Scenelist Sce = Scene_manager::get_nowscene());
 		static Gameobject* createSphere(const u_int tag = GO_tag::Sphere, Scenelist Sce = Scene_manager::get_nowscene()) {
 			return createSphere(std::string("GO_" + std::to_string(go_count)), tag, Sce);
