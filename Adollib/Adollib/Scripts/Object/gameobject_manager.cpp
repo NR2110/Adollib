@@ -227,7 +227,7 @@ Gameobject* Gameobject_manager::createFromFBX(const std::string go_name, const s
 	Value->renderer = Value->addComponent<Mesh_renderer>();
 
 	std::vector<Mesh::mesh>* meshes = nullptr;
-	ResourceManager::CreateModelFromFBX(&meshes, FBX_pass.c_str(), "");
+	ResourceManager::CreateModelFromFBX(&meshes, FBX_pass.c_str());
 	Value->renderer->set_meshes(meshes);
 
 	Value->initialize();
@@ -250,7 +250,7 @@ Gameobject* Gameobject_manager::createSphere(const std::string go_name, u_int ta
 	Value->renderer = Value->addComponent<Mesh_renderer>();
 
 	std::vector<Mesh::mesh>* meshes = nullptr;
-	ResourceManager::CreateModelFromFBX(&meshes, "./DefaultModel/sphere.fbx", "");
+	ResourceManager::CreateModelFromFBX(&meshes, "./DefaultModel/sphere.fbx");
 	Value->renderer->set_meshes(meshes);
 
 	Value->initialize();
@@ -273,7 +273,7 @@ Gameobject* Gameobject_manager::createCube(const std::string go_name, u_int tag,
 	Value->renderer = Value->addComponent<Mesh_renderer>();
 
 	std::vector<Mesh::mesh>* meshes = nullptr;
-	ResourceManager::CreateModelFromFBX(&meshes, "./DefaultModel/cube.fbx", "");
+	ResourceManager::CreateModelFromFBX(&meshes, "./DefaultModel/cube.fbx");
 	Value->renderer->set_meshes(meshes);
 
 	++go_count;
@@ -296,7 +296,7 @@ Gameobject* Gameobject_manager::createCapsule(const std::string go_name, u_int t
 	Value->renderer = Value->addComponent<Mesh_renderer>();
 
 	std::vector<Mesh::mesh>* meshes = nullptr;
-	ResourceManager::CreateModelFromFBX(&meshes, "./DefaultModel/cube.fbx", "");
+	ResourceManager::CreateModelFromFBX(&meshes, "./DefaultModel/cube.fbx");
 	Value->renderer->set_meshes(meshes);
 
 	++go_count;
@@ -321,7 +321,7 @@ Gameobject* Gameobject_manager::createCylinder(const std::string go_name, u_int 
 	Value->renderer = Value->addComponent<Mesh_renderer>();
 
 	std::vector<Mesh::mesh>* meshes = nullptr;
-	ResourceManager::CreateModelFromFBX(&meshes, "./DefaultModel/cylinder.fbx", "");
+	ResourceManager::CreateModelFromFBX(&meshes, "./DefaultModel/cylinder.fbx");
 	Value->renderer->set_meshes(meshes);
 
 	Value->initialize();

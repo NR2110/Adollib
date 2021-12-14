@@ -134,6 +134,9 @@
     <Filter Include="00_Adollib\44_render\shader\hlsl\sky_map">
       <UniqueIdentifier>{ee6380cf-4cdd-4bd6-9bc1-7550be794e2f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00_Adollib\44_render\shader\hlsl\croth">
+      <UniqueIdentifier>{13953fc7-b9b8-4815-bdff-e7b3121f17dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Scripts\player.cpp">
@@ -855,6 +858,9 @@
     <None Include="DefaultShader\gaussian_filter.hlsli">
       <Filter>00_Adollib\44_render\shader\hlsl\gaussian_filter</Filter>
     </None>
+    <None Include="DefaultShader\croth_shader.hlsli">
+      <Filter>00_Adollib\44_render\shader\hlsl\croth</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="DefaultShader\default_ps.hlsl">
@@ -904,6 +910,12 @@
     </FxCompile>
     <FxCompile Include="DefaultShader\default_ps_skysphere.hlsl">
       <Filter>00_Adollib\44_render\shader\hlsl\sky_map</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\croth_shader_ps.hlsl">
+      <Filter>00_Adollib\44_render\shader\hlsl\croth</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\croth_shader_vs.hlsl">
+      <Filter>00_Adollib\44_render\shader\hlsl\croth</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

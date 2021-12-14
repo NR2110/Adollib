@@ -1,6 +1,7 @@
 #pragma once
 #include <d3d11.h>
 #include <unordered_map>
+#include <memory>
 #include "../Renderer/mesh.h"
 #include "../Renderer/texture.h"
 #include "../Renderer/Shader/shader.h"
@@ -18,7 +19,7 @@ namespace Adollib
 		static HRESULT CreateDsFromCso(const char* cso_name, Microsoft::WRL::ComPtr<ID3D11DomainShader>& domain_shader);
 		static HRESULT CreateCsFromCso(const char* cso_name, Microsoft::WRL::ComPtr<ID3D11ComputeShader>& computeShader);
 		static HRESULT LoadTextureFromFile(const wchar_t* file_name, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>& pSRV, D3D11_TEXTURE2D_DESC* pTex2dDesc);
-		static HRESULT CreateModelFromFBX(std::vector<Mesh::mesh>** meshes, const char* fileName, const char* filePath = "");
+		static HRESULT CreateModelFromFBX(std::vector<Mesh::mesh>** meshes, const char* fileName, bool is_marge_vertex = false);
 
 		static void destroy();
 	private:

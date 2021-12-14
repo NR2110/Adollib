@@ -25,6 +25,8 @@ namespace Adollib {
 		std::list<Renderer_base*>::iterator this_itr; //renderer_manager‚É•Û‘¶‚³‚ê‚½©g‚Ìitr
 
 	public:
+		bool is_use_instancing = true;
+
 		int animeIndex = 0;
 
 		Vector4 color = Vector4(1, 1, 1, 1);
@@ -34,6 +36,7 @@ namespace Adollib {
 		void set_meshes(std::vector<Mesh::mesh>* l_meshes) { meshes = l_meshes; };
 
 		std::shared_ptr<Material> get_material() { return material; };
+		std::vector<Mesh::mesh>*  get_mesh() { return meshes; };
 
 		// shader‚Ìactivate
 		void shader_activete();

@@ -369,7 +369,7 @@ namespace Adollib
 		Human->transform->local_pos = pos;
 		Human->transform->local_orient = quaternion_from_euler(rotate);
 
-		auto material = Material_manager::make_material("player_statue_01");
+		auto material = Material_manager::create_material("player_statue_01");
 		material->Load_PS("./DefaultShader/default_ps_noshadow.cso");
 
 
@@ -657,7 +657,7 @@ namespace Adollib
 
 		//Šç‚Æ‚©ƒxƒ‹ƒg‚ð’…‚¯‚Ä‚Ý‚é
 		{
-			auto material_02 = Material_manager::make_material("player_statue_02");
+			auto material_02 = Material_manager::create_material("player_statue_02");
 			material_02->Load_PS("./DefaultShader/default_ps_noshadow.cso");
 
 			Vector4 face_color = Vector4(0.5f, 0.5f, 0.5f, 1);

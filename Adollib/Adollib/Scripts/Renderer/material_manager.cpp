@@ -6,7 +6,7 @@ using namespace Adollib;
 
 std::list<std::shared_ptr<Material>> Material_manager::materials;
 
-std::shared_ptr<Material> Material_manager::make_material(const std::string& name) {
+std::shared_ptr<Material> Material_manager::create_material(const std::string& name) {
 
 	if(name != "")
 		for (auto& mat : materials) {
@@ -28,5 +28,5 @@ std::shared_ptr<Material> Material_manager::find_material(const std::string& nam
 		if (mat->name == name)return mat;
 	}
 
-	assert(0 && "this name material is no exist");
+	return nullptr;
 };

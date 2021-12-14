@@ -1,6 +1,5 @@
-﻿  resource_manager.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(557,82): warning C4018: '>': signed と unsigned の数値を比較しようとしました。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(559,63): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(582,27): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(673,35): warning C4244: '=': 'double' から 'Adollib::u_int' への変換です。データが失われる可能性があります。
+﻿C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\croth_shader_ps.hlsl(34,5-77): warning X3206: implicit truncation of vector type
+  
+  compilation object save succeeded; see C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultShader\croth_shader_ps.cso
+  croth_renderer.cpp
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

@@ -33,7 +33,7 @@ void Sky_sphere::awake() {
 	Systems::CreateConstantBuffer(&world_cb, sizeof(ConstantBufferPerGO));
 	Systems::CreateConstantBuffer(&Mat_cb, sizeof(ConstantBufferPerMaterial));
 
-	ResourceManager::CreateModelFromFBX(&meshes, "./DefaultModel/sphere.fbx", "");
+	ResourceManager::CreateModelFromFBX(&meshes, "./DefaultModel/sphere.fbx");
 
 }
 void Sky_sphere::shader_activate() { shader->Activate(); };

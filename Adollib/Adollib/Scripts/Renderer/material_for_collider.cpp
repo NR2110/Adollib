@@ -40,16 +40,16 @@ void Collider_renderer::awake() {
 
 	//::: ï`âÊópmodelÇÃì«Ç›çûÇ› :::::::
 	meshes[ALPCollider_shape_type::BOX];
-	ResourceManager::CreateModelFromFBX(&meshes[ALPCollider_shape_type::BOX], "./DefaultModel/cube.fbx", "");
+	ResourceManager::CreateModelFromFBX(&meshes[ALPCollider_shape_type::BOX], "./DefaultModel/cube.fbx");
 
 	meshes[ALPCollider_shape_type::Sphere];
-	ResourceManager::CreateModelFromFBX(&meshes[ALPCollider_shape_type::Sphere], "./DefaultModel/sphere.fbx", "");
+	ResourceManager::CreateModelFromFBX(&meshes[ALPCollider_shape_type::Sphere], "./DefaultModel/sphere.fbx");
 
 	meshes[ALPCollider_shape_type::Plane];
-	ResourceManager::CreateModelFromFBX(&meshes[ALPCollider_shape_type::Plane], "./DefaultModel/plane.fbx", "");
+	ResourceManager::CreateModelFromFBX(&meshes[ALPCollider_shape_type::Plane], "./DefaultModel/plane.fbx");
 
 	meshes[ALPCollider_shape_type::Cylinder];
-	ResourceManager::CreateModelFromFBX(&meshes[ALPCollider_shape_type::Cylinder], "./DefaultModel/cylinder.fbx", "");
+	ResourceManager::CreateModelFromFBX(&meshes[ALPCollider_shape_type::Cylinder], "./DefaultModel/cylinder.fbx");
 
 	//meshes[ALP_Collider_shape::Mesh];
 	//ResourceManager::CreateModelFromFBX(&meshes[ALP_Collider_shape::Mesh], "../Data/FBX/0311_collisions.fbx", "");
@@ -316,7 +316,7 @@ void Collider_renderer::render_meshcoll(const Collider_shape* shape, const Vecto
 	Systems::SetDephtStencilState(State_manager::DStypes::DS_TRUE);
 
 	std::vector<Mesh::mesh>* meshs;
-	ResourceManager::CreateModelFromFBX(&meshs, shape->get_mesh_data()->FBX_pass.c_str(), "");
+	ResourceManager::CreateModelFromFBX(&meshs, shape->get_mesh_data()->FBX_pass.c_str());
 
 	int color_num = 0;
 

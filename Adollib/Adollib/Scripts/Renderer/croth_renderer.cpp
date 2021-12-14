@@ -11,6 +11,8 @@
 #include "material.h"
 #include "texture.h"
 
+#include "material_manager.h"
+
 using namespace Adollib;
 using namespace ConstantBuffer;
 
@@ -34,8 +36,28 @@ void Croth_renderer::init() {
 		Systems::Device->CreateBuffer(&bd, &res, vertexBuffer.GetAddressOf());
 	}
 
+	// indexバッファ作成
 	{
-		constexpr int maxElements = 10000;
+		u_int indices[3] = { 0,1,2 };
+		D3D11_BUFFER_DESC indexDesc = {};
+		indexDesc.ByteWidth = 3 * sizeof(u_int);          // バッファのサイズ
+		indexDesc.Usage = D3D11_USAGE_IMMUTABLE;	          // バッファの読み書き法
+		indexDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;    // パイプラインにどうバインドするか指定
+		indexDesc.CPUAccessFlags = 0;                    // CPUのアクセスフラグ　0でアクセスしない
+		indexDesc.MiscFlags = 0;                           // その他のフラグ
+		indexDesc.StructureByteStride = 0;                 // バッファ構造体の場合の要素数
+
+		D3D11_SUBRESOURCE_DATA indexSubResource = {};
+		indexSubResource.pSysMem = &indices[0];   // 初期化データのポインタ
+		indexSubResource.SysMemPitch = 0;        // 頂点バッファでは使わない
+		indexSubResource.SysMemSlicePitch = 0;   // 頂点バッファでは使わない
+
+		Systems::Device->CreateBuffer(&indexDesc, &indexSubResource, indexBuffer.GetAddressOf());
+
+	}
+
+	{
+		constexpr int maxElements = 500000;
 		HRESULT hr = S_OK;
 		std::shared_ptr<Instance> instances(new Instance[maxElements]);
 		{
@@ -60,6 +82,20 @@ void Croth_renderer::init() {
 			}
 		}
 	}
+
+	{
+		material = Material_manager::find_material("croth_material");
+
+		if (material == nullptr) {
+
+			material = Material_manager::create_material("croth_material");
+
+			material->Load_VS("./DefaultShader/croth_shader_vs.cso");
+			material->Load_PS("./DefaultShader/croth_shader_ps.cso");
+		}
+	}
+
+	is_use_instancing = false;
 }
 
 
@@ -187,90 +223,108 @@ void Croth_renderer::render(const Frustum_data& frustum_data) {
 
 }
 
-void Croth_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& instance_buffer, int bufferStart, int bufferCount) {
+void Croth_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& instance_buffer_, int bufferStart, int bufferCount) {
 	if (material == nullptr) return;
 	if (bufferCount == 0) return;
 
-	Systems::DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	//
-	Systems::SetBlendState(material->BS_state);
-	Systems::SetRasterizerState(material->RS_state);
-	Systems::SetDephtStencilState(material->DS_state);
-
-	// TODO : 複数マテリアルの対応
-	// textureをSRVにセット
-	material->get_texture()->Set(0);
-
-	for (Mesh::mesh& mesh : (*meshes))
+	//::: update_instancing ::::::::
 	{
+		static float debug_timer_count = 0;
+		debug_timer_count += time->deltaTime();
+
+		instance_count = 0;
+		Instance_polygon* instances = nullptr;
+
+		// instance_bufferをMapする
+		HRESULT hr = S_OK;
+		const D3D11_MAP map = D3D11_MAP_WRITE_DISCARD;
+		D3D11_MAPPED_SUBRESOURCE mappedBuffer = {};
+		hr = Systems::DeviceContext->Map(instanceBuffer.Get(), 0, map, 0, &mappedBuffer);
+
+		if (FAILED(hr))
+		{
+			assert(0 && "failed Map InstanceBuffer dynamic(RenderManager)");
+			return;
+		}
+		instances = static_cast<Instance_polygon*>(mappedBuffer.pData);
+
+		// meshから
+		for (Mesh::mesh& mesh : (*meshes))
+		{
+
+			int index_count = 0;
+			for (const auto& index : mesh.indexces) {
+
+				if (index_count == 3) {
+					index_count = 0;
+
+					++instance_count;
+				}
+
+				auto& instance = instances[instance_count];
+
+				instance.position[index_count] = Vector3(mesh.vertices[index].position) + Vector3(1, 0, 0) * 0.1f * cosf(debug_timer_count + index);
+				instance.normal[index_count] = Vector3(mesh.vertices[index].normal);
+				instance.color = color;
+				instance.texcoordTransform = Vector2(0, 0);
+
+				++index_count;
+			}
+			++instance_count;
+
+			// ポリゴンの途中で終わっていたらエラー
+			if (index_count != 3) {
+				assert(0 && "bug");
+			}
+		}
+
+		// instance_bufferをUnmapする
+		Systems::DeviceContext->Unmap(instanceBuffer.Get(), 0);
+
+	}
+
+
+	//::: render ::::::::
+	{
+
+		Systems::DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		////
+		Systems::SetBlendState(material->BS_state);
+		Systems::SetRasterizerState(material->RS_state);
+		Systems::SetDephtStencilState(material->DS_state);
+
+		// TODO : 複数マテリアルの対応
+		// textureをSRVにセット
+		material->get_texture()->Set(0);
 
 		UINT strides[2] = { sizeof(VertexFormat), sizeof(Instance) };
 		UINT offsets[2] = { 0, 0 };
-		ID3D11Buffer* vbs[2] = { mesh.vertexBuffer.Get(), instance_buffer.Get() };
+		ID3D11Buffer* vbs[2] = { vertexBuffer.Get(), instanceBuffer.Get() };
 		Systems::DeviceContext->IASetVertexBuffers(0, 2, vbs, strides, offsets);
-		Systems::DeviceContext->IASetIndexBuffer(mesh.indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+		Systems::DeviceContext->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 
-		//UINT stride = sizeof(VertexFormat);
-		//UINT offset = 0;
-		//Systems::DeviceContext->IASetVertexBuffers(0, 1, mesh.vertexBuffer.GetAddressOf(), &stride, &offset);
-		//Systems::DeviceContext->IASetIndexBuffer(mesh.indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+		// CB : ConstantBufferPerOBJ
+		// GOのtransformの情報をConstantBufferへセットする
+		ConstantBufferPerGO g_cb;
+		g_cb.world = matrix_world(transform->scale, transform->orientation.get_rotate_matrix(), transform->position);
+		Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
+		Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
+		Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 
-
-		//CB : ConstantBufferPerMaterial
 		ConstantBufferPerMaterial cb;
-		for (int i = 0; i < MAX_BONES; i++) {
-			cb.boneTransforms[i] = matrix44_identity();
-		}
-		{
-			// boneTransform
-			if (mesh.skeletalAnimation.size() > 0 && mesh.skeletalAnimation[animeIndex].size() > 0)
-			{
-				int frame = (int)(mesh.skeletalAnimation.at(animeIndex).animation_tick / mesh.skeletalAnimation.at(animeIndex).sampling_time);
-				if (frame > (int)mesh.skeletalAnimation.at(animeIndex).size() - 1)
-				{
-					frame = 0;
-					mesh.skeletalAnimation.at(animeIndex).animation_tick = 0;
-				}
-				std::vector<Mesh::bone>& skeletal = mesh.skeletalAnimation.at(animeIndex).at(frame);
-				size_t number_of_bones = skeletal.size();
-				_ASSERT_EXPR(number_of_bones < MAX_BONES, L"'the number_of_bones' exceeds MAX_BONES.");
-				for (size_t i = 0; i < number_of_bones; i++)
-				{
-					XMStoreFloat4x4(&cb.boneTransforms[i], DirectX::XMLoadFloat4x4(&skeletal.at(i).transform));
-				}
-				mesh.skeletalAnimation.at(animeIndex).animation_tick += 1;
-			}
-			// specular
-			cb.shininess = 1;
-			cb.ambientColor = DirectX::XMFLOAT4(0.1f, 0.1f, 0.1f, 1);
-			cb.materialColor = material->color.get_XM4();
-			//continue;
-		}
+		// specular
+		cb.shininess = 1;
+		cb.ambientColor = DirectX::XMFLOAT4(0.1f, 0.1f, 0.1f, 1);
+		cb.materialColor = material->color.get_XM4();
 		Systems::DeviceContext->UpdateSubresource(Mat_cb.Get(), 0, NULL, &cb, 0, 0);
 		Systems::DeviceContext->VSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
 		Systems::DeviceContext->PSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
 
-		//CB : ConstantBufferPerMesh
-		{
-			ConstantBuffer::ConstantBufferPerMesh g_cb;
-			g_cb.Mesh_world = mesh.globalTransform;
-			Systems::DeviceContext->UpdateSubresource(mesh.mesh_cb.Get(), 0, NULL, &g_cb, 0, 0);
-			Systems::DeviceContext->VSSetConstantBuffers(3, 1, mesh.mesh_cb.GetAddressOf());
-			Systems::DeviceContext->PSSetConstantBuffers(3, 1, mesh.mesh_cb.GetAddressOf());
-		}
 
+		Systems::DeviceContext->DrawIndexedInstanced(3, instance_count, 0, 0, 0);
 
-		for (auto& subset : mesh.subsets)
-		{
-			// 描画
-			//Systems::DeviceContext->DrawIndexed(subset.indexCount, subset.indexStart, 0);
-			// インスタンス描画
-			//const auto& m = mesh.lock()->subsets.at(index);
-			Systems::DeviceContext->DrawIndexedInstanced(subset.indexCount, bufferCount, subset.indexStart, 0, bufferStart);
-		}
 	}
-
 }
 
 void Croth_renderer::load_texture(const wchar_t* filename) { material->get_texture()->Load(filename); };
@@ -279,7 +333,7 @@ bool Croth_renderer::check_frustum(const Frustum_data& frustum_data) { return tr
 
 void Croth_renderer::instance_update(const Frustum_data& frustum_data) {
 
-	Instance* instances = nullptr;
+	Instance_polygon* instances = nullptr;
 
 	// instance_bufferをMapする
 	HRESULT hr = S_OK;
@@ -292,32 +346,36 @@ void Croth_renderer::instance_update(const Frustum_data& frustum_data) {
 		assert(0 && "failed Map InstanceBuffer dynamic(RenderManager)");
 		return;
 	}
-	instances = static_cast<Instance*>(mappedBuffer.pData);
+	instances = static_cast<Instance_polygon*>(mappedBuffer.pData);
 
 	int instance_num = 0;
 	int index_count = 0;
 
+	// meshから
 	for (Mesh::mesh& mesh : (*meshes))
 	{
 
-		//for (const auto& index : mesh.indexces) {
+		for (const auto& index : mesh.indexces) {
 
-		//	if (index_count == 3) {
-		//		index_count = 0;
+			if (index_count == 3) {
+				index_count = 0;
 
-		//		++instance_num;
-		//	}
+				++instance_num;
+			}
 
-		//	auto& instance = instances[instance_num];
+			auto& instance = instances[instance_num];
 
 
-		//	instance.transformMatrix._11 = mesh.vertices[index].position.x;
-		//	instance.transformMatrix._12 = mesh.vertices[index].position.y;
-		//	instance.transformMatrix._13 = mesh.vertices[index].position.z;
+			instance.position[index_count] = mesh.vertices[index].position /* + offser */;
+			instance.color = color;
+			//instance.normal = ;
 
-		//	++index_count;
-		//}
+			++index_count;
+		}
 
 	}
+
+	// instance_bufferをUnmapする
+	Systems::DeviceContext->Unmap(instanceBuffer.Get(), 0);
 
 }

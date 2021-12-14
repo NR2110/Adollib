@@ -220,6 +220,21 @@ namespace Adollib {
 					T* component = dynamic_cast<T*>(*itr);
 					//delete component;
 					component->finalize();
+					delete component;
+					components.erase(itr);
+					return true;
+				}
+			}
+			return false;
+		}
+		bool removeComponent(Component* comp)
+		{
+			// 同一コンポーネントが存在する場合、removeする
+			for (auto itr = components.begin(), itr_end = components.end(); itr != itr_end; ++itr)
+			{
+				if (comp->com_itr == itr) {
+					(*itr)->finalize();
+					delete (*itr);
 					components.erase(itr);
 					return true;
 				}

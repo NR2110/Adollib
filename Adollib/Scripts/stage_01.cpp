@@ -19,6 +19,7 @@
 #include "../Adollib/Scripts/Object/component_camera.h"
 
 #include "../Adollib/Scripts/Main/systems.h"
+#include "../Adollib/Scripts/Renderer/croth_renderer.h"
 
 namespace Adollib
 {
@@ -26,6 +27,7 @@ namespace Adollib
 	{
 		player_respown_pos = Vector3(-2.7f, 50, -5.f);
 		respown_num = -1;
+		next_stage = Stage_types::none;
 		//player_respown_pos = Vector3(-2.7f, 10, -5);
 		//player_respown_pos = Vector3(90, 16.0f, 66.0f);
 		y_respown_pos = 30; // respown‚µ‚½‚Æ‚«‚ÌY‚ÌÀ•W
@@ -34,11 +36,15 @@ namespace Adollib
 
 		//set_desk(Vector3(0, 0, 0), Vector3(30, 15, 25), Vector3(0, 0, 0), 0);
 
-		Gameobject_manager::createFromFBX("sponza", "../Data/FBX/Model_Shaclo_Winter_Edit.fbx");
+		//Gameobject_manager::createFromFBX("sponza", "../Data/FBX/Model_Shaclo_Winter_Edit.fbx");
 
-#if _DEBUG
-		//set_player_statue(Vector3(104, 17.6f, 132), 100, Vector3(0));
-		//set_pillar(Vector3(16, 4, 23), Vector3(1), Vector3(0));
+#if 1 || _DEBUG
+		//auto cube = Gameobject_manager::createFromFBX("sponza", "../Data/FBX/Model_Shaclo_Winter_Edit.fbx");
+		auto cube = Gameobject_manager::createFromFBX("sponza", "../Data/FBX/bunny.obj");
+		//auto cube = Gameobject_manager::createCube();
+		cube->addComponent<Croth_renderer>();
+		//cube->addComponent<Mesh_renderer>();
+
 #else
 
 

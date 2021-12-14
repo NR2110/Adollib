@@ -19,6 +19,8 @@ struct VSInput
     float2 Tex : TEXCOORD;
     float4 BoneWeights : WEIGHTS;
     uint4 BoneIndices : BONES;
+
+    uint vertexID : SV_VertexID;
 };
 
 struct VSInput_INSTANCE
@@ -26,6 +28,7 @@ struct VSInput_INSTANCE
     row_major float4x4 transform : TRANSFORM_MATRIX;
     float4 texcoord_transform : TEXCOORD_TRANSFORM;
     float4 color : COLOR;
+
     uint instanceID : SV_InstanceID;
 };
 

@@ -60,7 +60,7 @@ void Renderer_manager::awake() {
 		}
 	}
 
-	auto mat = Material_manager::make_material("default_material");
+	auto mat = Material_manager::create_material("default_material");
 
 }
 
@@ -298,7 +298,13 @@ void Renderer_manager::instance_update(const Frustum_data& frustum_data, Sceneli
 		render_count.bufferStart = 0;
 		render_count.bufferCount = 0;
 
+		std::vector<Renderer_base*> no_use_instancing_renderers;
+
 		for (auto& renderer : sorted_renderers) {
+
+			// instancing を行わない場合 別の配列に保存
+			if (renderer->is_use_instancing == false) no_use_instancing_renderers.emplace_back(renderer);
+
 
 			// 新しいinstance
 			if (mesh_num != renderer->get_meshnum() ||
@@ -325,6 +331,18 @@ void Renderer_manager::instance_update(const Frustum_data& frustum_data, Sceneli
 		// 一番最後の要素はfor外で追加する
 		render_counts.emplace_back(render_count);
 
+		// instancing を行わない物を個別にrender_countに保存
+		{
+			for (auto& renderer : no_use_instancing_renderers) {
+
+				if (renderer->check_frustum(frustum_data)) {
+					render_count.bufferStart = 0;
+					render_count.bufferCount = 1;
+					render_count.renderer = renderer;
+					render_counts.emplace_back(render_count);
+				}
+			}
+		}
 	}
 
 	// instance_bufferをUnmapする

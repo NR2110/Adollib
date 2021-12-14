@@ -18,7 +18,7 @@ namespace Adollib {
 	class Light_component;
 
 
-	class Gameobject_manager{
+	class Gameobject_manager {
 	private:
 
 		static int go_count;
@@ -26,7 +26,7 @@ namespace Adollib {
 		//’x‚ê‚¹‚Ädelete‚·‚é‚½‚ß‚±‚±‚É•Û‘¶‚·‚é
 		static std::vector<Gameobject*> save_delete_gameobject;
 
-		static void delete_gameobjects(){
+		static void delete_gameobjects() {
 			for (auto go : save_delete_gameobject) {
 				go->destroy();
 				delete go;
@@ -52,9 +52,9 @@ namespace Adollib {
 		static void destroy(Scenelist Sce = Scene_manager::get_nowscene());
 
 		static Gameobject* create(const std::string& go_name, const u_int& tag, Scenelist Sce = Scene_manager::get_nowscene());
-		static Gameobject* create(const std::string& go_name, Scenelist Sce = Scene_manager::get_nowscene()) {return create(go_name, GO_tag::None, Sce);}
-		static Gameobject* create(const u_int& tag, Scenelist Sce = Scene_manager::get_nowscene()) {return create(std::string("GO_" + std::to_string(go_count)), tag, Sce);}
-		static Gameobject* create(Scenelist Sce = Scene_manager::get_nowscene()) {return create(std::string("GO_" + std::to_string(go_count)), GO_tag::None, Sce);}
+		static Gameobject* create(const std::string& go_name, Scenelist Sce = Scene_manager::get_nowscene()) { return create(go_name, GO_tag::None, Sce); }
+		static Gameobject* create(const u_int& tag, Scenelist Sce = Scene_manager::get_nowscene()) { return create(std::string("GO_" + std::to_string(go_count)), tag, Sce); }
+		static Gameobject* create(Scenelist Sce = Scene_manager::get_nowscene()) { return create(std::string("GO_" + std::to_string(go_count)), GO_tag::None, Sce); }
 
 		static std::list<Camera_component*>::iterator add_camera_component(const Scenelist& scene, Camera_component* c_comp_ptr) {
 			cameras[scene].emplace_back(c_comp_ptr);
@@ -78,7 +78,7 @@ namespace Adollib {
 			lights[scene].erase(itr);
 		};
 
-
+		// meshrenderer
 		static Gameobject* createFromFBX(const std::string go_name, const std::string& FBX_pass, const u_int = GO_tag::FBX, Scenelist Sce = Scene_manager::get_nowscene());
 		static Gameobject* createFromFBX(const std::string& FBX_pass, const u_int tag = GO_tag::FBX, Scenelist Sce = Scene_manager::get_nowscene()) {
 			return createFromFBX(std::string("GO_" + std::to_string(go_count)), FBX_pass, tag, Sce);
@@ -99,14 +99,17 @@ namespace Adollib {
 		static Gameobject* createCapsule(const u_int tag = GO_tag::Box, Scenelist Sce = Scene_manager::get_nowscene()) {
 			return createCube(std::string("GO_" + std::to_string(go_count)), tag, Sce);
 		}
+		// spriterenderer
 		static Gameobject* createPlane(const std::string go_name, const u_int = GO_tag::Plane, Scenelist Sce = Scene_manager::get_nowscene());
 		static Gameobject* createPlane(const u_int tag = GO_tag::Plane, Scenelist Sce = Scene_manager::get_nowscene()) {
 			return createPlane(std::string("GO_" + std::to_string(go_count)), tag, Sce);
 		}
-		static Gameobject* createSprite(const std::string go_name, const u_int = GO_tag::Sprite, Scenelist Sce = Scene_manager::get_nowscene());
-		static Gameobject* createSprite(const u_int tag = GO_tag::Sprite, Scenelist Sce = Scene_manager::get_nowscene()) {
-			return createSprite(std::string("GO_" + std::to_string(go_count)), tag, Sce);
-		}
+		//static Gameobject* createSprite(const std::string go_name, const u_int = GO_tag::Sprite, Scenelist Sce = Scene_manager::get_nowscene());
+		//static Gameobject* createSprite(const u_int tag = GO_tag::Sprite, Scenelist Sce = Scene_manager::get_nowscene()) {
+		//	return createSprite(std::string("GO_" + std::to_string(go_count)), tag, Sce);
+		//}
+
+
 
 		// Šî–{“I‚Éuser‚ªŒÄ‚Î‚È‚¢!
 		static void removeGameobject(Scenelist Sce,std::list<Gameobject*>::iterator itr) { gameobjects[Sce].erase(itr); };

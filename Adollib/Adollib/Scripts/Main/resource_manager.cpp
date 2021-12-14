@@ -328,11 +328,11 @@ namespace Adollib
 #pragma endregion
 
 	// モデルの読み込み
-	HRESULT ResourceManager::CreateModelFromFBX(vector<Mesh::mesh>** ret_mesh, const char* fileName, const char* filePath)
+	HRESULT ResourceManager::CreateModelFromFBX(vector<Mesh::mesh>** ret_mesh, const char* fileName, bool is_marge_vertex)
 	{
 		//すでにロード済みであればそのアドレスを返す
-		if (meshes.count((string)filePath + (string)fileName) == 1) {
-			*ret_mesh = &meshes[(string)filePath + (string)fileName];
+		if (meshes.count((std::to_string(is_marge_vertex)) + (string)fileName) == 1) {
+			*ret_mesh = &meshes[(std::to_string(is_marge_vertex)) + (string)fileName];
 			return S_OK;
 		}
 
@@ -481,7 +481,7 @@ namespace Adollib
 								}
 							}
 
-							string texPath = (string)filePath + (string)name;
+							string texPath = (std::to_string(is_marge_vertex)) + (string)name;
 							setlocale(LC_ALL, "japanese");
 							wchar_t texName[MAX_PATH] = { 0 };
 							size_t ret = 0;
@@ -563,10 +563,27 @@ namespace Adollib
 							}
 						}
 					}
+
 					// push_back
-					vertices.push_back(vertex);
-					indices.at(index_offset + index_of_vertex) = static_cast<u_int>(vertex_count);
-					vertex_count++;
+					int vertex_size = vertices.size();
+					bool is_same_vertex = false;
+					if(is_marge_vertex)
+					for (int same_vertex_num = 0; same_vertex_num < vertex_size; ++same_vertex_num) {
+						if( vector3_distance(vertex.position, vertices[same_vertex_num].position) < FLT_EPSILON ){
+							indices.at(index_offset + index_of_vertex) = static_cast<u_int>(same_vertex_num);
+							vertices[same_vertex_num].normal += vertex.normal;
+
+							is_same_vertex = true;
+							break;
+						}
+					}
+
+					if (is_same_vertex == false) {
+						vertices.push_back(vertex);
+						indices.at(index_offset + index_of_vertex) = static_cast<u_int>(vertex_count);
+						vertex_count++;
+					}
+
 				}
 				subset.indexCount += 3;
 			}
@@ -584,6 +601,13 @@ namespace Adollib
 						if (mesh.dop.max[axi] < V)mesh.dop.max[axi] = V;
 						if (mesh.dop.min[axi] > V)mesh.dop.min[axi] = V;
 					}
+				}
+			}
+
+			// 情報の更新
+			{
+				for (auto& vertex : vertices) {
+					vertex.normal = vertex.normal.unit_vect();
 				}
 			}
 
@@ -639,8 +663,8 @@ namespace Adollib
 #pragma endregion
 
 		//FBXロード完了
-		meshes[(string)filePath + (string)fileName] = skinMeshes;
-		*ret_mesh = &meshes[(string)filePath + (string)fileName];
+		meshes[(std::to_string(is_marge_vertex)) + (string)fileName] = skinMeshes;
+		*ret_mesh = &meshes[(std::to_string(is_marge_vertex)) + (string)fileName];
 
 		//scene->Destroy();
 		//importer->Destroy();

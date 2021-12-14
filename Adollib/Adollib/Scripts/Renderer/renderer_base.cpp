@@ -21,6 +21,16 @@ void Renderer_base::shader_activete() {
 
 
 void Renderer_base::awake() {
+	// すでにrendererがセットされていた場合 外す
+	std::vector<Mesh::mesh>* oldmesh = nullptr;
+	if (gameobject->renderer != nullptr) {
+		oldmesh = gameobject->renderer->get_mesh();
+		gameobject->removeComponent(gameobject->renderer);
+
+		gameobject->renderer = nullptr;
+	}
+
+
 	this_itr = Renderer_manager::add_renderer(this);
 
 	Systems::CreateConstantBuffer(&world_cb, sizeof(ConstantBufferPerGO));
@@ -30,6 +40,8 @@ void Renderer_base::awake() {
 	material = Material_manager::find_material("default_material");
 
 	init();
+
+	set_meshes(oldmesh);
 }
 
 void Renderer_base::finalize() {

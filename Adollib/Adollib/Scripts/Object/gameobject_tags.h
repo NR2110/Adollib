@@ -12,6 +12,7 @@ namespace Adollib {
 		static const unsigned int FBX = (1 << 6);
 		static const unsigned int Sprite = (1 << 7);
 		static const unsigned int Capsule = (1 << 8);
+		static const unsigned int Croth = (1 << 9);
 
 
 		static const unsigned int Player = (1 << 10);
