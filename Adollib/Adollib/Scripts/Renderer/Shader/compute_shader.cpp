@@ -54,7 +54,7 @@ void ComputeShader::run(
 #pragma endregion
 
 
-HRESULT ComputeShader::create_StructureBuffer(UINT elementSize, UINT count, void* pInitData, Microsoft::WRL::ComPtr<StructureBuffer>& ppSBufferOut) {
+HRESULT ComputeShader::create_StructureBuffer(UINT elementSize, UINT count, void* pInitData, Microsoft::WRL::ComPtr<StructureBuffer>& ppSBufferOut, bool is_upu_access) {
 	D3D11_BUFFER_DESC desc;
 	memset(&desc, 0, sizeof(desc));
 
@@ -63,18 +63,24 @@ HRESULT ComputeShader::create_StructureBuffer(UINT elementSize, UINT count, void
 	desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
 	desc.StructureByteStride = elementSize;
 
+	if (is_upu_access) {
+		desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+		desc.Usage = D3D11_USAGE_DYNAMIC;
+		desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;	// リソースに許可されるCPUアクセスの指定
+	}
+
 	if (pInitData) {
 		D3D11_SUBRESOURCE_DATA init_data;
 		init_data.pSysMem = pInitData;
 
-		return Systems::Device->CreateBuffer(&desc, &init_data, ppSBufferOut.GetAddressOf());
+		return Systems::Device->CreateBuffer(&desc, &init_data, ppSBufferOut.ReleaseAndGetAddressOf());
 	}
 
-	return Systems::Device->CreateBuffer(&desc, nullptr, ppSBufferOut.GetAddressOf());
+	return Systems::Device->CreateBuffer(&desc, nullptr, ppSBufferOut.ReleaseAndGetAddressOf());
 }
 
 // StructureBufferからSRVの作成
-HRESULT ComputeShader::createSRV_fromSB(Microsoft::WRL::ComPtr<StructureBuffer> pSBuffer, ID3D11ShaderResourceView** ppSRVOut) {
+HRESULT ComputeShader::createSRV_fromSB(Microsoft::WRL::ComPtr<StructureBuffer>& pSBuffer, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>& ppSRVOut) {
 
 	D3D11_BUFFER_DESC desc;
 	memset(&desc, 0, sizeof(desc));
@@ -103,11 +109,11 @@ HRESULT ComputeShader::createSRV_fromSB(Microsoft::WRL::ComPtr<StructureBuffer> 
 		return E_INVALIDARG;
 	}
 
-	return Systems::Device->CreateShaderResourceView(pSBuffer.Get(), &srvDesc, ppSRVOut);
+	return Systems::Device->CreateShaderResourceView(pSBuffer.Get(), &srvDesc, ppSRVOut.ReleaseAndGetAddressOf());
 }
 
 // StructureBufferからUAVの作成
-HRESULT ComputeShader::createUAV_fromSB(Microsoft::WRL::ComPtr<StructureBuffer> pSBuffer, ID3D11UnorderedAccessView** ppUAVOut) {
+HRESULT ComputeShader::createUAV_fromSB(Microsoft::WRL::ComPtr<StructureBuffer>& pSBuffer, Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView>& ppUAVOut) {
 	D3D11_BUFFER_DESC desc;
 	memset(&desc, 0, sizeof(desc));
 	pSBuffer->GetDesc(&desc);
@@ -134,5 +140,5 @@ HRESULT ComputeShader::createUAV_fromSB(Microsoft::WRL::ComPtr<StructureBuffer> 
 		return E_INVALIDARG;
 	}
 
-	return Systems::Device->CreateUnorderedAccessView(pSBuffer.Get(), &uavDesc, ppUAVOut);
+	return Systems::Device->CreateUnorderedAccessView(pSBuffer.Get(), &uavDesc, ppUAVOut.ReleaseAndGetAddressOf());
 }

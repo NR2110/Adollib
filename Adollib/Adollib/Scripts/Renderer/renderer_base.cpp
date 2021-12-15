@@ -33,8 +33,8 @@ void Renderer_base::awake() {
 
 	this_itr = Renderer_manager::add_renderer(this);
 
-	Systems::CreateConstantBuffer(&world_cb, sizeof(ConstantBufferPerGO));
-	Systems::CreateConstantBuffer(&Mat_cb, sizeof(ConstantBufferPerMaterial));
+	Systems::CreateConstantBuffer(world_cb.ReleaseAndGetAddressOf(), sizeof(ConstantBufferPerGO));
+	Systems::CreateConstantBuffer(Mat_cb.ReleaseAndGetAddressOf(), sizeof(ConstantBufferPerMaterial));
 
 	//material = std::make_shared<Material>();
 	material = Material_manager::find_material("default_material");

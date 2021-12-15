@@ -29,7 +29,7 @@ void Sprite_renderer::init() {
 	ZeroMemory(&res, sizeof(res));
 	res.pSysMem = v;
 
-	Systems::Device->CreateBuffer(&bd, &res, VertexBuffer.GetAddressOf());
+	Systems::Device->CreateBuffer(&bd, &res, VertexBuffer.ReleaseAndGetAddressOf());
 
 	material->Load_VS("./DefaultShader/sprite_vs.cso");
 	material->Load_PS("./DefaultShader/sprite_ps.cso");

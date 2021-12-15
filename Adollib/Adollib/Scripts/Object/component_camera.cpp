@@ -19,9 +19,9 @@ using namespace ConstantBuffer;
 void Camera_component::awake() {
 
 	// コンスタントバッファーの生成
-	Systems::CreateConstantBuffer(&sprite_cb, sizeof(ConstantBufferPerSprite));
-	Systems::CreateConstantBuffer(&view_cb, sizeof(ConstantBufferPerCamera));
-	Systems::CreateConstantBuffer(&projection_cb, sizeof(ConstantBufferPerSystem));
+	Systems::CreateConstantBuffer(sprite_cb.ReleaseAndGetAddressOf(), sizeof(ConstantBufferPerSprite));
+	Systems::CreateConstantBuffer(view_cb.ReleaseAndGetAddressOf(), sizeof(ConstantBufferPerCamera));
+	Systems::CreateConstantBuffer(projection_cb.ReleaseAndGetAddressOf(), sizeof(ConstantBufferPerSystem));
 
 	// gameobject_managerの配列に登録
 	this_itr = Gameobject_manager::add_camera_component(gameobject->get_scene(), this);

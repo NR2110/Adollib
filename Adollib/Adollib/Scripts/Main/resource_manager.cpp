@@ -398,7 +398,7 @@ namespace Adollib
 			vector<u_int>& indices = mesh.indexces;
 			u_int vertex_count = 0;
 
-			Systems::CreateConstantBuffer(&mesh.mesh_cb, sizeof(ConstantBuffer::ConstantBufferPerMesh));
+			Systems::CreateConstantBuffer(mesh.mesh_cb.ReleaseAndGetAddressOf(), sizeof(ConstantBuffer::ConstantBufferPerMesh));
 
 			// globalTransform
 			FbxAMatrix global_transform = fbxMesh->GetNode()->EvaluateGlobalTransform(0);
@@ -634,7 +634,7 @@ namespace Adollib
 			vertexSubResource.SysMemSlicePitch = 0;     // 頂点バッファでは使わない
 
 			// 頂点バッファの生成
-			hr = Systems::Device->CreateBuffer(&vertexDesc, &vertexSubResource, mesh.vertexBuffer.GetAddressOf());
+			hr = Systems::Device->CreateBuffer(&vertexDesc, &vertexSubResource, mesh.vertexBuffer.ReleaseAndGetAddressOf());
 			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 #pragma endregion
 
@@ -657,7 +657,7 @@ namespace Adollib
 			indexSubResource.SysMemPitch = 0;        // 頂点バッファでは使わない
 			indexSubResource.SysMemSlicePitch = 0;   // 頂点バッファでは使わない
 
-			hr = Systems::Device->CreateBuffer(&indexDesc, &indexSubResource, mesh.indexBuffer.GetAddressOf());
+			hr = Systems::Device->CreateBuffer(&indexDesc, &indexSubResource, mesh.indexBuffer.ReleaseAndGetAddressOf());
 			_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
 		}
 

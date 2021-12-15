@@ -1,3 +1,6 @@
 ﻿  stage_01.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(15,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。
+  croth_renderer.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(15,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\stage_01.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Renderer\croth_renderer.cpp(377,49): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Renderer\croth_renderer.cpp(399,69): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

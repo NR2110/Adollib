@@ -15,9 +15,9 @@ using namespace ConstantBuffer;
 void Directional_shadow::awake() {
 
 	// コンスタントバッファーの生成
-	Systems::CreateConstantBuffer(&view_cb, sizeof(ConstantBufferPerCamera));
-	Systems::CreateConstantBuffer(&projection_cb, sizeof(ConstantBufferPerSystem));
-	Systems::CreateConstantBuffer(&shadow_viewprojection_cb, sizeof(ConstantBufferPerShadow));
+	Systems::CreateConstantBuffer(view_cb.ReleaseAndGetAddressOf(), sizeof(ConstantBufferPerCamera));
+	Systems::CreateConstantBuffer(projection_cb.ReleaseAndGetAddressOf(), sizeof(ConstantBufferPerSystem));
+	Systems::CreateConstantBuffer(shadow_viewprojection_cb.ReleaseAndGetAddressOf(), sizeof(ConstantBufferPerShadow));
 
 	// shaodow用texの準備
 	shadow_texture = std::make_shared<Texture>();

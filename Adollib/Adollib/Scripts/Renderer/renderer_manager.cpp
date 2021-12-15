@@ -33,7 +33,7 @@ ComPtr<ID3D11Buffer> Renderer_manager::light_cb;
 
 void Renderer_manager::awake() {
 
-	Systems::CreateConstantBuffer(&light_cb, sizeof(ConstantBufferPerLight));
+	Systems::CreateConstantBuffer(light_cb.ReleaseAndGetAddressOf(), sizeof(ConstantBufferPerLight));
 
 	constexpr int maxElements = 10000;
 	HRESULT hr = S_OK;
@@ -52,7 +52,7 @@ void Renderer_manager::awake() {
 		initData.pSysMem = instances.get();	// 頂点のアドレス
 		initData.SysMemPitch = 0;		//Not use for vertex buffers.mm
 		initData.SysMemSlicePitch = 0;	//Not use for vertex buffers.
-		hr = Systems::Device->CreateBuffer(&bd, &initData, instanceBuffer.GetAddressOf());
+		hr = Systems::Device->CreateBuffer(&bd, &initData, instanceBuffer.ReleaseAndGetAddressOf());
 		if (FAILED(hr))
 		{
 			assert(0 && "failed create instance buffer dynamic(render_manager)");

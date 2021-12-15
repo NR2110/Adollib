@@ -30,8 +30,8 @@ Shader Collider_renderer::shader; //shader
 
 void Collider_renderer::awake() {
 	//::: コンスタントバッファ :::
-	Systems::CreateConstantBuffer(&world_cb, sizeof(ConstantBufferPerGO));    //枠確保
-	Systems::CreateConstantBuffer(&Mat_cb, sizeof(ConstantBufferPerMaterial));//枠確保
+	Systems::CreateConstantBuffer(world_cb.ReleaseAndGetAddressOf(), sizeof(ConstantBufferPerGO));    //枠確保
+	Systems::CreateConstantBuffer(Mat_cb.ReleaseAndGetAddressOf(), sizeof(ConstantBufferPerMaterial));//枠確保
 
 	//::: shaderload :::::::
 	shader.Load_VS("./DefaultShader/collider_render_vs.cso");

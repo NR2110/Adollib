@@ -38,7 +38,7 @@ UI::UI() {
 	ZeroMemory(&res, sizeof(res));
 	res.pSysMem = v;
 
-	Systems::Device->CreateBuffer(&bd, &res, VertexBuffer.GetAddressOf());
+	Systems::Device->CreateBuffer(&bd, &res, VertexBuffer.ReleaseAndGetAddressOf());
 
 
 	//デプスステンシルステート

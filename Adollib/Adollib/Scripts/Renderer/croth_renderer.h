@@ -10,22 +10,26 @@ namespace Adollib {
 	namespace Compute_S { class ComputeShader; }
 
 	// polygon描画用のInstance
-	//struct Instance
-	//{
+	//struct Instance {
 	//	DirectX::XMFLOAT4X4 transformMatrix = {};	// world変換やNDC変換を入れる行列
 	//	DirectX::XMFLOAT4 texcoordTransform = { 0.0f,0.0f,1.0f,1.0f };
 	//	DirectX::XMFLOAT4 color = { 1.0f,1.0f,1.0f,1.0f };
 	//};
 	//と同じサイズ
-	struct Instance_polygon
-	{
-		DirectX::XMFLOAT3 position[3] = {};
+	struct Instance_polygon {
 
-		DirectX::XMFLOAT3 normal[3] = {};
+		Vector3 position[3] = {};
 
-		DirectX::XMFLOAT2 texcoordTransform = {};
+		Vector3 normal[3] = {};
 
-		DirectX::XMFLOAT4 color = { 1.0f,1.0f,1.0f,1.0f };
+		Vector2 texcoordTransform = {};
+
+		Vector4 color = { 1.0f,1.0f,1.0f,1.0f };
+	};
+	struct VertexOffset {
+		Vector3 position;
+
+		Vector3 normal;
 	};
 
 	class Croth_renderer : public Renderer_base {
@@ -37,19 +41,24 @@ namespace Adollib {
 		// compute_Shader
 		std::shared_ptr<Compute_S::ComputeShader> compute_shader = nullptr;
 
-		Microsoft::WRL::ComPtr<ID3D11Buffer> computeBuf_vertex = nullptr;
-		Microsoft::WRL::ComPtr<ID3D11Buffer> computeBuf_index  = nullptr;
-		Microsoft::WRL::ComPtr<ID3D11Buffer> computeBuf_color  = nullptr;
+		std::vector<Microsoft::WRL::ComPtr<ID3D11Buffer>> computeBuf_vertex = { nullptr };
+		std::vector<Microsoft::WRL::ComPtr<ID3D11Buffer>> computeBuf_vertexoffset = { nullptr };
+		std::vector<Microsoft::WRL::ComPtr<ID3D11Buffer>> computeBuf_index = { nullptr };
+		std::vector<Microsoft::WRL::ComPtr<ID3D11Buffer>> computeBuf_color = { nullptr };
 		Microsoft::WRL::ComPtr<ID3D11Buffer> computeBuf_result = nullptr;
 
-		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  computeBufSRV_vertex = nullptr;
-		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  computeBufSRV_index  = nullptr;
-		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  computeBufSRV_color  = nullptr;
+		std::vector<Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>>  computeBufSRV_vertex = { nullptr };
+		std::vector<Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>>  computeBufSRV_vertexoffset = { nullptr };
+		std::vector<Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>>  computeBufSRV_index  = { nullptr };
+		std::vector<Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>>  computeBufSRV_color = { nullptr };
 		Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> computeBufUAV_result = nullptr;
 
-		void instance_update(const Frustum_data& frustum_data);
 
 		int instance_count = 0;
+
+		std::shared_ptr<std::vector<std::vector<VertexOffset>>> mesh_offset;
+
+		void instance_update(const Frustum_data& frustum_data);
 
 	public:
 		void load_texture(const wchar_t* filename = nullptr);

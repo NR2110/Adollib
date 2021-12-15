@@ -18,8 +18,8 @@ using namespace ConstantBuffer;
 void Sky_sphere::awake() {
 
 	// コンスタントバッファーの生成
-	Systems::CreateConstantBuffer(&view_cb,       sizeof(ConstantBufferPerCamera));
-	Systems::CreateConstantBuffer(&projection_cb, sizeof(ConstantBufferPerSystem));
+	Systems::CreateConstantBuffer(view_cb.ReleaseAndGetAddressOf(),       sizeof(ConstantBufferPerCamera));
+	Systems::CreateConstantBuffer(projection_cb.ReleaseAndGetAddressOf(), sizeof(ConstantBufferPerSystem));
 
 	// sky用textureの準備
 	sky_texture = std::make_shared<Texture>();
@@ -29,9 +29,9 @@ void Sky_sphere::awake() {
 	shader->Load_VS("./DefaultShader/sky_map_vs.cso");
 	shader->Load_PS("./DefaultShader/default_ps_skysphere.cso");
 
-	Systems::CreateConstantBuffer(&projection_cb, sizeof(ConstantBufferPerSystem));
-	Systems::CreateConstantBuffer(&world_cb, sizeof(ConstantBufferPerGO));
-	Systems::CreateConstantBuffer(&Mat_cb, sizeof(ConstantBufferPerMaterial));
+	Systems::CreateConstantBuffer(projection_cb.ReleaseAndGetAddressOf(), sizeof(ConstantBufferPerSystem));
+	Systems::CreateConstantBuffer(world_cb.ReleaseAndGetAddressOf(), sizeof(ConstantBufferPerGO));
+	Systems::CreateConstantBuffer(Mat_cb.ReleaseAndGetAddressOf(), sizeof(ConstantBufferPerMaterial));
 
 	ResourceManager::CreateModelFromFBX(&meshes, "./DefaultModel/sphere.fbx");
 
