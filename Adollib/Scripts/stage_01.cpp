@@ -38,13 +38,19 @@ namespace Adollib
 
 		//Gameobject_manager::createFromFBX("sponza", "../Data/FBX/Model_Shaclo_Winter_Edit.fbx");
 
-#if 1 || _DEBUG
-		auto cube = Gameobject_manager::createFromFBX("sponza", "../Data/FBX/Model_Shaclo_Winter_Edit.fbx");
-		//auto cube = Gameobject_manager::createFromFBX("sponza", "../Data/FBX/bunny.obj");
-		//auto cube = Gameobject_manager::createCube();
+#if 1 ||  _DEBUG
+		//auto cube = Gameobject_manager::createFromFBX("Shaclo", "../Data/FBX/Model_Shaclo_Winter_Edit.fbx",true);
+		//auto cube = Gameobject_manager::createFromFBX("bunny", "../Data/FBX/bunny.obj");
+		auto cube = Gameobject_manager::createCube();
 		//auto cube = Gameobject_manager::createSphere();
-		cube->addComponent<Croth_renderer>();
-		//cube->addComponent<Mesh_renderer>();
+		//cube->addComponent<Croth_renderer>();
+
+		auto coll = cube->addComponent<Collider>();
+		coll->add_shape("../Data/FBX/Model_Shaclo_Winter_Edit.fbx", true, false);
+		//coll->add_shape("../Data/FBX/bunny.obj", true, false);
+		//coll->add_shape("./DefaultModel/sphere.fbx", true, false);
+		//coll->physics_data.is_hitable = false;
+		coll->physics_data.is_moveable = false;
 
 #else
 

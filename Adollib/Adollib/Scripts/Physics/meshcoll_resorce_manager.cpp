@@ -76,7 +76,6 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 	traverse(scene->GetRootNode());
 
 	// メッシュデータの取得
-	u_int vertex_count = 0;
 	struct Subset {
 		int index_start = 0;
 		int index_count = 0;
@@ -116,7 +115,7 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 		const int number_of_polygons = fbxMesh->GetPolygonCount();
 
 		indices.resize(number_of_polygons * 3);
-		vertices.resize(fbxMesh->GetControlPointsCount());
+		//vertices.resize(fbxMesh->GetControlPointsCount());
 
 		for (int index_of_polygon = 0; index_of_polygon < number_of_polygons; index_of_polygon++)
 		{
@@ -130,10 +129,32 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 				vertex.z = static_cast<float>(array_of_control_points[index_of_control_point][2]);
 
 				vertex = vector3_trans(vertex, mesh_globalTransform);
+
+
+				//// push_back
+				//vertices.at(index_of_control_point) = vertex;
+				//indices.at(subset.index_start + index_of_vertex) = index_of_control_point;
+				//vertex_count++;
+
 				// push_back
-				vertices.at(index_of_control_point) = vertex;
-				indices.at(subset.index_start + index_of_vertex) = index_of_control_point;
-				vertex_count++;
+				int vertex_size = vertices.size();
+				bool is_same_vertex = false;
+				// 同じ頂点をmargeする場合
+				for (int same_vertex_num = 0; same_vertex_num < vertex_size; ++same_vertex_num) {
+					// 同じ頂点を探して
+					if (vector3_distance(vertex, vertices[same_vertex_num]) < FLT_EPSILON) {
+						indices.at(subset.index_start + index_of_vertex) = static_cast<u_int>(same_vertex_num); //indexに保存して
+
+						// flagをtrueに
+						is_same_vertex = true;
+						break;
+					}
+				}
+				// 同じ頂点が無ければ新たに保存
+				if (is_same_vertex == false) {
+					vertices.push_back(vertex);
+					indices.at(subset.index_start + index_of_vertex) = static_cast<u_int>(vertex_size);
+				}
 			}
 			subset.index_start += 3;
 		}
@@ -142,14 +163,17 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 
 #pragma region Set Meshcollider_mesh
 
+
 		u_int& index_num = mesh.index_num;
 		//u_int& vertex_num = mesh.vertex_num;
 
+		std::vector<Vertex_involvement>& vertex_involvements = mesh.vertex_involvements;
 		vector<Edge>& edges = mesh.edges;
 		vector<Facet>& facets = mesh.facets;
 		u_int& edge_num = mesh.edge_num;
 		u_int& facet_num = mesh.facet_num;
 
+		vertex_involvements.resize(vertices.size());
 		bool& is_Convex = mesh.is_Convex;
 		//::: vertexなどの情報からedge,facetの情報を計算 :::
 		{
@@ -159,6 +183,7 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 				facet_num = index_num / 3;
 				Physics_function::Facet F;
 				for (u_int i = 0; i < facet_num; i++) {
+
 					if (Right_triangle) {
 						F.vertexID[0] = indices.at(i * 3 + 0);
 						F.vertexID[1] = indices.at(i * 3 + 1);
@@ -174,8 +199,12 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 						F.normal = F.normal.unit_vect();
 					}
 
+
+
 					facets.emplace_back(F);
 				}
+
+				facet_num = facets.size();
 			}
 
 			//エッジ情報の保存
@@ -191,8 +220,8 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 						u_int vertId0 = ALmin(facet.vertexID[o % 3], facet.vertexID[(o + 1) % 3]);
 						u_int vertId1 = ALmax(facet.vertexID[o % 3], facet.vertexID[(o + 1) % 3]);
 
-	/*					int intId0 = (int)vertId0;
-						int intId1 = (int)vertId1;*/
+						/*					int intId0 = (int)vertId0;
+											int intId1 = (int)vertId1;*/
 
 						u_int b = vertId1 * vertId1 - vertId1;
 
@@ -222,7 +251,15 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 							if (is_permit_edge_have_many_facet && edge.facetID[0] != edge.facetID[1]) {
 								continue;
 							}
-							assert(edge.facetID[0] == edge.facetID[1] && "Don't let the edges have 3～ facet.");
+
+							if (edge.facetID[0] != edge.facetID[1]) {
+								int dafsgdhf = 0;
+
+								auto& a = facets[edge.facetID[0]];
+								auto& b = facets[edge.facetID[1]];
+								int s = 0;
+							}
+							//assert(edge.facetID[0] == edge.facetID[1] && "Don't let the edges have 3～ facet.");
 
 
 							// エッジに含まれないＡ面の頂点がB面の表か裏かで判断
@@ -252,6 +289,8 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 
 				}
 			}
+
+
 		}
 #pragma endregion
 #pragma region Set Dopbase

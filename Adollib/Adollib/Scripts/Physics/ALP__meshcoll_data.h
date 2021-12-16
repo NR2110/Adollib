@@ -24,6 +24,12 @@ namespace Adollib {
 			Vector3 normal;  // 面法線ベクトル
 		};
 
+		constexpr int involved_vertex_max = 8;
+		struct Vertex_involvement {
+			int edge_involvements[involved_vertex_max];
+			int facet_involvements[involved_vertex_max];
+		};
+
 		struct Meshcollider_data{
 			std::string FBX_pass;
 
@@ -34,6 +40,7 @@ namespace Adollib {
 
 			std::vector<int> indexes; //頂点情報
 			std::vector<Vector3> vertices; //頂点情報
+			std::vector<Vertex_involvement> vertex_involvements; //頂点の関わっているものへのindex
 			std::vector<Edge> edges; //エッジ配列
 			std::vector<Facet> facets; //面配列
 

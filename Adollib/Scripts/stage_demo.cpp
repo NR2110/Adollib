@@ -24,6 +24,7 @@ namespace Adollib
 		player_respown_pos = Vector3(-2.7f, 100, -150);
 		player_respown_pos = Vector3(-2.7f, 100, -50);
 		respown_num = -1;
+		next_stage = Stage_types::none;
 
 		auto floar_go = Gameobject_manager::create("floar");
 		stage_parts.emplace_back(floar_go);

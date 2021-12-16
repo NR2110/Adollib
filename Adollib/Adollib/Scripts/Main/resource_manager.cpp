@@ -568,16 +568,19 @@ namespace Adollib
 					// push_back
 					int vertex_size = vertices.size();
 					bool is_same_vertex = false;
-					if(is_marge_vertex)
-					for (int same_vertex_num = 0; same_vertex_num < vertex_size; ++same_vertex_num) {
-						if( vector3_distance(vertex.position, vertices[same_vertex_num].position) < FLT_EPSILON ){
-							indices.at(index_offset + index_of_vertex) = static_cast<u_int>(same_vertex_num);
-							vertices[same_vertex_num].normal += vertex.normal;
+					// “¯‚¶’¸“_‚ğmarge‚·‚éê‡
+					if (is_marge_vertex)
+						for (int same_vertex_num = 0; same_vertex_num < vertex_size; ++same_vertex_num) {
+							// “¯‚¶’¸“_‚ğ’T‚µ‚Ä
+							if (vector3_distance(vertex.position, vertices[same_vertex_num].position) < FLT_EPSILON) {
+								indices.at(index_offset + index_of_vertex) = static_cast<u_int>(same_vertex_num); //index‚É•Û‘¶‚µ‚Ä
+								vertices[same_vertex_num].normal += vertex.normal; //normal‚ğ‘«‚µ‚Ä
 
-							is_same_vertex = true;
-							break;
+								// ‚ ‚Á‚½‚çflag‚ğtrue‚É
+								is_same_vertex = true;
+								break;
+							}
 						}
-					}
 
 					if (is_same_vertex == false) {
 						vertices.push_back(vertex);

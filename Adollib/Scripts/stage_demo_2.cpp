@@ -20,6 +20,7 @@
 #include "../Adollib/Scripts/Main/systems.h"
 
 #include "stage_manager.h"
+#include "../Adollib/Scripts/Renderer/croth_renderer.h"
 
 namespace Adollib
 {
@@ -27,6 +28,8 @@ namespace Adollib
 	{
 		player_respown_pos = Vector3(-2.7f, 80, -5.f);
 		respown_num = -1;
+		next_stage = Stage_types::none;
+
 		//player_respown_pos = Vector3(-2.7f, 10, -5);
 		//player_respown_pos = Vector3(90, 16.0f, 66.0f);
 		y_respown_pos = 30; // respownしたときのYの座標
@@ -38,12 +41,21 @@ namespace Adollib
 		all_pearent = Gameobject_manager::create("all_pearent");
 		stage_parts.emplace_back(all_pearent);
 
+		auto cube = Gameobject_manager::createFromFBX("Shaclo", "../Data/FBX/Model_Shaclo_Winter_Edit.fbx");
+		//auto cube = Gameobject_manager::createFromFBX("bunny", "../Data/FBX/bunny.obj");
+		//auto cube = Gameobject_manager::createCube();
+		//auto cube = Gameobject_manager::createSphere();
+		cube->addComponent<Croth_renderer>();
+		stage_parts.emplace_back(cube);
+		//cube->addComponent<Mesh_renderer>();
+
 		//stage_manager = Gameobject_manager::find("Stage_manager")->findComponent<Stage_manager>();
 	}
 
 	// 毎フレーム呼ばれる更新処理
 	void Stage_demo_02::update() {
 
+		return;
 		if(stage_manager == nullptr)stage_manager = Gameobject_manager::find("Stage_manager")->findComponent<Stage_manager>();
 
 		if (stage_manager->now_stage != Stage_types::demo_2)return;

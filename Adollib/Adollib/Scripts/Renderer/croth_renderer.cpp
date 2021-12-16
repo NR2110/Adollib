@@ -16,11 +16,16 @@
 
 #include "Shader/compute_shader.h"
 
-#
+#include "../Imgui/work_meter.h"
+
+#include <thread>
+#include <mutex>
 
 using namespace Adollib;
 using namespace ConstantBuffer;
 using namespace Compute_S;
+
+//#define use_thread_crothrenderer
 
 template<class T>
 T* map_buffer(Microsoft::WRL::ComPtr<ID3D11Buffer>& buffer) {
@@ -81,7 +86,7 @@ void Croth_renderer::init() {
 	}
 
 	// instanceバッファ生成
-	if(0)
+	if (0)
 	{
 		constexpr int maxElements = 300000;
 		HRESULT hr = S_OK;
@@ -267,6 +272,17 @@ void Croth_renderer::render(const Frustum_data& frustum_data) {
 
 }
 
+
+
+void update_meshoffset(std::mutex* mtx, VertexOffset* out_data, std::vector<VertexOffset>* in_data, int index_Start, int index_end, volatile int* end_thread_count) {
+	for (int i = index_Start; i < index_end; ++i) {
+		out_data[i] = in_data->at(i);
+	}
+
+	std::lock_guard<std::mutex> lock(*mtx);
+	++(*end_thread_count);
+};
+
 void Croth_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& instance_buffer_, int bufferStart, int bufferCount) {
 	if (material == nullptr) return;
 	if (bufferCount == 0) return;
@@ -331,6 +347,8 @@ void Croth_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& ins
 	//}
 	*/
 
+	// meshのoffsetを雑に計算
+	//if(0)
 	{
 		static float debug_timer_count = 0;
 		debug_timer_count += time->deltaTime();
@@ -346,27 +364,80 @@ void Croth_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& ins
 		}
 	}
 
+#ifdef use_thread_crothrenderer
+	// offset情報の更新
 	{
-		// 値の更新
 		int mesh_count = 0;
 
+		//int thread_count = 0;
+		//volatile int end_thread_count = 0;
+		std::mutex mtx;
+
+		int thread_vertex_size = 100000;
+		int thread_count = 0;
+		volatile int end_thread_count = 0;
+
+		Work_meter::start("make_thread");
 		for (auto& buffer : computeBuf_vertexoffset) {
+
 
 			auto data = map_buffer<VertexOffset>(buffer);
 
 			int vertex_size = meshes->at(mesh_count).vertices.size();
-			for (int i = 0; i < vertex_size; ++i) {
-				data[i] = mesh_offset->at(mesh_count)[i];
+			int vertex_start = 0;
+			int threads_size = vertex_size / thread_vertex_size + 1;
+
+			for (int i = 0; i < threads_size; ++i) {
+
+				int vertex_start = i * thread_vertex_size;
+				int vertex_end = (i + 1) * thread_vertex_size;
+				if (vertex_end > vertex_size)vertex_end = vertex_size;
+
+				auto t = std::thread(
+					update_meshoffset,
+					&mtx,
+					data,
+					&mesh_offset->at(mesh_count),
+					vertex_start,
+					vertex_end,
+					&end_thread_count
+				);
+				t.detach();
+
+				++thread_count;
 			}
 
 			unmap_buffer(buffer);
 
 			++mesh_count;
 		}
-	}
+		Work_meter::stop("make_thread");
 
+		Work_meter::start("thread_count_check");
+		while (thread_count != end_thread_count) {}
+		Work_meter::stop("thread_count_check");
+
+
+	}
+#else
 	{
-		// 値の更新
+		int mesh_count = 0;
+		for (auto& buffer : computeBuf_vertexoffset) {
+
+			auto data = map_buffer<VertexOffset>(buffer);
+
+			int vertex_size = meshes->at(mesh_count).vertices.size();
+			int vertex_start = 0;
+			for (int i = 0; i < vertex_size; ++i) {
+				data[i] = mesh_offset->at(mesh_count)[i];
+			}
+			++mesh_count;
+		}
+	}
+#endif
+
+	// color情報の更新 (instance_countをwに入れている)
+	{
 
 		int mesh_count = 0;
 		int instance_count = 0;
@@ -395,48 +466,11 @@ void Croth_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& ins
 			int vertices_count = mesh.vertices.size();
 			int instances_count = indexes_count / 3;
 
-			// structure bufferの作成
-			Vector4 color_instancecount = Vector4(color.x, color.y, color.z, instance_count);
-			//compute_shader->create_StructureBuffer(sizeof(u_int),			    indexes_count,  &mesh.indexces[0], computeBuf_index);
-			//compute_shader->create_StructureBuffer(sizeof(VertexFormat),	    vertices_count, &mesh.vertices[0], computeBuf_vertex);
-			//compute_shader->create_StructureBuffer(sizeof(VertexOffset), vertices_count, &mesh_offset->at(mesh_count)[0], computeBuf_vertexoffset);
-			//compute_shader->create_StructureBuffer(sizeof(Vector4), 1, &color_instancecount, computeBuf_color);
-			//compute_shader->create_StructureBuffer(sizeof(Instance_polygon), 30000, nullptr, instanceBuffer);
-
-			//compute_shader->createSRV_fromSB(computeBuf_index[mesh_count],		  computeBufSRV_index.ReleaseAndGetAddressOf());
-			//compute_shader->createSRV_fromSB(computeBuf_vertex[mesh_count],		  computeBufSRV_vertex.ReleaseAndGetAddressOf());
-			//compute_shader->createSRV_fromSB(computeBuf_vertexoffset[mesh_count], computeBufSRV_vertexoffset.ReleaseAndGetAddressOf());
-			//compute_shader->createSRV_fromSB(computeBuf_color,		  computeBufSRV_color.ReleaseAndGetAddressOf());
-			//compute_shader->createUAV_fromSB(instanceBuffer, computeBufUAV_result.ReleaseAndGetAddressOf());
-
+			// compute shaderを走らせる
 			ID3D11ShaderResourceView* pSRVs[4] = { computeBufSRV_index[mesh_count].Get(), computeBufSRV_vertex[mesh_count].Get(), computeBufSRV_vertexoffset[mesh_count].Get(), computeBufSRV_color[mesh_count].Get() };
 
 			int loop_count = indexes_count / 32 + 1;
 			compute_shader->run(pSRVs, 4, computeBufUAV_result, loop_count, 1, 1);
-
-			//auto instance_poly = compute_shader->Read_UAV<Instance_polygon>(computeBuf_result);
-			//auto instance_poly = compute_shader->Read_UAV<Instance_polygon>(instanceBuffer);
-
-			//Instance_polygon* instances = nullptr;
-			//// instance_bufferをMapする
-			//HRESULT hr = S_OK;
-			//const D3D11_MAP map = D3D11_MAP_WRITE_DISCARD;
-			//D3D11_MAPPED_SUBRESOURCE mappedBuffer = {};
-			//hr = Systems::DeviceContext->Map(instanceBuffer.Get(), 0, map, 0, &mappedBuffer);
-
-			//if (FAILED(hr))
-			//{
-			//	assert(0 && "failed Map InstanceBuffer dynamic(RenderManager)");
-			//	return;
-			//}
-
-			//instances = static_cast<Instance_polygon*>(mappedBuffer.pData);
-			//for (int i = 0; i < instances_count; ++i) {
-			//	instances[i + instance_count] = instance_poly[i];
-			//}
-
-			//// instance_bufferをUnmapする
-			//Systems::DeviceContext->Unmap(instanceBuffer.Get(), 0);
 
 			instance_count += instances_count;
 			++mesh_count;
@@ -497,87 +531,91 @@ void Croth_renderer::set_meshes(std::vector<Mesh::mesh>* l_meshes) {
 	if (l_meshes != nullptr) {
 		std::vector<Mesh::mesh>* no_marge_vertex_mesh;
 		ResourceManager::CreateModelFromFBX(&no_marge_vertex_mesh, (*l_meshes).at(0).file_pass.c_str(), true);
-		meshes = no_marge_vertex_mesh;
 
-		// bufferの作成
-		{
-			// 前のものを削除
-			for (auto& buf : computeBuf_index)buf.Reset();
-			for (auto& buf : computeBuf_vertex)buf.Reset();
-			for (auto& buf : computeBuf_vertexoffset)buf.Reset();
-			for (auto& buf : computeBuf_color)buf.Reset();
+		// アタッチしたmeshがすでにあるものと違った場合
+		if (meshes != no_marge_vertex_mesh) {
+			meshes = no_marge_vertex_mesh;
 
-			// アタッチするmeshのサイズだけ確保
-			int mesh_size = meshes->size();
-			computeBuf_index.resize(mesh_size);
-			computeBuf_vertex.resize(mesh_size);
-			computeBuf_vertexoffset.resize(mesh_size);
-			computeBuf_color.resize(mesh_size);
-
-			// Bufferの作成
-			// computeBuf_vertex, computeBuf_indexはここでしか変更しない
-			int sum_instance = 0;
-			int mesh_count = 0;
-			for (Mesh::mesh& mesh : (*meshes))
+			// bufferの作成
 			{
-				int indexes_count = mesh.indexces.size();
-				int vertices_count = mesh.vertices.size();
+				// 前のものを削除
+				for (auto& buf : computeBuf_index)buf.Reset();
+				for (auto& buf : computeBuf_vertex)buf.Reset();
+				for (auto& buf : computeBuf_vertexoffset)buf.Reset();
+				for (auto& buf : computeBuf_color)buf.Reset();
 
-				compute_shader->create_StructureBuffer(sizeof(u_int), indexes_count, &mesh.indexces[0], computeBuf_index[mesh_count], false);
-				compute_shader->create_StructureBuffer(sizeof(VertexFormat), vertices_count, &mesh.vertices[0], computeBuf_vertex[mesh_count], false);
-				compute_shader->create_StructureBuffer(sizeof(VertexOffset), vertices_count, nullptr, computeBuf_vertexoffset[mesh_count], true);
-				compute_shader->create_StructureBuffer(sizeof(Vector4), 1, nullptr, computeBuf_color[mesh_count], true);
+				// アタッチするmeshのサイズだけ確保
+				int mesh_size = meshes->size();
+				computeBuf_index.resize(mesh_size);
+				computeBuf_vertex.resize(mesh_size);
+				computeBuf_vertexoffset.resize(mesh_size);
+				computeBuf_color.resize(mesh_size);
 
-				++mesh_count;
-				sum_instance += indexes_count / 3;
+				// Bufferの作成
+				// computeBuf_vertex, computeBuf_indexはここでしか変更しない
+				int sum_instance = 0;
+				int mesh_count = 0;
+				for (Mesh::mesh& mesh : (*meshes))
+				{
+					int indexes_count = mesh.indexces.size();
+					int vertices_count = mesh.vertices.size();
+
+					compute_shader->create_StructureBuffer(sizeof(u_int), indexes_count, &mesh.indexces[0], computeBuf_index[mesh_count], false);
+					compute_shader->create_StructureBuffer(sizeof(VertexFormat), vertices_count, &mesh.vertices[0], computeBuf_vertex[mesh_count], false);
+					compute_shader->create_StructureBuffer(sizeof(VertexOffset), vertices_count, nullptr, computeBuf_vertexoffset[mesh_count], true);
+					compute_shader->create_StructureBuffer(sizeof(Vector4), 1, nullptr, computeBuf_color[mesh_count], true);
+
+					++mesh_count;
+					sum_instance += indexes_count / 3;
+				}
+				compute_shader->create_StructureBuffer(sizeof(Instance_polygon), sum_instance, nullptr, instanceBuffer, false);
 			}
-			compute_shader->create_StructureBuffer(sizeof(Instance_polygon), sum_instance, nullptr, instanceBuffer, false);
-		}
 
-		// SRVの作成
-		{
-			// 前のものを削除
-			for (auto& buf : computeBufSRV_index)buf.Reset();
-			for (auto& buf : computeBufSRV_vertex)buf.Reset();
-			for (auto& buf : computeBufSRV_vertexoffset)buf.Reset();
-			for (auto& buf : computeBufSRV_color)buf.Reset();
-
-			// アタッチするmeshのサイズだけ確保
-			int mesh_size = meshes->size();
-			computeBufSRV_index.resize(mesh_size);
-			computeBufSRV_vertex.resize(mesh_size);
-			computeBufSRV_vertexoffset.resize(mesh_size);
-			computeBufSRV_color.resize(mesh_size);
-
-			int mesh_count = 0;
-			for (Mesh::mesh& mesh : (*meshes))
+			// SRVの作成
 			{
-				compute_shader->createSRV_fromSB(computeBuf_index[mesh_count], computeBufSRV_index[mesh_count]);
-				compute_shader->createSRV_fromSB(computeBuf_vertex[mesh_count], computeBufSRV_vertex[mesh_count]);
-				compute_shader->createSRV_fromSB(computeBuf_vertexoffset[mesh_count], computeBufSRV_vertexoffset[mesh_count]);
-				compute_shader->createSRV_fromSB(computeBuf_color[mesh_count], computeBufSRV_color[mesh_count]);
-				++mesh_count;
+				// 前のものを削除
+				for (auto& buf : computeBufSRV_index)buf.Reset();
+				for (auto& buf : computeBufSRV_vertex)buf.Reset();
+				for (auto& buf : computeBufSRV_vertexoffset)buf.Reset();
+				for (auto& buf : computeBufSRV_color)buf.Reset();
+
+				// アタッチするmeshのサイズだけ確保
+				int mesh_size = meshes->size();
+				computeBufSRV_index.resize(mesh_size);
+				computeBufSRV_vertex.resize(mesh_size);
+				computeBufSRV_vertexoffset.resize(mesh_size);
+				computeBufSRV_color.resize(mesh_size);
+
+				int mesh_count = 0;
+				for (Mesh::mesh& mesh : (*meshes))
+				{
+					compute_shader->createSRV_fromSB(computeBuf_index[mesh_count], computeBufSRV_index[mesh_count]);
+					compute_shader->createSRV_fromSB(computeBuf_vertex[mesh_count], computeBufSRV_vertex[mesh_count]);
+					compute_shader->createSRV_fromSB(computeBuf_vertexoffset[mesh_count], computeBufSRV_vertexoffset[mesh_count]);
+					compute_shader->createSRV_fromSB(computeBuf_color[mesh_count], computeBufSRV_color[mesh_count]);
+					++mesh_count;
+				}
+				compute_shader->createUAV_fromSB(instanceBuffer, computeBufUAV_result);
 			}
-			compute_shader->createUAV_fromSB(instanceBuffer, computeBufUAV_result);
-		}
 
-		// offset用配列の準備
-		mesh_offset = std::make_shared<std::vector<std::vector<VertexOffset>>>();
-		//mesh_offset->resize(meshes->size());
-		VertexOffset zero_format;
-		zero_format.position = Vector3(0);
-		zero_format.normal = Vector3(0);
+			// offset用配列の準備
+			mesh_offset = std::make_shared<std::vector<std::vector<VertexOffset>>>();
+			//mesh_offset->resize(meshes->size());
+			VertexOffset zero_format;
+			zero_format.position = Vector3(0);
+			zero_format.normal = Vector3(0);
 
-		for (auto& meshess : (*meshes)) {
-			std::vector<VertexOffset> initial_mesh;
+			for (auto& meshess : (*meshes)) {
+				std::vector<VertexOffset> initial_mesh;
 
-			initial_mesh.resize(meshess.vertices.size());
-			for (auto& mesh : initial_mesh) {
-				mesh.position = Vector3(0);
-				mesh.normal = Vector3(0);
+				initial_mesh.resize(meshess.vertices.size());
+				for (auto& mesh : initial_mesh) {
+					mesh.position = Vector3(0);
+					mesh.normal = Vector3(0);
+				}
+
+				mesh_offset->emplace_back(initial_mesh);
 			}
-
-			mesh_offset->emplace_back(initial_mesh);
 		}
 	}
 }
