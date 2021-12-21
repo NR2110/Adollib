@@ -3,7 +3,7 @@
 #include <map>
 #include <memory>
 #include "mesh.h"
-#include "Shader/shader.h"
+#include "../Shader/shader.h"
 #include "../Physics/ALP_Collider.h"
 #include "../Physics/collider_shape.h"
 
@@ -12,6 +12,22 @@ namespace Adollib {
 
 		class Collider_renderer {
 
+			//object
+			struct ConstantBufferPerGO {
+				DirectX::XMFLOAT4X4 world;
+			};
+			//material
+			struct ConstantBufferPerMaterial
+			{
+				DirectX::XMFLOAT4X4 boneTransforms[MAX_BONES];
+
+				DirectX::XMFLOAT4 materialColor;
+				DirectX::XMFLOAT4 ambientColor;
+
+				float shininess;  // スペキュラ係数
+
+				//float intensity;
+			};
 			//頂点フォーマット
 			struct VertexFormat
 			{
@@ -31,18 +47,17 @@ namespace Adollib {
 			static Shader shader; //shader
 		public:
 
-			// constantbufferの設定 など
-			static void awake();
+
+			static void initialize();
 			static void render_collider(const Physics_function::ALP_Collider*);
-			static void render_joint(const Physics_function::ALP_Joint*);
 
 			//実際は14-DOPだが描画がめんどくさいのでAABBで描画
 			static void render_AABB(const Physics_function::ALP_Collider*);
 
-			static void render_box(const Collider_shape* R,const Vector3& color);
-			static void render_sphere(const Collider_shape* R, const Vector3& color);
-			static void render_meshcoll(const Collider_shape* R, const Vector3& color);
-			static void render_capsule(const Collider_shape* R, const Vector3& color);
+			static void render_box(const Collider_shape* R,const Vector4 color = Vector4(-1, -1, -1, -1));
+			static void render_sphere(const Collider_shape* R,const Vector4 color = Vector4(-1, -1, -1, -1));
+			static void render_meshcoll(const Collider_shape* R,const Vector4 color = Vector4(-1, -1, -1, -1));
+			static void render_capsule(const Collider_shape* R,const Vector4 color = Vector4(-1, -1, -1, -1));
 
 		};
 
