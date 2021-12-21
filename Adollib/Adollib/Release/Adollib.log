@@ -1,59 +1,36 @@
-﻿  camera_manager.cpp
-  camera_s.cpp
-  object_manager.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(89,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-  object_rotate.cpp
-  player.cpp
+﻿  object_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(84,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
   player_manager.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(89,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-  material_for_collider.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(114,98): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(180,98): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(246,98): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(315,99): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(381,99): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(447,99): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Mesh\material_for_collider.cpp(720,94): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-  gameobject.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(84,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
   gameobject_manager.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(89,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(84,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
   ALP__physics_manager.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(89,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(84,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
   ALP_broadphase.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(89,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(84,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
   ALP_collider.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(89,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-  ALP_generate_contact.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(485,8): warning C4101: 'ra': ローカル変数は 1 度も使われていません。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(485,12): warning C4101: 'rb': ローカル変数は 1 度も使われていません。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(2093,26): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(84,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
   ALP_integrate.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(89,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-  ALP_midphase.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(89,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(84,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
   ALP_physics.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(89,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-  ALP_raycast.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(108,23): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(84,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
   ALP_resolve_contact.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(89,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(84,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
   ALP_resolve_contact_SIM.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(89,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(84,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
   collider.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(89,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-  コンパイル中...
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(84,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
   collider_shape.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(89,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(84,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
   contact.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(89,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(84,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
   joint.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(89,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(84,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
   ray.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(89,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-  scene_game.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(84,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
   コード生成しています。
-  282 of 9097 functions ( 3.1%) were compiled, the rest were copied from previous compilation.
-    10 functions were new in current compilation
-    85 functions had inline decision re-evaluated but remain unchanged
+  330 of 9091 functions ( 3.6%) were compiled, the rest were copied from previous compilation.
+    70 functions were new in current compilation
+    153 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Release\Adollib.exe

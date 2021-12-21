@@ -3,8 +3,6 @@
 #include "../Imgui/work_meter.h"
 
 #include "ALP_physics.h"
-
-#include "ALP__physics_manager.h"
 using namespace Adollib;
 using namespace Physics_function;
 using namespace Contacts;
@@ -146,6 +144,7 @@ void Physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std:
 				//oldÇÃkeyÇ∆newÇ™ìØÇ∂ -> ëOÇ©ÇÁë∂ç›ÇµÇƒÇ¢ÇÈ
 				// keep
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 				// accumeimpulseÇÃëÂÇ´Ç≥Ç©ÇÁsleepÇflseÇ…Ç∑ÇÈ
 				for (int i = 0; i < old_pairs[oldId].contacts.contact_num; i++) {
@@ -155,6 +154,8 @@ void Physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std:
 					};
 				}
 
+=======
+>>>>>>> parent of 1c341af... sleep „Çè„Åã„Çâ„Çì
 				old_pairs[oldId].type = Contacts::Pairtype::keep_pair;
 				out_pairs.emplace_back(old_pairs[oldId]);
 

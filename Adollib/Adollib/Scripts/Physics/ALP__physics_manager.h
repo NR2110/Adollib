@@ -75,11 +75,14 @@ namespace Adollib
 <<<<<<< HEAD
 			float linear_sleep_threrhold = 0.5f;
 			float angula_sleep_threrhold = 0.5f;
+<<<<<<< HEAD
 			float accumeimpulse_sleep_threrhold = 0.1f;
 =======
 			float linear_sleep_threrhold = 0.8f;
 			float angula_sleep_threrhold = 1.0f;
 >>>>>>> parent of 863bd14... midphaseに保存された前フレームの情報にアクセスを行うせいでGOを削除すると死ぬ
+=======
+>>>>>>> parent of 1c341af... sleep わからん
 
 
 
