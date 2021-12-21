@@ -1,1 +1,7 @@
+<<<<<<< HEAD
 ﻿  Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe
+=======
+﻿  ALP_physics.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.h(88,23): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+  Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe
+>>>>>>> parent of 863bd14... midphaseに保存された前フレームの情報にアクセスを行うせいでGOを削除すると死ぬ
