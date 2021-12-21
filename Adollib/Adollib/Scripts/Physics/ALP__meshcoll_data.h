@@ -25,9 +25,43 @@ namespace Adollib {
 		};
 
 		constexpr int involved_vertex_max = 8;
-		struct Vertex_involvement {
-			int edge_involvements[involved_vertex_max];
-			int facet_involvements[involved_vertex_max];
+		// vertexからedgeへの情報へアクセスできるように
+		class Vertex_involvement {
+		public:
+			Vertex_involvement() {
+				edge_saved_num = 0;
+				facet_saved_num = 0;
+			}
+
+		private:
+			int edge_saved_num = 0;
+			int facet_saved_num = 0;
+
+		public:
+			struct edge_data {
+				int edge_id = 0;
+				bool is_edge_longer = false;
+			};
+
+			// 各データのID
+			edge_data edge_involvements[involved_vertex_max] = { 0 };
+			int facet_involvements[involved_vertex_max] = {0};
+
+			void add_edge_involvment(int num, bool is_edge_longer) {
+				if (edge_saved_num == involved_vertex_max)return;
+				edge_involvements[edge_saved_num].edge_id = num;
+				edge_involvements[edge_saved_num].is_edge_longer = is_edge_longer;
+				++edge_saved_num;
+			}
+
+			void add_facet_involvment(int num) {
+				if (facet_saved_num == involved_vertex_max)return;
+				facet_involvements[facet_saved_num] = num;
+				++facet_saved_num;
+			}
+
+			int get_edge_involvment_size() { return edge_saved_num; };
+			int get_facet_involvment_size() { return facet_saved_num; };
 		};
 
 		struct Meshcollider_data{

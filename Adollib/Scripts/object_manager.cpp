@@ -84,7 +84,7 @@ namespace Adollib
 				GO->renderer->color = Vector4(1, 1, 1, 1);
 
 				Collider* coll = GO->addComponent<Collider>();
-				coll->add_shape("../Adollib/DefaultModel/cube.fbx", true);
+				coll->add_mesh_shape("../Adollib/DefaultModel/cube.fbx", true);
 				coll->physics_data.is_moveable = false;
 				coll->is_static = true;
 			}
@@ -134,7 +134,7 @@ namespace Adollib
 				GO->transform->local_orient = quaternion_from_euler(0, 180, 0);
 
 				Collider* coll = GO->addComponent<Collider>();
-				coll->add_shape("../Data/FBX/Model_Shaclo_Winter_Edit.fbx", true, true);
+				coll->add_mesh_shape("../Data/FBX/Model_Shaclo_Winter_Edit.fbx", true, true);
 				//R->load_mesh("../Adollib/DefaultModel/cylinder.fbx");
 				coll->physics_data.is_moveable = false;
 				coll->is_static = true;
@@ -155,7 +155,7 @@ namespace Adollib
 				GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
 
 				Collider* coll = GO->addComponent<Collider>();
-				coll->add_shape("../Data/FBX/stage_col.fbx", true, true);
+				coll->add_mesh_shape("../Data/FBX/stage_col.fbx", true, true);
 				//R->load_mesh("../Adollib/DefaultModel/cylinder.fbx");
 				coll->physics_data.is_moveable = false;
 				coll->is_static = true;
@@ -175,7 +175,7 @@ namespace Adollib
 				GO->transform->local_orient = quaternion_from_euler(0, 180, 0);
 
 				Collider* coll = GO->addComponent<Collider>();
-				coll->add_shape("../Data/FBX/0311_collisions.fbx", true);
+				coll->add_mesh_shape("../Data/FBX/0311_collisions.fbx", true);
 				//R->load_mesh("../Adollib/DefaultModel/cylinder.fbx");
 				coll->physics_data.is_moveable = false;
 				coll->is_static = true;
@@ -195,7 +195,7 @@ namespace Adollib
 				GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
 
 				Collider* coll = GO->addComponent<Collider>();
-				coll->add_shape("../Data/FBX/sponza.obj", true, true);
+				coll->add_mesh_shape("../Data/FBX/sponza.obj", true, true);
 				//R->load_mesh("../Adollib/DefaultModel/cylinder.fbx");
 				coll->physics_data.is_moveable = false;
 				coll->is_static = true;
@@ -1309,7 +1309,7 @@ namespace Adollib
 
 		//Box* M = object->addComponent<Box>();
 		Collider* coll = object->addComponent<Collider>();
-		coll->add_shape("./DefaultModel/cone.fbx");
+		coll->add_mesh_shape("./DefaultModel/cone.fbx");
 
 		//M->inertial_mass = 1;
 		GOs.emplace_back(object);

@@ -235,6 +235,8 @@
     <ClInclude Include="Scripts\Physics\ALP_joint.h" />
     <ClInclude Include="Scripts\Physics\ALP_struct_world_transform.h" />
     <ClInclude Include="Scripts\Physics\balljoint.h" />
+    <ClInclude Include="Scripts\Physics\collider_croth.h" />
+    <ClInclude Include="Scripts\Physics\shape_croth.h" />
     <ClInclude Include="Scripts\Physics\conejoint.h" />
     <ClInclude Include="Scripts\Physics\coneTwistjoint.h" />
     <ClInclude Include="Scripts\Physics\hingejoint.h" />
@@ -253,11 +255,11 @@
     <ClInclude Include="Scripts\Physics\ALP__physics_function.h" />
     <ClInclude Include="Scripts\Physics\ALP__physics_manager.h" />
     <ClInclude Include="Scripts\Physics\collider.h" />
-    <ClInclude Include="Scripts\Physics\collider_box.h" />
-    <ClInclude Include="Scripts\Physics\collider_capsule.h" />
-    <ClInclude Include="Scripts\Physics\collider_meshcoll.h" />
-    <ClInclude Include="Scripts\Physics\collider_plane.h" />
-    <ClInclude Include="Scripts\Physics\collider_sphere.h" />
+    <ClInclude Include="Scripts\Physics\shape_box.h" />
+    <ClInclude Include="Scripts\Physics\shape_capsule.h" />
+    <ClInclude Include="Scripts\Physics\shape_meshcoll.h" />
+    <ClInclude Include="Scripts\Physics\shape_plane.h" />
+    <ClInclude Include="Scripts\Physics\shape_sphere.h" />
     <ClInclude Include="Scripts\Physics\collider_types.h" />
     <ClInclude Include="Scripts\Physics\ALP_contact.h" />
     <ClInclude Include="Scripts\Physics\joint.h" />
@@ -351,6 +353,7 @@
     <ClCompile Include="Scripts\Physics\ALP_resolve_contact.cpp" />
     <ClCompile Include="Scripts\Physics\ALP_resolve_contact_SIM.cpp" />
     <ClCompile Include="Scripts\Physics\balljoint.cpp" />
+    <ClCompile Include="Scripts\Physics\collider_croth.cpp" />
     <ClCompile Include="Scripts\Physics\collider_shape.cpp" />
     <ClCompile Include="Scripts\Physics\ALP__physics_manager.cpp" />
     <ClCompile Include="Scripts\Physics\collider.cpp" />

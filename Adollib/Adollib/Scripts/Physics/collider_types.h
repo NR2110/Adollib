@@ -11,7 +11,8 @@ namespace Adollib {
 			Plane,
 			Capsule,
 			Mesh,
-			Cylinder
+			Cylinder,
+			Point
 		};
 
 	}

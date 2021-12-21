@@ -179,11 +179,11 @@ void Physics_function::BroadMidphase(Scenelist Sce,
 				auto itr_S = itr_G;
 				--itr_S;
 
-				//互いにitrを保存
+				// 互いにitrを保存
 				(*itr_S)->axis_list_pair_itr = itr_G;
 				(*itr_G)->axis_list_pair_itr = itr_S;
 
-				//colliderからアクセスできるようにaccess_axislist_itrに保存
+				// colliderからアクセスできるようにaccess_axislist_itrに保存
 				access_axislist_itr[collider_index].push_back(itr_S);
 				access_axislist_itr[collider_index].push_back(itr_G);
 			}

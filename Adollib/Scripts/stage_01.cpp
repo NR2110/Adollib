@@ -46,7 +46,7 @@ namespace Adollib
 		//cube->addComponent<Croth_renderer>();
 
 		auto coll = cube->addComponent<Collider>();
-		coll->add_shape("../Data/FBX/Model_Shaclo_Winter_Edit.fbx", true, false);
+		coll->add_mesh_shape("../Data/FBX/Model_Shaclo_Winter_Edit.fbx", true, false);
 		//coll->add_shape("../Data/FBX/bunny.obj", true, false);
 		//coll->add_shape("./DefaultModel/sphere.fbx", true, false);
 		//coll->physics_data.is_hitable = false;

@@ -16,9 +16,6 @@
 #include "ALP_struct_contacted_data.h"
 
 namespace Adollib {
-	class Collider;
-
-
 
 	//表示用のphysics_data ユーザーが簡単に変更できるように
 	struct Physics_data {
@@ -123,7 +120,7 @@ namespace Adollib {
 		T* add_shape() { return ALPcollider_ptr->add_shape<T>(); };
 
 		// meshcolliderのアタッチ
-		void add_shape(const char* filepass, bool is_right_rtiangle = true, bool is_permit_edge_have_many_facet = false);
+		void add_mesh_shape(const char* filepass, bool is_right_rtiangle = true, bool is_permit_edge_have_many_facet = false);
 
 		// 慣性モーメントをユーザー定義で設定する
 		void set_tensor(const Matrix33& tensor) { ALPphysics_ptr->set_tensor(tensor); };
@@ -151,8 +148,7 @@ namespace Adollib {
 	};
 }
 
-#include "collider_box.h"
-#include "collider_plane.h"
-#include "collider_sphere.h"
-#include "collider_capsule.h"
-#include "collider_meshcoll.h"
+#include "shape_box.h"
+#include "shape_plane.h"
+#include "shape_sphere.h"
+#include "shape_capsule.h"

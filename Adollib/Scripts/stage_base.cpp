@@ -129,7 +129,7 @@ Collider* Stage_base::set_meshbox(const Vector3& pos, const Vector3& size, const
 
 	//Box* M = object->addComponent<Box>();
 	Collider* coll = object->addComponent<Collider>();
-	coll->add_shape("./DefaultModel/cone.fbx");
+	coll->add_mesh_shape("./DefaultModel/cone.fbx");
 
 	if (is_static) {
 		coll->tag = Collider_tags::FBX | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Static_Stage ;

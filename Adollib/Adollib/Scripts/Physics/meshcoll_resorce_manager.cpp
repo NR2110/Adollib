@@ -182,22 +182,34 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 			{
 				facet_num = index_num / 3;
 				Physics_function::Facet F;
+
+
 				for (u_int i = 0; i < facet_num; i++) {
+					const int indexed[3] = {
+						indices.at(i * 3 + 0),
+						indices.at(i * 3 + 1),
+						indices.at(i * 3 + 2)
+					};
 
 					if (Right_triangle) {
-						F.vertexID[0] = indices.at(i * 3 + 0);
-						F.vertexID[1] = indices.at(i * 3 + 1);
-						F.vertexID[2] = indices.at(i * 3 + 2);
-						F.normal = vector3_cross(vertices[F.vertexID[1]] - vertices[F.vertexID[0]], vertices[F.vertexID[2]] - vertices[F.vertexID[0]]);
+						F.vertexID[0] = indexed[0];
+						F.vertexID[1] = indexed[1];
+						F.vertexID[2] = indexed[2];
+						F.normal = vector3_cross(vertices[indexed[1]] - vertices[F.vertexID[0]], vertices[F.vertexID[2]] - vertices[F.vertexID[0]]);
 						F.normal = F.normal.unit_vect();
 					}
 					else {
-						F.vertexID[2] = indices.at(i * 3 + 0);
-						F.vertexID[1] = indices.at(i * 3 + 1);
-						F.vertexID[0] = indices.at(i * 3 + 2);
+						F.vertexID[2] = indexed[0];
+						F.vertexID[1] = indexed[1];
+						F.vertexID[0] = indexed[2];
 						F.normal = vector3_cross(vertices[F.vertexID[1]] - vertices[F.vertexID[0]], vertices[F.vertexID[2]] - vertices[F.vertexID[0]]);
 						F.normal = F.normal.unit_vect();
 					}
+
+					// vertexからfacetへアクセスできるように保存
+					vertex_involvements.at(indexed[0]).add_facet_involvment(facets.size());
+					vertex_involvements.at(indexed[1]).add_facet_involvment(facets.size());
+					vertex_involvements.at(indexed[2]).add_facet_involvment(facets.size());
 
 
 
@@ -216,17 +228,34 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 				for (u_int i = 0; i < facet_num; i++) {
 					Physics_function::Facet& facet = facets[i];
 
+					// 面の中で一番長いedgeを求める
+					u_int longer_edge_id = 0;
+					{
+						float max_length = 0;
+						for (int o = 0; o < 3; o++) {
+
+							const u_int vertId0 = ALmin(facet.vertexID[o % 3], facet.vertexID[(o + 1) % 3]);
+							const u_int vertId1 = ALmax(facet.vertexID[o % 3], facet.vertexID[(o + 1) % 3]);
+
+							if (max_length < vector3_distance(vertices[vertId0], vertices[vertId1])) {
+								max_length = vector3_distance(vertices[vertId0], vertices[vertId1]);
+								longer_edge_id = vertId0 + vertId1;
+							};
+
+						}
+					}
+
+					// edge情報を保存
 					for (int o = 0; o < 3; o++) {
-						u_int vertId0 = ALmin(facet.vertexID[o % 3], facet.vertexID[(o + 1) % 3]);
-						u_int vertId1 = ALmax(facet.vertexID[o % 3], facet.vertexID[(o + 1) % 3]);
+						const u_int vertId0 = ALmin(facet.vertexID[o % 3], facet.vertexID[(o + 1) % 3]);
+						const u_int vertId1 = ALmax(facet.vertexID[o % 3], facet.vertexID[(o + 1) % 3]);
 
-						/*					int intId0 = (int)vertId0;
-											int intId1 = (int)vertId1;*/
-
-						u_int b = vertId1 * vertId1 - vertId1;
+						const u_int b = vertId1 * vertId1 - vertId1;
 
 						////int tableId = (vertId1 * vertId1 - vertId1) * 0.5f + vertId0;
 						//float tableId_ = (intId1 * (intId1 - 1)) * 0.5f + intId0;
+
+						// vertId0, vertId1から作られるユニークな数字
 						int tableId = (int)(b + vertId0 * 2);
 
 						if (edgeID_Table.count(tableId) == 0) {
@@ -236,6 +265,13 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 							E.vertexID[0] = vertId0;
 							E.vertexID[1] = vertId1;
 							E.type = Physics_function::Edgetype::EdgeConvex; // 凸エッジで初期化
+
+							// vertexからedgeへアクセスできるように保存
+							bool is_longer = false;
+							if (longer_edge_id == vertId0 + vertId1)is_longer = true;
+							vertex_involvements.at(vertId0).add_edge_involvment(edges.size(), is_longer);
+							vertex_involvements.at(vertId1).add_edge_involvment(edges.size(), is_longer);
+
 							edges.emplace_back(E);
 
 							facet.edgeID[o] = edge_num;

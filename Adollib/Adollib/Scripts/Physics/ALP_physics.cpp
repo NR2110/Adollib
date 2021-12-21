@@ -40,7 +40,7 @@ void ALP_Physics::add_force(const Vector3& force, const bool& is_force_local) {
 
 void ALP_Physics::add_force(const Vector3& force, const Vector3& position, const bool& is_position_local, const bool& is_force_local) {
 
-	//std::lock_guard <std::mutex> lock(mtx);
+	std::lock_guard <std::mutex> lock(mtx);
 
 	//Vector3 local_position;
 	//Vector3 local_force;

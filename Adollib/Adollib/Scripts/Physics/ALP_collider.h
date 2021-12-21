@@ -23,6 +23,7 @@ namespace Adollib {
 
 		class ALP_Physics;
 		class Meshcoll_part;
+		class Croth_vertex;
 		class ALP_Joint;
 
 		namespace Contacts {

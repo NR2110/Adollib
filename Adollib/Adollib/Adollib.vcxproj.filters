@@ -137,6 +137,9 @@
     <Filter Include="00_Adollib\44_render\shader\hlsl\croth">
       <UniqueIdentifier>{13953fc7-b9b8-4815-bdff-e7b3121f17dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00_Adollib\22_physics\collider\shapes">
+      <UniqueIdentifier>{3aa56a7f-c681-43fc-8f44-e1ef26b272a1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Scripts\player.cpp">
@@ -260,9 +263,6 @@
       <Filter>ソース ファイル\scene_game\player</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Physics\collider.cpp">
-      <Filter>00_Adollib\22_physics\collider</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Physics\collider_shape.cpp">
       <Filter>00_Adollib\22_physics\collider</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Physics\ALP_resolve_contact_SIM.cpp">
@@ -402,6 +402,12 @@
     </ClCompile>
     <ClCompile Include="Scripts\Renderer\croth_renderer.cpp">
       <Filter>00_Adollib\44_render\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Physics\collider_shape.cpp">
+      <Filter>00_Adollib\22_physics\collider\shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Physics\collider_croth.cpp">
+      <Filter>00_Adollib\22_physics\collider</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -561,18 +567,6 @@
     <ClInclude Include="Scripts\Physics\collider.h">
       <Filter>00_Adollib\22_physics\collider</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Physics\collider_box.h">
-      <Filter>00_Adollib\22_physics\collider</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Physics\collider_meshcoll.h">
-      <Filter>00_Adollib\22_physics\collider</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Physics\collider_plane.h">
-      <Filter>00_Adollib\22_physics\collider</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Physics\collider_sphere.h">
-      <Filter>00_Adollib\22_physics\collider</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts\Physics\meshcoll_resorce_manager.h">
       <Filter>00_Adollib\22_physics\collider</Filter>
     </ClInclude>
@@ -606,9 +600,6 @@
     <ClInclude Include="Scripts\Physics\ALP_raycast.h">
       <Filter>00_Adollib\22_physics\base</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Physics\collider_capsule.h">
-      <Filter>00_Adollib\22_physics\collider</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts\Object\hierarchy.h">
       <Filter>00_Adollib\33_object</Filter>
     </ClInclude>
@@ -626,9 +617,6 @@
     </ClInclude>
     <ClInclude Include="..\Scripts\player_manager.h">
       <Filter>ソース ファイル\scene_game\player</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Physics\collider_shape.h">
-      <Filter>00_Adollib\22_physics\collider</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Physics\collider_types.h">
       <Filter>00_Adollib\22_physics\collider</Filter>
@@ -815,6 +803,30 @@
     </ClInclude>
     <ClInclude Include="Scripts\Renderer\croth_renderer.h">
       <Filter>00_Adollib\44_render\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\shape_box.h">
+      <Filter>00_Adollib\22_physics\collider\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\shape_capsule.h">
+      <Filter>00_Adollib\22_physics\collider\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\shape_croth.h">
+      <Filter>00_Adollib\22_physics\collider\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\shape_meshcoll.h">
+      <Filter>00_Adollib\22_physics\collider\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\shape_plane.h">
+      <Filter>00_Adollib\22_physics\collider\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\shape_sphere.h">
+      <Filter>00_Adollib\22_physics\collider\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\collider_shape.h">
+      <Filter>00_Adollib\22_physics\collider\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\collider_croth.h">
+      <Filter>00_Adollib\22_physics\collider</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -9,6 +9,9 @@
 #include "ALP_physics.h"
 #include "ALP_joint.h"
 
+#include "shape_meshcoll.h"
+#include "shape_croth.h"
+
 #include "../Main/Adollib.h"
 
 
@@ -122,7 +125,7 @@ void Collider::Update_hierarchy() {
 }
 
 //meshcolliderのアタッチ
-void Collider::add_shape(const char* filepass, bool is_right_rtiangle, bool is_permit_edge_have_many_facet) {
+void Collider::add_mesh_shape(const char* filepass, bool is_right_rtiangle, bool is_permit_edge_have_many_facet) {
 
 	//FBXのLoadを行う
 	std::vector<Physics_function::Meshcollider_data>* meshcoll_data = nullptr;

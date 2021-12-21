@@ -8,6 +8,10 @@
 #include "ALP_physics.h"
 #include "ALP_joint.h"
 #include "ALP__meshcoll_data.h"
+
+#include "shape_meshcoll.h"
+#include "shape_croth.h"
+
 #include "../Imgui/debug.h"
 using namespace Adollib;
 using namespace Physics_function;
