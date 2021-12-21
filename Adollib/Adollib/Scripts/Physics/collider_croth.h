@@ -68,6 +68,7 @@ namespace Adollib {
 		//::: unity‚Ìphysics•”•ª •ª‚¯‚é•K—v‚È‚ñ‚Ä‚È‚¢‚â‚ë ::::
 		Physics_data physics_data;
 
+
 		//::: static“¯m‚ÅÕ“Ë”»’è‚ğs‚í‚È‚¢ :::
 		bool is_static = false;
 
