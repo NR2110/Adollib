@@ -84,7 +84,7 @@ void Collider_Croth::load_file(const std::string& filename, bool is_right_rtiang
 	std::vector<Physics_function::Meshcollider_data>* meshcoll_data = nullptr;
 	Physics_function::Collider_ResourceManager::CreateMCFromFBX(filename.c_str(), &meshcoll_data, is_right_rtiangle, is_permit_edge_have_many_facet);
 
-	vertex_offset = std::make_shared<Vector3>();
+	vertex_offset = std::make_shared<std::vector<Vector3>>();
 
 	// ‚·‚×‚Ä‚Ì’¸“_î•ñ‚©‚çŒÂ•Ê‚ÉCollider‚ð¶¬
 	for (auto& data : *meshcoll_data) {
@@ -99,9 +99,9 @@ void Collider_Croth::load_file(const std::string& filename, bool is_right_rtiang
 
 			auto croth = collider->add_shape<Croth_vertex>();
 
-			croth->center = Vector3(0);
 			croth->mesh_data = &data;
 			croth->vertex_id = vertex_num;
+			croth->vertex_offset = vertex_offset;
 
 			vertex_offset->emplace_back(Vector3(0));
 

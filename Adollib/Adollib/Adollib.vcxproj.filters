@@ -409,6 +409,9 @@
     <ClCompile Include="Scripts\Physics\collider_croth.cpp">
       <Filter>00_Adollib\22_physics\collider</Filter>
     </ClCompile>
+    <ClCompile Include="Scripts\Physics\shape_croth.cpp">
+      <Filter>00_Adollib\22_physics\collider\shapes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Scripts\player.h">

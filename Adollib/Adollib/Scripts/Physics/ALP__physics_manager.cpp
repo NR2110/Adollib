@@ -196,15 +196,6 @@ bool Physics_manager::update(Scenelist Sce)
 			Work_meter::tag_stop(1);
 			Work_meter::stop("Resolve", 1);
 
-
-			{
-				for (auto joint : ALP_joints) {
-
-
-				}
-			}
-
-
 			{
 				std::lock_guard <std::mutex> lock(mtx);
 				// 計算中にgameobjectへtransformが適応されていた場合 ちゃんとtransformを更新してからintegrateを行う

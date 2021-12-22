@@ -160,9 +160,10 @@ Frustum_data Camera_component::calculate_frustum_data() {
 
 void Camera_component::clear() {
 
-	Systems::DeviceContext->ClearRenderTargetView(color_texture->GetRenderTargetView(), &clear_color[0]);
-	Systems::DeviceContext->ClearRenderTargetView(normal_texture->GetRenderTargetView(), &clear_color[0]);
-	Systems::DeviceContext->ClearRenderTargetView(depth_texture->GetRenderTargetView(), &clear_color[0]);
+	//‘S•”ã‘‚«‚·‚é‚©‚ç‚µ‚È‚­‚Ä‚æ‚¢
+	//Systems::DeviceContext->ClearRenderTargetView(color_texture->GetRenderTargetView(), &clear_color[0]);
+	//Systems::DeviceContext->ClearRenderTargetView(normal_texture->GetRenderTargetView(), &clear_color[0]);
+	//Systems::DeviceContext->ClearRenderTargetView(depth_texture->GetRenderTargetView(), &clear_color[0]);
 	Systems::DeviceContext->ClearDepthStencilView(Systems::GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 }
 

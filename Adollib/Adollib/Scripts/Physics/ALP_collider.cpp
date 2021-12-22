@@ -182,9 +182,18 @@ void ALP_Collider::adapt_to_gameobject_transform() const
 
 void ALP_Collider::copy_transform_gameobject() {
 	if (is_deleted)return;
+
 	transform_gameobject.position = gameobject->transform->position;
 	transform_gameobject.orientation = gameobject->transform->orientation;
 	transform_gameobject.scale = gameobject->transform->scale;
+
+
+	if (is_adapt_shape_for_copy_transform_gameobject) {
+		for (const auto& shape : shapes) {
+			shape->effect_for_transform(transform_gameobject.position, transform_gameobject.orientation, transform_gameobject.scale);
+		}
+	}
+
 }
 
 //:::::

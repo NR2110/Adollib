@@ -2,6 +2,8 @@
 #include "collider_shape.h"
 
 #include "../Imgui/imgui_all.h"
+#include <memory>
+#include <vector>
 
 namespace Adollib {
 
@@ -11,30 +13,26 @@ namespace Adollib {
 		// Croth頂点用クラス
 		class Croth_vertex : public Collider_shape {
 		public:
-			Physics_function::Meshcollider_data* mesh_data = nullptr;
-			int vertex_id = 0;
-			Vector3 center; //中心座標
-
-			Croth_vertex(Physics_function::ALP_Collider* l_ALPcollider_ptr)
-				:center(Vector3(0)){
+			Croth_vertex(Physics_function::ALP_Collider* l_ALPcollider_ptr) {
 				shape_tag = Physics_function::ALPCollider_shape_type::Sphere;
 				ALPcollider_ptr = l_ALPcollider_ptr;
 			};
 
+		public:
+			Physics_function::Meshcollider_data* mesh_data = nullptr;
+			int vertex_id = 0;
+			std::shared_ptr<std::vector<Vector3>> vertex_offset;
+
+		public:
+
 			void adapt_Colliderdata() override {
-				local_position = center;
+				local_position = Vector3(0);
 				local_orientation = quaternion_identity();
 				local_scale = Vector3(1);
-			};
+			}
 
 			void Update_hierarchy() override {
-				float ave = 1;
-				//position
-				{
-					float vec3[3] = { center.x,center.y,center.z };
-					ImGui::DragFloat3("center", vec3, ave * 0.001f, 0, 0, "%.2f");
-					center = Vector3(vec3[0], vec3[1], vec3[2]);
-				}
+
 			};
 
 
@@ -62,7 +60,7 @@ namespace Adollib {
 				return 1.3333333f * DirectX::XM_PI * local_scale.x * local_scale.x * local_scale.x;
 			}
 
-
+			void effect_for_transform(Vector3& GO_Wposiiton, Quaternion& GO_Worientation, Vector3& GO_Wscale) override;
 		};
 
 	}

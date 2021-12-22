@@ -39,9 +39,9 @@ namespace Adollib
 		//Gameobject_manager::createFromFBX("sponza", "../Data/FBX/Model_Shaclo_Winter_Edit.fbx");
 
 #if 1 ||  _DEBUG
-		//auto cube = Gameobject_manager::createFromFBX("Shaclo", "../Data/FBX/Model_Shaclo_Winter_Edit.fbx",true);
+		auto cube = Gameobject_manager::createFromFBX("Shaclo", "../Data/FBX/Model_Shaclo_Winter_Edit.fbx",true);
 		//auto cube = Gameobject_manager::createFromFBX("bunny", "../Data/FBX/bunny.obj");
-		auto cube = Gameobject_manager::createCube();
+		//auto cube = Gameobject_manager::createCube();
 		//auto cube = Gameobject_manager::createSphere();
 		//cube->addComponent<Croth_renderer>();
 

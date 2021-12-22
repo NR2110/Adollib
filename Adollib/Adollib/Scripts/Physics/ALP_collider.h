@@ -135,9 +135,11 @@ namespace Adollib {
 			//::: addedの配列からメインの配列にadaptされたらtrueにする (itrがaddedを指すのかmainの配列を刺すのかわからないため)
 			bool is_added = false;
 
-
 			//::: 衝突したcolliderの情報を保存しておくか :::
 			bool is_save_contacted_colls = false;
+
+			//::: gameobjectからtransformをコピーするとき、shapeが何かするか(ex.crothはtransform = go.transform + 頂点情報) :::
+			bool is_adapt_shape_for_copy_transform_gameobject = false;
 
 		public:
 			// added_dataをmainのdata配列に引っ越す

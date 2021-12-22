@@ -1,9 +1,16 @@
 ﻿  stage_01.cpp
 C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(15,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。
-  meshcoll_resorce_manager.cpp
+  systems.cpp
+  component_camera.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\component_camera.cpp(137,29): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\component_camera.cpp(138,29): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\component_camera.cpp(139,29): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\component_camera.cpp(140,29): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+  renderer_manager.cpp
   コード生成しています。
-  2 of 10191 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\vector.inl(339): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
+  13 of 10259 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    58 functions had inline decision re-evaluated but remain unchanged
+    70 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Release\Adollib.exe

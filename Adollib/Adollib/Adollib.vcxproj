@@ -365,6 +365,7 @@
     <ClCompile Include="Scripts\Physics\joint_base.cpp" />
     <ClCompile Include="Scripts\Physics\meshcoll_resorce_manager.cpp" />
     <ClCompile Include="Scripts\Physics\ray.cpp" />
+    <ClCompile Include="Scripts\Physics\shape_croth.cpp" />
     <ClCompile Include="Scripts\Physics\twistjoint.cpp" />
     <ClCompile Include="Scripts\Renderer\material.cpp" />
     <ClCompile Include="Scripts\Renderer\material_for_collider.cpp" />

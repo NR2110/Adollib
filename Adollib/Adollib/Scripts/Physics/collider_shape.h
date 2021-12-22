@@ -17,7 +17,7 @@ namespace Adollib {
 		Quaternion local_orientation;
 		Vector3 local_scale;
 
-	private:
+	protected:
 		Vector3	world_position_;
 		Quaternion	world_orientation_;
 		Vector3	world_scale_;
@@ -49,7 +49,7 @@ namespace Adollib {
 			tensor = local_orientation.get_rotate_matrix() * tensor * matrix_inverse(local_orientation.get_rotate_matrix());
 
 			// barycenterを回転中心として shapeのlocal座標の分を考慮 (平行軸の定理)
-			Vector3 dis =  local_position - barycenter;
+			Vector3 dis = local_position - barycenter;
 			tensor._11 += (dis.y * dis.y + dis.z * dis.z);
 			tensor._22 += (dis.z * dis.z + dis.x * dis.x);
 			tensor._33 += (dis.x * dis.x + dis.y * dis.y);
@@ -92,6 +92,8 @@ namespace Adollib {
 		// world情報の更新 動いていればtrueを変えす inertial_tensor更新の是非を確認するため
 		void update_world_trans(const Vector3& GO_Wposiiton, const Quaternion& GO_Worientation, const Vector3& GO_Wscale);
 
+		// gameobjectのtransformをALPcolliderにコピーする際にshapeが与える影響(基本的にはない)
+		virtual void effect_for_transform(Vector3& GO_Wposiiton, Quaternion& GO_Worientation, Vector3& GO_Wscale) {};
 
 	protected:
 		// 各shapeのユーザー用の情報(box:center,size)から計算用の情報(position,scale)に治す

@@ -11,28 +11,30 @@
 //#include "ALP_collider.h"
 #include "ALP_physics.h"
 
+#include "collider.h"
+
 #include "../Imgui/imgui_all.h"
 
 namespace Adollib {
 
-	//•\Ž¦—p‚Ìphysics_data ƒ†[ƒU[‚ªŠÈ’P‚É•ÏX‚Å‚«‚é‚æ‚¤‚É
-	struct Physics_data {
-		float inertial_mass = 0; //Ž¿—Ê
-		float drag = 0; //‹ó‹C’ïR
-		float anglar_drag = 0; //‹ó‹C’ïR
-		float dynamic_friction = 0; //“®–€ŽC
-		float static_friction = 0; //Ã–€ŽC
-		float restitution = 0;	 //”½”­ŒW”
+	////•\Ž¦—p‚Ìphysics_data ƒ†[ƒU[‚ªŠÈ’P‚É•ÏX‚Å‚«‚é‚æ‚¤‚É
+	//struct Physics_data {
+	//	float inertial_mass = 0; //Ž¿—Ê
+	//	float drag = 0; //‹ó‹C’ïR
+	//	float anglar_drag = 0; //‹ó‹C’ïR
+	//	float dynamic_friction = 0; //“®–€ŽC
+	//	float static_friction = 0; //Ã–€ŽC
+	//	float restitution = 0;	 //”½”­ŒW”
 
-		bool is_fallable = false; // —Ž‚¿‚È‚¢
-		bool is_kinematic = false;// ‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
-		bool is_kinmatic_anglar = false; // ‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å‰ñ“]‘¬“x‚ª•Ï‰»‚µ‚È‚¢
-		bool is_kinmatic_linear = false; // ‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å•Ài‘¬“x‚ª•Ï‰»‚µ‚È‚¢
-		bool is_moveable = false; // “®‚©‚È‚¢
-		bool is_hitable = false;  // Õ“Ë‚µ‚È‚¢
-		bool is_static = false;  // static“¯Žm‚Íoncoll_enter‚ªŽg‚¦‚È‚¢ ‚¯‚ÇŒy‚­‚È‚é
-	};
-	//:::::::::::::::::::::::::
+	//	bool is_fallable = false; // —Ž‚¿‚È‚¢
+	//	bool is_kinematic = false;// ‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
+	//	bool is_kinmatic_anglar = false; // ‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å‰ñ“]‘¬“x‚ª•Ï‰»‚µ‚È‚¢
+	//	bool is_kinmatic_linear = false; // ‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å•Ài‘¬“x‚ª•Ï‰»‚µ‚È‚¢
+	//	bool is_moveable = false; // “®‚©‚È‚¢
+	//	bool is_hitable = false;  // Õ“Ë‚µ‚È‚¢
+	//	bool is_static = false;  // static“¯Žm‚Íoncoll_enter‚ªŽg‚¦‚È‚¢ ‚¯‚ÇŒy‚­‚È‚é
+	//};
+	////:::::::::::::::::::::::::
 
 
 	namespace Physics_function {
@@ -113,10 +115,6 @@ namespace Adollib {
 		// ‘¬“x§ŒÀ‚ðs‚¤
 		void set_max_linear_velocity(const float& max_scalar) { for (auto ptr : colliders) ptr->set_max_linear_velocity(max_scalar); };
 		void set_max_angula_velocity(const float& max_scalar) { for (auto ptr : colliders) ptr->set_max_angula_velocity(max_scalar); };
-
-		// shape‚ÌƒAƒ^ƒbƒ`
-		template<typename T>
-		T* add_shape() { return ALPcollider_ptr->add_shape<T>(); };
 
 		// Šµ«ƒ‚[ƒƒ“ƒg‚ðƒ†[ƒU[’è‹`‚ÅÝ’è‚·‚é
 		void set_tensor(const Matrix33& tensor) { for (auto ptr : colliders) ptr->set_tensor(tensor); };

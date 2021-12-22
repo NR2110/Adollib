@@ -82,7 +82,7 @@ void Renderer_manager::render(const std::map<Scenelist, std::list<Camera_compone
 	Work_meter::tag_start("render");
 
 	// メインのRTVのclear
-	Systems::Clear();
+	//Systems::Clear(); //全部上書きするからしなくてよい
 
 	// Imguiがgpuの処理を全部待ちやがる & depthで上書きしちゃうので 前フレームのtextureを描画して Imguiの描画をここで行う
 	// camera->clearにgpu負荷があり、Imguiがその処理を待つので 下に置くと重くなる
