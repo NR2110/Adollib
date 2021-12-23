@@ -130,12 +130,6 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 
 				vertex = vector3_trans(vertex, mesh_globalTransform);
 
-
-				//// push_back
-				//vertices.at(index_of_control_point) = vertex;
-				//indices.at(subset.index_start + index_of_vertex) = index_of_control_point;
-				//vertex_count++;
-
 				// push_back
 				int vertex_size = vertices.size();
 				bool is_same_vertex = false;
@@ -191,18 +185,25 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 						indices.at(i * 3 + 2)
 					};
 
+					const Vector3 normal = vector3_cross(vertices[indexed[1]] - vertices[indexed[0]], vertices[indexed[2]] - vertices[indexed[0]]);
+
+					// –Ê‚Ì–ÊÏ‚ª‚Æ‚Ä‚à¬‚³‚¯‚ê‚Î–Ê‚É’Ç‰Á‚µ‚È‚¢
+					if (normal.norm() < FLT_EPSILON) {
+						continue;
+					}
+
 					if (Right_triangle) {
 						F.vertexID[0] = indexed[0];
 						F.vertexID[1] = indexed[1];
 						F.vertexID[2] = indexed[2];
-						F.normal = vector3_cross(vertices[indexed[1]] - vertices[F.vertexID[0]], vertices[F.vertexID[2]] - vertices[F.vertexID[0]]);
+						F.normal = +normal;
 						F.normal = F.normal.unit_vect();
 					}
 					else {
 						F.vertexID[2] = indexed[0];
 						F.vertexID[1] = indexed[1];
 						F.vertexID[0] = indexed[2];
-						F.normal = vector3_cross(vertices[F.vertexID[1]] - vertices[F.vertexID[0]], vertices[F.vertexID[2]] - vertices[F.vertexID[0]]);
+						F.normal = -normal;
 						F.normal = F.normal.unit_vect();
 					}
 
@@ -210,8 +211,6 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 					vertex_involvements.at(indexed[0]).add_facet_involvment(facets.size());
 					vertex_involvements.at(indexed[1]).add_facet_involvment(facets.size());
 					vertex_involvements.at(indexed[2]).add_facet_involvment(facets.size());
-
-
 
 					facets.emplace_back(F);
 				}

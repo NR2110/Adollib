@@ -41,12 +41,12 @@ namespace Adollib
 		all_pearent = Gameobject_manager::create("all_pearent");
 		stage_parts.emplace_back(all_pearent);
 
-		auto cube = Gameobject_manager::createFromFBX("Shaclo", "../Data/FBX/Model_Shaclo_Winter_Edit.fbx");
+		//auto cube = Gameobject_manager::createFromFBX("Shaclo", "../Data/FBX/Model_Shaclo_Winter_Edit.fbx");
 		//auto cube = Gameobject_manager::createFromFBX("bunny", "../Data/FBX/bunny.obj");
 		//auto cube = Gameobject_manager::createCube();
 		//auto cube = Gameobject_manager::createSphere();
-		cube->addComponent<Croth_renderer>();
-		stage_parts.emplace_back(cube);
+		//cube->addComponent<Croth_renderer>();
+		//stage_parts.emplace_back(cube);
 		//cube->addComponent<Mesh_renderer>();
 
 		//stage_manager = Gameobject_manager::find("Stage_manager")->findComponent<Stage_manager>();
@@ -55,7 +55,6 @@ namespace Adollib
 	// 毎フレーム呼ばれる更新処理
 	void Stage_demo_02::update() {
 
-		return;
 		if(stage_manager == nullptr)stage_manager = Gameobject_manager::find("Stage_manager")->findComponent<Stage_manager>();
 
 		if (stage_manager->now_stage != Stage_types::demo_2)return;
