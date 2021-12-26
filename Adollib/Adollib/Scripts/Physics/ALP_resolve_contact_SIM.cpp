@@ -260,8 +260,14 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 
 				constraint.rhs = -DirectX::XMVectorGetX(DirectX::XMVector3Dot(relativeVelocity, direction)); // velocity error
 
-				if (0.0f < DirectX::XMVectorGetX(distance) - joint->slop)
-					constraint.rhs += joint->bias * (DirectX::XMVectorGetX(distance) - joint->slop)* inv_duration; // position error
+				if (0.0f < DirectX::XMVectorGetX(distance) - joint->slop) {
+					if (DirectX::XMVectorGetX(DirectX::XMVector3Dot(DirectX::XMVectorSubtract(position[0], position[1]), DirectX::XMVectorSubtract(DirectX::XMLoadFloat3(&transform[0]->position) ,DirectX::XMLoadFloat3(&transform[1]->position)))) > 0) {
+						constraint.rhs += joint->stretch_bias * (DirectX::XMVectorGetX(distance) - joint->slop) * inv_duration; // position error
+					}
+					else {
+						constraint.rhs += joint->shrink_bias * (DirectX::XMVectorGetX(distance) - joint->slop) * inv_duration; // position error
+					}
+				}
 				constraint.rhs *= constraint.jacDiagInv;
 				constraint.lowerlimit = -FLT_MAX;
 				constraint.upperlimit = +FLT_MAX;

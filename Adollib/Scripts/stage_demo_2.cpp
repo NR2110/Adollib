@@ -12,6 +12,7 @@
 #include "../Adollib/Scripts/Physics/ray.h"
 #include "../Adollib/Scripts/Imgui/debug.h"
 #include "../Adollib/Scripts/Physics/joint.h"
+#include "../Adollib/Scripts/Physics/collider_croth.h"
 
 #include "../Adollib/Scripts/Renderer/mesh_renderer.h"
 #include "../Adollib/Scripts/Renderer/sprite_renderer.h"
@@ -21,6 +22,7 @@
 
 #include "stage_manager.h"
 #include "../Adollib/Scripts/Renderer/croth_renderer.h"
+
 
 namespace Adollib
 {
@@ -55,7 +57,7 @@ namespace Adollib
 	// 毎フレーム呼ばれる更新処理
 	void Stage_demo_02::update() {
 
-		if(stage_manager == nullptr)stage_manager = Gameobject_manager::find("Stage_manager")->findComponent<Stage_manager>();
+		if (stage_manager == nullptr)stage_manager = Gameobject_manager::find("Stage_manager")->findComponent<Stage_manager>();
 
 		if (stage_manager->now_stage != Stage_types::demo_2)return;
 
@@ -69,7 +71,7 @@ namespace Adollib
 			ImGui::Checkbox("delete", &del);
 			if (del) {
 				for (auto& GO : *all_pearent->children()) {
-					Gameobject_manager::deleteGameobject(GO,true);
+					Gameobject_manager::deleteGameobject(GO, true);
 				}
 			}
 
@@ -116,7 +118,7 @@ namespace Adollib
 					}
 				}
 				imgui_num++;
-		}
+			}
 
 			//SPHEREpyramid
 			{
@@ -136,15 +138,15 @@ namespace Adollib
 					all_pearent->add_child(pearent);
 					for (int i = 0; i < SPHERE_pyramid_count; i++) {
 						for (int o = 0; o < SPHERE_pyramid_count - i; o++) {
-								set_sphere(
-									Vector3(2.50001f * o - (SPHERE_pyramid_count - i) * 2.500001f / 2.0f + SPHERE_pyramid_pos[0],
-										5.0f + 2.50001f * i + SPHERE_pyramid_pos[1],
-										SPHERE_pyramid_pos[2]),
-									size,
-									Vector3(0, 1, 1),
-									pearent,
-									false
-								);
+							set_sphere(
+								Vector3(2.50001f * o - (SPHERE_pyramid_count - i) * 2.500001f / 2.0f + SPHERE_pyramid_pos[0],
+									5.0f + 2.50001f * i + SPHERE_pyramid_pos[1],
+									SPHERE_pyramid_pos[2]),
+								size,
+								Vector3(0, 1, 1),
+								pearent,
+								false
+							);
 						}
 
 					}
@@ -168,7 +170,7 @@ namespace Adollib
 						for (int o = 0; o < CAPSULE_pyramid_count - i; o++) {
 							set_capsule(
 								Vector3(2.50001f * o - (CAPSULE_pyramid_count - i) * 2.500001f / 2.0f + CAPSULE_pyramid_pos[0], 5.0f + 4.50001f * i + CAPSULE_pyramid_pos[1], CAPSULE_pyramid_pos[2]),
-								1, 1, Vector3(0, 1, 1), Vector3(0, 1, 1),all_pearent,false);
+								1, 1, Vector3(0, 1, 1), Vector3(0, 1, 1), all_pearent, false);
 						}
 
 					}
@@ -304,15 +306,15 @@ namespace Adollib
 					all_pearent->add_child(pearent);
 					for (int i = 0; i < TREE_pyramid_count; i++) {
 						for (int o = 0; o < TREE_pyramid_count - i; o++) {
-								set_tree(
-									Vector3(10.0f * o - (TREE_pyramid_count - i) * 10.0f / 2.0f + TREE_pyramid_pos[0],
-										TREE_pyramid_pos[1] + i * 13.0f,
-										TREE_pyramid_pos[2]),
-									Vector3(1),
-									Vector3(0),
-									1,1,
-									pearent
-								);
+							set_tree(
+								Vector3(10.0f * o - (TREE_pyramid_count - i) * 10.0f / 2.0f + TREE_pyramid_pos[0],
+									TREE_pyramid_pos[1] + i * 13.0f,
+									TREE_pyramid_pos[2]),
+								Vector3(1),
+								Vector3(0),
+								1, 1,
+								pearent
+							);
 						}
 
 					}
@@ -743,14 +745,102 @@ namespace Adollib
 
 
 
-					imgui_num++;
 				}
+				imgui_num++;
 
+			}
+
+			//croth sphere
+			{
+				static int TREE_pyramid_count = 3;
+				static float pos[3] = { 0 };
+				bool summon = false;
+				ImGui::Separator();
+				ImGui::Text("Croth_Sphere"); ImGui::NextColumn();
+				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
+				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), pos, 0.1f); ImGui::NextColumn(); ImGui::NextColumn();
+				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &TREE_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
+
+				if (summon == true) {
+					auto sphere = Gameobject_manager::createSphere();
+					sphere->transform->local_pos = Vector3(pos[0], pos[1], pos[2]);
+
+					auto coll = sphere->addComponent<Collider_Croth>();
+					coll->load_file("./DefaultModel/sphere.fbx", true, false);
+
+					auto renderer = sphere->addComponent<Croth_renderer>();
+					renderer->set_meshoffset(coll->get_vertex_offset());
+
+					all_pearent->add_child(sphere);
+				}
+				imgui_num++;
+			}
+
+			//croth box
+			{
+				static int TREE_pyramid_count = 3;
+				static float pos[3] = { 0 };
+				bool summon = false;
+				ImGui::Separator();
+				ImGui::Text("Croth_Vox"); ImGui::NextColumn();
+				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
+				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), pos, 0.1f); ImGui::NextColumn(); ImGui::NextColumn();
+				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &TREE_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
+
+				if (summon == true) {
+					auto sphere = Gameobject_manager::createCube();
+					sphere->transform->local_pos = Vector3(pos[0], pos[1], pos[2]);
+
+					auto coll = sphere->addComponent<Collider_Croth>();
+					coll->load_file("./DefaultModel/cube.fbx", true, false);
+
+					auto renderer = sphere->addComponent<Croth_renderer>();
+					renderer->set_meshoffset(coll->get_vertex_offset());
+
+					all_pearent->add_child(sphere);
+				}
+				imgui_num++;
+			}
+
+			//croth plane16
+			{
+				static int TREE_pyramid_count = 3;
+				static float pos[3] = { 0 };
+				bool summon = false;
+				ImGui::Separator();
+				ImGui::Text("Croth_plane32x"); ImGui::NextColumn();
+				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
+				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), pos, 0.1f); ImGui::NextColumn(); ImGui::NextColumn();
+				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &TREE_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
+
+				if (summon == true) {
+					auto go = Gameobject_manager::createFromFBX("plane", "./DefaultModel/plane_32x32vertex.fbx");
+					go->transform->local_pos = Vector3(pos[0], pos[1], pos[2]);
+					//go->transform->local_scale = Vector3(10, 10, 10);
+
+					auto coll = go->addComponent<Collider_Croth>();
+					coll->load_file("./DefaultModel/plane_32x32vertex.fbx", true, false);
+
+					Physics_data data;
+					data = coll->get_vertex_data(0, 259);
+					data.is_moveable = false;
+					coll->set_vertex_data(0, 259, data);
+					data = coll->get_vertex_data(0, 274);
+					data.is_moveable = false;
+					coll->set_vertex_data(0, 274, data);
+
+
+					auto renderer = go->addComponent<Croth_renderer>();
+					renderer->set_meshoffset(coll->get_vertex_offset());
+
+					all_pearent->add_child(go);
+				}
+				imgui_num++;
 			}
 
 			ImGui::Columns(1);
 			ImGui::End();
-	}
+		}
 	}
 
 	void Stage_demo_02::Update_hierarchy() {

@@ -601,7 +601,8 @@ namespace Adollib
 			}
 			{
 				auto hinge = Joint::add_Hingejoint(Lsholder_collider, Lelbow_collider, Vector3(-1, -(arm_size.y + 0.1f), 0) * scale, Vector3(+1, -(arm_size.y + 0.1f), 0) * scale, Vector3(-1, (arm_size.y + 0.1f), 0) * scale, Vector3(+1, (arm_size.y + 0.1f), 0) * scale, joint_bias);
-				hinge->bias = 0.5f;
+				hinge->shrink_bias = 0.5f;
+				hinge->stretch_bias = 0.5f;
 				hinge->limit = Vector2(230, 360);
 			}
 			{
@@ -613,7 +614,8 @@ namespace Adollib
 			}
 			{
 				auto hinge = Joint::add_Hingejoint(Rsholder_collider, Relbow_collider, Vector3(-1, -(arm_size.y + 0.1f), 0) * scale, Vector3(+1, -(arm_size.y + 0.1f), 0) * scale, Vector3(-1, (arm_size.y + 0.1f), 0) * scale, Vector3(+1, (arm_size.y + 0.1f), 0) * scale, joint_bias);
-				hinge->bias = 0.5f;
+				hinge->shrink_bias = 0.5f;
+				hinge->stretch_bias = 0.5f;
 				hinge->limit = Vector2(230, 360);
 			}
 			//çò

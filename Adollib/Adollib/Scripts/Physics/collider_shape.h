@@ -11,7 +11,6 @@ namespace Adollib {
 	}
 
 	class Collider_shape {
-
 	public:
 		Vector3 local_position;
 		Quaternion local_orientation;
@@ -89,11 +88,14 @@ namespace Adollib {
 
 	public:
 
-		// world情報の更新 動いていればtrueを変えす inertial_tensor更新の是非を確認するため
+		// world情報の更新
 		void update_world_trans(const Vector3& GO_Wposiiton, const Quaternion& GO_Worientation, const Vector3& GO_Wscale);
 
 		// gameobjectのtransformをALPcolliderにコピーする際にshapeが与える影響(基本的にはない)
-		virtual void effect_for_transform(Vector3& GO_Wposiiton, Quaternion& GO_Worientation, Vector3& GO_Wscale) {};
+		virtual void effect_for_copy_transform_to_collider(Vector3& GO_Wposiiton, Quaternion& GO_Worientation, Vector3& GO_Wscale) {};
+
+		// ALPcolliderのtransformをgameobjectにコピーする際にshapeが与える影響(基本的にはない)
+		virtual void effect_for_copy_transform_to_gameobject(const Vector3& position_amount_of_change, const Quaternion& orientation_amount_of_change) {};
 
 	protected:
 		// 各shapeのユーザー用の情報(box:center,size)から計算用の情報(position,scale)に治す
@@ -115,6 +117,8 @@ namespace Adollib {
 		virtual void update_dop14() = 0;
 
 
+	public:
+		virtual ~Collider_shape() {}; //派生クラスの持つshaerd_ptrのlefカウントを減らすため
 	};
 
 

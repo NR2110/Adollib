@@ -98,6 +98,9 @@ namespace Adollib {
 			void lock_mtx() { mtx.lock(); };
 			void unlock_mtx() { mtx.unlock(); };
 
+			// gameobject‚ğ•Ô‚· •ÏX•s‰Â ‰ºè‚Ég‚¤‚Ænullptr‚Å€‚Ê
+			const Gameobject* get_gameobject() const { return gameobject; };
+
 		public:
 			//[[nodiscard]] /
 

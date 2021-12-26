@@ -24,7 +24,8 @@ BallJoint* Joint::add_balljoint(
 
 	balljoint->anchor.posA = anchorA;
 	balljoint->anchor.posB = anchorB;
-	balljoint->bias = bias;
+	balljoint->shrink_bias = bias;
+	balljoint->stretch_bias = bias;
 
 	return balljoint;
 }
@@ -53,7 +54,8 @@ HingeJoint* Joint::add_Hingejoint(
 	hingejoint->anchor_g.posA = anchorA_g;
 	hingejoint->anchor_g.posB = anchorB_g;
 
-	hingejoint->bias = bias;
+	hingejoint->shrink_bias = bias;
+	hingejoint->stretch_bias = bias;
 	hingejoint->hinge_pow = hingepow;
 	return hingejoint;
 }
@@ -78,7 +80,8 @@ ConeJoint* Joint::add_Conejoint(
 	conetwist->limit_axis[0] = axisA;
 	conetwist->limit_axis[1] = axisB;
 
-	conetwist->bias = bias;
+	conetwist->shrink_bias = bias;
+	conetwist->stretch_bias = bias;
 
 	return conetwist;
 }
@@ -103,7 +106,8 @@ ConetwistJoint* Joint::add_Conetwistjoint(
 	conetwist->limit_axis[0] = axisA;
 	conetwist->limit_axis[1] = axisB;
 
-	conetwist->bias = bias;
+	conetwist->shrink_bias = bias;
+	conetwist->stretch_bias = bias;
 
 	return conetwist;
 }
@@ -125,7 +129,8 @@ TwistJoint* Joint::add_Twistjoint(
 	twistjoint->vec0 = axisA;
 	twistjoint->vec1 = axisB;
 
-	twistjoint->bias = bias;
+	twistjoint->shrink_bias = bias;
+	twistjoint->stretch_bias = bias;
 
 	return twistjoint;
 }

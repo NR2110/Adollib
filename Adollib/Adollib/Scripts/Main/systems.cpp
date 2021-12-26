@@ -295,105 +295,7 @@ bool Systems::CreateDepthStencil()
 bool Systems::CreateRasterizerState()
 {
 	D3D11_RASTERIZER_DESC rd;
-	//for (int state = 0; state < static_cast<int>(State_manager::RStypes::RS_SIZE) - 1; state++) {
-	//	switch (static_cast<State_manager::RStypes>(state)) {
-
-	//	case State_manager::RStypes::RS_CULL_NONE:
-	//		ZeroMemory(&rd, sizeof(rd));
-	//		rd.FillMode = D3D11_FILL_SOLID;
-	//		rd.CullMode = D3D11_CULL_NONE;
-	//		rd.FrontCounterClockwise = FALSE;
-	//		rd.DepthBias = 0;
-	//		rd.DepthBiasClamp = 0;
-	//		rd.SlopeScaledDepthBias = 0;
-	//		rd.DepthClipEnable = TRUE;
-	//		rd.ScissorEnable = FALSE;
-	//		rd.MultisampleEnable = FALSE;
-	//		rd.AntialiasedLineEnable = FALSE;
-
-	//		break;
-
-	//	case State_manager::RStypes::RS_CULL_FRONT:
-	//		ZeroMemory(&rd, sizeof(rd));
-	//		rd.FillMode = D3D11_FILL_SOLID;
-	//		rd.CullMode = D3D11_CULL_FRONT;
-	//		rd.FrontCounterClockwise = FALSE;
-	//		rd.DepthBias = 0;
-	//		rd.DepthBiasClamp = 0;
-	//		rd.SlopeScaledDepthBias = 0;
-	//		rd.DepthClipEnable = TRUE;
-	//		rd.ScissorEnable = FALSE;
-	//		rd.MultisampleEnable = FALSE;
-	//		rd.AntialiasedLineEnable = FALSE;
-
-	//		break;
-
-	//	case State_manager::RStypes::RS_CULL_BACK:
-	//		ZeroMemory(&rd, sizeof(rd));
-	//		rd.FillMode = D3D11_FILL_SOLID;
-	//		rd.CullMode = D3D11_CULL_BACK;
-	//		rd.FrontCounterClockwise = FALSE;
-	//		rd.DepthBias = 0;
-	//		rd.DepthBiasClamp = 0;
-	//		rd.SlopeScaledDepthBias = 0;
-	//		rd.DepthClipEnable = TRUE;
-	//		rd.ScissorEnable = FALSE;
-	//		rd.MultisampleEnable = FALSE;
-	//		rd.AntialiasedLineEnable = FALSE;
-
-	//		break;
-
-	//	case State_manager::RStypes::RS_WIRE_NONE:
-	//		ZeroMemory(&rd, sizeof(rd));
-	//		rd.FillMode = D3D11_FILL_WIREFRAME;
-	//		rd.CullMode = D3D11_CULL_NONE;
-	//		rd.FrontCounterClockwise = FALSE;
-	//		rd.DepthBias = 0;
-	//		rd.DepthBiasClamp = 0;
-	//		rd.SlopeScaledDepthBias = 0;
-	//		rd.DepthClipEnable = TRUE;
-	//		rd.ScissorEnable = FALSE;
-	//		rd.MultisampleEnable = FALSE;
-	//		rd.AntialiasedLineEnable = FALSE;
-	//		break;
-
-	//	case State_manager::RStypes::RS_WIRE_FRONT:
-	//		ZeroMemory(&rd, sizeof(rd));
-	//		rd.FillMode = D3D11_FILL_WIREFRAME;
-	//		rd.CullMode = D3D11_CULL_FRONT;
-	//		rd.FrontCounterClockwise = FALSE;
-	//		rd.DepthBias = 0;
-	//		rd.DepthBiasClamp = 0;
-	//		rd.SlopeScaledDepthBias = 0;
-	//		rd.DepthClipEnable = TRUE;
-	//		rd.ScissorEnable = FALSE;
-	//		rd.MultisampleEnable = FALSE;
-	//		rd.AntialiasedLineEnable = FALSE;
-	//		break;
-
-	//	case State_manager::RStypes::RS_WIRE_BACK:
-	//		ZeroMemory(&rd, sizeof(rd));
-	//		rd.FillMode = D3D11_FILL_WIREFRAME;
-	//		rd.CullMode = D3D11_CULL_BACK;
-	//		rd.FrontCounterClockwise = FALSE;
-	//		rd.DepthBias = 0;
-	//		rd.DepthBiasClamp = 0;
-	//		rd.SlopeScaledDepthBias = 0;
-	//		rd.DepthClipEnable = TRUE;
-	//		rd.ScissorEnable = FALSE;
-	//		rd.MultisampleEnable = FALSE;
-	//		rd.AntialiasedLineEnable = FALSE;
-	//		break;
-	//	}
-	//	HRESULT hr = Device->CreateRasterizerState(&rd, RasterizerState[state].GetAddressOf());
-	//	//assert(FAILED(hr));
-
-	//	if (FAILED(hr))
-	//	{
-	//		return false;
-	//	}
-	//}
-	for (int state = 0; state < static_cast<int>(State_manager::RStypes::RS_SIZE) - 1; state++) {
+	for (int state = 0; state < static_cast<int>(State_manager::RStypes::RS_SIZE); state++) {
 		switch (static_cast<State_manager::RStypes>(state)) {
 		case State_manager::RStypes::RS_CULL_BACK:
 			ZeroMemory(&rd, sizeof(rd));
@@ -471,7 +373,7 @@ bool Systems::CreateBlendState()
 {
 	D3D11_BLEND_DESC bd;
 
-	for (int state = 0; state < static_cast<int>(State_manager::BStypes::BS_SIZE) - 1; state++) {
+	for (int state = 0; state < static_cast<int>(State_manager::BStypes::BS_SIZE); state++) {
 		switch (static_cast<State_manager::BStypes>(state)) {
 		case State_manager::BStypes::BS_NONE:
 			ZeroMemory(&bd, sizeof(bd));

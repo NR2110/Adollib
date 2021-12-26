@@ -128,7 +128,7 @@ bool Collider_ResourceManager::CreateMCFromFBX(const char* fbxname, std::vector<
 				vertex.y = static_cast<float>(array_of_control_points[index_of_control_point][1]);
 				vertex.z = static_cast<float>(array_of_control_points[index_of_control_point][2]);
 
-				vertex = vector3_trans(vertex, mesh_globalTransform);
+				//vertex = vector3_trans(vertex, mesh_globalTransform);
 
 				// push_back
 				int vertex_size = vertices.size();

@@ -85,36 +85,6 @@ void Croth_renderer::init() {
 
 	}
 
-	// instanceバッファ生成
-	if (0)
-	{
-		constexpr int maxElements = 300000;
-		HRESULT hr = S_OK;
-		std::shared_ptr<Instance> instances(new Instance[maxElements]);
-		{
-			D3D11_BUFFER_DESC bd = {};
-			bd.ByteWidth = sizeof(Instance) * maxElements;	// インスタンスバッファのサイズ
-			// GPU->読み取りのみ　CPU->書き込みのみ
-			bd.Usage = D3D11_USAGE_DYNAMIC;				// バッファの読み書き方法
-			bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;	// バッファのパイプラインへのバインド方式
-			bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;	// リソースに許可されるCPUアクセスの指定
-			bd.MiscFlags = 0;
-			bd.StructureByteStride = 0;
-
-			D3D11_SUBRESOURCE_DATA initData = {};
-			initData.pSysMem = instances.get();	// 頂点のアドレス
-			initData.SysMemPitch = 0;		//Not use for vertex buffers.mm
-			initData.SysMemSlicePitch = 0;	//Not use for vertex buffers.
-			hr = Systems::Device->CreateBuffer(&bd, &initData, instanceBuffer.ReleaseAndGetAddressOf());
-			if (FAILED(hr))
-			{
-				assert(0 && "failed create instance buffer dynamic(render_manager)");
-				return;
-			}
-		}
-	}
-
-
 	// computeshaderのload
 	{
 		compute_shader = std::make_shared<ComputeShader>();
@@ -141,6 +111,8 @@ void Croth_renderer::init() {
 
 			material->Load_VS("./DefaultShader/croth_shader_vs.cso");
 			material->Load_PS("./DefaultShader/croth_shader_ps.cso");
+
+			material->RS_state = State_manager::RStypes::RS_CULL_NONE;
 		}
 	}
 
@@ -272,154 +244,29 @@ void Croth_renderer::render(const Frustum_data& frustum_data) {
 
 }
 
-
-
-void update_meshoffset(std::mutex* mtx, VertexOffset* out_data, std::vector<VertexOffset>* in_data, int index_Start, int index_end, volatile int* end_thread_count) {
-	for (int i = index_Start; i < index_end; ++i) {
-		out_data[i] = in_data->at(i);
-	}
-
-	std::lock_guard<std::mutex> lock(*mtx);
-	++(*end_thread_count);
-};
-
 void Croth_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& instance_buffer_, int bufferStart, int bufferCount) {
 	if (material == nullptr) return;
 	if (bufferCount == 0) return;
 
-	/*
-	//::: update_instancing ::::::::
+	// meshのoffsetを雑に計算
+	//if(0)
 	//{
 	//	static float debug_timer_count = 0;
 	//	debug_timer_count += time->deltaTime();
 
-	//	instance_count = 0;
-	//	Instance_polygon* instances = nullptr;
-
-	//	// instance_bufferをMapする
-	//	HRESULT hr = S_OK;
-	//	const D3D11_MAP map = D3D11_MAP_WRITE_DISCARD;
-	//	D3D11_MAPPED_SUBRESOURCE mappedBuffer = {};
-	//	hr = Systems::DeviceContext->Map(instanceBuffer.Get(), 0, map, 0, &mappedBuffer);
-
-	//	if (FAILED(hr))
-	//	{
-	//		assert(0 && "failed Map InstanceBuffer dynamic(RenderManager)");
-	//		return;
-	//	}
-	//	instances = static_cast<Instance_polygon*>(mappedBuffer.pData);
-
-	//	// meshから
-	//	for (Mesh::mesh& mesh : (*meshes))
-	//	{
-	//		int index_count = 0;
-	//		for (const auto& index : mesh.indexces) {
-
-	//			if (index_count == 3) {
-	//				index_count = 0;
-
-	//				++instance_count;
-	//			}
-
-	//			auto& instance = instances[instance_count];
-
-	//			instance.position[index_count] = Vector3(mesh.vertices[index].position)
+	//	for (auto& mesh : (*mesh_offset)) {
+	//		int index = 0;
+	//		for (auto& offset : mesh) {
+	//			offset.first = Vector3(0)
 	//				+ Vector3(0, 1, 0) * 0.5f * cosf(debug_timer_count + index)
 	//				+ Vector3(0, 0, 1) * 0.5f * sinf(debug_timer_count + index);
+	//			++index;
 
-	//			instance.normal[index_count] = Vector3(mesh.vertices[index].normal);
-	//			instance.color = color;
-	//			instance.texcoordTransform = Vector2(0, 0);
-
-	//			++index_count;
-	//		}
-	//		++instance_count;
-
-	//		// ポリゴンの途中で終わっていたらエラー
-	//		if (index_count != 3) {
-	//			assert(0 && "bug");
+	//			offset.first += Vector3(1, 0, 0);
 	//		}
 	//	}
-
-	//	// instance_bufferをUnmapする
-	//	Systems::DeviceContext->Unmap(instanceBuffer.Get(), 0);
-
 	//}
-	*/
 
-	// meshのoffsetを雑に計算
-	//if(0)
-	{
-		static float debug_timer_count = 0;
-		debug_timer_count += time->deltaTime();
-
-		for (auto& mesh : (*mesh_offset)) {
-			int index = 0;
-			for (auto& offset : mesh) {
-				offset.position = Vector3(0)
-					+ Vector3(0, 1, 0) * 0.5f * cosf(debug_timer_count + index)
-					+ Vector3(0, 0, 1) * 0.5f * sinf(debug_timer_count + index);
-				++index;
-			}
-		}
-	}
-
-#ifdef use_thread_crothrenderer
-	// offset情報の更新
-	{
-		int mesh_count = 0;
-
-		//int thread_count = 0;
-		//volatile int end_thread_count = 0;
-		std::mutex mtx;
-
-		int thread_vertex_size = 100000;
-		int thread_count = 0;
-		volatile int end_thread_count = 0;
-
-		Work_meter::start("make_thread");
-		for (auto& buffer : computeBuf_vertexoffset) {
-
-
-			auto data = map_buffer<VertexOffset>(buffer);
-
-			int vertex_size = meshes->at(mesh_count).vertices.size();
-			int vertex_start = 0;
-			int threads_size = vertex_size / thread_vertex_size + 1;
-
-			for (int i = 0; i < threads_size; ++i) {
-
-				int vertex_start = i * thread_vertex_size;
-				int vertex_end = (i + 1) * thread_vertex_size;
-				if (vertex_end > vertex_size)vertex_end = vertex_size;
-
-				auto t = std::thread(
-					update_meshoffset,
-					&mtx,
-					data,
-					&mesh_offset->at(mesh_count),
-					vertex_start,
-					vertex_end,
-					&end_thread_count
-				);
-				t.detach();
-
-				++thread_count;
-			}
-
-			unmap_buffer(buffer);
-
-			++mesh_count;
-		}
-		Work_meter::stop("make_thread");
-
-		Work_meter::start("thread_count_check");
-		while (thread_count != end_thread_count) {}
-		Work_meter::stop("thread_count_check");
-
-
-	}
-#else
 	{
 		int mesh_count = 0;
 		for (auto& buffer : computeBuf_vertexoffset) {
@@ -429,12 +276,12 @@ void Croth_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& ins
 			int vertex_size = meshes->at(mesh_count).vertices.size();
 			int vertex_start = 0;
 			for (int i = 0; i < vertex_size; ++i) {
-				data[i] = mesh_offset->at(mesh_count)[i];
+				data[i].position = mesh_offset->at(mesh_count)[i].first;
 			}
 			++mesh_count;
+			unmap_buffer(buffer);
 		}
 	}
-#endif
 
 	// color情報の更新 (instance_countをwに入れている)
 	{
@@ -599,19 +446,19 @@ void Croth_renderer::set_meshes(std::vector<Mesh::mesh>* l_meshes) {
 			}
 
 			// offset用配列の準備
-			mesh_offset = std::make_shared<std::vector<std::vector<VertexOffset>>>();
+			mesh_offset = std::make_shared<std::vector<std::vector<std::pair<Vector3, Vector3>>>>();
 			//mesh_offset->resize(meshes->size());
-			VertexOffset zero_format;
-			zero_format.position = Vector3(0);
-			zero_format.normal = Vector3(0);
+			std::pair<Vector3, Vector3> zero_format;
+			zero_format.first = Vector3(0);
+			zero_format.second = Vector3(0);
 
 			for (auto& meshess : (*meshes)) {
-				std::vector<VertexOffset> initial_mesh;
+				std::vector<std::pair<Vector3, Vector3>> initial_mesh;
 
 				initial_mesh.resize(meshess.vertices.size());
 				for (auto& mesh : initial_mesh) {
-					mesh.position = Vector3(0);
-					mesh.normal = Vector3(0);
+					mesh.first = Vector3(0);
+					mesh.second = Vector3(0);
 				}
 
 				mesh_offset->emplace_back(initial_mesh);

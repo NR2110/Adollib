@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../Math/math.h"
-#include "collider.h"
 
 #include "balljoint.h"
 #include "hingejoint.h"
@@ -10,6 +9,7 @@
 #include "twistjoint.h"
 
 namespace Adollib {
+	class Collider;
 
 	class Joint {
 	public:

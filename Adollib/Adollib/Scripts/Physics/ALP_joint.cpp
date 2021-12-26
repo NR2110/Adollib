@@ -7,7 +7,8 @@ using namespace Adollib;
 using namespace Physics_function;
 
 void ALP_Joint::reset() {
-	bias = 1;
+	shrink_bias = 1;
+	stretch_bias = 1;
 	constraint[0].accuminpulse = 0;
 	constraint[1].accuminpulse = 0;
 	constraint[2].accuminpulse = 0;
@@ -18,7 +19,8 @@ void ALP_Joint::adapt_Jointdata() {
 
 	anchor = userjoint->get_anchors();
 	anchor_count = userjoint->get_anchors_count();
-	bias = userjoint->bias;
+	shrink_bias = userjoint->shrink_bias;
+	stretch_bias = userjoint->stretch_bias;
 	slop = userjoint->slop;
 	limit_bias = userjoint->limit_bias;
 }

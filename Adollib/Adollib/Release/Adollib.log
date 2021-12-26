@@ -1,8 +1,13 @@
-﻿  meshcoll_resorce_manager.cpp
+﻿  collider_croth.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_croth.h(45,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_shape.h(9): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\shape_croth.h(11,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(67): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_croth.cpp(314,34): warning C4244: '引数': 'unsigned int' から 'float' への変換です。データが失われる可能性があります。
   コード生成しています。
-  1 of 9904 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  1 of 10469 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    63 functions had inline decision re-evaluated but remain unchanged
+    56 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
 area_goal.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
 area_respown_set.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
@@ -42,7 +47,7 @@ loop.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\re
 main.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
 resource_manager.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
 sprite.obj : warning LNK4099: PDB 'vc142.pdb' が 'sprite.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Release\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
-systems.obj : warning LNK4099: PDB 'vc142.pdb' が 'systems.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Release\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+systems.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
 closest_func.obj : warning LNK4099: PDB 'vc142.pdb' が 'closest_func.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Release\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 complex.obj : warning LNK4099: PDB 'vc142.pdb' が 'complex.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Release\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 crossing_func.obj : warning LNK4099: PDB 'vc142.pdb' が 'crossing_func.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Release\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。

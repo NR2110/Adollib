@@ -174,10 +174,22 @@ void ALP_Collider::adapt_to_gameobject_transform() const
 		parent_orientate_inv = parent_orientate_inv.inverse();
 	}
 
-	gameobject->transform->local_pos += vector3_quatrotate(transform.position - transform_start.position, parent_orientate_inv);
+	const Vector3& position_amount_of_change = vector3_quatrotate(transform.position - transform_start.position, parent_orientate_inv);
+	const Quaternion& buffer = (transform_start.orientation.inverse() * transform.orientation).unit_vect();
+	const Quaternion& orientation_amount_of_change = quaternion_axis_radian(vector3_quatrotate(buffer.axis(), parent_orientate_inv), buffer.radian());
 
-	const Quaternion buffer = (transform_start.orientation.inverse() * transform.orientation).unit_vect();
-	gameobject->transform->local_orient *= quaternion_axis_radian(vector3_quatrotate(buffer.axis(), parent_orientate_inv), buffer.radian());
+	if (is_adapt_shape_for_copy_transform_gameobject) {
+
+		for (const auto& shape : shapes) {
+			shape->effect_for_copy_transform_to_gameobject(
+				position_amount_of_change, orientation_amount_of_change
+			);
+		}
+		return;
+	}
+
+	gameobject->transform->local_pos += position_amount_of_change;
+	gameobject->transform->local_orient *= orientation_amount_of_change;
 }
 
 void ALP_Collider::copy_transform_gameobject() {
@@ -187,10 +199,10 @@ void ALP_Collider::copy_transform_gameobject() {
 	transform_gameobject.orientation = gameobject->transform->orientation;
 	transform_gameobject.scale = gameobject->transform->scale;
 
-
+	// ‚à‚µshape‚ª•Ï‚È‚±‚Æ‚·‚é‚È‚ç (ex. croth.collider.poisition = GO‚ÌÀ•W + vertex‚ÌÀ•W)
 	if (is_adapt_shape_for_copy_transform_gameobject) {
 		for (const auto& shape : shapes) {
-			shape->effect_for_transform(transform_gameobject.position, transform_gameobject.orientation, transform_gameobject.scale);
+			shape->effect_for_copy_transform_to_collider(transform_gameobject.position, transform_gameobject.orientation, transform_gameobject.scale);
 		}
 	}
 
@@ -257,11 +269,13 @@ void ALP_Collider::destroy() {
 	//std::lock_guard <std::mutex> lock(mtx);
 
 	//shape‚Ì‰ğ•ú
-	for (const auto& shape : shapes) {
+	for (auto& shape : shapes) {
 		delete shape;
+		shape = nullptr;
 	}
-	for (const auto& shape : added_buffer_shapes) {
+	for (auto& shape : added_buffer_shapes) {
 		delete shape;
+		shape = nullptr;
 	}
 
 	//joint‚Ìíœ

@@ -77,7 +77,7 @@ void Collider_renderer::render_joint(const Physics_function::ALP_Joint* joint) {
 
 	for (int i = 0; i < joint->anchor_count; i++) {
 		Vector4 color = Vector4(1, 1, 1, 1)  * 0.8f;
-		if (joint->bias != 0)color = Vector4(-1, -1, -1, -1);
+		if (joint->shrink_bias != 0 || joint->stretch_bias != 0)color = Vector4(-1, -1, -1, -1);
 
 		const world_trans* transforms[2] = {
 			&joint->ALPcollider[0]->transform,

@@ -421,6 +421,13 @@ namespace Adollib
 			// ƒ}ƒeƒŠƒAƒ‹‚ÌŽæ“¾
 			const int number_of_materials = fbxMesh->GetNode()->GetMaterialCount();
 			mesh.subsets.resize(number_of_materials);
+			// material‚ª–³‚©‚Á‚½‚çsubset‚Ìsize‚ª0‚É‚È‚Á‚Ä‚¢‚é ‚»‚ê‚¾‚ÆŽ€‚Ê‚Ì‚ÅŽæ‚è‚ ‚¦‚¸1‚Éresize
+			if (number_of_materials == 0) {
+				mesh.subsets.resize(1);
+				mesh.subsets[0].indexStart = 0;
+				mesh.subsets[0].indexCount = 0;
+			}
+
 			if (number_of_materials > 0)
 			{
 				// Count the faces of each material
@@ -458,7 +465,7 @@ namespace Adollib
 				if (property.IsValid())
 				{
 					const int number_of_textures = property.GetSrcObjectCount<FbxFileTexture>();
-					if (number_of_textures)
+					if (0 && number_of_textures)
 					{
 						const FbxFileTexture* file_texture = property.GetSrcObject<FbxFileTexture>();
 						if (file_texture)
@@ -514,6 +521,7 @@ namespace Adollib
 			const FbxVector4* array_of_control_points = fbxMesh->GetControlPoints();
 			const int number_of_polygons = fbxMesh->GetPolygonCount();
 			indices.resize(number_of_polygons * 3);
+
 			for (int index_of_polygon = 0; index_of_polygon < number_of_polygons; index_of_polygon++)
 			{
 				// The material for current face.

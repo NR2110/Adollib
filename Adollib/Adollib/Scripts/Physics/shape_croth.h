@@ -13,22 +13,20 @@ namespace Adollib {
 		// Croth頂点用クラス
 		class Croth_vertex : public Collider_shape {
 		public:
-			Croth_vertex(Physics_function::ALP_Collider* l_ALPcollider_ptr) {
-				shape_tag = Physics_function::ALPCollider_shape_type::Sphere;
-				ALPcollider_ptr = l_ALPcollider_ptr;
-			};
+			Croth_vertex(Physics_function::ALP_Collider* l_ALPcollider_ptr);
 
 		public:
 			Physics_function::Meshcollider_data* mesh_data = nullptr;
 			int vertex_id = 0;
-			std::shared_ptr<std::vector<Vector3>> vertex_offset;
+			int mesh_id = 0;
+			std::shared_ptr<std::vector<std::vector<std::pair<Vector3, Vector3>>>> vertex_offset;
 
 		public:
 
 			void adapt_Colliderdata() override {
 				local_position = Vector3(0);
 				local_orientation = quaternion_identity();
-				local_scale = Vector3(1);
+				local_scale = Vector3(1) * 0.01f;
 			}
 
 			void Update_hierarchy() override {
@@ -60,7 +58,8 @@ namespace Adollib {
 				return 1.3333333f * DirectX::XM_PI * local_scale.x * local_scale.x * local_scale.x;
 			}
 
-			void effect_for_transform(Vector3& GO_Wposiiton, Quaternion& GO_Worientation, Vector3& GO_Wscale) override;
+			void effect_for_copy_transform_to_collider(Vector3& GO_Wposiiton, Quaternion& GO_Worientation, Vector3& GO_Wscale) override;
+			void effect_for_copy_transform_to_gameobject(const Vector3& position_amount_of_change, const Quaternion& orientation_amount_of_change) override;
 		};
 
 	}

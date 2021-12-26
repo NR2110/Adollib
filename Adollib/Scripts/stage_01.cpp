@@ -7,11 +7,12 @@
 
 #include "../Adollib/Scripts/Math/closest_func.h"
 #include "../Adollib/Scripts/Imgui/imgui_all.h"
-#include "../Adollib/Scripts/Physics/ALP__physics_manager.h"
 
-#include "../Adollib/Scripts/Physics/ray.h"
 #include "../Adollib/Scripts/Imgui/debug.h"
+#include "../Adollib/Scripts/Physics/ray.h"
 #include "../Adollib/Scripts/Physics/joint.h"
+#include "../Adollib/Scripts/Physics/collider_croth.h"
+#include "../Adollib/Scripts/Physics/ALP__physics_manager.h"
 
 #include "../Adollib/Scripts/Renderer/mesh_renderer.h"
 #include "../Adollib/Scripts/Renderer/material_manager.h"
@@ -39,18 +40,25 @@ namespace Adollib
 		//Gameobject_manager::createFromFBX("sponza", "../Data/FBX/Model_Shaclo_Winter_Edit.fbx");
 
 #if 1 ||  _DEBUG
-		auto cube = Gameobject_manager::createFromFBX("Shaclo", "../Data/FBX/Model_Shaclo_Winter_Edit.fbx",true);
-		//auto cube = Gameobject_manager::createFromFBX("bunny", "../Data/FBX/bunny.obj");
+		////auto cube = Gameobject_manager::createFromFBX("Shaclo", "../Data/FBX/Model_Shaclo_Winter_Edit.fbx",true);
+		////auto cube = Gameobject_manager::createFromFBX("bunny", "../Data/FBX/bunny.obj");
+		////auto cube = Gameobject_manager::createFromFBX("plane", "./DefaultModel/plane_64x64vertex.fbx");
 		//auto cube = Gameobject_manager::createCube();
-		//auto cube = Gameobject_manager::createSphere();
-		//cube->addComponent<Croth_renderer>();
+		//////auto cube = Gameobject_manager::createSphere();
 
-		auto coll = cube->addComponent<Collider>();
-		coll->add_mesh_shape("../Data/FBX/Model_Shaclo_Winter_Edit.fbx", true, false);
-		//coll->add_shape("../Data/FBX/bunny.obj", true, false);
-		//coll->add_shape("./DefaultModel/sphere.fbx", true, false);
-		//coll->physics_data.is_hitable = false;
-		coll->physics_data.is_moveable = false;
+		//auto coll = cube->addComponent<Collider>();
+		//coll->add_mesh_shape("../Data/FBX/stage_col.fbx", true, false);
+
+		////auto coll = cube->addComponent<Collider_Croth>();
+		////coll->load_file("./DefaultModel/plane_64x64vertex.fbx", true, false);
+
+		////auto renderer = cube->addComponent<Croth_renderer>();
+		////renderer->set_meshoffset(coll->get_vertex_offset());
+
+		////coll->add_shape("../Data/FBX/bunny.obj", true, false);
+		////coll->add_shape("./DefaultModel/sphere.fbx", true, false);
+		////coll->physics_data.is_hitable = false;
+		//coll->physics_data.is_moveable = false;
 
 #else
 

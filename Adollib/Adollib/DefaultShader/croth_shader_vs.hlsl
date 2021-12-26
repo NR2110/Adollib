@@ -21,7 +21,8 @@ PSInput main(VSInput input, VSInput_INSTANCE instance_input)
         float3(instance_input.transform._44, instance_input.texcoord_transform.xy)
     };
 
-
+    float3 debug_normal = cross(float3(position[0] - position[1]), float3(position[0] - position[2]));
+    debug_normal = normalize(debug_normal);
 
     float4 P = float4(position[input.vertexID], 1.0);
     //float4 P = float4(input.vertexID, input.vertexID, input.vertexID, 1);
@@ -36,7 +37,8 @@ PSInput main(VSInput input, VSInput_INSTANCE instance_input)
     P = mul(P, matWVP);
 
 	// ワールド法線算出
-    float3 N = mul(normal[input.vertexID], (float3x3) W);
+    //float3 N = mul(normal[input.vertexID], (float3x3) W);
+    float3 N = mul(debug_normal, (float3x3) W);
     N = normalize(N); //正規化
 
    // N = float3(1, 0, 0);

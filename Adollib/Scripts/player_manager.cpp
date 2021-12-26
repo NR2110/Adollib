@@ -338,6 +338,35 @@ namespace Adollib
 			Lhand_collider->physics_data.dynamic_friction = 0;
 			Rhand_collider->physics_data.dynamic_friction = 0;
 
+
+			Head_collider    ->physics_data.is_hitable = false;
+			Lsholder_collider->physics_data.is_hitable = false;
+			Rsholder_collider->physics_data.is_hitable = false;
+			Lelbow_collider  ->physics_data.is_hitable = false;
+			Relbow_collider  ->physics_data.is_hitable = false;
+			Lhand_collider   ->physics_data.is_hitable = false;
+			Rhand_collider   ->physics_data.is_hitable = false;
+			Body_collider    ->physics_data.is_hitable = false;
+			Waist_collider   ->physics_data.is_hitable = false;
+			Lleg_collider    ->physics_data.is_hitable = false;
+			Rleg_collider    ->physics_data.is_hitable = false;
+			Lfoot_collider   ->physics_data.is_hitable = false;
+			Rfoot_collider   ->physics_data.is_hitable = false;
+
+			Head_collider    ->physics_data.is_moveable = false;
+			Lsholder_collider->physics_data.is_moveable = false;
+			Rsholder_collider->physics_data.is_moveable = false;
+			Lelbow_collider  ->physics_data.is_moveable = false;
+			Relbow_collider  ->physics_data.is_moveable = false;
+			Lhand_collider   ->physics_data.is_moveable = false;
+			Rhand_collider   ->physics_data.is_moveable = false;
+			Body_collider    ->physics_data.is_moveable = false;
+			Waist_collider   ->physics_data.is_moveable = false;
+			Lleg_collider    ->physics_data.is_moveable = false;
+			Rleg_collider    ->physics_data.is_moveable = false;
+			Lfoot_collider   ->physics_data.is_moveable = false;
+			Rfoot_collider   ->physics_data.is_moveable = false;
+
 			//::: Joint‚ÌÝ’è
 			float joint_bias = 0.1f;
 			//“ª
@@ -358,7 +387,8 @@ namespace Adollib
 			}
 			{
 				auto hinge = Joint::add_Hingejoint(Lsholder_collider, Lelbow_collider, Vector3(-1, -(arm_size.y + 0.1f), 0), Vector3(+1, -(arm_size.y + 0.1f), 0), Vector3(-1, (arm_size.y + 0.1f), 0), Vector3(+1, (arm_size.y + 0.1f), 0), joint_bias);
-				hinge->bias = 0.5f;
+				hinge->shrink_bias = 0.5f;
+				hinge->stretch_bias = 0.5f;
 				hinge->limit = Vector2(230, 360);
 			}
 			{
@@ -374,7 +404,8 @@ namespace Adollib
 			}
 			{
 				auto hinge = Joint::add_Hingejoint(Rsholder_collider, Relbow_collider, Vector3(-1, -(arm_size.y + 0.1f), 0), Vector3(+1, -(arm_size.y + 0.1f), 0), Vector3(-1, (arm_size.y + 0.1f), 0), Vector3(+1, (arm_size.y + 0.1f), 0), joint_bias);
-				hinge->bias = 0.5f;
+				hinge->shrink_bias = 0.5f;
+				hinge->stretch_bias = 0.5f;
 				hinge->limit = Vector2(230, 360);
 			}
 			{

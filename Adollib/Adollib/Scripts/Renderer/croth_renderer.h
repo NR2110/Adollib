@@ -56,7 +56,7 @@ namespace Adollib {
 
 		int instance_count = 0;
 
-		std::shared_ptr<std::vector<std::vector<VertexOffset>>> mesh_offset;
+		std::shared_ptr<std::vector<std::vector<std::pair<Vector3,Vector3>>>> mesh_offset;
 
 		void instance_update(const Frustum_data& frustum_data);
 
@@ -66,6 +66,11 @@ namespace Adollib {
 		bool check_frustum(const Frustum_data& data) override;
 
 		void set_meshes(std::vector<Mesh::mesh>* l_meshes) override;
+
+		void set_meshoffset(std::shared_ptr<std::vector<std::vector<std::pair<Vector3, Vector3>>>> off) {
+			mesh_offset = off;
+		};
+
 	protected:
 
 	public:

@@ -52,8 +52,7 @@ bool Check_insert_Plane(const Collider_shape* plane, const Collider_shape* mesh)
 
 void Midphase_DOP_14(std::vector<Contacts::Contact_pair*>& new_pairs, Collider_shape* meshA, Collider_shape* meshB) {
 
-	if (meshA->get_ALPcollider() == meshB->get_ALPcollider())return; //同じGOにアタッチされたshape同士は衝突しない
-
+	if (meshA->get_ALPcollider()->get_gameobject() == meshB->get_ALPcollider()->get_gameobject())return; //同じGOにアタッチされたshape同士は衝突しない
 
 	const ALP_Collider* collA = meshA->get_ALPcollider();
 	const ALP_Collider* collB = meshB->get_ALPcollider();

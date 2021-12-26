@@ -18,7 +18,8 @@ namespace Adollib {
 			explicit ALP_Joint(const std::list<ALP_Joint*>::iterator l_this_itr) :this_itr(l_this_itr) {};
 
 		public:
-			float bias = 0; // S‘©‚Ì‹­‚³‚Ì’²®’l
+			float shrink_bias = 0.1f; // S‘©‚Ì‹­‚³‚Ì’²®’l(k)
+			float stretch_bias = 0.1f; // S‘©‚Ì‹­‚³‚Ì’²®’l(L)
 			float slop = 0; // S‘©‚Ì‹–—eŒë·
 			float limit_bias = 0;
 

@@ -22,7 +22,8 @@ namespace Adollib {
 			collider_comp[1] = l_colliderB_comp;
 		};
 
-		float bias = 0.1f; // S‘©‚Ì‹­‚³‚Ì’²®’l
+		float shrink_bias = 0.1f; // S‘©‚Ì‹­‚³‚Ì’²®’l(k)
+		float stretch_bias = 0.1f; // S‘©‚Ì‹­‚³‚Ì’²®’l(L)
 		float slop = 0.003f; //S‘©‚Ì‹–—eŒë·
 		float limit_bias = 0.1f;
 		//std::vector<Vector3> anchor; // „‘Ì‚Ìƒ[ƒJƒ‹À•WŒn‚É‚¨‚¯‚éÚ‘±“_
