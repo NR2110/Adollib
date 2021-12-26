@@ -72,17 +72,8 @@ namespace Adollib
 			float contact_threrhold_normal = 0.01f; //衝突点の閾値
 			float contact_threrhold_tangent = 0.002f;//衝突点の閾値
 
-<<<<<<< HEAD
 			float linear_sleep_threrhold = 0.5f;
 			float angula_sleep_threrhold = 0.5f;
-<<<<<<< HEAD
-			float accumeimpulse_sleep_threrhold = 0.1f;
-=======
-			float linear_sleep_threrhold = 0.8f;
-			float angula_sleep_threrhold = 1.0f;
->>>>>>> parent of 863bd14... midphase縺ｫ菫晏ｭ倥＆繧後◆蜑阪ヵ繝ｬ繝ｼ繝縺ｮ諠�蝣ｱ縺ｫ繧｢繧ｯ繧ｻ繧ｹ繧定｡後≧縺帙＞縺ｧGO繧貞炎髯､縺吶ｋ縺ｨ豁ｻ縺ｬ
-=======
->>>>>>> parent of 1c341af... sleep 繧上°繧峨ｓ
 
 
 

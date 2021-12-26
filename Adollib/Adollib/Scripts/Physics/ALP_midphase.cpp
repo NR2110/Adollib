@@ -100,8 +100,9 @@ void Midphase_DOP_14(std::vector<Contacts::Contact_pair>& new_pairs, Collider_sh
 }
 
 
-void Physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std::vector<Contacts::Contact_pair>& old_pairs, std::vector<Contacts::Contact_pair>& new_pairs) {
+void Physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std::vector<Contacts::Contact_pair>& old_pairs, std::vector<Contacts::Contact_pair>& out_pairs) {
 
+	std::vector<Contacts::Contact_pair> new_pairs;
 	new_pairs.clear();
 
 	Work_meter::start("Mid_Dop14");
@@ -130,50 +131,65 @@ void Physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std:
 	}
 	Work_meter::stop("Contact_pair_quick_sort");
 
-	//TODO : 重い。 要軽量化
+	//前フレームから存在していたかのチェック
+	out_pairs.clear();
+	out_pairs.reserve(sizeof(Contacts::Contact_pair) * new_pair_size);
 	Work_meter::start("Mid_check_alive");
 	{
 		int oldId = 0, newId = 0;
 		while (oldId < old_pair_size && newId < new_pair_size)
 		{
 			if (new_pairs[newId].key > old_pairs[oldId].key) {
-				//oldのkeyがnewより小さい -> そのoldは存在しない
+				//oldのkeyがnewより小さい -> そのoldは衝突生成されていない
+
+				if (old_pairs[oldId].body[0]->get_ALPcollider()->get_ALPphysics()->is_sleep == true &&
+					old_pairs[oldId].body[1]->get_ALPcollider()->get_ALPphysics()->is_sleep == true) {
+					//お互いにfleeze状態ならoutに追加
+					old_pairs[oldId].type = Contacts::Pairtype::keep_pair;
+					out_pairs.emplace_back(old_pairs[oldId]);
+				}
+
 				oldId++;
 			}
 			else if (new_pairs[newId].key == old_pairs[oldId].key) {
 				//oldのkeyとnewが同じ -> 前から存在している
 				// keep
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-				// accumeimpulseの大きさからsleepをflseにする
-				for (int i = 0; i < old_pairs[oldId].contacts.contact_num; i++) {
-					if (old_pairs[oldId].contacts.contactpoints[i].constraint->accuminpulse > Phyisics_manager::physicsParams.accumeimpulse_sleep_threrhold) {
-						old_pairs[oldId].body[0]->get_ALPcollider()->get_ALPphysics()->is_sleep = false;
-						old_pairs[oldId].body[1]->get_ALPcollider()->get_ALPphysics()->is_sleep = false;
-					};
-				}
-
-=======
->>>>>>> parent of 1c341af... sleep 繧上°繧峨ｓ
 				old_pairs[oldId].type = Contacts::Pairtype::keep_pair;
 				out_pairs.emplace_back(old_pairs[oldId]);
 
-=======
-				new_pairs[newId] = old_pairs[oldId];
-				new_pairs[newId].type = Contacts::Pairtype::keep_pair;
->>>>>>> parent of 863bd14... midphase縺ｫ菫晏ｭ倥＆繧後◆蜑阪ヵ繝ｬ繝ｼ繝縺ｮ諠�蝣ｱ縺ｫ繧｢繧ｯ繧ｻ繧ｹ繧定｡後≧縺帙＞縺ｧGO繧貞炎髯､縺吶ｋ縺ｨ豁ｻ縺ｬ
 				oldId++;
 				newId++;
 			}
 			else {
 				//oldのkeyがnewより大きい -> 新しいnew
 				// new
-				new_pairs[newId].type = Contacts::Pairtype::new_pair;
+				new_pairs[newId].type = Contacts::Pairtype::keep_pair;
 				new_pairs[newId].contacts.reset();
+				out_pairs.emplace_back(new_pairs[newId]);
+
 				newId++;
 			}
 
+		}
+
+		if (newId < new_pair_size) {
+			// 残りは全部new
+			for (; newId < new_pair_size; newId++) {
+				new_pairs[newId].type = Contacts::Pairtype::keep_pair;
+				new_pairs[newId].contacts.reset();
+				out_pairs.emplace_back(new_pairs[newId]);
+			}
+		}
+		else if (oldId < old_pair_size) {
+			// 残りは全部old
+			if (old_pairs[oldId].body[0]->get_ALPcollider()->get_ALPphysics()->is_sleep == true &&
+				old_pairs[oldId].body[1]->get_ALPcollider()->get_ALPphysics()->is_sleep == true) {
+				//お互いにfleeze状態ならoutに追加
+				old_pairs[oldId].type = Contacts::Pairtype::keep_pair;
+				out_pairs.emplace_back(old_pairs[oldId]);
+			}
+
+			oldId++;
 		}
 
 	}
@@ -182,7 +198,7 @@ void Physics_function::Midphase(std::vector<Contacts::Collider_2>& in_pair, std:
 
 	Work_meter::start("Mid_remove_contact_point");
 	//現在使用していない衝突点を削除
-	for (auto& new_p : new_pairs) {
+	for (auto& new_p : out_pairs) {
 		new_p.contacts.chack_remove_contact_point(
 			new_p.body[0],
 			new_p.body[1]
