@@ -176,9 +176,9 @@ void ALP_Physics::apply_external_force(float duration, const float timeratio_60)
 
 		//TODO : crothのものは重力を小さくする いまは値が適当なため要修正
 		//if (is_fallable) linear_acceleration += Vector3(0, -Physics_manager::physicsParams.gravity, 0); //落下
-		if (is_fallable) {
+		if (is_fallable && Physics_manager::physicsParams.gravity != 0) {
 			if(ALPcollider->is_adapt_shape_for_copy_transform_gameobject)
-				linear_acceleration += Vector3(0, -2, 0); //落下
+				linear_acceleration += Vector3(0, -4, 0); //落下
 			else
 				linear_acceleration += Vector3(0, -Physics_manager::physicsParams.gravity, 0); //落下
 		}

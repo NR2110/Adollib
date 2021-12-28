@@ -222,7 +222,10 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 				DirectX::XMVECTOR direction = DirectX::XMVectorSubtract(position[1], position[0]);
 				DirectX::XMVECTOR distance = DirectX::XMVector3Length(direction);
 
-				if (DirectX::XMVectorGetX(distance) < FLT_EPSILON) {
+				if (
+					DirectX::XMVectorGetX(distance) < FLT_EPSILON || //初期化終わっていなければ ここが0になる
+					fabsf(DirectX::XMVectorGetX(distance) - joint->offset) < FLT_EPSILON //offsetを考慮した値
+					) {
 					//とても近い位置にある -> 引っ張らない
 					constraint.jacDiagInv = 0.0f;
 					constraint.rhs = 0.0f;
@@ -260,14 +263,22 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 
 				constraint.rhs = -DirectX::XMVectorGetX(DirectX::XMVector3Dot(relativeVelocity, direction)); // velocity error
 
-				if (0.0f < DirectX::XMVectorGetX(distance) - joint->slop) {
-					if (DirectX::XMVectorGetX(DirectX::XMVector3Dot(DirectX::XMVectorSubtract(position[0], position[1]), DirectX::XMVectorSubtract(DirectX::XMLoadFloat3(&transform[0]->position) ,DirectX::XMLoadFloat3(&transform[1]->position)))) > 0) {
-						constraint.rhs += joint->stretch_bias * (DirectX::XMVectorGetX(distance) - joint->slop) * inv_duration; // position error
-					}
-					else {
-						constraint.rhs += joint->shrink_bias * (DirectX::XMVectorGetX(distance) - joint->slop) * inv_duration; // position error
-					}
+				//if (0.0f < DirectX::XMVectorGetX(distance)) {
+				const float dis = fabsf(DirectX::XMVectorGetX(distance) - joint->offset);
+				if (0.0f < dis - joint->slop) {
+
+					const int sign = (DirectX::XMVectorGetX(distance) - joint->offset > 0) ? +1 : -1;
+
+					// 拘束点とColliderの座標の差分の内積 と offsetを考慮してstretchかshrinkを判断する
+					const float& bias = (DirectX::XMVectorGetX(DirectX::XMVector3Dot(
+						DirectX::XMVectorSubtract(position[0], position[1]),
+						DirectX::XMVectorSubtract(DirectX::XMLoadFloat3(&transform[0]->position), DirectX::XMLoadFloat3(&transform[1]->position))))
+						* sign
+						< 0) ? joint->stretch_bias : joint->shrink_bias;
+
+						constraint.rhs += bias * sign * (dis - joint->slop) * inv_duration; // position error
 				}
+
 				constraint.rhs *= constraint.jacDiagInv;
 				constraint.lowerlimit = -FLT_MAX;
 				constraint.upperlimit = +FLT_MAX;

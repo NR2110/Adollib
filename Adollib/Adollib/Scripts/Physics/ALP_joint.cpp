@@ -22,6 +22,7 @@ void ALP_Joint::adapt_Jointdata() {
 	shrink_bias = userjoint->shrink_bias;
 	stretch_bias = userjoint->stretch_bias;
 	slop = userjoint->slop;
+	offset = userjoint->offset;
 	limit_bias = userjoint->limit_bias;
 }
 

@@ -191,6 +191,9 @@ void Collider_Croth::load_file(const std::string& filename, bool is_right_rtiang
 					const int vertId0 = ALmin(edgeID_buf0, edgeID_buf1);
 					const int vertId1 = ALmax(edgeID_buf0, edgeID_buf1);
 
+					// ID‚Ì¬‚³‚¢‚©‚ç‘å‚«‚¢‚Ù‚¤‚É‚Â‚È‚¢‚Å‚¢‚­ vertId0‚ªvertexID‚Å‚È‚¯‚ê‚Î‘å‚«‚¢‚Ù‚¤‚©‚ç‚Â‚È‚²‚¤‚Æ‚µ‚Ä‚¢‚é‚½‚ßcontinue
+					if (vertId0 != vertexID)continue;
+
 					// ©g‚Æ©M‚Í‚Â‚È‚°‚È‚¢
 					if (vertId1 == vertId0)continue;
 
@@ -226,12 +229,12 @@ void Collider_Croth::load_file(const std::string& filename, bool is_right_rtiang
 		}
 	}
 
-	constexpr float sructural_stretch = 0.10f;
-	constexpr float sructural_shrink  = 0.001f;
-	constexpr float shear_stretch     = 0.05f;
+	constexpr float sructural_stretch = 0.50f;
+	constexpr float sructural_shrink  = 0.50f;
+	constexpr float shear_stretch     = 0.20f;
 	constexpr float shear_shrink      = 0.001f;
-	constexpr float bending_stretch   = 0.01f;
-	constexpr float bending_shrink    = 0.001f;
+	constexpr float bending_stretch   = 0.10f;
+	constexpr float bending_shrink    = 0.50f;
 	{
 		for (auto& spring : croth_constraints) {
 
@@ -242,7 +245,8 @@ void Collider_Croth::load_file(const std::string& filename, bool is_right_rtiang
 					Vector3(0), Vector3(0)
 				);
 
-				joint->slop = spring.natural_length;
+				joint->offset = spring.natural_length;
+				//joint->slop = spring.natural_length;
 				joint->stretch_bias = sructural_stretch;
 				joint->shrink_bias  = sructural_shrink;
 
@@ -254,7 +258,8 @@ void Collider_Croth::load_file(const std::string& filename, bool is_right_rtiang
 					Vector3(0), Vector3(0)
 				);
 
-				joint->slop = spring.natural_length;
+				joint->offset = spring.natural_length;
+				//joint->slop = spring.natural_length;
 				joint->stretch_bias = shear_stretch;
 				joint->shrink_bias  = shear_shrink;
 			}
@@ -265,7 +270,8 @@ void Collider_Croth::load_file(const std::string& filename, bool is_right_rtiang
 					Vector3(0), Vector3(0)
 				);
 
-				joint->slop = spring.natural_length;
+				joint->offset = spring.natural_length;
+				//joint->slop = spring.natural_length;
 				joint->stretch_bias = bending_stretch;
 				joint->shrink_bias  = bending_shrink;
 			}

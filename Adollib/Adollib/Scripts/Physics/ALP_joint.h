@@ -21,6 +21,7 @@ namespace Adollib {
 			float shrink_bias = 0.1f; // S‘©‚Ì‹­‚³‚Ì’²®’l(k)
 			float stretch_bias = 0.1f; // S‘©‚Ì‹­‚³‚Ì’²®’l(L)
 			float slop = 0; // S‘©‚Ì‹–—eŒë·
+			float offset = 0; //S‘©‚ÌêŠ‚Ì‚¸‚ê (ex. •z‚Íanchor = 0,0 offset = ’¸“_‚Ì‹——£ ‚ÅÀ‘•‚µ‚Ä‚¢‚é)
 			float limit_bias = 0;
 
 			int anchor_count = 0; //anchor‚ª‚¢‚­‚Â‚ ‚é‚©

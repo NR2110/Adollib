@@ -25,6 +25,7 @@ namespace Adollib {
 		float shrink_bias = 0.1f; // 拘束の強さの調整値(縮)
 		float stretch_bias = 0.1f; // 拘束の強さの調整値(伸)
 		float slop = 0.003f; //拘束の許容誤差
+		float offset = 0; //拘束の場所のずれ (ex. 布はanchor = 0,0 offset = 頂点の距離 で実装している)
 		float limit_bias = 0.1f;
 		//std::vector<Vector3> anchor; // 剛体のローカル座標系における接続点
 		//Vector3 anchor[2]; // 剛体のローカル座標系における接続点
