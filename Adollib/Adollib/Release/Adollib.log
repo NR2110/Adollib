@@ -6,9 +6,9 @@ C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_2.cpp(515,63): warni
 C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_2.cpp(724,182): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_2.cpp(735,181): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
   コード生成しています。
-  1 of 10469 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  1 of 10526 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    73 functions had inline decision re-evaluated but remain unchanged
+    56 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
 area_goal.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
 area_respown_set.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。

@@ -286,13 +286,63 @@ void Collider_Croth::load_file(const std::string& filename, bool is_right_rtiang
 
 void Collider_Croth::update() {
 
-	for (auto& constraint : croth_constraints) {
+	// 各facetのnormalを更新する
+	std::vector<std::vector<Vector3>> mesh_facet_normals;
+	mesh_facet_normals.resize(meshcoll_data->size());
+	{
+		int mesh_num = 0;
+		for (auto& data : *meshcoll_data) {
 
+			auto& facet_normals = mesh_facet_normals[mesh_num];
+			facet_normals.resize(data.facets.size());
 
+			int facet_mum = 0;
+			for (auto& facet : data.facets) {
 
+				const Vector3& vertex_0 = data.vertices[facet.vertexID[0]] + vertex_offset->at(mesh_num).at(facet.vertexID[0]).first;
+				const Vector3& vertex_1 = data.vertices[facet.vertexID[1]] + vertex_offset->at(mesh_num).at(facet.vertexID[1]).first;
+				const Vector3& vertex_2 = data.vertices[facet.vertexID[2]] + vertex_offset->at(mesh_num).at(facet.vertexID[2]).first;
 
+				const Vector3& normal = -vector3_cross(vertex_1 - vertex_0, vertex_2 - vertex_0).unit_vect();
 
+				facet_normals[facet_mum] = normal;
+				++facet_mum;
+			}
+
+			++mesh_num;
+		}
 	}
+
+	//各頂点の属する面から平均をとってoffsetを計算
+	{
+		int mesh_num = 0;
+		for (auto& data : *meshcoll_data) {
+
+			int vertex_num = 0;
+			for (auto& vertex : data.vertices) {
+
+				//vertex_offset->at(mesh_num).at(vertex_num).second;
+
+				Vector3 facet_normal;
+				for (int facet_num = 0; facet_num < data.vertex_involvements[vertex_num].get_facet_involvment_size(); ++facet_num) {
+
+					facet_normal += mesh_facet_normals[mesh_num][data.vertex_involvements[vertex_num].facet_involvements[facet_num]];
+				}
+				facet_normal /= data.vertex_involvements[vertex_num].get_facet_involvment_size();
+
+				vertex_offset->at(mesh_num).at(vertex_num).second = facet_normal;
+
+
+				++vertex_num;
+			}
+
+			++mesh_num;
+		}
+	}
+
+
+
+
 }
 
 void Collider_Croth::finalize() {

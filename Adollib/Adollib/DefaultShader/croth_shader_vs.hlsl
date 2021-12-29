@@ -37,8 +37,8 @@ PSInput main(VSInput input, VSInput_INSTANCE instance_input)
     P = mul(P, matWVP);
 
 	// ワールド法線算出
-    //float3 N = mul(normal[input.vertexID], (float3x3) W);
-    float3 N = mul(debug_normal, (float3x3) W);
+    float3 N = mul(normal[input.vertexID], (float3x3) W);
+    //float3 N = mul(debug_normal, (float3x3) W);
     N = normalize(N); //正規化
 
    // N = float3(1, 0, 0);

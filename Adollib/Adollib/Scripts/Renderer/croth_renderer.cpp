@@ -248,25 +248,6 @@ void Croth_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& ins
 	if (material == nullptr) return;
 	if (bufferCount == 0) return;
 
-	// mesh‚Ìoffset‚ðŽG‚ÉŒvŽZ
-	//if(0)
-	//{
-	//	static float debug_timer_count = 0;
-	//	debug_timer_count += time->deltaTime();
-
-	//	for (auto& mesh : (*mesh_offset)) {
-	//		int index = 0;
-	//		for (auto& offset : mesh) {
-	//			offset.first = Vector3(0)
-	//				+ Vector3(0, 1, 0) * 0.5f * cosf(debug_timer_count + index)
-	//				+ Vector3(0, 0, 1) * 0.5f * sinf(debug_timer_count + index);
-	//			++index;
-
-	//			offset.first += Vector3(1, 0, 0);
-	//		}
-	//	}
-	//}
-
 	{
 		int mesh_count = 0;
 		for (auto& buffer : computeBuf_vertexoffset) {
@@ -277,6 +258,7 @@ void Croth_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& ins
 			int vertex_start = 0;
 			for (int i = 0; i < vertex_size; ++i) {
 				data[i].position = mesh_offset->at(mesh_count)[i].first;
+				data[i].normal = mesh_offset->at(mesh_count)[i].second;
 			}
 			++mesh_count;
 			unmap_buffer(buffer);

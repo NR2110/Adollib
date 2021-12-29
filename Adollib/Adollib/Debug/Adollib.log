@@ -1,68 +1,10 @@
-﻿  player.cpp
-  player_manager.cpp
-  main.cpp
-  gameobject.cpp
-  gameobject_manager.cpp
-  ALP__physics_manager.cpp
-  ALP_broadphase.cpp
-  ALP_collider.cpp
-  ALP_contact.cpp
-  ALP_generate_contact.cpp
-  ALP_integrate.cpp
-  ALP_joint.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(2152,26): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-  ALP_midphase.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\shape_croth.h(11,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_collider.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(67): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ALP_collider.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.cpp(124,27): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(15,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\player.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(170,65): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(190,65): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(206,47): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(427,113): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(483,59): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-  ALP_physics.cpp
-  ALP_raycast.cpp
-  ALP_resolve_contact.cpp
-  ALP_resolve_contact_SIM.cpp
-  collider.cpp
-  collider_croth.cpp
-  collider_shape.cpp
-  coneTwistjoint.cpp
-  conejoint.cpp
-  hingejoint.cpp
-  joint.cpp
-  joint_base.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(120,23): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(377,23): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(423,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(424,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(425,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(427,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(428,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(429,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(486,21): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(487,21): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(488,21): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(517,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(518,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(519,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_croth.h(45,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています Scripts\Physics\collider_croth.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_shape.h(9): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\collider_croth.cpp)
-  ray.cpp
-  shape_croth.cpp
-  twistjoint.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\shape_croth.h(11,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています Scripts\Physics\shape_croth.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_shape.h(9): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\shape_croth.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact_SIM.cpp(450,21): warning C4101: 'position': ローカル変数は 1 度も使われていません。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\shape_croth.h(11,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています Scripts\Physics\collider.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(67): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\collider.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\shape_croth.h(11,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています Scripts\Physics\collider_croth.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(67): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\collider_croth.cpp)
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\hingejoint.cpp(89,78): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_croth.cpp(317,34): warning C4244: '引数': 'unsigned int' から 'float' への変換です。データが失われる可能性があります。
-  material_for_collider.cpp
-  renderer_manager.cpp
-  scene_game.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(15,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Scene\scene_game.cpp)
+﻿  stage_demo_2.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(15,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_croth.h(45,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_shape.h(9): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_2.cpp(515,62): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_2.cpp(724,114): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_2.cpp(735,93): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_2.cpp(735,113): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\vector.inl(339): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

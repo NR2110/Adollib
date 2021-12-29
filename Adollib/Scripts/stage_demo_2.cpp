@@ -865,6 +865,12 @@ namespace Adollib
 					data.is_moveable = false;
 					coll->set_vertex_data(0, 274, data);
 
+					for (int i = 259; i < 275; ++i) {
+						data = coll->get_vertex_data(0, i);
+						data.is_moveable = false;
+						coll->set_vertex_data(0, i, data);
+					}
+
 
 					auto renderer = go->addComponent<Croth_renderer>();
 					renderer->set_meshoffset(coll->get_vertex_offset());
@@ -888,18 +894,23 @@ namespace Adollib
 				if (summon == true) {
 					auto go = Gameobject_manager::createFromFBX("plane", "./DefaultModel/plane_32x32vertex.fbx");
 					go->transform->local_pos = Vector3(pos[0], pos[1], pos[2]);
-					//go->transform->local_scale = Vector3(10, 10, 10);
 
 					auto coll = go->addComponent<Collider_Croth>();
 					coll->load_file("./DefaultModel/plane_32x32vertex.fbx", true, false);
 
 					Physics_data data;
-					data = coll->get_vertex_data(0, 259);
+					data = coll->get_vertex_data(0, 1027);
 					data.is_moveable = false;
-					coll->set_vertex_data(0, 259, data);
-					data = coll->get_vertex_data(0, 274);
+					coll->set_vertex_data(0, 1027, data);
+					data = coll->get_vertex_data(0, 1058);
 					data.is_moveable = false;
-					coll->set_vertex_data(0, 274, data);
+					coll->set_vertex_data(0, 1058, data);
+
+					for (int i = 1026; i < 1059; ++i) {
+						data = coll->get_vertex_data(0, i);
+						data.is_moveable = false;
+						coll->set_vertex_data(0, i, data);
+					}
 
 
 					auto renderer = go->addComponent<Croth_renderer>();
@@ -933,9 +944,9 @@ namespace Adollib
 					data = coll->get_vertex_data(0, 259);
 					data.is_moveable = false;
 					coll->set_vertex_data(0, 259, data);
-					data = coll->get_vertex_data(0, 274);
+					data = coll->get_vertex_data(0, 374);
 					data.is_moveable = false;
-					coll->set_vertex_data(0, 274, data);
+					coll->set_vertex_data(0, 374, data);
 
 
 					auto renderer = go->addComponent<Croth_renderer>();
@@ -952,6 +963,8 @@ namespace Adollib
 	}
 
 	void Stage_demo_02::Update_hierarchy() {
+
+
 
 	}
 
