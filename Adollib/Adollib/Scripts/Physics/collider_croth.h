@@ -48,21 +48,6 @@ namespace Adollib {
 		}
 	}
 
-	enum class croth_constraint_type {
-		sructural_spring, //構成バネ
-		shear_spring, //せん断バネ
-		bending_spring //曲げバネ
-	};
-	struct Croth_constraint {
-
-		int vertId0 = 0; //頂点
-		int vertId1 = 0; //頂点
-		Physics_function::Meshcollider_data* mesh = nullptr;
-
-		float natural_length = 0; //ばねの自然長
-		croth_constraint_type constraint_type = croth_constraint_type::bending_spring;
-	};
-
 	class Collider_Croth : public Component {
 
 	public:
@@ -70,15 +55,34 @@ namespace Adollib {
 		Collider_tagbit tag = 0; //自身のtag(bit)
 		Collider_tagbit ignore_tags = 0; //衝突しないtags(bit)
 
-		//::: unityのphysics部分 分ける必要なんてないやろ ::::
-		Physics_data physics_data;
+		//::: アタッチするcolliderのphysicsの初期値 ::::
+		Physics_data default_physics_data;
 
+		//::: アタッチするsphereの半径の初期値 ::::
+		float default_sphere_r = 0.01f;
 
 		//::: static同士で衝突判定を行わない :::
 		bool is_static = false;
 
 		//::: 自身の関わるcontact_pairの情報をメンバに保存するかどうか :::
 		bool is_save_contacted_colls = false;
+
+	private:
+		// 適当なstruct
+		enum class croth_constraint_type {
+			sructural_spring, //構成バネ
+			shear_spring, //せん断バネ
+			bending_spring //曲げバネ
+		};
+		struct Croth_constraint {
+
+			int vertId0 = 0; //頂点
+			int vertId1 = 0; //頂点
+			Physics_function::Meshcollider_data* mesh = nullptr;
+
+			float natural_length = 0; //ばねの自然長
+			croth_constraint_type constraint_type = croth_constraint_type::bending_spring;
+		};
 
 	private:
 		std::map<Physics_function::Meshcollider_data*, std::vector<Collider*>> colliders; //頂点毎にアタッチしたcolliderの配列
@@ -138,11 +142,13 @@ namespace Adollib {
 		const Physics_data& get_vertex_data(const int& mesh_num, const int& vertex_num) const;
 
 	public:
-		void load_file(const std::string& filename,bool is_right_rtiangle,bool is_permit_edge_have_many_facet);
+		void load_file(const std::string& filename, bool is_right_rtiangle, bool is_permit_edge_have_many_facet);
 
 		void Update_hierarchy() override;
 
 		void update() override;
+
+		void awake() override;
 
 		// userが呼ばないように!!
 		void finalize() override;

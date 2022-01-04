@@ -412,6 +412,12 @@
     <ClCompile Include="Scripts\Physics\shape_croth.cpp">
       <Filter>00_Adollib\22_physics\collider\shapes</Filter>
     </ClCompile>
+    <ClCompile Include="Scripts\Physics\collider_rope.cpp">
+      <Filter>00_Adollib\22_physics\collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Renderer\rope_renderer.cpp">
+      <Filter>00_Adollib\44_render\renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Scripts\player.h">
@@ -830,6 +836,12 @@
     </ClInclude>
     <ClInclude Include="Scripts\Physics\collider_croth.h">
       <Filter>00_Adollib\22_physics\collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\collider_rope.h">
+      <Filter>00_Adollib\22_physics\collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\rope_renderer.h">
+      <Filter>00_Adollib\44_render\renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

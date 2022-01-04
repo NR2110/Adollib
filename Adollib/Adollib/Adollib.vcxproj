@@ -236,6 +236,7 @@
     <ClInclude Include="Scripts\Physics\ALP_struct_world_transform.h" />
     <ClInclude Include="Scripts\Physics\balljoint.h" />
     <ClInclude Include="Scripts\Physics\collider_croth.h" />
+    <ClInclude Include="Scripts\Physics\collider_rope.h" />
     <ClInclude Include="Scripts\Physics\shape_croth.h" />
     <ClInclude Include="Scripts\Physics\conejoint.h" />
     <ClInclude Include="Scripts\Physics\coneTwistjoint.h" />
@@ -278,6 +279,7 @@
     <ClInclude Include="Scripts\Renderer\mesh_renderer.h" />
     <ClInclude Include="Scripts\Renderer\renderer_base.h" />
     <ClInclude Include="Scripts\Renderer\renderer_manager.h" />
+    <ClInclude Include="Scripts\Renderer\rope_renderer.h" />
     <ClInclude Include="Scripts\Renderer\Shader\compute_shader.h" />
     <ClInclude Include="Scripts\Renderer\Shader\constant_buffer.h" />
     <ClInclude Include="Scripts\Renderer\Shader\light_types.h" />
@@ -354,6 +356,7 @@
     <ClCompile Include="Scripts\Physics\ALP_resolve_contact_SIM.cpp" />
     <ClCompile Include="Scripts\Physics\balljoint.cpp" />
     <ClCompile Include="Scripts\Physics\collider_croth.cpp" />
+    <ClCompile Include="Scripts\Physics\collider_rope.cpp" />
     <ClCompile Include="Scripts\Physics\collider_shape.cpp" />
     <ClCompile Include="Scripts\Physics\ALP__physics_manager.cpp" />
     <ClCompile Include="Scripts\Physics\collider.cpp" />
@@ -374,6 +377,7 @@
     <ClCompile Include="Scripts\Renderer\mesh_renderer.cpp" />
     <ClCompile Include="Scripts\Renderer\renderer_base.cpp" />
     <ClCompile Include="Scripts\Renderer\renderer_manager.cpp" />
+    <ClCompile Include="Scripts\Renderer\rope_renderer.cpp" />
     <ClCompile Include="Scripts\Renderer\Shader\compute_shader.cpp" />
     <ClCompile Include="Scripts\Renderer\Shader\shader.cpp" />
     <ClCompile Include="Scripts\Renderer\directional_shadow.cpp" />

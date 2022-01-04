@@ -2,13 +2,15 @@
 C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(15,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。
 C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_croth.h(45,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。
 C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_shape.h(9): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_2.cpp(515,63): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_2.cpp(724,182): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_2.cpp(735,181): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_rope.h(25,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_croth.h(45): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_2.cpp(516,63): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_2.cpp(725,182): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_2.cpp(736,181): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
   コード生成しています。
-  1 of 10526 functions (<0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    56 functions had inline decision re-evaluated but remain unchanged
+  200 of 10718 functions ( 1.9%) were compiled, the rest were copied from previous compilation.
+    31 functions were new in current compilation
+    227 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
 area_goal.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
 area_respown_set.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
@@ -69,6 +71,7 @@ ALP_resolve_contact.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\ado
 ALP_resolve_contact_SIM.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
 balljoint.obj : warning LNK4099: PDB 'vc142.pdb' が 'balljoint.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Release\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 collider_croth.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+collider_rope.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
 collider_shape.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
 ALP__physics_manager.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
 collider.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。

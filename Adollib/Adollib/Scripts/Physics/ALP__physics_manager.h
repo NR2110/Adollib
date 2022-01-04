@@ -108,6 +108,22 @@ namespace Adollib
 			bool is_moveable = true;//“®‚­‚©
 			bool is_hitable = true;  //Õ“Ë‚µ‚È‚¢
 			bool is_static = false; //static“¯m‚ÍÕ“Ë‚¹‚¸ oncoll_enter‚ª”­¶‚µ‚È‚¢ ‚¯‚ÇŒy‚­‚È‚é
+
+			void set_default_physics_data(Physics_data& physics_data) {
+				//::: ‰Šú’l‚ğ‚¢‚ê‚é :::
+				physics_data.inertial_mass      = inertial_mass; //¿—Ê
+				physics_data.drag               = linear_drag; //‹ó‹C’ïR
+				physics_data.anglar_drag        = anglar_drag; //‹ó‹C’ïR
+				physics_data.dynamic_friction   = dynamic_friction; //“®–€C
+				physics_data.static_friction    = static_friction; //Ã–€C
+				physics_data.restitution        = restitution;	 //”½”­ŒW”
+
+				physics_data.is_fallable        = is_fallable; //—‚¿‚È‚¢
+				physics_data.is_kinmatic_anglar = is_kinmatic_anglar;//‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
+				physics_data.is_kinmatic_linear = is_kinmatic_linear;//‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
+				physics_data.is_moveable        = is_moveable; //“®‚©‚È‚¢
+				physics_data.is_hitable         = is_hitable;  //Õ“Ë‚µ‚È‚¢
+			}
 		};
 
 		class Physics_manager
@@ -204,18 +220,19 @@ namespace Adollib
 				}
 
 				//::: ‰Šú’l‚ğ‚¢‚ê‚é :::
-				coll->physics_data.inertial_mass = physicsParams.inertial_mass; //¿—Ê
-				coll->physics_data.drag = physicsParams.linear_drag; //‹ó‹C’ïR
-				coll->physics_data.anglar_drag = physicsParams.anglar_drag; //‹ó‹C’ïR
-				coll->physics_data.dynamic_friction = physicsParams.dynamic_friction; //“®–€C
-				coll->physics_data.static_friction = physicsParams.static_friction; //Ã–€C
-				coll->physics_data.restitution = physicsParams.restitution;	 //”½”­ŒW”
+				physicsParams.set_default_physics_data(coll->physics_data);
+				//coll->physics_data.inertial_mass = physicsParams.inertial_mass; //¿—Ê
+				//coll->physics_data.drag = physicsParams.linear_drag; //‹ó‹C’ïR
+				//coll->physics_data.anglar_drag = physicsParams.anglar_drag; //‹ó‹C’ïR
+				//coll->physics_data.dynamic_friction = physicsParams.dynamic_friction; //“®–€C
+				//coll->physics_data.static_friction = physicsParams.static_friction; //Ã–€C
+				//coll->physics_data.restitution = physicsParams.restitution;	 //”½”­ŒW”
 
-				coll->physics_data.is_fallable = physicsParams.is_fallable; //—‚¿‚È‚¢
-				coll->physics_data.is_kinmatic_anglar = physicsParams.is_kinmatic_anglar;//‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
-				coll->physics_data.is_kinmatic_linear = physicsParams.is_kinmatic_linear;//‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
-				coll->physics_data.is_moveable = physicsParams.is_moveable; //“®‚©‚È‚¢
-				coll->physics_data.is_hitable = physicsParams.is_hitable;  //Õ“Ë‚µ‚È‚¢
+				//coll->physics_data.is_fallable = physicsParams.is_fallable; //—‚¿‚È‚¢
+				//coll->physics_data.is_kinmatic_anglar = physicsParams.is_kinmatic_anglar;//‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
+				//coll->physics_data.is_kinmatic_linear = physicsParams.is_kinmatic_linear;//‰e‹¿‚¤‚¯‚È‚¢(fall‚Í‚·‚é)
+				//coll->physics_data.is_moveable = physicsParams.is_moveable; //“®‚©‚È‚¢
+				//coll->physics_data.is_hitable = physicsParams.is_hitable;  //Õ“Ë‚µ‚È‚¢
 
 				collider_index_count[Sce]++;
 

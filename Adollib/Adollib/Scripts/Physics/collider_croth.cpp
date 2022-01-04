@@ -112,8 +112,7 @@ void Collider_Croth::load_file(const std::string& filename, bool is_right_rtiang
 			collider->gameobject = gameobject;
 			collider->awake();
 
-			collider->physics_data.anglar_drag = 0.9f;
-			collider->physics_data.inertial_mass = 0.01f;
+			collider->physics_data = default_physics_data;
 
 			auto croth = collider->add_shape<Croth_vertex>();
 
@@ -121,6 +120,7 @@ void Collider_Croth::load_file(const std::string& filename, bool is_right_rtiang
 			croth->mesh_id = mesh_id;
 			croth->vertex_id = vertex_num;
 			croth->vertex_offset = vertex_offset;
+			croth->size = default_sphere_r;
 
 			vertex_offset->at(mesh_id).emplace_back(std::pair<Vector3, Vector3>(Vector3(0), Vector3(0)));
 
@@ -168,9 +168,7 @@ void Collider_Croth::load_file(const std::string& filename, bool is_right_rtiang
 						edgeID_Table[tableId] = croth_constraints.size();
 						croth_constraints.emplace_back(constraint);
 					}
-					else {
-						int dasfgf = 0;
-					}
+
 					croth_constraints.at(edgeID_Table[tableId]).constraint_type = croth_constraint_type::sructural_spring;
 
 					// vertex_num‚Æ‚ÌpairID‚ğ•Û‘¶
@@ -343,6 +341,16 @@ void Collider_Croth::update() {
 
 
 
+}
+
+void Collider_Croth::awake() {
+	// ‰Šú’l‚Ì’²®
+	Physics_manager::physicsParams.set_default_physics_data(default_physics_data);
+
+	default_physics_data.anglar_drag = 0.9f;
+	default_physics_data.inertial_mass = 0.01f;
+
+	default_sphere_r = 0.01f;
 }
 
 void Collider_Croth::finalize() {

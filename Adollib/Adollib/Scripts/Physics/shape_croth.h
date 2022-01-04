@@ -19,6 +19,7 @@ namespace Adollib {
 			Physics_function::Meshcollider_data* mesh_data = nullptr;
 			int vertex_id = 0;
 			int mesh_id = 0;
+			float size = 0.01f;
 			std::shared_ptr<std::vector<std::vector<std::pair<Vector3, Vector3>>>> vertex_offset;
 
 		public:
@@ -26,7 +27,7 @@ namespace Adollib {
 			void adapt_Colliderdata() override {
 				local_position = Vector3(0);
 				local_orientation = quaternion_identity();
-				local_scale = Vector3(1) * 0.01f;
+				local_scale = Vector3(size);
 			}
 
 			void Update_hierarchy() override {

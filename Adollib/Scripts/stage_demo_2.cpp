@@ -13,6 +13,7 @@
 #include "../Adollib/Scripts/Imgui/debug.h"
 #include "../Adollib/Scripts/Physics/joint.h"
 #include "../Adollib/Scripts/Physics/collider_croth.h"
+#include "../Adollib/Scripts/Physics/collider_rope.h"
 
 #include "../Adollib/Scripts/Renderer/mesh_renderer.h"
 #include "../Adollib/Scripts/Renderer/sprite_renderer.h"
@@ -772,6 +773,38 @@ namespace Adollib
 					renderer->set_meshoffset(coll->get_vertex_offset());
 
 					all_pearent->add_child(sphere);
+				}
+				imgui_num++;
+			}
+
+			//rope
+			{
+				static int TREE_pyramid_count = 10;
+				static float pos[3] = { 0 };
+				bool summon = false;
+				ImGui::Separator();
+				ImGui::Text("Rope"); ImGui::NextColumn();
+				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
+				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), pos, 0.1f); ImGui::NextColumn();ImGui::NextColumn();
+				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &TREE_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
+
+				if (summon == true) {
+					auto go = Gameobject_manager::create("rope");
+					go->transform->local_pos = Vector3(pos[0], pos[1], pos[2]);
+
+					auto coll = go->addComponent<Collider_Rope>();
+					coll->sphere_num_size = TREE_pyramid_count;
+					coll->create_rope();
+
+					Physics_data data;
+					data = coll->get_vertex_data(0);
+					data.is_moveable = false;
+					coll->set_vertex_data(0, data);
+
+					//auto renderer = go->addComponent<Croth_renderer>();
+					//renderer->set_meshoffset(coll->get_vertex_offset());
+
+					all_pearent->add_child(go);
 				}
 				imgui_num++;
 			}
