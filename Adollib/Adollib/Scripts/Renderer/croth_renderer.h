@@ -58,8 +58,6 @@ namespace Adollib {
 
 		std::shared_ptr<std::vector<std::vector<std::pair<Vector3,Vector3>>>> mesh_offset;
 
-		void instance_update(const Frustum_data& frustum_data);
-
 	public:
 		void load_texture(const wchar_t* filename = nullptr);
 

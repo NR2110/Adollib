@@ -309,7 +309,6 @@ void Croth_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& ins
 
 	//::: render ::::::::
 	{
-
 		Systems::DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 		////
@@ -397,7 +396,9 @@ void Croth_renderer::set_meshes(std::vector<Mesh::mesh>* l_meshes) {
 					++mesh_count;
 					sum_instance += indexes_count / 3;
 				}
-				compute_shader->create_StructureBuffer(sizeof(Instance_polygon), sum_instance, nullptr, instanceBuffer, false);
+
+				// GPUを(32,1,1)で頂点数分回すため 最大で頂点32overが考えられるため 端数を考慮して(32 / 3 + 1) = 11だけ大きくとる
+				compute_shader->create_StructureBuffer(sizeof(Instance_polygon), sum_instance + 11, nullptr, instanceBuffer, false);
 			}
 
 			// SRVの作成
@@ -447,53 +448,4 @@ void Croth_renderer::set_meshes(std::vector<Mesh::mesh>* l_meshes) {
 			}
 		}
 	}
-}
-
-void Croth_renderer::instance_update(const Frustum_data& frustum_data) {
-
-	Instance_polygon* instances = nullptr;
-
-	// instance_bufferをMapする
-	HRESULT hr = S_OK;
-	const D3D11_MAP map = D3D11_MAP_WRITE_DISCARD;
-	D3D11_MAPPED_SUBRESOURCE mappedBuffer = {};
-	hr = Systems::DeviceContext->Map(instanceBuffer.Get(), 0, map, 0, &mappedBuffer);
-
-	if (FAILED(hr))
-	{
-		assert(0 && "failed Map InstanceBuffer dynamic(RenderManager)");
-		return;
-	}
-	instances = static_cast<Instance_polygon*>(mappedBuffer.pData);
-
-	int instance_num = 0;
-	int index_count = 0;
-
-	// meshから
-	for (Mesh::mesh& mesh : (*meshes))
-	{
-
-		for (const auto& index : mesh.indexces) {
-
-			if (index_count == 3) {
-				index_count = 0;
-
-				++instance_num;
-			}
-
-			auto& instance = instances[instance_num];
-
-
-			instance.position[index_count] = mesh.vertices[index].position /* + offser */;
-			instance.color = color;
-			//instance.normal = ;
-
-			++index_count;
-		}
-
-	}
-
-	// instance_bufferをUnmapする
-	Systems::DeviceContext->Unmap(instanceBuffer.Get(), 0);
-
 }

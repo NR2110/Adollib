@@ -243,7 +243,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 				if (
 					DirectX::XMVectorGetX(distance) < FLT_EPSILON || //初期化終わっていなければ ここが0になる
 					fabsf(DirectX::XMVectorGetX(distance) - joint->offset) < FLT_EPSILON || //offsetを考慮した値
-					rhs_pow < FLT_EPSILON //biasが0の時など
+					rhs_pow == 0 //biasが0の時など
 					) {
 					//とても近い位置にある -> 引っ張らない
 					constraint.jacDiagInv = 0.0f;

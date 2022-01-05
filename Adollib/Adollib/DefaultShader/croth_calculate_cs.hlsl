@@ -45,14 +45,18 @@ RWStructuredBuffer<CS_out>     BufOut   : register(u0); //!< 出力用.
 [numthreads(32, 1, 1)]
 void main( const CSInput input )
 {
-    uint instance_num = floor((float) input.dispatch.x / 3);
+    // mesh毎に走るためinput.dispatch.xは。  0,0,0,1,1,1,2,2,2,3,3,3,...
+    const uint instance_num = floor((float) input.dispatch.x / 3);
 
-    uint vertex_mum = input.dispatch.x - 3 * instance_num;
+    // そのinstance内のvertexの番号 0,1,2,0,1,2,0,1,2,0,1,2,...
+    const uint vertex_num = input.dispatch.x - 3 * instance_num;
 
+    const uint index_num = indexces[input.dispatch.x]; //index
 
-    BufOut[color[0].w + instance_num].position[vertex_mum] = vertices[indexces[input.dispatch.x]].position + vertices_offset[indexces[input.dispatch.x]].position;
-    BufOut[color[0].w + instance_num].normal[vertex_mum] = vertices_offset[indexces[input.dispatch.x]].normal;
-    //BufOut[color[0].w + instance_num].normal[vertex_mum] = normalize(vertices[indexces[input.dispatch.x]].normal + vertices_offset[indexces[input.dispatch.x]].normal);
+    // color[0].wはそのmeshのinstanceのstart位置
+    BufOut[color[0].w + instance_num].position[vertex_num] = vertices[index_num].position + vertices_offset[index_num].position;
+    BufOut[color[0].w + instance_num].normal[vertex_num] = vertices_offset[index_num].normal;
+    //BufOut[color[0].w + instance_num].normal[vertex_mum] = normalize(vertices[index_num].normal + vertices_offset[index_num].normal);
     BufOut[color[0].w + instance_num].color = float4(color[0].xyz, 1);
 
 }

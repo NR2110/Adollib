@@ -119,9 +119,6 @@
     <Filter Include="00_Adollib\44_render\shader\hlsl\collider_render">
       <UniqueIdentifier>{741d4a78-c44c-48cc-9d57-9e0cda3c0ff0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00_Adollib\44_render\shader\posteffect">
-      <UniqueIdentifier>{6c08b8ef-f6ef-4fa7-8668-7db469c33b7c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00_Adollib\44_render\shader\hlsl\gaussian_filter">
       <UniqueIdentifier>{4c76dcf8-fa8c-40ad-a842-cd31cdd338b4}</UniqueIdentifier>
     </Filter>
@@ -139,6 +136,12 @@
     </Filter>
     <Filter Include="00_Adollib\22_physics\collider\shapes">
       <UniqueIdentifier>{3aa56a7f-c681-43fc-8f44-e1ef26b272a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Adollib\44_render\shader\posteffect">
+      <UniqueIdentifier>{6c08b8ef-f6ef-4fa7-8668-7db469c33b7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Adollib\44_render\shader\hlsl\rope">
+      <UniqueIdentifier>{786516a1-4bf7-4588-9a4e-2c22fb2b427e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -946,6 +949,9 @@
     </FxCompile>
     <FxCompile Include="DefaultShader\croth_calculate_cs.hlsl">
       <Filter>00_Adollib\44_render\shader\hlsl\croth</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\rope_calculate_cs.hlsl">
+      <Filter>00_Adollib\44_render\shader\hlsl\rope</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
