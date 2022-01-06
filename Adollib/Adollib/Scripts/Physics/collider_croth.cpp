@@ -301,7 +301,7 @@ void Collider_Croth::update() {
 				const Vector3& vertex_1 = data.vertices[facet.vertexID[1]] + vertex_offset->at(mesh_num).at(facet.vertexID[1]).first;
 				const Vector3& vertex_2 = data.vertices[facet.vertexID[2]] + vertex_offset->at(mesh_num).at(facet.vertexID[2]).first;
 
-				const Vector3& normal = -vector3_cross(vertex_1 - vertex_0, vertex_2 - vertex_0).unit_vect();
+				const Vector3& normal = vector3_cross(vertex_1 - vertex_0, vertex_2 - vertex_0).unit_vect();
 
 				facet_normals[facet_mum] = normal;
 				++facet_mum;

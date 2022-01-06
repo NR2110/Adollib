@@ -52,7 +52,7 @@ void Rope_renderer::init() {
 
 	// コンスタントバッファの作成
 	{
-		Systems::CreateConstantBuffer(cb_per_rope.ReleaseAndGetAddressOf(), sizeof(ConstantBufferPerGO));
+		Systems::CreateConstantBuffer(cb_per_rope.ReleaseAndGetAddressOf(), sizeof(ConstantBufferPerRope));
 	}
 
 	//	頂点バッファ作成
@@ -100,7 +100,8 @@ void Rope_renderer::init() {
 
 			material = Material_manager::create_material("rope_material");
 
-			material->Load_VS("./DefaultShader/rope_shader_vs.cso");
+			//material->Load_VS("./DefaultShader/rope_shader_vs.cso");
+			material->Load_VS("./DefaultShader/default_vs.cso");
 			material->Load_PS("./DefaultShader/rope_shader_ps.cso");
 		}
 	}
@@ -247,9 +248,12 @@ void Rope_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& inst
 			rope_cb.joint_position[i] = Vector4(vertex_offset->at(i).first, 1);
 
 			//if (i - 1 < 0) {
-			rope_cb.joint_rotate[i] = matrix33_identity();
+			rope_cb.joint_rotate[i] = matrix44_identity();
 			//}
 		}
+		Systems::DeviceContext->UpdateSubresource(cb_per_rope.Get(), 0, NULL, &rope_cb, 0, 0);
+		Systems::DeviceContext->VSSetConstantBuffers(9, 1, cb_per_rope.GetAddressOf());
+		Systems::DeviceContext->PSSetConstantBuffers(9, 1, cb_per_rope.GetAddressOf());
 
 		Systems::DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
@@ -327,7 +331,7 @@ void Rope_renderer::set_meshoffset(std::shared_ptr<std::vector<std::pair<Vector3
 			std::vector<VertexFormat> v;
 			v.resize(vertex_fotmat_size); //ropeの端っこの中心点
 			{
-				for (int i = 0; i < sphere_count * split_count; ++i) {
+				for (int i = 0; i < vertex_fotmat_size; ++i) {
 					// 端っこの点の情報は適当に入れる
 					if (i == 0) {
 						v[i].position = Vector3(-radius * 0.2f, 0, 0); //ちょっととがっている
@@ -342,8 +346,8 @@ void Rope_renderer::set_meshoffset(std::shared_ptr<std::vector<std::pair<Vector3
 						continue;
 					}
 					// 0には端っこの情報が入っているためi-1
-					v[i] = vertex_pos[(i - 1) % sphere_count];
-					v[i].bone_indices[0] = (i - 1) / sphere_count;
+					v[i] = vertex_pos[(i - 1) % split_count];
+					v[i].bone_indices[0] = (i - 1) / split_count;
 				}
 			}
 
@@ -375,8 +379,8 @@ void Rope_renderer::set_meshoffset(std::shared_ptr<std::vector<std::pair<Vector3
 				if (sphere_num == 0) {
 					for (int vertex_num = 0; vertex_num < split_count; ++vertex_num) {
 						indices[index_num + 0] = 0;
-						indices[index_num + 1] = 0 + vertex_num;
-						indices[index_num + 2] = 0 + (vertex_num + 1) % split_count;
+						indices[index_num + 1] = 0 + 1 + vertex_num;
+						indices[index_num + 2] = 0 + 1 + (vertex_num + 1) % split_count;
 						index_num += 3;
 					}
 					continue;
@@ -401,9 +405,9 @@ void Rope_renderer::set_meshoffset(std::shared_ptr<std::vector<std::pair<Vector3
 				// 端っこの部分
 				if (sphere_num == sphere_count - 1) {
 					for (int vertex_num = 0; vertex_num < split_count; ++vertex_num) {
-						indices[index_num + 2] = sphere_count - 1;
-						indices[index_num + 1] = sphere_count - 1 + vertex_num;
-						indices[index_num + 0] = sphere_count - 1 + (vertex_num + 1) % split_count;
+						indices[index_num + 2] = sphere_count * split_count + 2 - 1;
+						indices[index_num + 1] = 1 + (sphere_count - 1) * split_count + vertex_num;
+						indices[index_num + 0] = 1 + (sphere_count - 1) * split_count + (vertex_num + 1) % split_count;
 						index_num += 3;
 					}
 				}
@@ -426,20 +430,20 @@ void Rope_renderer::set_meshoffset(std::shared_ptr<std::vector<std::pair<Vector3
 
 		}
 
-		// offset用配列の準備
-		{
-			vertex_offset = std::make_shared<std::vector<std::pair<Vector3, Vector3>>>();
-			//mesh_offset->resize(meshes->size());
-			std::pair<Vector3, Vector3> zero_format;
-			zero_format.first = Vector3(0);
-			zero_format.second = Vector3(0);
+		//// offset用配列の準備
+		//{
+		//	vertex_offset = std::make_shared<std::vector<std::pair<Vector3, Vector3>>>();
+		//	//mesh_offset->resize(meshes->size());
+		//	std::pair<Vector3, Vector3> zero_format;
+		//	zero_format.first = Vector3(0);
+		//	zero_format.second = Vector3(0);
 
-			vertex_offset->resize(sphere_count);
-			for (auto& sphere : *vertex_offset.get()) {
-				sphere.first = Vector3(0);
-				sphere.second = Vector3(0);
-			}
-		}
+		//	vertex_offset->resize(sphere_count);
+		//	for (auto& sphere : *vertex_offset.get()) {
+		//		sphere.first = Vector3(0);
+		//		sphere.second = Vector3(0);
+		//	}
+		//}
 
 
 

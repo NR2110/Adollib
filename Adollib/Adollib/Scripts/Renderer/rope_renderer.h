@@ -28,7 +28,7 @@ namespace Adollib {
 		struct ConstantBufferPerRope
 		{
 			Vector4 joint_position[MAX_JOINTS];
-			Matrix33 joint_rotate[MAX_JOINTS];
+			Matrix44 joint_rotate[MAX_JOINTS];
 		};
 
 	public:

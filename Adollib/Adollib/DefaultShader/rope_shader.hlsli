@@ -4,7 +4,7 @@
 //--------------------------------------------
 
 #define MAX_JOINTS 100
-cbuffer CBPerMaterial : register(b9)
+cbuffer CBPerJoint : register(b9)
 {
     float4 joint_position[MAX_JOINTS];
     row_major float4x4 joint_rotate[MAX_JOINTS];
