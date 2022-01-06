@@ -260,6 +260,7 @@
     <ClInclude Include="Scripts\Physics\shape_capsule.h" />
     <ClInclude Include="Scripts\Physics\shape_meshcoll.h" />
     <ClInclude Include="Scripts\Physics\shape_plane.h" />
+    <ClInclude Include="Scripts\Physics\shape_rope.h" />
     <ClInclude Include="Scripts\Physics\shape_sphere.h" />
     <ClInclude Include="Scripts\Physics\collider_types.h" />
     <ClInclude Include="Scripts\Physics\ALP_contact.h" />
@@ -369,6 +370,7 @@
     <ClCompile Include="Scripts\Physics\meshcoll_resorce_manager.cpp" />
     <ClCompile Include="Scripts\Physics\ray.cpp" />
     <ClCompile Include="Scripts\Physics\shape_croth.cpp" />
+    <ClCompile Include="Scripts\Physics\shape_rope.cpp" />
     <ClCompile Include="Scripts\Physics\twistjoint.cpp" />
     <ClCompile Include="Scripts\Renderer\material.cpp" />
     <ClCompile Include="Scripts\Renderer\material_for_collider.cpp" />
@@ -436,6 +438,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </None>
     <None Include="DefaultShader\render_directional_shadow.hlsli" />
+    <None Include="DefaultShader\rope_shader.hlsli" />
     <None Include="DefaultShader\sprite.hlsli">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
@@ -582,15 +585,17 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="DefaultShader\rope_calculate_cs.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+    <FxCompile Include="DefaultShader\rope_shader_ps.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\rope_shader_vs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="DefaultShader\sky_map_vs.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>

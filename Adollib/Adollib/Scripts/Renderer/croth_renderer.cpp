@@ -252,7 +252,7 @@ void Croth_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& ins
 		int mesh_count = 0;
 		for (auto& buffer : computeBuf_vertexoffset) {
 
-			auto data = map_buffer<VertexOffset>(buffer);
+			auto data = map_buffer<Croth_VertexOffset>(buffer);
 
 			int vertex_size = meshes->at(mesh_count).vertices.size();
 			int vertex_start = 0;
@@ -390,7 +390,7 @@ void Croth_renderer::set_meshes(std::vector<Mesh::mesh>* l_meshes) {
 
 					compute_shader->create_StructureBuffer(sizeof(u_int), indexes_count, &mesh.indexces[0], computeBuf_index[mesh_count], false);
 					compute_shader->create_StructureBuffer(sizeof(VertexFormat), vertices_count, &mesh.vertices[0], computeBuf_vertex[mesh_count], false);
-					compute_shader->create_StructureBuffer(sizeof(VertexOffset), vertices_count, nullptr, computeBuf_vertexoffset[mesh_count], true);
+					compute_shader->create_StructureBuffer(sizeof(Croth_VertexOffset), vertices_count, nullptr, computeBuf_vertexoffset[mesh_count], true);
 					compute_shader->create_StructureBuffer(sizeof(Vector4), 1, nullptr, computeBuf_color[mesh_count], true);
 
 					++mesh_count;

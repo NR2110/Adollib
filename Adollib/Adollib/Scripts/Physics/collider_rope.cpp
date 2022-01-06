@@ -10,8 +10,7 @@
 #include "ALP_physics.h"
 #include "ALP_joint.h"
 
-#include "shape_meshcoll.h"
-#include "shape_croth.h"
+#include "shape_rope.h"
 
 #include "../Main/Adollib.h"
 
@@ -71,9 +70,9 @@ const Physics_data& Collider_Rope::get_vertex_data(const int& vertex_num) const 
 
 void Collider_Rope::create_rope() {
 
-	vertex_offset = std::make_shared<std::vector<std::vector<std::pair<Vector3, Vector3>>>>();
+	vertex_offset = std::make_shared<std::vector<std::pair<Vector3, Vector3>>>();
 	vertex_offset->resize(1);
-	vertex_offset->at(0).resize(sphere_num_size);
+	vertex_offset->resize(sphere_num_size);
 
 	colliders.resize(sphere_num_size);
 
@@ -86,14 +85,13 @@ void Collider_Rope::create_rope() {
 		collider->awake();
 		collider->physics_data = default_physics_data;
 
-		auto croth = collider->add_shape<Croth_vertex>();
+		auto croth = collider->add_shape<Rope_vertex>();
 
-		croth->mesh_id = 0;
 		croth->vertex_id = sphere_num;
 		croth->size = sphere_size_r;
 		croth->vertex_offset = vertex_offset;
 
-		vertex_offset->at(0).at(sphere_num) = std::pair<Vector3, Vector3>(Vector3(0), Vector3(0));
+		vertex_offset->at(sphere_num) = std::pair<Vector3, Vector3>(Vector3(0), Vector3(0));
 
 		colliders.at(sphere_num) = collider;
 	}
@@ -137,7 +135,7 @@ void Collider_Rope::create_rope() {
 	}
 
 	for (int collider_num = 0; collider_num < sphere_num_size; ++collider_num) {
-		vertex_offset->at(0).at(collider_num).first = Vector3(0, 0, 1) * sphree_offset_size * collider_num;
+		vertex_offset->at(collider_num).first = Vector3(0, 0, 1) * sphree_offset_size * collider_num;
 	}
 
 

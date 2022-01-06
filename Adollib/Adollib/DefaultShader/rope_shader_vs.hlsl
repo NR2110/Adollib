@@ -1,0 +1,30 @@
+#include "rope_shader.hlsli"
+
+
+
+//--------------------------------------------
+//	頂点シェーダー
+//--------------------------------------------
+
+PSInput main(VSInput input, VSInput_INSTANCE instance_input)
+{
+    PSInput output = (PSInput) 0;
+
+    float4 P = float4(input.Position, 1.0);
+    float4 worldPos = mul(P, joint_rotate[input.BoneWeights.x]) + joint_position[input.BoneWeights.x];
+
+	// 射影空間に変換(列優先)
+    P = mul(worldPos, mul(View, Projection));
+
+	// ワールド法線算出
+    float3 N = mul(input.Normal, (float3x3) joint_rotate[input.BoneWeights.x]);
+    N = normalize(N); //正規化
+
+    output.Position = P;
+    output.Color = materialColor * instance_input.color;
+    output.Tex = input.Tex;
+    output.wPos = worldPos.xyz;
+    output.wNormal = N;
+
+    return output;
+}

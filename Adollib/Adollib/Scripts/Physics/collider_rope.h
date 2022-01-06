@@ -22,7 +22,7 @@ namespace Adollib {
 		class ALP_Joint;
 		class ALP_Collider;
 		class ALP_Physics;
-		class Meshcollider_data;
+		struct Meshcollider_data;
 		namespace Contacts {
 			struct Contact_pair;
 		}
@@ -66,8 +66,7 @@ namespace Adollib {
 
 		std::unordered_map<Rope_constraint_type, std::vector<Joint_base*>> joints; //配置したcolliderの配列
 
-		// 複数meshに対応した形なのでvectorが余分にある 最初のvector(mesh用)のsizeは1
-		std::shared_ptr<std::vector<std::vector<std::pair<Vector3, Vector3>>>> vertex_offset; //model頂点からどれくらいずれているか rendererがposition,normalのstd::pairなので合わせる
+		std::shared_ptr<std::vector<std::pair<Vector3, Vector3>>> vertex_offset; //model頂点からどれくらいずれているか rendererがposition,normalのstd::pairなので合わせる
 
 
 	public:
@@ -76,7 +75,7 @@ namespace Adollib {
 		// 指定した番号にアタッチされているjointの情報を得る
 		Joint_base* get_joint(const int num);
 
-		std::shared_ptr<std::vector<std::vector<std::pair<Vector3, Vector3>>>> get_vertex_offset() { return vertex_offset; };
+		std::shared_ptr<std::vector<std::pair<Vector3, Vector3>>> get_vertex_offset() { return vertex_offset; };
 
 	public:
 		// 交差していたらtrueを返す

@@ -23,6 +23,7 @@
 
 #include "stage_manager.h"
 #include "../Adollib/Scripts/Renderer/croth_renderer.h"
+#include "../Adollib/Scripts/Renderer/rope_renderer.h"
 
 
 namespace Adollib
@@ -513,7 +514,7 @@ namespace Adollib
 						Gameobject* belt = Gameobject_manager::createCube("belt");
 						Waist->add_child(belt);
 						belt->transform->local_pos = Vector3(0, -0.45f, 0);
-						belt->transform->local_scale = Vector3(1.1, 0.25f, 1.1f);
+						belt->transform->local_scale = Vector3(1.1f, 0.25f, 1.1f);
 						belt->renderer->color = face_color;
 					}
 
@@ -722,7 +723,7 @@ namespace Adollib
 					}
 
 					{
-						auto Cone = Joint::add_Conejoint(Waist_collider, Rleg_collider, Vector3(-0.6f, -0.8f, 0), Vector3(0, 0.3, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect());
+						auto Cone = Joint::add_Conejoint(Waist_collider, Rleg_collider, Vector3(-0.6f, -0.8f, 0), Vector3(0, 0.3f, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect());
 						Cone->limit = 48;
 
 						auto Twist = Joint::add_Twistjoint(Waist_collider, Rleg_collider, Vector3(0, 1, 0), Vector3(0, 1, 0));
@@ -733,7 +734,7 @@ namespace Adollib
 						hinge->limit = Vector2(0, 60);
 					}
 					{
-						auto Cone = Joint::add_Conejoint(Waist_collider, Lleg_collider, Vector3(+0.6f, -0.8, 0), Vector3(0, 0.3, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect());
+						auto Cone = Joint::add_Conejoint(Waist_collider, Lleg_collider, Vector3(+0.6f, -0.8f, 0), Vector3(0, 0.3f, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect());
 						Cone->limit = 48;
 
 						auto Twist = Joint::add_Twistjoint(Waist_collider, Lleg_collider, Vector3(0, 1, 0), Vector3(0, 1, 0));
@@ -749,32 +750,6 @@ namespace Adollib
 				}
 				imgui_num++;
 
-			}
-
-			//croth sphere
-			{
-				static int TREE_pyramid_count = 3;
-				static float pos[3] = { 0 };
-				bool summon = false;
-				ImGui::Separator();
-				ImGui::Text("Croth_Sphere"); ImGui::NextColumn();
-				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
-				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), pos, 0.1f); ImGui::NextColumn(); ImGui::NextColumn();
-				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &TREE_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
-
-				if (summon == true) {
-					auto sphere = Gameobject_manager::createSphere();
-					sphere->transform->local_pos = Vector3(pos[0], pos[1], pos[2]);
-
-					auto coll = sphere->addComponent<Collider_Croth>();
-					coll->load_file("./DefaultModel/sphere.fbx", true, false);
-
-					auto renderer = sphere->addComponent<Croth_renderer>();
-					renderer->set_meshoffset(coll->get_vertex_offset());
-
-					all_pearent->add_child(sphere);
-				}
-				imgui_num++;
 			}
 
 			//rope
@@ -801,10 +776,36 @@ namespace Adollib
 					data.is_moveable = false;
 					coll->set_vertex_data(0, data);
 
-					//auto renderer = go->addComponent<Croth_renderer>();
-					//renderer->set_meshoffset(coll->get_vertex_offset());
+					auto renderer = go->addComponent<Rope_renderer>();
+					renderer->set_meshoffset(coll->get_vertex_offset());
 
 					all_pearent->add_child(go);
+				}
+				imgui_num++;
+			}
+
+			//croth sphere
+			{
+				static int TREE_pyramid_count = 3;
+				static float pos[3] = { 0 };
+				bool summon = false;
+				ImGui::Separator();
+				ImGui::Text("Croth_Sphere"); ImGui::NextColumn();
+				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
+				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), pos, 0.1f); ImGui::NextColumn(); ImGui::NextColumn();
+				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &TREE_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
+
+				if (summon == true) {
+					auto sphere = Gameobject_manager::createSphere();
+					sphere->transform->local_pos = Vector3(pos[0], pos[1], pos[2]);
+
+					auto coll = sphere->addComponent<Collider_Croth>();
+					coll->load_file("./DefaultModel/sphere.fbx", true, false);
+
+					auto renderer = sphere->addComponent<Croth_renderer>();
+					renderer->set_meshoffset(coll->get_vertex_offset());
+
+					all_pearent->add_child(sphere);
 				}
 				imgui_num++;
 			}

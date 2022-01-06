@@ -7,52 +7,29 @@
 
 namespace Adollib {
 
-	namespace Compute_S { class ComputeShader; }
-
-	// polygon描画用のInstance
-	//struct Instance {
-	//	DirectX::XMFLOAT4X4 transformMatrix = {};	// world変換やNDC変換を入れる行列
-	//	DirectX::XMFLOAT4 texcoordTransform = { 0.0f,0.0f,1.0f,1.0f };
-	//	DirectX::XMFLOAT4 color = { 1.0f,1.0f,1.0f,1.0f };
-	//};
-	//と同じサイズ
-	struct Instance_polygon {
-
-		Vector3 position[3] = {};
-
-		Vector3 normal[3] = {};
-
-		Vector2 texcoordTransform = {};
-
-		Vector4 color = { 1.0f,1.0f,1.0f,1.0f };
-	};
-	struct VertexOffset {
-		Vector3 position;
-		Vector3 normal;
-	};
-
 	class Rope_renderer : public Renderer_base {
 	private:
-		Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
-		Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer;
-		Microsoft::WRL::ComPtr<ID3D11Buffer> instanceBuffer;
+		Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer = nullptr;
+		Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer = nullptr;
 
-		// compute_Shader
-		std::shared_ptr<Compute_S::ComputeShader> compute_shader = nullptr;
+		Microsoft::WRL::ComPtr<ID3D11Buffer> cb_per_rope = nullptr;
 
-		Microsoft::WRL::ComPtr<ID3D11Buffer> computeBuf_vertexoffset = { nullptr };
-		Microsoft::WRL::ComPtr<ID3D11Buffer> computeBuf_color = { nullptr };
-		Microsoft::WRL::ComPtr<ID3D11Buffer> computeBuf_result = nullptr;
+		// 分割数
+		int split_count = 4;
 
-		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  computeBufSRV_vertexoffset = { nullptr };
-		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  computeBufSRV_color = { nullptr };
-		Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> computeBufUAV_result = nullptr;
-
-		int instance_count = 0;
-
-		int facet_count = 4;
+		// 半径
+		float radius = 1;
 
 		std::shared_ptr<std::vector<std::pair<Vector3, Vector3>>> vertex_offset;
+
+	private:
+		// constantbuffer (b9)
+		static const int MAX_JOINTS = 100;
+		struct ConstantBufferPerRope
+		{
+			Vector4 joint_position[MAX_JOINTS];
+			Matrix33 joint_rotate[MAX_JOINTS];
+		};
 
 	public:
 		void load_texture(const wchar_t* filename = nullptr);

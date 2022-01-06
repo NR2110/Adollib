@@ -143,6 +143,9 @@
     <Filter Include="00_Adollib\44_render\shader\hlsl\rope">
       <UniqueIdentifier>{786516a1-4bf7-4588-9a4e-2c22fb2b427e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00_Adollib\22_physics\collider\shapes\other">
+      <UniqueIdentifier>{dddb83a8-c32c-4088-a435-9c88fdf544d5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Scripts\player.cpp">
@@ -412,14 +415,17 @@
     <ClCompile Include="Scripts\Physics\collider_croth.cpp">
       <Filter>00_Adollib\22_physics\collider</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Physics\shape_croth.cpp">
-      <Filter>00_Adollib\22_physics\collider\shapes</Filter>
-    </ClCompile>
     <ClCompile Include="Scripts\Physics\collider_rope.cpp">
       <Filter>00_Adollib\22_physics\collider</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Renderer\rope_renderer.cpp">
       <Filter>00_Adollib\44_render\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Physics\shape_croth.cpp">
+      <Filter>00_Adollib\22_physics\collider\shapes\other</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Physics\shape_rope.cpp">
+      <Filter>00_Adollib\22_physics\collider\shapes\other</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -822,9 +828,6 @@
     <ClInclude Include="Scripts\Physics\shape_capsule.h">
       <Filter>00_Adollib\22_physics\collider\shapes</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Physics\shape_croth.h">
-      <Filter>00_Adollib\22_physics\collider\shapes</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts\Physics\shape_meshcoll.h">
       <Filter>00_Adollib\22_physics\collider\shapes</Filter>
     </ClInclude>
@@ -845,6 +848,12 @@
     </ClInclude>
     <ClInclude Include="Scripts\Renderer\rope_renderer.h">
       <Filter>00_Adollib\44_render\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\shape_croth.h">
+      <Filter>00_Adollib\22_physics\collider\shapes\other</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Physics\shape_rope.h">
+      <Filter>00_Adollib\22_physics\collider\shapes\other</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -890,6 +899,9 @@
     </None>
     <None Include="DefaultShader\croth_shader.hlsli">
       <Filter>00_Adollib\44_render\shader\hlsl\croth</Filter>
+    </None>
+    <None Include="DefaultShader\rope_shader.hlsli">
+      <Filter>00_Adollib\44_render\shader\hlsl\rope</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -950,7 +962,10 @@
     <FxCompile Include="DefaultShader\croth_calculate_cs.hlsl">
       <Filter>00_Adollib\44_render\shader\hlsl\croth</Filter>
     </FxCompile>
-    <FxCompile Include="DefaultShader\rope_calculate_cs.hlsl">
+    <FxCompile Include="DefaultShader\rope_shader_vs.hlsl">
+      <Filter>00_Adollib\44_render\shader\hlsl\rope</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\rope_shader_ps.hlsl">
       <Filter>00_Adollib\44_render\shader\hlsl\rope</Filter>
     </FxCompile>
   </ItemGroup>

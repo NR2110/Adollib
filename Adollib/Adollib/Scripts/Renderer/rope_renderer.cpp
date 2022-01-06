@@ -27,26 +27,33 @@ using namespace Compute_S;
 
 //#define use_thread_crothrenderer
 
-template<class T>
-T* map_buffer(Microsoft::WRL::ComPtr<ID3D11Buffer>& buffer) {
-	HRESULT hr = S_OK;
-	const D3D11_MAP map = D3D11_MAP_WRITE_DISCARD;
-	D3D11_MAPPED_SUBRESOURCE mappedBuffer = {};
-	hr = Systems::DeviceContext->Map(buffer.Get(), 0, map, 0, &mappedBuffer);
+//
+//template<class T>
+//T* map_buffer(Microsoft::WRL::ComPtr<ID3D11Buffer>& buffer) {
+//	HRESULT hr = S_OK;
+//	const D3D11_MAP map = D3D11_MAP_WRITE_DISCARD;
+//	D3D11_MAPPED_SUBRESOURCE mappedBuffer = {};
+//	hr = Systems::DeviceContext->Map(buffer.Get(), 0, map, 0, &mappedBuffer);
+//
+//	if (FAILED(hr))
+//	{
+//		assert(0 && "failed Map InstanceBuffer dynamic(RenderManager)");
+//		return nullptr;
+//	}
+//	return static_cast<T*>(mappedBuffer.pData);
+//}
+//void unmap_buffer(Microsoft::WRL::ComPtr<ID3D11Buffer>& buffer) {
+//	Systems::DeviceContext->Unmap(buffer.Get(), 0);
+//}
 
-	if (FAILED(hr))
-	{
-		assert(0 && "failed Map InstanceBuffer dynamic(RenderManager)");
-		return nullptr;
-	}
-	return static_cast<T*>(mappedBuffer.pData);
-}
-void unmap_buffer(Microsoft::WRL::ComPtr<ID3D11Buffer>& buffer) {
-	Systems::DeviceContext->Unmap(buffer.Get(), 0);
-}
 
 
 void Rope_renderer::init() {
+
+	// コンスタントバッファの作成
+	{
+		Systems::CreateConstantBuffer(cb_per_rope.ReleaseAndGetAddressOf(), sizeof(ConstantBufferPerGO));
+	}
 
 	//	頂点バッファ作成
 	{
@@ -85,24 +92,16 @@ void Rope_renderer::init() {
 
 	}
 
-	// computeshaderのload
-	{
-		compute_shader = std::make_shared<ComputeShader>();
-		compute_shader->Load("./DefaultShader/rope_calculate_cs.cso");
-	}
-
 	// 初期maerialの設定
 	{
-		material = Material_manager::find_material("croth_material");
+		material = Material_manager::find_material("rope_material");
 
 		if (material == nullptr) {
 
-			material = Material_manager::create_material("croth_material");
+			material = Material_manager::create_material("rope_material");
 
-			material->Load_VS("./DefaultShader/croth_shader_vs.cso");
-			material->Load_PS("./DefaultShader/croth_shader_ps.cso");
-
-			material->RS_state = State_manager::RStypes::RS_CULL_NONE;
+			material->Load_VS("./DefaultShader/rope_shader_vs.cso");
+			material->Load_PS("./DefaultShader/rope_shader_ps.cso");
 		}
 	}
 
@@ -241,39 +240,16 @@ void Rope_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& inst
 	// アタッチされている頂点の数
 	const int vertex_size = vertex_offset->size();
 
-	// StructureBufferをoffsetの情報で更新する
-	{
-		auto data = map_buffer<VertexOffset>(computeBuf_vertexoffset);
-
-		for (int i = 0; i < vertex_size; ++i) {
-			data[i].position = vertex_offset->at(i).first;
-			data[i].normal = vertex_offset->at(i).second;
-		}
-		unmap_buffer(computeBuf_vertexoffset);
-	}
-
-	// color情報の更新
-	{
-
-		auto data = map_buffer<Vector4>(computeBuf_color);
-
-		data[0] = color;
-
-		unmap_buffer(computeBuf_color);
-	}
-
-
-	// compute shaderを走らせる
-	{
-		ID3D11ShaderResourceView* pSRVs[2] = { computeBufSRV_vertexoffset.Get(), computeBufSRV_color.Get() };
-
-		int loop_count = vertex_size / 32 + 1;
-		compute_shader->run(pSRVs, 2, computeBufUAV_result, loop_count, 1, 1);
-
-	}
-
 	//::: render ::::::::
 	{
+		ConstantBufferPerRope rope_cb;
+		for (int i = 0; i < vertex_size; ++i) {
+			rope_cb.joint_position[i] = Vector4(vertex_offset->at(i).first, 1);
+
+			//if (i - 1 < 0) {
+			rope_cb.joint_rotate[i] = matrix33_identity();
+			//}
+		}
 
 		Systems::DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
@@ -286,10 +262,10 @@ void Rope_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& inst
 		// textureをSRVにセット
 		material->get_texture()->Set(0);
 
-		UINT strides[2] = { sizeof(VertexFormat), sizeof(Instance) };
-		UINT offsets[2] = { 0, 0 };
-		ID3D11Buffer* vbs[2] = { vertexBuffer.Get(), instanceBuffer.Get() };
-		Systems::DeviceContext->IASetVertexBuffers(0, 2, vbs, strides, offsets);
+		UINT strides = sizeof(VertexFormat);
+		UINT offsets = 0;
+		ID3D11Buffer* vbs = vertexBuffer.Get();
+		Systems::DeviceContext->IASetVertexBuffers(0, 1, &vbs, &strides, &offsets);
 		Systems::DeviceContext->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 
 		// CB : ConstantBufferPerOBJ
@@ -309,8 +285,9 @@ void Rope_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& inst
 		Systems::DeviceContext->VSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
 		Systems::DeviceContext->PSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
 
-
-		Systems::DeviceContext->DrawIndexedInstanced(3, instance_count, 0, 0, 0);
+		const int facet_count = (vertex_size - 1) * split_count * 2 + (split_count * 2);
+		const int index_count = facet_count * 3;
+		Systems::DeviceContext->DrawIndexedInstanced(index_count, 1, 0, 0, 0);
 
 	}
 }
@@ -327,34 +304,126 @@ void Rope_renderer::set_meshoffset(std::shared_ptr<std::vector<std::pair<Vector3
 
 		// アタッチされるoffsetのsizeからvertex_bufferのサイズの変更などを行う
 		int sphere_count = off->size();
+		//(sphereの数 - 1) * 分割数 * 2(各面に3角形が2つだから)
+		//int facet_count = (sphere_count - 1) * split_count * 2;
 
-		// bufferの作成
+		//	頂点バッファ作成
 		{
-			// 前のものを削除
-			computeBuf_vertexoffset.Reset();
-			computeBuf_color.Reset();
+			// baseの頂点座標の計算
+			// 面法線が(1,0,0)の円を作る
+			std::vector<VertexFormat> vertex_pos;
+			vertex_pos.resize(split_count);
+			for (int i = 0; i < split_count; ++i)
+			{
+				const auto radian = PI * 2 * ((float)i / split_count);
 
-			// Bufferの作成
-			// computeBuf_vertex, computeBuf_indexはここでしか変更しない
-			compute_shader->create_StructureBuffer(sizeof(VertexOffset), sphere_count, nullptr, computeBuf_vertexoffset, true);
-			compute_shader->create_StructureBuffer(sizeof(Vector4), 1, nullptr, computeBuf_color, true);
+				vertex_pos[i].normal = Vector3(0, sinf(radian), cosf(radian)).unit_vect();
+				vertex_pos[i].position = vertex_pos[i].normal * radius;
 
-			// (sphereの数 - 1) * 面の数 * 2(各面に3角形が2つだから)
-			instance_count = (sphere_count - 1) * facet_count * 2;
-			// GPUを(32,1,1)で回すため 端数を考慮して32だけ大きくとる
-			compute_shader->create_StructureBuffer(sizeof(Instance_polygon), instance_count + 32, nullptr, instanceBuffer, false);
+			}
+
+			// vertex_formatの作成
+			const int vertex_fotmat_size = sphere_count * split_count + 2;
+			std::vector<VertexFormat> v;
+			v.resize(vertex_fotmat_size); //ropeの端っこの中心点
+			{
+				for (int i = 0; i < sphere_count * split_count; ++i) {
+					// 端っこの点の情報は適当に入れる
+					if (i == 0) {
+						v[i].position = Vector3(-radius * 0.2f, 0, 0); //ちょっととがっている
+						v[i].normal = Vector3(-1, 0, 0);
+						v[i].bone_indices[0] = 0; //対応するsphere_numを入れる
+						continue;
+					}
+					if (i == vertex_fotmat_size - 1) {
+						v[i].position = Vector3(+radius * 0.2f, 0, 0); //ちょっととがっている
+						v[i].normal = Vector3(+1, 0, 0);
+						v[i].bone_indices[0] = sphere_count - 1; //対応するsphere_numを入れる
+						continue;
+					}
+					// 0には端っこの情報が入っているためi-1
+					v[i] = vertex_pos[(i - 1) % sphere_count];
+					v[i].bone_indices[0] = (i - 1) / sphere_count;
+				}
+			}
+
+			D3D11_BUFFER_DESC bd;
+			ZeroMemory(&bd, sizeof(bd));
+			bd.Usage = D3D11_USAGE_DEFAULT;
+			bd.ByteWidth = sizeof(VertexFormat) * vertex_fotmat_size;
+			bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+
+			D3D11_SUBRESOURCE_DATA res;
+			ZeroMemory(&res, sizeof(res));
+			res.pSysMem = &v[0];
+
+			Systems::Device->CreateBuffer(&bd, &res, vertexBuffer.ReleaseAndGetAddressOf());
 		}
 
-		// SRVの作成
+		// indexバッファ作成
 		{
-			// 前のものを削除
-			computeBufSRV_vertexoffset.Reset();
-			computeBufSRV_color.Reset();
+			std::vector<u_int> indices;
+			// (sphereの数 - 1) * 分割数 * 2(各面に3角形が2つだから)
+			// 端っこのふたの部分(split_count * 2)
+			const int facet_count = (sphere_count - 1) * split_count * 2 + (split_count * 2);
+			const int index_count = facet_count * 3;
+			indices.resize(index_count);
 
-			compute_shader->createSRV_fromSB(computeBuf_vertexoffset, computeBufSRV_vertexoffset);
-			compute_shader->createSRV_fromSB(computeBuf_color, computeBufSRV_color);
+			int index_num = 0;
+			for (int sphere_num = 0; sphere_num < sphere_count; ++sphere_num) {
+				// 端っこの部分
+				if (sphere_num == 0) {
+					for (int vertex_num = 0; vertex_num < split_count; ++vertex_num) {
+						indices[index_num + 0] = 0;
+						indices[index_num + 1] = 0 + vertex_num;
+						indices[index_num + 2] = 0 + (vertex_num + 1) % split_count;
+						index_num += 3;
+					}
+					continue;
+				}
 
-			compute_shader->createUAV_fromSB(instanceBuffer, computeBufUAV_result);
+				const int sphere_ID_0 = sphere_num - 1;
+				const int sphere_ID_1 = sphere_num;
+
+				for (int vertex_num = 0; vertex_num < split_count; ++vertex_num) {
+
+					indices[index_num + 0] = 1 + sphere_ID_0 * split_count + vertex_num;
+					indices[index_num + 1] = 1 + sphere_ID_1 * split_count + vertex_num;
+					indices[index_num + 2] = 1 + sphere_ID_0 * split_count + (vertex_num + 1) % split_count;
+					index_num += 3;
+
+					indices[index_num + 0] = 1 + sphere_ID_0 * split_count + (vertex_num + 1) % split_count;
+					indices[index_num + 1] = 1 + sphere_ID_1 * split_count + vertex_num;
+					indices[index_num + 2] = 1 + sphere_ID_1 * split_count + (vertex_num + 1) % split_count;
+					index_num += 3;
+				}
+
+				// 端っこの部分
+				if (sphere_num == sphere_count - 1) {
+					for (int vertex_num = 0; vertex_num < split_count; ++vertex_num) {
+						indices[index_num + 2] = sphere_count - 1;
+						indices[index_num + 1] = sphere_count - 1 + vertex_num;
+						indices[index_num + 0] = sphere_count - 1 + (vertex_num + 1) % split_count;
+						index_num += 3;
+					}
+				}
+			}
+
+			D3D11_BUFFER_DESC indexDesc = {};
+			indexDesc.ByteWidth = index_count * sizeof(u_int);          // バッファのサイズ
+			indexDesc.Usage = D3D11_USAGE_IMMUTABLE;	          // バッファの読み書き法
+			indexDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;    // パイプラインにどうバインドするか指定
+			indexDesc.CPUAccessFlags = 0;                    // CPUのアクセスフラグ　0でアクセスしない
+			indexDesc.MiscFlags = 0;                           // その他のフラグ
+			indexDesc.StructureByteStride = 0;                 // バッファ構造体の場合の要素数
+
+			D3D11_SUBRESOURCE_DATA indexSubResource = {};
+			indexSubResource.pSysMem = &indices[0];   // 初期化データのポインタ
+			indexSubResource.SysMemPitch = 0;        // 頂点バッファでは使わない
+			indexSubResource.SysMemSlicePitch = 0;   // 頂点バッファでは使わない
+
+			Systems::Device->CreateBuffer(&indexDesc, &indexSubResource, indexBuffer.ReleaseAndGetAddressOf());
+
 		}
 
 		// offset用配列の準備
@@ -371,6 +440,9 @@ void Rope_renderer::set_meshoffset(std::shared_ptr<std::vector<std::pair<Vector3
 				sphere.second = Vector3(0);
 			}
 		}
+
+
+
 	}
 
 

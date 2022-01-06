@@ -26,7 +26,7 @@ namespace Adollib {
 
 		Vector4 color = { 1.0f,1.0f,1.0f,1.0f };
 	};
-	struct VertexOffset {
+	struct Croth_VertexOffset {
 		Vector3 position;
 
 		Vector3 normal;

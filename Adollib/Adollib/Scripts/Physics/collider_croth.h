@@ -42,7 +42,7 @@ namespace Adollib {
 		class ALP_Joint;
 		class ALP_Collider;
 		class ALP_Physics;
-		class Meshcollider_data;
+		struct Meshcollider_data;
 		namespace Contacts {
 			struct Contact_pair;
 		}
