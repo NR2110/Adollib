@@ -254,23 +254,6 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 					continue;
 				}
 
-				{
-					const float dis = fabsf(DirectX::XMVectorGetX(distance) - joint->offset);
-					if (0.0f < dis - joint->slop) {
-
-						const int sign = (DirectX::XMVectorGetX(distance) - joint->offset > 0) ? +1 : -1;
-
-						// S‘©“_‚ÆCollider‚ÌÀ•W‚Ì·•ª‚Ì“àÏ ‚Æ offset‚ðl—¶‚µ‚Ästretch‚©shrink‚ð”»’f‚·‚é
-						const float& bias = (DirectX::XMVectorGetX(DirectX::XMVector3Dot(
-							DirectX::XMVectorSubtract(position[0], position[1]),
-							DirectX::XMVectorSubtract(DirectX::XMLoadFloat3(&transform[0]->position), DirectX::XMLoadFloat3(&transform[1]->position))))
-							* sign
-							< 0) ? joint->stretch_bias : joint->shrink_bias;
-
-						rhs_pow = bias * sign * (dis - joint->slop) * inv_duration; // position error
-					}
-				}
-
 				direction = DirectX::XMVectorDivide(direction, distance);
 
 				DirectX::XMVECTOR velocityA = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&ALPphysics[0]->linear_velocity()), DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&ALPphysics[0]->angula_velocity()), rA));

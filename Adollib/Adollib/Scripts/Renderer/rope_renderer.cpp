@@ -100,8 +100,8 @@ void Rope_renderer::init() {
 
 			material = Material_manager::create_material("rope_material");
 
-			//material->Load_VS("./DefaultShader/rope_shader_vs.cso");
-			material->Load_VS("./DefaultShader/default_vs.cso");
+			material->Load_VS("./DefaultShader/rope_shader_vs.cso");
+			//material->Load_VS("./DefaultShader/default_vs.cso");
 			material->Load_PS("./DefaultShader/rope_shader_ps.cso");
 		}
 	}
@@ -239,17 +239,38 @@ void Rope_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& inst
 	if (bufferCount == 0) return;
 
 	// アタッチされている頂点の数
+	const int joint_size = vertex_offset->size();
 	const int vertex_size = vertex_offset->size();
 
 	//::: render ::::::::
 	{
 		ConstantBufferPerRope rope_cb;
-		for (int i = 0; i < vertex_size; ++i) {
-			rope_cb.joint_position[i] = Vector4(vertex_offset->at(i).first, 1);
+		// 座標
+		{
+			int sign = +1;
+			for (int i = 0; i < joint_size; ++i) {
+				rope_cb.joint_position[i] = Vector4(vertex_offset->at(i).first, 1);
+			}
+		}
 
-			//if (i - 1 < 0) {
-			rope_cb.joint_rotate[i] = matrix44_identity();
-			//}
+		// 回転
+		for (int i = 0; i < joint_size; ++i) {
+			if (i - 1 < 0) {
+				const Vector4 Vec1 = rope_cb.joint_position[i + 1] - rope_cb.joint_position[i];
+				rope_cb.joint_rotate[i] = quaternion_from_to_rotate(Vector3(1, 0, 0), Vec1.xyz()).get_rotate_matrix();
+				continue;
+			}
+			if (i + 1 == joint_size) {
+				const Vector4 Vec0 = rope_cb.joint_position[i] - rope_cb.joint_position[i - 1];
+				rope_cb.joint_rotate[i] = quaternion_from_to_rotate(Vector3(1, 0, 0), Vec0.xyz()).get_rotate_matrix();
+				continue;
+			}
+
+			const Vector4 Vec0 = rope_cb.joint_position[i] - rope_cb.joint_position[i - 1]; //後ろから自分
+			const Vector4 Vec1 = rope_cb.joint_position[i + 1] - rope_cb.joint_position[i]; //自分から前
+
+			rope_cb.joint_rotate[i] = quaternion_from_to_rotate(Vector3(1, 0, 0), ((Vec0 + Vec1) * 0.5f).xyz()).get_rotate_matrix();
+
 		}
 		Systems::DeviceContext->UpdateSubresource(cb_per_rope.Get(), 0, NULL, &rope_cb, 0, 0);
 		Systems::DeviceContext->VSSetConstantBuffers(9, 1, cb_per_rope.GetAddressOf());
@@ -289,7 +310,7 @@ void Rope_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& inst
 		Systems::DeviceContext->VSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
 		Systems::DeviceContext->PSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
 
-		const int facet_count = (vertex_size - 1) * split_count * 2 + (split_count * 2);
+		const int facet_count = (joint_size - 1) * split_count * 2 + (split_count * 2);
 		const int index_count = facet_count * 3;
 		Systems::DeviceContext->DrawIndexedInstanced(index_count, 1, 0, 0, 0);
 
@@ -342,12 +363,12 @@ void Rope_renderer::set_meshoffset(std::shared_ptr<std::vector<std::pair<Vector3
 					if (i == vertex_fotmat_size - 1) {
 						v[i].position = Vector3(+radius * 0.2f, 0, 0); //ちょっととがっている
 						v[i].normal = Vector3(+1, 0, 0);
-						v[i].bone_indices[0] = sphere_count - 1; //対応するsphere_numを入れる
+						v[i].bone_indices[0] =  (sphere_count - 1) * 2 - 1; //対応するsphere_numを入れる
 						continue;
 					}
 					// 0には端っこの情報が入っているためi-1
 					v[i] = vertex_pos[(i - 1) % split_count];
-					v[i].bone_indices[0] = (i - 1) / split_count;
+					v[i].bone_indices[0] = (i - 1) / (split_count);
 				}
 			}
 
@@ -367,7 +388,7 @@ void Rope_renderer::set_meshoffset(std::shared_ptr<std::vector<std::pair<Vector3
 		// indexバッファ作成
 		{
 			std::vector<u_int> indices;
-			// (sphereの数 - 1) * 分割数 * 2(各面に3角形が2つだから)
+			// (sphere_count - 1) * 分割数 * 2(各面に3角形が2つだから)
 			// 端っこのふたの部分(split_count * 2)
 			const int facet_count = (sphere_count - 1) * split_count * 2 + (split_count * 2);
 			const int index_count = facet_count * 3;
@@ -405,9 +426,9 @@ void Rope_renderer::set_meshoffset(std::shared_ptr<std::vector<std::pair<Vector3
 				// 端っこの部分
 				if (sphere_num == sphere_count - 1) {
 					for (int vertex_num = 0; vertex_num < split_count; ++vertex_num) {
-						indices[index_num + 2] = sphere_count * split_count + 2 - 1;
-						indices[index_num + 1] = 1 + (sphere_count - 1) * split_count + vertex_num;
-						indices[index_num + 0] = 1 + (sphere_count - 1) * split_count + (vertex_num + 1) % split_count;
+						indices[index_num + 2] = sphere_num * split_count + 2 - 1;
+						indices[index_num + 1] = 1 + sphere_num * split_count + vertex_num;
+						indices[index_num + 0] = 1 + sphere_num * split_count + (vertex_num + 1) % split_count;
 						index_num += 3;
 					}
 				}

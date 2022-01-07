@@ -14,10 +14,8 @@ Rope_vertex::Rope_vertex(Physics_function::ALP_Collider* l_ALPcollider_ptr) {
 
 void Rope_vertex::effect_for_copy_transform_to_collider(Vector3& GO_Wposiiton, Quaternion& GO_Worientation, Vector3& GO_Wscale) {
 
-	Vector3 mesh_vertex_pos = Vector3(0);
-	if (mesh_data != nullptr) mesh_vertex_pos = mesh_data->vertices.at(vertex_id);
 	// transform‚Évertex‚Ì‰e‹¿‚ð“ü‚ê‚é
-	GO_Wposiiton = GO_Wposiiton + vector3_quatrotate((mesh_vertex_pos + vertex_offset->at(vertex_id).first) * GO_Wscale, GO_Worientation);
+	GO_Wposiiton = GO_Wposiiton + vector3_quatrotate((vertex_offset->at(vertex_id).first) * GO_Wscale, GO_Worientation);
 }
 
 void Rope_vertex::effect_for_copy_transform_to_gameobject(const Vector3& position_amount_of_change, const Quaternion& orientation_amount_of_change) {

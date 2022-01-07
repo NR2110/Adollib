@@ -14,22 +14,23 @@ namespace Adollib {
 
 		Microsoft::WRL::ComPtr<ID3D11Buffer> cb_per_rope = nullptr;
 
-		// •ªŠ„”
-		int split_count = 4;
-
-		// ”¼Œa
-		float radius = 1;
-
 		std::shared_ptr<std::vector<std::pair<Vector3, Vector3>>> vertex_offset;
 
 	private:
 		// constantbuffer (b9)
-		static const int MAX_JOINTS = 100;
+		static const int MAX_JOINTS = 200;
 		struct ConstantBufferPerRope
 		{
 			Vector4 joint_position[MAX_JOINTS];
 			Matrix44 joint_rotate[MAX_JOINTS];
 		};
+
+	public:
+		// •ªŠ„”
+		int split_count = 4;
+
+		// ”¼Œa
+		float radius = 1;
 
 	public:
 		void load_texture(const wchar_t* filename = nullptr);

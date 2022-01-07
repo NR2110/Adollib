@@ -1,2 +1,4 @@
-﻿  rope_renderer.cpp
+﻿  stage_demo_2.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(15,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\vector.inl(339): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

@@ -190,6 +190,8 @@ namespace Adollib {
 
 		friend Vector4 operator*(float S, const Vector4& M);
 
+		Vector3 xyz() const { return Vector3(x, y, z); };
+
 		//XMFLOAT3‚Ì•ÏŠ·
 		DirectX::XMFLOAT4 get_XM4();
 

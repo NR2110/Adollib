@@ -45,7 +45,7 @@ namespace Adollib {
 		float sphere_size_r = 0.01f;
 
 		//::: rope‚Ìsphree‚Ì‹——£ ::::
-		float sphree_offset_size = 0.08f;
+		float sphree_offset_size = 0.5f;
 
 
 		//::: static“¯m‚ÅÕ“Ë”»’è‚ğs‚í‚È‚¢ :::

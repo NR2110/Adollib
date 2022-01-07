@@ -300,7 +300,7 @@ namespace Adollib
 				ImGui::Separator();
 				ImGui::Text("TREE_pyramid"); ImGui::NextColumn();
 				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
-				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), TREE_pyramid_pos, 0.1f); ImGui::NextColumn(); ImGui::NextColumn();
+				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), TREE_pyramid_pos, 0.1f); ImGui::NextColumn();ImGui::NextColumn();
 				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &TREE_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
 
 				if (summon == true) {
@@ -327,7 +327,6 @@ namespace Adollib
 
 			//gear
 			{
-
 				static int TREE_pyramid_count = 11;
 				static float TREE_pyramid_pos[3] = { 0 };
 				bool summon = false;
@@ -755,12 +754,14 @@ namespace Adollib
 			//rope
 			{
 				static int TREE_pyramid_count = 10;
+				static float TREE_pyramid_sphere_radius = 0.5f;
 				static float pos[3] = { 0 };
 				bool summon = false;
 				ImGui::Separator();
 				ImGui::Text("Rope"); ImGui::NextColumn();
 				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
-				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), pos, 0.1f); ImGui::NextColumn();ImGui::NextColumn();
+				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), pos, 0.1f); ImGui::NextColumn();
+				ImGui::DragFloat(std::to_string(imgui_num + 250).c_str(), &TREE_pyramid_sphere_radius, 0.01f, 0.01f, 100000); ImGui::NextColumn();
 				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &TREE_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
 
 				if (summon == true) {
@@ -769,6 +770,8 @@ namespace Adollib
 
 					auto coll = go->addComponent<Collider_Rope>();
 					coll->sphere_num_size = TREE_pyramid_count;
+					coll->sphere_size_r = TREE_pyramid_sphere_radius;
+					coll->sphree_offset_size = TREE_pyramid_sphere_radius * 2;
 					coll->create_rope();
 
 					Physics_data data;
@@ -777,6 +780,8 @@ namespace Adollib
 					coll->set_vertex_data(0, data);
 
 					auto renderer = go->addComponent<Rope_renderer>();
+					renderer->radius = TREE_pyramid_sphere_radius;
+					renderer->split_count = 30;
 					renderer->set_meshoffset(coll->get_vertex_offset());
 
 					all_pearent->add_child(go);

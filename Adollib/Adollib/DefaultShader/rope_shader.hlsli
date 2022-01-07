@@ -3,7 +3,7 @@
 //	データーフォーマット
 //--------------------------------------------
 
-#define MAX_JOINTS 100
+#define MAX_JOINTS 200
 cbuffer CBPerJoint : register(b9)
 {
     float4 joint_position[MAX_JOINTS];

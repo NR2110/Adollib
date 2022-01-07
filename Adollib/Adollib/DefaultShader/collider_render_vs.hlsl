@@ -18,6 +18,7 @@ PSInput main(VSInput input)
 
     output.Position = P;
     output.Color = materialColor;
-
+    output.Worldpos = worldPos;
+    
     return output;
 }

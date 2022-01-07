@@ -16,7 +16,6 @@ namespace Adollib {
 			Rope_vertex(Physics_function::ALP_Collider* l_ALPcollider_ptr);
 
 		public:
-			Physics_function::Meshcollider_data* mesh_data = nullptr;
 			int vertex_id = 0;
 			float size = 0.01f;
 			std::shared_ptr<std::vector<std::pair<Vector3, Vector3>>> vertex_offset;
