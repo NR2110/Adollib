@@ -462,6 +462,7 @@ void Physics_manager::adapt_added_data(Scenelist Sce, bool is_mutex_lock) {
 	for (auto added_coll : added_buffer_ALP_colliders) {
 		// ’Ç‰Á‚³‚ê‚½collider‚Ì‰Šú‰»&Broadphase‚É“o˜^
 		for (auto& coll : added_coll.second) {
+			coll->adapt_added_data();
 			coll->copy_transform_gameobject();
 			coll->copy_transform();
 			added_collider_for_insertsort[added_coll.first].emplace_back(coll);

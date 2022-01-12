@@ -256,7 +256,7 @@ void Player::shot_rope() {
 		ray.sphere_cast(rope_sphere_r, contact_point, data);
 		data.raymin += rope_sphere_r;
 
-		if (data.raymin > 30)return;
+		if (data.raymin > 90)return;
 		if (Lrope_go)Gameobject_manager::deleteGameobject(Lrope_go);
 
 		Lrope_go = Gameobject_manager::create("rope");
@@ -274,6 +274,12 @@ void Player::shot_rope() {
 		coll->default_physics_data.inertial_mass = 0.4f;
 		coll->create_rope();
 
+		for (int i = 0; i < coll->get_collider_size(); ++i) {
+			auto physics_data = coll->get_vertex_data(i);
+			physics_data.inertial_mass = 0.4f * (1 + (float)i / coll->get_collider_size());
+			coll->set_vertex_data(i, physics_data);
+		}
+
 		Joint::add_balljoint(
 			Lhand_collider, coll->get_collider(0),
 			Vector3(0), Vector3(0)
@@ -288,6 +294,13 @@ void Player::shot_rope() {
 		//	0.5f
 		//	//0
 		//);
+
+
+		static auto DGO = Gameobject_manager::createSphere("debug");
+		DGO->transform->local_pos = ray.position + ray.direction * coll->sphree_offset_size * (coll->sphere_num_size - 1);
+		DGO->transform->local_scale = Vector3(0.1f);
+
+
 		auto block_rope_joint = Joint::add_balljoint(
 			data.coll, coll->get_collider(coll->get_collider_size() - 1),
 			//vector3_quatrotate(contact_point - data.coll->transform->position, data.coll->transform->orientation.inverse()),
@@ -297,7 +310,7 @@ void Player::shot_rope() {
 			0.1f
 			//0
 		);
-		block_rope_joint->offset = 0.1f;
+		block_rope_joint->slop = 0.01f;
 
 		auto vertex_data = coll->get_vertex_data(coll->get_collider_size() - 1);
 		vertex_data.is_hitable = false;

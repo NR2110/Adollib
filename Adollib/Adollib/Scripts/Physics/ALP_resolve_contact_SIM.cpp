@@ -208,8 +208,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 
 			//::: anchorの影響を計算
 			for (int i = 0; i < joint->anchor_count; i++) {
-				const Vector3 joint_posA = joint->anchor[i].posA;
-				const Vector3 joint_posB = joint->anchor[i].posB;
+				const Vector3& joint_posA = joint->anchor[i].posA;
+				const Vector3& joint_posB = joint->anchor[i].posB;
 				auto& constraint = joint->constraint[i];
 
 				//anchorそれぞれのlocal座標
@@ -241,7 +241,7 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 				}
 
 				if (
-					DirectX::XMVectorGetX(distance) < FLT_EPSILON || //初期化終わっていなければ ここが0になる
+					//DirectX::XMVectorGetX(distance) < FLT_EPSILON || //初期化終わっていなければ ここが0になる
 					fabsf(DirectX::XMVectorGetX(distance) - joint->offset) < FLT_EPSILON || //offsetを考慮した値
 					rhs_pow == 0 //biasが0の時など
 					) {
