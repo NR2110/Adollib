@@ -75,6 +75,16 @@ namespace Adollib {
 	public:
 		// アタッチされたjointの数
 		const int get_joint_count();
+		// jointのptrを返す
+		Joint_base* get_joint_ptr(int joint_num);
+
+		// 指定の頂点のphysics_dataを変更する
+		void set_vertex_data(const int& vertex_num, const Physics_data& physics_data);
+		// 指定の頂点のphysics_dataを得る
+		const Physics_data& get_vertex_data(const int& vertex_num) const;
+
+		int get_collider_size() { return colliders.size(); };
+		Collider* get_collider(const int& vertex_num) { return colliders[vertex_num]; };
 
 		std::shared_ptr<std::vector<std::pair<Vector3, Vector3>>> get_vertex_offset() { return vertex_offset; };
 
@@ -103,14 +113,6 @@ namespace Adollib {
 		// 速度制限を行う
 		void set_max_linear_velocity(const float& max_scalar) {for (auto& ptr : colliders)  ptr->set_max_linear_velocity(max_scalar); };
 		void set_max_angula_velocity(const float& max_scalar) {for (auto& ptr : colliders)  ptr->set_max_angula_velocity(max_scalar); };
-
-		// 指定の頂点のphysics_dataを変更する
-		void set_vertex_data(const int& vertex_num, const Physics_data& physics_data);
-		// 指定の頂点のphysics_dataを得る
-		const Physics_data& get_vertex_data(const int& vertex_num) const;
-
-		int get_collider_size() { return colliders.size(); };
-		Collider* get_collider(const int& vertex_num) { return colliders[vertex_num]; };
 
 	public:
 		void create_rope();

@@ -31,6 +31,8 @@ namespace Adollib {
 
 		Vector4 color = Vector4(1, 1, 1, 1);
 
+		bool is_render = true;
+
 	public:
 		virtual void set_material(std::shared_ptr<Material> l_material) { material = l_material; };
 		virtual void set_meshes(std::vector<Mesh::mesh>* l_meshes) { meshes = l_meshes; };

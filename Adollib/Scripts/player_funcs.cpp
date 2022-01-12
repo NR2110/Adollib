@@ -241,6 +241,8 @@ void Player::shot_rope() {
 
 	static Gameobject* Lrope_go = nullptr;
 	static Gameobject* Rrope_go = nullptr;
+	static Collider_Rope* Lrope_coll = nullptr;
+	static Collider_Rope* Rrope_coll = nullptr;
 
 	const float rope_sphere_r = 0.2f;
 
@@ -262,7 +264,9 @@ void Player::shot_rope() {
 		Lrope_go = Gameobject_manager::create("rope");
 		Lrope_go->transform->local_pos = ray.position;
 
-		auto coll = Lrope_go->addComponent<Collider_Rope>();
+		Lrope_coll = Lrope_go->addComponent<Collider_Rope>();
+
+		auto& coll = Lrope_coll;
 
 		coll->sphere_size_r = rope_sphere_r;
 		coll->sphree_offset_size = coll->sphere_size_r * 3;
@@ -285,22 +289,6 @@ void Player::shot_rope() {
 			Vector3(0), Vector3(0)
 		);
 
-		//auto block_rope_joint = Joint::add_balljoint(
-		//	data.coll, coll->get_collider(coll->get_collider_size() - 1),
-		//	vector3_quatrotate(contact_point - data.coll->transform->position, data.coll->transform->orientation.inverse()),
-		//	//vector3_quatrotate(ray.position + ray.direction * coll->sphree_offset_size * (coll->sphere_num_size -  1) - data.coll->transform->position, data.coll->transform->orientation.inverse()),
-
-		//	contact_point - coll->get_vertex_offset()->at(coll->get_collider_size() - 1).first - Lrope_go->transform->local_pos,
-		//	0.5f
-		//	//0
-		//);
-
-
-		static auto DGO = Gameobject_manager::createSphere("debug");
-		DGO->transform->local_pos = ray.position + ray.direction * coll->sphree_offset_size * (coll->sphere_num_size - 1);
-		DGO->transform->local_scale = Vector3(0.1f);
-
-
 		auto block_rope_joint = Joint::add_balljoint(
 			data.coll, coll->get_collider(coll->get_collider_size() - 1),
 			//vector3_quatrotate(contact_point - data.coll->transform->position, data.coll->transform->orientation.inverse()),
@@ -308,21 +296,54 @@ void Player::shot_rope() {
 
 			Vector3(0),
 			0.1f
-			//0
 		);
-		block_rope_joint->slop = 0.01f;
 
 		auto vertex_data = coll->get_vertex_data(coll->get_collider_size() - 1);
 		vertex_data.is_hitable = false;
 		coll->set_vertex_data(coll->get_collider_size() - 1, vertex_data);
 
 		auto renderer = Lrope_go->addComponent<Rope_renderer>();
-		renderer->radius = rope_sphere_r * 0.8f;
+		Lrope_go->renderer = renderer;
+		renderer->radius = rope_sphere_r * 0.6f;
 		renderer->split_count = 30;
 		renderer->set_meshoffset(coll->get_vertex_offset());
 	}
 
-	if (input->getKeyTrigger(Key::Up)) {
+	// k‚ß‚é
+	if (input->getKeyState(Key::Up) && Lrope_go != nullptr) {
+		float next_offset = Lrope_coll->get_joint_ptr(0)->offset;
+		if (next_offset != 0) {
+			next_offset -= 0.2f * time->deltaTime();;
+			if (next_offset < 0)next_offset = 0;
+
+			int joint_size = Lrope_coll->get_joint_count();
+
+			for (int i = 0; i < joint_size; ++i) { Lrope_coll->get_joint_ptr(i)->offset = next_offset; }
+
+			if (next_offset == 0) {
+				Joint::add_balljoint(
+					Lrope_coll->get_collider(0), Lrope_coll->get_collider(Lrope_coll->get_collider_size() - 1),
+					Vector3(0), Vector3(0)
+				);
+			}
+		}
+
+		Lrope_coll->get_vertex_offset()->size();
+		if (next_offset == 0 &&
+			Lrope_go->renderer->is_render == true &&
+			vector3_distance( Lhand->transform->position, Lrope_coll->get_vertex_offset()->at(Lrope_coll->get_vertex_offset()->size() - 1).first + Lrope_go->transform->position) < 0.1f
+			) {
+				//Joint::add_balljoint(
+				//	Lrope_coll->get_collider(0), Lrope_coll->get_collider(Lrope_coll->get_collider_size() - 1),
+				//	Vector3(0), Vector3(0)
+				//);
+
+				//for (int i = 1; i < joint_size - 1; ++i) { Lrope_coll->get_collider(i)->gameobject->is_render = false; }
+				Lrope_go->renderer->is_render = false;
+			}
+	}
+
+	if (input->getKeyTrigger(Key::Down)) {
 		if (Lrope_go)Gameobject_manager::deleteGameobject(Lrope_go);
 		if (Rrope_go)Gameobject_manager::deleteGameobject(Rrope_go);
 

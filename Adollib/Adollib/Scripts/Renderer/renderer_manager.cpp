@@ -302,9 +302,9 @@ void Renderer_manager::instance_update(const Frustum_data& frustum_data, Sceneli
 
 		for (auto& renderer : sorted_renderers) {
 
+			if (renderer->is_render == false)continue;
 			// instancing ‚ğs‚í‚È‚¢ê‡ •Ê‚Ì”z—ñ‚É•Û‘¶
 			if (renderer->is_use_instancing == false) no_use_instancing_renderers.emplace_back(renderer);
-
 
 			// V‚µ‚¢instance
 			if (mesh_num != renderer->get_meshnum() ||

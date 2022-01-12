@@ -136,13 +136,14 @@ namespace Adollib
 				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &SPHERE_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
 
 				if (summon == true) {
+					float d = 2.50001f * size;
 					Gameobject* pearent = Gameobject_manager::create("Spherepyramid");
 					all_pearent->add_child(pearent);
 					for (int i = 0; i < SPHERE_pyramid_count; i++) {
 						for (int o = 0; o < SPHERE_pyramid_count - i; o++) {
 							set_sphere(
-								Vector3(2.50001f * o - (SPHERE_pyramid_count - i) * 2.500001f / 2.0f + SPHERE_pyramid_pos[0],
-									5.0f + 2.50001f * i + SPHERE_pyramid_pos[1],
+								Vector3(d * o - (SPHERE_pyramid_count - i) * d / 2.0f + SPHERE_pyramid_pos[0],
+									5.0f + d * i + SPHERE_pyramid_pos[1],
 									SPHERE_pyramid_pos[2]),
 								size,
 								Vector3(0, 1, 1),
@@ -751,6 +752,8 @@ namespace Adollib
 
 			}
 
+			{}
+
 			//rope
 			{
 				static int TREE_pyramid_count = 10;
@@ -793,16 +796,19 @@ namespace Adollib
 			{
 				static int TREE_pyramid_count = 3;
 				static float pos[3] = { 0 };
+				static float size = 1;
 				bool summon = false;
 				ImGui::Separator();
 				ImGui::Text("Croth_Sphere"); ImGui::NextColumn();
 				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
-				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), pos, 0.1f); ImGui::NextColumn(); ImGui::NextColumn();
+				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), pos, 0.1f); ImGui::NextColumn();
+				ImGui::DragFloat(std::to_string(imgui_num + 220).c_str(), &size, 0.1f, 0.01f, 100000); ImGui::NextColumn();
 				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &TREE_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
 
 				if (summon == true) {
 					auto sphere = Gameobject_manager::createSphere();
 					sphere->transform->local_pos = Vector3(pos[0], pos[1], pos[2]);
+					sphere->transform->local_scale = Vector3(size);
 
 					auto coll = sphere->addComponent<Collider_Croth>();
 					coll->load_file("./DefaultModel/sphere.fbx", true, false);

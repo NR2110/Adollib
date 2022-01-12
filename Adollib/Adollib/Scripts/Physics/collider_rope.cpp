@@ -57,8 +57,18 @@ void Collider_Rope::add_angula_acc(const Vector3& acc) {
 
 // アタッチされたjointの数
 const int Collider_Rope::get_joint_count() {
+	return joints[Rope_constraint_type::sructural_spring].size() + joints[Rope_constraint_type::bending_spring].size();
+}
+Joint_base* Collider_Rope::get_joint_ptr(int joint_num) {
+	if (joint_num < 0)return nullptr;
 
-	return joints[Rope_constraint_type::bending_spring].size() + joints[Rope_constraint_type::sructural_spring].size();
+	const int bending_spring_size = joints[Rope_constraint_type::bending_spring].size();
+	const int sructural_spring_size = joints[Rope_constraint_type::sructural_spring].size();
+
+	if (sructural_spring_size + bending_spring_size <= joint_num)return nullptr;
+
+	if (sructural_spring_size > joint_num) return joints[Rope_constraint_type::sructural_spring][joint_num];
+	else  return joints[Rope_constraint_type::bending_spring][joint_num - sructural_spring_size];
 }
 
 void Collider_Rope::set_vertex_data(const int& vertex_num, const Physics_data& physics_data) {
@@ -148,63 +158,26 @@ void Collider_Rope::create_rope() {
 }
 
 void Collider_Rope::update() {
+	int vertex_offset_size = vertex_offset->size();
+	if (vertex_offset_size <= 1)return;
 
-	//// 各facetのnormalを更新する
-	//std::vector<std::vector<Vector3>> mesh_facet_normals;
-	//mesh_facet_normals.resize(meshcoll_data->size());
-	//{
-	//	int mesh_num = 0;
-	//	for (auto& data : *meshcoll_data) {
+	float offset = joints[Rope_constraint_type::sructural_spring][0]->offset;
 
-	//		auto& facet_normals = mesh_facet_normals[mesh_num];
-	//		facet_normals.resize(data.facets.size());
+	for (int i = 0; i < vertex_offset_size; ++i) {
 
-	//		int facet_mum = 0;
-	//		for (auto& facet : data.facets) {
+		if (i == vertex_offset_size - 1)continue;
 
-	//			const Vector3& vertex_0 = data.vertices[facet.vertexID[0]] + vertex_offset->at(mesh_num).at(facet.vertexID[0]).first;
-	//			const Vector3& vertex_1 = data.vertices[facet.vertexID[1]] + vertex_offset->at(mesh_num).at(facet.vertexID[1]).first;
-	//			const Vector3& vertex_2 = data.vertices[facet.vertexID[2]] + vertex_offset->at(mesh_num).at(facet.vertexID[2]).first;
+		float dis = vector3_distance(vertex_offset->at(i).first, vertex_offset->at(i + 1).first);
 
-	//			const Vector3& normal = -vector3_cross(vertex_1 - vertex_0, vertex_2 - vertex_0).unit_vect();
+		if (offset + 0.1f < dis) offset = dis - 0.1f;
+	}
 
-	//			facet_normals[facet_mum] = normal;
-	//			++facet_mum;
-	//		}
-
-	//		++mesh_num;
-	//	}
-	//}
-
-	////各頂点の属する面から平均をとってoffsetを計算
-	//{
-	//	int mesh_num = 0;
-	//	for (auto& data : *meshcoll_data) {
-
-	//		int vertex_num = 0;
-	//		for (auto& vertex : data.vertices) {
-
-	//			//vertex_offset->at(mesh_num).at(vertex_num).second;
-
-	//			Vector3 facet_normal;
-	//			for (int facet_num = 0; facet_num < data.vertex_involvements[vertex_num].get_facet_involvment_size(); ++facet_num) {
-
-	//				facet_normal += mesh_facet_normals[mesh_num][data.vertex_involvements[vertex_num].facet_involvements[facet_num]];
-	//			}
-	//			facet_normal /= data.vertex_involvements[vertex_num].get_facet_involvment_size();
-
-	//			vertex_offset->at(mesh_num).at(vertex_num).second = facet_normal;
-
-
-	//			++vertex_num;
-	//		}
-
-	//		++mesh_num;
-	//	}
-	//}
-
-
-
+	if (joints[Rope_constraint_type::sructural_spring][0]->offset != offset) {
+		float n = offset - joints[Rope_constraint_type::sructural_spring][0]->offset;
+		n /= get_joint_count();
+		for (auto& joint : joints[Rope_constraint_type::sructural_spring])joint->offset += n;
+		for (auto& joint : joints[Rope_constraint_type::bending_spring])joint->offset += n;
+	}
 
 }
 
