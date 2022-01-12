@@ -18,9 +18,10 @@ void Rope_vertex::effect_for_copy_transform_to_collider(Vector3& GO_Wposiiton, Q
 	GO_Wposiiton = GO_Wposiiton + vector3_quatrotate((vertex_offset->at(vertex_id).first) * GO_Wscale, GO_Worientation);
 }
 
-void Rope_vertex::effect_for_copy_transform_to_gameobject(const Vector3& position_amount_of_change, const Quaternion& orientation_amount_of_change) {
+void Rope_vertex::effect_for_copy_transform_to_gameobject(const Vector3& position_amount_of_change, const Quaternion& orientation_amount_of_change, const Vector3& position_amount_of_change_local, const Quaternion& orientation_amount_of_change_local) {
 
-	vertex_offset->at(vertex_id).first += position_amount_of_change;
-	// transform‚Évertex‚Ì‰e‹¿‚ð“ü‚ê‚é
-	//GO_Wposiiton = GO_Wposiiton + vector3_quatrotate((mesh_data->vertices.at(vertex_id) + vertex_offset->at(vertex_id)) * GO_Wscale, GO_Worientation);
+	vertex_offset->at(vertex_id).first += position_amount_of_change_local;
+
+	ALPcollider_ptr->get_collptr()->transform->position = ALPcollider_ptr->transform_gameobject.position;
+
 }

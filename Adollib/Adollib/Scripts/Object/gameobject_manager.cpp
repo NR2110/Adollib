@@ -107,7 +107,9 @@ void Gameobject_manager::update(Scenelist Sce) {
 #endif // Use_physics_thread
 
 	{
+		Work_meter::start("adapt_transform_to_gameobject");
 		Physics_manager::adapt_transform_to_gameobject(Sce);
+		Work_meter::stop("adapt_transform_to_gameobject");
 
 		//親から子に座標の更新を行う
 		{
@@ -121,11 +123,15 @@ void Gameobject_manager::update(Scenelist Sce) {
 			}
 		}
 
+		Work_meter::start("copy_gameobject_transform");
 		Physics_manager::copy_gameobject_transform(Sce);
+		Work_meter::stop("copy_gameobject_transform");
 	}
 
+	Work_meter::start("update_to_children");
 	//親から子へupdateを呼ぶ update中に、親objectが削除されたときに対応できないため削除はいったんbufferに保管している
 	std::for_each(masters.begin(), masters.end(), [](Gameobject* ob) {ob->update_to_children(); });
+	Work_meter::stop("update_to_children");
 
 	//親から子に座標の更新を行う
 	{
@@ -144,7 +150,9 @@ void Gameobject_manager::update(Scenelist Sce) {
 
 #ifdef UseImgui
 	//ヒエラルキー
+	Work_meter::start("update_hierarchy");
 	Hierarchy::update_hierarchy(masters);
+	Work_meter::stop("update_hierarchy");
 
 #endif // UseImgui
 

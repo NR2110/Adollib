@@ -47,6 +47,9 @@ namespace Adollib {
 		//::: ropeのsphreeの距離 ::::
 		float sphree_offset_size = 0.5f;
 
+		//::: ropeの最初の方向 :::
+		Vector3 start_rope_dir = Vector3(0, 0, 1);
+
 
 		//::: static同士で衝突判定を行わない :::
 		bool is_static = false;
@@ -72,8 +75,6 @@ namespace Adollib {
 	public:
 		// アタッチされたjointの数
 		const int get_joint_count();
-		// 指定した番号にアタッチされているjointの情報を得る
-		Joint_base* get_joint(const int num);
 
 		std::shared_ptr<std::vector<std::pair<Vector3, Vector3>>> get_vertex_offset() { return vertex_offset; };
 
@@ -103,19 +104,13 @@ namespace Adollib {
 		void set_max_linear_velocity(const float& max_scalar) {for (auto& ptr : colliders)  ptr->set_max_linear_velocity(max_scalar); };
 		void set_max_angula_velocity(const float& max_scalar) {for (auto& ptr : colliders)  ptr->set_max_angula_velocity(max_scalar); };
 
-		// 慣性モーメントをユーザー定義で設定する
-		void set_tensor(const Matrix33& tensor) {for (auto& ptr : colliders)  ptr->set_tensor(tensor); };
-
-		// 重心をユーザー定義で設定する
-		void set_barycenter(const Vector3& cent) {for (auto& ptr : colliders)  ptr->set_barycenter(cent); };
-
-		// 重心のlocal座標を返す
-		const Vector3 get_barycenter() const;
-
 		// 指定の頂点のphysics_dataを変更する
 		void set_vertex_data(const int& vertex_num, const Physics_data& physics_data);
 		// 指定の頂点のphysics_dataを得る
 		const Physics_data& get_vertex_data(const int& vertex_num) const;
+
+		int get_collider_size() { return colliders.size(); };
+		Collider* get_collider(const int& vertex_num) { return colliders[vertex_num]; };
 
 	public:
 		void create_rope();

@@ -17,12 +17,15 @@ void Croth_vertex::effect_for_copy_transform_to_collider(Vector3& GO_Wposiiton, 
 	Vector3 mesh_vertex_pos = Vector3(0);
 	if (mesh_data != nullptr) mesh_vertex_pos = mesh_data->vertices.at(vertex_id);
 	// transform‚Évertex‚Ì‰e‹¿‚ð“ü‚ê‚é
-	GO_Wposiiton = GO_Wposiiton + vector3_quatrotate((mesh_vertex_pos + vertex_offset->at(mesh_id).at(vertex_id).first) * GO_Wscale, GO_Worientation);
+	GO_Wposiiton = GO_Wposiiton + vector3_quatrotate((mesh_vertex_pos * GO_Wscale + vertex_offset->at(mesh_id).at(vertex_id).first ), GO_Worientation);
 }
 
-void Croth_vertex::effect_for_copy_transform_to_gameobject(const Vector3& position_amount_of_change, const Quaternion& orientation_amount_of_change) {
+void Croth_vertex::effect_for_copy_transform_to_gameobject(const Vector3& position_amount_of_change, const Quaternion& orientation_amount_of_change, const Vector3& position_amount_of_change_local, const Quaternion& orientation_amount_of_change_local) {
 
-	vertex_offset->at(mesh_id).at(vertex_id).first += position_amount_of_change;
+	vertex_offset->at(mesh_id).at(vertex_id).first += position_amount_of_change_local / ALPcollider_ptr->get_collptr()->transform->scale;
 	// transform‚Évertex‚Ì‰e‹¿‚ð“ü‚ê‚é
 	//GO_Wposiiton = GO_Wposiiton + vector3_quatrotate((mesh_data->vertices.at(vertex_id) + vertex_offset->at(vertex_id)) * GO_Wscale, GO_Worientation);
+
+	ALPcollider_ptr->get_collptr()->transform->position = ALPcollider_ptr->transform_gameobject.position;
+	ALPcollider_ptr->get_collptr()->transform->orientation = ALPcollider_ptr->transform_gameobject.orientation;
 }

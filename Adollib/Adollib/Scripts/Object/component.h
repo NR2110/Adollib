@@ -20,7 +20,7 @@ namespace Adollib
 		std::list<Component*>::iterator com_itr; //自身へのイテレータ
 
 		Gameobject* gameobject = nullptr;	// このコンポーネントがアタッチされているGameObject
-		Transform*  transform = nullptr;	// GameObjectのTransformへのポインタ
+		std::shared_ptr<Transform> transform = nullptr;	// GameObjectのTransformへのポインタ
 
 		MonoInput* input = nullptr;
 		std::shared_ptr<Time> time = nullptr;

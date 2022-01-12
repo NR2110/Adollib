@@ -110,6 +110,7 @@ void Collider_Croth::load_file(const std::string& filename, bool is_right_rtiang
 			// collider‚ðî•ñ‚Æ‚µ‚Äˆµ‚¤ (‹CŽ‚¿ˆ«‚¢‚¯‚ê‚ÇŽd•û‚È‚¢)
 			auto collider = new Collider;
 			collider->gameobject = gameobject;
+			collider->transform = std::make_shared<Transform>();
 			collider->awake();
 
 			collider->physics_data = default_physics_data;
@@ -348,7 +349,7 @@ void Collider_Croth::awake() {
 	Physics_manager::physicsParams.set_default_physics_data(default_physics_data);
 
 	default_physics_data.anglar_drag = 0.9f;
-	default_physics_data.inertial_mass = 0.01f;
+	default_physics_data.inertial_mass = 1;
 
 	default_sphere_r = 0.01f;
 }

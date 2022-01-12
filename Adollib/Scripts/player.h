@@ -107,6 +107,8 @@ namespace Adollib
 		void move_legs(); //‘«‚ð“®‚©‚·
 		void make_jump(); //jump‚³‚¹‚é
 		//:::
+		void shot_rope();
+
 
 		void turn_gunyatto_dir();
 		void set_default_drag();

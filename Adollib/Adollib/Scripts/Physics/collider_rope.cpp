@@ -83,7 +83,10 @@ void Collider_Rope::create_rope() {
 		auto collider = new Collider;
 		collider->gameobject = gameobject;
 		collider->awake();
+		collider->transform = std::make_shared<Transform>();
 		collider->physics_data = default_physics_data;
+		collider->tag = tag;
+		collider->ignore_tags = ignore_tags;
 
 		auto croth = collider->add_shape<Rope_vertex>();
 
@@ -97,7 +100,7 @@ void Collider_Rope::create_rope() {
 	}
 
 	constexpr float sructural_stretch = 0.10f;
-	constexpr float sructural_shrink = 0.10f;
+	constexpr float sructural_shrink = 0.40f;
 	constexpr float bending_stretch = 0.10f;
 	constexpr float bending_shrink = 0.f;
 
@@ -135,7 +138,7 @@ void Collider_Rope::create_rope() {
 	}
 
 	for (int collider_num = 0; collider_num < sphere_num_size; ++collider_num) {
-		vertex_offset->at(collider_num).first = Vector3(0, 0, 1) * sphree_offset_size * collider_num;
+		vertex_offset->at(collider_num).first = start_rope_dir * sphree_offset_size * collider_num;
 	}
 
 
@@ -210,7 +213,7 @@ void Collider_Rope::awake() {
 	Physics_manager::physicsParams.set_default_physics_data(default_physics_data);
 
 	default_physics_data.anglar_drag = 0.9f;
-	default_physics_data.inertial_mass = 0.1f;
+	default_physics_data.inertial_mass = 2;
 
 	//::: rope‚Ìsphere‚ÌŒÂ” ::::
 	sphere_num_size = 5;
@@ -235,18 +238,3 @@ void Collider_Rope::Update_hierarchy() {
 	for (auto& ptr : colliders)  ptr->Update_hierarchy();
 
 }
-
-
-// dS‚ÌlocalÀ•W‚ð•Ô‚·
-const Vector3 Collider_Rope::get_barycenter() const {
-
-	Physics_function::Physics_manager::mutex_lock();
-
-	Vector3 num_barycenter;
-	for (auto& ptr : colliders)  num_barycenter += ptr->get_barycenter();
-	num_barycenter /= colliders.size();
-
-	Physics_function::Physics_manager::mutex_unlock();
-
-	return num_barycenter;
-};

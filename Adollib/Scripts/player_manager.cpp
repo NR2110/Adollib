@@ -339,36 +339,35 @@ namespace Adollib
 			Rhand_collider->physics_data.dynamic_friction = 0;
 
 
-			Head_collider    ->physics_data.is_hitable = false;
-			Lsholder_collider->physics_data.is_hitable = false;
-			Rsholder_collider->physics_data.is_hitable = false;
-			Lelbow_collider  ->physics_data.is_hitable = false;
-			Relbow_collider  ->physics_data.is_hitable = false;
-			Lhand_collider   ->physics_data.is_hitable = false;
-			Rhand_collider   ->physics_data.is_hitable = false;
-			Body_collider    ->physics_data.is_hitable = false;
-			Waist_collider   ->physics_data.is_hitable = false;
-			Lleg_collider    ->physics_data.is_hitable = false;
-			Rleg_collider    ->physics_data.is_hitable = false;
-			Lfoot_collider   ->physics_data.is_hitable = false;
-			Rfoot_collider   ->physics_data.is_hitable = false;
+			//Head_collider    ->physics_data.is_hitable = false;
+			//Lsholder_collider->physics_data.is_hitable = false;
+			//Rsholder_collider->physics_data.is_hitable = false;
+			//Lelbow_collider  ->physics_data.is_hitable = false;
+			//Relbow_collider  ->physics_data.is_hitable = false;
+			//Lhand_collider   ->physics_data.is_hitable = false;
+			//Rhand_collider   ->physics_data.is_hitable = false;
+			//Body_collider    ->physics_data.is_hitable = false;
+			//Waist_collider   ->physics_data.is_hitable = false;
+			//Lleg_collider    ->physics_data.is_hitable = false;
+			//Rleg_collider    ->physics_data.is_hitable = false;
+			//Lfoot_collider   ->physics_data.is_hitable = false;
+			//Rfoot_collider   ->physics_data.is_hitable = false;
 
-			Head_collider    ->physics_data.is_moveable = false;
-			Lsholder_collider->physics_data.is_moveable = false;
-			Rsholder_collider->physics_data.is_moveable = false;
-			Lelbow_collider  ->physics_data.is_moveable = false;
-			Relbow_collider  ->physics_data.is_moveable = false;
-			Lhand_collider   ->physics_data.is_moveable = false;
-			Rhand_collider   ->physics_data.is_moveable = false;
-			Body_collider    ->physics_data.is_moveable = false;
-			Waist_collider   ->physics_data.is_moveable = false;
-			Lleg_collider    ->physics_data.is_moveable = false;
-			Rleg_collider    ->physics_data.is_moveable = false;
-			Lfoot_collider   ->physics_data.is_moveable = false;
-			Rfoot_collider   ->physics_data.is_moveable = false;
+			//Head_collider    ->physics_data.is_moveable = false;
+			//Lsholder_collider->physics_data.is_moveable = false;
+			//Rsholder_collider->physics_data.is_moveable = false;
+			//Lelbow_collider  ->physics_data.is_moveable = false;
+			//Relbow_collider  ->physics_data.is_moveable = false;
+			//Lhand_collider   ->physics_data.is_moveable = false;
+			//Rhand_collider   ->physics_data.is_moveable = false;
+			//Body_collider    ->physics_data.is_moveable = false;
+			//Waist_collider   ->physics_data.is_moveable = false;
+			//Lleg_collider    ->physics_data.is_moveable = false;
+			//Rleg_collider    ->physics_data.is_moveable = false;
+			//Lfoot_collider   ->physics_data.is_moveable = false;
+			//Rfoot_collider   ->physics_data.is_moveable = false;
 
 			//::: Joint‚Ìİ’è
-			if(0)
 			{
 				float joint_bias = 0.1f;
 				//“ª

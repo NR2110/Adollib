@@ -881,19 +881,22 @@ namespace Adollib
 			{
 				static int TREE_pyramid_count = 3;
 				static float pos[3] = { 0 };
+				static float scale[3] = { 1,1,1 };
 				bool summon = false;
 				ImGui::Separator();
 				ImGui::Text("Croth_plane16x"); ImGui::NextColumn();
 				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
-				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), pos, 0.1f); ImGui::NextColumn(); ImGui::NextColumn();
+				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), pos, 0.1f); ImGui::NextColumn();
+				ImGui::DragFloat3(std::to_string(imgui_num + 250).c_str(), scale, 0.1f); ImGui::NextColumn();
 				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &TREE_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
 
 				if (summon == true) {
 					auto go = Gameobject_manager::createFromFBX("plane", "./DefaultModel/plane_16x16vertex.fbx");
 					go->transform->local_pos = Vector3(pos[0], pos[1], pos[2]);
-					//go->transform->local_scale = Vector3(10, 10, 10);
+					go->transform->local_scale = Vector3(scale[0], scale[1], scale[2]);
 
 					auto coll = go->addComponent<Collider_Croth>();
+					//coll->mesh_scale = Vector3(scale[0], scale[1], scale[2]);
 					coll->load_file("./DefaultModel/plane_16x16vertex.fbx", true, false);
 
 					Physics_data data;

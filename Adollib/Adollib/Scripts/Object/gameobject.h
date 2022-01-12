@@ -184,7 +184,7 @@ namespace Adollib {
 				std::list<Component*>::iterator itr = components.end();
 				itr--;
 				pCom->com_itr = itr;
-				pCom->transform = this->transform.get();
+				pCom->transform = this->transform;
 				pCom->gameobject = this;
 				pCom->input = MonoInput::getInstancePtr();
 				pCom->time = get_time_ptr();

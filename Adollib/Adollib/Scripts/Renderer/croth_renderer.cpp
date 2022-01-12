@@ -257,7 +257,7 @@ void Croth_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& ins
 			int vertex_size = meshes->at(mesh_count).vertices.size();
 			int vertex_start = 0;
 			for (int i = 0; i < vertex_size; ++i) {
-				data[i].position = mesh_offset->at(mesh_count)[i].first;
+				data[i].position = mesh_offset->at(mesh_count)[i].first / transform->scale;
 				data[i].normal = mesh_offset->at(mesh_count)[i].second;
 			}
 			++mesh_count;

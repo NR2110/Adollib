@@ -179,10 +179,17 @@ void ALP_Collider::adapt_to_gameobject_transform() const
 	const Quaternion& orientation_amount_of_change = quaternion_axis_radian(vector3_quatrotate(buffer.axis(), parent_orientate_inv), buffer.radian());
 
 	if (is_adapt_shape_for_copy_transform_gameobject) {
+		// Ž©g‚Ìcollider‚ðŠÜ‚Þ orientation‚Ìinverse‚ðì¬
+		Quaternion orientate_inv = gameobject->transform->orientation.inverse();
+
+		const Vector3& position_amount_of_change_local = vector3_quatrotate(transform.position - transform_start.position, orientate_inv);
+		const Quaternion& buffer = (transform_start.orientation.inverse() * transform.orientation).unit_vect();
+		const Quaternion& orientation_amount_of_change_local = quaternion_axis_radian(vector3_quatrotate(buffer.axis(), orientate_inv), buffer.radian());
 
 		for (const auto& shape : shapes) {
 			shape->effect_for_copy_transform_to_gameobject(
-				position_amount_of_change, orientation_amount_of_change
+				position_amount_of_change,       orientation_amount_of_change,
+				position_amount_of_change_local, orientation_amount_of_change_local
 			);
 		}
 		return;
