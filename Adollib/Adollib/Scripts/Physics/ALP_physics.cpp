@@ -427,11 +427,6 @@ void ALP_Physics::update_tensor_and_barycenter(const std::list<Collider_shape*>&
 			inertial_tensor_ += joint->userjoint->tensor_effect();
 		}
 
-
-
-		//inertial_tensor._11 *= gameobject->world_scale().x;
-		//inertial_tensor._22 *= gameobject->world_scale().y;
-		//inertial_tensor._33 *= gameobject->world_scale().z;
 	}
 
 

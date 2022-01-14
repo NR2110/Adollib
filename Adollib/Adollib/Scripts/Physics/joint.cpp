@@ -139,6 +139,7 @@ TwistJoint* Joint::add_Twistjoint(
 
 
 void Joint::delete_joint(Joint_base*& joint) {
+	if (joint == nullptr)return;
 	joint->destroy();
 	joint = nullptr;
 }

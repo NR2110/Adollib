@@ -56,19 +56,17 @@ void Collider_Rope::add_angula_acc(const Vector3& acc) {
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // アタッチされたjointの数
-const int Collider_Rope::get_joint_count() {
-	return joints[Rope_constraint_type::sructural_spring].size() + joints[Rope_constraint_type::bending_spring].size();
+const int Collider_Rope::get_joint_count(Rope_constraint_type type) {
+	return joints[type].size();
 }
-Joint_base* Collider_Rope::get_joint_ptr(int joint_num) {
+Joint_base* Collider_Rope::get_joint_ptr(Rope_constraint_type type, int joint_num) {
 	if (joint_num < 0)return nullptr;
 
-	const int bending_spring_size = joints[Rope_constraint_type::bending_spring].size();
-	const int sructural_spring_size = joints[Rope_constraint_type::sructural_spring].size();
+	const int size = joints[type].size();
 
-	if (sructural_spring_size + bending_spring_size <= joint_num)return nullptr;
+	if (size <= joint_num)return nullptr;
 
-	if (sructural_spring_size > joint_num) return joints[Rope_constraint_type::sructural_spring][joint_num];
-	else  return joints[Rope_constraint_type::bending_spring][joint_num - sructural_spring_size];
+	else  return joints[type][joint_num];
 }
 
 void Collider_Rope::set_vertex_data(const int& vertex_num, const Physics_data& physics_data) {
@@ -128,7 +126,7 @@ void Collider_Rope::create_rope() {
 			joint->stretch_bias = sructural_stretch;
 			joint->shrink_bias = sructural_shrink;
 
-			joints[Rope_constraint_type::bending_spring].emplace_back(joint);
+			joints[Rope_constraint_type::sructural_spring].emplace_back(joint);
 		}
 
 		// 曲げばねの追加
@@ -142,7 +140,7 @@ void Collider_Rope::create_rope() {
 			joint->stretch_bias = bending_stretch;
 			joint->shrink_bias = bending_shrink;
 
-			joints[Rope_constraint_type::sructural_spring].emplace_back(joint);
+			joints[Rope_constraint_type::bending_spring].emplace_back(joint);
 		}
 
 	}
@@ -158,26 +156,109 @@ void Collider_Rope::create_rope() {
 }
 
 void Collider_Rope::update() {
-	int vertex_offset_size = vertex_offset->size();
-	if (vertex_offset_size <= 1)return;
 
-	float offset = joints[Rope_constraint_type::sructural_spring][0]->offset;
+	// 構成ばねの長さが0ならけす
+	int structural_spring_size = joints[Rope_constraint_type::sructural_spring].size();
+	for (int i = 0; i < structural_spring_size;++i) {
+		auto joint = joints[Rope_constraint_type::sructural_spring][i];
+		if (joint == nullptr) continue;
 
-	for (int i = 0; i < vertex_offset_size; ++i) {
+		if (joint->offset == 0) {
 
-		if (i == vertex_offset_size - 1)continue;
+			// bending_springの削除、再設定を行う
+			if (i > 1) {
+				auto collider_A = joints[Rope_constraint_type::sructural_spring][i + 1]->get_colliderA();
+				const float stretch_bias = joints[Rope_constraint_type::bending_spring][i + 1]->stretch_bias;
+				const float shrink_bias = joints[Rope_constraint_type::bending_spring][i + 1]->shrink_bias;
+				const float offset = joints[Rope_constraint_type::bending_spring][i + 1]->offset;
 
-		float dis = vector3_distance(vertex_offset->at(i).first, vertex_offset->at(i + 1).first);
+				Joint::delete_joint(joints[Rope_constraint_type::bending_spring][i - 1]);
+				joints[Rope_constraint_type::bending_spring][i - 1] = nullptr;
 
-		if (offset + 0.1f < dis) offset = dis - 0.1f;
+				if (i > 2) {
+					auto collider_B = joints[Rope_constraint_type::sructural_spring][i + 1]->get_colliderB();
+
+					joints[Rope_constraint_type::bending_spring][i + 1] = Joint::add_balljoint(
+						collider_A, collider_B,
+						Vector3(0), Vector3(0)
+					);
+
+				}
+
+			}
+			if (structural_num < joints[Rope_constraint_type::sructural_spring].size()) {
+				auto collider_B = joints[Rope_constraint_type::bending_spring][structural_num]->get_colliderB();
+
+				Joint::delete_joint(joints[Rope_constraint_type::bending_spring][structural_num]);
+				joints[Rope_constraint_type::bending_spring][structural_num - 1] = nullptr;
+
+				joints[Rope_constraint_type::bending_spring][structural_num - 1] = Joint::add_balljoint(
+					collider_A, collider_B,
+					Vector3(0), Vector3(0)
+				);
+			}
+
+
+
+			{
+				// offsetが0のjointを削除
+				auto collider_A = joint->get_colliderA();
+
+				Joint::delete_joint(joint);
+				joint = nullptr;
+
+				if (i < structural_spring_size - 1) {
+					// 削除したjointの内 indexの大きいcolliderを、無視するため、
+					// そのcolliderの接続しているsructuralなjointをつなぎなおす
+
+					auto collider_B = joints[Rope_constraint_type::sructural_spring][i + 1]->get_colliderB();
+					const float stretch_bias = joints[Rope_constraint_type::sructural_spring][i + 1]->stretch_bias;
+					const float shrink_bias = joints[Rope_constraint_type::sructural_spring][i + 1]->shrink_bias;
+					const float offset = joints[Rope_constraint_type::sructural_spring][i + 1]->offset;
+
+					Joint::delete_joint(joints[Rope_constraint_type::sructural_spring][i + 1]);
+					joints[Rope_constraint_type::sructural_spring][i + 1] = nullptr;
+
+					joints[Rope_constraint_type::sructural_spring][i + 1] = Joint::add_balljoint(
+						collider_A, collider_B,
+						Vector3(0), Vector3(0)
+					);
+
+					joints[Rope_constraint_type::sructural_spring][i + 1]->stretch_bias = stretch_bias;
+					joints[Rope_constraint_type::sructural_spring][i + 1]->shrink_bias = shrink_bias;
+					joints[Rope_constraint_type::sructural_spring][i + 1]->offset = offset;
+
+				}
+			}
+
+		}
+
+		++structural_num;
 	}
 
-	if (joints[Rope_constraint_type::sructural_spring][0]->offset != offset) {
-		float n = offset - joints[Rope_constraint_type::sructural_spring][0]->offset;
-		n /= get_joint_count();
-		for (auto& joint : joints[Rope_constraint_type::sructural_spring])joint->offset += n;
-		for (auto& joint : joints[Rope_constraint_type::bending_spring])joint->offset += n;
-	}
+	//int vertex_offset_size = vertex_offset->size();
+	//if (vertex_offset_size <= 1)return;
+
+	//float offset = 0;
+
+	//for (int i = 0; i < vertex_offset_size; ++i) {
+
+	//	if (i == vertex_offset_size - 1)continue;
+
+	//	float dis = vector3_distance(vertex_offset->at(i).first, vertex_offset->at(i + 1).first);
+
+	//	if (joints[Rope_constraint_type::sructural_spring][i]->offset + 0.3f < dis) offset += dis - (joints[Rope_constraint_type::sructural_spring][i]->offset + 0.3f);
+	//}
+
+	//if (offset != 0) {
+	//	int not_0_offset_count = 0;
+	//	for (auto& joint : joints[Rope_constraint_type::sructural_spring])if (joint->offset != 0)not_0_offset_count++;
+
+	//	offset /= not_0_offset_count;
+
+	//	for (auto& joint : joints[Rope_constraint_type::sructural_spring])if (joint->offset != 0)joint->offset += offset;
+	//	//for (auto& joint : joints[Rope_constraint_type::bending_spring])joint->offset += n;
+	//}
 
 }
 

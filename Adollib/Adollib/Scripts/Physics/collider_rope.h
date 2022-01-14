@@ -57,7 +57,7 @@ namespace Adollib {
 		//::: 自身の関わるcontact_pairの情報をメンバに保存するかどうか :::
 		bool is_save_contacted_colls = false;
 
-	private:
+	public:
 		// 適当なstruct
 		enum class Rope_constraint_type {
 			sructural_spring, //構成バネ
@@ -74,9 +74,9 @@ namespace Adollib {
 
 	public:
 		// アタッチされたjointの数
-		const int get_joint_count();
+		const int get_joint_count(Rope_constraint_type type);
 		// jointのptrを返す
-		Joint_base* get_joint_ptr(int joint_num);
+		Joint_base* get_joint_ptr(Rope_constraint_type type, int joint_num);
 
 		// 指定の頂点のphysics_dataを変更する
 		void set_vertex_data(const int& vertex_num, const Physics_data& physics_data);
@@ -114,6 +114,7 @@ namespace Adollib {
 		void set_max_linear_velocity(const float& max_scalar) {for (auto& ptr : colliders)  ptr->set_max_linear_velocity(max_scalar); };
 		void set_max_angula_velocity(const float& max_scalar) {for (auto& ptr : colliders)  ptr->set_max_angula_velocity(max_scalar); };
 
+		//void clear_offset_0_joint();
 	public:
 		void create_rope();
 

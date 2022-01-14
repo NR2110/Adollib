@@ -1,2 +1,6 @@
-﻿  renderer_manager.cpp
+﻿  player_funcs.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(15,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(67,70): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(285,20): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(307,104): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe
