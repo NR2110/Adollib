@@ -42,6 +42,8 @@ namespace Adollib
 			padButtonPtrs[i][static_cast<int>(GamePad::RSTICK)/*9*/] = &padTracker[i].get()->rightStick;		// RStick
 			padButtonPtrs[i][static_cast<int>(GamePad::LSHOULDER)/*10*/] = &padTracker[i].get()->leftShoulder;	// LShoulder
 			padButtonPtrs[i][static_cast<int>(GamePad::RSHOULDER)/*11*/] = &padTracker[i].get()->rightShoulder;// RShoulder
+			padButtonPtrs[i][static_cast<int>(GamePad::LTRIGGER)/*10*/] = &padTracker[i].get()->leftTrigger;	// LShoulder
+			padButtonPtrs[i][static_cast<int>(GamePad::RTRIGGER)/*11*/] = &padTracker[i].get()->rightTrigger;// RShoulder
 			padButtonPtrs[i][static_cast<int>(GamePad::BACK)/*12*/] = &padTracker[i].get()->back;				// Back
 			padButtonPtrs[i][static_cast<int>(GamePad::START)/*13*/] = &padTracker[i].get()->start;			// Start
 			// Mouse

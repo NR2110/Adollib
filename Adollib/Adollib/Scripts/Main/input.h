@@ -30,6 +30,8 @@ namespace Adollib
 		RSTICK,
 		LSHOULDER,
 		RSHOULDER,
+		LTRIGGER,
+		RTRIGGER,
 		BACK,
 		START,
 

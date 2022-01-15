@@ -12,11 +12,16 @@ namespace Adollib
 
 		Vector3 dir; //“®‚­Œü‚«
 
-		bool is_Rarm_state = false;
 		bool is_Larm_state = false;
+		bool is_Rarm_state = false;
 		bool is_jump_trigger = false;
 		bool is_gunyatto_state = false;
 		bool is_respown_trigger = false;
+
+		bool is_rope_state = false;
+		bool is_rope_releaced = false;
+		bool is_rope_delete = false;
+		bool is_rope_shrink = false;
 
 		float wheel_move = 0;
 

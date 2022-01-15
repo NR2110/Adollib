@@ -71,6 +71,7 @@ namespace Adollib {
 
 		std::shared_ptr<std::vector<std::pair<Vector3, Vector3>>> vertex_offset; //model頂点からどれくらいずれているか rendererがposition,normalのstd::pairなので合わせる
 
+		std::vector<int> ignore_coll_num;
 
 	public:
 		// アタッチされたjointの数

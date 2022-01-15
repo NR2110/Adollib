@@ -240,25 +240,16 @@ void Player::catch_things() {
 void Player::shot_rope() {
 
 	static Gameobject* Lrope_go = nullptr;
-	static Gameobject* Rrope_go = nullptr;
 	static Collider_Rope* Lrope_coll = nullptr;
-	static Collider_Rope* Rrope_coll = nullptr;
+	static Joint_base* Lblock_rope_joint = nullptr;
+	static Joint_base* Lblock_hand_joint = nullptr;
+	static int collider_num = 1;
+
 
 	const float rope_sphere_r = 0.2f;
 
-	if (input->getKeyTrigger(Key::Left)) {
-
-		//{
-		//	Ray camera_ray;
-		//	camera_ray.direction = vector3_quatrotate(Vector3(0, 0, 1), camera->transform->orientation);
-		//	camera_ray.position = camera->transform->position;
-
-		//	Ray::Raycast_struct data;
-		//	data.collider_tag = Collider_tags::Stage;
-		//	Vector3 contact_point;
-		//	camera_ray.ray_cast(data);
-		//}
-
+	if (input_changer->is_rope_releaced) {
+		collider_num = 1;
 
 		Ray ray;
 		ray.direction = vector3_quatrotate(Vector3(0, -1, 0), Lelbow->transform->orientation);
@@ -272,6 +263,7 @@ void Player::shot_rope() {
 
 		if (data.raymin > 90)return;
 		if (Lrope_go)Gameobject_manager::deleteGameobject(Lrope_go);
+		if (Lblock_hand_joint)Joint::delete_joint(Lblock_hand_joint);
 
 		Lrope_go = Gameobject_manager::create("rope");
 		Lrope_go->transform->local_pos = ray.position;
@@ -301,7 +293,7 @@ void Player::shot_rope() {
 			Vector3(0), Vector3(0)
 		);
 
-		auto block_rope_joint = Joint::add_balljoint(
+		Lblock_rope_joint = Joint::add_balljoint(
 			data.coll, coll->get_collider(coll->get_collider_size() - 1),
 			//vector3_quatrotate(contact_point - data.coll->transform->position, data.coll->transform->orientation.inverse()),
 			vector3_quatrotate(ray.position + ray.direction * coll->sphree_offset_size * (coll->sphere_num_size -  1) - data.coll->transform->position, data.coll->transform->orientation.inverse()),
@@ -322,13 +314,13 @@ void Player::shot_rope() {
 	}
 
 	// k‚ß‚é
-	if (input->getKeyState(Key::Up) && Lrope_go != nullptr) {
+	if (input_changer->is_rope_shrink && Lrope_go != nullptr) {
 		const auto& structural_type = Collider_Rope::Rope_constraint_type::sructural_spring;
 		const auto& bending_type = Collider_Rope::Rope_constraint_type::bending_spring;
 
+
 		if (vector3_distance(Lhand_collider->transform->position, +Lrope_coll->get_vertex_offset()->at(0).first + Lrope_coll->gameobject->transform->position) < 0.2f)
 		{
-			int shrinking_spring_num = -1;
 			{
 				int joint_size = Lrope_coll->get_joint_count(structural_type);
 
@@ -336,40 +328,56 @@ void Player::shot_rope() {
 					if (Lrope_coll->get_joint_ptr(structural_type, i)->offset == 0)continue;
 					Lrope_coll->get_joint_ptr(structural_type, i)->offset = ALmax(Lrope_coll->get_joint_ptr(structural_type, i)->offset - 10 * time->deltaTime(), 0);
 
-					if (Lrope_coll->get_joint_ptr(structural_type, i)->offset == 0 ) {
-
-						if(i != 0 && i != 1)
-						{
-							Joint::add_balljoint(
-								Lrope_coll->get_collider(0), Lrope_coll->get_collider(i),
-								Vector3(0), Vector3(0)
-							);
-						}
+					// ˆê”ÔÅŒã‚ÍŽè‚ÆÚ‘±“_‚ð’¼Ú‚­‚Á‚Â‚¯‚ÄˆÀ’è‚³‚¹‚é
+					if (i == joint_size - 1 && Lrope_coll->get_joint_ptr(structural_type, i)->offset == 0) {
+						Lblock_hand_joint = Joint::add_balljoint(
+							Lblock_rope_joint->get_colliderA(),Lhand_collider,
+							Lblock_rope_joint->get_anchors()[0].posA,Vector3(0)
+						);
+						Lblock_hand_joint->offset = Lhand_collider->gameobject->transform->scale.x;
 
 					}
 
-					shrinking_spring_num = i;
+					if(Lrope_coll->get_joint_ptr(structural_type, i)->offset == 0 && i < joint_size - 1) collider_num++;
+
 					break;
+				}
+			}
+
+			if (check_onplayer_coll->concoll_enter(Collider_tags::Stage) && onground_collider == nullptr)
+			{
+				float pow = fabsf(vector3_dot(Vector3(0, 1, 0), (Lrope_coll->get_vertex_offset()->at(collider_num).first - Lrope_coll->get_vertex_offset()->at(0).first).unit_vect()));
+				Debug::set("pow", pow);
+				pow = 1 - pow;
+				for (int i = 0; i < Human_collider_size; ++i) {
+					Human_colliders[i]->add_force(Vector3(0, 1, 0) * 500 * pow);
 				}
 			}
 		}
 
 		int bending_size = Lrope_coll->get_joint_count(bending_type);
-		for (int i = 0; i < bending_size; ++i) {
-			Lrope_coll->get_joint_ptr(bending_type, i)->offset =
-				(Lrope_coll->get_joint_ptr(structural_type, i)->offset + Lrope_coll->get_joint_ptr(structural_type, i + 1)->offset) * 0.5f;
+		if (bending_size != 0) {
+			Lrope_coll->get_joint_ptr(bending_type, 0)->offset =
+				0;
 		}
-
-
-		//if(Lrope_coll->get_vertex_offset()->at(0).first)
 	}
 
-	if (input->getKeyTrigger(Key::Down)) {
+	if (input_changer->is_rope_delete) {
 		if (Lrope_go)Gameobject_manager::deleteGameobject(Lrope_go);
-		if (Rrope_go)Gameobject_manager::deleteGameobject(Rrope_go);
+		if (Lblock_hand_joint)Joint::delete_joint(Lblock_hand_joint);
 
 		Lrope_go = nullptr;
-		Rrope_go = nullptr;
+		Lblock_hand_joint = nullptr;
+	}
+
+	if (Lblock_hand_joint) {
+		if (Lrope_go)Gameobject_manager::deleteGameobject(Lrope_go);
+		Lrope_go = nullptr;
+	}
+
+	if (input_changer->is_Larm_state) {
+		if (Lblock_hand_joint)Joint::delete_joint(Lblock_hand_joint);
+		Lblock_hand_joint = nullptr;
 	}
 
 }
