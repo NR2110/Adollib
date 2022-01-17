@@ -291,7 +291,7 @@ namespace Adollib {
 
 
 	inline float Adollib::quaternion_dot(const Quaternion& Q1, const Quaternion& Q2) {
-		return Q1.x * Q2.x + Q1.y * Q2.y + Q1.z * Q2.z;
+		return Q1.x * Q2.x + Q1.y * Q2.y + Q1.z * Q2.z + Q1.w * Q2.w;
 	}
 
 	inline Quaternion Adollib::quaternion_from_to_rotate(const Vector3& V1, const Vector3& V2) {

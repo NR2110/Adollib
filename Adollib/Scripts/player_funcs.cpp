@@ -81,14 +81,36 @@ void Player::reach_out_hands() {
 
 			}
 
-			//float elbow_pow = 0;
+			//{
+			//	if (rad > PI) {
+			//		rad = rad - 2 * PI;
+			//		collider->gameobject->transform->local_orient *= -1;
+			//		collider->gameobject->transform->orientation *= -1;
+			//		off = rotate * collider->gameobject->transform->orientation.inverse();
+			//	}
+			//}
+
+			float elbow_pow = 0;
+			//if (fabsf(colliders[i]->transform->orientation.z * colliders[i + 2]->transform->orientation.z) > 0.2f) {
+			//	colliders[i + 2]->transform->orientation *= -1;
+			//	colliders[i + 2]->transform->local_orient *= -1;
+			//}
 			{
 				//腕
 				auto& collider = colliders[i + 2];
-				Quaternion off = collider->transform->orientation * goal.inverse();
-				Vector3 axis = off.axis();
+				Quaternion off = -collider->transform->orientation * goal.inverse();
+				Vector3 axis = -off.axis();
 				float rad = off.radian();
-				if (rad > PI) rad = 2 * PI - rad;
+				Debug::set("rad_sholder_" + std::to_string(i), rad);
+				if (rad > PI) {
+					collider->transform->orientation *= -1;
+					collider->transform->local_orient *= -1;
+
+					off = -collider->transform->orientation * goal.inverse();
+					axis = -off.axis();
+					rad = off.radian();
+				}
+				Debug::set("elbow_orientation_" + std::to_string(i), collider->transform->orientation);
 
 				float pow = ALClamp(rad * hand_rot_pow, 0, hand_rot_max_pow);
 				Vector3 world_axis = vector3_quatrotate(axis, collider->transform->orientation);
@@ -99,18 +121,24 @@ void Player::reach_out_hands() {
 			{
 				// 肩
 				auto& collider = colliders[i];
-				Quaternion off = collider->transform->orientation * goal.inverse();
-				Vector3 axis = off.axis();
+				Quaternion off = -collider->transform->orientation * goal.inverse();
+				Vector3 axis = -off.axis();
 				float rad = off.radian();
-				if (rad > PI) rad = 2 * PI - rad;
+				Debug::set("rad_sholder_" + std::to_string(i) + std::to_string(i), rad);
+				if (rad > PI) {
+					collider->transform->orientation *= -1;
+					collider->transform->local_orient *= -1;
+
+					off = -collider->transform->orientation * goal.inverse();
+					axis = -off.axis();
+					rad = off.radian();
+				}
+				Debug::set("sholder_orientation_" + std::to_string(i), collider->transform->orientation);
 
 				float pow = ALClamp(rad * hand_rot_pow, 0, hand_rot_max_pow);
 				Vector3 world_axis = vector3_quatrotate(axis, collider->transform->orientation);
 				collider->add_torque(world_axis * pow * collider->physics_data.inertial_mass);
 				collider->set_max_angula_velocity(ALmin(hand_rot_max_speed, hand_rot_max_speed * ToAngle(rad) * 0.03f));
-			}
-
-			{
 			}
 
 		}
@@ -453,7 +481,6 @@ void Player::shot_rope() {
 			if (check_onplayer_coll->concoll_enter(Collider_tags::Stage) && onground_collider == nullptr)
 			{
 				float pow = fabsf(vector3_dot(Vector3(0, 1, 0), (Lrope_coll->get_vertex_offset()->at(collider_num).first - Lrope_coll->get_vertex_offset()->at(0).first).unit_vect()));
-				Debug::set("pow", pow);
 				pow = 1 - pow;
 				for (int i = 0; i < Human_collider_size; ++i) {
 					Human_colliders[i]->add_force(Vector3(0, 1, 0) * 250 * pow);
@@ -490,6 +517,8 @@ void Player::shot_rope() {
 
 // 立つように力を加える
 void Player::add_pow_for_stand() {
+	// 今の向き
+	Vector3 player_vec = vector3_quatrotate(Vector3(0, 0, -1), rotate);
 
 	if (is_gunyatto == false)
 	{
@@ -498,11 +527,15 @@ void Player::add_pow_for_stand() {
 			Quaternion off = rotate * Waist_collider->gameobject->transform->orientation.inverse();
 
 			float rad = off.radian();
-			if (rad > PI)rad = 2 * PI - rad;
+			if (rad > PI) {
+				rad = rad - 2 * PI;
+				Waist_collider->gameobject->transform->local_orient *= -1;
+				Waist_collider->gameobject->transform->orientation *= -1;
+				off = rotate * Waist_collider->gameobject->transform->orientation.inverse();
+			}
 			float pow = ALClamp(rad * waist_rot_pow, 0, waist_rot_max_pow);
 			Waist_collider->add_torque(off.axis() * pow * 1, true);
 			Waist_collider->set_max_angula_velocity(waist_rot_max_speed);
-
 		}
 		{
 			//体をたたせる
@@ -510,7 +543,12 @@ void Player::add_pow_for_stand() {
 			//Quaternion off = Waist_collider->gameobject->transform->orientation * Body_collider->gameobject->transform->orientation.inverse();
 
 			float rad = off.radian();
-			if (rad > PI)rad = 2 * PI - rad;
+			if (rad > PI) {
+				rad = rad - 2 * PI;
+				Body_collider->gameobject->transform->local_orient *= -1;
+				Body_collider->gameobject->transform->orientation *= -1;
+				off = rotate * Body_collider->gameobject->transform->orientation.inverse();
+			}
 			float pow = ALClamp(rad * body_rot_pow, 0, body_rot_max_pow);
 			Body_collider->add_torque(off.axis() * pow * gunyatto_pow, true);
 			Body_collider->set_max_angula_velocity(body_rot_max_speed);
@@ -520,7 +558,12 @@ void Player::add_pow_for_stand() {
 			//顔が赤ちゃんなのを治す
 			Quaternion off = Body_collider->gameobject->transform->orientation * Head_collider->gameobject->transform->orientation.inverse();
 			float rad = off.radian();
-			if (rad > PI)rad = 2 * PI - rad;
+			if (rad > PI) {
+				rad = rad - 2 * PI;
+				Head_collider->gameobject->transform->local_orient *= -1;
+				Head_collider->gameobject->transform->orientation *= -1;
+				off = rotate * Head_collider->gameobject->transform->orientation.inverse();
+			}
 			float pow = ALClamp(rad * head_rot_pow, 0, head_rot_max_pow);
 			Head_collider->add_torque(off.axis() * pow * gunyatto_pow, true);
 			Head_collider->set_max_angula_velocity(ALmin(head_rot_max_speed, head_rot_max_speed * ToAngle(rad) * 0.03f)); //角度の差によって最大速度を調整
@@ -554,9 +597,6 @@ void Player::push_waist_for_stand() {
 			constexpr float mass = 10 * 4.5f; //パーツによって質量がまちまちなので だいたいの質量
 			constexpr float stand_pow = 1000;
 
-
-			Debug::set("onground_contactpoint_vec", (onground_contactpoint - Waist_collider->transform->position).unit_vect());
-
 			Vector3 gravity_pow = Vector3(0, 1, 0) * Physics_function::Physics_manager::physicsParams.gravity * mass; //playerが滞空出来る力
 			Vector3 force = Vector3(0, 1, 0) * (onground_dis * dot - dis) * stand_pow; //めり込みを治す力
 			Vector3 fall_force = Vector3(0, 1, 0) * Waist_collider->linear_velocity().y * mass;
@@ -565,7 +605,6 @@ void Player::push_waist_for_stand() {
 			onground_ray_data.coll->add_force(-(gravity_pow + fall_force), onground_contactpoint);
 
 		}
-		Debug::set("dis", dis);
 	}
 
 }
@@ -844,6 +883,7 @@ void Player::turn_gunyatto_dir() {
 
 	Vector3 front_dir = vector3_quatrotate(dir, quaternion_axis_radian(rotate_axis, radian));
 	front_dir.y = 0;
+	front_dir = front_dir.unit_vect();
 
 	//// 腹ばいか 仰向けか
 	//if (fabsf(dir.y) > 0.5f) {
@@ -854,18 +894,20 @@ void Player::turn_gunyatto_dir() {
 	//else return;
 
 	// 今の向き
-	Vector3 player_vec = vector3_quatrotate(Vector3(0, 0, 1), rotate);
+	Vector3 player_vec = vector3_quatrotate(Vector3(0, 0, -1), rotate);
 
 	// 差分を求めて
 	float angle = vector3_angle(front_dir, player_vec);
 
 	// 回転軸は0,1,0にしたいから 外積で回転方向の確認
-	if (vector3_cross(player_vec, dir).y < 0)angle *= -1;
+	if (vector3_cross(player_vec, front_dir).y < 0)angle *= -1;
 
 	rotate *= quaternion_axis_angle(Vector3(0, 1, 0), angle);
 
 	Debug::set("waist_head_dir", waist_head_dir);
 	Debug::set("front_dir", front_dir);
+	Debug::set("player_vec", player_vec);
+	Debug::set("angle", angle);
 
 }
 
