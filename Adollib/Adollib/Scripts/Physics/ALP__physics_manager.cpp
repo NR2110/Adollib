@@ -8,6 +8,8 @@
 #include "../Imgui/work_meter.h"
 #include "../Imgui/debug.h"
 
+#include "../Renderer/renderer_base.h"
+
 #include "collider.h"
 #include "ALP_joint.h"
 
@@ -20,7 +22,7 @@ using namespace Contacts;
 //ContactPointの表示
 #define Update60fps
 //#define Draw_Contact //使用する際はthreadを描画のと同じにすること
-//#define Draw_JointContact //使用する際はthreadを描画のと同じにすること
+#define Draw_JointContact //使用する際はthreadを描画のと同じにすること
 
 //::: staticメンバの初期化 :::::
 #pragma region static_initialize
@@ -224,9 +226,9 @@ bool Physics_manager::update(Scenelist Sce)
 	if (init) {
 		for (int i = 0; i < size; i++) {
 			debug_go[i] = Gameobject_manager::createSphere();
-			debug_go[i]->transform->local_scale = Vector3(1) * 0.3f * 10;
-			if (i % 2 == 0)debug_go[i]->material->color = Vector4(1, 0.5f, 0.5f, 1);
-			else debug_go[i]->material->color = Vector4(0.5f, 1, 0.5f, 1);
+			debug_go[i]->transform->local_scale = Vector3(1) * 0.3f;
+			if (i % 2 == 0)debug_go[i]->renderer->color = Vector4(1, 0.5f, 0.5f, 1);
+			else debug_go[i]->renderer->color = Vector4(0.5f, 1, 0.5f, 1);
 
 			debug_go[i]->is_hierarchy = false;
 		}

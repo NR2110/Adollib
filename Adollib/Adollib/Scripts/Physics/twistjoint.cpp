@@ -9,7 +9,7 @@ using namespace Adollib;
 using namespace Physics_function;
 
 bool TwistJoint::limit_effect(Vector3& contactP0, Vector3& contactP1, float& penetrate) const {
-	constexpr float power = 2; //“ä ‚È‚º‚©‚È‚¢‚Æ’£‚è•t‚­
+	constexpr float power = 1; //“ä ‚È‚º‚©‚È‚¢‚Æ’£‚è•t‚­
 
 	const world_trans* transforms[2]{
 		&ALPjoint->ALPcollider[0]->transform,

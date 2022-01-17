@@ -267,7 +267,7 @@ void Player::catch_things() {
 };
 
 void Player::shot_rope() {
-
+	// TODO:êÆóùÇ∑ÇÈ
 	static Gameobject* Lrope_go = nullptr;
 	static Collider_Rope* Lrope_coll = nullptr;
 	static Joint_base* Lblock_rope_joint = nullptr;
