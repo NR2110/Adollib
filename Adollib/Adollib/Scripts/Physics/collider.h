@@ -87,7 +87,7 @@ namespace Adollib {
 
 	public:
 		// joint‚É©g‚Ì•Û‚·‚éALPCollider‚Ìî•ñ‚ğ“ü‚ê‚é
-		void set_ptr_to_joint(Physics_function::ALP_Joint*& joint_base);
+		void set_ptr_to_joint(Physics_function::ALP_Joint* joint_base);
 
 	public:
 		// Œğ·‚µ‚Ä‚¢‚½‚çtrue‚ğ•Ô‚·

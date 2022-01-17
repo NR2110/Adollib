@@ -155,6 +155,9 @@ void Mesh_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& inst
 	// textureをSRVにセット
 	material->get_texture()->Set(0);
 
+	// materialのuserが設定したconstantbufferに更新をかける
+	material->set_constantbuffer();
+
 	for (Mesh::mesh& mesh : (*meshes))
 	{
 

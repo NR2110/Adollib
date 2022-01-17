@@ -20,6 +20,10 @@ namespace Adollib {
 
 		std::shared_ptr<Texture> texture = nullptr; //textureî•ñ
 
+		Microsoft::WRL::ComPtr<ID3D11Buffer> mat_cb = nullptr; //constantbufferî•ñ
+		int constant_buffer_num = 0;
+		int constant_buffer_Vector4_count = 0;
+
 	public:
 		std::string name; //material‚Ì–¼‘O
 
@@ -27,6 +31,8 @@ namespace Adollib {
 		std::shared_ptr<Texture>  get_texture() { return texture; };
 
 		Vector4 color;
+
+		Vector4 constant_buffer_data[4];
 
 		State_manager::DStypes DS_state;
 
@@ -41,6 +47,9 @@ namespace Adollib {
 		void Load_DS(const char* cso_name) { shader.Load_DS(cso_name); };
 
 		void shader_activate() { shader.Activate(); };
+
+		void create_constantbuffer(int constant_buffer_num, int constant_buffer_Vector4_count);
+		void set_constantbuffer();
 
 	};
 

@@ -108,9 +108,10 @@ void Collider_Rope::create_rope() {
 	}
 
 	constexpr float sructural_stretch = 0.10f;
-	constexpr float sructural_shrink = 0.40f;
+	//constexpr float sructural_shrink = 0.40f;
+	constexpr float sructural_shrink = 1;
 	constexpr float bending_stretch = 0.10f;
-	constexpr float bending_shrink = 0.f;
+	constexpr float bending_shrink = 0;
 
 	// sphere‚ğ‚Â‚È‚®joint‚Ì¶¬
 	for (int collider_num = 0; collider_num < sphere_num_size; ++collider_num) {
@@ -173,8 +174,10 @@ void Collider_Rope::update() {
 		// bending_spring‚ÌíœAÄİ’è‚ğs‚¤
 		{
 			// ©g‚ğ‹²‚ñ‚Å‘¶İ‚·‚ébending_spring‚Ìíœ
-			Joint::delete_joint(joints[Rope_constraint_type::bending_spring][i]);
-			joints[Rope_constraint_type::bending_spring][i] = nullptr;
+			if (i < structural_spring_size - 2) {
+				Joint::delete_joint(joints[Rope_constraint_type::bending_spring][i]);
+				joints[Rope_constraint_type::bending_spring][i] = nullptr;
+			}
 
 			if (i > 0) {
 				// Œã‚ë
@@ -297,6 +300,7 @@ void Collider_Rope::awake() {
 	Physics_manager::physicsParams.set_default_physics_data(default_physics_data);
 
 	default_physics_data.anglar_drag = 0.9f;
+	default_physics_data.dynamic_friction = 0;
 	default_physics_data.inertial_mass = 2;
 
 	//::: rope‚Ìsphere‚ÌŒÂ” ::::

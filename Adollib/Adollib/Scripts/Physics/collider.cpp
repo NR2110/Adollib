@@ -139,7 +139,7 @@ void Collider::add_mesh_shape(const char* filepass, bool is_right_rtiangle, bool
 	//coll_mesh.ALPcollider = ALPcollider_itr;
 }
 
-void Collider::set_ptr_to_joint(Physics_function::ALP_Joint*& joint) {
+void Collider::set_ptr_to_joint(Physics_function::ALP_Joint* joint) {
 	if (joint->ALPcollider[0] == nullptr)joint->ALPcollider[0] = ALPcollider_ptr;
 	else if (joint->ALPcollider[1] == nullptr)joint->ALPcollider[1] = ALPcollider_ptr;
 	else assert(0 && "too many ALP_Collider to attach joint");

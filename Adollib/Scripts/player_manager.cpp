@@ -47,7 +47,9 @@ namespace Adollib
 		Human->transform->local_orient = quaternion_from_euler(rotate);
 
 		auto player_material_01 = Material_manager::create_material("player_material_01");
-		player_material_01->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+		player_material_01->Load_VS("./DefaultShader/dither_noshadow_vs.cso");
+		player_material_01->Load_PS("./DefaultShader/dither_noshadow_ps.cso");
+		player_material_01->create_constantbuffer(6, 1);
 		player_material_01->color = Vector4(main_color, 1);
 
 		//::: Gameobject‚Ì¶¬ :::
@@ -291,6 +293,20 @@ namespace Adollib
 			Lfoot_collider->physics_data.restitution = 0.01f;
 			Rfoot_collider->physics_data.restitution = 0.01f;
 
+			Head_collider->physics_data.dynamic_friction = 0.01f;
+			Lsholder_collider->physics_data.dynamic_friction = 0.01f;
+			Rsholder_collider->physics_data.dynamic_friction = 0.01f;
+			Lelbow_collider->physics_data.dynamic_friction = 0.01f;
+			Relbow_collider->physics_data.dynamic_friction = 0.01f;
+			Lhand_collider->physics_data.dynamic_friction = 0.01f;
+			Rhand_collider->physics_data.dynamic_friction = 0.01f;
+			Body_collider->physics_data.dynamic_friction = 0.01f;
+			Waist_collider->physics_data.dynamic_friction = 0.01f;
+			Lleg_collider->physics_data.dynamic_friction = 0.01f;
+			Rleg_collider->physics_data.dynamic_friction = 0.01f;
+			Lfoot_collider->physics_data.dynamic_friction = 0.01f;
+			Rfoot_collider->physics_data.dynamic_friction = 0.01f;
+
 			//::: d—Í“K—p‚Ì’²® :::
 			Head_collider->physics_data.is_fallable = false;
 			//Rsholder_collider->physics_data.is_fallable = false;
@@ -452,7 +468,9 @@ namespace Adollib
 		{
 			auto player_material_02 = Material_manager::create_material("player_material_02");
 			player_material_02->color = Vector4(sub_color, 1);
-			player_material_02->Load_PS("./DefaultShader/default_ps_dither_noshadow.cso");
+			player_material_02->Load_VS("./DefaultShader/dither_noshadow_vs.cso");
+			player_material_02->Load_PS("./DefaultShader/dither_noshadow_ps.cso");
+			player_material_02->create_constantbuffer(6, 1);
 			{
 				Gameobject* eye0 = Gameobject_manager::createSphere("eye0");
 				Head->add_child(eye0);

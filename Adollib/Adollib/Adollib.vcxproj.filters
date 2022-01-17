@@ -146,6 +146,9 @@
     <Filter Include="00_Adollib\22_physics\collider\shapes\other">
       <UniqueIdentifier>{dddb83a8-c32c-4088-a435-9c88fdf544d5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00_Adollib\44_render\shader\hlsl\dither">
+      <UniqueIdentifier>{bc4f19db-466f-4b49-814d-28a0bc31075d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Scripts\player.cpp">
@@ -903,6 +906,9 @@
     <None Include="DefaultShader\rope_shader.hlsli">
       <Filter>00_Adollib\44_render\shader\hlsl\rope</Filter>
     </None>
+    <None Include="DefaultShader\dither_noshadow.hlsli">
+      <Filter>00_Adollib\44_render\shader\hlsl\dither</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="DefaultShader\default_ps.hlsl">
@@ -938,9 +944,6 @@
     <FxCompile Include="DefaultShader\collider_render_ps.hlsl">
       <Filter>00_Adollib\44_render\shader\hlsl\collider_render</Filter>
     </FxCompile>
-    <FxCompile Include="DefaultShader\default_ps_dither_noshadow.hlsl">
-      <Filter>00_Adollib\44_render\shader\hlsl\default</Filter>
-    </FxCompile>
     <FxCompile Include="DefaultShader\gaussian_filter_ps.hlsl">
       <Filter>00_Adollib\44_render\shader\hlsl\gaussian_filter</Filter>
     </FxCompile>
@@ -967,6 +970,12 @@
     </FxCompile>
     <FxCompile Include="DefaultShader\rope_shader_ps.hlsl">
       <Filter>00_Adollib\44_render\shader\hlsl\rope</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\dither_noshadow_ps.hlsl">
+      <Filter>00_Adollib\44_render\shader\hlsl\dither</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\dither_noshadow_vs.hlsl">
+      <Filter>00_Adollib\44_render\shader\hlsl\dither</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

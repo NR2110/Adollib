@@ -16,8 +16,8 @@ BallJoint* Joint::add_balljoint(
 ) {
 	//joint‚Ì¶¬
 	auto joint = Physics_manager::add_Joint();
-	colliderA->set_ptr_to_joint(joint);
-	colliderB->set_ptr_to_joint(joint);
+	//colliderA->set_ptr_to_joint(joint);
+	//colliderB->set_ptr_to_joint(joint);
 
 	BallJoint* balljoint = newD BallJoint(colliderA, colliderB, joint);
 	joint->userjoint = balljoint;
@@ -39,8 +39,8 @@ HingeJoint* Joint::add_Hingejoint(
 ) {
 	//joint‚Ì¶¬
 	auto joint = Physics_manager::add_Joint();
-	colliderA->set_ptr_to_joint(joint);
-	colliderB->set_ptr_to_joint(joint);
+	//colliderA->set_ptr_to_joint(joint);
+	//colliderB->set_ptr_to_joint(joint);
 
 	HingeJoint* hingejoint = newD HingeJoint(colliderA, colliderB, joint);
 	joint->userjoint = hingejoint;
@@ -68,8 +68,8 @@ ConeJoint* Joint::add_Conejoint(
 ) {
 	//joint‚Ì¶¬
 	auto joint = Physics_manager::add_Joint();
-	colliderA->set_ptr_to_joint(joint);
-	colliderB->set_ptr_to_joint(joint);
+	//colliderA->set_ptr_to_joint(joint);
+	//colliderB->set_ptr_to_joint(joint);
 
 	ConeJoint* conetwist = newD ConeJoint(colliderA, colliderB, joint);
 	joint->userjoint = conetwist;
@@ -94,8 +94,8 @@ ConetwistJoint* Joint::add_Conetwistjoint(
 ) {
 	//joint‚Ì¶¬
 	auto joint = Physics_manager::add_Joint();
-	colliderA->set_ptr_to_joint(joint);
-	colliderB->set_ptr_to_joint(joint);
+	//colliderA->set_ptr_to_joint(joint);
+	//colliderB->set_ptr_to_joint(joint);
 
 	ConetwistJoint* conetwist = newD ConetwistJoint(colliderA, colliderB, joint);
 	joint->userjoint = conetwist;
@@ -120,8 +120,8 @@ TwistJoint* Joint::add_Twistjoint(
 ) {
 	//joint‚Ì¶¬
 	auto joint = Physics_manager::add_Joint();
-	colliderA->set_ptr_to_joint(joint);
-	colliderB->set_ptr_to_joint(joint);
+	//colliderA->set_ptr_to_joint(joint);
+	//colliderB->set_ptr_to_joint(joint);
 
 	TwistJoint* twistjoint = newD TwistJoint(colliderA, colliderB, joint);
 	joint->userjoint = twistjoint;

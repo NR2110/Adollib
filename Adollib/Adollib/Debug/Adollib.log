@@ -1,5 +1,6 @@
-﻿  collider_rope.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\shape_rope.h(11,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_rope.h(25): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_rope.cpp(152,81): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+﻿  player_funcs.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(15,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(68,70): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(383,20): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(405,112): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

@@ -8,6 +8,7 @@
 #include "../Adollib/Scripts/Physics/collider_rope.h"
 #include "../Adollib/Scripts/Imgui/work_meter.h"
 
+#include "../Adollib/Scripts/Renderer/material_manager.h"
 #include "../Adollib/Scripts/Renderer/rope_renderer.h"
 
 #include "stage_manager.h"
@@ -91,7 +92,7 @@ void Player::reach_out_hands() {
 
 				float pow = ALClamp(rad * hand_rot_pow, 0, hand_rot_max_pow);
 				Vector3 world_axis = vector3_quatrotate(axis, collider->transform->orientation);
-				collider->add_torque(world_axis* pow * collider->physics_data.inertial_mass);
+				collider->add_torque(world_axis * pow * collider->physics_data.inertial_mass);
 				collider->set_max_angula_velocity(ALmin(hand_rot_max_speed, hand_rot_max_speed * ToAngle(rad) * 0.03f));
 			}
 
@@ -103,7 +104,7 @@ void Player::reach_out_hands() {
 				float rad = off.radian();
 				if (rad > PI) rad = 2 * PI - rad;
 
-				float pow = ALClamp(rad * hand_rot_pow,  0, hand_rot_max_pow);
+				float pow = ALClamp(rad * hand_rot_pow, 0, hand_rot_max_pow);
 				Vector3 world_axis = vector3_quatrotate(axis, collider->transform->orientation);
 				collider->add_torque(world_axis * pow * collider->physics_data.inertial_mass);
 				collider->set_max_angula_velocity(ALmin(hand_rot_max_speed, hand_rot_max_speed * ToAngle(rad) * 0.03f));
@@ -244,29 +245,134 @@ void Player::shot_rope() {
 	static Joint_base* Lblock_rope_joint = nullptr;
 	static Joint_base* Lblock_hand_joint = nullptr;
 	static int collider_num = 1;
+	static float dither_timer = 0;
 
 
 	const float rope_sphere_r = 0.2f;
 
+	static Gameobject* rope_hit_sphere = nullptr;
+	static Gameobject* rope_hit_cylinder = nullptr;
+	if (rope_hit_sphere == nullptr) {
+		rope_hit_sphere = Gameobject_manager::createSphere("rope_hit_sphere");
+		rope_hit_sphere->transform->local_scale = Vector3(rope_sphere_r * 2);
+		rope_hit_sphere->renderer->color = Vector4(1, 0, 0, 1);
+
+		rope_hit_cylinder = Gameobject_manager::createCylinder("rope_hit_cylinder");
+		rope_hit_cylinder->transform->local_scale = Vector3(rope_sphere_r * 0.5f);
+		rope_hit_cylinder->renderer->color = Vector4(1, 0, 0, 1);
+	}
+
+	{
+		rope_hit_sphere->transform->local_pos = Vector3(10000, 10000, 10000000);
+		rope_hit_cylinder->transform->local_pos = Vector3(10000, 10000, 10000000);
+	}
+
+	dither_timer = ALClamp(dither_timer, -0.3f, 1);
+	if (input_changer->is_rope_state) {
+		{
+			dither_timer += time->deltaTime() * 2.0f;
+			float dither_pow = ALClamp(dither_timer, 0, 1);
+
+			//Waist->renderer->get_material()->constant_buffer_data[0] = Vector4(500, 1000, 0, 0);
+			Material_manager::find_material("player_material_01")->constant_buffer_data[0] = Vector4(5 + (500 - 5) * dither_pow, 4 + (1000 - 4) * dither_pow, 0, 0);
+			Material_manager::find_material("player_material_02")->constant_buffer_data[0] = Vector4(5 + (500 - 5) * dither_pow, 4 + (1000 - 4) * dither_pow, 0, 0);
+			camera->gameobject->findComponent<Camera_component>()->fov = 60 + (40 - 60) * dither_pow;
+		}
+
+		Ray camera_ray;
+		camera_ray.direction = vector3_quatrotate(Vector3(0, 0, 1), camera->transform->orientation);
+		camera_ray.position = camera->transform->position;
+
+		Ray::Raycast_struct camera_ray_data;
+		camera_ray_data.collider_tag = Collider_tags::Stage;
+		Vector3 contact_point;
+
+		if (camera_ray.sphere_cast(rope_sphere_r, contact_point, camera_ray_data)) {
+			camera_ray_data.raymin += rope_sphere_r;
+			rope_hit_sphere->transform->local_pos = camera_ray.position + camera_ray.direction * camera_ray_data.raymin;
+
+			Ray arm_ray;
+			arm_ray.direction = (rope_hit_sphere->transform->local_pos - Lhand->transform->position).unit_vect();
+			arm_ray.position = Lhand->transform->position;
+
+			Ray::Raycast_struct arm_ray_data;
+			arm_ray_data.collider_tag = Collider_tags::Stage;
+
+			if (arm_ray.sphere_cast(rope_sphere_r, contact_point, arm_ray_data)) {
+				arm_ray_data.raymin += rope_sphere_r;
+				rope_hit_sphere->transform->local_pos = arm_ray.position + arm_ray.direction * arm_ray_data.raymin;
+
+				rope_hit_cylinder->transform->local_pos = arm_ray.position + arm_ray.direction * arm_ray_data.raymin * 0.5f;
+				rope_hit_cylinder->transform->local_orient = quaternion_from_to_rotate(Vector3(0, 1, 0), arm_ray.direction);
+				rope_hit_cylinder->transform->local_scale.y = arm_ray_data.raymin * 0.5f;
+
+				if (arm_ray_data.raymin > 90) {
+					rope_hit_cylinder->renderer->color = Vector4(1, 0, 0, 1);
+					rope_hit_sphere->renderer->color = Vector4(1, 0, 0, 1);
+				}
+				else {
+					rope_hit_cylinder->renderer->color = Vector4(0, 1, 0, 1);
+					rope_hit_sphere->renderer->color = Vector4(0, 1, 0, 1);
+				}
+
+			}
+		}
+	}
+	else {
+		dither_timer -= time->deltaTime() * 1.5f;
+		float dither_pow = ALClamp(dither_timer, 0, 1);
+
+		//Waist->renderer->get_material()->constant_buffer_data[0] = Vector4(500, 1000, 0, 0);
+		Material_manager::find_material("player_material_01")->constant_buffer_data[0] = Vector4(5 + (500 - 5) * dither_pow, 4 + (1000 - 4) * dither_pow, 0, 0);
+		Material_manager::find_material("player_material_02")->constant_buffer_data[0] = Vector4(5 + (500 - 5) * dither_pow, 4 + (1000 - 4) * dither_pow, 0, 0);
+		camera->gameobject->findComponent<Camera_component>()->fov = 60 + (40 - 60) * dither_pow;
+
+	}
+
 	if (input_changer->is_rope_releaced) {
 		collider_num = 1;
+		dither_timer = ALmin(1, dither_timer);
 
-		Ray ray;
-		ray.direction = vector3_quatrotate(Vector3(0, -1, 0), Lelbow->transform->orientation);
-		ray.position = Lhand->transform->position;
+		//Ray ray;
+		//ray.direction = vector3_quatrotate(Vector3(0, -1, 0), Lelbow->transform->orientation);
+		//ray.position = Lhand->transform->position;
 
-		Ray::Raycast_struct data;
-		data.collider_tag = Collider_tags::Stage;
+		//Ray::Raycast_struct data;
+		//data.collider_tag = Collider_tags::Stage;
+		//Vector3 contact_point;
+		//ray.sphere_cast(rope_sphere_r, contact_point, data);
+		//data.raymin += rope_sphere_r;
+
+		Ray camera_ray;
+		camera_ray.direction = vector3_quatrotate(Vector3(0, 0, 1), camera->transform->orientation);
+		camera_ray.position = camera->transform->position;
+
+		Ray::Raycast_struct camera_ray_data;
+		camera_ray_data.collider_tag = Collider_tags::Stage;
 		Vector3 contact_point;
-		ray.sphere_cast(rope_sphere_r, contact_point, data);
-		data.raymin += rope_sphere_r;
 
-		if (data.raymin > 90)return;
+		if (!camera_ray.sphere_cast(rope_sphere_r, contact_point, camera_ray_data))return;
+		camera_ray_data.raymin += rope_sphere_r;
+		rope_hit_sphere->transform->local_pos = camera_ray.position + camera_ray.direction * camera_ray_data.raymin;
+
+		Ray arm_ray;
+		arm_ray.direction = (rope_hit_sphere->transform->local_pos - Lhand->transform->position).unit_vect();
+		arm_ray.position = Lhand->transform->position;
+
+		Ray::Raycast_struct arm_ray_data;
+		arm_ray_data.collider_tag = Collider_tags::Stage;
+
+		if (!arm_ray.sphere_cast(rope_sphere_r, contact_point, arm_ray_data))return;
+		arm_ray_data.raymin += rope_sphere_r;
+		rope_hit_sphere->transform->local_pos = arm_ray.position + arm_ray.direction * arm_ray_data.raymin;
+
+
+		if (arm_ray_data.raymin > 90)return;
 		if (Lrope_go)Gameobject_manager::deleteGameobject(Lrope_go);
 		if (Lblock_hand_joint)Joint::delete_joint(Lblock_hand_joint);
 
 		Lrope_go = Gameobject_manager::create("rope");
-		Lrope_go->transform->local_pos = ray.position;
+		Lrope_go->transform->local_pos = arm_ray.position;
 
 		Lrope_coll = Lrope_go->addComponent<Collider_Rope>();
 
@@ -274,10 +380,10 @@ void Player::shot_rope() {
 
 		coll->sphere_size_r = rope_sphere_r;
 		coll->sphree_offset_size = coll->sphere_size_r * 3;
-		int sphere_count = data.raymin / coll->sphree_offset_size;
+		int sphere_count = arm_ray_data.raymin / coll->sphree_offset_size;
 		sphere_count += 1;
 		coll->sphere_num_size = sphere_count;
-		coll->start_rope_dir = ray.direction;
+		coll->start_rope_dir = arm_ray.direction;
 		coll->ignore_tags |= Collider_tags::Human;
 		coll->default_physics_data.inertial_mass = 0.4f;
 		coll->create_rope();
@@ -294,9 +400,9 @@ void Player::shot_rope() {
 		);
 
 		Lblock_rope_joint = Joint::add_balljoint(
-			data.coll, coll->get_collider(coll->get_collider_size() - 1),
+			arm_ray_data.coll, coll->get_collider(coll->get_collider_size() - 1),
 			//vector3_quatrotate(contact_point - data.coll->transform->position, data.coll->transform->orientation.inverse()),
-			vector3_quatrotate(ray.position + ray.direction * coll->sphree_offset_size * (coll->sphere_num_size -  1) - data.coll->transform->position, data.coll->transform->orientation.inverse()),
+			vector3_quatrotate(arm_ray.position + arm_ray.direction * coll->sphree_offset_size * (coll->sphere_num_size - 1) - arm_ray_data.coll->transform->position, arm_ray_data.coll->transform->orientation.inverse()),
 
 			Vector3(0),
 			0.1f
@@ -331,14 +437,14 @@ void Player::shot_rope() {
 					// ˆê”ÔÅŒã‚Íè‚ÆÚ‘±“_‚ğ’¼Ú‚­‚Á‚Â‚¯‚ÄˆÀ’è‚³‚¹‚é
 					if (i == joint_size - 1 && Lrope_coll->get_joint_ptr(structural_type, i)->offset == 0) {
 						Lblock_hand_joint = Joint::add_balljoint(
-							Lblock_rope_joint->get_colliderA(),Lhand_collider,
-							Lblock_rope_joint->get_anchors()[0].posA,Vector3(0)
+							Lblock_rope_joint->get_colliderA(), Lhand_collider,
+							Lblock_rope_joint->get_anchors()[0].posA, Vector3(0)
 						);
 						Lblock_hand_joint->offset = Lhand_collider->gameobject->transform->scale.x;
 
 					}
 
-					if(Lrope_coll->get_joint_ptr(structural_type, i)->offset == 0 && i < joint_size - 1) collider_num++;
+					if (Lrope_coll->get_joint_ptr(structural_type, i)->offset == 0 && i < joint_size - 1) collider_num++;
 
 					break;
 				}
@@ -350,7 +456,7 @@ void Player::shot_rope() {
 				Debug::set("pow", pow);
 				pow = 1 - pow;
 				for (int i = 0; i < Human_collider_size; ++i) {
-					Human_colliders[i]->add_force(Vector3(0, 1, 0) * 500 * pow);
+					Human_colliders[i]->add_force(Vector3(0, 1, 0) * 250 * pow);
 				}
 			}
 		}
@@ -456,10 +562,10 @@ void Player::push_waist_for_stand() {
 			Vector3 fall_force = Vector3(0, 1, 0) * Waist_collider->linear_velocity().y * mass;
 
 			Waist_collider->add_force(gravity_pow + force);
-			onground_ray_data.coll->add_force(-(gravity_pow + fall_force) , onground_contactpoint);
+			onground_ray_data.coll->add_force(-(gravity_pow + fall_force), onground_contactpoint);
 
 		}
-			Debug::set("dis", dis);
+		Debug::set("dis", dis);
 	}
 
 }
@@ -468,7 +574,7 @@ void Player::push_waist_for_stand() {
 void Player::linear_move() {
 	// ’n–Ê‚ÉÚ‚µ‚Ä‚¢‚é & “ü—Í‚ª–³‚¢
 	//if (is_gunyatto == false && dir.norm() == 0 && onground_collider != nullptr) {
-	if (is_gunyatto == false && dir.norm() == 0 ) {
+	if (is_gunyatto == false && dir.norm() == 0) {
 		Waist_collider->physics_data.drag = 0.985f;
 		Body_collider->physics_data.drag = 0.985f;
 	}
@@ -685,6 +791,7 @@ bool Player::check_respown() {
 
 	// respowntimer‚ª>0‚È‚ç respown’†
 	if (respown_timer > 0) {
+		turn_gunyatto_dir();
 
 		if (check_onplayer_coll->concoll_enter(Collider_tags::Stage)) {
 			// respown’† stage‚ÉÚG‚µ‚Ä‚¢‚ê‚Î timer‚ğŒ¸‚ç‚·
@@ -726,35 +833,51 @@ void Player::turn_gunyatto_dir() {
 	// ˜‚ÌŒü‚«
 	Vector3 dir = vector3_quatrotate(Vector3(0, 0, 1), Waist->transform->orientation);
 
-	// ˜‚©‚ç“ª‚Ö‚ÌŒü‚«(‚±‚Ì•ûŒü‚É³–Ê‚ğ‚Á‚Ä‚¢‚«‚½‚¢)
+	// ˜‚©‚ç“ª‚Ö‚ÌŒü‚«
 	Vector3 waist_head_dir = (Head->world_position() - Waist->world_position()).unit_vect();
 
-	// • ‚Î‚¢‚© ‹ÂŒü‚¯‚©
-	if (fabsf(dir.y) > 0.5f) {
-		if (dir.y < 0) dir = +waist_head_dir;
-		else           dir = -waist_head_dir;
-	}
-	// —§‚Á‚Ä‚¢‚é‚È‚ç‰½‚à‚¹‚¸‚Éreturn
-	else return;
+	// ‰ñ“]²
+	Vector3 rotate_axis = vector3_cross(Vector3(0, 1, 0), waist_head_dir);
+
+	// ‰ñ“]Šp“x
+	float radian = vector3_radian(Vector3(0, 1, 0), waist_head_dir);
+
+	Vector3 front_dir = vector3_quatrotate(dir, quaternion_axis_radian(rotate_axis, radian));
+	front_dir.y = 0;
+
+	//// • ‚Î‚¢‚© ‹ÂŒü‚¯‚©
+	//if (fabsf(dir.y) > 0.5f) {
+	//	if (dir.y < 0) dir = +waist_head_dir;
+	//	else           dir = -waist_head_dir;
+	//}
+	//// —§‚Á‚Ä‚¢‚é‚È‚ç‰½‚à‚¹‚¸‚Éreturn
+	//else return;
 
 	// ¡‚ÌŒü‚«
 	Vector3 player_vec = vector3_quatrotate(Vector3(0, 0, 1), rotate);
 
 	// ·•ª‚ğ‹‚ß‚Ä
-	float angle = vector3_angle(dir, player_vec);
+	float angle = vector3_angle(front_dir, player_vec);
 
 	// ‰ñ“]²‚Í0,1,0‚É‚µ‚½‚¢‚©‚ç ŠOÏ‚Å‰ñ“]•ûŒü‚ÌŠm”F
 	if (vector3_cross(player_vec, dir).y < 0)angle *= -1;
 
 	rotate *= quaternion_axis_angle(Vector3(0, 1, 0), angle);
 
+	Debug::set("waist_head_dir", waist_head_dir);
+	Debug::set("front_dir", front_dir);
+
 }
 
 // drag‚ğ‰Šú’l‚É‚·‚é
-void Player::set_default_drag() {
+void Player::set_default_data() {
 	for (int i = 0; i < Human_collider_size; i++) {
 		Human_colliders[i]->physics_data.drag = Human_default_drags[i];
 	}
+
+	Material_manager::find_material("player_material_01")->constant_buffer_data[0] = Vector4(5, 4, 0, 0);
+	Material_manager::find_material("player_material_02")->constant_buffer_data[0] = Vector4(5, 4, 0, 0);
+	camera->gameobject->findComponent<Camera_component>()->fov = 60;
 }
 
 // "•¨‚ğ‚Â"joint‚ğíœ‚·‚é

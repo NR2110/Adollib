@@ -521,7 +521,18 @@ void Physics_manager::adapt_added_data(Scenelist Sce, bool is_mutex_lock) {
 
 		// listを引っ越したためitrが変化している 自身のitrを更新
 		for (save_itr; save_itr != ALP_joints.end(); ++save_itr) {
+			// added_buffer_ALP_jointsに新規Jointを追加した直後にuserjointにポインタを入れているが、
+			// その隙間でここが呼ばれるとnull参照で死んでしまうので
+			// 気持ち悪いけど nullptrならcontinueする
+			if ((*save_itr)->userjoint == nullptr) {
+				--save_itr;
+				continue;
+			}
+
 			(*save_itr)->set_this_itr(save_itr);
+			(*save_itr)->set_ptr_to_joint(*save_itr);
+			//(*save_itr)->ALPcollider colliderA->set_ptr_to_joint(joint);
+			//colliderB->set_ptr_to_joint(joint);
 
 			// メイン配列に引っ越したためis_addedをtrueに
 			(*save_itr)->is_added = true;

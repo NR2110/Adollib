@@ -50,3 +50,8 @@ void ALP_Joint::destroy(ALP_Collider* coll_ptr) {
 	// userjoint‚©‚ç‚±‚ÌŠÖ”‚ªŒÄ‚Î‚ê‚é‚½‚ß ‚±‚±‚Å‚Íuserjoint‚ðdelete‚Å‚«‚È‚¢
 	//::::::::::::::
 }
+
+void ALP_Joint::set_ptr_to_joint(ALP_Joint* joint) {
+	userjoint->get_colliderA()->set_ptr_to_joint(joint);
+	userjoint->get_colliderB()->set_ptr_to_joint(joint);
+}

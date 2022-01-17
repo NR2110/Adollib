@@ -105,7 +105,7 @@ namespace Adollib
 	void Player::update()
 	{
 		// player‚Ìdrag‚ğ‰Šú’l‚É‚·‚é
-		set_default_drag();
+		set_default_data();
 
 		// respownˆ—
 		if (check_respown() == true)return;

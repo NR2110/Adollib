@@ -111,7 +111,7 @@ namespace Adollib
 
 
 		void turn_gunyatto_dir();
-		void set_default_drag();
+		void set_default_data();
 
 	public:
 		void delete_catchjoint(); //"•¨‚ğ‚Â"joint‚ğíœ‚·‚é

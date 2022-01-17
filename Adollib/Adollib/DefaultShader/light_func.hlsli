@@ -165,7 +165,10 @@ float3	GetShadow(Texture2D st, SamplerState ss, float3 Tex, float Bias)
 {	// シャドウマップから深度を取り出す
 	float d = st.Sample(ss, Tex.xy).r;
 	// シャドウマップの深度値と現実の深度の比較
+
     return (Tex.z - d > Bias) ? 1 : 0;
+    //return clamp((Tex.z - d) - Bias, 0, 1);
+
 }
 
 #define LightFunc

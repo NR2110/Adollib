@@ -46,6 +46,8 @@ namespace Adollib {
 		public:
 			void set_this_itr(std::list<ALP_Joint*>::iterator itr) { this_itr = itr; };
 
+			void set_ptr_to_joint(ALP_Joint* joint);
+
 
 		public:
 			void reset();
