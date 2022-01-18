@@ -22,7 +22,7 @@ using namespace Contacts;
 //ContactPointの表示
 #define Update60fps
 //#define Draw_Contact //使用する際はthreadを描画のと同じにすること
-#define Draw_JointContact //使用する際はthreadを描画のと同じにすること
+//#define Draw_JointContact //使用する際はthreadを描画のと同じにすること
 
 //::: staticメンバの初期化 :::::
 #pragma region static_initialize

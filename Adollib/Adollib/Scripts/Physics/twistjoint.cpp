@@ -18,34 +18,44 @@ bool TwistJoint::limit_effect(Vector3& contactP0, Vector3& contactP1, float& pen
 
 	float radian = 0;
 	{
-		// quaternoinのoffset
-		Quaternion off = transforms[1]->orientation * transforms[0]->orientation.inverse();
+		// quaternoinのoffset collider0の座標系に持ってくる
+		const Quaternion off1to0 = transforms[1]->orientation * transforms[0]->orientation.inverse();
 
-		// 回転後のtwistの軸
-		Vector3 vec_dir = vector3_quatrotate(vec0, off);
+		// collider0の座標系のvec1
+		const Vector3 vec1_coll0coord = vector3_quatrotate(vec1, off1to0);
 
-		Vector3 axis = vector3_cross(vec0, vec_dir); //回転後と後のどちらにも垂直なベクトル
-		if (axis.norm() < FLT_EPSILON) {
-			// 回転前、後が平行の時 適当な垂直なものを準備する
-			if (fabsf(vector3_dot(vec0, Vector3(1, 0, 0))) < FLT_EPSILON)axis = vector3_cross(vec0, Vector3(1, 0, 0));
-			else axis = vector3_cross(vec0, Vector3(0, 1, 0));
+		// off1to0の後、軸の向きをそろえるquaternion
+		Quaternion off1to0_and_align_vecdir;
+		{
+			const float radian = vector3_radian(vec0, vec1_coll0coord);
+			const Vector3 rotate_axis = vector3_cross(vec1_coll0coord, vec0).unit_vect();
+
+			Quaternion align_vecdir = quaternion_axis_radian(rotate_axis, radian);
+			off1to0_and_align_vecdir = off1to0 * align_vecdir;
+
+			Vector3 debug_vec0 = vector3_quatrotate(vec1, off1to0_and_align_vecdir);
 		}
-		axis = axis.unit_vect();
 
-		Vector3 rotated_axis = vector3_quatrotate(axis, off).unit_vect(); //回転後の垂直なベクトル
+		// 回転量を求めるための元となるベクトルを求める vec0,vec1に垂直なものにする
+		Vector3 check_radian_vec_base = vector3_cross(vec0, vec1);
+		if (check_radian_vec_base.norm() < FLT_EPSILON)check_radian_vec_base = vector3_cross(vec0, Vector3(0, 1, 0));
+		if (check_radian_vec_base.norm() < FLT_EPSILON)check_radian_vec_base = vector3_cross(vec0, Vector3(1, 0, 0));
+		check_radian_vec_base.unit_vect();
 
-		// 回転の角度を得る
-		radian = vector3_radian(rotated_axis, axis);
-		if (vector3_dot(vector3_cross(rotated_axis, axis), vec_dir) < 0) {
+		// coll0座標系での
+		Vector3 coll1_checK_vec = vector3_quatrotate(check_radian_vec_base, off1to0_and_align_vecdir);
+
+		// 角度を求める
+		radian = vector3_radian(check_radian_vec_base, coll1_checK_vec);
+
+		if (vector3_dot(vector3_cross(check_radian_vec_base, coll1_checK_vec), vec0) < 0) {
 			radian = DirectX::XM_PI + DirectX::XM_PI - radian; //0~180~0 を -360~0~360に治す
-			axis *= -1;
-			rotated_axis *= -1;
 		}
 
+		Debug::set("radian", radian);
 	}
 
 	const Vector2 limit_rad = Vector2(ToRadian(limit.x), ToRadian(limit.y)); //limitをradianに治した
-	//float radian = radian_local[1] - radian_local[0]; //radianの差分から collider[1]の回転量を計算
 	if (radian < 0)radian += 2 * PI;
 	if (radian > 2 * PI)radian -= 2 * PI;
 
@@ -59,58 +69,46 @@ bool TwistJoint::limit_effect(Vector3& contactP0, Vector3& contactP1, float& pen
 
 	// radianを基準にcosで一番近いlimitを求める
 	Vector2 limit_rad_off = Vector2(limit_rad.x - radian, limit_rad.y - radian);
-	//if (fabsf(limit_rad_off.x) > ToRadian(max_radian_pow))limit_rad_off.x = ToRadian(max_radian_pow) * limit_rad_off.x / fabsf(limit_rad_off.x);
-	//if (fabsf(limit_rad_off.y) > ToRadian(max_radian_pow))limit_rad_off.y = ToRadian(max_radian_pow) * limit_rad_off.y / fabsf(limit_rad_off.y);
 
+	// vec1に垂直な適当なベクトル
 	Vector3 axis;
 	{
-		int i = 1;
-		Vector3 vec_dir = vector3_quatrotate(vec0, transforms[i]->orientation); //回転後のtwistの軸
-		axis = vector3_cross(vec0, vec_dir).unit_vect(); //回転後と後のどちらにも垂直なベクトル
-		if (axis.norm() == 0) {
-			// 回転前、後が平行の時 適当な垂直なものを準備する
-			if (vec0.x != 1)axis = vector3_cross(vec0, Vector3(1, 0, 0));
-			else axis = vector3_cross(vec0, Vector3(0, 1, 0));
-		}
+		axis = vector3_cross(vec1, Vector3(0, 1, 0));
+		if (axis.norm() < FLT_EPSILON)axis = vector3_cross(vec1, Vector3(1, 0, 0));
+		axis.unit_vect();
 	}
+	// めり込み量だけtangent方向に(円の接線方向に)力をかける
 	Vector3 tangent = vector3_cross(axis, vec1);
 
 	// contactP1の基準に
 	// contactP0を持ってくる
 	if (cosf(limit_rad_off.x) < cosf(limit_rad_off.y)) {
 
-		//penetrate = DirectX::XM_2PI * power * fabsf(limit_rad_off.y) * DirectX::XM_1DIV2PI; //余分な弧の長さ
-		int p = 1;
 		float off = limit_rad_off.y;
 		if (off < 0)off *= -1;
-		//if (off > +DirectX::XM_PI) off = DirectX::XM_2PI - off;
-		//if (off < -DirectX::XM_PI) off = DirectX::XM_2PI + off;
-		if (off != limit_rad_off.y)p *= -1;
+
 		penetrate = DirectX::XM_2PI * power * off * DirectX::XM_1DIV2PI; //余分な弧の長さ
 
-		Vector3 contactP0_world = vector3_quatrotate((axis - tangent * penetrate), transforms[1]->orientation) + transforms[1]->position;
+		Vector3 contactP0_world = vector3_quatrotate((axis + tangent * penetrate), transforms[1]->orientation) + transforms[1]->position;
 		// limit_xのほうが近い
 		contactP0 = vector3_quatrotate(contactP0_world - transforms[0]->position, transforms[0]->orientation.inverse());
 		contactP1 = axis;
 
+		Debug::set("penetrate", penetrate);
 	}
 	else {
 
-		//penetrate = DirectX::XM_2PI * power * fabsf(limit_rad_off.x) * DirectX::XM_1DIV2PI; //余分な弧の長さ
-		int p = 1;
 		float off = limit_rad_off.x;
 		if (off < 0)off *= -1;
-		//if (off > +DirectX::XM_PI) off = DirectX::XM_2PI - off;
-		//if (off < -DirectX::XM_PI) off = DirectX::XM_2PI + off;
-		if (off != limit_rad_off.x)p *= -1;
 		penetrate = DirectX::XM_2PI * power * off * DirectX::XM_1DIV2PI; //余分な弧の長さ
 
-		Vector3 contactP0_world = vector3_quatrotate((axis + tangent * penetrate), transforms[1]->orientation) + transforms[1]->position;
+		Vector3 contactP0_world = vector3_quatrotate((axis - tangent * penetrate), transforms[1]->orientation) + transforms[1]->position;
 
 		// limit_yのほうが近い
 		contactP0 = vector3_quatrotate(contactP0_world - transforms[0]->position, transforms[0]->orientation.inverse());
 		contactP1 = axis;
 
+		Debug::set("penetrate", penetrate);
 	}
 
 	return true;
