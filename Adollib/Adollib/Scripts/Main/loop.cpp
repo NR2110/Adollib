@@ -31,7 +31,9 @@ bool loop::Render(){
 
 	Work_meter::start(std::string("loop_render"));
 	Scene_manager::render();
+	Adollib::Imgui_manager::render();
 	Work_meter::stop(std::string("loop_render"));
+
 
 	Systems::Flip();
 

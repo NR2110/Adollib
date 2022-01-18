@@ -52,9 +52,6 @@ namespace Adollib
 	void Camera::update()
 	{
 
-		static float rotate_speed = 0.5f;
-		static float linear_speed = 30;
-
 		//gameobject->aspect = (float)Al_Global::SCREEN_WIDTH / Al_Global::SCREEN_HEIGHT;
 
 #ifdef UseImgui

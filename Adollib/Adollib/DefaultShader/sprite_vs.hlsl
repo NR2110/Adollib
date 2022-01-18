@@ -1,11 +1,11 @@
 #include "sprite.hlsli"
 
-PSInput main(VSInput input)
+PSInput main(VSInput input, VSInput_INSTANCE instance_input)
 {
     PSInput output = (PSInput) 0;
 
     float4 P = float4(input.Position, 1.0);
-    float4x4 W = mul(Mesh_World, World);
+    float4x4 W = mul(Mesh_World, instance_input.transform);
 	// ƒ[ƒ‹ƒh•ÏŠ·À•W
     float4 worldPos = mul(P, W);
 	// Ë‰e‹óŠÔ‚É•ÏŠ·(—ñ—Dæ)
@@ -18,10 +18,11 @@ PSInput main(VSInput input)
     N = normalize(N); //³‹K‰»
 
     output.Position = P;
-    output.Color = materialColor;
+    output.Color = materialColor * instance_input.color;
     output.Tex = input.Tex;
     output.wPos = worldPos.xyz;
     output.wNormal = N;
 
     return output;
+
 }

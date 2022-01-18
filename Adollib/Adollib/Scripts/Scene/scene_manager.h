@@ -3,6 +3,7 @@
 #include <memory>
 #include <map>
 #include <list>
+#include <vector>
 
 #include "scene_list.h"
 
@@ -16,6 +17,9 @@ namespace Adollib {
 
 		// —LŒø‚É‚È‚Á‚Ä‚¢‚éscene renderAupdate‚ªs‚í‚ê‚é
 		static std::list<Scenelist> active_scenes;
+
+		// íœ‚³‚ê‚é—\’è‚Ìscene
+		static std::vector<Scenelist> delete_scene_buffer;
 
 		static Scenelist now_scene;
 

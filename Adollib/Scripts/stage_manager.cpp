@@ -62,6 +62,12 @@ void Stage_manager::update() {
 
 	if (input->getKeyTrigger(Key::F1))
 		set_next_stage_type(Stage_types::stage_1);
+
+	if (input->getKeyTrigger(Key::Left)) {
+		Scene_manager::set_inactive(Scenelist::scene_game);
+		Scene_manager::set_active(Scenelist::scene_title);
+
+	}
 }
 
 void Stage_manager::set_next_stage_type(Stage_types next_stge) {

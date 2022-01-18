@@ -30,6 +30,9 @@ namespace Adollib
 
 		Quaternion camera_rot_goal; //Easing—p
 
+		float rotate_speed = 0.5f;
+		float linear_speed = 30;
+
 	public:
 		Quaternion camera_rot; //camera‚ÌŒü‚«
 

@@ -155,8 +155,7 @@ namespace Adollib
 			static std::unordered_map<Scenelist, std::vector<Physics_function::ALP_Collider*>> moved_collider_for_insertsort; //挿入ソート用 動いた
 			static std::unordered_map<Scenelist, std::vector<Physics_function::ALP_Collider*>> added_collider_for_insertsort; //挿入ソート用 追加された
 
-			static int count_mainthread;
-			static int count_physicsthread;
+			static Scenelist old_sce; //前のloop時のsceneと同じかの確認用
 
 			static std::thread physics_thread; //trueになったときthread_updateを止める
 			static bool is_stop_physics_thread; //trueになったときthread_updateを止める

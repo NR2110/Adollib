@@ -57,6 +57,8 @@ namespace Adollib
 	u_int Physics_manager::pairs_new_num = 0; //pairsのどっちが新しい衝突なのか
 	// std::vector<Physics_function::Contacts::Collider_2> Phyisics_manager::broad_mid_pair;
 
+	Scenelist Physics_manager::old_sce;
+
 	std::unordered_map<Scenelist, std::vector<Physics_function::ALP_Collider*>> Physics_manager::moved_collider_for_insertsort;   //挿入ソート用 動いた
 	std::unordered_map<Scenelist, std::vector<Physics_function::ALP_Collider*>> Physics_manager::added_collider_for_insertsort;   //挿入ソート用 追加された
 
@@ -74,6 +76,11 @@ namespace Adollib
 bool Physics_manager::update(Scenelist Sce)
 {
 	Work_meter::start("Phyisics_manager", 1);
+	if (Sce != old_sce) {
+		pairs[0].clear();
+		pairs[1].clear();
+		old_sce = Sce;
+	}
 
 	if (Al_Global::second_per_game < 1) {
 

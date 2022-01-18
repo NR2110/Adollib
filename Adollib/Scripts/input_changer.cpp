@@ -92,7 +92,7 @@ void Input_changer::update() {
 		cursol_pos_save.x = (float)input->getCursorPosX();
 		cursol_pos_save.y = (float)input->getCursorPosY();
 	}
-	else {
+	else if(pad_num == 0){
 		input->setCursorPos(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
 		cursol_pos_save = Vector2(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
 	}

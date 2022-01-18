@@ -4,7 +4,8 @@
 
 #include "../Main/systems.h"
 
-#include "../Renderer/material_for_collider.h"
+//#include "../Renderer/material_for_collider.h"
+#include "../Renderer/renderer_base.h"
 #include "../Main/Adollib.h"
 
 #include "../Renderer/Shader/constant_buffer.h"
@@ -66,13 +67,21 @@ void Gameobject::update_imgui_toChildren() {
 			ImGui::TreePop();
 		}
 
+		if (renderer != nullptr && ImGui::TreeNodeEx((void*)(int)this, f, "renderer")) {
+
+			ImGui::ColorEdit3("color", &renderer->color[0]);
+
+			ImGui::TreePop();
+		}
+
 		int script_count = 0;
 		//Šecomponent‚Å•`‰æ‚·‚éŠÖ”
 		for (auto& comp : components) {
-			if (ImGui::TreeNode(comp->name.c_str())) {
+			if (ImGui::TreeNode((comp->name + std::string("##") + std::to_string((int)this) + std::to_string(script_count)).c_str())) {
 				comp->Update_hierarchy();
 				ImGui::TreePop();
 			}
+			++script_count;
 		}
 
 		//Žq‚Ìgo

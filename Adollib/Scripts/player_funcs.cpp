@@ -266,20 +266,8 @@ void Player::catch_things() {
 	}
 };
 
+// ropeÇåÇÇ¬
 void Player::shot_rope() {
-	// TODO:êÆóùÇ∑ÇÈ
-	static Gameobject* Lrope_go = nullptr;
-	static Collider_Rope* Lrope_coll = nullptr;
-	static Joint_base* Lblock_rope_joint = nullptr;
-	static Joint_base* Lblock_hand_joint = nullptr;
-	static int collider_num = 1;
-	static float dither_timer = 0;
-
-
-	const float rope_sphere_r = 0.2f;
-
-	static Gameobject* rope_hit_sphere = nullptr;
-	static Gameobject* rope_hit_cylinder = nullptr;
 	if (rope_hit_sphere == nullptr) {
 		rope_hit_sphere = Gameobject_manager::createSphere("rope_hit_sphere");
 		rope_hit_sphere->transform->local_scale = Vector3(rope_sphere_r * 2);
@@ -962,6 +950,15 @@ void Player::respown() {
 		if (joint != nullptr) {
 			Joint::delete_joint(joint);
 		}
+	}
+
+	// ropeÇÃçÌèú
+	{
+		if (Lrope_go)Gameobject_manager::deleteGameobject(Lrope_go);
+		if (Lblock_hand_joint)Joint::delete_joint(Lblock_hand_joint);
+
+		Lrope_go = nullptr;
+		Lblock_hand_joint = nullptr;
 	}
 
 	for (int i = 0; i < Human_collider_size; ++i) {

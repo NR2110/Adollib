@@ -149,6 +149,12 @@
     <Filter Include="00_Adollib\44_render\shader\hlsl\dither">
       <UniqueIdentifier>{bc4f19db-466f-4b49-814d-28a0bc31075d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\scene_title\camera">
+      <UniqueIdentifier>{aa8b806c-fdf2-45a3-ae83-13099cd76ed6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\scene_title\stage">
+      <UniqueIdentifier>{f72d8e3d-156d-4c92-89df-516444053fa8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Scripts\player.cpp">
@@ -429,6 +435,12 @@
     </ClCompile>
     <ClCompile Include="Scripts\Physics\shape_rope.cpp">
       <Filter>00_Adollib\22_physics\collider\shapes\other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\title_camera.cpp">
+      <Filter>ソース ファイル\scene_title\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\title_stage.cpp">
+      <Filter>ソース ファイル\scene_title\stage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -857,6 +869,15 @@
     </ClInclude>
     <ClInclude Include="Scripts\Physics\shape_rope.h">
       <Filter>00_Adollib\22_physics\collider\shapes\other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\title_camera.h">
+      <Filter>ソース ファイル\scene_title\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\title_stage.h">
+      <Filter>ソース ファイル\scene_title\stage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\scene_title_all.h">
+      <Filter>ソース ファイル\scene_title</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

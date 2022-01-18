@@ -10,6 +10,8 @@ namespace Adollib
 	class Stage_manager;
 	class Camera;
 	class Input_changer;
+	class Collider_Rope;
+	class Joint_base;
 
 	class Player : public Component
 	{
@@ -68,6 +70,18 @@ namespace Adollib
 		BallJoint* Lhand_joint = nullptr; //elbow‚Æhand‚ğ‚Â‚È‚®joint
 		float Rhand_joint_ylength_default = 0; //‚Â‚©‚ñ‚Å‚¢‚é‚Æ‚«hand‚Ìjoint‚Ìanchor‚ğL‚Î‚·‚½‚ß ‰Šú’l‚ğ•Û‘¶
 		float Lhand_joint_ylength_default = 0;
+
+
+		// ropeŠÖŒW
+		Gameobject* Lrope_go = nullptr;
+		Collider_Rope* Lrope_coll = nullptr;
+		Joint_base* Lblock_rope_joint = nullptr;
+		Joint_base* Lblock_hand_joint = nullptr;
+		int collider_num = 1;
+		float dither_timer = 0;
+		float rope_sphere_r = 0.2f;
+		Gameobject* rope_hit_sphere = nullptr;
+		Gameobject* rope_hit_cylinder = nullptr;
 
 		// Ú’n”»’è‚ğs‚¤(sphere_cast)
 		Collider* onground_collider = nullptr; //—§‚Á‚Ä‚¢‚écolliderî•ñ

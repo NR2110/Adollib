@@ -137,7 +137,7 @@ bool Calc_joint_effect(ALP_Joint* joint, float inv_duration)
 }
 
 
-void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std::vector<Contacts::Contact_pair*>& pairs, std::list<Physics_function::ALP_Joint*> joints, const float timescale) {
+void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std::vector<Contacts::Contact_pair*>& pairs, std::list<Physics_function::ALP_Joint*> l_joints, const float timescale) {
 
 	Work_meter::start("Make_solver", 1);
 
@@ -170,6 +170,15 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 			coll->get_ALPphysics()->solve = &SBs[count];
 			count++;
 		}
+	}
+
+	// jointはsceneをまたいで接続できるが、双方のcolliderのsceneがactiveでなければ動作しないようにする必要があるため
+	// 双方のsceneがactiveな時 配列に入れ、計算を行う
+	std::vector<Physics_function::ALP_Joint*> joints;
+	for (auto& joint : l_joints) {
+		if (joint->ALPcollider[0]->get_ALPphysics()->solve == nullptr) continue;
+		if (joint->ALPcollider[1]->get_ALPphysics()->solve == nullptr) continue;
+		joints.emplace_back(joint);
 	}
 
 	Collider_shape* coll[2];
@@ -691,6 +700,8 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 			coll->get_ALPphysics()->set_angula_velocity(coll->get_ALPphysics()->angula_velocity() + anglvec);
 			coll->get_ALPphysics()->set_old_angula_velocity(coll->get_ALPphysics()->old_angula_velocity() + anglvec);
 		}
+
+		coll->get_ALPphysics()->solve = nullptr;
 
 	}
 

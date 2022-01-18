@@ -7,49 +7,17 @@ namespace Adollib {
 
 	void scene_game::initialize() {
 
-		//else
-		if (1)
-		{
-			Gameobject* camera = Gameobject_manager::create("camera");
-			camera->addComponent<Camera>();
-			camera->addComponent<Camera_component>();
+
+		Gameobject* camera = Gameobject_manager::create("camera");
+		camera->addComponent<Camera>();
+		camera->addComponent<Camera_component>();
+
+		Gameobject* Playre = Gameobject_manager::create("Player_manager");
+		Playre->addComponent<Player_manager>();
 
 
-			Gameobject* Playre = Gameobject_manager::create("Player_manager");
-			Playre->addComponent<Player_manager>();
-
-			//Gameobject* GO = Gameobject_manager::create("Stage_demo");
-			//GO->addComponent<Stage_demo>();
-			Gameobject* GO = Gameobject_manager::create("Stage_manager");
-			GO->addComponent<Stage_manager>();
-
-		}
-		else if (0)
-		{
-			Gameobject* camera = Gameobject_manager::create("camera");
-			camera->addComponent<Camera>();
-			camera->addComponent<Camera_component>();
-
-			Gameobject* GO = Gameobject_manager::create("Demo_house");
-			GO->addComponent<Demo_house>();
-
-			Gameobject* Playre = Gameobject_manager::create("Player_manager");
-			Playre->addComponent<Player_manager>();
-
-		}
-		else if(1)
-		{
-			Gameobject* camera = Gameobject_manager::create("camera");
-			camera->addComponent<Camera>();
-			camera->addComponent<Camera_component>();
-
-			Gameobject* GO = Gameobject_manager::create("object_manager");
-			GO->addComponent<object_manager>();
-
-			Gameobject* Playre = Gameobject_manager::create("Player_manager");
-			Playre->addComponent<Player_manager>();
-
-		}
+		Gameobject* GO = Gameobject_manager::create("Stage_manager");
+		GO->addComponent<Stage_manager>();
 
 
 	}

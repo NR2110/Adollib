@@ -38,6 +38,8 @@ FBX SDK/
 Adollib/cereal-master/
 Adollib/Release/
 Adollib/Debug/
+Adollib/Adollib/Release/
+Adollib/Adollib/Debug/
 Adollib/.vs/
 Adollib/Data/Skymaps/
 Adollib/Sounds/sound_effects.xwb

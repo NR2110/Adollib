@@ -31,6 +31,7 @@ using namespace Physics_function;
 //};
 
 void ALP_Physics::add_force(const Vector3& force, const bool& is_force_local) {
+	if (transform == nullptr)return;
 	std::lock_guard <std::mutex> lock(mtx);
 
 	if (is_force_local)accumulated_force += vector3_quatrotate(force, transform->orientation);
@@ -39,7 +40,7 @@ void ALP_Physics::add_force(const Vector3& force, const bool& is_force_local) {
 }
 
 void ALP_Physics::add_force(const Vector3& force, const Vector3& position, const bool& is_position_local, const bool& is_force_local) {
-
+	if (transform == nullptr)return;
 	std::lock_guard <std::mutex> lock(mtx);
 
 	//Vector3 local_position;
@@ -68,6 +69,7 @@ void ALP_Physics::add_force(const Vector3& force, const Vector3& position, const
 }
 
 void ALP_Physics::add_torque(const Vector3& force, const bool& is_local) {
+	if (transform == nullptr)return;
 	std::lock_guard <std::mutex> lock(mtx);
 
 	if(is_local)accumulated_torque += vector3_quatrotate(force, transform->orientation);
@@ -95,6 +97,7 @@ float ALP_Physics::inverse_mass() const {
 }
 
 Matrix33 ALP_Physics::inverse_inertial_tensor() const {
+	if (transform == nullptr)return matrix33_zero();
 	Matrix33 inverse_inertial_tensor;
 
 	if (is_movable()) {
@@ -138,6 +141,7 @@ void ALP_Physics::copy_transform_ptr() {
 }
 
 void ALP_Physics::apply_external_force(float duration, const float timeratio_60) {
+	if (transform == nullptr)return;
 	std::lock_guard <std::mutex> lock(mtx);
 
 	old_angula_velocity_ = angula_velocity_;

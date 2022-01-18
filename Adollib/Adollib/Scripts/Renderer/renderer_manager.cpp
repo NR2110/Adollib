@@ -91,8 +91,6 @@ void Renderer_manager::render(const std::map<Scenelist, std::list<Camera_compone
 			// posteffect‚Ìˆ— & main‚ÌRTV‚É•`‰æ
 			camera->posteffect_render();
 		}
-
-		Adollib::Imgui_manager::render();
 	}
 
 	// OŠpŒ`‚Ì•`‰æ•û–@
@@ -126,7 +124,7 @@ void Renderer_manager::render(const std::map<Scenelist, std::list<Camera_compone
 			// instansing—p
 			instance_update(shadow_frustum, render_scene);
 
-			render_instance(false);
+			render_instance(true);
 
 			camera->directional_shadow->set_ShaderResourceView();
 		}

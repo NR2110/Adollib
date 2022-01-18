@@ -28,6 +28,8 @@ namespace Adollib
 		Quaternion player_start_rotate = quaternion_from_euler(20, 180, 0);
 
 		add_player(0, player_start_pos, Vector3(20, 180, 0), Vector3(1), Vector3(0.5f));
+		//add_player(1, player_start_pos, Vector3(30, 180, 0), Vector3(1), Vector3(0.5f));
+		//add_player(2, player_start_pos, Vector3(40, 180, 0), Vector3(1), Vector3(0.5f));
 
 	}
 
@@ -315,22 +317,28 @@ namespace Adollib
 			Lleg_collider->physics_data.is_fallable = false;
 
 			//::: tag‚Ìİ’è :::
-			Head_collider->tag = Collider_tags::Human;
-			Lsholder_collider->tag = Collider_tags::Human;
-			Lelbow_collider->tag = Collider_tags::Human;
-			Lhand_collider->tag = Collider_tags::Human;
-			Rsholder_collider->tag = Collider_tags::Human;
-			Relbow_collider->tag = Collider_tags::Human;
-			Rhand_collider->tag = Collider_tags::Human;
-			Body_collider->tag = Collider_tags::Human;
-			Waist_collider->tag = Collider_tags::Human;
-			Rleg_collider->tag = Collider_tags::Human;
-			Rfoot_collider->tag = Collider_tags::Human;
-			Lleg_collider->tag = Collider_tags::Human;
-			Lfoot_collider->tag = Collider_tags::Human;
+			Collider_tagbit tag;
+			if (player_num == 0) tag = Collider_tags::Player00;
+			if (player_num == 1) tag = Collider_tags::Player01;
+			if (player_num == 2) tag = Collider_tags::Player02;
+			if (player_num == 3) tag = Collider_tags::Player03;
 
-			Lhand_collider->ignore_tags |= Collider_tags::Human;
-			Rhand_collider->ignore_tags |= Collider_tags::Human;
+			Head_collider->tag     = Collider_tags::Human | tag;
+			Lsholder_collider->tag = Collider_tags::Human | tag;
+			Lelbow_collider->tag   = Collider_tags::Human | tag;
+			Lhand_collider->tag    = Collider_tags::Human | tag;
+			Rsholder_collider->tag = Collider_tags::Human | tag;
+			Relbow_collider->tag   = Collider_tags::Human | tag;
+			Rhand_collider->tag    = Collider_tags::Human | tag;
+			Body_collider->tag     = Collider_tags::Human | tag;
+			Waist_collider->tag    = Collider_tags::Human | tag;
+			Rleg_collider->tag     = Collider_tags::Human | tag;
+			Rfoot_collider->tag    = Collider_tags::Human | tag;
+			Lleg_collider->tag     = Collider_tags::Human | tag;
+			Lfoot_collider->tag    = Collider_tags::Human | tag;
+
+			Lhand_collider->ignore_tags |= tag;
+			Rhand_collider->ignore_tags |= tag;
 
 
 			//::: sphere‚Ì’²® :::

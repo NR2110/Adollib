@@ -16,10 +16,10 @@ namespace Adollib {
 
 	public:
 		Vector2 uv_pos[4] = {
-			Vector2(0, 0),
-			Vector2(0, 1),
 			Vector2(1, 0),
-			Vector2(1, 1)
+			Vector2(1, 1),
+			Vector2(0, 0),
+			Vector2(0, 1)
 		};
 
 
@@ -34,9 +34,7 @@ namespace Adollib {
 
 		void render(const Frustum_data& frustum_data) override;
 
-		void render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& instance_buffer, int bufferStart, int bufferCount) override {
-			return;
-		};
+		void render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& instance_buffer, int bufferStart, int bufferCount) override;
 
 	};
 }
