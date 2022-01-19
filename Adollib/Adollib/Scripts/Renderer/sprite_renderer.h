@@ -13,6 +13,7 @@ namespace Adollib {
 	class Sprite_renderer : public Renderer_base {
 	private:
 		Microsoft::WRL::ComPtr<ID3D11Buffer> VertexBuffer;
+		Microsoft::WRL::ComPtr<ID3D11Buffer> IndexBuffer;
 
 	public:
 		Vector2 uv_pos[4] = {

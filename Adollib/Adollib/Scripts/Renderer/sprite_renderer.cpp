@@ -18,19 +18,41 @@ using namespace ConstantBuffer;
 void Sprite_renderer::init() {
 
 	//	頂点バッファ作成
-	VertexFormat v[4];
+	{
+		VertexFormat v[4];
 
-	D3D11_BUFFER_DESC bd;
-	ZeroMemory(&bd, sizeof(bd));
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(VertexFormat) * 4;
-	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+		D3D11_BUFFER_DESC bd;
+		ZeroMemory(&bd, sizeof(bd));
+		bd.Usage = D3D11_USAGE_DEFAULT;
+		bd.ByteWidth = sizeof(VertexFormat) * 4;
+		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
-	D3D11_SUBRESOURCE_DATA res;
-	ZeroMemory(&res, sizeof(res));
-	res.pSysMem = v;
+		D3D11_SUBRESOURCE_DATA res;
+		ZeroMemory(&res, sizeof(res));
+		res.pSysMem = v;
 
-	Systems::Device->CreateBuffer(&bd, &res, VertexBuffer.ReleaseAndGetAddressOf());
+		Systems::Device->CreateBuffer(&bd, &res, VertexBuffer.ReleaseAndGetAddressOf());
+	}
+	// indexバッファ作成
+	{
+		u_int indices[4] = { 0,1,2,3 };
+		D3D11_BUFFER_DESC indexDesc = {};
+		indexDesc.ByteWidth = 4 * sizeof(u_int);          // バッファのサイズ
+		indexDesc.Usage = D3D11_USAGE_IMMUTABLE;	          // バッファの読み書き法
+		indexDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;    // パイプラインにどうバインドするか指定
+		indexDesc.CPUAccessFlags = 0;                    // CPUのアクセスフラグ　0でアクセスしない
+		indexDesc.MiscFlags = 0;                           // その他のフラグ
+		indexDesc.StructureByteStride = 0;                 // バッファ構造体の場合の要素数
+
+		D3D11_SUBRESOURCE_DATA indexSubResource = {};
+		indexSubResource.pSysMem = &indices[0];   // 初期化データのポインタ
+		indexSubResource.SysMemPitch = 0;        // 頂点バッファでは使わない
+		indexSubResource.SysMemSlicePitch = 0;   // 頂点バッファでは使わない
+
+		Systems::Device->CreateBuffer(&indexDesc, &indexSubResource, IndexBuffer.ReleaseAndGetAddressOf());
+
+	}
+
 
 	{
 		material = Material_manager::find_material("sprite_material");
@@ -169,7 +191,7 @@ void Sprite_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& in
 	UINT offsets[2] = { 0, 0 };
 	ID3D11Buffer* vbs[2] = { VertexBuffer.Get(), instance_buffer.Get() };
 	Systems::DeviceContext->IASetVertexBuffers(0, 2, vbs, strides, offsets);
-	//Systems::DeviceContext->IASetIndexBuffer(mesh.indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+	Systems::DeviceContext->IASetIndexBuffer(IndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 
 	Systems::DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 

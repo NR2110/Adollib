@@ -45,6 +45,7 @@ PSInput main(VSInput input, VSInput_INSTANCE instance_input)
 
     output.Position = P;
     output.Color = materialColor * instance_input.color;
+    output.Color.w = 1;
     //output.Tex = input.Tex;
     output.Tex = float2(0, 0);
     output.wPos = worldPos.xyz;

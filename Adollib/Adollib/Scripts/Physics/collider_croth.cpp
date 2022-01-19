@@ -87,7 +87,6 @@ const Physics_data& Collider_Croth::get_vertex_data(const int& mesh_num, const i
 }
 
 void Collider_Croth::load_file(const std::string& filename, bool is_right_rtiangle, bool is_permit_edge_have_many_facet) {
-
 	//FBXÇÃLoadÇçsÇ§
 	//std::vector<Physics_function::Meshcollider_data>* meshcoll_data = nullptr;
 	meshcoll_data = nullptr;
@@ -107,6 +106,8 @@ void Collider_Croth::load_file(const std::string& filename, bool is_right_rtiang
 
 		for (int vertex_num = 0; vertex_num < vertex_size; ++vertex_num) {
 
+			vertex_offset->at(mesh_id).emplace_back(std::pair<Vector3, Vector3>(Vector3(0), Vector3(0)));
+
 			// colliderÇèÓïÒÇ∆ÇµÇƒàµÇ§ (ãCéùÇøà´Ç¢ÇØÇÍÇ«édï˚Ç»Ç¢)
 			auto collider = new Collider;
 			collider->gameobject = gameobject;
@@ -123,7 +124,6 @@ void Collider_Croth::load_file(const std::string& filename, bool is_right_rtiang
 			croth->vertex_offset = vertex_offset;
 			croth->size = default_sphere_r;
 
-			vertex_offset->at(mesh_id).emplace_back(std::pair<Vector3, Vector3>(Vector3(0), Vector3(0)));
 
 			colliders_per_mesh.at(vertex_num) = collider;
 		}
@@ -279,7 +279,6 @@ void Collider_Croth::load_file(const std::string& filename, bool is_right_rtiang
 
 
 	}
-
 
 }
 

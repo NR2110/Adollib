@@ -112,6 +112,7 @@ void Croth_renderer::init() {
 			material->Load_VS("./DefaultShader/croth_shader_vs.cso");
 			material->Load_PS("./DefaultShader/croth_shader_ps.cso");
 
+			material->BS_state = State_manager::BStypes::BS_NONE;
 			material->RS_state = State_manager::RStypes::RS_CULL_NONE;
 		}
 	}

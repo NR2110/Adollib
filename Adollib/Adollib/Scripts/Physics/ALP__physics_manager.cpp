@@ -77,7 +77,10 @@ bool Physics_manager::update(Scenelist Sce)
 {
 	Work_meter::start("Phyisics_manager", 1);
 	if (Sce != old_sce) {
+		for (auto p : pairs[0]) delete p;
 		pairs[0].clear();
+
+		for (auto p : pairs[1]) delete p;
 		pairs[1].clear();
 		old_sce = Sce;
 	}

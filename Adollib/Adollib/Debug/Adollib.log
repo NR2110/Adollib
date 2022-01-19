@@ -1,3 +1,4 @@
-﻿  ALP__physics_manager.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.cpp(133,27): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
+﻿  title_stage.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\title_stage.cpp(150,54): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\title_stage.cpp(151,54): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe
