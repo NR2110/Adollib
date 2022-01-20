@@ -30,6 +30,7 @@ namespace Adollib {
 		static const Collider_tagbit Kinematic_Stage = (1 << 16);
 		static const Collider_tagbit Caera_not_sunk_Stage = (1 << 17);
 
+		static const Collider_tagbit Title = (1 << 18);
 
 
 		static const Collider_tagbit Tags_max = UINT_MAX;

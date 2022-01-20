@@ -80,9 +80,6 @@ namespace Adollib
 			float contact_threrhold_normal = 0.01f; //衝突点の閾値
 			float contact_threrhold_tangent = 0.002f;//衝突点の閾値
 
-			float linear_sleep_threrhold = 0.4f; //freezeの閾値
-			float angula_sleep_threrhold = 0.2f; //freezeの閾値
-
 			float bias = 0.15f;//めり込みを直す力
 			float slop = 0.003f;//衝突の許容値
 
@@ -101,6 +98,8 @@ namespace Adollib
 			float dynamic_friction = 0.8f;//動摩擦
 			float static_friction = 0.8f; //静摩擦
 			float restitution = 0.1f;	 //反発係数
+			float linear_sleep_threrhold = 0.2f; //freezeの閾値
+			float angula_sleep_threrhold = 0.1f; //freezeの閾値
 
 			bool is_fallable = true; //落ちるか
 			bool is_kinmatic_anglar = true; //ほかの物体からの影響で回転速度が変化しない
@@ -117,6 +116,8 @@ namespace Adollib
 				physics_data.dynamic_friction   = dynamic_friction; //動摩擦
 				physics_data.static_friction    = static_friction; //静摩擦
 				physics_data.restitution        = restitution;	 //反発係数
+				physics_data.linear_sleep_threrhold = linear_sleep_threrhold; //freezeの閾値
+				physics_data.angula_sleep_threrhold = angula_sleep_threrhold; //freezeの閾値
 
 				physics_data.is_fallable        = is_fallable; //落ちない
 				physics_data.is_kinmatic_anglar = is_kinmatic_anglar;//影響うけない(fallはする)

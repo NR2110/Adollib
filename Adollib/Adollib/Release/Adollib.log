@@ -1,8 +1,6 @@
 ﻿  title_stage.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\title_stage.cpp(150,126): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\title_stage.cpp(151,126): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
   コード生成しています。
-  1 of 10994 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  1 of 11257 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     61 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。

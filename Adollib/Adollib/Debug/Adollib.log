@@ -1,4 +1,117 @@
-﻿  title_stage.cpp
+﻿  camera.cpp
+  demo_house.cpp
+  object_manager.cpp
+  player_funcs.cpp
+  player_manager.cpp
+  stage_01.cpp
+  stage_01_funcs.cpp
+  stage_base.cpp
+  stage_demo.cpp
+  stage_demo_1.cpp
+  stage_demo_1_funcs.cpp
+  stage_demo_2.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(15,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\stage_demo_1_funcs.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(15,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\stage_01_funcs.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(15,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\stage_demo_2.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(15,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\stage_base.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(15,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\stage_demo_1.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(15,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\stage_demo.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(15,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\stage_01.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_1_funcs.cpp(346,66): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_base.cpp(184,22): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(174,65): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(194,65): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(210,47): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(462,113): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_manager.cpp(526,59): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(48,81): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(48,55): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(53,81): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(53,55): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(58,81): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(58,55): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(63,81): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(63,55): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(68,81): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(68,55): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(502,47): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(637,120): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(696,59): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(796,66): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(949,62): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(1158,114): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(1169,93): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\object_manager.cpp(1169,113): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(15,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\player_funcs.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(77,38): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(75,45): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\demo_house.cpp(80,26): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(68,70): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(399,20): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(421,112): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\vector.inl(339): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
+  stage_demo_2_funcs.cpp
+  stage_demo_funcs.cpp
+  title_camera.cpp
+  title_stage.cpp
+  loop.cpp
+  main.cpp
+  gameobject_manager.cpp
+  ALP__physics_manager.cpp
+  ALP_broadphase.cpp
+  ALP_collider.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\vector.inl(339): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
+  ALP_contact.cpp
+  ALP_integrate.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(15,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\stage_demo_2_funcs.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(15,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\stage_demo_funcs.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\shape_croth.h(11,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています Scripts\Physics\ALP_collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(67): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\ALP_collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.cpp(140,27): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_funcs.cpp(292,66): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_2_funcs.cpp(46,81): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_2_funcs.cpp(46,55): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_2_funcs.cpp(51,81): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_2_funcs.cpp(51,55): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_2_funcs.cpp(56,81): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_2_funcs.cpp(56,55): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_2_funcs.cpp(61,81): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_2_funcs.cpp(61,55): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_2_funcs.cpp(66,81): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_2_funcs.cpp(66,55): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_2_funcs.cpp(496,47): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_2_funcs.cpp(631,120): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\title_camera.cpp(82,44): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\title_camera.cpp(83,44): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_2_funcs.cpp(790,66): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
 C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\title_stage.cpp(150,54): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\title_stage.cpp(151,54): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+  ALP_joint.cpp
+  ALP_physics.cpp
+  ALP_resolve_contact.cpp
+  ALP_resolve_contact_SIM.cpp
+  collider.cpp
+  collider_croth.cpp
+  collider_rope.cpp
+  collider_shape.cpp
+  joint.cpp
+  joint_base.cpp
+  ray.cpp
+  shape_croth.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\shape_croth.h(11,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています Scripts\Physics\shape_croth.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_shape.h(9): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\shape_croth.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact_SIM.cpp(473,21): warning C4101: 'position': ローカル変数は 1 度も使われていません。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\shape_croth.h(11,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています Scripts\Physics\collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(67): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\shape_rope.h(11,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています Scripts\Physics\collider_rope.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_rope.h(25): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\collider_rope.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_rope.cpp(150,81): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\shape_croth.h(11,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています Scripts\Physics\collider_croth.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__meshcoll_data.h(67): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\collider_croth.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_croth.cpp(329,83): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_croth.cpp(378,34): warning C4244: '引数': 'unsigned int' から 'float' への変換です。データが失われる可能性があります。
+  shape_rope.cpp
+  renderer_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\shape_rope.h(11,26): warning C4099: 'Adollib::Physics_function::Meshcollider_data': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています Scripts\Physics\shape_rope.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_shape.h(9): message : 'Adollib::Physics_function::Meshcollider_data' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Physics\shape_rope.cpp)
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

@@ -84,6 +84,8 @@ namespace Adollib {
 			float dynamic_friction = 0;//“®–€C
 			float static_friction = 0; //Ã–€C
 			float restitution = 0;	 //”½”­ŒW”
+			float linear_sleep_threrhold = 0.4f; //freeze‚Ìè‡’l
+			float angula_sleep_threrhold = 0.2f; //freeze‚Ìè‡’l
 
 			bool is_fallable = false; //—‚¿‚È‚¢
 			bool is_kinmatic_anglar = false; //‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å‰ñ“]‘¬“x‚ª•Ï‰»‚µ‚È‚¢

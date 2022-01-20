@@ -224,8 +224,8 @@ void ALP_Physics::integrate(float duration) {
 	//float threrhold_pow = (duration * 60) * (duration * 60);
 	float threrhold_pow = 1;
 
-	if (linear_velocity_.norm() < Physics_manager::physicsParams.linear_sleep_threrhold * Physics_manager::physicsParams.linear_sleep_threrhold * threrhold_pow &&
-		angula_velocity_.norm() < Physics_manager::physicsParams.angula_sleep_threrhold * Physics_manager::physicsParams.angula_sleep_threrhold * threrhold_pow ) {
+	if (linear_velocity_.norm() < linear_sleep_threrhold * linear_sleep_threrhold * threrhold_pow &&
+		angula_velocity_.norm() < angula_sleep_threrhold * angula_sleep_threrhold * threrhold_pow ) {
 		sleep_timer += duration;
 	}
 	else sleep_timer = 0;
@@ -455,19 +455,21 @@ void ALP_Physics::update_tensor_and_barycenter(const std::list<Collider_shape*>&
 void ALP_Physics::adapt_collider_component_data() {
 	Physics_data Cdata = ALPcollider->get_collptr()->physics_data;
 
-	inertial_mass = Cdata.inertial_mass;
-	linear_drag = Cdata.drag;
-	angula_drag = Cdata.anglar_drag;
-	dynamic_friction = Cdata.dynamic_friction;
-	static_friction = Cdata.static_friction;
-	restitution = Cdata.restitution;
+	inertial_mass     = Cdata.inertial_mass;
+	linear_drag       = Cdata.drag;
+	angula_drag       = Cdata.anglar_drag;
+	dynamic_friction  = Cdata.dynamic_friction;
+	static_friction   = Cdata.static_friction;
+	restitution       = Cdata.restitution;
+	linear_sleep_threrhold = Cdata.linear_sleep_threrhold; //freeze‚Ìè‡’l
+	angula_sleep_threrhold = Cdata.angula_sleep_threrhold; //freeze‚Ìè‡’l
 
-	is_fallable = Cdata.is_fallable;
+	is_fallable        = Cdata.is_fallable;
 	is_kinmatic_anglar = Cdata.is_kinmatic_anglar; //‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å‰ñ“]‘¬“x‚ª•Ï‰»‚µ‚È‚¢
 	is_kinmatic_linear = Cdata.is_kinmatic_linear; //‚Ù‚©‚Ì•¨‘Ì‚©‚ç‚Ì‰e‹¿‚Å•Ài‘¬“x‚ª•Ï‰»‚µ‚È‚¢
-	is_moveable = Cdata.is_moveable;
-	is_hitable = Cdata.is_hitable;
-	is_static = Cdata.is_static;
+	is_moveable        = Cdata.is_moveable;
+	is_hitable         = Cdata.is_hitable;
+	is_static          = Cdata.is_static;
 }
 
 void ALP_Physics::destroy() {

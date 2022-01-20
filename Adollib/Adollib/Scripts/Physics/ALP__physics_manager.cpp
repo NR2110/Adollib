@@ -82,6 +82,10 @@ bool Physics_manager::update(Scenelist Sce)
 
 		for (auto p : pairs[1]) delete p;
 		pairs[1].clear();
+
+		moved_collider_for_insertsort[old_sce].clear();
+		added_collider_for_insertsort[old_sce].clear();
+
 		old_sce = Sce;
 	}
 
@@ -332,10 +336,6 @@ bool Physics_manager::update_Gui() {
 		ImGui::InputInt("solver_iteration", &physicsParams.solver_iteration, 1, 200);
 		ImGui::InputInt("calculate_iteration", &physicsParams.calculate_iteration, 1, 200);
 
-		//sleepÇÃËáíl
-		ImGui::InputFloat("linear_sleep_threrhold", &physicsParams.linear_sleep_threrhold, 0.01f);
-		ImGui::InputFloat("angular_sleep_threrhold", &physicsParams.angula_sleep_threrhold, 0.01f);
-
 		//ä—í éûÇÃÇŒÇÀÇÃã≠Ç≥
 		ImGui::InputFloat("bias", &physicsParams.bias, 0.01f, 0.1f, "%.3f");
 		//ä—í ãñóeåÎç∑
@@ -355,6 +355,8 @@ bool Physics_manager::update_Gui() {
 			ImGui::DragFloat("dynamic_friction", &physicsParams.dynamic_friction, 0.01f);
 			ImGui::DragFloat("static_friction", &physicsParams.static_friction, 0.01f);
 			ImGui::DragFloat("restitution", &physicsParams.restitution, 0.01f);
+			ImGui::InputFloat("linear_sleep_threrhold", &physicsParams.linear_sleep_threrhold, 0.01f);
+			ImGui::InputFloat("angular_sleep_threrhold", &physicsParams.angula_sleep_threrhold, 0.01f);
 			ImGui::Checkbox("is_fallable", &physicsParams.is_fallable);
 			ImGui::Checkbox("is_kinmatic_anglar", &physicsParams.is_kinmatic_anglar);
 			ImGui::Checkbox("is_kinmatic_linear", &physicsParams.is_kinmatic_linear);

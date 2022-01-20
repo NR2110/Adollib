@@ -21,6 +21,7 @@ namespace Adollib {
 		{
 			Gameobject* stage = Gameobject_manager::create("stage_pearent");
 			stage->addComponent<Title_stage>();
+			stage->addComponent<Fall_object_manager>();
 		}
 
 

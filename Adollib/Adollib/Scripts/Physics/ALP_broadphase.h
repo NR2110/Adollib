@@ -21,9 +21,9 @@ namespace Adollib {
 
 		namespace Broadphase_static {
 
-			static std::list<Insert_edge*> axis_list;
+			static std::unordered_map<Scenelist, std::list<Insert_edge*>> axis_list_;
 
-			static std::unordered_map<u_int, std::vector<std::list<Insert_edge*>::iterator>> access_axislist_itr; //colliderのindex情報から対応するaxis_listへアクセスできるようにする
+			static std::unordered_map<Scenelist, std::unordered_map<u_int, std::vector<std::list<Insert_edge*>::iterator>>> access_axislist_itr_; //colliderのindex情報から対応するaxis_listへアクセスできるようにする
 
 		}
 

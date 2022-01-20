@@ -62,7 +62,6 @@ namespace Adollib
 
 #else
 
-
 		// first_zone
 		{
 			Gameobject* first_zone = Gameobject_manager::create("first_zone");

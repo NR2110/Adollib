@@ -13,6 +13,8 @@ namespace Adollib
 		Vector4 floar_color;
 		Vector4 stair_color;
 
+		Collider* set_box(const char* name, Vector3 position, Vector3 rotate, Vector3 scale, Vector4 color, Gameobject* pearent = nullptr, bool is_moveable = false);
+		Collider* set_gear(const char* name, Vector3 position, Vector3 rotate, Vector3 scale, Vector4 color, int gear_tooth_num, Gameobject* pearent = nullptr, bool is_moveable = false);
 	public:
 
 		void awake() override;

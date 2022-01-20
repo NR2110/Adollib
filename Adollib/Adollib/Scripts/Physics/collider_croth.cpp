@@ -112,6 +112,8 @@ void Collider_Croth::load_file(const std::string& filename, bool is_right_rtiang
 			auto collider = new Collider;
 			collider->gameobject = gameobject;
 			collider->transform = std::make_shared<Transform>();
+			collider->tag = tag;
+			collider->ignore_tags = ignore_tags;
 			collider->awake();
 
 			collider->physics_data = default_physics_data;

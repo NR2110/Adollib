@@ -23,7 +23,7 @@ void Collider_shape::update_world_trans(const Vector3& GO_Wposiiton, const Quate
 
 	if (is_chenged_position || is_chenged_orientation || is_chenged_scale
 		) {
-		Physics_manager::add_moved(ALPcollider_ptr);
+		Physics_manager::add_moved(ALPcollider_ptr, ALPcollider_ptr->get_scene());
 	}
 
 };

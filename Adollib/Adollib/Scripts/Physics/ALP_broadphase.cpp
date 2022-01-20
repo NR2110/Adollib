@@ -116,6 +116,9 @@ void Physics_function::BroadMidphase(Scenelist Sce,
 	//適当に20コ点を取って適当に?
 	int SAP_axis = 0;
 
+	auto& axis_list = axis_list_[Sce];
+	auto& access_axislist_itr = access_axislist_itr_[Sce];
+
 	//Work_meter::start("delete_colldier_from_axislist");
 	////::: 削除されたものをaxis_listから削除する :::
 	//{
@@ -349,13 +352,13 @@ void Physics_function::remove_collider_broad_phase(Physics_function::ALP_Collide
 		const Scenelist scene = removed->get_scene();
 		const u_int index = removed->get_index();
 
-		if (Broadphase_static::access_axislist_itr.count(removed->get_index()) == 0)return;
+		if (Broadphase_static::access_axislist_itr_[scene].count(removed->get_index()) == 0)return;
 
-		auto remove_edge_itrs = Broadphase_static::access_axislist_itr[index];
+		auto remove_edge_itrs = Broadphase_static::access_axislist_itr_[scene][index];
 
 		for (auto& edge : remove_edge_itrs) {
 			delete *edge;
-			Broadphase_static::axis_list.erase(edge);
+			Broadphase_static::axis_list_[scene].erase(edge);
 
 		}
 	}
