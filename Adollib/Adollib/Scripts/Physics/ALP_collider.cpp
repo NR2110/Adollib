@@ -156,8 +156,11 @@ void ALP_Collider::adapt_collider_component_data() {
 void ALP_Collider::Update_hierarchy() {
 	std::lock_guard <std::mutex> lock(mtx); //shapesに範囲forでアクセスするため
 
+	int num = 0;
 	for (const auto& shape : shapes) {
-		shape->Update_hierarchy();
+		shape->Update_hierarchy(num);
+		ImGui::Separator();
+		++num;
 	}
 };
 

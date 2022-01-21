@@ -111,7 +111,7 @@ namespace Adollib {
 		};
 
 		// ヒエラルキーへの表示
-		virtual void Update_hierarchy() = 0;
+		virtual void Update_hierarchy(int hierarchy_num = 0) = 0;
 
 		// DOPの更新
 		virtual void update_dop14() = 0;

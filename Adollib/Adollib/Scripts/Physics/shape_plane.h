@@ -23,15 +23,15 @@ namespace Adollib {
 			local_scale = Vector3(FLT_MAX, 0, FLT_MAX);
 		}
 
-		void Update_hierarchy() override {
+		void Update_hierarchy(int hierarchy_num) override {
 			//rotate
 			{
 				float vec3[3] = { rotate.x,rotate.y,rotate.z };
-				ImGui::DragFloat3("rotate", vec3, 0.1f, 0, 0, "%.2f");
+				ImGui::DragFloat3((std::string("rotate##") + std::to_string(hierarchy_num)).c_str(), vec3, 0.1f, 0, 0, "%.2f");
 				rotate = Vector3(vec3[0], vec3[1], vec3[2]);
 			}
 			{
-				ImGui::DragFloat3("distance", &distance, 0.1f, 0, 0, "%.2f");
+				ImGui::DragFloat3((std::string("distance##") + std::to_string(hierarchy_num)).c_str(), &distance, 0.1f, 0, 0, "%.2f");
 			}
 		}
 

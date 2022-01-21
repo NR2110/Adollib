@@ -21,24 +21,24 @@ namespace Adollib {
 
 		};
 
-		void Update_hierarchy() override {
+		void Update_hierarchy(int hierarchy_num) override {
 			float ave = (size.x + size.y + size.z) * 0.333333333f;
 			//position
 			{
 				float vec3[3] = { center.x,center.y,center.z };
-				ImGui::DragFloat3("center", vec3, ave * 0.001f, 0, 0, "%.2f");
+				ImGui::DragFloat3((std::string("center##") + std::to_string(hierarchy_num)).c_str() , vec3, ave * 0.001f, 0, 0, "%.2f");
 				center = Vector3(vec3[0], vec3[1], vec3[2]);
 			}
 			//rotate
 			{
 				float vec3[3] = { rotate.x, rotate.y, rotate.z };
-				ImGui::DragFloat3("rotate", vec3, 0.1f, 0, 0, "%.2f");
+				ImGui::DragFloat3((std::string("rotate##") + std::to_string(hierarchy_num)).c_str(), vec3, 0.1f, 0, 0, "%.2f");
 				rotate = Vector3(vec3[0], vec3[1], vec3[2]);
 			}
 			//scale
 			{
 				float vec3[3] = { size.x,size.y, size.z };
-				ImGui::DragFloat3("size", vec3, ave * 0.001f, 0, 0, "%.2f");
+				ImGui::DragFloat3((std::string("size##") + std::to_string(hierarchy_num)).c_str(), vec3, ave * 0.001f, 0, 0, "%.2f");
 				size = Vector3(vec3[0], vec3[1], vec3[2]);
 			}
 		};

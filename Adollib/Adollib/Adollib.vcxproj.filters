@@ -158,6 +158,9 @@
     <Filter Include="ソース ファイル\scene_title\stage\fall">
       <UniqueIdentifier>{68566cbd-aeba-4cc3-9e8c-5c6bde60e8ff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\scene_title\title_state_manager">
+      <UniqueIdentifier>{869b328b-02c3-48b3-812a-4c1b9844879a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Scripts\player.cpp">
@@ -450,6 +453,9 @@
     </ClCompile>
     <ClCompile Include="..\Scripts\fall_object_comp.cpp">
       <Filter>ソース ファイル\scene_title\stage\fall</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\title_state_manager.cpp">
+      <Filter>ソース ファイル\scene_title\title_state_manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -893,6 +899,15 @@
     </ClInclude>
     <ClInclude Include="..\Scripts\fall_object_manager.h">
       <Filter>ソース ファイル\scene_title\stage\fall</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\title_state_manager.h">
+      <Filter>ソース ファイル\scene_title\title_state_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\title_states.h">
+      <Filter>ソース ファイル\scene_title\title_state_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\title_state_base.h">
+      <Filter>ソース ファイル\scene_title\title_state_manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

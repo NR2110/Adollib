@@ -181,9 +181,12 @@
     <ClInclude Include="..\Scripts\stage_demo_2.h" />
     <ClInclude Include="..\Scripts\stage_manager.h" />
     <ClInclude Include="..\Scripts\stage_types.h" />
+    <ClInclude Include="..\Scripts\title_state_base.h" />
     <ClInclude Include="..\Scripts\tag_andcircuit.h" />
     <ClInclude Include="..\Scripts\title_camera.h" />
     <ClInclude Include="..\Scripts\title_stage.h" />
+    <ClInclude Include="..\Scripts\title_states.h" />
+    <ClInclude Include="..\Scripts\title_state_manager.h" />
     <ClInclude Include="..\Scripts\touch_moveable.h" />
     <ClInclude Include="..\Scripts\ui_manager.h" />
     <ClInclude Include="Imgui\imconfig.h" />
@@ -328,6 +331,7 @@
     <ClCompile Include="..\Scripts\stage_manager.cpp" />
     <ClCompile Include="..\Scripts\title_camera.cpp" />
     <ClCompile Include="..\Scripts\title_stage.cpp" />
+    <ClCompile Include="..\Scripts\title_state_manager.cpp" />
     <ClCompile Include="..\Scripts\ui_manager.cpp" />
     <ClCompile Include="Imgui\imgui.cpp" />
     <ClCompile Include="Imgui\imgui_demo.cpp" />

@@ -112,6 +112,11 @@ void Title_stage::awake()
 	floar_color = Vector4(179, 179, 179, 255) / 255.0f;
 	stair_color = Vector4(64, 64, 64, 255) / 255.0f;
 
+	Collider* wall_coll = nullptr;
+	{
+		wall_coll = set_box("Wall", Vector3(0, 0, 1), Vector3(0), Vector3(100, 100, 1), wall_color);
+		set_box("Floar", Vector3(0, -33, -3), Vector3(-1, 0, 0), Vector3(100, 1, 3), floar_color);
+	}
 	{
 		auto title = Gameobject_manager::createPlane("Title_rogo");
 		title->transform->local_pos = Vector3(0, 3.6f, -0.1f);
@@ -126,30 +131,105 @@ void Title_stage::awake()
 	}
 
 	{
-		auto title = Gameobject_manager::createPlane("Title_pushstart");
-		title->transform->local_pos = Vector3(-1, 100, -7);
+		auto title = Gameobject_manager::create("Title_pushstart");
+		title->transform->local_pos = Vector3(-1, 50, -9);
 		title->transform->local_orient = quaternion_from_euler(0, 180, 0);
-		title->transform->local_scale = Vector3(31, 13, 0.5f);
+		title->transform->local_scale = Vector3(1, 1, 0.1f);
+		auto title_sprite = Gameobject_manager::createPlane("Title_pushstart");
+		title->add_child(title_sprite);
+
+		//title_sprite->transform->local_pos = Vector3(-1, 100, -7);
+		title_sprite->transform->local_scale = Vector3(31, 13, 0.5f);
 		auto title_material = Material_manager::create_material("Title_pushstart");
 		title_material->get_texture()->Load(L"./DefaultTexture/title/title_pushstart.png");
 		title_material->BS_state = State_manager::BStypes::BS_ALPHA;
 		title_material->RS_state = State_manager::RStypes::RS_CULL_NONE;
 		title_material->Load_VS("./DefaultShader/sprite_vs.cso");
 		title_material->Load_PS("./DefaultShader/sprite_ps.cso");
-		title->renderer->set_material(title_material);
+		title_sprite->renderer->set_material(title_material);
 
 		auto coll = title->addComponent<Collider>();
+		// spriteに合わせたcollider設定
+		{
+			{
+				auto shape = coll->add_shape<Box>();
+				shape->center = Vector3(27.7f, 0.3f, 0);
+				shape->rotate = Vector3(0, 0, -5.2f);
+				shape->size = Vector3(1, 1.5f, 1);
+			}
+			{
+				auto shape = coll->add_shape<Box>();
+				shape->center = Vector3(25.6f, -1.1f, 0);
+				shape->rotate = Vector3(0, 0, -4.2f);
+				shape->size = Vector3(1.9f, 3.1f, 1);
+			}
+			{
+				auto shape = coll->add_shape<Box>();
+				shape->center = Vector3(0.26f, 0, 0);
+				shape->rotate = Vector3(0, 0, 0);
+				shape->size = Vector3(24, 3.94f, 1);
+			}
+			{
+				auto shape = coll->add_shape<Box>();
+				shape->center = Vector3(0.26f, 2, -10);
+				shape->rotate = Vector3(0, 0, 0);
+				shape->size = Vector3(24, 1, 10);
+			}
+			{
+				auto shape = coll->add_shape<Box>();
+				shape->center = Vector3(12.5f, -3.95f, 0);
+				shape->rotate = Vector3(0, 0, -8.20f);
+				shape->size = Vector3(11, 1.73f, 1);
+			}
+			{
+				auto shape = coll->add_shape<Box>();
+				shape->center = Vector3(-10.72f, -3, 0);
+				shape->rotate = Vector3(0, 0, -0.8f);
+				shape->size = Vector3(14.4f, 1.5f, 1);
+			}
+			{
+				auto shape = coll->add_shape<Box>();
+				shape->center = Vector3(16.5f, 3.17f, 0);
+				shape->rotate = Vector3(0, 0, 1.8f);
+				shape->size = Vector3(7.78f, 1, 1);
+			}
+			{
+				auto shape = coll->add_shape<Box>();
+				shape->center = Vector3(-1.54f, 2.77f, 0);
+				shape->rotate = Vector3(0, 0, -4.7f);
+				shape->size = Vector3(10, 2, 1);
+			}
+			{
+				auto shape = coll->add_shape<Box>();
+				shape->center = Vector3(-17.35f, 3.9f, 0);
+				shape->rotate = Vector3(0, 0, -2.6f);
+				shape->size = Vector3(6.27f, 2, 1);
+			}
+			{
+				auto shape = coll->add_shape<Box>();
+				shape->center = Vector3(-25, 0.55f, 0);
+				shape->rotate = Vector3(0, 0, -2.8f);
+				shape->size = Vector3(1.2f, 1.5f, 1);
+			}
+		}
+
+		coll->add_shape<Box>();
+		coll->add_shape<Box>();
+		coll->add_shape<Box>();
+		coll->add_shape<Box>();
 		coll->add_shape<Box>();
 		coll->tag = Collider_tags::Title;
-		coll->physics_data.inertial_mass = 30;
+		coll->physics_data.inertial_mass = 300;
+		coll->physics_data.anglar_drag = 0.5f;
+		coll->physics_data.angula_sleep_threrhold = 0;
+		//coll->physics_data.is_moveable = false;
 
-		auto f_coll = set_box("Floar", Vector3(0, -33, -3), Vector3(-1, 0, 0), Vector3(100, 1, 6), floar_color);
-		f_coll->ignore_tags = Collider_tags::Tags_max & ~Collider_tags::Title;
-	}
-
-	{
-		set_box("Wall", Vector3(0, 0, 1), Vector3(0), Vector3(100, 100, 1), wall_color);
-		set_box("Floar", Vector3(0, -33, -3), Vector3(-1,0,0), Vector3(100, 1, 3), floar_color);
+		auto joint_a = Joint::add_balljoint(wall_coll, coll, Vector3(+30, 18, -7), Vector3(-30, 5, 0));
+		auto joint_b = Joint::add_balljoint(wall_coll, coll, Vector3(-30, 18, -7), Vector3(+30, 5, 0));
+		joint_a->offset = 14.5f + 18;
+		joint_b->offset = 14.5f + 18;
+		joint_a->stretch_bias = 0;
+		joint_b->stretch_bias = 0;
 	}
 
 	{
@@ -290,11 +370,10 @@ void Title_stage::start()
 // 毎フレーム呼ばれる更新処理
 void Title_stage::update()
 {
-	if (input->getKeyTrigger(Key::Right)) {
-		Scene_manager::set_active(Scenelist::scene_game);
-		Scene_manager::set_inactive(Scenelist::scene_title);
-
-	}
+	//if (input->getKeyTrigger(Key::Right)) {
+	//	Scene_manager::set_active(Scenelist::scene_game);
+	//	Scene_manager::set_inactive(Scenelist::scene_title);
+	//}
 }
 
 // このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる

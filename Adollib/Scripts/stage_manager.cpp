@@ -66,7 +66,6 @@ void Stage_manager::update() {
 	if (input->getKeyTrigger(Key::Left)) {
 		Scene_manager::set_inactive(Scenelist::scene_game);
 		Scene_manager::set_active(Scenelist::scene_title);
-
 	}
 }
 

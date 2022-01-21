@@ -28,7 +28,7 @@ namespace Adollib {
 				local_scale = Vector3(size);
 			}
 
-			void Update_hierarchy() override {
+			void Update_hierarchy(int hierarchy_num) override {
 
 			};
 

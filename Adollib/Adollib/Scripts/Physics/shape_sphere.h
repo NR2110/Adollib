@@ -20,17 +20,17 @@ namespace Adollib {
 			local_scale = Vector3(r);
 		};
 
-		void Update_hierarchy() override {
+		void Update_hierarchy(int hierarchy_num) override {
 			float ave = (r);
 			//position
 			{
 				float vec3[3] = { center.x,center.y,center.z };
-				ImGui::DragFloat3("center", vec3, ave * 0.001f, 0, 0, "%.2f");
+				ImGui::DragFloat3((std::string("center##") + std::to_string(hierarchy_num)).c_str(), vec3, ave * 0.001f, 0, 0, "%.2f");
 				center = Vector3(vec3[0], vec3[1], vec3[2]);
 			}
 			//scale
 			{
-				ImGui::DragFloat3("radias", &r, ave * 0.001f, 0, 0, "%.2f");
+				ImGui::DragFloat3((std::string("radius##") + std::to_string(hierarchy_num)).c_str(), &r, ave * 0.001f, 0, 0, "%.2f");
 			}
 		};
 
