@@ -5,13 +5,13 @@ namespace Adollib {
 
 	enum class Title_state_A {
 
-		Start,
+		Start = 0,
 		Select_stage,
 	};
 
 	enum class Title_state_B {
 
-		Awake,
+		Awake = 0,
 		Update_0,
 		Update_1,
 		Update_2,

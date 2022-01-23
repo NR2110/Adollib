@@ -55,6 +55,7 @@ void Fall_object_manager::set_sphere(const char* name, Vector3 position, float r
 // 所属するシーンの初期化時に一度だけ呼ばれる
 void Fall_object_manager::awake()
 {
+	fall_object_pearent = Gameobject_manager::create("fall_object_pearent");
 	start_pos_y = 60;
 	start_pos_x[0] = 63;
 	start_pos_x[1] = 46;
@@ -81,13 +82,14 @@ void Fall_object_manager::update()
 		int scale_num = (rand() % 100) * 0.01f * 3 + 2.2;
 		Vector3 pos = Vector3(start_pos_x[rand() % 4] + rand() % 100 * 0.01f * start_pos_x_randam_size, start_pos_y + rand() % 100 * 0.01f * start_pos_x_randam_size, -(1 + scale_num));
 
-		if (type_num == 0)set_box("fall_box",    pos, rotate_num, Vector3(scale_num), Al_Global::get_gaming(rand(), 2, 196 / 255.0f, 1));
-		if (type_num == 1)set_sphere("fall_box", pos, scale_num, Al_Global::get_gaming(rand(), 2, 196 / 255.0f, 1));
-		if (type_num == 2)set_sphere("fall_box", pos, scale_num, Al_Global::get_gaming(rand(), 2, 196 / 255.0f, 1));
+		if (type_num == 0)set_box("fall_box",    pos, rotate_num, Vector3(scale_num), Al_Global::get_gaming(rand(), 2, 196 / 255.0f, 1), fall_object_pearent);
+		if (type_num == 1)set_sphere("fall_box", pos, scale_num, Al_Global::get_gaming(rand(), 2, 196 / 255.0f, 1), fall_object_pearent);
+		if (type_num == 2)set_sphere("fall_box", pos, scale_num, Al_Global::get_gaming(rand(), 2, 196 / 255.0f, 1), fall_object_pearent);
 
 		timer = 0;
 	}
 
+	// 適当な乱数消費
 	rand(); rand(); rand();
 }
 

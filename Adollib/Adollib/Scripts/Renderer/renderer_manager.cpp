@@ -124,7 +124,7 @@ void Renderer_manager::render(const std::map<Scenelist, std::list<Camera_compone
 			// instansing—p
 			instance_update(shadow_frustum, render_scene);
 
-			render_instance(true);
+			render_instance(true, true);
 
 			camera->directional_shadow->set_ShaderResourceView();
 		}
@@ -348,9 +348,16 @@ void Renderer_manager::instance_update(const Frustum_data& frustum_data, Sceneli
 
 }
 
-void Renderer_manager::render_instance(bool is_shader_activate) {
+void Renderer_manager::render_instance(bool is_shader_activate, bool is_shadow_render) {
 	//return;
 	for (const auto& render : render_counts) {
+
+		// ‰e‚Ì•`‰æ‚ğs‚í‚È‚¯‚ê‚Îcontinue
+		if (is_shadow_render && render.renderer->get_material() !=nullptr) {
+			if (render.renderer->get_material()->is_render_shadow == false)continue;
+		}
+
+
 		Work_meter::start("shader_activete");
 		if (is_shader_activate)render.renderer->shader_activete();
 		Work_meter::stop("shader_activete");

@@ -24,6 +24,11 @@ namespace Adollib {
 			stage->addComponent<Fall_object_manager>();
 		}
 
+		{
+			Gameobject* state_manager = Gameobject_manager::create("title_state_manager");
+			state_manager->addComponent<Title_state_manager>();
+		}
+
 
 
 	}

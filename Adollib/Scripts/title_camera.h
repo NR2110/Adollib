@@ -3,10 +3,13 @@
 #include "../Adollib/Scripts/Object/component_camera.h"
 #include "../Adollib/Scripts/Physics/collider.h"
 
+#include "title_state_base.h"
+
 namespace Adollib
 {
+	class Title_state_manager;
 
-	class Title_camera : public Component
+	class Title_camera : public Component, public Title_state_base
 	{
 	private:
 		float rotate_speed = 0.5f;
@@ -21,6 +24,8 @@ namespace Adollib
 		Vector3 start_pos;
 		Quaternion start_rotate;
 
+		Title_state_manager* title_state_manager = nullptr;
+
 	public:
 
 		void Set_start_transform(const Vector3& l_start_pos, const Quaternion& l_start_rotate) {
@@ -29,6 +34,13 @@ namespace Adollib
 			transform->local_pos = l_start_pos;
 			transform->local_orient = l_start_rotate;
 		}
+
+	public:
+		void start_state(Title_state_B state) override;
+		void select_state(Title_state_B state) override;
+
+
+	public:
 
 		void awake() override;
 

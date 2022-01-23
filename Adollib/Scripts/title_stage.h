@@ -9,6 +9,8 @@ namespace Adollib
 	class Title_stage : public Component
 	{
 	private:
+		Vector4 sprite_bule_color;
+		Vector4 sprite_white_color;
 		Vector4 wall_color ;
 		Vector4 floar_color;
 		Vector4 stair_color;

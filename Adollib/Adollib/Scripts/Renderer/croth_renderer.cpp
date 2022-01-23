@@ -245,10 +245,8 @@ void Croth_renderer::render(const Frustum_data& frustum_data) {
 
 }
 
-void Croth_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& instance_buffer_, int bufferStart, int bufferCount) {
+void Croth_renderer::update() {
 	if (material == nullptr) return;
-	if (bufferCount == 0) return;
-
 	{
 		int mesh_count = 0;
 		for (auto& buffer : computeBuf_vertexoffset) {
@@ -307,6 +305,11 @@ void Croth_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& ins
 		}
 
 	}
+}
+
+void Croth_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& instance_buffer_, int bufferStart, int bufferCount) {
+	if (material == nullptr) return;
+	if (bufferCount == 0) return;
 
 	//::: render ::::::::
 	{

@@ -32,6 +32,8 @@ namespace Adollib {
 
 		Vector4 color;
 
+		bool is_render_shadow = true;
+
 		Vector4 constant_buffer_data[4];
 
 		State_manager::DStypes DS_state;
