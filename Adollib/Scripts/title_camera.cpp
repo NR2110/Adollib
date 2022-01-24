@@ -170,8 +170,8 @@ void Title_camera::select_state(Title_state_B state) {
 	if (state == Adollib::Title_state_B::Update_1) {
 		float t = title_state_manager->get_timer_stateB() * 2.5f;
 		if (t > 1) {
-			title_state_manager->set_nextstate_A(Title_state_A::Start);
-			//title_state_manager->set_nextstate_B(Title_state_B::Update_2);
+			//title_state_manager->set_nextstate_A(Title_state_A::Start);
+			title_state_manager->set_nextstate_B(Title_state_B::Update_2);
 			return;
 		}
 
@@ -216,7 +216,7 @@ void Title_camera::select_state(Title_state_B state) {
 
 	}
 	if (state == Adollib::Title_state_B::Update_2) {
-
+//		if (input->getKeyTrigger(Key::Enter))title_state_manager->set_nextstate_A(Title_state_A::Start);
 	}
 
 };

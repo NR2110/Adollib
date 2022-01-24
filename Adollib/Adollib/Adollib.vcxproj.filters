@@ -161,6 +161,9 @@
     <Filter Include="ソース ファイル\scene_title\title_state_manager">
       <UniqueIdentifier>{869b328b-02c3-48b3-812a-4c1b9844879a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\scene_title\stage\select">
+      <UniqueIdentifier>{f58d3658-a668-43ca-a340-c6fbf75efd0e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Scripts\player.cpp">
@@ -456,6 +459,9 @@
     </ClCompile>
     <ClCompile Include="..\Scripts\title_state_manager.cpp">
       <Filter>ソース ファイル\scene_title\title_state_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\select_stage_manager.cpp">
+      <Filter>ソース ファイル\scene_title\stage\select</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -909,6 +915,9 @@
     <ClInclude Include="..\Scripts\title_state_base.h">
       <Filter>ソース ファイル\scene_title\title_state_manager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Scripts\select_stage_manager.h">
+      <Filter>ソース ファイル\scene_title\stage\select</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
@@ -1027,6 +1036,9 @@
     </FxCompile>
     <FxCompile Include="DefaultShader\dither_noshadow_vs.hlsl">
       <Filter>00_Adollib\44_render\shader\hlsl\dither</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\default_ps_originalcolor.hlsl">
+      <Filter>00_Adollib\44_render\shader\hlsl\default</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

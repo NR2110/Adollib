@@ -10,14 +10,14 @@
 #include "../Adollib/Scripts/Renderer/renderer_base.h"
 #include "../Adollib/Scripts/Renderer/material_manager.h"
 #include "../Adollib/Scripts/Renderer/texture.h"
+#include "../Adollib/Scripts/Physics/ALP__physics_manager.h"
 #include "../Adollib/Scripts/Renderer/croth_renderer.h"
 #include "../Adollib/Scripts/Physics/collider_croth.h"
 #include "../Adollib/Scripts/Physics/collider_rope.h"
 #include "../Adollib/Scripts/Physics/joint.h"
-
 #include "../Adollib/Imgui/imgui.h"
 
-#include "../Adollib/Scripts/Physics/ALP__physics_manager.h"
+#include "select_stage_manager.h"
 
 using namespace Adollib;
 
@@ -110,7 +110,7 @@ Collider* Title_stage::set_gear(const char* name, Vector3 position, Vector3 rota
 void Title_stage::awake()
 {
 	sprite_bule_color = Vector4(83, 80, 116, 255) / 255.0f;
-	sprite_white_color = Vector4(83, 80, 116, 255) / 255.0f;
+	sprite_white_color = Vector4(246, 237, 240, 255) / 255.0f;
 	wall_color = Vector4(234, 234, 234, 255) / 255.0f;
 	floar_color = Vector4(179, 179, 179, 255) / 255.0f;
 	stair_color = Vector4(64, 64, 64, 255) / 255.0f;
@@ -253,7 +253,6 @@ void Title_stage::awake()
 
 		{}
 
-
 		// ŠK’i
 		{
 			Gameobject* stair_pearent = Gameobject_manager::create("stair_pearent");
@@ -384,6 +383,8 @@ void Title_stage::awake()
 #endif
 	}
 
+	{}
+
 	// select
 	{
 		// •Ç‚È‚Ç
@@ -394,18 +395,20 @@ void Title_stage::awake()
 
 			Collider* coll;
 			// •Ç
-			coll = set_box("select_Wall", Vector3(0, 0, 100), Vector3(0), Vector3(200, 200, 1), sprite_bule_color);
+			coll = set_box("select_Wall", Vector3(0, 0, 200), Vector3(0), Vector3(2000, 2000, 1), sprite_bule_color);
 			coll->gameobject->renderer->set_material(mat);
 
 			// ‘I‘ð‘I‘ðŽˆ
-			coll = set_box("select_part", Vector3(35, 0 - 1, 90), Vector3(-0.5f, 30, 0), Vector3(22, 14, 0.1f), wall_color);
-			coll->gameobject->renderer->set_material(mat);
+			auto go = Gameobject_manager::create("select_stage");
+			go->addComponent<Select_state_manager>();
+			//coll = set_box("select_part", Vector3(35, 0 - 1, 90), Vector3(-0.5f, 30, 0), Vector3(22, 14, 0.1f), wall_color);
+			//coll->gameobject->renderer->set_material(mat);
 
-			coll = set_box("select_part", Vector3(33, 35 - 1, 90), Vector3(-3, 30, 0), Vector3(22, 14, 0.1f), wall_color);
-			coll->gameobject->renderer->set_material(mat);
+			//coll = set_box("select_part", Vector3(33, 35 - 1, 90), Vector3(-3, 30, 0), Vector3(22, 14, 0.1f), wall_color);
+			//coll->gameobject->renderer->set_material(mat);
 
-			coll = set_box("select_part", Vector3(33, -35 - 1, 90), Vector3(+3, 30, 0), Vector3(22, 14, 0.1f), wall_color);
-			coll->gameobject->renderer->set_material(mat);
+			//coll = set_box("select_part", Vector3(33, -35 - 1, 90), Vector3(+3, 30, 0), Vector3(22, 14, 0.1f), wall_color);
+			//coll->gameobject->renderer->set_material(mat);
 		}
 
 		// sprite select_stage

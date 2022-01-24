@@ -1,2 +1,8 @@
-﻿  title_stage.cpp
+﻿  select_stage_manager.cpp
+  title_camera.cpp
+  title_stage.cpp
+  title_state_manager.cpp
+  scene_title.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\title_camera.cpp(86,43): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\title_camera.cpp(87,43): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

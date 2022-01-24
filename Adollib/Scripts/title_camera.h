@@ -37,6 +37,7 @@ namespace Adollib
 
 	public:
 		void start_state(Title_state_B state) override;
+
 		void select_state(Title_state_B state) override;
 
 
