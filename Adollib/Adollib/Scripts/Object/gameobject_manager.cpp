@@ -108,7 +108,7 @@ void Gameobject_manager::update(Scenelist Sce) {
 
 	{
 		Work_meter::start("adapt_transform_to_gameobject");
-		Physics_manager::adapt_transform_to_gameobject(Sce);
+		Physics_manager::adapt_transform_to_gameobject();
 		Work_meter::stop("adapt_transform_to_gameobject");
 
 		//親から子に座標の更新を行う
@@ -124,7 +124,7 @@ void Gameobject_manager::update(Scenelist Sce) {
 		}
 
 		Work_meter::start("copy_gameobject_transform");
-		Physics_manager::copy_gameobject_transform(Sce);
+		Physics_manager::copy_gameobject_transform();
 		Work_meter::stop("copy_gameobject_transform");
 	}
 

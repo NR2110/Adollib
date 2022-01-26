@@ -35,9 +35,9 @@ namespace Adollib {
 		public:
 			//コンストラクタ
 			ALP_Physics(
-				Gameobject* l_go, std::list<ALP_Physics*>::iterator l_itr, ALP_Collider* _ALPcollider ,Scenelist l_scene, u_int l_index
+				Gameobject* l_go, std::list<ALP_Physics*>::iterator l_itr, ALP_Collider* _ALPcollider, u_int l_index
 			) :
-				gameobject(l_go), this_itr(l_itr), ALPcollider(_ALPcollider), scene(l_scene), index(l_index) {
+				gameobject(l_go), this_itr(l_itr), ALPcollider(_ALPcollider), index(l_index) {
 			};
 
 		private:
@@ -45,7 +45,6 @@ namespace Adollib {
 			std::list<ALP_Physics*>::iterator this_itr;
 
 			u_int index = 0; //このcolliderの番号
-			Scenelist scene = Scenelist::scene_null; //このcolldierが存在するscene
 
 			//::: 慣性モーメントがユーザー定義されたものか :::
 			bool is_user_tensor = false;
@@ -65,9 +64,6 @@ namespace Adollib {
 			std::mutex mtx;
 
 		public:
-			// このphysicsが存在するscene
-			Scenelist get_scene() const { return scene; };
-
 			// マルチスレッド化するにあたり、add_colliderした時点ではメインのlistに入れずbufferのlistに入れるため 自身のitrが生成時に決まらないため set関数を準備
 			void set_this_itr(std::list<ALP_Physics*>::iterator itr) { this_itr = itr; };
 

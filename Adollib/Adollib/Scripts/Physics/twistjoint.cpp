@@ -51,8 +51,6 @@ bool TwistJoint::limit_effect(Vector3& contactP0, Vector3& contactP1, float& pen
 		if (vector3_dot(vector3_cross(check_radian_vec_base, coll1_checK_vec), vec0) < 0) {
 			radian = DirectX::XM_PI + DirectX::XM_PI - radian; //0~180~0 ‚ð -360~0~360‚ÉŽ¡‚·
 		}
-
-		Debug::set("radian", radian);
 	}
 
 	const Vector2 limit_rad = Vector2(ToRadian(limit.x), ToRadian(limit.y)); //limit‚ðradian‚ÉŽ¡‚µ‚½
@@ -93,8 +91,6 @@ bool TwistJoint::limit_effect(Vector3& contactP0, Vector3& contactP1, float& pen
 		// limit_x‚Ì‚Ù‚¤‚ª‹ß‚¢
 		contactP0 = vector3_quatrotate(contactP0_world - transforms[0]->position, transforms[0]->orientation.inverse());
 		contactP1 = axis;
-
-		Debug::set("penetrate", penetrate);
 	}
 	else {
 
@@ -107,8 +103,6 @@ bool TwistJoint::limit_effect(Vector3& contactP0, Vector3& contactP1, float& pen
 		// limit_y‚Ì‚Ù‚¤‚ª‹ß‚¢
 		contactP0 = vector3_quatrotate(contactP0_world - transforms[0]->position, transforms[0]->orientation.inverse());
 		contactP1 = axis;
-
-		Debug::set("penetrate", penetrate);
 	}
 
 	return true;

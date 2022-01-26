@@ -473,5 +473,5 @@ void ALP_Physics::adapt_collider_component_data() {
 }
 
 void ALP_Physics::destroy() {
-	Physics_manager::remove_ALPphysics(scene, this_itr);
+	Physics_manager::remove_ALPphysics(this_itr);
 }

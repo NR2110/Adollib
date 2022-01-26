@@ -296,7 +296,7 @@ void ALP_Collider::destroy() {
 	}
 
 	//physics_manager‚Ì”z—ñ‚©‚çíœ
-	Physics_manager::remove_ALPcollider(scene, this_itr);
+	Physics_manager::remove_ALPcollider(this_itr);
 
 };
 

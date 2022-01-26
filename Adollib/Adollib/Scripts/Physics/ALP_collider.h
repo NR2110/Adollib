@@ -2,7 +2,6 @@
 #include <unordered_map>
 #include <string>
 #include "../Math/math.h"
-#include "../Scene/scene_list.h"
 
 #include "ALP__tags.h"
 #include "collider_shape.h"
@@ -39,10 +38,9 @@ namespace Adollib {
 				Collider* l_collitr,
 				std::list<ALP_Collider*>::iterator l_itr,
 				ALP_Physics* l_ALPphysics,
-				const Scenelist l_scene,
 				const u_int l_index
 			) :
-				this_itr(l_itr), index(l_index), scene(l_scene), coll_ptr(l_collitr), ALPphysics(l_ALPphysics), gameobject(l_go) {};
+				this_itr(l_itr), index(l_index), coll_ptr(l_collitr), ALPphysics(l_ALPphysics), gameobject(l_go) {};
 
 		private:
 			//::: ComponentがアタッチされたColliderへのイテレータ :::
@@ -61,7 +59,6 @@ namespace Adollib {
 			std::list<ALP_Joint*> joints;
 
 			u_int index = 0; //このcolliderのuniqueなID
-			Scenelist scene = Scenelist::scene_null; //このcolliderが存在するscene
 
 			//::: アタッチされたshapeの配列 :::
 			std::list<Collider_shape*> shapes;
@@ -106,9 +103,6 @@ namespace Adollib {
 
 			// このcolliderのuniqueなID
 			u_int get_index() const { return index; };
-
-			// このcolliderが存在するscene
-			Scenelist get_scene() const { return scene; };
 
 			// on collision enterを行うtagの情報
 			Collider_tagbit get_oncoll_check_bits() const { return oncoll_check_bits; };

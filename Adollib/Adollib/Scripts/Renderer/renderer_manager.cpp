@@ -130,7 +130,7 @@ void Renderer_manager::render(std::list<Scenelist> active_scenes, const std::map
 					auto shadow_frustum = camera->directional_shadow->calculate_frustum_data();
 
 					// instansing—p
-					instance_update(shadow_frustum, render_scene);
+					instance_update(shadow_frustum, render_scene); //frastum‚É‚æ‚Á‚Ä’²®‚·‚é‚½‚ß
 
 					render_instance(true, true);
 
@@ -169,7 +169,7 @@ void Renderer_manager::render(std::list<Scenelist> active_scenes, const std::map
 				}
 
 				// collider‚Ìrender
-				Physics_function::Physics_manager::render_collider(Sce);
+				Physics_function::Physics_manager::render_collider();
 			}
 	}
 

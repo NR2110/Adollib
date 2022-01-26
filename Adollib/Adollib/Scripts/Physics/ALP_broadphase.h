@@ -6,8 +6,6 @@
 #include "ALP_physics.h"
 #include "collider_shape.h"
 
-#include "../Scene/scene_list.h"
-
 namespace Adollib {
 	namespace Physics_function {
 		// 挿入法の
@@ -23,20 +21,20 @@ namespace Adollib {
 
 		namespace Broadphase_static {
 
-			static std::unordered_map<Scenelist, std::list<Insert_edge*>> axis_list_;
+			static std::list<Insert_edge*> axis_list_;
 
-			static std::unordered_map<Scenelist, std::unordered_map<u_int, std::vector<std::list<Insert_edge*>::iterator>>> access_axislist_itr_; //colliderのindex情報から対応するaxis_listへアクセスできるようにする
+			static std::unordered_map<u_int, std::vector<std::list<Insert_edge*>::iterator>> access_axislist_itr_; //colliderのindex情報から対応するaxis_listへアクセスできるようにする
 
 		}
 
 		// とても大雑把な当たり判定(Boardphase) と DOP(Midphase)を行う
 		// sweep&pruneの情報をコピーするのが重いため、Midphaseもここで行う
-		void BroadMidphase(const std::list<Scenelist>& active_scenes,
-			std::unordered_map<Scenelist, std::list<Physics_function::ALP_Collider*>>& ALP_colliders,
+		void BroadMidphase(
+			std::list<Physics_function::ALP_Collider*>& ALP_colliders,
 			//std::vector<Contacts::Collider_2>& out_pair,
 			std::vector < Contacts::Contact_pair*> & out_pair,
-			std::unordered_map<Scenelist, std::vector<Physics_function::ALP_Collider*>>& moved_collider, //動いたもの
-			std::unordered_map<Scenelist, std::vector<Physics_function::ALP_Collider*>>& added_collider, //追加されたもの
+			std::vector<Physics_function::ALP_Collider*>& moved_collider, //動いたもの
+			std::vector<Physics_function::ALP_Collider*>& added_collider, //追加されたもの
 			std::mutex& mtx
 		);
 

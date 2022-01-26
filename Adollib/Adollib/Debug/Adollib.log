@@ -1,10 +1,2 @@
-﻿  gameobject_manager.cpp
-  croth_renderer.cpp
-  material.cpp
-  mesh_renderer.cpp
-  renderer_base.cpp
-  renderer_manager.cpp
-  rope_renderer.cpp
-  sprite_renderer.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Renderer\croth_renderer.cpp(276,49): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+﻿  twistjoint.cpp
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

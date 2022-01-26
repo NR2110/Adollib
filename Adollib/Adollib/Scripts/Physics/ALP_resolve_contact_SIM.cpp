@@ -43,7 +43,7 @@ void CalcTangentVector(const Vector3& normal, const DirectX::XMVECTOR& vrel, Dir
 	DirectX::XMVECTOR dot = DirectX::XMVector3Dot(xmnorm, vrel);
 
 	if (DirectX::XMVectorGetX(dot) < 1 + FLT_EPSILON && DirectX::XMVectorGetX(dot) > 1 - FLT_EPSILON) {
-	// もし相対速度と衝突法線が同じ方向なら適当にtangentを求める
+		// もし相対速度と衝突法線が同じ方向なら適当にtangentを求める
 		Vector3 vec(1.0f, 0.0f, 0.0f);
 		Vector3 n(normal);
 		n[0] = 0.0f;
@@ -137,45 +137,42 @@ bool Calc_joint_effect(ALP_Joint* joint, float inv_duration)
 }
 
 
-void Physics_function::resolve_contact(const std::list<Scenelist>& active_scenes, std::unordered_map<Scenelist, std::list<Physics_function::ALP_Collider*>>& ALP_colliders, std::vector<Contacts::Contact_pair*>& pairs, std::list<Physics_function::ALP_Joint*> l_joints, const float timescale) {
+void Physics_function::resolve_contact(std::list<Physics_function::ALP_Collider*>& ALP_colliders, std::vector<Contacts::Contact_pair*>& pairs, std::list<Physics_function::ALP_Joint*> l_joints, const float timescale) {
 
 	Work_meter::start("Make_solver", 1);
 
-	const float inv_duration = 1 / ( Physics_manager::physicsParams.timeStep / timescale);
+	const float inv_duration = 1 / (Physics_manager::physicsParams.timeStep / timescale);
 
 	//::: 解決用オブジェクトの生成 :::::::::::
 	std::vector<ALP_Solverbody> SBs;
-	int sum_colliders_size = 0;
-	for (const auto& Sce : active_scenes)sum_colliders_size += ALP_colliders[Sce].size();
-	SBs.reserve(sizeof(ALP_Solverbody) * sum_colliders_size);
+	SBs.reserve(sizeof(ALP_Solverbody) * ALP_colliders.size());
 	// SBs.resize(colliders.size()); //アライメントでSIMDとコンテナが競合する??? reserveにしたら治った
 	{
 		int count = 0;
 		ALP_Solverbody SB;
-		for (const auto& Sce : active_scenes) {
-			for (const auto& coll : ALP_colliders[Sce]) {
 
-				SB.delta_LinearVelocity = DirectX::XMLoadFloat3(&vector3_zero());
-				SB.delta_AngulaVelocity = DirectX::XMLoadFloat3(&vector3_zero());
+		for (const auto& coll : ALP_colliders) {
 
-				if (coll->get_ALPphysics()->is_kinmatic_anglar) SB.inv_inertia = DirectX::XMLoadFloat3x3(&coll->get_ALPphysics()->inverse_inertial_tensor());
-				else SB.inv_inertia = DirectX::XMLoadFloat3x3(&matrix33_zero());
+			SB.delta_LinearVelocity = DirectX::XMLoadFloat3(&vector3_zero());
+			SB.delta_AngulaVelocity = DirectX::XMLoadFloat3(&vector3_zero());
 
-				if (coll->get_ALPphysics()->is_kinmatic_linear) SB.inv_mass = coll->get_ALPphysics()->inverse_mass();
-				else SB.inv_mass = 0;
+			if (coll->get_ALPphysics()->is_kinmatic_anglar) SB.inv_inertia = DirectX::XMLoadFloat3x3(&coll->get_ALPphysics()->inverse_inertial_tensor());
+			else SB.inv_inertia = DirectX::XMLoadFloat3x3(&matrix33_zero());
 
-				SBs.emplace_back(SB);
-				++count;
-			}
+			if (coll->get_ALPphysics()->is_kinmatic_linear) SB.inv_mass = coll->get_ALPphysics()->inverse_mass();
+			else SB.inv_mass = 0;
+
+			SBs.emplace_back(SB);
+			++count;
 		}
 
 		count = 0;
-		for (const auto& Sce : active_scenes) {
-			for (auto& coll : ALP_colliders[Sce]) {
-				coll->get_ALPphysics()->solve = &SBs[count];
-				count++;
-			}
+
+		for (auto& coll : ALP_colliders) {
+			coll->get_ALPphysics()->solve = &SBs[count];
+			count++;
 		}
+
 	}
 
 	// jointはsceneをまたいで接続できるが、双方のcolliderのsceneがactiveでなければ動作しないようにする必要があるため
@@ -382,7 +379,7 @@ void Physics_function::resolve_contact(const std::list<Scenelist>& active_scenes
 				cp.constraint[0].rhs = -(1.0f + restitution) * DirectX::XMVectorGetX(DirectX::XMVector3Dot(axis, vrel)); //Baraff1997(8-18)の分子
 
 				if (0.0f < cp.distance - Physics_manager::physicsParams.slop)
-					cp.constraint[0].rhs += (Physics_manager::physicsParams.bias * (cp.distance - Physics_manager::physicsParams.slop))* inv_duration; //めり込みを直す力
+					cp.constraint[0].rhs += (Physics_manager::physicsParams.bias * (cp.distance - Physics_manager::physicsParams.slop)) * inv_duration; //めり込みを直す力
 
 				cp.constraint[0].rhs *= cp.constraint[0].jacDiagInv;
 				cp.constraint[0].lowerlimit = 0.0f;
@@ -692,25 +689,25 @@ void Physics_function::resolve_contact(const std::list<Scenelist>& active_scenes
 	Work_meter::stop("solver", 1);
 
 	// 速度の更新
-	for (const auto& Sce : active_scenes) {
-		for (auto& coll : ALP_colliders[Sce]) {
 
-			if (coll->get_ALPphysics()->is_kinmatic_linear) {
-				Vector3 linervec;
-				DirectX::XMStoreFloat3(&linervec, coll->get_ALPphysics()->solve->delta_LinearVelocity);
-				coll->get_ALPphysics()->set_linear_velocity(coll->get_ALPphysics()->linear_velocity() + linervec);
-				coll->get_ALPphysics()->set_old_linear_velocity(coll->get_ALPphysics()->old_linear_velocity() + linervec);
-			}
-			if (coll->get_ALPphysics()->is_kinmatic_anglar) {
-				Vector3 anglvec;
-				DirectX::XMStoreFloat3(&anglvec, coll->get_ALPphysics()->solve->delta_AngulaVelocity);
-				coll->get_ALPphysics()->set_angula_velocity(coll->get_ALPphysics()->angula_velocity() + anglvec);
-				coll->get_ALPphysics()->set_old_angula_velocity(coll->get_ALPphysics()->old_angula_velocity() + anglvec);
-			}
+	for (auto& coll : ALP_colliders) {
 
-			coll->get_ALPphysics()->solve = nullptr;
-
+		if (coll->get_ALPphysics()->is_kinmatic_linear) {
+			Vector3 linervec;
+			DirectX::XMStoreFloat3(&linervec, coll->get_ALPphysics()->solve->delta_LinearVelocity);
+			coll->get_ALPphysics()->set_linear_velocity(coll->get_ALPphysics()->linear_velocity() + linervec);
+			coll->get_ALPphysics()->set_old_linear_velocity(coll->get_ALPphysics()->old_linear_velocity() + linervec);
 		}
+		if (coll->get_ALPphysics()->is_kinmatic_anglar) {
+			Vector3 anglvec;
+			DirectX::XMStoreFloat3(&anglvec, coll->get_ALPphysics()->solve->delta_AngulaVelocity);
+			coll->get_ALPphysics()->set_angula_velocity(coll->get_ALPphysics()->angula_velocity() + anglvec);
+			coll->get_ALPphysics()->set_old_angula_velocity(coll->get_ALPphysics()->old_angula_velocity() + anglvec);
+		}
+
+		coll->get_ALPphysics()->solve = nullptr;
+
+
 	}
 
 
