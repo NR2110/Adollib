@@ -24,7 +24,9 @@ namespace Adollib
 		Vector3 start_pos;
 		Quaternion start_rotate;
 
+	private:
 		Title_state_manager* title_state_manager = nullptr;
+		std::shared_ptr<Transform> player;
 
 	public:
 

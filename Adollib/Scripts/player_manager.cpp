@@ -45,6 +45,18 @@ namespace Adollib
 			players[i]->set_stage_manager_ptr(m);
 		}
 	};
+	void Player_manager::set_Tpause_and_set_transform(const Vector3& position, const Quaternion& orient) {
+		for (int i = 0; i < 4; ++i) {
+			if (players[i] == nullptr)continue;
+			players[i]->set_Tpause(position, orient);
+		}
+	}
+	void Player_manager::set_moveable(bool is_moveable) {
+		for (int i = 0; i < 4; ++i) {
+			if (players[i] == nullptr)continue;
+			players[i]->set_moveable(is_moveable);
+		}
+	}
 
 	void Player_manager::add_player(int player_num, const Vector3& position, const Vector3& rotate, const Vector3& main_color, const Vector3& sub_color) {
 

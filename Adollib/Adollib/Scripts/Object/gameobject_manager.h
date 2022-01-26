@@ -48,7 +48,7 @@ namespace Adollib {
 		static void awake();
 		static void initialize(Scenelist Sce = Scene_manager::get_processing_scene());
 		static void update(Scenelist Sce = Scene_manager::get_processing_scene());
-		static void render(std::list<Scenelist> active_scenes);
+		static void render(const std::list<Scenelist>& active_scenes);
 		static void destroy(Scenelist Sce = Scene_manager::get_processing_scene());
 
 		static Gameobject* create(const std::string& go_name, const u_int& tag, Scenelist Sce = Scene_manager::get_processing_scene());

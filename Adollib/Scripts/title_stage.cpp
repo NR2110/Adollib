@@ -395,20 +395,22 @@ void Title_stage::awake()
 
 			Collider* coll;
 			// 壁
-			coll = set_box("select_Wall", Vector3(0, 0, 200), Vector3(0), Vector3(2000, 2000, 1), sprite_bule_color);
+			coll = set_box("select_Wall", Vector3(0, 0, 100), Vector3(0), Vector3(2000, 240, 1), sprite_bule_color);
+			coll->gameobject->renderer->set_material(mat);
 			coll->gameobject->renderer->set_material(mat);
 
-			// 選択選択肢
+			// 床
+			//auto floar = Gameobject_manager::create("select_floar");
+			//floar->transform->local_pos = Vector3(0, -10, 100);
+			//floar->transform->local_scale = Vector3(200, 1, 100);
+			//auto floar_coll = floar->addComponent<Collider>();
+			//floar_coll->physics_data.is_moveable = false;
+			//floar_coll->add_shape<Box>();
+
+
+			// 選択肢
 			auto go = Gameobject_manager::create("select_stage");
 			go->addComponent<Select_state_manager>();
-			//coll = set_box("select_part", Vector3(35, 0 - 1, 90), Vector3(-0.5f, 30, 0), Vector3(22, 14, 0.1f), wall_color);
-			//coll->gameobject->renderer->set_material(mat);
-
-			//coll = set_box("select_part", Vector3(33, 35 - 1, 90), Vector3(-3, 30, 0), Vector3(22, 14, 0.1f), wall_color);
-			//coll->gameobject->renderer->set_material(mat);
-
-			//coll = set_box("select_part", Vector3(33, -35 - 1, 90), Vector3(+3, 30, 0), Vector3(22, 14, 0.1f), wall_color);
-			//coll->gameobject->renderer->set_material(mat);
 		}
 
 		// sprite select_stage
@@ -437,10 +439,7 @@ void Title_stage::start()
 // 毎フレーム呼ばれる更新処理
 void Title_stage::update()
 {
-	//if (input->getKeyTrigger(Key::Right)) {
-	//	Scene_manager::set_active(Scenelist::scene_game);
-	//	Scene_manager::set_inactive(Scenelist::scene_title);
-	//}
+
 }
 
 // このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる

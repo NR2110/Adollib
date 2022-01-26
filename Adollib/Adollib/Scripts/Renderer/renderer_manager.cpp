@@ -77,7 +77,7 @@ void Renderer_manager::remove_renderer(std::list<Renderer_base*>::iterator itr) 
 	renderers[(*itr)->gameobject->get_scene()].erase(itr);
 }
 
-void Renderer_manager::render(std::list<Scenelist> active_scenes, const std::map<Scenelist, std::list<Camera_component*>>& cameras, const std::map<Scenelist, std::list<Light_component*>>& lights) {
+void Renderer_manager::render(const std::list<Scenelist>& active_scenes, const std::map<Scenelist, std::list<Camera_component*>>& cameras, const std::map<Scenelist, std::list<Light_component*>>& lights) {
 
 	Work_meter::tag_start("render");
 

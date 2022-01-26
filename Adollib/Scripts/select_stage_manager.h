@@ -17,6 +17,7 @@ namespace Adollib {
 	class Select_stage_base;
 	class Material;
 	class Title_state_manager;
+	class Player_manager;
 
 	class Select_state_manager : public Component, public Title_state_base {
 
@@ -36,6 +37,7 @@ namespace Adollib {
 		Gameobject* select_stage_front[5]; //sprite‚ğ’£‚é”Â
 
 		Title_state_manager* title_state_manager = nullptr;
+		Player_manager* player_manager = nullptr;
 		bool is_next_state = false; // Ÿ‚És‚­“ü—Í‚ª“ü‚ê‚Îtrue‚É‚È‚é
 
 	public:

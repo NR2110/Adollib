@@ -19,6 +19,7 @@
 
 #include "../Adollib/Scripts/Physics/ALP__physics_manager.h"
 
+#include "player_manager.h"
 #include "title_state_manager.h"
 
 using namespace Adollib;
@@ -71,11 +72,18 @@ void Select_state_manager::awake() {
 	// selectstage‚ÌÀ•W
 	gameobject->transform->local_pos = Vector3(32, -1, 90);
 	gameobject->transform->local_orient = quaternion_from_euler(Vector3(-0.5f, 30, 0));
+
+	Scene_manager::set_active(Scenelist::scene_player);
 }
 
 void Select_state_manager::start() {
 	title_state_manager = Gameobject_manager::find("title_state_manager")->findComponent<Title_state_manager>();
 	title_state_manager->add_statebase(this);
+
+	player_manager = Gameobject_manager::find("Player_manager",Scenelist::scene_player)->findComponent<Player_manager>();
+	player_manager->set_moveable(false);
+	player_manager->set_Tpause_and_set_transform(Vector3(0,-1000,-70),quaternion_identity());
+
 }
 
 void Select_state_manager::update() {
@@ -109,6 +117,9 @@ void Select_state_manager::select_state(Title_state_B state) {
 			}
 			change_timer_pow = 3;
 		}
+	}
+	if (state == Title_state_B::Update_1) {
+
 	}
 
 	if (state == Title_state_B::Update_2) {
@@ -174,11 +185,25 @@ void Select_state_manager::select_state(Title_state_B state) {
 
 		if (input->getKeyTrigger(Key::Enter) || input->getPadTrigger(0, GamePad::A))is_next_state = true;
 
-		//if (is_next_state && change_select_sign == 0) title_state_manager->set_nextstate_B(Title_state_B::Update_3);
 		if (is_next_state && change_select_sign == 0) {
+			//player_manager->set_Tpause_and_set_transform(Vector3(0, -50, -70), quaternion_identity());
+			//player_manager->set_moveable(true);
+			//title_state_manager->set_nextstate_B(Title_state_B::Update_3);
 			Scene_manager::set_active(Scenelist::scene_game);
 			Scene_manager::set_inactive(Scenelist::scene_title);
+			player_manager->set_moveable(true);
 		}
+	}
+
+	if (state == Title_state_B::Update_3) {
+
+		//title_state_manager->set_nextstate_B(Title_state_B::Update_4);
+
+
+
+
+		//Scene_manager::set_active(Scenelist::scene_game);
+		//Scene_manager::set_inactive(Scenelist::scene_title);
 	}
 
 

@@ -57,7 +57,12 @@ void Scene_manager::update() {
 	delete_scene_buffer.clear();
 
 	// 追加予定のsceneの追加
-	for (auto& Sce : active_scene_buffer) {
+
+	//while (active_scene_buffer.size() != 0) {
+
+	//for (auto& Sce : active_scene_buffer) {
+	for (int i = 0; i < active_scene_buffer.size(); ++i) {
+		auto Sce = active_scene_buffer[i];
 
 		bool is_actived = false;
 		for (auto& scene : active_scenes) {
@@ -77,11 +82,15 @@ void Scene_manager::update() {
 		processing_scene = Sce; //この値を初期値として渡すものもあるので 作成されるシーンを一時的に入れる
 		// 初期化
 		scenes[Sce]->initialize();
-		Gameobject_manager::initialize(processing_scene); //sceneのinitializeを呼ぶ
 
 		processing_scene = scene_save;
 
 	}
+	for (auto& Sce : active_scene_buffer) {
+		processing_scene = Sce; //この値を初期値として渡すものもあるので 作成されるシーンを一時的に入れる
+		Gameobject_manager::initialize(processing_scene); //sceneのinitializeを呼ぶ
+	}
+	processing_scene = Scenelist::scene_null;
 	active_scene_buffer.clear();
 
 	// activesceneのupdate
@@ -104,7 +113,7 @@ void Scene_manager::update() {
 void Scene_manager::render() {
 	//for (const auto& scene : active_scenes) {
 	//	processing_scene = scene;
-		Gameobject_manager::render(active_scenes);
+	Gameobject_manager::render(active_scenes);
 	//}
 	//processing_scene = Scenelist::scene_null;
 }

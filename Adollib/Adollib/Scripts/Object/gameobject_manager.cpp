@@ -176,7 +176,7 @@ void Gameobject_manager::update(Scenelist Sce) {
 	Work_meter::stop("update");
 }
 
-void Gameobject_manager::render(std::list<Scenelist> active_scenes) {
+void Gameobject_manager::render(const std::list<Scenelist>& active_scenes) {
 
 	Renderer_manager::render(active_scenes, cameras, lights);
 }

@@ -148,6 +148,7 @@ void Title_camera::select_state(Title_state_B state) {
 	float rot_q_func = 0;//回転計算に使う適当な二次関数の答え
 
 	if (state == Adollib::Title_state_B::Awake) {
+		player = nullptr;
 		transform->local_orient = quaternion_identity();
 	}
 
@@ -168,11 +169,9 @@ void Title_camera::select_state(Title_state_B state) {
 	}
 	// 近づく
 	if (state == Adollib::Title_state_B::Update_1) {
-		Scene_manager::set_active(Scenelist::scene_player);
 
 		float t = title_state_manager->get_timer_stateB() * 2.5f;
 		if (t > 1) {
-			//title_state_manager->set_nextstate_A(Title_state_A::Start);
 			title_state_manager->set_nextstate_B(Title_state_B::Update_2);
 			return;
 		}
@@ -186,7 +185,7 @@ void Title_camera::select_state(Title_state_B state) {
 				// 加速しながら
 				t_x_off = t * 1 / c_time;
 				pos_q_func = (+1 * t_x_off * t_x_off + 0); //(0<q<1)
-				pos_q_func = pow(pos_q_func, 1.1f)* c_time; //(0<q<c_time)
+				pos_q_func = pow(pos_q_func, 1.1f) * c_time; //(0<q<c_time)
 				transform->local_pos = s_pos + (Vector3(0, 0, 1) * (-back_dis + front_dis)) * pos_q_func;
 			}
 			else {
@@ -218,7 +217,56 @@ void Title_camera::select_state(Title_state_B state) {
 
 	}
 	if (state == Adollib::Title_state_B::Update_2) {
-//		if (input->getKeyTrigger(Key::Enter))title_state_manager->set_nextstate_A(Title_state_A::Start);
+		// select_stage_manager
 	}
 
+	static float dis_buffer = 0;
+	static Vector3 pos_buffer = Vector3(0);
+	static float pos_slop = 1;
+	if (state == Adollib::Title_state_B::Update_3) {
+
+		if (player == nullptr)
+			player = Gameobject_manager::find("Waist", Scenelist::scene_player)->transform;
+
+		if (player->position.y < -10) {
+			title_state_manager->set_nextstate_B(Title_state_B::Update_4);
+			dis_buffer = vector3_dot(vector3_quatrotate(Vector3(0, 0, 1), transform->orientation), player->position - transform->position);
+			pos_buffer = transform->position - vector3_quatrotate(dis_buffer * Vector3(0, 0, -1), transform->local_orient);
+		}
+	}
+
+	if (state == Adollib::Title_state_B::Update_4) {
+
+		Quaternion rotate = quaternion_identity();
+
+		// 画面中心からplayerが離れすぎたら調整
+		{
+			Vector3 goal = player->position + Vector3(0, 4, 0);
+			Vector3 dir = goal - pos_buffer;
+			if (dir.norm() > pos_slop * pos_slop) {
+				float dis = ALmin(10 * time->deltaTime(), dir.norm_sqr() - pos_slop);
+				pos_buffer += dir.unit_vect() * dis;
+			}
+		}
+		//カメラの距離
+		{
+			auto timestep = time->deltaTime();
+			//wheelから距離の調整
+			float easing_pow = 0.1f;
+			float easing_value = 10 * timestep; //イージングでの移動距離
+
+			float dis = ALClamp(dis_buffer, 10, 20); //マウスホイールで調整可能な最低距離 / 最大距離
+
+			//disをイージングのためにdis_bufferに保存
+			const float next = ALEasing(dis_buffer, dis, easing_pow, timestep);
+			dis_buffer += ALClamp(next - dis_buffer, -easing_value, easing_value);
+		}
+
+		transform->local_pos = pos_buffer + vector3_quatrotate(dis_buffer * Vector3(0, 0, -1), transform->local_orient);
+
+		if (transform->local_pos.y < -70) {
+			Scene_manager::set_active(Scenelist::scene_game);
+			Scene_manager::set_inactive(Scenelist::scene_title);
+		}
+	}
 };

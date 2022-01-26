@@ -189,7 +189,6 @@ namespace Adollib
 				if (dir.norm() > pos_slop * pos_slop) {
 					pos_buffer += dir.unit_vect() * (dir.norm_sqr() - pos_slop);
 				}
-
 			}
 
 			//ƒJƒƒ‰‚Ì‹——£
@@ -240,7 +239,6 @@ namespace Adollib
 				}
 
 			}
-
 			transform->local_pos = pos_buffer + vector3_quatrotate(dis_buffer * Vector3(0, 0, -1), transform->local_orient);
 
 		}

@@ -17,6 +17,10 @@ namespace Adollib
 	public:
 		void set_stage_manager_ptr(Stage_manager* m);
 
+		void set_Tpause_and_set_transform(const Vector3& position, const Quaternion& orient);
+
+		void set_moveable(bool is_moveable);
+
 		//void add_player();
 		//void delete_player(int num);
 

@@ -910,66 +910,6 @@ void Player::set_default_data() {
 	camera->gameobject->findComponent<Camera_component>()->fov = 60;
 }
 
-// "物を持つ"jointを削除する
-void Player::delete_catchjoint() {
-	Joint_base** joints[2] = {
-		&catch_left_joint,
-		&catch_right_joint
-	};
-	for (int i = 0; i < 2; i++) {
-		Joint_base*& joint = *joints[i];
-		if (joint != nullptr) {
-			Joint::delete_joint(joint);
-		}
-	}
-}
-
-// respown処理
-void Player::respown() {
-	auto stage = stage_manager->get_current_stage();
-
-	// 座標移動
-	Vector3 off = vector3_quatrotate(stage->player_respown_pos - Waist->world_position(), Waist->parent()->world_orientate().inverse());
-	for (int i = 0; i < Human_gameobject_size; i++) {
-		Human_gameobjects[i]->transform->local_pos += off;
-	}
-
-	// 力のreset& 軽く下に速度を加える
-	for (int i = 0; i < Human_collider_size; i++) {
-		Human_colliders[i]->reset_force();
-		Human_colliders[i]->linear_velocity(Vector3(0, -1, 0)); //fleezeに引っかからないように軽く力を加える
-	}
-
-	// 持っているものを離す
-	Joint_base** joints[2] = {
-		&catch_left_joint,
-		&catch_right_joint
-	};
-	for (int i = 0; i < 2; i++) {
-		Joint_base*& joint = *joints[i];
-		if (joint != nullptr) {
-			Joint::delete_joint(joint);
-		}
-	}
-
-	// ropeの削除
-	{
-		if (Lrope_go)Gameobject_manager::deleteGameobject(Lrope_go);
-		if (Lblock_hand_joint)Joint::delete_joint(Lblock_hand_joint);
-
-		Lrope_go = nullptr;
-		Lblock_hand_joint = nullptr;
-	}
-
-	for (int i = 0; i < Human_collider_size; ++i) {
-		Human_colliders[i]->set_max_linear_velocity(FLT_MAX);
-		Human_colliders[i]->set_max_angula_velocity(FLT_MAX);
-	}
-
-	respown_timer = 3;
-
-}
-
 // onground_colliderを更新
 void Player::update_onground() {
 
@@ -1039,4 +979,109 @@ void Player::update_gnyat_pow() {
 	//}
 	//is_gunyatto = false;
 	//if (gnyat_pow == 0)is_gunyatto = true;
+}
+
+// "物を持つ"jointを削除する
+void Player::delete_catchjoint() {
+	Joint_base** joints[2] = {
+		&catch_left_joint,
+		&catch_right_joint
+	};
+	for (int i = 0; i < 2; i++) {
+		Joint_base*& joint = *joints[i];
+		if (joint != nullptr) {
+			Joint::delete_joint(joint);
+		}
+	}
+}
+
+// respown処理
+void Player::respown() {
+	auto stage = stage_manager->get_current_stage();
+
+	// 座標移動
+	Vector3 off = vector3_quatrotate(stage->player_respown_pos - Waist->world_position(), Waist->parent()->world_orientate().inverse());
+	for (int i = 0; i < Human_gameobject_size; i++) {
+		Human_gameobjects[i]->transform->local_pos += off;
+	}
+
+	// 力のreset& 軽く下に速度を加える
+	for (int i = 0; i < Human_collider_size; i++) {
+		Human_colliders[i]->reset_force();
+		Human_colliders[i]->linear_velocity(Vector3(0, -1, 0)); //fleezeに引っかからないように軽く力を加える
+	}
+
+	// 持っているものを離す
+	Joint_base** joints[2] = {
+		&catch_left_joint,
+		&catch_right_joint
+	};
+	for (int i = 0; i < 2; i++) {
+		Joint_base*& joint = *joints[i];
+		if (joint != nullptr) {
+			Joint::delete_joint(joint);
+		}
+	}
+
+	// ropeの削除
+	{
+		if (Lrope_go)Gameobject_manager::deleteGameobject(Lrope_go);
+		if (Lblock_hand_joint)Joint::delete_joint(Lblock_hand_joint);
+
+		Lrope_go = nullptr;
+		Lblock_hand_joint = nullptr;
+	}
+
+	for (int i = 0; i < Human_collider_size; ++i) {
+		Human_colliders[i]->set_max_linear_velocity(FLT_MAX);
+		Human_colliders[i]->set_max_angula_velocity(FLT_MAX);
+	}
+
+	respown_timer = 3;
+
+}
+
+void Player::set_Tpause(const Vector3& position, const Quaternion& orient) {
+
+	//::: gameobjectの座標設定 :::
+	constexpr Vector3 head_size = Vector3(1, 1, 1);
+	constexpr Vector3 body_size = Vector3(0.8f, 0.6f, 0.8f);
+	constexpr Vector3 Waist_size = Vector3(0.81f, 0.7f, 0.81f);
+	constexpr Vector3 sholder_size = Vector3(0.35f, 0.6f, 0.4f);
+	constexpr Vector3 arm_size = sholder_size;
+	constexpr Vector3 hand_size = Vector3(0.45f, 0.45f, 0.45f);
+	constexpr float arm_y_pos = 0.18f;
+	constexpr Vector3 Leg_size = Vector3(0.3f, 0.15, 0.3f);
+	constexpr Vector3 Foot_size = Vector3(0.4f, 0.25, 0.4f);
+	constexpr float leg_x_pos = 0.6f;
+
+	Head->transform->local_pos = Vector3(0, body_size.y + head_size.y + 0.2f, 0);
+	Body->transform->local_pos = Vector3(0, 0, 0);
+	Waist->transform->local_pos = Vector3(0, -0.7f * 2, 0);
+
+	Lsholder->transform->local_pos = Vector3(+1.62, arm_y_pos, -0.30f);
+	Lelbow->transform->local_pos = Vector3(+(body_size.x + arm_size.y * 3 + 0.2f), arm_y_pos, -0.98f);
+	Lhand->transform->local_pos = Vector3(+(body_size.x + arm_size.y * 4 - 0.2f), arm_y_pos - 0.15f, -1.07f);
+	Rsholder->transform->local_pos = Vector3(-1.62, arm_y_pos, -0.30f);
+	Relbow->transform->local_pos = Vector3(-(body_size.x + arm_size.y * 3 + 0.2f), arm_y_pos, -0.98f);
+	Rhand->transform->local_pos = Vector3(-(body_size.x + arm_size.y * 4 - 0.2f), arm_y_pos - 0.15f, -1.07f);
+
+	Rleg->transform->local_pos = Vector3(-leg_x_pos, -(body_size.y + Waist_size.y * 2 + Foot_size.y * 2), 0);
+	Rfoot->transform->local_pos = Vector3(-leg_x_pos, -(body_size.y + Waist_size.y * 2 + Foot_size.y * 5), 0);
+	Lleg->transform->local_pos = Vector3(+leg_x_pos, -(body_size.y + Waist_size.y * 2 + Foot_size.y * 2), 0);
+	Lfoot->transform->local_pos = Vector3(+leg_x_pos, -(body_size.y + Waist_size.y * 2 + Foot_size.y * 5), 0);
+
+	for (int i = 0; i < Human_gameobject_size; ++i) {
+		Human_gameobjects[i]->transform->local_pos = vector3_quatrotate(Human_gameobjects[i]->transform->local_pos, orient);
+		Human_gameobjects[i]->transform->local_pos += position;
+	}
+
+
+}
+
+void Player::set_moveable(bool is_moveable) {
+	for (int i = 0; i < Human_collider_size; ++i) {
+		Human_colliders[i]->physics_data.is_moveable = is_moveable;
+		Human_colliders[i]->physics_data.is_hitable = is_moveable;
+	}
 }
