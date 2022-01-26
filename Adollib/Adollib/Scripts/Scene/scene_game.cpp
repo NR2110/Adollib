@@ -5,21 +5,28 @@
 namespace Adollib {
 
 
-	void scene_game::initialize() {
+	void Scene_game::initialize() {
+
+		//Gameobject* camera = Gameobject_manager::create("camera");
+		//camera->addComponent<Camera>();
+		//camera->addComponent<Camera_component>();
+
+		//Gameobject* Player = Gameobject_manager::create("Player_manager");
+		//Player->addComponent<Player_manager>();
 
 
-		Gameobject* camera = Gameobject_manager::create("camera");
-		camera->addComponent<Camera>();
-		camera->addComponent<Camera_component>();
-
-		Gameobject* Playre = Gameobject_manager::create("Player_manager");
-		Playre->addComponent<Player_manager>();
-
+		//Gameobject_manager::find("camera")->findComponent<Camera_component>()->gameobject->is_active = true;
+		Gameobject_manager::find("camera", Scenelist::scene_player)->findComponent<Camera_component>()->gameobject->is_active = true;
 
 		Gameobject* GO = Gameobject_manager::create("Stage_manager");
-		GO->addComponent<Stage_manager>();
+		auto comp = GO->addComponent<Stage_manager>();
 
+		Gameobject_manager::find("Player_manager",Scenelist::scene_player)->findComponent<Player_manager>()->set_stage_manager_ptr(comp);
 
+	}
+
+	void Scene_game::destroy() {
+		//Scene_manager::set_inactive(Scenelist::scene_player);
 	}
 
 

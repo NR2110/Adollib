@@ -32,7 +32,7 @@ void Stage_manager::awake() {
 }
 
 void Stage_manager::start() {
-	player = Gameobject_manager::find("player")->findComponent<Player>();
+	player = Gameobject_manager::find("player",Scenelist::scene_player)->findComponent<Player>();
 	player->respown();
 }
 
@@ -65,6 +65,7 @@ void Stage_manager::update() {
 
 	if (input->getKeyTrigger(Key::Left)) {
 		Scene_manager::set_inactive(Scenelist::scene_game);
+		Scene_manager::set_inactive(Scenelist::scene_player);
 		Scene_manager::set_active(Scenelist::scene_title);
 	}
 }

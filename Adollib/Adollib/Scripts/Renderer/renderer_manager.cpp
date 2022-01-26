@@ -77,7 +77,7 @@ void Renderer_manager::remove_renderer(std::list<Renderer_base*>::iterator itr) 
 	renderers[(*itr)->gameobject->get_scene()].erase(itr);
 }
 
-void Renderer_manager::render(const std::map<Scenelist, std::list<Camera_component*>>& cameras,const std::map<Scenelist, std::list<Light_component*>>& lights, Scenelist Sce) {
+void Renderer_manager::render(std::list<Scenelist> active_scenes, const std::map<Scenelist, std::list<Camera_component*>>& cameras, const std::map<Scenelist, std::list<Light_component*>>& lights) {
 
 	Work_meter::tag_start("render");
 
@@ -87,83 +87,91 @@ void Renderer_manager::render(const std::map<Scenelist, std::list<Camera_compone
 	// Imguiがgpuの処理を全部待ちやがる & depthで上書きしちゃうので 前フレームのtextureを描画して Imguiの描画をここで行う
 	// camera->clearにgpu負荷があり、Imguiがその処理を待つので 下に置くと重くなる
 	{
-		for (const auto& camera : cameras.at(Sce)) {
-			// posteffectの処理 & mainのRTVに描画
-			camera->posteffect_render();
+		for (const auto& Sce : active_scenes) {
+			if (cameras.count(Sce) == 0)continue;
+			for (const auto& camera : cameras.at(Sce)) {
+				// posteffectの処理 & mainのRTVに描画
+				camera->posteffect_render();
+			}
 		}
 	}
 
 	// 三角形の描画方法
 	Systems::DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	if (Sce == Scenelist::scene_null)return;
-
-	// light情報をコンスタントバッファーにセットする
-	set_light_Constantbuffer(lights.at(Sce));
+	//if (Sce == Scenelist::scene_null)return;
 
 	// バッチ用に現在のシーンのmesh,materialのsortを行う
-	sort_update(Sce);
+	sort_update(active_scenes);
 
-	//そのシーンのカメラの数だけ回す
-	for (const auto& camera : cameras.at(Sce)) {
-		if (camera->gameobject->active == false)continue;
+	for (const auto& Sce : active_scenes) {
 
-		const auto& frustum_data = camera->calculate_frustum_data();
-		const auto& render_scene = camera->render_scene; //カメラがrenderするscene
+		// light情報をコンスタントバッファーにセットする
+		if (lights.count(Sce) != 0)
+			set_light_Constantbuffer(lights.at(Sce));
 
 
-		// カメラの存在するシーンをカメラが描画するシーンが違えばupdateをしていないので updateを呼ぶ
-		if (Sce != render_scene) sort_update(Sce);
+		//そのシーンのカメラの数だけ回す
+		if (cameras.count(Sce) != 0)
+			for (const auto& camera : cameras.at(Sce)) {
+				if (camera->gameobject->is_active == false)continue;
 
-		// 影用の描画
-		{
-			camera->directional_shadow->setup();
-			camera->directional_shadow->shader_activate();
-			auto shadow_frustum = camera->directional_shadow->calculate_frustum_data();
+				const auto& frustum_data = camera->calculate_frustum_data();
+				const auto& render_scene = camera->render_scene; //カメラがrenderするscene
 
-			// instansing用
-			instance_update(shadow_frustum, render_scene);
 
-			render_instance(true, true);
+				// カメラの存在するシーンをカメラが描画するシーンが違えばupdateをしていないので updateを呼ぶ
+				//if (Sce != render_scene) sort_update(Sce);
 
-			camera->directional_shadow->set_ShaderResourceView();
-		}
+				// 影用の描画
+				{
+					camera->directional_shadow->setup();
+					camera->directional_shadow->shader_activate();
+					auto shadow_frustum = camera->directional_shadow->calculate_frustum_data();
 
-		{
-			Systems::SetViewPort(Al_Global::SCREEN_WIDTH, Al_Global::SCREEN_HEIGHT);
+					// instansing用
+					instance_update(shadow_frustum, render_scene);
 
-			// cameraの持つtextureのclear
-			camera->clear();
+					render_instance(true, true);
 
-			// camera情報を準備(constantbuffer,rendertargetview)
-			camera->setup();
+					camera->directional_shadow->set_ShaderResourceView();
+				}
 
-			Work_meter::start("render_obj");
+				{
+					Systems::SetViewPort(Al_Global::SCREEN_WIDTH, Al_Global::SCREEN_HEIGHT);
 
-			// instansing用
-			instance_update(frustum_data, render_scene);
+					// cameraの持つtextureのclear
+					camera->clear();
 
-			// renderを呼ぶ
-			render_instance(true);
-			Work_meter::stop("render_obj");
-		}
+					// camera情報を準備(constantbuffer,rendertargetview)
+					camera->setup();
 
-		// sky sphere
-		{
-			camera->sky_sphere->position = camera->transform->position + Vector3(0, -500, 0);
-			camera->sky_sphere->rotate = Vector3(0, 180, 0);
-			camera->sky_sphere->fov = camera->fov;
-			camera->sky_sphere->aspect = camera->aspect;
-			camera->sky_sphere->nearZ = camera->nearZ;
-			camera->sky_sphere->farZ = 100000.0f;
-			camera->sky_sphere->shader_activate();
-			camera->sky_sphere->render();
-		}
+					Work_meter::start("render_obj");
 
-		// colliderのrender
-		Physics_function::Physics_manager::render_collider(Sce);
+					// instansing用
+					instance_update(frustum_data, render_scene);
+
+					// renderを呼ぶ
+					render_instance(true);
+					Work_meter::stop("render_obj");
+				}
+
+				// sky sphere
+				{
+					camera->sky_sphere->position = camera->transform->position + Vector3(0, -500, 0);
+					camera->sky_sphere->rotate = Vector3(0, 180, 0);
+					camera->sky_sphere->fov = camera->fov;
+					camera->sky_sphere->aspect = camera->aspect;
+					camera->sky_sphere->nearZ = camera->nearZ;
+					camera->sky_sphere->farZ = 100000.0f;
+					camera->sky_sphere->shader_activate();
+					camera->sky_sphere->render();
+				}
+
+				// colliderのrender
+				Physics_function::Physics_manager::render_collider(Sce);
+			}
 	}
-
 
 	Work_meter::tag_stop();
 }
@@ -195,14 +203,14 @@ void Renderer_manager::set_light_Constantbuffer(const std::list<Light_component*
 		int spot_num = 0;
 		for (const auto& light : lights) {
 			for (u_int o = 0; o < light->PointLight.size(); o++) {
-				if (light->gameobject->active == false)return;
+				if (light->gameobject->is_active == false)return;
 				PointLight[point_num] = *light->PointLight[o];
 				//	PointLight[point_num].pos = (*itr_li->get()->PointLight[o]->pos )+( *itr_li->get()->transform->position);
 				point_num++;
 			}
 
 			for (u_int o = 0; o < light->SpotLight.size(); o++) {
-				if (light->gameobject->active == false)return;
+				if (light->gameobject->is_active == false)return;
 				SpotLight[spot_num] = *light->SpotLight[o];
 				spot_num++;
 			}
@@ -210,22 +218,26 @@ void Renderer_manager::set_light_Constantbuffer(const std::list<Light_component*
 	}
 
 	memcpy(l_cb.PointLight, PointLight, sizeof(POINTLIGHT) * POINTMAX);
-	memcpy(l_cb.SpotLight,  SpotLight, sizeof(SPOTLIGHT) * SPOTMAX);
+	memcpy(l_cb.SpotLight, SpotLight, sizeof(SPOTLIGHT) * SPOTMAX);
 	Systems::DeviceContext->UpdateSubresource(light_cb.Get(), 0, NULL, &l_cb, 0, 0);
 	Systems::DeviceContext->VSSetConstantBuffers(4, 1, light_cb.GetAddressOf());
 	Systems::DeviceContext->PSSetConstantBuffers(4, 1, light_cb.GetAddressOf());
 
 }
 
-void Renderer_manager::sort_update(Scenelist Sce) {
+void Renderer_manager::sort_update(std::list<Scenelist> active_scenes) {
 
-	if (renderers[Sce].size() == 0)return;
+	//if (renderers[Sce].size() == 0)return;
+	int scene_size = 0;
+	for (const auto& Sce : active_scenes) scene_size += renderers[Sce].size();
 
 	sorted_renderers.clear();
-	sorted_renderers.reserve(renderers[Sce].size());
+	sorted_renderers.reserve(scene_size);
 
-	for (auto& renderer : renderers[Sce]) {
-		sorted_renderers.emplace_back(renderer);
+	for (const auto& Sce : active_scenes) {
+		for (auto& renderer : renderers[Sce]) {
+			sorted_renderers.emplace_back(renderer);
+		}
 	}
 
 	// meshでsort
@@ -353,7 +365,7 @@ void Renderer_manager::render_instance(bool is_shader_activate, bool is_shadow_r
 	for (const auto& render : render_counts) {
 
 		// 影の描画を行わなければcontinue
-		if (is_shadow_render && render.renderer->get_material() !=nullptr) {
+		if (is_shadow_render && render.renderer->get_material() != nullptr) {
 			if (render.renderer->get_material()->is_render_shadow == false)continue;
 		}
 

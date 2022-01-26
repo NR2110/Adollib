@@ -237,6 +237,8 @@ namespace Adollib
 			Rhand_joint = l_Rhand_joint;
 		}
 
+		void set_stage_manager_ptr(Stage_manager* m) { stage_manager = m; };
+
 	public:
 		void awake() override;
 

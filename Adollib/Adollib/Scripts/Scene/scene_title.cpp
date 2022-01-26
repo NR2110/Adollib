@@ -9,7 +9,7 @@
 
 namespace Adollib {
 
-	void scene_title::initialize() {
+	void Scene_title::initialize() {
 
 		{
 			Gameobject* camera = Gameobject_manager::create("camera");

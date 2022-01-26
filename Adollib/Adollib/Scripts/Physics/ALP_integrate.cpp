@@ -28,19 +28,23 @@ void Physics_function::adapt_joint_limit(std::list<Physics_function::ALP_Joint*>
 #pragma region ALP_colliders
 //:::::::::::::::::::::::::::::::::::::::::::::::::::
 
-void Physics_function::update_world_trans(std::list<Physics_function::ALP_Collider*>& ALP_colliders) {
+void Physics_function::update_world_trans(const std::list<Scenelist>& active_scenes, std::unordered_map<Scenelist, std::list<Physics_function::ALP_Collider*>>& ALP_colliders) {
 
-	std::for_each(ALP_colliders.begin(), ALP_colliders.end(), [](ALP_Collider* coll) {
-		coll->update_world_trans();
-		}
-	);
+	for (const auto& Sce : active_scenes) {
+		std::for_each(ALP_colliders[Sce].begin(), ALP_colliders[Sce].end(), [](ALP_Collider* coll) {
+			coll->update_world_trans();
+			}
+		);
+	}
 }
-void Physics_function::update_per_calculate(std::list<Physics_function::ALP_Collider*>& ALP_colliders) {
+void Physics_function::update_per_calculate(const std::list<Scenelist>& active_scenes, std::unordered_map<Scenelist, std::list<Physics_function::ALP_Collider*>>& ALP_colliders) {
 
-	std::for_each(ALP_colliders.begin(), ALP_colliders.end(), [](ALP_Collider* coll) {
-		coll->update_contacted_collider_data();
-		}
-	);
+	for (const auto& Sce : active_scenes) {
+		std::for_each(ALP_colliders[Sce].begin(), ALP_colliders[Sce].end(), [](ALP_Collider* coll) {
+			coll->update_contacted_collider_data();
+			}
+		);
+	}
 }
 
 
@@ -53,29 +57,35 @@ void Physics_function::update_per_calculate(std::list<Physics_function::ALP_Coll
 //:::::::::::::::::::::::::::::::::::::::::::::::::::
 
 //速度などをリセット
-void Physics_function::resetforce(std::list<Physics_function::ALP_Physics*>& ALP_physics) {
+void Physics_function::resetforce(const std::list<Scenelist>& active_scenes, std::unordered_map<Scenelist, std::list<Physics_function::ALP_Physics*>>& ALP_physics) {
 
-	std::for_each(ALP_physics.begin(), ALP_physics.end(), [](ALP_Physics* phys) {
-		phys->reset_force();
-		}
-	);
+	for (const auto& Sce : active_scenes) {
+		std::for_each(ALP_physics[Sce].begin(), ALP_physics[Sce].end(), [](ALP_Physics* phys) {
+			phys->reset_force();
+			}
+		);
+	}
 }
 
 //外力による速度などの更新
-void Physics_function::applyexternalforce(std::list<Physics_function::ALP_Physics*>& ALP_physics, const float timeratio_60, const float time_scale) {
+void Physics_function::applyexternalforce(const std::list<Scenelist>& active_scenes, std::unordered_map<Scenelist, std::list<Physics_function::ALP_Physics*>>& ALP_physics, const float timeratio_60, const float time_scale) {
 
-	std::for_each(ALP_physics.begin(), ALP_physics.end(), [&](ALP_Physics* phys) {
-		phys->apply_external_force(Physics_manager::physicsParams.timeStep / time_scale, timeratio_60);
-		}
-	);
+	for (const auto& Sce : active_scenes) {
+		std::for_each(ALP_physics[Sce].begin(), ALP_physics[Sce].end(), [&](ALP_Physics* phys) {
+			phys->apply_external_force(Physics_manager::physicsParams.timeStep / time_scale, timeratio_60);
+			}
+		);
+	}
 }
 
-void Physics_function::integrate(std::list<Physics_function::ALP_Physics*>& ALP_physics) {
+void Physics_function::integrate(const std::list<Scenelist>& active_scenes, std::unordered_map<Scenelist, std::list<Physics_function::ALP_Physics*>>& ALP_physics) {
 
-	std::for_each(ALP_physics.begin(), ALP_physics.end(), [](ALP_Physics* phys) {
-		phys->integrate(Physics_manager::physicsParams.timeStep);
-		}
-	);
+	for (const auto& Sce : active_scenes) {
+		std::for_each(ALP_physics[Sce].begin(), ALP_physics[Sce].end(), [](ALP_Physics* phys) {
+			phys->integrate(Physics_manager::physicsParams.timeStep);
+			}
+		);
+	}
 }
 
 #pragma endregion
@@ -86,28 +96,32 @@ void Physics_function::integrate(std::list<Physics_function::ALP_Physics*>& ALP_
 #pragma region colliders & phyicses
 //:::::::::::::::::::::::::::::::::::::::::::::::::::
 
-void Physics_function::copy_transform(std::list<Physics_function::ALP_Collider*>& ALP_colliders, std::list<Physics_function::ALP_Physics*>& ALP_physics) {
+void Physics_function::copy_transform(const std::list<Scenelist>& active_scenes, std::unordered_map<Scenelist, std::list<Physics_function::ALP_Collider*>>& ALP_colliders, std::unordered_map<Scenelist, std::list<Physics_function::ALP_Physics*>>& ALP_physics) {
 
-	std::for_each(ALP_colliders.begin(), ALP_colliders.end(), [](ALP_Collider* coll) {
-		coll->copy_transform();
-		}
-	);
-	std::for_each(ALP_physics.begin(), ALP_physics.end(), [](ALP_Physics* phys) {
-		phys->copy_transform_ptr();
-		}
-	);
+	for (const auto& Sce : active_scenes) {
+		std::for_each(ALP_colliders[Sce].begin(), ALP_colliders[Sce].end(), [](ALP_Collider* coll) {
+			coll->copy_transform();
+			}
+		);
+		std::for_each(ALP_physics[Sce].begin(), ALP_physics[Sce].end(), [](ALP_Physics* phys) {
+			phys->copy_transform_ptr();
+			}
+		);
+	}
 }
 
-void Physics_function::adapt_component_data(std::list<Physics_function::ALP_Collider*>& ALP_colliders, std::list<Physics_function::ALP_Physics*>& ALP_physics, std::list<Physics_function::ALP_Joint*>& ALP_joints) {
+void Physics_function::adapt_component_data(const std::list<Scenelist>& active_scenes, std::unordered_map<Scenelist, std::list<Physics_function::ALP_Collider*>>& ALP_colliders, std::unordered_map<Scenelist, std::list<Physics_function::ALP_Physics*>>& ALP_physics, std::list<Physics_function::ALP_Joint*>& ALP_joints) {
 
-	std::for_each(ALP_colliders.begin(), ALP_colliders.end(), [](ALP_Collider* coll) {
-		coll->adapt_collider_component_data();
-		}
-	);
-	std::for_each(ALP_physics.begin(), ALP_physics.end(), [](ALP_Physics* phys) {
-		phys->adapt_collider_component_data();
-		}
-	);
+	for (const auto& Sce : active_scenes) {
+		std::for_each(ALP_colliders[Sce].begin(), ALP_colliders[Sce].end(), [](ALP_Collider* coll) {
+			coll->adapt_collider_component_data();
+			}
+		);
+		std::for_each(ALP_physics[Sce].begin(), ALP_physics[Sce].end(), [](ALP_Physics* phys) {
+			phys->adapt_collider_component_data();
+			}
+		);
+	}
 	std::for_each(ALP_joints.begin(), ALP_joints.end(), [](ALP_Joint* joint) {
 		joint->adapt_Jointdata();
 		}

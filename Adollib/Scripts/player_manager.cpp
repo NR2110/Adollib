@@ -39,6 +39,12 @@ namespace Adollib
 
 	}
 
+	void Player_manager::set_stage_manager_ptr(Stage_manager* m) {
+		for (int i = 0; i < 4; ++i) {
+			if (players[i] == nullptr)continue;
+			players[i]->set_stage_manager_ptr(m);
+		}
+	};
 
 	void Player_manager::add_player(int player_num, const Vector3& position, const Vector3& rotate, const Vector3& main_color, const Vector3& sub_color) {
 

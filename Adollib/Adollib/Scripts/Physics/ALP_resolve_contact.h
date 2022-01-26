@@ -8,7 +8,11 @@ namespace Adollib {
 	namespace Physics_function {
 
 		//Õ“Ë‰ğŒˆ
-		void resolve_contact(std::list<ALP_Collider*>& colliders, std::vector<Contacts::Contact_pair*>& pairs, std::list<Physics_function::ALP_Joint*> joints, const float time_scale);
+		void resolve_contact(const std::list<Scenelist>& active_scenes,
+			std::unordered_map<Scenelist, std::list<Physics_function::ALP_Collider*>>& ALP_colliders,
+			std::vector<Contacts::Contact_pair*>& pairs,
+			std::list<Physics_function::ALP_Joint*> joints,
+			const float time_scale);
 
 	}
 }

@@ -104,241 +104,351 @@ void Midphase_DOP_14(std::vector<Contacts::Contact_pair*>& new_pairs, Collider_s
 
 
 
-void Physics_function::BroadMidphase(Scenelist Sce,
-	const std::list<ALP_Collider*>& ALP_collider,
+void Physics_function::BroadMidphase(const std::list<Scenelist>& active_scenes,
+	std::unordered_map<Scenelist, std::list<Physics_function::ALP_Collider*>>& ALP_collider,
 	std::vector<Contacts::Contact_pair*>& out_pair,
-	std::vector<Physics_function::ALP_Collider*>& moved_collider, //動いたもの
-	std::vector<Physics_function::ALP_Collider*>& added_collider,
+	std::unordered_map<Scenelist, std::vector<Physics_function::ALP_Collider*>>& moved_collider, //動いたもの
+	std::unordered_map<Scenelist, std::vector<Physics_function::ALP_Collider*>>& added_collider, //追加されたもの
 	std::mutex& mtx
-	//追加されたもの
 ) {
+	if (active_scenes.size() == 0)return;
 
-	//適当に20コ点を取って適当に?
-	int SAP_axis = 0;
-
-	auto& axis_list = axis_list_[Sce];
-	auto& access_axislist_itr = access_axislist_itr_[Sce];
-
-	//Work_meter::start("delete_colldier_from_axislist");
-	////::: 削除されたものをaxis_listから削除する :::
-	//{
-	//	std::vector<std::list<edge>::iterator> itrs;
-	//	std::list<edge>::iterator itr;
-	//	for (const auto& removed : removed_collider) {
-	//		if (axis_list_edge_pS.count(removed->scene) == 0)continue;
-	//		if (axis_list_edge_pS[removed->scene].count(removed->index) == 0)continue;
-
-	//		auto remove_edge_itrs = axis_list_edge_pS[removed->scene][removed->index];
-
-	//		for (auto& edge : remove_edge_itrs) {
-	//			axis_list_pS[removed->scene].erase(edge);
-	//		}
-	//	}
-	//}
-	//Work_meter::stop("delete_colldier_from_axislist");
-
-	//auto& axis_list = axis_list;
-	//auto& axis_list_edge = access_axislist_itr;
-
-	Work_meter::start("make_axis_list", 1);
-	//::: 追加されたものをaxis_listに追加 :::
+	// activeなsceneのs&pで使用する配列を更新
+	for (const auto& Sce : active_scenes)
 	{
-		for (auto& added : added_collider) {
-			if (added == nullptr)continue;
+		//適当に20コ点を取って適当に?
+		int SAP_axis = 0;
+		auto& axis_list = axis_list_[Sce];
+		auto& access_axislist_itr = access_axislist_itr_[Sce];
 
-			const u_int collider_index = added->get_index(); //colliderのuniqueなID
+		Work_meter::start("make_axis_list", 1);
+		//::: 追加されたものをaxis_listに追加 :::
+		{
+			for (auto& added : added_collider[Sce]) {
+				if (added == nullptr)continue;
 
-			access_axislist_itr[collider_index].clear(); // 初期化
+				const u_int collider_index = added->get_index(); //colliderのuniqueなID
 
-			u_int shape_count = 0;
+				access_axislist_itr[collider_index].clear(); // 初期化
 
-			for (auto& shape : added->get_shapes()) {
+				u_int shape_count = 0;
 
-				{
-					Insert_edge* ed = newD Insert_edge;
-					ed->value = shape->get_DOP().pos[0] + shape->get_DOP().max[0];
-					ed->shape = shape;
-					ed->edge_start = false;
-					ed->shape_index = shape_count;
-					axis_list.emplace_back(ed);
+				for (auto& shape : added->get_shapes()) {
 
-					shape_count++;
+					{
+						Insert_edge* ed = newD Insert_edge;
+						ed->value = shape->get_DOP().pos[0] + shape->get_DOP().max[0];
+						ed->shape = shape;
+						ed->edge_start = false;
+						ed->shape_index = shape_count;
+						axis_list.emplace_back(ed);
+
+						shape_count++;
+					}
+					{
+						Insert_edge* ed = newD Insert_edge;
+						ed->value = shape->get_DOP().pos[0] + shape->get_DOP().min[0];
+						ed->shape = shape;
+						ed->edge_start = true;
+						ed->shape_index = shape_count;
+						axis_list.emplace_back(ed);
+
+						shape_count++;
+					}
+
+
+					auto itr_G = axis_list.end();
+					--itr_G;
+					auto itr_S = itr_G;
+					--itr_S;
+
+					// 互いにitrを保存
+					(*itr_S)->axis_list_pair_itr = itr_G;
+					(*itr_G)->axis_list_pair_itr = itr_S;
+
+					// colliderからアクセスできるようにaccess_axislist_itrに保存
+					access_axislist_itr[collider_index].push_back(itr_S);
+					access_axislist_itr[collider_index].push_back(itr_G);
 				}
-				{
-					Insert_edge* ed = newD Insert_edge;
-					ed->value = shape->get_DOP().pos[0] + shape->get_DOP().min[0];
-					ed->shape = shape;
-					ed->edge_start = true;
-					ed->shape_index = shape_count;
-					axis_list.emplace_back(ed);
-
-					shape_count++;
-				}
-
-
-				auto itr_G = axis_list.end();
-				--itr_G;
-				auto itr_S = itr_G;
-				--itr_S;
-
-				// 互いにitrを保存
-				(*itr_S)->axis_list_pair_itr = itr_G;
-				(*itr_G)->axis_list_pair_itr = itr_S;
-
-				// colliderからアクセスできるようにaccess_axislist_itrに保存
-				access_axislist_itr[collider_index].push_back(itr_S);
-				access_axislist_itr[collider_index].push_back(itr_G);
 			}
 		}
-	}
 
 
-	Work_meter::stop("make_axis_list", 1);
+		Work_meter::stop("make_axis_list", 1);
 
-	//::: 動いたもののvalueを更新
-	{
-		Work_meter::start("update_Value", 1);
+		//::: 動いたもののvalueを更新
 		{
-			std::lock_guard<std::mutex> lock(mtx);
+			Work_meter::start("update_Value", 1);
+			{
+				std::lock_guard<std::mutex> lock(mtx);
 
-			for (auto& moved : moved_collider) {
-				if (moved == nullptr)continue;
+				for (auto& moved : moved_collider[Sce]) {
+					if (moved == nullptr)continue;
 
-				for (auto& edge_itr : access_axislist_itr[moved->get_index()]) {
+					for (auto& edge_itr : access_axislist_itr[moved->get_index()]) {
+						auto& edge = *edge_itr;
+
+						if (edge->edge_start == false)
+							edge->value = edge->shape->get_DOP().pos[SAP_axis] + edge->shape->get_DOP().max[SAP_axis];
+						else
+							edge->value = edge->shape->get_DOP().pos[SAP_axis] + edge->shape->get_DOP().min[SAP_axis];
+					}
+
+				}
+			}
+
+			for (auto& added : added_collider[Sce]) {
+				if (added == nullptr)continue;
+
+				for (auto& edge_itr : access_axislist_itr[added->get_index()]) {
 					auto& edge = *edge_itr;
 
 					if (edge->edge_start == false)
 						edge->value = edge->shape->get_DOP().pos[SAP_axis] + edge->shape->get_DOP().max[SAP_axis];
 					else
 						edge->value = edge->shape->get_DOP().pos[SAP_axis] + edge->shape->get_DOP().min[SAP_axis];
+
+				}
+			}
+
+			Work_meter::stop("update_Value", 1);
+		}
+
+		//::: 挿入ソート ::::::::::::::
+		//small ----> big
+		{
+			Work_meter::start("insert_sort", 1);
+
+			std::list<Insert_edge*>::iterator itr[2] = { axis_list.begin(),axis_list.begin() };
+			u_int next_num = 0;
+
+			std::list<Insert_edge*>::iterator itr_insert;
+			std::list<Insert_edge*>::iterator itr_end = axis_list.end();
+
+
+			if (itr[next_num] != itr_end)itr[next_num]++;
+
+			while (true) {
+				if (itr[next_num] == itr_end)break;
+
+				const u_int now_num = 1 - next_num;
+				const Insert_edge* next_edge = *itr[next_num];
+				const Insert_edge* now_edge = *itr[now_num];
+
+
+				if (next_edge->value < now_edge->value) {
+
+					itr_insert = axis_list.begin();
+
+					for (; itr_insert != itr_end; ++itr_insert) {
+						if (next_edge->value < (*itr_insert)->value) {
+
+							axis_list.emplace(itr_insert, *itr[next_num]);
+							axis_list.erase(itr[next_num]);
+
+							itr_insert--;
+							(*(*itr_insert)->axis_list_pair_itr)->axis_list_pair_itr = itr_insert; //相方に保存されている自身へのitrを更新
+							access_axislist_itr[(*itr_insert)->shape->get_ALPcollider()->get_index()][(*itr_insert)->shape_index] = itr_insert; //axis_list_edgeに保存したitrの更新
+
+							itr[next_num] = itr_insert;
+							break;
+						}
+					}
+
+
 				}
 
+				//次のnextに今のnextの次を保存し next_numを更新
+				itr[now_num] = itr[next_num];
+				++itr[now_num];
+				next_num = now_num;
 			}
+
+			Work_meter::stop("insert_sort", 1);
 		}
 
-		for (auto& moved : added_collider) {
-			if (moved == nullptr)continue;
-
-			for (auto& edge_itr : access_axislist_itr[moved->get_index()]) {
-				auto& edge = *edge_itr;
-
-				if (edge->edge_start == false)
-					edge->value = edge->shape->get_DOP().pos[SAP_axis] + edge->shape->get_DOP().max[SAP_axis];
-				else
-					edge->value = edge->shape->get_DOP().pos[SAP_axis] + edge->shape->get_DOP().min[SAP_axis];
-
-			}
-		}
-
-		Work_meter::stop("update_Value", 1);
 	}
 
-	//::: 挿入ソート ::::::::::::::
-	//small ----> big
+
 	{
-		Work_meter::start("insert_sort", 1);
+		Work_meter::start("Sweep&Prune", 1);
+		//Sweep&Prune
 
-		std::list<Insert_edge*>::iterator itr[2] = { axis_list.begin(),axis_list.begin() };
-		u_int next_num = 0;
+		out_pair.clear();
+		// 自身と同じSceneに存在するものとのチェック
+		{
+			std::list<Collider_shape*> actives;
+			std::list<Collider_shape*> static_actives;
 
-		std::list<Insert_edge*>::iterator itr_insert;
-		std::list<Insert_edge*>::iterator itr_end = axis_list.end();
+			for (const auto& Sce : active_scenes)
+			{
+				const auto& axis_list = axis_list_[Sce];
 
+				for (auto& insert_edge_itr : axis_list) {
+					auto& insert_edge = *insert_edge_itr;
 
-		if(itr[next_num] != itr_end)itr[next_num]++;
+					//colliderの始点ならactivelistにあるものと衝突の可能性あり
+					if (insert_edge.edge_start == true) {
 
-		while (true) {
-			if (itr[next_num] == itr_end)break;
+						if (insert_edge.shape->get_ALPcollider()->get_ALPphysics()->is_static == true) { // get_collptr()が
 
-			const u_int now_num = 1 - next_num;
-			const Insert_edge* next_edge = *itr[next_num];
-			const Insert_edge* now_edge = *itr[now_num];
+							//staticなオブジェクトはstatic_activesとは衝突しない
+							for (auto& shape : actives) {
+								Midphase_DOP_14(out_pair, shape, insert_edge.shape);
+							}
+							static_actives.emplace_back(insert_edge.shape);
 
+							auto pair_itr = static_actives.end();
+							--pair_itr;
+							(*insert_edge.axis_list_pair_itr)->active_list_pair_itr = pair_itr;
+						}
+						else {
 
-			if (next_edge->value < now_edge->value) {
+							//dynamicなオブジェクトはすべてに可能性がある
+							for (auto& shape : static_actives) {
+								Midphase_DOP_14(out_pair, shape, insert_edge.shape);
+							}
+							for (auto& shape : actives) {
+								Midphase_DOP_14(out_pair, shape, insert_edge.shape);
+							}
+							actives.emplace_back(insert_edge.shape);
 
-				itr_insert = axis_list.begin();
+							auto pair_itr = actives.end();
+							--pair_itr;
+							(*insert_edge.axis_list_pair_itr)->active_list_pair_itr = pair_itr;
+						}
 
-				for (; itr_insert != itr_end; ++itr_insert) {
-					if (next_edge->value < (*itr_insert)->value) {
+					}
 
-						axis_list.emplace(itr_insert, *itr[next_num]);
-						axis_list.erase(itr[next_num]);
+					else {
 
-						itr_insert--;
-						(*(*itr_insert)->axis_list_pair_itr)->axis_list_pair_itr = itr_insert; //相方に保存されている自身へのitrを更新
-						access_axislist_itr[(*itr_insert)->shape->get_ALPcollider()->get_index()][(*itr_insert)->shape_index] = itr_insert; //axis_list_edgeに保存したitrの更新
-
-						itr[next_num] = itr_insert;
-						break;
+						if (insert_edge.shape->get_ALPcollider()->get_ALPphysics()->is_static == true)
+							static_actives.erase(insert_edge.active_list_pair_itr);
+						else
+							actives.erase(insert_edge.active_list_pair_itr);
 					}
 				}
-
-
-			}
-
-			//次のnextに今のnextの次を保存し next_numを更新
-			itr[now_num] = itr[next_num];
-			++itr[now_num];
-			next_num = now_num;
-		}
-
-		Work_meter::stop("insert_sort", 1);
-	}
-
-	Work_meter::start("Sweep&Prune", 1);
-	//Sweep&Prune
-	std::list<Collider_shape*> actives;
-	std::list<Collider_shape*> static_actives;
-	out_pair.clear();
-	std::list<Collider_shape*>::iterator ac_itr;
-	{
-		for (auto& insert_edge_itr : axis_list) {
-			auto& insert_edge = *insert_edge_itr;
-
-			//colliderの始点ならactivelistにあるものと衝突の可能性あり
-			if (insert_edge.edge_start == true) {
-
-				if (insert_edge.shape->get_ALPcollider()->get_ALPphysics()->is_static == true) { // get_collptr()が
-
-					//staticなオブジェクトはstatic_activesとは衝突しない
-					for (auto& shape : actives) {
-						Midphase_DOP_14(out_pair, shape, insert_edge.shape);
-					}
-					static_actives.emplace_back(insert_edge.shape);
-
-					auto pair_itr = static_actives.end();
-					--pair_itr;
-					(*insert_edge.axis_list_pair_itr)->active_list_pair_itr = pair_itr;
-				}
-				else {
-
-					//dynamicなオブジェクトはすべてに可能性がある
-					for (auto& shape : static_actives) {
-						Midphase_DOP_14(out_pair, shape, insert_edge.shape);
-					}
-					for (auto& shape : actives) {
-						Midphase_DOP_14(out_pair, shape, insert_edge.shape);
-					}
-					actives.emplace_back(insert_edge.shape);
-
-					auto pair_itr = actives.end();
-					--pair_itr;
-					(*insert_edge.axis_list_pair_itr)->active_list_pair_itr = pair_itr;
-				}
-
-			}
-
-			else {
-
-				if (insert_edge.shape->get_ALPcollider()->get_ALPphysics()->is_static == true)
-					static_actives.erase(insert_edge.active_list_pair_itr);
-				else
-					actives.erase(insert_edge.active_list_pair_itr);
 			}
 		}
 
+		// 自身と違うSceneに存在する者とのチェック
+		Work_meter::start("Sweep&Prune_no_ame_scene", 1);
+		{
+			auto Sce_itr_first = active_scenes.begin();
+			auto Sce_itr_second = active_scenes.begin();
+
+			auto Sce_itr_end = active_scenes.end();
+
+			Work_meter::start("Sweep&Prune", 1);
+
+			for (Sce_itr_first = active_scenes.begin(); Sce_itr_first != Sce_itr_end; ++Sce_itr_first)
+			{
+				for (Sce_itr_second = Sce_itr_first; Sce_itr_second != Sce_itr_end; ++Sce_itr_second)
+				{
+					if (Sce_itr_first == Sce_itr_second)continue;
+
+					//Sweep&Prune
+					std::list<Collider_shape*> actives;
+					std::list<Collider_shape*> static_actives;
+
+					auto& axis_list_first = axis_list_[*Sce_itr_first];
+					auto& axis_list_second = axis_list_[*Sce_itr_second];
+
+					std::vector<Insert_edge*> sorted_axislist;
+					sorted_axislist.reserve(sizeof(Insert_edge*) * axis_list_first.size() + axis_list_second.size());
+					// 2つのsceneのオブジェクトをsorted_axislistにソートして入れる
+					{
+						auto axislist_itr_first = axis_list_first.begin();
+						auto axislist_itr_second = axis_list_second.begin();
+
+						auto axislist_itr_first_end = axis_list_first.end();
+						auto axislist_itr_second_end = axis_list_second.end();
+
+						while (1) {
+							if (axislist_itr_first == axislist_itr_first_end && axislist_itr_second == axislist_itr_second_end)break;
+
+							else if (axislist_itr_first == axislist_itr_first_end) {
+								for (; axislist_itr_second != axislist_itr_second_end; ++axislist_itr_second) sorted_axislist.emplace_back(*axislist_itr_second);
+							}
+							else if (axislist_itr_second == axislist_itr_second_end) {
+								for (; axislist_itr_first != axislist_itr_first_end; ++axislist_itr_first) sorted_axislist.emplace_back(*axislist_itr_first);
+							}
+
+							else {
+								if ((*axislist_itr_first)->value > (*axislist_itr_second)->value) {
+									sorted_axislist.emplace_back(*axislist_itr_second);
+									++axislist_itr_second;
+								}
+								else {
+									sorted_axislist.emplace_back(*axislist_itr_first);
+									++axislist_itr_first;
+								}
+							}
+						}
+					}
+
+					{
+						std::list<Collider_shape*> actives;
+						std::list<Collider_shape*> static_actives;
+
+						//const auto& axis_list = axis_list_[Sce];
+
+						for (auto& insert_edge_itr : sorted_axislist) {
+							auto& insert_edge = *insert_edge_itr;
+
+							//colliderの始点ならactivelistにあるものと衝突の可能性あり
+							if (insert_edge.edge_start == true) {
+
+								if (insert_edge.shape->get_ALPcollider()->get_ALPphysics()->is_static == true) { // get_collptr()が
+
+									//staticなオブジェクトはstatic_activesとは衝突しない
+									for (auto& shape : actives) {
+										Midphase_DOP_14(out_pair, shape, insert_edge.shape);
+									}
+									static_actives.emplace_back(insert_edge.shape);
+
+									auto pair_itr = static_actives.end();
+									--pair_itr;
+									(*insert_edge.axis_list_pair_itr)->active_list_pair_itr = pair_itr;
+								}
+								else {
+
+									//dynamicなオブジェクトはすべてに可能性がある
+									for (auto& shape : static_actives) {
+										Midphase_DOP_14(out_pair, shape, insert_edge.shape);
+									}
+									for (auto& shape : actives) {
+										Midphase_DOP_14(out_pair, shape, insert_edge.shape);
+									}
+									actives.emplace_back(insert_edge.shape);
+
+									auto pair_itr = actives.end();
+									--pair_itr;
+									(*insert_edge.axis_list_pair_itr)->active_list_pair_itr = pair_itr;
+								}
+
+							}
+
+							else {
+
+								if (insert_edge.shape->get_ALPcollider()->get_ALPphysics()->is_static == true)
+									static_actives.erase(insert_edge.active_list_pair_itr);
+								else
+									actives.erase(insert_edge.active_list_pair_itr);
+
+							}
+						}
+
+					}
+
+
+				}
+
+			}
+		}
+		Work_meter::stop("Sweep&Prune_no_ame_scene", 1);
 	}
+
 
 	moved_collider.clear();
 	added_collider.clear();
@@ -357,7 +467,7 @@ void Physics_function::remove_collider_broad_phase(Physics_function::ALP_Collide
 		auto remove_edge_itrs = Broadphase_static::access_axislist_itr_[scene][index];
 
 		for (auto& edge : remove_edge_itrs) {
-			delete *edge;
+			delete* edge;
 			Broadphase_static::axis_list_[scene].erase(edge);
 
 		}

@@ -4,7 +4,7 @@
 
 namespace Adollib {
 
-	class scene_title : public Scene {
+	class Scene_title : public Scene {
 
 		void initialize();
 

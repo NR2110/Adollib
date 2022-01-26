@@ -137,7 +137,7 @@ bool Calc_joint_effect(ALP_Joint* joint, float inv_duration)
 }
 
 
-void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std::vector<Contacts::Contact_pair*>& pairs, std::list<Physics_function::ALP_Joint*> l_joints, const float timescale) {
+void Physics_function::resolve_contact(const std::list<Scenelist>& active_scenes, std::unordered_map<Scenelist, std::list<Physics_function::ALP_Collider*>>& ALP_colliders, std::vector<Contacts::Contact_pair*>& pairs, std::list<Physics_function::ALP_Joint*> l_joints, const float timescale) {
 
 	Work_meter::start("Make_solver", 1);
 
@@ -145,30 +145,36 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 
 	//::: 解決用オブジェクトの生成 :::::::::::
 	std::vector<ALP_Solverbody> SBs;
-	SBs.reserve(sizeof(ALP_Solverbody) * colliders.size());
+	int sum_colliders_size = 0;
+	for (const auto& Sce : active_scenes)sum_colliders_size += ALP_colliders[Sce].size();
+	SBs.reserve(sizeof(ALP_Solverbody) * sum_colliders_size);
 	// SBs.resize(colliders.size()); //アライメントでSIMDとコンテナが競合する??? reserveにしたら治った
 	{
 		int count = 0;
 		ALP_Solverbody SB;
-		for (const auto& coll : colliders) {
+		for (const auto& Sce : active_scenes) {
+			for (const auto& coll : ALP_colliders[Sce]) {
 
-			SB.delta_LinearVelocity = DirectX::XMLoadFloat3(&vector3_zero());
-			SB.delta_AngulaVelocity = DirectX::XMLoadFloat3(&vector3_zero());
+				SB.delta_LinearVelocity = DirectX::XMLoadFloat3(&vector3_zero());
+				SB.delta_AngulaVelocity = DirectX::XMLoadFloat3(&vector3_zero());
 
-			if (coll->get_ALPphysics()->is_kinmatic_anglar) SB.inv_inertia = DirectX::XMLoadFloat3x3(&coll->get_ALPphysics()->inverse_inertial_tensor());
-			else SB.inv_inertia = DirectX::XMLoadFloat3x3(&matrix33_zero());
+				if (coll->get_ALPphysics()->is_kinmatic_anglar) SB.inv_inertia = DirectX::XMLoadFloat3x3(&coll->get_ALPphysics()->inverse_inertial_tensor());
+				else SB.inv_inertia = DirectX::XMLoadFloat3x3(&matrix33_zero());
 
-			if (coll->get_ALPphysics()->is_kinmatic_linear) SB.inv_mass = coll->get_ALPphysics()->inverse_mass();
-			else SB.inv_mass = 0;
+				if (coll->get_ALPphysics()->is_kinmatic_linear) SB.inv_mass = coll->get_ALPphysics()->inverse_mass();
+				else SB.inv_mass = 0;
 
-			SBs.emplace_back(SB);
-			++count;
+				SBs.emplace_back(SB);
+				++count;
+			}
 		}
 
 		count = 0;
-		for (auto& coll : colliders) {
-			coll->get_ALPphysics()->solve = &SBs[count];
-			count++;
+		for (const auto& Sce : active_scenes) {
+			for (auto& coll : ALP_colliders[Sce]) {
+				coll->get_ALPphysics()->solve = &SBs[count];
+				count++;
+			}
 		}
 	}
 
@@ -686,23 +692,25 @@ void Physics_function::resolve_contact(std::list<ALP_Collider*>& colliders, std:
 	Work_meter::stop("solver", 1);
 
 	// 速度の更新
-	for (auto& coll : colliders) {
+	for (const auto& Sce : active_scenes) {
+		for (auto& coll : ALP_colliders[Sce]) {
 
-		if (coll->get_ALPphysics()->is_kinmatic_linear) {
-			Vector3 linervec;
-			DirectX::XMStoreFloat3(&linervec, coll->get_ALPphysics()->solve->delta_LinearVelocity);
-			coll->get_ALPphysics()->set_linear_velocity(coll->get_ALPphysics()->linear_velocity() + linervec);
-			coll->get_ALPphysics()->set_old_linear_velocity(coll->get_ALPphysics()->old_linear_velocity() + linervec);
+			if (coll->get_ALPphysics()->is_kinmatic_linear) {
+				Vector3 linervec;
+				DirectX::XMStoreFloat3(&linervec, coll->get_ALPphysics()->solve->delta_LinearVelocity);
+				coll->get_ALPphysics()->set_linear_velocity(coll->get_ALPphysics()->linear_velocity() + linervec);
+				coll->get_ALPphysics()->set_old_linear_velocity(coll->get_ALPphysics()->old_linear_velocity() + linervec);
+			}
+			if (coll->get_ALPphysics()->is_kinmatic_anglar) {
+				Vector3 anglvec;
+				DirectX::XMStoreFloat3(&anglvec, coll->get_ALPphysics()->solve->delta_AngulaVelocity);
+				coll->get_ALPphysics()->set_angula_velocity(coll->get_ALPphysics()->angula_velocity() + anglvec);
+				coll->get_ALPphysics()->set_old_angula_velocity(coll->get_ALPphysics()->old_angula_velocity() + anglvec);
+			}
+
+			coll->get_ALPphysics()->solve = nullptr;
+
 		}
-		if (coll->get_ALPphysics()->is_kinmatic_anglar) {
-			Vector3 anglvec;
-			DirectX::XMStoreFloat3(&anglvec, coll->get_ALPphysics()->solve->delta_AngulaVelocity);
-			coll->get_ALPphysics()->set_angula_velocity(coll->get_ALPphysics()->angula_velocity() + anglvec);
-			coll->get_ALPphysics()->set_old_angula_velocity(coll->get_ALPphysics()->old_angula_velocity() + anglvec);
-		}
-
-		coll->get_ALPphysics()->solve = nullptr;
-
 	}
 
 

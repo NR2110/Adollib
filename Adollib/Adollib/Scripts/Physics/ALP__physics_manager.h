@@ -343,7 +343,7 @@ namespace Adollib
 				float& tmin, float& tmax,
 				Vector3& normal,
 				Collider*& coll,
-				Scenelist Sce = Scene_manager::get_nowscene());
+				Scenelist Sce = Scene_manager::get_processing_scene());
 
 			//::::::
 			//spherecastを行う
@@ -367,10 +367,10 @@ namespace Adollib
 				float& tmin, float& tmax,
 				Vector3& normal,
 				Collider*& coll,
-				Scenelist Sce = Scene_manager::get_nowscene());
+				Scenelist Sce = Scene_manager::get_processing_scene());
 
 			// 動いたものとしてmoved_colliderに登録(sweep&pruneでの挿入ソートにて使う)
-			static void add_moved(Physics_function::ALP_Collider* coll, Scenelist Sce = Scene_manager::get_nowscene()) {
+			static void add_moved(Physics_function::ALP_Collider* coll, Scenelist Sce = Scene_manager::get_processing_scene()) {
 				moved_collider_for_insertsort[Sce].push_back(coll);
 			}
 
@@ -379,7 +379,7 @@ namespace Adollib
 			static void thread_update();
 
 			// 追加されたものを適応する(マルチスレッドだと処理途中に追加されるためbufferを挟む)
-			static void adapt_added_data(Scenelist Sce, bool is_mutex_lock = true);
+			static void adapt_added_data(const std::list<Scenelist>& active_scenes, bool is_mutex_lock = true);
 
 			// 削除されたものを適応する(マルチスレッドだと処理途中にGOが削除されるためbufferを挟む)
 			static void dadapt_delete_data(bool is_mutex_lock = true);
@@ -407,19 +407,19 @@ namespace Adollib
 			// main threadから呼ばれる
 
 			// 毎フレーム呼ばれる更新処理
-			static bool update(Scenelist Sce = Scene_manager::get_nowscene());
+			static bool update(const std::list<Scenelist> Sce = Scene_manager::get_activescenes());
 
 			// Guiの表示
 			static bool update_Gui();
 
 			// colliderの表示
-			static bool render_collider(Scenelist Sce = Scene_manager::get_nowscene());
+			static bool render_collider(Scenelist Sce);
 			// kdopの表示
-			static bool render_dop(Scenelist Sce = Scene_manager::get_nowscene());
+			static bool render_dop(Scenelist Sce);
 			// jointの表示
-			static bool render_joint(Scenelist Sce = Scene_manager::get_nowscene());
+			static bool render_joint(Scenelist Sce);
 
-			static void destroy(Scenelist Sce = Scene_manager::get_nowscene());
+			static void destroy();
 
 		};
 

@@ -15,6 +15,11 @@ namespace Adollib
 		void add_player(int player_num, const Vector3& position, const Vector3& rotate, const Vector3& main_color, const Vector3& sub_color);
 
 	public:
+		void set_stage_manager_ptr(Stage_manager* m);
+
+		//void add_player();
+		//void delete_player(int num);
+
 
 	public:
 		void awake();

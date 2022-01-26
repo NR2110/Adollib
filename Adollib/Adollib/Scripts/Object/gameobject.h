@@ -57,7 +57,7 @@ namespace Adollib {
 
 		std::string name; //このgoの名前
 
-		bool active = true; //falseなら更新、描画を止める
+		bool is_active = true; //falseなら更新、描画を止める
 
 		bool is_hierarchy = true;
 
@@ -72,7 +72,7 @@ namespace Adollib {
 
 		//自身のupdateしてから子のupdateを呼ぶ
 		void update_to_children() {
-			if (active == true)
+			if (is_active == true)
 				update();
 			//transform->local_orient = transform->local_orient.unit_vect();
 			std::for_each(children_.begin(), children_.end(), [](Gameobject* obj) {obj->update_to_children(); });
@@ -80,7 +80,7 @@ namespace Adollib {
 
 		//自身のupdateしてから子のupdateを呼ぶ
 		void update_world_trans_to_children() {
-			if (active == true)
+			if (is_active == true)
 				update_worldtrans();
 			//transform->local_orient = transform->local_orient.unit_vect();
 			std::for_each(children_.begin(), children_.end(), [](Gameobject* obj) {obj->update_world_trans_to_children(); });
@@ -111,8 +111,8 @@ namespace Adollib {
 
 		// activeが変更されたときの処理を呼び出す
 		void set_active(bool value) {
-			if (active == value)return;
-			active = value;
+			if (is_active == value)return;
+			is_active = value;
 			if (value == false) {
 				for (auto& comp : components)comp->onDisable();
 			}

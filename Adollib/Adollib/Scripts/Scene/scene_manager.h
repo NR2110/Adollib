@@ -20,11 +20,15 @@ namespace Adollib {
 
 		// íœ‚³‚ê‚é—\’è‚Ìscene
 		static std::vector<Scenelist> delete_scene_buffer;
+		static std::vector<Scenelist> active_scene_buffer;
 
-		static Scenelist now_scene;
+		static Scenelist latest_activated_scene;
+		static Scenelist processing_scene;
 
 	public:
-		static Scenelist get_nowscene() { return now_scene; };
+		static Scenelist get_latest_activated_scene() { return latest_activated_scene; };
+		static Scenelist get_processing_scene() { return processing_scene; };
+		static std::list<Scenelist> get_activescenes() { return active_scenes; };
 
 	public:
 		static void initialize();

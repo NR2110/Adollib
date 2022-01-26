@@ -42,7 +42,7 @@ namespace Adollib {
 	private:
 		static void set_light_Constantbuffer(const std::list<Light_component*>& lights);
 
-		static void sort_update(Scenelist Sce); //instanceのためのsort materialとmeshが同じrendererを連番にするsortを行う
+		static void sort_update(std::list<Scenelist> active_scenes); //instanceのためのsort materialとmeshが同じrendererを連番にするsortを行う
 
 		static void instance_update(const Frustum_data& frustum_data, Scenelist Sce); //sort_updateでまとめた情報から instancingの回数などを計算、render_countsに保存
 
@@ -51,7 +51,7 @@ namespace Adollib {
 	public:
 		static void awake();
 
-		static void render(const std::map<Scenelist, std::list<Camera_component*>>& cameras, const std::map<Scenelist, std::list<Light_component*>>& lights, Scenelist Sce);
+		static void render(std::list<Scenelist> active_scenes, const std::map<Scenelist, std::list<Camera_component*>>& cameras, const std::map<Scenelist, std::list<Light_component*>>& lights);
 
 	};
 

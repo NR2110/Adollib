@@ -128,7 +128,7 @@ void Title_camera::onDisable()
 
 void Title_camera::start_state(Title_state_B state) {
 
-	if (input->getKeyTrigger(Key::Enter)) title_state_manager->set_nextstate_A(Title_state_A::Select_stage);
+	if (input->getKeyTrigger(Key::Enter) || input->getPadTrigger(0, GamePad::A)) title_state_manager->set_nextstate_A(Title_state_A::Select_stage);
 
 };
 
@@ -168,6 +168,8 @@ void Title_camera::select_state(Title_state_B state) {
 	}
 	// ‹ß‚Ã‚­
 	if (state == Adollib::Title_state_B::Update_1) {
+		Scene_manager::set_active(Scenelist::scene_player);
+
 		float t = title_state_manager->get_timer_stateB() * 2.5f;
 		if (t > 1) {
 			//title_state_manager->set_nextstate_A(Title_state_A::Start);

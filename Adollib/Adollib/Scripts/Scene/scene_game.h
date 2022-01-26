@@ -4,9 +4,16 @@
 
 namespace Adollib {
 
-	class scene_game : public Scene {
+	class Scene_game : public Scene {
 
-		void initialize();
+	public:
+		int start_stage_num = 0;
+
+	public:
+
+		void initialize() override;
+
+		void destroy() override;
 
 	private:
 

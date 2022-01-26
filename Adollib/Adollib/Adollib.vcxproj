@@ -170,7 +170,6 @@
     <ClInclude Include="..\Scripts\respown_area.h" />
     <ClInclude Include="..\Scripts\area_respown_set.h" />
     <ClInclude Include="..\Scripts\scene_game_all.h" />
-    <ClInclude Include="..\Scripts\scene_shader.h" />
     <ClInclude Include="..\Scripts\scene_title_all.h" />
     <ClInclude Include="..\Scripts\select_stage_manager.h" />
     <ClInclude Include="..\Scripts\stageparts_base.h" />
@@ -304,6 +303,7 @@
     <ClInclude Include="Scripts\Scene\scene_game.h" />
     <ClInclude Include="Scripts\Scene\scene_list.h" />
     <ClInclude Include="Scripts\Scene\scene_manager.h" />
+    <ClInclude Include="Scripts\Scene\scene_player.h" />
     <ClInclude Include="Scripts\Scene\scene_title.h" />
   </ItemGroup>
   <ItemGroup>
@@ -319,7 +319,6 @@
     <ClCompile Include="..\Scripts\player.cpp" />
     <ClCompile Include="..\Scripts\player_funcs.cpp" />
     <ClCompile Include="..\Scripts\player_manager.cpp" />
-    <ClCompile Include="..\Scripts\scene_shader.cpp" />
     <ClCompile Include="..\Scripts\select_stage_manager.cpp" />
     <ClCompile Include="..\Scripts\stage_01.cpp" />
     <ClCompile Include="..\Scripts\stage_01_funcs.cpp" />
@@ -405,6 +404,7 @@
     <ClCompile Include="Scripts\Renderer\croth_renderer.cpp" />
     <ClCompile Include="Scripts\Scene\scene_game.cpp" />
     <ClCompile Include="Scripts\Scene\scene_manager.cpp" />
+    <ClCompile Include="Scripts\Scene\scene_player.cpp" />
     <ClCompile Include="Scripts\Scene\scene_title.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -73,28 +73,28 @@ namespace Adollib
 
 #pragma endregion
 
-bool Physics_manager::update(Scenelist Sce)
+bool Physics_manager::update(const std::list<Scenelist> active_scenes)
 {
 	Work_meter::start("Phyisics_manager", 1);
-	if (Sce != old_sce) {
-		for (auto p : pairs[0]) delete p;
-		pairs[0].clear();
+	//if (Sce != old_sce) {
+	//	for (auto p : pairs[0]) delete p;
+	//	pairs[0].clear();
 
-		for (auto p : pairs[1]) delete p;
-		pairs[1].clear();
+	//	for (auto p : pairs[1]) delete p;
+	//	pairs[1].clear();
 
-		moved_collider_for_insertsort[old_sce].clear();
-		added_collider_for_insertsort[old_sce].clear();
+	//	moved_collider_for_insertsort[old_sce].clear();
+	//	added_collider_for_insertsort[old_sce].clear();
 
-		old_sce = Sce;
-	}
+	//	old_sce = Sce;
+	//}
 
 	if (Al_Global::second_per_game < 1) {
 
-		adapt_added_data(Sce);
-		copy_transform(ALP_colliders[Sce], ALP_physicses[Sce]);
+		adapt_added_data(active_scenes);
+		copy_transform(active_scenes, ALP_colliders, ALP_physicses);
 
-		resetforce(ALP_physicses[Sce]);
+		resetforce(active_scenes, ALP_physicses);
 		is_updated_physicsthread = true;
 		is_updated_mainthread = false;
 		return true;
@@ -111,7 +111,7 @@ bool Physics_manager::update(Scenelist Sce)
 		//
 		if (is_added_ALPcollider == false) {
 			// 追加したものを配列に加える 追加された瞬間はis_added_ALPcolliderがtrue worldtransformが更新されたら毎フレームfalseになる
-			adapt_added_data(Sce, false);
+			adapt_added_data(active_scenes, false);
 
 		}
 
@@ -120,12 +120,12 @@ bool Physics_manager::update(Scenelist Sce)
 			is_updated_mainthread = false; // mainthreadがgameobject_transformを呼んだあと gameobjectのtransformをphysicsにコピーする
 
 			// gameobjectが更新したworld_trnsformの更新
-			copy_transform(ALP_colliders[Sce], ALP_physicses[Sce]);
+			copy_transform(active_scenes, ALP_colliders, ALP_physicses);
 
 		}
 
 		// ColliderのWorld情報の更新
-		adapt_component_data(ALP_colliders[Sce], ALP_physicses[Sce], ALP_joints);
+		adapt_component_data(active_scenes, ALP_colliders, ALP_physicses, ALP_joints);
 
 	}
 
@@ -163,70 +163,70 @@ bool Physics_manager::update(Scenelist Sce)
 		// timescaleの影響は座標の更新のみなので
 		physicsParams.timeStep *= time_scale;
 
-		update_per_calculate(ALP_colliders[Sce]);
+		update_per_calculate(active_scenes, ALP_colliders);
 
 		if (physicsParams.timeStep != 0)
-		for (int i = 0; i < physicsParams.calculate_iteration; i++) {
+			for (int i = 0; i < physicsParams.calculate_iteration; i++) {
 
-			// shapeのworld情報, physicsのtensorなどの更新
-			update_world_trans(ALP_colliders[Sce]);
+				// shapeのworld情報, physicsのtensorなどの更新
+				update_world_trans(active_scenes, ALP_colliders);
 
-			// 外力の更新
-			//applyexternalforce(ALP_physicses[Sce], 1);
-			applyexternalforce(ALP_physicses[Sce], inv60_per_timeStep, time_scale);
+				// 外力の更新
+				//applyexternalforce(ALP_physicses[Sce], 1);
+				applyexternalforce(active_scenes, ALP_physicses, inv60_per_timeStep, time_scale);
 
-			// pairのnew/oldを入れ替える
-			pairs_new_num = 1 - pairs_new_num;
+				// pairのnew/oldを入れ替える
+				pairs_new_num = 1 - pairs_new_num;
 
-			// 大雑把な当たり判定
-			Work_meter::start("Broad,Mid,Narrow", 1);
+				// 大雑把な当たり判定
+				Work_meter::start("Broad,Mid,Narrow", 1);
 
-			Work_meter::start("Broadphase", 1);
-			Work_meter::tag_start("Broadphase", 1);
-			BroadMidphase(Sce,
-				ALP_colliders[Sce], pairs[pairs_new_num],
-				moved_collider_for_insertsort[Sce], added_collider_for_insertsort[Sce], mtx
-			);
-			Work_meter::tag_stop(1);
-			Work_meter::stop("Broadphase", 1);
+				Work_meter::start("Broadphase", 1);
+				Work_meter::tag_start("Broadphase", 1);
+				BroadMidphase(active_scenes,
+					ALP_colliders, pairs[pairs_new_num],
+					moved_collider_for_insertsort, added_collider_for_insertsort, mtx
+				);
+				Work_meter::tag_stop(1);
+				Work_meter::stop("Broadphase", 1);
 
-			Work_meter::start("Midphase", 1);
-			Work_meter::tag_start("Midphase", 1);
-			Midphase(pairs[1 - pairs_new_num], pairs[pairs_new_num]);
-			Work_meter::tag_stop(1);
-			Work_meter::stop("Midphase", 1);
+				Work_meter::start("Midphase", 1);
+				Work_meter::tag_start("Midphase", 1);
+				Midphase(pairs[1 - pairs_new_num], pairs[pairs_new_num]);
+				Work_meter::tag_stop(1);
+				Work_meter::stop("Midphase", 1);
 
-			// 衝突生成
-			Work_meter::start("Narrowphase", 1);
-			Work_meter::tag_start("Narrowphase", 1);
-			generate_contact(pairs[pairs_new_num]);
-			Work_meter::tag_stop(1);
-			Work_meter::stop("Narrowphase", 1);
+				// 衝突生成
+				Work_meter::start("Narrowphase", 1);
+				Work_meter::tag_start("Narrowphase", 1);
+				generate_contact(pairs[pairs_new_num]);
+				Work_meter::tag_stop(1);
+				Work_meter::stop("Narrowphase", 1);
 
-			Work_meter::stop("Broad,Mid,Narrow", 1);
+				Work_meter::stop("Broad,Mid,Narrow", 1);
 
-			// 衝突解決
-			Work_meter::start("Resolve", 1);
-			Work_meter::tag_start("Resolve", 1);
-			resolve_contact(ALP_colliders[Sce], pairs[pairs_new_num], ALP_joints, time_scale);
-			Work_meter::tag_stop(1);
-			Work_meter::stop("Resolve", 1);
+				// 衝突解決
+				Work_meter::start("Resolve", 1);
+				Work_meter::tag_start("Resolve", 1);
+				resolve_contact(active_scenes, ALP_colliders, pairs[pairs_new_num], ALP_joints, time_scale);
+				Work_meter::tag_stop(1);
+				Work_meter::stop("Resolve", 1);
 
-			{
-				std::lock_guard <std::mutex> lock(mtx);
-				// 計算中にgameobjectへtransformが適応されていた場合 ちゃんとtransformを更新してからintegrateを行う
-				if (is_updated_mainthread) {
-					is_updated_mainthread = false; // mainthreadがgameobject_transformを呼んだあと gameobjectのtransformをphysicsにコピーする
+				{
+					std::lock_guard <std::mutex> lock(mtx);
+					// 計算中にgameobjectへtransformが適応されていた場合 ちゃんとtransformを更新してからintegrateを行う
+					if (is_updated_mainthread) {
+						is_updated_mainthread = false; // mainthreadがgameobject_transformを呼んだあと gameobjectのtransformをphysicsにコピーする
 
-					//Colliderのframe毎に保存するdataをreset
-					copy_transform(ALP_colliders[Sce], ALP_physicses[Sce]);
+						//Colliderのframe毎に保存するdataをreset
+						copy_transform(active_scenes, ALP_colliders, ALP_physicses);
+					}
+					// 位置の更新
+					integrate(active_scenes, ALP_physicses);
+
+					is_updated_physicsthread = true;
 				}
-				// 位置の更新
-				integrate(ALP_physicses[Sce]);
-
-				is_updated_physicsthread = true;
 			}
-		}
 
 		physicsParams.timeStep = 0;
 	}
@@ -307,14 +307,14 @@ bool Physics_manager::update(Scenelist Sce)
 			debug_go[count - 1]->transform->local_pos = p->body[0]->world_position() + vector3_quatrotate(p->contacts.contactpoints[i].point[0], p->body[0]->world_orientation());
 			debug_go[count - 2]->transform->local_pos = p->body[1]->world_position() + vector3_quatrotate(p->contacts.contactpoints[i].point[1], p->body[1]->world_orientation());
 			int adfsdg = 0;
-			}
 		}
+	}
 
 #endif // DEBUG
 
-		return true;
+	return true;
 
-	}
+}
 
 bool Physics_manager::update_Gui() {
 	ImGuiWindowFlags flag = 0;
@@ -470,7 +470,7 @@ void Physics_manager::thread_update() {
 	}
 }
 
-void Physics_manager::adapt_added_data(Scenelist Sce, bool is_mutex_lock) {
+void Physics_manager::adapt_added_data(const std::list<Scenelist>& active_scenes, bool is_mutex_lock) {
 	if (is_mutex_lock) mtx.lock(); //呼び出しのところでlockしている if文中なのでstd::lock_guard <std::mutex> lock(mtx)は使えない
 
 	for (auto added_coll : added_buffer_ALP_colliders) {
@@ -522,12 +522,14 @@ void Physics_manager::adapt_added_data(Scenelist Sce, bool is_mutex_lock) {
 	added_buffer_ALP_colliders.clear();
 	added_buffer_ALP_physicses.clear();
 
-	for (auto added_coll : ALP_colliders[Sce]) {
-		// 各colliderのshapeのadded_dataを処理
-		added_coll->adapt_added_data();
+	for (const auto& Sce : active_scenes) {
+		for (auto added_coll : ALP_colliders[Sce]) {
+			// 各colliderのshapeのadded_dataを処理
+			added_coll->adapt_added_data();
+		}
 	}
 
-	if(added_buffer_ALP_joints.size() != 0)
+	if (added_buffer_ALP_joints.size() != 0)
 	{
 		// 引っ越す
 		auto save_itr = added_buffer_ALP_joints.begin();
@@ -640,8 +642,8 @@ void Physics_manager::thread_stop_and_join() {
 
 void Physics_manager::timer_stop() {
 	std::lock_guard<std::mutex> lock(mtx);
-	if(frame_count_stop.QuadPart == 0)
-	QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&frame_count_stop));
+	if (frame_count_stop.QuadPart == 0)
+		QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&frame_count_stop));
 }
 void Physics_manager::timer_start() {
 	std::lock_guard<std::mutex> lock(mtx);
@@ -689,7 +691,7 @@ bool Physics_manager::render_joint(Scenelist Sce) {
 	return true;
 }
 
-void Physics_manager::destroy(Scenelist Sce) {
+void Physics_manager::destroy() {
 
 	dadapt_delete_data();
 

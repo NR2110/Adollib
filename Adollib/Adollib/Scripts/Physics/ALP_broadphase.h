@@ -1,10 +1,12 @@
 #pragma once
 #include <memory>
+#include <unordered_map>
+
 #include "ALP_contact.h"
 #include "ALP_physics.h"
 #include "collider_shape.h"
 
-#include "../Scene/scene.h"
+#include "../Scene/scene_list.h"
 
 namespace Adollib {
 	namespace Physics_function {
@@ -29,12 +31,12 @@ namespace Adollib {
 
 		// とても大雑把な当たり判定(Boardphase) と DOP(Midphase)を行う
 		// sweep&pruneの情報をコピーするのが重いため、Midphaseもここで行う
-		void BroadMidphase(Scenelist Sce,
-			const std::list<ALP_Collider*>& ALP_collider,
+		void BroadMidphase(const std::list<Scenelist>& active_scenes,
+			std::unordered_map<Scenelist, std::list<Physics_function::ALP_Collider*>>& ALP_colliders,
 			//std::vector<Contacts::Collider_2>& out_pair,
 			std::vector < Contacts::Contact_pair*> & out_pair,
-			std::vector<Physics_function::ALP_Collider*>& moved_collider, //動いたもの
-			std::vector<Physics_function::ALP_Collider*>& added_collider, //追加されたもの
+			std::unordered_map<Scenelist, std::vector<Physics_function::ALP_Collider*>>& moved_collider, //動いたもの
+			std::unordered_map<Scenelist, std::vector<Physics_function::ALP_Collider*>>& added_collider, //追加されたもの
 			std::mutex& mtx
 		);
 

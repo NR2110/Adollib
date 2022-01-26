@@ -172,8 +172,7 @@ void Select_state_manager::select_state(Title_state_B state) {
 		}
 
 
-
-		if (input->getKeyTrigger(Key::Enter))is_next_state = true;
+		if (input->getKeyTrigger(Key::Enter) || input->getPadTrigger(0, GamePad::A))is_next_state = true;
 
 		//if (is_next_state && change_select_sign == 0) title_state_manager->set_nextstate_B(Title_state_B::Update_3);
 		if (is_next_state && change_select_sign == 0) {

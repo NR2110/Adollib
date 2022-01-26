@@ -21,8 +21,9 @@ namespace Adollib
 	{
 
 		camera = Gameobject_manager::find("camera")->findComponent<Camera>();
-		stage_manager = Gameobject_manager::find("Stage_manager")->findComponent<Stage_manager>();
+		//stage_manager = Gameobject_manager::find("Stage_manager")->findComponent<Stage_manager>();
 		input_changer = gameobject->findComponent<Input_changer>();
+		stage_manager = nullptr;
 
 		head_rot_max_speed = 3;
 		head_rot_max_pow = 1000;
@@ -104,6 +105,8 @@ namespace Adollib
 	// 毎フレーム呼ばれる更新処理
 	void Player::update()
 	{
+		if (stage_manager == nullptr)return; //対応するstageが無い時 return
+
 		// playerのdragを初期値にする
 		set_default_data();
 
