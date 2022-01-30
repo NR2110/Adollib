@@ -6,7 +6,9 @@ namespace Adollib {
 
 	class Scene_title : public Scene {
 
-		void initialize();
+		void awake() override {};
+
+		void initialize() override;
 
 	private:
 

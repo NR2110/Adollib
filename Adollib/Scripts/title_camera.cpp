@@ -138,11 +138,6 @@ void Title_camera::start_state(Title_state_B state) {
 	transform->local_orient = quaternion_identity() * quaternion_from_euler(camera_eular);
 };
 
-Vector3 debug_easing(Vector3 start, Vector3 goal, float speed, float delta_time) {
-	float dd = pow(1 - speed, delta_time * 60);
-	return goal + (start - goal) * pow(1 - speed, delta_time * 60);
-}
-
 void Title_camera::select_state(Title_state_B state) {
 
 	float back_dis = -10;
@@ -253,36 +248,36 @@ void Title_camera::select_state(Title_state_B state) {
 
 	if (state == Adollib::Title_state_B::Update_4) {
 
-		Quaternion rotate = quaternion_identity();
+		//Quaternion rotate = quaternion_identity();
 
-		// 画面中心からplayerが離れすぎたら調整
-		{
-			Vector3 goal = player->position + Vector3(0, 4, 0);
-			Vector3 dir = goal - pos_buffer;
-			if (dir.norm() > pos_slop * pos_slop) {
-				float dis = ALmin(10 * time->deltaTime(), dir.norm_sqr() - pos_slop);
-				pos_buffer += dir.unit_vect() * dis;
-			}
-		}
-		//カメラの距離
-		{
-			auto timestep = time->deltaTime();
-			//wheelから距離の調整
-			float easing_pow = 0.1f;
-			float easing_value = 10 * timestep; //イージングでの移動距離
+		//// 画面中心からplayerが離れすぎたら調整
+		//{
+		//	Vector3 goal = player->position + Vector3(0, 4, 0);
+		//	Vector3 dir = goal - pos_buffer;
+		//	if (dir.norm() > pos_slop * pos_slop) {
+		//		float dis = ALmin(10 * time->deltaTime(), dir.norm_sqr() - pos_slop);
+		//		pos_buffer += dir.unit_vect() * dis;
+		//	}
+		//}
+		////カメラの距離
+		//{
+		//	auto timestep = time->deltaTime();
+		//	//wheelから距離の調整
+		//	float easing_pow = 0.1f;
+		//	float easing_value = 10 * timestep; //イージングでの移動距離
 
-			float dis = ALClamp(dis_buffer, 10, 20); //マウスホイールで調整可能な最低距離 / 最大距離
+		//	float dis = ALClamp(dis_buffer, 10, 20); //マウスホイールで調整可能な最低距離 / 最大距離
 
-			//disをイージングのためにdis_bufferに保存
-			const float next = ALEasing(dis_buffer, dis, easing_pow, timestep);
-			dis_buffer += ALClamp(next - dis_buffer, -easing_value, easing_value);
-		}
+		//	//disをイージングのためにdis_bufferに保存
+		//	const float next = ALEasing(dis_buffer, dis, easing_pow, timestep);
+		//	dis_buffer += ALClamp(next - dis_buffer, -easing_value, easing_value);
+		//}
 
-		transform->local_pos = pos_buffer + vector3_quatrotate(dis_buffer * Vector3(0, 0, -1), transform->local_orient);
+		//transform->local_pos = pos_buffer + vector3_quatrotate(dis_buffer * Vector3(0, 0, -1), transform->local_orient);
 
-		if (transform->local_pos.y < -70) {
-			Scene_manager::set_active(Scenelist::scene_game);
-			Scene_manager::set_inactive(Scenelist::scene_title);
-		}
+		//if (transform->local_pos.y < -70) {
+		//	Scene_manager::set_active(Scenelist::scene_game);
+		//	Scene_manager::set_inactive(Scenelist::scene_title);
+		//}
 	}
 };

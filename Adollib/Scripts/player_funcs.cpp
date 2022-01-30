@@ -779,6 +779,7 @@ void Player::make_jump() {
 
 // respownˆ—
 bool Player::check_respown() {
+	if (stage_manager->now_stage == Stage_types::none)return false;
 
 	auto stage = stage_manager->get_current_stage();
 	// “ü—Í‚ª‚ ‚é || stagew’è‚ÌYÀ•W‚æ‚èPlayer‚ª’á‚¯‚ê‚Îrespown
@@ -997,6 +998,8 @@ void Player::delete_catchjoint() {
 
 // respownˆ—
 void Player::respown() {
+	if (stage_manager->now_stage == Stage_types::none)return;
+
 	auto stage = stage_manager->get_current_stage();
 
 	// À•WˆÚ“®

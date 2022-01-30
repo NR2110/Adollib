@@ -1,4 +1,4 @@
-﻿  title_camera.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\title_camera.cpp(86,43): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\title_camera.cpp(87,43): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+﻿  camera.cpp
+  select_stage_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(15,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\select_stage_manager.cpp)
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

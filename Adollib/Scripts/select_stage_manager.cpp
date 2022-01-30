@@ -4,6 +4,7 @@
 #include "../Adollib/Scripts/Main/systems.h"
 #include "../Adollib/Scripts/Main/Adollib.h"
 #include "../Adollib/Scripts/Imgui/debug.h"
+#include "../Adollib/Scripts/Object/component_camera.h"
 #include "../Adollib/Scripts/Object/transform.h"
 #include "../Adollib/Scripts/Object/gameobject.h"
 #include "../Adollib/Scripts/Object/gameobject_manager.h"
@@ -20,6 +21,7 @@
 #include "../Adollib/Scripts/Physics/ALP__physics_manager.h"
 
 #include "player_manager.h"
+#include "stage_manager.h"
 #include "title_state_manager.h"
 
 using namespace Adollib;
@@ -189,22 +191,22 @@ void Select_state_manager::select_state(Title_state_B state) {
 		if (is_next_state && change_select_sign == 0) {
 			//player_manager->set_Tpause_and_set_transform(Vector3(0, -50, -70), quaternion_identity());
 			//player_manager->set_moveable(true);
-			//title_state_manager->set_nextstate_B(Title_state_B::Update_3);
-			Scene_manager::set_active(Scenelist::scene_game);
-			Scene_manager::set_inactive(Scenelist::scene_title);
-			player_manager->set_moveable(true);
+
+			title_state_manager->set_nextstate_B(Title_state_B::Update_3);
 		}
 	}
 
 	if (state == Title_state_B::Update_3) {
-
 		//title_state_manager->set_nextstate_B(Title_state_B::Update_4);
 
+		Scene_manager::set_active(Scenelist::scene_game);
+		Gameobject_manager::find("Stage_manager", Scenelist::scene_game)->findComponent<Stage_manager>()->set_next_stage_type(static_cast<Stage_types>(select_stage_num));
 
 
+		Scene_manager::set_inactive(Scenelist::scene_title);
+		player_manager->set_moveable(true);
+		Gameobject_manager::find("camera", Scenelist::scene_player)->findComponent<Camera_component>()->gameobject->is_active = true;
 
-		//Scene_manager::set_active(Scenelist::scene_game);
-		//Scene_manager::set_inactive(Scenelist::scene_title);
 	}
 
 

@@ -22,16 +22,16 @@ void Stage_manager::awake() {
 	add_stage<Stage_demo_02>(Stage_types::demo_2);
 
 	add_stage<Stage_01>(Stage_types::stage_1);
-	//add_stage<Stage_01>(Stage_types::stage_1);
+	add_stage<Stage_01>(Stage_types::stage_2);
 
-	now_stage = Stage_types::stage_1; //¡‚Ìstagetype
-	next_stage = Stage_types::stage_1; //Ÿ‚Ìstagetype
+	now_stage = Stage_types::none; //¡‚Ìstagetype
+	next_stage = Stage_types::none; //Ÿ‚Ìstagetype
 
-	stages[now_stage]->stage_awake();
-
+	//stages[now_stage]->stage_awake();
 }
 
 void Stage_manager::start() {
+
 	player = Gameobject_manager::find("player",Scenelist::scene_player)->findComponent<Player>();
 	player->respown();
 }
@@ -42,8 +42,8 @@ void Stage_manager::update() {
 
 	if (now_stage != next_stage) {
 
-		stages[now_stage]->stage_destroy();
-		stages[next_stage]->stage_awake();
+		if (now_stage != Stage_types::none) stages[now_stage]->stage_destroy();
+		if (next_stage != Stage_types::none) stages[next_stage]->stage_awake();
 
 		now_stage = next_stage;
 

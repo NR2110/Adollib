@@ -58,10 +58,6 @@ void Scene_manager::update() {
 	delete_scene_buffer.clear();
 
 	// ’Ç‰Á—\’è‚Ìscene‚Ì’Ç‰Á
-
-	//while (active_scene_buffer.size() != 0) {
-
-	//for (auto& Sce : active_scene_buffer) {
 	for (int i = 0; i < active_scene_buffer.size(); ++i) {
 		auto Sce = active_scene_buffer[i];
 
@@ -104,6 +100,7 @@ void Scene_manager::update() {
 #ifdef UseImgui
 		Physics_function::Physics_manager::update_Gui();
 #endif
+
 	}
 
 	// activescene‚Ìupdate
@@ -141,10 +138,21 @@ void Scene_manager::render() {
 
 void Scene_manager::set_active(Scenelist Sce) {
 
-	for (auto& scene : active_scene_buffer) {
-		// ‚·‚Å‚É•Û‘¶‚³‚ê‚Ä‚¢‚ê‚Îreturn
-		if (scene == Sce)return;
+	// ‚·‚Å‚É•Û‘¶‚³‚ê‚Ä‚¢‚ê‚Îreturn
+	{
+		for (auto& scene : active_scene_buffer) {
+			if (scene == Sce)return;
+		}
+		for (auto& scene : active_scenes) {
+			if (scene == Sce)return;
+		}
 	}
+
+	auto save = processing_scene;
+	processing_scene = Sce;
+	scenes[Sce]->awake();
+	processing_scene = save;
+
 	active_scene_buffer.emplace_back(Sce);
 }
 

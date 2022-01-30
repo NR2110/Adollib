@@ -10,6 +10,7 @@ namespace Adollib {
 		int start_stage_num = 0;
 
 	public:
+		void awake() override;
 
 		void initialize() override;
 

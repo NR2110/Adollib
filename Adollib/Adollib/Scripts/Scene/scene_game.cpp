@@ -4,6 +4,12 @@
 #include "../../../Scripts/scene_game_all.h"
 namespace Adollib {
 
+	void Scene_game::awake() {
+		Gameobject* GO = Gameobject_manager::create("Stage_manager");
+		auto comp = GO->addComponent<Stage_manager>();
+
+		Gameobject_manager::find("Player_manager",Scenelist::scene_player)->findComponent<Player_manager>()->set_stage_manager_ptr(comp);
+	}
 
 	void Scene_game::initialize() {
 
@@ -16,12 +22,9 @@ namespace Adollib {
 
 
 		//Gameobject_manager::find("camera")->findComponent<Camera_component>()->gameobject->is_active = true;
-		Gameobject_manager::find("camera", Scenelist::scene_player)->findComponent<Camera_component>()->gameobject->is_active = true;
+		//Gameobject_manager::find("camera", Scenelist::scene_player)->findComponent<Camera_component>()->gameobject->is_active = true;
 
-		Gameobject* GO = Gameobject_manager::create("Stage_manager");
-		auto comp = GO->addComponent<Stage_manager>();
 
-		Gameobject_manager::find("Player_manager",Scenelist::scene_player)->findComponent<Player_manager>()->set_stage_manager_ptr(comp);
 
 	}
 
