@@ -39,6 +39,8 @@ namespace Adollib
 
 #ifndef ON_DEBUG
 		input_changer->set_lockcursol(true);
+#else
+		ShowCursor(TRUE);
 #endif
 
 		auto c = gameobject->findComponent<Camera_component>();
@@ -51,14 +53,6 @@ namespace Adollib
 	// 毎フレーム呼ばれる更新処理
 	void Camera::update()
 	{
-		{
-			//bool is_render = false;
-			//auto scenes = Scene_manager::get_activescenes();
-			//for (const auto& sce : scenes)if (sce == Scenelist::scene_game)is_render = true;
-
-			//gameobject->is_active = is_render;
-			//if (is_render == false)return;
-		}
 		//gameobject->aspect = (float)Al_Global::SCREEN_WIDTH / Al_Global::SCREEN_HEIGHT;
 
 #ifdef UseImgui

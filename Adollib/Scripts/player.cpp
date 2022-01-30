@@ -2,8 +2,8 @@
 
 #include "../Adollib/Scripts/Main/Adollib.h"
 #include "../Adollib/Scripts/Object/gameobject_manager.h"
-
 #include "../Adollib/Scripts/Physics/ray.h"
+#include "../Adollib/Scripts/Renderer/renderer_base.h"
 
 #include "stage_manager.h"
 #include "camera.h"
@@ -89,6 +89,21 @@ namespace Adollib
 			Waist->add_child(check_respown_go);
 
 			this->check_onplayer_coll = check_onplayer_coll;
+		}
+
+		// rope”­ŽË‚Ì—\‘ªüGo‚Ì¶¬
+		{
+			rope_hit_sphere = Gameobject_manager::createSphere("rope_hit_sphere");
+			rope_hit_sphere->transform->local_scale = Vector3(rope_sphere_r * 2);
+			rope_hit_sphere->renderer->color = Vector4(1, 0, 0, 1);
+
+			rope_hit_cylinder = Gameobject_manager::createCylinder("rope_hit_cylinder");
+			rope_hit_cylinder->transform->local_scale = Vector3(rope_sphere_r * 0.5f);
+			rope_hit_cylinder->renderer->color = Vector4(1, 0, 0, 1);
+
+			// ‚Æ‚è‚ ‚¦‚¸•`‰æ‚³‚ê‚È‚¢‚Æ‚±‚ë‚É”ò‚Î‚·
+			rope_hit_sphere->transform->local_pos = Vector3(10000, 10000, 10000000);
+			rope_hit_cylinder->transform->local_pos = Vector3(10000, 10000, 10000000);
 		}
 
 		{

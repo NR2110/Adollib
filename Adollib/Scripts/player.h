@@ -73,15 +73,15 @@ namespace Adollib
 
 
 		// ropeŠÖŒW
-		Gameobject* Lrope_go = nullptr;
-		Collider_Rope* Lrope_coll = nullptr;
-		Joint_base* Lblock_rope_joint = nullptr;
-		Joint_base* Lblock_hand_joint = nullptr;
-		int collider_num = 1;
-		float dither_timer = 0;
-		float rope_sphere_r = 0.2f;
-		Gameobject* rope_hit_sphere = nullptr;
-		Gameobject* rope_hit_cylinder = nullptr;
+		Gameobject* Lrope_go = nullptr; //rope‚ÌGO
+		Collider_Rope* Lrope_coll = nullptr; //rope‚Ìcollider
+		Joint_base* Lblock_rope_joint = nullptr; //rope‚Æblock‚Ìjoint
+		Joint_base* Lblock_hand_joint = nullptr; //˜r‚Æblock‚Ìjoint(rope‚Ì’·‚³‚ª0‚É‚È‚Á‚½ê‡‚±‚±‚ğ’¼Ú‚Â‚È‚°‚é)
+		int nearest_rope_collider_num = 1; //ropecolliders‚Ì“àˆê”Ôè‚É‹ß‚¢collider‚ÌID
+		float dither_timer = 0; //—\‘ªü‚ğo‚·Û‚Ìdithertimer
+		float rope_sphere_r = 0.2f; //rope‚Ì”¼Œa
+		Gameobject* rope_hit_sphere = nullptr; //—\‘ªü‚Ìæ’[‚Ìsphere
+		Gameobject* rope_hit_cylinder = nullptr; //—\‘ªü‚Ìü
 
 		// Ú’n”»’è‚ğs‚¤(sphere_cast)
 		Collider* onground_collider = nullptr; //—§‚Á‚Ä‚¢‚écolliderî•ñ

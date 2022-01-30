@@ -18,6 +18,7 @@ namespace Adollib {
 		static const Collider_tagbit croth = (1 << 10);
 
 		static const Collider_tagbit Human = (1 << 11);
+		static const Collider_tagbit Human_rope = (1 << 12);
 		static const Collider_tagbit Player00 = (1 << 21);
 		static const Collider_tagbit Player01 = (1 << 22);
 		static const Collider_tagbit Player02 = (1 << 23);

@@ -268,24 +268,31 @@ void Player::catch_things() {
 
 // ropeを撃つ
 void Player::shot_rope() {
-	if (rope_hit_sphere == nullptr) {
-		rope_hit_sphere = Gameobject_manager::createSphere("rope_hit_sphere");
-		rope_hit_sphere->transform->local_scale = Vector3(rope_sphere_r * 2);
-		rope_hit_sphere->renderer->color = Vector4(1, 0, 0, 1);
+	// rope_hit_sphere, rope_hit_cylinderの初期化
+	//if (rope_hit_sphere == nullptr) {
+	//	rope_hit_sphere = Gameobject_manager::createSphere("rope_hit_sphere");
+	//	rope_hit_sphere->transform->local_scale = Vector3(rope_sphere_r * 2);
+	//	rope_hit_sphere->renderer->color = Vector4(1, 0, 0, 1);
 
-		rope_hit_cylinder = Gameobject_manager::createCylinder("rope_hit_cylinder");
-		rope_hit_cylinder->transform->local_scale = Vector3(rope_sphere_r * 0.5f);
-		rope_hit_cylinder->renderer->color = Vector4(1, 0, 0, 1);
-	}
+	//	rope_hit_cylinder = Gameobject_manager::createCylinder("rope_hit_cylinder");
+	//	rope_hit_cylinder->transform->local_scale = Vector3(rope_sphere_r * 0.5f);
+	//	rope_hit_cylinder->renderer->color = Vector4(1, 0, 0, 1);
+	//}
 
+	// とりあえず描画されないように吹っ飛ばす
 	{
 		rope_hit_sphere->transform->local_pos = Vector3(10000, 10000, 10000000);
 		rope_hit_cylinder->transform->local_pos = Vector3(10000, 10000, 10000000);
 	}
 
 	dither_timer = ALClamp(dither_timer, -0.3f, 1);
+
+	// rope発射ボタンが押されているとき
+	// 予測線表示,カメラが近づいてplayerのdither
 	if (input_changer->is_rope_state) {
 		{
+			// dither_timerからmaterialのditherを行う (shaderはあらかじめセットされているのでconstant_buffer_dataを変更)
+			// dither_timerでfovを調整してcameraの近づいてる感をだす
 			dither_timer += time->deltaTime() * 2.0f;
 			float dither_pow = ALClamp(dither_timer, 0, 1);
 
@@ -295,6 +302,8 @@ void Player::shot_rope() {
 			camera->gameobject->findComponent<Camera_component>()->fov = 60 + (40 - 60) * dither_pow;
 		}
 
+		// 予測線の表示 cameraの注視点へplayerの手から紐を出す
+		// カメラからのraycast
 		Ray camera_ray;
 		camera_ray.direction = vector3_quatrotate(Vector3(0, 0, 1), camera->transform->orientation);
 		camera_ray.position = camera->transform->position;
@@ -304,6 +313,7 @@ void Player::shot_rope() {
 		Vector3 contact_point;
 
 		if (camera_ray.sphere_cast(rope_sphere_r, contact_point, camera_ray_data)) {
+			// カメラのrayの衝突点方向へplayerの手からraycast
 			camera_ray_data.raymin += rope_sphere_r;
 			rope_hit_sphere->transform->local_pos = camera_ray.position + camera_ray.direction * camera_ray_data.raymin;
 
@@ -315,6 +325,7 @@ void Player::shot_rope() {
 			arm_ray_data.collider_tag = Collider_tags::Stage;
 
 			if (arm_ray.sphere_cast(rope_sphere_r, contact_point, arm_ray_data)) {
+				// 衝突点へ向けて予測線の表示
 				arm_ray_data.raymin += rope_sphere_r;
 				rope_hit_sphere->transform->local_pos = arm_ray.position + arm_ray.direction * arm_ray_data.raymin;
 
@@ -322,6 +333,7 @@ void Player::shot_rope() {
 				rope_hit_cylinder->transform->local_orient = quaternion_from_to_rotate(Vector3(0, 1, 0), arm_ray.direction);
 				rope_hit_cylinder->transform->local_scale.y = arm_ray_data.raymin * 0.5f;
 
+				// 届いていれば緑、届いていなければ赤 (とりあえず今は90のマジックナンバーで代用 要修正)
 				if (arm_ray_data.raymin > 90) {
 					rope_hit_cylinder->renderer->color = Vector4(1, 0, 0, 1);
 					rope_hit_sphere->renderer->color = Vector4(1, 0, 0, 1);
@@ -335,6 +347,7 @@ void Player::shot_rope() {
 		}
 	}
 	else {
+		// 何もない時は dither timerを戻してfov,ditherを元に戻す
 		dither_timer -= time->deltaTime() * 1.5f;
 		float dither_pow = ALClamp(dither_timer, 0, 1);
 
@@ -345,19 +358,10 @@ void Player::shot_rope() {
 
 	}
 
+	// 発射されたとき (上のis_rope_stateと両立しない)(TODO : 中身結構似てるから適当きれいにしたい)
 	if (input_changer->is_rope_releaced) {
-		collider_num = 1;
+		nearest_rope_collider_num = 1;
 		dither_timer = ALmin(1, dither_timer);
-
-		//Ray ray;
-		//ray.direction = vector3_quatrotate(Vector3(0, -1, 0), Lelbow->transform->orientation);
-		//ray.position = Lhand->transform->position;
-
-		//Ray::Raycast_struct data;
-		//data.collider_tag = Collider_tags::Stage;
-		//Vector3 contact_point;
-		//ray.sphere_cast(rope_sphere_r, contact_point, data);
-		//data.raymin += rope_sphere_r;
 
 		Ray camera_ray;
 		camera_ray.direction = vector3_quatrotate(Vector3(0, 0, 1), camera->transform->orientation);
@@ -382,16 +386,19 @@ void Player::shot_rope() {
 		arm_ray_data.raymin += rope_sphere_r;
 		rope_hit_sphere->transform->local_pos = arm_ray.position + arm_ray.direction * arm_ray_data.raymin;
 
+		// 届いていなければ適当に return
+		if (arm_ray_data.coll == nullptr || arm_ray_data.raymin > 90)return;
 
-		if (arm_ray_data.raymin > 90)return;
+		// 前のropeを削除, jointを削除
 		if (Lrope_go)Gameobject_manager::deleteGameobject(Lrope_go);
 		if (Lblock_hand_joint)Joint::delete_joint(Lblock_hand_joint);
 
+		// 始点をarmの座標にrope GOの生成
 		Lrope_go = Gameobject_manager::create("rope");
 		Lrope_go->transform->local_pos = arm_ray.position;
 
+		// colliderのアタッチ&初期設定
 		Lrope_coll = Lrope_go->addComponent<Collider_Rope>();
-
 		auto& coll = Lrope_coll;
 
 		coll->sphere_size_r = rope_sphere_r;
@@ -400,21 +407,25 @@ void Player::shot_rope() {
 		sphere_count += 1;
 		coll->sphere_num_size = sphere_count;
 		coll->start_rope_dir = arm_ray.direction;
+		coll->tag |= Collider_tags::Human_rope;
 		coll->ignore_tags |= Collider_tags::Human;
 		coll->default_physics_data.inertial_mass = 0.4f;
 		coll->create_rope();
 
+		// 場所によって質量を調整する
 		for (int i = 0; i < coll->get_collider_size(); ++i) {
 			auto physics_data = coll->get_vertex_data(i);
 			physics_data.inertial_mass = 0.4f * (1 + (float)i / coll->get_collider_size());
 			coll->set_vertex_data(i, physics_data);
 		}
 
+		// 腕とropeをつなぐjoint
 		Joint::add_balljoint(
 			Lhand_collider, coll->get_collider(0),
 			Vector3(0), Vector3(0)
 		);
 
+		// つなげるものとropeをつなぐjoint
 		Lblock_rope_joint = Joint::add_balljoint(
 			arm_ray_data.coll, coll->get_collider(coll->get_collider_size() - 1),
 			//vector3_quatrotate(contact_point - data.coll->transform->position, data.coll->transform->orientation.inverse()),
@@ -424,10 +435,12 @@ void Player::shot_rope() {
 			0.1f
 		);
 
+		// blockにつなぐcolliderを衝突しないように(暴れやすいため)
 		auto vertex_data = coll->get_vertex_data(coll->get_collider_size() - 1);
 		vertex_data.is_hitable = false;
 		coll->set_vertex_data(coll->get_collider_size() - 1, vertex_data);
 
+		// rendererのアタッチ&セット
 		auto renderer = Lrope_go->addComponent<Rope_renderer>();
 		Lrope_go->renderer = renderer;
 		renderer->radius = rope_sphere_r * 0.6f;
@@ -440,12 +453,13 @@ void Player::shot_rope() {
 		const auto& structural_type = Collider_Rope::Rope_constraint_type::sructural_spring;
 		const auto& bending_type = Collider_Rope::Rope_constraint_type::bending_spring;
 
-
+		// もしarmとropeが離れすぎていれば縮めない
 		if (vector3_distance(Lhand_collider->transform->position, +Lrope_coll->get_vertex_offset()->at(0).first + Lrope_coll->gameobject->transform->position) < 0.2f)
 		{
 			{
 				int joint_size = Lrope_coll->get_joint_count(structural_type);
 
+				// 直近のoffsetが0出ないところを縮める
 				for (int i = 0; i < joint_size; ++i) {
 					if (Lrope_coll->get_joint_ptr(structural_type, i)->offset == 0)continue;
 					Lrope_coll->get_joint_ptr(structural_type, i)->offset = ALmax(Lrope_coll->get_joint_ptr(structural_type, i)->offset - 10 * time->deltaTime(), 0);
@@ -460,15 +474,19 @@ void Player::shot_rope() {
 
 					}
 
-					if (Lrope_coll->get_joint_ptr(structural_type, i)->offset == 0 && i < joint_size - 1) collider_num++;
+					// offsetが0になったとき 一番近いropeの頂点を次の頂点へ更新
+					if (Lrope_coll->get_joint_ptr(structural_type, i)->offset == 0 && i < joint_size - 1) nearest_rope_collider_num++;
 
 					break;
 				}
 			}
 
+			// 縮める際、stageに体が当たっているが 設置していないとき
+			// 上方向へ力をかけて 上りやすいようにする
 			if (check_onplayer_coll->concoll_enter(Collider_tags::Stage) && onground_collider == nullptr)
 			{
-				float pow = fabsf(vector3_dot(Vector3(0, 1, 0), (Lrope_coll->get_vertex_offset()->at(collider_num).first - Lrope_coll->get_vertex_offset()->at(0).first).unit_vect()));
+				// 上方向に加える力
+				float pow = fabsf(vector3_dot(Vector3(0, 1, 0), (Lrope_coll->get_vertex_offset()->at(nearest_rope_collider_num).first - Lrope_coll->get_vertex_offset()->at(0).first).unit_vect()));
 				pow = 1 - pow;
 				for (int i = 0; i < Human_collider_size; ++i) {
 					Human_colliders[i]->add_force(Vector3(0, 1, 0) * 250 * pow);
@@ -476,13 +494,15 @@ void Player::shot_rope() {
 			}
 		}
 
+		// bending joint(曲げばね)の調整
 		int bending_size = Lrope_coll->get_joint_count(bending_type);
 		if (bending_size != 0) {
-			Lrope_coll->get_joint_ptr(bending_type, 0)->offset =
-				0;
+			// 一番近い bending jointのoffsetを0に (このjointは縮みすぎたら伸ばすjoint 縮めるjointの場合 0にして 伸ばさないように)
+			Lrope_coll->get_joint_ptr(bending_type, 0)->offset = 0;
 		}
 	}
 
+	// 削除されるとき
 	if (input_changer->is_rope_delete) {
 		if (Lrope_go)Gameobject_manager::deleteGameobject(Lrope_go);
 		if (Lblock_hand_joint)Joint::delete_joint(Lblock_hand_joint);
@@ -491,6 +511,7 @@ void Player::shot_rope() {
 		Lblock_hand_joint = nullptr;
 	}
 
+	//
 	if (Lblock_hand_joint) {
 		if (Lrope_go)Gameobject_manager::deleteGameobject(Lrope_go);
 		Lrope_go = nullptr;
@@ -782,6 +803,7 @@ bool Player::check_respown() {
 	if (stage_manager->now_stage == Stage_types::none)return false;
 
 	auto stage = stage_manager->get_current_stage();
+
 	// 入力がある || stage指定のY座標よりPlayerが低ければrespown
 	if (input_changer->is_respown_trigger || Waist->world_position().y < stage->y_player_respown_limit + 50) {
 
@@ -791,30 +813,7 @@ bool Player::check_respown() {
 			return true;
 		}
 
-		// 座標移動
-		Vector3 off = vector3_quatrotate(stage->player_respown_pos - Waist->world_position(), Waist->parent()->world_orientate().inverse());
-		for (int i = 0; i < Human_gameobject_size; i++) {
-			Human_gameobjects[i]->transform->local_pos += off;
-		}
-
-		// 力のreset
-		for (int i = 0; i < Human_collider_size; i++) {
-			Human_colliders[i]->reset_force();
-		}
-
-		// 持っているものを離す
-		Joint_base** joints[2] = {
-			&catch_left_joint,
-			&catch_right_joint
-		};
-		for (int i = 0; i < 2; i++) {
-			Joint_base*& joint = *joints[i];
-			if (joint != nullptr) {
-				Joint::delete_joint(joint);
-			}
-		}
-
-		respown_timer = 3;
+		respown();
 	}
 
 	// respowntimerが>0なら respown中

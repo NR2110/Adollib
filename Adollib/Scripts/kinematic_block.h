@@ -25,40 +25,47 @@ namespace Adollib {
 			// 毎フレーム呼ばれる更新処理
 			void update() override {
 				if (transform->position.y < this_stage->y_respown_limit) {
+
 					if (pearent == nullptr) {
+						// playerに捕まれていたら そのjointを削除する
+						int joint_size = this_coll->get_joint_count();
+
+						// もし、playerのropeとつながっていたらrespownさせない
+						// playerがつかんでいたらそのjointを削除する
+						for (int i = 0; i < joint_size; ++i) {
+							auto joint = this_coll->get_joint(i);
+							if (joint->get_colliderB()->tag & Collider_tags::Human_rope || joint->get_colliderB()->tag & Collider_tags::Human)return;
+						}
+
 						this_coll->reset_force();
-						this_coll->linear_velocity(Vector3(0, -1, 0)); //feezeに引っかからないように
+						this_coll->linear_velocity(Vector3(0, -1, 0)); //fleezeに引っかからないように
 						transform->local_pos = respown_pos;
 						transform->local_pos.y = this_stage->y_respown_pos;
 						transform->local_orient = respown_rotate;
 
-						// playerに捕まれていたら そのjointを削除する
-						int joint_size = this_coll->get_joint_count();
-						for (int i = 0; i < joint_size; ++i) {
-							auto joint = this_coll->get_joint(i);
-							if (joint->get_colliderB()->tag & Collider_tags::Human) {
-								Joint::delete_joint(joint);
-							}
-						}
 
 					}
 					else {
 						Vector3 off = Vector3(respown_pos.x, this_stage->y_respown_pos, respown_pos.y) - transform->local_pos;
+
 						for (auto& child : *pearent->children()) {
-							child->transform->local_pos += off;
 							auto coll = child->findComponent<Collider>();
-							if (coll == nullptr)continue;
-							coll->reset_force();
-							coll->linear_velocity(Vector3(0, -1, 0)); //feezeに引っかからないように
 
 							// playerに捕まれていたら そのjointを削除する
 							int joint_size = coll->get_joint_count();
 							for (int i = 0; i < joint_size; ++i) {
 								auto joint = coll->get_joint(i);
-								if (joint->get_colliderB()->tag & Collider_tags::Human) {
-									Joint::delete_joint(joint);
-								}
+								//if (joint->get_colliderB()->tag & Collider_tags::Human || joint->get_colliderB()->tag & Collider_tags::Human_rope) {
+								//	Joint::delete_joint(joint);
+								//}
+								if (joint->get_colliderB()->tag & Collider_tags::Human_rope || joint->get_colliderB()->tag & Collider_tags::Human)return;
 							}
+
+							child->transform->local_pos += off;
+							if (coll == nullptr)continue;
+							coll->reset_force();
+							coll->linear_velocity(Vector3(0, -1, 0)); //feezeに引っかからないように
+
 						}
 
 					}

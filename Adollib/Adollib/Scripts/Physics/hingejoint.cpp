@@ -8,6 +8,15 @@ using namespace Physics_function;
 
 
 void HingeJoint::velocity_effect() const {
+	// •Ð•û‚ªŒÅ’è‚³‚ê‚Ä‚¢‚é‚Æ‚«A“®‚­•û‚Ì‰ñ“]Ž²‚ð’²®‚·‚é
+
+
+	int moveable_num = -1;
+	if (ALPjoint->ALPcollider[0]->get_ALPphysics()->is_movable() == true)moveable_num += 1;
+	if (ALPjoint->ALPcollider[1]->get_ALPphysics()->is_movable() == true)moveable_num += 2;
+
+	// ‚Ç‚¿‚ç‚à“®‚­or“®‚©‚È‚¢‚Ì‚Å‚ ‚ê‚Î return
+	if (moveable_num == -1 || moveable_num == 2)return;
 
 	// transform
 	const world_trans* transforms[2]{
@@ -30,9 +39,9 @@ void HingeJoint::velocity_effect() const {
 		ALPjoint->ALPcollider[1]->get_ALPphysics()->angula_velocity()
 	};
 
-	for (int i = 0; i < 2; ++i) {
-		angular_velocity[i] = hinge_vec_world[i] * vector3_dot(hinge_vec_world[i], angular_velocity[i]);
-		ALPjoint->ALPcollider[i]->get_ALPphysics()->set_angula_velocity(angular_velocity[i]);
+	{
+		angular_velocity[moveable_num] = hinge_vec_world[moveable_num] * vector3_dot(hinge_vec_world[moveable_num], angular_velocity[moveable_num]);
+		ALPjoint->ALPcollider[moveable_num]->get_ALPphysics()->set_angula_velocity(angular_velocity[moveable_num]);
 	}
 
 
