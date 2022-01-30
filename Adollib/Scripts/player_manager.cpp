@@ -189,7 +189,7 @@ namespace Adollib
 					GO->transform->local_scale = sholder_size;
 					GO->transform->local_orient = quaternion_from_euler(0, +30, +90);
 					//GO->transform->local_pos = Vector3(+(body_size.x + arm_size.y * 1 + 0.1f), arm_y_pos, 0);
-					GO->transform->local_pos = Vector3(+1.62, arm_y_pos, -0.30f);
+					GO->transform->local_pos = Vector3(+1.62f, arm_y_pos, -0.30f);
 				}
 				{
 					auto& GO = Lelbow;
@@ -209,7 +209,7 @@ namespace Adollib
 					GO->transform->local_orient = quaternion_from_euler(0, -30, -90);
 					//GO->transform->local_pos = Vector3(1.08f, arm_y_pos, 1.86f);
 					//GO->transform->local_pos = Vector3(3.78f, arm_y_pos, 4.02f);
-					GO->transform->local_pos = Vector3(-1.62, arm_y_pos, -0.30f);
+					GO->transform->local_pos = Vector3(-1.62f, arm_y_pos, -0.30f);
 				}
 				{
 					auto& GO = Relbow;
@@ -225,8 +225,8 @@ namespace Adollib
 				}
 			}
 
-			Vector3 Leg_size = Vector3(0.3f, 0.15, 0.3f);
-			Vector3 Foot_size = Vector3(0.4f, 0.25, 0.4f);
+			Vector3 Leg_size = Vector3(0.3f, 0.15f, 0.3f);
+			Vector3 Foot_size = Vector3(0.4f, 0.25f, 0.4f);
 			float leg_x_pos = 0.6f;
 			{
 				{
@@ -335,7 +335,7 @@ namespace Adollib
 			Lleg_collider->physics_data.is_fallable = false;
 
 			//::: tag‚ÌÝ’è :::
-			Collider_tagbit tag;
+			Collider_tagbit tag = 0;
 			if (player_num == 0) tag = Collider_tags::Player00;
 			if (player_num == 1) tag = Collider_tags::Player01;
 			if (player_num == 2) tag = Collider_tags::Player02;
@@ -477,7 +477,7 @@ namespace Adollib
 				}
 				//‘«
 				{
-					auto Cone = Joint::add_Conejoint(Waist_collider, Rleg_collider, Vector3(-0.6f, -0.8f, 0), Vector3(0, 0.3, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
+					auto Cone = Joint::add_Conejoint(Waist_collider, Rleg_collider, Vector3(-0.6f, -0.8f, 0), Vector3(0, 0.3f, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
 					Cone->limit = 80;
 					Cone->limit_bias = limit_bias;
 
@@ -541,7 +541,7 @@ namespace Adollib
 				Gameobject* belt = Gameobject_manager::createCube("belt");
 				Waist->add_child(belt);
 				belt->transform->local_pos = Vector3(0, -0.45f, 0);
-				belt->transform->local_scale = Vector3(1.1, 0.25f, 1.1);
+				belt->transform->local_scale = Vector3(1.1f, 0.25f, 1.1f);
 				belt->findComponent<Renderer_base>()->set_material(player_material_02);
 			}
 		}

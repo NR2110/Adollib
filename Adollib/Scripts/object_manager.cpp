@@ -946,7 +946,7 @@ namespace Adollib
 						Gameobject* belt = Gameobject_manager::createCube("belt");
 						Waist->add_child(belt);
 						belt->transform->local_pos = Vector3(0, -0.45f, 0);
-						belt->transform->local_scale = Vector3(1.1, 0.25f, 1.1f);
+						belt->transform->local_scale = Vector3(1.1f, 0.25f, 1.1f);
 						belt->renderer->color = face_color;
 					}
 
@@ -1155,7 +1155,7 @@ namespace Adollib
 					}
 
 					{
-						auto Cone = Joint::add_Conejoint(Waist_collider, Rleg_collider, Vector3(-0.6f, -0.8f, 0), Vector3(0, 0.3, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect());
+						auto Cone = Joint::add_Conejoint(Waist_collider, Rleg_collider, Vector3(-0.6f, -0.8f, 0), Vector3(0, 0.3f, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect());
 						Cone->limit = 48;
 
 						auto Twist = Joint::add_Twistjoint(Waist_collider, Rleg_collider, Vector3(0, 1, 0), Vector3(0, 1, 0));
@@ -1166,7 +1166,7 @@ namespace Adollib
 						hinge->limit = Vector2(0, 60);
 					}
 					{
-						auto Cone = Joint::add_Conejoint(Waist_collider, Lleg_collider, Vector3(+0.6f, -0.8, 0), Vector3(0, 0.3, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect());
+						auto Cone = Joint::add_Conejoint(Waist_collider, Lleg_collider, Vector3(+0.6f, -0.8f, 0), Vector3(0, 0.3, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect());
 						Cone->limit = 48;
 
 						auto Twist = Joint::add_Twistjoint(Waist_collider, Lleg_collider, Vector3(0, 1, 0), Vector3(0, 1, 0));

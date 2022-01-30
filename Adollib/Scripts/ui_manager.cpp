@@ -17,4 +17,8 @@ void UI_manager::update() {
 
 };
 
+void UI_manager::summon_tutrial_stick() {
+
+
+}
 

@@ -16,6 +16,8 @@
 
 #include "../Adollib/Scripts/Renderer/mesh_renderer.h"
 #include "../Adollib/Scripts/Renderer/material_manager.h"
+#include "../Adollib/Scripts/Renderer/material.h"
+#include "../Adollib/Scripts/Renderer/texture.h"
 #include "../Adollib/Scripts/Renderer/sprite_renderer.h"
 #include "../Adollib/Scripts/Object/component_camera.h"
 
@@ -139,6 +141,43 @@ namespace Adollib
 				set_tree(Vector3(73, 0, 32), Vector3(1, 1.2f, 1), Vector3(0, 76, 0), 2.5f, 0.8f, trees_pearent);
 				set_tree(Vector3(83, 0, 32), Vector3(1, 1.2f, 1), Vector3(0, 12, 0), 2.5f, 0.8f, trees_pearent);
 			}
+
+			{
+				auto tutrial_stick_pearent = Gameobject_manager::create("tutrial_stick");
+				first_zone->add_child(tutrial_stick_pearent);
+
+				auto coll = set_box(Vector3(-12,5,6.6f), Vector3(10, 5, 0.5f), Vector3(10, 0, 0), base_color, tutrial_stick_pearent, false);
+
+				auto tutrial_stick_sprite = Gameobject_manager::createPlane("tutrial_stick_sprite");
+				coll->gameobject->add_child(tutrial_stick_sprite);
+				tutrial_stick_sprite->transform->local_pos = Vector3(0, 0, -1.1f);
+				tutrial_stick_sprite->transform->local_orient = quaternion_from_euler(0, 180, 0);
+				tutrial_stick_sprite->transform->local_scale = Vector3(1.16f, 1.3f, 1);
+				auto tutrial_material = Material_manager::create_material("Tuterial_stick");
+				tutrial_material->get_texture()->Load(L"./DefaultTexture/tutrial/tuterial_stick.png");
+				tutrial_material->BS_state = State_manager::BStypes::BS_ALPHA;
+				tutrial_material->Load_VS("./DefaultShader/sprite_vs.cso");
+				tutrial_material->Load_PS("./DefaultShader/sprite_ps.cso");
+				tutrial_stick_sprite->renderer->set_material(tutrial_material);
+			}
+			{
+				auto tutrial_hand_pearent = Gameobject_manager::create("tutrial_chatch_and_hold_Turn_your_hand");
+				first_zone->add_child(tutrial_hand_pearent);
+
+				auto coll = set_box(Vector3(65, 6, 0), Vector3(13, 6, 0.5f), Vector3(0, 90, 0), base_color, tutrial_hand_pearent, false);
+
+				auto tutrial_stick_sprite = Gameobject_manager::createPlane("tutrial_chatch_and_hold_Turn_your_hand");
+				coll->gameobject->add_child(tutrial_stick_sprite);
+				tutrial_stick_sprite->transform->local_pos = Vector3(-0.01f, 0.02f, -1.1f);
+				tutrial_stick_sprite->transform->local_orient = quaternion_from_euler(0, 180, 0);
+				tutrial_stick_sprite->transform->local_scale = Vector3(1.1f, 1.06f, 1);
+				auto tutrial_material = Material_manager::create_material("Tutrial_chatch_and_hold_Turn_your_hand");
+				tutrial_material->get_texture()->Load(L"./DefaultTexture/tutrial/tutrial_chatch_and_hold_Turn_your_hand.png");
+				tutrial_material->BS_state = State_manager::BStypes::BS_ALPHA;
+				tutrial_material->Load_VS("./DefaultShader/sprite_vs.cso");
+				tutrial_material->Load_PS("./DefaultShader/sprite_ps.cso");
+				tutrial_stick_sprite->renderer->set_material(tutrial_material);
+			}
 		}
 
 		// second_zone
@@ -201,7 +240,7 @@ namespace Adollib
 				);
 
 
-				set_buttan(Vector3(82.80, 16, 54), Vector3(2, 0.9f, 2), Vector3(0, 0, -90), Stage_parts::Stageparts_tags::Flag_0, wall_pearent, true);
+				set_buttan(Vector3(82.80f, 16, 54), Vector3(2, 0.9f, 2), Vector3(0, 0, -90), Stage_parts::Stageparts_tags::Flag_0, wall_pearent, true);
 			}
 		}
 

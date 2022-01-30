@@ -165,7 +165,7 @@ Gameobject* Stage_base::set_plane(const Vector3& pos, const Vector3& size, const
 	return object;
 }
 
-Gameobject* Stage_base::set_respown_area(const Vector3& pos, const Vector3& size, const Vector3& rotate, float respown_num, Vector3 respown_pos, Gameobject* pearent) {
+Gameobject* Stage_base::set_respown_area(const Vector3& pos, const Vector3& size, const Vector3& rotate, int respown_num, Vector3 respown_pos, Gameobject* pearent) {
 
 	auto go = Gameobject_manager::create("respown_area" + std::to_string(respown_num));
 	go->transform->local_pos = pos;

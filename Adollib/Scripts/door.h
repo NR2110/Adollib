@@ -22,7 +22,7 @@ namespace Adollib {
 
 			//“®‚­‘¬‚³
 			float pos_speed = 5;
-			float rot_speed;
+			float rot_speed = 0;
 
 		private:
 

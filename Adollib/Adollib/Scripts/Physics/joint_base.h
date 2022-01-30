@@ -47,15 +47,17 @@ namespace Adollib {
 		const Anchor* get_anchors()const { return anchors; };
 		const int     get_anchors_count()const { return anchor_count; };
 
-		//anchor‚Ì’l‚ğ”h¶ƒNƒ‰ƒX‚©‚çXV‚·‚é
+		// anchor‚Ì’l‚ğ”h¶ƒNƒ‰ƒX‚©‚çXV‚·‚é
 		virtual void adapt_anchor() = 0;
 
-		//joint‚Ìtensor‚Ö‚Ì‰e‹¿‚ğ‚©‚¦‚·
+		// joint‚Ìtensor‚Ö‚Ì‰e‹¿‚ğ‚©‚¦‚·
 		virtual Matrix33 tensor_effect() const = 0;
 
-		//limit‚Ì‰e‹¿‚ğ•Ô‚·
-		virtual bool limit_effect(Vector3& contactP0, Vector3& contactP1, float& penetrate) const = 0;
+		// linear,angular speed‚Ö‚Ì‰e‹¿‚ğŒvZ‚·‚é
+		virtual void velocity_effect() const = 0;
 
+		// limit‚Ì‰e‹¿‚ğ•Ô‚·
+		virtual bool limit_effect(Vector3& contactP0, Vector3& contactP1, float& penetrate) const = 0;
 		// user‚ªŒÄ‚Î‚È‚¢‚æ‚¤‚É!!
 		void destroy();
 	};

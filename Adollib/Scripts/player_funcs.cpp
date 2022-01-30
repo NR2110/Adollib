@@ -65,7 +65,7 @@ void Player::reach_out_hands() {
 				camera_off = quaternion_axis_radian(Vector3(1, 0, 0), radian);
 			}
 
-			Quaternion goal = quaternion_axis_angle(Vector3(0, 1, 0), sign[i] * 90) * quaternion_axis_angle(Vector3(1, 0, 0), 90) * camera_off * Body_collider->transform->orientation;
+			Quaternion goal = quaternion_axis_angle(Vector3(0, 1, 0), sign[i] * 90.0f) * quaternion_axis_angle(Vector3(1, 0, 0), 90) * camera_off * Body_collider->transform->orientation;
 
 			//quaternion‚ª-Q‚ÌŽžA¶¬‚·‚é‰ñ“]‚ª‹t‰ñ“]‚É‚È‚é‚½‚ßlocalorint‚É - ‚ð‚©‚¯‚é
 			{
@@ -396,7 +396,7 @@ void Player::shot_rope() {
 
 		coll->sphere_size_r = rope_sphere_r;
 		coll->sphree_offset_size = coll->sphere_size_r * 3;
-		int sphere_count = arm_ray_data.raymin / coll->sphree_offset_size;
+		int sphere_count = (int)(arm_ray_data.raymin / coll->sphree_offset_size);
 		sphere_count += 1;
 		coll->sphere_num_size = sphere_count;
 		coll->start_rope_dir = arm_ray.direction;
@@ -418,7 +418,7 @@ void Player::shot_rope() {
 		Lblock_rope_joint = Joint::add_balljoint(
 			arm_ray_data.coll, coll->get_collider(coll->get_collider_size() - 1),
 			//vector3_quatrotate(contact_point - data.coll->transform->position, data.coll->transform->orientation.inverse()),
-			vector3_quatrotate(arm_ray.position + arm_ray.direction * coll->sphree_offset_size * (coll->sphere_num_size - 1) - arm_ray_data.coll->transform->position, arm_ray_data.coll->transform->orientation.inverse()),
+			vector3_quatrotate(arm_ray.position + arm_ray.direction * coll->sphree_offset_size * (float)(coll->sphere_num_size - 1) - arm_ray_data.coll->transform->position, arm_ray_data.coll->transform->orientation.inverse()),
 
 			Vector3(0),
 			0.1f
@@ -1051,7 +1051,7 @@ void Player::set_Tpause(const Vector3& position, const Quaternion& orient) {
 	constexpr Vector3 arm_size = sholder_size;
 	constexpr Vector3 hand_size = Vector3(0.45f, 0.45f, 0.45f);
 	constexpr float arm_y_pos = 0.18f;
-	constexpr Vector3 Leg_size = Vector3(0.3f, 0.15, 0.3f);
+	constexpr Vector3 Leg_size = Vector3(0.3f, 0.15f, 0.3f);
 	constexpr Vector3 Foot_size = Vector3(0.4f, 0.25, 0.4f);
 	constexpr float leg_x_pos = 0.6f;
 
@@ -1059,10 +1059,10 @@ void Player::set_Tpause(const Vector3& position, const Quaternion& orient) {
 	Body->transform->local_pos = Vector3(0, 0, 0);
 	Waist->transform->local_pos = Vector3(0, -0.7f * 2, 0);
 
-	Lsholder->transform->local_pos = Vector3(+1.62, arm_y_pos, -0.30f);
+	Lsholder->transform->local_pos = Vector3(+1.62f, arm_y_pos, -0.30f);
 	Lelbow->transform->local_pos = Vector3(+(body_size.x + arm_size.y * 3 + 0.2f), arm_y_pos, -0.98f);
 	Lhand->transform->local_pos = Vector3(+(body_size.x + arm_size.y * 4 - 0.2f), arm_y_pos - 0.15f, -1.07f);
-	Rsholder->transform->local_pos = Vector3(-1.62, arm_y_pos, -0.30f);
+	Rsholder->transform->local_pos = Vector3(-1.62f, arm_y_pos, -0.30f);
 	Relbow->transform->local_pos = Vector3(-(body_size.x + arm_size.y * 3 + 0.2f), arm_y_pos, -0.98f);
 	Rhand->transform->local_pos = Vector3(-(body_size.x + arm_size.y * 4 - 0.2f), arm_y_pos - 0.15f, -1.07f);
 

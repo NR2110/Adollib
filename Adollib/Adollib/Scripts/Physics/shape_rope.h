@@ -8,7 +8,7 @@
 namespace Adollib {
 
 	namespace Physics_function {
-		class Meshcollider_data;
+		struct Meshcollider_data;
 
 		// Rope頂点用クラス
 		class Rope_vertex : public Collider_shape {

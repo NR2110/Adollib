@@ -4,8 +4,8 @@
 
 namespace Adollib {
 	struct Frustum_data {
-		Vector3 normals[6]; //各平面の法線
-		float distances[6]; //各平面の距離
+		Vector3 normals[6] = { Vector3(0) }; //各平面の法線
+		float distances[6] = { 0 }; //各平面の距離
 
 		static Frustum_data create_frustum_data(
 			const Vector3& position,

@@ -26,6 +26,12 @@ void ALP_Joint::adapt_Jointdata() {
 	limit_bias = userjoint->limit_bias;
 }
 
+void ALP_Joint::apply_joint_velocityeffect() {
+
+	userjoint->velocity_effect();
+}
+
+
 void ALP_Joint::destroy(ALP_Collider* coll_ptr) {
 	// physics_manager‚©‚çíœ
 	Physics_manager::remove_Joint(this_itr);

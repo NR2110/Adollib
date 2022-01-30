@@ -13,9 +13,9 @@ using namespace Contacts;
 //:::::::::::::::::::::::::::::::::::::::::::::::::::
 #pragma region ALP_Joint
 //:::::::::::::::::::::::::::::::::::::::::::::::::::
-void Physics_function::adapt_joint_limit(std::list<Physics_function::ALP_Joint*>& ALP_Joints) {
-
+void  Physics_function::apply_joint_velocityeffect(std::list<Physics_function::ALP_Joint*>& ALP_Joints) {
 	std::for_each(ALP_Joints.begin(), ALP_Joints.end(), [](ALP_Joint* joint) {
+		joint->apply_joint_velocityeffect();
 		}
 	);
 }

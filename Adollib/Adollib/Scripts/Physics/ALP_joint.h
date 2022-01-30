@@ -47,11 +47,12 @@ namespace Adollib {
 
 			void set_ptr_to_joint(ALP_Joint* joint);
 
-
 		public:
 			void reset();
 
 			void adapt_Jointdata();
+
+			void apply_joint_velocityeffect();
 
 			void destroy(ALP_Collider* coll_ptr = nullptr);
 

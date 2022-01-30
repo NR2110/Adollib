@@ -134,8 +134,8 @@ void Select_state_manager::select_state(Title_state_B state) {
 		// “ü—Í‚ð‚Æ‚é
 		if (change_select_sign == 0) {
 			change_select_timer = 0;
-			if (input->getKeyTrigger(Key::Up))change_select_sign = 1;
-			if (input->getKeyTrigger(Key::Down))change_select_sign = -1;
+			if (input->getKeyTrigger(Key::Up) || input->getPadTrigger(0, GamePad::UP))    change_select_sign = 1;
+			if (input->getKeyTrigger(Key::Down) || input->getPadTrigger(0, GamePad::DOWN))change_select_sign = -1;
 		}
 
 		// ‰½‚à“ü—Í‚ª–³‚¢Žž‚ÌÀ•W’²®
@@ -176,9 +176,10 @@ void Select_state_manager::select_state(Title_state_B state) {
 
 
 			if (change_select_timer > 0.8f) {
-				if (input->getKeyState(Key::Up))change_select_state_sign = 1;
-				if (input->getKeyState(Key::Down))change_select_state_sign = -1;
+				if (input->getKeyState(Key::Up) || input->getPadState(0, GamePad::UP))change_select_state_sign = 1;
+				if (input->getKeyState(Key::Down) || input->getPadState(0, GamePad::DOWN))change_select_state_sign = -1;
 				change_timer_pow = 5;
+				is_next_state = false;
 			}
 		}
 

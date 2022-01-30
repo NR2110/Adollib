@@ -37,7 +37,7 @@ namespace Adollib
 
 		follow_player = true;
 
-#ifndef UseImgui
+#ifndef ON_DEBUG
 		input_changer->set_lockcursol(true);
 #endif
 
@@ -243,9 +243,11 @@ namespace Adollib
 
 		}
 
+#ifdef ON_DEBUG
 		if (input->getKeyTrigger(Key::RightControl)) {
 			input_changer->set_lockcursol(!input_changer->get_lockcursol());
 		}
+#endif
 
 		timeStep = 0;
 	}

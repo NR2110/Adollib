@@ -72,12 +72,12 @@ namespace Adollib
 
 					pearent->add_child(
 						set_tree(
-							Vector3(x_num * 17 - 60 + rand() % 6 - 3,
+							Vector3(x_num * 17 - 60 + (float)(rand() % 6) - 3,
 								0,
-								z_num * 17 - 60 + rand() % 6 - 3
+								z_num * 17 - 60 + (float)(rand() % 6) - 3
 							),
-							Vector3(1, 0.9f + (rand() % 100) * 0.01f * 0.5f, 1),
-							Vector3(0, rand() % 180, 0),
+							Vector3(1, 0.9f + (float)(rand() % 100) * 0.01f * 0.5f, 1),
+							Vector3(0, (float)(rand() % 180), 0),
 							Vector3(1)
 						));
 				}

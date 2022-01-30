@@ -209,6 +209,12 @@ void ALP_Collider::copy_transform_gameobject() {
 	transform_gameobject.orientation = gameobject->transform->orientation;
 	transform_gameobject.scale = gameobject->transform->scale;
 
+	if (transform_gameobject.position == Vector3(0)) {
+		int dFZgd = 0;
+		rand();
+		rand();
+	}
+
 	// ‚à‚µshape‚ª•Ï‚È‚±‚Æ‚·‚é‚È‚ç (ex. croth.collider.poisition = GO‚ÌÀ•W + vertex‚ÌÀ•W)
 	if (is_adapt_shape_for_copy_transform_gameobject) {
 		for (const auto& shape : shapes) {

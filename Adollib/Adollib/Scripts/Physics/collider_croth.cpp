@@ -328,7 +328,7 @@ void Collider_Croth::update() {
 
 					facet_normal += mesh_facet_normals[mesh_num][data.vertex_involvements[vertex_num].facet_involvements[facet_num]];
 				}
-				facet_normal /= data.vertex_involvements[vertex_num].get_facet_involvment_size();
+				facet_normal /= (float)data.vertex_involvements[vertex_num].get_facet_involvment_size();
 
 				vertex_offset->at(mesh_num).at(vertex_num).second = facet_normal;
 
@@ -377,7 +377,7 @@ const Vector3 Collider_Croth::get_barycenter() const {
 
 	Vector3 num_barycenter;
 	for (auto& map : colliders) for (auto ptr : map.second) num_barycenter += ptr->get_barycenter();
-	num_barycenter /= colliders.size();
+	num_barycenter /= (float)colliders.size();
 
 	Physics_function::Physics_manager::mutex_unlock();
 

@@ -34,6 +34,8 @@ namespace Adollib {
 			anchors[1] = anchor_g;
 		}
 
+		void velocity_effect() const override;
+
 		Matrix33 tensor_effect() const override {
 			// hinge•ûŒüˆÈŠO‚É‚Í‹È‚ª‚è‚É‚­‚­‚·‚é
 			Vector3 axis;
@@ -56,6 +58,7 @@ namespace Adollib {
 			return mat;
 		}
 
+		// ‰ñ“]‚ÌŠp“x§ŒÀ
 		bool limit_effect(Vector3& contactP0, Vector3& contactP1, float& penetrate) const override;
 
 

@@ -63,7 +63,7 @@ void Stage_manager::update() {
 	if (input->getKeyTrigger(Key::F1))
 		set_next_stage_type(Stage_types::stage_1);
 
-	if (input->getKeyTrigger(Key::Left)) {
+	if (input->getKeyTrigger(Key::Left) || input->getPadTrigger(0, GamePad::BACK)) {
 		Scene_manager::set_inactive(Scenelist::scene_game);
 		Scene_manager::set_inactive(Scenelist::scene_player);
 		Scene_manager::set_active(Scenelist::scene_title);

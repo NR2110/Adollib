@@ -7,6 +7,7 @@
 #include "scene_player.h"
 
 #include "../Object/gameobject_manager.h"
+#include "../Physics/ALP__physics_manager.h"
 #include "../Imgui/work_meter.h"
 
 using namespace Adollib;
@@ -89,9 +90,21 @@ void Scene_manager::update() {
 	for (auto& Sce : active_scene_buffer) {
 		processing_scene = Sce; //この値を初期値として渡すものもあるので 作成されるシーンを一時的に入れる
 		Gameobject_manager::initialize(processing_scene); //sceneのinitializeを呼ぶ
+
 	}
 	processing_scene = Scenelist::scene_null;
 	active_scene_buffer.clear();
+
+	// physics_managerのupdate
+	{
+		Work_meter::start("adapt_transform_to_gameobject");
+		Physics_function::Physics_manager::adapt_transform_to_gameobject();
+		Work_meter::stop("adapt_transform_to_gameobject");
+
+#ifdef UseImgui
+		Physics_function::Physics_manager::update_Gui();
+#endif
+	}
 
 	// activesceneのupdate
 	for (auto& scene : active_scenes) {
@@ -99,6 +112,14 @@ void Scene_manager::update() {
 		Gameobject_manager::update(scene);
 	}
 	processing_scene = Scenelist::scene_null;
+
+	// physics_managerのlate_update
+	{
+		Work_meter::start("copy_gameobject_transform");
+		Physics_function::Physics_manager::copy_gameobject_transform();
+		Work_meter::stop("copy_gameobject_transform");
+	}
+
 
 	// latest_activated_sceneがnullなら 一番最後のscenelistを入れる
 	if (latest_activated_scene == Scenelist::scene_null) {

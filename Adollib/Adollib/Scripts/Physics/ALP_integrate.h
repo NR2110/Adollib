@@ -11,7 +11,7 @@ namespace Adollib {
 		class ALP_Physics;
 
 		//::: ALP_Joint ::::::::
-		void adapt_joint_limit(std::list<Physics_function::ALP_Joint*>& ALP_Joints);
+		void apply_joint_velocityeffect(std::list<Physics_function::ALP_Joint*>& ALP_Joints);
 
 
 		//::: ALP_colliders ::::::::::

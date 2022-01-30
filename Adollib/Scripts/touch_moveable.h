@@ -9,7 +9,7 @@ namespace Adollib {
 		// 指定のtagが1であれば動くギミック
 		class Touch_moveable : public Stageparts_base {
 		public:
-			Collider_tagbit tag; //このtagのオブジェクトに接触したら collidersのmoveableをtrueにする
+			Collider_tagbit tag = 0; //このtagのオブジェクトに接触したら collidersのmoveableをtrueにする
 			std::vector<Collider*> judge_colliders; //このcolliderにtagのcolliderが接触したら
 			std::vector<Collider*> move_colliders;  //このcolliderのmoveableをtrueにする
 

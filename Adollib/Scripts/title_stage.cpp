@@ -395,7 +395,7 @@ void Title_stage::awake()
 
 			Collider* coll;
 			// •Ç
-			coll = set_box("select_Wall", Vector3(0, 0, 100), Vector3(0), Vector3(2000, 240, 1), sprite_bule_color);
+			coll = set_box("select_Wall", Vector3(0, 0, 200), Vector3(0), Vector3(2000, 500, 1), sprite_bule_color);
 			coll->gameobject->renderer->set_material(mat);
 			coll->gameobject->renderer->set_material(mat);
 

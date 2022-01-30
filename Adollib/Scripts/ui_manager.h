@@ -12,6 +12,9 @@ namespace Adollib
 
 		void summon_pause();
 
+		void summon_tutrial_stick();
+
+
 
 
 	public:

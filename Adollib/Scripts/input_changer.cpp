@@ -59,7 +59,7 @@ void Input_changer::update() {
 	// “ê‚ð•ú‚Â
 	is_rope_state = (pad_num == 0 && input->getKeyState(Key::R)) || input->getPadState(pad_num, GamePad::LSHOULDER);
 	is_rope_releaced = (pad_num == 0 && input->getKeyReleased(Key::R)) || input->getPadReleased(pad_num, GamePad::LSHOULDER);
-	is_rope_delete = (pad_num == 0 && input->getKeyTrigger(Key::F)) || input->getPadState(pad_num, GamePad::Y);
+	is_rope_delete = (pad_num == 0 && input->getKeyTrigger(Key::F)) || input->getPadState(pad_num, GamePad::RSHOULDER);
 	is_rope_shrink = (pad_num == 0 && input->getKeyState(Key::Q)) || input->getPadState(pad_num, GamePad::B);
 
 	// wheel

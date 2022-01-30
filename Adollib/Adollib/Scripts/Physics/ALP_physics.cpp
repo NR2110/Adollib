@@ -175,7 +175,6 @@ void ALP_Physics::apply_external_force(float duration, const float timeratio_60)
 		//_angula_velocity = _angula_velocity * exp(-ka * duration); // 空気抵抗
 
 		//並進移動に加える力(accumulated_force)から加速度を出して並進速度を更新する 向きを間違えないように!!
-
 		linear_acceleration += accumulated_force * inv_mass / duration;
 
 		//TODO : crothのものは重力を小さくする いまは値が適当なため要修正

@@ -60,29 +60,30 @@ void Title_camera::update()
 
 	float timeStep = Al_Global::second_per_frame;
 
-	{
+	// debug用 カメラを自由に動かす
+#ifdef ON_DEBUG
+	if (0 && input->getMouseState(Mouse::RBUTTON)) {
 		Vector3 position = Vector3(0, 0, 0);
 		Quaternion rotate = quaternion_identity();
 
 		static bool set_carsol_stop = true;
 
 		//カメラの回転
-		if (input->getMouseState(Mouse::RBUTTON)) {
 			//float rotate_pow = 70 * Al_Global::second_per_frame;
-			float rotate_pow = rotate_speed;
-			Vector3 rotate_vec = Vector3(0, 0, 0);
-			rotate_vec.y = input->getCursorPosX() - cursol_pos_save.x;
-			rotate_vec.x = input->getCursorPosY() - cursol_pos_save.y;
+		float rotate_pow = rotate_speed;
+		Vector3 rotate_vec = Vector3(0, 0, 0);
+		rotate_vec.y = input->getCursorPosX() - cursol_pos_save.x;
+		rotate_vec.x = input->getCursorPosY() - cursol_pos_save.y;
 
 
-			rotate_vec.x = ALClamp(rotate_vec.x, max_rotate.x - rotate_vec_save.x, max_rotate.y - rotate_vec_save.x);
-			rotate_vec_save += rotate_vec;
+		rotate_vec.x = ALClamp(rotate_vec.x, max_rotate.x - rotate_vec_save.x, max_rotate.y - rotate_vec_save.x);
+		rotate_vec_save += rotate_vec;
 
-			rotate *= quaternion_axis_angle(Vector3(0, 1, 0), +rotate_vec.y);
-			rotate *= quaternion_axis_angle(vector3_cross(Vector3(0, 1, 0), vector3_quatrotate(Vector3(0, 0, 1), camera_rot)).unit_vect(), +rotate_vec.x);
+		rotate *= quaternion_axis_angle(Vector3(0, 1, 0), +rotate_vec.y);
+		rotate *= quaternion_axis_angle(vector3_cross(Vector3(0, 1, 0), vector3_quatrotate(Vector3(0, 0, 1), camera_rot)).unit_vect(), +rotate_vec.x);
 
-			transform->local_orient = camera_rot;
-		}
+		transform->local_orient = camera_rot;
+
 		cursol_pos_save.x = input->getCursorPosX();
 		cursol_pos_save.y = input->getCursorPosY();
 
@@ -110,8 +111,7 @@ void Title_camera::update()
 		camera_rot *= rotate;
 
 	}
-
-	timeStep = 0;
+#endif
 }
 
 // このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる
@@ -130,6 +130,12 @@ void Title_camera::start_state(Title_state_B state) {
 
 	if (input->getKeyTrigger(Key::Enter) || input->getPadTrigger(0, GamePad::A)) title_state_manager->set_nextstate_A(Title_state_A::Select_stage);
 
+	float eular_x = input->getRStickY(0) * -1.f;
+	float eular_y = input->getRStickX(0) * +1.f;
+
+	camera_eular.x = ALEasing(camera_eular.x, eular_x, 0.1f, time->deltaTime());
+	camera_eular.y = ALEasing(camera_eular.y, eular_y, 0.1f, time->deltaTime());
+	transform->local_orient = quaternion_identity() * quaternion_from_euler(camera_eular);
 };
 
 Vector3 debug_easing(Vector3 start, Vector3 goal, float speed, float delta_time) {
@@ -147,9 +153,13 @@ void Title_camera::select_state(Title_state_B state) {
 	float pos_q_func = 0;//座標計算に使う適当な二次関数の答え
 	float rot_q_func = 0;//回転計算に使う適当な二次関数の答え
 
+	camera_eular.x = ALEasing(camera_eular.x, 0, 0.1f, time->deltaTime());
+	camera_eular.y = ALEasing(camera_eular.y, 0, 0.1f, time->deltaTime());
+
 	if (state == Adollib::Title_state_B::Awake) {
 		player = nullptr;
-		transform->local_orient = quaternion_identity();
+		//transform->local_orient = quaternion_identity();
+		transform->local_orient = quaternion_identity() * quaternion_from_euler(camera_eular);
 	}
 
 	// 離れる
@@ -166,6 +176,7 @@ void Title_camera::select_state(Title_state_B state) {
 		transform->local_pos = start_pos + (Vector3(0, 0, 1) * back_dis) * pos_q_func; //z方向の調整
 		transform->local_pos.y = start_pos.y + y_dis * pos_q_func; //titleのfloarの見え方がかわるのが気持ち悪いので 離れるとき座標を少し上げる
 
+		transform->local_orient = quaternion_identity() * quaternion_from_euler(camera_eular);
 	}
 	// 近づく
 	if (state == Adollib::Title_state_B::Update_1) {
@@ -210,14 +221,19 @@ void Title_camera::select_state(Title_state_B state) {
 				Debug::set("t_x_off", t_x_off);
 				rot_q_func = (-1 * t_x_off * t_x_off + 1); //(0<y<1)
 				rot_q_func *= rot_q_func;
-				transform->local_orient = quaternion_from_euler(Vector3(0, 9.5f, 0) * rot_q_func);
+				transform->local_orient = quaternion_from_euler(Vector3(0, 9.5f, 0) * rot_q_func) * quaternion_from_euler(camera_eular);
 			}
 		}
 
 
 	}
+	// stage_select
 	if (state == Adollib::Title_state_B::Update_2) {
-		// select_stage_manager
+		float eular_x = input->getRStickY(0) * -1.f;
+		float eular_y = input->getRStickX(0) * +1.f;
+		camera_eular.x = ALEasing(camera_eular.x, eular_x, 0.1f, time->deltaTime());
+		camera_eular.y = ALEasing(camera_eular.y, eular_y, 0.1f, time->deltaTime());
+		transform->local_orient = quaternion_from_euler(Vector3(0, 9.5f, 0) * 1) * quaternion_from_euler(camera_eular);
 	}
 
 	static float dis_buffer = 0;

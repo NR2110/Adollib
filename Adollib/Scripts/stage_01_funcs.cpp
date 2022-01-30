@@ -45,27 +45,27 @@ namespace Adollib
 		tree_parts[0]->renderer->color = stem_color;
 
 		tree_parts[1]->transform->local_pos = Vector3(0, 5 + y_scale * 2 * 5, 0);
-		tree_parts[1]->transform->local_scale = Vector3(1.5 * tan_scale, y_scale, 1.5 * tan_scale);
+		tree_parts[1]->transform->local_scale = Vector3(1.5f * tan_scale, y_scale, 1.5f * tan_scale);
 		tree_parts[1]->transform->local_orient = quaternion_from_euler(0, 0, 0);
 		tree_parts[1]->renderer->color = reaf_color;
 
 		tree_parts[2]->transform->local_pos = Vector3(0, 5 + y_scale * 2 * 4, 0);
-		tree_parts[2]->transform->local_scale = Vector3(2.0 * tan_scale, y_scale, 2.0 * tan_scale);
+		tree_parts[2]->transform->local_scale = Vector3(2.0f * tan_scale, y_scale, 2.0f * tan_scale);
 		tree_parts[2]->transform->local_orient = quaternion_from_euler(0, 1.7f, 0);
 		tree_parts[2]->renderer->color = reaf_color;
 
 		tree_parts[3]->transform->local_pos = Vector3(0, 5 + y_scale * 2 * 3, 0);
-		tree_parts[3]->transform->local_scale = Vector3(3.0 * tan_scale, y_scale, 3.0 * tan_scale);
+		tree_parts[3]->transform->local_scale = Vector3(3.0f * tan_scale, y_scale, 3.0f * tan_scale);
 		tree_parts[3]->transform->local_orient = quaternion_from_euler(0, 13, 0);
 		tree_parts[3]->renderer->color = reaf_color;
 
 		tree_parts[4]->transform->local_pos = Vector3(0, 5 + y_scale * 2 * 2, 0);
-		tree_parts[4]->transform->local_scale = Vector3(3.5 * tan_scale, y_scale, 3.5 * tan_scale);
+		tree_parts[4]->transform->local_scale = Vector3(3.5f * tan_scale, y_scale, 3.5f * tan_scale);
 		tree_parts[4]->transform->local_orient = quaternion_from_euler(0, 28, 0);
 		tree_parts[4]->renderer->color = reaf_color;
 
 		tree_parts[5]->transform->local_pos = Vector3(0, 5 + y_scale * 2 * 1, 0);
-		tree_parts[5]->transform->local_scale = Vector3(4.5 * tan_scale, y_scale, 4.5 * tan_scale);
+		tree_parts[5]->transform->local_scale = Vector3(4.5f * tan_scale, y_scale, 4.5f * tan_scale);
 		tree_parts[5]->transform->local_orient = quaternion_from_euler(0, 14, 0);
 		tree_parts[5]->renderer->color = reaf_color;
 
@@ -80,7 +80,7 @@ namespace Adollib
 
 		Box* boxes[Tree_size];
 		Collider* coll = tree->addComponent<Collider>();
-		coll->physics_data.inertial_mass = 120 * y_scale * tan_scale;
+		coll->physics_data.inertial_mass = 60 * y_scale * tan_scale;
 		coll->tag = Collider_tags::Stage | Collider_tags::Kinematic_Stage | Collider_tags::Caera_not_sunk_Stage ;
 		//coll->tag = Collider_tags::Stage | Collider_tags::Kinematic_Stage ;
 
@@ -499,8 +499,8 @@ namespace Adollib
 				}
 			}
 
-			Vector3 Leg_size = Vector3(0.3f, 0.15, 0.3f);
-			Vector3 Foot_size = Vector3(0.4f, 0.25, 0.4f);
+			Vector3 Leg_size = Vector3(0.3f, 0.15f, 0.3f);
+			Vector3 Foot_size = Vector3(0.4f, 0.25f, 0.4f);
 			float leg_x_pos = 0.6f;
 			{
 				{
@@ -634,7 +634,7 @@ namespace Adollib
 			}
 			//‘«
 			{
-				auto Cone = Joint::add_Conejoint(Waist_collider, Rleg_collider, Vector3(-0.6f, -0.8f, 0) * scale, Vector3(0, 0.3, 0) * scale, Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
+				auto Cone = Joint::add_Conejoint(Waist_collider, Rleg_collider, Vector3(-0.6f, -0.8f, 0) * scale, Vector3(0, 0.3f, 0) * scale, Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect(), joint_bias);
 				Cone->limit = 80;
 
 				auto Twist = Joint::add_Twistjoint(Waist_collider, Rleg_collider, Vector3(0, 1, 0), Vector3(0, 1, 0), joint_bias);
@@ -693,7 +693,7 @@ namespace Adollib
 				Gameobject* belt = Gameobject_manager::createCube("belt");
 				Waist->add_child(belt);
 				belt->transform->local_pos = Vector3(0, -0.45f, 0);
-				belt->transform->local_scale = Vector3(1.1, 0.25f, 1.1);
+				belt->transform->local_scale = Vector3(1.1f, 0.25f, 1.1f);
 				belt->renderer->color = face_color;
 				belt->renderer->set_material(material_02);
 			}

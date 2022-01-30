@@ -173,6 +173,9 @@ bool Physics_manager::update()
 				//applyexternalforce(ALP_physicses[Sce], 1);
 				applyexternalforce(ALP_physicses, inv60_per_timeStep, time_scale);
 
+				// Joint‚É‚æ‚é‘¬“x‚Ö‚Ì‰e‹¿
+				apply_joint_velocityeffect(ALP_joints);
+
 				// pair‚Ìnew/old‚ð“ü‚ê‘Ö‚¦‚é
 				pairs_new_num = 1 - pairs_new_num;
 

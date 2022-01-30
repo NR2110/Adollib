@@ -6,6 +6,40 @@
 using namespace Adollib;
 using namespace Physics_function;
 
+
+void HingeJoint::velocity_effect() const {
+
+	// transform
+	const world_trans* transforms[2]{
+		&ALPjoint->ALPcollider[0]->transform,
+		&ALPjoint->ALPcollider[1]->transform
+	};
+	//Hinge‚ÌŒü‚«
+	const Vector3 hinge_vec[2] = {
+		(anchor_s.posA - anchor_g.posA).unit_vect(),
+		(anchor_s.posB - anchor_g.posB).unit_vect()
+	};
+	//Hinge‚Ìworld_vec
+	const Vector3 hinge_vec_world[2] = {
+		vector3_quatrotate(hinge_vec[0],transforms[0]->orientation),
+		vector3_quatrotate(hinge_vec[1],transforms[1]->orientation),
+	};
+	//‰ñ“]
+	Vector3 angular_velocity[2] = {
+		ALPjoint->ALPcollider[0]->get_ALPphysics()->angula_velocity(),
+		ALPjoint->ALPcollider[1]->get_ALPphysics()->angula_velocity()
+	};
+
+	for (int i = 0; i < 2; ++i) {
+		angular_velocity[i] = hinge_vec_world[i] * vector3_dot(hinge_vec_world[i], angular_velocity[i]);
+		ALPjoint->ALPcollider[i]->get_ALPphysics()->set_angula_velocity(angular_velocity[i]);
+	}
+
+
+
+
+}
+
 bool HingeJoint::limit_effect(Vector3& contactP0, Vector3& contactP1, float& penetrate) const {
 	constexpr float power = 2; //“ä ‚È‚º‚©‚È‚¢‚Æ’£‚è•t‚­
 

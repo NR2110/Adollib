@@ -33,6 +33,8 @@ namespace Adollib {
 			anchors[0] = anchor;
 		}
 
+		void velocity_effect() const override {};
+
 		Matrix33 tensor_effect() const override {
 			return matrix33_zero();
 		}

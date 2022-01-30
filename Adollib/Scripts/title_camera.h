@@ -15,14 +15,18 @@ namespace Adollib
 		float rotate_speed = 0.5f;
 		float linear_speed = 30;
 
+		Vector3 start_pos;
+		Quaternion start_rotate;
+
+		Vector3 camera_eular = Vector3(0); //入力で少しカメラを周りに回せるようにする
+
+		//::: debug用 カメラを自由に動かせるようにする変数 :::
 		Quaternion camera_rot; //cameraの向き
 		Vector2 max_rotate = Vector2(-50, 60); //カメラの上下の最大角度
 		Vector3 rotate_vec_save;
 
 		Vector2 cursol_pos_save;
 
-		Vector3 start_pos;
-		Quaternion start_rotate;
 
 	private:
 		Title_state_manager* title_state_manager = nullptr;

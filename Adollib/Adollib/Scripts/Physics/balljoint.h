@@ -28,6 +28,8 @@ namespace Adollib {
 			return matrix33_zero();
 		}
 
+		void velocity_effect() const override {};
+
 		bool limit_effect(Vector3& contactP0, Vector3& contactP1, float& penetrate) const override {
 			return false;
 		}

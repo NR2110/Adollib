@@ -8,7 +8,7 @@
 namespace Adollib {
 
 	namespace Physics_function {
-		class Meshcollider_data;
+		struct Meshcollider_data;
 
 		// Croth頂点用クラス
 		class Croth_vertex : public Collider_shape {

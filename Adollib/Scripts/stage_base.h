@@ -42,7 +42,7 @@ namespace Adollib {
 		Collider* set_meshbox(const Vector3& pos = Vector3(0), const Vector3& size = Vector3(1), const Vector3& rotate = Vector3(0), const Vector3& color = Vector3(1, 1, 1), Gameobject* pearent = nullptr, bool is_static = true);
 		Gameobject* set_plane  (const Vector3& pos = Vector3(0), const Vector3& size = Vector3(1), const Vector3& rotate = Vector3(0), const Vector3& color = Vector3(1, 1, 1), Gameobject* pearent = nullptr, bool is_static = true);
 
-		Gameobject* set_respown_area(const Vector3& pos, const Vector3& size, const Vector3& rotate, float respown_num, Vector3 respown_pos, Gameobject* pearent = nullptr);
+		Gameobject* set_respown_area(const Vector3& pos, const Vector3& size, const Vector3& rotate, int respown_num, Vector3 respown_pos, Gameobject* pearent = nullptr);
 		Gameobject* set_goal_area(const Vector3& pos, const Vector3& size, const Vector3& rotate, Stage_types next_stage, Gameobject* pearent = nullptr);
 
 	public:
