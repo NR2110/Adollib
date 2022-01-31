@@ -14,4 +14,6 @@
 
 #include "../Scripts/stage_manager.h"
 
+#include "../Scripts/tutorial_manager.h"
+
 #include "../Scripts/camera.h"

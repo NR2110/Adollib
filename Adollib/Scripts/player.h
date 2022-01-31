@@ -70,6 +70,8 @@ namespace Adollib
 		BallJoint* Lhand_joint = nullptr; //elbow‚Æhand‚ğ‚Â‚È‚®joint
 		float Rhand_joint_ylength_default = 0; //‚Â‚©‚ñ‚Å‚¢‚é‚Æ‚«hand‚Ìjoint‚Ìanchor‚ğL‚Î‚·‚½‚ß ‰Šú’l‚ğ•Û‘¶
 		float Lhand_joint_ylength_default = 0;
+		float Rarm_rad_to_camera = 0;
+		float Larm_rad_to_camera = 0;
 
 
 		// ropeŠÖŒW

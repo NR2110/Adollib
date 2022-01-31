@@ -52,7 +52,7 @@ namespace Adollib
 		hand_camera_rot_pow = 2;
 		hand_camera_rot_center = ToRadian(15);
 
-		jump_y_power = 21;
+		jump_y_power = 22;
 		jump_front_power = 5000;
 
 		turn_speed = 1.5f;
@@ -160,6 +160,7 @@ namespace Adollib
 
 		// jump‚³‚¹‚é
 		make_jump();
+
 
 		shot_rope();
 

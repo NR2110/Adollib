@@ -74,7 +74,7 @@ Collider* Stage_base::set_box(const Vector3& pos, const Vector3& size, const Vec
 		comp->this_stage = this;
 		comp->this_coll = coll;
 		comp->respown_pos = pos;
-		comp->respown_rotate = quaternion_identity();
+		comp->respown_rotate = object->transform->local_orient;
 		coll->physics_data.inertial_mass = size.x * size.y * size.z;
 
 	}

@@ -188,6 +188,7 @@
     <ClInclude Include="..\Scripts\title_states.h" />
     <ClInclude Include="..\Scripts\title_state_manager.h" />
     <ClInclude Include="..\Scripts\touch_moveable.h" />
+    <ClInclude Include="..\Scripts\tutorial_manager.h" />
     <ClInclude Include="..\Scripts\ui_manager.h" />
     <ClInclude Include="Imgui\imconfig.h" />
     <ClInclude Include="Imgui\imgui.h" />
@@ -299,6 +300,7 @@
     <ClInclude Include="Scripts\Renderer\UI.h" />
     <ClInclude Include="Scripts\Renderer\sprite_renderer.h" />
     <ClInclude Include="Scripts\Renderer\texture.h" />
+    <ClInclude Include="Scripts\Renderer\UI_renderer.h" />
     <ClInclude Include="Scripts\Scene\scene.h" />
     <ClInclude Include="Scripts\Scene\scene_game.h" />
     <ClInclude Include="Scripts\Scene\scene_list.h" />
@@ -333,6 +335,7 @@
     <ClCompile Include="..\Scripts\title_camera.cpp" />
     <ClCompile Include="..\Scripts\title_stage.cpp" />
     <ClCompile Include="..\Scripts\title_state_manager.cpp" />
+    <ClCompile Include="..\Scripts\tutorial_manager.cpp" />
     <ClCompile Include="..\Scripts\ui_manager.cpp" />
     <ClCompile Include="Imgui\imgui.cpp" />
     <ClCompile Include="Imgui\imgui_demo.cpp" />
@@ -402,6 +405,7 @@
     <ClCompile Include="Scripts\Renderer\sprite_renderer.cpp" />
     <ClCompile Include="Scripts\Renderer\texture.cpp" />
     <ClCompile Include="Scripts\Renderer\croth_renderer.cpp" />
+    <ClCompile Include="Scripts\Renderer\UI_renderer.cpp" />
     <ClCompile Include="Scripts\Scene\scene_game.cpp" />
     <ClCompile Include="Scripts\Scene\scene_manager.cpp" />
     <ClCompile Include="Scripts\Scene\scene_player.cpp" />

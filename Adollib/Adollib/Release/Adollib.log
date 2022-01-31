@@ -1,20 +1,8 @@
-﻿  stage_01_funcs.cpp
+﻿  scene_game.cpp
 C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(15,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(796,66): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-  stage_base.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(15,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。
-  stage_demo_1_funcs.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(15,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_1_funcs.cpp(346,66): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-  stage_demo_2_funcs.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(15,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_2_funcs.cpp(790,66): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-  stage_demo_funcs.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(15,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_funcs.cpp(292,66): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
   コード生成しています。
-  1 of 10504 functions (<0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    66 functions had inline decision re-evaluated but remain unchanged
+  387 of 10531 functions ( 3.7%) were compiled, the rest were copied from previous compilation.
+    27 functions were new in current compilation
+    254 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Release\Adollib.exe

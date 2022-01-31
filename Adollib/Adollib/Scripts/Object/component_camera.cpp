@@ -114,6 +114,7 @@ void Camera_component::setup() {
 }
 
 void Camera_component::posteffect_render() {
+	if (gameobject->is_active == false)return;
 
 	// Šeposteffect‚Ì‚ğˆ—‚µ‚Ä‚¢‚­
 	for (auto& posteffect : posteffects) {
@@ -131,7 +132,7 @@ void Camera_component::posteffect_render() {
 
 	Systems::SetBlendState(State_manager::BStypes::BS_ALPHA);
 	Systems::SetRasterizerState(State_manager::RStypes::RS_CULL_BACK);
-	Systems::SetDephtStencilState(State_manager::DStypes::DS_TRUE);
+	Systems::SetDephtStencilState(State_manager::DStypes::DS_FALSE);
 
 	UI ui;
 	ui.ui_data.dh = Al_Global::SCREEN_HEIGHT;

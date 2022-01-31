@@ -86,6 +86,7 @@ void Select_state_manager::start() {
 	player_manager->set_moveable(false);
 	player_manager->set_Tpause_and_set_transform(Vector3(0,-1000,-70),quaternion_identity());
 
+	Gameobject_manager::find("camera", Scenelist::scene_player)->findComponent<Camera_component>()->gameobject->is_active = false;
 }
 
 void Select_state_manager::update() {

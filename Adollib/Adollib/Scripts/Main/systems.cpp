@@ -249,7 +249,9 @@ bool Systems::CreateDepthStencil()
 	//デプスステンシルステート
 	D3D11_DEPTH_STENCIL_DESC depth_stencil_desc;
 	ZeroMemory(&depth_stencil_desc, sizeof(depth_stencil_desc));
-	depth_stencil_desc.DepthEnable = FALSE;
+	depth_stencil_desc.DepthEnable = TRUE;
+	depth_stencil_desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	depth_stencil_desc.DepthFunc = D3D11_COMPARISON_ALWAYS;
 	hr = Device->CreateDepthStencilState(&depth_stencil_desc, DepthStencilState[static_cast<int>(State_manager::DStypes::DS_FALSE)].GetAddressOf());
 	//assert(FAILED(hr));
 

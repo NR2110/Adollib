@@ -44,6 +44,10 @@ void Player::reach_out_hands() {
 		catch_left_joint,
 		catch_right_joint
 	};
+	float* arm_rad_to_camera[2] = {
+		&Rarm_rad_to_camera,
+		&Larm_rad_to_camera
+	};
 
 	for (int i = 0; i < 2; i++) {
 		if (input_arm[i]) {
@@ -81,20 +85,6 @@ void Player::reach_out_hands() {
 
 			}
 
-			//{
-			//	if (rad > PI) {
-			//		rad = rad - 2 * PI;
-			//		collider->gameobject->transform->local_orient *= -1;
-			//		collider->gameobject->transform->orientation *= -1;
-			//		off = rotate * collider->gameobject->transform->orientation.inverse();
-			//	}
-			//}
-
-			float elbow_pow = 0;
-			//if (fabsf(colliders[i]->transform->orientation.z * colliders[i + 2]->transform->orientation.z) > 0.2f) {
-			//	colliders[i + 2]->transform->orientation *= -1;
-			//	colliders[i + 2]->transform->local_orient *= -1;
-			//}
 			{
 				//腕
 				auto& collider = colliders[i + 2];
@@ -111,6 +101,7 @@ void Player::reach_out_hands() {
 					rad = off.radian();
 				}
 				Debug::set("elbow_orientation_" + std::to_string(i), collider->transform->orientation);
+				*arm_rad_to_camera[i] = rad; //つかみ用
 
 				float pow = ALClamp(rad * hand_rot_pow, 0, hand_rot_max_pow);
 				Vector3 world_axis = vector3_quatrotate(axis, collider->transform->orientation);
@@ -178,6 +169,10 @@ void Player::catch_things() {
 		Lhand_joint_ylength_default,
 		Rhand_joint_ylength_default
 	};
+	const float arm_rad_to_camera[2] = {
+		Rarm_rad_to_camera,
+		Larm_rad_to_camera
+	};
 
 	bool* is_maked_joint[2] = {
 		&is_maked_left_joint,
@@ -195,7 +190,7 @@ void Player::catch_things() {
 		auto& collider = colliders[i];
 		Joint_base*& joint = *joints[i];
 		//持つ
-		if (input_arm[i] && joint == nullptr && *is_maked_joint[i] == false) { //Keyが押されている jointが存在しない 同state中に物をつかんでいない
+		if (input_arm[i] && joint == nullptr && *is_maked_joint[i] == false && arm_rad_to_camera[i] < ToRadian(10)) { //Keyが押されている jointが存在しない 同state中に物をつかんでいない
 			collider->is_save_contacted_colls = true;
 			auto contacted_colls = collider->get_Contacted_data();
 
@@ -268,16 +263,6 @@ void Player::catch_things() {
 
 // ropeを撃つ
 void Player::shot_rope() {
-	// rope_hit_sphere, rope_hit_cylinderの初期化
-	//if (rope_hit_sphere == nullptr) {
-	//	rope_hit_sphere = Gameobject_manager::createSphere("rope_hit_sphere");
-	//	rope_hit_sphere->transform->local_scale = Vector3(rope_sphere_r * 2);
-	//	rope_hit_sphere->renderer->color = Vector4(1, 0, 0, 1);
-
-	//	rope_hit_cylinder = Gameobject_manager::createCylinder("rope_hit_cylinder");
-	//	rope_hit_cylinder->transform->local_scale = Vector3(rope_sphere_r * 0.5f);
-	//	rope_hit_cylinder->renderer->color = Vector4(1, 0, 0, 1);
-	//}
 
 	// とりあえず描画されないように吹っ飛ばす
 	{
@@ -611,6 +596,8 @@ void Player::push_waist_for_stand() {
 			Vector3 fall_force = Vector3(0, 1, 0) * Waist_collider->linear_velocity().y * mass;
 
 			Waist_collider->add_force(gravity_pow + force);
+
+			//if(onground_ray_data.coll->physics_data.inertial_mass > 50)
 			onground_ray_data.coll->add_force(-(gravity_pow + fall_force), onground_contactpoint);
 
 		}
@@ -650,7 +637,7 @@ void Player::linear_move() {
 		}
 
 		if (onground_collider != nullptr) {
-			if (onground_collider->physics_data.inertial_mass > 20) //歩くときに小さな石ころに全力を加えない
+			if (onground_collider->physics_data.inertial_mass > 50) //歩くときに小さな石ころに全力を加えない
 				onground_collider->add_force(-dir * waist_move_pow * move_pow, onground_contactpoint);
 		}
 
@@ -780,10 +767,19 @@ void Player::make_jump() {
 			Lfoot_collider->linear_velocity(Vector3(Lfoot_collider->linear_velocity().x, jump_y_power * 0.1f, Lfoot_collider->linear_velocity().z));
 			Rfoot_collider->linear_velocity(Vector3(Rfoot_collider->linear_velocity().x, jump_y_power * 0.1f, Rfoot_collider->linear_velocity().z));
 
-			// Z方向に力を加える
+			// 入力方向に力を加える
 			for (int i = 0; i < Human_collider_size; i++) {
 				float pow = vector3_dot(Human_colliders[i]->linear_velocity(), dir) * Human_colliders[i]->physics_data.inertial_mass;
 				Human_colliders[i]->add_force(dir * (jump_front_power - pow * 2));
+			}
+			// camera方向に力を加える
+			if(dir.norm() == 0 && (input_changer->is_Larm_state || input_changer->is_Rarm_state))
+			for (int i = 0; i < Human_collider_size; i++) {
+				Vector3 camera_dir = vector3_quatrotate(Vector3(0, 0, 1), camera->transform->orientation);
+				camera_dir.y = 0;
+				camera_dir = camera_dir.unit_vect();
+
+				Human_colliders[i]->add_force(camera_dir * 5000);
 			}
 
 			// 足元の物体に力を加える
@@ -938,13 +934,13 @@ void Player::update_gnyat_pow() {
 		is_jumping == false
 		) {
 		// 両手でつかんでいる&接地していない&jumpした直後ではない
-		hand_gunyatto_pow -= 5 * time->deltaTime(); //ぐにゃっとさせていく
+		hand_gunyatto_pow -= 3 * time->deltaTime(); //ぐにゃっとさせていく
 
 	}
 	else if (catch_left_joint != nullptr && catch_right_joint != nullptr) {
 		// 両手でつかんでいる&そこそこ腰が立っており接地している
 		if (vector3_dot(Vector3(0, -1, 0), vector3_quatrotate(Vector3(0, -1, 0), Waist->transform->orientation)) > 0.7f)
-			hand_gunyatto_pow += 1 * time->deltaTime(); //しっかりさせていく
+			hand_gunyatto_pow += 3 * time->deltaTime(); //しっかりさせていく
 	}
 
 	else if (catch_left_joint == nullptr || catch_right_joint == nullptr) {

@@ -5,10 +5,17 @@
 namespace Adollib {
 
 	void Scene_game::awake() {
-		Gameobject* GO = Gameobject_manager::create("Stage_manager");
-		auto comp = GO->addComponent<Stage_manager>();
+		{
+			Gameobject* GO = Gameobject_manager::create("Stage_manager");
+			auto comp = GO->addComponent<Stage_manager>();
+			Gameobject_manager::find("Player_manager",Scenelist::scene_player)->findComponent<Player_manager>()->set_stage_manager_ptr(comp);
+		}
 
-		Gameobject_manager::find("Player_manager",Scenelist::scene_player)->findComponent<Player_manager>()->set_stage_manager_ptr(comp);
+		{
+			Gameobject* GO = Gameobject_manager::create("Tutrial_manager");
+			auto comp = GO->addComponent<Tutrial_manager>();
+		}
+
 	}
 
 	void Scene_game::initialize() {

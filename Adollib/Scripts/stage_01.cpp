@@ -33,7 +33,7 @@ namespace Adollib
 		next_stage = Stage_types::none;
 		//player_respown_pos = Vector3(-2.7f, 10, -5);
 		//player_respown_pos = Vector3(90, 16.0f, 66.0f);
-		y_respown_pos = 30; // respown‚µ‚½‚Æ‚«‚ÌY‚ÌÀ•W
+		y_respown_pos = 50; // respown‚µ‚½‚Æ‚«‚ÌY‚ÌÀ•W
 
 		//set_box(Vector3(0, -60, -98), Vector3(30, 30, 60), Vector3(0), Vector3(188, 214, 54) / 255.0f, true);
 
@@ -128,7 +128,7 @@ namespace Adollib
 				set_fence(Vector3(-28, 4, 15.5f), Vector3(1), Vector3(0, 90, 0), fences_pearent);
 			}
 
-			//–Ø
+			// –Ø
 			{
 				Gameobject* trees_pearent = Gameobject_manager::create("trees");
 				first_zone->add_child(trees_pearent);
@@ -142,42 +142,74 @@ namespace Adollib
 				set_tree(Vector3(83, 0, 32), Vector3(1, 1.2f, 1), Vector3(0, 12, 0), 2.5f, 0.8f, trees_pearent);
 			}
 
-			{
-				auto tutrial_stick_pearent = Gameobject_manager::create("tutrial_stick");
-				first_zone->add_child(tutrial_stick_pearent);
 
-				auto coll = set_box(Vector3(-12,5,6.6f), Vector3(10, 5, 0.5f), Vector3(10, 0, 0), base_color, tutrial_stick_pearent, false);
 
-				auto tutrial_stick_sprite = Gameobject_manager::createPlane("tutrial_stick_sprite");
-				coll->gameobject->add_child(tutrial_stick_sprite);
-				tutrial_stick_sprite->transform->local_pos = Vector3(0, 0, -1.1f);
-				tutrial_stick_sprite->transform->local_orient = quaternion_from_euler(0, 180, 0);
-				tutrial_stick_sprite->transform->local_scale = Vector3(1.16f, 1.3f, 1);
-				auto tutrial_material = Material_manager::create_material("Tuterial_stick");
-				tutrial_material->get_texture()->Load(L"./DefaultTexture/tutrial/tuterial_stick.png");
-				tutrial_material->BS_state = State_manager::BStypes::BS_ALPHA;
-				tutrial_material->Load_VS("./DefaultShader/sprite_vs.cso");
-				tutrial_material->Load_PS("./DefaultShader/sprite_ps.cso");
-				tutrial_stick_sprite->renderer->set_material(tutrial_material);
-			}
-			{
-				auto tutrial_hand_pearent = Gameobject_manager::create("tutrial_chatch_and_hold_Turn_your_hand");
-				first_zone->add_child(tutrial_hand_pearent);
 
-				auto coll = set_box(Vector3(65, 6, 0), Vector3(13, 6, 0.5f), Vector3(0, 90, 0), base_color, tutrial_hand_pearent, false);
 
-				auto tutrial_stick_sprite = Gameobject_manager::createPlane("tutrial_chatch_and_hold_Turn_your_hand");
-				coll->gameobject->add_child(tutrial_stick_sprite);
-				tutrial_stick_sprite->transform->local_pos = Vector3(-0.01f, 0.02f, -1.1f);
-				tutrial_stick_sprite->transform->local_orient = quaternion_from_euler(0, 180, 0);
-				tutrial_stick_sprite->transform->local_scale = Vector3(1.1f, 1.06f, 1);
-				auto tutrial_material = Material_manager::create_material("Tutrial_chatch_and_hold_Turn_your_hand");
-				tutrial_material->get_texture()->Load(L"./DefaultTexture/tutrial/tutrial_chatch_and_hold_Turn_your_hand.png");
-				tutrial_material->BS_state = State_manager::BStypes::BS_ALPHA;
-				tutrial_material->Load_VS("./DefaultShader/sprite_vs.cso");
-				tutrial_material->Load_PS("./DefaultShader/sprite_ps.cso");
-				tutrial_stick_sprite->renderer->set_material(tutrial_material);
-			}
+			//// tutrial_stick
+			//{
+			//	auto tutrial_stick_pearent = Gameobject_manager::create("tutrial_stick");
+			//	first_zone->add_child(tutrial_stick_pearent);
+
+			//	auto coll = set_box(Vector3(-12, 5, 6.6f), Vector3(10, 5, 0.5f), Vector3(10, 0, 0), base_color, tutrial_stick_pearent, false);
+
+			//	auto tutrial_stick_sprite = Gameobject_manager::createPlane("tutrial_stick_sprite");
+			//	coll->gameobject->add_child(tutrial_stick_sprite);
+			//	tutrial_stick_sprite->transform->local_pos = Vector3(0, 0, -1.1f);
+			//	tutrial_stick_sprite->transform->local_orient = quaternion_from_euler(0, 180, 0);
+			//	tutrial_stick_sprite->transform->local_scale = Vector3(1.16f, 1.3f, 1);
+			//	auto tutrial_material = Material_manager::create_material("Tuterial_stick");
+			//	tutrial_material->get_texture()->Load(L"./DefaultTexture/tutrial/tuterial_stick.png");
+			//	tutrial_material->BS_state = State_manager::BStypes::BS_ALPHA;
+			//	tutrial_material->Load_VS("./DefaultShader/sprite_vs.cso");
+			//	tutrial_material->Load_PS("./DefaultShader/sprite_ps.cso");
+			//	tutrial_stick_sprite->renderer->set_material(tutrial_material);
+			//}
+
+			//// tutrial_chatch_and_hold_Turn_your_hand
+			//{
+			//	auto tutrial_hand_pearent = Gameobject_manager::create("tutrial_chatch_and_hold_Turn_your_hand");
+			//	first_zone->add_child(tutrial_hand_pearent);
+
+			//	auto coll = set_box(Vector3(66.5f, 6, 0), Vector3(13, 6, 0.5f), Vector3(15, 90, 0), base_color, tutrial_hand_pearent, false);
+
+			//	auto tutrial_stick_sprite = Gameobject_manager::createPlane("tutrial_chatch_and_hold_Turn_your_hand");
+			//	coll->gameobject->add_child(tutrial_stick_sprite);
+			//	tutrial_stick_sprite->transform->local_pos = Vector3(-0.01f, 0.02f, -1.1f);
+			//	tutrial_stick_sprite->transform->local_orient = quaternion_from_euler(0, 180, 0);
+			//	tutrial_stick_sprite->transform->local_scale = Vector3(1.1f, 1.06f, 1);
+			//	auto tutrial_material = Material_manager::create_material("Tutrial_chatch_and_hold_Turn_your_hand");
+			//	tutrial_material->get_texture()->Load(L"./DefaultTexture/tutrial/tutrial_chatch_and_hold_Turn_your_hand.png");
+			//	tutrial_material->BS_state = State_manager::BStypes::BS_ALPHA;
+			//	tutrial_material->Load_VS("./DefaultShader/sprite_vs.cso");
+			//	tutrial_material->Load_PS("./DefaultShader/sprite_ps.cso");
+			//	tutrial_stick_sprite->renderer->set_material(tutrial_material);
+
+			//	auto phyramid_pearent = Gameobject_manager::create("tutrial_chatch_and_hold_Turn_your_hand_phyramid_pearent");
+			//	tutrial_hand_pearent->add_child(phyramid_pearent);
+
+			//	int phyramid_size = 6;
+			//	Vector3 base_size = Vector3(1, 1, 2);
+			//	Vector3 base_pos = Vector3(73, 0, 2);
+			//	for (int y = 0; y < phyramid_size; ++y) {
+			//		for (int x = 0; x < phyramid_size - y; ++x) {
+			//			for (int z = 0; z < phyramid_size - y; ++z) {
+
+			//				auto coll = set_box(base_pos + Vector3(
+			//					(base_size.x * 2) * x - ((base_size.x * 2) * (phyramid_size - y) * 0.5f) - y * base_size.x * 0.5f,
+			//					(base_size.y * 2) * y + base_size.y,
+			//					(base_size.z * 2) * z - ((base_size.z * 2) * (phyramid_size - y) * 0.5f)
+
+			//				), base_size, Vector3(0, 0, 0), moveable_blue, phyramid_pearent, false);
+			//				coll->physics_data.inertial_mass = 10;
+			//			}
+			//		}
+			//	}
+
+
+			//}
+
+
 		}
 
 		// second_zone
@@ -521,9 +553,9 @@ namespace Adollib
 			Gameobject* goal_and_respown_areas = Gameobject_manager::create("goal&respown_areas");
 			stage_parts.emplace_back(goal_and_respown_areas);
 
-			set_respown_area(Vector3(24, 9, 57),    Vector3(14, 5, 15),  Vector3(0), 2, Vector3(24,  50, 57), goal_and_respown_areas);
-			set_respown_area(Vector3(100, 18, 61),  Vector3(16, 10, 19), Vector3(0), 3, Vector3(102, 50, 50), goal_and_respown_areas);
-			set_respown_area(Vector3(126, 16, 116), Vector3(24, 10, 10), Vector3(0), 4, Vector3(104, 50,120), goal_and_respown_areas);
+			set_respown_area(Vector3(24, 9, 57), Vector3(14, 5, 15), Vector3(0), 2, Vector3(24, 50, 57), goal_and_respown_areas);
+			set_respown_area(Vector3(100, 18, 61), Vector3(16, 10, 19), Vector3(0), 3, Vector3(102, 50, 50), goal_and_respown_areas);
+			set_respown_area(Vector3(126, 16, 116), Vector3(24, 10, 10), Vector3(0), 4, Vector3(104, 50, 120), goal_and_respown_areas);
 
 			set_goal_area(Vector3(104, 6, 224), Vector3(10, 2, 8), Vector3(0), Stage_types::demo, goal_and_respown_areas);
 		}

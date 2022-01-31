@@ -13,6 +13,10 @@ namespace Adollib {
 		const Vector3 roof_color = Vector3(233, 225, 217) / 255.0f * 0.9f;
 		const Vector3 stair_color = Vector3(215, 205, 197) / 255.0f * 0.9f;
 
+		const Vector3 moveable_red =   Vector3(1, 196 / 255.0f, 196 / 255.0f);
+		const Vector3 moveable_green = Vector3(196 / 255.0f, 1, 196 / 255.0f);
+		const Vector3 moveable_blue =  Vector3(196 / 255.0f, 196 / 255.0f, 1);
+
 
 		// ñÿÇçÏÇÈ
 		Gameobject* set_tree(const Vector3& pos, const Vector3& scale, const Vector3& rotate, const float y_scale = 1, const float tan_scale = 1, Gameobject* pearent = nullptr);
