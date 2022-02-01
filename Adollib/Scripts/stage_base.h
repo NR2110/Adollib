@@ -52,6 +52,11 @@ namespace Adollib {
 		// stage_manager‚ªŒÄ‚Ôdestroy ‚±‚Ìstage‚©‚çŸ‚ÉØ‚è‘Ö‚í‚Á‚½‚Æ‚«‚ÉŒÄ‚Î‚ê‚é
 		virtual void stage_destroy() = 0;
 
+		virtual void  summon_block_01() {};
+		virtual void  summon_block_02() {};
+		virtual void  summon_block_03() {};
+		virtual void  summon_block_04() {};
+
 	public:
 
 		// addComponent‚³‚ê‚½‚Æ‚«‚ÉŒÄ‚Î‚ê‚é

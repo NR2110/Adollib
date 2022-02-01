@@ -258,54 +258,6 @@ namespace Adollib
 
 		{}
 
-		//croth
-		if(0)
-		{
-			Gameobject* pearent = Gameobject_manager::create("BallJoint_Shperenet");
-			pearent->transform->local_pos = Vector3(0, 60, 0);
-			std::vector<Collider*>colls;
-			stage_parts.emplace_back(pearent);
-
-			int sphere_size = 8;
-			const int colls_size = sphere_size * sphere_size;
-			colls.resize(colls_size);
-
-			for (int xaxis = 0; xaxis < sphere_size; xaxis++) {
-				for (int zaxis = 0; zaxis < sphere_size; zaxis++) {
-					int index = xaxis * sphere_size + zaxis;
-
-					Collider* coll = nullptr;
-					Gameobject* go = nullptr;
-
-					coll = set_sphere(Vector3(
-						(xaxis - sphere_size * 0.5f) * 2,
-						2,
-						(zaxis - sphere_size * 0.5f) * 2
-					),
-						1,
-						Vector3(1, 0, (1.0f / (sphere_size * sphere_size)) * index),
-						nullptr,
-						false
-					);
-					go = coll->gameobject;
-
-					pearent->add_child(go);
-					colls.at(index) = (coll);
-
-					coll->tag &= ~Collider_tags::Caera_not_sunk_Stage;
-					coll->physics_data.inertial_mass = 0.1f;
-				}
-			}
-
-			for (int xaxis = 0; xaxis < sphere_size; xaxis++) {
-				for (int zaxis = 0; zaxis < sphere_size; zaxis++) {
-					int index = xaxis * sphere_size + zaxis;
-
-					if (xaxis > 0) Joint::add_balljoint(colls[index], colls[index - sphere_size], Vector3(-1, 0, 0), Vector3(1, 0, 0), 0.1f);
-					if (zaxis > 0) Joint::add_balljoint(colls[index], colls[index - 1], Vector3(0, 0, -1), Vector3(0, 0, 1), 0.1f);
-				}
-			}
-		}
 #endif
 
 		// •Ç
@@ -318,7 +270,7 @@ namespace Adollib
 			set_door(Vector3(-2, 4, 81), Vector3(2, 4, 0.5f), Vector3(0),true , floar_go);
 			set_door(Vector3(+2, 4, 81), Vector3(2, 4, 0.5f), Vector3(0),false, floar_go);
 
-			set_goal_area(Vector3(0, -8, 90), Vector3(10, 4, 10), Vector3(0), Stage_types::demo_1, floar_go);
+			set_goal_area(Vector3(0, -8, 90), Vector3(10, 4, 10), Vector3(0), Stage_types::Title, floar_go);
 		}
 
 		// ‰º

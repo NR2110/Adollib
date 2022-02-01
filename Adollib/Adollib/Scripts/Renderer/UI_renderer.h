@@ -19,18 +19,12 @@ namespace Adollib {
 	public:
 		struct UI_data {
 		public:
-			//float dx = 0;
-			//float dy = 0;
-			//float dw = 0;
-			//float dh = 0;
-
 			float sx = 0;
 			float sy = 0;
 			float sw = 1;
 			float sh = 1;
 
 			float angle = 0.0f;
-			//float alpha = 1.0f;
 		};
 		UI_data ui_data;
 

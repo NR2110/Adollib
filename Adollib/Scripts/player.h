@@ -70,8 +70,8 @@ namespace Adollib
 		BallJoint* Lhand_joint = nullptr; //elbow‚Æhand‚ð‚Â‚È‚®joint
 		float Rhand_joint_ylength_default = 0; //‚Â‚©‚ñ‚Å‚¢‚é‚Æ‚«hand‚Ìjoint‚Ìanchor‚ðL‚Î‚·‚½‚ß ‰Šú’l‚ð•Û‘¶
 		float Lhand_joint_ylength_default = 0;
-		float Rarm_rad_to_camera = 0;
-		float Larm_rad_to_camera = 0;
+		Quaternion Rarm_rad_to_camera ;
+		Quaternion Larm_rad_to_camera ;
 
 
 		// ropeŠÖŒW
@@ -242,6 +242,15 @@ namespace Adollib
 		}
 
 		void set_stage_manager_ptr(Stage_manager* m) { stage_manager = m; };
+
+		Stage_manager* get_stage_manager_ptr() { return stage_manager; };
+
+		bool is_respowning() { return respown_timer > 0; };
+
+		bool is_chatch_objct(int num) {
+			if (num == 0) return catch_left_joint != nullptr;
+			if (num == 1) return catch_right_joint != nullptr;
+		}
 
 	public:
 		void awake() override;

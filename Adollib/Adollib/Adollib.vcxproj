@@ -188,7 +188,9 @@
     <ClInclude Include="..\Scripts\title_states.h" />
     <ClInclude Include="..\Scripts\title_state_manager.h" />
     <ClInclude Include="..\Scripts\touch_moveable.h" />
-    <ClInclude Include="..\Scripts\tutorial_manager.h" />
+    <ClInclude Include="..\Scripts\tutrial_base.h" />
+    <ClInclude Include="..\Scripts\tutrial_manager.h" />
+    <ClInclude Include="..\Scripts\tutrial_stage01_move_camera_catch.h" />
     <ClInclude Include="..\Scripts\ui_manager.h" />
     <ClInclude Include="Imgui\imconfig.h" />
     <ClInclude Include="Imgui\imgui.h" />
@@ -335,7 +337,8 @@
     <ClCompile Include="..\Scripts\title_camera.cpp" />
     <ClCompile Include="..\Scripts\title_stage.cpp" />
     <ClCompile Include="..\Scripts\title_state_manager.cpp" />
-    <ClCompile Include="..\Scripts\tutorial_manager.cpp" />
+    <ClCompile Include="..\Scripts\tutrial_manager.cpp" />
+    <ClCompile Include="..\Scripts\tutrial_stage01_move_camera_catch.h.cpp" />
     <ClCompile Include="..\Scripts\ui_manager.cpp" />
     <ClCompile Include="Imgui\imgui.cpp" />
     <ClCompile Include="Imgui\imgui_demo.cpp" />

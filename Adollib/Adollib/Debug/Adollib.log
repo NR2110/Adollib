@@ -1,3 +1,5 @@
-﻿  select_stage_manager.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(15,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。
+﻿  stage_01.cpp
+  tutrial.cpp
+  renderer_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(15,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\stage_01.cpp)
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

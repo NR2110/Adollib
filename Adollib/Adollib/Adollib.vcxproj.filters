@@ -164,7 +164,7 @@
     <Filter Include="ソース ファイル\scene_player\camera">
       <UniqueIdentifier>{c5a1a0b5-3b44-4ee7-b36f-e93b357c3d6b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\scene_game\stage\stage\tutrial">
+    <Filter Include="ソース ファイル\scene_player\tutrial">
       <UniqueIdentifier>{8dd5e070-ee73-47fb-8aa1-1d75d6d613a3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -466,11 +466,14 @@
     <ClCompile Include="Scripts\Scene\scene_player.cpp">
       <Filter>ソース ファイル\scene_player</Filter>
     </ClCompile>
-    <ClCompile Include="..\Scripts\tutorial_manager.cpp">
-      <Filter>ソース ファイル\scene_game\stage\stage\tutrial</Filter>
-    </ClCompile>
     <ClCompile Include="Scripts\Renderer\UI_renderer.cpp">
       <Filter>00_Adollib\44_render\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\tutrial_stage01_move_camera_catch.h.cpp">
+      <Filter>ソース ファイル\scene_player\tutrial</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\tutrial_manager.cpp">
+      <Filter>ソース ファイル\scene_player\tutrial</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -927,11 +930,17 @@
     <ClInclude Include="..\Scripts\ui_manager.h">
       <Filter>ソース ファイル\scene_game\ui</Filter>
     </ClInclude>
-    <ClInclude Include="..\Scripts\tutorial_manager.h">
-      <Filter>ソース ファイル\scene_game\stage\stage\tutrial</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts\Renderer\UI_renderer.h">
       <Filter>00_Adollib\44_render\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\tutrial_stage01_move_camera_catch.h">
+      <Filter>ソース ファイル\scene_player\tutrial</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\tutrial_manager.h">
+      <Filter>ソース ファイル\scene_player\tutrial</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\tutrial_base.h">
+      <Filter>ソース ファイル\scene_player\tutrial</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

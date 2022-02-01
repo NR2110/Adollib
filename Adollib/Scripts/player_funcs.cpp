@@ -44,7 +44,7 @@ void Player::reach_out_hands() {
 		catch_left_joint,
 		catch_right_joint
 	};
-	float* arm_rad_to_camera[2] = {
+	Quaternion* arm_rad_to_camera[2] = {
 		&Rarm_rad_to_camera,
 		&Larm_rad_to_camera
 	};
@@ -91,7 +91,6 @@ void Player::reach_out_hands() {
 				Quaternion off = -collider->transform->orientation * goal.inverse();
 				Vector3 axis = -off.axis();
 				float rad = off.radian();
-				Debug::set("rad_sholder_" + std::to_string(i), rad);
 				if (rad > PI) {
 					collider->transform->orientation *= -1;
 					collider->transform->local_orient *= -1;
@@ -100,8 +99,7 @@ void Player::reach_out_hands() {
 					axis = -off.axis();
 					rad = off.radian();
 				}
-				Debug::set("elbow_orientation_" + std::to_string(i), collider->transform->orientation);
-				*arm_rad_to_camera[i] = rad; //‚Â‚©‚İ—p
+				*arm_rad_to_camera[i] = off; //‚Â‚©‚İ—p
 
 				float pow = ALClamp(rad * hand_rot_pow, 0, hand_rot_max_pow);
 				Vector3 world_axis = vector3_quatrotate(axis, collider->transform->orientation);
@@ -115,7 +113,6 @@ void Player::reach_out_hands() {
 				Quaternion off = -collider->transform->orientation * goal.inverse();
 				Vector3 axis = -off.axis();
 				float rad = off.radian();
-				Debug::set("rad_sholder_" + std::to_string(i) + std::to_string(i), rad);
 				if (rad > PI) {
 					collider->transform->orientation *= -1;
 					collider->transform->local_orient *= -1;
@@ -124,7 +121,6 @@ void Player::reach_out_hands() {
 					axis = -off.axis();
 					rad = off.radian();
 				}
-				Debug::set("sholder_orientation_" + std::to_string(i), collider->transform->orientation);
 
 				float pow = ALClamp(rad * hand_rot_pow, 0, hand_rot_max_pow);
 				Vector3 world_axis = vector3_quatrotate(axis, collider->transform->orientation);
@@ -169,7 +165,7 @@ void Player::catch_things() {
 		Lhand_joint_ylength_default,
 		Rhand_joint_ylength_default
 	};
-	const float arm_rad_to_camera[2] = {
+	const Quaternion arm_rad_to_camera[2] = {
 		Rarm_rad_to_camera,
 		Larm_rad_to_camera
 	};
@@ -189,8 +185,18 @@ void Player::catch_things() {
 	for (int i = 0; i < 2; i++) {
 		auto& collider = colliders[i];
 		Joint_base*& joint = *joints[i];
+
+		// ˜r‚Ì‰ñ“]‘OAŒã‚ÌŒü‚«‚ğŒvZ
+		Vector3 check_0 = vector3_quatrotate(Vector3(1, 0, 0), colliders[i + 2]->transform->orientation);
+		Vector3 check_1 = vector3_quatrotate(check_0, arm_rad_to_camera[i]);
 		//‚Â
-		if (input_arm[i] && joint == nullptr && *is_maked_joint[i] == false && arm_rad_to_camera[i] < ToRadian(10)) { //Key‚ª‰Ÿ‚³‚ê‚Ä‚¢‚é joint‚ª‘¶İ‚µ‚È‚¢ “¯state’†‚É•¨‚ğ‚Â‚©‚ñ‚Å‚¢‚È‚¢
+		if (
+			input_arm[i] && joint == nullptr && *is_maked_joint[i] == false && // Key‚ª‰Ÿ‚³‚ê‚Ä‚¢‚é joint‚ª‘¶İ‚µ‚È‚¢ “¯state’†‚É•¨‚ğ‚Â‚©‚ñ‚Å‚¢‚È‚¢
+			(
+				check_1.x - check_0.x < 0 || //‰º‚ÉŒü‚±‚¤‚Æ‚µ‚Ä‚¢‚é
+				arm_rad_to_camera[i].radian() < ToRadian(50) //˜r‚ÆƒJƒƒ‰‚ÌŠp“x‚ªˆê’èˆÈ‰º‚Å‚ ‚é
+				)
+			) {
 			collider->is_save_contacted_colls = true;
 			auto contacted_colls = collider->get_Contacted_data();
 
@@ -773,14 +779,14 @@ void Player::make_jump() {
 				Human_colliders[i]->add_force(dir * (jump_front_power - pow * 2));
 			}
 			// camera•ûŒü‚É—Í‚ğ‰Á‚¦‚é
-			if(dir.norm() == 0 && (input_changer->is_Larm_state || input_changer->is_Rarm_state))
-			for (int i = 0; i < Human_collider_size; i++) {
-				Vector3 camera_dir = vector3_quatrotate(Vector3(0, 0, 1), camera->transform->orientation);
-				camera_dir.y = 0;
-				camera_dir = camera_dir.unit_vect();
+			if (dir.norm() == 0 && (input_changer->is_Larm_state || input_changer->is_Rarm_state))
+				for (int i = 0; i < Human_collider_size; i++) {
+					Vector3 camera_dir = vector3_quatrotate(Vector3(0, 0, 1), camera->transform->orientation);
+					camera_dir.y = 0;
+					camera_dir = camera_dir.unit_vect();
 
-				Human_colliders[i]->add_force(camera_dir * 5000);
-			}
+					Human_colliders[i]->add_force(camera_dir * 5000);
+				}
 
 			// ‘«Œ³‚Ì•¨‘Ì‚É—Í‚ğ‰Á‚¦‚é
 			float mass = 1500;
@@ -805,8 +811,16 @@ bool Player::check_respown() {
 
 		// goal‚µ‚Ä‚¢‚½‚ç respownˆ—‚ğs‚í‚¸ stageØ‘Öˆ—‚ğŒÄ‚Ô
 		if (stage->next_stage != Stage_types::none) {
-			stage_manager->set_next_stage_type(stage->next_stage);
-			return true;
+			if (stage->next_stage == Stage_types::Title) {
+				Scene_manager::set_active(Scenelist::scene_title);
+				Scene_manager::set_inactive(Scenelist::scene_game);
+				Scene_manager::set_inactive(Scenelist::scene_player);
+				return true;
+			}
+			else {
+				stage_manager->set_next_stage_type(stage->next_stage);
+				return true;
+			}
 		}
 
 		respown();

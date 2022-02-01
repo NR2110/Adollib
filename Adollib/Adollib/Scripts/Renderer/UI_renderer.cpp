@@ -21,20 +21,20 @@ void UI_renderer::init() {
 	//	頂点バッファ作成
 	{
 		VertexFormat v[4];
-		v[0].position = Vector3(-0.5f, +0.5f, 0);
-		v[1].position = Vector3(+0.5f, +0.5f, 0);
-		v[2].position = Vector3(-0.5f, -0.5f, 0);
-		v[3].position = Vector3(+0.5f, -0.5f, 0);
+		v[0].position = Vector3(-0.5f, -0.5f, 0);
+		v[1].position = Vector3(+0.5f, -0.5f, 0);
+		v[2].position = Vector3(-0.5f, +0.5f, 0);
+		v[3].position = Vector3(+0.5f, +0.5f, 0);
 
 		v[0].normal = Vector3(0, 0, 1);
 		v[1].normal = Vector3(0, 0, 1);
 		v[2].normal = Vector3(0, 0, 1);
 		v[3].normal = Vector3(0, 0, 1);
 
-		v[0].texcoord = Vector2(0, 0);
-		v[1].texcoord = Vector2(1, 0);
-		v[2].texcoord = Vector2(0, 1);
-		v[3].texcoord = Vector2(1, 1);
+		v[0].texcoord = Vector2(0, 1);
+		v[1].texcoord = Vector2(1, 1);
+		v[2].texcoord = Vector2(0, 0);
+		v[3].texcoord = Vector2(1, 0);
 
 		//	頂点バッファ作成
 		D3D11_BUFFER_DESC bd;
@@ -233,20 +233,24 @@ void UI_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& instan
 	// 頂点データ設定
 	VertexFormat data[4];
 
-	data[0].position.x = -0.5f * transform->scale.x;
-	data[0].position.y = -0.5f * transform->scale.y;
+	// 初期の大きさ とりあえず縦横100ピクセル
+	float x_1 = 100 / screen_width;
+	float h_1 = 100 / screen_height;
+
+	data[0].position.x = -x_1 * transform->scale.x;
+	data[0].position.y = -h_1 * transform->scale.y;
 	data[0].position.z = 0.0f;
 
-	data[1].position.x = +0.5f * transform->scale.x;
-	data[1].position.y = -0.5f * transform->scale.y;
+	data[1].position.x = +x_1 * transform->scale.x;
+	data[1].position.y = -h_1 * transform->scale.y;
 	data[1].position.z = 0.0f;
 
-	data[2].position.x = -0.5f * transform->scale.x;
-	data[2].position.y = +0.5f * transform->scale.y;
+	data[2].position.x = -x_1 * transform->scale.x;
+	data[2].position.y = +h_1 * transform->scale.y;
 	data[2].position.z = 0.0f;
 
-	data[3].position.x = +0.5f * transform->scale.x;
-	data[3].position.y = +0.5f * transform->scale.y;
+	data[3].position.x = +x_1 * transform->scale.x;
+	data[3].position.y = +h_1 * transform->scale.y;
 	data[3].position.z = 0.0f;
 
 	// 回転の中心
@@ -262,6 +266,10 @@ void UI_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& instan
 		data[i].position.y = workX * sinf(ui_data.angle) + workY * cosf(ui_data.angle);
 		data[i].position.z = 0.0f;
 	}
+	// 座標移動
+	for (int i = 0; i < 4; i++) {
+		data[i].position += transform->position * 0.01f;
+	}
 
 	// 正規化デバイス座標系
 	//for (int i = 0; i < 4; i++) {
@@ -273,13 +281,13 @@ void UI_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& instan
 
 	// テクスチャ座標設定
 	data[0].texcoord.x = ui_data.sx;
-	data[0].texcoord.y = ui_data.sy;
+	data[0].texcoord.y = ui_data.sy + ui_data.sh;
 	data[1].texcoord.x = ui_data.sx + ui_data.sw;
-	data[1].texcoord.y = ui_data.sy;
+	data[1].texcoord.y = ui_data.sy + ui_data.sh;
 	data[2].texcoord.x = ui_data.sx;
-	data[2].texcoord.y = ui_data.sy + ui_data.sh;
+	data[2].texcoord.y = ui_data.sy;
 	data[3].texcoord.x = ui_data.sx + ui_data.sw;
-	data[3].texcoord.y = ui_data.sy + ui_data.sh;
+	data[3].texcoord.y = ui_data.sy;
 
 	//UV座標
 	//if (material->get_texture())

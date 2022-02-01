@@ -11,14 +11,15 @@ namespace Adollib {
 	class Stage_base;
 	class Player;
 
-	class Stage_manager : public Component{
+	class Stage_manager : public Component {
 
 	public:
 		bool is_changed_stage = false;
 
-		Stage_types now_stage =  Stage_types::demo; //¡‚Ìstagetype
+		Stage_types now_stage = Stage_types::demo; //¡‚Ìstagetype
 		Stage_types next_stage = Stage_types::demo; //Ÿ‚Ìstagetype
 	private:
+		float stage_timer = 0;
 
 		Vector3 player_respown_pos; //player‚Ìrespown‚·‚éÀ•W
 
@@ -43,10 +44,10 @@ namespace Adollib {
 		}
 
 	public:
-		void set_next_stage_type (Stage_types next_stge); //next_stge‚ğset‚·‚é (Ÿ‚Ìstage‚Éi‚Ş)
+		void set_next_stage_type(Stage_types next_stge); //next_stge‚ğset‚·‚é (Ÿ‚Ìstage‚Éi‚Ş)
 		Stage_base* get_current_stage() { return stages[now_stage]; };
 		bool get_is_changed_stage() const { return is_changed_stage; };
-
+		float get_nowstage_timer() { return stage_timer; }
 	public:
 
 		void awake() override;

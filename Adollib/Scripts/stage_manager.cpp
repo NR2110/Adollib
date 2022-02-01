@@ -38,9 +38,11 @@ void Stage_manager::start() {
 
 void Stage_manager::update() {
 	if (Al_Global::second_per_game < 2)return;
+	stage_timer += time->deltaTime();
 	is_changed_stage = false;
 
 	if (now_stage != next_stage) {
+		stage_timer = 0;
 
 		if (now_stage != Stage_types::none) stages[now_stage]->stage_destroy();
 		if (next_stage != Stage_types::none) stages[next_stage]->stage_awake();

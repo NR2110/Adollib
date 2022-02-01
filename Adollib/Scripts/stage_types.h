@@ -10,6 +10,8 @@ namespace Adollib {
 		demo_1,
 		demo_2,
 
+		Title,
+
 
 		stagetype_max
 	};

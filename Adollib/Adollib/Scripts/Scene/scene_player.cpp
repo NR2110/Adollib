@@ -14,7 +14,6 @@ namespace Adollib {
 		camera->addComponent<Camera>();
 		camera->addComponent<Camera_component>();
 
-
 	}
 
 

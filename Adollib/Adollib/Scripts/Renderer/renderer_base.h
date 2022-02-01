@@ -33,6 +33,8 @@ namespace Adollib {
 
 		bool is_render = true;
 
+		int depth = 0; //UI—p 0 ~ 5
+
 	public:
 		virtual void set_material(std::shared_ptr<Material> l_material) { material = l_material; };
 		virtual void set_meshes(std::vector<Mesh::mesh>* l_meshes) { meshes = l_meshes; };

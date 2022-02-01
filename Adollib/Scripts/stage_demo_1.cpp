@@ -59,59 +59,6 @@ namespace Adollib
 		set_tree(Vector3(+22, 0, -25), Vector3(1, 1.2f, 1), Vector3(0));
 		//{}
 
-		//croth
-		{
-			Gameobject* pearent = Gameobject_manager::create("BallJoint_Shperenet");
-			pearent->transform->local_pos = Vector3(62, 30, 22);
-			pearent->transform->local_orient = quaternion_from_euler(0, 45, 0);
-			std::vector<Collider*>colls;
-			stage_parts.emplace_back(pearent);
-
-			int sphere_count = 10;
-			float sphere_size = 1.5f;
-			const int colls_size = sphere_count * sphere_count;
-			colls.resize(colls_size);
-
-			for (int xaxis = 0; xaxis < sphere_count; xaxis++) {
-				for (int zaxis = 0; zaxis < sphere_count; zaxis++) {
-					int index = xaxis * sphere_count + zaxis;
-
-					Collider* coll = nullptr;
-					Gameobject* go = nullptr;
-
-					coll = set_sphere(Vector3(
-						(xaxis - sphere_count * 0.5f) * sphere_size * 2,
-						2,
-						(zaxis - sphere_count * 0.5f) * sphere_size * 2
-					),
-						sphere_size,
-						Vector3(1, 0, (1.0f / (sphere_count * sphere_count)) * index),
-						nullptr,
-						false
-					);
-					coll->physics_data.is_moveable = true;
-					coll->tag = Collider_tags::Sphere | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Kinematic_Stage;
-
-					go = coll->gameobject;
-
-					pearent->add_child(go);
-					colls.at(index) = (coll);
-
-					coll->tag &= ~Collider_tags::Caera_not_sunk_Stage;
-					coll->physics_data.inertial_mass = 0.1f;
-				}
-			}
-
-			for (int xaxis = 0; xaxis < sphere_count; xaxis++) {
-				for (int zaxis = 0; zaxis < sphere_count; zaxis++) {
-					int index = xaxis * sphere_count + zaxis;
-
-					if (xaxis > 0) Joint::add_balljoint(colls[index], colls[index - sphere_count], Vector3(-sphere_size * 1.1f, 0, 0), Vector3(sphere_size * 1.1f, 0, 0), 1);
-					if (zaxis > 0) Joint::add_balljoint(colls[index], colls[index - 1], Vector3(0, 0, -sphere_size * 1.1f), Vector3(0, 0, sphere_size * 1.1f), 1);
-				}
-			}
-		}
-
 		set_box(Vector3(65, 5, 31), Vector3(4, 7, 4), Vector3(0), Vector3(0.9f, 0.9f, 1) * 0.97f,floar_go);
 		set_box(Vector3(69, 5, 23), Vector3(4, 7, 4), Vector3(0), Vector3(0.9f, 0.9f, 1) * 0.97f,floar_go);
 		set_box(Vector3(61, 5, 23), Vector3(4, 7, 4), Vector3(0), Vector3(0.9f, 0.9f, 1) * 0.97f,floar_go);

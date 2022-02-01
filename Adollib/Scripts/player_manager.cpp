@@ -15,6 +15,7 @@
 
 #include "player.h"
 #include "input_changer.h"
+#include "tutrial_manager.h"
 
 namespace Adollib
 {
@@ -574,6 +575,8 @@ namespace Adollib
 
 			auto input_changer = GO->addComponent<Input_changer>();
 			input_changer->pad_num = player_num;
+
+			auto tutrial = GO->addComponent<Tutrial_manager>();
 		}
 
 

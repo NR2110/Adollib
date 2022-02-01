@@ -24,6 +24,8 @@
 #include "../Adollib/Scripts/Main/systems.h"
 #include "../Adollib/Scripts/Renderer/croth_renderer.h"
 
+#include "player_manager.h"
+
 namespace Adollib
 {
 	void Stage_01::stage_awake()
@@ -142,75 +144,35 @@ namespace Adollib
 				set_tree(Vector3(83, 0, 32), Vector3(1, 1.2f, 1), Vector3(0, 12, 0), 2.5f, 0.8f, trees_pearent);
 			}
 
+			// 適当なピラミッド
+			{
+				Gameobject* tutrial_block = Gameobject_manager::create("pyramid");
+				first_zone->add_child(tutrial_block);
 
+				int phyramid_size = 6;
+				Vector3 base_size = Vector3(1, 1, 1.5f);
+				Vector3 base_pos = Vector3(52, 0, -4);
 
+				for (int y = 0; y < phyramid_size; ++y) {
+					for (int x = 0; x < phyramid_size - y; ++x) {
+						for (int z = 0; z < phyramid_size - y; ++z) {
 
+							auto coll = set_box(base_pos + Vector3(
+								(base_size.x * 2 + 0.2f) * x - ((base_size.x * 2 + 0.2f) * (phyramid_size - y) * 0.5f),
+								(base_size.y * 2 + 0) * y + base_size.y,
+								(base_size.z * 2 + 0.2f) * z - ((base_size.z * 2 + 0.2f) * (phyramid_size - y) * 0.5f)
 
-			//// tutrial_stick
-			//{
-			//	auto tutrial_stick_pearent = Gameobject_manager::create("tutrial_stick");
-			//	first_zone->add_child(tutrial_stick_pearent);
-
-			//	auto coll = set_box(Vector3(-12, 5, 6.6f), Vector3(10, 5, 0.5f), Vector3(10, 0, 0), base_color, tutrial_stick_pearent, false);
-
-			//	auto tutrial_stick_sprite = Gameobject_manager::createPlane("tutrial_stick_sprite");
-			//	coll->gameobject->add_child(tutrial_stick_sprite);
-			//	tutrial_stick_sprite->transform->local_pos = Vector3(0, 0, -1.1f);
-			//	tutrial_stick_sprite->transform->local_orient = quaternion_from_euler(0, 180, 0);
-			//	tutrial_stick_sprite->transform->local_scale = Vector3(1.16f, 1.3f, 1);
-			//	auto tutrial_material = Material_manager::create_material("Tuterial_stick");
-			//	tutrial_material->get_texture()->Load(L"./DefaultTexture/tutrial/tuterial_stick.png");
-			//	tutrial_material->BS_state = State_manager::BStypes::BS_ALPHA;
-			//	tutrial_material->Load_VS("./DefaultShader/sprite_vs.cso");
-			//	tutrial_material->Load_PS("./DefaultShader/sprite_ps.cso");
-			//	tutrial_stick_sprite->renderer->set_material(tutrial_material);
-			//}
-
-			//// tutrial_chatch_and_hold_Turn_your_hand
-			//{
-			//	auto tutrial_hand_pearent = Gameobject_manager::create("tutrial_chatch_and_hold_Turn_your_hand");
-			//	first_zone->add_child(tutrial_hand_pearent);
-
-			//	auto coll = set_box(Vector3(66.5f, 6, 0), Vector3(13, 6, 0.5f), Vector3(15, 90, 0), base_color, tutrial_hand_pearent, false);
-
-			//	auto tutrial_stick_sprite = Gameobject_manager::createPlane("tutrial_chatch_and_hold_Turn_your_hand");
-			//	coll->gameobject->add_child(tutrial_stick_sprite);
-			//	tutrial_stick_sprite->transform->local_pos = Vector3(-0.01f, 0.02f, -1.1f);
-			//	tutrial_stick_sprite->transform->local_orient = quaternion_from_euler(0, 180, 0);
-			//	tutrial_stick_sprite->transform->local_scale = Vector3(1.1f, 1.06f, 1);
-			//	auto tutrial_material = Material_manager::create_material("Tutrial_chatch_and_hold_Turn_your_hand");
-			//	tutrial_material->get_texture()->Load(L"./DefaultTexture/tutrial/tutrial_chatch_and_hold_Turn_your_hand.png");
-			//	tutrial_material->BS_state = State_manager::BStypes::BS_ALPHA;
-			//	tutrial_material->Load_VS("./DefaultShader/sprite_vs.cso");
-			//	tutrial_material->Load_PS("./DefaultShader/sprite_ps.cso");
-			//	tutrial_stick_sprite->renderer->set_material(tutrial_material);
-
-			//	auto phyramid_pearent = Gameobject_manager::create("tutrial_chatch_and_hold_Turn_your_hand_phyramid_pearent");
-			//	tutrial_hand_pearent->add_child(phyramid_pearent);
-
-			//	int phyramid_size = 6;
-			//	Vector3 base_size = Vector3(1, 1, 2);
-			//	Vector3 base_pos = Vector3(73, 0, 2);
-			//	for (int y = 0; y < phyramid_size; ++y) {
-			//		for (int x = 0; x < phyramid_size - y; ++x) {
-			//			for (int z = 0; z < phyramid_size - y; ++z) {
-
-			//				auto coll = set_box(base_pos + Vector3(
-			//					(base_size.x * 2) * x - ((base_size.x * 2) * (phyramid_size - y) * 0.5f) - y * base_size.x * 0.5f,
-			//					(base_size.y * 2) * y + base_size.y,
-			//					(base_size.z * 2) * z - ((base_size.z * 2) * (phyramid_size - y) * 0.5f)
-
-			//				), base_size, Vector3(0, 0, 0), moveable_blue, phyramid_pearent, false);
-			//				coll->physics_data.inertial_mass = 10;
-			//			}
-			//		}
-			//	}
-
-
-			//}
+							), base_size, Vector3(0, 0, 0), moveable_green, tutrial_block, false);
+							coll->physics_data.inertial_mass = 5;
+						}
+					}
+				}
+			}
 
 
 		}
+
+		{}
 
 		// second_zone
 		{
@@ -273,6 +235,31 @@ namespace Adollib
 
 
 				set_buttan(Vector3(82.80f, 16, 54), Vector3(2, 0.9f, 2), Vector3(0, 0, -90), Stage_parts::Stageparts_tags::Flag_0, wall_pearent, true);
+			}
+
+			// 適当なピラミッド
+			{
+				Gameobject* tutrial_block = Gameobject_manager::create("pyramid");
+				second_zone->add_child(tutrial_block);
+
+				int phyramid_size = 6;
+				Vector3 base_size = Vector3(1.5f, 1, 1);
+				Vector3 base_pos = Vector3(53, 12, 76);
+
+				for (int y = 0; y < phyramid_size; ++y) {
+					for (int x = 0; x < phyramid_size - y; ++x) {
+						for (int z = 0; z < phyramid_size - y; ++z) {
+
+							auto coll = set_box(base_pos + Vector3(
+								(base_size.x * 2 + 0.2f) * x - ((base_size.x * 2 + 0.2f) * (phyramid_size - y) * 0.5f),
+								(base_size.y * 2 + 0) * y + base_size.y,
+								(base_size.z * 2 + 0.2f) * z - ((base_size.z * 2 + 0.2f) * (phyramid_size - y) * 0.5f)
+
+							), base_size, Vector3(0, 0, 0), moveable_red, tutrial_block, false);
+							coll->physics_data.inertial_mass = 5;
+						}
+					}
+				}
 			}
 		}
 
@@ -562,6 +549,37 @@ namespace Adollib
 #endif
 
 		//set_sphere_rope(Vector3(64, 60, 65), 1, Vector3(0, 0, 0), 10, 5);
+
+		//Gameobject_manager::find("Player_manager",Scenelist::scene_player)->findComponent<Player_manager>()->tutrial_move_and_camera();
+
+		//summon_block_01();
+	}
+
+	void Stage_01::summon_block_01() {
+
+		//int phyramid_size = 4;
+		//Vector3 base_size = Vector3(1, 1, 1);
+		//Vector3 base_pos = Vector3(33, 30, 12);
+
+		//Gameobject* tutrial_block = Gameobject_manager::create("tutrial_block");
+		//stage_parts.emplace_back(tutrial_block);
+
+		//for (int y = 0; y < phyramid_size; ++y) {
+		//	for (int x = 0; x < phyramid_size - y; ++x) {
+		//		for (int z = 0; z < phyramid_size - y; ++z) {
+
+		//			auto coll = set_box(base_pos + Vector3(
+		//				(base_size.x * 2 + 0.2f) * x - ((base_size.x * 2 + 0.2f) * (phyramid_size - y) * 0.5f),
+		//				(base_size.y * 2 + 1.f) * y + base_size.y,
+		//				(base_size.z * 2 + 0.2f) * z - ((base_size.z * 2 + 0.2f) * (phyramid_size - y) * 0.5f)
+
+		//			), base_size, Vector3(0, 0, 0), moveable_green, tutrial_block, false);
+		//			coll->physics_data.inertial_mass = 5;
+		//		}
+		//	}
+		//}
+
+
 	}
 
 	// 毎フレーム呼ばれる更新処理

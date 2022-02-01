@@ -236,6 +236,7 @@ void Renderer_manager::sort_update(std::list<Scenelist> active_scenes) {
 
 	for (const auto& Sce : active_scenes) {
 		for (auto& renderer : renderers[Sce]) {
+			if (renderer->gameobject->is_active == false)continue;
 			sorted_renderers.emplace_back(renderer);
 		}
 	}
@@ -346,13 +347,17 @@ void Renderer_manager::instance_update(const Frustum_data& frustum_data, Sceneli
 
 		// instancing ‚ğs‚í‚È‚¢•¨‚ğŒÂ•Ê‚Érender_count‚É•Û‘¶
 		{
-			for (auto& renderer : no_use_instancing_renderers) {
+			for (int depth = 0; depth < 5; ++depth) {
 
-				if (renderer->check_frustum(frustum_data)) {
-					render_count.bufferStart = 0;
-					render_count.bufferCount = 1;
-					render_count.renderer = renderer;
-					render_counts.emplace_back(render_count);
+				for (auto& renderer : no_use_instancing_renderers) {
+					if (renderer->depth != depth) continue;
+
+					if (renderer->check_frustum(frustum_data)) {
+						render_count.bufferStart = 0;
+						render_count.bufferCount = 1;
+						render_count.renderer = renderer;
+						render_counts.emplace_back(render_count);
+					}
 				}
 			}
 		}

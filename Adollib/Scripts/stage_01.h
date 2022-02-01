@@ -3,10 +3,16 @@
 
 namespace Adollib {
 
+	// tutrial用
+	//class Player_manager;
+
 	class Stage_01 : public Stage_base {
+
+	private:
 
 
 	private:
+
 		const Vector3 base_color = Vector3(233, 225, 217) / 255.0f * 0.9f;
 		const Vector3 grass_color = Vector3(188, 214, 54) / 255.0f * 0.7f * 0.9f;
 		const Vector3 wood_color = Vector3(90, 47, 27) / 255.0f * 0.9f;
@@ -54,6 +60,10 @@ namespace Adollib {
 
 		// stage_managerが呼ぶdestroy このstageから次に切り替わったときに呼ばれる
 		void stage_destroy() override;
+
+	public:
+
+		void summon_block_01() override;
 
 	public:
 		// 毎フレーム呼ばれる更新処理
