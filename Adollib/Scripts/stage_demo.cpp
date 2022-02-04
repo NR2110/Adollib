@@ -147,6 +147,8 @@ namespace Adollib
 							);
 							//coll->tag &= ~Collider_tags::Caera_not_sunk_Stage;
 							coll->physics_data.inertial_mass = mass;
+							coll->physics_data.linear_sleep_threrhold = 0.4f;
+							coll->physics_data.angula_sleep_threrhold = 0.2f;
 							wall_pearent->add_child(coll->gameobject);
 						}
 					}

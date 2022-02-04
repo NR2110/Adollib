@@ -37,7 +37,7 @@ Index of this file:
 */
 
 #pragma once
-//#define ON_DEBUG
+#define ON_DEBUG
 
 #ifdef ON_DEBUG
 #define UseImgui

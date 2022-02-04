@@ -38,10 +38,10 @@ void Select_state_manager::awake() {
 	// “Ç‚İ‚Ştexture‚Ìpath
 	const wchar_t* filepath[select_stage_size]{
 		(L"./DefaultTexture/number/debug_01.png"),
-		(L"./DefaultTexture/number/debug_02.png"),
+		(L"./DefaultTexture/number/debug_02.png")/*,
 		(L"./DefaultTexture/number/debug_03.png"),
 		(L"./DefaultTexture/number/debug_04.png"),
-		(L"./DefaultTexture/number/debug_05.png")
+		(L"./DefaultTexture/number/debug_05.png")*/
 	};
 
 	// selectstage‚É’£‚ématerialì¬

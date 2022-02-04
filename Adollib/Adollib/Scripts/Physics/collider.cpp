@@ -115,6 +115,9 @@ void Collider::Update_hierarchy() {
 		ImGui::DragFloat("linear_drag", &physics_data.drag, 0.01f, 0, 1);
 		ImGui::DragFloat("anglar_drag", &physics_data.anglar_drag, 0.01f, 0, 1);
 
+		ImGui::DragFloat("linear_sleep_threrhold", &physics_data.linear_sleep_threrhold, 0.01f, 0, 1);
+		ImGui::DragFloat("angula_sleep_threrhold", &physics_data.angula_sleep_threrhold, 0.01f, 0, 1);
+
 		ImGui::Text("linear_velocity : %f", linear_velocity().norm_sqr());
 		ImGui::Text("angula_velocity : %f", angula_velocity().norm_sqr());
 

@@ -437,6 +437,12 @@ void Player::shot_rope() {
 		renderer->radius = rope_sphere_r * 0.6f;
 		renderer->split_count = 30;
 		renderer->set_meshoffset(coll->get_vertex_offset());
+
+		if (Lrope_go)Gameobject_manager::deleteGameobject(Lrope_go);
+		if (Lblock_hand_joint)Joint::delete_joint(Lblock_hand_joint);
+
+		Lrope_go = nullptr;
+		Lblock_hand_joint = nullptr;
 	}
 
 	// k‚ß‚é
@@ -445,7 +451,7 @@ void Player::shot_rope() {
 		const auto& bending_type = Collider_Rope::Rope_constraint_type::bending_spring;
 
 		// ‚à‚µarm‚Ærope‚ª—£‚ê‚·‚¬‚Ä‚¢‚ê‚Îk‚ß‚È‚¢
-		if (vector3_distance(Lhand_collider->transform->position, +Lrope_coll->get_vertex_offset()->at(0).first + Lrope_coll->gameobject->transform->position) < 0.2f)
+		if (vector3_distance(Lhand_collider->transform->position, +Lrope_coll->get_vertex_offset()->at(0).first + Lrope_coll->gameobject->transform->position) < 0.2f * 10000)
 		{
 			{
 				int joint_size = Lrope_coll->get_joint_count(structural_type);

@@ -249,6 +249,7 @@ void ALP_Collider::remove_joint(ALP_Joint* joint) {
 		if (*itr == joint)break;
 	}
 	if(itr != joints.end()) joints.remove(joint);
+
 }
 
 void ALP_Collider::add_contacted_collider(const Contacts::Contact_pair* pair, const u_int num)

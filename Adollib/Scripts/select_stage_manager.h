@@ -29,7 +29,7 @@ namespace Adollib {
 		int  change_select_sign = 0; //入力により +1,-1になる
 		int  change_select_state_sign = 0; //入力が続いていればパラパラ動くようにするためのフラグ 入力により +1,-1になる
 
-		static constexpr int select_stage_size = 5; //stageの数
+		static constexpr int select_stage_size = 2; //stageの数
 		std::shared_ptr<Material>  select_stage_material[select_stage_size]; //stageの数だけ張り付けるためのmaterialを作る
 
 		Vector3 base_select_back_pos[5]; //selectの基本座標 使いまわすため5個数でOK
