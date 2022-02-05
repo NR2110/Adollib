@@ -57,7 +57,7 @@ const int Collider::get_joint_count() {
 }
 // 指定した番号にアタッチされているjointの情報を得る
 Joint_base* Collider::get_joint(const int num) {
-	int size =  ALPcollider_ptr->get_joints().size();
+	int size = ALPcollider_ptr->get_joints().size();
 	if (size < num + 1)return nullptr;
 
 	auto itr = ALPcollider_ptr->get_joints().begin();
@@ -146,6 +146,7 @@ void Collider::set_ptr_to_joint(Physics_function::ALP_Joint* joint) {
 	if (joint->ALPcollider[0] == nullptr)joint->ALPcollider[0] = ALPcollider_ptr;
 	else if (joint->ALPcollider[1] == nullptr)joint->ALPcollider[1] = ALPcollider_ptr;
 	else assert(0 && "too many ALP_Collider to attach joint");
+
 
 	ALPcollider_ptr->add_joint(joint);
 };

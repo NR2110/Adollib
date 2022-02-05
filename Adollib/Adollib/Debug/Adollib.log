@@ -1,3 +1,54 @@
 ﻿  ALP__physics_manager.cpp
+  ALP_broadphase.cpp
+  ALP_collider.cpp
+  ALP_contact.cpp
+  ALP_generate_contact.cpp
+  ALP_integrate.cpp
+  ALP_joint.cpp
+  ALP_midphase.cpp
+  ALP_physics.cpp
+  ALP_raycast.cpp
+  ALP_resolve_contact.cpp
+  ALP_resolve_contact_SIM.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(2152,26): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+  collider.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(120,23): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(377,23): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(423,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(424,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(425,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(427,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(428,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(429,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(486,21): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(487,21): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(488,21): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(517,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(518,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_raycast.cpp(519,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+  collider_croth.cpp
+  collider_rope.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact_SIM.cpp(476,21): warning C4101: 'position': ローカル変数は 1 度も使われていません。
 C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.cpp(138,27): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
+  collider_shape.cpp
+  coneTwistjoint.cpp
+  conejoint.cpp
+  hingejoint.cpp
+  joint.cpp
+  joint_base.cpp
+  ray.cpp
+  shape_croth.cpp
+  shape_rope.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_rope.cpp(150,81): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+  twistjoint.cpp
+  material_for_collider.cpp
+  renderer_manager.cpp
+  scene_game.cpp
+  scene_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\hingejoint.cpp(132,78): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+  scene_player.cpp
+  scene_title.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(17,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Scene\scene_game.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Scene\scene_manager.cpp(61,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(17,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Scene\scene_player.cpp)
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

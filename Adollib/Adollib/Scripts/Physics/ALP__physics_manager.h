@@ -251,6 +251,8 @@ namespace Adollib
 				//’†g‚ð“ü‚ê‚é
 				*itr = ALPjoint;
 
+				ALPjoint->set_this_itr(itr);
+
 				return ALPjoint;
 			};
 

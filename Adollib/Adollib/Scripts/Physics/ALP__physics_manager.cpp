@@ -539,14 +539,11 @@ void Physics_manager::adapt_added_data(bool is_mutex_lock) {
 		for (save_itr; save_itr != ALP_joints.end(); ++save_itr) {
 			// added_buffer_ALP_jointsに新規Jointを追加した直後にuserjointにポインタを入れているが、
 			// その隙間でここが呼ばれるとnull参照で死んでしまうので
-			// 気持ち悪いけど nullptrならcontinueする
-			while ((*save_itr)->userjoint == nullptr) {
-				//--save_itr;
-				//continue;
-			}
+			// 気持ち悪いけど nullptrでなくなるまで待機する
+			while ((*save_itr)->userjoint == nullptr) {}
 
 			(*save_itr)->set_this_itr(save_itr);
-			(*save_itr)->set_ptr_to_joint(*save_itr);
+
 			//(*save_itr)->ALPcollider colliderA->set_ptr_to_joint(joint);
 			//colliderB->set_ptr_to_joint(joint);
 

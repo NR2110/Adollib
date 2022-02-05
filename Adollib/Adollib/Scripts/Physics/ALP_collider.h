@@ -57,7 +57,6 @@ namespace Adollib {
 
 			//::: このColliderが属しているjointへのポインタ配列 :::
 			std::list<ALP_Joint*> joints;
-			std::list<ALP_Joint*> added_buffer_joints;
 
 			u_int index = 0; //このcolliderのuniqueなID
 

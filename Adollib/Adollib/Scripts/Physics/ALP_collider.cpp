@@ -191,7 +191,7 @@ void ALP_Collider::adapt_to_gameobject_transform() const
 
 		for (const auto& shape : shapes) {
 			shape->effect_for_copy_transform_to_gameobject(
-				position_amount_of_change,       orientation_amount_of_change,
+				position_amount_of_change, orientation_amount_of_change,
 				position_amount_of_change_local, orientation_amount_of_change_local
 			);
 		}
@@ -208,12 +208,6 @@ void ALP_Collider::copy_transform_gameobject() {
 	transform_gameobject.position = gameobject->transform->position;
 	transform_gameobject.orientation = gameobject->transform->orientation;
 	transform_gameobject.scale = gameobject->transform->scale;
-
-	if (transform_gameobject.position == Vector3(0)) {
-		int dFZgd = 0;
-		rand();
-		rand();
-	}
 
 	// Ç‡ÇµshapeÇ™ïœÇ»Ç±Ç∆Ç∑ÇÈÇ»ÇÁ (ex. croth.collider.poisition = GOÇÃç¿ïW + vertexÇÃç¿ïW)
 	if (is_adapt_shape_for_copy_transform_gameobject) {
@@ -235,7 +229,9 @@ void ALP_Collider::add_joint(ALP_Joint* joint) {
 	for (auto& j : joints) {
 		if (j == joint) assert(0 && " the joint is already been added");
 	}
+
 #endif
+
 	joints.emplace_back(joint);
 }
 
@@ -248,7 +244,7 @@ void ALP_Collider::remove_joint(ALP_Joint* joint) {
 	for (; itr != joints.end(); ++itr) {
 		if (*itr == joint)break;
 	}
-	if(itr != joints.end()) joints.remove(joint);
+	if (itr != joints.end()) joints.remove(joint);
 
 }
 
