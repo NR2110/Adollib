@@ -107,6 +107,17 @@ namespace Adollib {
 		{
 		}
 
+		Matrix33(
+			Matrix44 mat
+		)  noexcept :
+			XMFLOAT3X3(
+				mat._11, mat._12, mat._13,
+				mat._21, mat._22, mat._23,
+				mat._31, mat._32, mat._33
+			)
+		{
+		}
+
 		Matrix33 operator+ () const;
 		Matrix33 operator- () const;
 

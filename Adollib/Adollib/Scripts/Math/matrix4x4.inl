@@ -86,9 +86,10 @@ namespace Adollib {
 	}
 
 	inline Matrix44& Matrix44::operator= (const Matrix33& M) {
-		_11 += M._11; _12 += M._12; _13 += M._13;
-		_21 += M._21; _22 += M._22; _23 += M._23;
-		_31 += M._31; _32 += M._32; _33 += M._33;
+		_11 += M._11; _12 += M._12; _13 += M._13; _14 = 0;
+		_21 += M._21; _22 += M._22; _23 += M._23; _24 = 0;
+		_31 += M._31; _32 += M._32; _33 += M._33; _34 = 0;
+		_41 = 0; 	  _42 = 0;      _43 = 0;	  _44 = 1;
 		return *this;
 	}
 	inline Matrix44& Matrix44::operator+= (const Matrix44& M) {

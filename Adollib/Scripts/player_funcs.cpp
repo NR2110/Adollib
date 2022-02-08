@@ -438,11 +438,6 @@ void Player::shot_rope() {
 		renderer->split_count = 30;
 		renderer->set_meshoffset(coll->get_vertex_offset());
 
-		if (Lrope_go)Gameobject_manager::deleteGameobject(Lrope_go);
-		if (Lblock_hand_joint)Joint::delete_joint(Lblock_hand_joint);
-
-		Lrope_go = nullptr;
-		Lblock_hand_joint = nullptr;
 	}
 
 	// k‚ß‚é
@@ -451,7 +446,7 @@ void Player::shot_rope() {
 		const auto& bending_type = Collider_Rope::Rope_constraint_type::bending_spring;
 
 		// ‚à‚µarm‚Ærope‚ª—£‚ê‚·‚¬‚Ä‚¢‚ê‚Îk‚ß‚È‚¢
-		if (vector3_distance(Lhand_collider->transform->position, +Lrope_coll->get_vertex_offset()->at(0).first + Lrope_coll->gameobject->transform->position) < 0.2f * 10000)
+		if (vector3_distance(Lhand_collider->transform->position, +Lrope_coll->get_vertex_offset()->at(0).first + Lrope_coll->gameobject->transform->position) < 0.4f)
 		{
 			{
 				int joint_size = Lrope_coll->get_joint_count(structural_type);
@@ -468,6 +463,9 @@ void Player::shot_rope() {
 							Lblock_rope_joint->get_anchors()[0].posA, Vector3(0)
 						);
 						Lblock_hand_joint->offset = Lhand_collider->gameobject->transform->scale.x;
+
+						Lrope_coll->get_joint_ptr(structural_type, i)->stretch_bias = 0;
+						Lrope_coll->get_joint_ptr(structural_type, i)->shrink_bias = 0;
 
 					}
 
@@ -491,11 +489,19 @@ void Player::shot_rope() {
 			}
 		}
 
-		// bending joint(‹È‚°‚Î‚Ë)‚Ì’²®
-		int bending_size = Lrope_coll->get_joint_count(bending_type);
-		if (bending_size != 0) {
-			// ˆê”Ô‹ß‚¢ bending joint‚Ìoffset‚ð0‚É (‚±‚Ìjoint‚Ík‚Ý‚·‚¬‚½‚çL‚Î‚·joint k‚ß‚éjoint‚Ìê‡ 0‚É‚µ‚Ä L‚Î‚³‚È‚¢‚æ‚¤‚É)
-			Lrope_coll->get_joint_ptr(bending_type, 0)->offset = 0;
+		{
+			// bending joint(‹È‚°‚Î‚Ë)‚Ì’²®
+			int bending_size = Lrope_coll->get_joint_count(bending_type);
+			if (bending_size != 0) {
+				// ˆê”Ô‹ß‚¢ bending joint‚Ìoffset‚ð0‚É (‚±‚Ìjoint‚Ík‚Ý‚·‚¬‚½‚çL‚Î‚·joint k‚ß‚éjoint‚Ìê‡ 0‚É‚µ‚Ä L‚Î‚³‚È‚¢‚æ‚¤‚É)
+				Lrope_coll->get_joint_ptr(bending_type, 0)->stretch_bias = 0;
+				Lrope_coll->get_joint_ptr(bending_type, 0)->shrink_bias = 0;
+			}
+			if (bending_size > 1) {
+				// ˆê”Ô‹ß‚¢ bending joint‚Ìoffset‚ð0‚É (‚±‚Ìjoint‚Ík‚Ý‚·‚¬‚½‚çL‚Î‚·joint k‚ß‚éjoint‚Ìê‡ 0‚É‚µ‚Ä L‚Î‚³‚È‚¢‚æ‚¤‚É)
+				Lrope_coll->get_joint_ptr(bending_type, 1)->stretch_bias = 0;
+				Lrope_coll->get_joint_ptr(bending_type, 1)->shrink_bias = 0;
+			}
 		}
 	}
 

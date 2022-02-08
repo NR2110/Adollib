@@ -111,7 +111,7 @@ void Collider_Rope::create_rope() {
 	//constexpr float sructural_shrink = 0.40f;
 	constexpr float sructural_shrink = 1;
 	constexpr float bending_stretch = 0.10f;
-	constexpr float bending_shrink = 0;
+	constexpr float bending_shrink = 0.1f;
 
 	// sphere‚ğ‚Â‚È‚®joint‚Ì¶¬
 	for (int collider_num = 0; collider_num < sphere_num_size; ++collider_num) {
@@ -123,7 +123,7 @@ void Collider_Rope::create_rope() {
 				Vector3(0), Vector3(0)
 			);
 
-			joint->offset = sphree_offset_size;
+			joint->offset = sphree_offset_size * 1.01f;
 			joint->stretch_bias = sructural_stretch;
 			joint->shrink_bias = sructural_shrink;
 
@@ -137,7 +137,8 @@ void Collider_Rope::create_rope() {
 				Vector3(0), Vector3(0)
 			);
 
-			joint->offset = sphree_offset_size;
+			joint->offset = sphree_offset_size * 1.5f;
+			joint->slop = sphree_offset_size * 0.5f;
 			joint->stretch_bias = bending_stretch;
 			joint->shrink_bias = bending_shrink;
 
@@ -146,6 +147,7 @@ void Collider_Rope::create_rope() {
 
 	}
 
+	// ‰ŠúÀ•W‚Ìİ’è
 	for (int collider_num = 0; collider_num < sphere_num_size; ++collider_num) {
 		vertex_offset->at(collider_num).first = start_rope_dir * sphree_offset_size * collider_num;
 	}

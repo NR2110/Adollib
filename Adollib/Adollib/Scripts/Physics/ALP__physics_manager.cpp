@@ -225,6 +225,8 @@ bool Physics_manager::update()
 					// ˆÊ’u‚ÌXV
 					integrate(ALP_physicses);
 
+					dadapt_delete_data(false);
+
 					is_updated_physicsthread = true;
 				}
 			}

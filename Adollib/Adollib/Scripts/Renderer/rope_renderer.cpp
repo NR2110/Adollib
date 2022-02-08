@@ -249,29 +249,52 @@ void Rope_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& inst
 		{
 			int sign = +1;
 			for (int i = 0; i < joint_size; ++i) {
-				rope_cb.joint_position[i] = Vector4(vertex_offset->at(i).first, 1);
+
+				const Vector3* pos_0 = &vertex_offset->at(i).first;
+				const Vector3* pos_1 = &vertex_offset->at(i).first;
+
+				if (i > 1)pos_0 = &vertex_offset->at(i - 1).first;
+				if (i < joint_size - 1)pos_1 = &vertex_offset->at(i + 1).first;
+
+				const Vector3& ave = ((*pos_0 + *pos_1) * 0.5f + vertex_offset->at(i).first) * 0.5f;
+
+				rope_cb.joint_position[i] = Vector4(ave, 1);
 			}
 		}
 
 		// 回転
+		Vector3 joint_normal[MAX_JOINTS];
 		for (int i = 0; i < joint_size; ++i) {
-			if (i - 1 < 0) {
-				const Vector4 Vec1 = rope_cb.joint_position[i + 1] - rope_cb.joint_position[i];
-				rope_cb.joint_rotate[i] = quaternion_from_to_rotate(Vector3(1, 0, 0), Vec1.xyz()).get_rotate_matrix();
+			if (i == 0) {
+				joint_normal[i] = (rope_cb.joint_position[i + 1] - rope_cb.joint_position[i]).unit_vect().xyz();
 				continue;
 			}
-			if (i + 1 == joint_size) {
-				const Vector4 Vec0 = rope_cb.joint_position[i] - rope_cb.joint_position[i - 1];
-				rope_cb.joint_rotate[i] = quaternion_from_to_rotate(Vector3(1, 0, 0), Vec0.xyz()).get_rotate_matrix();
+			if (i == joint_size - 1) {
+				joint_normal[i] = (rope_cb.joint_position[i] - rope_cb.joint_position[i - 1]).unit_vect().xyz();
 				continue;
 			}
 
 			const Vector4 Vec0 = rope_cb.joint_position[i] - rope_cb.joint_position[i - 1]; //後ろから自分
 			const Vector4 Vec1 = rope_cb.joint_position[i + 1] - rope_cb.joint_position[i]; //自分から前
 
-			rope_cb.joint_rotate[i] = quaternion_from_to_rotate(Vector3(1, 0, 0), ((Vec0 + Vec1) * 0.5f).xyz()).get_rotate_matrix();
-
+			joint_normal[i] = ((Vec0 + Vec1) * 0.5f).unit_vect().xyz();
 		}
+		Quaternion joint_quat[MAX_JOINTS];
+		int n = -1;
+		for (int i = 0; i < joint_size; ++i) {
+			if (n == -1) {
+				joint_quat[i] = quaternion_from_to_rotate(Vector3(1, 0, 0), joint_normal[i]);
+				if (joint_normal[i].norm() != 0)n = 1;
+				continue;
+			}
+
+			joint_quat[i] = joint_quat[i - 1] * quaternion_from_to_rotate(joint_normal[i - 1], joint_normal[i]);
+		}
+		for (int i = 0; i < joint_size; ++i) {
+
+			rope_cb.joint_rotate[i] = joint_quat[i].get_rotate_matrix();
+		}
+
 		Systems::DeviceContext->UpdateSubresource(cb_per_rope.Get(), 0, NULL, &rope_cb, 0, 0);
 		Systems::DeviceContext->VSSetConstantBuffers(9, 1, cb_per_rope.GetAddressOf());
 		Systems::DeviceContext->PSSetConstantBuffers(9, 1, cb_per_rope.GetAddressOf());
@@ -363,7 +386,7 @@ void Rope_renderer::set_meshoffset(std::shared_ptr<std::vector<std::pair<Vector3
 					if (i == vertex_fotmat_size - 1) {
 						v[i].position = Vector3(+radius * 0.2f, 0, 0); //ちょっととがっている
 						v[i].normal = Vector3(+1, 0, 0);
-						v[i].bone_indices[0] =  (sphere_count - 1) * 2 - 1; //対応するsphere_numを入れる
+						v[i].bone_indices[0] = (sphere_count - 1) * 2 - 1; //対応するsphere_numを入れる
 						continue;
 					}
 					// 0には端っこの情報が入っているためi-1
@@ -450,22 +473,6 @@ void Rope_renderer::set_meshoffset(std::shared_ptr<std::vector<std::pair<Vector3
 			Systems::Device->CreateBuffer(&indexDesc, &indexSubResource, indexBuffer.ReleaseAndGetAddressOf());
 
 		}
-
-		//// offset用配列の準備
-		//{
-		//	vertex_offset = std::make_shared<std::vector<std::pair<Vector3, Vector3>>>();
-		//	//mesh_offset->resize(meshes->size());
-		//	std::pair<Vector3, Vector3> zero_format;
-		//	zero_format.first = Vector3(0);
-		//	zero_format.second = Vector3(0);
-
-		//	vertex_offset->resize(sphere_count);
-		//	for (auto& sphere : *vertex_offset.get()) {
-		//		sphere.first = Vector3(0);
-		//		sphere.second = Vector3(0);
-		//	}
-		//}
-
 
 
 	}
