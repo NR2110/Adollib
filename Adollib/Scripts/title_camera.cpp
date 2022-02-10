@@ -236,14 +236,14 @@ void Title_camera::select_state(Title_state_B state) {
 	static float pos_slop = 1;
 	if (state == Adollib::Title_state_B::Update_3) {
 
-		if (player == nullptr)
-			player = Gameobject_manager::find("Waist", Scenelist::scene_player)->transform;
+		//if (player == nullptr)
+		//	player = Gameobject_manager::find("Waist", Scenelist::scene_player)->transform;
 
-		if (player->position.y < -10) {
-			title_state_manager->set_nextstate_B(Title_state_B::Update_4);
-			dis_buffer = vector3_dot(vector3_quatrotate(Vector3(0, 0, 1), transform->orientation), player->position - transform->position);
-			pos_buffer = transform->position - vector3_quatrotate(dis_buffer * Vector3(0, 0, -1), transform->local_orient);
-		}
+		//if (player->position.y < -10) {
+		//	title_state_manager->set_nextstate_B(Title_state_B::Update_4);
+		//	dis_buffer = vector3_dot(vector3_quatrotate(Vector3(0, 0, 1), transform->orientation), player->position - transform->position);
+		//	pos_buffer = transform->position - vector3_quatrotate(dis_buffer * Vector3(0, 0, -1), transform->local_orient);
+		//}
 	}
 
 	if (state == Adollib::Title_state_B::Update_4) {

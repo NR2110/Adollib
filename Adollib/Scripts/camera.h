@@ -36,6 +36,9 @@ namespace Adollib
 	public:
 		Quaternion camera_rot; //camera‚ÌŒü‚«
 
+		void set_player_transformptr(std::shared_ptr<Transform> p) { player = p; };
+		void set_input_changerptr(Input_changer* p) { input_changer = p; };
+
 	public:
 		void awake() override;
 

@@ -77,12 +77,12 @@ void Tutrial_stage01_move_camera_catch::awake() {
 		check_base_scale = Vector3(0.21f, 1.5f, 1);
 
 		{
-			go_tutrial_move = Gameobject_manager::createPlane("go_tutrial_move");
+			go_tutrial_move = Gameobject_manager::createPlane("go_tutrial_move", Scenelist::scene_player);
 			auto renderer = go_tutrial_move->addComponent<UI_renderer>();
 			renderer->set_material(mat_tutrial_move);
 			go_tutrial_move->transform->local_scale = Vector3(7, 1, 1);
 
-			auto check = Gameobject_manager::createPlane("check");
+			auto check = Gameobject_manager::createPlane("check", Scenelist::scene_player);
 			auto check_renderer = check->addComponent<UI_renderer>();
 			check_renderer->set_material(mat_tutrial_check);
 			check_renderer->depth = 1;
@@ -92,12 +92,12 @@ void Tutrial_stage01_move_camera_catch::awake() {
 
 		}
 		{
-			go_tutrial_camera = Gameobject_manager::createPlane("go_tutrial_camera");
+			go_tutrial_camera = Gameobject_manager::createPlane("go_tutrial_camera", Scenelist::scene_player);
 			auto renderer = go_tutrial_camera->addComponent<UI_renderer>();
 			renderer->set_material(mat_tutrial_camera);
 			go_tutrial_camera->transform->local_scale = Vector3(7, 1, 1);
 
-			auto check = Gameobject_manager::createPlane("check");
+			auto check = Gameobject_manager::createPlane("check", Scenelist::scene_player);
 			auto check_renderer = check->addComponent<UI_renderer>();
 			check_renderer->set_material(mat_tutrial_check);
 			check_renderer->depth = 1;
@@ -106,12 +106,12 @@ void Tutrial_stage01_move_camera_catch::awake() {
 			go_tutrial_camera->add_child(check);
 		}
 		{
-			go_tutrial_hand = Gameobject_manager::createPlane("go_tutrial_hand");
+			go_tutrial_hand = Gameobject_manager::createPlane("go_tutrial_hand", Scenelist::scene_player);
 			auto renderer = go_tutrial_hand->addComponent<UI_renderer>();
 			renderer->set_material(mat_tutrial_hand);
 			go_tutrial_hand->transform->local_scale = Vector3(7, 1, 1);
 
-			auto check = Gameobject_manager::createPlane("check");
+			auto check = Gameobject_manager::createPlane("check", Scenelist::scene_player);
 			auto check_renderer = check->addComponent<UI_renderer>();
 			check_renderer->set_material(mat_tutrial_check);
 			check_renderer->depth = 1;
@@ -120,12 +120,12 @@ void Tutrial_stage01_move_camera_catch::awake() {
 			go_tutrial_hand->add_child(check);
 		}
 		{
-			go_tutrial_catch_object = Gameobject_manager::createPlane("go_tutrial_catch_object");
+			go_tutrial_catch_object = Gameobject_manager::createPlane("go_tutrial_catch_object", Scenelist::scene_player);
 			auto renderer = go_tutrial_catch_object->addComponent<UI_renderer>();
 			renderer->set_material(mat_tutrial_catch_object);
 			go_tutrial_catch_object->transform->local_scale = Vector3(7, 1, 1);
 
-			auto check = Gameobject_manager::createPlane("check");
+			auto check = Gameobject_manager::createPlane("check", Scenelist::scene_player);
 			auto check_renderer = check->addComponent<UI_renderer>();
 			check_renderer->set_material(mat_tutrial_check);
 			check_renderer->depth = 1;

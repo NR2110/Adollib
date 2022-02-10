@@ -21,7 +21,7 @@ namespace Adollib
 {
 	Gameobject* Stage_demo_02::set_tree(const Vector3& pos, const Vector3& scale, const Vector3& rotate, const float y_scale, const float tan_scale, Gameobject* pearent) {
 		Gameobject* tree = nullptr;
-		tree = Gameobject_manager::create("tree", GO_tag::None);
+		tree = Gameobject_manager::create("tree");
 		if (pearent != nullptr)pearent->add_child(tree);
 
 		Vector4 stem_color = Vector4(90, 47, 27, 255) / 255.0f;
@@ -35,7 +35,7 @@ namespace Adollib
 		const int Tree_size = 7;
 		Gameobject* tree_parts[Tree_size] = { nullptr };
 		for (int i = 0; i < Tree_size; i++) {
-			tree_parts[i] = Gameobject_manager::createCube("tree_part", GO_tag::Box);
+			tree_parts[i] = Gameobject_manager::createCube("tree_part");
 		}
 
 		tree_parts[0]->transform->local_pos = Vector3(0, 7, 0);
@@ -145,9 +145,9 @@ namespace Adollib
 
 		// 表示用
 		{
-			auto bot = Gameobject_manager::createCube("bot", GO_tag::Box);
-			auto mid = Gameobject_manager::createCube("mid", GO_tag::Box);
-			auto top = Gameobject_manager::createCube("top", GO_tag::Box);
+			auto bot = Gameobject_manager::createCube("bot");
+			auto mid = Gameobject_manager::createCube("mid");
+			auto top = Gameobject_manager::createCube("top");
 			pillar_pearent->add_child(bot);
 			pillar_pearent->add_child(mid);
 			pillar_pearent->add_child(top);
@@ -229,7 +229,7 @@ namespace Adollib
 
 		//boxを生成
 		{
-			auto object = Gameobject_manager::createCube("Door", GO_tag::Box);
+			auto object = Gameobject_manager::createCube("Door");
 			object->renderer->color = Vector4(Vector3(90, 47, 27) / 255.0f, 1);
 
 			object->transform->local_pos = pos;
@@ -245,7 +245,7 @@ namespace Adollib
 			if (pearent != nullptr)pearent->add_child(object);
 
 			{
-				auto totte = Gameobject_manager::createCube("Totte_front", GO_tag::Box);
+				auto totte = Gameobject_manager::createCube("Totte_front");
 				totte->renderer->color = Vector4(Vector3(207, 145, 64) / 255.0f, 1);
 				object->add_child(totte);
 				if (is_left) {
@@ -258,7 +258,7 @@ namespace Adollib
 				}
 			}
 			{
-				auto totte = Gameobject_manager::createSphere("Totte_back", GO_tag::Box);
+				auto totte = Gameobject_manager::createSphere("Totte_back");
 				totte->renderer->color = Vector4(Vector3(207, 145, 64) / 255.0f, 1);
 				object->add_child(totte);
 				if (is_left) {
@@ -805,7 +805,7 @@ namespace Adollib
 
 		// deskの生成とcolliderのアタッチ
 		Gameobject* desk = nullptr;
-		desk = Gameobject_manager::create("Desk", GO_tag::Sphere);
+		desk = Gameobject_manager::create("Desk");
 		desk->transform->local_pos = pos;
 		desk->transform->local_scale = scale;
 		desk->transform->local_orient = quaternion_from_euler(rotate);

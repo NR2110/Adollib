@@ -26,14 +26,7 @@ namespace Adollib
 	{
 		gameobject->transform->local_pos = Vector3(0, 30, -50);
 		//input->setCursorPos(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
-	}
 
-	void Camera::start()
-	{
-		//player = Gameobject_manager::find("Body")->transform;
-		player = Gameobject_manager::find("Waist")->transform;
-
-		input_changer = Gameobject_manager::find("player")->findComponent<Input_changer>();
 
 		follow_player = true;
 
@@ -43,6 +36,10 @@ namespace Adollib
 		ShowCursor(TRUE);
 #endif
 
+	}
+
+	void Camera::start()
+	{
 		auto c = gameobject->findComponent<Camera_component>();
 		c->directional_shadow->position = Vector3(200, 200, -200);
 		c->directional_shadow->direction = Vector3(-1, -2, 1).unit_vect();

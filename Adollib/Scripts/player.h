@@ -134,7 +134,8 @@ namespace Adollib
 		void respown(); //respownˆ—
 		void set_Tpause(const Vector3& position, const Quaternion& orient);
 		void set_moveable(bool is_moveable);
-
+		void set_cameraptr(Camera* l_camera) { camera = l_camera; };
+		void set_input_changerptr(Input_changer* l_input_changer) { input_changer = l_input_changer; };
 
 	private:
 		//::: GO :::
@@ -239,6 +240,10 @@ namespace Adollib
 		) {
 			Lhand_joint = l_Lhand_joint;
 			Rhand_joint = l_Rhand_joint;
+
+			// anchor‚Ì‰Šúî•ñ‚ğ•Û‘¶
+			Lhand_joint_ylength_default = Lhand_joint->anchor.posA.y;
+			Rhand_joint_ylength_default = Rhand_joint->anchor.posA.y;
 		}
 
 		void set_stage_manager_ptr(Stage_manager* m) { stage_manager = m; };

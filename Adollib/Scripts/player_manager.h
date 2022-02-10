@@ -25,7 +25,12 @@ namespace Adollib
 		//void delete_player(int num);
 
 
+		void add_players(int num);
+
+		void delete_players();
+
 	public:
+
 		void awake();
 
 		// Š‘®‚·‚éƒV[ƒ“‚Ì‰Šú‰»‚Éˆê“x‚¾‚¯ŒÄ‚Î‚ê‚é

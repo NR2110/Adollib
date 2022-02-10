@@ -2,6 +2,7 @@
 
 #include "player_manager.h"
 #include "../Adollib/Scripts/Object/gameobject_manager.h"
+#include "../Adollib/Scripts/Object/component_camera.h"
 
 #include "../Adollib/Scripts/Imgui/imgui_all.h"
 #include "../Adollib/Scripts/Imgui/debug.h"
@@ -13,6 +14,7 @@
 #include "../Adollib/Scripts/Renderer/material_manager.h"
 #include "../Adollib/Scripts/Renderer/renderer_base.h"
 
+#include "camera.h"
 #include "player.h"
 #include "input_changer.h"
 #include "tutrial_manager.h"
@@ -24,15 +26,22 @@ namespace Adollib
 
 		//Vector3 player_start_pos = Vector3(-2.7f, 23, -150);
 		//Vector3 player_start_pos = Vector3(-2.7f, 80, -5);
-		Vector3 player_start_pos = Vector3(-2.7f, 50, -5);
+		//Vector3 player_start_pos = Vector3(-2.7f, 50, -5);
 
-		Quaternion player_start_rotate = quaternion_from_euler(20, 180, 0);
+		//Quaternion player_start_rotate = quaternion_from_euler(20, 180, 0);
 
-		add_player(0, player_start_pos, Vector3(20, 180, 0), Vector3(1), Vector3(0.5f));
+		//add_player(0, player_start_pos, Vector3(20, 180, 0), Vector3(1), Vector3(0.5f));
 		//add_player(1, player_start_pos, Vector3(30, 180, 0), Vector3(1), Vector3(0.5f));
 		//add_player(2, player_start_pos, Vector3(40, 180, 0), Vector3(1), Vector3(0.5f));
 
+
+		//Vector3 player_start_pos = Vector3(-2.7f, 50, -5);
+
+		//Quaternion player_start_rotate = quaternion_from_euler(20, 180, 0);
+
+		//add_player(0, player_start_pos, Vector3(20, 180, 0), Vector3(1), Vector3(0.5f));
 	}
+
 
 	// 毎フレーム呼ばれる更新処理
 	void Player_manager::update()
@@ -59,11 +68,32 @@ namespace Adollib
 		}
 	}
 
+	void Player_manager::add_players(int num) {
+		Vector3 player_start_pos = Vector3(-2.7f, 50, -5);
+
+		Quaternion player_start_rotate = quaternion_from_euler(20, 180, 0);
+		for (int i = 0; i < num; ++i) {
+
+			add_player(i, player_start_pos + Vector3(10, 0, 0) * i, Vector3(20, 180, 0), Vector3(1), Vector3(0.5f));
+		}
+	}
+
+	void Player_manager::delete_players() {
+		for (int i = 0; i < 4; ++i) {
+			if (players[i] == nullptr)continue;
+			Gameobject_manager::deleteGameobject(players[i]->gameobject);
+		}
+
+		for (int i = 0; i < 4; ++i) {
+			players[i] = nullptr;
+		}
+	}
+
 	void Player_manager::add_player(int player_num, const Vector3& position, const Vector3& rotate, const Vector3& main_color, const Vector3& sub_color) {
 
 		Player*& player = players[player_num];
 
-		Gameobject* Human = Gameobject_manager::create("Human");
+		Gameobject* Human = Gameobject_manager::create("Human", Scenelist::scene_player);
 		Human->transform->local_pos = position;
 		Human->transform->local_orient = quaternion_from_euler(rotate);
 
@@ -74,63 +104,63 @@ namespace Adollib
 		player_material_01->color = Vector4(main_color, 1);
 
 		//::: Gameobjectの生成 :::
-		Gameobject* Head = Gameobject_manager::createCube("Head");
+		Gameobject* Head     = Gameobject_manager::createCube("Head", Scenelist::scene_player);
 
-		Gameobject* Lsholder = Gameobject_manager::createCube("Lsholder");
-		Gameobject* Lelbow   = Gameobject_manager::createCube("Lelbow");
-		Gameobject* Lhand    = Gameobject_manager::create("Lhand");
-		Gameobject* Rsholder = Gameobject_manager::createCube("Rsholder");
-		Gameobject* Relbow   = Gameobject_manager::createCube("Relbow");
-		Gameobject* Rhand    = Gameobject_manager::create("Rhand");
-		Gameobject* Body     = Gameobject_manager::createCube("Body");
-		Gameobject* Waist    = Gameobject_manager::createCube("Waist");
-		Gameobject* Rleg     = Gameobject_manager::createCube("Rleg");
-		Gameobject* Rfoot    = Gameobject_manager::createCube("Rfoot");
-		Gameobject* Lleg     = Gameobject_manager::createCube("Lleg");
-		Gameobject* Lfoot    = Gameobject_manager::createCube("Lfoot");
+		Gameobject* Lsholder = Gameobject_manager::createCube("Lsholder", Scenelist::scene_player);
+		Gameobject* Lelbow   = Gameobject_manager::createCube("Lelbow", Scenelist::scene_player);
+		Gameobject* Lhand    = Gameobject_manager::create    ("Lhand", Scenelist::scene_player);
+		Gameobject* Rsholder = Gameobject_manager::createCube("Rsholder", Scenelist::scene_player);
+		Gameobject* Relbow   = Gameobject_manager::createCube("Relbow", Scenelist::scene_player);
+		Gameobject* Rhand    = Gameobject_manager::create    ("Rhand", Scenelist::scene_player);
+		Gameobject* Body     = Gameobject_manager::createCube("Body",  Scenelist::scene_player);
+		Gameobject* Waist    = Gameobject_manager::createCube("Waist", Scenelist::scene_player);
+		Gameobject* Rleg     = Gameobject_manager::createCube("Rleg",  Scenelist::scene_player);
+		Gameobject* Rfoot    = Gameobject_manager::createCube("Rfoot", Scenelist::scene_player);
+		Gameobject* Lleg     = Gameobject_manager::createCube("Lleg",  Scenelist::scene_player);
+		Gameobject* Lfoot    = Gameobject_manager::createCube("Lfoot", Scenelist::scene_player);
 
-		Head	->findComponent<Renderer_base>()->set_material(player_material_01);
+		Head->findComponent<Renderer_base>()->set_material(player_material_01);
 		Lsholder->findComponent<Renderer_base>()->set_material(player_material_01);
-		Lelbow  ->findComponent<Renderer_base>()->set_material(player_material_01);
+		Lelbow->findComponent<Renderer_base>()->set_material(player_material_01);
 		Rsholder->findComponent<Renderer_base>()->set_material(player_material_01);
-		Relbow  ->findComponent<Renderer_base>()->set_material(player_material_01);
-		Body    ->findComponent<Renderer_base>()->set_material(player_material_01);
-		Waist   ->findComponent<Renderer_base>()->set_material(player_material_01);
-		Rleg    ->findComponent<Renderer_base>()->set_material(player_material_01);
-		Rfoot   ->findComponent<Renderer_base>()->set_material(player_material_01);
-		Lleg    ->findComponent<Renderer_base>()->set_material(player_material_01);
-		Lfoot   ->findComponent<Renderer_base>()->set_material(player_material_01);
+		Relbow->findComponent<Renderer_base>()->set_material(player_material_01);
+		Body->findComponent<Renderer_base>()->set_material(player_material_01);
+		Waist->findComponent<Renderer_base>()->set_material(player_material_01);
+		Rleg->findComponent<Renderer_base>()->set_material(player_material_01);
+		Rfoot->findComponent<Renderer_base>()->set_material(player_material_01);
+		Lleg->findComponent<Renderer_base>()->set_material(player_material_01);
+		Lfoot->findComponent<Renderer_base>()->set_material(player_material_01);
 
 		//::: collider,shapeのアタッチ :::
-		Collider* Head_collider     = Head->addComponent<Collider>();
+		Collider* Head_collider = Head->addComponent<Collider>();
 		Collider* Lsholder_collider = Lsholder->addComponent<Collider>();
-		Collider* Lelbow_collider   = Lelbow->addComponent<Collider>();
-		Collider* Lhand_collider    = Lhand->addComponent<Collider>();
+		Collider* Lelbow_collider = Lelbow->addComponent<Collider>();
+		Collider* Lhand_collider = Lhand->addComponent<Collider>();
 		Collider* Rsholder_collider = Rsholder->addComponent<Collider>();
-		Collider* Relbow_collider   = Relbow->addComponent<Collider>();
-		Collider* Rhand_collider    = Rhand->addComponent<Collider>();
-		Collider* Body_collider     = Body->addComponent<Collider>();
-		Collider* Waist_collider    = Waist->addComponent<Collider>();
-		Collider* Rleg_collider     = Rleg->addComponent<Collider>();
-		Collider* Rfoot_collider    = Rfoot->addComponent<Collider>();
-		Collider* Lleg_collider     = Lleg->addComponent<Collider>();
-		Collider* Lfoot_collider    = Lfoot->addComponent<Collider>();
+		Collider* Relbow_collider = Relbow->addComponent<Collider>();
+		Collider* Rhand_collider = Rhand->addComponent<Collider>();
+		Collider* Body_collider = Body->addComponent<Collider>();
+		Collider* Waist_collider = Waist->addComponent<Collider>();
+		Collider* Rleg_collider = Rleg->addComponent<Collider>();
+		Collider* Rfoot_collider = Rfoot->addComponent<Collider>();
+		Collider* Lleg_collider = Lleg->addComponent<Collider>();
+		Collider* Lfoot_collider = Lfoot->addComponent<Collider>();
 
 
-		Sphere* Head_shape     = Head_collider->add_shape<Sphere>();
+		Sphere* Head_shape = Head_collider->add_shape<Sphere>();
 		Sphere* Lsholder_shape = Lsholder_collider->add_shape<Sphere>();
-		Sphere* Lelbow_shape   = Lelbow_collider->add_shape<Sphere>();
-		Sphere* Lhand_shape    = Lhand_collider->add_shape<Sphere>();
+		Sphere* Lelbow_shape = Lelbow_collider->add_shape<Sphere>();
+		Sphere* Lhand_shape = Lhand_collider->add_shape<Sphere>();
 		Sphere* Rsholder_shape = Rsholder_collider->add_shape<Sphere>();
-		Sphere* Relbow_shape   = Relbow_collider->add_shape<Sphere>();
-		Sphere* Rhand_shape    = Rhand_collider->add_shape<Sphere>();
-		Box* Body_shape        = Body_collider->add_shape<Box>();
-		Box* Waist_shape       = Waist_collider->add_shape<Box>();
+		Sphere* Relbow_shape = Relbow_collider->add_shape<Sphere>();
+		Sphere* Rhand_shape = Rhand_collider->add_shape<Sphere>();
+		Box* Body_shape = Body_collider->add_shape<Box>();
+		Box* Waist_shape = Waist_collider->add_shape<Box>();
 		//Sphere* Waist_shape  = Waist_collider->add_shape<Sphere>();
-		Sphere* Rleg_shape     = Rleg_collider->add_shape<Sphere>();
-		Sphere* Rfoot_shape    = Rfoot_collider->add_shape<Sphere>();
-		Sphere* Lleg_shape     = Lleg_collider->add_shape<Sphere>();
-		Sphere* Lfoot_shape    = Lfoot_collider->add_shape<Sphere>();
+		Sphere* Rleg_shape = Rleg_collider->add_shape<Sphere>();
+		Sphere* Rfoot_shape = Rfoot_collider->add_shape<Sphere>();
+		Sphere* Lleg_shape = Lleg_collider->add_shape<Sphere>();
+		Sphere* Lfoot_shape = Lfoot_collider->add_shape<Sphere>();
 
 		BallJoint* Lhand_joint = nullptr;
 		BallJoint* Rhand_joint = nullptr;
@@ -342,19 +372,19 @@ namespace Adollib
 			if (player_num == 2) tag = Collider_tags::Player02;
 			if (player_num == 3) tag = Collider_tags::Player03;
 
-			Head_collider->tag     = Collider_tags::Human | tag;
+			Head_collider->tag = Collider_tags::Human | tag;
 			Lsholder_collider->tag = Collider_tags::Human | tag;
-			Lelbow_collider->tag   = Collider_tags::Human | tag;
-			Lhand_collider->tag    = Collider_tags::Human | tag;
+			Lelbow_collider->tag = Collider_tags::Human | tag;
+			Lhand_collider->tag = Collider_tags::Human | tag;
 			Rsholder_collider->tag = Collider_tags::Human | tag;
-			Relbow_collider->tag   = Collider_tags::Human | tag;
-			Rhand_collider->tag    = Collider_tags::Human | tag;
-			Body_collider->tag     = Collider_tags::Human | tag;
-			Waist_collider->tag    = Collider_tags::Human | tag;
-			Rleg_collider->tag     = Collider_tags::Human | tag;
-			Rfoot_collider->tag    = Collider_tags::Human | tag;
-			Lleg_collider->tag     = Collider_tags::Human | tag;
-			Lfoot_collider->tag    = Collider_tags::Human | tag;
+			Relbow_collider->tag = Collider_tags::Human | tag;
+			Rhand_collider->tag = Collider_tags::Human | tag;
+			Body_collider->tag = Collider_tags::Human | tag;
+			Waist_collider->tag = Collider_tags::Human | tag;
+			Rleg_collider->tag = Collider_tags::Human | tag;
+			Rfoot_collider->tag = Collider_tags::Human | tag;
+			Lleg_collider->tag = Collider_tags::Human | tag;
+			Lfoot_collider->tag = Collider_tags::Human | tag;
 
 			Lhand_collider->ignore_tags |= tag;
 			Rhand_collider->ignore_tags |= tag;
@@ -517,21 +547,21 @@ namespace Adollib
 			player_material_02->Load_PS("./DefaultShader/dither_noshadow_ps.cso");
 			player_material_02->create_constantbuffer(6, 1);
 			{
-				Gameobject* eye0 = Gameobject_manager::createSphere("eye0");
+				Gameobject* eye0 = Gameobject_manager::createSphere("eye0", Scenelist::scene_player);
 				Head->add_child(eye0);
 				eye0->transform->local_pos = Vector3(+0.5f, 0.5f, -1);
 				eye0->transform->local_scale = Vector3(0.25f, 0.25f, 0.25f);
 				eye0->findComponent<Renderer_base>()->set_material(player_material_02);
 			}
 			{
-				Gameobject* eye1 = Gameobject_manager::createSphere("eye1");
+				Gameobject* eye1 = Gameobject_manager::createSphere("eye1", Scenelist::scene_player);
 				Head->add_child(eye1);
 				eye1->transform->local_pos = Vector3(-0.5f, 0.5f, -1);
 				eye1->transform->local_scale = Vector3(0.25f, 0.25f, 0.25f);
 				eye1->findComponent<Renderer_base>()->set_material(player_material_02);
 			}
 			{
-				Gameobject* mouth = Gameobject_manager::createCube("mouth");
+				Gameobject* mouth = Gameobject_manager::createCube("mouth", Scenelist::scene_player);
 				Head->add_child(mouth);
 				mouth->transform->local_pos = Vector3(0, -0.45f, -1);
 				mouth->transform->local_scale = Vector3(0.7f, 0.25f, 0.3f);
@@ -539,7 +569,7 @@ namespace Adollib
 			}
 
 			{
-				Gameobject* belt = Gameobject_manager::createCube("belt");
+				Gameobject* belt = Gameobject_manager::createCube("belt", Scenelist::scene_player);
 				Waist->add_child(belt);
 				belt->transform->local_pos = Vector3(0, -0.45f, 0);
 				belt->transform->local_scale = Vector3(1.1f, 0.25f, 1.1f);
@@ -549,8 +579,9 @@ namespace Adollib
 
 		{
 
-			auto GO = Gameobject_manager::create("player");
+			auto GO = Gameobject_manager::create("player", Scenelist::scene_player);
 			player = GO->addComponent<Player>();
+			GO->add_child(Human);
 
 			player->set_player_colliders(
 				Head_collider,
@@ -577,6 +608,21 @@ namespace Adollib
 			input_changer->pad_num = player_num;
 
 			auto tutrial = GO->addComponent<Tutrial_manager>();
+
+			Gameobject* camera = Gameobject_manager::create("camera", Scenelist::scene_player);
+			auto camera_comp = camera->addComponent<Camera>();
+			camera->addComponent<Camera_component>();
+			GO->add_child(camera);
+
+
+			player->set_input_changerptr(input_changer);
+			player->set_cameraptr(camera_comp);
+
+			camera_comp->set_input_changerptr(input_changer);
+			camera_comp->set_player_transformptr(Waist->transform);
+
+			//camera->is_active = false;
+
 		}
 
 

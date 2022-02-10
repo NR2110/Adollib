@@ -10,10 +10,6 @@ namespace Adollib {
 		Gameobject* Player = Gameobject_manager::create("Player_manager");
 		Player->addComponent<Player_manager>();
 
-		Gameobject* camera = Gameobject_manager::create("camera");
-		camera->addComponent<Camera>();
-		camera->addComponent<Camera_component>();
-
 	}
 
 

@@ -4,6 +4,7 @@
 #include "../Adollib/Scripts/Object/gameobject_manager.h"
 #include "../Adollib/Scripts/Physics/ray.h"
 #include "../Adollib/Scripts/Renderer/renderer_base.h"
+#include "../Adollib/Scripts/Renderer/material_manager.h"
 
 #include "stage_manager.h"
 #include "camera.h"
@@ -15,14 +16,6 @@ namespace Adollib
 	void Player::awake() {
 		rotate = quaternion_from_euler(0, 180, 1);
 
-	}
-
-	void Player::start()
-	{
-
-		camera = Gameobject_manager::find("camera")->findComponent<Camera>();
-		//stage_manager = Gameobject_manager::find("Stage_manager")->findComponent<Stage_manager>();
-		input_changer = gameobject->findComponent<Input_changer>();
 		stage_manager = nullptr;
 
 		head_rot_max_speed = 3;
@@ -93,26 +86,29 @@ namespace Adollib
 
 		// rope”­ŽË‚Ì—\‘ªüGo‚Ì¶¬
 		{
+			auto material = Material_manager::create_material("rope_prediction");
+			material->is_render_shadow = false;
+
 			rope_hit_sphere = Gameobject_manager::createSphere("rope_hit_sphere");
 			rope_hit_sphere->transform->local_scale = Vector3(rope_sphere_r * 2);
 			rope_hit_sphere->renderer->color = Vector4(1, 0, 0, 1);
+			rope_hit_sphere->renderer->set_material(material);
 
 			rope_hit_cylinder = Gameobject_manager::createCylinder("rope_hit_cylinder");
 			rope_hit_cylinder->transform->local_scale = Vector3(rope_sphere_r * 0.5f);
 			rope_hit_cylinder->renderer->color = Vector4(1, 0, 0, 1);
+			rope_hit_cylinder->renderer->set_material(material);
 
 			// ‚Æ‚è‚ ‚¦‚¸•`‰æ‚³‚ê‚È‚¢‚Æ‚±‚ë‚É”ò‚Î‚·
 			rope_hit_sphere->transform->local_pos = Vector3(10000, 10000, 10000000);
 			rope_hit_cylinder->transform->local_pos = Vector3(10000, 10000, 10000000);
 		}
 
-		{
-			// anchor‚Ì‰Šúî•ñ‚ð•Û‘¶
-			Rhand_joint_ylength_default = Rhand_joint->anchor.posA.y;
-			Lhand_joint_ylength_default = Lhand_joint->anchor.posA.y;
-		}
-
 		respown_timer = -1;
+	}
+
+	void Player::start()
+	{
 		update();
 
 	}

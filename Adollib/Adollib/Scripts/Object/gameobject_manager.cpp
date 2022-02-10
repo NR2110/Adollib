@@ -32,6 +32,7 @@ using namespace Physics_function;
 using namespace ConstantBuffer;
 
 std::map<Scenelist, std::list<Gameobject*>> Gameobject_manager::gameobjects;
+std::list<Gameobject*> Gameobject_manager::added_gameobjects;
 std::map<Scenelist, std::list<Light_component*>> Gameobject_manager::lights;
 std::map<Scenelist, std::list<Camera_component*>> Gameobject_manager::cameras;
 
@@ -82,7 +83,7 @@ void Gameobject_manager::update(Scenelist Sce) {
 
 	auto& gos = gameobjects[Sce];
 
-	//一番上の親を保存
+	// 一番上の親を保存
 	std::vector<Gameobject*> masters; //GO親子ツリーの頂点を保存
 	masters.clear();
 	{
@@ -102,11 +103,11 @@ void Gameobject_manager::update(Scenelist Sce) {
 #endif // Use_physics_thread
 
 	{
-		//Work_meter::start("adapt_transform_to_gameobject");
-		//Physics_manager::adapt_transform_to_gameobject();
-		//Work_meter::stop("adapt_transform_to_gameobject");
+		// Work_meter::start("adapt_transform_to_gameobject");
+		// Physics_manager::adapt_transform_to_gameobject();
+		// Work_meter::stop("adapt_transform_to_gameobject");
 
-		//親から子に座標の更新を行う
+		// 親から子に座標の更新を行う
 		{
 			std::unordered_map<Gameobject*, bool> masters_manag;
 			for (auto& GO : gos) {
@@ -118,17 +119,23 @@ void Gameobject_manager::update(Scenelist Sce) {
 			}
 		}
 
-		//Work_meter::start("copy_gameobject_transform");
-		//Physics_manager::copy_gameobject_transform();
-		//Work_meter::stop("copy_gameobject_transform");
+		// Work_meter::start("copy_gameobject_transform");
+		// Physics_manager::copy_gameobject_transform();
+		// Work_meter::stop("copy_gameobject_transform");
 	}
 
 	Work_meter::start("update_to_children");
-	//親から子へupdateを呼ぶ update中に、親objectが削除されたときに対応できないため削除はいったんbufferに保管している
+
+	added_gameobjects.clear();
+	// 親から子へupdateを呼ぶ update中に、親objectが削除されたときに対応できないため削除はいったんbufferに保管している
 	std::for_each(masters.begin(), masters.end(), [](Gameobject* ob) {ob->update_to_children(); });
+
+	// 追加されたもののinitializeを呼ぶ
+	std::for_each(added_gameobjects.begin(), added_gameobjects.end(), [](Gameobject* ob) {ob->initialize(); });
+
 	Work_meter::stop("update_to_children");
 
-	//親から子に座標の更新を行う
+	// 親から子に座標の更新を行う
 	{
 		std::unordered_map<Gameobject*, bool> masters_manag;
 
@@ -144,14 +151,14 @@ void Gameobject_manager::update(Scenelist Sce) {
 
 
 #ifdef UseImgui
-	//ヒエラルキー
+	// ヒエラルキー
 	Work_meter::start("update_hierarchy");
 	Hierarchy::update_hierarchy(masters);
 	Work_meter::stop("update_hierarchy");
 
 #endif // UseImgui
 
-	//親から子に座標の更新を行う
+	// 親から子に座標の更新を行う
 	{
 		std::unordered_map<Gameobject*, bool> masters_manag;
 
@@ -202,6 +209,7 @@ Gameobject* Gameobject_manager::create(const std::string& go_name, const u_int& 
 	itr--;
 	*itr = newD Gameobject(true, Sce, itr);
 	Gameobject* Value = *itr;
+	added_gameobjects.emplace_back(*itr);
 
 	Value->tag = tag;
 	Value->name = go_name;
@@ -220,6 +228,7 @@ Gameobject* Gameobject_manager::createFromFBX(const std::string go_name, const s
 	itr--;
 	*itr = newD Gameobject(false, Sce, itr);
 	Gameobject* Value = *itr;
+	added_gameobjects.emplace_back(*itr);
 
 	Value->tag = tag;
 	Value->name = go_name;
@@ -236,15 +245,16 @@ Gameobject* Gameobject_manager::createFromFBX(const std::string go_name, const s
 	return Value;
 }
 
-Gameobject* Gameobject_manager::createSphere(const std::string go_name, u_int tag, Scenelist Sce) {
+Gameobject* Gameobject_manager::createSphere(const std::string go_name, Scenelist Sce) {
 	Gameobject* null = nullptr;
 	gameobjects[Sce].emplace_back(null);
 	auto itr = gameobjects[Sce].end();
 	itr--;
 	*itr = newD Gameobject(false, Sce, itr);
 	Gameobject* Value = *itr;
+	added_gameobjects.emplace_back(*itr);
 
-	Value->tag = tag;
+	Value->tag = GO_tag::Sphere;
 	Value->name = go_name;
 	Value->transform = std::make_shared<Transform>();
 
@@ -259,15 +269,16 @@ Gameobject* Gameobject_manager::createSphere(const std::string go_name, u_int ta
 	return Value;
 }
 
-Gameobject* Gameobject_manager::createCube(const std::string go_name, u_int tag, Scenelist Sce) {
+Gameobject* Gameobject_manager::createCube(const std::string go_name, Scenelist Sce) {
 	Gameobject* null = nullptr;
 	gameobjects[Sce].emplace_back(null);
 	auto itr = gameobjects[Sce].end();
 	itr--;
 	*itr = newD Gameobject(false, Sce, itr);
 	Gameobject* Value = *itr;
+	added_gameobjects.emplace_back(*itr);
 
-	Value->tag = tag;
+	Value->tag = GO_tag::Box;
 	Value->name = go_name;
 	Value->transform = std::make_shared<Transform>();
 
@@ -282,15 +293,16 @@ Gameobject* Gameobject_manager::createCube(const std::string go_name, u_int tag,
 	return Value;
 }
 
-Gameobject* Gameobject_manager::createCapsule(const std::string go_name, u_int tag, Scenelist Sce) {
+Gameobject* Gameobject_manager::createCapsule(const std::string go_name, Scenelist Sce) {
 	Gameobject* null = nullptr;
 	gameobjects[Sce].emplace_back(null);
 	auto itr = gameobjects[Sce].end();
 	itr--;
 	*itr = newD Gameobject(false, Sce, itr);
 	Gameobject* Value = *itr;
+	added_gameobjects.emplace_back(*itr);
 
-	Value->tag = tag;
+	Value->tag = GO_tag::Capsule;
 	Value->name = go_name;
 	Value->transform = std::make_shared<Transform>();
 
@@ -307,15 +319,16 @@ Gameobject* Gameobject_manager::createCapsule(const std::string go_name, u_int t
 //Gameobject* Gameobject_manager::createCylinder( u_int go_name) {
 
 //}
-Gameobject* Gameobject_manager::createCylinder(const std::string go_name, u_int tag, Scenelist Sce) {
+Gameobject* Gameobject_manager::createCylinder(const std::string go_name, Scenelist Sce) {
 	Gameobject* null = nullptr;
 	gameobjects[Sce].emplace_back(null);
 	auto itr = gameobjects[Sce].end();
 	itr--;
 	*itr = newD Gameobject(false, Sce, itr);
 	Gameobject* Value = *itr;
+	added_gameobjects.emplace_back(*itr);
 
-	Value->tag = tag;
+	Value->tag = GO_tag::Cylinder;
 	Value->name = go_name;
 	Value->transform = std::make_shared<Transform>();
 
@@ -330,15 +343,16 @@ Gameobject* Gameobject_manager::createCylinder(const std::string go_name, u_int 
 	return Value;
 }
 
-Gameobject* Gameobject_manager::createPlane(const std::string go_name, u_int tag, Scenelist Sce) {
+Gameobject* Gameobject_manager::createPlane(const std::string go_name, Scenelist Sce) {
 	Gameobject* null = nullptr;
 	gameobjects[Sce].emplace_back(null);
 	auto itr = gameobjects[Sce].end();
 	itr--;
 	*itr = newD Gameobject(false, Sce, itr);
 	Gameobject* Value = *itr;
+	added_gameobjects.emplace_back(*itr);
 
-	Value->tag = tag;
+	Value->tag = GO_tag::Plane;
 	Value->name = go_name;
 	Value->transform = std::make_shared<Transform>();
 

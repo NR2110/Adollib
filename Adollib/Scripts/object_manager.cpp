@@ -1229,7 +1229,7 @@ namespace Adollib
 {
 	Gameobject* object_manager::set_sphere(Collider*& out_coll, Vector3 pos, float r, Vector3 color) {
 		Gameobject* object = nullptr;
-		object = Gameobject_manager::createSphere(GO_tag::Sphere);
+		object = Gameobject_manager::createSphere();
 		//Vector4 C = Vector4(color.x, color.y, color.z, 1);
 		Vector4 C = Vector4(color, 1);
 		object->renderer->color = C;
@@ -1254,7 +1254,7 @@ namespace Adollib
 
 	Gameobject* object_manager::set_box(Collider*& out_coll, Vector3 pos, Vector3 size, Vector3 rotate, Vector3 color) {
 		Gameobject* object = nullptr;
-		object = Gameobject_manager::createCube(GO_tag::Box);
+		object = Gameobject_manager::createCube();
 		Vector4 C = Vector4(color.x, color.y, color.z, 1);
 		object->renderer->color = C;
 
@@ -1318,7 +1318,7 @@ namespace Adollib
 
 	Gameobject* object_manager::set_plane(Vector3 pos, Vector3 normal, Vector3 color) {
 		Gameobject* object = nullptr;
-		object = Gameobject_manager::createCube(GO_tag::Plane);
+		object = Gameobject_manager::createCube();
 		Vector4 C = Vector4(color.x, color.y, color.z, 1);
 		object->renderer->color = C;
 
@@ -1335,7 +1335,7 @@ namespace Adollib
 
 	Gameobject* object_manager::set_tree(Vector3 pos, Vector3 scale, Vector3 rotate, Vector3 color) {
 		Gameobject* tree = nullptr;
-		tree = Gameobject_manager::create(GO_tag::None);
+		tree = Gameobject_manager::create();
 
 		Vector4 stem_color = Vector4(90, 47, 27, 255) / 255.0f;
 		Vector4 reaf_color = Vector4(48, 188, 0, 255) / 255.0f;
@@ -1348,7 +1348,7 @@ namespace Adollib
 		const int Tree_size = 7;
 		Gameobject* tree_parts[Tree_size] = { nullptr };
 		for (int i = 0; i < Tree_size; i++) {
-			tree_parts[i] = Gameobject_manager::createCube(GO_tag::Box);
+			tree_parts[i] = Gameobject_manager::createCube();
 		}
 
 		tree_parts[0]->transform->local_pos = Vector3(0, 7, 0);

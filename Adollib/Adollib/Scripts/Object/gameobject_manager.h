@@ -38,6 +38,7 @@ namespace Adollib {
 	private:
 		//Gameobjectのポインタ
 		static std::map<Scenelist, std::list<Gameobject*>> gameobjects;
+		static std::list<Gameobject*> added_gameobjects; //initializeを呼ぶために保存する
 
 		//camera_componentへのポインタ
 		static std::map<Scenelist, std::list<Camera_component*>> cameras;
@@ -80,26 +81,26 @@ namespace Adollib {
 
 		// meshrenderer
 		static Gameobject* createFromFBX(const std::string go_name, const std::string FBX_pass, const bool is_marge_vertex = false, const u_int = GO_tag::FBX, Scenelist Sce = Scene_manager::get_processing_scene());
-		static Gameobject* createSphere(const std::string go_name, const u_int = GO_tag::Sphere, Scenelist Sce = Scene_manager::get_processing_scene());
-		static Gameobject* createSphere(const u_int tag = GO_tag::Sphere, Scenelist Sce = Scene_manager::get_processing_scene()) {
-			return createSphere(std::string("GO_" + std::to_string(go_count)), tag, Sce);
+		static Gameobject* createSphere(const std::string go_name, Scenelist Sce = Scene_manager::get_processing_scene());
+		static Gameobject* createSphere(Scenelist Sce = Scene_manager::get_processing_scene()) {
+			return createSphere(std::string("GO_" + std::to_string(go_count)), Sce);
 		}
-		static Gameobject* createCylinder(const std::string go_name, const u_int = GO_tag::Cylinder, Scenelist Sce = Scene_manager::get_processing_scene());
-		static Gameobject* createCylinder(const u_int tag = GO_tag::Cylinder, Scenelist Sce = Scene_manager::get_processing_scene()) {
-			return createCylinder(std::string("GO_" + std::to_string(go_count)), tag, Sce);
+		static Gameobject* createCylinder(const std::string go_name,  Scenelist Sce = Scene_manager::get_processing_scene());
+		static Gameobject* createCylinder(Scenelist Sce = Scene_manager::get_processing_scene()) {
+			return createCylinder(std::string("GO_" + std::to_string(go_count)), Sce);
 		}
-		static Gameobject* createCube(const std::string go_name, const u_int = GO_tag::Box, Scenelist Sce = Scene_manager::get_processing_scene());
-		static Gameobject* createCube(const u_int tag = GO_tag::Box, Scenelist Sce = Scene_manager::get_processing_scene()) {
-			return createCube(std::string("GO_" + std::to_string(go_count)), tag, Sce);
+		static Gameobject* createCube(const std::string go_name, Scenelist Sce = Scene_manager::get_processing_scene());
+		static Gameobject* createCube(Scenelist Sce = Scene_manager::get_processing_scene()) {
+			return createCube(std::string("GO_" + std::to_string(go_count)) , Sce);
 		}
-		static Gameobject* createCapsule(const std::string go_name, const u_int = GO_tag::Box, Scenelist Sce = Scene_manager::get_processing_scene());
-		static Gameobject* createCapsule(const u_int tag = GO_tag::Box, Scenelist Sce = Scene_manager::get_processing_scene()) {
-			return createCube(std::string("GO_" + std::to_string(go_count)), tag, Sce);
+		static Gameobject* createCapsule(const std::string go_name, Scenelist Sce = Scene_manager::get_processing_scene());
+		static Gameobject* createCapsule(Scenelist Sce = Scene_manager::get_processing_scene()) {
+			return createCube(std::string("GO_" + std::to_string(go_count)) , Sce);
 		}
 		// spriterenderer
-		static Gameobject* createPlane(const std::string go_name, const u_int = GO_tag::Plane, Scenelist Sce = Scene_manager::get_processing_scene());
-		static Gameobject* createPlane(const u_int tag = GO_tag::Plane, Scenelist Sce = Scene_manager::get_processing_scene()) {
-			return createPlane(std::string("GO_" + std::to_string(go_count)), tag, Sce);
+		static Gameobject* createPlane(const std::string go_name, Scenelist Sce = Scene_manager::get_processing_scene());
+		static Gameobject* createPlane( Scenelist Sce = Scene_manager::get_processing_scene()) {
+			return createPlane(std::string("GO_" + std::to_string(go_count)), Sce);
 		}
 		//static Gameobject* createSprite(const std::string go_name, const u_int = GO_tag::Sprite, Scenelist Sce = Scene_manager::get_processing_scene());
 		//static Gameobject* createSprite(const u_int tag = GO_tag::Sprite, Scenelist Sce = Scene_manager::get_processing_scene()) {

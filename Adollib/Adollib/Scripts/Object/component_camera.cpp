@@ -41,6 +41,10 @@ void Camera_component::awake() {
 
 	directional_shadow = std::make_shared<Directional_shadow>();
 	directional_shadow->awake();
+	directional_shadow->position = Vector3(200, 200, -200);
+	directional_shadow->direction = Vector3(-1, -2, 1).unit_vect();
+	directional_shadow->nearZ = 150;
+	directional_shadow->nearZ = 0.1f;
 
 	sky_sphere = std::make_shared<Sky_sphere>();
 	sky_sphere->awake();

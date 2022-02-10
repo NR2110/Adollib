@@ -56,13 +56,13 @@ void Select_state_manager::awake() {
 
 	// gameobject‚Ìì¬ & eqŠÖŒW‚Ìİ’è
 	for (int i = 0; i < 5; ++i) {
-		select_stage_back[i] = Gameobject_manager::createCube(std::string("select_back") + std::to_string(i));
+		select_stage_back[i] = Gameobject_manager::create(std::string("select_back") + std::to_string(i));
 		select_stage_back[i]->transform->local_scale = Vector3(22, 14, 0.01f);
-		auto material = Material_manager::create_material("select_back_material");
-		material->Load_VS("./DefaultShader/default_vs.cso");
-		material->Load_PS("./DefaultShader/default_ps_originalcolor.cso");
-		select_stage_back[i]->renderer->set_material(material);
-		select_stage_back[i]->renderer->color = Vector4(246, 237, 240, 255) / 255.0f;
+		//auto material = Material_manager::create_material("select_back_material");
+		//material->Load_VS("./DefaultShader/default_vs.cso");
+		//material->Load_PS("./DefaultShader/default_ps_originalcolor.cso");
+		//select_stage_back[i]->renderer->set_material(material);
+		//select_stage_back[i]->renderer->color = Vector4(246, 237, 240, 255) / 255.0f;
 		gameobject->add_child(select_stage_back[i]);
 
 		select_stage_front[i] = Gameobject_manager::createPlane(std::string("select_front") + std::to_string(i));
@@ -75,18 +75,18 @@ void Select_state_manager::awake() {
 	gameobject->transform->local_pos = Vector3(32, -1, 90);
 	gameobject->transform->local_orient = quaternion_from_euler(Vector3(-0.5f, 30, 0));
 
-	Scene_manager::set_active(Scenelist::scene_player);
+	//Scene_manager::set_active(Scenelist::scene_player);
 }
 
 void Select_state_manager::start() {
 	title_state_manager = Gameobject_manager::find("title_state_manager")->findComponent<Title_state_manager>();
 	title_state_manager->add_statebase(this);
 
-	player_manager = Gameobject_manager::find("Player_manager",Scenelist::scene_player)->findComponent<Player_manager>();
-	player_manager->set_moveable(false);
-	player_manager->set_Tpause_and_set_transform(Vector3(0,-1000,-70),quaternion_identity());
+	//player_manager = Gameobject_manager::find("Player_manager",Scenelist::scene_player)->findComponent<Player_manager>();
+	//player_manager->set_moveable(false);
+	//player_manager->set_Tpause_and_set_transform(Vector3(0,-1000,-70),quaternion_identity());
 
-	Gameobject_manager::find("camera", Scenelist::scene_player)->findComponent<Camera_component>()->gameobject->is_active = false;
+	//Gameobject_manager::find("camera", Scenelist::scene_player)->findComponent<Camera_component>()->gameobject->is_active = false;
 }
 
 void Select_state_manager::update() {
@@ -194,6 +194,7 @@ void Select_state_manager::select_state(Title_state_B state) {
 			//player_manager->set_moveable(true);
 
 			title_state_manager->set_nextstate_B(Title_state_B::Update_3);
+			Scene_manager::set_active(Scenelist::scene_player);
 		}
 	}
 
@@ -205,8 +206,8 @@ void Select_state_manager::select_state(Title_state_B state) {
 
 
 		Scene_manager::set_inactive(Scenelist::scene_title);
-		player_manager->set_moveable(true);
-		Gameobject_manager::find("camera", Scenelist::scene_player)->findComponent<Camera_component>()->gameobject->is_active = true;
+		//player_manager->set_moveable(true);
+		//Gameobject_manager::find("camera", Scenelist::scene_player)->findComponent<Camera_component>()->gameobject->is_active = true;
 
 	}
 

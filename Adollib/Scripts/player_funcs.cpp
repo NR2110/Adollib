@@ -627,7 +627,7 @@ void Player::push_waist_for_stand() {
 void Player::linear_move() {
 	// ’n–Ê‚ÉÚ‚µ‚Ä‚¢‚é & “ü—Í‚ª–³‚¢Žž
 	//if (is_gunyatto == false && dir.norm() == 0 && onground_collider != nullptr) {
-	if (is_gunyatto == false && dir.norm() == 0) {
+	if (is_gunyatto == false && dir.norm() == 0 && onground_collider != nullptr) {
 		Waist_collider->physics_data.drag = 0.985f;
 		Body_collider->physics_data.drag = 0.985f;
 	}
