@@ -270,6 +270,8 @@ void Player::catch_things() {
 // ropeを撃つ
 void Player::shot_rope() {
 
+	const float rope_max_length = 90;
+
 	// とりあえず描画されないように吹っ飛ばす
 	{
 		rope_hit_sphere->transform->local_pos = Vector3(10000, 10000, 10000000);
@@ -324,8 +326,8 @@ void Player::shot_rope() {
 				rope_hit_cylinder->transform->local_orient = quaternion_from_to_rotate(Vector3(0, 1, 0), arm_ray.direction);
 				rope_hit_cylinder->transform->local_scale.y = arm_ray_data.raymin * 0.5f;
 
-				// 届いていれば緑、届いていなければ赤 (とりあえず今は50のマジックナンバーで代用 要修正)
-				if (arm_ray_data.raymin > 50) {
+				// 届いていれば緑、届いていなければ赤
+				if (arm_ray_data.raymin > rope_max_length) {
 					rope_hit_cylinder->renderer->color = Vector4(1, 0, 0, 1);
 					rope_hit_sphere->renderer->color = Vector4(1, 0, 0, 1);
 				}
@@ -378,7 +380,7 @@ void Player::shot_rope() {
 		rope_hit_sphere->transform->local_pos = arm_ray.position + arm_ray.direction * arm_ray_data.raymin;
 
 		// 届いていなければ適当に return
-		if (arm_ray_data.coll == nullptr || arm_ray_data.raymin > 50)return;
+		if (arm_ray_data.coll == nullptr || arm_ray_data.raymin > rope_max_length)return;
 
 		// 前のropeを削除, jointを削除
 		if (Lrope_go)Gameobject_manager::deleteGameobject(Lrope_go);
@@ -435,7 +437,7 @@ void Player::shot_rope() {
 		auto renderer = Lrope_go->addComponent<Rope_renderer>();
 		Lrope_go->renderer = renderer;
 		renderer->radius = rope_sphere_r * 0.6f;
-		renderer->split_count = 30;
+		renderer->split_count = 20;
 		renderer->set_meshoffset(coll->get_vertex_offset());
 
 	}

@@ -8,6 +8,7 @@ namespace Adollib {
 
 		auto player_manager = Gameobject_manager::find("Player_manager", Scenelist::scene_player)->findComponent<Player_manager>();
 		player_manager->add_players(1);
+
 		{
 			Gameobject* GO = Gameobject_manager::create("Stage_manager");
 			auto comp = GO->addComponent<Stage_manager>();

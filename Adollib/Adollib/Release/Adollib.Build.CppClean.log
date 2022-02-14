@@ -1,6 +1,7 @@
 c:\users\waaaa\documents\adollib\adollib\release\adollib.ipdb
 c:\users\waaaa\documents\adollib\adollib\release\adollib.iobj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb
+c:\users\waaaa\documents\adollib\adollib\adollib\release\stage_demo_funcs.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\stage_demo_1_funcs.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\stage_demo_1.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\stage_demo.obj
@@ -8,7 +9,6 @@ c:\users\waaaa\documents\adollib\adollib\adollib\release\stage_base.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\stage_01_funcs.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\stage_01.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\select_stage_manager.obj
-c:\users\waaaa\documents\adollib\adollib\adollib\release\scene_shader.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\player_manager.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\player_funcs.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\player.obj
@@ -21,6 +21,7 @@ c:\users\waaaa\documents\adollib\adollib\adollib\release\demo_house.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\camera.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\area_respown_set.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\area_goal.obj
+c:\users\waaaa\documents\adollib\adollib\adollib\release\loop.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\input.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\adollib.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\work_meter.obj
@@ -40,7 +41,7 @@ c:\users\waaaa\documents\adollib\adollib\adollib\release\title_camera.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\stage_manager.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\stage_demo_2_funcs.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\stage_demo_2.obj
-c:\users\waaaa\documents\adollib\adollib\adollib\release\stage_demo_funcs.obj
+c:\users\waaaa\documents\adollib\adollib\adollib\release\alp_raycast.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\alp_physics.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\alp_midphase.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\alp_joint.obj
@@ -60,7 +61,7 @@ c:\users\waaaa\documents\adollib\adollib\adollib\release\systems.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\sprite.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\resource_manager.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\main.obj
-c:\users\waaaa\documents\adollib\adollib\adollib\release\loop.obj
+c:\users\waaaa\documents\adollib\adollib\adollib\release\material.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\twistjoint.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\shape_rope.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\shape_croth.obj
@@ -80,8 +81,8 @@ c:\users\waaaa\documents\adollib\adollib\adollib\release\collider_croth.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\balljoint.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\alp_resolve_contact_sim.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\alp_resolve_contact.obj
-c:\users\waaaa\documents\adollib\adollib\adollib\release\alp_raycast.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\scene_title.obj
+c:\users\waaaa\documents\adollib\adollib\adollib\release\scene_player.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\scene_manager.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\scene_game.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\croth_renderer.obj
@@ -99,8 +100,13 @@ c:\users\waaaa\documents\adollib\adollib\adollib\release\mesh_renderer.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\mesh.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\material_manager.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\material_for_collider.obj
-c:\users\waaaa\documents\adollib\adollib\adollib\release\material.obj
-c:\users\waaaa\documents\adollib\adollib\adollib\release\scene_player.obj
+c:\users\waaaa\documents\adollib\adollib\adollib\release\tutorial_manager.obj
+c:\users\waaaa\documents\adollib\adollib\adollib\release\ui_renderer.obj
+c:\users\waaaa\documents\adollib\adollib\adollib\release\tutrial.obj
+c:\users\waaaa\documents\adollib\adollib\adollib\release\tutrial_stage01_move_camera_catch.h.obj
+c:\users\waaaa\documents\adollib\adollib\adollib\release\tutrial_manager.obj
+c:\users\waaaa\documents\adollib\adollib\adollib\release\stage_02_funcs.obj
+c:\users\waaaa\documents\adollib\adollib\adollib\release\stage_02.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\defaultshader\collider_render_ps.cso
 c:\users\waaaa\documents\adollib\adollib\adollib\defaultshader\collider_render_vs.cso
 c:\users\waaaa\documents\adollib\adollib\adollib\defaultshader\croth_calculate_cs.cso

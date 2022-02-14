@@ -109,7 +109,7 @@ void Collider_Rope::create_rope() {
 
 	constexpr float sructural_stretch = 0.10f;
 	//constexpr float sructural_shrink = 0.40f;
-	constexpr float sructural_shrink = 0.9f;
+	constexpr float sructural_shrink = 1;
 	constexpr float bending_stretch = 0.10f;
 	constexpr float bending_shrink = 0.1f;
 

@@ -55,12 +55,12 @@ namespace Adollib
 			auto material = Material_manager::create_material("rope_prediction");
 			material->is_render_shadow = false;
 
-			rope_hit_sphere = Gameobject_manager::createSphere("rope_hit_sphere");
+			rope_hit_sphere = Gameobject_manager::createSphere("rope_hit_sphere",Scenelist::scene_player);
 			rope_hit_sphere->transform->local_scale = Vector3(rope_sphere_r * 2);
 			rope_hit_sphere->renderer->color = Vector4(1, 0, 0, 1);
 			rope_hit_sphere->renderer->set_material(material);
 
-			rope_hit_cylinder = Gameobject_manager::createCylinder("rope_hit_cylinder");
+			rope_hit_cylinder = Gameobject_manager::createCylinder("rope_hit_cylinder",Scenelist::scene_player);
 			rope_hit_cylinder->transform->local_scale = Vector3(rope_sphere_r * 0.5f);
 			rope_hit_cylinder->renderer->color = Vector4(1, 0, 0, 1);
 			rope_hit_cylinder->renderer->set_material(material);
@@ -68,6 +68,9 @@ namespace Adollib
 			// ‚Æ‚è‚ ‚¦‚¸•`‰æ‚³‚ê‚È‚¢‚Æ‚±‚ë‚É”ò‚Î‚·
 			rope_hit_sphere->transform->local_pos = Vector3(10000, 10000, 10000000);
 			rope_hit_cylinder->transform->local_pos = Vector3(10000, 10000, 10000000);
+
+			gameobject->add_child(rope_hit_sphere);
+			gameobject->add_child(rope_hit_cylinder);
 		}
 
 		respown_timer = -1;
@@ -111,7 +114,7 @@ namespace Adollib
 
 		player_mterial_0 = Material_manager::find_material(std::string("player_material_") + std::to_string(player_num) + std::string("_0"));
 		player_mterial_1 = Material_manager::find_material(std::string("player_material_") + std::to_string(player_num) + std::string("_1"));
-		update();
+		//update();
 
 	}
 
