@@ -9,6 +9,7 @@
 #include "stage_demo_1.h"
 #include "stage_demo_2.h"
 #include "stage_01.h"
+#include "stage_02.h"
 
 #include "player.h"
 
@@ -22,7 +23,8 @@ void Stage_manager::awake() {
 	add_stage<Stage_demo_02>(Stage_types::demo_2);
 
 	add_stage<Stage_01>(Stage_types::stage_1);
-	add_stage<Stage_demo>(Stage_types::stage_2);
+	add_stage<Stage_02>(Stage_types::stage_2);
+	add_stage<Stage_demo>(Stage_types::stage_3);
 
 	now_stage = Stage_types::none; //¡‚Ìstagetype
 	next_stage = Stage_types::none; //ŽŸ‚Ìstagetype
@@ -55,17 +57,17 @@ void Stage_manager::update() {
 		is_changed_stage = true;
 	}
 
+	if (input->getKeyTrigger(Key::F1))
+		set_next_stage_type(Stage_types::stage_1);
 	if (input->getKeyTrigger(Key::F2))
-		set_next_stage_type(Stage_types::demo);
+		set_next_stage_type(Stage_types::stage_2);
 	if (input->getKeyTrigger(Key::F3))
 		set_next_stage_type(Stage_types::demo_1);
 	if (input->getKeyTrigger(Key::F4))
 		set_next_stage_type(Stage_types::demo_2);
 
-	if (input->getKeyTrigger(Key::F1))
-		set_next_stage_type(Stage_types::stage_1);
 
-	if (input->getKeyTrigger(Key::Left) || input->getPadTrigger(0, GamePad::BACK)) {
+	if (input->getKeyTrigger(Key::F11) || input->getPadTrigger(0, GamePad::BACK)) {
 		Scene_manager::set_inactive(Scenelist::scene_game);
 		Scene_manager::set_inactive(Scenelist::scene_player);
 		Scene_manager::set_active(Scenelist::scene_title);

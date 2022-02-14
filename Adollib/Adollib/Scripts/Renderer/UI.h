@@ -10,14 +10,20 @@ namespace Adollib {
 
 	class UI_data {
 	public:
-		float dx = 0;
-		float dy = 0;
-		float dw = 0;
-		float dh = 0;
-		float sx = 0;
-		float sy = 0;
-		float sw = 0;
-		float sh = 0;
+		UI_data() {};
+		UI_data(float dx_, float dy_, float dw_, float dh_, float sx_, float sy_, float sw_, float sh_, float angle_ = 0, float alpha_ = 1) :
+			dx(dx_), dy(dy_), dw(dw_), dh(dh_), sx(sx_), sy(sy_), sw(sw_), sh(sh_), angle(angle_), alpha(alpha_)
+		{};
+
+	public:
+		float dx = 0; //頂点座標
+		float dy = 0; //頂点座標
+		float dw = 0; //頂点座標
+		float dh = 0; //頂点座標
+		float sx = 0; //texture座標
+		float sy = 0; //texture座標
+		float sw = 0; //texture座標
+		float sh = 0; //texture座標
 
 		float angle = 0.0f;
 		float alpha = 1.0f;

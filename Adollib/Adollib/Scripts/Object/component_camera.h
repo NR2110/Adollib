@@ -6,6 +6,7 @@
 #include "../Main/input.h"
 #include "../Renderer/Shader/shader.h"
 #include "../Renderer/frustum_data.h"
+#include "../Renderer/UI.h"
 #include "../Scene/scene_list.h"
 
 #include <string>
@@ -44,6 +45,8 @@ namespace Adollib
 		// skysphereのptr
 		std::shared_ptr<Sky_sphere> sky_sphere = nullptr;
 
+		// 描画情報
+		UI_data ui_data;
 	private:
 		std::list<std::shared_ptr<Posteffect_base>> posteffects; //ポストエフェクト関係の保存
 
@@ -57,6 +60,8 @@ namespace Adollib
 		std::shared_ptr<Texture> depth_texture  = nullptr;
 
 		Shader shader;
+
+		UI ui;
 
 	private:
 		// managerに保存されている 自身へのitr

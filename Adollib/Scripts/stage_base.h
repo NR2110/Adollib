@@ -25,7 +25,7 @@ namespace Adollib {
 		Vector3 player_respown_pos;
 		int player_respown_num = 0; // 現在のrespownposの番号 前のrespownposで更新しないようにするため
 
-		Stage_types next_stage = Stage_types::none;
+		Stage_types next_stage = Stage_types::none; //次のstage この値がnone以外でrespownが行われるとき 次のstageに行く
 
 	protected:
 		std::vector<Gameobject*> stage_parts; // このstageが管理しているGOのポインタ

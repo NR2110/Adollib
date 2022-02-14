@@ -18,6 +18,7 @@
 #include "door.h"
 #include "tag_andcircuit.h"
 #include "touch_moveable.h"
+#include "rotate_block.h"
 
 namespace Adollib
 {
@@ -82,6 +83,8 @@ namespace Adollib
 		Collider* coll = tree->addComponent<Collider>();
 		coll->physics_data.inertial_mass = 60 * y_scale * tan_scale;
 		coll->tag = Collider_tags::Stage | Collider_tags::Kinematic_Stage | Collider_tags::Caera_not_sunk_Stage ;
+		coll->physics_data.angula_sleep_threrhold = 0;
+		coll->physics_data.is_moveable = false;
 		//coll->tag = Collider_tags::Stage | Collider_tags::Kinematic_Stage ;
 
 		for (int i = 0; i < Tree_size; i++) {
@@ -345,6 +348,36 @@ namespace Adollib
 		door_comp->goal_rot = goal_rot;
 		door_comp->pos_speed = pos_speed;
 		door_comp->rot_speed = rot_speed;
+
+		return go;
+	}
+
+	Gameobject* Stage_01::set_rotate_block(const Vector3& pos, const Vector3& size, const Vector3& rotate,
+		Stage_parts::Stageparts_tagbit tag,
+		const Vector3& rotate_axis, float rotate_speed, float rotate_speed_easing,
+		const Vector3& color, Gameobject* pearent) {
+
+		auto coll = set_box(pos, size, rotate, color, pearent);
+		auto go = coll->gameobject;
+		auto comp = go->addComponent<Stage_parts::Rotate_block>();
+
+		coll->physics_data.inertial_mass = 1000;
+		coll->set_max_linear_velocity(0);
+		coll->physics_data.is_moveable = true;
+		coll->physics_data.is_fallable = false;
+		coll->physics_data.is_kinmatic_linear = false;
+		coll->physics_data.is_kinmatic_anglar = false;
+
+		comp->tag = tag;
+		comp->this_stage = this;
+		comp->this_coll = coll;
+
+		comp->rotate_axis = rotate_axis;
+		comp->rotate_speed = rotate_speed;
+		comp->rotate_speed_easing_pow = rotate_speed_easing;
+
+
+
 
 		return go;
 	}

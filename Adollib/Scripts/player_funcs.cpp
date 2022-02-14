@@ -288,8 +288,8 @@ void Player::shot_rope() {
 			float dither_pow = ALClamp(dither_timer, 0, 1);
 
 			//Waist->renderer->get_material()->constant_buffer_data[0] = Vector4(500, 1000, 0, 0);
-			Material_manager::find_material("player_material_01")->constant_buffer_data[0] = Vector4(5 + (500 - 5) * dither_pow, 4 + (1000 - 4) * dither_pow, 0, 0);
-			Material_manager::find_material("player_material_02")->constant_buffer_data[0] = Vector4(5 + (500 - 5) * dither_pow, 4 + (1000 - 4) * dither_pow, 0, 0);
+			player_mterial_0->constant_buffer_data[0] = Vector4(5 + (500 - 5) * dither_pow, 4 + (1000 - 4) * dither_pow, 0, 0);
+			player_mterial_1->constant_buffer_data[0] = Vector4(5 + (500 - 5) * dither_pow, 4 + (1000 - 4) * dither_pow, 0, 0);
 			camera->gameobject->findComponent<Camera_component>()->fov = 60 + (40 - 60) * dither_pow;
 		}
 
@@ -324,8 +324,8 @@ void Player::shot_rope() {
 				rope_hit_cylinder->transform->local_orient = quaternion_from_to_rotate(Vector3(0, 1, 0), arm_ray.direction);
 				rope_hit_cylinder->transform->local_scale.y = arm_ray_data.raymin * 0.5f;
 
-				// 届いていれば緑、届いていなければ赤 (とりあえず今は90のマジックナンバーで代用 要修正)
-				if (arm_ray_data.raymin > 90) {
+				// 届いていれば緑、届いていなければ赤 (とりあえず今は50のマジックナンバーで代用 要修正)
+				if (arm_ray_data.raymin > 50) {
 					rope_hit_cylinder->renderer->color = Vector4(1, 0, 0, 1);
 					rope_hit_sphere->renderer->color = Vector4(1, 0, 0, 1);
 				}
@@ -343,8 +343,8 @@ void Player::shot_rope() {
 		float dither_pow = ALClamp(dither_timer, 0, 1);
 
 		//Waist->renderer->get_material()->constant_buffer_data[0] = Vector4(500, 1000, 0, 0);
-		Material_manager::find_material("player_material_01")->constant_buffer_data[0] = Vector4(5 + (500 - 5) * dither_pow, 4 + (1000 - 4) * dither_pow, 0, 0);
-		Material_manager::find_material("player_material_02")->constant_buffer_data[0] = Vector4(5 + (500 - 5) * dither_pow, 4 + (1000 - 4) * dither_pow, 0, 0);
+		player_mterial_0->constant_buffer_data[0] = Vector4(5 + (500 - 5) * dither_pow, 4 + (1000 - 4) * dither_pow, 0, 0);
+		player_mterial_1->constant_buffer_data[0] = Vector4(5 + (500 - 5) * dither_pow, 4 + (1000 - 4) * dither_pow, 0, 0);
 		camera->gameobject->findComponent<Camera_component>()->fov = 60 + (40 - 60) * dither_pow;
 
 	}
@@ -378,7 +378,7 @@ void Player::shot_rope() {
 		rope_hit_sphere->transform->local_pos = arm_ray.position + arm_ray.direction * arm_ray_data.raymin;
 
 		// 届いていなければ適当に return
-		if (arm_ray_data.coll == nullptr || arm_ray_data.raymin > 90)return;
+		if (arm_ray_data.coll == nullptr || arm_ray_data.raymin > 50)return;
 
 		// 前のropeを削除, jointを削除
 		if (Lrope_go)Gameobject_manager::deleteGameobject(Lrope_go);
@@ -627,7 +627,7 @@ void Player::push_waist_for_stand() {
 void Player::linear_move() {
 	// 地面に接している & 入力が無い時
 	//if (is_gunyatto == false && dir.norm() == 0 && onground_collider != nullptr) {
-	if (is_gunyatto == false && dir.norm() == 0 && onground_collider != nullptr) {
+	if (is_gunyatto == false && dir.norm() == 0) {
 		Waist_collider->physics_data.drag = 0.985f;
 		Body_collider->physics_data.drag = 0.985f;
 	}
@@ -927,8 +927,8 @@ void Player::set_default_data() {
 		Human_colliders[i]->physics_data.drag = Human_default_drags[i];
 	}
 
-	Material_manager::find_material("player_material_01")->constant_buffer_data[0] = Vector4(5, 4, 0, 0);
-	Material_manager::find_material("player_material_02")->constant_buffer_data[0] = Vector4(5, 4, 0, 0);
+	player_mterial_0->constant_buffer_data[0] = Vector4(5, 4, 0, 0);
+	player_mterial_1->constant_buffer_data[0] = Vector4(5, 4, 0, 0);
 	camera->gameobject->findComponent<Camera_component>()->fov = 60;
 }
 

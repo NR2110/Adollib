@@ -208,6 +208,7 @@ namespace Adollib
 			}
 
 			// 壁
+			if (0)
 			{
 				Gameobject* wall_pearent = Gameobject_manager::create("wall_pearent");
 				second_zone->add_child(wall_pearent);
@@ -215,26 +216,24 @@ namespace Adollib
 				set_box(Vector3(83, 20.0f, 50.0f), Vector3(1, 8.0f, 10), Vector3(0), base_color, wall_pearent);
 				set_box(Vector3(83, 24.0f, 64.0f), Vector3(1, 4.0f, 4), Vector3(0), base_color, wall_pearent);
 
-				set_gimmickdoor(Vector3(83, 16.0f, 62.0f), Vector3(83, 16.0f, 58.5f),
+				set_gimmickdoor(Vector3(211, 19, 64), Vector3(210, 19, 64),
 					Vector3(0), Vector3(0),
 					2, 0,
-					Vector3(0.5f, 4.0f, 2),
+					Vector3(2, 4.0f, 0.5f),
 					Stage_parts::Stageparts_tags::Flag_0,
 					base_color * 0.8f,
 					wall_pearent
 				);
 
-				set_gimmickdoor(Vector3(83, 16.0f, 66.0f), Vector3(83, 16.0f, 69.5f),
+				set_gimmickdoor(Vector3(209, 19, 64), Vector3(210, 19, 64),
 					Vector3(0), Vector3(0),
 					2, 0,
-					Vector3(0.5f, 4.0f, 2),
+					Vector3(2, 4.0f, 0.5f),
 					Stage_parts::Stageparts_tags::Flag_0,
 					base_color * 0.8f,
 					wall_pearent
 				);
 
-
-				set_buttan(Vector3(82.80f, 16, 54), Vector3(2, 0.9f, 2), Vector3(0, 0, -90), Stage_parts::Stageparts_tags::Flag_0, wall_pearent, true);
 			}
 
 			// 適当なピラミッド
@@ -261,12 +260,114 @@ namespace Adollib
 					}
 				}
 			}
+
+
+			// 回転gimmick
+			{
+				Gameobject* rotate_gimmick = Gameobject_manager::create("rotate_gimmick");
+				second_zone->add_child(rotate_gimmick);
+
+				set_buttan(Vector3(74, 11.2f, 76), Vector3(4, 0.9f, 4), Vector3(0, 0, 0), Stage_parts::Stageparts_tags::Flag_0, rotate_gimmick, false);
+				set_rotate_block(Vector3(102, 25.0f, 71), Vector3(5, 15, 15), Vector3(0, 90, 0), Stage_parts::Stageparts_tags::Flag_0, Vector3(0, 0, -1), 1, 1, base_color, rotate_gimmick);
+			}
+
+			// 体を持ち上げるtutrial
+			{
+				Gameobject* tute_up = Gameobject_manager::create("tute_up");
+				second_zone->add_child(tute_up);
+
+				set_box(Vector3(133, 6.5f, 137), Vector3(11, 4.5f, 6), Vector3(0), wood_color, tute_up);
+				set_box(Vector3(150, 9.4f, 103), Vector3(6, 7.4f, 40), Vector3(0), base_color, tute_up);
+				set_box(Vector3(139, 7, 97), Vector3(17, 5, 34), Vector3(0), base_color, tute_up);
+				set_box(Vector3(168, 9.4f, 123), Vector3(12, 7.4f, 20), Vector3(0), base_color, tute_up);
+
+
+				set_box(Vector3(172, 18, 122), Vector3(16, 6, 5), Vector3(0), grass_color, tute_up);
+				set_box(Vector3(205, 18, 122), Vector3(17, 6, 5), Vector3(0), grass_color, tute_up);
+				set_box(Vector3(172, 18, 85), Vector3(16, 6, 20), Vector3(0), grass_color, tute_up);
+				set_box(Vector3(167, 18, 111), Vector3(11, 6, 6), Vector3(0), grass_color, tute_up);
+				set_box(Vector3(214, 20.4f, 135), Vector3(8, 3.6f, 8), Vector3(0), grass_color, tute_up);
+				set_box(Vector3(201, 9.4f, 135), Vector3(21, 7.4f, 8), Vector3(0), base_color, tute_up);
+				set_box(Vector3(205, 13.5f, 84), Vector3(17, 1.5f, 21), Vector3(0), wood_color, tute_up);
+
+				// 階段
+				set_box(Vector3(182, 17.5f, 111), Vector3(4, 5.5f, 6), Vector3(0), base_color, tute_up);
+				set_box(Vector3(190, 17.0f, 111), Vector3(4, 5.0f, 6), Vector3(0), base_color, tute_up);
+				set_box(Vector3(198, 16.5f, 111), Vector3(4, 4.5f, 6), Vector3(0), base_color, tute_up);
+				set_box(Vector3(206, 16.0f, 111), Vector3(4, 4.0f, 6), Vector3(0), base_color, tute_up);
+				set_box(Vector3(216, 15.5f, 111), Vector3(6, 3.5f, 6), Vector3(0), base_color, tute_up);
+				set_box(Vector3(216, 16.5f, 101), Vector3(6, 1.5f, 4), Vector3(0), base_color, tute_up);
+				set_box(Vector3(216, 16.0f, 93), Vector3(6, 1.0f, 4), Vector3(0), base_color, tute_up);
+				set_box(Vector3(216, 15.5f, 85), Vector3(6, 0.5f, 4), Vector3(0), base_color, tute_up);
+				//set_box(Vector3(216,13.0f,70), Vector3(6, 1.0f, 4), Vector3(0), moveable_red);
+				//set_box(Vector3(216,12.5f,62), Vector3(6, 0.5f, 4), Vector3(0), moveable_red);
+
+				set_box(Vector3(227, 11, 64), Vector3(13, 12, 1.1f), Vector3(0), base_color, tute_up);
+				set_box(Vector3(181, 17, 64), Vector3(25, 6, 1.1f), Vector3(0), base_color, tute_up);
+				set_box(Vector3(198, 27, 64), Vector3(42, 4, 1.1f), Vector3(0), base_color, tute_up);
+
+				set_buttan(Vector3(199, 19, 64.4f), Vector3(2, 0.9f, 2), Vector3(90, 0, 0), Stage_parts::Stageparts_tags::Flag_2, tute_up, true);
+				set_gimmickdoor(Vector3(212, 19, 64), Vector3(214, 19, 64),
+					Vector3(0), Vector3(0),
+					2, 0,
+					Vector3(2, 4.0f, 0.5f),
+					Stage_parts::Stageparts_tags::Flag_2,
+					base_color * 0.8f,
+					tute_up
+				);
+
+				set_gimmickdoor(Vector3(208, 19, 64), Vector3(206, 19, 64),
+					Vector3(0), Vector3(0),
+					2, 0,
+					Vector3(2, 4.0f, 0.5f),
+					Stage_parts::Stageparts_tags::Flag_2,
+					base_color * 0.8f,
+					tute_up
+				);
+
+				set_tree(Vector3(139, 11, 137), Vector3(1, 1.2f, 1), Vector3(0, 12, 0), 1.2f, 0.8f, tute_up);
+				set_tree(Vector3(128, 11, 137), Vector3(1, 1.2f, 1), Vector3(0, 12, 0), 1.2f, 0.8f, tute_up);
+				set_tree(Vector3(214, 24, 135), Vector3(1, 1.2f, 1), Vector3(0, 12, 0), 1.2f, 0.8f, tute_up);
+				set_tree(Vector3(193, 15, 78), Vector3(1, 1.2f, 1), Vector3(0, 12, 0), 1.2f, 0.8f, tute_up);
+				set_tree(Vector3(193, 15, 88), Vector3(1, 1.2f, 1), Vector3(0, 12, 0), 1.2f, 0.8f, tute_up);
+				set_tree(Vector3(193, 15, 98), Vector3(1, 1.2f, 1), Vector3(0, 12, 0), 1.2f, 0.8f, tute_up);
+
+				set_fence(Vector3(186, 24, 71), Vector3(1), Vector3(0, 90, 0), tute_up);
+				set_fence(Vector3(186, 24, 83), Vector3(1), Vector3(0, 90, 0), tute_up);
+				set_fence(Vector3(186, 24, 95), Vector3(1), Vector3(0, 90, 0), tute_up);
+				set_pillar(Vector3(186, 24, 67), Vector3(1), Vector3(0), tute_up, 2.5f, 5, false);
+				set_pillar(Vector3(186, 24, 103), Vector3(1), Vector3(0), tute_up, 2.5f, 5, false);
+
+				set_fence(Vector3(166, 24, 125), Vector3(1), Vector3(0, 0, 0), tute_up);
+				set_fence(Vector3(178, 24, 125), Vector3(1), Vector3(0, 0, 0), tute_up);
+				set_fence(Vector3(190, 24, 125), Vector3(1), Vector3(0, 0, 0), tute_up);
+				set_fence(Vector3(202, 24, 125), Vector3(1), Vector3(0, 0, 0), tute_up);
+				set_pillar(Vector3(158, 24, 125), Vector3(1), Vector3(0), tute_up, 2.5f, 5, false);
+				set_pillar(Vector3(208, 24, 125), Vector3(1), Vector3(0), tute_up, 2.5f, 5, false);
+
+
+				set_fence(Vector3(146, 16.8, 133), Vector3(1), Vector3(0, 90, 0), tute_up);
+				set_pillar(Vector3(146, 16.8f, 125), Vector3(1), Vector3(0), tute_up, 2.5f, 5, false);
+				set_pillar(Vector3(146, 16.8f, 141), Vector3(1), Vector3(0), tute_up, 2.5f, 5, false);
+			}
+
+			set_box(Vector3(100, 100, 100), Vector3(5, 5, 5), Vector3(0), moveable_red);
+			set_box(Vector3(100, 100, 100), Vector3(5, 5, 5), Vector3(0), moveable_red);
+			set_box(Vector3(100, 100, 100), Vector3(5, 5, 5), Vector3(0), moveable_red);
+
+			set_tree(Vector3(100, 100, 100), Vector3(1, 1.2f, 1), Vector3(0, 12, 0), 1.5f, 0.8f);
+			set_tree(Vector3(100, 100, 100), Vector3(1, 1.2f, 1), Vector3(0, 12, 0), 1.5f, 0.8f);
+			set_tree(Vector3(100, 100, 100), Vector3(1, 1.2f, 1), Vector3(0, 12, 0), 1.5f, 0.8f);
+
+
 		}
 
 		// third_zone
 		{
 			Gameobject* third_zone = Gameobject_manager::create("third_zone");
 			stage_parts.emplace_back(third_zone);
+			third_zone->transform->local_pos = Vector3(140, 3, 147);
+			third_zone->transform->local_orient = quaternion_from_euler(0, 90, 0);
 
 			// 階段
 			{
@@ -388,6 +489,8 @@ namespace Adollib
 		{
 			Gameobject* fourth_zone = Gameobject_manager::create("fourth_zone");
 			stage_parts.emplace_back(fourth_zone);
+			fourth_zone->transform->local_pos = Vector3(140, 3, 147);
+			fourth_zone->transform->local_orient = quaternion_from_euler(0, 90, 0);
 
 			// 橋
 			{
@@ -541,10 +644,11 @@ namespace Adollib
 			stage_parts.emplace_back(goal_and_respown_areas);
 
 			set_respown_area(Vector3(24, 9, 57), Vector3(14, 5, 15), Vector3(0), 2, Vector3(24, 50, 57), goal_and_respown_areas);
-			set_respown_area(Vector3(100, 18, 61), Vector3(16, 10, 19), Vector3(0), 3, Vector3(102, 50, 50), goal_and_respown_areas);
-			set_respown_area(Vector3(126, 16, 116), Vector3(24, 10, 10), Vector3(0), 4, Vector3(104, 50, 120), goal_and_respown_areas);
+			set_respown_area(Vector3(151, 18, 98), Vector3(28, 10, 20), Vector3(0), 3, Vector3(132, 50, 83), goal_and_respown_areas);
+			set_respown_area(Vector3(210, 18, 43), Vector3(28, 10, 20), Vector3(0), 4, Vector3(189, 50, 49), goal_and_respown_areas);
+			set_respown_area(Vector3(272, 18, 98), Vector3(28, 10, 33), Vector3(0), 5, Vector3(260, 50, 14), goal_and_respown_areas);
 
-			set_goal_area(Vector3(104, 6, 224), Vector3(10, 2, 8), Vector3(0), Stage_types::demo, goal_and_respown_areas);
+			set_goal_area(Vector3(370, 13, 43), Vector3(14, 2, 14), Vector3(0), Stage_types::stage_2, goal_and_respown_areas);
 		}
 #endif
 

@@ -50,40 +50,6 @@ namespace Adollib
 
 		turn_speed = 1.5f;
 
-		// playerが上に乗っているか、gimick側が感知できるようにplayerの下方向に適当なcolliderを置く
-		{
-			auto check_onplayer_go = Gameobject_manager::create("check_onplayer_go");
-			auto check_onplayer_coll = check_onplayer_go->addComponent<Collider>();
-			auto shape = check_onplayer_coll->add_shape<Sphere>();
-
-			check_onplayer_go->transform->local_pos = Vector3(0, -3.0f, 0);
-
-			check_onplayer_coll->physics_data.is_moveable = false;
-			check_onplayer_coll->physics_data.is_hitable = false;
-			check_onplayer_coll->tag = Collider_tags::Human;
-
-			shape->r = 1;
-
-			Waist->add_child(check_onplayer_go);
-		}
-		// respown時に接地判定を行う playerを包むsphere
-		{
-			auto check_respown_go = Gameobject_manager::create("check_respown_go");
-			auto check_onplayer_coll = check_respown_go->addComponent<Collider>();
-			auto shape = check_onplayer_coll->add_shape<Sphere>();
-
-			check_respown_go->transform->local_pos = Vector3(0, 0, 0);
-			check_respown_go->transform->local_scale = Vector3(1) * 2.5f;
-
-			check_onplayer_coll->physics_data.is_moveable = false;
-			check_onplayer_coll->physics_data.is_hitable = false;
-			shape->r = 1;
-
-			Waist->add_child(check_respown_go);
-
-			this->check_onplayer_coll = check_onplayer_coll;
-		}
-
 		// rope発射の予測線Goの生成
 		{
 			auto material = Material_manager::create_material("rope_prediction");
@@ -109,6 +75,42 @@ namespace Adollib
 
 	void Player::start()
 	{
+		// playerが上に乗っているか、gimick側が感知できるようにplayerの下方向に適当なcolliderを置く
+		{
+			auto check_onplayer_go = Gameobject_manager::create("check_onplayer_go", Scenelist::scene_player);
+			auto check_onplayer_coll = check_onplayer_go->addComponent<Collider>();
+			auto shape = check_onplayer_coll->add_shape<Sphere>();
+
+			check_onplayer_go->transform->local_pos = Vector3(0, -3.0f, 0);
+
+			check_onplayer_coll->physics_data.is_moveable = false;
+			check_onplayer_coll->physics_data.is_hitable = false;
+			check_onplayer_coll->tag = Collider_tags::Human;
+
+			shape->r = 1;
+
+			Waist->add_child(check_onplayer_go);
+		}
+		// respown時に接地判定を行う playerを包むsphere
+		{
+			auto check_respown_go = Gameobject_manager::create("check_respown_go", Scenelist::scene_player);
+			auto check_onplayer_coll = check_respown_go->addComponent<Collider>();
+			auto shape = check_onplayer_coll->add_shape<Sphere>();
+
+			check_respown_go->transform->local_pos = Vector3(0, 0, 0);
+			check_respown_go->transform->local_scale = Vector3(1) * 2.5f;
+
+			check_onplayer_coll->physics_data.is_moveable = false;
+			check_onplayer_coll->physics_data.is_hitable = false;
+			shape->r = 1;
+
+			Waist->add_child(check_respown_go);
+
+			this->check_onplayer_coll = check_onplayer_coll;
+		}
+
+		player_mterial_0 = Material_manager::find_material(std::string("player_material_") + std::to_string(player_num) + std::string("_0"));
+		player_mterial_1 = Material_manager::find_material(std::string("player_material_") + std::to_string(player_num) + std::string("_1"));
 		update();
 
 	}

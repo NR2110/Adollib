@@ -25,6 +25,7 @@ void Camera_component::awake() {
 
 	// gameobject_managerÇÃîzóÒÇ…ìoò^
 	this_itr = Gameobject_manager::add_camera_component(gameobject->get_scene(), this);
+
 	aspect = (float)Al_Global::SCREEN_WIDTH / Al_Global::SCREEN_HEIGHT;
 
 	// MRTóptextureÇÃê∂ê¨
@@ -48,6 +49,18 @@ void Camera_component::awake() {
 
 	sky_sphere = std::make_shared<Sky_sphere>();
 	sky_sphere->awake();
+
+	ui_data.dx = 0;
+	ui_data.dy = 0;
+	ui_data.sx = 0;
+	ui_data.sy = 0;
+	ui_data.dh = Al_Global::SCREEN_HEIGHT;
+	ui_data.dw = Al_Global::SCREEN_WIDTH;
+	ui_data.sh = Al_Global::SCREEN_HEIGHT;
+	ui_data.sw = Al_Global::SCREEN_WIDTH;
+
+	ui.shader.Load_VS("./DefaultShader/ui_vs.cso");
+	ui.shader.Load_PS("./DefaultShader/ui_ps.cso");
 }
 
 void Camera_component::finalize() {
@@ -138,15 +151,9 @@ void Camera_component::posteffect_render() {
 	Systems::SetRasterizerState(State_manager::RStypes::RS_CULL_BACK);
 	Systems::SetDephtStencilState(State_manager::DStypes::DS_FALSE);
 
-	UI ui;
-	ui.ui_data.dh = Al_Global::SCREEN_HEIGHT;
-	ui.ui_data.dw = Al_Global::SCREEN_WIDTH;
-	ui.ui_data.sh = Al_Global::SCREEN_HEIGHT;
-	ui.ui_data.sw = Al_Global::SCREEN_WIDTH;
 
+	ui.ui_data = ui_data;
 	ui.set_texture(color_texture);
-	ui.shader.Load_VS("./DefaultShader/ui_vs.cso");
-	ui.shader.Load_PS("./DefaultShader/ui_ps.cso");
 	ui.render();
 }
 
@@ -155,7 +162,7 @@ Frustum_data Camera_component::calculate_frustum_data() {
 	return Frustum_data::create_frustum_data(
 		transform->position,
 		//transform->orientation,
-		vector3_quatrotate(Vector3(0,0,1), transform->orientation),
+		vector3_quatrotate(Vector3(0, 0, 1), transform->orientation),
 		nearZ,
 		farZ,
 		fov,

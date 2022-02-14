@@ -8,6 +8,9 @@ namespace Adollib {
 	//int Al_Global::SCREEN_HEIGHT = 720;
 	int Al_Global::SCREEN_WIDTH = 1880;
 	int Al_Global::SCREEN_HEIGHT = 720;
+	//int Al_Global::SCREEN_WIDTH = 1920;
+	//int Al_Global::SCREEN_HEIGHT = 1080;
+
 
 	bool Al_Global::render_collider_flag = true;
 

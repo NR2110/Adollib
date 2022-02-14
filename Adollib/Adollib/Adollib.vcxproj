@@ -169,12 +169,14 @@
     <ClInclude Include="..\Scripts\player_manager.h" />
     <ClInclude Include="..\Scripts\respown_area.h" />
     <ClInclude Include="..\Scripts\area_respown_set.h" />
+    <ClInclude Include="..\Scripts\rotate_block.h" />
     <ClInclude Include="..\Scripts\scene_game_all.h" />
     <ClInclude Include="..\Scripts\scene_title_all.h" />
     <ClInclude Include="..\Scripts\select_stage_manager.h" />
     <ClInclude Include="..\Scripts\stageparts_base.h" />
     <ClInclude Include="..\Scripts\stageparts_tags.h" />
     <ClInclude Include="..\Scripts\stage_01.h" />
+    <ClInclude Include="..\Scripts\stage_02.h" />
     <ClInclude Include="..\Scripts\stage_base.h" />
     <ClInclude Include="..\Scripts\stage_demo.h" />
     <ClInclude Include="..\Scripts\stage_demo_1.h" />
@@ -326,6 +328,8 @@
     <ClCompile Include="..\Scripts\select_stage_manager.cpp" />
     <ClCompile Include="..\Scripts\stage_01.cpp" />
     <ClCompile Include="..\Scripts\stage_01_funcs.cpp" />
+    <ClCompile Include="..\Scripts\stage_02.cpp" />
+    <ClCompile Include="..\Scripts\stage_02_funcs.cpp" />
     <ClCompile Include="..\Scripts\stage_base.cpp" />
     <ClCompile Include="..\Scripts\stage_demo.cpp" />
     <ClCompile Include="..\Scripts\stage_demo_1.cpp" />

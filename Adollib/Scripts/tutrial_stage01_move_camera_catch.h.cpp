@@ -152,6 +152,7 @@ void Tutrial_stage01_move_camera_catch::update() {
 	for (auto& child : *go_tutrial_camera->children())child->is_active = false;
 	for (auto& child : *go_tutrial_hand->children())child->is_active = false;
 	for (auto& child : *go_tutrial_catch_object->children())child->is_active = false;
+	//return;
 
 	// moveとcameraのtutrial
 	// set_tutrial_move_and_camera_flagは初期値-1 条件で0になり、変化していく
@@ -244,7 +245,7 @@ void Tutrial_stage01_move_camera_catch::tutrial_move_and_camera() {
 		}
 
 		// 1秒以上cameraを動かしたらチェックマークをつける
-		if (tutrial_camera_state_timer >= 1) {
+		if (tutrial_camera_state_timer >= 0.8f) {
 			// scaleを適当な二次関数でeasing
 			tutrial_camera_check_animation_timer += time->deltaTime() * 4;
 			tutrial_camera_check_animation_timer = ALClamp(tutrial_camera_check_animation_timer, 0, 1);
@@ -304,8 +305,8 @@ void Tutrial_stage01_move_camera_catch::tutrial_hand_stretch() {
 
 	//::::::::
 
-	// 5秒待つ
-	if (tutrial_flag == 5) {
+	// 4秒待つ
+	if (tutrial_flag == 4) {
 
 		if (tutrial_timer > 5) {
 			tutrial_flag++;
@@ -334,8 +335,8 @@ void Tutrial_stage01_move_camera_catch::tutrial_hand_stretch() {
 	if (tutrial_flag == 7) {
 		if (input_changer->is_Larm_state || input_changer->is_Rarm_state) tutrial_move_state_timer += time->deltaTime(); //移動キーを押されたらtimerを進める
 
-		// 3秒以上動いたらチェックマークをつける
-		if (tutrial_move_state_timer >= 3) {
+		// 2秒以上動いたらチェックマークをつける
+		if (tutrial_move_state_timer >= 2) {
 			// scaleを適当な二次関数でeasing
 			tutrial_move_check_animation_timer += time->deltaTime() * 4;
 			tutrial_move_check_animation_timer = ALClamp(tutrial_move_check_animation_timer, 0, 1);

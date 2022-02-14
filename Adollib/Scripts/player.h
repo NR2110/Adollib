@@ -107,6 +107,10 @@ namespace Adollib
 		Stage_manager* stage_manager = nullptr; //stage_managerへのポインタ
 		Camera* camera = nullptr; //cameraへのポインタ
 		Input_changer* input_changer = nullptr; //自身の保持するinput_changerへのポインタ
+		std::shared_ptr<Material> player_mterial_0 = nullptr;
+		std::shared_ptr<Material> player_mterial_1 = nullptr;
+
+		int player_num = -1; //playerの番号
 
 	private:
 		//::: 毎フレーム呼び出す
@@ -256,6 +260,8 @@ namespace Adollib
 			if (num == 0) return catch_left_joint != nullptr;
 			if (num == 1) return catch_right_joint != nullptr;
 		}
+
+		void set_player_num(int num) { player_num = num; };
 
 	public:
 		void awake() override;

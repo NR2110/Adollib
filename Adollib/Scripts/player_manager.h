@@ -1,5 +1,6 @@
 #pragma once
 #include "../Adollib/Scripts/Object/component.h"
+#include "../Adollib/Scripts/Renderer/UI.h"
 #include "../Adollib/Scripts/Physics/collider.h"
 
 #include "player.h"
@@ -12,7 +13,7 @@ namespace Adollib
 	private:
 		Player* players[4];
 
-		void add_player(int player_num, const Vector3& position, const Vector3& rotate, const Vector3& main_color, const Vector3& sub_color);
+		void add_player(int player_num, const Vector3& position, const Vector3& rotate, const Vector3& main_color, const Vector3& sub_color, const UI_data& camera_data);
 
 	public:
 		void set_stage_manager_ptr(Stage_manager* m);

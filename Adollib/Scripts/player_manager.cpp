@@ -1,6 +1,8 @@
 
 
 #include "player_manager.h"
+#include "../Adollib/Scripts/Main/Adollib.h"
+
 #include "../Adollib/Scripts/Object/gameobject_manager.h"
 #include "../Adollib/Scripts/Object/component_camera.h"
 
@@ -68,13 +70,64 @@ namespace Adollib
 		}
 	}
 
+
 	void Player_manager::add_players(int num) {
+		if (num == 0 || num > 4)return;
+
 		Vector3 player_start_pos = Vector3(-2.7f, 50, -5);
 
 		Quaternion player_start_rotate = quaternion_from_euler(20, 180, 0);
+
+		const float S_W = Al_Global::SCREEN_WIDTH;
+		const float S_H = Al_Global::SCREEN_HEIGHT;
+
+		const float S_W_inv2 = Al_Global::SCREEN_WIDTH * 0.5f;
+		const float S_H_inv2 = Al_Global::SCREEN_HEIGHT * 0.5f;
+
+		const float S_W_inv3 = Al_Global::SCREEN_WIDTH / 3.f;
+		const float S_H_inv3 = Al_Global::SCREEN_HEIGHT / 3.f;
+
+		const float S_W_inv4 = Al_Global::SCREEN_WIDTH * 0.25f;
+		const float S_H_inv4 = Al_Global::SCREEN_HEIGHT * 0.25f;
+
+
+		const UI_data base_ui_datas[4][4]{
+			{
+				UI_data(0, 0, S_W, S_H, 0, 0, S_W, S_H),
+				UI_data(),
+				UI_data(),
+				UI_data(),
+			},
+
+			{
+				UI_data(S_W_inv2 * 0, 0, S_W_inv2, S_H, S_W_inv4, 0, S_W_inv2, S_H),
+				UI_data(S_W_inv2 * 1, 0, S_W_inv2, S_H, S_W_inv4, 0, S_W_inv2, S_H),
+				UI_data(),
+				UI_data(),
+			},
+
+			{
+				UI_data(S_W_inv3 * 0, 0, S_W_inv3, S_H,  S_W_inv3, 0, S_W_inv3, S_H),
+				UI_data(S_W_inv3 * 1, 0, S_W_inv3, S_H,  S_W_inv3, 0, S_W_inv3, S_H),
+				UI_data(S_W_inv3 * 2, 0, S_W_inv3, S_H,  S_W_inv3, 0, S_W_inv3, S_H),
+				UI_data(),
+			},
+
+			{
+				UI_data(S_W_inv2 * 0, S_H_inv2 * 0, S_W_inv2, S_H_inv2,  0, 0, S_W, S_H),
+				UI_data(S_W_inv2 * 1, S_H_inv2 * 0, S_W_inv2, S_H_inv2,  0, 0, S_W, S_H),
+				UI_data(S_W_inv2 * 0, S_H_inv2 * 1, S_W_inv2, S_H_inv2,  0, 0, S_W, S_H),
+				UI_data(S_W_inv2 * 1, S_H_inv2 * 1, S_W_inv2, S_H_inv2,  0, 0, S_W, S_H),
+			}
+
+
+		};
+
 		for (int i = 0; i < num; ++i) {
 
-			add_player(i, player_start_pos + Vector3(10, 0, 0) * i, Vector3(20, 180, 0), Vector3(1), Vector3(0.5f));
+			add_player(i, player_start_pos + Vector3(10, 0, 0) * i, Vector3(20, 180, 0), Vector3(1), Vector3(0.5f),
+				base_ui_datas[num - 1][i]
+			);
 		}
 	}
 
@@ -89,7 +142,7 @@ namespace Adollib
 		}
 	}
 
-	void Player_manager::add_player(int player_num, const Vector3& position, const Vector3& rotate, const Vector3& main_color, const Vector3& sub_color) {
+	void Player_manager::add_player(int player_num, const Vector3& position, const Vector3& rotate, const Vector3& main_color, const Vector3& sub_color, const UI_data& camera_data) {
 
 		Player*& player = players[player_num];
 
@@ -97,70 +150,70 @@ namespace Adollib
 		Human->transform->local_pos = position;
 		Human->transform->local_orient = quaternion_from_euler(rotate);
 
-		auto player_material_01 = Material_manager::create_material("player_material_01");
-		player_material_01->Load_VS("./DefaultShader/dither_noshadow_vs.cso");
-		player_material_01->Load_PS("./DefaultShader/dither_noshadow_ps.cso");
-		player_material_01->create_constantbuffer(6, 1);
-		player_material_01->color = Vector4(main_color, 1);
+		auto player_material = Material_manager::create_material(std::string("player_material_") + std::to_string(player_num) + std::string("_0"));
+		player_material->Load_VS("./DefaultShader/dither_noshadow_vs.cso");
+		player_material->Load_PS("./DefaultShader/dither_noshadow_ps.cso");
+		player_material->create_constantbuffer(6, 1);
+		player_material->color = Vector4(main_color, 1);
 
 		//::: Gameobjectの生成 :::
-		Gameobject* Head     = Gameobject_manager::createCube("Head", Scenelist::scene_player);
+		Gameobject* Head = Gameobject_manager::createCube("Head", Scenelist::scene_player);
 
 		Gameobject* Lsholder = Gameobject_manager::createCube("Lsholder", Scenelist::scene_player);
 		Gameobject* Lelbow   = Gameobject_manager::createCube("Lelbow", Scenelist::scene_player);
-		Gameobject* Lhand    = Gameobject_manager::create    ("Lhand", Scenelist::scene_player);
+		Gameobject* Lhand    = Gameobject_manager::create("Lhand", Scenelist::scene_player);
 		Gameobject* Rsholder = Gameobject_manager::createCube("Rsholder", Scenelist::scene_player);
 		Gameobject* Relbow   = Gameobject_manager::createCube("Relbow", Scenelist::scene_player);
-		Gameobject* Rhand    = Gameobject_manager::create    ("Rhand", Scenelist::scene_player);
-		Gameobject* Body     = Gameobject_manager::createCube("Body",  Scenelist::scene_player);
+		Gameobject* Rhand    = Gameobject_manager::create("Rhand", Scenelist::scene_player);
+		Gameobject* Body     = Gameobject_manager::createCube("Body", Scenelist::scene_player);
 		Gameobject* Waist    = Gameobject_manager::createCube("Waist", Scenelist::scene_player);
-		Gameobject* Rleg     = Gameobject_manager::createCube("Rleg",  Scenelist::scene_player);
+		Gameobject* Rleg     = Gameobject_manager::createCube("Rleg", Scenelist::scene_player);
 		Gameobject* Rfoot    = Gameobject_manager::createCube("Rfoot", Scenelist::scene_player);
-		Gameobject* Lleg     = Gameobject_manager::createCube("Lleg",  Scenelist::scene_player);
+		Gameobject* Lleg     = Gameobject_manager::createCube("Lleg", Scenelist::scene_player);
 		Gameobject* Lfoot    = Gameobject_manager::createCube("Lfoot", Scenelist::scene_player);
 
-		Head->findComponent<Renderer_base>()->set_material(player_material_01);
-		Lsholder->findComponent<Renderer_base>()->set_material(player_material_01);
-		Lelbow->findComponent<Renderer_base>()->set_material(player_material_01);
-		Rsholder->findComponent<Renderer_base>()->set_material(player_material_01);
-		Relbow->findComponent<Renderer_base>()->set_material(player_material_01);
-		Body->findComponent<Renderer_base>()->set_material(player_material_01);
-		Waist->findComponent<Renderer_base>()->set_material(player_material_01);
-		Rleg->findComponent<Renderer_base>()->set_material(player_material_01);
-		Rfoot->findComponent<Renderer_base>()->set_material(player_material_01);
-		Lleg->findComponent<Renderer_base>()->set_material(player_material_01);
-		Lfoot->findComponent<Renderer_base>()->set_material(player_material_01);
+		Head    ->findComponent<Renderer_base>()->set_material(player_material);
+		Lsholder->findComponent<Renderer_base>()->set_material(player_material);
+		Lelbow  ->findComponent<Renderer_base>()->set_material(player_material);
+		Rsholder->findComponent<Renderer_base>()->set_material(player_material);
+		Relbow  ->findComponent<Renderer_base>()->set_material(player_material);
+		Body    ->findComponent<Renderer_base>()->set_material(player_material);
+		Waist   ->findComponent<Renderer_base>()->set_material(player_material);
+		Rleg    ->findComponent<Renderer_base>()->set_material(player_material);
+		Rfoot   ->findComponent<Renderer_base>()->set_material(player_material);
+		Lleg    ->findComponent<Renderer_base>()->set_material(player_material);
+		Lfoot   ->findComponent<Renderer_base>()->set_material(player_material);
 
 		//::: collider,shapeのアタッチ :::
-		Collider* Head_collider = Head->addComponent<Collider>();
+		Collider* Head_collider     = Head->addComponent<Collider>();
 		Collider* Lsholder_collider = Lsholder->addComponent<Collider>();
-		Collider* Lelbow_collider = Lelbow->addComponent<Collider>();
-		Collider* Lhand_collider = Lhand->addComponent<Collider>();
+		Collider* Lelbow_collider   = Lelbow->addComponent<Collider>();
+		Collider* Lhand_collider    = Lhand->addComponent<Collider>();
 		Collider* Rsholder_collider = Rsholder->addComponent<Collider>();
-		Collider* Relbow_collider = Relbow->addComponent<Collider>();
-		Collider* Rhand_collider = Rhand->addComponent<Collider>();
-		Collider* Body_collider = Body->addComponent<Collider>();
-		Collider* Waist_collider = Waist->addComponent<Collider>();
-		Collider* Rleg_collider = Rleg->addComponent<Collider>();
-		Collider* Rfoot_collider = Rfoot->addComponent<Collider>();
-		Collider* Lleg_collider = Lleg->addComponent<Collider>();
-		Collider* Lfoot_collider = Lfoot->addComponent<Collider>();
+		Collider* Relbow_collider   = Relbow->addComponent<Collider>();
+		Collider* Rhand_collider    = Rhand->addComponent<Collider>();
+		Collider* Body_collider     = Body->addComponent<Collider>();
+		Collider* Waist_collider    = Waist->addComponent<Collider>();
+		Collider* Rleg_collider     = Rleg->addComponent<Collider>();
+		Collider* Rfoot_collider    = Rfoot->addComponent<Collider>();
+		Collider* Lleg_collider     = Lleg->addComponent<Collider>();
+		Collider* Lfoot_collider    = Lfoot->addComponent<Collider>();
 
 
-		Sphere* Head_shape = Head_collider->add_shape<Sphere>();
+		Sphere* Head_shape     = Head_collider->add_shape<Sphere>();
 		Sphere* Lsholder_shape = Lsholder_collider->add_shape<Sphere>();
-		Sphere* Lelbow_shape = Lelbow_collider->add_shape<Sphere>();
-		Sphere* Lhand_shape = Lhand_collider->add_shape<Sphere>();
+		Sphere* Lelbow_shape   = Lelbow_collider->add_shape<Sphere>();
+		Sphere* Lhand_shape    = Lhand_collider->add_shape<Sphere>();
 		Sphere* Rsholder_shape = Rsholder_collider->add_shape<Sphere>();
-		Sphere* Relbow_shape = Relbow_collider->add_shape<Sphere>();
-		Sphere* Rhand_shape = Rhand_collider->add_shape<Sphere>();
-		Box* Body_shape = Body_collider->add_shape<Box>();
-		Box* Waist_shape = Waist_collider->add_shape<Box>();
+		Sphere* Relbow_shape   = Relbow_collider->add_shape<Sphere>();
+		Sphere* Rhand_shape    = Rhand_collider->add_shape<Sphere>();
+		Box* Body_shape        = Body_collider->add_shape<Box>();
+		Box* Waist_shape       = Waist_collider->add_shape<Box>();
 		//Sphere* Waist_shape  = Waist_collider->add_shape<Sphere>();
-		Sphere* Rleg_shape = Rleg_collider->add_shape<Sphere>();
-		Sphere* Rfoot_shape = Rfoot_collider->add_shape<Sphere>();
-		Sphere* Lleg_shape = Lleg_collider->add_shape<Sphere>();
-		Sphere* Lfoot_shape = Lfoot_collider->add_shape<Sphere>();
+		Sphere* Rleg_shape     = Rleg_collider->add_shape<Sphere>();
+		Sphere* Rfoot_shape    = Rfoot_collider->add_shape<Sphere>();
+		Sphere* Lleg_shape     = Lleg_collider->add_shape<Sphere>();
+		Sphere* Lfoot_shape    = Lfoot_collider->add_shape<Sphere>();
 
 		BallJoint* Lhand_joint = nullptr;
 		BallJoint* Rhand_joint = nullptr;
@@ -541,7 +594,7 @@ namespace Adollib
 
 		//顔とかベルトを着けてみる
 		{
-			auto player_material_02 = Material_manager::create_material("player_material_02");
+			auto player_material_02 = Material_manager::create_material(std::string("player_material_") + std::to_string(player_num) + std::string("_1"));
 			player_material_02->color = Vector4(sub_color, 1);
 			player_material_02->Load_VS("./DefaultShader/dither_noshadow_vs.cso");
 			player_material_02->Load_PS("./DefaultShader/dither_noshadow_ps.cso");
@@ -609,14 +662,16 @@ namespace Adollib
 
 			auto tutrial = GO->addComponent<Tutrial_manager>();
 
-			Gameobject* camera = Gameobject_manager::create("camera", Scenelist::scene_player);
-			auto camera_comp = camera->addComponent<Camera>();
-			camera->addComponent<Camera_component>();
-			GO->add_child(camera);
+			Gameobject* camera_go = Gameobject_manager::create("camera", Scenelist::scene_player);
+			auto camera_comp = camera_go->addComponent<Camera>();
+			auto camera_ = camera_go->addComponent<Camera_component>();
+			camera_->ui_data = camera_data;
+			GO->add_child(camera_go);
 
 
 			player->set_input_changerptr(input_changer);
 			player->set_cameraptr(camera_comp);
+			player->set_player_num(player_num);
 
 			camera_comp->set_input_changerptr(input_changer);
 			camera_comp->set_player_transformptr(Waist->transform);

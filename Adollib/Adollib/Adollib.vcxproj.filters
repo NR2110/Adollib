@@ -167,6 +167,12 @@
     <Filter Include="ソース ファイル\scene_player\tutrial">
       <UniqueIdentifier>{8dd5e070-ee73-47fb-8aa1-1d75d6d613a3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\scene_game\stage\stage\stage_02">
+      <UniqueIdentifier>{e7dedf53-a0f4-4c53-bf64-5b26f181d10f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\scene_game\stage\parts\gimmick">
+      <UniqueIdentifier>{23b33dd7-e631-42e8-99b7-be63c4970c3d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Scripts\player.cpp">
@@ -475,6 +481,12 @@
     <ClCompile Include="..\Scripts\tutrial_manager.cpp">
       <Filter>ソース ファイル\scene_player\tutrial</Filter>
     </ClCompile>
+    <ClCompile Include="..\Scripts\stage_02.cpp">
+      <Filter>ソース ファイル\scene_game\stage\stage\stage_02</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\stage_02_funcs.cpp">
+      <Filter>ソース ファイル\scene_game\stage\stage\stage_02</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Scripts\player.h">
@@ -708,20 +720,11 @@
     <ClInclude Include="Scripts\Physics\springjoint.h">
       <Filter>00_Adollib\22_physics\Joint</Filter>
     </ClInclude>
-    <ClInclude Include="..\Scripts\door.h">
-      <Filter>ソース ファイル\scene_game\stage\parts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Scripts\kinematic_block.h">
-      <Filter>ソース ファイル\scene_game\stage\parts</Filter>
-    </ClInclude>
     <ClInclude Include="..\Scripts\stage_base.h">
       <Filter>ソース ファイル\scene_game\stage\base</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\stageparts_tags.h">
       <Filter>ソース ファイル\scene_game\stage\base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Scripts\buttan.h">
-      <Filter>ソース ファイル\scene_game\stage\parts</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\stageparts_base.h">
       <Filter>ソース ファイル\scene_game\stage\base</Filter>
@@ -731,9 +734,6 @@
     </ClInclude>
     <ClInclude Include="..\Scripts\stage_types.h">
       <Filter>ソース ファイル\scene_game\stage</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Scripts\respown_area.h">
-      <Filter>ソース ファイル\scene_game\stage\parts</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\stage_demo.h">
       <Filter>ソース ファイル\scene_game\stage\stage\stage_demo</Filter>
@@ -833,12 +833,6 @@
     </ClInclude>
     <ClInclude Include="..\Scripts\stage_demo_1.h">
       <Filter>ソース ファイル\scene_game\stage\stage\stage_demo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Scripts\tag_andcircuit.h">
-      <Filter>ソース ファイル\scene_game\stage\parts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Scripts\touch_moveable.h">
-      <Filter>ソース ファイル\scene_game\stage\parts</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\area_goal.h">
       <Filter>ソース ファイル\scene_game\stage\parts</Filter>
@@ -941,6 +935,30 @@
     </ClInclude>
     <ClInclude Include="..\Scripts\tutrial_base.h">
       <Filter>ソース ファイル\scene_player\tutrial</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\stage_02.h">
+      <Filter>ソース ファイル\scene_game\stage\stage\stage_02</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\rotate_block.h">
+      <Filter>ソース ファイル\scene_game\stage\parts\gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\buttan.h">
+      <Filter>ソース ファイル\scene_game\stage\parts\gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\door.h">
+      <Filter>ソース ファイル\scene_game\stage\parts\gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\kinematic_block.h">
+      <Filter>ソース ファイル\scene_game\stage\parts\gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\respown_area.h">
+      <Filter>ソース ファイル\scene_game\stage\parts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\touch_moveable.h">
+      <Filter>ソース ファイル\scene_game\stage\parts\gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\tag_andcircuit.h">
+      <Filter>ソース ファイル\scene_game\stage\parts\gimmick</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

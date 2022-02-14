@@ -52,6 +52,10 @@ namespace Adollib {
 			const Vector3& color = Vector3(1, 1, 1),
 			Gameobject* pearent = nullptr
 		);
+		Gameobject* set_rotate_block(const Vector3& pos, const Vector3& size, const Vector3& rotate,
+			Stage_parts::Stageparts_tagbit tag,
+			const Vector3& rotate_axis, float rotate_speed, float rotate_speed_easing,
+			const Vector3& color, Gameobject* pearent);
 		Gameobject* set_Andcircuit(Stage_parts::Stageparts_tagbit in_tag0, Stage_parts::Stageparts_tagbit in_tag1, Stage_parts::Stageparts_tagbit out_tag, Gameobject* pearent = nullptr);
 
 	public:
