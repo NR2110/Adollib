@@ -34,6 +34,7 @@ Collider* Stage_base::set_sphere(const Vector3& pos, const float& r, const Vecto
 	if (is_static) {
 		coll->tag = Collider_tags::Sphere | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Static_Stage ;
 		coll->physics_data.is_moveable = false;
+		coll->physics_data.is_static = true;
 	}
 	else {
 		coll->tag = Collider_tags::Sphere | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Kinematic_Stage ;
@@ -66,6 +67,7 @@ Collider* Stage_base::set_box(const Vector3& pos, const Vector3& size, const Vec
 	if (is_static) {
 		coll->tag = Collider_tags::Box | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Static_Stage ;
 		coll->physics_data.is_moveable = false;
+		coll->physics_data.is_static = true;
 	}
 	else {
 		coll->tag = Collider_tags::Box | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Kinematic_Stage ;
@@ -100,6 +102,7 @@ Collider* Stage_base::set_capsule(const Vector3& pos, const float& r, const floa
 	if (is_static) {
 		coll->tag = Collider_tags::Capsule | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Static_Stage ;
 		coll->physics_data.is_moveable = false;
+		coll->physics_data.is_static = true;
 	}
 	else {
 		coll->tag = Collider_tags::Capsule | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Kinematic_Stage ;
@@ -134,6 +137,7 @@ Collider* Stage_base::set_meshbox(const Vector3& pos, const Vector3& size, const
 	if (is_static) {
 		coll->tag = Collider_tags::FBX | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Static_Stage ;
 		coll->physics_data.is_moveable = false;
+		coll->physics_data.is_static = true;
 	}
 	else {
 		coll->tag = Collider_tags::FBX | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Kinematic_Stage ;
@@ -176,6 +180,7 @@ Gameobject* Stage_base::set_respown_area(const Vector3& pos, const Vector3& size
 	coll->add_shape<Box>();
 	coll->physics_data.is_hitable = false;
 	coll->physics_data.is_moveable = false;
+	coll->physics_data.is_static = true;
 
 	auto comp = go->addComponent<Stage_parts::Area_respown_set>();
 	comp->this_stage = this;
@@ -199,6 +204,7 @@ Gameobject* Stage_base::set_goal_area(const Vector3& pos, const Vector3& size, c
 	coll->add_shape<Box>();
 	coll->physics_data.is_hitable = false;
 	coll->physics_data.is_moveable = false;
+	coll->physics_data.is_static = true;
 
 	auto comp = go->addComponent<Stage_parts::Area_goal>();
 	comp->this_stage = this;

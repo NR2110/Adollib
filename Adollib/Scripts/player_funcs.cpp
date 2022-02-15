@@ -387,7 +387,7 @@ void Player::shot_rope() {
 		if (Lblock_hand_joint)Joint::delete_joint(Lblock_hand_joint);
 
 		// 始点をarmの座標にrope GOの生成
-		Lrope_go = Gameobject_manager::create("rope");
+		Lrope_go = Gameobject_manager::create("rope",Scenelist::scene_player);
 		Lrope_go->transform->local_pos = arm_ray.position;
 
 		// colliderのアタッチ&初期設定

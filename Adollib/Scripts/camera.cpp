@@ -30,16 +30,16 @@ namespace Adollib
 
 		follow_player = true;
 
-#ifndef ON_DEBUG
-		input_changer->set_lockcursol(true);
-#else
-		ShowCursor(TRUE);
-#endif
 
 	}
 
 	void Camera::start()
 	{
+#ifndef ON_DEBUG
+		input_changer->set_lockcursol(true);
+#else
+		ShowCursor(TRUE);
+#endif
 		auto c = gameobject->findComponent<Camera_component>();
 		c->directional_shadow->position = Vector3(200, 200, -200);
 		c->directional_shadow->direction = Vector3(-1, -2, 1).unit_vect();

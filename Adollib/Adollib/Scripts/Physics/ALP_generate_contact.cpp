@@ -693,7 +693,7 @@ bool sat_convex_mesh_mesh(const Collider_shape* meshA, const Collider_shape* mes
 
 	}
 
-	Work_meter::start("generate_edge_edge");
+	//Work_meter::start("generate_edge_edge");
 	//::: ŠOÏ‚Ì²‚É“Š‰e(Å‹ß‹——£‚ğ‹‚ß‚é‚½‚ß)
 		//collA‚ÌÀ•WŒn‚ÅŒvZ‚ğs‚¤
 	Vector3 save_axisW;
@@ -757,7 +757,7 @@ bool sat_convex_mesh_mesh(const Collider_shape* meshA, const Collider_shape* mes
 		}
 
 	}
-	Work_meter::stop("generate_edge_edge");
+	//Work_meter::stop("generate_edge_edge");
 	// •ª—£²‚ªŒ©“–‚½‚ç‚È‚¢ê‡OBB‚ÍŒğ·‚µ‚Ä‚¢‚é‚Í‚¸
 	return (smallest_penetration < FLT_MAX&& smallest_penetration > FLT_EPSILON) ? true : false;
 
@@ -865,7 +865,7 @@ bool sat_obb_convex_mesh(const OBB_struct& obb, const Collider_shape* mesh,
 		smallest_case = PA_FB.smallest_case;
 
 	}
-	Work_meter::stop("generate_edge_edge");
+	//Work_meter::stop("generate_edge_edge");
 	// •ª—£²‚ªŒ©“–‚½‚ç‚È‚¢ê‡OBB‚ÍŒğ·‚µ‚Ä‚¢‚é‚Í‚¸
 	return (smallest_penetration < FLT_MAX&& smallest_penetration > FLT_EPSILON) ? true : false;
 }

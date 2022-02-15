@@ -1,8 +1,116 @@
-﻿  collider_rope.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\collider_rope.cpp(152,81): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+﻿  ALP__physics_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.cpp(138,27): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
+  ALP_broadphase.cpp
+  ALP_generate_contact.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact.cpp(2152,26): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+  ALP_resolve_contact_SIM.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact_SIM.cpp(476,21): warning C4101: 'position': ローカル変数は 1 度も使われていません。
   コード生成しています。
-  1 of 10659 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  391 of 10659 functions ( 3.7%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    64 functions had inline decision re-evaluated but remain unchanged
+    127 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
+area_respown_set.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+camera.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+demo_house.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+fall_object_comp.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+fall_object_manager.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+input_changer.obj : warning LNK4099: PDB 'vc142.pdb' が 'input_changer.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Release\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+object_manager.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+object_rotate.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+player.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+player_funcs.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+player_manager.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+select_stage_manager.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+stage_01.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+stage_01_funcs.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+stage_02.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+stage_02_funcs.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+stage_base.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+stage_demo.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+stage_demo_1.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+stage_demo_1_funcs.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+stage_demo_funcs.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+stage_demo_2.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+stage_demo_2_funcs.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+stage_manager.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+title_camera.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+title_stage.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+title_state_manager.obj : warning LNK4099: PDB 'vc142.pdb' が 'title_state_manager.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Release\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+tutrial_manager.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+tutrial_stage01_move_camera_catch.h.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+ui_manager.obj : warning LNK4099: PDB 'vc142.pdb' が 'ui_manager.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Release\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+imgui.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+imgui_demo.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+imgui_draw.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+imgui_impl_dx11.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+imgui_impl_win32.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+imgui_widgets.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+debug.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+imgui_manager.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+inspector.obj : warning LNK4099: PDB 'vc142.pdb' が 'inspector.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Release\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+work_meter.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+Adollib.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+input.obj : warning LNK4099: PDB 'vc142.pdb' が 'input.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Release\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+loop.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+main.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+resource_manager.obj : warning LNK4099: PDB 'vc142.pdb' が 'resource_manager.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Release\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+sprite.obj : warning LNK4099: PDB 'vc142.pdb' が 'sprite.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Release\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+systems.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+closest_func.obj : warning LNK4099: PDB 'vc142.pdb' が 'closest_func.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Release\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+complex.obj : warning LNK4099: PDB 'vc142.pdb' が 'complex.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Release\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+crossing_func.obj : warning LNK4099: PDB 'vc142.pdb' が 'crossing_func.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Release\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+component_camera.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+component_light.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+gameobject.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+gameobject_manager.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+hierarchy.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+ALP_broadphase.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+ALP_collider.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+ALP_generate_contact.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+ALP_integrate.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+ALP_joint.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+ALP_midphase.obj : warning LNK4099: PDB 'vc142.pdb' が 'ALP_midphase.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Release\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ALP_physics.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+ALP_raycast.obj : warning LNK4099: PDB 'vc142.pdb' が 'ALP_raycast.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Release\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ALP_resolve_contact.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+ALP_resolve_contact_SIM.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+balljoint.obj : warning LNK4099: PDB 'vc142.pdb' が 'balljoint.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Release\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+collider_croth.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+collider_rope.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+collider_shape.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+ALP__physics_manager.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+collider.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+ALP_contact.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+conejoint.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+coneTwistjoint.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+hingejoint.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+joint.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+joint_base.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+meshcoll_resorce_manager.obj : warning LNK4099: PDB 'vc142.pdb' が 'meshcoll_resorce_manager.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Release\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+ray.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+shape_croth.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+shape_rope.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+twistjoint.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+material.obj : warning LNK4099: PDB 'vc142.pdb' が 'material.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Release\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+material_for_collider.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+material_manager.obj : warning LNK4099: PDB 'vc142.pdb' が 'material_manager.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Release\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+mesh.obj : warning LNK4099: PDB 'vc142.pdb' が 'mesh.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Release\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+mesh_renderer.obj : warning LNK4099: PDB 'vc142.pdb' が 'mesh_renderer.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Release\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+renderer_base.obj : warning LNK4099: PDB 'vc142.pdb' が 'renderer_base.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Release\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+renderer_manager.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+rope_renderer.obj : warning LNK4099: PDB 'vc142.pdb' が 'rope_renderer.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Release\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+compute_shader.obj : warning LNK4099: PDB 'vc142.pdb' が 'compute_shader.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Release\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+shader.obj : warning LNK4099: PDB 'vc142.pdb' が 'shader.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Release\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+directional_shadow.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+sky_sphere.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+UI.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+sprite_renderer.obj : warning LNK4099: PDB 'vc142.pdb' が 'sprite_renderer.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Release\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+texture.obj : warning LNK4099: PDB 'vc142.pdb' が 'texture.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Release\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+croth_renderer.obj : warning LNK4099: PDB 'vc142.pdb' が 'croth_renderer.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Release\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+UI_renderer.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+scene_game.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+scene_manager.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+scene_player.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
+scene_title.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Release\Adollib.exe
