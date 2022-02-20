@@ -960,6 +960,12 @@
     <ClInclude Include="..\Scripts\tag_andcircuit.h">
       <Filter>ソース ファイル\scene_game\stage\parts\gimmick</Filter>
     </ClInclude>
+    <ClInclude Include="..\Scripts\lever.h">
+      <Filter>ソース ファイル\scene_game\stage\parts\gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\move_block_from_2flags.h">
+      <Filter>ソース ファイル\scene_game\stage\parts\gimmick</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />

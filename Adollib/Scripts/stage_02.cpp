@@ -25,6 +25,9 @@
 
 #include "player_manager.h"
 
+#include "../Adollib/Scripts/Physics/collider_rope.h"
+#include "../Adollib/Scripts/Renderer/rope_renderer.h"
+
 namespace Adollib
 {
 	void Stage_02::stage_awake()
@@ -36,13 +39,18 @@ namespace Adollib
 		//player_respown_pos = Vector3(90, 16.0f, 66.0f);
 		y_respown_pos = 50; // respownしたときのYの座標
 
+		auto player_manager = Gameobject_manager::find("Player_manager", Scenelist::scene_player)->findComponent<Player_manager>();
+
+		//player_manager->set_shadow_camera_pos(Vector3(-200, 200, -200));
+		//player_manager->set_shadow_camera_dir(Vector3(+1, -2, 1));
+
 		//set_box(Vector3(0, -60, -98), Vector3(30, 30, 60), Vector3(0), Vector3(188, 214, 54) / 255.0f, true);
 
 		//set_desk(Vector3(0, 0, 0), Vector3(30, 15, 25), Vector3(0, 0, 0), 0);
 
 		//Gameobject_manager::createFromFBX("sponza", "../Data/FBX/Model_Shaclo_Winter_Edit.fbx");
 
-#if  _DEBUG
+#if  0 && _DEBUG
 		////auto cube = Gameobject_manager::createFromFBX("Shaclo", "../Data/FBX/Model_Shaclo_Winter_Edit.fbx",true);
 		////auto cube = Gameobject_manager::createFromFBX("bunny", "../Data/FBX/bunny.obj");
 		////auto cube = Gameobject_manager::createFromFBX("plane", "./DefaultModel/plane_64x64vertex.fbx");
@@ -73,12 +81,21 @@ namespace Adollib
 			{
 				Gameobject* pearent = Gameobject_manager::create("stairs_pearent");
 				first_zone->add_child(pearent);
-				set_box(Vector3(0, -2, 10), Vector3(50, 2, 30.1f), Vector3(0, 0, 0), base_color, pearent);
-				set_box(Vector3(0, 30, 30), Vector3(50, 30, 15), Vector3(0, 0, 0), base_color, pearent);
+				set_box(Vector3(0, -2, 13), Vector3(50, 2, 32.0f), Vector3(0, 0, 0), grass_color, pearent);
+				set_box(Vector3(0, 15, 30), Vector3(50, 15, 15), Vector3(0, 0, 0), base_color, pearent);
 				set_box(Vector3(50, 4, 0), Vector3(20, 4, 20), Vector3(0, 0, 0), base_color, pearent);
-				set_box(Vector3(60, 2, 20), Vector3(20, 10, 30), Vector3(0, 0, 0), base_color, pearent);
-				set_box(Vector3(50, 22, 46), Vector3(5, 10, 1), Vector3(0, 0, 0), base_color, pearent);
-				set_box(Vector3(80, 30, 20), Vector3(8, 25, 55), Vector3(0, 0, 0), base_color, pearent);
+				set_box(Vector3(60, 2, 15), Vector3(20, 10, 25), Vector3(0, 0, 0), base_color, pearent);
+				set_box(Vector3(80, 15, 18), Vector3(8, 15, 40), Vector3(0, 0, 0), base_color, pearent);
+				set_fence(Vector3(-4, 0, -15), Vector3(1), Vector3(0, 0, 0), pearent);
+				set_fence(Vector3(-31, 0, -15), Vector3(1), Vector3(0, 180, 0), pearent);
+				set_fence(Vector3(-45, 0, -6), Vector3(1), Vector3(0, +90, 0), pearent);
+				set_fence(Vector3(-45, 0, 16), Vector3(1), Vector3(0, -90, 0), pearent);
+
+
+				set_box(Vector3(7, 32, 30), Vector3(23, 2, 13), Vector3(0, 0, 0), base_color, pearent);
+				set_box(Vector3(12, 34, 33), Vector3(10, 2, 8), Vector3(0, 0, 0), base_color, pearent);
+
+
 			}
 
 			// 壁
@@ -87,504 +104,673 @@ namespace Adollib
 				first_zone->add_child(wallAnddoor_pearent);
 				wallAnddoor_pearent->transform->local_pos = Vector3(35, 8, 0);
 
-				set_box( Vector3(7, 10, 39), Vector3(15, 10, 1), Vector3(0), base_color, wallAnddoor_pearent);
-				set_box( Vector3(36, 10, 39), Vector3(6, 10, 1), Vector3(0), base_color, wallAnddoor_pearent);
-				set_box( Vector3(26, 16, 39), Vector3(4, 4, 1), Vector3(0), base_color, wallAnddoor_pearent);
-				set_box( Vector3(26, 3, 39),  Vector3(4, 1, 1), Vector3(0), base_color, wallAnddoor_pearent);
+				set_box(Vector3(7, 10, 39), Vector3(15, 10, 1), Vector3(0), base_color, wallAnddoor_pearent);
+				set_box(Vector3(36, 10, 39), Vector3(6, 10, 1), Vector3(0), base_color, wallAnddoor_pearent);
+				set_box(Vector3(26, 16, 39), Vector3(4, 4, 1), Vector3(0), base_color, wallAnddoor_pearent);
 
-				set_box( Vector3(18, 12, 37), Vector3(2, 8, 1), Vector3(0), base_color * 0.9f, wallAnddoor_pearent);
-				set_box( Vector3(34, 12, 37), Vector3(2, 8, 1), Vector3(0), base_color * 0.9f, wallAnddoor_pearent);
+				set_box(Vector3(18, 12, 37), Vector3(2, 8, 1), Vector3(0), base_color * 0.9f, wallAnddoor_pearent);
+				set_box(Vector3(34, 12, 37), Vector3(2, 8, 1), Vector3(0), base_color * 0.9f, wallAnddoor_pearent);
 
 				set_door(Vector3(24, 8, 39.25f), Vector3(2, 4, 0.5f), Vector3(0), true, wallAnddoor_pearent);
 				set_door(Vector3(28, 8, 39.25f), Vector3(2, 4, 0.5f), Vector3(0), false, wallAnddoor_pearent);
 			}
 
+			{
+				Gameobject* tree = Gameobject_manager::create("tree");
+				first_zone->add_child(tree);
 
+				set_tree(Vector3(-12, 0, 10), Vector3(1, 1.2f, 1), Vector3(0, 76, 0), 1.2f, 0.8f, tree);
+				set_tree(Vector3(-23, 0, 10), Vector3(1, 1.2f, 1), Vector3(0, 14, 0), 1.2f, 0.8f, tree);
+				set_tree(Vector3(-34, 0, 10), Vector3(1, 1.2f, 1), Vector3(0, 95, 0), 1.2f, 0.8f, tree);
+			}
 
-			set_box(Vector3(0,0,0), Vector3(1,1,1), Vector3(0, 0, 0), grass_color);
-			set_box(Vector3(0,0,0), Vector3(1,1,1), Vector3(0, 0, 0), grass_color);
-			set_box(Vector3(0,0,0), Vector3(1,1,1), Vector3(0, 0, 0), grass_color);
-			set_box(Vector3(0,0,0), Vector3(1,1,1), Vector3(0, 0, 0), grass_color);
-			set_box(Vector3(0,0,0), Vector3(1,1,1), Vector3(0, 0, 0), grass_color);
-			set_box(Vector3(0,0,0), Vector3(1,1,1), Vector3(0, 0, 0), grass_color);
-			set_box(Vector3(0,0,0), Vector3(1,1,1), Vector3(0, 0, 0), grass_color);
-			set_box(Vector3(0,0,0), Vector3(1,1,1), Vector3(0, 0, 0), grass_color);
+		}
 
+		// second_zone Tag 0,1,2,3使用
+		{
+			Gameobject* second_zone = Gameobject_manager::create("second_zone");
+			stage_parts.emplace_back(second_zone);
 
-			//// 階段
-			//{
+			// floor
+			{
+				Gameobject* first_floor = Gameobject_manager::create("first_floor");
+				second_zone->add_child(first_floor);
 
-			//	Gameobject* stairs_pearent = Gameobject_manager::create("stairs_pearent");
-			//	first_zone->add_child(stairs_pearent);
-			//	set_box(Vector3(-15, 2, 23), Vector3(15, 2, 15), Vector3(0, 0, 0), base_color, stairs_pearent);
-			//	set_box(Vector3(28, 2, 29.5f), Vector3(28, 2, 8.5f), Vector3(0, 0, 0), base_color, stairs_pearent);
-			//	set_box(Vector3(28, 1, 24), Vector3(28, 2, 8), Vector3(0, 0, 0), base_color, stairs_pearent);
-			//	set_box(Vector3(28, 0, 20), Vector3(28, 2, 8), Vector3(0, 0, 0), base_color, stairs_pearent);
-			//	set_box(Vector3(28, -1, 16), Vector3(28, 2, 8), Vector3(0, 0, 0), base_color, stairs_pearent);
+				// 最初の床
+				set_box(Vector3(52, 2, 50), Vector3(20, 10, 10), Vector3(0, 0, 0), base_color, first_floor);
+			}
+			// stairs
+			{
+				Gameobject* staire_pearent = Gameobject_manager::create("staire_pearent");
+				second_zone->add_child(staire_pearent);
 
-			//}
+				// 階段
+				set_box(Vector3(38, 5.5f, 50), Vector3(2, 7.5f, 5), Vector3(0, 0, 0), base_color, staire_pearent);
+				set_box(Vector3(34, 6.0f, 50), Vector3(2, 8.0f, 5), Vector3(0, 0, 0), base_color, staire_pearent);
+				set_box(Vector3(30, 6.5f, 50), Vector3(2, 8.5f, 5), Vector3(0, 0, 0), base_color, staire_pearent);
+				set_box(Vector3(26, 7.0f, 50), Vector3(2, 9.0f, 5), Vector3(0, 0, 0), base_color, staire_pearent);
+				set_box(Vector3(22, 7.5f, 50), Vector3(2, 9.5f, 5), Vector3(0, 0, 0), base_color, staire_pearent);
+				set_box(Vector3(12, 8, 50), Vector3(8, 10, 5), Vector3(0, 0, 0), base_color, staire_pearent);
 
-			//// 壁
-			//{
-			//	Gameobject* wallAnddoor_pearent = Gameobject_manager::create("wallAnddoor_pearent");
-			//	first_zone->add_child(wallAnddoor_pearent);
+				set_box(Vector3(26, 8, 65), Vector3(22, 10, 10), Vector3(0, 0, 0), base_color, staire_pearent); //上
+				set_box(Vector3(60, 8, 60), Vector3(12, 10, 5), Vector3(0, 0, 0), base_color, staire_pearent); //上
+				set_box(Vector3(60, 8.5f, 70), Vector3(12, 10, 5), Vector3(0, 0, 0), grass_color, staire_pearent); //上
 
-			//	set_box(Vector3(-9, 10, 39), Vector3(31, 10, 1), Vector3(0), base_color, wallAnddoor_pearent);
-			//	set_box(Vector3(60, 10, 39), Vector3(30, 10, 1), Vector3(0), base_color, wallAnddoor_pearent);
-			//	set_box(Vector3(26, 16, 39), Vector3(4, 4, 1), Vector3(0), base_color, wallAnddoor_pearent);
-			//	set_box(Vector3(26, 3, 39), Vector3(4, 1, 1), Vector3(0), base_color, wallAnddoor_pearent);
+				set_box(Vector3(14, 8, 109), Vector3(10, 10, 34), Vector3(0, 0, 0), base_color, staire_pearent); //上
+			}
+			// gimmick
+			{
+				Gameobject* gimmick = Gameobject_manager::create("gimmick");
+				gimmick->transform->local_pos = Vector3(80, 0, 65);
+				gimmick->transform->local_orient = quaternion_from_euler(0, -90, 0);
 
-			//	set_box(Vector3(18, 12, 37), Vector3(2, 8, 1), Vector3(0), base_color * 0.9f, wallAnddoor_pearent);
-			//	set_box(Vector3(34, 12, 37), Vector3(2, 8, 1), Vector3(0), base_color * 0.9f, wallAnddoor_pearent);
+				second_zone->add_child(gimmick);
 
-			//	set_door(Vector3(24, 8, 39.25f), Vector3(2, 4, 0.5f), Vector3(0), true, wallAnddoor_pearent);
-			//	set_door(Vector3(28, 8, 39.25f), Vector3(2, 4, 0.5f), Vector3(0), false, wallAnddoor_pearent);
-			//}
+				set_box(Vector3(60, 8, 125), Vector3(20, 10, 25), Vector3(0, 0, 0), base_color, gimmick);
+				set_box(Vector3(10, 8, 115), Vector3(30, 10, 15), Vector3(0, 0, 0), base_color, gimmick);
+				set_box(Vector3(41, 24, 125), Vector3(1, 6, 25), Vector3(0, 0, 0), base_color, gimmick);
+				set_box(Vector3(4, 28, 122), Vector3(1, 2, 5), Vector3(0, 0, 0), base_color, gimmick); //上
+				set_box(Vector3(4, 23, 128), Vector3(1, 5, 2), Vector3(0, 0, 0), base_color, gimmick); //右
+				set_box(Vector3(4, 23, 109), Vector3(1, 5, 9), Vector3(0, 0, 0), base_color, gimmick); //左
 
+				set_gimmickdoor(Vector3(4, 22, 124), Vector3(4, 22, 126), Vector3(0), Vector3(0),
+					2, 0, Vector3(0.5f, 4, 2), Stage_parts::Stageparts_tags::Flag_2, stair_color, gimmick);
+				set_gimmickdoor(Vector3(4, 22, 120), Vector3(4, 22, 118), Vector3(0), Vector3(0),
+					2, 0, Vector3(0.5f, 4, 2), Stage_parts::Stageparts_tags::Flag_2, stair_color, gimmick);
 
-			//// 柱
-			//{
-			//	Gameobject* pillars_pearent = Gameobject_manager::create("pillars");
-			//	first_zone->add_child(pillars_pearent);
-			//	set_pillar(Vector3(-02, 4, 23), Vector3(1), Vector3(0), pillars_pearent, 2.5f, 5, false);
-			//	set_pillar(Vector3(-02, 4, 10), Vector3(1), Vector3(0), pillars_pearent, 2.5f, 5, false);
-			//	set_pillar(Vector3(-15, 4, 10), Vector3(1), Vector3(0), pillars_pearent, 2.5f, 5, false);
-			//	set_pillar(Vector3(-28, 4, 10), Vector3(1), Vector3(0), pillars_pearent, 2.5f, 5, false);
-			//	set_pillar(Vector3(-28, 4, 23), Vector3(1), Vector3(0), pillars_pearent, 2.5f, 5, false);
-			//	set_pillar(Vector3(-28, 4, 36), Vector3(1), Vector3(0), pillars_pearent, 2.5f, 5, false);
+				set_buttan(Vector3(35, 17.2f, 110), Vector3(4, 1, 4), Vector3(0), Stage_parts::Stageparts_tags::Flag_2, gimmick);
 
-			//	set_pillar(Vector3(16, 4, 23), Vector3(1), Vector3(0), pillars_pearent);
-			//	set_pillar(Vector3(36, 4, 23), Vector3(1), Vector3(0), pillars_pearent);
-			//	set_pillar(Vector3(54, 4, 23), Vector3(1), Vector3(0), pillars_pearent);
-			//	set_pillar(Vector3(54, 4, 36), Vector3(1), Vector3(0), pillars_pearent);
-			//}
+				// ピラミッド
+				{
+					Gameobject* tutrial_block = Gameobject_manager::create("pyramid");
+					gimmick->add_child(tutrial_block);
+					tutrial_block->transform->local_pos = Vector3(63, 18, 130);
 
-			//// 柵
-			//{
-			//	Gameobject* fences_pearent = Gameobject_manager::create("fences");
-			//	first_zone->add_child(fences_pearent);
-			//	set_fence(Vector3(-2, 4, 16.5f), Vector3(1), Vector3(0, 90, 0), fences_pearent);
-			//	set_fence(Vector3(-21.5f, 4, 10), Vector3(1), Vector3(0, 0, 0), fences_pearent);
-			//	set_fence(Vector3(-8.50f, 4, 10), Vector3(1), Vector3(0, 0, 0), fences_pearent);
-			//	set_fence(Vector3(-28, 4, 28.5f), Vector3(1), Vector3(0, 90, 0), fences_pearent);
-			//	set_fence(Vector3(-28, 4, 15.5f), Vector3(1), Vector3(0, 90, 0), fences_pearent);
-			//}
+					int phyramid_size = 4;
+					Vector3 base_size = Vector3(2, 2, 2);
+					Vector3 base_pos = Vector3(0);
 
-			//// 木
-			//{
-			//	Gameobject* trees_pearent = Gameobject_manager::create("trees");
-			//	first_zone->add_child(trees_pearent);
-			//	set_tree(Vector3(-35, 0, 32), Vector3(1, 1.2f, 1), Vector3(0, 02, 0), 1.2f, 0.8f, trees_pearent);
-			//	set_tree(Vector3(-35, 0, 22), Vector3(1, 1.2f, 1), Vector3(0, 76, 0), 1.2f, 0.8f, trees_pearent);
-			//	set_tree(Vector3(-35, 0, 12), Vector3(1, 1.2f, 1), Vector3(0, 12, 0), 1.2f, 0.8f, trees_pearent);
-			//	set_tree(Vector3(-35, 0, +2), Vector3(1, 1.2f, 1), Vector3(0, 92, 0), 1.2f, 0.8f, trees_pearent);
+					for (int y = 0; y < phyramid_size; ++y) {
+						for (int x = 0; x < phyramid_size - y; ++x) {
+							for (int z = 0; z < phyramid_size - y; ++z) {
 
-			//	set_tree(Vector3(63, 0, 32), Vector3(1, 1.2f, 1), Vector3(0, 02, 0), 2.5f, 0.8f, trees_pearent);
-			//	set_tree(Vector3(73, 0, 32), Vector3(1, 1.2f, 1), Vector3(0, 76, 0), 2.5f, 0.8f, trees_pearent);
-			//	set_tree(Vector3(83, 0, 32), Vector3(1, 1.2f, 1), Vector3(0, 12, 0), 2.5f, 0.8f, trees_pearent);
-			//}
+								auto coll = set_box(base_pos + Vector3(
+									(base_size.x * 2 + 0.2f) * x - ((base_size.x * 2 + 0.2f) * (phyramid_size - y) * 0.5f),
+									(base_size.y * 2 + 0) * y + base_size.y,
+									(base_size.z * 2 + 0.2f) * z - ((base_size.z * 2 + 0.2f) * (phyramid_size - y) * 0.5f)
 
-			//// 適当なピラミッド
-			//{
-			//	Gameobject* tutrial_block = Gameobject_manager::create("pyramid");
-			//	first_zone->add_child(tutrial_block);
+								), base_size, Vector3(0, 0, 0), moveable_red, tutrial_block, false);
+								coll->physics_data.inertial_mass = 20;
+								coll->physics_data.angula_sleep_threrhold = 0;
+							}
+						}
+					}
+				}
 
-			//	int phyramid_size = 6;
-			//	Vector3 base_size = Vector3(1, 1, 1.5f);
-			//	Vector3 base_pos = Vector3(52, 0, -4);
+				// エレベーター
+				{
+					auto doorgo = set_gimmickdoor(Vector3(-15, 9, 115), Vector3(-15, 20, 115), Vector3(0), Vector3(0),
+						3, 0, Vector3(5, 10, 5), Stage_parts::Stageparts_tags::Flag_3, stair_color, gimmick);
 
-			//	for (int y = 0; y < phyramid_size; ++y) {
-			//		for (int x = 0; x < phyramid_size - y; ++x) {
-			//			for (int z = 0; z < phyramid_size - y; ++z) {
+					auto switchgo = set_buttan(Vector3(0, 1.01f, 0), Vector3(0.8f, 0.08f, 0.8f), Vector3(0), Stage_parts::Stageparts_tags::Flag_3, gimmick);
 
-			//				auto coll = set_box(base_pos + Vector3(
-			//					(base_size.x * 2 + 0.2f) * x - ((base_size.x * 2 + 0.2f) * (phyramid_size - y) * 0.5f),
-			//					(base_size.y * 2 + 0) * y + base_size.y,
-			//					(base_size.z * 2 + 0.2f) * z - ((base_size.z * 2 + 0.2f) * (phyramid_size - y) * 0.5f)
+					doorgo->add_child(switchgo);
+					//set_box(Vector3(-15, 9, 115), Vector3(5, 10, 5), Vector3(0, 0, 0), base_color, gimmick);
+					//set_box(Vector3(-15, 19, 115), Vector3(4, 1, 4), Vector3(0, 0, 0), base_color, gimmick);
+				}
 
-			//				), base_size, Vector3(0, 0, 0), moveable_green, tutrial_block, false);
-			//				coll->physics_data.inertial_mass = 5;
-			//			}
-			//		}
-			//	}
-			//}
+			}
+			// lever&move
+			{
+				Gameobject* lever_and_move = Gameobject_manager::create("lever_and_move");
+				second_zone->add_child(lever_and_move);
+				set_lever(Vector3(8, 19, 104), Vector3(1), Vector3(0, 90, 0), Stage_parts::Stageparts_tags::Flag_0, Stage_parts::Stageparts_tags::Flag_1, lever_and_move);
+				set_box(Vector3(8, 17.5, 104), Vector3(4, 1, 2), Vector3(0, 90, 0), stair_color, lever_and_move);
+				set_move_block_2flags(Vector3(-10, 17, 95), Vector3(-10, 17, 117),
+					Vector3(10, 1, 5), Vector3(0),
+					0.1f, 0.1f,
+					Stage_parts::Stageparts_tags::Flag_0, Stage_parts::Stageparts_tags::Flag_1,
+					grass_color, lever_and_move);
+			}
+			// trees
+			{
+				Gameobject* tree = Gameobject_manager::create("tree");
+				second_zone->add_child(tree);
 
+				set_tree(Vector3(66, 18.5f, 70), Vector3(1, 1.2f, 1), Vector3(0, 02, 0), 2.5f, 0.8f, tree);
+				set_tree(Vector3(55, 18.5f, 70), Vector3(1, 1.2f, 1), Vector3(0, 02, 0), 2.5f, 0.8f, tree);
+			}
+			// 装飾
+			{
+				Gameobject* sousyoku = Gameobject_manager::create("sousyoku");
+				second_zone->add_child(sousyoku);
+
+				set_box(Vector3(23, 32, 93), Vector3(1, 2, 50), Vector3(0, 0, 0), stair_color,sousyoku);
+				set_box(Vector3(23, 24, 46), Vector3(1, 7, 1), Vector3(0, 0, 0),  stair_color,sousyoku);
+				set_box(Vector3(23, 24, 74), Vector3(1, 6, 1), Vector3(0, 0, 0),  stair_color,sousyoku);
+				set_box(Vector3(23, 24, 96), Vector3(1, 6, 1), Vector3(0, 0, 0),  stair_color,sousyoku);
+				set_box(Vector3(23, 24, 120), Vector3(1, 6, 1), Vector3(0, 0, 0), stair_color,sousyoku);
+				set_box(Vector3(23, 24, 142), Vector3(1, 6, 1), Vector3(0, 0, 0), stair_color,sousyoku);
+
+				set_box(Vector3(13, 32, 142), Vector3(9, 2, 1), Vector3(0, 0, 0), stair_color,sousyoku);
+				set_box(Vector3(-31, 32, 142), Vector3(36, 2, 1), Vector3(0, 0, 0),  stair_color,sousyoku);
+				set_box(Vector3(-21, 24, 142), Vector3(1, 6, 1), Vector3(0, 0, 0),  stair_color,sousyoku);
+				set_box(Vector3(-43, 24, 142), Vector3(1, 6, 1), Vector3(0, 0, 0),  stair_color,sousyoku);
+				set_box(Vector3(-66, 24, 142), Vector3(1, 6, 1), Vector3(0, 0, 0),  stair_color,sousyoku);
+				set_box(Vector3(-66, 24, 108), Vector3(1, 6, 1), Vector3(0, 0, 0),  stair_color,sousyoku);
+
+				set_box(Vector3(-66, 32, 123), Vector3(1, 2, 18), Vector3(0, 0, 0), stair_color);
+
+				set_box(Vector3(-49, 24, 104), Vector3(1, 6, 1), Vector3(0, 0, 0), stair_color, sousyoku);
+				set_box(Vector3(-49, 24, 80),  Vector3(1, 6, 1), Vector3(0, 0, 0), stair_color, sousyoku);
+				set_box(Vector3(-49, 19, 92),  Vector3(0.5f, 1, 11), Vector3(0, 0, 0), stair_color, sousyoku);
+
+			}
 
 		}
 
 		{}
 
-		//// second_zone
-		//{
-		//	Gameobject* second_zone = Gameobject_manager::create("second_zone");
-		//	stage_parts.emplace_back(second_zone);
-		//	// 床
-		//	{
-		//		Gameobject* stairs_pearent = Gameobject_manager::create("stairs_pearent");
-		//		second_zone->add_child(stairs_pearent);
-		//		set_box(Vector3(47.0f, -1.0f, 70.0f), Vector3(37, 05, 30), Vector3(0), base_color, stairs_pearent);
-		//		set_box(Vector3(61.0f, +2.0f, 70.0f), Vector3(23, 10, 30), Vector3(0), base_color, stairs_pearent);
-		//		set_box(Vector3(17.0f, 6.0f, 93.0f), Vector3(7.0f, 2.0f, 7.0f), Vector3(0), base_color, stairs_pearent);
-		//		set_box(Vector3(26.4f, 6.5f, 93.0f), Vector3(2.4f, 2.5f, 7.0f), Vector3(0), base_color, stairs_pearent);
-		//		set_box(Vector3(31.2f, 7.0f, 93.0f), Vector3(2.4f, 3.0f, 7.0f), Vector3(0), base_color, stairs_pearent);
-		//		set_box(Vector3(36.0f, 7.5f, 93.0f), Vector3(2.4f, 3.5f, 7.0f), Vector3(0), base_color, stairs_pearent);
-		//		set_box(Vector3(17.0f, 4.5f, 74.0f), Vector3(7.0f, 0.5f, 2.4f), Vector3(0), base_color, stairs_pearent);
-		//		set_box(Vector3(17.0f, 5.0f, 78.8f), Vector3(7.0f, 1.0f, 2.4f), Vector3(0), base_color, stairs_pearent);
-		//		set_box(Vector3(17.0f, 5.5f, 83.6f), Vector3(7.0f, 1.5f, 2.4f), Vector3(0), base_color, stairs_pearent);
-		//	}
-
-		//	// arch
-		//	{
-		//		Gameobject* arch_pearent = Gameobject_manager::create("arch_pearent");
-		//		second_zone->add_child(arch_pearent);
-		//		set_box(Vector3(11, 15.5f, 85.0f), Vector3(1, 8.5f, 1), Vector3(0), base_color, arch_pearent);
-		//		set_box(Vector3(25, 14.0f, 85.0f), Vector3(1, 10.f, 1), Vector3(0), base_color, arch_pearent);
-		//		set_box(Vector3(39, 18.0f, 85.0f), Vector3(1, 6.0f, 1), Vector3(0), base_color, arch_pearent);
-		//		set_box(Vector3(53, 18.0f, 85.0f), Vector3(1, 6.0f, 1), Vector3(0), base_color, arch_pearent);
-		//		set_box(Vector3(67, 18.0f, 85.0f), Vector3(1, 6.0f, 1), Vector3(0), base_color, arch_pearent);
-		//		set_box(Vector3(81, 18.0f, 85.0f), Vector3(1, 6.0f, 1), Vector3(0), base_color, arch_pearent);
-
-		//		set_box(Vector3(46, 26.0f, 85.0f), Vector3(36, 2.0f, 1), Vector3(0), base_color, arch_pearent);
-		//	}
-
-		//	// 壁
-		//	{
-		//		Gameobject* wall_pearent = Gameobject_manager::create("wall_pearent");
-		//		second_zone->add_child(wall_pearent);
-		//		set_box(Vector3(83, 20.0f, 84.0f), Vector3(1, 8.0f, 16), Vector3(0), base_color, wall_pearent);
-		//		set_box(Vector3(83, 20.0f, 50.0f), Vector3(1, 8.0f, 10), Vector3(0), base_color, wall_pearent);
-		//		set_box(Vector3(83, 24.0f, 64.0f), Vector3(1, 4.0f, 4), Vector3(0), base_color, wall_pearent);
-
-		//		set_gimmickdoor(Vector3(83, 16.0f, 62.0f), Vector3(83, 16.0f, 58.5f),
-		//			Vector3(0), Vector3(0),
-		//			2, 0,
-		//			Vector3(0.5f, 4.0f, 2),
-		//			Stage_parts::Stageparts_tags::Flag_0,
-		//			base_color * 0.8f,
-		//			wall_pearent
-		//		);
-
-		//		set_gimmickdoor(Vector3(83, 16.0f, 66.0f), Vector3(83, 16.0f, 69.5f),
-		//			Vector3(0), Vector3(0),
-		//			2, 0,
-		//			Vector3(0.5f, 4.0f, 2),
-		//			Stage_parts::Stageparts_tags::Flag_0,
-		//			base_color * 0.8f,
-		//			wall_pearent
-		//		);
-
-
-		//		set_buttan(Vector3(82.80f, 16, 54), Vector3(2, 0.9f, 2), Vector3(0, 0, -90), Stage_parts::Stageparts_tags::Flag_0, wall_pearent, true);
-		//	}
-
-		//	// 適当なピラミッド
-		//	{
-		//		Gameobject* tutrial_block = Gameobject_manager::create("pyramid");
-		//		second_zone->add_child(tutrial_block);
-
-		//		int phyramid_size = 6;
-		//		Vector3 base_size = Vector3(1.5f, 1, 1);
-		//		Vector3 base_pos = Vector3(53, 12, 76);
-
-		//		for (int y = 0; y < phyramid_size; ++y) {
-		//			for (int x = 0; x < phyramid_size - y; ++x) {
-		//				for (int z = 0; z < phyramid_size - y; ++z) {
-
-		//					auto coll = set_box(base_pos + Vector3(
-		//						(base_size.x * 2 + 0.2f) * x - ((base_size.x * 2 + 0.2f) * (phyramid_size - y) * 0.5f),
-		//						(base_size.y * 2 + 0) * y + base_size.y,
-		//						(base_size.z * 2 + 0.2f) * z - ((base_size.z * 2 + 0.2f) * (phyramid_size - y) * 0.5f)
-
-		//					), base_size, Vector3(0, 0, 0), moveable_red, tutrial_block, false);
-		//					coll->physics_data.inertial_mass = 5;
-		//				}
-		//			}
-		//		}
-		//	}
-		//}
-
-		//// third_zone
-		//{
-		//	Gameobject* third_zone = Gameobject_manager::create("third_zone");
-		//	stage_parts.emplace_back(third_zone);
-
-		//	// 階段
-		//	{
-		//		Gameobject* stairs_pearent = Gameobject_manager::create("stairs_pearent");
-		//		third_zone->add_child(stairs_pearent);
-
-		//		set_box(Vector3(92.0f, 10.f, 69.0f), Vector3(8, 2, 11), Vector3(0), base_color, stairs_pearent);
-		//		set_box(Vector3(89.0f, 4.0f, 49.0f), Vector3(7, 8, 9), Vector3(0), base_color, stairs_pearent);
-		//		set_box(Vector3(98.00f, 3.5f, 49.0f), Vector3(2, 7.5f, 9), Vector3(0), base_color, stairs_pearent);
-		//		set_box(Vector3(102.0f, 3.0f, 49.0f), Vector3(2, 7.0f, 9), Vector3(0), base_color, stairs_pearent);
-		//		set_box(Vector3(106.0f, 2.5f, 49.0f), Vector3(2, 6.5f, 9), Vector3(0), base_color, stairs_pearent);
-
-		//		set_box(Vector3(92.0f, 12.f, 81.0f), Vector3(8, 4.5f, 1), Vector3(0), base_color, stairs_pearent);
-		//		set_box(Vector3(101.f, 12.f, 70.0f), Vector3(1, 4.5f, 12), Vector3(0), base_color, stairs_pearent);
-		//	}
-
-		//	// 床
-		//	{
-		//		Gameobject* floor_pearent = Gameobject_manager::create("floor_pearent");
-		//		third_zone->add_child(floor_pearent);
-		//		set_box(Vector3(134, 0, 13), Vector3(28, 4, 11), Vector3(0), base_color, floor_pearent);
-		//		set_box(Vector3(128, 2, 32), Vector3(22, 6, 8), Vector3(0), grass_color, floor_pearent);
-		//		set_box(Vector3(128, 2, 49), Vector3(22, 6, 9), Vector3(0), base_color, floor_pearent);
-		//		set_box(Vector3(116, 2, 78), Vector3(34, 6, 20), Vector3(0), grass_color, floor_pearent);
-		//		set_box(Vector3(83.5f, 10, 90.0f), Vector3(1, 2, 8), Vector3(0), base_color, floor_pearent);
-
-		//		set_box(Vector3(156, 2.0f, 69), Vector3(6, 6, 29), Vector3(0), base_color, floor_pearent);
-
-		//		set_box(Vector3(156, 2.0f, 38), Vector3(6, 6.0f, 2), Vector3(0), base_color, floor_pearent);
-		//		set_box(Vector3(156, 1.5f, 34), Vector3(6, 5.5f, 2), Vector3(0), base_color, floor_pearent);
-		//		set_box(Vector3(156, 1.0f, 30), Vector3(6, 5.0f, 2), Vector3(0), base_color, floor_pearent);
-		//		set_box(Vector3(156, 0.5f, 26), Vector3(6, 4.5f, 2), Vector3(0), base_color, floor_pearent);
-		//		set_box(Vector3(145, 10, 90), Vector3(17, 2, 8), Vector3(0), base_color, floor_pearent);
-
-		//		set_box(Vector3(156, 9.5f, 80), Vector3(6, 1.5f, 2), Vector3(0), base_color, floor_pearent);
-		//		set_box(Vector3(156, 9.0f, 76), Vector3(6, 1.0f, 2), Vector3(0), base_color, floor_pearent);
-		//		set_box(Vector3(156, 8.5f, 72), Vector3(6, 0.5f, 2), Vector3(0), base_color, floor_pearent);
-		//	}
-
-		//	// 柱 と上の棒
-		//	{
-		//		Gameobject* pillar_pearent = Gameobject_manager::create("pillar_pearent");
-		//		third_zone->add_child(pillar_pearent);
-
-		//		set_pillar(Vector3(110.0f, 8, 30), Vector3(1), Vector3(0), pillar_pearent);
-		//		set_pillar(Vector3(128.0f, 8, 30), Vector3(1), Vector3(0), pillar_pearent);
-		//		set_pillar(Vector3(146.0f, 8, 30), Vector3(1), Vector3(0), pillar_pearent);
-
-		//		set_pillar(Vector3(110.0f, 8, 62), Vector3(1), Vector3(0), pillar_pearent);
-		//		set_pillar(Vector3(128.0f, 8, 62), Vector3(1), Vector3(0), pillar_pearent);
-		//		set_pillar(Vector3(146.0f, 8, 62), Vector3(1), Vector3(0), pillar_pearent);
-
-		//		set_pillar(Vector3(110.0f, 8, 76), Vector3(1), Vector3(0), pillar_pearent);
-		//		set_pillar(Vector3(128.0f, 8, 76), Vector3(1), Vector3(0), pillar_pearent);
-		//		set_pillar(Vector3(146.0f, 8, 76), Vector3(1), Vector3(0), pillar_pearent);
-
-		//		set_box(Vector3(110.0f, 24.5f, 53), Vector3(0.5f, 0.5f, 26), Vector3(0), wood_color, pillar_pearent, false);
-		//		set_box(Vector3(128.0f, 24.5f, 53), Vector3(0.5f, 0.5f, 26), Vector3(0), wood_color, pillar_pearent, false);
-		//		set_box(Vector3(146.0f, 24.5f, 53), Vector3(0.5f, 0.5f, 26), Vector3(0), wood_color, pillar_pearent, false);
-
-		//		set_box(Vector3(128.0f, 25.5f, 30), Vector3(21, 0.5f, 0.5f), Vector3(0), wood_color, pillar_pearent, false);
-		//		set_box(Vector3(128.0f, 25.5f, 62), Vector3(21, 0.5f, 0.5f), Vector3(0), wood_color, pillar_pearent, false);
-		//		set_box(Vector3(128.0f, 25.5f, 76), Vector3(21, 0.5f, 0.5f), Vector3(0), wood_color, pillar_pearent, false);
-		//	}
-
-		//	// 木
-		//	{
-		//		Gameobject* tree_pearent = Gameobject_manager::create("tree_pearent");
-		//		third_zone->add_child(tree_pearent);
-
-		//		set_tree(Vector3(92, 8, 90), Vector3(1, 1.2f, 1), Vector3(0, 02, 0), 2.5f, 0.8f, tree_pearent);
-		//		set_tree(Vector3(157, 4, 8), Vector3(1, 1.2f, 1), Vector3(0, 76, 0), 1.2f, 0.8f, tree_pearent);
-		//		set_tree(Vector3(148, 4, 8), Vector3(1, 1.2f, 1), Vector3(0, 12, 0), 1.2f, 0.8f, tree_pearent);
-		//	}
-
-		//	// 壁
-		//	{
-		//		Gameobject* wall_pearent = Gameobject_manager::create("wall_pearent");
-		//		third_zone->add_child(wall_pearent);
-
-		//		set_box(Vector3(144, 10, 99), Vector3(4, 2, 1), Vector3(0), base_color, wall_pearent);
-		//		set_box(Vector3(144, 24, 99), Vector3(4, 4, 1), Vector3(0), base_color, wall_pearent);
-		//		set_box(Vector3(155, 18, 99), Vector3(7, 10, 1), Vector3(0), base_color, wall_pearent);
-		//		set_box(Vector3(112, 18, 99), Vector3(28, 10, 1), Vector3(0), base_color, wall_pearent);
-		//		set_box(Vector3(123, 2, 99), Vector3(39, 6, 1), Vector3(0), base_color, wall_pearent);
-
-		//		set_gimmickdoor(Vector3(146, 16, 99), Vector3(149.5f, 16, 99),
-		//			Vector3(0), Vector3(0),
-		//			2, 0,
-		//			Vector3(2, 4.0f, 0.5f),
-		//			Stage_parts::Stageparts_tags::Flag_3,
-		//			base_color * 0.8f,
-		//			wall_pearent
-		//		);
-
-		//		set_gimmickdoor(Vector3(142, 16, 99), Vector3(138.5f, 16, 99),
-		//			Vector3(0), Vector3(0),
-		//			2, 0,
-		//			Vector3(2, 4.0f, 0.5f),
-		//			Stage_parts::Stageparts_tags::Flag_3,
-		//			base_color * 0.8f,
-		//			wall_pearent
-		//		);
-
-
-		//		set_buttan(Vector3(135, 16, 98.8f), Vector3(2, 0.9f, 2), Vector3(-90, 0, 0), Stage_parts::Stageparts_tags::Flag_1, wall_pearent, true);
-		//		set_buttan(Vector3(153, 16, 98.8f), Vector3(2, 0.9f, 2), Vector3(-90, 0, 0), Stage_parts::Stageparts_tags::Flag_2, wall_pearent, true);
-
-		//		set_Andcircuit(Stage_parts::Stageparts_tags::Flag_1, Stage_parts::Stageparts_tags::Flag_2, Stage_parts::Stageparts_tags::Flag_3, wall_pearent);
-
-		//	}
-
-
-		//}
-
-		//{}
-
-		//// fourth_zone
-		//{
-		//	Gameobject* fourth_zone = Gameobject_manager::create("fourth_zone");
-		//	stage_parts.emplace_back(fourth_zone);
-
-		//	// 橋
-		//	{
-		//		Gameobject* bridge_pearent = Gameobject_manager::create("bridge_pearent");
-		//		fourth_zone->add_child(bridge_pearent);
-
-		//		set_box(Vector3(144, 10.81f, 101.89f), Vector3(5, 1, 2), Vector3(5.5f, 0, 0), base_color, bridge_pearent);
-		//		set_box(Vector3(144, 10.23f, 105.74f), Vector3(5, 1, 2), Vector3(11.5f, 0, 0), base_color, bridge_pearent);
-		//		set_box(Vector3(144, 9.19f, 109.44f), Vector3(5, 1, 2), Vector3(20.5f, 0, 0), base_color, bridge_pearent);
-		//		set_box(Vector3(144, 7.58f, 112.89f), Vector3(5, 1, 2), Vector3(30, 0, 0), base_color, bridge_pearent);
-		//		set_box(Vector3(144, 5.71f, 115.63f), Vector3(5, 1, 1.5f), Vector3(40, 0, 0), base_color, bridge_pearent);
-
-		//	}
-
-		//	// 床
-		//	{
-		//		Gameobject* floor_pearent = Gameobject_manager::create("floor_pearent");
-		//		fourth_zone->add_child(floor_pearent);
-
-		//		set_box(Vector3(110, 5, 119), Vector3(40, 1, 7), Vector3(0), roof_color, floor_pearent);
-		//		set_box(Vector3(104, 5, 136), Vector3(20, 1, 10), Vector3(0), wood_color, floor_pearent);
-
-		//		//上
-		//		set_box(Vector3(104, 8, 154), Vector3(34, 4, 8), Vector3(0), stair_color, floor_pearent);
-		//		set_box(Vector3(104, 12.5f, 154), Vector3(18, 0.5f, 8), Vector3(0), stair_color, floor_pearent);
-		//		set_box(Vector3(104, 13.0f, 172), Vector3(34, 1, 10), Vector3(0), roof_color, floor_pearent);
-		//		set_box(Vector3(104, 13.5f, 154), Vector3(14, 0.5f, 8), Vector3(0), roof_color, floor_pearent);
-		//		set_box(Vector3(104, 13.5f, 199), Vector3(18, 0.5f, 17), Vector3(0), roof_color, floor_pearent);
-		//		set_box(Vector3(104, 8.0f, 172), Vector3(34, 4.0f, 10), Vector3(0), wood_color, floor_pearent);
-		//		set_box(Vector3(104, 8.5f, 186), Vector3(34, 4.5f, 4), Vector3(0), wood_color, floor_pearent);
-		//		set_box(Vector3(104, 8.5f, 203), Vector3(26, 4.5f, 13), Vector3(0), wood_color, floor_pearent);
-
-		//		set_box(Vector3(82, 13.5f, 213), Vector3(4, 0.5f, 3), Vector3(0), roof_color, floor_pearent);
-		//		set_box(Vector3(126, 13.5f, 213), Vector3(4, 0.5f, 3), Vector3(0), roof_color, floor_pearent);
-		//	}
-
-		//	// 像
-		//	{
-		//		Gameobject* statue_pearent = Gameobject_manager::create("statue_pearent");
-		//		fourth_zone->add_child(statue_pearent);
-
-		//		set_box(Vector3(104, 8.5f, 132), Vector3(4, 0.5f, 3), Vector3(0), base_color, statue_pearent);
-		//		set_box(Vector3(104, 7, 132), Vector3(5, 1, 5), Vector3(0), base_color, statue_pearent);
-
-		//		auto go = set_player_statue(Vector3(104, 17.6f, 132), 2, Vector3(0));
-		//		statue_pearent->add_child(go);
-		//	}
-
-		//	// 階段
-		//	{
-		//		Gameobject* stair_pearent = Gameobject_manager::create("stair_pearent");
-		//		fourth_zone->add_child(stair_pearent);
-		//		const Vector3 color = Vector3(255, 255, 255) / 255.0f;
-		//		const Vector3 roof_color = Vector3(233, 225, 217) / 255.0f;
-		//		const Vector3 stair_color = Vector3(215, 205, 197) / 255.0f;
-
-		//		// 階段
-		//		set_box(Vector3(130, 5.5f, 128), Vector3(8, 1.5f, 2), Vector3(0), stair_color, stair_pearent);
-		//		set_box(Vector3(130, 6.0f, 132), Vector3(8, 2.0f, 2), Vector3(0), stair_color, stair_pearent);
-		//		set_box(Vector3(130, 6.5f, 136), Vector3(8, 2.5f, 2), Vector3(0), stair_color, stair_pearent);
-		//		set_box(Vector3(130, 7.0f, 140), Vector3(8, 3.0f, 2), Vector3(0), stair_color, stair_pearent);
-		//		set_box(Vector3(130, 7.5f, 144), Vector3(8, 3.5f, 2), Vector3(0), stair_color, stair_pearent);
-		//		// 階段
-		//		set_box(Vector3(78, 5.5f, 128), Vector3(8, 1.5f, 2), Vector3(0), stair_color, stair_pearent);
-		//		set_box(Vector3(78, 6.0f, 132), Vector3(8, 2.0f, 2), Vector3(0), stair_color, stair_pearent);
-		//		set_box(Vector3(78, 6.5f, 136), Vector3(8, 2.5f, 2), Vector3(0), stair_color, stair_pearent);
-		//		set_box(Vector3(78, 7.0f, 140), Vector3(8, 3.0f, 2), Vector3(0), stair_color, stair_pearent);
-		//		set_box(Vector3(78, 7.5f, 144), Vector3(8, 3.5f, 2), Vector3(0), stair_color, stair_pearent);
-		//	}
-
-		//	// 柱
-		//	{
-		//		Gameobject* pillar_pearent = Gameobject_manager::create("pillar_pearent");
-		//		fourth_zone->add_child(pillar_pearent);
-
-		//		set_pillar(Vector3(120, 13, 148), Vector3(1), Vector3(0), pillar_pearent, 0.5f, 7.0f, false);
-		//		set_pillar(Vector3(136, 12, 148), Vector3(1), Vector3(0), pillar_pearent);
-		//		set_pillar(Vector3(136, 14, 164), Vector3(1), Vector3(0), pillar_pearent);
-		//		set_pillar(Vector3(136, 14, 180), Vector3(1), Vector3(0), pillar_pearent);
-		//		set_pillar(Vector3(120, 14, 180), Vector3(1), Vector3(0), pillar_pearent);
-		//		set_pillar(Vector3(120, 14, 196), Vector3(1), Vector3(0), pillar_pearent);
-		//		set_pillar(Vector3(120, 14, 212), Vector3(1), Vector3(0), pillar_pearent);
-
-		//		set_pillar(Vector3(88, 13, 148), Vector3(1), Vector3(0), pillar_pearent, 0.5f, 7.0f, false);
-		//		set_pillar(Vector3(72, 12, 148), Vector3(1), Vector3(0), pillar_pearent);
-		//		set_pillar(Vector3(72, 14, 164), Vector3(1), Vector3(0), pillar_pearent);
-		//		set_pillar(Vector3(72, 14, 180), Vector3(1), Vector3(0), pillar_pearent);
-		//		set_pillar(Vector3(88, 14, 180), Vector3(1), Vector3(0), pillar_pearent);
-		//		set_pillar(Vector3(88, 14, 196), Vector3(1), Vector3(0), pillar_pearent);
-		//		set_pillar(Vector3(88, 14, 212), Vector3(1), Vector3(0), pillar_pearent);
-		//	}
-
-		//	// 壁
-		//	{
-		//		Gameobject* wall_pearent = Gameobject_manager::create("wall_pearent");
-		//		fourth_zone->add_child(wall_pearent);
-		//		const Vector3 color = Vector3(255, 255, 255) / 255.0f;
-
-		//		set_box(Vector3(93, 18, 215), Vector3(7, 4, 1), Vector3(0), base_color, wall_pearent);
-		//		set_box(Vector3(115, 18, 215), Vector3(7, 4, 1), Vector3(0), base_color, wall_pearent);
-		//		set_box(Vector3(104, 26, 215), Vector3(18, 4, 1), Vector3(0), base_color, wall_pearent);
-
-		//		set_box(Vector3(104, 9, 216.05f), Vector3(26, 5, 0.05f), Vector3(0), color, wall_pearent);
-		//		set_box(Vector3(93, 18, 216.05f), Vector3(7, 4, 0.05f), Vector3(0), color, wall_pearent);
-		//		set_box(Vector3(115, 18, 216.05f), Vector3(7, 4, 0.05f), Vector3(0), color, wall_pearent);
-		//		set_box(Vector3(104, 26, 216.05f), Vector3(18, 4, 0.05f), Vector3(0), color, wall_pearent);
-		//		set_box(Vector3(104, 13.5f, 217), Vector3(4, 0.5f, 1), Vector3(0), color, wall_pearent);
-
-		//		set_door(Vector3(102, 18, 215), Vector3(2, 4, 0.5f), Vector3(0), true, wall_pearent);
-		//		set_door(Vector3(106, 18, 215), Vector3(2, 4, 0.5f), Vector3(0), false, wall_pearent);
-		//	}
-
-		//	// 柵
-		//	{
-		//		Gameobject* fence_pearent = Gameobject_manager::create("fence_pearent");
-		//		fourth_zone->add_child(fence_pearent);
-
-		//		set_fence(Vector3(95, 14, 148.05f), Vector3(1), Vector3(0, 0, 0), fence_pearent);
-		//		set_fence(Vector3(104, 14, 148.05f), Vector3(1), Vector3(0, 0, 0), fence_pearent);
-		//		set_fence(Vector3(113, 14, 148.05f), Vector3(1), Vector3(0, 0, 0), fence_pearent);
-		//	}
-
-		//	// 木
-		//	{
-		//		Gameobject* tree_pearent = Gameobject_manager::create("tree_pearent");
-		//		fourth_zone->add_child(tree_pearent);
-
-		//		set_tree(Vector3(82, 14, 213), Vector3(1, 1.2f, 1), Vector3(0), 2.5f, 0.5f, tree_pearent);
-		//		set_tree(Vector3(82, 13, 199), Vector3(1, 1.2f, 1), Vector3(0), 2.5f, 0.5f, tree_pearent);
-		//		set_tree(Vector3(82, 13, 186), Vector3(1, 1.2f, 1), Vector3(0), 2.5f, 0.5f, tree_pearent);
-		//		set_tree(Vector3(74, 13, 186), Vector3(1, 1.2f, 1), Vector3(0), 2.5f, 0.5f, tree_pearent);
-
-		//		set_tree(Vector3(126, 14, 213), Vector3(1, 1.2f, 1), Vector3(0), 2.5f, 0.5f, tree_pearent);
-		//		set_tree(Vector3(126, 13, 199), Vector3(1, 1.2f, 1), Vector3(0), 2.5f, 0.5f, tree_pearent);
-		//		set_tree(Vector3(126, 13, 186), Vector3(1, 1.2f, 1), Vector3(0), 2.5f, 0.5f, tree_pearent);
-		//		set_tree(Vector3(134, 13, 186), Vector3(1, 1.2f, 1), Vector3(0), 2.5f, 0.5f, tree_pearent);
-
-		//		set_tree(Vector3(90.0f, 6, 140), Vector3(1, 1.2f, 1), Vector3(0), 1.2f, 0.8f, tree_pearent);
-		//		set_tree(Vector3(99.5f, 6, 140), Vector3(1, 1.2f, 1), Vector3(0), 1.2f, 0.8f, tree_pearent);
-		//		set_tree(Vector3(108.5f, 6, 140), Vector3(1, 1.2f, 1), Vector3(0), 1.2f, 0.8f, tree_pearent);
-		//		set_tree(Vector3(118.0f, 6, 140), Vector3(1, 1.2f, 1), Vector3(0), 1.2f, 0.8f, tree_pearent);
-
-		//	}
-
-
-		//}
+		// third_zone Tag 4,5使用
+		{
+			Gameobject* third_zone = Gameobject_manager::create("third_zone");
+			stage_parts.emplace_back(third_zone);
+
+			// bridge
+			{
+				Gameobject* bridge = Gameobject_manager::create("bridge");
+				third_zone->add_child(bridge);
+
+				// 橋
+				//set_box(Vector3(-9, 29, 74), Vector3(5, 1, 29), Vector3(0, 0, 0), base_color, bridge);
+				set_box(Vector3(-40, 29, -17), Vector3(5, 1, 32), Vector3(0, 0, 0), wood_color, bridge);
+			}
+			// stage
+			{
+				Gameobject* stage = Gameobject_manager::create("stage");
+				third_zone->add_child(stage);
+
+				// 入口
+				set_box(Vector3(-27, 0, -75), Vector3(26, 30, 26), Vector3(0, 0, 0), base_color, stage);
+
+				// 床
+				set_box(Vector3(13, 1, -112), Vector3(63, 10, 35), Vector3(0, 0, 0), grass_color, stage);
+			}
+			// stairss
+			{
+				Gameobject* stairs = Gameobject_manager::create("stairs");
+				third_zone->add_child(stairs);
+
+				// 階段
+				set_box(Vector3(-35, 20.5f, -104), Vector3(5, 9.5f, 3), Vector3(0, 0, 0), base_color, stairs);
+				set_box(Vector3(-35, 20.0f, -109), Vector3(5, 9.0f, 2), Vector3(0, 0, 0), base_color, stairs);
+				set_box(Vector3(-35, 23.0f, -113), Vector3(5, 5.0f, 2), Vector3(0, 0, 0), base_color, stairs); //アーチ
+				set_box(Vector3(-35, 23.5f, -117), Vector3(5, 3.5f, 2), Vector3(0, 0, 0), base_color, stairs); //アーチ
+				set_box(Vector3(-35, 23.5f, -121), Vector3(5, 2.5f, 2), Vector3(0, 0, 0), base_color, stairs); //アーチ
+				set_box(Vector3(-35, 22.5f, -125), Vector3(5, 2.5f, 2), Vector3(0, 0, 0), base_color, stairs); //アーチ
+				set_box(Vector3(-35, 21.0f, -129), Vector3(5, 3.0f, 2), Vector3(0, 0, 0), base_color, stairs); //アーチ
+				set_box(Vector3(-35, 17.0f, -133), Vector3(5, 6.0f, 2), Vector3(0, 0, 0), base_color, stairs); //アーチ
+				set_box(Vector3(-35, 16.5f, -137), Vector3(5, 5.5f, 2), Vector3(0, 0, 0), base_color, stairs);
+				set_box(Vector3(-35, 16.0f, -141), Vector3(5, 5.0f, 2), Vector3(0, 0, 0), base_color, stairs);
+				set_box(Vector3(-35, 15.5f, -145), Vector3(5, 4.5f, 2), Vector3(0, 0, 0), base_color, stairs);
+				set_box(Vector3(-35, 15.0f, -149), Vector3(5, 4.0f, 2), Vector3(0, 0, 0), base_color, stairs);
+				set_box(Vector3(-35, 14.5f, -153), Vector3(5, 3.5f, 2), Vector3(0, 0, 0), base_color, stairs);
+
+				// 遊び場
+				set_box(Vector3(-33, -2.5f, -157), Vector3(15, 20, 10), Vector3(0, 0, 0), base_color, stairs);
+				set_box(Vector3(-14, -2.5f, -161), Vector3(4, 20, 6), Vector3(0, 0, 0), base_color, stairs);
+				set_box(Vector3(6, -2.5f, -157), Vector3(16, 20, 10), Vector3(0, 0, 0), base_color, stairs);
+				// 遊び場奥
+				set_box(Vector3(31, -2.0f, -155.50f), Vector3(9, 20, 9), Vector3(0, 0, 0), grass_color, stairs);
+
+				// 階段
+				set_box(Vector3(-14, 14.0f, -153), Vector3(4, 3.0f, 2), Vector3(0, 0, 0), base_color, stairs);
+				set_box(Vector3(-14, 13.5f, -149), Vector3(4, 2.5f, 2), Vector3(0, 0, 0), base_color, stairs);
+				set_box(Vector3(-14, 13.0f, -145), Vector3(4, 2.0f, 2), Vector3(0, 0, 0), base_color, stairs);
+				set_box(Vector3(-14, 12.5f, -141), Vector3(4, 1.5f, 2), Vector3(0, 0, 0), base_color, stairs);
+				set_box(Vector3(-14, 12.0f, -137), Vector3(4, 1.0f, 2), Vector3(0, 0, 0), base_color, stairs);
+				set_box(Vector3(-14, 11.5f, -133), Vector3(4, 0.5f, 2), Vector3(0, 0, 0), base_color, stairs);
+			}
+			// switch_base
+			{
+				Gameobject* switch_base = Gameobject_manager::create("switch_base");
+				third_zone->add_child(switch_base);
+
+				// switch base
+				set_box(Vector3(33, 9, -82), Vector3(10, 10, 10), Vector3(0, 0, 0), base_color, switch_base);
+
+				set_box(Vector3(21, 15.0f, -76), Vector3(2, 4.0f, 3), Vector3(0, 0, 0), base_color, switch_base);
+				set_box(Vector3(21, 14.5f, -80), Vector3(2, 3.5f, 1), Vector3(0, 0, 0), base_color, switch_base);
+				set_box(Vector3(21, 14.0f, -82), Vector3(2, 3.0f, 1), Vector3(0, 0, 0), base_color, switch_base);
+				set_box(Vector3(21, 13.5f, -84), Vector3(2, 2.5f, 1), Vector3(0, 0, 0), base_color, switch_base);
+				set_box(Vector3(21, 13.0f, -86), Vector3(2, 2.0f, 1), Vector3(0, 0, 0), base_color, switch_base);
+				set_box(Vector3(21, 12.5f, -88), Vector3(2, 1.5f, 1), Vector3(0, 0, 0), base_color, switch_base);
+				set_box(Vector3(21, 12.0f, -90), Vector3(2, 1.5f, 1), Vector3(0, 0, 0), base_color, switch_base);
+				set_box(Vector3(21, 11.5f, -92), Vector3(2, 1.0f, 1), Vector3(0, 0, 0), base_color, switch_base);
+				set_box(Vector3(21, 11.0f, -94), Vector3(2, 0.5f, 1), Vector3(0, 0, 0), base_color, switch_base);
+
+				set_box(Vector3(45, 15.0f, -76), Vector3(2, 4.0f, 3), Vector3(0, 0, 0), base_color, switch_base);
+				set_box(Vector3(45, 14.5f, -80), Vector3(2, 3.5f, 1), Vector3(0, 0, 0), base_color, switch_base);
+				set_box(Vector3(45, 14.0f, -82), Vector3(2, 3.0f, 1), Vector3(0, 0, 0), base_color, switch_base);
+				set_box(Vector3(45, 13.5f, -84), Vector3(2, 2.5f, 1), Vector3(0, 0, 0), base_color, switch_base);
+				set_box(Vector3(45, 13.0f, -86), Vector3(2, 2.0f, 1), Vector3(0, 0, 0), base_color, switch_base);
+				set_box(Vector3(45, 12.5f, -88), Vector3(2, 1.5f, 1), Vector3(0, 0, 0), base_color, switch_base);
+				set_box(Vector3(45, 12.0f, -90), Vector3(2, 1.5f, 1), Vector3(0, 0, 0), base_color, switch_base);
+				set_box(Vector3(45, 11.5f, -92), Vector3(2, 1.0f, 1), Vector3(0, 0, 0), base_color, switch_base);
+				set_box(Vector3(45, 11.0f, -94), Vector3(2, 0.5f, 1), Vector3(0, 0, 0), base_color, switch_base);
+
+			}
+			// wall
+			{
+				Gameobject* wall = Gameobject_manager::create("wall");
+				third_zone->add_child(wall);
+
+				// 壁
+				set_box(Vector3(55, 25, -163), Vector3(15, 30, 17), Vector3(0, 0, 0), base_color, wall);
+
+				set_box(Vector3(75, 21, -83.65f), Vector3(1, 10, 6.65f), Vector3(0, 0, 0), base_color, wall); //左
+				set_box(Vector3(75, 21, -133.35f), Vector3(1, 10, 6.65f), Vector3(0, 0, 0), base_color, wall); //右
+
+				set_box(Vector3(75, 14, -91.3f), Vector3(1, 1, 1), Vector3(0, 0, 0), base_color, wall); //左 すきま
+				set_box(Vector3(75, 18, -91.3f), Vector3(1, 1, 1), Vector3(0, 0, 0), base_color, wall); //左 すきま
+				set_box(Vector3(75, 22, -91.3f), Vector3(1, 1, 1), Vector3(0, 0, 0), base_color, wall); //左 すきま
+				set_box(Vector3(75, 26, -91.3f), Vector3(1, 1, 1), Vector3(0, 0, 0), base_color, wall); //左 すきま
+				set_box(Vector3(75, 30, -91.3f), Vector3(1, 1, 1), Vector3(0, 0, 0), base_color, wall); //左 すきま
+
+				set_box(Vector3(75, 14, -125.7f), Vector3(1, 1, 1), Vector3(0, 0, 0), base_color, wall); //右 すきま
+				set_box(Vector3(75, 18, -125.7f), Vector3(1, 1, 1), Vector3(0, 0, 0), base_color, wall); //右 すきま
+				set_box(Vector3(75, 22, -125.7f), Vector3(1, 1, 1), Vector3(0, 0, 0), base_color, wall); //右 すきま
+				set_box(Vector3(75, 26, -125.7f), Vector3(1, 1, 1), Vector3(0, 0, 0), base_color, wall); //右 すきま
+				set_box(Vector3(75, 30, -125.7f), Vector3(1, 1, 1), Vector3(0, 0, 0), base_color, wall); //右 すきま
+
+			}
+			// crane
+			{
+				Gameobject* crane = Gameobject_manager::create("crane");
+				third_zone->add_child(crane);
+
+				// クレーン
+				set_box(Vector3(+30, 46, -108.5f), Vector3(60.f, 1, 1.0f), Vector3(0, 0, 0), wood_color, crane); //上
+				set_box(Vector3(-24, 45, -108.5f), Vector3(1, 1, 16), Vector3(0, 0, 0), stair_color, crane);       //手前 上
+				set_box(Vector3(-24, 37, -94.5f), Vector3(0.5f, 7, 0.5f), Vector3(0, 0, 0), stair_color, crane);   //手前 柱
+				set_box(Vector3(-24, 27, -122.5f), Vector3(0.5f, 17, 0.5f), Vector3(0, 0, 0), stair_color, crane); //手前 柱
+				set_box(Vector3(+83, 45, -108.5f), Vector3(1, 1, 16), Vector3(0, 0, 0), stair_color, crane);       //奥 上
+				set_box(Vector3(+83, 27, -94.5f), Vector3(0.5f, 17, 0.5f), Vector3(0, 0, 0), stair_color, crane);  //奥 柱
+				set_box(Vector3(+83, 27, -122.5f), Vector3(0.5f, 17, 0.5f), Vector3(0, 0, 0), stair_color, crane); //奥 柱
+
+				set_box(Vector3(-22.5f, 45.5f, -108.5f), Vector3(0.5f, 2, 1.5f), Vector3(0, 0, 0), grass_color, crane); //手前固定
+				set_box(Vector3(-25.5f, 45.5f, -108.5f), Vector3(0.5f, 2, 1.5f), Vector3(0, 0, 0), grass_color, crane); //手前固定
+				set_box(Vector3(+81.5f, 45.5f, -108.5f), Vector3(0.5f, 2, 1.5f), Vector3(0, 0, 0), grass_color, crane); //奥固定
+				set_box(Vector3(+84.5f, 45.5f, -108.5f), Vector3(0.5f, 2, 1.5f), Vector3(0, 0, 0), grass_color, crane); //奥固定
+
+
+				// 壊す壁
+				set_box(Vector3(75, 11, -66.5f), Vector3(1, 20, 10.5f), Vector3(0, 0, 0), base_color, crane);
+			}
+
+			// brake_wall
+			{
+				Gameobject* brake_wall = Gameobject_manager::create("brake_wall");
+				third_zone->add_child(brake_wall);
+				brake_wall->transform->local_pos = Vector3(75, 11, -110.5f);
+				brake_wall->transform->local_orient = quaternion_from_euler(Vector3(0, 90, 0));
+
+				float mass = 10;
+				Vector3 color = Vector3(187, 185, 181) / 255;
+				Vector3 size = Vector3(2, 1, 1);
+				Vector2 count = Vector2(8, 10);
+
+
+
+				for (int i = 0; i < count.y; i++) {
+
+					int x_num = count.x;
+					if (i % 2 == 0) x_num += 1;
+
+					for (int o = 0; o < x_num; o++) {
+						auto coll = set_box(Vector3(
+							size.x * 2 * o - size.x * x_num,
+							size.y * 2 * i + size.y,
+							0
+						),
+							size,
+							Vector3(0, 0, 0),
+							color + Vector3(rand() % 5 / 255.0f),
+							nullptr,
+							false
+						);
+						//coll->tag &= ~Collider_tags::Caera_not_sunk_Stage;
+						coll->physics_data.inertial_mass = mass;
+						coll->physics_data.linear_sleep_threrhold = 0.2f;
+						coll->physics_data.angula_sleep_threrhold = 0.2f;
+						//coll->physics_data.is_moveable = false;
+						//coll->physics_data.dynamic_friction = 0.8f;
+						brake_wall->add_child(coll->gameobject);
+					}
+
+
+				}
+
+			}
+
+			// lever&move
+			{
+				Gameobject* lever_and_move = Gameobject_manager::create("lever_and_move");
+				third_zone->add_child(lever_and_move);
+				set_lever(Vector3(32.5f, 20, -88), Vector3(1), Vector3(0), Stage_parts::Stageparts_tags::Flag_4, Stage_parts::Stageparts_tags::Flag_5, lever_and_move);
+				set_box(Vector3(32.5f, 18.5f, -88), Vector3(4, 1, 2), Vector3(0, 0, 0), stair_color, lever_and_move);
+
+				{
+					float rope_sphere_r = 0.5f;
+					float rope_sphree_offset_size = rope_sphere_r * 3;
+					int rope_sphere_count = 16;
+					float rope_mass = 20;
+					Vector3 rope_joint_start_offset = Vector3(0, -0.8f, 0);
+
+					// 動かすもの
+					auto base_coll = set_move_block_2flags(Vector3(80.5f, 46, -108.5f), Vector3(-21.5f, 46, -108.5f),
+						Vector3(0.5f, 1.2f, 1.2f), Vector3(0),
+						0.2f, 0.8f,
+						Stage_parts::Stageparts_tags::Flag_4, Stage_parts::Stageparts_tags::Flag_5,
+						Yellow_color, lever_and_move);
+
+					Vector3 rope_0_pos = base_coll->gameobject->transform->local_pos + rope_joint_start_offset;
+
+					// 下の球
+					float sphere_r = 5.2f;
+					auto sphere_coll = set_sphere(
+						rope_0_pos
+						+ Vector3(0, -1, 0) * rope_sphree_offset_size * (rope_sphere_count - 1)
+						+ Vector3(0, -1, 0) * (sphere_r - 0.5f)
+						, sphere_r, Vector3(1, 0, 0), lever_and_move);
+					sphere_coll->tag = Collider_tags::Sphere | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Kinematic_Stage;
+					sphere_coll->physics_data.inertial_mass = 1000;
+					sphere_coll->physics_data.angula_sleep_threrhold = 0;
+					sphere_coll->physics_data.is_moveable = true;
+					sphere_coll->physics_data.is_static = false;
+
+
+					Collider_Rope* rope_coll = nullptr;
+					// ropeの作成
+					{
+
+						// colliderのアタッチ&初期設定
+						auto rope_go = Gameobject_manager::create("rope_go");
+						lever_and_move->add_child(rope_go);
+						rope_go->transform->local_pos = rope_0_pos;
+
+						rope_coll = rope_go->addComponent<Collider_Rope>();
+
+						rope_coll->sphere_size_r = rope_sphere_r;
+						rope_coll->sphree_offset_size = rope_sphree_offset_size;
+						rope_coll->sphere_num_size = rope_sphere_count;
+						rope_coll->start_rope_dir = Vector3(0, -1, 0);
+						rope_coll->tag |= Collider_tags::Human_rope;
+						rope_coll->ignore_tags |= Collider_tags::Human;
+						rope_coll->default_physics_data.inertial_mass = rope_mass;
+						rope_coll->create_rope();
+
+						// 場所によって質量を調整する
+						for (int i = 0; i < rope_coll->get_collider_size(); ++i) {
+							auto physics_data = rope_coll->get_vertex_data(i);
+							physics_data.inertial_mass = rope_mass * (1 + ((float)rope_coll->get_collider_size() - i) / rope_coll->get_collider_size());
+							rope_coll->set_vertex_data(i, physics_data);
+						}
+
+						// blockにつなぐ0と最後のcolliderを衝突しないように(暴れやすいため)
+						{
+							auto vertex_data_0 = rope_coll->get_vertex_data(0);
+							vertex_data_0.is_hitable = false;
+							rope_coll->set_vertex_data(0, vertex_data_0);
+
+							auto vertex_data_1 = rope_coll->get_vertex_data(rope_coll->get_collider_size() - 1);
+							vertex_data_1.is_hitable = false;
+							rope_coll->set_vertex_data(rope_coll->get_collider_size() - 1, vertex_data_1);
+						}
+						// rendererのアタッチ&セット
+						auto renderer = rope_go->addComponent<Rope_renderer>();
+						rope_go->renderer = renderer;
+						renderer->radius = rope_sphere_r * 0.6f;
+						renderer->split_count = 20;
+						renderer->color = Vector4(stair_color, 1);
+						renderer->set_meshoffset(rope_coll->get_vertex_offset());
+					}
+
+					// 腕とropeをつなぐjoint
+					Joint::add_balljoint(
+						base_coll, rope_coll->get_collider(0),
+						rope_joint_start_offset, Vector3(0)
+					);
+
+					// つなげるものとropeをつなぐjoint
+					Joint::add_balljoint(
+						sphere_coll, rope_coll->get_collider(rope_coll->get_collider_size() - 1),
+						//vector3_quatrotate(contact_point - data.coll->transform->position, data.coll->transform->orientation.inverse()),
+						Vector3(0, sphere_r - 0.5f, 0),
+						Vector3(0),
+						0.1f
+					);
+
+				}
+			}
+			// house
+			{
+				Gameobject* house = Gameobject_manager::create("house");
+				third_zone->add_child(house);
+
+				// 外床
+				set_box(Vector3(85, 1, -98), Vector3(9, 10, 42), Vector3(0, 0, 0), base_color, house);
+				set_box(Vector3(113, 1, -64.5f), Vector3(19, 10, 8.5f), Vector3(0, 0, 0), base_color, house);
+				set_box(Vector3(154, 1, -64.5f), Vector3(22, 10, 8.5f), Vector3(0, 0, 0), grass_color, house);
+
+				// 中壁
+				set_door(Vector3(95, 15, -105.5f), Vector3(2, 4, 0.5f), Vector3(0, 90, 0), true, house); //door
+				set_door(Vector3(95, 15, -109.5f), Vector3(2, 4, 0.5f), Vector3(0, 90, 0), false, house); //door
+				set_box(Vector3(95, 21, -101), Vector3(2, 10, 1), Vector3(0), base_color, house); //door横柱
+				set_box(Vector3(95, 21, -114), Vector3(2, 10, 1), Vector3(0), base_color, house); //door横柱
+				set_box(Vector3(95, 11, -89.25f), Vector3(1, 20, 14.25f), Vector3(0, 0, 0), base_color, house); //左
+				set_box(Vector3(95, 25, -107.5f), Vector3(1, 6, 4), Vector3(0, 0, 0), base_color, house); //上
+				set_box(Vector3(95, 21, -125.75f), Vector3(1, 10, 14.25f), Vector3(0, 0, 0), base_color, house); //右
+				set_box(Vector3(135, 11, -74), Vector3(41, 20, 1), Vector3(0, 0, 0), base_color, house); //右
+				set_box(Vector3(175, 21, -64.5f), Vector3(1, 10, 8.5f), Vector3(0, 0, 0), base_color, house); //右
+
+				// 中床
+				set_box(Vector3(114.0f, 1, -114.0f), Vector3(20, 10, 26), Vector3(0, 0, 0), base_color, house);
+				set_box(Vector3(121.5f, 1, -81.5f), Vector3(12.5f, 10, 7.5f), Vector3(0, 0, 0), base_color, house);
+				set_box(Vector3(101.5f, 0.5f, -80.5f), Vector3(7.5f, 10, 7.5f), Vector3(0, 0, 0), wood_color, house);
+
+
+				set_box(Vector3(160, 1, -79), Vector3(26, 10, 6), Vector3(0, 0, 0), base_color, house);
+
+				// 中床 奥の遊び
+				set_box(Vector3(180, 1.5f, -71), Vector3(4, 10.5f, 2), Vector3(0, 0, 0), base_color, house); //階段
+				set_box(Vector3(180, 2.0f, -67), Vector3(4, 11.0f, 2), Vector3(0, 0, 0), base_color, house); //階段
+				set_box(Vector3(180, 2.5f, -63), Vector3(4, 11.5f, 2), Vector3(0, 0, 0), base_color, house); //階段
+				set_box(Vector3(180, 3.0f, -54), Vector3(4, 12.0f, 7), Vector3(0, 0, 0), grass_color, house); //上床
+				set_box(Vector3(192, 3.0f, -62), Vector3(8, 12.0f, 15), Vector3(0, 0, 0), grass_color, house);//上床
+				set_box(Vector3(175, 3.0f, -51.5f), Vector3(1, 12.0f, 4.5f), Vector3(0, 0, 0), grass_color, house);//上床
+			}
+			// rope_tute
+			{
+				Gameobject* rope_tute = Gameobject_manager::create("rope_tute");
+				third_zone->add_child(rope_tute);
+
+				// 台座
+				set_box(Vector3(126, 1.5f, -122), Vector3(11, 10.5f, 12), Vector3(0, 0, 0), base_color, rope_tute);
+				set_box(Vector3(127, 12.5f, -122), Vector3(10, 0.5f, 10), Vector3(0, 0, 0), base_color, rope_tute);
+				set_box(Vector3(129, 13.5f, -122), Vector3(8, 0.5f, 8), Vector3(0, 0, 0), base_color, rope_tute);
+
+				// 足場01
+				set_box(Vector3(183, 2, -122), Vector3(10, 10, 10), Vector3(0, 0, 0), base_color, rope_tute);
+				set_box(Vector3(194, 12, -122), Vector3(1, 20, 10), Vector3(0, 0, 0), base_color, rope_tute); //壁
+
+				// 足場02
+				set_box(Vector3(194, 20, -183), Vector3(10, 10, 10), Vector3(0, 0, 0), base_color, rope_tute);
+				set_box(Vector3(194, 30, -194), Vector3(10, 20, 1), Vector3(0, 0, 0), base_color, rope_tute); //壁
+
+				// 足場03
+				set_box(Vector3(120, 25, -190), Vector3(10, 10, 10), Vector3(0, 0, 0), base_color, rope_tute);
+				//set_box(Vector3(109, 35, -190), Vector3(1, 20, 10), Vector3(0, 0, 0), base_color, rope_tute); //壁  forth_zoneの壁で代用
+
+				// 階段
+				set_box(Vector3(114, 23.0f, -177), Vector3(4, 12.0f, 3), Vector3(0, 0, 0), base_color, rope_tute);
+				set_box(Vector3(114, 23.5f, -172), Vector3(4, 12.5f, 2), Vector3(0, 0, 0), base_color, rope_tute);
+				set_box(Vector3(114, 24.0f, -168), Vector3(4, 13.0f, 2), Vector3(0, 0, 0), base_color, rope_tute);
+				set_box(Vector3(114, 24.5f, -164), Vector3(4, 13.5f, 2), Vector3(0, 0, 0), base_color, rope_tute);
+				set_box(Vector3(114, 25.0f, -160), Vector3(4, 14.0f, 2), Vector3(0, 0, 0), base_color, rope_tute);
+				set_box(Vector3(114, 25.5f, -156), Vector3(4, 14.5f, 2), Vector3(0, 0, 0), base_color, rope_tute);
+				set_box(Vector3(114, 26.0f, -152), Vector3(4, 15.0f, 2), Vector3(0, 0, 0), base_color, rope_tute);
+				set_box(Vector3(114, 26.5f, -148), Vector3(4, 15.5f, 2), Vector3(0, 0, 0), base_color, rope_tute);
+
+				set_box(Vector3(114, 27.0f, -142), Vector3(4, 16.0f, 4), Vector3(0, 0, 0), base_color, rope_tute); //遊び場
+
+				set_box(Vector3(108, 27.0f, -142), Vector3(2, 16.0f, 4), Vector3(0, 0, 0), base_color, rope_tute);
+				set_box(Vector3(104, 27.5f, -142), Vector3(2, 16.5f, 4), Vector3(0, 0, 0), base_color, rope_tute);
+				set_box(Vector3(100, 28.0f, -142), Vector3(2, 17.0f, 4), Vector3(0, 0, 0), base_color, rope_tute);
+				set_box(Vector3(96, 28.5f, -142), Vector3(2, 17.5f, 4), Vector3(0, 0, 0), base_color, rope_tute);
+				set_box(Vector3(92, 29.0f, -142), Vector3(2, 18.0f, 4), Vector3(0, 0, 0), base_color, rope_tute);
+				set_box(Vector3(88, 29.5f, -142), Vector3(2, 18.5f, 4), Vector3(0, 0, 0), base_color, rope_tute);
+				set_box(Vector3(84, 30.0f, -142), Vector3(2, 19.0f, 4), Vector3(0, 0, 0), base_color, rope_tute);
+				set_box(Vector3(80, 30.5f, -142), Vector3(2, 19.5f, 4), Vector3(0, 0, 0), base_color, rope_tute);
+
+				set_box(Vector3(74, 30.5f, -142), Vector3(4, 19.5f, 4), Vector3(0, 0, 0), base_color, rope_tute); //遊び場
+
+				set_box(Vector3(74, 31.0f, -148), Vector3(4, 20.0f, 2), Vector3(0, 0, 0), base_color, rope_tute);
+				set_box(Vector3(74, 31.5f, -152), Vector3(4, 20.5f, 2), Vector3(0, 0, 0), base_color, rope_tute);
+				set_box(Vector3(74, 32.0f, -156), Vector3(4, 21.0f, 2), Vector3(0, 0, 0), base_color, rope_tute);
+				set_box(Vector3(74, 32.5f, -160), Vector3(4, 21.5f, 2), Vector3(0, 0, 0), base_color, rope_tute);
+				set_box(Vector3(74, 33.0f, -164), Vector3(4, 22.0f, 2), Vector3(0, 0, 0), base_color, rope_tute);
+
+			}
+			// trees
+			{
+				Gameobject* tree = Gameobject_manager::create("tree");
+				third_zone->add_child(tree);
+
+				set_tree(Vector3(31, 18.05f, -155.5f), Vector3(1, 1.2f, 1), Vector3(0, 55, 0), 2.5f, 0.8f, tree);
+
+				set_tree(Vector3(168, 11.5f, -65), Vector3(1, 1.2f, 1), Vector3(0, 57, 0), 2.5f, 0.8f, tree);
+				set_tree(Vector3(157, 11.5f, -65), Vector3(1, 1.2f, 1), Vector3(0, 57, 0), 2.5f, 0.8f, tree);
+				set_tree(Vector3(146, 11.5f, -65), Vector3(1, 1.2f, 1), Vector3(0, 57, 0), 2.5f, 0.8f, tree);
+				set_tree(Vector3(102.7f, 10.5f, -81.7f), Vector3(1, 1.2f, 1), Vector3(0, 12, 0), 2.5f, 0.8f, tree);
+
+				set_tree(Vector3(193, 15, -70), Vector3(1, 1.2f, 1), Vector3(0, 79, 0), 1.2f, 0.8f, tree);
+
+			}
+			// fences
+			{
+				Gameobject* fences = Gameobject_manager::create("fences");
+				third_zone->add_child(fences);
+
+				set_fence(Vector3(-26, 30, 19), Vector3(1), Vector3(0, 00, 0), fences);
+				set_fence(Vector3(-19, 30, -54), Vector3(1), Vector3(0, 00, 0), fences);
+				set_fence(Vector3(-4, 30, -82), Vector3(1), Vector3(0, 90, 0), fences);
+				set_fence(Vector3(-44, 11, -121), Vector3(1), Vector3(0, 90, 0), fences);
+				set_fence(Vector3(189, 15, -51), Vector3(1), Vector3(0, 0, 0), fences);
+			}
+
+		}
+
+		{}
+
+		// forth_zone
+		{
+			Gameobject* forth_zone = Gameobject_manager::create("forth_zone");
+			stage_parts.emplace_back(forth_zone);
+
+			// floor
+			{
+				Gameobject* floor = Gameobject_manager::create("floor");
+				forth_zone->add_child(floor);
+
+				set_box(Vector3(30, 55, -172), Vector3(10, 1, 8), Vector3(0, 0, 0), grass_color, floor);
+				set_box(Vector3(30, 24, -172), Vector3(10, 30, 8), Vector3(0, 0, 0), base_color, floor);
+				set_box(Vector3(94, 25, -163), Vector3(16, 30, 17), Vector3(0, 0, 0), base_color, floor);
+				set_box(Vector3(74, 33, -173), Vector3(4, 22, 7), Vector3(0, 0, 0), base_color, floor);
+				set_box(Vector3(60, 25, -189), Vector3(50, 30, 9), Vector3(0, 0, 0), base_color, floor);
+				set_box(Vector3(101, 25, -218), Vector3(9, 30, 20), Vector3(0, 0, 0), base_color, floor);
+
+				set_box(Vector3(50, 54, -202), Vector3(6, 1, 2), Vector3(0, 0, 0), base_color, floor); //goal扉奥の床
+			}
+			// wall
+			{
+				Gameobject* wall = Gameobject_manager::create("wall");
+				forth_zone->add_child(wall);
+
+				set_box(Vector3(91, 35, -218), Vector3(1, 40, 20), Vector3(0, 0, 0), base_color, wall);
+				set_box(Vector3(101, 75, -237), Vector3(9, 20, 1), Vector3(0, 0, 0), base_color, wall);
+
+				set_door(Vector3(52, 59, -199), Vector3(2, 4, 0.5f), Vector3(0, 180, 0), true, wall); //door
+				set_door(Vector3(48, 59, -199), Vector3(2, 4, 0.5f), Vector3(0, 180, 0), false, wall); //door
+				set_box(Vector3(72, 35, -199), Vector3(18, 40, 1), Vector3(0, 0, 0), base_color, wall); //左
+				set_box(Vector3(50, 69, -199), Vector3(4, 6, 1), Vector3(0, 0, 0), base_color, wall); //真ん中
+				set_box(Vector3(28, 35, -199), Vector3(18, 40, 1), Vector3(0, 0, 0), base_color, wall); //右
+				set_box(Vector3(50, 25, -199), Vector3(4, 30, 1), Vector3(0, 0, 0), base_color, wall); //下
+
+				set_box(Vector3(57, 65, -197.5F), Vector3(1, 10, 0.5F), Vector3(0, 0, 0), base_color, wall); //goal横でっぱり左
+				set_box(Vector3(43, 65, -197.5F), Vector3(1, 10, 0.5F), Vector3(0, 0, 0), base_color, wall); //goal横でっぱり右
+			}
+
+			// trees
+			{
+				Gameobject* tree = Gameobject_manager::create("tree");
+				forth_zone->add_child(tree);
+
+				set_tree(Vector3(31, 56, -172), Vector3(1, 1.2f, 1), Vector3(0, 76, 0), 1.2f, 0.8f, tree);
+
+			}
+
+			// fences
+			{
+				Gameobject* fences = Gameobject_manager::create("fences");
+				forth_zone->add_child(fences);
+
+				set_fence(Vector3(16, 55, -189), Vector3(1), Vector3(0, 90, 0), fences);
+
+
+			}
+		}
+
+		//set_lever(Vector3(0,0,0),Vector3(1),   Vector3(0), Stage_parts::Stageparts_tags::Flag_4, Stage_parts::Stageparts_tags::Flag_4);
+		//set_lever(Vector3(8,18,104),Vector3(1),Vector3(0,90,0), Stage_parts::Stageparts_tags::Flag_4, Stage_parts::Stageparts_tags::Flag_4);
+
+		set_box(Vector3(0, 100, 0), Vector3(10, 10, 10), Vector3(0, 0, 0), grass_color);
+		set_box(Vector3(0, 100, 0), Vector3(10, 10, 10), Vector3(0, 0, 0), grass_color);
+		set_box(Vector3(0, 100, 0), Vector3(10, 10, 10), Vector3(0, 0, 0), grass_color);
+		set_box(Vector3(0, 100, 0), Vector3(10, 10, 10), Vector3(0, 0, 0), grass_color);
+		set_box(Vector3(0, 100, 0), Vector3(10, 10, 10), Vector3(0, 0, 0), grass_color);
+		set_box(Vector3(0, 100, 0), Vector3(10, 10, 10), Vector3(0, 0, 0), grass_color);
+
+
+		//set_tree(Vector3(0, 100, 0), Vector3(1, 1.2f, 1), Vector3(0, 02, 0), 2.5f, 0.8f);
+		//set_tree(Vector3(0, 100, 0), Vector3(1, 1.2f, 1), Vector3(0, 02, 0), 2.5f, 0.8f);
+		//set_tree(Vector3(0, 100, 0), Vector3(1, 1.2f, 1), Vector3(0, 02, 0), 2.5f, 0.8f);
+		//set_tree(Vector3(0, 100, 0), Vector3(1, 1.2f, 1), Vector3(0, 76, 0), 1.2f, 0.8f);
+		//set_tree(Vector3(0, 100, 0), Vector3(1, 1.2f, 1), Vector3(0, 76, 0), 1.2f, 0.8f);
+		//set_tree(Vector3(0, 100, 0), Vector3(1, 1.2f, 1), Vector3(0, 76, 0), 1.2f, 0.8f);
+
+		//set_fence(Vector3(0,100,0), Vector3(1), Vector3(0, 0, 0));
+		//set_fence(Vector3(0,100,0), Vector3(1), Vector3(0, 0, 0));
+		//set_fence(Vector3(0,100,0), Vector3(1), Vector3(0, 0, 0));
+		//set_fence(Vector3(0,100,0), Vector3(1), Vector3(0, 0, 0));
+		//set_fence(Vector3(0,100,0), Vector3(1), Vector3(0, 0, 0));
+		//set_fence(Vector3(0,100,0), Vector3(1), Vector3(0, 0, 0));
+		//set_fence(Vector3(0,100,0), Vector3(1), Vector3(0, 0, 0));
+
+		{}
 
 		// goal&respown_areas
 		{
 			Gameobject* goal_and_respown_areas = Gameobject_manager::create("goal&respown_areas");
 			stage_parts.emplace_back(goal_and_respown_areas);
 
-			set_respown_area(Vector3(24, 9, 57), Vector3(14, 5, 15), Vector3(0), 2, Vector3(24, 50, 57), goal_and_respown_areas);
-			set_respown_area(Vector3(100, 18, 61), Vector3(16, 10, 19), Vector3(0), 3, Vector3(102, 50, 50), goal_and_respown_areas);
-			set_respown_area(Vector3(126, 16, 116), Vector3(24, 10, 10), Vector3(0), 4, Vector3(104, 50, 120), goal_and_respown_areas);
+			set_respown_area(Vector3(36, 18, 70), Vector3(34, 5, 25), Vector3(0), 1, Vector3(33, 50, 62), goal_and_respown_areas);
+			set_respown_area(Vector3(-37, 27, 35), Vector3(15, 10, 12), Vector3(0), 2, Vector3(-30, 50, 35), goal_and_respown_areas);
+			set_respown_area(Vector3(-36, 20, -113), Vector3(34, 20, 61), Vector3(0), 3, Vector3(-18, 50, -72), goal_and_respown_areas);
+			set_respown_area(Vector3(117, 20, -113), Vector3(34, 20, 55), Vector3(0), 4, Vector3(105, 50, -120), goal_and_respown_areas);
+			set_respown_area(Vector3(107, 52.5f, -189), Vector3(10, 20, 50), Vector3(0), 5, Vector3(100, 50, -158), goal_and_respown_areas);
 
-			set_goal_area(Vector3(104, 6, 224), Vector3(10, 2, 8), Vector3(0), Stage_types::demo, goal_and_respown_areas);
+			set_goal_area(Vector3(51, 51, -221), Vector3(20, 2, 20), Vector3(0), Stage_types::demo, goal_and_respown_areas);
 		}
 #endif
 

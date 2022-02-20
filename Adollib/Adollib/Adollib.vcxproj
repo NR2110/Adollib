@@ -163,6 +163,8 @@
     <ClInclude Include="..\Scripts\fall_object_manager.h" />
     <ClInclude Include="..\Scripts\input_changer.h" />
     <ClInclude Include="..\Scripts\kinematic_block.h" />
+    <ClInclude Include="..\Scripts\lever.h" />
+    <ClInclude Include="..\Scripts\move_block_from_2flags.h" />
     <ClInclude Include="..\Scripts\object_manager.h" />
     <ClInclude Include="..\Scripts\object_rotate.h" />
     <ClInclude Include="..\Scripts\player.h" />

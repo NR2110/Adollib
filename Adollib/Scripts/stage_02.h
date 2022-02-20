@@ -16,8 +16,9 @@ namespace Adollib {
 		const Vector3 base_color = Vector3(233, 225, 217) / 255.0f * 0.9f;
 		const Vector3 grass_color = Vector3(188, 214, 54) / 255.0f * 0.7f * 0.9f;
 		const Vector3 wood_color = Vector3(90, 47, 27) / 255.0f * 0.9f;
-		const Vector3 roof_color = Vector3(233, 225, 217) / 255.0f * 0.9f;
+		const Vector3 fence_color = Vector3(164, 107, 81) / 255.0f;
 		const Vector3 stair_color = Vector3(215, 205, 197) / 255.0f * 0.9f;
+		const Vector3 Yellow_color = Vector3(253, 255, 0) / 255.0f * 0.9f;
 
 		const Vector3 moveable_red = Vector3(1, 196 / 255.0f, 196 / 255.0f);
 		const Vector3 moveable_green = Vector3(196 / 255.0f, 1, 196 / 255.0f);
@@ -43,12 +44,25 @@ namespace Adollib {
 
 
 		Gameobject* set_buttan(const Vector3& pos, const Vector3& scale, const Vector3& rotate, Stage_parts::Stageparts_tagbit tag, Gameobject* pearent = nullptr, bool is_use_trigger = false);
+		Gameobject* set_lever(const Vector3& pos, const Vector3& scale, const Vector3& rotate,
+			Stage_parts::Stageparts_tagbit left_tag, Stage_parts::Stageparts_tagbit right_tag,
+			Gameobject* pearent = nullptr);
 		Gameobject* set_gimmickdoor(
 			const Vector3& start_pos, const Vector3& goal_pos,
 			const Vector3& start_rot, const Vector3& goal_rot,
 			float pos_speed, float rot_speed,
 			const Vector3& scale,
 			Stage_parts::Stageparts_tagbit tag,
+			const Vector3& color = Vector3(1, 1, 1),
+			Gameobject* pearent = nullptr
+		);
+		Collider* set_move_block_2flags(
+			const Vector3& left_pos, const Vector3& right_pos,
+			const Vector3& scale, const Vector3& rotate,
+			float time_pow,
+			float now_time,
+			Stage_parts::Stageparts_tagbit left_tag,
+			Stage_parts::Stageparts_tagbit right_tag,
 			const Vector3& color = Vector3(1, 1, 1),
 			Gameobject* pearent = nullptr
 		);

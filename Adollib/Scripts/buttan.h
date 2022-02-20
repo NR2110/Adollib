@@ -33,6 +33,11 @@ namespace Adollib{
 			void update() override {
 				constexpr float color_cheng_time = 5.5f;
 
+				float pearent_y_inve_scale = 1;
+				float pearent_y_scale = 1;
+				if (this_coll->gameobject->parent() != nullptr)pearent_y_scale = this_coll->gameobject->parent()->transform->scale.y;
+				pearent_y_inve_scale = 1 / pearent_y_scale;
+
 				if (is_use_trigger) {
 
 					// ‘O‚ÌƒtƒŒ[ƒ€‰Ÿ‚³‚ê‚Ä‚¢‚È‚¢‚Æ‚«
@@ -57,11 +62,11 @@ namespace Adollib{
 				// G‚ê‚Ä‚¢‚é‚Æ‚«button‚ğ‰º‚°‚é
 				if (this_coll->concoll_enter(Collider_tags::Human | Collider_tags::Kinematic_Stage)) {
 					// scale‚Ì’²®
-					transform->local_scale.y = ALClamp(transform->local_scale.y - 0.2f * Al_Global::second_per_frame, base_scale_y, base_scale_y + 0.2f);
+					transform->local_scale.y = ALClamp(transform->local_scale.y * pearent_y_scale - 0.2f * Al_Global::second_per_frame, base_scale_y, base_scale_y + 0.2f) * pearent_y_inve_scale;
 				}
 				else {
 					// scale‚Ì’²®
-					transform->local_scale.y = ALClamp(transform->local_scale.y + 0.2f * Al_Global::second_per_frame, base_scale_y, base_scale_y + 0.2f);
+					transform->local_scale.y = ALClamp(transform->local_scale.y * pearent_y_scale + 0.2f * Al_Global::second_per_frame, base_scale_y, base_scale_y + 0.2f) * pearent_y_inve_scale;
 				}
 
 				// player‚©“®‚­•¨‘Ì‚ÉG‚ê‚Ä‚¢‚½‚ç

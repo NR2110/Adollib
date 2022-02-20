@@ -138,6 +138,9 @@ namespace Adollib
 		void respown(); //respownèàóù
 		void set_Tpause(const Vector3& position, const Quaternion& orient);
 		void set_moveable(bool is_moveable);
+		void set_shadow_camera_pos(const Vector3& pos);
+		void set_shadow_camera_dir(const Vector3& dir);
+
 		void set_cameraptr(Camera* l_camera) { camera = l_camera; };
 		void set_input_changerptr(Input_changer* l_input_changer) { input_changer = l_input_changer; };
 

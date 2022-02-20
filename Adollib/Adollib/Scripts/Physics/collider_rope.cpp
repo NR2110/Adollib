@@ -109,7 +109,7 @@ void Collider_Rope::create_rope() {
 
 	constexpr float sructural_stretch = 0.10f;
 	//constexpr float sructural_shrink = 0.40f;
-	constexpr float sructural_shrink = 1;
+	constexpr float sructural_shrink = 0.5f;
 	constexpr float bending_stretch = 0.10f;
 	constexpr float bending_shrink = 0.1f;
 
@@ -301,7 +301,7 @@ void Collider_Rope::awake() {
 	// ‰Šú’l‚Ì’²®
 	Physics_manager::physicsParams.set_default_physics_data(default_physics_data);
 
-	default_physics_data.anglar_drag = 0.9f;
+	//default_physics_data.anglar_drag = 0.9f;
 	default_physics_data.dynamic_friction = 0;
 	default_physics_data.inertial_mass = 2;
 

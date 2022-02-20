@@ -70,6 +70,18 @@ namespace Adollib
 			players[i]->set_moveable(is_moveable);
 		}
 	}
+	void Player_manager::set_shadow_camera_pos(const Vector3& pos) {
+		for (int i = 0; i < 4; ++i) {
+			if (players[i] == nullptr)continue;
+			players[i]->set_shadow_camera_pos(pos);
+		}
+	}
+	void Player_manager::set_shadow_camera_dir(const Vector3& dir) {
+		for (int i = 0; i < 4; ++i) {
+			if (players[i] == nullptr)continue;
+			players[i]->set_shadow_camera_dir(dir);
+		}
+	}
 
 
 	void Player_manager::add_players(int num) {

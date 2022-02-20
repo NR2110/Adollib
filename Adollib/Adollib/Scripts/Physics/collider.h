@@ -82,6 +82,9 @@ namespace Adollib {
 			ALPphysics_ptr->set_old_angula_velocity(v);
 		}
 
+		// 指定した一点での速度
+		const Vector3 get_point_velocity(const Vector3& pos, bool is_local = false);
+
 		// アタッチされたjointの数
 		const int get_joint_count();
 		// 指定した番号にアタッチされているjointの情報を得る

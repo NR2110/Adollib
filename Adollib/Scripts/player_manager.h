@@ -22,6 +22,10 @@ namespace Adollib
 
 		void set_moveable(bool is_moveable);
 
+		void set_shadow_camera_pos(const Vector3& pos);
+
+		void set_shadow_camera_dir(const Vector3& dir);
+
 		//void add_player();
 		//void delete_player(int num);
 

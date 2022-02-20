@@ -58,6 +58,7 @@ namespace Adollib {
 						}
 						else {
 							//s‚«‰ß‚¬‚Ä‚¢‚È‚¯‚ê‚Î—Í‚ð‰Á‚¦‚é
+							if (this_coll->gameobject->parent() != nullptr)dir = vector3_quatrotate(dir, this_coll->gameobject->parent()->transform->orientation);
 							this_coll->linear_velocity(dir.unit_vect() * pos_speed);
 							this_coll->physics_data.is_moveable = true;
 						}
@@ -83,6 +84,7 @@ namespace Adollib {
 						}
 						else {
 							//s‚«‰ß‚¬‚Ä‚¢‚È‚¯‚ê‚Î—Í‚ð‰Á‚¦‚é
+							if (this_coll->gameobject->parent() != nullptr)dir = vector3_quatrotate(dir, this_coll->gameobject->parent()->transform->orientation);
 							this_coll->linear_velocity(dir.unit_vect() * pos_speed);
 							this_coll->physics_data.is_moveable = true;
 						}

@@ -181,7 +181,7 @@ void ALP_Physics::apply_external_force(float duration, const float timeratio_60)
 		//if (is_fallable) linear_acceleration += Vector3(0, -Physics_manager::physicsParams.gravity, 0); //—Ž‰º
 		if (is_fallable && Physics_manager::physicsParams.gravity != 0) {
 			if(ALPcollider->is_adapt_shape_for_copy_transform_gameobject)
-				linear_acceleration += Vector3(0, -4, 0); //—Ž‰º
+				linear_acceleration += Vector3(0, -6, 0); //—Ž‰º
 			else
 				linear_acceleration += Vector3(0, -Physics_manager::physicsParams.gravity, 0); //—Ž‰º
 		}

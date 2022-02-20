@@ -64,6 +64,23 @@ namespace Adollib
 		////coll->physics_data.is_hitable = false;
 		//coll->physics_data.is_moveable = false;
 
+					// ‰ñ“]gimmick
+		{
+			// ŠK’i
+			{
+				set_box(Vector3(25, -2, 10), Vector3(65, 2, 30), Vector3(0), Vector3(188, 214, 54) / 255.0f * 0.8f * 0.9f);
+				set_box(Vector3(-15, 2, 23), Vector3(15, 2, 15), Vector3(0, 0, 0), base_color);
+				set_box(Vector3(28, 2, 29.5f), Vector3(28, 2, 8.5f), Vector3(0, 0, 0), base_color);
+				set_box(Vector3(28, 1, 24), Vector3(28, 2, 8), Vector3(0, 0, 0), base_color);
+				set_box(Vector3(28, 0, 20), Vector3(28, 2, 8), Vector3(0, 0, 0), base_color);
+				set_box(Vector3(28, -1, 16), Vector3(28, 2, 8), Vector3(0, 0, 0), base_color);
+
+			}
+
+			set_buttan(Vector3(74, 11.2f, 76), Vector3(4, 0.9f, 4), Vector3(0, 0, 0), Stage_parts::Stageparts_tags::Flag_0, nullptr, false);
+			set_rotate_block(Vector3(102, 25.0f, 71), Vector3(5, 15, 15), Vector3(0, 90, 0), Stage_parts::Stageparts_tags::Flag_0, Vector3(0, 0, -1), 1, 1, base_color,nullptr);
+		}
+
 #else
 
 		// first_zone
@@ -164,6 +181,7 @@ namespace Adollib
 
 							), base_size, Vector3(0, 0, 0), moveable_green, tutrial_block, false);
 							coll->physics_data.inertial_mass = 5;
+							coll->physics_data.angula_sleep_threrhold = 0;
 						}
 					}
 				}
@@ -256,6 +274,7 @@ namespace Adollib
 
 							), base_size, Vector3(0, 0, 0), moveable_red, tutrial_block, false);
 							coll->physics_data.inertial_mass = 5;
+							coll->physics_data.angula_sleep_threrhold = 0;
 						}
 					}
 				}
@@ -302,9 +321,9 @@ namespace Adollib
 				//set_box(Vector3(216,13.0f,70), Vector3(6, 1.0f, 4), Vector3(0), moveable_red);
 				//set_box(Vector3(216,12.5f,62), Vector3(6, 0.5f, 4), Vector3(0), moveable_red);
 
-				set_box(Vector3(227, 11, 64), Vector3(13, 12, 1.1f), Vector3(0), base_color, tute_up);
-				set_box(Vector3(181, 17, 64), Vector3(25, 6, 1.1f), Vector3(0), base_color, tute_up);
-				set_box(Vector3(198, 27, 64), Vector3(42, 4, 1.1f), Vector3(0), base_color, tute_up);
+				set_box(Vector3(227, 11, 64), Vector3(13, 12, 1), Vector3(0), base_color, tute_up);
+				set_box(Vector3(181, 17, 64), Vector3(25, 6, 1), Vector3(0), base_color, tute_up);
+				set_box(Vector3(198, 27, 64), Vector3(42, 4, 1), Vector3(0), base_color, tute_up);
 
 				set_buttan(Vector3(199, 19, 64.4f), Vector3(2, 0.9f, 2), Vector3(90, 0, 0), Stage_parts::Stageparts_tags::Flag_2, tute_up, true);
 				set_gimmickdoor(Vector3(212, 19, 64), Vector3(214, 19, 64),
@@ -351,14 +370,6 @@ namespace Adollib
 				set_pillar(Vector3(146, 16.8f, 141), Vector3(1), Vector3(0), tute_up, 2.5f, 5, false);
 			}
 
-			set_box(Vector3(100, 100, 100), Vector3(5, 5, 5), Vector3(0), moveable_red);
-			set_box(Vector3(100, 100, 100), Vector3(5, 5, 5), Vector3(0), moveable_red);
-			set_box(Vector3(100, 100, 100), Vector3(5, 5, 5), Vector3(0), moveable_red);
-
-			set_tree(Vector3(100, 100, 100), Vector3(1, 1.2f, 1), Vector3(0, 12, 0), 1.5f, 0.8f);
-			set_tree(Vector3(100, 100, 100), Vector3(1, 1.2f, 1), Vector3(0, 12, 0), 1.5f, 0.8f);
-			set_tree(Vector3(100, 100, 100), Vector3(1, 1.2f, 1), Vector3(0, 12, 0), 1.5f, 0.8f);
-
 
 		}
 
@@ -391,7 +402,7 @@ namespace Adollib
 				set_box(Vector3(134, 0, 13), Vector3(28, 4, 11), Vector3(0), base_color, floor_pearent);
 				set_box(Vector3(128, 2, 32), Vector3(22, 6, 8), Vector3(0), grass_color, floor_pearent);
 				set_box(Vector3(128, 2, 49), Vector3(22, 6, 9), Vector3(0), base_color, floor_pearent);
-				set_box(Vector3(116, 2, 78), Vector3(34, 6, 20), Vector3(0), grass_color, floor_pearent);
+				set_box(Vector3(117, 2, 78), Vector3(33, 6, 20), Vector3(0), grass_color, floor_pearent);
 				set_box(Vector3(83.5f, 10, 90.0f), Vector3(1, 2, 8), Vector3(0), base_color, floor_pearent);
 
 				set_box(Vector3(156, 2.0f, 69), Vector3(6, 6, 29), Vector3(0), base_color, floor_pearent);

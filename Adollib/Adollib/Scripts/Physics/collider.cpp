@@ -51,6 +51,23 @@ void Collider::add_angula_acc(const Vector3& acc) {
 #pragma endregion
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+// 指定した一点での速度
+const Vector3 Collider::get_point_velocity(const Vector3& pos, bool is_local) {
+	Vector3 local_pos = pos;
+	if (is_local == false) {
+		local_pos = pos - transform->position;
+	}
+	Vector3 axis = angula_velocity().unit_vect();
+
+	Vector3 r_vec = local_pos - axis * vector3_dot(local_pos, axis);
+	float angle_pow = sinf(vector3_radian(angula_velocity().unit_vect(), local_pos.unit_vect())) * angula_velocity().norm_sqr() * r_vec.norm_sqr();
+	if (angle_pow == 0)return linear_velocity();
+
+	Vector3 angle_dir = vector3_cross(angula_velocity().unit_vect(), r_vec.unit_vect());
+
+	return linear_velocity() + angle_dir * angle_pow;
+}
+
 // アタッチされたjointの数
 const int Collider::get_joint_count() {
 	return ALPcollider_ptr->get_joints().size();

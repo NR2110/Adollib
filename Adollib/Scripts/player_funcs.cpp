@@ -10,6 +10,7 @@
 
 #include "../Adollib/Scripts/Renderer/material_manager.h"
 #include "../Adollib/Scripts/Renderer/rope_renderer.h"
+#include "../Adollib/Scripts/Renderer/directional_shadow.h"
 
 #include "stage_manager.h"
 #include "stage_base.h"
@@ -611,15 +612,25 @@ void Player::push_waist_for_stand() {
 			constexpr float mass = 10 * 4.5f; //パーツによって質量がまちまちなので だいたいの質量
 			constexpr float stand_pow = 1000;
 
-			Vector3 gravity_pow = Vector3(0, 1, 0) * Physics_function::Physics_manager::physicsParams.gravity * mass; //playerが滞空出来る力
-			Vector3 force = Vector3(0, 1, 0) * (onground_dis * dot - dis) * stand_pow; //めり込みを治す力
-			Vector3 fall_force = Vector3(0, 1, 0) * Waist_collider->linear_velocity().y * mass;
+			Vector3 normal = Vector3(0, 1, 0);
+			float gravity_pow = Physics_function::Physics_manager::physicsParams.gravity * mass; //playerが滞空出来る力
+			float force = (onground_dis * dot - dis) * stand_pow; //めり込みを治す力
+			float fall_force = Waist_collider->linear_velocity().y * mass;
 
-			Waist_collider->add_force(gravity_pow + force);
+			Waist_collider->add_force(normal * (gravity_pow + force));
 
-			//if(onground_ray_data.coll->physics_data.inertial_mass > 50)
-			onground_ray_data.coll->add_force(-(gravity_pow + fall_force), onground_contactpoint);
+			// 乗っているものに常に力をかける
+			if (onground_collider->physics_data.is_kinmatic_linear == true)
+				onground_ray_data.coll->add_force(normal * -(gravity_pow + fall_force), onground_contactpoint);
 
+			Vector3 onground_velocity = onground_ray_data.coll->get_point_velocity(onground_contactpoint, false);
+			onground_velocity.y = 0;
+			if (onground_velocity.norm() != 0) {
+				for (int i = 0; i < Human_collider_size; ++i) {
+					Human_colliders[i]->add_force(onground_velocity * 10);
+				}
+				onground_ray_data.coll->get_point_velocity(onground_contactpoint, false);
+			}
 		}
 	}
 
@@ -657,7 +668,7 @@ void Player::linear_move() {
 		}
 
 		if (onground_collider != nullptr) {
-			if (onground_collider->physics_data.inertial_mass > 50) //歩くときに小さな石ころに全力を加えない
+			if (onground_collider->physics_data.inertial_mass > 50 && onground_collider->physics_data.is_kinmatic_linear == true) //歩くときに小さな石ころに全力を加えない
 				onground_collider->add_force(-dir * waist_move_pow * move_pow, onground_contactpoint);
 		}
 
@@ -804,6 +815,7 @@ void Player::make_jump() {
 
 			// 足元の物体に力を加える
 			float mass = 1500;
+			if(onground_collider->physics_data.is_kinmatic_linear == true)
 			onground_collider->add_force(Vector3(0, -mass, 0) * jump_y_power, onground_contactpoint);
 
 
@@ -1111,3 +1123,19 @@ void Player::set_moveable(bool is_moveable) {
 		Human_colliders[i]->physics_data.is_hitable = is_moveable;
 	}
 }
+void Player::set_shadow_camera_pos(const Vector3& pos) {
+	for (auto child : *gameobject->children()){
+		auto comp = child->findComponent<Camera_component>();
+		if (comp == nullptr)continue;
+		comp->directional_shadow->position = pos;
+	}
+
+}
+void Player::set_shadow_camera_dir(const Vector3& dir) {
+	for (auto child : *gameobject->children()) {
+		auto comp = child->findComponent<Camera_component>();
+		if (comp == nullptr)continue;
+		comp->directional_shadow->direction = dir;
+	}
+}
+
