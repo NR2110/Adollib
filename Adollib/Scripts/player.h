@@ -60,6 +60,7 @@ namespace Adollib
 		bool is_gunyatto = false; //trueの時、体がぐにゃっとする
 		float gunyatto_pow = 1; //体を起こす力に掛ける値
 		float hand_gunyatto_pow = 1; //腕のつかみなどの情報から求たgunyatto_powへのbuffer
+		float onground_gunyatto_pow = 1; //接地判定からの係数
 
 		// つかみ関係
 		Joint_base* catch_right_joint = nullptr; //右手がつかんでいるjoint

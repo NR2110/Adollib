@@ -2,9 +2,16 @@
 #include "../Object/gameobject_manager.h"
 
 #include "../../../Scripts/scene_game_all.h"
+#include "../../Scripts/Main/mono_audio.h"
+
 namespace Adollib {
 
 	void Scene_game::awake() {
+		ALKLib::MonoAudio::StopMusic(0);
+		ALKLib::MonoAudio::StopMusic(1);
+		ALKLib::MonoAudio::StopMusic(2);
+		ALKLib::MonoAudio::StopMusic(3);
+		ALKLib::MonoAudio::PlayMusic(1, true);
 
 		//auto player_manager = Gameobject_manager::find("Player_manager", Scenelist::scene_player)->findComponent<Player_manager>();
 		//player_manager->add_players(1);

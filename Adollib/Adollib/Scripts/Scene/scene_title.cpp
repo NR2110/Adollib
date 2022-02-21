@@ -6,10 +6,16 @@
 #include "../Renderer/renderer_base.h"
 
 #include "../../../Scripts/scene_title_all.h"
+#include "../../Scripts/Main/mono_audio.h"
 
 namespace Adollib {
 
 	void Scene_title::initialize() {
+		ALKLib::MonoAudio::StopMusic(0);
+		ALKLib::MonoAudio::StopMusic(1);
+		ALKLib::MonoAudio::StopMusic(2);
+		ALKLib::MonoAudio::StopMusic(3);
+		ALKLib::MonoAudio::PlayMusic(0, true);
 
 		{
 			Gameobject* camera = Gameobject_manager::create("camera");

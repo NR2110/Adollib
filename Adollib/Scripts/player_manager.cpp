@@ -42,6 +42,7 @@ namespace Adollib
 		//Quaternion player_start_rotate = quaternion_from_euler(20, 180, 0);
 
 		//add_player(0, player_start_pos, Vector3(20, 180, 0), Vector3(1), Vector3(0.5f));
+
 		add_players(1);
 	}
 

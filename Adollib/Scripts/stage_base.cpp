@@ -202,6 +202,7 @@ Gameobject* Stage_base::set_goal_area(const Vector3& pos, const Vector3& size, c
 
 	auto coll = go->addComponent<Collider>();
 	coll->add_shape<Box>();
+	coll->tag |= Collider_tags::Goal_stage;
 	coll->physics_data.is_hitable = false;
 	coll->physics_data.is_moveable = false;
 	coll->physics_data.is_static = true;

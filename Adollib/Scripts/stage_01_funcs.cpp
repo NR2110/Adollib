@@ -84,7 +84,7 @@ namespace Adollib
 		coll->physics_data.inertial_mass = 60 * y_scale * tan_scale;
 		coll->tag = Collider_tags::Stage | Collider_tags::Kinematic_Stage | Collider_tags::Caera_not_sunk_Stage ;
 		coll->physics_data.angula_sleep_threrhold = 0;
-		coll->physics_data.is_moveable = false;
+		//coll->physics_data.is_moveable = false;
 		//coll->tag = Collider_tags::Stage | Collider_tags::Kinematic_Stage ;
 
 		for (int i = 0; i < Tree_size; i++) {

@@ -30,6 +30,7 @@ namespace Adollib {
 		static const Collider_tagbit Static_Stage = (1 << 21);
 		static const Collider_tagbit Kinematic_Stage = (1 << 22);
 		static const Collider_tagbit Caera_not_sunk_Stage = (1 << 23);
+		static const Collider_tagbit Goal_stage = (1 << 24);
 
 		static const Collider_tagbit Title = (1 << 28);
 

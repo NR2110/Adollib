@@ -84,7 +84,7 @@ namespace Adollib
 		Box* boxes[Tree_size];
 		Collider* coll = tree->addComponent<Collider>();
 		coll->physics_data.inertial_mass = 60 * y_scale * tan_scale;
-		coll->physics_data.is_moveable = false;
+		//coll->physics_data.is_moveable = false;
 
 		coll->tag = Collider_tags::Stage | Collider_tags::Kinematic_Stage | Collider_tags::Caera_not_sunk_Stage;
 

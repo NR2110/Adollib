@@ -388,7 +388,7 @@ void Player::shot_rope() {
 		if (Lblock_hand_joint)Joint::delete_joint(Lblock_hand_joint);
 
 		// 始点をarmの座標にrope GOの生成
-		Lrope_go = Gameobject_manager::create("rope",Scenelist::scene_player);
+		Lrope_go = Gameobject_manager::create("rope", Scenelist::scene_player);
 		Lrope_go->transform->local_pos = arm_ray.position;
 
 		// colliderのアタッチ&初期設定
@@ -535,7 +535,7 @@ void Player::add_pow_for_stand() {
 	// 今の向き
 	Vector3 player_vec = vector3_quatrotate(Vector3(0, 0, -1), rotate);
 
-	if (is_gunyatto == false)
+	if (is_gunyatto == false && gunyatto_pow != 0)
 	{
 		{
 			//腰をたたせる
@@ -621,15 +621,20 @@ void Player::push_waist_for_stand() {
 
 			// 乗っているものに常に力をかける
 			if (onground_collider->physics_data.is_kinmatic_linear == true)
-				onground_ray_data.coll->add_force(normal * -(gravity_pow + fall_force), onground_contactpoint);
+				onground_collider->add_force(normal * -(gravity_pow + fall_force), onground_contactpoint);
 
-			Vector3 onground_velocity = onground_ray_data.coll->get_point_velocity(onground_contactpoint, false);
-			onground_velocity.y = 0;
-			if (onground_velocity.norm() != 0) {
-				for (int i = 0; i < Human_collider_size; ++i) {
-					Human_colliders[i]->add_force(onground_velocity * 10);
+			if (
+				(catch_right_joint == nullptr || catch_right_joint->get_colliderB() != onground_collider) && //右手で持っているものではない
+				(catch_left_joint == nullptr || catch_left_joint->get_colliderB() != onground_collider) &&    //左手で持っているものではない
+				(Lblock_rope_joint == nullptr || Lblock_rope_joint->get_colliderA() != onground_collider) //ropeでつかんでいるものではない
+			){
+				Vector3 onground_velocity = onground_collider->get_point_velocity(onground_contactpoint, false);
+				onground_velocity.y = 0;
+				if (onground_velocity.norm() != 0) {
+					for (int i = 0; i < Human_collider_size; ++i) {
+						Human_colliders[i]->add_force(onground_velocity * 10);
+					}
 				}
-				onground_ray_data.coll->get_point_velocity(onground_contactpoint, false);
 			}
 		}
 	}
@@ -777,7 +782,7 @@ void Player::make_jump() {
 	bool is_jumpable = false;
 	if (onground_collider != nullptr && //接地している
 		(catch_right_joint == nullptr || catch_right_joint->get_colliderB() != onground_collider) && //右手で持っているものではない
-		(catch_left_joint == nullptr || catch_left_joint->get_colliderB() != onground_collider)    //左手で持っているものではない
+		(catch_left_joint == nullptr || catch_left_joint->get_colliderB() != onground_collider)
 		)is_jumpable = true;
 
 	if (is_jumping == true)coyote += Al_Global::second_per_frame;
@@ -815,8 +820,8 @@ void Player::make_jump() {
 
 			// 足元の物体に力を加える
 			float mass = 1500;
-			if(onground_collider->physics_data.is_kinmatic_linear == true)
-			onground_collider->add_force(Vector3(0, -mass, 0) * jump_y_power, onground_contactpoint);
+			if (onground_collider->physics_data.is_kinmatic_linear == true)
+				onground_collider->add_force(Vector3(0, -mass, 0) * jump_y_power, onground_contactpoint);
 
 
 			is_jumping = true;
@@ -850,6 +855,32 @@ bool Player::check_respown() {
 		}
 
 		respown();
+	}
+
+	// goalに触れたとき gunyattoさせる つかんでいるもの、ropeを強制的に離してgunyattoさせる
+	if (Waist_collider->concoll_enter(Collider_tags::Goal_stage)) {
+		// 持っているものを離す
+		Joint_base** joints[2] = {
+			&catch_left_joint,
+			&catch_right_joint
+		};
+		for (int i = 0; i < 2; i++) {
+			Joint_base*& joint = *joints[i];
+			if (joint != nullptr) {
+				Joint::delete_joint(joint);
+			}
+		}
+
+		// ropeの削除
+		{
+			if (Lrope_go)Gameobject_manager::deleteGameobject(Lrope_go);
+			if (Lblock_hand_joint)Joint::delete_joint(Lblock_hand_joint);
+
+			Lrope_go = nullptr;
+			Lblock_hand_joint = nullptr;
+		}
+
+		respown_timer = 1;
 	}
 
 	// respowntimerが>0なら respown中
@@ -964,6 +995,7 @@ void Player::update_onground() {
 
 }
 
+// gunyattoさせるかどうかの更新
 void Player::update_gnyat_pow() {
 	float gunyatto_pows[3] = { 1,1,1 };
 	//gnyat_pow = 1;
@@ -982,7 +1014,6 @@ void Player::update_gnyat_pow() {
 		if (vector3_dot(Vector3(0, -1, 0), vector3_quatrotate(Vector3(0, -1, 0), Waist->transform->orientation)) > 0.7f)
 			hand_gunyatto_pow += 3 * time->deltaTime(); //しっかりさせていく
 	}
-
 	else if (catch_left_joint == nullptr || catch_right_joint == nullptr) {
 		// 片方でもつかんでいないとき
 		hand_gunyatto_pow = 1; //しっかりする
@@ -1000,12 +1031,15 @@ void Player::update_gnyat_pow() {
 		onground_collider == nullptr
 		)gunyatto_pows[1] = 0.1f;
 
+	if (onground_collider == nullptr && Lrope_go == nullptr)onground_gunyatto_pow -= time->deltaTime();
+	else onground_gunyatto_pow = 1.4f;
+
 	//if (
 	//	(Waist_collider->concoll_enter(Collider_tags::Stage)) &&
 	//	onground_collider == nullptr
 	//	)gunyatto_pows[2] = 0.1f;
 
-	gunyatto_pow = ALClamp(hand_gunyatto_pow * ((gunyatto_pows[0] * gunyatto_pows[1] * gunyatto_pows[2])), 0, 1);
+	gunyatto_pow = ALClamp(ALClamp(onground_gunyatto_pow, 0, 1) * hand_gunyatto_pow * ((gunyatto_pows[0] * gunyatto_pows[1] * gunyatto_pows[2])), 0, 1);
 	////両手がstaticなものを持っているとき、ぐにゃっと
 	//if ((catch_left_joint != nullptr && catch_left_joint->get_colliderB()->tag & Collider_tags::Static_Stage) &&
 	//	(catch_right_joint != nullptr && catch_right_joint->get_colliderB()->tag & Collider_tags::Static_Stage) &&
@@ -1124,7 +1158,7 @@ void Player::set_moveable(bool is_moveable) {
 	}
 }
 void Player::set_shadow_camera_pos(const Vector3& pos) {
-	for (auto child : *gameobject->children()){
+	for (auto child : *gameobject->children()) {
 		auto comp = child->findComponent<Camera_component>();
 		if (comp == nullptr)continue;
 		comp->directional_shadow->position = pos;

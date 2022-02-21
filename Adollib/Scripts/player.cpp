@@ -114,7 +114,6 @@ namespace Adollib
 
 		player_mterial_0 = Material_manager::find_material(std::string("player_material_") + std::to_string(player_num) + std::string("_0"));
 		player_mterial_1 = Material_manager::find_material(std::string("player_material_") + std::to_string(player_num) + std::string("_1"));
-		//update();
 
 	}
 

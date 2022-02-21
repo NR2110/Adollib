@@ -173,6 +173,12 @@
     <Filter Include="ソース ファイル\scene_game\stage\parts\gimmick">
       <UniqueIdentifier>{23b33dd7-e631-42e8-99b7-be63c4970c3d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00_Adollib\44_render\shader\hlsl\billboard">
+      <UniqueIdentifier>{cb90bacb-7bc0-4af8-bf89-8b7d7f6e3d9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Adollib\00_main\audio">
+      <UniqueIdentifier>{4acc996e-ba03-4945-b278-c30f50df5a8f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Scripts\player.cpp">
@@ -475,9 +481,6 @@
     <ClCompile Include="Scripts\Renderer\UI_renderer.cpp">
       <Filter>00_Adollib\44_render\renderer</Filter>
     </ClCompile>
-    <ClCompile Include="..\Scripts\tutrial_stage01_move_camera_catch.h.cpp">
-      <Filter>ソース ファイル\scene_player\tutrial</Filter>
-    </ClCompile>
     <ClCompile Include="..\Scripts\tutrial_manager.cpp">
       <Filter>ソース ファイル\scene_player\tutrial</Filter>
     </ClCompile>
@@ -486,6 +489,18 @@
     </ClCompile>
     <ClCompile Include="..\Scripts\stage_02_funcs.cpp">
       <Filter>ソース ファイル\scene_game\stage\stage\stage_02</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\tutrial_stage01_handdir_is_cameradir.cpp">
+      <Filter>ソース ファイル\scene_player\tutrial</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\tutrial_stage01_move_camera_catch.cpp">
+      <Filter>ソース ファイル\scene_player\tutrial</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Renderer\billboard_renderer.cpp">
+      <Filter>00_Adollib\44_render\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Main\mono_audio.cpp">
+      <Filter>00_Adollib\00_main\audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -966,6 +981,15 @@
     <ClInclude Include="..\Scripts\move_block_from_2flags.h">
       <Filter>ソース ファイル\scene_game\stage\parts\gimmick</Filter>
     </ClInclude>
+    <ClInclude Include="..\Scripts\tutrial_stage01_handdir_is_cameradir.h">
+      <Filter>ソース ファイル\scene_player\tutrial</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\billboard_renderer.h">
+      <Filter>00_Adollib\44_render\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Main\mono_audio.h">
+      <Filter>00_Adollib\00_main\audio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
@@ -1016,6 +1040,9 @@
     </None>
     <None Include="DefaultShader\dither_noshadow.hlsli">
       <Filter>00_Adollib\44_render\shader\hlsl\dither</Filter>
+    </None>
+    <None Include="DefaultShader\billboard.hlsli">
+      <Filter>00_Adollib\44_render\shader\hlsl\billboard</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1087,6 +1114,12 @@
     </FxCompile>
     <FxCompile Include="DefaultShader\default_ps_originalcolor.hlsl">
       <Filter>00_Adollib\44_render\shader\hlsl\default</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\billboard_ps.hlsl">
+      <Filter>00_Adollib\44_render\shader\hlsl\billboard</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\billboard_vs.hlsl">
+      <Filter>00_Adollib\44_render\shader\hlsl\billboard</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

@@ -21,6 +21,8 @@
 
 #include "../Math/math.h"
 
+#include "mono_audio.h"
+
 using namespace Adollib;
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wparam, LPARAM lparam);
@@ -136,6 +138,8 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 
 		return 0;
 	}
+	ALKLib::MonoAudio::awake();
+	ALKLib::MonoAudio::Init();
 
 	//ÉÅÉCÉìÉãÅ[Év
 	MSG hMsg = { 0 };
@@ -197,6 +201,7 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 		}
 	}
 
+	ALKLib::MonoAudio::destroy();
 	loop.destroy();
 	Systems::Release();
 

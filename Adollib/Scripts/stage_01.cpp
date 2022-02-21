@@ -301,23 +301,22 @@ namespace Adollib
 				set_box(Vector3(168, 9.4f, 123), Vector3(12, 7.4f, 20), Vector3(0), base_color, tute_up);
 
 
-				set_box(Vector3(172, 18, 122), Vector3(16, 6, 5), Vector3(0), grass_color, tute_up);
-				set_box(Vector3(205, 18, 122), Vector3(17, 6, 5), Vector3(0), grass_color, tute_up);
-				set_box(Vector3(172, 18, 85), Vector3(16, 6, 20), Vector3(0), grass_color, tute_up);
-				set_box(Vector3(167, 18, 111), Vector3(11, 6, 6), Vector3(0), grass_color, tute_up);
+				set_box(Vector3(172, 17, 122), Vector3(16, 6, 5), Vector3(0), grass_color, tute_up);
+				set_box(Vector3(205, 17, 122), Vector3(17, 6, 5), Vector3(0), grass_color, tute_up);
+				set_box(Vector3(172, 17, 85), Vector3(16, 6, 20), Vector3(0), grass_color, tute_up);
+				set_box(Vector3(167, 17, 111), Vector3(11, 6, 6), Vector3(0), grass_color, tute_up);
 				set_box(Vector3(214, 20.4f, 135), Vector3(8, 3.6f, 8), Vector3(0), grass_color, tute_up);
 				set_box(Vector3(201, 9.4f, 135), Vector3(21, 7.4f, 8), Vector3(0), base_color, tute_up);
 				set_box(Vector3(205, 13.5f, 84), Vector3(17, 1.5f, 21), Vector3(0), wood_color, tute_up);
 
 				// 階段
-				set_box(Vector3(182, 17.5f, 111), Vector3(4, 5.5f, 6), Vector3(0), base_color, tute_up);
-				set_box(Vector3(190, 17.0f, 111), Vector3(4, 5.0f, 6), Vector3(0), base_color, tute_up);
-				set_box(Vector3(198, 16.5f, 111), Vector3(4, 4.5f, 6), Vector3(0), base_color, tute_up);
-				set_box(Vector3(206, 16.0f, 111), Vector3(4, 4.0f, 6), Vector3(0), base_color, tute_up);
-				set_box(Vector3(216, 15.5f, 111), Vector3(6, 3.5f, 6), Vector3(0), base_color, tute_up);
-				set_box(Vector3(216, 16.5f, 101), Vector3(6, 1.5f, 4), Vector3(0), base_color, tute_up);
-				set_box(Vector3(216, 16.0f, 93), Vector3(6, 1.0f, 4), Vector3(0), base_color, tute_up);
-				set_box(Vector3(216, 15.5f, 85), Vector3(6, 0.5f, 4), Vector3(0), base_color, tute_up);
+				set_box(Vector3(182, 16.5f, 111), Vector3(4, 5.5f, 6), Vector3(0), base_color, tute_up);
+				set_box(Vector3(190, 16.0f, 111), Vector3(4, 5.0f, 6), Vector3(0), base_color, tute_up);
+				set_box(Vector3(198, 15.5f, 111), Vector3(4, 4.5f, 6), Vector3(0), base_color, tute_up);
+				set_box(Vector3(206, 15.0f, 111), Vector3(4, 4.0f, 6), Vector3(0), base_color, tute_up);
+				set_box(Vector3(216, 14.5f, 111), Vector3(6, 3.5f, 6), Vector3(0), base_color, tute_up);
+				set_box(Vector3(216, 16.0f, 101), Vector3(6, 1.0f, 4), Vector3(0), base_color, tute_up);
+				set_box(Vector3(216, 15.5f, 93), Vector3(6, 0.5f, 4), Vector3(0), base_color, tute_up);
 				//set_box(Vector3(216,13.0f,70), Vector3(6, 1.0f, 4), Vector3(0), moveable_red);
 				//set_box(Vector3(216,12.5f,62), Vector3(6, 0.5f, 4), Vector3(0), moveable_red);
 
@@ -351,23 +350,50 @@ namespace Adollib
 				set_tree(Vector3(193, 15, 88), Vector3(1, 1.2f, 1), Vector3(0, 12, 0), 1.2f, 0.8f, tute_up);
 				set_tree(Vector3(193, 15, 98), Vector3(1, 1.2f, 1), Vector3(0, 12, 0), 1.2f, 0.8f, tute_up);
 
-				set_fence(Vector3(186, 24, 71), Vector3(1), Vector3(0, 90, 0), tute_up);
-				set_fence(Vector3(186, 24, 83), Vector3(1), Vector3(0, 90, 0), tute_up);
-				set_fence(Vector3(186, 24, 95), Vector3(1), Vector3(0, 90, 0), tute_up);
-				set_pillar(Vector3(186, 24, 67), Vector3(1), Vector3(0), tute_up, 2.5f, 5, false);
-				set_pillar(Vector3(186, 24, 103), Vector3(1), Vector3(0), tute_up, 2.5f, 5, false);
+				set_fence(Vector3(186, 23, 71), Vector3(1), Vector3(0, 90, 0), tute_up);
+				set_fence(Vector3(186, 23, 83), Vector3(1), Vector3(0, 90, 0), tute_up);
+				set_fence(Vector3(186, 23, 95), Vector3(1), Vector3(0, 90, 0), tute_up);
+				set_pillar(Vector3(186, 23, 67), Vector3(1), Vector3(0), tute_up, 2.5f, 5, false);
+				set_pillar(Vector3(186, 23, 103), Vector3(1), Vector3(0), tute_up, 2.5f, 5, false);
 
-				set_fence(Vector3(166, 24, 125), Vector3(1), Vector3(0, 0, 0), tute_up);
-				set_fence(Vector3(178, 24, 125), Vector3(1), Vector3(0, 0, 0), tute_up);
-				set_fence(Vector3(190, 24, 125), Vector3(1), Vector3(0, 0, 0), tute_up);
-				set_fence(Vector3(202, 24, 125), Vector3(1), Vector3(0, 0, 0), tute_up);
-				set_pillar(Vector3(158, 24, 125), Vector3(1), Vector3(0), tute_up, 2.5f, 5, false);
-				set_pillar(Vector3(208, 24, 125), Vector3(1), Vector3(0), tute_up, 2.5f, 5, false);
+				set_fence(Vector3(166, 23, 125), Vector3(1), Vector3(0, 0, 0), tute_up);
+				set_fence(Vector3(178, 23, 125), Vector3(1), Vector3(0, 0, 0), tute_up);
+				set_fence(Vector3(190, 23, 125), Vector3(1), Vector3(0, 0, 0), tute_up);
+				set_fence(Vector3(202, 23, 125), Vector3(1), Vector3(0, 0, 0), tute_up);
+				set_pillar(Vector3(158, 23, 125), Vector3(1), Vector3(0), tute_up, 2.5f, 5, false);
+				set_pillar(Vector3(208, 23, 125), Vector3(1), Vector3(0), tute_up, 2.5f, 5, false);
 
 
 				set_fence(Vector3(146, 16.8, 133), Vector3(1), Vector3(0, 90, 0), tute_up);
 				set_pillar(Vector3(146, 16.8f, 125), Vector3(1), Vector3(0), tute_up, 2.5f, 5, false);
 				set_pillar(Vector3(146, 16.8f, 141), Vector3(1), Vector3(0), tute_up, 2.5f, 5, false);
+
+				// 適当なピラミッド
+				{
+					Gameobject* tutrial_block = Gameobject_manager::create("pyramid");
+					second_zone->add_child(tutrial_block);
+					tutrial_block->transform->local_pos = Vector3(138, 12, 116);
+
+					int phyramid_size = 4;
+					Vector3 base_size = Vector3(2, 1.5f, 2);
+					Vector3 base_pos = Vector3(0);
+
+					for (int y = 0; y < phyramid_size; ++y) {
+						for (int x = 0; x < phyramid_size - y; ++x) {
+							for (int z = 0; z < phyramid_size - y; ++z) {
+
+								auto coll = set_box(base_pos + Vector3(
+									(base_size.x * 2 + 0.2f) * x - ((base_size.x * 2 + 0.2f) * (phyramid_size - y) * 0.5f),
+									(base_size.y * 2 + 0) * y + base_size.y,
+									(base_size.z * 2 + 0.2f) * z - ((base_size.z * 2 + 0.2f) * (phyramid_size - y) * 0.5f)
+
+								), base_size, Vector3(0, 0, 0), moveable_blue, tutrial_block, false);
+								coll->physics_data.inertial_mass = 8;
+								coll->physics_data.angula_sleep_threrhold = 0;
+							}
+						}
+					}
+				}
 			}
 
 

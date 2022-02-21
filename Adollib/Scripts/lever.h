@@ -40,7 +40,7 @@ namespace Adollib {
 				this_coll->add_torque(rot_axis * fabsf(transform->orientation.radian() * 1000));
 
 				// lever‚ª‚ ‚Ü‚è“|‚ê‚Ä‚¢‚È‚¯‚ê‚Îflag‚ð—§‚Ä‚¸‚Éreturn
-				if (fabsf(vector3_dot(base_dir, now_dir)) > 0.9f)return;
+				if (fabsf(vector3_dot(base_dir, now_dir)) > 0.92f)return;
 
 
 				Vector3 roted_hinge_dir = vector3_quatrotate(hinge_dir, transform->orientation);

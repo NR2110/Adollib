@@ -86,6 +86,10 @@ namespace Adollib
 				set_box(Vector3(50, 4, 0), Vector3(20, 4, 20), Vector3(0, 0, 0), base_color, pearent);
 				set_box(Vector3(60, 2, 15), Vector3(20, 10, 25), Vector3(0, 0, 0), base_color, pearent);
 				set_box(Vector3(80, 15, 18), Vector3(8, 15, 40), Vector3(0, 0, 0), base_color, pearent);
+				set_box(Vector3(20, 1.5f, 0), Vector3(2, 1.5f, 12), Vector3(0, 0, 0), grass_color, pearent);
+				set_box(Vector3(28, 3, 0), Vector3(2, 3, 15), Vector3(0, 0, 0), grass_color, pearent);
+				set_box(Vector3(50.5f, 9, 1), Vector3(18, 1, 16), Vector3(0, 0, 0), grass_color, pearent);
+
 				set_fence(Vector3(-4, 0, -15), Vector3(1), Vector3(0, 0, 0), pearent);
 				set_fence(Vector3(-31, 0, -15), Vector3(1), Vector3(0, 180, 0), pearent);
 				set_fence(Vector3(-45, 0, -6), Vector3(1), Vector3(0, +90, 0), pearent);
@@ -259,7 +263,7 @@ namespace Adollib
 				set_box(Vector3(-66, 24, 142), Vector3(1, 6, 1), Vector3(0, 0, 0),  stair_color,sousyoku);
 				set_box(Vector3(-66, 24, 108), Vector3(1, 6, 1), Vector3(0, 0, 0),  stair_color,sousyoku);
 
-				set_box(Vector3(-66, 32, 123), Vector3(1, 2, 18), Vector3(0, 0, 0), stair_color);
+				set_box(Vector3(-66, 32, 123), Vector3(1, 2, 18), Vector3(0, 0, 0), stair_color, sousyoku);
 
 				set_box(Vector3(-49, 24, 104), Vector3(1, 6, 1), Vector3(0, 0, 0), stair_color, sousyoku);
 				set_box(Vector3(-49, 24, 80),  Vector3(1, 6, 1), Vector3(0, 0, 0), stair_color, sousyoku);
@@ -407,7 +411,6 @@ namespace Adollib
 				// ‰ó‚·•Ç
 				set_box(Vector3(75, 11, -66.5f), Vector3(1, 20, 10.5f), Vector3(0, 0, 0), base_color, crane);
 			}
-
 			// brake_wall
 			{
 				Gameobject* brake_wall = Gameobject_manager::create("brake_wall");
@@ -452,7 +455,6 @@ namespace Adollib
 				}
 
 			}
-
 			// lever&move
 			{
 				Gameobject* lever_and_move = Gameobject_manager::create("lever_and_move");
@@ -595,22 +597,37 @@ namespace Adollib
 				Gameobject* rope_tute = Gameobject_manager::create("rope_tute");
 				third_zone->add_child(rope_tute);
 
+				std::shared_ptr<Material> mato_mat = Material_manager::create_material("mato_material");
+				mato_mat->get_texture()->Load(L"./DefaultTexture/tutrial/mato.png");
+				mato_mat->BS_state = State_manager::BStypes::BS_ALPHA;
+				mato_mat->Load_VS("./DefaultShader/sprite_vs.cso");
+				mato_mat->Load_PS("./DefaultShader/sprite_ps.cso");
+				mato_mat->is_render_shadow = false;
+				mato_mat->color = Vector4(0.8f, 0.8f, 0.8f, 1);
+
 				// ‘äÀ
 				set_box(Vector3(126, 1.5f, -122), Vector3(11, 10.5f, 12), Vector3(0, 0, 0), base_color, rope_tute);
 				set_box(Vector3(127, 12.5f, -122), Vector3(10, 0.5f, 10), Vector3(0, 0, 0), base_color, rope_tute);
 				set_box(Vector3(129, 13.5f, -122), Vector3(8, 0.5f, 8), Vector3(0, 0, 0), base_color, rope_tute);
 
+
 				// ‘«ê01
 				set_box(Vector3(183, 2, -122), Vector3(10, 10, 10), Vector3(0, 0, 0), base_color, rope_tute);
 				set_box(Vector3(194, 12, -122), Vector3(1, 20, 10), Vector3(0, 0, 0), base_color, rope_tute); //•Ç
+				auto plane_0 = set_plane(Vector3(192, 22, -122), Vector3(10, 10, 1), Vector3(0,-90,0), Vector3(1), rope_tute);
+				plane_0->renderer->set_material(mato_mat);
 
 				// ‘«ê02
 				set_box(Vector3(194, 20, -183), Vector3(10, 10, 10), Vector3(0, 0, 0), base_color, rope_tute);
 				set_box(Vector3(194, 30, -194), Vector3(10, 20, 1), Vector3(0, 0, 0), base_color, rope_tute); //•Ç
+				auto plane_1 = set_plane(Vector3(194, 40, -192), Vector3(10, 10, 1), Vector3(0,0,0), Vector3(1), rope_tute);
+				plane_1->renderer->set_material(mato_mat);
 
 				// ‘«ê03
 				set_box(Vector3(120, 25, -190), Vector3(10, 10, 10), Vector3(0, 0, 0), base_color, rope_tute);
 				//set_box(Vector3(109, 35, -190), Vector3(1, 20, 10), Vector3(0, 0, 0), base_color, rope_tute); //•Ç  forth_zone‚Ì•Ç‚Å‘ã—p
+				auto plane_2 = set_plane(Vector3(111, 45, -190), Vector3(10, 10, 1), Vector3(0, 90, 0), Vector3(1), rope_tute);
+				plane_2->renderer->set_material(mato_mat);
 
 				// ŠK’i
 				set_box(Vector3(114, 23.0f, -177), Vector3(4, 12.0f, 3), Vector3(0, 0, 0), base_color, rope_tute);
@@ -668,7 +685,6 @@ namespace Adollib
 				set_fence(Vector3(-44, 11, -121), Vector3(1), Vector3(0, 90, 0), fences);
 				set_fence(Vector3(189, 15, -51), Vector3(1), Vector3(0, 0, 0), fences);
 			}
-
 		}
 
 		{}
@@ -727,7 +743,6 @@ namespace Adollib
 
 				set_fence(Vector3(16, 55, -189), Vector3(1), Vector3(0, 90, 0), fences);
 
-
 			}
 		}
 
@@ -764,11 +779,11 @@ namespace Adollib
 			Gameobject* goal_and_respown_areas = Gameobject_manager::create("goal&respown_areas");
 			stage_parts.emplace_back(goal_and_respown_areas);
 
-			set_respown_area(Vector3(36, 18, 70), Vector3(34, 5, 25), Vector3(0), 1, Vector3(33, 50, 62), goal_and_respown_areas);
-			set_respown_area(Vector3(-37, 27, 35), Vector3(15, 10, 12), Vector3(0), 2, Vector3(-30, 50, 35), goal_and_respown_areas);
-			set_respown_area(Vector3(-36, 20, -113), Vector3(34, 20, 61), Vector3(0), 3, Vector3(-18, 50, -72), goal_and_respown_areas);
-			set_respown_area(Vector3(117, 20, -113), Vector3(34, 20, 55), Vector3(0), 4, Vector3(105, 50, -120), goal_and_respown_areas);
-			set_respown_area(Vector3(107, 52.5f, -189), Vector3(10, 20, 50), Vector3(0), 5, Vector3(100, 50, -158), goal_and_respown_areas);
+			set_respown_area(Vector3(36, 18, 70),       Vector3(34, 5, 25),  Vector3(0), 1, Vector3(33,  100, 62), goal_and_respown_areas);
+			set_respown_area(Vector3(-37, 27, 35),      Vector3(15, 10, 12), Vector3(0), 2, Vector3(-30, 100, 35), goal_and_respown_areas);
+			set_respown_area(Vector3(-36, 20, -113),    Vector3(34, 20, 61), Vector3(0), 3, Vector3(-18, 100, -72), goal_and_respown_areas);
+			set_respown_area(Vector3(117, 20, -113),    Vector3(34, 20, 55), Vector3(0), 4, Vector3(105, 100, -120), goal_and_respown_areas);
+			set_respown_area(Vector3(107, 52.5f, -189), Vector3(10, 20, 50), Vector3(0), 5, Vector3(100, 100, -158), goal_and_respown_areas);
 
 			set_goal_area(Vector3(51, 51, -221), Vector3(20, 2, 20), Vector3(0), Stage_types::demo, goal_and_respown_areas);
 		}
