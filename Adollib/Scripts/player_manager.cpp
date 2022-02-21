@@ -83,6 +83,12 @@ namespace Adollib
 			players[i]->set_shadow_camera_dir(dir);
 		}
 	}
+	void Player_manager::set_is_shotable(bool is) {
+		for (int i = 0; i < 4; ++i) {
+			if (players[i] == nullptr)continue;
+			players[i]->set_is_shotable(is);
+		}
+	}
 
 
 	void Player_manager::add_players(int num) {

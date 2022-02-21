@@ -71,9 +71,8 @@ namespace Adollib
 		BallJoint* Lhand_joint = nullptr; //elbowとhandをつなぐjoint
 		float Rhand_joint_ylength_default = 0; //つかんでいるときhandのjointのanchorを伸ばすため 初期値を保存
 		float Lhand_joint_ylength_default = 0;
-		Quaternion Rarm_rad_to_camera ;
-		Quaternion Larm_rad_to_camera ;
-
+		Quaternion Rarm_rad_to_camera;
+		Quaternion Larm_rad_to_camera;
 
 		// rope関係
 		Gameobject* Lrope_go = nullptr; //ropeのGO
@@ -104,6 +103,7 @@ namespace Adollib
 		Collider* check_onplayer_coll = nullptr; //respownの接地判定を行うCollider
 		float respown_timer = 0; //respown処理用のtimer >0の時 check_respown()でPlayer::updateをreturn (入力を受け付けない、gunyattoする)
 
+
 	private:
 		Stage_manager* stage_manager = nullptr; //stage_managerへのポインタ
 		Camera* camera = nullptr; //cameraへのポインタ
@@ -112,6 +112,8 @@ namespace Adollib
 		std::shared_ptr<Material> player_mterial_1 = nullptr;
 
 		int player_num = -1; //playerの番号
+
+		bool is_shotable = true;
 
 	private:
 		//::: 毎フレーム呼び出す
@@ -130,7 +132,6 @@ namespace Adollib
 		//:::
 		void shot_rope();
 
-
 		void turn_gunyatto_dir();
 		void set_default_data(); //physics_dataとditherなどを初期値に戻す
 
@@ -141,9 +142,12 @@ namespace Adollib
 		void set_moveable(bool is_moveable);
 		void set_shadow_camera_pos(const Vector3& pos);
 		void set_shadow_camera_dir(const Vector3& dir);
+		void set_is_shotable(bool is);
 
 		void set_cameraptr(Camera* l_camera) { camera = l_camera; };
 		void set_input_changerptr(Input_changer* l_input_changer) { input_changer = l_input_changer; };
+
+		bool get_is_shotable_rope() { return is_shotable; };
 
 	private:
 		//::: GO :::

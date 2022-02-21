@@ -161,7 +161,7 @@ namespace Adollib
 		// jump‚³‚¹‚é
 		make_jump();
 
-
+		// rope‚ðŒ‚‚Â
 		shot_rope();
 
 	}

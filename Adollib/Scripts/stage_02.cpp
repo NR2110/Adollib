@@ -35,20 +35,10 @@ namespace Adollib
 		player_respown_pos = Vector3(-2.7f, 50, -5.f);
 		respown_num = -1;
 		next_stage = Stage_types::none;
-		//player_respown_pos = Vector3(-2.7f, 10, -5);
-		//player_respown_pos = Vector3(90, 16.0f, 66.0f);
-		y_respown_pos = 50; // respown‚µ‚½‚Æ‚«‚ÌY‚ÌÀ•W
+		y_respown_pos = 100; // respown‚µ‚½‚Æ‚«‚ÌY‚ÌÀ•W
 
 		auto player_manager = Gameobject_manager::find("Player_manager", Scenelist::scene_player)->findComponent<Player_manager>();
-
-		//player_manager->set_shadow_camera_pos(Vector3(-200, 200, -200));
-		//player_manager->set_shadow_camera_dir(Vector3(+1, -2, 1));
-
-		//set_box(Vector3(0, -60, -98), Vector3(30, 30, 60), Vector3(0), Vector3(188, 214, 54) / 255.0f, true);
-
-		//set_desk(Vector3(0, 0, 0), Vector3(30, 15, 25), Vector3(0, 0, 0), 0);
-
-		//Gameobject_manager::createFromFBX("sponza", "../Data/FBX/Model_Shaclo_Winter_Edit.fbx");
+		player_manager->set_is_shotable(false);
 
 #if  0 && _DEBUG
 		////auto cube = Gameobject_manager::createFromFBX("Shaclo", "../Data/FBX/Model_Shaclo_Winter_Edit.fbx",true);
@@ -610,6 +600,8 @@ namespace Adollib
 				set_box(Vector3(127, 12.5f, -122), Vector3(10, 0.5f, 10), Vector3(0, 0, 0), base_color, rope_tute);
 				set_box(Vector3(129, 13.5f, -122), Vector3(8, 0.5f, 8), Vector3(0, 0, 0), base_color, rope_tute);
 
+				//
+				set_event(Vector3(129, 16, -122), rope_tute);
 
 				// ‘«ê01
 				set_box(Vector3(183, 2, -122), Vector3(10, 10, 10), Vector3(0, 0, 0), base_color, rope_tute);
@@ -749,12 +741,12 @@ namespace Adollib
 		//set_lever(Vector3(0,0,0),Vector3(1),   Vector3(0), Stage_parts::Stageparts_tags::Flag_4, Stage_parts::Stageparts_tags::Flag_4);
 		//set_lever(Vector3(8,18,104),Vector3(1),Vector3(0,90,0), Stage_parts::Stageparts_tags::Flag_4, Stage_parts::Stageparts_tags::Flag_4);
 
-		set_box(Vector3(0, 100, 0), Vector3(10, 10, 10), Vector3(0, 0, 0), grass_color);
-		set_box(Vector3(0, 100, 0), Vector3(10, 10, 10), Vector3(0, 0, 0), grass_color);
-		set_box(Vector3(0, 100, 0), Vector3(10, 10, 10), Vector3(0, 0, 0), grass_color);
-		set_box(Vector3(0, 100, 0), Vector3(10, 10, 10), Vector3(0, 0, 0), grass_color);
-		set_box(Vector3(0, 100, 0), Vector3(10, 10, 10), Vector3(0, 0, 0), grass_color);
-		set_box(Vector3(0, 100, 0), Vector3(10, 10, 10), Vector3(0, 0, 0), grass_color);
+		//set_box(Vector3(0, 100, 0), Vector3(10, 10, 10), Vector3(0, 0, 0), grass_color);
+		//set_box(Vector3(0, 100, 0), Vector3(10, 10, 10), Vector3(0, 0, 0), grass_color);
+		//set_box(Vector3(0, 100, 0), Vector3(10, 10, 10), Vector3(0, 0, 0), grass_color);
+		//set_box(Vector3(0, 100, 0), Vector3(10, 10, 10), Vector3(0, 0, 0), grass_color);
+		//set_box(Vector3(0, 100, 0), Vector3(10, 10, 10), Vector3(0, 0, 0), grass_color);
+		//set_box(Vector3(0, 100, 0), Vector3(10, 10, 10), Vector3(0, 0, 0), grass_color);
 
 
 		//set_tree(Vector3(0, 100, 0), Vector3(1, 1.2f, 1), Vector3(0, 02, 0), 2.5f, 0.8f);
@@ -789,11 +781,6 @@ namespace Adollib
 		}
 #endif
 
-		//set_sphere_rope(Vector3(64, 60, 65), 1, Vector3(0, 0, 0), 10, 5);
-
-		//Gameobject_manager::find("Player_manager",Scenelist::scene_player)->findComponent<Player_manager>()->tutrial_move_and_camera();
-
-		//summon_block_01();
 	}
 
 	void Stage_02::summon_block_01() {

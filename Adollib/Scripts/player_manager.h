@@ -26,8 +26,7 @@ namespace Adollib
 
 		void set_shadow_camera_dir(const Vector3& dir);
 
-		//void add_player();
-		//void delete_player(int num);
+		void set_is_shotable(bool is);
 
 
 		void add_players(int num);

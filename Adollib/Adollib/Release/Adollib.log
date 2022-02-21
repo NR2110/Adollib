@@ -1,12 +1,7 @@
 ﻿  mono_audio.cpp
-  scene_game.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(20,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。
-  scene_player.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(20,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。
-  scene_title.cpp
   コード生成しています。
-  6 of 10747 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  2 of 10798 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    64 functions had inline decision re-evaluated but remain unchanged
+    65 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Release\Adollib.exe

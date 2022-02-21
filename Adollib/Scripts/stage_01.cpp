@@ -33,15 +33,10 @@ namespace Adollib
 		player_respown_pos = Vector3(-2.7f, 50, -5.f);
 		respown_num = -1;
 		next_stage = Stage_types::none;
-		//player_respown_pos = Vector3(-2.7f, 10, -5);
-		//player_respown_pos = Vector3(90, 16.0f, 66.0f);
 		y_respown_pos = 50; // respown‚µ‚½‚Æ‚«‚ÌY‚ÌÀ•W
 
-		//set_box(Vector3(0, -60, -98), Vector3(30, 30, 60), Vector3(0), Vector3(188, 214, 54) / 255.0f, true);
-
-		//set_desk(Vector3(0, 0, 0), Vector3(30, 15, 25), Vector3(0, 0, 0), 0);
-
-		//Gameobject_manager::createFromFBX("sponza", "../Data/FBX/Model_Shaclo_Winter_Edit.fbx");
+		auto player_manager = Gameobject_manager::find("Player_manager", Scenelist::scene_player)->findComponent<Player_manager>();
+		player_manager->set_is_shotable(false);
 
 #if  _DEBUG
 		////auto cube = Gameobject_manager::createFromFBX("Shaclo", "../Data/FBX/Model_Shaclo_Winter_Edit.fbx",true);
@@ -689,11 +684,6 @@ namespace Adollib
 		}
 #endif
 
-		//set_sphere_rope(Vector3(64, 60, 65), 1, Vector3(0, 0, 0), 10, 5);
-
-		//Gameobject_manager::find("Player_manager",Scenelist::scene_player)->findComponent<Player_manager>()->tutrial_move_and_camera();
-
-		//summon_block_01();
 	}
 
 	void Stage_01::summon_block_01() {

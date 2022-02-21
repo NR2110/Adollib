@@ -17,7 +17,9 @@
 #include "camera.h"
 #include "input_changer.h"
 
-
+#ifdef ON_DEBUG
+//#define Rope_Shot_Always
+#endif
 
 using namespace Adollib;
 
@@ -270,6 +272,11 @@ void Player::catch_things() {
 
 // rope‚ðŒ‚‚Â
 void Player::shot_rope() {
+
+	if (Waist_collider->concoll_enter(Collider_tags::Rope_event))is_shotable = true;
+#ifndef Rope_Shot_Always
+	if (is_shotable == false)return;
+#endif
 
 	const float rope_max_length = 90;
 
@@ -586,7 +593,7 @@ void Player::add_pow_for_stand() {
 
 	}
 	// gunyatto‚µ‚Ä‚¢‚½Žž‚Í
-	else {
+	else if(gunyatto_pow != 0){
 		// Œü‚«‚Ì‚ÝXV
 		turn_gunyatto_dir();
 	}
@@ -1172,4 +1179,6 @@ void Player::set_shadow_camera_dir(const Vector3& dir) {
 		comp->directional_shadow->direction = dir;
 	}
 }
-
+void Player::set_is_shotable(bool is) {
+	is_shotable = is;
+}

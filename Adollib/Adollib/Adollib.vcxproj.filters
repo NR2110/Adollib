@@ -176,7 +176,7 @@
     <Filter Include="00_Adollib\44_render\shader\hlsl\billboard">
       <UniqueIdentifier>{cb90bacb-7bc0-4af8-bf89-8b7d7f6e3d9a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00_Adollib\00_main\audio">
+    <Filter Include="00_Adollib\66_audio">
       <UniqueIdentifier>{4acc996e-ba03-4945-b278-c30f50df5a8f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -490,9 +490,6 @@
     <ClCompile Include="..\Scripts\stage_02_funcs.cpp">
       <Filter>ソース ファイル\scene_game\stage\stage\stage_02</Filter>
     </ClCompile>
-    <ClCompile Include="..\Scripts\tutrial_stage01_handdir_is_cameradir.cpp">
-      <Filter>ソース ファイル\scene_player\tutrial</Filter>
-    </ClCompile>
     <ClCompile Include="..\Scripts\tutrial_stage01_move_camera_catch.cpp">
       <Filter>ソース ファイル\scene_player\tutrial</Filter>
     </ClCompile>
@@ -500,7 +497,10 @@
       <Filter>00_Adollib\44_render\renderer</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Main\mono_audio.cpp">
-      <Filter>00_Adollib\00_main\audio</Filter>
+      <Filter>00_Adollib\66_audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\tutrial_stage02_rope.cpp">
+      <Filter>ソース ファイル\scene_player\tutrial</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -981,14 +981,17 @@
     <ClInclude Include="..\Scripts\move_block_from_2flags.h">
       <Filter>ソース ファイル\scene_game\stage\parts\gimmick</Filter>
     </ClInclude>
-    <ClInclude Include="..\Scripts\tutrial_stage01_handdir_is_cameradir.h">
-      <Filter>ソース ファイル\scene_player\tutrial</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts\Renderer\billboard_renderer.h">
       <Filter>00_Adollib\44_render\renderer</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Main\mono_audio.h">
-      <Filter>00_Adollib\00_main\audio</Filter>
+      <Filter>00_Adollib\66_audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\event_exclamation.h">
+      <Filter>ソース ファイル\scene_game\stage\parts\gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\tutrial_stage02_rope.h">
+      <Filter>ソース ファイル\scene_player\tutrial</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

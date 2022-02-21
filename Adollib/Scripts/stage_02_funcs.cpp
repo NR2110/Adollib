@@ -21,6 +21,7 @@
 #include "touch_moveable.h"
 #include "lever.h"
 #include "move_block_from_2flags.h"
+#include "event_exclamation.h"
 
 namespace Adollib
 {
@@ -211,12 +212,12 @@ namespace Adollib
 		fence_pearent->transform->local_orient = quaternion_from_euler(rotate);
 		fence_pearent->transform->local_scale = scale;
 
-		set_box(Vector3(0, 3, 0), Vector3(6.5f, 0.5f, 1), Vector3(0,0,1.6f), fence_color, fence_pearent);
+		set_box(Vector3(0, 3, 0), Vector3(6.5f, 0.5f, 1), Vector3(0, 0, 1.6f), fence_color, fence_pearent);
 
-		set_box(Vector3(-4.5f, 2, 0), Vector3(0.5f, 2, 0.5f), Vector3(0,0,-1), fence_color, fence_pearent);
-		set_box(Vector3(-1.5f, 2, 0), Vector3(0.5f, 2, 0.5f), Vector3(0,0,5),  fence_color, fence_pearent);
-		set_box(Vector3(+1.5f, 2, 0), Vector3(0.5f, 2, 0.5f), Vector3(0,0,-8), fence_color, fence_pearent);
-		set_box(Vector3(+4.5f, 2, 0), Vector3(0.5f, 2, 0.5f), Vector3(0,0,1),  fence_color, fence_pearent);
+		set_box(Vector3(-4.5f, 2, 0), Vector3(0.5f, 2, 0.5f), Vector3(0, 0, -1), fence_color, fence_pearent);
+		set_box(Vector3(-1.5f, 2, 0), Vector3(0.5f, 2, 0.5f), Vector3(0, 0, 5), fence_color, fence_pearent);
+		set_box(Vector3(+1.5f, 2, 0), Vector3(0.5f, 2, 0.5f), Vector3(0, 0, -8), fence_color, fence_pearent);
+		set_box(Vector3(+4.5f, 2, 0), Vector3(0.5f, 2, 0.5f), Vector3(0, 0, 1), fence_color, fence_pearent);
 
 		if (pearent != nullptr)pearent->add_child(fence_pearent);
 
@@ -300,6 +301,54 @@ namespace Adollib
 		return door_joint;
 	}
 
+	Gameobject* Stage_02::set_event(const Vector3& pos, Gameobject* pearent) {
+
+		Gameobject* excu_go = Gameobject_manager::create("fence_pearent");
+		excu_go->transform->local_pos = pos;
+
+		std::shared_ptr<Material> mat = Material_manager::create_material("event_material");
+		mat->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		mat->color = Vector4(1, 1, 0, 1);
+
+		// collider
+		auto coll = excu_go->addComponent<Collider>();
+		{
+			coll->physics_data.is_moveable = false;
+			coll->tag = Collider_tags::Rope_event;
+			coll->ignore_tags = Collider_tags::Tags_max;
+			auto box = coll->add_shape<Box>();
+			box->center = Vector3(0, 4, 0);
+			box->size = Vector3(1.5f, 6, 1.5f);
+		}
+
+		// Œ©‚½–Ú
+		{
+			{
+				auto go_excu_top = Gameobject_manager::createCube("excu_top");
+				excu_go->add_child(go_excu_top);
+				go_excu_top->transform->local_pos = Vector3(0, 5.5f, 0);
+				go_excu_top->transform->local_scale = Vector3(1, 3, 1);
+				go_excu_top->renderer->set_material(mat);
+			}
+			{
+				auto go_excu_bot = Gameobject_manager::createCube("excu_bot");
+				excu_go->add_child(go_excu_bot);
+				go_excu_bot->transform->local_pos = Vector3(0, 0, 0);
+				go_excu_bot->transform->local_scale = Vector3(1, 1, 1);
+				go_excu_bot->renderer->set_material(mat);
+			}
+		}
+
+		auto comp = excu_go->addComponent<Stage_parts::Event_exclamation>();
+
+		comp->this_stage = this;
+		comp->this_coll = coll;
+		comp->start_pos = pos;
+
+		if (pearent != nullptr)pearent->add_child(excu_go);
+		return excu_go;
+	}
+
 	Gameobject* Stage_02::set_buttan(const Vector3& pos, const Vector3& scale, const Vector3& rotate, Stage_parts::Stageparts_tagbit tag, Gameobject* pearent, bool is_use_trigger) {
 		auto coll = set_box(pos, scale, rotate, Vector3(1, 0, 0), pearent);
 		auto go = coll->gameobject;
@@ -330,7 +379,7 @@ namespace Adollib
 		lever->transform->local_scale = scale;
 		lever->transform->local_orient = quaternion_from_euler(rotate);
 		Vector3 hinge_dir = Vector3(0, 0, 1);
-		float scale_pow =  1;
+		float scale_pow = 1;
 
 		// ’†g
 		{
@@ -348,8 +397,8 @@ namespace Adollib
 				{
 					auto sphere = Gameobject_manager::createSphere("lever_sphere");
 					lever_stick->add_child(sphere);
-					sphere->transform->local_pos =   Vector3(0, 3.5f, 0) * scale_pow;
-					sphere->transform->local_scale = Vector3(0.6f, 0.6f, 0.6f) * scale_pow;
+					sphere->transform->local_pos = Vector3(0, 3.8f, 0) * scale_pow;
+					sphere->transform->local_scale = Vector3(0.8f, 0.8f, 0.8f) * scale_pow;
 					sphere->renderer->color = Vector4(1, 0, 0, 1);
 				}
 			}
@@ -370,12 +419,12 @@ namespace Adollib
 				{
 					auto c = coll->add_shape<Box>();
 					c->center = Vector3(0, 2, 0) * scale_pow;
-					c->size = Vector3(0.3f, 1.5f, 0.3f) * scale_pow;
+					c->size = Vector3(0.1f, 1.5f, 0.1f) * scale_pow;
 				}
 				{
 					auto c = coll->add_shape<Sphere>();
-					c->center = Vector3(0, 3.5f, 0) * scale_pow;
-					c->r = 0.6f * scale_pow;
+					c->center = Vector3(0, 3.8f, 0) * scale_pow;
+					c->r = 0.8f * scale_pow;
 				}
 
 				auto lever_stick_joint_base = Gameobject_manager::create("lever_stick_joint_base");
@@ -386,7 +435,7 @@ namespace Adollib
 				auto hinge_joint = Joint::add_Hingejoint(coll, joint_base_coll,
 					-hinge_dir * 10, +hinge_dir * 10,
 					-hinge_dir * 10, +hinge_dir * 10
-					);
+				);
 
 			}
 
@@ -413,7 +462,7 @@ namespace Adollib
 				{
 					auto lever_box_00 = Gameobject_manager::createCube("lever_box_00");
 					lever_box->add_child(lever_box_00);
-					lever_box_00->transform->local_pos =   Vector3(0, -1, +0.45) * scale_pow;
+					lever_box_00->transform->local_pos = Vector3(0, -1, +0.45) * scale_pow;
 					lever_box_00->transform->local_scale = Vector3(2, 2, 0.1f) * scale_pow;
 					lever_box_00->transform->local_orient = quaternion_from_euler(0, 0, 45);
 					lever_box_00->renderer->color = Vector4(stair_color, 1);
@@ -421,7 +470,7 @@ namespace Adollib
 				{
 					auto lever_box_01 = Gameobject_manager::createCube("lever_box_01");
 					lever_box->add_child(lever_box_01);
-					lever_box_01->transform->local_pos =   Vector3(0, -1, -0.45) * scale_pow;
+					lever_box_01->transform->local_pos = Vector3(0, -1, -0.45) * scale_pow;
 					lever_box_01->transform->local_scale = Vector3(2, 2, 0.1f) * scale_pow;
 					lever_box_01->transform->local_orient = quaternion_from_euler(0, 0, 45);
 					lever_box_01->renderer->color = Vector4(stair_color, 1);
@@ -961,6 +1010,7 @@ namespace Adollib
 
 		return Human;
 	}
+
 
 
 

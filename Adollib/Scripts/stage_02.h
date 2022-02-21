@@ -33,6 +33,8 @@ namespace Adollib {
 		Gameobject* set_fence(const Vector3& pos, const Vector3& scale, const Vector3& rotate, Gameobject* pearent = nullptr, const int fence_count = 1);
 		// ÉhÉAÇçÏÇÈ
 		Gameobject* set_door(const Vector3& pos, const Vector3& scale, const Vector3& rotate, const int is_left, Gameobject* pearent = nullptr);
+		// hit event
+		Gameobject* set_event(const Vector3& pos, Gameobject* pearent = nullptr);
 
 
 		Gameobject* set_player_statue(const Vector3& pos, const float& scale, const Vector3& rotate, Gameobject* pearent = nullptr);

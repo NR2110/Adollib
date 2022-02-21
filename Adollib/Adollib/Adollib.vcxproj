@@ -159,6 +159,7 @@
     <ClInclude Include="..\Scripts\demo_house.h" />
     <ClInclude Include="..\Scripts\door.h" />
     <ClInclude Include="..\Scripts\area_goal.h" />
+    <ClInclude Include="..\Scripts\event_exclamation.h" />
     <ClInclude Include="..\Scripts\fall_object_comp.h" />
     <ClInclude Include="..\Scripts\fall_object_manager.h" />
     <ClInclude Include="..\Scripts\input_changer.h" />
@@ -194,7 +195,7 @@
     <ClInclude Include="..\Scripts\touch_moveable.h" />
     <ClInclude Include="..\Scripts\tutrial_base.h" />
     <ClInclude Include="..\Scripts\tutrial_manager.h" />
-    <ClInclude Include="..\Scripts\tutrial_stage01_handdir_is_cameradir.h" />
+    <ClInclude Include="..\Scripts\tutrial_stage02_rope.h" />
     <ClInclude Include="..\Scripts\tutrial_stage01_move_camera_catch.h" />
     <ClInclude Include="..\Scripts\ui_manager.h" />
     <ClInclude Include="Imgui\imconfig.h" />
@@ -347,7 +348,7 @@
     <ClCompile Include="..\Scripts\title_stage.cpp" />
     <ClCompile Include="..\Scripts\title_state_manager.cpp" />
     <ClCompile Include="..\Scripts\tutrial_manager.cpp" />
-    <ClCompile Include="..\Scripts\tutrial_stage01_handdir_is_cameradir.cpp" />
+    <ClCompile Include="..\Scripts\tutrial_stage02_rope.cpp" />
     <ClCompile Include="..\Scripts\tutrial_stage01_move_camera_catch.cpp" />
     <ClCompile Include="..\Scripts\ui_manager.cpp" />
     <ClCompile Include="Imgui\imgui.cpp" />
