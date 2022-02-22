@@ -167,12 +167,25 @@ namespace Adollib
 				set_box(Vector3(4, 23, 128), Vector3(1, 5, 2), Vector3(0, 0, 0), base_color, gimmick); //右
 				set_box(Vector3(4, 23, 109), Vector3(1, 5, 9), Vector3(0, 0, 0), base_color, gimmick); //左
 
-				set_gimmickdoor(Vector3(4, 22, 124), Vector3(4, 22, 126), Vector3(0), Vector3(0),
+				set_box(Vector3(10.5f, 23, 129), Vector3(5.5f, 5, 1), Vector3(0, 0, 0), stair_color, gimmick);
+				set_box(Vector3(-7.5f, 20, 99), Vector3(12.5f, 8, 1), Vector3(0, 0, 0), base_color, gimmick);
+
+				std::shared_ptr<Material> yajisushi_mat = Material_manager::create_material("yajisushi_material");
+				yajisushi_mat->get_texture()->Load(L"./DefaultTexture/stage/yajiushi.png");
+				yajisushi_mat->BS_state = State_manager::BStypes::BS_ALPHA;
+				yajisushi_mat->Load_VS("./DefaultShader/sprite_vs.cso");
+				yajisushi_mat->Load_PS("./DefaultShader/sprite_ps.cso");
+				yajisushi_mat->is_render_shadow = false;
+				yajisushi_mat->color = Vector4(1, 1, 1, 1);
+				auto plane = set_plane(Vector3(11, 23, 127), Vector3(5.5f, 5, 0), Vector3(0, 180, 0), Vector3(base_color), gimmick);
+				plane->renderer->set_material(yajisushi_mat);
+
+				set_gimmickdoor(Vector3(4, 22, 124), Vector3(4, 22, 127), Vector3(0), Vector3(0),
 					2, 0, Vector3(0.5f, 4, 2), Stage_parts::Stageparts_tags::Flag_2, stair_color, gimmick);
-				set_gimmickdoor(Vector3(4, 22, 120), Vector3(4, 22, 118), Vector3(0), Vector3(0),
+				set_gimmickdoor(Vector3(4, 22, 120), Vector3(4, 22, 117), Vector3(0), Vector3(0),
 					2, 0, Vector3(0.5f, 4, 2), Stage_parts::Stageparts_tags::Flag_2, stair_color, gimmick);
 
-				set_buttan(Vector3(35, 17.2f, 110), Vector3(4, 1, 4), Vector3(0), Stage_parts::Stageparts_tags::Flag_2, gimmick);
+				set_buttan(Vector3(20, 17.2f, 110), Vector3(4, 1, 4), Vector3(0), Stage_parts::Stageparts_tags::Flag_2, gimmick);
 
 				// ピラミッド
 				{
@@ -180,8 +193,8 @@ namespace Adollib
 					gimmick->add_child(tutrial_block);
 					tutrial_block->transform->local_pos = Vector3(63, 18, 130);
 
-					int phyramid_size = 4;
-					Vector3 base_size = Vector3(2, 2, 2);
+					int phyramid_size = 3;
+					Vector3 base_size = Vector3(4, 2, 4);
 					Vector3 base_pos = Vector3(0);
 
 					for (int y = 0; y < phyramid_size; ++y) {
@@ -239,25 +252,25 @@ namespace Adollib
 				Gameobject* sousyoku = Gameobject_manager::create("sousyoku");
 				second_zone->add_child(sousyoku);
 
-				set_box(Vector3(23, 32, 93), Vector3(1, 2, 50), Vector3(0, 0, 0), stair_color,sousyoku);
-				set_box(Vector3(23, 24, 46), Vector3(1, 7, 1), Vector3(0, 0, 0),  stair_color,sousyoku);
-				set_box(Vector3(23, 24, 74), Vector3(1, 6, 1), Vector3(0, 0, 0),  stair_color,sousyoku);
-				set_box(Vector3(23, 24, 96), Vector3(1, 6, 1), Vector3(0, 0, 0),  stair_color,sousyoku);
-				set_box(Vector3(23, 24, 120), Vector3(1, 6, 1), Vector3(0, 0, 0), stair_color,sousyoku);
-				set_box(Vector3(23, 24, 142), Vector3(1, 6, 1), Vector3(0, 0, 0), stair_color,sousyoku);
+				set_box(Vector3(23, 32, 93), Vector3(1, 2, 50), Vector3(0, 0, 0), stair_color, sousyoku);
+				set_box(Vector3(23, 24, 46), Vector3(1, 7, 1), Vector3(0, 0, 0), stair_color, sousyoku);
+				set_box(Vector3(23, 24, 74), Vector3(1, 6, 1), Vector3(0, 0, 0), stair_color, sousyoku);
+				set_box(Vector3(23, 24, 96), Vector3(1, 6, 1), Vector3(0, 0, 0), stair_color, sousyoku);
+				set_box(Vector3(23, 24, 120), Vector3(1, 6, 1), Vector3(0, 0, 0), stair_color, sousyoku);
+				set_box(Vector3(23, 24, 142), Vector3(1, 6, 1), Vector3(0, 0, 0), stair_color, sousyoku);
 
-				set_box(Vector3(13, 32, 142), Vector3(9, 2, 1), Vector3(0, 0, 0), stair_color,sousyoku);
-				set_box(Vector3(-31, 32, 142), Vector3(36, 2, 1), Vector3(0, 0, 0),  stair_color,sousyoku);
-				set_box(Vector3(-21, 24, 142), Vector3(1, 6, 1), Vector3(0, 0, 0),  stair_color,sousyoku);
-				set_box(Vector3(-43, 24, 142), Vector3(1, 6, 1), Vector3(0, 0, 0),  stair_color,sousyoku);
-				set_box(Vector3(-66, 24, 142), Vector3(1, 6, 1), Vector3(0, 0, 0),  stair_color,sousyoku);
-				set_box(Vector3(-66, 24, 108), Vector3(1, 6, 1), Vector3(0, 0, 0),  stair_color,sousyoku);
+				set_box(Vector3(13, 32, 142), Vector3(9, 2, 1), Vector3(0, 0, 0), stair_color, sousyoku);
+				set_box(Vector3(-31, 32, 142), Vector3(36, 2, 1), Vector3(0, 0, 0), stair_color, sousyoku);
+				set_box(Vector3(-21, 24, 142), Vector3(1, 6, 1), Vector3(0, 0, 0), stair_color, sousyoku);
+				set_box(Vector3(-43, 24, 142), Vector3(1, 6, 1), Vector3(0, 0, 0), stair_color, sousyoku);
+				set_box(Vector3(-66, 24, 142), Vector3(1, 6, 1), Vector3(0, 0, 0), stair_color, sousyoku);
+				set_box(Vector3(-66, 24, 108), Vector3(1, 6, 1), Vector3(0, 0, 0), stair_color, sousyoku);
 
 				set_box(Vector3(-66, 32, 123), Vector3(1, 2, 18), Vector3(0, 0, 0), stair_color, sousyoku);
 
 				set_box(Vector3(-49, 24, 104), Vector3(1, 6, 1), Vector3(0, 0, 0), stair_color, sousyoku);
-				set_box(Vector3(-49, 24, 80),  Vector3(1, 6, 1), Vector3(0, 0, 0), stair_color, sousyoku);
-				set_box(Vector3(-49, 19, 92),  Vector3(0.5f, 1, 11), Vector3(0, 0, 0), stair_color, sousyoku);
+				set_box(Vector3(-49, 24, 82), Vector3(1, 6, 1), Vector3(0, 0, 0), stair_color, sousyoku);
+				set_box(Vector3(-49, 19, 92), Vector3(0.5f, 1, 11), Vector3(0, 0, 0), stair_color, sousyoku);
 
 			}
 
@@ -278,6 +291,17 @@ namespace Adollib
 				// 橋
 				//set_box(Vector3(-9, 29, 74), Vector3(5, 1, 29), Vector3(0, 0, 0), base_color, bridge);
 				set_box(Vector3(-40, 29, -17), Vector3(5, 1, 32), Vector3(0, 0, 0), wood_color, bridge);
+
+				set_box(Vector3(-46, 33, 16), Vector3(0.5f, 3, 0.5f), Vector3(0, 0, 0), wood_color, bridge);
+				set_box(Vector3(-45.69f, 31.48f, 1), Vector3(0.3f, 0.3f, 15), Vector3(-10, -1.4f, 0), fence_color, bridge);
+				set_box(Vector3(-34, 33, 16), Vector3(0.5f, 3, 0.5f), Vector3(0, 0, 0), wood_color, bridge);
+				set_box(Vector3(-34.30f, 31.48f, 1), Vector3(0.3f, 0.3f, 15), Vector3(-10, +1.4f, 0), fence_color, bridge);
+
+				set_box(Vector3(-46, 33, -50), Vector3(0.5f, 3, 0.5f), Vector3(0, 0, 0), wood_color, bridge);
+				set_box(Vector3(-45.69f, 31.48f, -35.0f), Vector3(0.3f, 0.3f, 15), Vector3(+10, +1.4f, 0), fence_color, bridge);
+				set_box(Vector3(-34, 33, -50), Vector3(0.5f, 3, 0.5f), Vector3(0, 0, 0), wood_color, bridge);
+				set_box(Vector3(-34.30f, 31.48f, -35.0f), Vector3(0.3f, 0.3f, 15), Vector3(+10, -1.4f, 0), fence_color, bridge);
+
 			}
 			// stage
 			{
@@ -456,13 +480,13 @@ namespace Adollib
 					float rope_sphere_r = 0.5f;
 					float rope_sphree_offset_size = rope_sphere_r * 3;
 					int rope_sphere_count = 16;
-					float rope_mass = 20;
+					float rope_mass = 5;
 					Vector3 rope_joint_start_offset = Vector3(0, -0.8f, 0);
 
 					// 動かすもの
 					auto base_coll = set_move_block_2flags(Vector3(80.5f, 46, -108.5f), Vector3(-21.5f, 46, -108.5f),
 						Vector3(0.5f, 1.2f, 1.2f), Vector3(0),
-						0.2f, 0.8f,
+						0.4f, 0.8f,
 						Stage_parts::Stageparts_tags::Flag_4, Stage_parts::Stageparts_tags::Flag_5,
 						Yellow_color, lever_and_move);
 
@@ -476,7 +500,7 @@ namespace Adollib
 						+ Vector3(0, -1, 0) * (sphere_r - 0.5f)
 						, sphere_r, Vector3(1, 0, 0), lever_and_move);
 					sphere_coll->tag = Collider_tags::Sphere | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Kinematic_Stage;
-					sphere_coll->physics_data.inertial_mass = 1000;
+					sphere_coll->physics_data.inertial_mass = 500;
 					sphere_coll->physics_data.angula_sleep_threrhold = 0;
 					sphere_coll->physics_data.is_moveable = true;
 					sphere_coll->physics_data.is_static = false;
@@ -588,7 +612,7 @@ namespace Adollib
 				third_zone->add_child(rope_tute);
 
 				std::shared_ptr<Material> mato_mat = Material_manager::create_material("mato_material");
-				mato_mat->get_texture()->Load(L"./DefaultTexture/tutrial/mato.png");
+				mato_mat->get_texture()->Load(L"./DefaultTexture/stage/mato.png");
 				mato_mat->BS_state = State_manager::BStypes::BS_ALPHA;
 				mato_mat->Load_VS("./DefaultShader/sprite_vs.cso");
 				mato_mat->Load_PS("./DefaultShader/sprite_ps.cso");
@@ -600,19 +624,19 @@ namespace Adollib
 				set_box(Vector3(127, 12.5f, -122), Vector3(10, 0.5f, 10), Vector3(0, 0, 0), base_color, rope_tute);
 				set_box(Vector3(129, 13.5f, -122), Vector3(8, 0.5f, 8), Vector3(0, 0, 0), base_color, rope_tute);
 
-				//
+				// ropeが使えるようになる
 				set_event(Vector3(129, 16, -122), rope_tute);
 
 				// 足場01
 				set_box(Vector3(183, 2, -122), Vector3(10, 10, 10), Vector3(0, 0, 0), base_color, rope_tute);
 				set_box(Vector3(194, 12, -122), Vector3(1, 20, 10), Vector3(0, 0, 0), base_color, rope_tute); //壁
-				auto plane_0 = set_plane(Vector3(192, 22, -122), Vector3(10, 10, 1), Vector3(0,-90,0), Vector3(1), rope_tute);
+				auto plane_0 = set_plane(Vector3(192, 22, -122), Vector3(10, 10, 1), Vector3(0, -90, 0), Vector3(1), rope_tute);
 				plane_0->renderer->set_material(mato_mat);
 
 				// 足場02
 				set_box(Vector3(194, 20, -183), Vector3(10, 10, 10), Vector3(0, 0, 0), base_color, rope_tute);
 				set_box(Vector3(194, 30, -194), Vector3(10, 20, 1), Vector3(0, 0, 0), base_color, rope_tute); //壁
-				auto plane_1 = set_plane(Vector3(194, 40, -192), Vector3(10, 10, 1), Vector3(0,0,0), Vector3(1), rope_tute);
+				auto plane_1 = set_plane(Vector3(194, 40, -192), Vector3(10, 10, 1), Vector3(0, 0, 0), Vector3(1), rope_tute);
 				plane_1->renderer->set_material(mato_mat);
 
 				// 足場03
@@ -741,13 +765,6 @@ namespace Adollib
 		//set_lever(Vector3(0,0,0),Vector3(1),   Vector3(0), Stage_parts::Stageparts_tags::Flag_4, Stage_parts::Stageparts_tags::Flag_4);
 		//set_lever(Vector3(8,18,104),Vector3(1),Vector3(0,90,0), Stage_parts::Stageparts_tags::Flag_4, Stage_parts::Stageparts_tags::Flag_4);
 
-		//set_box(Vector3(0, 100, 0), Vector3(10, 10, 10), Vector3(0, 0, 0), grass_color);
-		//set_box(Vector3(0, 100, 0), Vector3(10, 10, 10), Vector3(0, 0, 0), grass_color);
-		//set_box(Vector3(0, 100, 0), Vector3(10, 10, 10), Vector3(0, 0, 0), grass_color);
-		//set_box(Vector3(0, 100, 0), Vector3(10, 10, 10), Vector3(0, 0, 0), grass_color);
-		//set_box(Vector3(0, 100, 0), Vector3(10, 10, 10), Vector3(0, 0, 0), grass_color);
-		//set_box(Vector3(0, 100, 0), Vector3(10, 10, 10), Vector3(0, 0, 0), grass_color);
-
 
 		//set_tree(Vector3(0, 100, 0), Vector3(1, 1.2f, 1), Vector3(0, 02, 0), 2.5f, 0.8f);
 		//set_tree(Vector3(0, 100, 0), Vector3(1, 1.2f, 1), Vector3(0, 02, 0), 2.5f, 0.8f);
@@ -771,10 +788,10 @@ namespace Adollib
 			Gameobject* goal_and_respown_areas = Gameobject_manager::create("goal&respown_areas");
 			stage_parts.emplace_back(goal_and_respown_areas);
 
-			set_respown_area(Vector3(36, 18, 70),       Vector3(34, 5, 25),  Vector3(0), 1, Vector3(33,  100, 62), goal_and_respown_areas);
-			set_respown_area(Vector3(-37, 27, 35),      Vector3(15, 10, 12), Vector3(0), 2, Vector3(-30, 100, 35), goal_and_respown_areas);
-			set_respown_area(Vector3(-36, 20, -113),    Vector3(34, 20, 61), Vector3(0), 3, Vector3(-18, 100, -72), goal_and_respown_areas);
-			set_respown_area(Vector3(117, 20, -113),    Vector3(34, 20, 55), Vector3(0), 4, Vector3(105, 100, -120), goal_and_respown_areas);
+			set_respown_area(Vector3(36, 18, 70), Vector3(34, 5, 25), Vector3(0), 1, Vector3(33, 100, 62), goal_and_respown_areas);
+			set_respown_area(Vector3(-37, 27, 35), Vector3(15, 10, 12), Vector3(0), 2, Vector3(-30, 100, 35), goal_and_respown_areas);
+			set_respown_area(Vector3(-36, 20, -113), Vector3(34, 20, 61), Vector3(0), 3, Vector3(-18, 100, -72), goal_and_respown_areas);
+			set_respown_area(Vector3(117, 20, -113), Vector3(34, 20, 55), Vector3(0), 4, Vector3(105, 100, -120), goal_and_respown_areas);
 			set_respown_area(Vector3(107, 52.5f, -189), Vector3(10, 20, 50), Vector3(0), 5, Vector3(100, 100, -158), goal_and_respown_areas);
 
 			set_goal_area(Vector3(51, 51, -221), Vector3(20, 2, 20), Vector3(0), Stage_types::demo, goal_and_respown_areas);

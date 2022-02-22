@@ -76,7 +76,7 @@ namespace Adollib {
 				}
 
 				// “K“–‚Èeasing—p
-				if (sign == 0)acc -= time->deltaTime() * 2;
+				if (sign == 0)acc -= time->deltaTime();
 				else acc += time->deltaTime() * 2;
 				acc = ALClamp(acc, 0, 1);
 

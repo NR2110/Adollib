@@ -385,8 +385,8 @@ void Tutrial_stage01_move_camera_catch::tutrial_jump() {
 	if (tutrial_flag == 7) {
 		if (input_changer->is_jump_trigger) tutrial_move_state_timer += 1; //移動キーを押されたらtimerを進める
 
-		// 1回jumpしたらチェックマークを付ける
-		if (tutrial_move_state_timer > 0) {
+		// 2回jumpしたらチェックマークを付ける
+		if (tutrial_move_state_timer > 1) {
 			// scaleを適当な二次関数でeasing
 			tutrial_move_check_animation_timer += time->deltaTime() * 4;
 			tutrial_move_check_animation_timer = ALClamp(tutrial_move_check_animation_timer, 0, 1);

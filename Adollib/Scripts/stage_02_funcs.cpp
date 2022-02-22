@@ -307,7 +307,9 @@ namespace Adollib
 		excu_go->transform->local_pos = pos;
 
 		std::shared_ptr<Material> mat = Material_manager::create_material("event_material");
-		mat->Load_PS("./DefaultShader/default_ps_noshadow.cso");
+		mat->Load_PS("./DefaultShader/dither_noshadow_ps.cso");
+		mat->create_constantbuffer(6, 1);
+		mat->constant_buffer_data[0] = Vector4(25, 10, 0, 0);
 		mat->color = Vector4(1, 1, 0, 1);
 
 		// collider
@@ -318,7 +320,7 @@ namespace Adollib
 			coll->ignore_tags = Collider_tags::Tags_max;
 			auto box = coll->add_shape<Box>();
 			box->center = Vector3(0, 4, 0);
-			box->size = Vector3(1.5f, 6, 1.5f);
+			box->size = Vector3(3, 6, 3);
 		}
 
 		// Œ©‚½–Ú
@@ -407,7 +409,7 @@ namespace Adollib
 			// collider
 			auto coll = lever_stick->addComponent<Collider>();
 			{
-				coll->tag = Collider_tags::Stage /*| Collider_tags::Caera_not_sunk_Stage*/ | Collider_tags::Kinematic_Stage;
+				coll->tag = Collider_tags::Stage | Collider_tags::Kinematic_Stage | Collider_tags::Catch_able_easy;
 				coll->physics_data.is_fallable = false;
 				//coll->physics_data.is_moveable = false;
 				coll->physics_data.anglar_drag = 0.99f;
@@ -492,25 +494,25 @@ namespace Adollib
 				{
 					auto c = coll->add_shape<Box>();
 					c->center = Vector3(0, -1, +0.45) * scale_pow;
-					c->size = Vector3(2, 2, 0.1f) * scale_pow;
+					c->size = Vector3(1.5f, 1.5f, 0.1f) * scale_pow; //box‚Ì“–‚½‚è”»’è¬‚³‚­
 					c->rotate = Vector3(0, 0, 45);
 				}
 				{
 					auto c = coll->add_shape<Box>();
 					c->center = Vector3(0, -1, -0.45) * scale_pow;
-					c->size = Vector3(2, 2, 0.1f) * scale_pow;
+					c->size = Vector3(1.5f, 1.5f, 0.1f) * scale_pow;
 					c->rotate = Vector3(0, 0, 45);
 				}
 
 				{
 					auto c = coll->add_shape<Box>();
-					c->center = Vector3(+1.25, 0.75f, 0) * scale_pow;
+					c->center = Vector3(+0.75f, 0.45f, 0) * scale_pow;
 					c->size = Vector3(0.1f, 0.1f, 0.1f) * scale_pow;
 					c->rotate = Vector3(0, 0, 45);
 				}
 				{
 					auto c = coll->add_shape<Box>();
-					c->center = Vector3(-1.25, 0.75f, 0) * scale_pow;
+					c->center = Vector3(-0.75f, 0.45f, 0) * scale_pow;
 					c->size = Vector3(0.1f, 0.1f, 0.1f) * scale_pow;
 					c->rotate = Vector3(0, 0, 45);
 				}
@@ -585,8 +587,8 @@ namespace Adollib
 		door_comp->time_pow = time_pow;
 		door_comp->now_time = now_time;
 
-		auto GO = Gameobject_manager::create("move_block_2flags");
-		GO->add_child(collgo);
+		//auto GO = Gameobject_manager::create("move_block_2flags");
+		//GO->add_child(collgo);
 
 		if (pearent != nullptr)pearent->add_child(collgo);
 		return coll;

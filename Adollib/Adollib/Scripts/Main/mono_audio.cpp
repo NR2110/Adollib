@@ -26,10 +26,10 @@ namespace ALKLib
 	void MonoAudio::Init() {
 
 		// BGMのロード
-		LoadMusic(static_cast<int>(Music::BGM_Title),  L"../Data/sounds/BGM/bgm_stage.wav", 0.25f);
-		LoadMusic(static_cast<int>(Music::BGM_Game), L"../Data/sounds/BGM/stage_1.wav", 0.6f);
-		//LoadMusic(static_cast<int>(Music::BGM_Title), L"../Data/sounds/BGM/bgm_stage.wav", 0);
-		//LoadMusic(static_cast<int>(Music::BGM_Game), L"../Data/sounds/BGM/stage_1.wav", 0);
+		//LoadMusic(static_cast<int>(Music::BGM_Title),  L"../Data/sounds/BGM/Take_it_easy.wav", 0.25f);
+		//LoadMusic(static_cast<int>(Music::BGM_Game), L"../Data/sounds/BGM/tuitekuru_tuitekuru.wav", 0.6f);
+		LoadMusic(static_cast<int>(Music::BGM_Title), L"../Data/sounds/BGM/Take_it_easy.wav", 0);
+		LoadMusic(static_cast<int>(Music::BGM_Game), L"../Data/sounds/BGM/tuitekuru_tuitekuru.wav", 0);
 
 		//// BGMのロード
 		//LoadSound(L"Assets/Sounds/SE/Win/sound_effect.xwb");

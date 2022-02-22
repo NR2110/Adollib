@@ -285,7 +285,7 @@ namespace Adollib
 
 			Vector3 sholder_size = Vector3(0.35f, 0.6f, 0.4f);
 			Vector3 arm_size = sholder_size;
-			Vector3 hand_size = Vector3(0.45f, 0.45f, 0.45f);
+			Vector3 hand_size = Vector3(0.7f, 0.7f, 0.7f);
 			float arm_y_pos = 0.18f;
 			{
 				{

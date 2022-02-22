@@ -41,7 +41,7 @@ namespace Adollib
 		ShowCursor(TRUE);
 #endif
 		auto c = gameobject->findComponent<Camera_component>();
-		c->directional_shadow->position = Vector3(200, 200, -200);
+		c->directional_shadow->position = Vector3(300, 320, -200);
 		c->directional_shadow->direction = Vector3(-1, -2, 1).unit_vect();
 		c->directional_shadow->nearZ = 150;
 		c->directional_shadow->nearZ = 0.1f;
@@ -150,26 +150,29 @@ namespace Adollib
 				transform->local_orient = camera_rot;
 				if (input_changer->dir.norm() != 0)
 				{
-					rotate_min_pow_bufer -= 0.5f * time->deltaTime();
-					if (rotate_min_pow_bufer < rotate_min_pow)rotate_min_pow_bufer = rotate_min_pow;
-				}
-				else
-				{
 					rotate_min_pow_bufer += 0.5f * time->deltaTime();
 					if (rotate_min_pow_bufer > 1)rotate_min_pow_bufer = 1;
 				}
+				else
+				{
+					rotate_min_pow_bufer -= 0.5f * time->deltaTime();
+					if (rotate_min_pow_bufer < 0)rotate_min_pow_bufer = 0;
+				}
 
+				if (rotate_min_pow_bufer != 0)
 				{
 					const Vector3 dir = vector3_quatrotate(Vector3(0, 0, 1), camera_rot);
 					const Vector3 right = vector3_cross(Vector3(0, 1, 0), vector3_quatrotate(Vector3(0, 0, 1), camera_rot));
 
 					float tan_rad = vector3_radian(vector3_cross(right, Vector3(0, 1, 0)), dir);
 					if (dir.y > 0)tan_rad *= -1;
-					const float tan_rad_cl = tan_rad * rotate_min_pow_bufer;
 
-					if (tan_rad != tan_rad_cl) {
-						transform->local_orient *= quaternion_axis_radian(right, tan_rad_cl - tan_rad);
-					}
+					float tan_rad_cl = tan_rad;
+					if (dir.y > 0) tan_rad_cl *= 1 + (rotate_min_pow_yp - 1) * rotate_min_pow_bufer;
+					else           tan_rad_cl *= 1 + (rotate_min_pow_ym - 1) * rotate_min_pow_bufer;
+
+					transform->local_orient *= quaternion_axis_radian(right, tan_rad_cl - tan_rad);
+
 				}
 			}
 

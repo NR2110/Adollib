@@ -39,27 +39,31 @@ namespace Adollib
 		player_manager->set_is_shotable(false);
 
 #if  _DEBUG
-		////auto cube = Gameobject_manager::createFromFBX("Shaclo", "../Data/FBX/Model_Shaclo_Winter_Edit.fbx",true);
-		////auto cube = Gameobject_manager::createFromFBX("bunny", "../Data/FBX/bunny.obj");
-		////auto cube = Gameobject_manager::createFromFBX("plane", "./DefaultModel/plane_64x64vertex.fbx");
-		//auto cube = Gameobject_manager::createCube();
-		//////auto cube = Gameobject_manager::createSphere();
+		// 適当なピラミッド
+		{
+			Gameobject* tutrial_block = Gameobject_manager::create("pyramid");
 
-		//auto coll = cube->addComponent<Collider>();
-		//coll->add_mesh_shape("../Data/FBX/stage_col.fbx", true, false);
+			int phyramid_size = 6;
+			Vector3 base_size = Vector3(1, 1, 1.5f);
+			Vector3 base_pos = Vector3(52, 0, -4);
 
-		////auto coll = cube->addComponent<Collider_Croth>();
-		////coll->load_file("./DefaultModel/plane_64x64vertex.fbx", true, false);
+			for (int y = 0; y < phyramid_size; ++y) {
+				for (int x = 0; x < phyramid_size - y; ++x) {
+					for (int z = 0; z < phyramid_size - y; ++z) {
 
-		////auto renderer = cube->addComponent<Croth_renderer>();
-		////renderer->set_meshoffset(coll->get_vertex_offset());
+						auto coll = set_box(base_pos + Vector3(
+							(base_size.x * 2 + 0.2f) * x - ((base_size.x * 2 + 0.2f) * (phyramid_size - y) * 0.5f),
+							(base_size.y * 2 + 0) * y + base_size.y,
+							(base_size.z * 2 + 0.2f) * z - ((base_size.z * 2 + 0.2f) * (phyramid_size - y) * 0.5f)
 
-		////coll->add_shape("../Data/FBX/bunny.obj", true, false);
-		////coll->add_shape("./DefaultModel/sphere.fbx", true, false);
-		////coll->physics_data.is_hitable = false;
-		//coll->physics_data.is_moveable = false;
-
-					// 回転gimmick
+						), base_size, Vector3(0, 0, 0), moveable_green, tutrial_block, false);
+						coll->tag |= Collider_tags::Catch_able_easy;
+						coll->physics_data.inertial_mass = 5;
+						coll->physics_data.angula_sleep_threrhold = 0;
+					}
+				}
+			}
+		}
 		{
 			// 階段
 			{
@@ -161,8 +165,8 @@ namespace Adollib
 				Gameobject* tutrial_block = Gameobject_manager::create("pyramid");
 				first_zone->add_child(tutrial_block);
 
-				int phyramid_size = 6;
-				Vector3 base_size = Vector3(1, 1, 1.5f);
+				int phyramid_size = 3;
+				Vector3 base_size = Vector3(2, 2, 3);
 				Vector3 base_pos = Vector3(52, 0, -4);
 
 				for (int y = 0; y < phyramid_size; ++y) {
@@ -175,6 +179,7 @@ namespace Adollib
 								(base_size.z * 2 + 0.2f) * z - ((base_size.z * 2 + 0.2f) * (phyramid_size - y) * 0.5f)
 
 							), base_size, Vector3(0, 0, 0), moveable_green, tutrial_block, false);
+							coll->tag |= Collider_tags::Catch_able_easy;
 							coll->physics_data.inertial_mass = 5;
 							coll->physics_data.angula_sleep_threrhold = 0;
 						}
@@ -254,8 +259,8 @@ namespace Adollib
 				Gameobject* tutrial_block = Gameobject_manager::create("pyramid");
 				second_zone->add_child(tutrial_block);
 
-				int phyramid_size = 6;
-				Vector3 base_size = Vector3(1.5f, 1, 1);
+				int phyramid_size = 3;
+				Vector3 base_size = Vector3(3, 2, 2);
 				Vector3 base_pos = Vector3(53, 12, 76);
 
 				for (int y = 0; y < phyramid_size; ++y) {
@@ -281,8 +286,29 @@ namespace Adollib
 				Gameobject* rotate_gimmick = Gameobject_manager::create("rotate_gimmick");
 				second_zone->add_child(rotate_gimmick);
 
-				set_buttan(Vector3(74, 11.2f, 76), Vector3(4, 0.9f, 4), Vector3(0, 0, 0), Stage_parts::Stageparts_tags::Flag_0, rotate_gimmick, false);
+				set_buttan(Vector3(74, 11.2f, 76), Vector3(4, 0.9f, 4), Vector3(0, 0, 0), Stage_parts::Stageparts_tags::Flag_0, rotate_gimmick, true);
 				set_rotate_block(Vector3(102, 25.0f, 71), Vector3(5, 15, 15), Vector3(0, 90, 0), Stage_parts::Stageparts_tags::Flag_0, Vector3(0, 0, -1), 1, 1, base_color, rotate_gimmick);
+
+				{
+					std::shared_ptr<Material> yajisushi_mat = Material_manager::create_material("stage_catch_material");
+					yajisushi_mat->get_texture()->Load(L"./DefaultTexture/stage/stage_catch.png");
+					yajisushi_mat->BS_state = State_manager::BStypes::BS_ALPHA;
+					yajisushi_mat->RS_state = State_manager::RStypes::RS_CULL_NONE;
+					yajisushi_mat->Load_VS("./DefaultShader/sprite_vs.cso");
+					yajisushi_mat->Load_PS("./DefaultShader/sprite_ps.cso");
+					yajisushi_mat->is_render_shadow = false;
+					yajisushi_mat->color = Vector4(1, 1, 1, 1);
+					auto plane = set_plane(Vector3(82.6f, 15.28f, 60.2f), Vector3(6, 3.42f, 1), Vector3(0, -47, 0), Vector3(base_color), rotate_gimmick);
+					plane->renderer->set_material(yajisushi_mat);
+
+					auto coll = plane->addComponent<Collider>();
+					coll->tag = Collider_tags::Box | Collider_tags::Stage | Collider_tags::Static_Stage;
+					coll->physics_data.is_moveable = false;
+					coll->physics_data.is_static = true;
+					auto box = coll->add_shape<Box>();
+					box->size = Vector3(0.91f, 0.92f, 0.10f);
+
+				}
 			}
 
 			// 体を持ち上げるtutrial
@@ -320,7 +346,7 @@ namespace Adollib
 				set_box(Vector3(198, 27, 64), Vector3(42, 4, 1), Vector3(0), base_color, tute_up);
 
 				set_buttan(Vector3(199, 19, 64.4f), Vector3(2, 0.9f, 2), Vector3(90, 0, 0), Stage_parts::Stageparts_tags::Flag_2, tute_up, true);
-				set_gimmickdoor(Vector3(212, 19, 64), Vector3(214, 19, 64),
+				set_gimmickdoor(Vector3(212, 19, 64), Vector3(215, 19, 64),
 					Vector3(0), Vector3(0),
 					2, 0,
 					Vector3(2, 4.0f, 0.5f),
@@ -329,7 +355,7 @@ namespace Adollib
 					tute_up
 				);
 
-				set_gimmickdoor(Vector3(208, 19, 64), Vector3(206, 19, 64),
+				set_gimmickdoor(Vector3(208, 19, 64), Vector3(205, 19, 64),
 					Vector3(0), Vector3(0),
 					2, 0,
 					Vector3(2, 4.0f, 0.5f),
@@ -367,10 +393,10 @@ namespace Adollib
 				{
 					Gameobject* tutrial_block = Gameobject_manager::create("pyramid");
 					second_zone->add_child(tutrial_block);
-					tutrial_block->transform->local_pos = Vector3(138, 12, 116);
+					tutrial_block->transform->local_pos = Vector3(138, 12, 114);
 
-					int phyramid_size = 4;
-					Vector3 base_size = Vector3(2, 1.5f, 2);
+					int phyramid_size = 3;
+					Vector3 base_size = Vector3(3, 1.5f, 4);
 					Vector3 base_pos = Vector3(0);
 
 					for (int y = 0; y < phyramid_size; ++y) {
@@ -378,7 +404,7 @@ namespace Adollib
 							for (int z = 0; z < phyramid_size - y; ++z) {
 
 								auto coll = set_box(base_pos + Vector3(
-									(base_size.x * 2 + 0.2f) * x - ((base_size.x * 2 + 0.2f) * (phyramid_size - y) * 0.5f),
+									(base_size.x * 2 + 0.2f) * x - ((base_size.x * 2 + 0.2f) * (phyramid_size - y) * 0.5f) + y * base_size.x,
 									(base_size.y * 2 + 0) * y + base_size.y,
 									(base_size.z * 2 + 0.2f) * z - ((base_size.z * 2 + 0.2f) * (phyramid_size - y) * 0.5f)
 

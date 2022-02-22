@@ -33,6 +33,7 @@ namespace Adollib {
 		static const Collider_tagbit Goal_stage = (1 << 24);
 
 		static const Collider_tagbit Rope_event = (1 << 25);
+		static const Collider_tagbit Catch_able_easy = (1 << 26);
 
 		static const Collider_tagbit Title = (1 << 28);
 

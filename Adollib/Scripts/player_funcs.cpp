@@ -18,7 +18,7 @@
 #include "input_changer.h"
 
 #ifdef ON_DEBUG
-//#define Rope_Shot_Always
+#define Rope_Shot_Always
 #endif
 
 using namespace Adollib;
@@ -194,11 +194,7 @@ void Player::catch_things() {
 		Vector3 check_1 = vector3_quatrotate(check_0, arm_rad_to_camera[i]);
 		//‚Â
 		if (
-			input_arm[i] && joint == nullptr && *is_maked_joint[i] == false && // Key‚ª‰Ÿ‚³‚ê‚Ä‚¢‚é joint‚ª‘¶İ‚µ‚È‚¢ “¯state’†‚É•¨‚ğ‚Â‚©‚ñ‚Å‚¢‚È‚¢
-			(
-				check_1.x - check_0.x < 0 || //‰º‚ÉŒü‚±‚¤‚Æ‚µ‚Ä‚¢‚é
-				arm_rad_to_camera[i].radian() < ToRadian(50) //˜r‚ÆƒJƒƒ‰‚ÌŠp“x‚ªˆê’èˆÈ‰º‚Å‚ ‚é
-				)
+			input_arm[i] && joint == nullptr && *is_maked_joint[i] == false // Key‚ª‰Ÿ‚³‚ê‚Ä‚¢‚é joint‚ª‘¶İ‚µ‚È‚¢ “¯state’†‚É•¨‚ğ‚Â‚©‚ñ‚Å‚¢‚È‚¢
 			) {
 			collider->is_save_contacted_colls = true;
 			auto contacted_colls = collider->get_Contacted_data();
@@ -206,7 +202,14 @@ void Player::catch_things() {
 			//Õ“Ë‚µ‚Ä‚¢‚écollider‚©‚çˆê”Ô‹ß‚¢‚à‚Ì‚ğ’T¸
 			Contacted_data const* min_data = nullptr;
 			for (auto& c_coll : contacted_colls) {
-				if (min_data == nullptr || min_data->penetrate > c_coll.penetrate) {
+				if (
+					(min_data == nullptr || min_data->penetrate > c_coll.penetrate) && // ‹——£‚Ì”äŠr
+					(
+						c_coll.coll->tag & Collider_tags::Catch_able_easy || //‚Â‚©‚İ‚â‚·‚¢‚à‚Ì‚©(‰º‚Ì“ñ‚Â‚ÌğŒ‚È‚µ‚Å‚Â‚©‚ß‚é‚à‚Ì)
+						check_1.x - check_0.x < 0 || //‰º‚ÉŒü‚±‚¤‚Æ‚µ‚Ä‚¢‚é
+						arm_rad_to_camera[i].radian() < ToRadian(50) //˜r‚ÆƒJƒƒ‰‚ÌŠp“x‚ªˆê’èˆÈ‰º‚Å‚ ‚é
+					)
+					) {
 					min_data = &c_coll;
 
 				}
@@ -593,7 +596,7 @@ void Player::add_pow_for_stand() {
 
 	}
 	// gunyatto‚µ‚Ä‚¢‚½‚Í
-	else if(gunyatto_pow != 0){
+	else if (gunyatto_pow != 0) {
 		// Œü‚«‚Ì‚İXV
 		turn_gunyatto_dir();
 	}
@@ -634,7 +637,7 @@ void Player::push_waist_for_stand() {
 				(catch_right_joint == nullptr || catch_right_joint->get_colliderB() != onground_collider) && //‰Eè‚Å‚Á‚Ä‚¢‚é‚à‚Ì‚Å‚Í‚È‚¢
 				(catch_left_joint == nullptr || catch_left_joint->get_colliderB() != onground_collider) &&    //¶è‚Å‚Á‚Ä‚¢‚é‚à‚Ì‚Å‚Í‚È‚¢
 				(Lblock_rope_joint == nullptr || Lblock_rope_joint->get_colliderA() != onground_collider) //rope‚Å‚Â‚©‚ñ‚Å‚¢‚é‚à‚Ì‚Å‚Í‚È‚¢
-			){
+				) {
 				Vector3 onground_velocity = onground_collider->get_point_velocity(onground_contactpoint, false);
 				onground_velocity.y = 0;
 				if (onground_velocity.norm() != 0) {
