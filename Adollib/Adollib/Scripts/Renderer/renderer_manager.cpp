@@ -130,9 +130,9 @@ void Renderer_manager::render(const std::list<Scenelist>& active_scenes, const s
 					auto shadow_frustum = camera->directional_shadow->calculate_frustum_data();
 
 					// instansing用
-					instance_update(shadow_frustum, render_scene); //frastumによって調整するため
+					instance_update(shadow_frustum, camera); //frastumによって調整するため
 
-					render_instance(true, true);
+					render_instance(camera, true, true);
 
 					camera->directional_shadow->set_ShaderResourceView();
 				}
@@ -149,10 +149,10 @@ void Renderer_manager::render(const std::list<Scenelist>& active_scenes, const s
 					Work_meter::start("render_obj");
 
 					// instansing用
-					instance_update(frustum_data, render_scene);
+					instance_update(frustum_data, camera);
 
 					// renderを呼ぶ
-					render_instance(true);
+					render_instance(camera, true);
 					Work_meter::stop("render_obj");
 				}
 
@@ -278,7 +278,7 @@ void Renderer_manager::sort_update(std::list<Scenelist> active_scenes) {
 	}
 }
 
-void Renderer_manager::instance_update(const Frustum_data& frustum_data, Scenelist Sce) {
+void Renderer_manager::instance_update(const Frustum_data& frustum_data, Camera_component* camera_comp) {
 
 	Instance* instances = nullptr;
 	if (sorted_renderers.size() == 0)return;
@@ -314,6 +314,7 @@ void Renderer_manager::instance_update(const Frustum_data& frustum_data, Sceneli
 		for (auto& renderer : sorted_renderers) {
 
 			if (renderer->is_render == false)continue;
+			//if (renderer->only_render_cameraGO_ptr != nullptr && renderer->only_render_cameraGO_ptr != camera_comp->gameobject)continue;
 			// instancing を行わない場合 別の配列に保存
 			if (renderer->is_use_instancing == false) {
 				no_use_instancing_renderers.emplace_back(renderer);
@@ -368,13 +369,15 @@ void Renderer_manager::instance_update(const Frustum_data& frustum_data, Sceneli
 
 }
 
-void Renderer_manager::render_instance(bool is_shader_activate, bool is_shadow_render) {
+void Renderer_manager::render_instance(Camera_component* camera_comp, bool is_shader_activate, bool is_shadow_render) {
 	//return;
 	for (const auto& render : render_counts) {
 
 		// 影の描画を行わなければcontinue
-		if (is_shadow_render && render.renderer->get_material() != nullptr) {
-			if (render.renderer->get_material()->is_render_shadow == false)continue;
+		if (render.renderer->get_material() != nullptr
+			) {
+			if (is_shadow_render && render.renderer->get_material()->is_render_shadow == false)continue;
+			if (render.renderer->get_material()->only_render_cameraGO_ptr != nullptr && render.renderer->get_material()->only_render_cameraGO_ptr != camera_comp->gameobject)continue;
 		}
 
 

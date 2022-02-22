@@ -15,7 +15,7 @@ namespace Adollib {
 
 
 	public:
-
+		float tutrial_ui_x = -63;
 
 	private:
 

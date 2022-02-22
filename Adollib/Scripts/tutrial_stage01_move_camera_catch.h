@@ -37,7 +37,6 @@ namespace Adollib {
 		float tutrial_move_check_animation_timer = 0;
 		float tutrial_camera_check_animation_timer = 0;
 
-
 	public:
 
 		void set_tutrial_move_and_camera() {
@@ -46,6 +45,12 @@ namespace Adollib {
 
 
 	private:
+
+		void create_material(std::shared_ptr<Material>& mat_ptr, const std::string& material_name, const wchar_t* texture_path);
+		void create_gameobject(Gameobject*& retGO, const std::string& go_name, std::shared_ptr<Material>& set_mat,const Vector3& go_scale, const Vector3& local_check_pos, const Vector3& local_check_scale);
+
+	private:
+
 		void tutrial_move_and_camera(); //1 ~ 4
 
 		void tutrial_jump(); //5 ~ 9

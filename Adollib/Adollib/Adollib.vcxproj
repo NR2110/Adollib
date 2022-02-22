@@ -175,6 +175,7 @@
     <ClInclude Include="..\Scripts\rotate_block.h" />
     <ClInclude Include="..\Scripts\scene_game_all.h" />
     <ClInclude Include="..\Scripts\scene_title_all.h" />
+    <ClInclude Include="..\Scripts\select_playernum_manager.h" />
     <ClInclude Include="..\Scripts\select_stage_manager.h" />
     <ClInclude Include="..\Scripts\stageparts_base.h" />
     <ClInclude Include="..\Scripts\stageparts_tags.h" />
@@ -331,6 +332,7 @@
     <ClCompile Include="..\Scripts\player.cpp" />
     <ClCompile Include="..\Scripts\player_funcs.cpp" />
     <ClCompile Include="..\Scripts\player_manager.cpp" />
+    <ClCompile Include="..\Scripts\select_playernum_manager.cpp" />
     <ClCompile Include="..\Scripts\select_stage_manager.cpp" />
     <ClCompile Include="..\Scripts\stage_01.cpp" />
     <ClCompile Include="..\Scripts\stage_01_funcs.cpp" />

@@ -62,7 +62,7 @@ void Title_camera::update()
 
 	// debug—p ƒJƒƒ‰‚ðŽ©—R‚É“®‚©‚·
 #ifdef ON_DEBUG
-	if (0 && input->getMouseState(Mouse::RBUTTON)) {
+	if (input->getMouseState(Mouse::RBUTTON)) {
 		Vector3 position = Vector3(0, 0, 0);
 		Quaternion rotate = quaternion_identity();
 

@@ -6,6 +6,7 @@ namespace Adollib {
 	enum class Title_state_A {
 
 		Start = 0,
+		Select_playernum,
 		Select_stage,
 	};
 

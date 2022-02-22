@@ -10,6 +10,7 @@
 
 namespace Adollib {
 	class Texture;
+	class Gameobject;
 
 	class Material {
 	public:
@@ -33,6 +34,8 @@ namespace Adollib {
 		Vector4 color;
 
 		bool is_render_shadow = true;
+
+		Gameobject* only_render_cameraGO_ptr = nullptr;
 
 		Vector4 constant_buffer_data[4];
 

@@ -11,7 +11,7 @@
 #include "stage_01.h"
 #include "stage_02.h"
 
-#include "player.h"
+#include "Player_manager.h"
 
 using namespace Adollib;
 using namespace Stage_parts;
@@ -34,8 +34,8 @@ void Stage_manager::awake() {
 
 void Stage_manager::start() {
 
-	player = Gameobject_manager::find("player",Scenelist::scene_player)->findComponent<Player>();
-	player->respown();
+	player = Gameobject_manager::find("Player_manager",Scenelist::scene_player)->findComponent<Player_manager>();
+	player->player_respown();
 }
 
 void Stage_manager::update() {
@@ -52,7 +52,7 @@ void Stage_manager::update() {
 		now_stage = next_stage;
 
 		//player->delete_catchjoint();
-		player->respown();
+		player->player_respown();
 
 		is_changed_stage = true;
 	}

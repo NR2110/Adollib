@@ -23,11 +23,14 @@ namespace Adollib {
 
 	private:
 		int select_stage_num = 0; //userが選択しているstageのID
-
 		float change_timer_pow = 0; //changeの時間 1/pow だけの時間をかけて変わる
 		float change_select_timer = 0; //
 		int  change_select_sign = 0; //入力により +1,-1になる
 		int  change_select_state_sign = 0; //入力が続いていればパラパラ動くようにするためのフラグ 入力により +1,-1になる
+
+		int select_player_num = 0;
+		float change_playernum_timer = 0; //
+		int  change_playernum_sign = 0; //入力により +1,-1になる
 
 		static constexpr int select_stage_size = 2; //stageの数
 		std::shared_ptr<Material>  select_stage_material[select_stage_size]; //stageの数だけ張り付けるためのmaterialを作る
@@ -35,6 +38,8 @@ namespace Adollib {
 		Vector3 base_select_back_pos[5]; //selectの基本座標 使いまわすため5個数でOK
 		Gameobject* select_stage_back[5]; //spriteの後ろの板
 		Gameobject* select_stage_front[5]; //spriteを張る板
+
+		Gameobject* select_sprite = nullptr;
 
 		Title_state_manager* title_state_manager = nullptr;
 		Player_manager* player_manager = nullptr;

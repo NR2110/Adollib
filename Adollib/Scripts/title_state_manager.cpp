@@ -4,6 +4,12 @@
 
 using namespace Adollib;
 
+
+void Title_state_manager::awake() {
+	now_stateA = Title_state_A::Select_playernum;
+	now_stateB = Title_state_B::Awake;
+}
+
 void Title_state_manager::update() {
 
 	state_A_timer += time->deltaTime();

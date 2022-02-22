@@ -18,6 +18,7 @@
 #include "../Adollib/Imgui/imgui.h"
 
 #include "select_stage_manager.h"
+#include "select_playernum_manager.h"
 
 using namespace Adollib;
 
@@ -385,6 +386,13 @@ void Title_stage::awake()
 
 	{}
 
+	// select player num
+	//{
+	//	// ‘I‘ðŽˆ
+	//	auto go = Gameobject_manager::create("select_stage");
+	//	go->addComponent<Select_playernum_manager>();
+	//}
+
 	// select
 	{
 		// •Ç‚È‚Ç
@@ -411,6 +419,7 @@ void Title_stage::awake()
 			// ‘I‘ðŽˆ
 			auto go = Gameobject_manager::create("select_stage");
 			go->addComponent<Select_state_manager>();
+			//go->addComponent<Select_playernum_manager>();
 		}
 
 		// sprite select_stage

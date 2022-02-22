@@ -37,6 +37,10 @@ namespace Adollib {
 
 
 	private:
+		void create_material(std::shared_ptr<Material>& mat_ptr, const std::string& material_name, const wchar_t* texture_path);
+		void create_gameobject(Gameobject*& retGO, const std::string& go_name, std::shared_ptr<Material>& set_mat, const Vector3& go_scale, const Vector3& local_check_pos, const Vector3& local_check_scale);
+
+	private:
 		void tutrial_aim_and_shot(); //1 ~ 4
 		void tutrial_shrink(); //1 ~ 4
 		void tutrial_cut(); //1 ~ 4

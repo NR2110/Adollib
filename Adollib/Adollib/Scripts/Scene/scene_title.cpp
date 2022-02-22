@@ -36,7 +36,7 @@ namespace Adollib {
 		}
 
 
-		//Scene_manager::set_inactive(Scenelist::scene_player);
+		Scene_manager::set_active(Scenelist::scene_player);
 	}
 
 

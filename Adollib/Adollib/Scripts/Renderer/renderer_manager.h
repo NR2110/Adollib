@@ -44,9 +44,9 @@ namespace Adollib {
 
 		static void sort_update(std::list<Scenelist> active_scenes); //instanceのためのsort materialとmeshが同じrendererを連番にするsortを行う
 
-		static void instance_update(const Frustum_data& frustum_data, Scenelist Sce); //sort_updateでまとめた情報から instancingの回数などを計算、render_countsに保存
+		static void instance_update(const Frustum_data& frustum_data, Camera_component* camera_comp); //sort_updateでまとめた情報から instancingの回数などを計算、render_countsに保存
 
-		static void render_instance(bool is_shader_activate = true, bool is_shadow_render = false);
+		static void render_instance(Camera_component* camera_comp, bool is_shader_activate = true, bool is_shadow_render = false);
 
 	public:
 		static void awake();

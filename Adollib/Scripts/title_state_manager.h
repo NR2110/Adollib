@@ -39,6 +39,7 @@ namespace Adollib {
 
 	public:
 
+		void awake() override;
 		void update() override;
 
 

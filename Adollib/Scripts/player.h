@@ -145,6 +145,7 @@ namespace Adollib
 		void set_is_shotable(bool is);
 
 		void set_cameraptr(Camera* l_camera) { camera = l_camera; };
+		Camera* get_cameraptr() { return camera; };
 		void set_input_changerptr(Input_changer* l_input_changer) { input_changer = l_input_changer; };
 
 		bool get_is_shotable_rope() { return is_shotable; };
@@ -270,6 +271,8 @@ namespace Adollib
 		}
 
 		void set_player_num(int num) { player_num = num; };
+
+		int get_player_num() { return player_num; };
 
 	public:
 		void awake() override;

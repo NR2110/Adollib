@@ -1,3 +1,2 @@
-﻿  stage_01.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(20,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。
-  Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe
+﻿  tutrial_manager.cpp
+  tutrial_stage01_move_camera_catch.cpp

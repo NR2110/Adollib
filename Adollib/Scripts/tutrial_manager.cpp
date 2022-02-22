@@ -20,6 +20,7 @@ void Tutrial_manager::start() {
 		ptr->time = time;
 		ptr->input_changer = gameobject->findComponent<Input_changer>();
 		ptr->player = gameobject->findComponent<Player>();
+		ptr->tutrial_ui_x = tutrial_ui_x;
 		ptr->awake();
 		tutrials.emplace_back(ptr);
 	}
@@ -28,6 +29,7 @@ void Tutrial_manager::start() {
 		ptr->time = time;
 		ptr->input_changer = gameobject->findComponent<Input_changer>();
 		ptr->player = gameobject->findComponent<Player>();
+		ptr->tutrial_ui_x = tutrial_ui_x;
 		ptr->awake();
 		tutrials.emplace_back(ptr);
 	}

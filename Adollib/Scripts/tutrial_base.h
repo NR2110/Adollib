@@ -14,6 +14,8 @@ namespace Adollib {
 		std::shared_ptr<Time> time = nullptr;
 		Input_changer* input_changer = nullptr;
 		Player* player = nullptr;
+		float tutrial_ui_x = -63;
+
 	public:
 
 		virtual void awake() = 0;

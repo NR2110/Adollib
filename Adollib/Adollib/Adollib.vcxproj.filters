@@ -502,6 +502,9 @@
     <ClCompile Include="..\Scripts\tutrial_stage02_rope.cpp">
       <Filter>ソース ファイル\scene_player\tutrial</Filter>
     </ClCompile>
+    <ClCompile Include="..\Scripts\select_playernum_manager.cpp">
+      <Filter>ソース ファイル\scene_title\stage\select</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Scripts\player.h">
@@ -992,6 +995,9 @@
     </ClInclude>
     <ClInclude Include="..\Scripts\tutrial_stage02_rope.h">
       <Filter>ソース ファイル\scene_player\tutrial</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\select_playernum_manager.h">
+      <Filter>ソース ファイル\scene_title\stage\select</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

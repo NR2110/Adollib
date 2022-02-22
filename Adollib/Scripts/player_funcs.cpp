@@ -1082,7 +1082,8 @@ void Player::respown() {
 	auto stage = stage_manager->get_current_stage();
 
 	// À•WˆÚ“®
-	Vector3 off = vector3_quatrotate(stage->player_respown_pos - Waist->world_position(), Waist->parent()->world_orientate().inverse());
+	Vector3 respown_pow = stage->player_respown_pos + Vector3(10, 0, 0) * player_num;
+	Vector3 off = vector3_quatrotate(respown_pow - Waist->world_position(), Waist->parent()->world_orientate().inverse());
 	for (int i = 0; i < Human_gameobject_size; i++) {
 		Human_gameobjects[i]->transform->local_pos += off;
 	}

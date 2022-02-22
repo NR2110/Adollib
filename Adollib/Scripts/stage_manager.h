@@ -9,7 +9,7 @@
 
 namespace Adollib {
 	class Stage_base;
-	class Player;
+	class Player_manager;
 
 	class Stage_manager : public Component {
 
@@ -25,7 +25,7 @@ namespace Adollib {
 
 		std::unordered_map<Stage_types, Stage_base*> stages; //アタッチされたstageへのポインタ
 
-		Player* player;
+		Player_manager* player;
 
 	private:
 		template<typename T>

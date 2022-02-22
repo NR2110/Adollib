@@ -63,9 +63,9 @@ namespace Adollib
 			ImGui::InputFloat("linear_speed", &linear_speed, 1.0f, 300.0f, "%.2f");
 			ImGui::Checkbox("follow_player", &follow_player);
 			if (follow_player) ImGui::DragFloat("dis", &dis, 0.1f);
-
-			ImGui::End();
 		}
+		ImGui::End();
+
 #endif // UseImgui
 
 		float timeStep = Al_Global::second_per_frame;

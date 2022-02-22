@@ -26,49 +26,48 @@
 
 #include "input_changer.h"
 #include "player.h"
+#include "camera.h"
 #include "stage_manager.h"
 #include "stage_base.h"
 
 using namespace Adollib;
 
+void Tutrial_stage02_rope::create_material(std::shared_ptr<Material>& mat_ptr, const std::string& material_name, const wchar_t* texture_path) {
+	mat_ptr = Material_manager::create_material(material_name + std::to_string(player->get_player_num()));
+	mat_ptr->only_render_cameraGO_ptr = player->get_cameraptr()->gameobject;
+	mat_ptr->get_texture()->Load(texture_path);
+	mat_ptr->BS_state = State_manager::BStypes::BS_ALPHA;
+	mat_ptr->Load_VS("./DefaultShader/ui_vs.cso");
+	mat_ptr->Load_PS("./DefaultShader/ui_ps.cso");
+	mat_ptr->is_render_shadow = false;
+}
+void Tutrial_stage02_rope::create_gameobject(Gameobject*& retGO, const std::string& go_name, std::shared_ptr<Material>& set_mat,
+	const Vector3& go_scale, const Vector3& local_check_pos, const Vector3& local_check_scale
+) {
+	retGO = Gameobject_manager::createPlane(go_name, Scenelist::scene_player);
+	auto renderer = retGO->addComponent<UI_renderer>();
+	renderer->set_material(set_mat);
+	retGO->transform->local_scale = go_scale;
+
+	auto check = Gameobject_manager::createPlane("check", Scenelist::scene_player);
+	auto check_renderer = check->addComponent<UI_renderer>();
+	check_renderer->set_material(mat_tutrial_check);
+	check_renderer->depth = 1;
+	check->transform->local_scale = local_check_scale;
+	check->transform->local_pos = local_check_pos;
+	retGO->add_child(check);
+}
+
+
 void Tutrial_stage02_rope::awake() {
 
 	// material‚Ìì¬
 	{
-		mat_tutrial_check = Material_manager::create_material("mat_tutrial_check");
-		mat_tutrial_check->get_texture()->Load(L"./DefaultTexture/tutrial/tutrial_check.png");
-		mat_tutrial_check->BS_state = State_manager::BStypes::BS_ALPHA;
-		mat_tutrial_check->Load_VS("./DefaultShader/ui_vs.cso");
-		mat_tutrial_check->Load_PS("./DefaultShader/ui_ps.cso");
-		mat_tutrial_check->is_render_shadow = false;
-
-		mat_tutrial_aim = Material_manager::create_material("mat_tutrial_aim");
-		mat_tutrial_aim->get_texture()->Load(L"./DefaultTexture/tutrial/tutrial_LBhold_aim.png");
-		mat_tutrial_aim->BS_state = State_manager::BStypes::BS_ALPHA;
-		mat_tutrial_aim->Load_VS("./DefaultShader/ui_vs.cso");
-		mat_tutrial_aim->Load_PS("./DefaultShader/ui_ps.cso");
-		mat_tutrial_aim->is_render_shadow = false;
-
-		mat_tutrial_shot = Material_manager::create_material("mat_tutrial_shot");
-		mat_tutrial_shot->get_texture()->Load(L"./DefaultTexture/tutrial/tutrial_LBrelease_shot.png");
-		mat_tutrial_shot->BS_state = State_manager::BStypes::BS_ALPHA;
-		mat_tutrial_shot->Load_VS("./DefaultShader/ui_vs.cso");
-		mat_tutrial_shot->Load_PS("./DefaultShader/ui_ps.cso");
-		mat_tutrial_shot->is_render_shadow = false;
-
-		mat_tutrial_shrink = Material_manager::create_material("mat_tutrial_shrink");
-		mat_tutrial_shrink->get_texture()->Load(L"./DefaultTexture/tutrial/tutrial_RBhold_shrimk.png");
-		mat_tutrial_shrink->BS_state = State_manager::BStypes::BS_ALPHA;
-		mat_tutrial_shrink->Load_VS("./DefaultShader/ui_vs.cso");
-		mat_tutrial_shrink->Load_PS("./DefaultShader/ui_ps.cso");
-		mat_tutrial_shrink->is_render_shadow = false;
-
-		mat_tutrial_cut = Material_manager::create_material("mat_tutrial_cut");
-		mat_tutrial_cut->get_texture()->Load(L"./DefaultTexture/tutrial/tutrial_B_cut.png");
-		mat_tutrial_cut->BS_state = State_manager::BStypes::BS_ALPHA;
-		mat_tutrial_cut->Load_VS("./DefaultShader/ui_vs.cso");
-		mat_tutrial_cut->Load_PS("./DefaultShader/ui_ps.cso");
-		mat_tutrial_cut->is_render_shadow = false;
+		create_material(mat_tutrial_check, "mat_tutrial_check", L"./DefaultTexture/tutrial/tutrial_check.png");
+		create_material(mat_tutrial_aim, "mat_tutrial_aim", L"./DefaultTexture/tutrial/tutrial_LBhold_aim.png");
+		create_material(mat_tutrial_shot, "mat_tutrial_shot", L"./DefaultTexture/tutrial/tutrial_LBrelease_shot.png");
+		create_material(mat_tutrial_shrink, "mat_tutrial_shrink", L"./DefaultTexture/tutrial/tutrial_RBhold_shrimk.png");
+		create_material(mat_tutrial_cut, "mat_tutrial_cut", L"./DefaultTexture/tutrial/tutrial_B_cut.png");
 	}
 
 	// gameobject‚Ìì¬
@@ -76,67 +75,10 @@ void Tutrial_stage02_rope::awake() {
 		Vector3 local_check_pos = Vector3(5.15f, 2.9f, 1);
 		check_base_scale = Vector3(0.21f, 1.5f, 1);
 
-
-		{
-			go_tutrial_aim = Gameobject_manager::createPlane("go_tutrial_aim", Scenelist::scene_player);
-			auto renderer = go_tutrial_aim->addComponent<UI_renderer>();
-			renderer->set_material(mat_tutrial_aim);
-			go_tutrial_aim->transform->local_scale = Vector3(7, 1, 1);
-
-			auto check = Gameobject_manager::createPlane("check", Scenelist::scene_player);
-			auto check_renderer = check->addComponent<UI_renderer>();
-			check_renderer->set_material(mat_tutrial_check);
-			check_renderer->depth = 1;
-			check->transform->local_scale = check_base_scale;
-			check->transform->local_pos = local_check_pos;
-			go_tutrial_aim->add_child(check);
-
-		}
-		{
-			go_tutrial_shot = Gameobject_manager::createPlane("go_tutrial_shot", Scenelist::scene_player);
-			auto renderer = go_tutrial_shot->addComponent<UI_renderer>();
-			renderer->set_material(mat_tutrial_shot);
-			go_tutrial_shot->transform->local_scale = Vector3(7, 1, 1);
-
-			auto check = Gameobject_manager::createPlane("check", Scenelist::scene_player);
-			auto check_renderer = check->addComponent<UI_renderer>();
-			check_renderer->set_material(mat_tutrial_check);
-			check_renderer->depth = 1;
-			check->transform->local_scale = check_base_scale;
-			check->transform->local_pos = local_check_pos;
-			go_tutrial_shot->add_child(check);
-
-		}
-		{
-			go_tutrial_shrink = Gameobject_manager::createPlane("go_tutrial_shrink", Scenelist::scene_player);
-			auto renderer = go_tutrial_shrink->addComponent<UI_renderer>();
-			renderer->set_material(mat_tutrial_shrink);
-			go_tutrial_shrink->transform->local_scale = Vector3(7, 1, 1);
-
-			auto check = Gameobject_manager::createPlane("check", Scenelist::scene_player);
-			auto check_renderer = check->addComponent<UI_renderer>();
-			check_renderer->set_material(mat_tutrial_check);
-			check_renderer->depth = 1;
-			check->transform->local_scale = check_base_scale;
-			check->transform->local_pos = local_check_pos;
-			go_tutrial_shrink->add_child(check);
-
-		}
-		{
-			go_tutrial_cut = Gameobject_manager::createPlane("go_tutrial_cut", Scenelist::scene_player);
-			auto renderer = go_tutrial_cut->addComponent<UI_renderer>();
-			renderer->set_material(mat_tutrial_cut);
-			go_tutrial_cut->transform->local_scale = Vector3(7, 1, 1);
-
-			auto check = Gameobject_manager::createPlane("check", Scenelist::scene_player);
-			auto check_renderer = check->addComponent<UI_renderer>();
-			check_renderer->set_material(mat_tutrial_check);
-			check_renderer->depth = 1;
-			check->transform->local_scale = check_base_scale;
-			check->transform->local_pos = local_check_pos;
-			go_tutrial_cut->add_child(check);
-
-		}
+		create_gameobject(go_tutrial_aim, "go_tutrial_aim", mat_tutrial_aim, Vector3(7, 1, 1), local_check_pos, check_base_scale);
+		create_gameobject(go_tutrial_shot, "go_tutrial_shot", mat_tutrial_shot, Vector3(7, 1, 1), local_check_pos, check_base_scale);
+		create_gameobject(go_tutrial_shrink, "go_tutrial_shrink", mat_tutrial_shrink, Vector3(7, 1, 1), local_check_pos, check_base_scale);
+		create_gameobject(go_tutrial_cut, "go_tutrial_cut", mat_tutrial_cut, Vector3(7, 1, 1), local_check_pos, check_base_scale);
 
 	}
 
@@ -211,8 +153,8 @@ void Tutrial_stage02_rope::tutrial_aim_and_shot() {
 	if (tutrial_flag == flag_num + 1) {
 		const float move_x_timer = ALClamp(tutrial_timer * 5, 0, 1);
 		const float camera_x_timer = ALClamp(tutrial_timer * 5 - 0.2f, 0, 1);
-		const float move_x_pos = -200 + move_x_timer * 137;
-		const float camera_x_pos = -200 + camera_x_timer * 137;
+		const float move_x_pos = tutrial_ui_x + -137 + move_x_timer * 137;
+		const float camera_x_pos = tutrial_ui_x + -137 + camera_x_timer * 137;
 
 		sprites[0]->transform->local_pos.x = move_x_pos;
 		sprites[1]->transform->local_pos.x = camera_x_pos;
@@ -288,8 +230,8 @@ void Tutrial_stage02_rope::tutrial_aim_and_shot() {
 
 		const float move_x_timer = ALClamp(1 - tutrial_timer * 5, 0, 1);
 		const float camera_x_timer = ALClamp(1 - (tutrial_timer * 5 - 0.2f), 0, 1);
-		const float move_x_pos = -200 + move_x_timer * 137;
-		const float camera_x_pos = -200 + camera_x_timer * 137;
+		const float move_x_pos = tutrial_ui_x  - 137  + move_x_timer * 137;
+		const float camera_x_pos = tutrial_ui_x  - 137  + camera_x_timer * 137;
 
 		sprites[0]->transform->local_pos.x = move_x_pos;
 		sprites[1]->transform->local_pos.x = camera_x_pos;
@@ -324,7 +266,7 @@ void Tutrial_stage02_rope::tutrial_shrink() {
 	// ¶‚©‚ço‚Ä‚­‚é
 	if (tutrial_flag == flag_num + 1) {
 		const float move_x_timer = ALClamp(tutrial_timer * 5, 0, 1);
-		const float move_x_pos = -200 + move_x_timer * 137;
+		const float move_x_pos = tutrial_ui_x  - 137  + move_x_timer * 137;
 
 		go->transform->local_pos.x = move_x_pos;
 
@@ -379,7 +321,7 @@ void Tutrial_stage02_rope::tutrial_shrink() {
 		for (auto& child : *go->children())child->is_active = true;
 
 		const float move_x_timer = ALClamp(1 - tutrial_timer * 5, 0, 1);
-		const float move_x_pos = -200 + move_x_timer * 137;
+		const float move_x_pos = tutrial_ui_x  - 137  + move_x_timer * 137;
 
 		go->transform->local_pos.x = move_x_pos;
 
@@ -412,7 +354,7 @@ void Tutrial_stage02_rope::tutrial_cut() {
 	// ¶‚©‚ço‚Ä‚­‚é
 	if (tutrial_flag == flag_num + 1) {
 		const float move_x_timer = ALClamp(tutrial_timer * 5, 0, 1);
-		const float move_x_pos = -200 + move_x_timer * 137;
+		const float move_x_pos = tutrial_ui_x  - 137  + move_x_timer * 137;
 
 		go->transform->local_pos.x = move_x_pos;
 
@@ -467,7 +409,7 @@ void Tutrial_stage02_rope::tutrial_cut() {
 		for (auto& child : *go->children())child->is_active = true;
 
 		const float move_x_timer = ALClamp(1 - tutrial_timer * 5, 0, 1);
-		const float move_x_pos = -200 + move_x_timer * 137;
+		const float move_x_pos = tutrial_ui_x  - 137  + move_x_timer * 137;
 
 		go->transform->local_pos.x = move_x_pos;
 

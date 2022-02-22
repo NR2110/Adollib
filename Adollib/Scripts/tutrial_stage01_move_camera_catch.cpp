@@ -26,63 +26,50 @@
 
 #include "input_changer.h"
 #include "player.h"
+#include "camera.h"
 #include "stage_manager.h"
 #include "stage_base.h"
 
 using namespace Adollib;
 
+void Tutrial_stage01_move_camera_catch::create_material(std::shared_ptr<Material>& mat_ptr, const std::string& material_name, const wchar_t* texture_path) {
+	mat_ptr = Material_manager::create_material(material_name + std::to_string(player->get_player_num()));
+	mat_ptr->only_render_cameraGO_ptr = player->get_cameraptr()->gameobject;
+	mat_ptr->get_texture()->Load(texture_path);
+	mat_ptr->BS_state = State_manager::BStypes::BS_ALPHA;
+	mat_ptr->Load_VS("./DefaultShader/ui_vs.cso");
+	mat_ptr->Load_PS("./DefaultShader/ui_ps.cso");
+	mat_ptr->is_render_shadow = false;
+}
+
+void Tutrial_stage01_move_camera_catch::create_gameobject(Gameobject*& retGO, const std::string& go_name, std::shared_ptr<Material>& set_mat,
+	const Vector3& go_scale, const Vector3& local_check_pos, const Vector3& local_check_scale
+) {
+	retGO = Gameobject_manager::createPlane(go_name, Scenelist::scene_player);
+	auto renderer = retGO->addComponent<UI_renderer>();
+	renderer->set_material(set_mat);
+	retGO->transform->local_scale = go_scale;
+
+	auto check = Gameobject_manager::createPlane("check", Scenelist::scene_player);
+	auto check_renderer = check->addComponent<UI_renderer>();
+	check_renderer->set_material(mat_tutrial_check);
+	check_renderer->depth = 1;
+	check->transform->local_scale = local_check_scale;
+	check->transform->local_pos = local_check_pos;
+	retGO->add_child(check);
+}
+
 void Tutrial_stage01_move_camera_catch::awake() {
 
 	// materialの作成
 	{
-		mat_tutrial_check = Material_manager::create_material("mat_tutrial_check");
-		mat_tutrial_check->get_texture()->Load(L"./DefaultTexture/tutrial/tutrial_check.png");
-		mat_tutrial_check->BS_state = State_manager::BStypes::BS_ALPHA;
-		mat_tutrial_check->Load_VS("./DefaultShader/ui_vs.cso");
-		mat_tutrial_check->Load_PS("./DefaultShader/ui_ps.cso");
-		mat_tutrial_check->is_render_shadow = false;
-
-		mat_tutrial_move = Material_manager::create_material("mat_tutrial_move");
-		mat_tutrial_move->get_texture()->Load(L"./DefaultTexture/tutrial/tutrial_stickL_move.png");
-		mat_tutrial_move->BS_state = State_manager::BStypes::BS_ALPHA;
-		mat_tutrial_move->Load_VS("./DefaultShader/ui_vs.cso");
-		mat_tutrial_move->Load_PS("./DefaultShader/ui_ps.cso");
-		mat_tutrial_move->is_render_shadow = false;
-
-		mat_tutrial_camera = Material_manager::create_material("mat_tutrial_camera");
-		mat_tutrial_camera->get_texture()->Load(L"./DefaultTexture/tutrial/tutrial_stickR_camera.png");
-		mat_tutrial_camera->BS_state = State_manager::BStypes::BS_ALPHA;
-		mat_tutrial_camera->Load_VS("./DefaultShader/ui_vs.cso");
-		mat_tutrial_camera->Load_PS("./DefaultShader/ui_ps.cso");
-		mat_tutrial_camera->is_render_shadow = false;
-
-		mat_tutrial_jump = Material_manager::create_material("mat_tutrial_jump");
-		mat_tutrial_jump->get_texture()->Load(L"./DefaultTexture/tutrial/tutrial_A_jump.png");
-		mat_tutrial_jump->BS_state = State_manager::BStypes::BS_ALPHA;
-		mat_tutrial_jump->Load_VS("./DefaultShader/ui_vs.cso");
-		mat_tutrial_jump->Load_PS("./DefaultShader/ui_ps.cso");
-		mat_tutrial_jump->is_render_shadow = false;
-
-		mat_tutrial_hand = Material_manager::create_material("mat_tutrial_hand");
-		mat_tutrial_hand->get_texture()->Load(L"./DefaultTexture/tutrial/tutrial_LTRL_hand.png");
-		mat_tutrial_hand->BS_state = State_manager::BStypes::BS_ALPHA;
-		mat_tutrial_hand->Load_VS("./DefaultShader/ui_vs.cso");
-		mat_tutrial_hand->Load_PS("./DefaultShader/ui_ps.cso");
-		mat_tutrial_hand->is_render_shadow = false;
-
-		mat_tutrial_catch_object = Material_manager::create_material("mat_tutrial_catch_object");
-		mat_tutrial_catch_object->get_texture()->Load(L"./DefaultTexture/tutrial/tutrial_catch_object.png");
-		mat_tutrial_catch_object->BS_state = State_manager::BStypes::BS_ALPHA;
-		mat_tutrial_catch_object->Load_VS("./DefaultShader/ui_vs.cso");
-		mat_tutrial_catch_object->Load_PS("./DefaultShader/ui_ps.cso");
-		mat_tutrial_catch_object->is_render_shadow = false;
-
-		mat_tutrial_hand_dir = Material_manager::create_material("mat_tutrial_hand_dir");
-		mat_tutrial_hand_dir->get_texture()->Load(L"./DefaultTexture/tutrial/tutrial_hand_dir.png");
-		mat_tutrial_hand_dir->BS_state = State_manager::BStypes::BS_ALPHA;
-		mat_tutrial_hand_dir->Load_VS("./DefaultShader/ui_vs.cso");
-		mat_tutrial_hand_dir->Load_PS("./DefaultShader/ui_ps.cso");
-		mat_tutrial_hand_dir->is_render_shadow = false;
+		create_material(mat_tutrial_check, "mat_tutrial_check", L"./DefaultTexture/tutrial/tutrial_check.png");
+		create_material(mat_tutrial_move, "mat_tutrial_move", L"./DefaultTexture/tutrial/tutrial_stickL_move.png");
+		create_material(mat_tutrial_camera, "mat_tutrial_camera", L"./DefaultTexture/tutrial/tutrial_stickR_camera.png");
+		create_material(mat_tutrial_jump, "mat_tutrial_jump", L"./DefaultTexture/tutrial/tutrial_A_jump.png");
+		create_material(mat_tutrial_hand, "mat_tutrial_hand", L"./DefaultTexture/tutrial/tutrial_LTRL_hand.png");
+		create_material(mat_tutrial_catch_object, "mat_tutrial_catch_object", L"./DefaultTexture/tutrial/tutrial_catch_object.png");
+		create_material(mat_tutrial_hand_dir, "mat_tutrial_hand_dir", L"./DefaultTexture/tutrial/tutrial_hand_dir.png");
 	}
 
 	// gameobjectの作成
@@ -92,92 +79,12 @@ void Tutrial_stage01_move_camera_catch::awake() {
 		check_base_scale = Vector3(0.21f, 1.5f, 1);
 		check_base_scale_y2 = Vector3(0.21f, 1.5f * 0.5f, 1);
 
-		{
-			go_tutrial_move = Gameobject_manager::createPlane("go_tutrial_move", Scenelist::scene_player);
-			auto renderer = go_tutrial_move->addComponent<UI_renderer>();
-			renderer->set_material(mat_tutrial_move);
-			go_tutrial_move->transform->local_scale = Vector3(7, 1, 1);
-
-			auto check = Gameobject_manager::createPlane("check", Scenelist::scene_player);
-			auto check_renderer = check->addComponent<UI_renderer>();
-			check_renderer->set_material(mat_tutrial_check);
-			check_renderer->depth = 1;
-			check->transform->local_scale = check_base_scale;
-			check->transform->local_pos = local_check_pos;
-			go_tutrial_move->add_child(check);
-
-		}
-		{
-			go_tutrial_camera = Gameobject_manager::createPlane("go_tutrial_camera", Scenelist::scene_player);
-			auto renderer = go_tutrial_camera->addComponent<UI_renderer>();
-			renderer->set_material(mat_tutrial_camera);
-			go_tutrial_camera->transform->local_scale = Vector3(7, 1, 1);
-
-			auto check = Gameobject_manager::createPlane("check", Scenelist::scene_player);
-			auto check_renderer = check->addComponent<UI_renderer>();
-			check_renderer->set_material(mat_tutrial_check);
-			check_renderer->depth = 1;
-			check->transform->local_scale = check_base_scale;
-			check->transform->local_pos = local_check_pos;
-			go_tutrial_camera->add_child(check);
-		}
-		{
-			go_tutrial_jump= Gameobject_manager::createPlane("go_tutrial_jump", Scenelist::scene_player);
-			auto renderer = go_tutrial_jump->addComponent<UI_renderer>();
-			renderer->set_material(mat_tutrial_jump);
-			go_tutrial_jump->transform->local_scale = Vector3(7, 1, 1);
-
-			auto check = Gameobject_manager::createPlane("check", Scenelist::scene_player);
-			auto check_renderer = check->addComponent<UI_renderer>();
-			check_renderer->set_material(mat_tutrial_check);
-			check_renderer->depth = 1;
-			check->transform->local_scale = check_base_scale;
-			check->transform->local_pos = local_check_pos;
-			go_tutrial_jump->add_child(check);
-		}
-		{
-			go_tutrial_hand = Gameobject_manager::createPlane("go_tutrial_hand", Scenelist::scene_player);
-			auto renderer = go_tutrial_hand->addComponent<UI_renderer>();
-			renderer->set_material(mat_tutrial_hand);
-			go_tutrial_hand->transform->local_scale = Vector3(7, 1, 1);
-
-			auto check = Gameobject_manager::createPlane("check", Scenelist::scene_player);
-			auto check_renderer = check->addComponent<UI_renderer>();
-			check_renderer->set_material(mat_tutrial_check);
-			check_renderer->depth = 1;
-			check->transform->local_scale = check_base_scale;
-			check->transform->local_pos = local_check_pos;
-			go_tutrial_hand->add_child(check);
-		}
-		{
-			go_tutrial_catch_object = Gameobject_manager::createPlane("go_tutrial_catch_object", Scenelist::scene_player);
-			auto renderer = go_tutrial_catch_object->addComponent<UI_renderer>();
-			renderer->set_material(mat_tutrial_catch_object);
-			go_tutrial_catch_object->transform->local_scale = Vector3(7, 1, 1);
-
-			auto check = Gameobject_manager::createPlane("check", Scenelist::scene_player);
-			auto check_renderer = check->addComponent<UI_renderer>();
-			check_renderer->set_material(mat_tutrial_check);
-			check_renderer->depth = 1;
-			check->transform->local_scale = check_base_scale;
-			check->transform->local_pos = local_check_pos;
-			go_tutrial_catch_object->add_child(check);
-		}
-		{
-			go_tutrial_hand_dir = Gameobject_manager::createPlane("go_tutrial_hand_dir", Scenelist::scene_player);
-			auto renderer = go_tutrial_hand_dir->addComponent<UI_renderer>();
-			renderer->set_material(mat_tutrial_hand_dir);
-			go_tutrial_hand_dir->transform->local_scale = Vector3(7, 2, 1);
-
-			auto check = Gameobject_manager::createPlane("check", Scenelist::scene_player);
-			auto check_renderer = check->addComponent<UI_renderer>();
-			check_renderer->set_material(mat_tutrial_check);
-			check_renderer->depth = 1;
-			check->transform->local_scale = check_base_scale_y2;
-			check->transform->local_pos = local_check_pos_y2;
-			go_tutrial_hand_dir->add_child(check);
-		}
-
+		create_gameobject(go_tutrial_move, "go_tutrial_move", mat_tutrial_move, Vector3(7, 1, 1), local_check_pos, check_base_scale);
+		create_gameobject(go_tutrial_camera, "go_tutrial_camera", mat_tutrial_camera, Vector3(7, 1, 1), local_check_pos, check_base_scale);
+		create_gameobject(go_tutrial_jump, "go_tutrial_jump", mat_tutrial_jump, Vector3(7, 1, 1), local_check_pos, check_base_scale);
+		create_gameobject(go_tutrial_hand, "go_tutrial_hand", mat_tutrial_hand, Vector3(7, 1, 1), local_check_pos, check_base_scale);
+		create_gameobject(go_tutrial_catch_object, "go_tutrial_catch_object", mat_tutrial_catch_object, Vector3(7, 1, 1), local_check_pos, check_base_scale);
+		create_gameobject(go_tutrial_hand_dir, "go_tutrial_hand_dir", mat_tutrial_hand_dir, Vector3(7, 2, 1), local_check_pos_y2, check_base_scale_y2);
 	}
 
 	tutrial_flag = -1;
@@ -256,8 +163,8 @@ void Tutrial_stage01_move_camera_catch::tutrial_move_and_camera() {
 	if (tutrial_flag == 1) {
 		const float move_x_timer = ALClamp(tutrial_timer * 5, 0, 1);
 		const float camera_x_timer = ALClamp(tutrial_timer * 5 - 0.2f, 0, 1);
-		const float move_x_pos = -200 + move_x_timer * 137;
-		const float camera_x_pos = -200 + camera_x_timer * 137;
+		const float move_x_pos = tutrial_ui_x - 137 + move_x_timer * 137;
+		const float camera_x_pos = tutrial_ui_x - 137 + camera_x_timer * 137;
 
 		sprites[0]->transform->local_pos.x = move_x_pos;
 		sprites[1]->transform->local_pos.x = camera_x_pos;
@@ -333,8 +240,8 @@ void Tutrial_stage01_move_camera_catch::tutrial_move_and_camera() {
 
 		const float move_x_timer = ALClamp(1 - tutrial_timer * 5, 0, 1);
 		const float camera_x_timer = ALClamp(1 - (tutrial_timer * 5 - 0.2f), 0, 1);
-		const float move_x_pos = -200 + move_x_timer * 137;
-		const float camera_x_pos = -200 + camera_x_timer * 137;
+		const float move_x_pos = tutrial_ui_x - 137 + move_x_timer * 137;
+		const float camera_x_pos = tutrial_ui_x - 137 + camera_x_timer * 137;
 
 		sprites[0]->transform->local_pos.x = move_x_pos;
 		sprites[1]->transform->local_pos.x = camera_x_pos;
@@ -367,7 +274,7 @@ void Tutrial_stage01_move_camera_catch::tutrial_jump() {
 	// 左から出てくる
 	if (tutrial_flag == 6) {
 		const float move_x_timer = ALClamp(tutrial_timer * 5, 0, 1);
-		const float move_x_pos = -200 + move_x_timer * 137;
+		const float move_x_pos = tutrial_ui_x - 137 + move_x_timer * 137;
 
 		go_tutrial_jump->transform->local_pos.x = move_x_pos;
 
@@ -422,7 +329,7 @@ void Tutrial_stage01_move_camera_catch::tutrial_jump() {
 		for (auto& child : *go_tutrial_jump->children())child->is_active = true;
 
 		const float move_x_timer = ALClamp(1 - tutrial_timer * 5, 0, 1);
-		const float move_x_pos = -200 + move_x_timer * 137;
+		const float move_x_pos = tutrial_ui_x - 137 + move_x_timer * 137;
 
 		go_tutrial_jump->transform->local_pos.x = move_x_pos;
 
@@ -437,7 +344,7 @@ void Tutrial_stage01_move_camera_catch::tutrial_jump() {
 void Tutrial_stage01_move_camera_catch::tutrial_hand_stretch() {
 
 	go_tutrial_hand->transform->local_pos.y = 80;
-	if(tutrial_flag > 10) go_tutrial_hand->is_active = true;
+	if (tutrial_flag > 10) go_tutrial_hand->is_active = true;
 
 	//::::::::
 
@@ -453,7 +360,7 @@ void Tutrial_stage01_move_camera_catch::tutrial_hand_stretch() {
 	// 左から出てくる
 	if (tutrial_flag == 11) {
 		const float move_x_timer = ALClamp(tutrial_timer * 5, 0, 1);
-		const float move_x_pos = -200 + move_x_timer * 137;
+		const float move_x_pos = tutrial_ui_x - 137 + move_x_timer * 137;
 
 		go_tutrial_hand->transform->local_pos.x = move_x_pos;
 
@@ -508,7 +415,7 @@ void Tutrial_stage01_move_camera_catch::tutrial_hand_stretch() {
 		for (auto& child : *go_tutrial_hand->children())child->is_active = true;
 
 		const float move_x_timer = ALClamp(1 - tutrial_timer * 5, 0, 1);
-		const float move_x_pos = -200 + move_x_timer * 137;
+		const float move_x_pos = tutrial_ui_x - 137 + move_x_timer * 137;
 
 		go_tutrial_hand->transform->local_pos.x = move_x_pos;
 
@@ -538,7 +445,7 @@ void Tutrial_stage01_move_camera_catch::tutrial_hand_catch() {
 	// 左から出てくる
 	if (tutrial_flag == 16) {
 		const float move_x_timer = ALClamp(tutrial_timer * 5, 0, 1);
-		const float move_x_pos = -200 + move_x_timer * 137;
+		const float move_x_pos = tutrial_ui_x - 137 + move_x_timer * 137;
 
 		go_tutrial_catch_object->transform->local_pos.x = move_x_pos;
 
@@ -593,7 +500,7 @@ void Tutrial_stage01_move_camera_catch::tutrial_hand_catch() {
 		for (auto& child : *go_tutrial_catch_object->children())child->is_active = true;
 
 		const float move_x_timer = ALClamp(1 - tutrial_timer * 5, 0, 1);
-		const float move_x_pos = -200 + move_x_timer * 137;
+		const float move_x_pos = tutrial_ui_x - 137 + move_x_timer * 137;
 
 		go_tutrial_catch_object->transform->local_pos.x = move_x_pos;
 
@@ -620,7 +527,7 @@ void Tutrial_stage01_move_camera_catch::tutrial_hand_dir() {
 	// 左から出てくる
 	if (tutrial_flag == 21) {
 		const float move_x_timer = ALClamp(tutrial_timer * 5, 0, 1);
-		const float move_x_pos = -200 + move_x_timer * 137;
+		const float move_x_pos = tutrial_ui_x - 137 + move_x_timer * 137;
 
 		go_tutrial_hand_dir->transform->local_pos.x = move_x_pos;
 
@@ -678,7 +585,7 @@ void Tutrial_stage01_move_camera_catch::tutrial_hand_dir() {
 		for (auto& child : *go_tutrial_hand_dir->children())child->is_active = true;
 
 		const float move_x_timer = ALClamp(1 - tutrial_timer * 5, 0, 1);
-		const float move_x_pos = -200 + move_x_timer * 137;
+		const float move_x_pos = tutrial_ui_x - 137 + move_x_timer * 137;
 
 		go_tutrial_hand_dir->transform->local_pos.x = move_x_pos;
 
