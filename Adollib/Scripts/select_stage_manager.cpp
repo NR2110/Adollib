@@ -80,13 +80,13 @@ void Select_state_manager::awake() {
 
 		// gameobject‚Ìì¬ & eŽqŠÖŒW‚ÌÝ’è
 		{
-			select_sprite = Gameobject_manager::create(std::string("select_playernum_sprite_pearent"));
-			gameobject->add_child(select_sprite);
-			select_sprite->transform->local_pos = Vector3(-40, -15.5f, -23);
+			select_playernum_sprite = Gameobject_manager::create(std::string("select_playernum_sprite_pearent"));
+			gameobject->add_child(select_playernum_sprite);
+			select_playernum_sprite->transform->local_pos = Vector3(-40, -15.5f, -23);
 
 			for (int i = 0; i < 2; ++i) {
 				auto sprite = Gameobject_manager::createPlane(std::string("sprite") + std::to_string(i));
-				select_sprite->add_child(sprite);
+				select_playernum_sprite->add_child(sprite);
 				sprite->transform->local_scale = Vector3(11.91f, 3.8f, 1);
 				sprite->transform->local_orient = quaternion_from_euler(0, 150 + 180 * i, 0);
 
@@ -243,7 +243,7 @@ void Select_state_manager::select_state(Title_state_B state) {
 				if (change_playernum_timer > 1)change_playernum_sign = 0;
 			}
 
-			select_sprite->transform->local_orient = quaternion_from_euler(0, rotate_angle, 0);
+			select_playernum_sprite->transform->local_orient = quaternion_from_euler(0, rotate_angle, 0);
 		}
 
 

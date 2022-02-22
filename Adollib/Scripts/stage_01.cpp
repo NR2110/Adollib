@@ -43,7 +43,7 @@ namespace Adollib
 		{
 			Gameobject* tutrial_block = Gameobject_manager::create("pyramid");
 
-			int phyramid_size = 6;
+			int phyramid_size = 2;
 			Vector3 base_size = Vector3(1, 1, 1.5f);
 			Vector3 base_pos = Vector3(52, 0, -4);
 

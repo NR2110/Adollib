@@ -269,8 +269,24 @@ void Player::catch_things() {
 			hand_joints[i]->anchor.posA.y += 0.1f * time->deltaTime();
 			if (hand_joints[i]->anchor.posA.y > hand_joint_ylength_default[i]) hand_joints[i]->anchor.posA.y = hand_joint_ylength_default[i];
 		}
-
 	}
+
+
+	{
+		auto& jointL = *joints[0];
+		auto& jointR = *joints[1];
+		if (jointL != nullptr && jointR != nullptr) {
+			Vector3 world_posL = jointL->get_colliderA()->transform->position + vector3_quatrotate(jointL->get_anchors()[0].posA, jointL->get_colliderA()->transform->orientation);
+			Vector3 world_posR = jointR->get_colliderA()->transform->position + vector3_quatrotate(jointR->get_anchors()[0].posA, jointR->get_colliderA()->transform->orientation);
+
+			Debug::set("vector3_distance(world_posL, world_posR)", vector3_distance_sqr(world_posL, world_posR));
+			if (vector3_distance(world_posL, world_posR) > 200) {
+				Joint::delete_joint(jointL);
+				Joint::delete_joint(jointR);
+			}
+		}
+	}
+
 };
 
 // rope‚ðŒ‚‚Â
@@ -527,12 +543,12 @@ void Player::shot_rope() {
 		Lblock_hand_joint = nullptr;
 	}
 
-	//
+	// rope‚Ì’·‚³‚ª0‚É‚È‚Á‚½‚Æ‚« block‚Æhand‚Ìjoint‚ð¶¬‚·‚é
 	if (Lblock_hand_joint) {
 		if (Lrope_go)Gameobject_manager::deleteGameobject(Lrope_go);
 		Lrope_go = nullptr;
 	}
-
+	// ã‹L‚Å¶¬‚µ‚½Lblock_hand_joint‚ª‚ ‚é‚Æ‚«‚ÉA•¨‚ð‚Â‚©‚à‚¤‚Æ‚µ‚½ê‡ALblock_hand_joint‚ðíœ‚·‚é
 	if (input_changer->is_Larm_state) {
 		if (Lblock_hand_joint)Joint::delete_joint(Lblock_hand_joint);
 		Lblock_hand_joint = nullptr;

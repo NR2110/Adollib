@@ -40,6 +40,8 @@ namespace Adollib {
 
 			stages[stage_type] = comp;
 
+			gameobject->add_child(GO);
+
 			return comp;
 		}
 

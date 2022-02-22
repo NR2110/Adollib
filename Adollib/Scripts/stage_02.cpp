@@ -634,9 +634,9 @@ namespace Adollib
 				plane_0->renderer->set_material(mato_mat);
 
 				// ‘«ê02
-				set_box(Vector3(194, 20, -183), Vector3(10, 10, 10), Vector3(0, 0, 0), base_color, rope_tute);
-				set_box(Vector3(194, 30, -194), Vector3(10, 20, 1), Vector3(0, 0, 0), base_color, rope_tute); //•Ç
-				auto plane_1 = set_plane(Vector3(194, 40, -192), Vector3(10, 10, 1), Vector3(0, 0, 0), Vector3(1), rope_tute);
+				set_box(Vector3(184, 20, -183), Vector3(10, 10, 10), Vector3(0, 0, 0), base_color, rope_tute);
+				set_box(Vector3(184, 30, -194), Vector3(10, 20, 1), Vector3(0, 0, 0), base_color, rope_tute); //•Ç
+				auto plane_1 = set_plane(Vector3(184, 40, -192), Vector3(10, 10, 1), Vector3(0, 0, 0), Vector3(1), rope_tute);
 				plane_1->renderer->set_material(mato_mat);
 
 				// ‘«ê03

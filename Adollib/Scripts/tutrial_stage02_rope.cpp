@@ -80,6 +80,10 @@ void Tutrial_stage02_rope::awake() {
 		create_gameobject(go_tutrial_shrink, "go_tutrial_shrink", mat_tutrial_shrink, Vector3(7, 1, 1), local_check_pos, check_base_scale);
 		create_gameobject(go_tutrial_cut, "go_tutrial_cut", mat_tutrial_cut, Vector3(7, 1, 1), local_check_pos, check_base_scale);
 
+		gameobject->add_child(go_tutrial_aim);
+		gameobject->add_child(go_tutrial_shot);
+		gameobject->add_child(go_tutrial_shrink);
+		gameobject->add_child(go_tutrial_cut);
 	}
 
 	tutrial_flag = -1;

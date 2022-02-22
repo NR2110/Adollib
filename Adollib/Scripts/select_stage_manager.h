@@ -28,8 +28,8 @@ namespace Adollib {
 		int  change_select_sign = 0; //入力により +1,-1になる
 		int  change_select_state_sign = 0; //入力が続いていればパラパラ動くようにするためのフラグ 入力により +1,-1になる
 
-		int select_player_num = 0;
-		float change_playernum_timer = 0; //
+		int select_player_num = 0; //playerの数 0->1人 1->2人 ...
+		float change_playernum_timer = 0; //timer
 		int  change_playernum_sign = 0; //入力により +1,-1になる
 
 		static constexpr int select_stage_size = 2; //stageの数
@@ -39,7 +39,7 @@ namespace Adollib {
 		Gameobject* select_stage_back[5]; //spriteの後ろの板
 		Gameobject* select_stage_front[5]; //spriteを張る板
 
-		Gameobject* select_sprite = nullptr;
+		Gameobject* select_playernum_sprite = nullptr; //player人数表示GO
 
 		Title_state_manager* title_state_manager = nullptr;
 		Player_manager* player_manager = nullptr;

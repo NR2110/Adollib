@@ -17,6 +17,7 @@ void Tutrial_manager::awake() {
 void Tutrial_manager::start() {
 	{
 		auto ptr = std::make_shared<Tutrial_stage01_move_camera_catch>();
+		ptr->gameobject = gameobject;
 		ptr->time = time;
 		ptr->input_changer = gameobject->findComponent<Input_changer>();
 		ptr->player = gameobject->findComponent<Player>();
@@ -26,6 +27,7 @@ void Tutrial_manager::start() {
 	}
 	{
 		auto ptr = std::make_shared<Tutrial_stage02_rope>();
+		ptr->gameobject = gameobject;
 		ptr->time = time;
 		ptr->input_changer = gameobject->findComponent<Input_changer>();
 		ptr->player = gameobject->findComponent<Player>();

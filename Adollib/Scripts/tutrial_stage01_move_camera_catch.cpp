@@ -85,6 +85,13 @@ void Tutrial_stage01_move_camera_catch::awake() {
 		create_gameobject(go_tutrial_hand, "go_tutrial_hand", mat_tutrial_hand, Vector3(7, 1, 1), local_check_pos, check_base_scale);
 		create_gameobject(go_tutrial_catch_object, "go_tutrial_catch_object", mat_tutrial_catch_object, Vector3(7, 1, 1), local_check_pos, check_base_scale);
 		create_gameobject(go_tutrial_hand_dir, "go_tutrial_hand_dir", mat_tutrial_hand_dir, Vector3(7, 2, 1), local_check_pos_y2, check_base_scale_y2);
+
+		gameobject->add_child(go_tutrial_move);
+		gameobject->add_child(go_tutrial_camera);
+		gameobject->add_child(go_tutrial_jump);
+		gameobject->add_child(go_tutrial_hand);
+		gameobject->add_child(go_tutrial_catch_object);
+		gameobject->add_child(go_tutrial_hand_dir);
 	}
 
 	tutrial_flag = -1;
