@@ -762,6 +762,22 @@ namespace Adollib
 				set_fence(Vector3(16, 55, -189), Vector3(1), Vector3(0, 90, 0), fences);
 
 			}
+
+			// exit
+			{
+				std::shared_ptr<Material> exit_mat = Material_manager::create_material("exit_material");
+				exit_mat->get_texture()->Load(L"./DefaultTexture/stage/EXIT.png");
+				exit_mat->BS_state = State_manager::BStypes::BS_ALPHA;
+				exit_mat->RS_state = State_manager::RStypes::RS_CULL_NONE;
+				exit_mat->Load_VS("./DefaultShader/sprite_vs.cso");
+				exit_mat->Load_PS("./DefaultShader/sprite_ps.cso");
+				exit_mat->is_render_shadow = false;
+				exit_mat->color = Vector4(1, 1, 1, 1);
+				auto plane = set_plane(Vector3(49.8f, 65, -197), Vector3(2.5f, 1.5f, 1), Vector3(0, 0, 0), Vector3(base_color), forth_zone);
+				plane->name = std::string("exit_plane");
+				plane->renderer->set_material(exit_mat);
+
+			}
 		}
 
 		//set_lever(Vector3(0,0,0),Vector3(1),   Vector3(0), Stage_parts::Stageparts_tags::Flag_4, Stage_parts::Stageparts_tags::Flag_4);
