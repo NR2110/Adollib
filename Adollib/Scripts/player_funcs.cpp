@@ -864,7 +864,7 @@ bool Player::check_respown() {
 	auto stage = stage_manager->get_current_stage();
 
 	// 入力がある || stage指定のY座標よりPlayerが低ければrespown
-	if (input_changer->is_respown_trigger || Waist->world_position().y < stage->y_player_respown_limit + 50) {
+	if (input_changer->is_respown_trigger || Waist->world_position().y < stage->y_player_respown_limit) {
 
 		// goalしていたら respown処理を行わず stage切替処理を呼ぶ
 		if (stage->next_stage != Stage_types::none) {
@@ -1106,8 +1106,10 @@ void Player::respown() {
 
 	// 力のreset& 軽く下に速度を加える
 	for (int i = 0; i < Human_collider_size; i++) {
+		float y_speed = fabsf(Human_colliders[i]->linear_velocity().y);
+		y_speed = ALClamp(y_speed * 0.5f, 1, 10);
 		Human_colliders[i]->reset_force();
-		Human_colliders[i]->linear_velocity(Vector3(0, -1, 0)); //fleezeに引っかからないように軽く力を加える
+		Human_colliders[i]->linear_velocity(Vector3(0, -y_speed, 0)); //fleezeに引っかからないように軽く力を加える
 	}
 
 	// 持っているものを離す

@@ -34,6 +34,8 @@ namespace Adollib
 		respown_num = -1;
 		next_stage = Stage_types::none;
 		y_respown_pos = 50; // respown‚µ‚½‚Æ‚«‚ÌY‚ÌÀ•W
+		y_player_respown_limit = -40; //player‚Ìy‚ª‚±‚êˆÈ‰º‚¾‚Ærespown‚³‚ê‚é
+		y_respown_limit = -150;  //block‚Ìy‚ª‚±‚êˆÈ‰º‚¾‚Ærespown‚³‚ê‚é
 
 		auto player_manager = Gameobject_manager::find("Player_manager", Scenelist::scene_player)->findComponent<Player_manager>();
 		player_manager->set_is_shotable(false);
