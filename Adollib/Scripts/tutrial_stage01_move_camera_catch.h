@@ -20,6 +20,7 @@ namespace Adollib {
 		std::shared_ptr<Material> mat_tutrial_hand = nullptr;
 		std::shared_ptr<Material> mat_tutrial_catch_object = nullptr;
 		std::shared_ptr<Material> mat_tutrial_hand_dir = nullptr;
+		std::shared_ptr<Material> mat_tutrial_good_luck = nullptr;
 
 		Gameobject* go_tutrial_move = nullptr;
 		Gameobject* go_tutrial_camera = nullptr;
@@ -27,6 +28,7 @@ namespace Adollib {
 		Gameobject* go_tutrial_hand = nullptr;
 		Gameobject* go_tutrial_catch_object = nullptr;
 		Gameobject* go_tutrial_hand_dir = nullptr;
+		Gameobject* go_tutrial_good_luck = nullptr;
 
 		Vector3 check_base_scale;
 		Vector3 check_base_scale_y2;
@@ -59,7 +61,9 @@ namespace Adollib {
 
 		void tutrial_hand_catch(); //15 ~ 19
 
-		void tutrial_hand_dir(); //16
+		void tutrial_hand_dir(); //20 ~ 24
+
+		void tutrial_good_luck(); //16
 
 
 

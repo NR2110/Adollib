@@ -70,6 +70,7 @@ void Tutrial_stage01_move_camera_catch::awake() {
 		create_material(mat_tutrial_hand, "mat_tutrial_hand", L"./DefaultTexture/tutrial/tutrial_LTRL_hand.png");
 		create_material(mat_tutrial_catch_object, "mat_tutrial_catch_object", L"./DefaultTexture/tutrial/tutrial_catch_object.png");
 		create_material(mat_tutrial_hand_dir, "mat_tutrial_hand_dir", L"./DefaultTexture/tutrial/tutrial_hand_dir.png");
+		create_material(mat_tutrial_good_luck, "mat_tutrial_good_luck", L"./DefaultTexture/tutrial/good_luck.png");
 	}
 
 	// gameobject‚Ìì¬
@@ -85,6 +86,7 @@ void Tutrial_stage01_move_camera_catch::awake() {
 		create_gameobject(go_tutrial_hand, "go_tutrial_hand", mat_tutrial_hand, Vector3(7, 1, 1), local_check_pos, check_base_scale);
 		create_gameobject(go_tutrial_catch_object, "go_tutrial_catch_object", mat_tutrial_catch_object, Vector3(7, 1, 1), local_check_pos, check_base_scale);
 		create_gameobject(go_tutrial_hand_dir, "go_tutrial_hand_dir", mat_tutrial_hand_dir, Vector3(7, 2, 1), local_check_pos_y2, check_base_scale_y2);
+		create_gameobject(go_tutrial_good_luck, "go_tutrial_good_luck", mat_tutrial_good_luck, Vector3(7, 1, 1), local_check_pos, check_base_scale);
 
 		gameobject->add_child(go_tutrial_move);
 		gameobject->add_child(go_tutrial_camera);
@@ -92,6 +94,7 @@ void Tutrial_stage01_move_camera_catch::awake() {
 		gameobject->add_child(go_tutrial_hand);
 		gameobject->add_child(go_tutrial_catch_object);
 		gameobject->add_child(go_tutrial_hand_dir);
+		gameobject->add_child(go_tutrial_good_luck);
 	}
 
 	tutrial_flag = -1;
@@ -108,12 +111,14 @@ void Tutrial_stage01_move_camera_catch::update() {
 	go_tutrial_hand->is_active = false;
 	go_tutrial_catch_object->is_active = false;
 	go_tutrial_hand_dir->is_active = false;
+	go_tutrial_good_luck->is_active = false;
 	for (auto& child : *go_tutrial_move->children())child->is_active = false;
 	for (auto& child : *go_tutrial_camera->children())child->is_active = false;
 	for (auto& child : *go_tutrial_jump->children())child->is_active = false;
 	for (auto& child : *go_tutrial_hand->children())child->is_active = false;
 	for (auto& child : *go_tutrial_catch_object->children())child->is_active = false;
 	for (auto& child : *go_tutrial_hand_dir->children())child->is_active = false;
+	for (auto& child : *go_tutrial_good_luck->children())child->is_active = false;
 	//return;
 
 	// move‚Æcamera‚Ìtutrial
@@ -124,6 +129,7 @@ void Tutrial_stage01_move_camera_catch::update() {
 		tutrial_hand_stretch();
 		tutrial_hand_catch();
 		tutrial_hand_dir();
+		tutrial_good_luck();
 	}
 
 	// stage‚ª–³‚¯‚ê‚Î‚Æ‚è‚ ‚¦‚¸‰Šú‰» & return
@@ -595,6 +601,60 @@ void Tutrial_stage01_move_camera_catch::tutrial_hand_dir() {
 		const float move_x_pos = tutrial_ui_x - 137 + move_x_timer * 137;
 
 		go_tutrial_hand_dir->transform->local_pos.x = move_x_pos;
+
+		if (move_x_timer == 0) {
+			tutrial_flag++;
+			tutrial_timer = 0;
+		}
+	}
+}
+
+void Tutrial_stage01_move_camera_catch::tutrial_good_luck() {
+
+	go_tutrial_good_luck->transform->local_pos.y = 80;
+	if (tutrial_flag > 25) go_tutrial_good_luck->is_active = true;
+
+	// 0•b‘Ò‚Â
+	if (tutrial_flag == 25) {
+		if (tutrial_timer > 0) {
+			tutrial_flag++;
+			tutrial_timer = 0;
+		}
+	}
+
+	// ¶‚©‚ço‚Ä‚­‚é
+	if (tutrial_flag == 26) {
+		const float move_x_timer = ALClamp(tutrial_timer * 5, 0, 1);
+		const float move_x_pos = tutrial_ui_x - 137 + move_x_timer * 137;
+
+		go_tutrial_good_luck->transform->local_pos.x = move_x_pos;
+
+		if (move_x_timer == 1) {
+			tutrial_flag++;
+			tutrial_timer = 0;
+
+			tutrial_move_check_animation_timer = 0; //timer‚ðŽg‚¢‚Ü‚í‚·
+			tutrial_move_state_timer = 0;
+		}
+
+	}
+
+	// 4•b‘Ò‚Â
+	if (tutrial_flag == 27) {
+
+		if (tutrial_timer > 4) {
+			tutrial_flag++;
+			tutrial_timer = 0;
+		}
+
+	}
+	// ¶‚Éˆø‚Áž‚Þ
+	if (tutrial_flag == 28) {
+
+		const float move_x_timer = ALClamp(1 - tutrial_timer * 5, 0, 1);
+		const float move_x_pos = tutrial_ui_x - 137 + move_x_timer * 137;
+
+		go_tutrial_good_luck->transform->local_pos.x = move_x_pos;
 
 		if (move_x_timer == 0) {
 			tutrial_flag++;

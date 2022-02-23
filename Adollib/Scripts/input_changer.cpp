@@ -1,5 +1,6 @@
 #include "input_changer.h"
 
+#include "../Adollib/Scripts/Imgui/imgui_all.h"
 #include "../Adollib/Scripts/Main/Adollib.h"
 #include "../Adollib/Scripts/Imgui/debug.h"
 
@@ -75,10 +76,12 @@ void Input_changer::update() {
 
 	// cursol_move
 	cursol_move = Vector2(0);
+#ifdef ON_DEBUG
 	if (pad_num == 0) {
 		cursol_move.y = (input->getCursorPosX() - cursol_pos_save.x) * rotate_speed;
 		cursol_move.x = (input->getCursorPosY() - cursol_pos_save.y) * rotate_speed * y_sign;
 	}
+#endif
 
 	Debug::set("cursol_move", cursol_move.x, cursol_move.y);
 

@@ -649,16 +649,24 @@ void Player::push_waist_for_stand() {
 			if (onground_collider->physics_data.is_kinmatic_linear == true)
 				onground_collider->add_force(normal * -(gravity_pow + fall_force), onground_contactpoint);
 
+			// æ‚Á‚Ä‚¢‚é‚à‚Ì‚Ì‘¬“x‚ðPlayer‚É‰Á‚¦‚é
 			if (
 				(catch_right_joint == nullptr || catch_right_joint->get_colliderB() != onground_collider) && //‰EŽè‚ÅŽ‚Á‚Ä‚¢‚é‚à‚Ì‚Å‚Í‚È‚¢
 				(catch_left_joint == nullptr || catch_left_joint->get_colliderB() != onground_collider) &&    //¶Žè‚ÅŽ‚Á‚Ä‚¢‚é‚à‚Ì‚Å‚Í‚È‚¢
 				(Lblock_rope_joint == nullptr || Lblock_rope_joint->get_colliderA() != onground_collider) //rope‚Å‚Â‚©‚ñ‚Å‚¢‚é‚à‚Ì‚Å‚Í‚È‚¢
 				) {
 				Vector3 onground_velocity = onground_collider->get_point_velocity(onground_contactpoint, false);
+				float onground_pow = onground_collider->physics_data.inertial_mass * 0.5f;
+				if (onground_collider->physics_data.is_moveable == false ||
+					onground_collider->physics_data.is_kinmatic_linear == false ||
+					onground_collider->physics_data.is_kinmatic_anglar == false
+					)onground_pow = 6;
+				onground_pow = ALClamp(onground_pow, 0, 6);
+
 				onground_velocity.y = 0;
 				if (onground_velocity.norm() != 0) {
 					for (int i = 0; i < Human_collider_size; ++i) {
-						Human_colliders[i]->add_force(onground_velocity * 10);
+						Human_colliders[i]->add_force(onground_velocity * onground_pow);
 					}
 				}
 			}

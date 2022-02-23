@@ -179,6 +179,9 @@
     <Filter Include="00_Adollib\66_audio">
       <UniqueIdentifier>{4acc996e-ba03-4945-b278-c30f50df5a8f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\scene_game\stage\stage\stage_99">
+      <UniqueIdentifier>{181f9a95-1958-46ec-8165-632ac0c2053f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Scripts\player.cpp">
@@ -504,6 +507,15 @@
     </ClCompile>
     <ClCompile Include="..\Scripts\select_playernum_manager.cpp">
       <Filter>ソース ファイル\scene_title\stage\select</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Object\camera_costantbuffer_template.cpp">
+      <Filter>00_Adollib\33_object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\stage_99.cpp">
+      <Filter>ソース ファイル\scene_game\stage\stage\stage_99</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\stage_99_funcs.cpp">
+      <Filter>ソース ファイル\scene_game\stage\stage\stage_99</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -998,6 +1010,18 @@
     </ClInclude>
     <ClInclude Include="..\Scripts\select_playernum_manager.h">
       <Filter>ソース ファイル\scene_title\stage\select</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Object\camera_costantbuffer_template.h">
+      <Filter>00_Adollib\33_object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\stage_99.h">
+      <Filter>ソース ファイル\scene_game\stage\stage\stage_99</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\chenge_color_rainbow.h">
+      <Filter>ソース ファイル\scene_game\stage\parts\gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\change_scaleY_reinbow.h">
+      <Filter>ソース ファイル\scene_game\stage\parts\gimmick</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

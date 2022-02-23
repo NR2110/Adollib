@@ -405,12 +405,15 @@ namespace Adollib
 						for (int x = 0; x < phyramid_size - y; ++x) {
 							for (int z = 0; z < phyramid_size - y; ++z) {
 
+								float pow = 1;
+								if (y == 2)pow = 1.5f;
 								auto coll = set_box(base_pos + Vector3(
-									(base_size.x * 2 + 0.2f) * x - ((base_size.x * 2 + 0.2f) * (phyramid_size - y) * 0.5f) + y * base_size.x,
-									(base_size.y * 2 + 0) * y + base_size.y,
+									(base_size.x * 2 + 0.2f) * x - ((base_size.x * 2 + 0.2f) * (phyramid_size - y) * 0.5f) + y * base_size.x * pow,
+									(base_size.y * 2 + 0) * y + base_size.y * pow,
 									(base_size.z * 2 + 0.2f) * z - ((base_size.z * 2 + 0.2f) * (phyramid_size - y) * 0.5f)
 
 								), base_size, Vector3(0, 0, 0), moveable_blue, tutrial_block, false);
+
 								coll->physics_data.inertial_mass = 8;
 								coll->physics_data.angula_sleep_threrhold = 0;
 							}

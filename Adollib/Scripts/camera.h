@@ -34,6 +34,11 @@ namespace Adollib
 		float rotate_speed = 0.5f;
 		float linear_speed = 30;
 
+		float respown_dither_start; //respown timerによる ditherの値 主にstageに使う
+		float respown_dither_length; //respown timerによる ditherの値 主にstageに使う
+		float player_dither_start[2]; //playerのditherの値 他のカメラのditherが見えないようにするため
+		float player_dither_length[2];//playerのditherの値 他のカメラのditherが見えないようにするため
+
 	public:
 		Quaternion camera_rot; //cameraの向き
 

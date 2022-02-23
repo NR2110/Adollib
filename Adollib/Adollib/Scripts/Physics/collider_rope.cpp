@@ -301,7 +301,8 @@ void Collider_Rope::awake() {
 	// ‰Šú’l‚Ì’²®
 	Physics_manager::physicsParams.set_default_physics_data(default_physics_data);
 
-	//default_physics_data.anglar_drag = 0.9f;
+	default_physics_data.drag = 0.8f;
+	default_physics_data.anglar_drag = 0.9f;
 	default_physics_data.dynamic_friction = 0;
 	default_physics_data.inertial_mass = 2;
 

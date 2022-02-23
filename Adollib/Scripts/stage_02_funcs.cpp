@@ -494,13 +494,13 @@ namespace Adollib
 				{
 					auto c = coll->add_shape<Box>();
 					c->center = Vector3(0, -1, +0.45) * scale_pow;
-					c->size = Vector3(1.5f, 1.5f, 0.1f) * scale_pow; //box‚Ì“–‚½‚è”»’è¬‚³‚­
+					c->size = Vector3(1.2f, 1.2f, 0.1f) * scale_pow; //box‚Ì“–‚½‚è”»’è¬‚³‚­
 					c->rotate = Vector3(0, 0, 45);
 				}
 				{
 					auto c = coll->add_shape<Box>();
 					c->center = Vector3(0, -1, -0.45) * scale_pow;
-					c->size = Vector3(1.5f, 1.5f, 0.1f) * scale_pow;
+					c->size = Vector3(1.2f, 1.2f, 0.1f) * scale_pow;
 					c->rotate = Vector3(0, 0, 45);
 				}
 

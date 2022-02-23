@@ -314,7 +314,40 @@ namespace Adollib
 				set_box(Vector3(-27, 0, -75), Vector3(26, 30, 26), Vector3(0, 0, 0), base_color, stage);
 
 				// 床
-				set_box(Vector3(13, 1, -112), Vector3(63, 10, 35), Vector3(0, 0, 0), grass_color, stage);
+				set_box(Vector3(33, 1, -131), Vector3(43, 10, 17), Vector3(0, 0, 0), grass_color, stage);
+				set_box(Vector3(-34, 1, -131), Vector3(16, 10, 17), Vector3(0, 0, 0), grass_color, stage);
+				set_box(Vector3(-39, 1, -108.5f), Vector3(11, 10, 5.5f), Vector3(0, 0, 0), grass_color, stage);
+				set_box(Vector3(13, 1, -90), Vector3(63, 10, 13), Vector3(0, 0, 0), grass_color, stage);
+				set_box(Vector3(24, 1, -108.5f), Vector3(52, 10, 5.5f), Vector3(0, 0, 0), base_color, stage);
+				set_box(Vector3(-14, 1, -131), Vector3(4, 10, 17), Vector3(0, 0, 0), base_color, stage);
+
+			}
+			// ピラミッド
+			{
+				Gameobject* tutrial_block = Gameobject_manager::create("pyramid");
+				third_zone->add_child(tutrial_block);
+				tutrial_block->transform->local_pos = Vector3(48, 11, -129);
+
+				int phyramid_size = 4;
+				Vector3 base_size = Vector3(2.5f, 1.5f, 2);
+				Vector3 base_pos = Vector3(0);
+
+				for (int y = 0; y < phyramid_size; ++y) {
+					for (int x = 0; x < phyramid_size - y; ++x) {
+						for (int z = 0; z < phyramid_size - y; ++z) {
+
+							auto coll = set_box(base_pos + Vector3(
+								(base_size.x * 2 + 0.2f) * x - ((base_size.x * 2 + 0.2f) * (phyramid_size - y) * 0.5f),
+								(base_size.y * 2 + 0) * y + base_size.y,
+								(base_size.z * 2 + 0.2f) * z - ((base_size.z * 2 + 0.2f) * (phyramid_size - y) * 0.5f)
+
+							), base_size, Vector3(0, 0, 0), moveable_red, tutrial_block, false);
+							coll->physics_data.inertial_mass = 10;
+							coll->physics_data.angula_sleep_threrhold = 0;
+							coll->physics_data.is_moveable = false;
+						}
+					}
+				}
 			}
 			// stairss
 			{
@@ -780,6 +813,9 @@ namespace Adollib
 			}
 		}
 
+		//set_box(Vector3(0, 100, 0), Vector3(10, 10, 10), Vector3(0, 0, 0), grass_color);
+		//set_box(Vector3(0, 100, 0), Vector3(10, 10, 10), Vector3(0, 0, 0), grass_color);
+
 		//set_lever(Vector3(0,0,0),Vector3(1),   Vector3(0), Stage_parts::Stageparts_tags::Flag_4, Stage_parts::Stageparts_tags::Flag_4);
 		//set_lever(Vector3(8,18,104),Vector3(1),Vector3(0,90,0), Stage_parts::Stageparts_tags::Flag_4, Stage_parts::Stageparts_tags::Flag_4);
 
@@ -812,7 +848,7 @@ namespace Adollib
 			set_respown_area(Vector3(117, 20, -113), Vector3(34, 20, 55), Vector3(0), 4, Vector3(105, 100, -120), goal_and_respown_areas);
 			set_respown_area(Vector3(107, 52.5f, -189), Vector3(10, 20, 50), Vector3(0), 5, Vector3(100, 100, -158), goal_and_respown_areas);
 
-			set_goal_area(Vector3(51, 51, -221), Vector3(20, 2, 20), Vector3(0), Stage_types::demo, goal_and_respown_areas);
+			set_goal_area(Vector3(51, 51, -221), Vector3(20, 2, 20), Vector3(0), Stage_types::stage_3, goal_and_respown_areas);
 		}
 #endif
 
