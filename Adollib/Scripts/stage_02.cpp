@@ -846,7 +846,7 @@ namespace Adollib
 			set_respown_area(Vector3(-37, 27, 35), Vector3(15, 10, 12), Vector3(0), 2, Vector3(-30, 100, 35), goal_and_respown_areas);
 			set_respown_area(Vector3(-36, 20, -113), Vector3(34, 20, 61), Vector3(0), 3, Vector3(-18, 100, -72), goal_and_respown_areas);
 			set_respown_area(Vector3(117, 20, -113), Vector3(34, 20, 55), Vector3(0), 4, Vector3(105, 100, -120), goal_and_respown_areas);
-			set_respown_area(Vector3(107, 52.5f, -189), Vector3(10, 20, 50), Vector3(0), 5, Vector3(100, 100, -158), goal_and_respown_areas);
+			set_respown_area(Vector3(107, 52.5f, -189), Vector3(10, 20, 50), Vector3(0), 5, Vector3(88, 100, -158), goal_and_respown_areas);
 
 			set_goal_area(Vector3(51, 51, -221), Vector3(20, 2, 20), Vector3(0), Stage_types::stage_3, goal_and_respown_areas);
 		}
