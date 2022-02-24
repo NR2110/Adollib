@@ -32,13 +32,14 @@ void Select_playernum_manager::awake() {
 	base_select_back_pos = Vector3(-40, -15.5f, -23);
 
 	// “Ç‚İ‚Ştexture‚Ìpath
-	const wchar_t* filepath[select_stage_size]{
+	const wchar_t* filepath[select_playernum_material_size]{
 		(L"./DefaultTexture/title/player_soro.png"),
-		(L"./DefaultTexture/title/player_duo.png")
+		(L"./DefaultTexture/title/player_duo.png"),
+		(L"./DefaultTexture/title/title_yajirushi.png")
 	};
 
 	// selectstage‚É’£‚ématerialì¬
-	for (int i = 0; i < select_stage_size; ++i) {
+	for (int i = 0; i < select_playernum_material_size; ++i) {
 		select_stage_material[i] = Material_manager::create_material(std::string("select_playernum_material_") + std::to_string(i));
 
 		select_stage_material[i]->Load_VS("./DefaultShader/sprite_vs.cso");
@@ -61,6 +62,17 @@ void Select_playernum_manager::awake() {
 			sprite->renderer->set_material(select_stage_material[i]);
 		}
 	}
+	{
+		{
+			yajirushi = Gameobject_manager::createPlane(std::string("select_playernum_yajirushi"));
+			gameobject->add_child(yajirushi);
+			yajirushi->transform->local_scale = Vector3(11.91f, 3.8f, 1);
+			yajirushi->transform->local_orient = quaternion_from_euler(0, 150, 0);
+			yajirushi->renderer->set_material(select_stage_material[2]);
+		}
+
+	}
+
 
 }
 

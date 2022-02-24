@@ -28,11 +28,12 @@ namespace Adollib {
 		int  change_select_sign = 0; //“ü—Í‚É‚æ‚è +1,-1‚É‚È‚é
 		float rotate_angle; //”Â‚Ì‰ñ“]‚ÌŠp“x
 
-		static constexpr int select_stage_size = 2; //player‚Ì”
-		std::shared_ptr<Material>  select_stage_material[select_stage_size]; //material
+		static constexpr int select_playernum_material_size = 3; //player‚Ì”
+		std::shared_ptr<Material>  select_stage_material[select_playernum_material_size]; //material
 
 		Vector3 base_select_back_pos; //Šî–{À•W
 		Gameobject* select_sprite;  //
+		Gameobject* yajirushi;  //
 
 		Title_state_manager* title_state_manager = nullptr;
 		Player_manager* player_manager = nullptr;

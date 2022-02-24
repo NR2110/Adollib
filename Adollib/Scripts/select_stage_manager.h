@@ -40,6 +40,8 @@ namespace Adollib {
 		Gameobject* select_stage_front[5]; //sprite‚ğ’£‚é”Â
 
 		Gameobject* select_playernum_sprite = nullptr; //playerl”•\¦GO
+		Gameobject* yajirushi_go[4];  //
+		float yajirushi_timer;
 
 		Title_state_manager* title_state_manager = nullptr;
 		Player_manager* player_manager = nullptr;

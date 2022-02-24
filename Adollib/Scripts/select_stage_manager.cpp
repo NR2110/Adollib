@@ -90,7 +90,7 @@ void Select_state_manager::awake() {
 				sprite->transform->local_scale = Vector3(11.91f, 3.8f, 1);
 				sprite->transform->local_orient = quaternion_from_euler(0, 150 + 180 * i, 0);
 
-				auto mat  = Material_manager::create_material(std::string("select_playernum_material_") + std::to_string(i));
+				auto mat = Material_manager::create_material(std::string("select_playernum_material_") + std::to_string(i));
 				mat->Load_VS("./DefaultShader/sprite_vs.cso");
 				mat->Load_PS("./DefaultShader/sprite_ps.cso");
 				mat->get_texture()->Load(filepath[i]);
@@ -99,6 +99,58 @@ void Select_state_manager::awake() {
 			}
 		}
 	}
+
+	// yajirushi
+	{
+
+		for (int i = 0; i < 4; ++i) {
+			yajirushi_go[i] = Gameobject_manager::create("yajirushi_p");
+			gameobject->add_child(yajirushi_go[i]);
+		}
+		auto yajirushi_mat = Material_manager::create_material(std::string("select_yajirushi"));
+
+		yajirushi_mat->Load_VS("./DefaultShader/sprite_vs.cso");
+		yajirushi_mat->Load_PS("./DefaultShader/sprite_ps.cso");
+		yajirushi_mat->get_texture()->Load(L"./DefaultTexture/title/title_yajirushi.png");
+		{
+			auto go = yajirushi_go[0];
+			auto yajirushi = Gameobject_manager::createPlane(std::string("select_playernum_yajirushi_0"));
+			go->add_child(yajirushi);
+			yajirushi->transform->local_pos = Vector3(-28.12f, -13.93f, -18);
+			yajirushi->transform->local_scale = Vector3(1.5f, 2, 1);
+			yajirushi->transform->local_orient = quaternion_from_euler(0, 150, 82.4f);
+			yajirushi->renderer->set_material(yajirushi_mat);
+		}
+		{
+			auto go = yajirushi_go[1];
+			auto yajirushi = Gameobject_manager::createPlane(std::string("select_playernum_yajirushi_1"));
+			go->add_child(yajirushi);
+			yajirushi->transform->local_pos = Vector3(-49.57f, -15.48f, -29.25f);
+			yajirushi->transform->local_scale = Vector3(1.5f, 2, 1);
+			yajirushi->transform->local_orient = quaternion_from_euler(0, 150, -95.1f);
+			yajirushi->renderer->set_material(yajirushi_mat);
+		}
+		{
+			auto go = yajirushi_go[2];
+			auto yajirushi = Gameobject_manager::createPlane(std::string("select_playernum_yajirushi_2"));
+			go->add_child(yajirushi);
+			yajirushi->transform->local_pos = Vector3(-15.7f, 11.23f, -18);
+			yajirushi->transform->local_scale = Vector3(2.2f, 2, 1);
+			yajirushi->transform->local_orient = quaternion_from_euler(0, 150, -7.4f);
+			yajirushi->renderer->set_material(yajirushi_mat);
+		}
+		{
+			auto go = yajirushi_go[3];
+			auto yajirushi = Gameobject_manager::createPlane(std::string("select_playernum_yajirushi_3"));
+			go->add_child(yajirushi);
+			yajirushi->transform->local_pos = Vector3(-15.52f, -11.43f, -18);
+			yajirushi->transform->local_scale = Vector3(2.2f, 2, 1);
+			yajirushi->transform->local_orient = quaternion_from_euler(0, 150, -171.3f);
+			yajirushi->renderer->set_material(yajirushi_mat);
+		}
+
+	}
+
 }
 
 void Select_state_manager::start() {
@@ -110,10 +162,21 @@ void Select_state_manager::start() {
 	//player_manager->set_Tpause_and_set_transform(Vector3(0,-1000,-70),quaternion_identity());
 
 	//Gameobject_manager::find("camera", Scenelist::scene_player)->findComponent<Camera_component>()->gameobject->is_active = false;
+
 }
 
 void Select_state_manager::update() {
 
+
+	yajirushi_timer += time->deltaTime() * 3;
+
+	Vector3 x_vec = Vector3(1, 0.1f, 0).unit_vect();
+	yajirushi_go[0]->transform->local_pos = x_vec * +(cosf(yajirushi_timer) * 0.5f - 0.5f);
+	yajirushi_go[1]->transform->local_pos = x_vec * -(cosf(yajirushi_timer) * 0.5f + 0.5f);
+
+	Vector3 y_vec = Vector3(0, 1, 0).unit_vect();
+	yajirushi_go[2]->transform->local_pos = y_vec * +(cosf(yajirushi_timer - 0.8f) * 0.5f + 0.5f);
+	yajirushi_go[3]->transform->local_pos = y_vec * -(cosf(yajirushi_timer - 0.8f) * 0.5f - 0.5f);
 
 
 
