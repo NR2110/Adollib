@@ -40,7 +40,7 @@ namespace Adollib
 		y_respown_limit = -150;  //block‚Ìy‚ª‚±‚êˆÈ‰º‚¾‚Ærespown‚³‚ê‚é
 
 		auto player_manager = Gameobject_manager::find("Player_manager", Scenelist::scene_player)->findComponent<Player_manager>();
-		player_manager->set_is_shotable(false);
+		player_manager->set_is_shotable(true);
 
 #if  0 && _DEBUG
 		////auto cube = Gameobject_manager::createFromFBX("Shaclo", "../Data/FBX/Model_Shaclo_Winter_Edit.fbx",true);

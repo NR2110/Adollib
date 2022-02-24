@@ -179,6 +179,7 @@
     <ClInclude Include="..\Scripts\scene_title_all.h" />
     <ClInclude Include="..\Scripts\select_playernum_manager.h" />
     <ClInclude Include="..\Scripts\select_stage_manager.h" />
+    <ClInclude Include="..\Scripts\se_manager.h" />
     <ClInclude Include="..\Scripts\stageparts_base.h" />
     <ClInclude Include="..\Scripts\stageparts_tags.h" />
     <ClInclude Include="..\Scripts\stage_01.h" />
@@ -338,6 +339,7 @@
     <ClCompile Include="..\Scripts\player_manager.cpp" />
     <ClCompile Include="..\Scripts\select_playernum_manager.cpp" />
     <ClCompile Include="..\Scripts\select_stage_manager.cpp" />
+    <ClCompile Include="..\Scripts\se_manager.cpp" />
     <ClCompile Include="..\Scripts\stage_01.cpp" />
     <ClCompile Include="..\Scripts\stage_01_funcs.cpp" />
     <ClCompile Include="..\Scripts\stage_02.cpp" />

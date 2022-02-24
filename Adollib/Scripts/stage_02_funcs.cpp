@@ -483,7 +483,7 @@ namespace Adollib
 			// collider
 			auto coll = lever_box->addComponent<Collider>();
 			{
-				coll->tag = Collider_tags::Stage /*| Collider_tags::Caera_not_sunk_Stage*/ | Collider_tags::Kinematic_Stage;
+				coll->tag = Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Cant_catch;
 				coll->physics_data.is_moveable = false;
 				coll->physics_data.anglar_drag = 0.99f;
 				coll->physics_data.inertial_mass = 50;

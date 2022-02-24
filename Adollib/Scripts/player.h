@@ -12,6 +12,7 @@ namespace Adollib
 	class Input_changer;
 	class Collider_Rope;
 	class Joint_base;
+	class SE_manager;
 
 	class Player : public Component
 	{
@@ -51,6 +52,9 @@ namespace Adollib
 		float jump_front_power = 150;
 
 		float turn_speed = 200;
+
+	private:
+
 
 	private:
 		Quaternion rotate; //rotateのbuffer
@@ -108,6 +112,7 @@ namespace Adollib
 		Stage_manager* stage_manager = nullptr; //stage_managerへのポインタ
 		Camera* camera = nullptr; //cameraへのポインタ
 		Input_changer* input_changer = nullptr; //自身の保持するinput_changerへのポインタ
+		SE_manager*    se_manager = nullptr; //自身の保持するse_managerへのポインタ
 		std::shared_ptr<Material> player_mterial_0 = nullptr;
 		std::shared_ptr<Material> player_mterial_1 = nullptr;
 
@@ -147,6 +152,7 @@ namespace Adollib
 		void set_cameraptr(Camera* l_camera) { camera = l_camera; };
 		Camera* get_cameraptr() { return camera; };
 		void set_input_changerptr(Input_changer* l_input_changer) { input_changer = l_input_changer; };
+		void set_se_managerptr(SE_manager* l_se_manager) { se_manager = l_se_manager; };
 
 		bool get_is_shotable_rope() { return is_shotable; };
 

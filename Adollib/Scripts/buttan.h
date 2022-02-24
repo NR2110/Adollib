@@ -5,6 +5,8 @@
 #include "stageparts_base.h"
 #include "../Adollib/Scripts/Main/Adollib.h"
 
+#include "../../Scripts/Main/mono_audio.h"
+
 namespace Adollib{
 
 	namespace Stage_parts {
@@ -23,6 +25,9 @@ namespace Adollib{
 			float trigger_timer = 0;
 
 			bool is_trigger_pushed = false;
+
+			float se_on_timer = 0;
+			float se_off_timer = 0;
 
 		public:
 
@@ -79,6 +84,8 @@ namespace Adollib{
 					gameobject->renderer->color.x = ALClamp(gameobject->renderer->color.x + (base_material_color.y - base_material_color.x) * color_cheng_time * Al_Global::second_per_frame, base_material_color.y, base_material_color.x);
 					gameobject->renderer->color.y = ALClamp(gameobject->renderer->color.y + (base_material_color.x - base_material_color.y) * color_cheng_time * Al_Global::second_per_frame, base_material_color.y, base_material_color.x);
 
+					if (se_on_timer < 0)ALKLib::MonoAudio::PlayMusic(ALKLib::Music::SE_Button_on, false);
+					se_on_timer = 0.2f;
 				}
 				else {
 					// bit‚ð—§‚Ä‚é
@@ -87,8 +94,14 @@ namespace Adollib{
 					// F‚Ì•ÏX
 					gameobject->renderer->color.x = ALClamp(gameobject->renderer->color.x - (base_material_color.y - base_material_color.x) * color_cheng_time * Al_Global::second_per_frame, base_material_color.y, base_material_color.x);
 					gameobject->renderer->color.y = ALClamp(gameobject->renderer->color.y - (base_material_color.x - base_material_color.y) * color_cheng_time * Al_Global::second_per_frame, base_material_color.y, base_material_color.x);
+
+					if (se_off_timer < 0)ALKLib::MonoAudio::PlayMusic(ALKLib::Music::SE_Button_off, false);
+					se_off_timer = 0.2f;
 				}
 
+
+				se_on_timer -= Al_Global::second_per_frame;
+				se_off_timer -= Al_Global::second_per_frame;
 			};
 
 		};

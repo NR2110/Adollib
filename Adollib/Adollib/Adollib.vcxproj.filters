@@ -517,6 +517,9 @@
     <ClCompile Include="..\Scripts\stage_99_funcs.cpp">
       <Filter>ソース ファイル\scene_game\stage\stage\stage_99</Filter>
     </ClCompile>
+    <ClCompile Include="..\Scripts\se_manager.cpp">
+      <Filter>ソース ファイル\scene_player\player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Scripts\player.h">
@@ -1022,6 +1025,9 @@
     </ClInclude>
     <ClInclude Include="..\Scripts\change_scaleY_reinbow.h">
       <Filter>ソース ファイル\scene_game\stage\parts\gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\se_manager.h">
+      <Filter>ソース ファイル\scene_player\player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -6,6 +6,8 @@
 #include "../Adollib/Scripts/Renderer/renderer_base.h"
 #include "../Adollib/Scripts/Renderer/material_manager.h"
 
+#include "../../Scripts/Main/mono_audio.h"
+
 #include "stage_manager.h"
 #include "camera.h"
 #include "input_changer.h"
@@ -43,7 +45,7 @@ namespace Adollib
 
 		hand_camera_max_rot = ToRadian(85);
 		hand_camera_rot_pow = 2;
-		hand_camera_rot_center = ToRadian(15);
+		hand_camera_rot_center = ToRadian(20);
 
 		jump_y_power = 22;
 		jump_front_power = 5000;

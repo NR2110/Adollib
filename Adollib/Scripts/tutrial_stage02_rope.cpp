@@ -68,6 +68,7 @@ void Tutrial_stage02_rope::awake() {
 		create_material(mat_tutrial_shot, "mat_tutrial_shot", L"./DefaultTexture/tutrial/tutrial_LBrelease_shot.png");
 		create_material(mat_tutrial_shrink, "mat_tutrial_shrink", L"./DefaultTexture/tutrial/tutrial_RBhold_shrimk.png");
 		create_material(mat_tutrial_cut, "mat_tutrial_cut", L"./DefaultTexture/tutrial/tutrial_B_cut.png");
+		create_material(mat_complete, "mat_complete", L"./DefaultTexture/tutrial/excellent.png");
 	}
 
 	// gameobject‚Ìì¬
@@ -79,11 +80,13 @@ void Tutrial_stage02_rope::awake() {
 		create_gameobject(go_tutrial_shot, "go_tutrial_shot", mat_tutrial_shot, Vector3(7, 1, 1), local_check_pos, check_base_scale);
 		create_gameobject(go_tutrial_shrink, "go_tutrial_shrink", mat_tutrial_shrink, Vector3(7, 1, 1), local_check_pos, check_base_scale);
 		create_gameobject(go_tutrial_cut, "go_tutrial_cut", mat_tutrial_cut, Vector3(7, 1, 1), local_check_pos, check_base_scale);
+		create_gameobject(go_complete, "go_complete", mat_complete, Vector3(7, 1, 1), local_check_pos, check_base_scale);
 
 		gameobject->add_child(go_tutrial_aim);
 		gameobject->add_child(go_tutrial_shot);
 		gameobject->add_child(go_tutrial_shrink);
 		gameobject->add_child(go_tutrial_cut);
+		gameobject->add_child(go_complete);
 	}
 
 	tutrial_flag = -1;
@@ -98,10 +101,12 @@ void Tutrial_stage02_rope::update() {
 	go_tutrial_shot  ->is_active = false;
 	go_tutrial_shrink->is_active = false;
 	go_tutrial_cut   ->is_active = false;
+	go_complete      ->is_active = false;
 	for (auto& child : *go_tutrial_aim   ->children())child->is_active = false;
 	for (auto& child : *go_tutrial_shot  ->children())child->is_active = false;
 	for (auto& child : *go_tutrial_shrink->children())child->is_active = false;
 	for (auto& child : *go_tutrial_cut   ->children())child->is_active = false;
+	for (auto& child : *go_complete      ->children())child->is_active = false;
 	//return;
 
 	// move‚Æcamera‚Ìtutrial
@@ -110,6 +115,7 @@ void Tutrial_stage02_rope::update() {
 		tutrial_aim_and_shot();
 		tutrial_shrink(); //1 ~ 4
 		tutrial_cut(); //1 ~ 4
+		tutrial_complete();
 	}
 
 	// stage‚ª–³‚¯‚ê‚Î‚Æ‚è‚ ‚¦‚¸‰Šú‰» & return
@@ -414,6 +420,66 @@ void Tutrial_stage02_rope::tutrial_cut() {
 
 		const float move_x_timer = ALClamp(1 - tutrial_timer * 5, 0, 1);
 		const float move_x_pos = tutrial_ui_x  - 137  + move_x_timer * 137;
+
+		go->transform->local_pos.x = move_x_pos;
+
+		if (move_x_timer == 0) {
+			tutrial_flag++;
+			tutrial_timer = 0;
+		}
+	}
+}
+
+void Tutrial_stage02_rope::tutrial_complete() {
+
+	auto go = go_complete;
+	int flag_num = 15;
+
+	go->transform->local_pos.y = 80;
+	if (tutrial_flag > flag_num) go->is_active = true;
+
+	//::::::::
+
+	// 0•b‘Ò‚Â
+	if (tutrial_flag == flag_num + 0) {
+
+		if (tutrial_timer > 0) {
+			tutrial_flag++;
+			tutrial_timer = 0;
+		}
+	}
+
+	// ¶‚©‚ço‚Ä‚­‚é
+	if (tutrial_flag == flag_num + 1) {
+		const float move_x_timer = ALClamp(tutrial_timer * 5, 0, 1);
+		const float move_x_pos = tutrial_ui_x - 137 + move_x_timer * 137;
+
+		go->transform->local_pos.x = move_x_pos;
+
+		if (move_x_timer == 1) {
+			tutrial_flag++;
+			tutrial_timer = 0;
+
+			tutrial_move_check_animation_timer = 0; //timer‚ðŽg‚¢‚Ü‚í‚·
+			tutrial_aim_state_timer = 0;
+		}
+
+	}
+
+	// 4•b‘Ò‚Â
+	if (tutrial_flag == flag_num + 2) {
+
+		if (tutrial_timer > 4) {
+			tutrial_flag++;
+			tutrial_timer = 0;
+		}
+
+	}
+	// ¶‚Éˆø‚Áž‚Þ
+	if (tutrial_flag == flag_num + 3) {
+
+		const float move_x_timer = ALClamp(1 - tutrial_timer * 5, 0, 1);
+		const float move_x_pos = tutrial_ui_x - 137 + move_x_timer * 137;
 
 		go->transform->local_pos.x = move_x_pos;
 

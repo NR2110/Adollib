@@ -288,7 +288,7 @@ namespace Adollib
 				Gameobject* rotate_gimmick = Gameobject_manager::create("rotate_gimmick");
 				second_zone->add_child(rotate_gimmick);
 
-				set_buttan(Vector3(74, 11.2f, 76), Vector3(4, 0.9f, 4), Vector3(0, 0, 0), Stage_parts::Stageparts_tags::Flag_0, rotate_gimmick, true);
+				set_buttan(Vector3(75, 11.2f, 82), Vector3(3, 0.9f, 3), Vector3(0, 0, 0), Stage_parts::Stageparts_tags::Flag_0, rotate_gimmick, true);
 				set_rotate_block(Vector3(102, 25.0f, 71), Vector3(5, 15, 15), Vector3(0, 90, 0), Stage_parts::Stageparts_tags::Flag_0, Vector3(0, 0, -1), 1, 1, base_color, rotate_gimmick);
 
 				{

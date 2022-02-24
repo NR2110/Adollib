@@ -26,11 +26,27 @@ namespace ALKLib
 	void MonoAudio::Init() {
 
 		// BGMのロード
-		//LoadMusic(static_cast<int>(Music::BGM_Title),  L"../Data/sounds/BGM/Take_it_easy.wav", 0.25f);
-		//LoadMusic(static_cast<int>(Music::BGM_Game), L"../Data/sounds/BGM/tuitekuru_tuitekuru.wav", 0.6f);
-		LoadMusic(static_cast<int>(Music::BGM_Title), L"../Data/sounds/BGM/Take_it_easy.wav", 0);
-		LoadMusic(static_cast<int>(Music::BGM_Game), L"../Data/sounds/BGM/tuitekuru_tuitekuru.wav", 0);
+		LoadMusic(static_cast<int>(Music::BGM_Title),  L"../Data/sounds/BGM/Take_it_easy.wav", 0.25f);
+		//LoadMusic(static_cast<int>(Music::BGM_Title),  L"../Data/sounds/BGM/otoboke.wav", 0.25f);
+		LoadMusic(static_cast<int>(Music::BGM_Game), L"../Data/sounds/BGM/tuitekuru_tuitekuru.wav", 0.6f);
+		//LoadMusic(static_cast<int>(Music::BGM_Title), L"../Data/sounds/BGM/Take_it_easy.wav", 0);
+		//LoadMusic(static_cast<int>(Music::BGM_Game), L"../Data/sounds/BGM/tuitekuru_tuitekuru.wav", 0);
 
+		LoadMusic(static_cast<int>(Music::SE_Pop),  L"../Data/sounds/SE/Motion-Pop03-2.wav", 0.5f);
+		LoadMusic(static_cast<int>(Music::SE_Jump), L"../Data/sounds/SE/SNES-Action01-01(Jump).wav", 0.5f);
+		LoadMusic(static_cast<int>(Music::SE_Landing), L"../Data/sounds/SE/SNES-Action01-03(Stomp).wav", 0.7f);
+		LoadMusic(static_cast<int>(Music::SE_Step0), L"../Data/sounds/SE/Motion-Pop28-1.wav", 0.2f);
+		LoadMusic(static_cast<int>(Music::SE_Step1), L"../Data/sounds/SE/Motion-Pop28-3.wav", 0.2f);
+		LoadMusic(static_cast<int>(Music::SE_Button_on), L"../Data/sounds/SE/Onmtp-Click02-1.wav", 0.15f);
+		LoadMusic(static_cast<int>(Music::SE_Button_off), L"../Data/sounds/SE/Onmtp-Click02-1.wav", 0.15f);
+
+		LoadMusic(static_cast<int>(Music::SE_Pop       ) + 10, L"../Data/sounds/SE/Motion-Pop03-2.wav", 0.5f);
+		LoadMusic(static_cast<int>(Music::SE_Jump      ) + 10, L"../Data/sounds/SE/SNES-Action01-01(Jump).wav", 0.5f);
+		LoadMusic(static_cast<int>(Music::SE_Landing   ) + 10, L"../Data/sounds/SE/SNES-Action01-03(Stomp).wav", 0.7f);
+		LoadMusic(static_cast<int>(Music::SE_Step0     ) + 10, L"../Data/sounds/SE/Motion-Pop28-1.wav", 0.2f);
+		LoadMusic(static_cast<int>(Music::SE_Step1     ) + 10, L"../Data/sounds/SE/Motion-Pop28-3.wav", 0.2f);
+		LoadMusic(static_cast<int>(Music::SE_Button_on ) + 10, L"../Data/sounds/SE/Onmtp-Click02-1.wav", 0.15f);
+		LoadMusic(static_cast<int>(Music::SE_Button_off) + 10, L"../Data/sounds/SE/Onmtp-Click02-1.wav", 0.15f);
 		//// BGMのロード
 		//LoadSound(L"Assets/Sounds/SE/Win/sound_effect.xwb");
 

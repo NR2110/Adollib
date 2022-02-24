@@ -22,16 +22,24 @@ namespace ALKLib
 	static constexpr int WAVE_FILE_MAX = 128;
 	static constexpr int WAVE_SOUND_MAX = 8;   // ç≈ëÂ8âπìØéûçƒê∂OK
 
-	enum class SoundState
+	enum SoundState
 	{
 		STOPPED = 0,
 		PLAYING,
 		PAUSED
 	};
-	enum class Music
+	enum Music
 	{
 		BGM_Title,
 		BGM_Game,
+
+		SE_Pop = 10,
+		SE_Jump,
+		SE_Landing,
+		SE_Step0,
+		SE_Step1,
+		SE_Button_on,
+		SE_Button_off,
 
 	};
 	enum class Sound

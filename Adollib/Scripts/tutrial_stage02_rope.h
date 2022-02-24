@@ -18,11 +18,13 @@ namespace Adollib {
 		std::shared_ptr<Material> mat_tutrial_shot   = nullptr;
 		std::shared_ptr<Material> mat_tutrial_shrink = nullptr;
 		std::shared_ptr<Material> mat_tutrial_cut    = nullptr;
+		std::shared_ptr<Material> mat_complete    = nullptr;
 
 		Gameobject* go_tutrial_aim = nullptr;
 		Gameobject* go_tutrial_shot = nullptr;
 		Gameobject* go_tutrial_shrink = nullptr;
 		Gameobject* go_tutrial_cut = nullptr;
+		Gameobject* go_complete = nullptr;
 
 		Vector3 check_base_scale;
 		int tutrial_flag = -1;
@@ -44,6 +46,7 @@ namespace Adollib {
 		void tutrial_aim_and_shot(); //1 ~ 4
 		void tutrial_shrink(); //1 ~ 4
 		void tutrial_cut(); //1 ~ 4
+		void tutrial_complete(); //1 ~ 4
 
 
 	public:

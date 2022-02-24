@@ -8,7 +8,7 @@
 
 using namespace Adollib;
 using namespace Physics_function;
-
+//#pragma optimize("", off)
 BallJoint* Joint::add_balljoint(
 	Collider* colliderA, Collider* colliderB,
 	const Vector3& anchorA, const Vector3& anchorB,
@@ -30,6 +30,7 @@ BallJoint* Joint::add_balljoint(
 
 	return balljoint;
 }
+//#pragma optimize("", on)
 
 HingeJoint* Joint::add_Hingejoint(
 	Collider* colliderA, Collider* colliderB,

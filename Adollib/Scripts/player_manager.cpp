@@ -20,6 +20,7 @@
 #include "player.h"
 #include "input_changer.h"
 #include "tutrial_manager.h"
+#include "se_manager.h"
 
 namespace Adollib
 {
@@ -692,21 +693,28 @@ namespace Adollib
 				Rhand_joint
 			);
 
+			// “ü—Í•ÏŠ·
 			auto input_changer = GO->addComponent<Input_changer>();
 			input_changer->pad_num = player_num;
 
+			// tutrial
 			auto tutrial = GO->addComponent<Tutrial_manager>();
 			tutrial->tutrial_ui_x = tutrial_ui_x;
 
+			// camera
 			Gameobject* camera_go = Gameobject_manager::create("camera", Scenelist::scene_player);
 			auto camera_comp = camera_go->addComponent<Camera>();
 			auto camera_ = camera_go->addComponent<Camera_component>();
 			camera_->ui_data = camera_data;
 			GO->add_child(camera_go);
 
+			// se
+			auto se = GO->addComponent<SE_manager>();
+			se->player_num = player_num;
 
 			player->set_input_changerptr(input_changer);
 			player->set_cameraptr(camera_comp);
+			player->set_se_managerptr(se);
 			player->set_player_num(player_num);
 
 			camera_comp->set_input_changerptr(input_changer);

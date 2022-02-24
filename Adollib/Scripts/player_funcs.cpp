@@ -12,10 +12,13 @@
 #include "../Adollib/Scripts/Renderer/rope_renderer.h"
 #include "../Adollib/Scripts/Renderer/directional_shadow.h"
 
+#include "../../Scripts/Main/mono_audio.h"
+
 #include "stage_manager.h"
 #include "stage_base.h"
 #include "camera.h"
 #include "input_changer.h"
+#include "se_manager.h"
 
 #ifdef ON_DEBUG
 #define Rope_Shot_Always
@@ -204,11 +207,12 @@ void Player::catch_things() {
 			for (auto& c_coll : contacted_colls) {
 				if (
 					(min_data == nullptr || min_data->penetrate > c_coll.penetrate) && // ‹——£‚Ì”äŠr
+					!(c_coll.coll->tag & Collider_tags::Cant_catch) && //‚Ä‚È‚¢‚à‚Ì‚Å‚È‚¢
 					(
 						c_coll.coll->tag & Collider_tags::Catch_able_easy || //‚Â‚©‚İ‚â‚·‚¢‚à‚Ì‚©(‰º‚Ì“ñ‚Â‚ÌğŒ‚È‚µ‚Å‚Â‚©‚ß‚é‚à‚Ì)
 						check_1.x - check_0.x < 0 || //‰º‚ÉŒü‚±‚¤‚Æ‚µ‚Ä‚¢‚é
 						arm_rad_to_camera[i].radian() < ToRadian(50) //˜r‚ÆƒJƒƒ‰‚ÌŠp“x‚ªˆê’èˆÈ‰º‚Å‚ ‚é
-					)
+						)
 					) {
 					min_data = &c_coll;
 
@@ -228,6 +232,8 @@ void Player::catch_things() {
 				joint->slop = 0.1f;
 				joint->shrink_bias = 0.5f;
 				joint->stretch_bias = 0.5f;
+
+				se_manager->hand_pop_SE();
 			}
 		}
 
@@ -426,6 +432,7 @@ void Player::shot_rope() {
 		int sphere_count = (int)(arm_ray_data.raymin / coll->sphree_offset_size);
 		sphere_count += 1;
 		coll->sphere_num_size = sphere_count;
+		//coll->sphere_num_size = 84;
 		coll->start_rope_dir = arm_ray.direction;
 		coll->tag |= Collider_tags::Human_rope;
 		coll->ignore_tags |= Collider_tags::Human;
@@ -691,12 +698,14 @@ void Player::linear_move() {
 
 	float move_pow = 1;
 	if (onground_collider == nullptr) {
-		move_pow = 0.3f;
+		move_pow = 0.4f;
 	}
 
+	if (dir.norm() != 0)
 	{
 		//ˆÚ“®
 		Waist_collider->add_force(dir * waist_move_pow * move_pow);
+
 
 		// ‘¬“x§ŒÀ
 		Vector3 speed = Waist_collider->linear_velocity();
@@ -711,6 +720,8 @@ void Player::linear_move() {
 				onground_collider->add_force(-dir * waist_move_pow * move_pow, onground_contactpoint);
 		}
 
+		if (onground_collider != nullptr)
+			se_manager->step_SE();
 	}
 };
 
@@ -861,6 +872,7 @@ void Player::make_jump() {
 			is_jumping = true;
 			coyote = -0.3f;
 
+			se_manager->jump_SE();
 		}
 	}
 };
@@ -924,6 +936,8 @@ bool Player::check_respown() {
 		if (check_onplayer_coll->concoll_enter(Collider_tags::Stage)) {
 			// respown’† stage‚ÉÚG‚µ‚Ä‚¢‚ê‚Î timer‚ğŒ¸‚ç‚·
 			respown_timer -= Al_Global::second_per_frame;
+
+			se_manager->landing_SE();
 		}
 		else {
 			// respown’† stage‚ÉÚG‚µ‚Ä‚¢‚È‚¯‚ê‚Î drag‚ğ0
@@ -1067,6 +1081,7 @@ void Player::update_gnyat_pow() {
 
 	if (onground_collider == nullptr && Lrope_go == nullptr)onground_gunyatto_pow -= time->deltaTime();
 	else onground_gunyatto_pow = 1.4f;
+
 
 	//if (
 	//	(Waist_collider->concoll_enter(Collider_tags::Stage)) &&
