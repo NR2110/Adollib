@@ -412,7 +412,7 @@ namespace Adollib
 				coll->tag = Collider_tags::Stage | Collider_tags::Kinematic_Stage | Collider_tags::Catch_able_easy;
 				coll->physics_data.is_fallable = false;
 				//coll->physics_data.is_moveable = false;
-				coll->physics_data.anglar_drag = 0.99f;
+				coll->physics_data.anglar_drag = 0.993f;
 				coll->physics_data.inertial_mass = 50;
 				coll->physics_data.angula_sleep_threrhold = 0;
 				coll->physics_data.linear_sleep_threrhold = 0;

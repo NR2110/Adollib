@@ -13,7 +13,7 @@ namespace Adollib
 	private:
 		Player* players[4];
 
-		void add_player(int player_num, const Vector3& position, const Vector3& rotate, const Vector3& main_color, const Vector3& sub_color, const UI_data& camera_data, float tutrial_ui_x);
+		Player* add_player(int player_num, const Vector3& position, const Vector3& rotate, const Vector3& main_color, const Vector3& sub_color, const UI_data& camera_data, float tutrial_ui_x);
 
 	public:
 		void set_stage_manager_ptr(Stage_manager* m);

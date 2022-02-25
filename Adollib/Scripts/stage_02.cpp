@@ -344,7 +344,6 @@ namespace Adollib
 							), base_size, Vector3(0, 0, 0), moveable_red, tutrial_block, false);
 							coll->physics_data.inertial_mass = 10;
 							coll->physics_data.angula_sleep_threrhold = 0;
-							coll->physics_data.is_moveable = false;
 						}
 					}
 				}

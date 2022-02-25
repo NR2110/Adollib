@@ -924,6 +924,7 @@ bool Player::check_respown() {
 
 			Lrope_go = nullptr;
 			Lblock_hand_joint = nullptr;
+			Lblock_rope_joint = nullptr;
 		}
 
 		respown_timer = 1;
@@ -1120,21 +1121,6 @@ void Player::respown() {
 
 	auto stage = stage_manager->get_current_stage();
 
-	// À•WˆÚ“®
-	Vector3 respown_pow = stage->player_respown_pos + Vector3(10, 0, 0) * player_num;
-	Vector3 off = vector3_quatrotate(respown_pow - Waist->world_position(), Waist->parent()->world_orientate().inverse());
-	for (int i = 0; i < Human_gameobject_size; i++) {
-		Human_gameobjects[i]->transform->local_pos += off;
-	}
-
-	// —Í‚Ìreset& Œy‚­‰º‚É‘¬“x‚ğ‰Á‚¦‚é
-	for (int i = 0; i < Human_collider_size; i++) {
-		float y_speed = fabsf(Human_colliders[i]->linear_velocity().y);
-		y_speed = ALClamp(y_speed * 0.5f, 1, 10);
-		Human_colliders[i]->reset_force();
-		Human_colliders[i]->linear_velocity(Vector3(0, -y_speed, 0)); //fleeze‚Éˆø‚Á‚©‚©‚ç‚È‚¢‚æ‚¤‚ÉŒy‚­—Í‚ğ‰Á‚¦‚é
-	}
-
 	// ‚Á‚Ä‚¢‚é‚à‚Ì‚ğ—£‚·
 	Joint_base** joints[2] = {
 		&catch_left_joint,
@@ -1146,6 +1132,10 @@ void Player::respown() {
 			Joint::delete_joint(joint);
 		}
 	}
+	if (another_player_ptr != nullptr) {
+		another_player_ptr->delete_joint_from_tag(player_collider_tag);
+	}
+
 
 	// rope‚Ìíœ
 	{
@@ -1159,6 +1149,21 @@ void Player::respown() {
 	for (int i = 0; i < Human_collider_size; ++i) {
 		Human_colliders[i]->set_max_linear_velocity(FLT_MAX);
 		Human_colliders[i]->set_max_angula_velocity(FLT_MAX);
+	}
+
+	// —Í‚Ìreset& Œy‚­‰º‚É‘¬“x‚ğ‰Á‚¦‚é
+	for (int i = 0; i < Human_collider_size; i++) {
+		float y_speed = fabsf(Human_colliders[i]->linear_velocity().y);
+		y_speed = ALClamp(y_speed * 0.5f, 1, 10);
+		Human_colliders[i]->reset_force();
+		Human_colliders[i]->linear_velocity(Vector3(0, -y_speed, 0)); //fleeze‚Éˆø‚Á‚©‚©‚ç‚È‚¢‚æ‚¤‚ÉŒy‚­—Í‚ğ‰Á‚¦‚é
+	}
+
+	// À•WˆÚ“®
+	Vector3 respown_pow = stage->player_respown_pos + Vector3(10, 0, 0) * player_num;
+	Vector3 off = vector3_quatrotate(respown_pow - Waist->world_position(), Waist->parent()->world_orientate().inverse());
+	for (int i = 0; i < Human_gameobject_size; i++) {
+		Human_gameobjects[i]->transform->local_pos += off;
 	}
 
 	respown_timer = 3;
@@ -1226,4 +1231,11 @@ void Player::set_shadow_camera_dir(const Vector3& dir) {
 }
 void Player::set_is_shotable(bool is) {
 	is_shotable = is;
+}
+void Player::delete_joint_from_tag(Collider_tagbit tag) {
+
+	if (catch_right_joint != nullptr && catch_right_joint->get_colliderB()->tag & tag)	Joint::delete_joint(catch_right_joint);
+	if (catch_left_joint != nullptr && catch_left_joint->get_colliderB()->tag & tag)	Joint::delete_joint(catch_left_joint);
+	if (Lblock_hand_joint != nullptr && Lblock_hand_joint->get_colliderA()->tag & tag)	Joint::delete_joint(Lblock_hand_joint);
+	if (Lblock_rope_joint != nullptr && Lblock_rope_joint->get_colliderA()->tag & tag)	Joint::delete_joint(Lblock_rope_joint);
 }

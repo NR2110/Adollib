@@ -159,11 +159,17 @@ namespace Adollib
 		};
 
 
+		Player* players[2];
 		for (int i = 0; i < num; ++i) {
 
-			add_player(i, player_start_pos + Vector3(10, 0, 0) * i, Vector3(20, 180, 0), Vector3(1), Vector3(0.5f),
+			players[i] = add_player(i, player_start_pos + Vector3(10, 0, 0) * i, Vector3(20, 180, 0), Vector3(1), Vector3(0.5f),
 				base_ui_datas[num - 1][i], tutrial_ui_x[num - 1]
 			);
+		}
+
+		if (num == 2) {
+			players[0]->another_player_ptr = players[1];
+			players[1]->another_player_ptr = players[0];
 		}
 	}
 
@@ -178,7 +184,7 @@ namespace Adollib
 		}
 	}
 
-	void Player_manager::add_player(int player_num, const Vector3& position, const Vector3& rotate, const Vector3& main_color, const Vector3& sub_color, const UI_data& camera_data, float tutrial_ui_x) {
+	Player* Player_manager::add_player(int player_num, const Vector3& position, const Vector3& rotate, const Vector3& main_color, const Vector3& sub_color, const UI_data& camera_data, float tutrial_ui_x) {
 
 		Player*& player = players[player_num];
 
@@ -667,6 +673,11 @@ namespace Adollib
 		}
 
 		{
+			Collider_tagbit tag = 0;
+			if (player_num == 0) tag = Collider_tags::Player00;
+			if (player_num == 1) tag = Collider_tags::Player01;
+			if (player_num == 2) tag = Collider_tags::Player02;
+			if (player_num == 3) tag = Collider_tags::Player03;
 
 			auto GO = Gameobject_manager::create("player", Scenelist::scene_player);
 			player = GO->addComponent<Player>();
@@ -692,6 +703,8 @@ namespace Adollib
 				Lhand_joint,
 				Rhand_joint
 			);
+
+			player->player_collider_tag = tag;
 
 			// “ü—Í•ÏŠ·
 			auto input_changer = GO->addComponent<Input_changer>();
@@ -722,6 +735,7 @@ namespace Adollib
 
 			//camera->is_active = false;
 
+			return player;
 		}
 
 

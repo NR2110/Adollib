@@ -53,7 +53,9 @@ namespace Adollib
 
 		float turn_speed = 200;
 
-	private:
+	public:
+		Player* another_player_ptr = nullptr;
+		Collider_tagbit player_collider_tag = 0;
 
 
 	private:
@@ -155,6 +157,8 @@ namespace Adollib
 		void set_se_managerptr(SE_manager* l_se_manager) { se_manager = l_se_manager; };
 
 		bool get_is_shotable_rope() { return is_shotable; };
+
+		void delete_joint_from_tag(Collider_tagbit tag);
 
 	private:
 		//::: GO :::
