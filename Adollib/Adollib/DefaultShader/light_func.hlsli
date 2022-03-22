@@ -166,7 +166,10 @@ float3	GetShadow(Texture2D st, SamplerState ss, float3 Tex, float Bias)
 	float d = st.Sample(ss, Tex.xy).r;
 	// シャドウマップの深度値と現実の深度の比較
 
-    return (Tex.z - d > Bias) ? 1 : 0;
+    //return (Tex.z - d > Bias) ? 1 : 0;
+
+    return smoothstep(d, d + Bias, Tex.z);
+
     //return clamp((Tex.z - d) - Bias, 0, 1);
 
 }

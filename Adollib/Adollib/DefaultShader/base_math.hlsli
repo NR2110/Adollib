@@ -45,5 +45,17 @@ float3 matrix_to_euler(matrix M) {
 	return R;
 }
 
+float linearstep(float edge0, float edge1, float x)
+{
+    float t = (x - edge0) / (edge1 - edge0);
+    return clamp(t, 0.0f, 1.0f);
+}
+float smootherstep(float edge0, float edge1, float x)
+{
+    float t = (x - edge0) / (edge1 - edge0);
+    float t1 = t * t * t * (t * (t * 6.f - 15.f) + 10.f);
+    return clamp(t1, 0.0f, 1.0f);
+}
+
 #endif
 

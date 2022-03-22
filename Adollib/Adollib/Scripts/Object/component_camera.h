@@ -89,7 +89,7 @@ namespace Adollib
 
 		// ポストエフェクトの追加
 		template<typename T>
-		T* add_posteffect() {
+		std::shared_ptr<T> add_posteffect() {
 
 			// Posteffect_baseクラスから派生したものかチェック
 			static_assert(std::is_base_of<Posteffect_base, T>::value == true, "template T must inherit Posteffect_base");
@@ -106,7 +106,8 @@ namespace Adollib
 			}
 
 			// 生成
-			T* newCom = newD T();
+			//T* newCom = newD T();
+			auto newCom = std::make_shared<T>();
 
 			// 初期化
 			posteffect_initialize(newCom);

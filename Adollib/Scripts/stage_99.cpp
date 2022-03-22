@@ -150,8 +150,8 @@ namespace Adollib
 				Gameobject* pearent = Gameobject_manager::create("button");
 				first_zone->add_child(pearent);
 
-				set_buttan(Vector3(46, 0, 4), Vector3(4, 0.9f, 4), Vector3(0, 0, 0), Stage_parts::Stageparts_tags::Flag_6, pearent, true);
-				set_buttan(Vector3(-55, 0, 4), Vector3(4, 0.9f, 4), Vector3(0, 0, 0), Stage_parts::Stageparts_tags::Flag_5, pearent, true);
+				set_buttan(Vector3(46, 0, 4), Vector3(4, 0.9f, 4), Vector3(0, 0, 0), Stage_parts::Stageparts_tags::Flag_6, pearent, 1);
+				set_buttan(Vector3(-55, 0, 4), Vector3(4, 0.9f, 4), Vector3(0, 0, 0), Stage_parts::Stageparts_tags::Flag_5, pearent, 1);
 			}
 
 			// trees

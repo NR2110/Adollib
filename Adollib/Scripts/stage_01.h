@@ -42,7 +42,7 @@ namespace Adollib {
 
 
 
-		Gameobject* set_buttan(const Vector3& pos, const Vector3& scale, const Vector3& rotate, Stage_parts::Stageparts_tagbit tag, Gameobject* pearent = nullptr, bool is_use_trigger = false);
+		Gameobject* set_buttan(const Vector3& pos, const Vector3& scale, const Vector3& rotate, Stage_parts::Stageparts_tagbit tag, Gameobject* pearent = nullptr, int is_use_trigger = 0);
 		Gameobject* set_gimmickdoor(
 			const Vector3& start_pos, const Vector3& goal_pos,
 			const Vector3& start_rot, const Vector3& goal_rot,

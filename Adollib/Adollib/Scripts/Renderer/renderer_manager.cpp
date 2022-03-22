@@ -187,7 +187,6 @@ bool sortmaterial(const Renderer_base* left, const Renderer_base* Right)
 	return left->get_materialnum() < Right->get_materialnum();
 }
 
-
 void Renderer_manager::set_light_Constantbuffer(const std::list<Light_component*>& lights) {
 	//CB : ConstantBufferPerLight
 	ConstantBufferPerLight l_cb;

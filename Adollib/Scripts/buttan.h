@@ -19,7 +19,7 @@ namespace Adollib{
 			Vector3 base_material_color = Vector3(0.5f);
 
 			// triggerとして使用するか
-			bool is_use_trigger = false;
+			int is_use_trigger = 0;
 		private:
 			float timer = 0; //離れても少しの間はONになるようにするため(ちかちかさせたくない)
 			float trigger_timer = 0;
@@ -43,7 +43,12 @@ namespace Adollib{
 				if (this_coll->gameobject->parent() != nullptr)pearent_y_scale = this_coll->gameobject->parent()->transform->scale.y;
 				pearent_y_inve_scale = 1 / pearent_y_scale;
 
-				if (is_use_trigger) {
+				// 押されっぱなし
+				if (is_use_trigger == 2) {
+					if (this_coll->concoll_enter(Collider_tags::Human | Collider_tags::Kinematic_Stage)) timer = 0.25f;
+				}
+				// trigger
+				else if (is_use_trigger == 1) {
 
 					// 前のフレーム押されていないとき
 					if (trigger_timer < 0){
@@ -59,6 +64,7 @@ namespace Adollib{
 					else timer = -1;
 
 				}
+				// state
 				else {
 					if (this_coll->concoll_enter(Collider_tags::Human | Collider_tags::Kinematic_Stage)) timer = 0.25f;
 					else timer -= Al_Global::second_per_frame;

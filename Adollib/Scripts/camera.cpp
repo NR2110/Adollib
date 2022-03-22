@@ -6,6 +6,7 @@
 #include "../Adollib/Scripts/Object/gameobject_manager.h"
 #include "../Adollib/Scripts/Object/component_camera.h"
 #include "../Adollib/Scripts/Renderer/directional_shadow.h"
+#include "../Adollib/Scripts/Renderer/vignette_effect.h"
 
 #include "Camera.h"
 
@@ -45,6 +46,8 @@ namespace Adollib
 		c->directional_shadow->direction = Vector3(-1, -2, 1).unit_vect();
 		c->directional_shadow->nearZ = 150;
 		c->directional_shadow->nearZ = 0.1f;
+
+		c->add_posteffect<Vignette_effect>();
 	}
 
 	// 毎フレーム呼ばれる更新処理

@@ -5,6 +5,7 @@
 #include <list>
 
 #include "Shader/shader.h"
+#include "../Renderer/UI.h"
 
 namespace Adollib {
 	class Texture;
@@ -14,22 +15,23 @@ namespace Adollib {
 	class Posteffect_base {
 
 	protected:
-		Shader shader;
+		//Shader shader;
+		UI ui;
 
 	protected:
-		void Load_VS(const char* cso_name) { shader.Load_VS(cso_name); };
-		void Load_PS(const char* cso_name) { shader.Load_PS(cso_name); };
-		void Load_GS(const char* cso_name) { shader.Load_GS(cso_name); };
-		void Load_HS(const char* cso_name) { shader.Load_HS(cso_name); };
-		void Load_DS(const char* cso_name) { shader.Load_DS(cso_name); };
+		void Load_VS(const char* cso_name) { ui.shader.Load_VS(cso_name); };
+		void Load_PS(const char* cso_name) { ui.shader.Load_PS(cso_name); };
+		void Load_GS(const char* cso_name) { ui.shader.Load_GS(cso_name); };
+		void Load_HS(const char* cso_name) { ui.shader.Load_HS(cso_name); };
+		void Load_DS(const char* cso_name) { ui.shader.Load_DS(cso_name); };
 
 	public:
 		Camera_component* camera = nullptr;
 		std::list<std::shared_ptr<Posteffect_base>>::iterator this_itr;
 
 	public:
-		virtual void awake();
-		virtual void render(const Texture* color_tex, const  Texture* normal_tex, const Texture* depth_tex) = 0;
+		virtual void awake() = 0;
+		virtual void render(std::shared_ptr<Texture> output_tex, std::shared_ptr<Texture> color_tex, std::shared_ptr<Texture> normal_tex, std::shared_ptr<Texture> depth_tex, const UI_data& ui_data) = 0;
 
 
 

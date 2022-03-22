@@ -5,6 +5,8 @@
 #include "ALP_joint.h"
 #include "ALP__physics_manager.h"
 
+#include <unordered_map>
+
 using namespace Adollib;
 using namespace Physics_function;
 using namespace Contacts;

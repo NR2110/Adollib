@@ -78,7 +78,7 @@ namespace Adollib
 
 			}
 
-			set_buttan(Vector3(74, 11.2f, 76), Vector3(4, 0.9f, 4), Vector3(0, 0, 0), Stage_parts::Stageparts_tags::Flag_0, nullptr, false);
+			set_buttan(Vector3(74, 11.2f, 76), Vector3(4, 0.9f, 4), Vector3(0, 0, 0), Stage_parts::Stageparts_tags::Flag_0, nullptr, 0);
 			set_rotate_block(Vector3(102, 25.0f, 71), Vector3(5, 15, 15), Vector3(0, 90, 0), Stage_parts::Stageparts_tags::Flag_0, Vector3(0, 0, -1), 1, 1, base_color,nullptr);
 		}
 
@@ -288,7 +288,7 @@ namespace Adollib
 				Gameobject* rotate_gimmick = Gameobject_manager::create("rotate_gimmick");
 				second_zone->add_child(rotate_gimmick);
 
-				set_buttan(Vector3(75, 11.2f, 82), Vector3(3, 0.9f, 3), Vector3(0, 0, 0), Stage_parts::Stageparts_tags::Flag_0, rotate_gimmick, true);
+				set_buttan(Vector3(75, 11.2f, 82), Vector3(3, 0.9f, 3), Vector3(0, 0, 0), Stage_parts::Stageparts_tags::Flag_0, rotate_gimmick, 2);
 				set_rotate_block(Vector3(102, 25.0f, 71), Vector3(5, 15, 15), Vector3(0, 90, 0), Stage_parts::Stageparts_tags::Flag_0, Vector3(0, 0, -1), 1, 1, base_color, rotate_gimmick);
 
 				{
@@ -347,7 +347,7 @@ namespace Adollib
 				set_box(Vector3(181, 17, 64), Vector3(25, 6, 1), Vector3(0), base_color, tute_up);
 				set_box(Vector3(198, 27, 64), Vector3(42, 4, 1), Vector3(0), base_color, tute_up);
 
-				set_buttan(Vector3(199, 19, 64.4f), Vector3(2, 0.9f, 2), Vector3(90, 0, 0), Stage_parts::Stageparts_tags::Flag_2, tute_up, true);
+				set_buttan(Vector3(199, 19, 64.4f), Vector3(2, 0.9f, 2), Vector3(90, 0, 0), Stage_parts::Stageparts_tags::Flag_2, tute_up, 1);
 				set_gimmickdoor(Vector3(212, 19, 64), Vector3(215, 19, 64),
 					Vector3(0), Vector3(0),
 					2, 0,
@@ -538,8 +538,8 @@ namespace Adollib
 				);
 
 
-				set_buttan(Vector3(135, 16, 98.8f), Vector3(2, 0.9f, 2), Vector3(-90, 0, 0), Stage_parts::Stageparts_tags::Flag_1, wall_pearent, true);
-				set_buttan(Vector3(153, 16, 98.8f), Vector3(2, 0.9f, 2), Vector3(-90, 0, 0), Stage_parts::Stageparts_tags::Flag_2, wall_pearent, true);
+				set_buttan(Vector3(135, 16, 98.8f), Vector3(2, 0.9f, 2), Vector3(-90, 0, 0), Stage_parts::Stageparts_tags::Flag_1, wall_pearent, 1);
+				set_buttan(Vector3(153, 16, 98.8f), Vector3(2, 0.9f, 2), Vector3(-90, 0, 0), Stage_parts::Stageparts_tags::Flag_2, wall_pearent, 1);
 
 				set_Andcircuit(Stage_parts::Stageparts_tags::Flag_1, Stage_parts::Stageparts_tags::Flag_2, Stage_parts::Stageparts_tags::Flag_3, wall_pearent);
 

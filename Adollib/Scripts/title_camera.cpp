@@ -8,6 +8,8 @@
 #include "../Adollib/Scripts/Object/gameobject_manager.h"
 #include "../Adollib/Scripts/Object/component_camera.h"
 #include "../Adollib/Scripts/Renderer/directional_shadow.h"
+#include "../Adollib/Scripts/Renderer/vignette_effect.h"
+
 
 #include "../Adollib/Imgui/imgui.h"
 
@@ -17,6 +19,7 @@
 #include "../Adollib/Scripts/Physics/ALP__physics_manager.h"
 
 #include "title_state_manager.h"
+
 
 using namespace Adollib;
 
@@ -38,6 +41,8 @@ void Title_camera::start()
 	c->directional_shadow->direction = Vector3(-1, -2, 1).unit_vect();
 	c->directional_shadow->nearZ = 150;
 	c->directional_shadow->nearZ = 0.1f;
+
+	c->add_posteffect<Vignette_effect>();
 }
 
 // 毎フレーム呼ばれる更新処理

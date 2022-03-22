@@ -317,6 +317,7 @@
     <ClInclude Include="Scripts\Renderer\sprite_renderer.h" />
     <ClInclude Include="Scripts\Renderer\texture.h" />
     <ClInclude Include="Scripts\Renderer\UI_renderer.h" />
+    <ClInclude Include="Scripts\Renderer\vignette_effect.h" />
     <ClInclude Include="Scripts\Scene\scene.h" />
     <ClInclude Include="Scripts\Scene\scene_game.h" />
     <ClInclude Include="Scripts\Scene\scene_list.h" />
@@ -433,6 +434,7 @@
     <ClCompile Include="Scripts\Renderer\texture.cpp" />
     <ClCompile Include="Scripts\Renderer\croth_renderer.cpp" />
     <ClCompile Include="Scripts\Renderer\UI_renderer.cpp" />
+    <ClCompile Include="Scripts\Renderer\vignette_effect.cpp" />
     <ClCompile Include="Scripts\Scene\scene_game.cpp" />
     <ClCompile Include="Scripts\Scene\scene_manager.cpp" />
     <ClCompile Include="Scripts\Scene\scene_player.cpp" />
@@ -495,6 +497,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </None>
+    <None Include="DefaultShader\vignette_effect.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="DefaultShader\billboard_ps.hlsl">
@@ -726,6 +729,18 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\vignette_effect_ps.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\vignette_effect_vs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

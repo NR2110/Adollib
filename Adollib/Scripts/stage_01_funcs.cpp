@@ -299,7 +299,7 @@ namespace Adollib
 		return door_joint;
 	}
 
-	Gameobject* Stage_01::set_buttan(const Vector3& pos, const Vector3& scale, const Vector3& rotate, Stage_parts::Stageparts_tagbit tag, Gameobject* pearent, bool is_use_trigger) {
+	Gameobject* Stage_01::set_buttan(const Vector3& pos, const Vector3& scale, const Vector3& rotate, Stage_parts::Stageparts_tagbit tag, Gameobject* pearent, int is_use_trigger) {
 		auto coll = set_box(pos, scale, rotate, Vector3(1, 0, 0), pearent);
 		auto go = coll->gameobject;
 		auto buttan_comp = go->addComponent<Stage_parts::Buttan>();

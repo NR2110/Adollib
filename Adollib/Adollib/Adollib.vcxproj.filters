@@ -128,9 +128,6 @@
     <Filter Include="00_Adollib\22_physics\collider\shapes">
       <UniqueIdentifier>{3aa56a7f-c681-43fc-8f44-e1ef26b272a1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00_Adollib\44_render\shader\posteffect">
-      <UniqueIdentifier>{6c08b8ef-f6ef-4fa7-8668-7db469c33b7c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00_Adollib\44_render\shader\hlsl\rope">
       <UniqueIdentifier>{786516a1-4bf7-4588-9a4e-2c22fb2b427e}</UniqueIdentifier>
     </Filter>
@@ -181,6 +178,15 @@
     </Filter>
     <Filter Include="ソース ファイル\scene_game\stage\stage\stage_99">
       <UniqueIdentifier>{181f9a95-1958-46ec-8165-632ac0c2053f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Adollib\44_render\posteffect">
+      <UniqueIdentifier>{6c08b8ef-f6ef-4fa7-8668-7db469c33b7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Adollib\44_render\posteffect\shader">
+      <UniqueIdentifier>{e6126396-3bec-426e-bbcd-835bfc95e959}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Adollib\44_render\posteffect\shader\vignette_effect">
+      <UniqueIdentifier>{ba1922e7-30ea-4622-bbe5-a92c71f86f14}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -519,6 +525,9 @@
     </ClCompile>
     <ClCompile Include="..\Scripts\se_manager.cpp">
       <Filter>ソース ファイル\scene_player\player</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Renderer\vignette_effect.cpp">
+      <Filter>00_Adollib\44_render\posteffect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -861,9 +870,6 @@
     <ClInclude Include="Scripts\Math\quaternion.inl">
       <Filter>00_Adollib\11_math</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Renderer\posteffect_base.h">
-      <Filter>00_Adollib\44_render\shader</Filter>
-    </ClInclude>
     <ClInclude Include="..\Scripts\stage_demo_1.h">
       <Filter>ソース ファイル\scene_game\stage\stage\stage_demo</Filter>
     </ClInclude>
@@ -1029,6 +1035,12 @@
     <ClInclude Include="..\Scripts\se_manager.h">
       <Filter>ソース ファイル\scene_player\player</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Renderer\posteffect_base.h">
+      <Filter>00_Adollib\44_render\posteffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Renderer\vignette_effect.h">
+      <Filter>00_Adollib\44_render\posteffect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
@@ -1082,6 +1094,9 @@
     </None>
     <None Include="DefaultShader\billboard.hlsli">
       <Filter>00_Adollib\44_render\shader\hlsl\billboard</Filter>
+    </None>
+    <None Include="DefaultShader\vignette_effect.hlsli">
+      <Filter>00_Adollib\44_render\posteffect\shader\vignette_effect</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1159,6 +1174,12 @@
     </FxCompile>
     <FxCompile Include="DefaultShader\billboard_vs.hlsl">
       <Filter>00_Adollib\44_render\shader\hlsl\billboard</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\vignette_effect_ps.hlsl">
+      <Filter>00_Adollib\44_render\posteffect\shader\vignette_effect</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\vignette_effect_vs.hlsl">
+      <Filter>00_Adollib\44_render\posteffect\shader\vignette_effect</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

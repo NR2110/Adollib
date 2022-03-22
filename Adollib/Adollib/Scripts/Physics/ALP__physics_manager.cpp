@@ -10,6 +10,9 @@
 
 #include "../Renderer/renderer_base.h"
 
+#include <thread>
+#include <chrono>
+
 #include "collider.h"
 #include "ALP_joint.h"
 
@@ -74,18 +77,6 @@ namespace Adollib
 bool Physics_manager::update()
 {
 	Work_meter::start("Phyisics_manager", 1);
-	//if (Sce != old_sce) {
-	//	for (auto p : pairs[0]) delete p;
-	//	pairs[0].clear();
-
-	//	for (auto p : pairs[1]) delete p;
-	//	pairs[1].clear();
-
-	//	moved_collider_for_insertsort[old_sce].clear();
-	//	added_collider_for_insertsort[old_sce].clear();
-
-	//	old_sce = Sce;
-	//}
 
 	if (Al_Global::second_per_game < 1) {
 
@@ -232,6 +223,16 @@ bool Physics_manager::update()
 			}
 
 		physicsParams.timeStep = 0;
+	}
+	else
+	{
+		//float sleep_time = physicsParams.caluculate_time - physicsParams.timeStep - 0.005f;
+		//Work_meter::set("physicsParams.sleep_time", sleep_time, 1);
+
+		//if (sleep_time > 0)
+		//	//std::this_thread::sleep_for(std::chrono::minutes((long)(sleep_time)));
+		//	std::this_thread::sleep_for(std::chrono::milliseconds((long)(sleep_time * 1000)));
+
 	}
 
 	Work_meter::stop("Phyisics_manager", 1);

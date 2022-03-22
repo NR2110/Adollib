@@ -134,8 +134,15 @@ void Camera_component::posteffect_render() {
 	if (gameobject->is_active == false)return;
 
 	// Šeposteffect‚Ì‚ðˆ—‚µ‚Ä‚¢‚­
-	for (auto& posteffect : posteffects) {
-		posteffect->render(color_texture.get(), normal_texture.get(), depth_texture.get());
+	std::shared_ptr<Texture> output_tecture = nullptr;
+	if (posteffects.size() == 0) output_tecture = color_texture;
+	else {
+		output_tecture = std::make_shared<Texture>();
+		output_tecture->Create(Al_Global::SCREEN_WIDTH, Al_Global::SCREEN_HEIGHT, DXGI_FORMAT_R8G8B8A8_UNORM);
+
+		for (auto& posteffect : posteffects) {
+			posteffect->render(output_tecture, color_texture, normal_texture, depth_texture, ui_data);
+		}
 	}
 
 	// main‚ÌRTV‚É•`‰æ‚µ‚È‚¢‚È‚ç‚±‚±‚Åreturn
@@ -153,7 +160,7 @@ void Camera_component::posteffect_render() {
 
 
 	ui.ui_data = ui_data;
-	ui.set_texture(color_texture);
+	ui.set_texture(output_tecture);
 	ui.render();
 }
 
