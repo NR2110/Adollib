@@ -47,6 +47,7 @@ namespace Adollib
 
 		// 描画情報
 		UI_data ui_data;
+
 	private:
 		std::list<std::shared_ptr<Posteffect_base>> posteffects; //ポストエフェクト関係の保存
 

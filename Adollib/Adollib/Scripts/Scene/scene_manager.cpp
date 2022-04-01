@@ -5,6 +5,7 @@
 #include "scene_game.h"
 #include "scene_title.h"
 #include "scene_player.h"
+#include "scene_SPH.h"
 
 #include "../Object/gameobject_manager.h"
 #include "../Physics/ALP__physics_manager.h"
@@ -25,9 +26,10 @@ void Scene_manager::initialize() {
 	scenes[Scenelist::scene_game] = std::make_unique<Scene_game>();
 	scenes[Scenelist::scene_title] = std::make_unique<Scene_title>();
 	scenes[Scenelist::scene_player] = std::make_unique<Scene_player>();
+	scenes[Scenelist::scene_SPH] = std::make_unique<Scene_SPH>();
 
 
-	set_active(Scenelist::scene_title);
+	set_active(Scenelist::scene_SPH);
 
 }
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

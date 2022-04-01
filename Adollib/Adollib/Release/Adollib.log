@@ -1,12 +1,16 @@
-﻿  camera.cpp
-  vignette_effect.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Renderer\vignette_effect.cpp(16,29): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Renderer\vignette_effect.cpp(17,29): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Renderer\vignette_effect.cpp(18,29): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Renderer\vignette_effect.cpp(19,29): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+﻿  simulation_SPH.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(467,14): warning C4244: '=': 'double' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(468,14): warning C4244: '=': 'double' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(469,14): warning C4244: '=': 'double' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(470,15): warning C4244: '=': 'double' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(471,15): warning C4244: '=': 'double' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(633,105): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(633,89): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(633,73): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+  scene_SPH.cpp
   コード生成しています。
-  511 of 10944 functions ( 4.7%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    191 functions had inline decision re-evaluated but remain unchanged
+  712 of 11256 functions ( 6.3%) were compiled, the rest were copied from previous compilation.
+    268 functions were new in current compilation
+    810 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Release\Adollib.exe

@@ -8,6 +8,8 @@ namespace Adollib {
 		scene_title,
 		scene_game,
 
+		scene_SPH,
+
 		scene_list_size
 	};
 }

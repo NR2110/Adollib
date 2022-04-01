@@ -5,12 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="ソース ファイル\scene_game">
-      <UniqueIdentifier>{99480d18-a01a-478a-95d0-fb97c50cd010}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\scene_game\object">
-      <UniqueIdentifier>{1318d6d5-7f58-4468-9a25-b89ef51ca1f0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00_Adollib">
       <UniqueIdentifier>{457a0db0-78dc-4f19-9ba1-e6eb79f8abcf}</UniqueIdentifier>
     </Filter>
@@ -53,27 +47,6 @@
     <Filter Include="00_Adollib\22_physics\Joint">
       <UniqueIdentifier>{49b4bba8-3f1f-4682-a578-69c8e8cd5674}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\scene_game\stage">
-      <UniqueIdentifier>{3188ed85-55f8-473e-8937-984656018759}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\scene_game\stage\parts">
-      <UniqueIdentifier>{8acb49fd-f466-4fea-a25f-e71f4f5b8155}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\scene_game\stage\base">
-      <UniqueIdentifier>{6f7db560-cc33-4c5e-831f-e256c3b8824d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\scene_game\stage\stage">
-      <UniqueIdentifier>{12652a8b-3b50-4c00-957c-a10b36361d3e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\scene_game\object\scene_house">
-      <UniqueIdentifier>{e6d50f78-9f68-4ce7-acad-d2aae7892255}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\scene_game\stage\stage\stage_demo">
-      <UniqueIdentifier>{6474080a-8940-43e5-9d97-4902e2bd4472}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\scene_game\stage\stage\stage_01">
-      <UniqueIdentifier>{3f98db6c-a379-43e7-b67f-827a81fa4f0b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00_Adollib\22_physics\Joint\base">
       <UniqueIdentifier>{c1365332-cec2-4643-9d90-027c299b9470}</UniqueIdentifier>
     </Filter>
@@ -82,9 +55,6 @@
     </Filter>
     <Filter Include="00_Adollib\44_render\shader">
       <UniqueIdentifier>{3174d617-5d73-43a8-90e4-a147987a3daa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\scene_title">
-      <UniqueIdentifier>{f1c58b24-84bc-4a88-bdda-fc57d1d89abc}</UniqueIdentifier>
     </Filter>
     <Filter Include="00_Adollib\44_render\renderer">
       <UniqueIdentifier>{622ecb35-466a-41d0-819e-0e71a54345ef}</UniqueIdentifier>
@@ -113,12 +83,6 @@
     <Filter Include="00_Adollib\44_render\shader\hlsl\gaussian_filter">
       <UniqueIdentifier>{4c76dcf8-fa8c-40ad-a842-cd31cdd338b4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\scene_game\ui">
-      <UniqueIdentifier>{b5c011fd-f561-4618-9e49-083f69a12300}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\scene_game\ui\ui_base">
-      <UniqueIdentifier>{7c868ad2-36ca-401f-8e2a-ef3a50652dd3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00_Adollib\44_render\shader\hlsl\sky_map">
       <UniqueIdentifier>{ee6380cf-4cdd-4bd6-9bc1-7550be794e2f}</UniqueIdentifier>
     </Filter>
@@ -137,47 +101,11 @@
     <Filter Include="00_Adollib\44_render\shader\hlsl\dither">
       <UniqueIdentifier>{bc4f19db-466f-4b49-814d-28a0bc31075d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\scene_title\camera">
-      <UniqueIdentifier>{aa8b806c-fdf2-45a3-ae83-13099cd76ed6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\scene_title\stage">
-      <UniqueIdentifier>{f72d8e3d-156d-4c92-89df-516444053fa8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\scene_title\stage\fall">
-      <UniqueIdentifier>{68566cbd-aeba-4cc3-9e8c-5c6bde60e8ff}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\scene_title\title_state_manager">
-      <UniqueIdentifier>{869b328b-02c3-48b3-812a-4c1b9844879a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\scene_title\stage\select">
-      <UniqueIdentifier>{f58d3658-a668-43ca-a340-c6fbf75efd0e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\scene_player">
-      <UniqueIdentifier>{9cd0fd86-3ad2-4025-b8d1-669ad396a86d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\scene_player\player">
-      <UniqueIdentifier>{5803a67c-c3e6-4d3c-82a6-90b2b6264aeb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\scene_player\camera">
-      <UniqueIdentifier>{c5a1a0b5-3b44-4ee7-b36f-e93b357c3d6b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\scene_player\tutrial">
-      <UniqueIdentifier>{8dd5e070-ee73-47fb-8aa1-1d75d6d613a3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\scene_game\stage\stage\stage_02">
-      <UniqueIdentifier>{e7dedf53-a0f4-4c53-bf64-5b26f181d10f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\scene_game\stage\parts\gimmick">
-      <UniqueIdentifier>{23b33dd7-e631-42e8-99b7-be63c4970c3d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00_Adollib\44_render\shader\hlsl\billboard">
       <UniqueIdentifier>{cb90bacb-7bc0-4af8-bf89-8b7d7f6e3d9a}</UniqueIdentifier>
     </Filter>
     <Filter Include="00_Adollib\66_audio">
       <UniqueIdentifier>{4acc996e-ba03-4945-b278-c30f50df5a8f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\scene_game\stage\stage\stage_99">
-      <UniqueIdentifier>{181f9a95-1958-46ec-8165-632ac0c2053f}</UniqueIdentifier>
     </Filter>
     <Filter Include="00_Adollib\44_render\posteffect">
       <UniqueIdentifier>{6c08b8ef-f6ef-4fa7-8668-7db469c33b7c}</UniqueIdentifier>
@@ -188,16 +116,97 @@
     <Filter Include="00_Adollib\44_render\posteffect\shader\vignette_effect">
       <UniqueIdentifier>{ba1922e7-30ea-4622-bbe5-a92c71f86f14}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\game">
+      <UniqueIdentifier>{6b23e1c5-64a1-4618-9702-07d7476dcccb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\game\scene_game">
+      <UniqueIdentifier>{99480d18-a01a-478a-95d0-fb97c50cd010}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\game\scene_game\object">
+      <UniqueIdentifier>{1318d6d5-7f58-4468-9a25-b89ef51ca1f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\game\scene_game\object\scene_house">
+      <UniqueIdentifier>{e6d50f78-9f68-4ce7-acad-d2aae7892255}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\game\scene_game\stage">
+      <UniqueIdentifier>{3188ed85-55f8-473e-8937-984656018759}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\game\scene_game\stage\parts">
+      <UniqueIdentifier>{8acb49fd-f466-4fea-a25f-e71f4f5b8155}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\game\scene_game\stage\parts\gimmick">
+      <UniqueIdentifier>{23b33dd7-e631-42e8-99b7-be63c4970c3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\game\scene_game\stage\base">
+      <UniqueIdentifier>{6f7db560-cc33-4c5e-831f-e256c3b8824d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\game\scene_game\stage\stage">
+      <UniqueIdentifier>{12652a8b-3b50-4c00-957c-a10b36361d3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\game\scene_game\stage\stage\stage_demo">
+      <UniqueIdentifier>{6474080a-8940-43e5-9d97-4902e2bd4472}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\game\scene_game\stage\stage\stage_01">
+      <UniqueIdentifier>{3f98db6c-a379-43e7-b67f-827a81fa4f0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\game\scene_game\stage\stage\stage_02">
+      <UniqueIdentifier>{e7dedf53-a0f4-4c53-bf64-5b26f181d10f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\game\scene_game\stage\stage\stage_99">
+      <UniqueIdentifier>{181f9a95-1958-46ec-8165-632ac0c2053f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\game\scene_game\ui">
+      <UniqueIdentifier>{b5c011fd-f561-4618-9e49-083f69a12300}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\game\scene_game\ui\ui_base">
+      <UniqueIdentifier>{7c868ad2-36ca-401f-8e2a-ef3a50652dd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\game\scene_player">
+      <UniqueIdentifier>{9cd0fd86-3ad2-4025-b8d1-669ad396a86d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\game\scene_player\player">
+      <UniqueIdentifier>{5803a67c-c3e6-4d3c-82a6-90b2b6264aeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\game\scene_player\camera">
+      <UniqueIdentifier>{c5a1a0b5-3b44-4ee7-b36f-e93b357c3d6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\game\scene_player\tutrial">
+      <UniqueIdentifier>{8dd5e070-ee73-47fb-8aa1-1d75d6d613a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\game\scene_title">
+      <UniqueIdentifier>{f1c58b24-84bc-4a88-bdda-fc57d1d89abc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\game\scene_title\camera">
+      <UniqueIdentifier>{aa8b806c-fdf2-45a3-ae83-13099cd76ed6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\game\scene_title\stage">
+      <UniqueIdentifier>{f72d8e3d-156d-4c92-89df-516444053fa8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\game\scene_title\stage\fall">
+      <UniqueIdentifier>{68566cbd-aeba-4cc3-9e8c-5c6bde60e8ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\game\scene_title\stage\select">
+      <UniqueIdentifier>{f58d3658-a668-43ca-a340-c6fbf75efd0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\game\scene_title\title_state_manager">
+      <UniqueIdentifier>{869b328b-02c3-48b3-812a-4c1b9844879a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\demo">
+      <UniqueIdentifier>{7264c1e2-201e-4bd8-9da9-1cf092b9c00f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\demo\particle">
+      <UniqueIdentifier>{8629ccf9-50b8-4aa5-b405-770b1f59ffb6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Scripts\player.cpp">
-      <Filter>ソース ファイル\scene_player\player</Filter>
+      <Filter>ソース ファイル\game\scene_player\player</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\object_rotate.cpp">
-      <Filter>ソース ファイル\scene_game\object</Filter>
+      <Filter>ソース ファイル\game\scene_game\object</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\object_manager.cpp">
-      <Filter>ソース ファイル\scene_game\object</Filter>
+      <Filter>ソース ファイル\game\scene_game\object</Filter>
     </ClCompile>
     <ClCompile Include="Imgui\imgui.cpp">
       <Filter>00_Adollib\99_imgui</Filter>
@@ -224,10 +233,7 @@
       <Filter>00_Adollib\33_object</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Scene\scene_game.cpp">
-      <Filter>ソース ファイル\scene_game</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Scene\scene_manager.cpp">
-      <Filter>00_Adollib\55_scene</Filter>
+      <Filter>ソース ファイル\game\scene_game</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Math\complex.cpp">
       <Filter>00_Adollib\11_math</Filter>
@@ -308,7 +314,7 @@
       <Filter>00_Adollib\33_object</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\player_manager.cpp">
-      <Filter>ソース ファイル\scene_player\player</Filter>
+      <Filter>ソース ファイル\game\scene_player\player</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Physics\collider.cpp">
       <Filter>00_Adollib\22_physics\collider</Filter>
@@ -326,34 +332,34 @@
       <Filter>00_Adollib\33_object</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\demo_house.cpp">
-      <Filter>ソース ファイル\scene_game\object\scene_house</Filter>
+      <Filter>ソース ファイル\game\scene_game\object\scene_house</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\camera.cpp">
-      <Filter>ソース ファイル\scene_player\camera</Filter>
+      <Filter>ソース ファイル\game\scene_player\camera</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Physics\ALP_contact.cpp">
       <Filter>00_Adollib\22_physics\ALP</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\player_funcs.cpp">
-      <Filter>ソース ファイル\scene_player\player</Filter>
+      <Filter>ソース ファイル\game\scene_player\player</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\stage_base.cpp">
-      <Filter>ソース ファイル\scene_game\stage\base</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\base</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\stage_manager.cpp">
-      <Filter>ソース ファイル\scene_game\stage</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\stage_demo_funcs.cpp">
-      <Filter>ソース ファイル\scene_game\stage\stage\stage_demo</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\stage\stage_demo</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\stage_demo.cpp">
-      <Filter>ソース ファイル\scene_game\stage\stage\stage_demo</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\stage\stage_demo</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\stage_01.cpp">
-      <Filter>ソース ファイル\scene_game\stage\stage\stage_01</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\stage\stage_01</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\stage_01_funcs.cpp">
-      <Filter>ソース ファイル\scene_game\stage\stage\stage_01</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\stage\stage_01</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Physics\twistjoint.cpp">
       <Filter>00_Adollib\22_physics\Joint</Filter>
@@ -383,7 +389,7 @@
       <Filter>00_Adollib\44_render\shader</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Scene\scene_title.cpp">
-      <Filter>ソース ファイル\scene_title</Filter>
+      <Filter>ソース ファイル\game\scene_title</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Renderer\material.cpp">
       <Filter>00_Adollib\44_render</Filter>
@@ -416,34 +422,34 @@
       <Filter>00_Adollib\44_render\renderer</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\stage_demo_1.cpp">
-      <Filter>ソース ファイル\scene_game\stage\stage\stage_demo</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\stage\stage_demo</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\stage_demo_1_funcs.cpp">
-      <Filter>ソース ファイル\scene_game\stage\stage\stage_demo</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\stage\stage_demo</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\area_goal.cpp">
-      <Filter>ソース ファイル\scene_game\stage\parts</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\parts</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\area_respown_set.cpp">
-      <Filter>ソース ファイル\scene_game\stage\parts</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\parts</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Renderer\sky_sphere.cpp">
       <Filter>00_Adollib\44_render\renderer</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\input_changer.cpp">
-      <Filter>ソース ファイル\scene_player\player</Filter>
+      <Filter>ソース ファイル\game\scene_player\player</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\ui_manager.cpp">
-      <Filter>ソース ファイル\scene_game\ui</Filter>
+      <Filter>ソース ファイル\game\scene_game\ui</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Renderer\material_manager.cpp">
       <Filter>00_Adollib\44_render</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\stage_demo_2.cpp">
-      <Filter>ソース ファイル\scene_game\stage\stage\stage_demo</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\stage\stage_demo</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\stage_demo_2_funcs.cpp">
-      <Filter>ソース ファイル\scene_game\stage\stage\stage_demo</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\stage\stage_demo</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Renderer\croth_renderer.cpp">
       <Filter>00_Adollib\44_render\renderer</Filter>
@@ -467,40 +473,40 @@
       <Filter>00_Adollib\22_physics\collider\shapes\other</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\title_camera.cpp">
-      <Filter>ソース ファイル\scene_title\camera</Filter>
+      <Filter>ソース ファイル\game\scene_title\camera</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\title_stage.cpp">
-      <Filter>ソース ファイル\scene_title\stage</Filter>
+      <Filter>ソース ファイル\game\scene_title\stage</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\fall_object_manager.cpp">
-      <Filter>ソース ファイル\scene_title\stage\fall</Filter>
+      <Filter>ソース ファイル\game\scene_title\stage\fall</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\fall_object_comp.cpp">
-      <Filter>ソース ファイル\scene_title\stage\fall</Filter>
+      <Filter>ソース ファイル\game\scene_title\stage\fall</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\title_state_manager.cpp">
-      <Filter>ソース ファイル\scene_title\title_state_manager</Filter>
+      <Filter>ソース ファイル\game\scene_title\title_state_manager</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\select_stage_manager.cpp">
-      <Filter>ソース ファイル\scene_title\stage\select</Filter>
+      <Filter>ソース ファイル\game\scene_title\stage\select</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Scene\scene_player.cpp">
-      <Filter>ソース ファイル\scene_player</Filter>
+      <Filter>ソース ファイル\game\scene_player</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Renderer\UI_renderer.cpp">
       <Filter>00_Adollib\44_render\renderer</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\tutrial_manager.cpp">
-      <Filter>ソース ファイル\scene_player\tutrial</Filter>
+      <Filter>ソース ファイル\game\scene_player\tutrial</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\stage_02.cpp">
-      <Filter>ソース ファイル\scene_game\stage\stage\stage_02</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\stage\stage_02</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\stage_02_funcs.cpp">
-      <Filter>ソース ファイル\scene_game\stage\stage\stage_02</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\stage\stage_02</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\tutrial_stage01_move_camera_catch.cpp">
-      <Filter>ソース ファイル\scene_player\tutrial</Filter>
+      <Filter>ソース ファイル\game\scene_player\tutrial</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Renderer\billboard_renderer.cpp">
       <Filter>00_Adollib\44_render\renderer</Filter>
@@ -509,39 +515,51 @@
       <Filter>00_Adollib\66_audio</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\tutrial_stage02_rope.cpp">
-      <Filter>ソース ファイル\scene_player\tutrial</Filter>
+      <Filter>ソース ファイル\game\scene_player\tutrial</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\select_playernum_manager.cpp">
-      <Filter>ソース ファイル\scene_title\stage\select</Filter>
+      <Filter>ソース ファイル\game\scene_title\stage\select</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Object\camera_costantbuffer_template.cpp">
       <Filter>00_Adollib\33_object</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\stage_99.cpp">
-      <Filter>ソース ファイル\scene_game\stage\stage\stage_99</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\stage\stage_99</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\stage_99_funcs.cpp">
-      <Filter>ソース ファイル\scene_game\stage\stage\stage_99</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\stage\stage_99</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\se_manager.cpp">
-      <Filter>ソース ファイル\scene_player\player</Filter>
+      <Filter>ソース ファイル\game\scene_player\player</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Renderer\vignette_effect.cpp">
       <Filter>00_Adollib\44_render\posteffect</Filter>
     </ClCompile>
+    <ClCompile Include="Scripts\Scene\scene_SPH.cpp">
+      <Filter>ソース ファイル\demo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\simulation_SPH.cpp">
+      <Filter>ソース ファイル\demo\particle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\debug_camera_controller.cpp">
+      <Filter>ソース ファイル\game</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Scene\scene_manager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Scripts\player.h">
-      <Filter>ソース ファイル\scene_player\player</Filter>
+      <Filter>ソース ファイル\game\scene_player\player</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\scene_game_all.h">
-      <Filter>ソース ファイル\scene_game</Filter>
+      <Filter>ソース ファイル\game\scene_game</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\object_rotate.h">
-      <Filter>ソース ファイル\scene_game\object</Filter>
+      <Filter>ソース ファイル\game\scene_game\object</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\object_manager.h">
-      <Filter>ソース ファイル\scene_game\object</Filter>
+      <Filter>ソース ファイル\game\scene_game\object</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imconfig.h">
       <Filter>00_Adollib\99_imgui</Filter>
@@ -589,7 +607,7 @@
       <Filter>00_Adollib\33_object</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Scene\scene_game.h">
-      <Filter>ソース ファイル\scene_game</Filter>
+      <Filter>ソース ファイル\game\scene_game</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Scene\scene.h">
       <Filter>00_Adollib\55_scene</Filter>
@@ -736,7 +754,7 @@
       <Filter>00_Adollib\11_math</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\player_manager.h">
-      <Filter>ソース ファイル\scene_player\player</Filter>
+      <Filter>ソース ファイル\game\scene_player\player</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Physics\collider_types.h">
       <Filter>00_Adollib\22_physics\collider</Filter>
@@ -751,10 +769,10 @@
       <Filter>00_Adollib\22_physics\Joint</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\demo_house.h">
-      <Filter>ソース ファイル\scene_game\object\scene_house</Filter>
+      <Filter>ソース ファイル\game\scene_game\object\scene_house</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\camera.h">
-      <Filter>ソース ファイル\scene_player\camera</Filter>
+      <Filter>ソース ファイル\game\scene_player\camera</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Physics\ALP_contact.h">
       <Filter>00_Adollib\22_physics\ALP</Filter>
@@ -763,25 +781,25 @@
       <Filter>00_Adollib\22_physics\Joint</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\stage_base.h">
-      <Filter>ソース ファイル\scene_game\stage\base</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\base</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\stageparts_tags.h">
-      <Filter>ソース ファイル\scene_game\stage\base</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\base</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\stageparts_base.h">
-      <Filter>ソース ファイル\scene_game\stage\base</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\base</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\stage_manager.h">
-      <Filter>ソース ファイル\scene_game\stage</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\stage_types.h">
-      <Filter>ソース ファイル\scene_game\stage</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\stage_demo.h">
-      <Filter>ソース ファイル\scene_game\stage\stage\stage_demo</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\stage\stage_demo</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\stage_01.h">
-      <Filter>ソース ファイル\scene_game\stage\stage\stage_01</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\stage\stage_01</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Physics\balljoint.h">
       <Filter>00_Adollib\22_physics\Joint</Filter>
@@ -820,7 +838,7 @@
       <Filter>00_Adollib\44_render\shader</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Scene\scene_title.h">
-      <Filter>ソース ファイル\scene_title</Filter>
+      <Filter>ソース ファイル\game\scene_title</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Renderer\material.h">
       <Filter>00_Adollib\44_render</Filter>
@@ -871,19 +889,19 @@
       <Filter>00_Adollib\11_math</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\stage_demo_1.h">
-      <Filter>ソース ファイル\scene_game\stage\stage\stage_demo</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\stage\stage_demo</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\area_goal.h">
-      <Filter>ソース ファイル\scene_game\stage\parts</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\parts</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\area_respown_set.h">
-      <Filter>ソース ファイル\scene_game\stage\parts</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\parts</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Renderer\sky_sphere.h">
       <Filter>00_Adollib\44_render\renderer</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\input_changer.h">
-      <Filter>ソース ファイル\scene_player\player</Filter>
+      <Filter>ソース ファイル\game\scene_player\player</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Renderer\instance.h">
       <Filter>00_Adollib\44_render\renderer</Filter>
@@ -892,7 +910,7 @@
       <Filter>00_Adollib\44_render</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\stage_demo_2.h">
-      <Filter>ソース ファイル\scene_game\stage\stage\stage_demo</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\stage\stage_demo</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Renderer\croth_renderer.h">
       <Filter>00_Adollib\44_render\renderer</Filter>
@@ -931,79 +949,79 @@
       <Filter>00_Adollib\22_physics\collider\shapes\other</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\title_camera.h">
-      <Filter>ソース ファイル\scene_title\camera</Filter>
+      <Filter>ソース ファイル\game\scene_title\camera</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\title_stage.h">
-      <Filter>ソース ファイル\scene_title\stage</Filter>
+      <Filter>ソース ファイル\game\scene_title\stage</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\scene_title_all.h">
-      <Filter>ソース ファイル\scene_title</Filter>
+      <Filter>ソース ファイル\game\scene_title</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\fall_object_comp.h">
-      <Filter>ソース ファイル\scene_title\stage\fall</Filter>
+      <Filter>ソース ファイル\game\scene_title\stage\fall</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\fall_object_manager.h">
-      <Filter>ソース ファイル\scene_title\stage\fall</Filter>
+      <Filter>ソース ファイル\game\scene_title\stage\fall</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\title_state_manager.h">
-      <Filter>ソース ファイル\scene_title\title_state_manager</Filter>
+      <Filter>ソース ファイル\game\scene_title\title_state_manager</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\title_states.h">
-      <Filter>ソース ファイル\scene_title\title_state_manager</Filter>
+      <Filter>ソース ファイル\game\scene_title\title_state_manager</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\title_state_base.h">
-      <Filter>ソース ファイル\scene_title\title_state_manager</Filter>
+      <Filter>ソース ファイル\game\scene_title\title_state_manager</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\select_stage_manager.h">
-      <Filter>ソース ファイル\scene_title\stage\select</Filter>
+      <Filter>ソース ファイル\game\scene_title\stage\select</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Scene\scene_player.h">
-      <Filter>ソース ファイル\scene_player</Filter>
+      <Filter>ソース ファイル\game\scene_player</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\ui_manager.h">
-      <Filter>ソース ファイル\scene_game\ui</Filter>
+      <Filter>ソース ファイル\game\scene_game\ui</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Renderer\UI_renderer.h">
       <Filter>00_Adollib\44_render\renderer</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\tutrial_stage01_move_camera_catch.h">
-      <Filter>ソース ファイル\scene_player\tutrial</Filter>
+      <Filter>ソース ファイル\game\scene_player\tutrial</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\tutrial_manager.h">
-      <Filter>ソース ファイル\scene_player\tutrial</Filter>
+      <Filter>ソース ファイル\game\scene_player\tutrial</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\tutrial_base.h">
-      <Filter>ソース ファイル\scene_player\tutrial</Filter>
+      <Filter>ソース ファイル\game\scene_player\tutrial</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\stage_02.h">
-      <Filter>ソース ファイル\scene_game\stage\stage\stage_02</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\stage\stage_02</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\rotate_block.h">
-      <Filter>ソース ファイル\scene_game\stage\parts\gimmick</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\parts\gimmick</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\buttan.h">
-      <Filter>ソース ファイル\scene_game\stage\parts\gimmick</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\parts\gimmick</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\door.h">
-      <Filter>ソース ファイル\scene_game\stage\parts\gimmick</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\parts\gimmick</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\kinematic_block.h">
-      <Filter>ソース ファイル\scene_game\stage\parts\gimmick</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\parts\gimmick</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\respown_area.h">
-      <Filter>ソース ファイル\scene_game\stage\parts</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\parts</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\touch_moveable.h">
-      <Filter>ソース ファイル\scene_game\stage\parts\gimmick</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\parts\gimmick</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\tag_andcircuit.h">
-      <Filter>ソース ファイル\scene_game\stage\parts\gimmick</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\parts\gimmick</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\lever.h">
-      <Filter>ソース ファイル\scene_game\stage\parts\gimmick</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\parts\gimmick</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\move_block_from_2flags.h">
-      <Filter>ソース ファイル\scene_game\stage\parts\gimmick</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\parts\gimmick</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Renderer\billboard_renderer.h">
       <Filter>00_Adollib\44_render\renderer</Filter>
@@ -1012,34 +1030,43 @@
       <Filter>00_Adollib\66_audio</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\event_exclamation.h">
-      <Filter>ソース ファイル\scene_game\stage\parts\gimmick</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\parts\gimmick</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\tutrial_stage02_rope.h">
-      <Filter>ソース ファイル\scene_player\tutrial</Filter>
+      <Filter>ソース ファイル\game\scene_player\tutrial</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\select_playernum_manager.h">
-      <Filter>ソース ファイル\scene_title\stage\select</Filter>
+      <Filter>ソース ファイル\game\scene_title\stage\select</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Object\camera_costantbuffer_template.h">
       <Filter>00_Adollib\33_object</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\stage_99.h">
-      <Filter>ソース ファイル\scene_game\stage\stage\stage_99</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\stage\stage_99</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\chenge_color_rainbow.h">
-      <Filter>ソース ファイル\scene_game\stage\parts\gimmick</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\parts\gimmick</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\change_scaleY_reinbow.h">
-      <Filter>ソース ファイル\scene_game\stage\parts\gimmick</Filter>
+      <Filter>ソース ファイル\game\scene_game\stage\parts\gimmick</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\se_manager.h">
-      <Filter>ソース ファイル\scene_player\player</Filter>
+      <Filter>ソース ファイル\game\scene_player\player</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Renderer\posteffect_base.h">
       <Filter>00_Adollib\44_render\posteffect</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Renderer\vignette_effect.h">
       <Filter>00_Adollib\44_render\posteffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Scene\scene_SPH.h">
+      <Filter>ソース ファイル\demo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\simulation_SPH.h">
+      <Filter>ソース ファイル\demo\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\debug_camera_controller.h">
+      <Filter>ソース ファイル\game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

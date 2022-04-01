@@ -1,6 +1,1 @@
-﻿  vignette_effect.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Renderer\vignette_effect.cpp(16,29): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Renderer\vignette_effect.cpp(17,29): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Renderer\vignette_effect.cpp(18,29): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Renderer\vignette_effect.cpp(19,29): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-  Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe
+﻿  Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe
