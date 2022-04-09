@@ -54,12 +54,12 @@ void Gameobject_manager::awake() {
 		gameobjects[static_cast<Scenelist>(i)] = go_manager;
 	}
 
-	Physics_function::Collider_renderer::awake();
+	//Physics_function::Collider_renderer::awake();
 
 
 
 #ifdef Use_physics_thread
-	Physics_manager::thread_start();
+	//Physics_manager::thread_start();
 
 #endif // Use_physics_thread
 

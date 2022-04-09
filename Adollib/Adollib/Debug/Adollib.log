@@ -1,1 +1,8 @@
-﻿  Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe
+﻿  simulation_SPH.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(725,81): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(740,88): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(740,72): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(740,56): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(775,26): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(776,26): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+  Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

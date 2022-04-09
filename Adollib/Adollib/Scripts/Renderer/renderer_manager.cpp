@@ -35,7 +35,7 @@ void Renderer_manager::awake() {
 
 	Systems::CreateConstantBuffer(light_cb.ReleaseAndGetAddressOf(), sizeof(ConstantBufferPerLight));
 
-	constexpr int maxElements = 10000;
+	constexpr int maxElements = 20000;
 	HRESULT hr = S_OK;
 	std::shared_ptr<Instance> instances(new Instance[maxElements]);
 	{

@@ -27,6 +27,8 @@ namespace Adollib {
 			camera->addComponent<Camera_component>();
 			camera->addComponent<Debug_camera_controller>();
 
+			camera->transform->local_pos = Vector3(0.6f, 0.3f, -1.4f);
+
 		}
 	}
 
