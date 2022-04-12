@@ -51,7 +51,7 @@ namespace Adollib {
 		void Load_HS(const char* cso_name) { shader.Load_HS(cso_name); };
 		void Load_DS(const char* cso_name) { shader.Load_DS(cso_name); };
 
-		void shader_activate() { shader.Activate(); };
+		void shader_activate(const bool& is_PSshader_update = true) { shader.Activate(is_PSshader_update); };
 
 		void create_constantbuffer(int constant_buffer_num, int constant_buffer_Vector4_count);
 		void set_constantbuffer();

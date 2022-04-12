@@ -25,9 +25,10 @@ namespace Adollib {
 		{
 			Gameobject* camera = Gameobject_manager::create("camera");
 			camera->addComponent<Camera_component>();
-			camera->addComponent<Debug_camera_controller>();
+			auto camera_cont = camera->addComponent<Debug_camera_controller>();
 
 			camera->transform->local_pos = Vector3(0.6f, 0.3f, -1.4f);
+			camera_cont->linear_speed = 1;
 
 		}
 	}

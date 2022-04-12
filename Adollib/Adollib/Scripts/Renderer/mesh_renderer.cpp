@@ -227,6 +227,7 @@ void Mesh_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& inst
 		}
 	}
 
+	material->get_texture()->Set(0, false);
 }
 
 void Mesh_renderer::load_texture(const wchar_t* filename) { material->get_texture()->Load(filename); };

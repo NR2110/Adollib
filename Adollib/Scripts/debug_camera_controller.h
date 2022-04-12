@@ -10,7 +10,7 @@ namespace Adollib
 
 	class Debug_camera_controller : public Component
 	{
-	private:
+	public:
 
 		Vector2 max_rotate = Vector2(-50, 60); //ƒJƒƒ‰‚Ìã‰º‚ÌÅ‘åŠp“x
 

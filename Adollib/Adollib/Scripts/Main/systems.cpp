@@ -1,11 +1,12 @@
 #include "systems.h"
+//#include "../../Imgui/imgui.h"
 
 #pragma comment( lib, "d3dcompiler.lib" ) //これがないと shaderのD3DCompileFromFileが使えない
 
 using namespace Adollib;
 
 ComPtr<ID3D11Device>		Systems::Device;
-ComPtr<IDXGISwapChain>		Systems::SwapChain;
+ComPtr<IDXGISwapChain4>		Systems::SwapChain;
 
 ComPtr<ID3D11DeviceContext>		Systems::DeviceContext;
 ComPtr<ID3D11RenderTargetView>  Systems::RenderTargetView;
@@ -45,11 +46,11 @@ bool Systems::Initialize(HWND hWnd, int width, int height)
 	/// Debugの生成
 	//Debug::create();
 	//debug = Debug::getInstancePtr();
-
 	// 入力マネージャーの生成
 	MonoInput::create();
 	inputManager = MonoInput::getInstancePtr();
 	inputManager->initialize(hWnd);
+	return 0;
 
 	return false;
 }
@@ -61,6 +62,9 @@ HRESULT Systems::CreateDevice(HWND hWnd)
 
 	//::: デバイスとスワップチェインンの作成 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	UINT creationFlags/*= D3D11_CREATE_DEVICE_DEBUG;*/ = 0;
+#ifdef ON_DEBUG
+	creationFlags = D3D11_CREATE_DEVICE_DEBUG;
+#endif
 
 	D3D_DRIVER_TYPE driverTypes[] = {
 		D3D_DRIVER_TYPE_UNKNOWN,
@@ -82,7 +86,6 @@ HRESULT Systems::CreateDevice(HWND hWnd)
 		D3D_FEATURE_LEVEL_9_1,
 	};
 	UINT numFeatureLevels = ARRAYSIZE(featureLevels);
-
 	//デバイスの生成
 	for (UINT i = 0; i < numDriverTypes; i++) {
 		D3D_DRIVER_TYPE driverType = driverTypes[i];
@@ -109,21 +112,19 @@ HRESULT Systems::CreateDevice(HWND hWnd)
 	}
 
 	//インターフェース取得
-	IDXGIDevice1* hpDXGI = NULL;
+	Microsoft::WRL::ComPtr<IDXGIDevice1> hpDXGI = NULL;
 	if (FAILED(Device.Get()->QueryInterface(__uuidof(IDXGIDevice1), (void**)&hpDXGI))) {
 		MessageBoxW(hWnd, L"QueryInterface", L"Err", MB_ICONSTOP);
 		return S_FALSE;
 	}
-
 	//アダプター取得
-	IDXGIAdapter* hpAdapter = NULL;
+	Microsoft::WRL::ComPtr<IDXGIAdapter> hpAdapter = NULL;
 	if (FAILED(hpDXGI->GetAdapter(&hpAdapter))) {
 		MessageBoxW(hWnd, L"GetAdapter", L"Err", MB_ICONSTOP);
 		return S_FALSE;
 	}
-
 	//ファクトリー取得
-	IDXGIFactory* hpDXGIFactory = NULL;
+	Microsoft::WRL::ComPtr<IDXGIFactory4> hpDXGIFactory = NULL;
 	hpAdapter->GetParent(__uuidof(IDXGIFactory), (void**)&hpDXGIFactory);
 	if (hpDXGIFactory == NULL) {
 		MessageBoxW(hWnd, L"GetParent", L"Err", MB_ICONSTOP);
@@ -131,28 +132,32 @@ HRESULT Systems::CreateDevice(HWND hWnd)
 	}
 
 	//スワップチェイン作成
-	DXGI_SWAP_CHAIN_DESC scd;
-	scd.BufferDesc.Width = Al_Global::SCREEN_WIDTH;
-	scd.BufferDesc.Height = Al_Global::SCREEN_HEIGHT;
-	scd.BufferDesc.RefreshRate.Numerator = 60;
-	scd.BufferDesc.RefreshRate.Denominator = 1;
-	scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	scd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-	scd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+	DXGI_SWAP_CHAIN_DESC1 scd = {};
+	scd.Width = Al_Global::SCREEN_WIDTH;
+	scd.Height = Al_Global::SCREEN_HEIGHT;
+	scd.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	scd.SampleDesc.Quality = 0;
 	scd.SampleDesc.Count = 1;
 	scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	scd.BufferCount = 1;
-	scd.OutputWindow = hWnd;
+	scd.BufferCount = 2;
 
-	scd.Windowed = Windowed;
+	DXGI_SWAP_CHAIN_FULLSCREEN_DESC scfd = {};
+	scfd.Windowed = Windowed;
+	scfd.RefreshRate.Denominator = 1;
+	scfd.RefreshRate.Numerator = 60;
+	scfd.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+	scfd.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 
-	scd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+	//scd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+	scd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 	scd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-	if (FAILED(hpDXGIFactory->CreateSwapChain(Device.Get(), &scd, SwapChain.GetAddressOf()))) {
+	hr = hpDXGIFactory->CreateSwapChainForHwnd(Device.Get(), hWnd, &scd, &scfd, nullptr, reinterpret_cast<IDXGISwapChain1**>(SwapChain.GetAddressOf()));
+	if (FAILED(hr)) {
+		std::system_category().message(hr);
 		MessageBoxW(hWnd, L"CreateSwapChain", L"Err", MB_ICONSTOP);
 		return S_FALSE;
 	}
+	//hr = immidiate->QueryInterface(__uuidof(ID3DUserDefinedAnnotation), &userDefinedAnnotations);
 
 
 	return S_OK;

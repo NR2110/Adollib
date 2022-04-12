@@ -6,9 +6,17 @@
 
 #include "../Adollib/Scripts/Renderer/renderer_base.h"
 
-using namespace Adollib;
+#include "../Adollib/Scripts/Imgui/work_meter.h"
 
-#define USE_22 1
+#include "../Adollib/Scripts/Renderer/Shader/compute_shader.h"
+
+#include "../Adollib/Scripts/Main/systems.h"
+
+using namespace Adollib;
+using namespace Compute_S;
+
+#define USE_22 0
+#define USE_COMPUTE 1
 
 #if 0
 /*----------------------------
@@ -666,14 +674,15 @@ void Simulation_SPH::update()
 #define IN_FILE "../mk_particle/dambreak.prof"
 #define PARTICLE_DISTANCE    0.025 //初期粒子間距離
 #define EPS             (0.01 * PARTICLE_DISTANCE)
+#define DIM 2				//次元数
 
 #define PCL_DST PARTICLE_DISTANCE //平均粒子間距離
 #define MIN_X  (0 - PCL_DST*5)	//解析領域のx方向の最小値
 #define MIN_Y  (0 - PCL_DST*5)	//解析領域のy方向の最小値
-#define MIN_Z  (0 - PCL_DST*3)	//解析領域のz方向の最小値
-#define MAX_X  (0 + PCL_DST*45)	//解析領域のx方向の最大値
+#define MIN_Z  (0 - PCL_DST*5)	//解析領域のz方向の最小値
+#define MAX_X  (0 + PCL_DST*100)	//解析領域のx方向の最大値
 #define MAX_Y  (0 + PCL_DST*80)	//解析領域のy方向の最大値
-#define MAX_Z  (0 + PCL_DST*3)	//解析領域のz方向の最大値
+#define MAX_Z  (0 + PCL_DST*30)	//解析領域のz方向の最大値
 
 #define GST -1			//計算対象外粒子の種類番号
 #define FLD 0				//流体粒子の種類番号
@@ -684,7 +693,6 @@ void Simulation_SPH::update()
 #define DT 0.0005			//時間刻み幅
 #define SND 22.0			//音速
 #define KNM_VSC (1.0E-6)	//動粘性係数
-#define DIM 2				//次元数
 #define CRT_NUM 0.1		//クーラン条件数
 #define COL_RAT 0.2		//接近した粒子の反発率
 #define DST_LMT_RAT 0.5	//これ以上の粒子間の接近を許さない距離の係数
@@ -695,16 +703,16 @@ void Simulation_SPH::update()
 
 char filename[256];
 int iLP, iF;
-double TIM;
+float TIM;
 int nP;
-double* Acc, * Pos, * Vel, * Prs, * pav;
+float* Acc, * Pos, * Vel, * Prs, * pav;
 int* Typ;
-double r, r2;
-double DB, DB2, DBinv;
+float r, r2;
+float DB, DB2, DBinv;
 int nBx, nBy, nBz, nBxy, nBxyz;
 int* bfst, * blst, * nxt;
-double n0, lmd, A1, A2, A3, rlim, rlim2, COL;
-double Dns[NUM_TYP], invDns[NUM_TYP];
+float n0, lmd, A1, A2, A3, rlim, rlim2, COL;
+float Dns[NUM_TYP], invDns[NUM_TYP];
 
 static std::vector<Gameobject*> particle;
 
@@ -721,8 +729,11 @@ void Simulation_SPH::awake() {
 
 	particle.resize(nP);
 	for (int i = 0; i < nP; i++) {
+		//if (Pos[i * 3 + 2] < EPS)continue;
 		particle[i] = Gameobject_manager::createSphere("particle");
+		particle[i]->transform->local_pos = Vector3(Pos[i * 3], Pos[i * 3 + 1], Pos[i * 3 + 2]);
 		particle[i]->transform->local_scale = Vector3((2.1 * PARTICLE_DISTANCE) * 0.4f);
+		particle[i]->is_hierarchy = false;
 
 		if (Typ[i] == FLD)particle[i]->renderer->color = Vector4(0, 0, 1, 1);
 		if (Typ[i] == WLL)particle[i]->renderer->color = Vector4(0, 1, 0, 1);
@@ -733,13 +744,15 @@ void Simulation_SPH::awake() {
 
 void Simulation_SPH::update() {
 
+	Work_meter::start("simulation_SPH");
 	ClcEMPS(); //mein処理
 	for (int i = 0; i < nP; i++) {
 		//particle.gameobject->transform->local_pos = particle.pos;
-
+		if (Typ[i] != FLD)continue;
 		particle[i]->transform->local_pos = Vector3(Pos[i * 3], Pos[i * 3 + 1], Pos[i * 3 + 2]);
 
 	}
+	Work_meter::stop("simulation_SPH");
 }
 
 
@@ -754,84 +767,128 @@ void ChkPcl(int i) {
 }
 
 void RdDat(void) {
-	nP = 1000;
-	Acc = (double*)malloc(sizeof(double) * nP * 3);	//粒子の加速度
-	Pos = (double*)malloc(sizeof(double) * nP * 3);	//粒子の座標
-	Vel = (double*)malloc(sizeof(double) * nP * 3);	//粒子の速度
-	Prs = (double*)malloc(sizeof(double) * nP);		//粒子の圧力
-	pav = (double*)malloc(sizeof(double) * nP);		//時間平均された粒子の圧力
+	nP = 17000;
+	Acc = (float*)malloc(sizeof(float) * nP * 3);	//粒子の加速度
+	Pos = (float*)malloc(sizeof(float) * nP * 3);	//粒子の座標
+	Vel = (float*)malloc(sizeof(float) * nP * 3);	//粒子の速度
+	Prs = (float*)malloc(sizeof(float) * nP);		//粒子の圧力
+	pav = (float*)malloc(sizeof(float) * nP);		//時間平均された粒子の圧力
 	Typ = (int*)malloc(sizeof(int) * nP);			//粒子の種類
 
+#if DIM == 3
+	int iX, iY, iZ;
+	int nX, nY, nZ;
+	float x, y, z;
+	int i = 0;
+	int flagOfParticleGeneration;
+
+	nX = (int)(1.0 / PARTICLE_DISTANCE) + 5;
+	nY = (int)(0.6 / PARTICLE_DISTANCE) + 5;
+	nZ = (int)(0.3 / PARTICLE_DISTANCE) + 5;
+	for (iX = -4; iX < nX; iX++) {
+		for (iY = -4; iY < nY; iY++) {
+			for (iZ = -4; iZ < nZ; iZ++) {
+				x = PARTICLE_DISTANCE * iX;
+				y = PARTICLE_DISTANCE * iY;
+				z = PARTICLE_DISTANCE * iZ;
+				flagOfParticleGeneration = 0;
+
+				/* dummy wall region */
+				if ((((x > -4.0 * PARTICLE_DISTANCE + EPS) && (x <= 1.00 + 4.0 * PARTICLE_DISTANCE + EPS)) && ((y > 0.0 - 4.0 * PARTICLE_DISTANCE + EPS) && (y <= 0.6 + EPS))) && ((z > 0.0 - 4.0 * PARTICLE_DISTANCE + EPS) && (z <= 0.3 + 4.0 * PARTICLE_DISTANCE + EPS))) {
+					Typ[i] = WLL;
+					flagOfParticleGeneration = 1;
+				}
+
+				/* wall region */
+				if ((((x > -2.0 * PARTICLE_DISTANCE + EPS) && (x <= 1.00 + 2.0 * PARTICLE_DISTANCE + EPS)) && ((y > 0.0 - 2.0 * PARTICLE_DISTANCE + EPS) && (y <= 0.6 + EPS))) && ((z > 0.0 - 2.0 * PARTICLE_DISTANCE + EPS) && (z <= 0.3 + 2.0 * PARTICLE_DISTANCE + EPS))) {
+					Typ[i] = WLL;
+					flagOfParticleGeneration = 1;
+				}
+
+				/* wall region */
+				if ((((x > -4.0 * PARTICLE_DISTANCE + EPS) && (x <= 1.00 + 4.0 * PARTICLE_DISTANCE + EPS)) && ((y > 0.6 - 2.0 * PARTICLE_DISTANCE + EPS) && (y <= 0.6 + EPS))) && ((z > 0.0 - 4.0 * PARTICLE_DISTANCE + EPS) && (z <= 0.3 + 4.0 * PARTICLE_DISTANCE + EPS))) {
+					Typ[i] = WLL;
+					flagOfParticleGeneration = 1;
+				}
+
+				/* empty region */
+				if ((((x > 0.0 + EPS) && (x <= 1.00 + EPS)) && (y > 0.0 + EPS)) && ((z > 0.0 + EPS) && (z <= 0.3 + EPS))) {
+					flagOfParticleGeneration = 0;
+				}
+
+				/* fluid region */
+				if ((((x > 0.0 + EPS) && (x <= 0.25 + EPS)) && ((y > 0.0 + EPS) && (y < 0.5 + EPS))) && ((z > 0.0 + EPS) && (z <= 0.3 + EPS))) {
+					Typ[i] = FLD;
+					flagOfParticleGeneration = 1;
+				}
+
+				if (flagOfParticleGeneration == 1) {
+					Pos[i * 3] = x;
+					Pos[i * 3 + 1] = y;
+					Pos[i * 3 + 2] = z;
+					i++;
+				}
+			}
+		}
+	}
+	nP = i;
+	for (i = 0; i < nP * 3; i++) { Vel[i] = 0.0; }
+#elif  DIM == 2
+	  // 各粒子の初期座標など
 	int iX, iY;
 	int nX, nY;
 	float x, y, z;
 	int i = 0;
 	int flagOfParticleGeneration;
 
-	nX = (int)(1.0 / PARTICLE_DISTANCE) + 5; //40+5
-	nY = (int)(0.6 / PARTICLE_DISTANCE) + 5; //24+5
-		for (iX = -4; iX < nX; iX++) {
-	for (iY = -4; iY < nY; iY++) {
+	nX = (int)(2.0 / PARTICLE_DISTANCE) + 5;
+	nY = (int)(1.0 / PARTICLE_DISTANCE) + 5;
+	for (iX = -4; iX < nX; iX++) {
+		for (iY = -4; iY < nY; iY++) {
 			x = PARTICLE_DISTANCE * (float)(iX);
 			y = PARTICLE_DISTANCE * (float)(iY);
 			z = 0.0;
 			flagOfParticleGeneration = 0;
 
 			/* dummy wall region */
-			if (((x > -4.0 * PARTICLE_DISTANCE + EPS) && (x <= 1.00 + 4.0 * PARTICLE_DISTANCE + EPS)) && ((y > 0.0 - 4.0 * PARTICLE_DISTANCE + EPS) && (y <= 0.6 + EPS))) {
+			if (((x > -4.0 * PARTICLE_DISTANCE + EPS) && (x <= 2.00 + 4.0 * PARTICLE_DISTANCE + EPS)) && ((y > 0.0 - 4.0 * PARTICLE_DISTANCE + EPS) && (y <= 1 + 4.0 * PARTICLE_DISTANCE + EPS))) {
 				Typ[i] = WLL;
 				flagOfParticleGeneration = 1;
 			}
 
 			/* wall region */
-			if (((x > -2.0 * PARTICLE_DISTANCE + EPS) && (x <= 1.00 + 2.0 * PARTICLE_DISTANCE + EPS)) && ((y > 0.0 - 2.0 * PARTICLE_DISTANCE + EPS) && (y <= 0.6 + EPS))) {
+			if (((x > -2.0 * PARTICLE_DISTANCE + EPS) && (x <= 2.00 + 2.0 * PARTICLE_DISTANCE + EPS)) && ((y > 0.0 - 2.0 * PARTICLE_DISTANCE + EPS) && (y <= 1 + 2.0 * PARTICLE_DISTANCE + EPS))) {
 				Typ[i] = WLL;
 				flagOfParticleGeneration = 1;
 			}
 
 			/* wall region */
-			if (((x > -4.0 * PARTICLE_DISTANCE + EPS) && (x <= 1.00 + 4.0 * PARTICLE_DISTANCE + EPS)) && ((y > 0.6 - 2.0 * PARTICLE_DISTANCE + EPS) && (y <= 0.6 + EPS))) {
+			if (((x > -4.0 * PARTICLE_DISTANCE + EPS) && (x <= 2.00 + 4.0 * PARTICLE_DISTANCE + EPS)) && ((y > 0.6 - 2.0 * PARTICLE_DISTANCE + EPS) && (y <= 1 + 2.0 * PARTICLE_DISTANCE + EPS))) {
 				Typ[i] = WLL;
 				flagOfParticleGeneration = 1;
 			}
+
 
 			/* empty region */
-			if (((x > 0.0 + EPS) && (x <= 1.00 + EPS)) && (y > 0.0 + EPS)) {
+			if (((x > 0.0 + EPS) && (x <= 2.00 + EPS)) && ((y > 0.0 + EPS) && (y <= 1 + EPS))) {
 				flagOfParticleGeneration = 0;
 			}
 
 			/* fluid region */
-			if ((
-				(x > 0.0 + EPS) &&
-				(x <= 0.25 + EPS)
-				) && (
-				(y > 0.0 + EPS) && (y <= 0.50 + EPS)
-				)) {
-			//if ((
-			//	(x > 0.03 + EPS) &&
-			//	(x <= 0.05 + EPS)
-			//	) && (
-			//	(y > 0.0 + EPS) && (y <= 0.03 + EPS)
-			//)) {
+			if (((x > 0.0 + EPS) && (x <= 0.5 + EPS)) && ((y > 0.0 + EPS) && (y <= 1 + EPS))) {
 				Typ[i] = FLD;
 				flagOfParticleGeneration = 1;
 			}
 
 			if (flagOfParticleGeneration == 1) {
 				Pos[i * 3] = x; Pos[i * 3 + 1] = y; Pos[i * 3 + 2] = z;
-				Vel[i * 3] = 0; Vel[i * 3 + 1] = 0; Vel[i * 3 + 2] = 0;
-
-				if (Typ[i] == FLD) {
-					Pos[i * 3] += PARTICLE_DISTANCE * 0.5f;
-				}
-				Prs[i] = 0;
-				pav[i] = 0;
 				i++;
 			}
 		}
 	}
 	nP = i;
 	for (i = 0; i < nP * 3; i++) { Vel[i] = 0.0; }
+#endif
 	for (int i = 0; i < nP; i++) { ChkPcl(i); }
 	for (int i = 0; i < nP * 3; i++) { Acc[i] = 0.0; }
 }
@@ -853,25 +910,42 @@ void AlcBkt(void) {
 }
 
 void SetPara(void) {
-	double tn0 = 0.0;
-	double tlmd = 0.0;
+	float tn0 = 0.0;
+	float tlmd = 0.0;
+#if DEM == 3
 	for (int ix = -4; ix < 5; ix++) {
 		for (int iy = -4; iy < 5; iy++) {
-			//for (int iz = -4; iz < 5; iz++) {
-				double x = PCL_DST * (double)ix;
-				double y = PCL_DST * (double)iy;
-				//double z = PCL_DST * (double)iz;
-				//double dist2 = x * x + y * y + z * z;
-				double dist2 = x * x + y * y;
+			for (int iz = -4; iz < 5; iz++) {
+				float x = PCL_DST * (float)ix;
+				float y = PCL_DST * (float)iy;
+				float z = PCL_DST * (float)iz;
+				float dist2 = x * x + y * y + z * z;
+				//float dist2 = x * x + y * y;
 				if (dist2 <= r2) {
 					if (dist2 == 0.0)continue;
-					double dist = sqrt(dist2);
+					float dist = sqrt(dist2);
 					tn0 += WEI(dist, r);
 					tlmd += dist2 * WEI(dist, r);
 				}
-			//}
+			}
 		}
 	}
+#elif DIM == 2
+	for (int ix = -4; ix < 5; ix++) {
+		for (int iy = -4; iy < 5; iy++) {
+			float x = PCL_DST * (float)ix;
+			float y = PCL_DST * (float)iy;
+			float dist2 = x * x + y * y;
+			//float dist2 = x * x + y * y;
+			if (dist2 <= r2) {
+				if (dist2 == 0.0)continue;
+				float dist = sqrt(dist2);
+				tn0 += WEI(dist, r);
+				tlmd += dist2 * WEI(dist, r);
+			}
+		}
+	}
+#endif
 	n0 = tn0;			//初期粒子数密度
 	lmd = tlmd / tn0;	//ラプラシアンモデルの係数λ
 	A1 = 2.0 * KNM_VSC * DIM / n0 / lmd;//粘性項の計算に用いる係数
@@ -909,9 +983,9 @@ void MkBkt(void) {
 void VscTrm() {
 	for (int i = 0; i < nP; i++) {
 		if (Typ[i] == FLD) {
-			double Acc_x = 0.0;			double Acc_y = 0.0;			double Acc_z = 0.0;
-			double pos_ix = Pos[i * 3];	double pos_iy = Pos[i * 3 + 1];	double pos_iz = Pos[i * 3 + 2];
-			double vec_ix = Vel[i * 3];	double vec_iy = Vel[i * 3 + 1];	double vec_iz = Vel[i * 3 + 2];
+			float Acc_x = 0.0;			float Acc_y = 0.0;			float Acc_z = 0.0;
+			float pos_ix = Pos[i * 3];	float pos_iy = Pos[i * 3 + 1];	float pos_iz = Pos[i * 3 + 2];
+			float vec_ix = Vel[i * 3];	float vec_iy = Vel[i * 3 + 1];	float vec_iz = Vel[i * 3 + 2];
 			int ix = (int)((pos_ix - MIN_X) * DBinv) + 1;
 			int iy = (int)((pos_iy - MIN_Y) * DBinv) + 1;
 			int iz = (int)((pos_iz - MIN_Z) * DBinv) + 1;
@@ -922,14 +996,14 @@ void VscTrm() {
 						int j = bfst[jb];
 						if (j == -1) continue;
 						for (;;) {
-							double v0 = Pos[j * 3] - pos_ix;
-							double v1 = Pos[j * 3 + 1] - pos_iy;
-							double v2 = Pos[j * 3 + 2] - pos_iz;
-							double dist2 = v0 * v0 + v1 * v1 + v2 * v2;
+							float v0 = Pos[j * 3] - pos_ix;
+							float v1 = Pos[j * 3 + 1] - pos_iy;
+							float v2 = Pos[j * 3 + 2] - pos_iz;
+							float dist2 = v0 * v0 + v1 * v1 + v2 * v2;
 							if (dist2 < r2) {
 								if (j != i && Typ[j] != GST) {
-									double dist = sqrt(dist2);
-									double w = WEI(dist, r);
+									float dist = sqrt(dist2);
+									float w = WEI(dist, r);
 									Acc_x += (Vel[j * 3] - vec_ix) * w;
 									Acc_y += (Vel[j * 3 + 1] - vec_iy) * w;
 									Acc_z += (Vel[j * 3 + 2] - vec_iz) * w;
@@ -962,10 +1036,10 @@ void UpPcl1() {
 void ChkCol() {
 	for (int i = 0; i < nP; i++) {
 		if (Typ[i] == FLD) {
-			double mi = Dns[Typ[i]];
-			double pos_ix = Pos[i * 3];	double pos_iy = Pos[i * 3 + 1];	double pos_iz = Pos[i * 3 + 2];
-			double vec_ix = Vel[i * 3];	double vec_iy = Vel[i * 3 + 1];	double vec_iz = Vel[i * 3 + 2];
-			double vec_ix2 = Vel[i * 3]; double vec_iy2 = Vel[i * 3 + 1]; double vec_iz2 = Vel[i * 3 + 2];
+			float mi = Dns[Typ[i]];
+			float pos_ix = Pos[i * 3];	float pos_iy = Pos[i * 3 + 1];	float pos_iz = Pos[i * 3 + 2];
+			float vec_ix = Vel[i * 3];	float vec_iy = Vel[i * 3 + 1];	float vec_iz = Vel[i * 3 + 2];
+			float vec_ix2 = Vel[i * 3]; float vec_iy2 = Vel[i * 3 + 1]; float vec_iz2 = Vel[i * 3 + 2];
 			int ix = (int)((pos_ix - MIN_X) * DBinv) + 1;
 			int iy = (int)((pos_iy - MIN_Y) * DBinv) + 1;
 			int iz = (int)((pos_iz - MIN_Z) * DBinv) + 1;
@@ -976,15 +1050,15 @@ void ChkCol() {
 						int j = bfst[jb];
 						if (j == -1) continue;
 						for (;;) {
-							double v0 = Pos[j * 3] - pos_ix;
-							double v1 = Pos[j * 3 + 1] - pos_iy;
-							double v2 = Pos[j * 3 + 2] - pos_iz;
-							double dist2 = v0 * v0 + v1 * v1 + v2 * v2;
+							float v0 = Pos[j * 3] - pos_ix;
+							float v1 = Pos[j * 3 + 1] - pos_iy;
+							float v2 = Pos[j * 3 + 2] - pos_iz;
+							float dist2 = v0 * v0 + v1 * v1 + v2 * v2;
 							if (dist2 < rlim2) {
 								if (j != i && Typ[j] != GST) {
-									double fDT = (vec_ix - Vel[j * 3]) * v0 + (vec_iy - Vel[j * 3 + 1]) * v1 + (vec_iz - Vel[j * 3 + 2]) * v2;
+									float fDT = (vec_ix - Vel[j * 3]) * v0 + (vec_iy - Vel[j * 3 + 1]) * v1 + (vec_iz - Vel[j * 3 + 2]) * v2;
 									if (fDT > 0.0) {
-										double mj = Dns[Typ[j]];
+										float mj = Dns[Typ[j]];
 										fDT *= COL * mj / (mi + mj) / dist2;
 										vec_ix2 -= v0 * fDT;		vec_iy2 -= v1 * fDT;		vec_iz2 -= v2 * fDT;
 									}
@@ -1007,8 +1081,8 @@ void ChkCol() {
 void MkPrs() {
 	for (int i = 0; i < nP; i++) {
 		if (Typ[i] != GST) {
-			double pos_ix = Pos[i * 3];	double pos_iy = Pos[i * 3 + 1];	double pos_iz = Pos[i * 3 + 2];
-			double ni = 0.0;
+			float pos_ix = Pos[i * 3];	float pos_iy = Pos[i * 3 + 1];	float pos_iz = Pos[i * 3 + 2];
+			float ni = 0.0;
 			int ix = (int)((pos_ix - MIN_X) * DBinv) + 1;
 			int iy = (int)((pos_iy - MIN_Y) * DBinv) + 1;
 			int iz = (int)((pos_iz - MIN_Z) * DBinv) + 1;
@@ -1019,14 +1093,14 @@ void MkPrs() {
 						int j = bfst[jb];
 						if (j == -1) continue;
 						for (;;) {
-							double v0 = Pos[j * 3] - pos_ix;
-							double v1 = Pos[j * 3 + 1] - pos_iy;
-							double v2 = Pos[j * 3 + 2] - pos_iz;
-							double dist2 = v0 * v0 + v1 * v1 + v2 * v2;
+							float v0 = Pos[j * 3] - pos_ix;
+							float v1 = Pos[j * 3 + 1] - pos_iy;
+							float v2 = Pos[j * 3 + 2] - pos_iz;
+							float dist2 = v0 * v0 + v1 * v1 + v2 * v2;
 							if (dist2 < r2) {
 								if (j != i && Typ[j] != GST) {
-									double dist = sqrt(dist2);
-									double w = WEI(dist, r);
+									float dist = sqrt(dist2);
+									float w = WEI(dist, r);
 									ni += w;
 								}
 							}
@@ -1036,8 +1110,8 @@ void MkPrs() {
 					}
 				}
 			}
-			double mi = Dns[Typ[i]];
-			double pressure = (ni > n0) * (ni - n0) * A2 * mi;
+			float mi = Dns[Typ[i]];
+			float pressure = (ni > n0) * (ni - n0) * A2 * mi;
 			Prs[i] = pressure;
 		}
 	}
@@ -1046,12 +1120,13 @@ void MkPrs() {
 void PrsGrdTrm() {
 	for (int i = 0; i < nP; i++) {
 		if (Typ[i] == FLD) {
-			double Acc_x = 0.0;			double Acc_y = 0.0;			double Acc_z = 0.0;
-			double pos_ix = Pos[i * 3];	double pos_iy = Pos[i * 3 + 1];	double pos_iz = Pos[i * 3 + 2];
-			double pre_min = Prs[i];
+			float Acc_x = 0.0;			float Acc_y = 0.0;			float Acc_z = 0.0;
+			float pos_ix = Pos[i * 3];	float pos_iy = Pos[i * 3 + 1];	float pos_iz = Pos[i * 3 + 2];
+			float pre_min = Prs[i];
 			int ix = (int)((pos_ix - MIN_X) * DBinv) + 1;
 			int iy = (int)((pos_iy - MIN_Y) * DBinv) + 1;
 			int iz = (int)((pos_iz - MIN_Z) * DBinv) + 1;
+			// 周囲の粒子の最低圧力を保存
 			for (int jz = iz - 1; jz <= iz + 1; jz++) {
 				for (int jy = iy - 1; jy <= iy + 1; jy++) {
 					for (int jx = ix - 1; jx <= ix + 1; jx++) {
@@ -1059,10 +1134,10 @@ void PrsGrdTrm() {
 						int j = bfst[jb];
 						if (j == -1) continue;
 						for (;;) {
-							double v0 = Pos[j * 3] - pos_ix;
-							double v1 = Pos[j * 3 + 1] - pos_iy;
-							double v2 = Pos[j * 3 + 2] - pos_iz;
-							double dist2 = v0 * v0 + v1 * v1 + v2 * v2;
+							float v0 = Pos[j * 3] - pos_ix;
+							float v1 = Pos[j * 3 + 1] - pos_iy;
+							float v2 = Pos[j * 3 + 2] - pos_iz;
+							float dist2 = v0 * v0 + v1 * v1 + v2 * v2;
 							if (dist2 < r2) {
 								if (j != i && Typ[j] != GST) {
 									if (pre_min > Prs[j])pre_min = Prs[j];
@@ -1081,14 +1156,14 @@ void PrsGrdTrm() {
 						int j = bfst[jb];
 						if (j == -1) continue;
 						for (;;) {
-							double v0 = Pos[j * 3] - pos_ix;
-							double v1 = Pos[j * 3 + 1] - pos_iy;
-							double v2 = Pos[j * 3 + 2] - pos_iz;
-							double dist2 = v0 * v0 + v1 * v1 + v2 * v2;
+							float v0 = Pos[j * 3] - pos_ix;
+							float v1 = Pos[j * 3 + 1] - pos_iy;
+							float v2 = Pos[j * 3 + 2] - pos_iz;
+							float dist2 = v0 * v0 + v1 * v1 + v2 * v2;
 							if (dist2 < r2) {
 								if (j != i && Typ[j] != GST) {
-									double dist = sqrt(dist2);
-									double w = WEI(dist, r);
+									float dist = sqrt(dist2);
+									float w = WEI(dist, r);
 									w *= (Prs[j] - pre_min) / dist2;
 									Acc_x += v0 * w;	Acc_y += v1 * w;	Acc_z += v2 * w;
 								}
@@ -1131,14 +1206,29 @@ void ClcEMPS(void) {
 		//if (iLP % OPT_FQC == 0) {
 		//	if (TIM >= FIN_TIM) { return; }
 		//}
+
+		Work_meter::start("save_backet");
 		MkBkt(); //バケットの保存
+		Work_meter::stop("save_backet");
+		Work_meter::start("calc_a*_from_Viscosity_g");
 		VscTrm(); //粘着、外力(重力)から仮の加速度a*を計算
+		Work_meter::stop("calc_a*_from_Viscosity_g");
+		Work_meter::start("update_pos_1");
 		UpPcl1(); //a*を用いて仮の速度、座標に更新
+		Work_meter::stop("update_pos_1");
+		Work_meter::start("collider");
 		ChkCol(); //衝突判定 近すぎるものを離す
+		Work_meter::stop("collider");
 		//:::: 陽解法 :::
+		Work_meter::start("presser");
 		MkPrs(); //仮の圧力を求める
+		Work_meter::stop("presser");
+		Work_meter::start("calc_a*_from_presser");
 		PrsGrdTrm(); //圧力勾配を求め、圧力による加速度を計算
+		Work_meter::stop("calc_a*_from_presser");
+		Work_meter::start("update_pos_2");
 		UpPcl2(); //圧力による加速度のから速度、座標を更新
+		Work_meter::stop("update_pos_2");
 		//MkPrs(); //
 		for (int i = 0; i < nP; i++) { pav[i] += Prs[i]; }
 		iLP++;
@@ -1146,7 +1236,7 @@ void ClcEMPS(void) {
 	}
 }
 
-#elif 1
+#elif 0
 
 
 /*=====================================================================
@@ -1890,11 +1980,11 @@ void setMinimumPressure(void) {
 
 void calPressureGradient(void) {
 	int    i, j;
-	double gradient_x, gradient_y, gradient_z;
-	double xij, yij, zij;
-	double distance, distance2;
-	double w, pij;
-	double a;
+	float gradient_x, gradient_y, gradient_z;
+	float xij, yij, zij;
+	float distance, distance2;
+	float w, pij;
+	float a;
 
 	//
 	a = 1 / FluidDensity * DIM / N0_forGradient;
@@ -1925,7 +2015,7 @@ void calPressureGradient(void) {
 		Acceleration[i * 3 + 1] = (-1.0) * gradient_y;
 		Acceleration[i * 3 + 2] = (-1.0) * gradient_z;
 	}
-		}
+}
 
 
 void moveParticleUsingPressureGradient(void) {
@@ -1947,5 +2037,324 @@ void moveParticleUsingPressureGradient(void) {
 	}
 }
 
+
+
+#elif USE_COMPUTE
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <string.h>
+
+#define IN_FILE "../mk_particle/dambreak.prof"
+#define PARTICLE_DISTANCE    0.025 //初期粒子間距離
+#define EPS             (0.01 * PARTICLE_DISTANCE)
+#define DIM 2				//次元数
+
+#define PCL_DST PARTICLE_DISTANCE //平均粒子間距離
+#define MIN_X  (0 - PCL_DST*5)	//解析領域のx方向の最小値
+#define MIN_Y  (0 - PCL_DST*5)	//解析領域のy方向の最小値
+#define MIN_Z  (0 - PCL_DST*5)	//解析領域のz方向の最小値
+#define MAX_X  (0 + PCL_DST*100)	//解析領域のx方向の最大値
+#define MAX_Y  (0 + PCL_DST*80)	//解析領域のy方向の最大値
+#define MAX_Z  (0 + PCL_DST*30)	//解析領域のz方向の最大値
+
+#define GST -1			//計算対象外粒子の種類番号
+#define FLD 0				//流体粒子の種類番号
+#define WLL  1			//壁粒子の種類番号
+#define NUM_TYP  2		//粒子の種類数
+#define DNS_FLD 1000		//流体粒子の密度
+#define DNS_WLL 1000		//壁粒子の密度
+#define DT 0.0005			//時間刻み幅
+#define SND 22.0			//音速
+#define KNM_VSC (1.0E-6)	//動粘性係数
+#define CRT_NUM 0.1		//クーラン条件数
+#define COL_RAT 0.2		//接近した粒子の反発率
+#define DST_LMT_RAT 0.5	//これ以上の粒子間の接近を許さない距離の係数
+#define G_X 0.0			//重力加速度のx成分
+#define G_Y -9.8			//重力加速度のy成分
+#define G_Z 0.0			//重力加速度のz成分
+#define WEI(dist, re) ((re/dist) - 1.0)	//重み関数
+
+struct ConstantBuffer_particle {
+	int _NumParticles;        // 粒子数
+	float _TimeStep;          // 時間刻み幅(dt)
+	float _Smoothlen;         // 粒子半径
+	float _PressureStiffness; // Beckerの係数
+	float _RestDensity;       // 静止密度
+	float _DensityCoef;       // 密度算出時の係数
+	float _GradPressureCoef;  // 圧力算出時の係数
+	float _LapViscosityCoef;  // 粘性算出時の係数
+	float _WallStiffness;     // ペナルティ法の押し返す力
+	float _Viscosity;         // 粘性係数
+	Vector3 _Gravity;          // 重力
+	Vector3 _Range;            // シミュレーション空間
+};
+
+int nP;
+
+struct Particle {
+	Vector3 position;
+	Vector3 velocity;
+};
+
+struct ParticlePressure {
+	float pressure;
+};
+
+struct ParticleForces {
+	Vector2 acceleration;
+};
+
+struct ParticleDensity {
+	float density;
+};
+
+static std::vector<Particle> particles;
+static std::vector<Gameobject*> particle_gos;
+
+void RdDat();
+void compute_shader_init();
+
+static std::shared_ptr<ComputeShader> density_CS;
+static std::shared_ptr<ComputeShader> pressure_CS;
+static std::shared_ptr<ComputeShader> force_CS;
+static std::shared_ptr<ComputeShader> integrate_CS;
+
+// bufffer
+static Microsoft::WRL::ComPtr<ID3D11Buffer> particle_buffer;
+static Microsoft::WRL::ComPtr<ID3D11Buffer> dencity_buffer;
+static Microsoft::WRL::ComPtr<ID3D11Buffer> pressure_buffer;
+static Microsoft::WRL::ComPtr<ID3D11Buffer> force_buffer;
+
+static Microsoft::WRL::ComPtr<ID3D11Buffer> particle_cb; //constantbuffer用
+
+// SRV,UAV
+static Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> particle_read;
+static Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> dencity_read;
+static Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> pressure_read;
+static Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> force_read;
+static Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> particle_write;
+static Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> dencity_write;
+static Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> pressure_write;
+static Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> force_write;
+
+template<class T>
+T* map_buffer_(Microsoft::WRL::ComPtr<ID3D11Buffer>& buffer) {
+	HRESULT hr = S_OK;
+	const D3D11_MAP map = D3D11_MAP_WRITE_DISCARD;
+	D3D11_MAPPED_SUBRESOURCE mappedBuffer = {};
+	hr = Systems::DeviceContext->Map(buffer.Get(), 0, map, 0, &mappedBuffer);
+
+	if (FAILED(hr))
+	{
+		assert(0 && "failed Map InstanceBuffer dynamic(RenderManager)");
+		return nullptr;
+	}
+	return static_cast<T*>(mappedBuffer.pData);
+}
+void unmap_buffer_(Microsoft::WRL::ComPtr<ID3D11Buffer>& buffer) {
+	Systems::DeviceContext->Unmap(buffer.Get(), 0);
+}
+
+void Simulation_SPH::awake() {
+
+	RdDat(); //粒子の配置
+	compute_shader_init(); //compute_Shaderの初期化
+
+	particle_gos.resize(nP);
+	for (int i = 0; i < nP; i++) {
+
+		particle_gos[i] = Gameobject_manager::createSphere("particle");
+		particle_gos[i]->transform->local_pos = Vector3(particles[i].position);
+		particle_gos[i]->transform->local_scale = Vector3((2.1 * PARTICLE_DISTANCE) * 0.4f);
+		particle_gos[i]->is_hierarchy = false;
+	}
+
+}
+
+void Simulation_SPH::update() {
+	Work_meter::start("simulation_SPH");
+
+	Systems::DeviceContext->CSSetConstantBuffers(0, 1, particle_cb.GetAddressOf());
+
+	ID3D11ShaderResourceView* pSRVs[4] = {
+		particle_read.Get(),
+		dencity_read.Get(),
+		pressure_read.Get(),
+		force_read.Get()
+	};
+	ID3D11UnorderedAccessView* pUAVs[4] = {
+		particle_write.Get(),
+		dencity_write.Get(),
+		pressure_write.Get(),
+		force_write.Get()
+	};
+
+	density_CS->run(pSRVs, 4, pUAVs, 4, nP / 256 + 1, 0, 0);
+	pressure_CS->run(pSRVs, 4, pUAVs, 4, nP / 256 + 1, 0, 0);
+	force_CS->run(pSRVs, 4, pUAVs, 4, nP / 256 + 1, 0, 0);
+	integrate_CS->run(pSRVs, 4, pUAVs, 4, nP / 256 + 1, 0, 0);
+	//density_CS-> run(particle_read.GetAddressOf(), 1, dencity_write.GetAddressOf(),  1, nP / 256 + 1, 0, 0);
+	//pressure_CS->run(dencity_read.GetAddressOf(),  1, pressure_write.GetAddressOf(), 1, nP / 256 + 1, 0, 0);
+	//force_CS->   run(pressure_read.GetAddressOf(), 1, force_write.GetAddressOf(),    1, nP / 256 + 1, 0, 0);
+	//integrate_CS->run(force_read.GetAddressOf(),   1, particle_write.GetAddressOf(), 1, nP / 256 + 1, 0, 0);
+
+	//{
+	//	auto data = map_buffer_<Particle>(particle_buffer);
+
+	//	for (int i = 0; i < nP; ++i) {
+	//		particle_gos[i]->transform->local_pos = data[i].position;
+	//	}
+	//	unmap_buffer_(particle_buffer);
+	//}
+
+
+	Work_meter::stop("simulation_SPH");
+}
+
+void compute_shader_init() {
+	density_CS = std::make_shared<ComputeShader>();
+	pressure_CS = std::make_shared<ComputeShader>();
+	force_CS = std::make_shared<ComputeShader>();
+	integrate_CS = std::make_shared<ComputeShader>();
+	density_CS->Load("./DefaultShader/fluid_simulation_density_cs.cso");
+	pressure_CS->Load("./DefaultShader/fluid_simulation_pressure_cs.cso");
+	force_CS->Load("./DefaultShader/fluid_simulation_force_cs.cso");
+	integrate_CS->Load("./DefaultShader/fluid_simulation_integrate_cs.cso");
+
+	// bufferの生成
+	ComputeShader_function::create_StructureBuffer(sizeof(Particle), nP, &particles[0], particle_buffer, true);
+	ComputeShader_function::create_StructureBuffer(sizeof(ParticleDensity), nP, nullptr, dencity_buffer, false);
+	ComputeShader_function::create_StructureBuffer(sizeof(ParticlePressure), nP, nullptr, pressure_buffer, false);
+	ComputeShader_function::create_StructureBuffer(sizeof(ParticleForces), nP, nullptr, force_buffer, false);
+
+	// SRV,UAVの生成
+	ComputeShader_function::createSRV_fromSB(particle_buffer, particle_read);
+	ComputeShader_function::createUAV_fromSB(particle_buffer, particle_write);
+	ComputeShader_function::createSRV_fromSB(dencity_buffer, dencity_read);
+	ComputeShader_function::createUAV_fromSB(dencity_buffer, dencity_write);
+	ComputeShader_function::createSRV_fromSB(pressure_buffer, pressure_read);
+	ComputeShader_function::createUAV_fromSB(pressure_buffer, pressure_write);
+	ComputeShader_function::createSRV_fromSB(force_buffer, force_read);
+	ComputeShader_function::createUAV_fromSB(force_buffer, force_write);
+
+	Systems::CreateConstantBuffer(particle_cb.ReleaseAndGetAddressOf(), sizeof(ConstantBuffer_particle));
+
+	float particleMass = 0.0002f; //粒子質量
+	float smoothlen = 0.012f; //粒子半径
+
+	ConstantBuffer_particle cb;
+	cb._NumParticles = nP;                       // 粒子数
+	cb._TimeStep = 0.005f;                   // 時間刻み幅(dt)
+	cb._Smoothlen = 0.012f;                   // 粒子半径
+	cb._PressureStiffness = 200.0f;              // Beckerの係数
+	cb._RestDensity = 1000.0f;                  // 静止密度
+	cb._WallStiffness = 3000.0f;                 // ペナルティ法の押し返す力
+	cb._Viscosity = 0.1f;                        // 粘性係数
+	cb._Gravity = Vector3(0, -9.8f, 0);          // 重力
+	cb._Range = Vector3(1, 1, 0);                // シミュレーション空間
+	cb._DensityCoef = particleMass * 4.f / (PI * pow(smoothlen, 8));      // 密度算出時の係数
+	cb._GradPressureCoef = particleMass * -30.0f / (PI * pow(smoothlen, 5));   // 圧力算出時の係数
+	cb._LapViscosityCoef = particleMass * 20.f / (3 * PI * pow(smoothlen, 5)); // 粘性算出時の係数
+
+	Systems::DeviceContext->UpdateSubresource(particle_cb.Get(), 0, NULL, &cb, 0, 0);
+}
+
+
+void RdDat(void) {
+	nP = 17000;
+
+#if DIM == 3
+	int iX, iY, iZ;
+	int nX, nY, nZ;
+	float x, y, z;
+	int i = 0;
+	int flagOfParticleGeneration;
+
+	nX = (int)(1.0 / PARTICLE_DISTANCE) + 5;
+	nY = (int)(0.6 / PARTICLE_DISTANCE) + 5;
+	nZ = (int)(0.3 / PARTICLE_DISTANCE) + 5;
+	for (iX = -4; iX < nX; iX++) {
+		for (iY = -4; iY < nY; iY++) {
+			for (iZ = -4; iZ < nZ; iZ++) {
+				x = PARTICLE_DISTANCE * iX;
+				y = PARTICLE_DISTANCE * iY;
+				z = PARTICLE_DISTANCE * iZ;
+				flagOfParticleGeneration = 0;
+
+				/* dummy wall region */
+				if ((((x > -4.0 * PARTICLE_DISTANCE + EPS) && (x <= 1.00 + 4.0 * PARTICLE_DISTANCE + EPS)) && ((y > 0.0 - 4.0 * PARTICLE_DISTANCE + EPS) && (y <= 0.6 + EPS))) && ((z > 0.0 - 4.0 * PARTICLE_DISTANCE + EPS) && (z <= 0.3 + 4.0 * PARTICLE_DISTANCE + EPS))) {
+					Typ[i] = WLL;
+					flagOfParticleGeneration = 1;
+				}
+
+				/* wall region */
+				if ((((x > -2.0 * PARTICLE_DISTANCE + EPS) && (x <= 1.00 + 2.0 * PARTICLE_DISTANCE + EPS)) && ((y > 0.0 - 2.0 * PARTICLE_DISTANCE + EPS) && (y <= 0.6 + EPS))) && ((z > 0.0 - 2.0 * PARTICLE_DISTANCE + EPS) && (z <= 0.3 + 2.0 * PARTICLE_DISTANCE + EPS))) {
+					Typ[i] = WLL;
+					flagOfParticleGeneration = 1;
+				}
+
+				/* wall region */
+				if ((((x > -4.0 * PARTICLE_DISTANCE + EPS) && (x <= 1.00 + 4.0 * PARTICLE_DISTANCE + EPS)) && ((y > 0.6 - 2.0 * PARTICLE_DISTANCE + EPS) && (y <= 0.6 + EPS))) && ((z > 0.0 - 4.0 * PARTICLE_DISTANCE + EPS) && (z <= 0.3 + 4.0 * PARTICLE_DISTANCE + EPS))) {
+					Typ[i] = WLL;
+					flagOfParticleGeneration = 1;
+				}
+
+				/* empty region */
+				if ((((x > 0.0 + EPS) && (x <= 1.00 + EPS)) && (y > 0.0 + EPS)) && ((z > 0.0 + EPS) && (z <= 0.3 + EPS))) {
+					flagOfParticleGeneration = 0;
+				}
+
+				/* fluid region */
+				if ((((x > 0.0 + EPS) && (x <= 0.25 + EPS)) && ((y > 0.0 + EPS) && (y < 0.5 + EPS))) && ((z > 0.0 + EPS) && (z <= 0.3 + EPS))) {
+					Typ[i] = FLD;
+					flagOfParticleGeneration = 1;
+				}
+
+				if (flagOfParticleGeneration == 1) {
+					Pos[i * 3] = x;
+					Pos[i * 3 + 1] = y;
+					Pos[i * 3 + 2] = z;
+					i++;
+				}
+			}
+		}
+	}
+	nP = i;
+	for (i = 0; i < nP * 3; i++) { Vel[i] = 0.0; }
+#elif  DIM == 2
+	// 各粒子の初期座標など
+	int iX, iY;
+	int nX, nY;
+	float x, y, z;
+	int i = 0;
+	int flagOfParticleGeneration;
+
+	nX = (int)(2.0 / PARTICLE_DISTANCE) + 5;
+	nY = (int)(1.0 / PARTICLE_DISTANCE) + 5;
+	for (iX = -4; iX < nX; iX++) {
+		for (iY = -4; iY < nY; iY++) {
+			x = PARTICLE_DISTANCE * (float)(iX);
+			y = PARTICLE_DISTANCE * (float)(iY);
+			z = 0.0;
+			flagOfParticleGeneration = 0;
+
+			/* fluid region */
+			if (((x > 0.0 + EPS) && (x <= 0.5 + EPS)) && ((y > 0.0 + EPS) && (y <= 1 + EPS))) {
+				flagOfParticleGeneration = 1;
+			}
+
+			if (flagOfParticleGeneration == 1) {
+				Particle p;
+				p.position = Vector3(x, y, z);
+				p.velocity = Vector3(0);
+				particles.emplace_back(p);
+				i++;
+			}
+		}
+	}
+	nP = i;
+#endif
+}
 
 #endif

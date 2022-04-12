@@ -1125,6 +1125,9 @@
     <None Include="DefaultShader\vignette_effect.hlsli">
       <Filter>00_Adollib\44_render\posteffect\shader\vignette_effect</Filter>
     </None>
+    <None Include="..\Data\Shader\fluid_simulation.hlsli">
+      <Filter>ソース ファイル\demo\particle</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="DefaultShader\default_ps.hlsl">
@@ -1207,6 +1210,18 @@
     </FxCompile>
     <FxCompile Include="DefaultShader\vignette_effect_vs.hlsl">
       <Filter>00_Adollib\44_render\posteffect\shader\vignette_effect</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Data\Shader\fluid_simulation_density_cs.hlsl">
+      <Filter>ソース ファイル\demo\particle</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Data\Shader\fluid_simulation_pressure_cs.hlsl">
+      <Filter>ソース ファイル\demo\particle</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Data\Shader\fluid_simulation_force_cs.hlsl">
+      <Filter>ソース ファイル\demo\particle</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Data\Shader\fluid_simulation_integrate_cs.hlsl">
+      <Filter>ソース ファイル\demo\particle</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

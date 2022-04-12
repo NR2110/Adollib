@@ -156,4 +156,6 @@ void UI::render() {
 
 	Systems::DeviceContext->Draw(4, 0);
 
+	if (texture) texture->Set(0, false);
+
 }

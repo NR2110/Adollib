@@ -202,6 +202,8 @@ void Sprite_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& in
 	//Systems::DeviceContext->Draw(4, 0);
 	Systems::DeviceContext->DrawIndexedInstanced(4, bufferCount, 0, 0, bufferStart);
 
+	if (material->get_texture()) material->get_texture()->Set(0, false);
+
 }
 
 void Sprite_renderer::load_texture(const wchar_t* filename) { material->get_texture()->Load(filename); };

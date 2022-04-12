@@ -120,7 +120,6 @@ void Croth_renderer::init() {
 	is_use_instancing = false;
 }
 
-
 void Croth_renderer::render(const Frustum_data& frustum_data) {
 	if (material == nullptr) return;
 
@@ -296,9 +295,9 @@ void Croth_renderer::update() {
 
 			// compute shaderを走らせる
 			ID3D11ShaderResourceView* pSRVs[4] = { computeBufSRV_index[mesh_count].Get(), computeBufSRV_vertex[mesh_count].Get(), computeBufSRV_vertexoffset[mesh_count].Get(), computeBufSRV_color[mesh_count].Get() };
-
+			ID3D11UnorderedAccessView* pUAVs[1] = { computeBufUAV_result.Get() };
 			int loop_count = indexes_count / 32 + 1;
-			compute_shader->run(pSRVs, 4, computeBufUAV_result, loop_count, 1, 1);
+			compute_shader->run(pSRVs, 4, pUAVs, 1, loop_count, 1, 1);
 
 			instance_count += instances_count;
 			++mesh_count;
@@ -320,9 +319,6 @@ void Croth_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& ins
 		Systems::SetRasterizerState(material->RS_state);
 		Systems::SetDephtStencilState(material->DS_state);
 
-		// TODO : 複数マテリアルの対応
-		// textureをSRVにセット
-		material->get_texture()->Set(0);
 
 		UINT strides[2] = { sizeof(VertexFormat), sizeof(Instance) };
 		UINT offsets[2] = { 0, 0 };
@@ -347,8 +343,12 @@ void Croth_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& ins
 		Systems::DeviceContext->VSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
 		Systems::DeviceContext->PSSetConstantBuffers(5, 1, Mat_cb.GetAddressOf());
 
+		// textureをSRVにセット
+		material->get_texture()->Set(0);
 
 		Systems::DeviceContext->DrawIndexedInstanced(3, instance_count, 0, 0, 0);
+
+		material->get_texture()->Set(0, false);
 
 	}
 }
@@ -392,17 +392,17 @@ void Croth_renderer::set_meshes(std::vector<Mesh::mesh>* l_meshes) {
 					int indexes_count = mesh.indexces.size();
 					int vertices_count = mesh.vertices.size();
 
-					compute_shader->create_StructureBuffer(sizeof(u_int), indexes_count, &mesh.indexces[0], computeBuf_index[mesh_count], false);
-					compute_shader->create_StructureBuffer(sizeof(VertexFormat), vertices_count, &mesh.vertices[0], computeBuf_vertex[mesh_count], false);
-					compute_shader->create_StructureBuffer(sizeof(Croth_VertexOffset), vertices_count, nullptr, computeBuf_vertexoffset[mesh_count], true);
-					compute_shader->create_StructureBuffer(sizeof(Vector4), 1, nullptr, computeBuf_color[mesh_count], true);
+					ComputeShader_function::create_StructureBuffer(sizeof(u_int), indexes_count, &mesh.indexces[0], computeBuf_index[mesh_count], false);
+					ComputeShader_function::create_StructureBuffer(sizeof(VertexFormat), vertices_count, &mesh.vertices[0], computeBuf_vertex[mesh_count], false);
+					ComputeShader_function::create_StructureBuffer(sizeof(Croth_VertexOffset), vertices_count, nullptr, computeBuf_vertexoffset[mesh_count], true);
+					ComputeShader_function::create_StructureBuffer(sizeof(Vector4), 1, nullptr, computeBuf_color[mesh_count], true);
 
 					++mesh_count;
 					sum_instance += indexes_count / 3;
 				}
 
 				// GPUを(32,1,1)で頂点数分回すため 最大で頂点32overが考えられるため 端数を考慮して(32 / 3 + 1) = 11だけ大きくとる
-				compute_shader->create_StructureBuffer(sizeof(Instance_polygon), sum_instance + 11, nullptr, instanceBuffer, false);
+				ComputeShader_function::create_StructureBuffer(sizeof(Instance_polygon), sum_instance + 11, nullptr, instanceBuffer, false);
 			}
 
 			// SRVの作成
@@ -423,13 +423,13 @@ void Croth_renderer::set_meshes(std::vector<Mesh::mesh>* l_meshes) {
 				int mesh_count = 0;
 				for (Mesh::mesh& mesh : (*meshes))
 				{
-					compute_shader->createSRV_fromSB(computeBuf_index[mesh_count], computeBufSRV_index[mesh_count]);
-					compute_shader->createSRV_fromSB(computeBuf_vertex[mesh_count], computeBufSRV_vertex[mesh_count]);
-					compute_shader->createSRV_fromSB(computeBuf_vertexoffset[mesh_count], computeBufSRV_vertexoffset[mesh_count]);
-					compute_shader->createSRV_fromSB(computeBuf_color[mesh_count], computeBufSRV_color[mesh_count]);
+					ComputeShader_function::createSRV_fromSB(computeBuf_index[mesh_count], computeBufSRV_index[mesh_count]);
+					ComputeShader_function::createSRV_fromSB(computeBuf_vertex[mesh_count], computeBufSRV_vertex[mesh_count]);
+					ComputeShader_function::createSRV_fromSB(computeBuf_vertexoffset[mesh_count], computeBufSRV_vertexoffset[mesh_count]);
+					ComputeShader_function::createSRV_fromSB(computeBuf_color[mesh_count], computeBufSRV_color[mesh_count]);
 					++mesh_count;
 				}
-				compute_shader->createUAV_fromSB(instanceBuffer, computeBufUAV_result);
+				ComputeShader_function::createUAV_fromSB(instanceBuffer, computeBufUAV_result);
 			}
 
 			// offset用配列の準備

@@ -43,7 +43,7 @@ namespace Adollib {
 		std::vector<Mesh::mesh>*  get_mesh() { return meshes; };
 
 		// shaderのactivate
-		void shader_activete();
+		void shader_activete(const bool& is_shader_activate_all);
 
 		// meshのuniqueな数字(アドレスをcastした値)
 		long get_meshnum() const { return reinterpret_cast<long>(meshes); };

@@ -321,6 +321,8 @@ void UI_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& instan
 
 	Systems::DeviceContext->Draw(4, 0);
 
+	if (material->get_texture()) material->get_texture()->Set(0, false);
+
 }
 
 void UI_renderer::load_texture(const wchar_t* filename) { material->get_texture()->Load(filename); };

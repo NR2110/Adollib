@@ -46,7 +46,7 @@ namespace Adollib {
 
 		static void instance_update(const Frustum_data& frustum_data, Camera_component* camera_comp); //sort_update‚Å‚Ü‚Æ‚ß‚½î•ñ‚©‚ç instancing‚Ì‰ñ”‚È‚Ç‚ğŒvZArender_counts‚É•Û‘¶
 
-		static void render_instance(Camera_component* camera_comp, bool is_shader_activate = true, bool is_shadow_render = false);
+		static void render_instance(Camera_component* camera_comp, bool is_PSshader_update = true, bool is_shadow_render = false);
 
 	public:
 		static void awake();

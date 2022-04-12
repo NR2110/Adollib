@@ -24,13 +24,13 @@ void ComputeShader::Load(std::string csname) {
 
 
 void ComputeShader::run(
-	ID3D11ShaderResourceView** pSRVs, UINT numViews,
-	Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> pUAV,
-	UINT x, UINT y, UINT z
+	ID3D11ShaderResourceView** pSRVs, UINT numSRV,
+	ID3D11UnorderedAccessView** pUAVs, UINT numUAV,
+	UINT x , UINT y, UINT z
 ) {
 	Systems::DeviceContext->CSSetShader(computeShader.Get(), nullptr, 0);
-	Systems::DeviceContext->CSSetShaderResources(0, numViews, pSRVs);
-	Systems::DeviceContext->CSSetUnorderedAccessViews(0, 1, pUAV.GetAddressOf(), nullptr);
+	Systems::DeviceContext->CSSetShaderResources(0, numSRV, pSRVs);
+	Systems::DeviceContext->CSSetUnorderedAccessViews(0, numUAV, pUAVs, nullptr);
 
 	//Systems::DeviceContext->CSSetShaderResources(0, 1, pSRVs[0].GetAddressOf());
 	//Systems::DeviceContext->CSSetShaderResources(1, 1, pSRVs[1].GetAddressOf());
@@ -39,22 +39,27 @@ void ComputeShader::run(
 	Systems::DeviceContext->Dispatch(x, y, z);
 
 
-	ID3D11UnorderedAccessView* pNullUAVs[1] = { nullptr };
-	ID3D11ShaderResourceView* pNullSRVs[3] = { nullptr, nullptr, nullptr };
+	ID3D11UnorderedAccessView* pNullUAVs[4] = { nullptr, nullptr, nullptr, nullptr };
+	ID3D11ShaderResourceView* pNullSRVs[4] = { nullptr, nullptr,nullptr,  nullptr };
 	ID3D11Buffer* pNullCBs[1] = { nullptr };
 
 	Systems::DeviceContext->CSSetShader(nullptr, nullptr, 0);
-	Systems::DeviceContext->CSSetUnorderedAccessViews(0, 1, pNullUAVs, nullptr);
-	Systems::DeviceContext->CSSetShaderResources(0, 3, pNullSRVs);
-	Systems::DeviceContext->CSSetConstantBuffers(0, 1, pNullCBs);
+	Systems::DeviceContext->CSSetShaderResources(0, 4, pNullSRVs);
+	Systems::DeviceContext->CSSetUnorderedAccessViews(0, 4, pNullUAVs, nullptr);
 
+}
+
+void ComputeShader::run(
+	UINT x, UINT y, UINT z
+) {
+	Systems::DeviceContext->Dispatch(x, y, z);
 }
 
 
 #pragma endregion
 
 
-HRESULT ComputeShader::create_StructureBuffer(UINT elementSize, UINT count, void* pInitData, Microsoft::WRL::ComPtr<StructureBuffer>& ppSBufferOut, bool is_upu_access) {
+HRESULT ComputeShader_function::create_StructureBuffer(UINT elementSize, UINT count, void* pInitData, Microsoft::WRL::ComPtr<StructureBuffer>& ppSBufferOut, bool is_upu_access) {
 	D3D11_BUFFER_DESC desc;
 	memset(&desc, 0, sizeof(desc));
 
@@ -80,7 +85,7 @@ HRESULT ComputeShader::create_StructureBuffer(UINT elementSize, UINT count, void
 }
 
 // StructureBufferÇ©ÇÁSRVÇÃçÏê¨
-HRESULT ComputeShader::createSRV_fromSB(Microsoft::WRL::ComPtr<StructureBuffer>& pSBuffer, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>& ppSRVOut) {
+HRESULT ComputeShader_function::createSRV_fromSB(Microsoft::WRL::ComPtr<StructureBuffer>& pSBuffer, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>& ppSRVOut) {
 
 	D3D11_BUFFER_DESC desc;
 	memset(&desc, 0, sizeof(desc));
@@ -113,7 +118,7 @@ HRESULT ComputeShader::createSRV_fromSB(Microsoft::WRL::ComPtr<StructureBuffer>&
 }
 
 // StructureBufferÇ©ÇÁUAVÇÃçÏê¨
-HRESULT ComputeShader::createUAV_fromSB(Microsoft::WRL::ComPtr<StructureBuffer>& pSBuffer, Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView>& ppUAVOut) {
+HRESULT ComputeShader_function::createUAV_fromSB(Microsoft::WRL::ComPtr<StructureBuffer>& pSBuffer, Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView>& ppUAVOut) {
 	D3D11_BUFFER_DESC desc;
 	memset(&desc, 0, sizeof(desc));
 	pSBuffer->GetDesc(&desc);

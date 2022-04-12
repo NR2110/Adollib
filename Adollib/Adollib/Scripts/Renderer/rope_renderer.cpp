@@ -306,10 +306,6 @@ void Rope_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& inst
 		Systems::SetRasterizerState(material->RS_state);
 		Systems::SetDephtStencilState(material->DS_state);
 
-		// TODO : 複数マテリアルの対応
-		// textureをSRVにセット
-		material->get_texture()->Set(0);
-
 		UINT strides = sizeof(VertexFormat);
 		UINT offsets = 0;
 		ID3D11Buffer* vbs = vertexBuffer.Get();
@@ -335,7 +331,13 @@ void Rope_renderer::render_instancing(Microsoft::WRL::ComPtr<ID3D11Buffer>& inst
 
 		const int facet_count = (joint_size - 1) * split_count * 2 + (split_count * 2);
 		const int index_count = facet_count * 3;
+
+		// textureをSRVにセット
+		material->get_texture()->Set(0);
+
 		Systems::DeviceContext->DrawIndexedInstanced(index_count, 1, 0, 0, 0);
+
+		material->get_texture()->Set(0, false);
 
 	}
 }

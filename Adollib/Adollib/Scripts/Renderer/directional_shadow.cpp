@@ -49,6 +49,7 @@ void Directional_shadow::setup() {
 
 	Systems::DeviceContext->ClearDepthStencilView(shadow_texture->GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
+	shadow_texture->Set(1, false);
 	ID3D11DepthStencilView* dsv = shadow_texture->GetDepthStencilView();
 	Systems::DeviceContext->OMSetRenderTargets(0, nullptr, dsv);
 

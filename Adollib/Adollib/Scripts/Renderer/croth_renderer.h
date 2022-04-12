@@ -45,7 +45,6 @@ namespace Adollib {
 		std::vector<Microsoft::WRL::ComPtr<ID3D11Buffer>> computeBuf_vertexoffset = { nullptr };
 		std::vector<Microsoft::WRL::ComPtr<ID3D11Buffer>> computeBuf_index = { nullptr };
 		std::vector<Microsoft::WRL::ComPtr<ID3D11Buffer>> computeBuf_color = { nullptr };
-		Microsoft::WRL::ComPtr<ID3D11Buffer> computeBuf_result = nullptr;
 
 		std::vector<Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>>  computeBufSRV_vertex = { nullptr };
 		std::vector<Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>>  computeBufSRV_vertexoffset = { nullptr };

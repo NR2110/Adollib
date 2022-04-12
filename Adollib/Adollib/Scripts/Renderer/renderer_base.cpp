@@ -15,8 +15,8 @@
 using namespace Adollib;
 using namespace ConstantBuffer;
 
-void Renderer_base::shader_activete() {
-	material->shader_activate();
+void Renderer_base::shader_activete(const bool& is_PSshader_update) {
+	material->shader_activate(is_PSshader_update);
 }
 
 

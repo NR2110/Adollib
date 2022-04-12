@@ -62,7 +62,7 @@ namespace Adollib {
 			{"TRANSFORM_MATRIX", 3,DXGI_FORMAT_R32G32B32A32_FLOAT, 1,D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_INSTANCE_DATA, 1},
 			{"TEXCOORD_TRANSFORM", 0,DXGI_FORMAT_R32G32B32A32_FLOAT, 1,D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_INSTANCE_DATA, 1},
 			{"COLOR",			 0,DXGI_FORMAT_R32G32B32A32_FLOAT, 1,D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_INSTANCE_DATA, 1},
-	};
+		};
 
 		UINT numElements = ARRAYSIZE(layout);
 
@@ -90,15 +90,16 @@ namespace Adollib {
 	//------------------------------------------------
 	//	—LŒø‰»
 	//------------------------------------------------
-	void Shader::Activate()
+	void Shader::Activate(const bool& is_PSshader_update)
 	{
 		Systems::DeviceContext->IASetInputLayout(vertexLayout.Get());
 
 		Systems::DeviceContext->VSSetShader(VS.Get(), NULL, 0);
-		Systems::DeviceContext->PSSetShader(PS.Get(), NULL, 0);
 		Systems::DeviceContext->GSSetShader(GS.Get(), NULL, 0);
 		Systems::DeviceContext->HSSetShader(HS.Get(), NULL, 0);
 		Systems::DeviceContext->DSSetShader(DS.Get(), NULL, 0);
+		if (is_PSshader_update) Systems::DeviceContext->PSSetShader(PS.Get(), NULL, 0);
+
 
 	}
 

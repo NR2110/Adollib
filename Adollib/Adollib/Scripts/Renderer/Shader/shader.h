@@ -37,7 +37,7 @@ namespace Adollib {
 		void Load_HS(const char* cso_name);
 		void Load_DS(const char* cso_name);
 
-		void Activate();
+		void Activate(const bool& is_PSshader_update = true);
 
 	};
 

@@ -5,6 +5,8 @@
 #include <sstream>
 #include <d3d11.h>
 #include <dxgi.h>
+#include <dxgi1_4.h>
+#include <dxgi1_6.h>
 #include <wrl.h>
 #include <memory>
 #include <map>
@@ -26,7 +28,7 @@ namespace Adollib {
 	class Systems {
 
 	private:
-		static ComPtr<IDXGISwapChain>			SwapChain;
+		static ComPtr<IDXGISwapChain4>			SwapChain;
 		static ComPtr<ID3D11RenderTargetView>	RenderTargetView;
 		static ComPtr<ID3D11Texture2D>			DepthStencilTexture;
 		static ComPtr<ID3D11DepthStencilView>	DepthStencilView;

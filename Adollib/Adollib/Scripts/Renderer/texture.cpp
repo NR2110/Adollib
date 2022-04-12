@@ -24,7 +24,7 @@ bool Texture::Load(const wchar_t* filename)
 
 	hr = ResourceManager::LoadTextureFromFile(filename, ShaderResourceView, &texture2d_desc);
 
-	if(FAILED(hr)){
+	if (FAILED(hr)) {
 		assert(!"テクスチャ画像読み込み失敗");
 		return false;
 	}
@@ -65,7 +65,6 @@ void Texture::Set(UINT Slot, BOOL flg)
 		Systems::DeviceContext->DSSetSamplers(Slot, 1, sampler.GetAddressOf());
 	}
 }
-
 
 bool Texture::Create(u_int width, u_int height, DXGI_FORMAT format)
 {
