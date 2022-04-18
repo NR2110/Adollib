@@ -1,6 +1,7 @@
 #include "player.h"
 
 #include "../Adollib/Scripts/Main/Adollib.h"
+#include "../Adollib/Scripts/Main/defines.h"
 #include "../Adollib/Scripts/Object/gameobject_manager.h"
 
 #include "../Adollib/Scripts/Physics/ALP__physics_manager.h"
@@ -860,7 +861,7 @@ void Player::make_jump() {
 					camera_dir.y = 0;
 					camera_dir = camera_dir.unit_vect();
 
-					Human_colliders[i]->add_force(camera_dir * 5000);
+					Human_colliders[i]->add_force(camera_dir * 100);
 				}
 
 			// ‘«Œ³‚Ì•¨‘Ì‚É—Í‚ð‰Á‚¦‚é

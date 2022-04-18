@@ -1,5 +1,6 @@
 #include "work_meter.h"
 #include "debug.h"
+#include "../Main/defines.h"
 #include "../../Imgui/imgui.h"
 
 using namespace Adollib;

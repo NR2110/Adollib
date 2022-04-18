@@ -224,6 +224,7 @@
     <ClInclude Include="Scripts\Imgui\inspector.h" />
     <ClInclude Include="Scripts\Imgui\work_meter.h" />
     <ClInclude Include="Scripts\Main\Adollib.h" />
+    <ClInclude Include="Scripts\Main\defines.h" />
     <ClInclude Include="Scripts\Main\input.h" />
     <ClInclude Include="Scripts\Main\loop.h" />
     <ClInclude Include="Scripts\Main\misc.h" />

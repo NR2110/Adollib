@@ -49,6 +49,7 @@ namespace Adollib {
 		static void awake();
 		static void initialize(Scenelist Sce = Scene_manager::get_processing_scene());
 		static void update(Scenelist Sce = Scene_manager::get_processing_scene());
+		//static void fixed_update(Scenelist Sce = Scene_manager::get_processing_scene());
 		static void render(const std::list<Scenelist>& active_scenes);
 		static void destroy(Scenelist Sce = Scene_manager::get_processing_scene());
 

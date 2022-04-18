@@ -151,6 +151,8 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 
 	loop.init(hwnd);
 	Systems::time->reset();
+	Systems::time->isFloatFPS(false);
+	Systems::time->setFrameRate(60.0);
 
 	while (hMsg.message != WM_QUIT) {
 		if (PeekMessage(&hMsg, NULL, 0, 0, PM_REMOVE))
@@ -160,9 +162,10 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 		}
 		else
 		{
+			if (Systems::time->tick() == false)continue;
 			if (Adollib::Imgui_manager::update(hMsg) == false) continue;
 
-			Systems::time->tick();
+			//Systems::time->tick();
 
 			Al_Global::second_per_frame = Systems::time->deltaTime();
 			//Al_Global::second_per_frame = ALmin(Systems::time->deltaTime(), 0.016f);
@@ -178,7 +181,6 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 				SetWindowTextA(hwnd, outs.str().c_str());
 				Interval += 1.0f;
 				fps = 0;
-
 			}
 
 			// çXêVÅEï`âÊ

@@ -6,6 +6,7 @@
 
 #include "../Main/resource_manager.h"
 #include "../Main/systems.h"
+#include "../Main/defines.h"
 
 #include "../Scene/scene.h"
 

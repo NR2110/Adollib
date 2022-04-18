@@ -1,8 +1,8 @@
-﻿  scene_manager.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Scene\scene_manager.cpp(65,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+﻿  player.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(20,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。
   コード生成しています。
-  2 of 11154 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  1 of 11196 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    68 functions had inline decision re-evaluated but remain unchanged
+    67 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Release\Adollib.exe

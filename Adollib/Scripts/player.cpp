@@ -39,7 +39,7 @@ namespace Adollib
 		leg_rot_max_pow = 300;
 		leg_rot_pow = 400;
 
-		hand_rot_max_speed = 8;
+		hand_rot_max_speed = 10;
 		hand_rot_max_pow = 300;
 		hand_rot_pow = 300;
 
@@ -48,7 +48,7 @@ namespace Adollib
 		hand_camera_rot_center = ToRadian(20);
 
 		jump_y_power = 22;
-		jump_front_power = 5000;
+		jump_front_power = 2000;
 
 		turn_speed = 1.5f;
 

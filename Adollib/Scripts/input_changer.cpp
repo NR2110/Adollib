@@ -2,6 +2,7 @@
 
 #include "../Adollib/Scripts/Imgui/imgui_all.h"
 #include "../Adollib/Scripts/Main/Adollib.h"
+#include "../Adollib/Scripts/Main/defines.h"
 #include "../Adollib/Scripts/Imgui/debug.h"
 
 using namespace Adollib;

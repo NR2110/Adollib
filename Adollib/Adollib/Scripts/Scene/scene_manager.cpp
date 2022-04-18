@@ -7,6 +7,7 @@
 #include "scene_player.h"
 #include "scene_SPH.h"
 
+#include "../Main/defines.h"
 #include "../Object/gameobject_manager.h"
 #include "../Physics/ALP__physics_manager.h"
 #include "../Imgui/work_meter.h"

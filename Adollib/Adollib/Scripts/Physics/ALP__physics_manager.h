@@ -133,6 +133,9 @@ namespace Adollib
 		private:
 			static LARGE_INTEGER frame_count; //
 			static LARGE_INTEGER frame_count_stop; //
+			static LARGE_INTEGER update_start_time; //
+			static LARGE_INTEGER update_end_time; //
+			static float update_time; //
 
 			static std::mutex mtx; //Žå‚Éadd_collder,phsics,joint‚Æ added_data‚Ìˆµ‚¢‚ÌŽž
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "singleton.h"
+#include "../Math/math.h"
 
 #define NOMINMAX
 #include <windows.h>
@@ -149,6 +149,7 @@ namespace Adollib
 		float deltaTime() const
 		{
 			if (stopped)return 0;
+			if (!is_float_fps) return static_cast<float>(frames_per_sec * seconds_per_count);
 			return static_cast<float>(delta_time);
 		}
 

@@ -41,6 +41,9 @@ namespace Adollib
 
 	LARGE_INTEGER Physics_manager::frame_count;
 	LARGE_INTEGER Physics_manager::frame_count_stop; //;
+	LARGE_INTEGER Physics_manager::update_start_time; //;
+	LARGE_INTEGER Physics_manager::update_end_time; //;
+	float Physics_manager::update_time; //;
 
 	std::mutex Physics_manager::mtx;
 
@@ -77,6 +80,7 @@ namespace Adollib
 bool Physics_manager::update()
 {
 	Work_meter::start("Phyisics_manager", 1);
+	QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&update_start_time));
 
 	if (Al_Global::second_per_game < 1) {
 
@@ -137,9 +141,10 @@ bool Physics_manager::update()
 		frame_count.QuadPart = time.QuadPart;
 	}
 
-	Work_meter::set("physicsParams.timeStep", physicsParams.timeStep, 1);
+	Work_meter::set("physicsParams.timeStep", update_time, 1);
 	if (physicsParams.timeStep > physicsParams.caluculate_time)
 	{
+		//physicsParams.timeStep = physicsParams.caluculate_time;
 
 		const float inv60_per_timeStep = physicsParams.caluculate_time / physicsParams.timeStep;
 		physicsParams.timeStep = ALmin(physicsParams.timeStep, physicsParams.max_timeStep);
@@ -223,15 +228,18 @@ bool Physics_manager::update()
 			}
 
 		physicsParams.timeStep = 0;
+
+		QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&update_end_time));
+		update_time = static_cast<float>(update_end_time.QuadPart - update_start_time.QuadPart) * 0.0000001f;;
 	}
 	else
 	{
-		//float sleep_time = physicsParams.caluculate_time - physicsParams.timeStep - 0.005f;
-		//Work_meter::set("physicsParams.sleep_time", sleep_time, 1);
+		float sleep_time = physicsParams.caluculate_time - physicsParams.timeStep - 0.005f;
+		Work_meter::set("physicsParams.sleep_time", sleep_time, 1);
 
-		//if (sleep_time > 0)
-		//	//std::this_thread::sleep_for(std::chrono::minutes((long)(sleep_time)));
-		//	std::this_thread::sleep_for(std::chrono::milliseconds((long)(sleep_time * 1000)));
+		if (sleep_time > 0)
+			//std::this_thread::sleep_for(std::chrono::minutes((long)(sleep_time)));
+			std::this_thread::sleep_for(std::chrono::milliseconds((long)(sleep_time * 1000)));
 
 	}
 

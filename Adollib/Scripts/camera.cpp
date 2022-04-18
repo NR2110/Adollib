@@ -1,6 +1,7 @@
 
 #include "../Adollib/Scripts/Main/systems.h"
 #include "../Adollib/Scripts/Main/Adollib.h"
+#include "../Adollib/Scripts/Main/defines.h"
 #include "../Adollib/Scripts/Imgui/debug.h"
 #include "../Adollib/Scripts/Object/transform.h"
 #include "../Adollib/Scripts/Object/gameobject_manager.h"

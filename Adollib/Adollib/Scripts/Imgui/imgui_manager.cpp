@@ -1,6 +1,7 @@
 #include "imgui_manager.h"
 
 #include "../Main/systems.h"
+#include "../Main/defines.h"
 
 #include "imgui_all.h"
 

@@ -5,6 +5,7 @@
 #include "../Adollib/Scripts/Scene/scene_manager.h"
 
 #include "../Adollib/Scripts/Math/closest_func.h"
+#include "../Adollib/Scripts/Main/defines.h"
 #include "../Adollib/Scripts/Imgui/imgui_all.h"
 #include "../Adollib/Scripts/Physics/ALP__physics_manager.h"
 
