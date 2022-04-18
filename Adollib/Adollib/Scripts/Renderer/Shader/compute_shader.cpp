@@ -71,7 +71,8 @@ HRESULT ComputeShader_function::create_StructureBuffer(UINT elementSize, UINT co
 	if (is_upu_access) {
 		desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 		desc.Usage = D3D11_USAGE_DYNAMIC;
-		desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;	// リソースに許可されるCPUアクセスの指定
+		desc.CPUAccessFlags = D3D11_CPU_ACCESS_FLAG::D3D11_CPU_ACCESS_WRITE;	// リソースに許可されるCPUアクセスの指定
+
 	}
 
 	if (pInitData) {

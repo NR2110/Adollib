@@ -326,6 +326,7 @@ bool Physics_manager::update_Gui() {
 	flag |= ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize;
 	flag |= ImGuiWindowFlags_::ImGuiWindowFlags_NoDocking;
 
+
 	if (ImGui::Begin("physics_global", 0, flag)) {
 
 		//Collider‚Ì•\Ž¦

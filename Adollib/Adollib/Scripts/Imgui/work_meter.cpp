@@ -1,8 +1,6 @@
 #include "work_meter.h"
 #include "debug.h"
 #include "../../Imgui/imgui.h"
-#include "../../Imgui/imgui_impl_win32.h"
-#include "../../Imgui/imgui_impl_dx11.h"
 
 using namespace Adollib;
 
@@ -77,7 +75,7 @@ bool Work_meter::render() {
 	//if (!draw_Back_ground) flag |= ImGuiWindowFlags_NoBackground;		// ウィンドウ内の背景を非表示にします。
 	//flag |= ImGuiWindowFlags_AlwaysAutoResize;		// 自動でウィンドウ内のコンテンツに合わせてリサ
 	flag |= ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize;
-	flag |= ImGuiWindowFlags_::ImGuiWindowFlags_NoDocking;
+	//flag |= ImGuiWindowFlags_::ImGuiWindowFlags_NoDocking;
 
 	ImGui::Begin("work_meter", 0, flag);
 

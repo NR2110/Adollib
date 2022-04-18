@@ -82,6 +82,10 @@ namespace Adollib {
 		ResourceManager::CreateHsFromCso(cso_name, HS);
 	}
 
+	void Shader::Load_PS_shadow(const char* cso_name) {
+		ResourceManager::CreatePsFromCso(cso_name, PS_shadow);
+	}
+
 	//****************************************************************
 	//
 	//
@@ -98,7 +102,11 @@ namespace Adollib {
 		Systems::DeviceContext->GSSetShader(GS.Get(), NULL, 0);
 		Systems::DeviceContext->HSSetShader(HS.Get(), NULL, 0);
 		Systems::DeviceContext->DSSetShader(DS.Get(), NULL, 0);
+
 		if (is_PSshader_update) Systems::DeviceContext->PSSetShader(PS.Get(), NULL, 0);
+		else if(PS_shadow != nullptr) Systems::DeviceContext->PSSetShader(PS_shadow.Get(), NULL, 0);
+
+
 
 
 	}

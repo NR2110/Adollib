@@ -13,7 +13,6 @@ namespace Adollib {
 
 
 	void Scene_SPH::initialize() {
-
 		//ALKLib::MonoAudio::PlayMusic(0, true);
 		//ALKLib::MonoAudio::PlayMusic(1, true);
 
@@ -27,7 +26,7 @@ namespace Adollib {
 			camera->addComponent<Camera_component>();
 			auto camera_cont = camera->addComponent<Debug_camera_controller>();
 
-			camera->transform->local_pos = Vector3(0.6f, 0.3f, -1.4f);
+			camera->transform->local_pos = Vector3(0, 0, -10);
 			camera_cont->linear_speed = 1;
 
 		}

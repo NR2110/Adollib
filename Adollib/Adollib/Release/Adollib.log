@@ -1,24 +1,8 @@
-﻿  simulation_SPH.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2185,86): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2307,12): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2308,12): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2314,24): warning C4244: '+=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2315,33): warning C4244: '+=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2322,32): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2323,17): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2327,29): warning C4305: '=': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2328,29): warning C4305: '=': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2329,30): warning C4305: '=': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2331,21): warning C4305: '=': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2409,26): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2410,26): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2432,19): warning C4305: '=': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2434,9): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2436,14): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+﻿  scene_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Scene\scene_manager.cpp(65,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
   コード生成しています。
-  Previous IPDB not found, fall back to full compilation.
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player.h(281): warning C4715: 'Adollib::Player::is_chatch_objct': 値を返さないコントロール パスがあります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\vector.inl(339): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
-  All 10583 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  2 of 11154 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    68 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Release\Adollib.exe

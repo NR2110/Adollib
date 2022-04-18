@@ -22,7 +22,6 @@ bool loop::Update(MSG hMsg, HWND hWnd, int width, int height) {
 	Systems::inputManager->update();
 
 	Scene_manager::update();
-	//Gameobject_manager::update();
 
 	return true;
 }
@@ -31,7 +30,10 @@ bool loop::Render(){
 
 	Work_meter::start(std::string("loop_render"));
 	Scene_manager::render();
+
+	Work_meter::start("Imgui_render");
 	Adollib::Imgui_manager::render();
+	Work_meter::stop("Imgui_render");
 	Work_meter::stop(std::string("loop_render"));
 
 

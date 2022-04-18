@@ -1,8 +1,6 @@
 #include "debug.h"
 
 #include "../../Imgui/imgui.h"
-#include "../../Imgui/imgui_impl_win32.h"
-#include "../../Imgui/imgui_impl_dx11.h"
 
 using namespace Adollib;
 

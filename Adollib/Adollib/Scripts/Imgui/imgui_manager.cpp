@@ -25,6 +25,7 @@ bool Imgui_manager::init(HWND hwnd) {
 	//io.ConfigViewportsNoDefaultParent = true;
 	//io.ConfigDockingAlwaysTabBar = true;
 	//io.ConfigDockingTransparentPayload = true;
+	io.Framerate = 1 / 60.f;
 
 #if 1
 	io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleFonts;     // FIXME-DPI: THIS CURRENTLY DOESN'T WORK AS EXPECTED. DON'T USE IN USER APP!

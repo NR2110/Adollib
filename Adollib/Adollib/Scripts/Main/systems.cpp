@@ -62,7 +62,7 @@ HRESULT Systems::CreateDevice(HWND hWnd)
 
 	//::: デバイスとスワップチェインンの作成 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	UINT creationFlags/*= D3D11_CREATE_DEVICE_DEBUG;*/ = 0;
-#ifdef ON_DEBUG
+#ifdef _DEBUG
 	creationFlags = D3D11_CREATE_DEVICE_DEBUG;
 #endif
 

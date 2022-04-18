@@ -20,6 +20,8 @@ namespace Adollib {
 		ComPtr<ID3D11HullShader>		HS = nullptr; // ハルシェーダ
 		ComPtr<ID3D11DomainShader>		DS = nullptr; // ドメインネームシェーダ
 
+		ComPtr<ID3D11PixelShader>		PS_shadow = nullptr; // 影用ピクセルシェーダ
+
 		HRESULT Compile(WCHAR* filename, LPCSTR method, LPCSTR shaderModel, ID3DBlob** ppBlobOut);
 
 	public:
@@ -36,6 +38,8 @@ namespace Adollib {
 		void Load_GS(const char* cso_name);
 		void Load_HS(const char* cso_name);
 		void Load_DS(const char* cso_name);
+
+		void Load_PS_shadow(const char* cso_name);
 
 		void Activate(const bool& is_PSshader_update = true);
 

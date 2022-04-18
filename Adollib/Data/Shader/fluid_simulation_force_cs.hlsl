@@ -1,5 +1,12 @@
 #include "fluid_simulation.hlsli"
 
+// 粒子位置と速度を保持するバッファ
+StructuredBuffer<Particle> _ParticlesBufferRead : register(t0);
+StructuredBuffer<ParticleDensity> _ParticlesDensityBufferRead : register(t1);
+StructuredBuffer<ParticlePressure> _ParticlesPressureBufferRead : register(t2);
+
+RWStructuredBuffer<ParticleForces> _ParticlesForceBufferWrite : register(u0);
+
 //--------------------------------------------------------------------------------------
 // 力(加速度)の算出
 //--------------------------------------------------------------------------------------

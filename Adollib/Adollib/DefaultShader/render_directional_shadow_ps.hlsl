@@ -1,21 +1,21 @@
 #include "render_directional_shadow.hlsli"
 
 //	ピクセルシェーダー
-PSOutput main(PSInput input)
+float4 main(PSInput input) : SV_TARGET0
 {
-    PSOutput output;
-    //PSOutput Out = (PSOutput) 0;
+    //PSOutput output;
+    ////PSOutput Out = (PSOutput) 0;
 
-    //float A = (dot(input.wNormal, normalize(float3(0, 1, 1))) + 1) / 4 + 0.5; //影
-    //float4 Color = input.Color * DiffuseTexture.Sample(DecalSampler, input.Tex) * A;
-    //Color.w = input.Color.w;
+    ////float A = (dot(input.wNormal, normalize(float3(0, 1, 1))) + 1) / 4 + 0.5; //影
+    ////float4 Color = input.Color * DiffuseTexture.Sample(DecalSampler, input.Tex) * A;
+    ////Color.w = input.Color.w;
 
-    ////Color = input.Color;
+    //////Color = input.Color;
 
-    //Out.Color = Color;
-    //Out.Normal = float4(input.wNormal, 1.0f);
-    //Out.SVPosiiton = input.Position;
-    output.Position = input.Position;
+    ////Out.Color = Color;
+    ////Out.Normal = float4(input.wNormal, 1.0f);
+    ////Out.SVPosiiton = input.Position;
+    //output.Position = input.Position;
 
-    return output;
+    return input.Position;
 }

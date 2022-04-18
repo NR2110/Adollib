@@ -81,6 +81,7 @@ void Renderer_manager::render(const std::list<Scenelist>& active_scenes, const s
 
 	Work_meter::tag_start("render");
 
+	Work_meter::start("posteffect&render_main");
 	// メインのRTVのclear
 	//Systems::Clear(); //全部上書きするからしなくてよい
 
@@ -95,14 +96,17 @@ void Renderer_manager::render(const std::list<Scenelist>& active_scenes, const s
 			}
 		}
 	}
+	Work_meter::start("posteffect&render_main");
 
 	// 三角形の描画方法
 	Systems::DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	//if (Sce == Scenelist::scene_null)return;
 
+	Work_meter::start("instancing_sort");
 	// バッチ用に現在のシーンのmesh,materialのsortを行う
 	sort_update(active_scenes);
+	Work_meter::stop("instancing_sort");
 
 	for (const auto& Sce : active_scenes) {
 
@@ -124,6 +128,7 @@ void Renderer_manager::render(const std::list<Scenelist>& active_scenes, const s
 				//if (Sce != render_scene) sort_update(Sce);
 
 				// 影用の描画
+				Work_meter::start("shadow_render");
 				{
 					camera->directional_shadow->setup();
 					camera->directional_shadow->shader_activate();
@@ -132,10 +137,15 @@ void Renderer_manager::render(const std::list<Scenelist>& active_scenes, const s
 					// instansing用
 					instance_update(shadow_frustum, camera); //frastumによって調整するため
 
+#ifdef _DEBUG
 					render_instance(camera, false, true);
+#else
+					render_instance(camera, true, true);
+#endif
 
 					camera->directional_shadow->set_ShaderResourceView();
 				}
+				Work_meter::start("shadow_render");
 
 				{
 					Systems::SetViewPort(Al_Global::SCREEN_WIDTH, Al_Global::SCREEN_HEIGHT);
@@ -239,6 +249,7 @@ void Renderer_manager::sort_update(std::list<Scenelist> active_scenes) {
 			sorted_renderers.emplace_back(renderer);
 		}
 	}
+	if (sorted_renderers.size() == 0) return;
 
 	// meshでsort
 	{

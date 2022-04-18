@@ -17,6 +17,9 @@ using namespace Compute_S;
 
 #define USE_22 0
 #define USE_COMPUTE 1
+#define USE_COMPUTE_22 0
+
+//#define USE_3D
 
 #if 0
 /*----------------------------
@@ -109,6 +112,10 @@ void Simulation_SPH::calculate_density_and_pressure(std::vector<Particle>* ps)
 				c = H2 - r2;
 				sum += c * c * c;
 			}
+			cb._DensityCoef = particleMass * 4.f / (PI * pow(smoothlen, 8));      // 密度算出時の係数
+			cb._GradPressureCoef = particleMass * -30.0f / (PI * pow(smoothlen, 5));   // 圧力算出時の係数
+			cb._LapViscosityCoef = particleMass * 20.f / (3 * PI * pow(smoothlen, 5)); // 粘性算出時の係数
+
 		}
 		p->density = sum * SPH_PMASS * Poly6Kern;
 		p->pressure = (p->density - SPH_RESTDENSITY) * SPH_INTSTIFF;
@@ -218,7 +225,9 @@ void Simulation_SPH::calculate_position(std::vector<Particle>* ps)
 	}
 }
 
-#elif 0
+#endif
+
+#if 0
 
 #include <vector>
 #include <list>
@@ -664,8 +673,9 @@ void Simulation_SPH::update()
 }
 
 
+#endif
 
-#elif USE_22
+#if USE_22
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -2038,42 +2048,17 @@ void moveParticleUsingPressureGradient(void) {
 }
 
 
+#endif
 
-#elif USE_COMPUTE
+#if USE_COMPUTE
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
 
-#define IN_FILE "../mk_particle/dambreak.prof"
-#define PARTICLE_DISTANCE    0.025 //初期粒子間距離
+#define PARTICLE_DISTANCE    0.5f / 5.1 //初期粒子間距離
 #define EPS             (0.01 * PARTICLE_DISTANCE)
 #define DIM 2				//次元数
-
-#define PCL_DST PARTICLE_DISTANCE //平均粒子間距離
-#define MIN_X  (0 - PCL_DST*5)	//解析領域のx方向の最小値
-#define MIN_Y  (0 - PCL_DST*5)	//解析領域のy方向の最小値
-#define MIN_Z  (0 - PCL_DST*5)	//解析領域のz方向の最小値
-#define MAX_X  (0 + PCL_DST*100)	//解析領域のx方向の最大値
-#define MAX_Y  (0 + PCL_DST*80)	//解析領域のy方向の最大値
-#define MAX_Z  (0 + PCL_DST*30)	//解析領域のz方向の最大値
-
-#define GST -1			//計算対象外粒子の種類番号
-#define FLD 0				//流体粒子の種類番号
-#define WLL  1			//壁粒子の種類番号
-#define NUM_TYP  2		//粒子の種類数
-#define DNS_FLD 1000		//流体粒子の密度
-#define DNS_WLL 1000		//壁粒子の密度
-#define DT 0.0005			//時間刻み幅
-#define SND 22.0			//音速
-#define KNM_VSC (1.0E-6)	//動粘性係数
-#define CRT_NUM 0.1		//クーラン条件数
-#define COL_RAT 0.2		//接近した粒子の反発率
-#define DST_LMT_RAT 0.5	//これ以上の粒子間の接近を許さない距離の係数
-#define G_X 0.0			//重力加速度のx成分
-#define G_Y -9.8			//重力加速度のy成分
-#define G_Z 0.0			//重力加速度のz成分
-#define WEI(dist, re) ((re/dist) - 1.0)	//重み関数
 
 struct ConstantBuffer_particle {
 	int _NumParticles;        // 粒子数
@@ -2086,11 +2071,27 @@ struct ConstantBuffer_particle {
 	float _LapViscosityCoef;  // 粘性算出時の係数
 	float _WallStiffness;     // ペナルティ法の押し返す力
 	float _Viscosity;         // 粘性係数
+	float dummy_0;         // 粘性係数
+	float dummy_1;         // 粘性係数
+	float dummy_2;         // 粘性係数
 	Vector3 _Gravity;          // 重力
-	Vector3 _Range;            // シミュレーション空間
+};
+struct ConstantBuffer_particlerange {
+	Vector3 _Range_s;            // シミュレーション空間
+	float dummy_0;
+	Vector3 _Range_g;            // シミュレーション空間
+	float dummy_1;
+	Vector3 _Range_noraml_0;            // シミュレーション空間
+	float dummy_2;
+	Vector3 _Range_noraml_1;            // シミュレーション空間
+	float dummy_3;
+	Vector3 _Range_noraml_2;            // シミュレーション空間
+	float dummy_4;
 };
 
 int nP;
+int count;
+int cs_thread = 512;
 
 struct Particle {
 	Vector3 position;
@@ -2102,7 +2103,7 @@ struct ParticlePressure {
 };
 
 struct ParticleForces {
-	Vector2 acceleration;
+	Vector3 acceleration;
 };
 
 struct ParticleDensity {
@@ -2117,6 +2118,7 @@ void compute_shader_init();
 
 static std::shared_ptr<ComputeShader> density_CS;
 static std::shared_ptr<ComputeShader> pressure_CS;
+static std::shared_ptr<ComputeShader> collide_CS;
 static std::shared_ptr<ComputeShader> force_CS;
 static std::shared_ptr<ComputeShader> integrate_CS;
 
@@ -2126,7 +2128,10 @@ static Microsoft::WRL::ComPtr<ID3D11Buffer> dencity_buffer;
 static Microsoft::WRL::ComPtr<ID3D11Buffer> pressure_buffer;
 static Microsoft::WRL::ComPtr<ID3D11Buffer> force_buffer;
 
+static Microsoft::WRL::ComPtr<ID3D11Buffer> read_particle_buffer;
+
 static Microsoft::WRL::ComPtr<ID3D11Buffer> particle_cb; //constantbuffer用
+static Microsoft::WRL::ComPtr<ID3D11Buffer> particlerange_cb; //constantbuffer用
 
 // SRV,UAV
 static Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> particle_read;
@@ -2141,6 +2146,7 @@ static Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> force_write;
 template<class T>
 T* map_buffer_(Microsoft::WRL::ComPtr<ID3D11Buffer>& buffer) {
 	HRESULT hr = S_OK;
+	//const D3D11_MAP map = D3D11_MAP_READ;
 	const D3D11_MAP map = D3D11_MAP_WRITE_DISCARD;
 	D3D11_MAPPED_SUBRESOURCE mappedBuffer = {};
 	hr = Systems::DeviceContext->Map(buffer.Get(), 0, map, 0, &mappedBuffer);
@@ -2166,8 +2172,410 @@ void Simulation_SPH::awake() {
 
 		particle_gos[i] = Gameobject_manager::createSphere("particle");
 		particle_gos[i]->transform->local_pos = Vector3(particles[i].position);
+		particle_gos[i]->transform->local_scale = Vector3((2.1 * PARTICLE_DISTANCE) * 0.3f);
+
+		gameobject->add_child(particle_gos[i]);
+	}
+
+}
+
+static float rotate = 0;
+void Simulation_SPH::update() {
+	Work_meter::start("simulation_SPH");
+
+	if (input->getKeyState(Key::Left))rotate += time->deltaTime() * 0.2f;
+	if (input->getKeyState(Key::Right))rotate -= time->deltaTime() * 0.2f;
+
+	// コンスタントバッファーの更新
+	{
+		Systems::DeviceContext->CSSetConstantBuffers(0, 1, particle_cb.GetAddressOf());
+
+		{
+			ConstantBuffer_particlerange cb;
+#ifdef USE_3D
+			cb._Range_s = Vector3(-2, -4, -0.4f);
+			cb._Range_g = Vector3(+2, +4, +0.4f);
+#else
+			cb._Range_s = Vector3(-8, -8, -0);
+			cb._Range_g = Vector3(+8, +8, +0);
+#endif
+			cb._Range_noraml_0 = Vector3(cosf(rotate), sinf(rotate), 0);
+			cb._Range_noraml_1 = Vector3(-sinf(rotate), cosf(rotate), 0);
+			cb._Range_noraml_2 = Vector3(0, -0.1f, 1).unit_vect();
+
+			Systems::DeviceContext->UpdateSubresource(particlerange_cb.Get(), 0, NULL, &cb, 0, 0);
+			Systems::DeviceContext->CSSetConstantBuffers(1, 1, particlerange_cb.GetAddressOf());
+		}
+	}
+
+
+	for (int i = 0; i < 3; ++i) {
+		{
+			ID3D11ShaderResourceView* pSRVs[1] = {
+				particle_read.Get(),
+			};
+			ID3D11UnorderedAccessView* pUAVs[1] = {
+				dencity_write.Get(),
+			};
+
+			density_CS->run(pSRVs, 1, pUAVs, 1, nP / cs_thread + 1, 1, 1);
+		}
+		{
+			ID3D11ShaderResourceView* pSRVs[1] = {
+				dencity_read.Get(),
+			};
+			ID3D11UnorderedAccessView* pUAVs[1] = {
+				pressure_write.Get(),
+			};
+
+			pressure_CS->run(pSRVs, 1, pUAVs, 1, nP / cs_thread + 1, 1, 1);
+		}
+		{
+			ID3D11ShaderResourceView* pSRVs[3] = {
+				particle_read.Get(),
+				dencity_read.Get(),
+				pressure_read.Get(),
+			};
+			ID3D11UnorderedAccessView* pUAVs[1] = {
+				force_write.Get()
+			};
+
+			force_CS->run(pSRVs, 3, pUAVs, 1, nP / cs_thread + 1, 1, 1);
+		}
+		//{
+		//	ID3D11ShaderResourceView* pSRVs[2] = {
+		//		particle_read.Get(),
+		//		dencity_read.Get()
+		//	};
+		//	ID3D11UnorderedAccessView* pUAVs[1] = {
+		//		force_write.Get(),
+		//	};
+
+		//	collide_CS->run(pSRVs, 2, pUAVs, 1, nP / cs_thread + 1, 1, 1);
+		//}
+		{
+			ID3D11ShaderResourceView* pSRVs[1] = {
+				force_read.Get()
+			};
+			ID3D11UnorderedAccessView* pUAVs[1] = {
+				particle_write.Get(),
+			};
+
+			integrate_CS->run(pSRVs, 1, pUAVs, 1, nP / cs_thread + 1, 1, 1);
+		}
+	}
+
+	Systems::DeviceContext->CopyResource(read_particle_buffer.Get(), particle_buffer.Get());
+	{
+		auto data = map_buffer_<Particle>(read_particle_buffer);
+
+		for (int i = 0; i < nP; ++i) {
+			//data[i].position += Vector3(0, 1, 0) * 0.01f;
+			particle_gos[i]->transform->local_pos = data[i].position;
+		}
+		unmap_buffer_(read_particle_buffer);
+	}
+
+
+	Work_meter::stop("simulation_SPH");
+}
+
+void compute_shader_init() {
+	count = (nP / cs_thread + 1) * cs_thread;
+
+	density_CS = std::make_shared<ComputeShader>();
+	pressure_CS = std::make_shared<ComputeShader>();
+	force_CS = std::make_shared<ComputeShader>();
+	collide_CS = std::make_shared<ComputeShader>();
+	integrate_CS = std::make_shared<ComputeShader>();
+	density_CS->Load("./DefaultShader/fluid_simulation_density_cs.cso");
+	pressure_CS->Load("./DefaultShader/fluid_simulation_pressure_cs.cso");
+	force_CS->Load("./DefaultShader/fluid_simulation_force_cs.cso");
+	collide_CS->Load("./DefaultShader/fluid_simulation_collide.cso");
+	integrate_CS->Load("./DefaultShader/fluid_simulation_integrate_cs.cso");
+
+	// bufferの生成
+	ComputeShader_function::create_StructureBuffer(sizeof(Particle), count, &particles[0], particle_buffer, false);
+	ComputeShader_function::create_StructureBuffer(sizeof(ParticleDensity), count, nullptr, dencity_buffer, false);
+	ComputeShader_function::create_StructureBuffer(sizeof(ParticlePressure), count, nullptr, pressure_buffer, false);
+	ComputeShader_function::create_StructureBuffer(sizeof(ParticleForces), count, nullptr, force_buffer, false);
+
+	ComputeShader_function::create_StructureBuffer(sizeof(Particle), count, nullptr, read_particle_buffer, true);
+
+	// SRV,UAVの生成
+	ComputeShader_function::createSRV_fromSB(particle_buffer, particle_read);
+	ComputeShader_function::createUAV_fromSB(particle_buffer, particle_write);
+	ComputeShader_function::createSRV_fromSB(dencity_buffer, dencity_read);
+	ComputeShader_function::createUAV_fromSB(dencity_buffer, dencity_write);
+	ComputeShader_function::createSRV_fromSB(pressure_buffer, pressure_read);
+	ComputeShader_function::createUAV_fromSB(pressure_buffer, pressure_write);
+	ComputeShader_function::createSRV_fromSB(force_buffer, force_read);
+	ComputeShader_function::createUAV_fromSB(force_buffer, force_write);
+
+
+	{
+		float particleMass = 0.08f; //粒子質量
+		float smoothlen = 0.5f; //粒子半径
+		ConstantBuffer_particle cb;
+		cb._NumParticles = nP;                       // 粒子数
+		cb._TimeStep = 0.010f;                       // 時間刻み幅(dt)
+		cb._Smoothlen = 0.5f;                      // 粒子半径
+		cb._PressureStiffness = 0.57f;              // Beckerの係数 p0*c^2/7
+		cb._WallStiffness = 2000.0f;                 // ペナルティ法の押し返す力
+		cb._Viscosity = 3;                        // 粘性係数
+		cb._Gravity = Vector3(0, -9.8f, 0);          // 重力
+
+#ifdef USE_3D
+		cb._RestDensity = 100;                   // 静止密度
+		cb._DensityCoef = particleMass * 315.f / (64 * PI * pow(smoothlen, 9));      // 密度算出時の係数 weight { m * 315/(64 * PI * h^9) }  * (h^2 - r^2)^3 (3次元)
+		cb._GradPressureCoef = particleMass * -45.0f / (PI * pow(smoothlen, 6));   // 圧力算出時の係数 ▽weight {m * -45/(PI * h^6)} * (h - r)^2 * r.normalize (3次元)
+		cb._LapViscosityCoef = particleMass * 45.f / (PI * pow(smoothlen, 6)); // 粘性算出時の係数
+#else
+		cb._RestDensity = 4; // 静止密度
+		cb._DensityCoef = particleMass * 4.f / (PI * pow(smoothlen, 8));      // 密度算出時の係数 weight { m * 4/(PI * h^8) }  * (h^2 - r^2)^3 (2次元)
+		cb._GradPressureCoef = particleMass * -30.0f / (PI * pow(smoothlen, 5));   // 圧力算出時の係数 ▽weight {m * -30/(PI * h^5)} * (h - r)^2 * r.normalize (2次元)
+		cb._LapViscosityCoef = particleMass * 20.f / (3 * PI * pow(smoothlen, 5)); // 粘性算出時の係数
+#endif
+
+		Systems::CreateConstantBuffer(particle_cb.ReleaseAndGetAddressOf(), sizeof(ConstantBuffer_particle));
+		Systems::DeviceContext->UpdateSubresource(particle_cb.Get(), 0, NULL, &cb, 0, 0);
+	}
+	{
+		Systems::CreateConstantBuffer(particlerange_cb.ReleaseAndGetAddressOf(), sizeof(ConstantBuffer_particlerange));
+	}
+
+
+}
+
+
+void RdDat(void) {
+	nP = 8001;
+
+#if DIM == 3
+	int iX, iY, iZ;
+	int nX, nY, nZ;
+	float x, y, z;
+	int i = 0;
+	int flagOfParticleGeneration;
+
+	nX = (int)(1.0 / PARTICLE_DISTANCE) + 5;
+	nY = (int)(0.6 / PARTICLE_DISTANCE) + 5;
+	nZ = (int)(0.3 / PARTICLE_DISTANCE) + 5;
+	for (iX = -4; iX < nX; iX++) {
+		for (iY = -4; iY < nY; iY++) {
+			for (iZ = -4; iZ < nZ; iZ++) {
+				x = PARTICLE_DISTANCE * iX;
+				y = PARTICLE_DISTANCE * iY;
+				z = PARTICLE_DISTANCE * iZ;
+				flagOfParticleGeneration = 0;
+
+				/* dummy wall region */
+				if ((((x > -4.0 * PARTICLE_DISTANCE + EPS) && (x <= 1.00 + 4.0 * PARTICLE_DISTANCE + EPS)) && ((y > 0.0 - 4.0 * PARTICLE_DISTANCE + EPS) && (y <= 0.6 + EPS))) && ((z > 0.0 - 4.0 * PARTICLE_DISTANCE + EPS) && (z <= 0.3 + 4.0 * PARTICLE_DISTANCE + EPS))) {
+					Typ[i] = WLL;
+					flagOfParticleGeneration = 1;
+				}
+
+				/* wall region */
+				if ((((x > -2.0 * PARTICLE_DISTANCE + EPS) && (x <= 1.00 + 2.0 * PARTICLE_DISTANCE + EPS)) && ((y > 0.0 - 2.0 * PARTICLE_DISTANCE + EPS) && (y <= 0.6 + EPS))) && ((z > 0.0 - 2.0 * PARTICLE_DISTANCE + EPS) && (z <= 0.3 + 2.0 * PARTICLE_DISTANCE + EPS))) {
+					Typ[i] = WLL;
+					flagOfParticleGeneration = 1;
+				}
+
+				/* wall region */
+				if ((((x > -4.0 * PARTICLE_DISTANCE + EPS) && (x <= 1.00 + 4.0 * PARTICLE_DISTANCE + EPS)) && ((y > 0.6 - 2.0 * PARTICLE_DISTANCE + EPS) && (y <= 0.6 + EPS))) && ((z > 0.0 - 4.0 * PARTICLE_DISTANCE + EPS) && (z <= 0.3 + 4.0 * PARTICLE_DISTANCE + EPS))) {
+					Typ[i] = WLL;
+					flagOfParticleGeneration = 1;
+				}
+
+				/* empty region */
+				if ((((x > 0.0 + EPS) && (x <= 1.00 + EPS)) && (y > 0.0 + EPS)) && ((z > 0.0 + EPS) && (z <= 0.3 + EPS))) {
+					flagOfParticleGeneration = 0;
+				}
+
+				/* fluid region */
+				if ((((x > 0.0 + EPS) && (x <= 0.25 + EPS)) && ((y > 0.0 + EPS) && (y < 0.5 + EPS))) && ((z > 0.0 + EPS) && (z <= 0.3 + EPS))) {
+					Typ[i] = FLD;
+					flagOfParticleGeneration = 1;
+				}
+
+				if (flagOfParticleGeneration == 1) {
+					Pos[i * 3] = x;
+					Pos[i * 3 + 1] = y;
+					Pos[i * 3 + 2] = z;
+					i++;
+				}
+			}
+		}
+	}
+	nP = i;
+	for (i = 0; i < nP * 3; i++) { Vel[i] = 0.0; }
+#elif  DIM == 2
+	// 各粒子の初期座標など
+	int iX, iY, iZ;
+	float x = 0, y = 0, z = 0;
+	int i = 0;
+	int flagOfParticleGeneration;
+
+#ifdef USE_3D
+	for (iX = 0; iX < 20; iX++) {
+		for (iY = 0; iY < 80; iY++) {
+			for (iZ = 0; iZ < 5; iZ++) {
+	//for (iX = 0; iX < 4; iX++) {
+	//	for (iY = 0; iY < 5; iY++) {
+	//		for (iZ = 0; iZ < 4; iZ++) {
+				x = PARTICLE_DISTANCE * (float)(iX)-10 * PARTICLE_DISTANCE;
+				y = PARTICLE_DISTANCE * (float)(iY)-40 * PARTICLE_DISTANCE;
+				z = PARTICLE_DISTANCE * (float)(iZ)-5 * PARTICLE_DISTANCE;
+#else
+	for (iX = 0; iX < 100; iX++) {
+		for (iY = 0; iY < 80; iY++) {
+	//for (iX = 0; iX < 10; iX++) {
+	//	for (iY = 0; iY < 8; iY++) {
+			x = PARTICLE_DISTANCE * (float)(iX)-50 * PARTICLE_DISTANCE;
+			y = PARTICLE_DISTANCE * (float)(iY)-40 * PARTICLE_DISTANCE;
+#endif
+
+			Particle p;
+			p.position = Vector3(x, y, z);
+			p.velocity = Vector3(0);
+			particles.emplace_back(p);
+			i++;
+
+
+#ifdef USE_3D
+			}
+#endif
+		}
+	}
+nP = i;
+#endif
+}
+
+#endif
+
+#if USE_COMPUTE_22
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <string.h>
+
+#define PARTICLE_DISTANCE    0.025f //初期粒子間距離
+#define PARTICLE_RADIAS    PARTICLE_DISTANCE * 2.1f //粒子半径
+#define EPS             (0.01f * PARTICLE_DISTANCE)
+#define DIM 2				//次元数
+
+#define NUM_TYP  2		//粒子の種類数
+#define DNS0 1000		//流体粒子の密度
+#define DT 0.0005f			//時間刻み幅
+#define SND 22.0f			//音速
+#define KNM_VSC (1.0E-6)	//動粘性係数
+#define CRT_NUM 0.1f	//クーラン条件数
+#define COL_RAT 0.2f		//接近した粒子の反発率
+#define DST_LMT_RAT 0.5f	//これ以上の粒子間の接近を許さない距離の係数
+#define G_X 0.0			//重力加速度のx成分
+#define G_Y -9.8f			//重力加速度のy成分
+#define G_Z 0.0			//重力加速度のz成分
+#define WEI(dist, re) ((re/dist) - 1.0)	//重み関数
+
+struct ConstantBuffer_particle {
+	int _NumParticles;        // 粒子数
+	float _TimeStep;          // 時間刻み幅(dt)
+	float _Smoothlen;         // 粒子半径
+	float _PressureStiffness; // Beckerの係数
+	float _RestDensity;       // 静止密度
+	float _DensityCoef;       // 密度算出時の係数
+	float _GradPressureCoef;  // 圧力算出時の係数
+	float _LapViscosityCoef;  // 粘性算出時の係数
+	Vector3 _Range;            // シミュレーション空間
+	float _WallStiffness;     // ペナルティ法の押し返す力
+	Vector3 _Gravity;          // 重力
+	float _Viscosity;         // 粘性係数
+};
+
+int nP;
+int count;
+int cs_thread = 512;
+
+struct Particle {
+	Vector3 position;
+	Vector3 velocity;
+};
+
+struct ParticlePressure {
+	float pressure;
+};
+
+struct ParticleForces {
+	Vector3 acceleration;
+};
+
+struct ParticleDensity {
+	float density;
+};
+
+static std::vector<Particle> particles;
+static std::vector<Gameobject*> particle_gos;
+
+void RdDat();
+void compute_shader_init();
+
+static std::shared_ptr<ComputeShader> density_CS;
+static std::shared_ptr<ComputeShader> pressure_CS;
+static std::shared_ptr<ComputeShader> force_CS;
+static std::shared_ptr<ComputeShader> integrate_CS;
+
+// bufffer
+static Microsoft::WRL::ComPtr<ID3D11Buffer> particle_buffer;
+static Microsoft::WRL::ComPtr<ID3D11Buffer> dencity_buffer;
+static Microsoft::WRL::ComPtr<ID3D11Buffer> pressure_buffer;
+static Microsoft::WRL::ComPtr<ID3D11Buffer> force_buffer;
+
+static Microsoft::WRL::ComPtr<ID3D11Buffer> read_particle_buffer;
+
+static Microsoft::WRL::ComPtr<ID3D11Buffer> particle_cb; //constantbuffer用
+
+// SRV,UAV
+static Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> particle_read;
+static Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> dencity_read;
+static Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> pressure_read;
+static Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> force_read;
+static Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> particle_write;
+static Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> dencity_write;
+static Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> pressure_write;
+static Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> force_write;
+
+template<class T>
+T* map_buffer_(Microsoft::WRL::ComPtr<ID3D11Buffer> & buffer) {
+	HRESULT hr = S_OK;
+	//const D3D11_MAP map = D3D11_MAP_READ;
+	const D3D11_MAP map = D3D11_MAP_WRITE_DISCARD;
+	D3D11_MAPPED_SUBRESOURCE mappedBuffer = {};
+	hr = Systems::DeviceContext->Map(buffer.Get(), 0, map, 0, &mappedBuffer);
+
+	if (FAILED(hr))
+	{
+		assert(0 && "failed Map InstanceBuffer dynamic(RenderManager)");
+		return nullptr;
+	}
+	return static_cast<T*>(mappedBuffer.pData);
+}
+void unmap_buffer_(Microsoft::WRL::ComPtr<ID3D11Buffer> & buffer) {
+	Systems::DeviceContext->Unmap(buffer.Get(), 0);
+}
+
+void Simulation_SPH::awake() {
+
+	RdDat(); //粒子の配置
+	compute_shader_init(); //compute_Shaderの初期化
+
+	particle_gos.resize(nP);
+	for (int i = 0; i < nP; i++) {
+
+		particle_gos[i] = Gameobject_manager::createSphere("particle");
+		particle_gos[i]->transform->local_pos = Vector3(particles[i].position);
 		particle_gos[i]->transform->local_scale = Vector3((2.1 * PARTICLE_DISTANCE) * 0.4f);
-		particle_gos[i]->is_hierarchy = false;
+
+		gameobject->add_child(particle_gos[i]);
 	}
 
 }
@@ -2177,42 +2585,75 @@ void Simulation_SPH::update() {
 
 	Systems::DeviceContext->CSSetConstantBuffers(0, 1, particle_cb.GetAddressOf());
 
-	ID3D11ShaderResourceView* pSRVs[4] = {
-		particle_read.Get(),
-		dencity_read.Get(),
-		pressure_read.Get(),
-		force_read.Get()
-	};
-	ID3D11UnorderedAccessView* pUAVs[4] = {
-		particle_write.Get(),
-		dencity_write.Get(),
-		pressure_write.Get(),
-		force_write.Get()
-	};
+	{
+		ID3D11ShaderResourceView* pSRVs[1] = {
+			particle_read.Get(),
+		};
+		ID3D11UnorderedAccessView* pUAVs[1] = {
+			dencity_write.Get(),
+		};
 
-	density_CS->run(pSRVs, 4, pUAVs, 4, nP / 256 + 1, 0, 0);
-	pressure_CS->run(pSRVs, 4, pUAVs, 4, nP / 256 + 1, 0, 0);
-	force_CS->run(pSRVs, 4, pUAVs, 4, nP / 256 + 1, 0, 0);
-	integrate_CS->run(pSRVs, 4, pUAVs, 4, nP / 256 + 1, 0, 0);
+		density_CS->run(pSRVs, 1, pUAVs, 1, nP / cs_thread + 1, 1, 1);
+	}
+	{
+		ID3D11ShaderResourceView* pSRVs[1] = {
+			dencity_read.Get(),
+		};
+		ID3D11UnorderedAccessView* pUAVs[1] = {
+			pressure_write.Get(),
+		};
+
+		pressure_CS->run(pSRVs, 1, pUAVs, 1, nP / cs_thread + 1, 1, 1);
+	}
+	{
+		ID3D11ShaderResourceView* pSRVs[3] = {
+			particle_read.Get(),
+			dencity_read.Get(),
+			pressure_read.Get(),
+		};
+		ID3D11UnorderedAccessView* pUAVs[1] = {
+			force_write.Get()
+		};
+
+		force_CS->run(pSRVs, 3, pUAVs, 1, nP / cs_thread + 1, 1, 1);
+	}
+	{
+		ID3D11ShaderResourceView* pSRVs[1] = {
+			force_read.Get()
+		};
+		ID3D11UnorderedAccessView* pUAVs[1] = {
+			particle_write.Get(),
+		};
+
+		integrate_CS->run(pSRVs, 1, pUAVs, 1, nP / cs_thread + 1, 1, 1);
+	}
+
+	//pressure_CS->run(pSRVs, 4, pUAVs, 4, nP / 256 + 1, 0, 0);
+	//force_CS->run(pSRVs, 4, pUAVs, 4, nP / 256 + 1, 0, 0);
+	//integrate_CS->run(pSRVs, 4, pUAVs, 4, nP / 256 + 1, 0, 0);
 	//density_CS-> run(particle_read.GetAddressOf(), 1, dencity_write.GetAddressOf(),  1, nP / 256 + 1, 0, 0);
 	//pressure_CS->run(dencity_read.GetAddressOf(),  1, pressure_write.GetAddressOf(), 1, nP / 256 + 1, 0, 0);
 	//force_CS->   run(pressure_read.GetAddressOf(), 1, force_write.GetAddressOf(),    1, nP / 256 + 1, 0, 0);
 	//integrate_CS->run(force_read.GetAddressOf(),   1, particle_write.GetAddressOf(), 1, nP / 256 + 1, 0, 0);
 
-	//{
-	//	auto data = map_buffer_<Particle>(particle_buffer);
+	Systems::DeviceContext->CopyResource(read_particle_buffer.Get(), particle_buffer.Get());
+	{
+		auto data = map_buffer_<Particle>(read_particle_buffer);
 
-	//	for (int i = 0; i < nP; ++i) {
-	//		particle_gos[i]->transform->local_pos = data[i].position;
-	//	}
-	//	unmap_buffer_(particle_buffer);
-	//}
+		for (int i = 0; i < nP; ++i) {
+			//data[i].position += Vector3(0, 1, 0) * 0.01f;
+			particle_gos[i]->transform->local_pos = data[i].position;
+		}
+		unmap_buffer_(read_particle_buffer);
+	}
 
 
 	Work_meter::stop("simulation_SPH");
 }
 
 void compute_shader_init() {
+	count = (nP / cs_thread + 1) * cs_thread;
+
 	density_CS = std::make_shared<ComputeShader>();
 	pressure_CS = std::make_shared<ComputeShader>();
 	force_CS = std::make_shared<ComputeShader>();
@@ -2223,10 +2664,12 @@ void compute_shader_init() {
 	integrate_CS->Load("./DefaultShader/fluid_simulation_integrate_cs.cso");
 
 	// bufferの生成
-	ComputeShader_function::create_StructureBuffer(sizeof(Particle), nP, &particles[0], particle_buffer, true);
-	ComputeShader_function::create_StructureBuffer(sizeof(ParticleDensity), nP, nullptr, dencity_buffer, false);
-	ComputeShader_function::create_StructureBuffer(sizeof(ParticlePressure), nP, nullptr, pressure_buffer, false);
-	ComputeShader_function::create_StructureBuffer(sizeof(ParticleForces), nP, nullptr, force_buffer, false);
+	ComputeShader_function::create_StructureBuffer(sizeof(Particle), count, &particles[0], particle_buffer, false);
+	ComputeShader_function::create_StructureBuffer(sizeof(ParticleDensity), count, nullptr, dencity_buffer, false);
+	ComputeShader_function::create_StructureBuffer(sizeof(ParticlePressure), count, nullptr, pressure_buffer, false);
+	ComputeShader_function::create_StructureBuffer(sizeof(ParticleForces), count, nullptr, force_buffer, false);
+
+	ComputeShader_function::create_StructureBuffer(sizeof(Particle), count, nullptr, read_particle_buffer, true);
 
 	// SRV,UAVの生成
 	ComputeShader_function::createSRV_fromSB(particle_buffer, particle_read);
@@ -2240,22 +2683,43 @@ void compute_shader_init() {
 
 	Systems::CreateConstantBuffer(particle_cb.ReleaseAndGetAddressOf(), sizeof(ConstantBuffer_particle));
 
-	float particleMass = 0.0002f; //粒子質量
+	float particleMass = 1; //粒子質量
 	float smoothlen = 0.012f; //粒子半径
 
 	ConstantBuffer_particle cb;
 	cb._NumParticles = nP;                       // 粒子数
-	cb._TimeStep = 0.005f;                   // 時間刻み幅(dt)
-	cb._Smoothlen = 0.012f;                   // 粒子半径
-	cb._PressureStiffness = 200.0f;              // Beckerの係数
-	cb._RestDensity = 1000.0f;                  // 静止密度
+	//cb._TimeStep = 0;                          // 時間刻み幅(dt)
+	cb._TimeStep = 0.005f;                       // 時間刻み幅(dt)
+	cb._Smoothlen = 0.012f;                      // 粒子半径
+	cb._PressureStiffness = 200.0f;              // Beckerの係数 p0*c^2/7
+	cb._RestDensity = 1000.0f;                   // 静止密度
 	cb._WallStiffness = 3000.0f;                 // ペナルティ法の押し返す力
 	cb._Viscosity = 0.1f;                        // 粘性係数
 	cb._Gravity = Vector3(0, -9.8f, 0);          // 重力
 	cb._Range = Vector3(1, 1, 0);                // シミュレーション空間
-	cb._DensityCoef = particleMass * 4.f / (PI * pow(smoothlen, 8));      // 密度算出時の係数
-	cb._GradPressureCoef = particleMass * -30.0f / (PI * pow(smoothlen, 5));   // 圧力算出時の係数
+	cb._DensityCoef = particleMass * 4.f / (PI * pow(smoothlen, 8));      // 密度算出時の係数 weight { m * 4/(PI * h^8) }  * (h^2 - r^2)^3 (2次元)
+	cb._GradPressureCoef = particleMass * -30.0f / (PI * pow(smoothlen, 5));   // 圧力算出時の係数 ▽weight {m * -30/(PI * h^5)} * (h - r)^2 * r.normalize (2次元)
 	cb._LapViscosityCoef = particleMass * 20.f / (3 * PI * pow(smoothlen, 5)); // 粘性算出時の係数
+
+	// 粒子数密度 = 密度
+	//float n0 = 0;
+	//float smooth2 = cb._Smoothlen * cb._Smoothlen;
+	//for (int xi = -4; xi < 5; ++xi) {
+	//	for (int yi = -4; yi < 5; ++yi) {
+	//		float x = PARTICLE_DISTANCE * (float)xi;
+	//		float y = PARTICLE_DISTANCE * (float)yi;
+	//		float dist2 = x * x + y * y;
+	//		//float dist2 = x * x + y * y;
+	//		if (dist2 <= smooth2) {
+	//			if (dist2 == 0.0)continue;
+	//			float dist = sqrt(dist2);
+	//			n0 += cb._DensityCoef * (smooth2 - dist2) * (smooth2 - dist2) * (smooth2 - dist2);
+	//		}
+	//	}
+	//}
+	//cb._RestDensity = particleMass * n0 / (PI * cb._Smoothlen * cb._Smoothlen);
+	//cb._PressureStiffness = cb._RestDensity * 22 * 22 / 7.0f;
+
 
 	Systems::DeviceContext->UpdateSubresource(particle_cb.Get(), 0, NULL, &cb, 0, 0);
 }
@@ -2340,13 +2804,17 @@ void RdDat(void) {
 			flagOfParticleGeneration = 0;
 
 			/* fluid region */
-			if (((x > 0.0 + EPS) && (x <= 0.5 + EPS)) && ((y > 0.0 + EPS) && (y <= 1 + EPS))) {
+			if (
+				((x > 0.0 + EPS) && (x <= 0.25 + EPS)) &&
+				((y > 0.0 + EPS) && (y <= 0.25 + EPS))
+				) {
 				flagOfParticleGeneration = 1;
 			}
 
 			if (flagOfParticleGeneration == 1) {
 				Particle p;
-				p.position = Vector3(x, y, z);
+				p.position = Vector3(x, y, z) + Vector3(rand() % 100 * 0.00001f, rand() % 100 * 0.00001f, 0);
+				//p.position = Vector3(x, y, z);
 				p.velocity = Vector3(0);
 				particles.emplace_back(p);
 				i++;

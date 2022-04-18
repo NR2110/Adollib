@@ -54,12 +54,12 @@ void Gameobject_manager::awake() {
 		gameobjects[static_cast<Scenelist>(i)] = go_manager;
 	}
 
-	//Physics_function::Collider_renderer::awake();
+	Physics_function::Collider_renderer::awake();
 
 
 
 #ifdef Use_physics_thread
-	//Physics_manager::thread_start();
+	Physics_manager::thread_start();
 
 #endif // Use_physics_thread
 
@@ -103,9 +103,9 @@ void Gameobject_manager::update(Scenelist Sce) {
 #endif // Use_physics_thread
 
 	{
-		// Work_meter::start("adapt_transform_to_gameobject");
-		// Physics_manager::adapt_transform_to_gameobject();
-		// Work_meter::stop("adapt_transform_to_gameobject");
+		 //Work_meter::start("adapt_transform_to_gameobject");
+		 //Physics_manager::adapt_transform_to_gameobject();
+		 //Work_meter::stop("adapt_transform_to_gameobject");
 
 		// 親から子に座標の更新を行う
 		{
@@ -119,9 +119,9 @@ void Gameobject_manager::update(Scenelist Sce) {
 			}
 		}
 
-		// Work_meter::start("copy_gameobject_transform");
-		// Physics_manager::copy_gameobject_transform();
-		// Work_meter::stop("copy_gameobject_transform");
+		 //Work_meter::start("copy_gameobject_transform");
+		 //Physics_manager::copy_gameobject_transform();
+		 //Work_meter::stop("copy_gameobject_transform");
 	}
 
 	Work_meter::start("update_to_children");

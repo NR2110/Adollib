@@ -41,6 +41,7 @@ c:\users\waaaa\documents\adollib\adollib\adollib\release\stage_base.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\stage_99_funcs.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\stage_99.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\stage_02_funcs.obj
+c:\users\waaaa\documents\adollib\adollib\adollib\release\component_camera.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\camera_costantbuffer_template.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\crossing_func.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\complex.obj
@@ -58,9 +59,9 @@ c:\users\waaaa\documents\adollib\adollib\adollib\release\inspector.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\imgui_manager.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\debug.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\imgui_widgets.obj
-c:\users\waaaa\documents\adollib\adollib\adollib\release\imgui_impl_win32.obj
-c:\users\waaaa\documents\adollib\adollib\adollib\release\imgui_impl_dx11.obj
+c:\users\waaaa\documents\adollib\adollib\adollib\release\imgui_tables.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\imgui_draw.obj
+c:\users\waaaa\documents\adollib\adollib\adollib\release\collider.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\alp__physics_manager.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\collider_shape.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\collider_rope.obj
@@ -80,7 +81,7 @@ c:\users\waaaa\documents\adollib\adollib\adollib\release\hierarchy.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\gameobject_manager.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\gameobject.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\component_light.obj
-c:\users\waaaa\documents\adollib\adollib\adollib\release\component_camera.obj
+c:\users\waaaa\documents\adollib\adollib\adollib\release\rope_renderer.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\renderer_manager.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\renderer_base.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\mesh_renderer.obj
@@ -100,7 +101,6 @@ c:\users\waaaa\documents\adollib\adollib\adollib\release\hingejoint.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\conetwistjoint.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\conejoint.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\alp_contact.obj
-c:\users\waaaa\documents\adollib\adollib\adollib\release\collider.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\scene_title.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\scene_sph.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\scene_player.obj
@@ -116,7 +116,12 @@ c:\users\waaaa\documents\adollib\adollib\adollib\release\sky_sphere.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\directional_shadow.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\shader.obj
 c:\users\waaaa\documents\adollib\adollib\adollib\release\compute_shader.obj
-c:\users\waaaa\documents\adollib\adollib\adollib\release\rope_renderer.obj
+c:\users\waaaa\documents\adollib\adollib\adollib\release\imgui_impl_win32.obj
+c:\users\waaaa\documents\adollib\adollib\adollib\release\imgui_impl_dx11.obj
+c:\users\waaaa\documents\adollib\adollib\adollib\defaultshader\fluid_simulation_density_cs.cso
+c:\users\waaaa\documents\adollib\adollib\adollib\defaultshader\fluid_simulation_force_cs.cso
+c:\users\waaaa\documents\adollib\adollib\adollib\defaultshader\fluid_simulation_integrate_cs.cso
+c:\users\waaaa\documents\adollib\adollib\adollib\defaultshader\fluid_simulation_pressure_cs.cso
 c:\users\waaaa\documents\adollib\adollib\adollib\defaultshader\billboard_ps.cso
 c:\users\waaaa\documents\adollib\adollib\adollib\defaultshader\billboard_vs.cso
 c:\users\waaaa\documents\adollib\adollib\adollib\defaultshader\collider_render_ps.cso
@@ -144,10 +149,6 @@ c:\users\waaaa\documents\adollib\adollib\adollib\defaultshader\ui_ps.cso
 c:\users\waaaa\documents\adollib\adollib\adollib\defaultshader\ui_vs.cso
 c:\users\waaaa\documents\adollib\adollib\adollib\defaultshader\vignette_effect_ps.cso
 c:\users\waaaa\documents\adollib\adollib\adollib\defaultshader\vignette_effect_vs.cso
-c:\users\waaaa\documents\adollib\adollib\adollib\defaultshader\fluid_simulation_density_cs.cso
-c:\users\waaaa\documents\adollib\adollib\adollib\defaultshader\fluid_simulation_force_cs.cso
-c:\users\waaaa\documents\adollib\adollib\adollib\defaultshader\fluid_simulation_integrate_cs.cso
-c:\users\waaaa\documents\adollib\adollib\adollib\defaultshader\fluid_simulation_pressure_cs.cso
 c:\users\waaaa\documents\adollib\adollib\release\adollib.exe
 c:\users\waaaa\documents\adollib\adollib\release\adollib.pdb
 c:\users\waaaa\documents\adollib\adollib\adollib\release\adollib.tlog\adollib.write.1u.tlog

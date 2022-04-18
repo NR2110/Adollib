@@ -1,5 +1,8 @@
 #include "fluid_simulation.hlsli"
 
+StructuredBuffer<Particle> _ParticlesBufferRead : register(t0);
+RWStructuredBuffer<ParticleDensity> _ParticlesDensityBufferWrite : register(u0);
+
 //--------------------------------------------------------------------------------------
 // 密度の算出
 //--------------------------------------------------------------------------------------
@@ -26,7 +29,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
 		// 半径内に収まっていない粒子は除外
         if (r_sq < h_sq)
         {
-            density += CalculateDensity(r_sq); // わざわざルートをとる必要がない
+            density += Weight(r_sq); // わざわざルートをとる必要がない
         }
     }
 

@@ -24,6 +24,9 @@ namespace Adollib
 	// 所属するシーンの初期化時に一度だけ呼ばれる
 	void Debug_camera_controller::awake()
 	{
+#ifndef ON_DEBUG
+		return;
+#endif
 		gameobject->transform->local_pos = Vector3(0, 30, -50);
 		//input->setCursorPos(Al_Global::SCREEN_WIDTH * 0.5f, Al_Global::SCREEN_HEIGHT * 0.5f);
 
@@ -32,10 +35,14 @@ namespace Adollib
 	void Debug_camera_controller::start()
 	{
 #ifndef ON_DEBUG
-		input_changer->set_lockcursol(true);
-#else
-		ShowCursor(TRUE);
+		return;
 #endif
+
+//#ifndef ON_DEBUG
+//		input_changer->set_lockcursol(true);
+//#else
+		ShowCursor(TRUE);
+//#endif
 		auto c = gameobject->findComponent<Camera_component>();
 		c->directional_shadow->position = Vector3(300, 320, -200);
 		c->directional_shadow->direction = Vector3(-1, -2, 1).unit_vect();
@@ -47,6 +54,10 @@ namespace Adollib
 	// 毎フレーム呼ばれる更新処理
 	void Debug_camera_controller::update()
 	{
+#ifndef ON_DEBUG
+		return;
+#endif
+
 		//gameobject->aspect = (float)Al_Global::SCREEN_WIDTH / Al_Global::SCREEN_HEIGHT;
 
 #ifdef UseImgui

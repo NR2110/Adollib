@@ -1,5 +1,11 @@
 #include "fluid_simulation.hlsli"
 
+StructuredBuffer<ParticleDensity> _ParticlesDensityBufferRead : register(t0);
+
+RWStructuredBuffer<ParticlePressure> _ParticlesPressureBufferWrite : register(u0);
+
+
+
 //--------------------------------------------------------------------------------------
 // à≥óÕÇÃéZèo
 //--------------------------------------------------------------------------------------

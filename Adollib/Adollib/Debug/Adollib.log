@@ -1,6 +1,9 @@
 ﻿  simulation_SPH.cpp
-  compute_shader.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2169,85): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2337,26): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2338,26): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2174,85): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2424,40): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2425,40): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2426,40): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2433,39): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2434,39): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2415,6): warning C4101: 'flagOfParticleGeneration': ローカル変数は 1 度も使われていません。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

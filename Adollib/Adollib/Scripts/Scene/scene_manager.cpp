@@ -29,7 +29,9 @@ void Scene_manager::initialize() {
 	scenes[Scenelist::scene_SPH] = std::make_unique<Scene_SPH>();
 
 
-	set_active(Scenelist::scene_SPH);
+	//set_active(Scenelist::scene_SPH);
+	//set_active(Scenelist::scene_title);
+	set_active(Scenelist::scene_title);
 
 }
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

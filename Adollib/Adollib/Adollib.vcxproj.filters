@@ -547,6 +547,9 @@
     <ClCompile Include="Scripts\Scene\scene_manager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Imgui\imgui_tables.cpp">
+      <Filter>00_Adollib\99_imgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Scripts\player.h">
@@ -1221,6 +1224,9 @@
       <Filter>ソース ファイル\demo\particle</Filter>
     </FxCompile>
     <FxCompile Include="..\Data\Shader\fluid_simulation_integrate_cs.hlsl">
+      <Filter>ソース ファイル\demo\particle</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Data\Shader\fluid_simulation_collide.hlsl">
       <Filter>ソース ファイル\demo\particle</Filter>
     </FxCompile>
   </ItemGroup>
