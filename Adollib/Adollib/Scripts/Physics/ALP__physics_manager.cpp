@@ -356,6 +356,7 @@ bool Physics_manager::update_Gui() {
 
 		//ç≈ëÂÇÃtimestep
 		ImGui::DragFloat("max_timeStep", &physicsParams.max_timeStep, 0.001f, 0.001f, 100000000);
+		ImGui::DragFloat("caluculate_time", &physicsParams.caluculate_time, 0.001f, 0.001f, 100000000,"%.5f");
 		ImGui::DragFloat("timescale", &physicsParams.timescale, 0.01f, 0, 100000000);
 		ImGui::Text("timeStep : %f", physicsParams.timeStep);
 

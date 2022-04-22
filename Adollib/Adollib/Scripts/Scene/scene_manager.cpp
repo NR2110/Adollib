@@ -134,11 +134,8 @@ void Scene_manager::update() {
 }
 
 void Scene_manager::render() {
-	//for (const auto& scene : active_scenes) {
-	//	processing_scene = scene;
+
 	Gameobject_manager::render(active_scenes);
-	//}
-	//processing_scene = Scenelist::scene_null;
 }
 
 void Scene_manager::set_active(Scenelist Sce) {

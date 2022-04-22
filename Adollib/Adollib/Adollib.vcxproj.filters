@@ -197,6 +197,9 @@
     <Filter Include="ソース ファイル\demo\particle">
       <UniqueIdentifier>{8629ccf9-50b8-4aa5-b405-770b1f59ffb6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00_Adollib\22_physics\ALP\compute">
+      <UniqueIdentifier>{d1422c47-4fc9-4ed1-bf80-40ef60b337d8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Scripts\player.cpp">
@@ -1231,6 +1234,12 @@
     </FxCompile>
     <FxCompile Include="..\Data\Shader\fluid_simulation_collide.hlsl">
       <Filter>ソース ファイル\demo\particle</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\setup_solver_joint_cs.hlsl">
+      <Filter>00_Adollib\22_physics\ALP\compute</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\setup_solver_pair_cs.hlsl">
+      <Filter>00_Adollib\22_physics\ALP\compute</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

@@ -139,7 +139,7 @@ bool Calc_joint_effect(ALP_Joint* joint, float inv_duration)
 
 void Physics_function::resolve_contact(std::list<Physics_function::ALP_Collider*>& ALP_colliders, std::vector<Contacts::Contact_pair*>& pairs, std::list<Physics_function::ALP_Joint*> l_joints, const float timescale) {
 
-	//Work_meter::start("Make_solver", 1);
+	Work_meter::start("Make_solver", 1);
 
 	const float inv_duration = 1 / (Physics_manager::physicsParams.timeStep / timescale);
 
@@ -189,24 +189,13 @@ void Physics_function::resolve_contact(std::list<Physics_function::ALP_Collider*
 	ALP_Physics* ALPphysics[2];
 	ALP_Solverbody* solverbody[2];
 
-	//Work_meter::stop("Make_solver", 1);
+	Work_meter::stop("Make_solver", 1);
 
-	//Work_meter::start("Setup_solver_joint", 1);
-	// 拘束のセットアップ
+	//::: limitの影響を計算
 	{
-		world_trans* transform[2] = { nullptr };
-		DirectX::XMVECTOR position[2];
 		for (auto& joint : joints) {
 
-			transform[0] = &joint->ALPcollider[0]->transform;
-			transform[1] = &joint->ALPcollider[1]->transform;
-			ALPphysics[0] = joint->ALPcollider[0]->get_ALPphysics();
-			ALPphysics[1] = joint->ALPcollider[1]->get_ALPphysics();
-			solverbody[0] = ALPphysics[0]->solve;
-			solverbody[1] = ALPphysics[1]->solve;
-
-			//::: limitの影響を計算
-			//Work_meter::start("Setup_solver_joint_effect", 1);
+			Work_meter::start("Setup_solver_joint_effect", 1);
 
 			if (Calc_joint_effect(joint, inv_duration) == false) {
 				//limitに引っかかっていない -> 何も起きない
@@ -216,7 +205,21 @@ void Physics_function::resolve_contact(std::list<Physics_function::ALP_Collider*
 				joint->constraint_limit.upperlimit = +FLT_MAX;
 				joint->constraint_limit.axis = Vector3(0, 0, 0);
 			}
-			//Work_meter::stop("Setup_solver_joint_effect", 1);
+			Work_meter::stop("Setup_solver_joint_effect", 1);
+		}
+	}
+
+	// 拘束のセットアップ
+	Work_meter::start("Setup_solver_joint", 1);
+	{
+		world_trans* transform[2] = { nullptr };
+		DirectX::XMVECTOR position[2];
+		for (auto& joint : joints) {
+
+			transform[0] = &joint->ALPcollider[0]->transform;
+			transform[1] = &joint->ALPcollider[1]->transform;
+			ALPphysics[0] = joint->ALPcollider[0]->get_ALPphysics();
+			ALPphysics[1] = joint->ALPcollider[1]->get_ALPphysics();
 
 			//::: anchorの影響を計算
 			for (int i = 0; i < joint->anchor_count; i++) {
@@ -248,7 +251,7 @@ void Physics_function::resolve_contact(std::list<Physics_function::ALP_Collider*
 							* sign
 							< 0) ? joint->stretch_bias : joint->shrink_bias;
 
-						rhs_pow = bias * sign * (dis - joint->slop) * inv_duration; // position error
+						rhs_pow = 0.9f * bias * sign * (dis - joint->slop) * inv_duration; // position error
 					}
 				}
 
@@ -307,9 +310,9 @@ void Physics_function::resolve_contact(std::list<Physics_function::ALP_Collider*
 		}
 	}
 
-	//Work_meter::stop("Setup_solver_joint", 1);
+	Work_meter::stop("Setup_solver_joint", 1);
 
-	//Work_meter::start("Setup_solver_contact", 1);
+	Work_meter::start("Setup_solver_contact", 1);
 	// pairのセットアップ
 	for (auto& pair : pairs) {
 
@@ -433,10 +436,10 @@ void Physics_function::resolve_contact(std::list<Physics_function::ALP_Collider*
 		}
 	}
 
-	//Work_meter::stop("Setup_solver_contact", 1);
+	Work_meter::stop("Setup_solver_contact", 1);
 
 
-	//Work_meter::start("adapt_impulse", 1);
+	Work_meter::start("adapt_impulse", 1);
 
 
 	//::: 変化量を求める :::::::::::::::
@@ -523,9 +526,9 @@ void Physics_function::resolve_contact(std::list<Physics_function::ALP_Collider*
 		}
 	}
 
-	//Work_meter::stop("adapt_impulse", 1);
+	Work_meter::stop("adapt_impulse", 1);
 
-	//Work_meter::start("solver", 1);
+	Work_meter::start("solver", 1);
 
 	for (int solver_iterations_count = 0; solver_iterations_count < Physics_manager::physicsParams.solver_iteration; solver_iterations_count++) {
 		// 拘束の演算
@@ -686,7 +689,7 @@ void Physics_function::resolve_contact(std::list<Physics_function::ALP_Collider*
 		}
 	}
 
-	//Work_meter::stop("solver", 1);
+	Work_meter::stop("solver", 1);
 
 	// 速度の更新
 

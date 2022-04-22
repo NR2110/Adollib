@@ -24,6 +24,7 @@
 #ifdef ON_DEBUG
 #define Rope_Shot_Always
 #endif
+#define Rope_Shot_Always
 
 using namespace Adollib;
 
@@ -636,7 +637,6 @@ void Player::push_waist_for_stand() {
 	float dot = vector3_dot(Vector3(0, -1, 0), vector3_quatrotate(Vector3(0, -1, 0), Waist_collider->transform->orientation));
 	if (dot < 0)return; //腰が下を向いていなければreturn
 	dot = dot * dot;
-	//dot = 1;
 
 	if (onground_collider != nullptr) {
 
@@ -644,7 +644,7 @@ void Player::push_waist_for_stand() {
 
 		if (dis < onground_dis) {
 			constexpr float mass = 10 * 4.5f; //パーツによって質量がまちまちなので だいたいの質量
-			constexpr float stand_pow = 1000;
+			constexpr float stand_pow = 500;
 
 			Vector3 normal = Vector3(0, 1, 0);
 			float gravity_pow = Physics_function::Physics_manager::physicsParams.gravity * mass; //playerが滞空出来る力
@@ -680,6 +680,7 @@ void Player::push_waist_for_stand() {
 			}
 		}
 	}
+
 
 }
 
@@ -989,14 +990,6 @@ void Player::turn_gunyatto_dir() {
 	Vector3 front_dir = vector3_quatrotate(dir, quaternion_axis_radian(rotate_axis, radian));
 	front_dir.y = 0;
 	front_dir = front_dir.unit_vect();
-
-	//// 腹ばいか 仰向けか
-	//if (fabsf(dir.y) > 0.5f) {
-	//	if (dir.y < 0) dir = +waist_head_dir;
-	//	else           dir = -waist_head_dir;
-	//}
-	//// 立っているなら何もせずにreturn
-	//else return;
 
 	// 今の向き
 	Vector3 player_vec = vector3_quatrotate(Vector3(0, 0, -1), rotate);
