@@ -25,7 +25,7 @@ namespace Adollib {
 			DirectX::XMVECTOR delta_LinearVelocity; // 並進速度差分
 			DirectX::XMVECTOR delta_AngulaVelocity; // 回転速度差分
 			//DirectX::XMVECTOR orientation; // 姿勢
-			DirectX::XMMATRIX inv_inertia; // 慣性テンソルの逆行列
+			DirectX::XMMATRIX inv_tensor; // 慣性テンソルの逆行列
 #endif
 			float  inv_mass = 0; // 質量の逆数
 			//int num = 0;

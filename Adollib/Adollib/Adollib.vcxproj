@@ -472,6 +472,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
+    <None Include="DefaultShader\defines.hlsli" />
     <None Include="DefaultShader\dither_noshadow.hlsli" />
     <None Include="DefaultShader\gaussian_filter.hlsli" />
     <None Include="DefaultShader\light_func.hlsli">

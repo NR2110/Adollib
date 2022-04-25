@@ -1137,6 +1137,9 @@
     <None Include="..\Data\Shader\fluid_simulation.hlsli">
       <Filter>ソース ファイル\demo\particle</Filter>
     </None>
+    <None Include="DefaultShader\defines.hlsli">
+      <Filter>00_Adollib\44_render\shader\hlsl\base</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="DefaultShader\default_ps.hlsl">
