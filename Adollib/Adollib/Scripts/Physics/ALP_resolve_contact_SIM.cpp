@@ -7,12 +7,15 @@
 
 #include "ALP__physics_manager.h"
 #include "ALP_physics.h"
+#include "../Renderer/Shader/compute_shader.h"
+#include "../Main/systems.h"
 
 #include "ALP_joint.h"
 
 using namespace Adollib;
 using namespace Physics_function;
 using namespace Contacts;
+using namespace Compute_S;
 
 //:::::::::::::::::::::::::::
 #pragma region resolve_contact
@@ -137,6 +140,38 @@ bool Calc_joint_effect(ALP_Joint* joint, float inv_duration)
 }
 
 
+
+struct Joint_Read
+{
+	Vector3 position[2]; //6
+	Vector3 joint_pos[2]; //6
+	Vector3 relativeVelocity; //3
+	float inv_mass[2]; //2
+	Matrix33 inv_tensor[2]; //9
+	float shrink_bias; // S‘©‚Ì‹­‚³‚Ì’²®’l(k) 1
+	float stretch_bias; // S‘©‚Ì‹­‚³‚Ì’²®’l(L) 1
+	float slop; // S‘©‚Ì‹–—eŒë· 1
+	float offset; //S‘©‚ÌêŠ‚Ì‚¸‚ê (ex. •z‚Íanchor = 0,0 offset = ’¸“_‚Ì‹——£ ‚ÅÀ‘•‚µ‚Ä‚¢‚é) 1
+	Vector2 dummy2;
+};
+
+struct Joint_Write
+{
+	Vector3 axis; //S‘©²
+	float jacDiagInv; //S‘©®‚Ì•ª•ê
+	float rhs; //‰ŠúS‘©—Í
+	float tangent_rhs; //S‘©²‚ª–@ü‚Ì–Êã‚Å‚ÌS‘©—Í
+	float lowerlimit; //S‘©—Í‚Ì‰ºŒÀ
+	float upperlimit; //S‘©—Í‚ÌãŒÀ
+	float accuminpulse; //—İÏ‚³‚ê‚éS‘©—Í
+	Vector3 dummy3;
+};
+
+struct Inverse_Deltatime {
+	float inv_deltatime;
+};
+
+
 void Physics_function::resolve_contact(std::list<Physics_function::ALP_Collider*>& ALP_colliders, std::vector<Contacts::Contact_pair*>& pairs, std::list<Physics_function::ALP_Joint*> l_joints, const float timescale) {
 
 	Work_meter::start("Make_solver", 1);
@@ -212,14 +247,20 @@ void Physics_function::resolve_contact(std::list<Physics_function::ALP_Collider*
 	// S‘©‚ÌƒZƒbƒgƒAƒbƒv
 	Work_meter::start("Setup_solver_joint", 1);
 	{
+		std::vector<Joint_Read> joint_read;
+		std::vector<Joint_Write> joint_write;
+
 		world_trans* transform[2] = { nullptr };
 		DirectX::XMVECTOR position[2];
 		for (auto& joint : joints) {
-
 			transform[0] = &joint->ALPcollider[0]->transform;
 			transform[1] = &joint->ALPcollider[1]->transform;
 			ALPphysics[0] = joint->ALPcollider[0]->get_ALPphysics();
 			ALPphysics[1] = joint->ALPcollider[1]->get_ALPphysics();
+
+			Joint_Read read;
+			read.position[0] = transform[0]->position;
+			read.position[1] = transform[1]->position;
 
 			//::: anchor‚Ì‰e‹¿‚ğŒvZ
 			for (int i = 0; i < joint->anchor_count; i++) {
@@ -228,86 +269,91 @@ void Physics_function::resolve_contact(std::list<Physics_function::ALP_Collider*
 				auto& constraint = joint->constraint[i];
 
 				//anchor‚»‚ê‚¼‚ê‚ÌlocalÀ•W
-				const DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&joint_posA), DirectX::XMLoadFloat4(&transform[0]->orientation));
-				const DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&joint_posB), DirectX::XMLoadFloat4(&transform[1]->orientation));
+				DirectX::XMStoreFloat3(&read.joint_pos[0], DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&joint_posA), DirectX::XMLoadFloat4(&transform[0]->orientation)));
+				DirectX::XMStoreFloat3(&read.joint_pos[1], DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&joint_posB), DirectX::XMLoadFloat4(&transform[1]->orientation)));
 
-				//anchor‚»‚ê‚¼‚ê‚ÌworldÀ•W
-				position[0] = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&transform[0]->position), rA);
-				position[1] = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&transform[1]->position), rB);
-				DirectX::XMVECTOR direction = DirectX::XMVectorSubtract(position[1], position[0]);
-				DirectX::XMVECTOR distance = DirectX::XMVector3Length(direction);
+				read.shrink_bias = joint->shrink_bias; // S‘©‚Ì‹­‚³‚Ì’²®’l(k) 1
+				read.stretch_bias = joint->stretch_bias; // S‘©‚Ì‹­‚³‚Ì’²®’l(L) 1
+				read.slop = joint->slop; // S‘©‚Ì‹–—eŒë· 1
+				read.offset = joint->offset; //S‘©‚ÌêŠ‚Ì‚¸‚ê (ex. •z‚Íanchor = 0,0 offset = ’¸“_‚Ì‹——£ ‚ÅÀ‘•‚µ‚Ä‚¢‚é) 1
 
-				float rhs_pow = 0;
-				{
-					const float dis = fabsf(DirectX::XMVectorGetX(distance) - joint->offset);
-					if (0.0f < dis - joint->slop) {
+				DirectX::XMStoreFloat3x3(&read.inv_tensor[0], ALPphysics[0]->solve->inv_tensor); //2
+				DirectX::XMStoreFloat3x3(&read.inv_tensor[1], ALPphysics[1]->solve->inv_tensor); //2
+				read.inv_mass[0] = ALPphysics[0]->solve->inv_mass; //9
+				read.inv_mass[1] = ALPphysics[1]->solve->inv_mass; //9
 
-						const int sign = (DirectX::XMVectorGetX(distance) - joint->offset > 0) ? +1 : -1;
-
-						// S‘©“_‚ÆCollider‚ÌÀ•W‚Ì·•ª‚Ì“àÏ ‚Æ offset‚ğl—¶‚µ‚Ästretch‚©shrink‚ğ”»’f‚·‚é
-						const float& bias = (DirectX::XMVectorGetX(DirectX::XMVector3Dot(
-							DirectX::XMVectorSubtract(position[0], position[1]),
-							DirectX::XMVectorSubtract(DirectX::XMLoadFloat3(&transform[0]->position), DirectX::XMLoadFloat3(&transform[1]->position))))
-							* sign
-							< 0) ? joint->stretch_bias : joint->shrink_bias;
-
-						rhs_pow = 0.9f * bias * sign * (dis - joint->slop) * inv_duration; // position error
-					}
-				}
-
-				if (
-					//DirectX::XMVectorGetX(distance) < FLT_EPSILON || //‰Šú‰»I‚í‚Á‚Ä‚¢‚È‚¯‚ê‚Î ‚±‚±‚ª0‚É‚È‚é
-					fabsf(DirectX::XMVectorGetX(distance) - joint->offset) < FLT_EPSILON || //offset‚ğl—¶‚µ‚½’l
-					rhs_pow == 0 //bias‚ª0‚Ì‚È‚Ç
-					) {
-					//‚Æ‚Ä‚à‹ß‚¢ˆÊ’u‚É‚ ‚é -> ˆø‚Á’£‚ç‚È‚¢
-					constraint.jacDiagInv = 0.0f;
-					constraint.rhs = 0.0f;
-					constraint.lowerlimit = -FLT_MAX;
-					constraint.upperlimit = +FLT_MAX;
-					constraint.axis = Vector3(0, 0, 0);
-					continue;
-				}
-
-				direction = DirectX::XMVectorDivide(direction, distance);
-
-				DirectX::XMVECTOR velocityA = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&ALPphysics[0]->linear_velocity()), DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&ALPphysics[0]->angula_velocity()), rA));
-				DirectX::XMVECTOR velocityB = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&ALPphysics[1]->linear_velocity()), DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&ALPphysics[1]->angula_velocity()), rB));
-				DirectX::XMVECTOR relativeVelocity = DirectX::XMVectorSubtract(velocityA, velocityB);
-
-				const float& term1 = ALPphysics[0]->inverse_mass();
-				const float& term2 = ALPphysics[1]->inverse_mass();
-				DirectX::XMVECTOR tA, tB;
-
-				float term3, term4, denominator;
-				DirectX::XMVECTOR axis;
-				axis = direction;
-				tA = DirectX::XMVector3Cross(rA, axis);
-				tB = DirectX::XMVector3Cross(rB, axis);
-				tA = DirectX::XMVector3Transform(tA, ALPphysics[0]->solve->inv_tensor);
-				tB = DirectX::XMVector3Transform(tB, ALPphysics[1]->solve->inv_tensor);
-				tA = DirectX::XMVector3Cross(tA, rA);
-				tB = DirectX::XMVector3Cross(tB, rB);
-				term3 = DirectX::XMVectorGetX(DirectX::XMVector3Dot(axis, tA));
-				term4 = DirectX::XMVectorGetX(DirectX::XMVector3Dot(axis, tB));
-				denominator = term1 + term2 + term3 + term4;
-
-
-				constraint.jacDiagInv = 1.0f / denominator;
-
-				constraint.rhs = -DirectX::XMVectorGetX(DirectX::XMVector3Dot(relativeVelocity, direction)); // velocity error
-
-				constraint.rhs += rhs_pow; //ã‚ÅŒvZ‚µ‚Ä‚¢‚é
-
-				constraint.rhs *= constraint.jacDiagInv;
-				constraint.lowerlimit = -FLT_MAX;
-				constraint.upperlimit = +FLT_MAX;
-				DirectX::XMStoreFloat3(&constraint.axis, direction);
-
-				constraint.accuminpulse = 0.0f;
+				joint_read.emplace_back(read);
 			}
 
 		}
+
+		const int joint_max = 1024;
+		static Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> joint_read_sb;
+		static Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> joint_write_uav;
+		static Microsoft::WRL::ComPtr<ID3D11Buffer> joint_read_sbuffer;
+		static Microsoft::WRL::ComPtr<ID3D11Buffer> joint_write_sbuffer;
+		static Microsoft::WRL::ComPtr<ID3D11Buffer> joint_writeread_buffer;
+		static Compute_S::ComputeShader joint_compute_shader;
+		static Microsoft::WRL::ComPtr<ID3D11Buffer> inv_delta_cb;
+		if (joint_compute_shader.computeShader == nullptr) { //initialize
+			joint_compute_shader.Load("./DefaultShader/setup_solver_joint_cs.cso");
+
+			ComputeShader_function::create_StructureBuffer(sizeof(Joint_Read), joint_max, nullptr, joint_read_sbuffer, true);
+			ComputeShader_function::create_StructureBuffer(sizeof(Joint_Write), joint_max, nullptr, joint_write_sbuffer, false);
+			ComputeShader_function::create_StructureBuffer(sizeof(Joint_Write), joint_max, nullptr, joint_writeread_buffer, true);
+
+			ComputeShader_function::createSRV_fromSB(joint_read_sbuffer,  joint_read_sb);
+			ComputeShader_function::createUAV_fromSB(joint_write_sbuffer, joint_write_uav);
+
+			Systems::CreateConstantBuffer(inv_delta_cb.ReleaseAndGetAddressOf(), sizeof(Inverse_Deltatime));
+		}
+
+		{ //data‚ğ“ü‚ê‚é
+			auto data = ComputeShader_function::map_buffer<Joint_Read>(joint_read_sbuffer);
+
+			//memcpy(data, &joint_read[0], joint_read.size() * sizeof(Joint_Read));
+
+			ComputeShader_function::unmap_buffer(joint_read_sbuffer);
+		}
+
+		//{ //CB‚ğ“ü‚ê‚é
+		//	Inverse_Deltatime inv_delta;
+		//	inv_delta.inv_deltatime = inv_duration;
+		//	Systems::DeviceContext->UpdateSubresource(inv_delta_cb.Get(), 0, NULL, &inv_delta, 0, 0);
+		//	Systems::DeviceContext->CSSetConstantBuffers(0, 1, inv_delta_cb.GetAddressOf());
+		//}
+
+		//{
+		//	ID3D11ShaderResourceView* SRVs[1] = { joint_read_sb.Get() };
+		//	ID3D11UnorderedAccessView* UAVs[1] = { joint_write_uav.Get() };
+
+		//	joint_compute_shader.run(SRVs, 1, UAVs, 1, joint_max / 512 + 1, 1, 1);
+		//}
+
+
+		//Systems::DeviceContext->CopyResource(joint_writeread_buffer.Get(), joint_write_sbuffer.Get());
+		//{
+		//	auto data = ComputeShader_function::map_buffer<Joint_Write>(joint_writeread_buffer);
+		//	int data_count = 0;
+		//	for (auto& joint : joints) {
+		//		//::: anchor‚Ì‰e‹¿‚ğŒvZ
+		//		for (int i = 0; i < joint->anchor_count; i++) {
+		//			auto& constraint = joint->constraint[i];
+		//			constraint.accuminpulse = 0;
+		//			constraint.axis = data[data_count].axis;
+		//			constraint.jacDiagInv = data[data_count].jacDiagInv;
+		//			constraint.tangent_rhs = data[data_count].tangent_rhs;
+		//			constraint.rhs = data[data_count].rhs;
+		//			constraint.lowerlimit = data[data_count].lowerlimit;
+		//			constraint.upperlimit = data[data_count].upperlimit;
+		//			++data_count;
+		//		}
+		//	}
+		//	ComputeShader_function::unmap_buffer(joint_writeread_buffer);
+		//}
+
+
+
 	}
 
 	Work_meter::stop("Setup_solver_joint", 1);

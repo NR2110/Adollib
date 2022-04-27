@@ -4,19 +4,21 @@
 cbuffer CB : register(b0)
 {
     float inverse_duration;
+    //float3 dummy;
 }
 
 struct Joint_Read
 {
-    float3 position[2];
-    float3 joint_pos[2];
-    float3 relativeVelocity;
-    float inv_mass[2];
-    row_major float3x3 inv_tensor[2];
-    float shrink_bias; // S‘©‚Ì‹­‚³‚Ì’²®’l(k)
-    float stretch_bias; // S‘©‚Ì‹­‚³‚Ì’²®’l(L)
-    float slop ; // S‘©‚Ì‹–—eŒë·
-    float offset ; //S‘©‚ÌêŠ‚Ì‚¸‚ê (ex. •z‚Íanchor = 0,0 offset = ’¸“_‚Ì‹——£ ‚ÅÀ‘•‚µ‚Ä‚¢‚é)
+    float3 position[2]; //6
+    float3 joint_pos[2]; //6
+    float3 relativeVelocity; //3
+    float inv_mass[2]; //2
+    row_major float3x3 inv_tensor[2]; //9
+    float shrink_bias; // S‘©‚Ì‹­‚³‚Ì’²®’l(k) 1
+    float stretch_bias; // S‘©‚Ì‹­‚³‚Ì’²®’l(L) 1
+    float slop ; // S‘©‚Ì‹–—eŒë· 1
+    float offset ; //S‘©‚ÌêŠ‚Ì‚¸‚ê (ex. •z‚Íanchor = 0,0 offset = ’¸“_‚Ì‹——£ ‚ÅÀ‘•‚µ‚Ä‚¢‚é) 1
+    float2 dummy2;
 };
 
 struct Joint_Write
@@ -28,6 +30,7 @@ struct Joint_Write
     float lowerlimit; //S‘©—Í‚Ì‰ºŒÀ
     float upperlimit; //S‘©—Í‚ÌãŒÀ
     float accuminpulse; //—İÏ‚³‚ê‚éS‘©—Í
+    float3 dummy3;
 };
 
 
