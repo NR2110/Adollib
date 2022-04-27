@@ -812,28 +812,6 @@ namespace Adollib
 			}
 		}
 
-		//set_box(Vector3(0, 100, 0), Vector3(10, 10, 10), Vector3(0, 0, 0), grass_color);
-		//set_box(Vector3(0, 100, 0), Vector3(10, 10, 10), Vector3(0, 0, 0), grass_color);
-
-		//set_lever(Vector3(0,0,0),Vector3(1),   Vector3(0), Stage_parts::Stageparts_tags::Flag_4, Stage_parts::Stageparts_tags::Flag_4);
-		//set_lever(Vector3(8,18,104),Vector3(1),Vector3(0,90,0), Stage_parts::Stageparts_tags::Flag_4, Stage_parts::Stageparts_tags::Flag_4);
-
-
-		//set_tree(Vector3(0, 100, 0), Vector3(1, 1.2f, 1), Vector3(0, 02, 0), 2.5f, 0.8f);
-		//set_tree(Vector3(0, 100, 0), Vector3(1, 1.2f, 1), Vector3(0, 02, 0), 2.5f, 0.8f);
-		//set_tree(Vector3(0, 100, 0), Vector3(1, 1.2f, 1), Vector3(0, 02, 0), 2.5f, 0.8f);
-		//set_tree(Vector3(0, 100, 0), Vector3(1, 1.2f, 1), Vector3(0, 76, 0), 1.2f, 0.8f);
-		//set_tree(Vector3(0, 100, 0), Vector3(1, 1.2f, 1), Vector3(0, 76, 0), 1.2f, 0.8f);
-		//set_tree(Vector3(0, 100, 0), Vector3(1, 1.2f, 1), Vector3(0, 76, 0), 1.2f, 0.8f);
-
-		//set_fence(Vector3(0,100,0), Vector3(1), Vector3(0, 0, 0));
-		//set_fence(Vector3(0,100,0), Vector3(1), Vector3(0, 0, 0));
-		//set_fence(Vector3(0,100,0), Vector3(1), Vector3(0, 0, 0));
-		//set_fence(Vector3(0,100,0), Vector3(1), Vector3(0, 0, 0));
-		//set_fence(Vector3(0,100,0), Vector3(1), Vector3(0, 0, 0));
-		//set_fence(Vector3(0,100,0), Vector3(1), Vector3(0, 0, 0));
-		//set_fence(Vector3(0,100,0), Vector3(1), Vector3(0, 0, 0));
-
 		{}
 
 		// goal&respown_areas
@@ -849,6 +827,8 @@ namespace Adollib
 
 			set_goal_area(Vector3(51, 51, -221), Vector3(20, 2, 20), Vector3(0), Stage_types::stage_3, goal_and_respown_areas);
 		}
+
+
 #endif
 
 	}

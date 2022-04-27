@@ -190,18 +190,6 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 
 			//ReportLiveObjects()
 
-#pragma region Imgui_demo
-
-
-			//ImGui::Begin("main");
-
-
-			//ImGui::End();
-
-
-
-#pragma endregion
-
 
 		}
 	}
@@ -213,7 +201,7 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 	//memory leak 221 Å` 302 ÇÕâΩÇÇµÇƒÇ‡èoÇÈÇΩÇﬂñ≥éã
 	//char* memory_leak = DBG_NEW char;
 
-	//_CrtDumpMemoryLeaks();
+	_CrtDumpMemoryLeaks();
 
 	return 0;
 }

@@ -530,6 +530,7 @@ void Physics_function::resolve_contact(std::list<Physics_function::ALP_Collider*
 
 	Work_meter::start("solver", 1);
 
+	//::: ŒvŽZ :::::::::
 	for (int solver_iterations_count = 0; solver_iterations_count < Physics_manager::physicsParams.solver_iteration; solver_iterations_count++) {
 		// S‘©‚Ì‰‰ŽZ
 		world_trans* transform[2];
@@ -600,8 +601,6 @@ void Physics_function::resolve_contact(std::list<Physics_function::ALP_Collider*
 				solverbody[1]->delta_LinearVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_LinearVelocity, DirectX::XMVectorScale(axis, delta_impulse * solverbody[1]->inv_mass));
 				solverbody[1]->delta_AngulaVelocity = DirectX::XMVectorSubtract(solverbody[1]->delta_AngulaVelocity, DirectX::XMVectorScale(DirectX::XMVector3Transform(DirectX::XMVector3Cross(rB, axis), solverbody[1]->inv_tensor), delta_impulse));
 			}
-
-
 
 		}
 
@@ -692,7 +691,6 @@ void Physics_function::resolve_contact(std::list<Physics_function::ALP_Collider*
 	Work_meter::stop("solver", 1);
 
 	// ‘¬“x‚ÌXV
-
 	for (auto& coll : ALP_colliders) {
 
 		if (coll->get_ALPphysics()->is_kinmatic_linear) {

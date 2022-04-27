@@ -410,6 +410,7 @@
     <ClCompile Include="Scripts\Physics\ALP_broadphase.cpp" />
     <ClCompile Include="Scripts\Physics\ALP_collider.cpp" />
     <ClCompile Include="Scripts\Physics\ALP_generate_contact.cpp" />
+    <ClCompile Include="Scripts\Physics\ALP_generate_contact_SIM.cpp" />
     <ClCompile Include="Scripts\Physics\ALP_integrate.cpp" />
     <ClCompile Include="Scripts\Physics\ALP_joint.cpp" />
     <ClCompile Include="Scripts\Physics\ALP_midphase.cpp" />

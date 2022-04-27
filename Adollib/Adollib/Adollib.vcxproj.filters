@@ -553,6 +553,9 @@
     <ClCompile Include="Imgui\imgui_tables.cpp">
       <Filter>00_Adollib\99_imgui</Filter>
     </ClCompile>
+    <ClCompile Include="Scripts\Physics\ALP_generate_contact_SIM.cpp">
+      <Filter>00_Adollib\22_physics\ALP</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Scripts\player.h">
