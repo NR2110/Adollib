@@ -2,6 +2,8 @@
 #include "collider_shape.h"
 #include "ALP_contact.h"
 
+#define USE_SIM
+
 namespace Adollib {
 	namespace Physics_function {
 

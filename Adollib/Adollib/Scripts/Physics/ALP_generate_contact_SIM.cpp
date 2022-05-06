@@ -13,6 +13,8 @@ using namespace Contacts;
 
 using namespace Closest_func;
 
+#ifdef USE_SIM
+
 //:::::::::::::::::::::::::::
 #pragma region generate_contact
 //:::::::::::::::::::::::::::
@@ -875,8 +877,7 @@ bool sat_obb_convex_mesh(const OBB_struct& obb, const Collider_shape* mesh,
 //衝突生成
 #pragma region SPHERE-SPHERE
 bool Physics_function::generate_contact_sphere_sphere(const Collider_shape* SA, const Collider_shape* SB, Contacts::Contact_pair*& pair, bool& is_crossing) {
-	//const std::list<ALP_Collider>::iterator& SA = SA->get_ALPcollider();
-	//const std::list<ALP_Collider>::iterator& SB = SB->get_ALPcollider();
+	using namespace DirectX;
 
 	DirectX::XMVECTOR pA = DirectX::XMLoadFloat3(&SA->world_position());
 	DirectX::XMVECTOR pB = DirectX::XMLoadFloat3(&SB->world_position());
@@ -889,7 +890,7 @@ bool Physics_function::generate_contact_sphere_sphere(const Collider_shape* SA, 
 	DirectX::XMVECTOR ACcontact_pointB;
 
 	//p1 から p0　方向への法線
-	DirectX::XMVECTOR n = DirectX::XMVectorSubtract(pA, pB);
+	DirectX::XMVECTOR n = pA - pB;
 	float length = DirectX::XMVectorGetX(DirectX::XMVector3Length(n));
 	n = DirectX::XMVector3Normalize(n);
 
@@ -1108,45 +1109,56 @@ bool Physics_function::generate_contact_sphere_box(const Collider_shape* sphere,
 
 #pragma region SPHERE-Capsule
 bool Physics_function::generate_contact_sphere_capsule(const Collider_shape* sphere, const Collider_shape* capsule, Contacts::Contact_pair*& pair, bool& is_crossing) {
+	using namespace DirectX;
 
-	//const std::list<ALP_Collider>::iterator& sphere = sphere_mesh->get_ALPcollider();
-	//const std::list<ALP_Collider>::iterator& capsule = capsule_mesh->get_ALPcollider();
+	const XMVECTOR sphere_wpos = XMLoadFloat3(&sphere->world_position());
+	const XMVECTOR capsule_wpos = XMLoadFloat3(&capsule->world_position());
+
+	const XMVECTOR capsule_worient = XMLoadFloat4(&capsule->world_orientation());
+	const XMVECTOR capsule_worient_inv = XMLoadFloat4(&capsule->world_orientation().inverse());
+	const XMVECTOR sphere_worient_inv = XMLoadFloat4(&sphere->world_orientation().inverse());
+
+
 
 	//AddContact用の変数
 	bool is_AC = false;
 	float ACpenetration = 0;
-	Vector3 ACnormal;
-	Vector3 ACcontact_pointA;
-	Vector3 ACcontact_pointB;
+	XMVECTOR ACnormal;
+	XMVECTOR ACcontact_pointA;
+	XMVECTOR ACcontact_pointB;
 
 	//capsuleの座標系で計算する(scaleは変更しない)
 
 	//capsule coord
-	Vector3 sphere_pos_capcoord = vector3_quatrotate(sphere->world_position() - capsule->world_position(), capsule->world_orientation().inverse());
+	const DirectX::XMVECTOR sphere_pos_capcoord = XMVector3Rotate(sphere_wpos - capsule_wpos, capsule_worient_inv);
 
+	// sphereの中心点とcapsuleの直線の最近点を求める
 	float s;
-	Closest_func::get_closestP_point_line(sphere_pos_capcoord, Vector3(0), Vector3(0, 1, 0), s);
+	Vector3 y1 = Vector3(0, 1, 0);
+	XMVECTOR y1_SIM = XMLoadFloat3(&y1);
+	Closest_func_SIM::get_closestP_point_line(sphere_pos_capcoord, XMVectorZero(), y1_SIM, s);
+	//s = XMVectorGetX(XMVector3Dot(y1_SIM, sphere_pos_capcoord - XMVectorZero()) / XMVector3Dot(y1_SIM, y1_SIM));
 	s = ALmax(ALmin(s, +capsule->world_scale().y), -capsule->world_scale().y); //capsuleの長さにクランプ
 
 
 	//capsuleの座標系でsphere-sphereの判定を行う
-	Vector3 pA = sphere_pos_capcoord;
-	Vector3 pB = s * Vector3(0, 1, 0);
+	XMVECTOR pA = sphere_pos_capcoord;
+	XMVECTOR pB = XMVectorScale(y1_SIM, s);
 
 	//p1 から p0　方向への法線
-	Vector3 n = pA - pB;
-	float length = n.norm_sqr();
-	n = n.unit_vect();
+	XMVECTOR n = pA - pB;
+	float length = XMVectorGetX(XMVector3Length(n));
+	n = n / length;
 
 	if (length < sphere->world_scale().x + capsule->world_scale().x) {
-		Vector3 Wn = vector3_quatrotate(n, capsule->world_orientation()); //nをcapsuleからワールドに
+		XMVECTOR Wn = XMVector3Rotate(n, capsule_worient); //nをcapsuleからワールドに
 
 		//衝突していたらContactオブジェクトを生成用に入力
 		is_AC = true;
 		ACpenetration = sphere->world_scale().x + capsule->world_scale().x - length;
 		ACnormal = +Wn;
-		ACcontact_pointA = sphere->world_scale().x * vector3_quatrotate(-Wn, sphere->world_orientation().inverse());
-		ACcontact_pointB = capsule->world_scale().x * n + pB;
+		ACcontact_pointA = XMVectorScale(XMVector3Rotate(-Wn, sphere_worient_inv), sphere->world_scale().x);
+		ACcontact_pointB = XMVectorScale(n, capsule->world_scale().x) + pB;
 
 	}
 
@@ -1157,19 +1169,27 @@ bool Physics_function::generate_contact_sphere_capsule(const Collider_shape* sph
 		//oncoll_enterのみの場合ここでreturn
 		if (pair->check_oncoll_only == true) return false;
 
+		Vector3 ACnormal_;
+		Vector3 ACcontact_pointA_;
+		Vector3 ACcontact_pointB_;
+
+		DirectX::XMStoreFloat3(&ACnormal_, ACnormal);
+		DirectX::XMStoreFloat3(&ACcontact_pointA_, ACcontact_pointA);
+		DirectX::XMStoreFloat3(&ACcontact_pointB_, ACcontact_pointB);
+
 		if (pair->body[0]->get_shape_tag() == sphere->get_shape_tag())
 			pair->contacts.addcontact(
 				ACpenetration,
-				ACnormal,
-				ACcontact_pointA,
-				ACcontact_pointB
+				ACnormal_,
+				ACcontact_pointA_,
+				ACcontact_pointB_
 			);
 		else
 			pair->contacts.addcontact(
 				ACpenetration,
-				-ACnormal,
-				ACcontact_pointB,
-				ACcontact_pointA
+				-ACnormal_,
+				ACcontact_pointB_,
+				ACcontact_pointA_
 			);
 	}
 	return is_AC;
@@ -2699,7 +2719,7 @@ bool Physics_function::generate_contact_mesh_mesh(const Collider_shape* meshA, c
 					if (vector3_dot(facet_shape->get_mesh_data()->facets.at(f_num).normal, -axisF) < 0.5)continue; //衝突法線と比べて
 
 					//メッシュと点の最近点を求める
-					get_closestP_point_triangle(p,
+					Closest_func::get_closestP_point_triangle(p,
 						facet_shape->get_mesh_data()->vertices.at(facet_shape->get_mesh_data()->facets.at(f_num).vertexID[0]),
 						facet_shape->get_mesh_data()->vertices.at(facet_shape->get_mesh_data()->facets.at(f_num).vertexID[1]),
 						facet_shape->get_mesh_data()->vertices.at(facet_shape->get_mesh_data()->facets.at(f_num).vertexID[2]),
@@ -2781,7 +2801,7 @@ bool Physics_function::generate_contact_mesh_mesh(const Collider_shape* meshA, c
 					if (vector3_dot(facet_mesh->get_mesh_data()->facets.at(f_num).normal, -axisF) < 0.5)continue; //衝突法線と比べて
 
 					//メッシュと点の最近点を求める
-					get_closestP_point_triangle(p,
+					Closest_func::get_closestP_point_triangle(p,
 						facet_mesh->get_mesh_data()->vertices.at(facet_mesh->get_mesh_data()->facets.at(f_num).vertexID[0]),
 						facet_mesh->get_mesh_data()->vertices.at(facet_mesh->get_mesh_data()->facets.at(f_num).vertexID[1]),
 						facet_mesh->get_mesh_data()->vertices.at(facet_mesh->get_mesh_data()->facets.at(f_num).vertexID[2]),
@@ -2879,3 +2899,5 @@ bool Physics_function::generate_contact_mesh_mesh(const Collider_shape* meshA, c
 
 #pragma endregion
 //:::::::::::::::::::::::::::
+
+#endif

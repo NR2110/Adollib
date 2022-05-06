@@ -399,6 +399,7 @@
     <ClCompile Include="Scripts\Main\sprite.cpp" />
     <ClCompile Include="Scripts\Main\systems.cpp" />
     <ClCompile Include="Scripts\Math\closest_func.cpp" />
+    <ClCompile Include="Scripts\Math\closest_func_SIM.cpp" />
     <ClCompile Include="Scripts\Math\complex.cpp" />
     <ClCompile Include="Scripts\Math\crossing_func.cpp" />
     <ClCompile Include="Scripts\Object\camera_costantbuffer_template.cpp" />
