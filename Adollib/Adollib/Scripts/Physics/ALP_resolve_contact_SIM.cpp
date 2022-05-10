@@ -534,11 +534,13 @@ void Physics_function::resolve_contact(std::list<Physics_function::ALP_Collider*
 	for (int solver_iterations_count = 0; solver_iterations_count < Physics_manager::physicsParams.solver_iteration; solver_iterations_count++) {
 		// S‘©‚Ì‰‰ŽZ
 		world_trans* transform[2];
+
+		Work_meter::start("solver_joint", 1);
 		for (auto& joint : joints) {
 
 			{
-				const Vector3 joint_posA = joint->limit_constraint_pos[0];
-				const Vector3 joint_posB = joint->limit_constraint_pos[1];
+				const DirectX::XMVECTOR joint_posA = DirectX::XMLoadFloat3(&joint->limit_constraint_pos[0]);
+				const DirectX::XMVECTOR joint_posB = DirectX::XMLoadFloat3(&joint->limit_constraint_pos[1]);
 
 				transform[0] = &joint->ALPcollider[0]->transform;
 				transform[1] = &joint->ALPcollider[1]->transform;
@@ -547,8 +549,8 @@ void Physics_function::resolve_contact(std::list<Physics_function::ALP_Collider*
 				solverbody[0] = ALPphysics[0]->solve;
 				solverbody[1] = ALPphysics[1]->solve;
 
-				const DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&joint_posA), DirectX::XMLoadFloat4(&transform[0]->orientation));
-				const DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(DirectX::XMLoadFloat3(&joint_posB), DirectX::XMLoadFloat4(&transform[1]->orientation));
+				const DirectX::XMVECTOR rA = DirectX::XMVector3Rotate(joint_posA, DirectX::XMLoadFloat4(&transform[0]->orientation));
+				const DirectX::XMVECTOR rB = DirectX::XMVector3Rotate(joint_posB, DirectX::XMLoadFloat4(&transform[1]->orientation));
 
 				Constraint& constraint = joint->constraint_limit;
 				const DirectX::XMVECTOR axis = DirectX::XMLoadFloat3(&constraint.axis);
@@ -559,7 +561,7 @@ void Physics_function::resolve_contact(std::list<Physics_function::ALP_Collider*
 				delta_velocity[1] = DirectX::XMVectorAdd(solverbody[1]->delta_LinearVelocity, DirectX::XMVector3Cross(solverbody[1]->delta_AngulaVelocity, rB));
 				delta_impulse -= constraint.jacDiagInv * DirectX::XMVectorGetX(DirectX::XMVector3Dot(axis, DirectX::XMVectorSubtract(delta_velocity[0], delta_velocity[1])));
 
-				float old_impulse = constraint.accuminpulse;
+				const float& old_impulse = constraint.accuminpulse;
 				constraint.accuminpulse = ALClamp(old_impulse + delta_impulse, constraint.lowerlimit, constraint.upperlimit);
 				delta_impulse = constraint.accuminpulse - old_impulse;
 
@@ -603,8 +605,11 @@ void Physics_function::resolve_contact(std::list<Physics_function::ALP_Collider*
 			}
 
 		}
+		Work_meter::stop("solver_joint", 1);
 
+		Work_meter::start("solver_pair", 1);
 		for (auto& pair : pairs) {
+
 
 			coll[0] = pair->body[0];
 			coll[1] = pair->body[1];
@@ -686,6 +691,7 @@ void Physics_function::resolve_contact(std::list<Physics_function::ALP_Collider*
 
 			}
 		}
+		Work_meter::stop("solver_pair", 1);
 	}
 
 	Work_meter::stop("solver", 1);

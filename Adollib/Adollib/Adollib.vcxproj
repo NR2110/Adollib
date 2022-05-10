@@ -402,6 +402,7 @@
     <ClCompile Include="Scripts\Math\closest_func_SIM.cpp" />
     <ClCompile Include="Scripts\Math\complex.cpp" />
     <ClCompile Include="Scripts\Math\crossing_func.cpp" />
+    <ClCompile Include="Scripts\Math\crossing_func_SIM.cpp" />
     <ClCompile Include="Scripts\Object\camera_costantbuffer_template.cpp" />
     <ClCompile Include="Scripts\Object\component_camera.cpp" />
     <ClCompile Include="Scripts\Object\component_light.cpp" />

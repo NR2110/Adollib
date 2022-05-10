@@ -559,6 +559,9 @@
     <ClCompile Include="Scripts\Math\closest_func_SIM.cpp">
       <Filter>00_Adollib\11_math\functions</Filter>
     </ClCompile>
+    <ClCompile Include="Scripts\Math\crossing_func_SIM.cpp">
+      <Filter>00_Adollib\11_math\functions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Scripts\player.h">
