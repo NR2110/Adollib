@@ -119,7 +119,7 @@ void Physics_function::BroadMidphase(
 		auto& axis_list = axis_list_;
 		auto& access_axislist_itr = access_axislist_itr_;
 
-		//Work_meter::start("make_axis_list", 1);
+		Work_meter::start("make_axis_list", 1);
 		//::: 追加されたものをaxis_listに追加 :::
 		{
 			for (auto& added : added_collider) {
@@ -172,11 +172,11 @@ void Physics_function::BroadMidphase(
 		}
 
 
-		//Work_meter::stop("make_axis_list", 1);
+		Work_meter::stop("make_axis_list", 1);
 
 		//::: 動いたもののvalueを更新
 		{
-			//Work_meter::start("update_Value", 1);
+			Work_meter::start("update_Value", 1);
 			{
 				std::lock_guard<std::mutex> lock(mtx);
 
@@ -209,13 +209,13 @@ void Physics_function::BroadMidphase(
 				}
 			}
 
-			//Work_meter::stop("update_Value", 1);
+			Work_meter::stop("update_Value", 1);
 		}
 
 		//::: 挿入ソート ::::::::::::::
 		//small ----> big
 		{
-			//Work_meter::start("insert_sort", 1);
+			Work_meter::start("insert_sort", 1);
 
 			std::list<Insert_edge*>::iterator itr[2] = { axis_list.begin(),axis_list.begin() };
 			u_int next_num = 0;
@@ -262,14 +262,14 @@ void Physics_function::BroadMidphase(
 				next_num = now_num;
 			}
 
-			//Work_meter::stop("insert_sort", 1);
+			Work_meter::stop("insert_sort", 1);
 		}
 
 	}
 
 
 	{
-		//Work_meter::start("Sweep&Prune", 1);
+		Work_meter::start("Sweep&Prune", 1);
 		//Sweep&Prune
 
 		out_pair.clear();
@@ -332,7 +332,7 @@ void Physics_function::BroadMidphase(
 	moved_collider.clear();
 	added_collider.clear();
 
-	//Work_meter::stop("Sweep&Prune", 1);
+	Work_meter::stop("Sweep&Prune", 1);
 }
 
 void Physics_function::remove_collider_broad_phase(Physics_function::ALP_Collider* removed) {

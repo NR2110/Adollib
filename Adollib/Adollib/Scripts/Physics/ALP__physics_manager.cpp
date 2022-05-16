@@ -234,7 +234,7 @@ bool Physics_manager::update()
 	}
 	else
 	{
-		float sleep_time = physicsParams.caluculate_time - physicsParams.timeStep - 0.005f;
+		float sleep_time = physicsParams.caluculate_time - physicsParams.timeStep - 0.0005f;
 		Work_meter::set("physicsParams.sleep_time", sleep_time, 1);
 
 		if (sleep_time > 0)

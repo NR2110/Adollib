@@ -50,7 +50,7 @@ void Physics_function::generate_contact(std::vector<Contacts::Contact_pair*>& pa
 
 			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Sphere)generate_contact_sphere_capsule(shapeB, shapeA, pair, is_crossing);
 			if (shapeB->get_shape_tag() == ALPCollider_shape_type::BOX)generate_contact_box_capsule(shapeB, shapeA, pair, is_crossing);
-			//if (shapeB->get_shape_tag() == ALPCollider_shape_type::Capsule)generate_contact_capsule_capsule(shapeA, shapeB, pair, is_crossing);
+			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Capsule)generate_contact_capsule_capsule(shapeA, shapeB, pair, is_crossing);
 			//if (shapeB->get_shape_tag() == ALPCollider_shape_type::Mesh)generate_contact_capsule_mesh(shapeA, shapeB, pair, is_crossing);
 		}
 		//if (shapeA->get_shape_tag() == ALPCollider_shape_type::Plane) {
@@ -2096,7 +2096,7 @@ bool Physics_function::generate_contact_box_capsule(const Collider_shape* box, c
 }
 #pragma endregion
 
-//#pragma region BOX-MESH
+#pragma region BOX-MESH
 //
 //struct Crossing_struct {
 //	float ACpenetration = 0;
@@ -2424,77 +2424,90 @@ bool Physics_function::generate_contact_box_capsule(const Collider_shape* box, c
 //		return true;
 //	}
 //}
-//#pragma endregion
-//
-//
-//#pragma region Capsule-Capsule
-//bool Physics_function::generate_contact_capsule_capsule(const Collider_shape* capsuleA, const Collider_shape* capsuleB, Contacts::Contact_pair*& pair, bool& is_crossing) {
-//	//const std::list<ALP_Collider>::iterator& capsuleA = SA->get_ALPcollider();
-//	//const std::list<ALP_Collider>::iterator& capsuleB = SB->get_ALPcollider();
-//
-//	//AddContact用の変数
-//	bool is_AC = false;
-//	float ACpenetration = 0;
-//	Vector3 ACnormal;
-//	Vector3 ACcontact_pointA;
-//	Vector3 ACcontact_pointB;
-//
-//	Vector3 Avec_Wco = vector3_quatrotate(Vector3(0, 1, 0), capsuleA->world_orientation()) * capsuleA->world_scale().y;
-//	Vector3 Bvec_Wco = vector3_quatrotate(Vector3(0, 1, 0), capsuleB->world_orientation()) * capsuleB->world_scale().y;
-//
-//	float t, s;
-//	Closest_func::get_closestP_two_segment(
-//		capsuleA->world_position() - Avec_Wco,
-//		capsuleA->world_position() + Avec_Wco,
-//		capsuleB->world_position() - Bvec_Wco,
-//		capsuleB->world_position() + Bvec_Wco,
-//		s, t
-//	);
-//
-//	Vector3 pA_Wco = capsuleA->world_position() + Avec_Wco * (s * 2 - 1);
-//	Vector3 pB_Wco = capsuleB->world_position() + Bvec_Wco * (t * 2 - 1);
-//
-//	//pB から pA　方向への法線 Acoord
-//	Vector3 Wn = pA_Wco - pB_Wco;
-//	float length = Wn.norm_sqr();
-//	Wn = Wn.unit_vect();
-//
-//	if (length < capsuleA->world_scale().x + capsuleB->world_scale().x) {
-//
-//		//衝突していたらContactオブジェクトを生成用に準備する
-//		is_AC = true;
-//		ACpenetration = capsuleA->world_scale().x + capsuleB->world_scale().x - length;
-//		ACnormal = Wn;
-//		ACcontact_pointA = Vector3(0, 1, 0) * capsuleA->world_scale().y * (s * 2 - 1) + capsuleA->world_scale().x * vector3_quatrotate(-Wn, capsuleA->world_orientation().inverse());
-//		ACcontact_pointB = Vector3(0, 1, 0) * capsuleB->world_scale().y * (t * 2 - 1) + capsuleB->world_scale().x * vector3_quatrotate(+Wn, capsuleB->world_orientation().inverse());
-//	}
-//
-//
-//	if (is_AC)
-//	{
-//		is_crossing = true;
-//
-//		//oncoll_enterのみの場合ここでreturn
-//		if (pair->check_oncoll_only == true) return false;
-//
-//		if (pair->body[0]->get_shape_tag() == capsuleA->get_shape_tag())
-//			pair->contacts.addcontact(
-//				ACpenetration,
-//				ACnormal,
-//				ACcontact_pointA,
-//				ACcontact_pointB
-//			);
-//		else
-//			pair->contacts.addcontact(
-//				ACpenetration,
-//				-ACnormal,
-//				ACcontact_pointB,
-//				ACcontact_pointA
-//			);
-//	}
-//	return is_AC;
-//}
-//#pragma endregion
+#pragma endregion
+
+#pragma region Capsule-Capsule
+bool Physics_function::generate_contact_capsule_capsule(const Collider_shape* capsuleA, const Collider_shape* capsuleB, Contacts::Contact_pair*& pair, bool& is_crossing) {
+	using namespace DirectX;
+
+	//AddContact用の変数
+	bool is_AC = false;
+	float ACpenetration = 0;
+	XMVECTOR ACnormal;
+	XMVECTOR ACcontact_pointA;
+	XMVECTOR ACcontact_pointB;
+
+	const XMVECTOR capsule_base_axis = XMVectorSet(0, 1, 0, 0);
+	const XMVECTOR capsuleA_Worient = XMLoadFloat4(&capsuleA->world_orientation());
+	const XMVECTOR capsuleB_Worient = XMLoadFloat4(&capsuleB->world_orientation());
+
+	const XMVECTOR capsuleA_Wpos = XMLoadFloat3(&capsuleA->world_position());
+	const XMVECTOR capsuleB_Wpos = XMLoadFloat3(&capsuleB->world_position());
+
+	const XMVECTOR Avec_Wco = XMVectorScale(XMVector3Rotate(capsule_base_axis, capsuleA_Worient), capsuleA->world_scale().y);
+	const XMVECTOR Bvec_Wco = XMVectorScale(XMVector3Rotate(capsule_base_axis, capsuleB_Worient), capsuleB->world_scale().y);
+
+	float t, s;
+	Closest_func_SIM::get_closestP_two_segment(
+		capsuleA_Wpos - Avec_Wco,
+		capsuleA_Wpos + Avec_Wco,
+		capsuleB_Wpos - Bvec_Wco,
+		capsuleB_Wpos + Bvec_Wco,
+		s, t
+	);
+
+	XMVECTOR pA_Wco = capsuleA_Wpos + XMVectorScale(Avec_Wco, (s * 2 - 1));
+	XMVECTOR pB_Wco = capsuleB_Wpos + XMVectorScale(Bvec_Wco, (t * 2 - 1));
+
+	//pB から pA　方向への法線 Acoord
+	XMVECTOR Wn = pA_Wco - pB_Wco;
+	float length = XMVector3Length(Wn).m128_f32[0];
+	Wn = Wn / length;
+
+	if (length < capsuleA->world_scale().x + capsuleB->world_scale().x) {
+
+		//衝突していたらContactオブジェクトを生成用に準備する
+		is_AC = true;
+		ACpenetration = capsuleA->world_scale().x + capsuleB->world_scale().x - length;
+		ACnormal = Wn;
+		ACcontact_pointA = XMVectorScale(capsule_base_axis, capsuleA->world_scale().y * (s * 2 - 1)) + XMVectorScale(XMVector3Rotate(-Wn, XMQuaternionInverse(capsuleA_Worient)), capsuleA->world_scale().x);
+		ACcontact_pointB = XMVectorScale(capsule_base_axis, capsuleB->world_scale().y * (t * 2 - 1)) + XMVectorScale(XMVector3Rotate(+Wn, XMQuaternionInverse(capsuleB_Worient)), capsuleB->world_scale().x);
+	}
+
+
+	if (is_AC)
+	{
+		is_crossing = true;
+
+		//oncoll_enterのみの場合ここでreturn
+		if (pair->check_oncoll_only == true) return false;
+
+		Vector3 ACnormal_;
+		Vector3 ACcontact_pointA_;
+		Vector3 ACcontact_pointB_;
+
+		DirectX::XMStoreFloat3(&ACnormal_, ACnormal);
+		DirectX::XMStoreFloat3(&ACcontact_pointA_, ACcontact_pointA);
+		DirectX::XMStoreFloat3(&ACcontact_pointB_, ACcontact_pointB);
+
+		if (pair->body[0]->get_shape_tag() == capsuleA->get_shape_tag())
+			pair->contacts.addcontact(
+				ACpenetration,
+				ACnormal_,
+				ACcontact_pointA_,
+				ACcontact_pointB_
+			);
+		else
+			pair->contacts.addcontact(
+				ACpenetration,
+				-ACnormal_,
+				ACcontact_pointB_,
+				ACcontact_pointA_
+			);
+	}
+	return is_AC;
+}
+#pragma endregion
 //
 //#pragma region Capsule-Mesh
 //bool Physics_function::generate_contact_capsule_mesh(const Collider_shape* capsule, const Collider_shape* mesh, Contacts::Contact_pair*& pair, bool& is_crossing) {

@@ -8,25 +8,21 @@
 #include "../Object/transform.h"
 #include <mutex>
 
-//SIMDを使うかどうか バグっているため使用不可
-#define PHYICSE_USED_SIMD
 
 
 namespace Adollib {
 	namespace Physics_function {
 
 		struct ALP_Solverbody {
-#ifndef PHYICSE_USED_SIMD
-			Vector3 delta_LinearVelocity; // 並進速度差分
-			Vector3 delta_AngulaVelocity; // 回転速度差分
-			//Quaternion orientation; // 姿勢
-			Matrix33 inv_tensor; // 慣性テンソルの逆行列
-#else
+
 			DirectX::XMVECTOR delta_LinearVelocity; // 並進速度差分
 			DirectX::XMVECTOR delta_AngulaVelocity; // 回転速度差分
-			//DirectX::XMVECTOR orientation; // 姿勢
+
 			DirectX::XMMATRIX inv_tensor; // 慣性テンソルの逆行列
-#endif
+
+			DirectX::XMVECTOR Worient; //アタッチしているGOのworld_orientation
+			DirectX::XMVECTOR Wposition; //アタッチしているGOのworld_position
+
 			float  inv_mass = 0; // 質量の逆数
 			//int num = 0;
 		};
