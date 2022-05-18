@@ -11,20 +11,24 @@ namespace Adollib {
 		// 挿入法の
 		struct Insert_edge {
 			Collider_shape* shape; //shapeへのポインタ
-			float value = 0; //値
+			float pos_value[2] = {0}; //値 0:X 1:Z
 			bool edge_start = false; //true = start, false = goal
-			u_int shape_index = 0; //Insert_edgeの情報から対応するaccess_axislist_itrにアクセスできるように
+			u_int shape_index = 0; //Insert_edgeの情報から対応するaccess_axislist_itr_にアクセスできるように
 
-			std::list<Insert_edge*>::iterator axis_list_pair_itr;     //このedgeのpairとなるedgeへのitr
-			std::list<Collider_shape*>::iterator active_list_pair_itr;//このedgeのpairとなるedgeのactivelistへのイテレータ
+			std::list<Insert_edge*>::iterator axis_listX_pair_itr;     //このedgeのpairとなるedgeへのitr
+			std::list<Collider_shape*>::iterator active_list_itr;     //edgeのactivelistへのイテレータ
 		};
 
 		namespace Broadphase_static {
 
-			static std::list<Insert_edge*> axis_list_;
+			static std::list<Insert_edge*> axis_listX_;
+			static std::list<std::list<Insert_edge*>> axis_listZ_;
 
 			static std::unordered_map<u_int, std::vector<std::list<Insert_edge*>::iterator>> access_axislist_itr_; //colliderのindex情報から対応するaxis_listへアクセスできるようにする
 
+			bool Check_insert_DOP14(const Collider_shape* meshA, const Collider_shape* meshB);
+			bool Check_insert_Plane(const Collider_shape* plane, const Collider_shape* mesh);
+			void Midphase_DOP_14(std::vector<Contacts::Contact_pair*>& new_pairs, Collider_shape* meshA, Collider_shape* meshB);
 		}
 
 		// とても大雑把な当たり判定(Boardphase) と DOP(Midphase)を行う

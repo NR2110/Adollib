@@ -177,14 +177,8 @@ void ALP_Physics::apply_external_force(float duration, const float timeratio_60)
 		//並進移動に加える力(accumulated_force)から加速度を出して並進速度を更新する 向きを間違えないように!!
 		linear_acceleration += accumulated_force * inv_mass / duration;
 
-		//TODO : crothのものは重力を小さくする いまは値が適当なため要修正
-		//if (is_fallable) linear_acceleration += Vector3(0, -Physics_manager::physicsParams.gravity, 0); //落下
-		if (is_fallable && Physics_manager::physicsParams.gravity != 0) {
-			if(ALPcollider->is_adapt_shape_for_copy_transform_gameobject)
-				linear_acceleration += Vector3(0, -Physics_manager::physicsParams.gravity * 0.5f, 0); //落下
-			else
-				linear_acceleration += Vector3(0, -Physics_manager::physicsParams.gravity, 0); //落下
-		}
+		if (is_fallable) linear_acceleration += Vector3(0, -Physics_manager::physicsParams.gravity, 0); //落下
+
 		linear_velocity_ += linear_acceleration * duration;
 
 		//各回転に加える力(accumulated_torque)から加速度を出して角速度を更新する
