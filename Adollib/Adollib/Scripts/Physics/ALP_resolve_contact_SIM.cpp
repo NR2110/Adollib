@@ -147,7 +147,7 @@ void Physics_function::resolve_contact(std::list<Physics_function::ALP_Collider*
 
 	//::: 解決用オブジェクトの生成 :::::::::::
 	std::vector<ALP_Solverbody> SBs;
-	SBs.reserve(sizeof(ALP_Solverbody) * ALP_colliders.size());
+	SBs.reserve(ALP_colliders.size());
 	// SBs.resize(colliders.size()); //アライメントでSIMDとコンテナが競合する??? reserveにしたら治った
 	{
 		int count = 0;

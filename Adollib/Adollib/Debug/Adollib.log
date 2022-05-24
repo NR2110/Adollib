@@ -1,3 +1,4 @@
-﻿  ALP_generate_contact_SIM.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact_SIM.cpp(508,11): warning C4101: 'axis': ローカル変数は 1 度も使われていません。
+﻿  ALP_resolve_contact_SIM.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_resolve_contact_SIM.cpp(483,12): warning C4101: 'position': ローカル変数は 1 度も使われていません。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe
