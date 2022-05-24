@@ -293,8 +293,8 @@ bool Physics_manager::update()
 		for (int i = 0; i < size; i++) {
 			debug_go[i] = Gameobject_manager::createSphere();
 			debug_go[i]->transform->local_scale = Vector3(1) * 0.3f;
-			if (i % 2 == 0)debug_go[i]->material->color = Vector4(1, 0.5f, 0.5f, 1);
-			else debug_go[i]->material->color = Vector4(0.5f, 1, 0.5f, 1);
+			if (i % 2 == 0)debug_go[i]->renderer->get_material()->color = Vector4(1, 0.5f, 0.5f, 1);
+			else debug_go[i]->renderer->get_material()->color = Vector4(0.5f, 1, 0.5f, 1);
 
 			debug_go[i]->is_hierarchy = false;
 		}
@@ -310,15 +310,13 @@ bool Physics_manager::update()
 		for (int i = 0; i < p->contacts.contact_num; i++) {
 			count += 2;
 			if (count > size)break;
-			const auto coll0 = *p->body[0]->get_ALPcollider();
-			const auto coll1 = *p->body[1]->get_ALPcollider();
 
 			//debug_go[count - 1]->transform->local_pos = vector3_quatrotate((p.contacts.contactpoints[i].point[0]), coll0.get_gameobject()->world_orientate()) + coll0.get_gameobject()->world_position();
 			//debug_go[count - 2]->transform->local_pos = vector3_quatrotate((p.contacts.contactpoints[i].point[1]), coll1.get_gameobject()->world_orientate()) + coll1.get_gameobject()->world_position();
 
 			debug_go[count - 1]->transform->local_pos = p->body[0]->world_position() + vector3_quatrotate(p->contacts.contactpoints[i].point[0], p->body[0]->world_orientation());
 			debug_go[count - 2]->transform->local_pos = p->body[1]->world_position() + vector3_quatrotate(p->contacts.contactpoints[i].point[1], p->body[1]->world_orientation());
-			int adfsdg = 0;
+
 		}
 	}
 
@@ -330,7 +328,7 @@ bool Physics_manager::update()
 
 bool Physics_manager::update_Gui() {
 	ImGuiWindowFlags flag = 0;
-	//flag |= ImGuiWindowFlags_AlwaysAutoResize;
+	// flag |= ImGuiWindowFlags_AlwaysAutoResize;
 	flag |= ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize;
 	flag |= ImGuiWindowFlags_::ImGuiWindowFlags_NoDocking;
 
@@ -342,25 +340,28 @@ bool Physics_manager::update_Gui() {
 		ImGui::Checkbox("draw_DOP", &is_draw_dop);
 		ImGui::Checkbox("draw_joint", &is_draw_joint);
 
-		//重力の調整
+		// 重力の調整
 		ImGui::InputFloat("gravity", &physicsParams.gravity, 0.1f, 1.0f, "%.2f");
 
-		//正確さの調整
+		// 正確さの調整
 		ImGui::InputInt("solver_iteration", &physicsParams.solver_iteration, 1, 200);
 		ImGui::InputInt("calculate_iteration", &physicsParams.calculate_iteration, 1, 200);
 
-		//貫通時のばねの強さ
+		// SweepAndPruneのX軸分割の分母
+		ImGui::InputInt("sweep_and_prune_divide_value", &physicsParams.sweep_and_prune_divide_value, 1, 200);
+
+		// 貫通時のばねの強さ
 		ImGui::InputFloat("bias", &physicsParams.bias, 0.01f, 0.1f, "%.3f");
-		//貫通許容誤差
+		// 貫通許容誤差
 		ImGui::InputFloat("slop", &physicsParams.slop, 0.0001f, 0.001f, "%.4f");
 
-		//最大のtimestep
+		// 最大のtimestep
 		ImGui::DragFloat("max_timeStep", &physicsParams.max_timeStep, 0.001f, 0.001f, 100000000);
 		ImGui::DragFloat("caluculate_time", &physicsParams.caluculate_time, 0.001f, 0.001f, 100000000,"%.5f");
 		ImGui::DragFloat("timescale", &physicsParams.timescale, 0.01f, 0, 100000000);
 		ImGui::Text("timeStep : %f", physicsParams.timeStep);
 
-		//physics_defaultの表示
+		// physics_defaultの表示
 		if (ImGui::CollapsingHeader("physics_default")) {
 
 			ImGui::DragFloat("mass", &physicsParams.inertial_mass, 0.1f);

@@ -69,7 +69,6 @@ namespace Adollib
 				//Meshcoll* R = GO->addComponent<Meshcoll>();
 				//R->load_mesh("./DefaultModel/cube.fbx");
 				coll->physics_data.is_moveable = false;
-				coll->is_static = true;
 				coll->tag = Collider_tags::Stage;;
 			}
 
@@ -86,7 +85,6 @@ namespace Adollib
 				Collider* coll = GO->addComponent<Collider>();
 				coll->add_mesh_shape("../Adollib/DefaultModel/cube.fbx", true);
 				coll->physics_data.is_moveable = false;
-				coll->is_static = true;
 			}
 
 		}
@@ -101,7 +99,6 @@ namespace Adollib
 				//Meshcoll* R = GO->addComponent<Meshcoll>();
 				//R->load_mesh("./DefaultModel/cube.fbx");
 				coll->physics_data.is_moveable = false;
-				coll->is_static = true;
 
 			}
 
@@ -117,7 +114,6 @@ namespace Adollib
 				//Meshcoll* R = GO->addComponent<Meshcoll>();
 				//R->load_mesh("./DefaultModel/cube.fbx");
 				coll->physics_data.is_moveable = false;
-				coll->is_static = true;
 
 			}
 
@@ -137,7 +133,6 @@ namespace Adollib
 				coll->add_mesh_shape("../Data/FBX/Model_Shaclo_Winter_Edit.fbx", true, true);
 				//R->load_mesh("../Adollib/DefaultModel/cylinder.fbx");
 				coll->physics_data.is_moveable = false;
-				coll->is_static = true;
 			}
 		}
 		else if (stage_type == Stage_types::Shaclo_stage) {
@@ -158,7 +153,6 @@ namespace Adollib
 				coll->add_mesh_shape("../Data/FBX/stage_col.fbx", true, true);
 				//R->load_mesh("../Adollib/DefaultModel/cylinder.fbx");
 				coll->physics_data.is_moveable = false;
-				coll->is_static = true;
 
 			}
 
@@ -178,7 +172,6 @@ namespace Adollib
 				coll->add_mesh_shape("../Data/FBX/0311_collisions.fbx", true);
 				//R->load_mesh("../Adollib/DefaultModel/cylinder.fbx");
 				coll->physics_data.is_moveable = false;
-				coll->is_static = true;
 			}
 		}
 		else if (stage_type == Stage_types::Sponza) {
@@ -198,7 +191,6 @@ namespace Adollib
 				coll->add_mesh_shape("../Data/FBX/sponza.obj", true, true);
 				//R->load_mesh("../Adollib/DefaultModel/cylinder.fbx");
 				coll->physics_data.is_moveable = false;
-				coll->is_static = true;
 
 			}
 

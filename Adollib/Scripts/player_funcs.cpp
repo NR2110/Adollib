@@ -641,6 +641,7 @@ void Player::push_waist_for_stand() {
 	if (onground_collider != nullptr) {
 
 		float dis = vector3_dot(onground_contactpoint - Waist_collider->transform->position, Vector3(0, -1, 0));
+		Debug::set("player_ray_dis", dis);
 
 		if (dis < onground_dis) {
 			constexpr float mass = 10 * 4.5f; //パーツによって質量がまちまちなので だいたいの質量
@@ -1036,6 +1037,7 @@ void Player::update_onground() {
 	onground_ray_data.collider_tag = Collider_tags::Stage;
 	if (ray.sphere_cast(onground_radius, onground_contactpoint, onground_ray_data) && onground_ray_data.raymin < onground_dis) onground_collider = onground_ray_data.coll;
 
+	Debug::set("onground_contactpoint", onground_contactpoint);
 }
 
 // gunyattoさせるかどうかの更新

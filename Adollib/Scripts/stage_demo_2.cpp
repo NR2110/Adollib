@@ -38,9 +38,175 @@ namespace Adollib
 		//player_respown_pos = Vector3(90, 16.0f, 66.0f);
 		y_respown_pos = 30; // respown‚µ‚½‚Æ‚«‚ÌY‚ÌÀ•W
 
-		Gameobject* p = Gameobject_manager::create("stage");
-		stage_parts.emplace_back(p);
-		set_box(Vector3(0, -60, -0), Vector3(300, 60, 300), Vector3(0), Vector3(188, 214, 54) / 255.0f, p);
+		{
+			Gameobject* p = Gameobject_manager::create("stage");
+			stage_parts.emplace_back(p);
+
+			enum class Stage_types {
+
+				Cube,
+				Sphere,
+				Capsule,
+				Mesh_Cube,
+				Shaclo,
+				Shaclo_stage,
+				Teach,
+				Sponza
+			};
+
+			Stage_types stage_type = Stage_types::Mesh_Cube;
+			Gameobject* GO = nullptr;
+
+			if (stage_type == Stage_types::Cube) {
+				GO = Gameobject_manager::createCube("stage");
+				GO->transform->local_pos = Vector3(0, -60, 0);
+				GO->transform->local_scale = Vector3(300, 60, 300);
+				//GO->transform->local_orient = quaternion_from_euler(0, 45, 0);
+				GO->renderer->color = Vector4(188, 214, 54, 255) / 255.0f;
+
+				Collider* coll = GO->addComponent<Collider>();
+				Box* box = coll->add_shape<Box>();
+				coll->physics_data.is_moveable = false;
+				coll->physics_data.is_static = true;
+				coll->tag = Collider_tags::Box | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Static_Stage;
+
+			}
+			else if (stage_type == Stage_types::Mesh_Cube) {
+				{
+					//C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DefaultModel
+					GO = Gameobject_manager::createFromFBX("", "../Adollib/DefaultModel/cube.fbx");
+					GO->transform->local_pos = Vector3(0, -60, 0);
+					GO->transform->local_scale = Vector3(60, 60, 60);
+					//GO->transform->local_orient = quaternion_from_euler(0, 45, 0);
+					GO->renderer->color = GO->renderer->color = Vector4(188, 214, 54, 255) / 255.0f;
+
+					Collider* coll = GO->addComponent<Collider>();
+					coll->add_mesh_shape("../Adollib/DefaultModel/cube.fbx", true);
+					coll->physics_data.is_moveable = false;
+					coll->physics_data.is_static = true;
+					coll->tag = Collider_tags::Box | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Static_Stage;
+				}
+
+			}
+			else if (stage_type == Stage_types::Sphere) {
+				{
+					GO = Gameobject_manager::createSphere("stage");
+					GO->transform->local_pos = Vector3(0, -6000, 0);
+					GO->transform->local_scale = Vector3(6000, 6000, 6000);
+					GO->renderer->color = GO->renderer->color = Vector4(188, 214, 54, 255) / 255.0f;
+					Collider* coll = GO->addComponent<Collider>();
+					Sphere* sphere = coll->add_shape<Sphere>();
+					//Meshcoll* R = GO->addComponent<Meshcoll>();
+					//R->load_mesh("./DefaultModel/cube.fbx");
+					coll->physics_data.is_moveable = false;
+					coll->physics_data.is_static = true;
+					coll->tag = Collider_tags::Box | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Static_Stage;
+
+				}
+
+			}
+			else if (stage_type == Stage_types::Capsule) {
+				{
+					GO = Gameobject_manager::create("stage");
+					GO->transform->local_pos = Vector3(0, -60, 0);
+					GO->transform->local_scale = Vector3(60, 60, 60);
+
+					Collider* coll = GO->addComponent<Collider>();
+					Capsule* capsule = coll->add_shape<Capsule>();
+					//Meshcoll* R = GO->addComponent<Meshcoll>();
+					//R->load_mesh("./DefaultModel/cube.fbx");
+					coll->physics_data.is_moveable = false;
+					coll->physics_data.is_static = true;
+					coll->tag = Collider_tags::Box | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Static_Stage;
+
+				}
+
+			}
+			else if (stage_type == Stage_types::Shaclo) {
+				{
+					GO = Gameobject_manager::createFromFBX("", "../Data/FBX/Model_Shaclo_Winter_Edit.fbx");
+					GO->transform->local_pos = Vector3(0, 10, 114);
+					//objGO->transform->local_scale = Vector3(0.01f, 0.02f, 0.03f);
+					GO->transform->local_orient = quaternion_from_euler(90,0,0.1f);
+					//GO->transform->local_scale = Vector3(0.01f, 0.01f, 0.01f);
+
+					Collider* coll = GO->addComponent<Collider>();
+					coll->add_mesh_shape("../Data/FBX/Model_Shaclo_Winter_Edit.fbx", true, true);
+					//R->load_mesh("../Adollib/DefaultModel/cylinder.fbx");
+					coll->physics_data.is_moveable = false;
+					coll->physics_data.is_static = true;
+					coll->tag = Collider_tags::Box | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Static_Stage;
+				}
+			}
+			else if (stage_type == Stage_types::Shaclo_stage) {
+				{
+					//GO = Gameobject_manager::createFromFBX("../Data/FBX/big_plane.fbx");
+					//GO = Gameobject_manager::createFromFBX("../Data/FBX/stage_col.fbx");
+					GO = Gameobject_manager::create("stage");
+					//objGO = Gameobject_manager::createFromFBX("../Data/FBX/0311_collisions.fbx");
+					//objGO = Gameobject_manager::create();
+					//objGO = Gameobject_manager::createFromFBX("../Adollib/DefaultModel/cylinder.fbx");
+					GO->transform->local_pos = Vector3(-10, 0, -25);
+					//objGO->transform->local_scale = Vector3(0.01f, 0.02f, 0.03f);
+					GO->transform->local_scale = Vector3(1, 1, 1);
+					//objGO->transform->local_orient = quaternion_from_euler(45, 45, 45);
+					GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
+
+					Collider* coll = GO->addComponent<Collider>();
+					coll->add_mesh_shape("../Data/FBX/stage_col.fbx", true, true);
+					//R->load_mesh("../Adollib/DefaultModel/cylinder.fbx");
+					coll->physics_data.is_moveable = false;
+					coll->physics_data.is_static = true;
+					coll->tag = Collider_tags::Box | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Static_Stage;
+
+				}
+
+			}
+			else if (stage_type == Stage_types::Teach) {
+				{
+					GO = Gameobject_manager::createFromFBX("", "../Data/FBX/0311_collisions.fbx");
+					//objGO = Gameobject_manager::create();
+					//objGO = Gameobject_manager::createFromFBX("../Adollib/DefaultModel/cylinder.fbx");
+					GO->transform->local_pos = Vector3(-10, 15, -25);
+					//objGO->transform->local_scale = Vector3(0.01f, 0.02f, 0.03f);
+					GO->transform->local_scale = Vector3(0.01f, 0.01f, 0.01f);
+					//objGO->transform->local_orient = quaternion_from_euler(45, 45, 45);
+					GO->transform->local_orient = quaternion_from_euler(0, 180, 0);
+
+					Collider* coll = GO->addComponent<Collider>();
+					coll->add_mesh_shape("../Data/FBX/0311_collisions.fbx", true);
+					//R->load_mesh("../Adollib/DefaultModel/cylinder.fbx");
+					coll->physics_data.is_moveable = false;
+					coll->physics_data.is_static = true;
+					coll->tag = Collider_tags::Box | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Static_Stage;
+				}
+			}
+			else if (stage_type == Stage_types::Sponza) {
+				{
+					//objGO = Gameobject_manager::createFromFBX("../Data/FBX/big_plane.fbx");
+					GO = Gameobject_manager::createFromFBX("", "../Data/FBX/sponza.obj");
+					//objGO = Gameobject_manager::createFromFBX("../Data/FBX/0311_collisions.fbx");
+					//objGO = Gameobject_manager::create();
+					//objGO = Gameobject_manager::createFromFBX("../Adollib/DefaultModel/cylinder.fbx");
+					GO->transform->local_pos = Vector3(0, 0, 0);
+					//objGO->transform->local_scale = Vector3(0.01f, 0.02f, 0.03f);
+					GO->transform->local_scale = Vector3(1, 1, 1);
+					//objGO->transform->local_orient = quaternion_from_euler(45, 45, 45);
+					GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
+
+					Collider* coll = GO->addComponent<Collider>();
+					coll->add_mesh_shape("../Data/FBX/sponza.obj", true, true);
+					//R->load_mesh("../Adollib/DefaultModel/cylinder.fbx");
+					coll->physics_data.is_moveable = false;
+					coll->physics_data.is_static = true;
+					coll->tag = Collider_tags::Box | Collider_tags::Stage | Collider_tags::Caera_not_sunk_Stage | Collider_tags::Static_Stage;
+
+				}
+
+			}
+
+			if(GO) p->add_child(GO);
+		}
 
 		all_pearent = Gameobject_manager::create("all_pearent");
 		stage_parts.emplace_back(all_pearent);
@@ -301,7 +467,7 @@ namespace Adollib
 				ImGui::Separator();
 				ImGui::Text("TREE_pyramid"); ImGui::NextColumn();
 				ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
-				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), TREE_pyramid_pos, 0.1f); ImGui::NextColumn();ImGui::NextColumn();
+				ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), TREE_pyramid_pos, 0.1f); ImGui::NextColumn(); ImGui::NextColumn();
 				ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &TREE_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
 
 				if (summon == true) {

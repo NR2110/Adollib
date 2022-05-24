@@ -86,11 +86,14 @@ namespace Adollib
 			int solver_iteration = 15; //衝突の精度
 			int calculate_iteration = 3; //計算の精度
 
+			int sweep_and_prune_divide_value = 100; //SweepAndPruneのX軸分割の分母
+
 			float timescale = 1.0f;
 			float timeStep = inv120;
 			//float caluculate_time = inv120; //timeStepがこれ以上の時に更新が入る
 			float caluculate_time = inv120; //timeStepがこれ以上の時に更新が入る
 			float max_timeStep = 0.05f;
+
 
 			//::: Physicsの初期値部分 :::
 			float inertial_mass = 1.f; //質量

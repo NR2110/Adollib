@@ -13,3 +13,5 @@
 #ifdef ON_DEBUG
 #define UseImgui
 #endif
+
+#define Use_physics_thread

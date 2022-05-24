@@ -21,14 +21,22 @@ namespace Adollib {
 
 		namespace Broadphase_static {
 
+			static struct Edge_sort_axis {
+				constexpr static u_int X = 0;
+				constexpr static u_int Z = 1;
+			};
+
+
 			static std::list<Insert_edge*> axis_listX_;
-			static std::list<std::list<Insert_edge*>> axis_listZ_;
+			static std::vector<Insert_edge*> axis_listZ_; //std::sort使うからvector
 
 			static std::unordered_map<u_int, std::vector<std::list<Insert_edge*>::iterator>> access_axislist_itr_; //colliderのindex情報から対応するaxis_listへアクセスできるようにする
 
 			bool Check_insert_DOP14(const Collider_shape* meshA, const Collider_shape* meshB);
 			bool Check_insert_Plane(const Collider_shape* plane, const Collider_shape* mesh);
 			void Midphase_DOP_14(std::vector<Contacts::Contact_pair*>& new_pairs, Collider_shape* meshA, Collider_shape* meshB);
+
+			void SweepAndPrune(std::list<Collider_shape*>& actives, std::list<Collider_shape*>& static_actives, Insert_edge* insert_edge, std::vector<Contacts::Contact_pair*>& out_pair);
 		}
 
 		// とても大雑把な当たり判定(Boardphase) と DOP(Midphase)を行う

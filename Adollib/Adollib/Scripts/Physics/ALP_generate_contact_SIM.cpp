@@ -35,7 +35,7 @@ void Physics_function::generate_contact(std::vector<Contacts::Contact_pair*>& pa
 			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Sphere)	generate_contact_sphere_sphere(shapeA, shapeB, pair, is_crossing);
 			if (shapeB->get_shape_tag() == ALPCollider_shape_type::BOX)		generate_contact_sphere_box(shapeA, shapeB, pair, is_crossing);
 			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Capsule)	generate_contact_sphere_capsule(shapeA, shapeB, pair, is_crossing);
-			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Plane)	generate_contact_sphere_plane(shapeA, shapeB, pair, is_crossing);
+			//if (shapeB->get_shape_tag() == ALPCollider_shape_type::Plane)	generate_contact_sphere_plane(shapeA, shapeB, pair, is_crossing);
 			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Mesh)	generate_contact_sphere_mesh(shapeA, shapeB, pair, is_crossing);
 		}
 		if (shapeA->get_shape_tag() == ALPCollider_shape_type::BOX) {
@@ -59,14 +59,14 @@ void Physics_function::generate_contact(std::vector<Contacts::Contact_pair*>& pa
 		//	if (shapeB->get_shape_tag() == ALPCollider_shape_type::BOX)	generate_contact_box_plane(shapeB, shapeA, pair, is_crossing);
 		//	if (shapeB->get_shape_tag() == ALPCollider_shape_type::Plane) {}
 		//}
-		//if (shapeA->get_shape_tag() == ALPCollider_shape_type::Mesh) {
+		if (shapeA->get_shape_tag() == ALPCollider_shape_type::Mesh) {
 
-		//	if (shapeB->get_shape_tag() == ALPCollider_shape_type::Sphere)generate_contact_sphere_mesh(shapeB, shapeA, pair, is_crossing);
+			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Sphere)generate_contact_sphere_mesh(shapeB, shapeA, pair, is_crossing);
 		//	if (shapeB->get_shape_tag() == ALPCollider_shape_type::Capsule)generate_contact_capsule_mesh(shapeB, shapeA, pair, is_crossing);
 		//	if (shapeB->get_shape_tag() == ALPCollider_shape_type::BOX)	generate_contact_box_mesh(shapeB, shapeA, pair, is_crossing);
 		//	if (shapeB->get_shape_tag() == ALPCollider_shape_type::Plane)	generate_contact_mesh_plane(shapeA, shapeB, pair, is_crossing);
 		//	if (shapeB->get_shape_tag() == ALPCollider_shape_type::Mesh)	generate_contact_mesh_mesh(shapeA, shapeB, pair, is_crossing);
-		//}
+		}
 
 		//もし交差していたらそれぞれのoncoll_bitに相手のtagを追加
 		if (is_crossing) {
@@ -1213,77 +1213,86 @@ bool Physics_function::generate_contact_sphere_capsule(const Collider_shape* sph
 
 #pragma region SPHERE-MESH
 bool Physics_function::generate_contact_sphere_mesh(const Collider_shape* sphere, const Collider_shape* mesh, Contacts::Contact_pair*& pair, bool& is_crossing) {
-	//const std::list<ALP_Collider>::iterator& sphere = sphere_mesh->get_ALPcollider();
-	//const std::list<ALP_Collider>::iterator& mesh = mesh_part->get_ALPcollider();
+	using namespace DirectX;
 
 	//AddContact用の変数
 	bool is_AC = false;
 	float ACpenetration = 0;
-	Vector3 ACnormal;
-	Vector3 ACcontact_pointA;
-	Vector3 ACcontact_pointB;
+	XMVECTOR ACnormal;
+	XMVECTOR ACcontact_pointA;
+	XMVECTOR ACcontact_pointB;
 
 	if (false && mesh->get_mesh_data()->is_Convex == true) {
-		//球とmeshの衝突判定を行う
-		Matrix44 rotate, inverse_rotate;
-		rotate = matrix_world(Vector3(1, 1, 1), mesh->world_orientation().get_rotate_matrix(), mesh->world_position());
-		inverse_rotate = matrix_inverse(rotate);
+		////球とmeshの衝突判定を行う
+		//Matrix44 rotate, inverse_rotate;
+		//rotate = matrix_world(Vector3(1, 1, 1), mesh->world_orientation().get_rotate_matrix(), mesh->world_position());
+		//inverse_rotate = matrix_inverse(rotate);
 
-		Vector3 center;
-		center = vector3_trans(sphere->world_position(), inverse_rotate); //meshのlocal座標系での球の中心座標
+		//Vector3 center;
+		//center = vector3_trans(sphere->world_position(), inverse_rotate); //meshのlocal座標系での球の中心座標
 
-		//mesh上の最近点
-		Vector3 closest_point;
+		////mesh上の最近点
+		//Vector3 closest_point;
 
-		closest_point = center;
-		//各面の外にあれば面平面に持ってくる
-		for (u_int i = 0; i < mesh->get_mesh_data()->facet_num; i++) {
-			const Vector3& nor = mesh->get_mesh_data()->facets.at(i).normal.unit_vect();
-			const Vector3& pos = mesh->get_mesh_data()->vertices.at(mesh->get_mesh_data()->facets.at(i).vertexID[0]) * mesh->world_scale();
-			float d = vector3_dot(nor, pos) - vector3_dot(nor, closest_point);
-			if (d < 0)
-				closest_point += d * nor;
-		}
+		//closest_point = center;
+		////各面の外にあれば面平面に持ってくる
+		//for (u_int i = 0; i < mesh->get_mesh_data()->facet_num; i++) {
+		//	const Vector3& nor = mesh->get_mesh_data()->facets.at(i).normal.unit_vect();
+		//	const Vector3& pos = mesh->get_mesh_data()->vertices.at(mesh->get_mesh_data()->facets.at(i).vertexID[0]) * mesh->world_scale();
+		//	float d = vector3_dot(nor, pos) - vector3_dot(nor, closest_point);
+		//	if (d < 0)
+		//		closest_point += d * nor;
+		//}
 
-		float distance = (closest_point - center).norm_sqr(); //最近点と球中心の距離
-		if (sphere->world_scale().x - distance > FLT_EPSILON) { //float誤差も調整
-			Vector3 n = (sphere->world_position() - vector3_trans(closest_point, rotate)).unit_vect(); //meshからsphereへのベクトル
+		//float distance = (closest_point - center).norm_sqr(); //最近点と球中心の距離
+		//if (sphere->world_scale().x - distance > FLT_EPSILON) { //float誤差も調整
+		//	Vector3 n = (sphere->world_position() - vector3_trans(closest_point, rotate)).unit_vect(); //meshからsphereへのベクトル
 
-			//衝突していたらContactオブジェクトを生成用に入力
-			is_AC = true;
-			ACpenetration = sphere->world_scale().x - distance;
-			ACnormal = -n;
-			ACcontact_pointA = closest_point;
-			ACcontact_pointB = sphere->world_scale().x * vector3_quatrotate(n, sphere->world_orientation().inverse());
-		}
+		//	//衝突していたらContactオブジェクトを生成用に入力
+		//	is_AC = true;
+		//	ACpenetration = sphere->world_scale().x - distance;
+		//	ACnormal = -n;
+		//	ACcontact_pointA = closest_point;
+		//	ACcontact_pointB = sphere->world_scale().x * vector3_quatrotate(n, sphere->world_orientation().inverse());
+		//}
 
 	}
 	else {
 		//球とmeshの衝突判定を行う
 
-		Vector3 sphere_pos_meshcoord = vector3_quatrotate(sphere->world_position() - mesh->world_position(), mesh->world_orientation().inverse()); //mesh座標系でのsphereのpos
+		const XMVECTOR& mesh_Wscale = XMLoadFloat3(&mesh->world_scale());
+		const XMVECTOR& mesh_Wpos = XMLoadFloat3(&mesh->world_position());
+		const XMVECTOR& mesh_Worient = XMLoadFloat4(&mesh->world_orientation());
+
+		XMVECTOR sphere_pos_meshcoord = XMVector3Rotate(XMLoadFloat3(&(sphere->world_position() - mesh->world_position())), XMLoadFloat4(&mesh->world_orientation().inverse())); //mesh座標系でのsphereのpos
 
 		float min_dis = sphere->world_scale().x;//最低距離をsphereの半径に
-		Vector3 closest_point; //mesh上の最近点
+		XMVECTOR closest_point; //mesh上の最近点
 		bool is_hit = false; //衝突していたらtrue
-		Vector3 nor_meshcoord;
+		XMVECTOR nor_meshcoord;
+
 		//球とmeshの判定
 		for (const auto& faset : mesh->get_mesh_data()->facets) {
-			const Vector3& nor = (faset.normal * mesh->world_scale()).unit_vect();
-			const Vector3& mesh_pos0 = mesh->get_mesh_data()->vertices.at(faset.vertexID[0]) * mesh->world_scale();
+			const XMVECTOR& faset_normal = XMLoadFloat3(&faset.normal);
+			const XMVECTOR& faset_vertex0 = XMLoadFloat3(&mesh->get_mesh_data()->vertices.at(faset.vertexID[0]));
+			const XMVECTOR& faset_vertex1 = XMLoadFloat3(&mesh->get_mesh_data()->vertices.at(faset.vertexID[1]));
+			const XMVECTOR& faset_vertex2 = XMLoadFloat3(&mesh->get_mesh_data()->vertices.at(faset.vertexID[2]));
+
+			const XMVECTOR& nor = XMVector3Normalize(XMVectorMultiply(faset_normal, mesh_Wscale));
+			const XMVECTOR& mesh_pos0 = XMVectorMultiply(faset_vertex0, mesh_Wscale);
 
 			//mesh平面の"d"
-			float dis = vector3_dot(nor, mesh_pos0);
-			float dis_sp = vector3_dot(nor, sphere_pos_meshcoord);
+			const float dis = XMVector3Dot(nor, mesh_pos0).m128_f32[0];
+			const float dis_sp = XMVector3Dot(nor, sphere_pos_meshcoord).m128_f32[0];
 
 			//mesh平面とsphereの距離がmin_disより大きければ衝突しない
 			if (fabsf(dis_sp - dis) > min_dis) continue;
 
-			const Vector3& mesh_pos1 = mesh->get_mesh_data()->vertices.at(faset.vertexID[1]) * mesh->world_scale();
-			const Vector3& mesh_pos2 = mesh->get_mesh_data()->vertices.at(faset.vertexID[2]) * mesh->world_scale();
+			const XMVECTOR& mesh_pos1 = XMVectorMultiply(faset_vertex1, mesh_Wscale);
+			const XMVECTOR& mesh_pos2 = XMVectorMultiply(faset_vertex2, mesh_Wscale);
 
-			Vector3 closest_p;
-			Closest_func::get_closestP_point_triangle(
+			XMVECTOR closest_p;
+			Closest_func_SIM::get_closestP_point_triangle(
 				sphere_pos_meshcoord,
 				mesh_pos0,
 				mesh_pos1,
@@ -1292,24 +1301,24 @@ bool Physics_function::generate_contact_sphere_mesh(const Collider_shape* sphere
 				closest_p
 			);
 
-			if ((sphere_pos_meshcoord - closest_p).norm() > min_dis * min_dis)continue; //保存されている距離より大きければcontinue
+			if (XMVector3LengthSq(sphere_pos_meshcoord - closest_p).m128_f32[0] > min_dis * min_dis)continue; //保存されている距離より大きければcontinue
 
 			//min_dis,最近点の更新
 			closest_point = closest_p;
-			min_dis = (sphere_pos_meshcoord - closest_point).norm_sqr();
+			min_dis = XMVector3Length(sphere_pos_meshcoord - closest_point).m128_f32[0];
 			is_hit = true;
 			nor_meshcoord = nor;
 		}
 		//交差していなければfalseを返す
 		if (is_hit == false)return false;
 
-		Vector3 Wn = vector3_quatrotate((sphere_pos_meshcoord - closest_point), mesh->world_orientation()).unit_vect();//meshからsphereへのベクトル
-		if (vector3_dot(sphere_pos_meshcoord - closest_point, nor_meshcoord) < 0)Wn *= -1;
+		XMVECTOR Wn = XMVector3Normalize( XMVector3Rotate((sphere_pos_meshcoord - closest_point), mesh_Worient));//meshからsphereへのベクトル
+		if (XMVector3Dot(sphere_pos_meshcoord - closest_point, nor_meshcoord).m128_f32[0] < 0)Wn *= -1;
 
 		is_AC = true;
 		ACpenetration = sphere->world_scale().x - min_dis;
 		ACnormal = +Wn;
-		ACcontact_pointA = sphere->world_scale().x * vector3_quatrotate(-Wn, sphere->world_orientation().inverse());
+		ACcontact_pointA = XMVectorScale(XMVector3Rotate(-Wn, XMLoadFloat4(&sphere->world_orientation().inverse())), sphere->world_scale().x);
 		ACcontact_pointB = closest_point;
 	}
 
@@ -1320,19 +1329,27 @@ bool Physics_function::generate_contact_sphere_mesh(const Collider_shape* sphere
 		//oncoll_enterのみの場合ここでreturn
 		if (pair->check_oncoll_only == true) return false;
 
+		Vector3 ACnormal_;
+		Vector3 ACcontact_pointA_;
+		Vector3 ACcontact_pointB_;
+
+		DirectX::XMStoreFloat3(&ACnormal_, ACnormal);
+		DirectX::XMStoreFloat3(&ACcontact_pointA_, ACcontact_pointA);
+		DirectX::XMStoreFloat3(&ACcontact_pointB_, ACcontact_pointB);
+
 		if (pair->body[0]->get_shape_tag() == sphere->get_shape_tag())
 			pair->contacts.addcontact(
 				ACpenetration,
-				ACnormal,
-				ACcontact_pointA,
-				ACcontact_pointB
+				ACnormal_,
+				ACcontact_pointA_,
+				ACcontact_pointB_
 			);
 		else
 			pair->contacts.addcontact(
 				ACpenetration,
-				-ACnormal,
-				ACcontact_pointB,
-				ACcontact_pointA
+				-ACnormal_,
+				ACcontact_pointB_,
+				ACcontact_pointA_
 			);
 	}
 	return is_AC;
@@ -1921,7 +1938,7 @@ bool Physics_function::generate_contact_box_capsule(const Collider_shape* box, c
 		ACpenetration = smallest_penetration;
 		ACnormal = -Wn;
 		ACcontact_pointA = box_seg[0] + XMVectorScale((box_seg[1] - box_seg[0]), s);
-		ACcontact_pointB = XMVectorScale(XMVectorSet(0, capsule->world_scale().y, 0,0), (t - 0.5f) * 2) + XMVectorScale (-cupsuleN, capsule->world_scale().x);
+		ACcontact_pointB = XMVectorScale(XMVectorSet(0, capsule->world_scale().y, 0, 0), (t - 0.5f) * 2) + XMVectorScale(-cupsuleN, capsule->world_scale().x);
 
 	}
 	else assert(0);

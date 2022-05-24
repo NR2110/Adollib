@@ -464,7 +464,7 @@ namespace Adollib
 				{
 					auto lever_box_00 = Gameobject_manager::createCube("lever_box_00");
 					lever_box->add_child(lever_box_00);
-					lever_box_00->transform->local_pos = Vector3(0, -1, +0.45) * scale_pow;
+					lever_box_00->transform->local_pos = Vector3(0, -1, +0.45f) * scale_pow;
 					lever_box_00->transform->local_scale = Vector3(2, 2, 0.1f) * scale_pow;
 					lever_box_00->transform->local_orient = quaternion_from_euler(0, 0, 45);
 					lever_box_00->renderer->color = Vector4(stair_color, 1);
@@ -472,7 +472,7 @@ namespace Adollib
 				{
 					auto lever_box_01 = Gameobject_manager::createCube("lever_box_01");
 					lever_box->add_child(lever_box_01);
-					lever_box_01->transform->local_pos = Vector3(0, -1, -0.45) * scale_pow;
+					lever_box_01->transform->local_pos = Vector3(0, -1, -0.45f) * scale_pow;
 					lever_box_01->transform->local_scale = Vector3(2, 2, 0.1f) * scale_pow;
 					lever_box_01->transform->local_orient = quaternion_from_euler(0, 0, 45);
 					lever_box_01->renderer->color = Vector4(stair_color, 1);
@@ -493,13 +493,13 @@ namespace Adollib
 
 				{
 					auto c = coll->add_shape<Box>();
-					c->center = Vector3(0, -1, +0.45) * scale_pow;
+					c->center = Vector3(0, -1, +0.45f) * scale_pow;
 					c->size = Vector3(1.2f, 1.2f, 0.1f) * scale_pow; //box‚Ì“–‚½‚è”»’è¬‚³‚­
 					c->rotate = Vector3(0, 0, 45);
 				}
 				{
 					auto c = coll->add_shape<Box>();
-					c->center = Vector3(0, -1, -0.45) * scale_pow;
+					c->center = Vector3(0, -1, -0.45f) * scale_pow;
 					c->size = Vector3(1.2f, 1.2f, 0.1f) * scale_pow;
 					c->rotate = Vector3(0, 0, 45);
 				}

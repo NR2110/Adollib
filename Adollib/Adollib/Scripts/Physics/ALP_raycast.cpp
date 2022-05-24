@@ -623,6 +623,9 @@ bool sphere_cast_mesh(const Vector3& l_Ray_pos, const Vector3& l_Ray_dir, const 
 
 	normal = vector3_quatrotate(normal, mesh->world_orientation());
 
+	//contact_point = l_Ray_pos + l_Ray_dir * tmin - normal * radius;
+	contact_point = l_Ray_pos + l_Ray_dir * tmin;
+
 	return crossing;
 }
 

@@ -59,9 +59,6 @@ namespace Adollib {
 		//::: unityのphysics部分 分ける必要なんてないやろ ::::
 		Physics_data physics_data;
 
-		//::: static同士で衝突判定を行わない :::
-		bool is_static = false;
-
 		//::: 自身の関わるcontact_pairの情報をメンバに保存するかどうか :::
 		bool is_save_contacted_colls = false;
 
