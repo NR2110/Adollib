@@ -44,7 +44,7 @@ void Physics_function::generate_contact(std::vector<Contacts::Contact_pair*>& pa
 			if (shapeB->get_shape_tag() == ALPCollider_shape_type::BOX)	generate_contact_box_box(shapeA, shapeB, pair, is_crossing);
 			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Capsule)generate_contact_box_capsule(shapeA, shapeB, pair, is_crossing);
 			//if (shapeB->get_shape_tag() == ALPCollider_shape_type::Plane)	generate_contact_box_plane(shapeA, shapeB, pair, is_crossing);
-			//if (shapeB->get_shape_tag() == ALPCollider_shape_type::Mesh)	generate_contact_box_mesh(shapeA, shapeB, pair, is_crossing);
+			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Mesh)	generate_contact_box_mesh(shapeA, shapeB, pair, is_crossing);
 		}
 		if (shapeA->get_shape_tag() == ALPCollider_shape_type::Capsule) {
 
@@ -62,10 +62,10 @@ void Physics_function::generate_contact(std::vector<Contacts::Contact_pair*>& pa
 		if (shapeA->get_shape_tag() == ALPCollider_shape_type::Mesh) {
 
 			if (shapeB->get_shape_tag() == ALPCollider_shape_type::Sphere)generate_contact_sphere_mesh(shapeB, shapeA, pair, is_crossing);
-		//	if (shapeB->get_shape_tag() == ALPCollider_shape_type::Capsule)generate_contact_capsule_mesh(shapeB, shapeA, pair, is_crossing);
-		//	if (shapeB->get_shape_tag() == ALPCollider_shape_type::BOX)	generate_contact_box_mesh(shapeB, shapeA, pair, is_crossing);
-		//	if (shapeB->get_shape_tag() == ALPCollider_shape_type::Plane)	generate_contact_mesh_plane(shapeA, shapeB, pair, is_crossing);
-		//	if (shapeB->get_shape_tag() == ALPCollider_shape_type::Mesh)	generate_contact_mesh_mesh(shapeA, shapeB, pair, is_crossing);
+			//	if (shapeB->get_shape_tag() == ALPCollider_shape_type::Capsule)generate_contact_capsule_mesh(shapeB, shapeA, pair, is_crossing);
+				if (shapeB->get_shape_tag() == ALPCollider_shape_type::BOX)	generate_contact_box_mesh(shapeB, shapeA, pair, is_crossing);
+			//	if (shapeB->get_shape_tag() == ALPCollider_shape_type::Plane)	generate_contact_mesh_plane(shapeA, shapeB, pair, is_crossing);
+			//	if (shapeB->get_shape_tag() == ALPCollider_shape_type::Mesh)	generate_contact_mesh_mesh(shapeA, shapeB, pair, is_crossing);
 		}
 
 		//もし交差していたらそれぞれのoncoll_bitに相手のtagを追加
@@ -105,7 +105,7 @@ struct OBB_struct {
 	DirectX::XMVECTOR world_position; //中心座標
 	DirectX::XMVECTOR u_axes[3]; //軸の向き
 	DirectX::XMVECTOR world_orientation;
-	float half_width[3]; //軸ごとの辺の長さ
+	float half_width[4]; //軸ごとの辺の長さ
 };
 
 struct Capsule_struct {
@@ -117,13 +117,13 @@ struct Capsule_struct {
 };
 
 struct Triangle_struct {
-	Vector3 world_position; //triangleの中心座標
-	Quaternion world_orientation;
-	Vector3 world_scale;
-	Vector3 normal; //triangleの法線(向き)
-	Vector3 world_normal;
-	Vector3 vertex_position[3]; //triangleのlocalな頂点座標
-	Vector3 world_vertex_position[3]; //triangleのworldな頂点座標
+	DirectX::XMVECTOR world_position; //triangleの中心座標
+	DirectX::XMVECTOR world_orientation;
+	DirectX::XMVECTOR world_scale;
+	DirectX::XMVECTOR normal; //triangleの法線(向き)
+	DirectX::XMVECTOR world_normal;
+	DirectX::XMVECTOR vertex_position[3]; //triangleのlocalな頂点座標
+	DirectX::XMVECTOR world_vertex_position[3]; //triangleのworldな頂点座標
 
 	int Edge_num[3] = { 0,0,0 };
 };
@@ -140,11 +140,11 @@ float sum_of_projected_radii(const OBB_struct& obb, const DirectX::XMVECTOR& vec
 		);
 }
 
-float sum_of_projected_radii(const Triangle_struct& tri, const Vector3& Wvec, float& min, float& max) {
+float sum_of_projected_radii(const Triangle_struct& tri, const DirectX::XMVECTOR& Wvec, float& min, float& max) {
 
-	float A = vector3_dot(Wvec, tri.world_vertex_position[0]);
-	float B = vector3_dot(Wvec, tri.world_vertex_position[1]);
-	float C = vector3_dot(Wvec, tri.world_vertex_position[2]);
+	float A = DirectX::XMVector3Dot(Wvec, tri.world_vertex_position[0]).m128_f32[0];
+	float B = DirectX::XMVector3Dot(Wvec, tri.world_vertex_position[1]).m128_f32[0];
+	float C = DirectX::XMVector3Dot(Wvec, tri.world_vertex_position[2]).m128_f32[0];
 
 	min = ALmin3(A, B, C);
 	max = ALmax3(A, B, C);
@@ -277,7 +277,7 @@ bool sat_obb_obb(
 	return (smallest_penetration < FLT_MAX&& smallest_penetration > FLT_EPSILON) ? true : false;
 }
 
-/*
+
 //OBBとTriangleの分離軸判定 交差していればtrueを返す ついでに色々引数に入れる
 bool sat_obb_Triangle(
 	const OBB_struct& obb, const Triangle_struct& triangle, const Physics_function::Meshcollider_data* mesh,
@@ -285,14 +285,15 @@ bool sat_obb_Triangle(
 	int smallest_axis[2], //どの軸で最近になったか(edge×edge用に2つ分用意)
 	SAT_TYPE& smallest_case //どのような形で最近になっているか
 ) {
+	using namespace DirectX;
 	smallest_penetration = FLT_MAX;
 
 	Ret_S PB_FA, PA_FB;
 
 	float penetration = 0; //貫通量
 	float ra; //obb,triangleのLに投影された長さ
-	Vector3 axis; //投影する軸
-	const Vector3 offset_tri_obb = triangle.world_position - obb.world_position; //triangleからobbへのoffset
+	XMVECTOR axis; //投影する軸
+	const XMVECTOR offset_tri_obb = triangle.world_position - obb.world_position; //triangleからobbへのoffset
 
 	//::: obbの軸にtriangleを投影 :::::::::::::::::::
 	// obbを0,0に持ってくる(回転はworldのままで)
@@ -306,7 +307,7 @@ bool sat_obb_Triangle(
 		sum_of_projected_radii(triangle, axis, trimin, trimax);
 
 		//距離の軸方向への長さ
-		const float off = vector3_dot(axis, offset_tri_obb);
+		const float off = XMVector3Dot(axis, offset_tri_obb).m128_f32[0];
 
 		//軸に投影した貫通量を求める
 		penetration = FLT_MAX;
@@ -331,15 +332,15 @@ bool sat_obb_Triangle(
 	//obbを0,0に持ってくる(回転はworldのままで)
 	if (PA_FB.hit_point_to_face == true) {
 
-		Vector3 triangle_world_normal = vector3_quatrotate(triangle.normal, triangle.world_orientation);
+		XMVECTOR triangle_world_normal = XMVector3Rotate(triangle.normal, triangle.world_orientation);
 		for (int i = 0; i < 3; i++)
 		{
 			//辺と法線の外積で分離軸を行う
-			axis = vector3_cross(triangle_world_normal, (triangle.world_vertex_position[i] - triangle.world_vertex_position[(i + 1) % 3]).unit_vect());
-			if (vector3_dot(axis, triangle.world_position) > vector3_dot(axis, triangle.world_vertex_position[i]))
+			axis = XMVector3Cross(triangle_world_normal, XMVector3Normalize((triangle.world_vertex_position[i] - triangle.world_vertex_position[(i + 1) % 3])));
+			if (XMVector3Greater(XMVector3Dot(axis, triangle.world_position), XMVector3Dot(axis, triangle.world_vertex_position[i])))
 				axis *= -1;
 
-			if (vector3_dot(axis, triangle.world_vertex_position[i]) > vector3_dot(axis, triangle.world_vertex_position[(i + 2) % 3])) axis *= -1; //axisはtriangle辺から中心に向けて
+			if (XMVector3Greater(XMVector3Dot(axis, triangle.world_vertex_position[i]), XMVector3Dot(axis, triangle.world_vertex_position[(i + 2) % 3]))) axis *= -1; //axisはtriangle辺から中心に向けて
 
 			//obbの軸方向の長さ
 			ra = fabsf(sum_of_projected_radii(obb, axis));
@@ -349,7 +350,7 @@ bool sat_obb_Triangle(
 			sum_of_projected_radii(triangle, axis, trimin, trimax);
 
 			//距離の軸方向への長さ
-			const float off = vector3_dot(axis, offset_tri_obb);
+			const float off = XMVector3Dot(axis, offset_tri_obb).m128_f32[0];
 
 			//軸に投影した貫通量を求める
 			penetration = FLT_MAX;
@@ -379,7 +380,7 @@ bool sat_obb_Triangle(
 			float trimin, trimax;
 			sum_of_projected_radii(triangle, axis, trimin, trimax);
 
-			const float off = vector3_dot(axis, offset_tri_obb);
+			const float off = XMVector3Dot(axis, offset_tri_obb).m128_f32[0];
 
 			penetration = FLT_MAX;
 			//penetration = ALmin(penetration, ra - (trimin + off));   //裏からの衝突は検知しない
@@ -415,23 +416,23 @@ bool sat_obb_Triangle(
 	for (int OB1 = 0; OB1 < 3; OB1++) {
 		for (int OB2 = 0; OB2 < 3; OB2++) {
 
-			const Vector3& tri_vertex_p0 = mesh->vertices[mesh->edges[triangle.Edge_num[OB2]].vertexID[0]];
-			const Vector3& tri_vertex_p1 = mesh->vertices[mesh->edges[triangle.Edge_num[OB2]].vertexID[1]];
+			const XMVECTOR& tri_vertex_p0 = XMLoadFloat3(&mesh->vertices[mesh->edges[triangle.Edge_num[OB2]].vertexID[0]]);
+			const XMVECTOR& tri_vertex_p1 = XMLoadFloat3(&mesh->vertices[mesh->edges[triangle.Edge_num[OB2]].vertexID[1]]);
 
-			const Vector3& world_tri_vertex_p0 = vector3_quatrotate(tri_vertex_p0 * triangle.world_scale, triangle.world_orientation);
-			const Vector3& world_tri_vertex_p1 = vector3_quatrotate(tri_vertex_p1 * triangle.world_scale, triangle.world_orientation);
+			const XMVECTOR& world_tri_vertex_p0 = XMVector3Rotate(tri_vertex_p0 * triangle.world_scale, triangle.world_orientation);
+			const XMVECTOR& world_tri_vertex_p1 = XMVector3Rotate(tri_vertex_p1 * triangle.world_scale, triangle.world_orientation);
 
 
-			axis = vector3_cross(obb.u_axes[OB1], (world_tri_vertex_p0 - world_tri_vertex_p1).unit_vect());
-			if (axis.norm() <= FLT_EPSILON * FLT_EPSILON)continue;//外積が 0 = 平行
+			axis = XMVector3Cross(obb.u_axes[OB1], XMVector3Normalize(world_tri_vertex_p0 - world_tri_vertex_p1));
+			if (XMVector2LengthSq(axis).m128_f32[0] <= FLT_EPSILON * FLT_EPSILON)continue;//外積が 0 = 平行
 
 			//meshからobbの向きにaxisを変更(裏から衝突しないようにするため)
-			if (vector3_dot(axis, obb.world_position - (world_tri_vertex_p0 + triangle.world_position)) < 0)//めり込んでいることを忘れずに!!!!
+			if (XMVector3Dot(axis, obb.world_position - (world_tri_vertex_p0 + triangle.world_position)).m128_f32[0] < 0)//めり込んでいることを忘れずに!!!!
 			{
 				axis = axis * -1.0f;
 			}
-			axis = axis.unit_vect();
-			if (axis.norm() <= 1) axis *= (1 - FLT_EPSILON);
+			axis = XMVector3Normalize(axis);
+			if (XMVector3LengthSq(axis).m128_f32[0] <= 1) axis *= (1 - FLT_EPSILON);
 
 
 
@@ -445,7 +446,7 @@ bool sat_obb_Triangle(
 			sum_of_projected_radii(triangle, axis, trimin, trimax);
 
 			//距離の軸方向への長さ
-			const float off = vector3_dot(axis, offset_tri_obb);
+			const float off = XMVector3Dot(axis, offset_tri_obb).m128_f32[0];
 
 			//軸に投影した貫通量を求める
 			penetration = FLT_MAX;
@@ -454,7 +455,7 @@ bool sat_obb_Triangle(
 
 			if (penetration < 0) return false; //分離してる
 
-			if (vector3_dot(axis, triangle.world_normal) < 0)continue; //裏からは衝突しない
+			if (XMVector3Dot(axis, triangle.world_normal).m128_f32[0] < 0)continue; //裏からは衝突しない
 			if (mesh->edges[triangle.Edge_num[OB2]].type == Edgetype::EdgeConcave) continue; //へこみのEdgeは衝突しない
 			if (mesh->edges[triangle.Edge_num[OB2]].type == Edgetype::EdgeFlat) continue; //平面のEdgeは衝突しない
 
@@ -486,7 +487,7 @@ bool sat_obb_Triangle(
 	// 分離軸が見当たらない場合OBBは交差しているはず
 	return (smallest_penetration < FLT_MAX&& smallest_penetration > FLT_EPSILON) ? true : false;
 }
-*/
+
 
 
 bool sat_obb_capsule(
@@ -1312,7 +1313,7 @@ bool Physics_function::generate_contact_sphere_mesh(const Collider_shape* sphere
 		//交差していなければfalseを返す
 		if (is_hit == false)return false;
 
-		XMVECTOR Wn = XMVector3Normalize( XMVector3Rotate((sphere_pos_meshcoord - closest_point), mesh_Worient));//meshからsphereへのベクトル
+		XMVECTOR Wn = XMVector3Normalize(XMVector3Rotate((sphere_pos_meshcoord - closest_point), mesh_Worient));//meshからsphereへのベクトル
 		if (XMVector3Dot(sphere_pos_meshcoord - closest_point, nor_meshcoord).m128_f32[0] < 0)Wn *= -1;
 
 		is_AC = true;
@@ -2114,333 +2115,328 @@ bool Physics_function::generate_contact_box_capsule(const Collider_shape* box, c
 #pragma endregion
 
 #pragma region BOX-MESH
-//
-//struct Crossing_struct {
-//	float ACpenetration = 0;
-//	Vector3 ACnormal = Vector3(0);
-//	Vector3 ACcontact_pointA = Vector3(0);
-//	Vector3 ACcontact_pointB = Vector3(0);
-//};
-//
-//bool Physics_function::generate_contact_box_mesh(const Collider_shape* box, const Collider_shape* mesh, Contacts::Contact_pair*& pair, bool& is_crossing) {
-//	//const std::list<ALP_Collider>::iterator& box = box_part->get_ALPcollider();
-//	//const std::list<ALP_Collider>::iterator& mesh = mesh_part->get_ALPcollider();
-//
-//	//AddContact用の変数
-//	bool is_AC = false;
-//	float ACpenetration = 0;
-//	Vector3 ACnormal;
-//	Vector3 ACcontact_pointA;
-//	Vector3 ACcontact_pointB;
-//
-//	if (0 && mesh->get_mesh_data()->is_Convex == true) {}
-//	else {
-//		//boxとmeshの判定
-//		Matrix33 m;
-//		m = box->world_orientation().get_rotate_matrix();
-//		OBB_struct obb;
-//		obb.world_position = box->world_position();
-//		obb.u_axes[0].x = m._11; obb.u_axes[0].y = m._12; obb.u_axes[0].z = m._13;
-//		obb.u_axes[1].x = m._21; obb.u_axes[1].y = m._22; obb.u_axes[1].z = m._23;
-//		obb.u_axes[2].x = m._31; obb.u_axes[2].y = m._32; obb.u_axes[2].z = m._33;
-//		obb.half_width = box->world_scale();
-//		obb.world_orientation = box->world_orientation();
-//		assert(!isnan(obb.world_orientation.norm()));
-//
-//		//const Vector3 box_relative_movement_from_triangle = +(box->world_position() - box->old_world_position()) - (mesh->world_position() - mesh->old_world_position());
-//		//const Vector3 triangle_relative_movement_from_box = -(box->world_position() - box->old_world_position()) + (mesh->world_position() - mesh->old_world_position());
-//
-//
-//		Triangle_struct smallest_triangle;
-//		float smallest_penetration = FLT_MAX;
-//		int smallest_axis[2] = { -1,-1 };
-//		SAT_TYPE smallest_case = SAT_TYPE::EDGE_EDGE;
-//
-//
-//		Triangle_struct triangle;
-//		triangle.world_position = mesh->world_position();
-//		triangle.world_orientation = mesh->world_orientation();
-//		triangle.world_scale = mesh->world_scale();
-//
-//		std::vector<Crossing_struct> crossing_structs;
-//		for (const auto& faset : mesh->get_mesh_data()->facets) {
-//
-//			auto& vertices = mesh->get_mesh_data()->vertices;
-//			triangle.vertex_position[0] = (vertices)[faset.vertexID[0]];
-//			triangle.vertex_position[1] = (vertices)[faset.vertexID[1]];
-//			triangle.vertex_position[2] = (vertices)[faset.vertexID[2]];
-//
-//			triangle.world_vertex_position[0] = vector3_quatrotate(triangle.vertex_position[0] * triangle.world_scale, triangle.world_orientation);
-//			triangle.world_vertex_position[1] = vector3_quatrotate(triangle.vertex_position[1] * triangle.world_scale, triangle.world_orientation);
-//			triangle.world_vertex_position[2] = vector3_quatrotate(triangle.vertex_position[2] * triangle.world_scale, triangle.world_orientation);
-//
-//			triangle.Edge_num[0] = faset.edgeID[0];
-//			triangle.Edge_num[1] = faset.edgeID[1];
-//			triangle.Edge_num[2] = faset.edgeID[2];
-//
-//			triangle.normal = faset.normal;
-//			triangle.world_normal = vector3_quatrotate(triangle.normal, triangle.world_orientation);
-//
-//			assert(!isnan(triangle.normal.norm()));
-//
-//			float penetration = FLT_MAX;	//最小めり込み量
-//			int axis[2];	//最小めり込み量を得た分離軸の作成に使用した各OBBのローカル軸番号 辺×辺用に2つ
-//			SAT_TYPE s_case;	//衝突の種類
-//			//assert(!(isnan((obb.u_axes[0] + obb.u_axes[1] + obb.u_axes[2]).norm())));
-//			if (!sat_obb_Triangle(obb, triangle, mesh->get_mesh_data(), penetration, axis, s_case)) continue;
-//
-//			if (!sat_obb_Triangle(obb, triangle, mesh->get_mesh_data(), penetration, axis, s_case)) continue;
-//
-//			if (0) {
-//				if (smallest_case == SAT_TYPE::EDGE_EDGE ||
-//					s_case != SAT_TYPE::EDGE_EDGE) {
-//
-//					if ((
-//						smallest_case == SAT_TYPE::EDGE_EDGE &&
-//						s_case != SAT_TYPE::EDGE_EDGE //Edgeの衝突の優先度を下げる
-//						) || (
-//							smallest_penetration > penetration //一番短い衝突
-//							)) {
-//
-//						smallest_triangle = triangle;
-//						smallest_penetration = penetration;
-//						smallest_axis[0] = axis[0];
-//						smallest_axis[1] = axis[1];
-//						smallest_case = s_case;
-//					}
-//				}
-//			}
-//			else {
-//				smallest_triangle = triangle;
-//				smallest_penetration = penetration;
-//				smallest_axis[0] = axis[0];
-//				smallest_axis[1] = axis[1];
-//				smallest_case = s_case;
-//			}
-//
-//			if (smallest_axis[0] == -1 && smallest_axis[1] == -1) continue;
-//			//}
-//			//{
-//			//if (smallest_axis[0] == -1 && smallest_axis[1] == -1) return false;
-//
-//
-//				//obbBの頂点がobbAの面と衝突した場合
-//			if (smallest_case == SAT_TYPE::POINTB_FACETA)
-//			{
-//				Vector3 Wn = obb.u_axes[smallest_axis[0]]; //衝突法線
-//				Wn *= smallest_axis[1]; //衝突法線をmeshからobbの方向に
-//				Wn = Wn.unit_vect();
-//
-//				//triangleのローカル座標系での最近点(p1) triangleの3頂点のうちのどれか
-//				float save_dis = -FLT_MAX;
-//				Vector3 p1; //meshの座標系
-//
-//				if (vector3_dot(smallest_triangle.world_vertex_position[0], +Wn) > save_dis) { save_dis = vector3_dot(smallest_triangle.world_vertex_position[0], +Wn);  p1 = smallest_triangle.vertex_position[0]; };
-//				if (vector3_dot(smallest_triangle.world_vertex_position[1], +Wn) > save_dis) { save_dis = vector3_dot(smallest_triangle.world_vertex_position[1], +Wn);  p1 = smallest_triangle.vertex_position[1]; };
-//				if (vector3_dot(smallest_triangle.world_vertex_position[2], +Wn) > save_dis) { save_dis = vector3_dot(smallest_triangle.world_vertex_position[2], +Wn);  p1 = smallest_triangle.vertex_position[2]; };
-//				p1 *= smallest_triangle.world_scale;
-//
-//				//boxAの逆行列の作成
-//				Matrix44 rotate, inverse_rotate;
-//				rotate = box->world_orientation().get_rotate_matrix();
-//				rotate._41 = box->world_position().x; //transpseの入力
-//				rotate._42 = box->world_position().y;
-//				rotate._43 = box->world_position().z;
-//				rotate._44 = 1;
-//				inverse_rotate = matrix_inverse(rotate);
-//
-//				//p1をobbAのローカル座標系へ
-//				Vector3 Wp1 = vector3_quatrotate(p1, smallest_triangle.world_orientation) + smallest_triangle.world_position;
-//				//Vector3 P = vector3_quatrotate(Wp1, box->world_orientation()) + box->world_position();
-//				Vector3 c = vector3_trans(Wp1, inverse_rotate);
-//
-//				//obbAの最近点を求める
-//				Vector3 p0 = c;
-//				Vector3 box_halfsize = box->world_scale();
-//				if (c.x > +box_halfsize.x)p0.x = +box_halfsize.x;
-//				if (c.x < -box_halfsize.x)p0.x = -box_halfsize.x;
-//
-//				if (c.y > +box_halfsize.y)p0.y = +box_halfsize.y;
-//				if (c.y < -box_halfsize.y)p0.y = -box_halfsize.y;
-//
-//				if (c.z > +box_halfsize.z)p0.z = +box_halfsize.z;
-//				if (c.z < -box_halfsize.z)p0.z = -box_halfsize.z;
-//
-//				p0 += vector3_quatrotate(-Wn, obb.world_orientation.inverse()) * smallest_penetration;
-//
-//				Crossing_struct crossing;
-//				is_AC = true;
-//				crossing.ACpenetration = smallest_penetration;
-//				crossing.ACnormal = Wn;
-//				crossing.ACcontact_pointA = p0;
-//				crossing.ACcontact_pointB = p1;
-//				crossing_structs.emplace_back(crossing);
-//
-//			}
-//
-//			//obbの頂点がtriangleの面と衝突した場合
-//			else if (smallest_case == SAT_TYPE::POINTA_FACETB)
-//			{
-//				Vector3 Wn;
-//				if (smallest_axis[1] == 3)
-//				{
-//					Wn = vector3_quatrotate(smallest_triangle.normal, smallest_triangle.world_orientation); //meshからboxに向けての法線(BからA)
-//				}
-//				else
-//				{
-//					Wn = vector3_quatrotate(vector3_cross(smallest_triangle.vertex_position[smallest_axis[1]], smallest_triangle.vertex_position[(smallest_axis[1] + 1) % 3]), smallest_triangle.world_orientation);
-//
-//					if (vector3_dot(Wn, smallest_triangle.vertex_position[smallest_axis[1]]) < vector3_dot(Wn, smallest_triangle.vertex_position[(smallest_axis[1] + 2) % 3]))Wn *= -1;
-//				}
-//				Wn = Wn.unit_vect();
-//
-//				Vector3 p0 = obb.half_width;
-//				//obbとtriangleの位置関係(d)より接触点(p)を求める
-//				if (vector3_dot(obb.u_axes[0], Wn) > 0) p0.x = -p0.x;
-//				if (vector3_dot(obb.u_axes[1], Wn) > 0) p0.y = -p0.y;
-//				if (vector3_dot(obb.u_axes[2], Wn) > 0) p0.z = -p0.z;
-//
-//				//p0をobbBのローカル座標系へ
-//				Vector3 WP = vector3_quatrotate(p0, box->world_orientation()) + box->world_position();
-//				Vector3 c = vector3_quatrotate(WP - mesh->world_position(), mesh->world_orientation().inverse());
-//
-//				//obbBの最近点を求める
-//				Vector3 p1;
-//				if (0) {
-//					//meshと点の最近点を求める方法
-//					c /= mesh->world_scale();
-//					Closest_func::get_closestP_point_triangle(
-//						c,
-//						smallest_triangle.vertex_position[0],
-//						smallest_triangle.vertex_position[1],
-//						smallest_triangle.vertex_position[2],
-//						smallest_triangle.normal,
-//						p1
-//					);
-//
-//					p1 *= mesh->world_scale();
-//				}
-//				else {
-//					//法線とめり込み量から求める方法 //こっちのほうが圧倒的に早い けど少し不正確
-//					p1 = c;
-//					p1 += Wn * smallest_penetration;
-//				}
-//
-//				Crossing_struct crossing;
-//				is_AC = true;
-//				crossing.ACpenetration = smallest_penetration;
-//				crossing.ACnormal = Wn;
-//				crossing.ACcontact_pointA = p0;
-//				crossing.ACcontact_pointB = p1;
-//				crossing_structs.emplace_back(crossing);
-//			}
-//			//③obb0の辺とobb1の辺と衝突した場合
-//			else if (smallest_case == SAT_TYPE::EDGE_EDGE)
-//			{
-//				//Vector3 d = obbB.world_position - obbA.world_position;
-//
-//				const Vector3& tri_vertex_p0 = mesh->get_mesh_data()->vertices[mesh->get_mesh_data()->edges[smallest_triangle.Edge_num[smallest_axis[1]]].vertexID[0]];
-//				const Vector3& tri_vertex_p1 = mesh->get_mesh_data()->vertices[mesh->get_mesh_data()->edges[smallest_triangle.Edge_num[smallest_axis[1]]].vertexID[1]];
-//
-//				const Vector3& world_tri_vertex_p0 = vector3_quatrotate(tri_vertex_p0 * triangle.world_scale, triangle.world_orientation);
-//				const Vector3& world_tri_vertex_p1 = vector3_quatrotate(tri_vertex_p1 * triangle.world_scale, triangle.world_orientation);
-//
-//				Vector3 triangle_edge_dir = (tri_vertex_p0 - tri_vertex_p1).unit_vect();
-//				Vector3 world_triangle_edge_dir = vector3_quatrotate(triangle_edge_dir, smallest_triangle.world_orientation);
-//
-//				Vector3 Wn;
-//				Wn = vector3_cross(obb.u_axes[smallest_axis[0]], world_triangle_edge_dir);
-//				if (vector3_dot(Wn, box->world_position() - (world_tri_vertex_p0 + smallest_triangle.world_position)) < 0)	//
-//				{
-//					Wn = Wn * -1.0f;
-//				}
-//				Wn = Wn.unit_vect();
-//
-//				Vector3 p[2] = { obb.half_width ,tri_vertex_p0 };
-//				{
-//					if (vector3_dot(obb.u_axes[0], Wn) > 0) p[0].x = -p[0].x;
-//					if (vector3_dot(obb.u_axes[1], Wn) > 0) p[0].y = -p[0].y;
-//					if (vector3_dot(obb.u_axes[2], Wn) > 0) p[0].z = -p[0].z;
-//				}
-//
-//				//world座標系でedgeとedgeの最近点を求める
-//				Vector3 P0a = vector3_quatrotate(p[0], obb.world_orientation) + obb.world_position;
-//				Vector3 P1a = vector3_quatrotate(p[1] * smallest_triangle.world_scale, smallest_triangle.world_orientation) + smallest_triangle.world_position;
-//
-//				float s, t; //最近点を求めることのできるs,tを求める
-//				Closest_func::get_closestP_two_line(
-//					P0a, obb.u_axes[smallest_axis[0]],
-//					P1a, world_triangle_edge_dir * smallest_triangle.world_scale,
-//					s, t
-//				);
-//
-//				//obbのlocal座標系での軸の向き
-//				Vector3 b_axis[3]{
-//					Vector3(1,0,0),
-//					Vector3(0,1,0),
-//					Vector3(0,0,1)
-//				};
-//
-//				Crossing_struct crossing;
-//				is_AC = true;
-//				crossing.ACpenetration = smallest_penetration;
-//				crossing.ACnormal = Wn;
-//				crossing.ACcontact_pointA = p[0] + s * b_axis[smallest_axis[0]];
-//				crossing.ACcontact_pointB = (p[1] + t * triangle_edge_dir) * smallest_triangle.world_scale;
-//				crossing_structs.emplace_back(crossing);
-//			}
-//
-//			else assert(0);
-//
-//		}
-//
-//		if (is_AC)
-//		{
-//			is_crossing = true;
-//			if (pair->check_oncoll_only == true) return false;
-//
-//			float smallest_penetrate = FLT_MAX;
-//			Vector3 smallest_axis = Vector3(0);
-//			for (const auto& crossing : crossing_structs) {
-//				if (smallest_penetrate > crossing.ACpenetration) {
-//					smallest_penetrate = crossing.ACpenetration;
-//					smallest_axis = crossing.ACnormal;
-//				}
-//			}
-//
-//			for (const auto& crossing : crossing_structs) {
-//				if (vector3_dot(crossing.ACnormal, smallest_axis) < 0)continue;
-//
-//				//oncoll_enterのみの場合ここでreturn
-//
-//				if (pair->body[0]->get_shape_tag() == box->get_shape_tag())
-//					pair->contacts.addcontact(
-//						crossing.ACpenetration,
-//						crossing.ACnormal,
-//						crossing.ACcontact_pointA,
-//						crossing.ACcontact_pointB
-//					);
-//				else
-//					pair->contacts.addcontact(
-//						crossing.ACpenetration,
-//						-crossing.ACnormal,
-//						crossing.ACcontact_pointB,
-//						crossing.ACcontact_pointA
-//					);
-//			}
-//
-//
-//		}
-//
-//
-//		return is_AC;
-//
-//
-//
-//
-//		return true;
-//	}
-//}
+
+struct Crossing_struct {
+	float ACpenetration = 0;
+	DirectX::XMVECTOR ACnormal = DirectX::XMVectorZero();
+	DirectX::XMVECTOR ACcontact_pointA = DirectX::XMVectorZero();
+	DirectX::XMVECTOR ACcontact_pointB = DirectX::XMVectorZero();
+};
+
+bool Physics_function::generate_contact_box_mesh(const Collider_shape* box, const Collider_shape* mesh, Contacts::Contact_pair*& pair, bool& is_crossing) {
+	using namespace DirectX;
+
+	//AddContact用の変数
+	bool is_AC = false;
+	float ACpenetration = 0;
+
+	if (0 && mesh->get_mesh_data()->is_Convex == true) {}
+	else {
+		//boxとmeshの判定
+		Matrix33 m;
+		m = box->world_orientation().get_rotate_matrix();
+		OBB_struct obb;
+		obb.world_position = XMLoadFloat3(&box->world_position());
+		obb.u_axes[0] = XMVectorSet(m._11, m._12, m._13, 0);
+		obb.u_axes[1] = XMVectorSet(m._21, m._22, m._23, 0);
+		obb.u_axes[2] = XMVectorSet(m._31, m._32, m._33, 0);
+		obb.half_width[0] = box->world_scale()[0];	obb.half_width[1] = box->world_scale()[1];	obb.half_width[2] = box->world_scale()[2]; obb.half_width[3] = 0;
+		obb.world_orientation = XMLoadFloat4(&box->world_orientation());
+
+		Triangle_struct smallest_triangle;
+		float smallest_penetration = FLT_MAX;
+		int smallest_axis[2] = { -1,-1 };
+		SAT_TYPE smallest_case = SAT_TYPE::EDGE_EDGE;
+
+
+		Triangle_struct triangle;
+		triangle.world_position = XMLoadFloat3(&mesh->world_position());
+		triangle.world_orientation = XMLoadFloat4(&mesh->world_orientation());
+		triangle.world_scale = XMLoadFloat3(&mesh->world_scale());
+
+		std::vector<Crossing_struct> crossing_structs;
+		for (const auto& faset : mesh->get_mesh_data()->facets) {
+
+			auto& vertices = mesh->get_mesh_data()->vertices;
+			triangle.vertex_position[0] = XMLoadFloat3(&(vertices)[faset.vertexID[0]]);
+			triangle.vertex_position[1] = XMLoadFloat3(&(vertices)[faset.vertexID[1]]);
+			triangle.vertex_position[2] = XMLoadFloat3(&(vertices)[faset.vertexID[2]]);
+
+			triangle.world_vertex_position[0] = XMVector3Rotate(XMVectorMultiply(triangle.vertex_position[0], triangle.world_scale), triangle.world_orientation);
+			triangle.world_vertex_position[1] = XMVector3Rotate(XMVectorMultiply(triangle.vertex_position[1], triangle.world_scale), triangle.world_orientation);
+			triangle.world_vertex_position[2] = XMVector3Rotate(XMVectorMultiply(triangle.vertex_position[2], triangle.world_scale), triangle.world_orientation);
+
+			triangle.Edge_num[0] = faset.edgeID[0];
+			triangle.Edge_num[1] = faset.edgeID[1];
+			triangle.Edge_num[2] = faset.edgeID[2];
+
+			triangle.normal = XMLoadFloat3(&faset.normal);
+			triangle.world_normal = XMVector3Rotate(triangle.normal, triangle.world_orientation);
+
+			assert(!isnan(triangle.normal.m128_f32[0]));
+
+			float penetration = FLT_MAX;	//最小めり込み量
+			int axis[2];	//最小めり込み量を得た分離軸の作成に使用した各OBBのローカル軸番号 辺×辺用に2つ
+			SAT_TYPE s_case;	//衝突の種類
+			//assert(!(isnan((obb.u_axes[0] + obb.u_axes[1] + obb.u_axes[2]).norm())));
+			if (!sat_obb_Triangle(obb, triangle, mesh->get_mesh_data(), penetration, axis, s_case)) continue;
+
+			if (0) {
+				if (smallest_case == SAT_TYPE::EDGE_EDGE ||
+					s_case != SAT_TYPE::EDGE_EDGE) {
+
+					if ((
+						smallest_case == SAT_TYPE::EDGE_EDGE &&
+						s_case != SAT_TYPE::EDGE_EDGE //Edgeの衝突の優先度を下げる
+						) || (
+							smallest_penetration > penetration //一番短い衝突
+							)) {
+
+						smallest_triangle = triangle;
+						smallest_penetration = penetration;
+						smallest_axis[0] = axis[0];
+						smallest_axis[1] = axis[1];
+						smallest_case = s_case;
+					}
+				}
+			}
+			else {
+				smallest_triangle = triangle;
+				smallest_penetration = penetration;
+				smallest_axis[0] = axis[0];
+				smallest_axis[1] = axis[1];
+				smallest_case = s_case;
+			}
+
+			if (smallest_axis[0] == -1 && smallest_axis[1] == -1) continue;
+
+				//obbBの頂点がobbAの面と衝突した場合
+			if (smallest_case == SAT_TYPE::POINTB_FACETA)
+			{
+				XMVECTOR& Wn = obb.u_axes[smallest_axis[0]]; //衝突法線
+				Wn *= smallest_axis[1]; //衝突法線をmeshからobbの方向に
+				Wn = XMVector3Normalize(Wn);
+
+				//triangleのローカル座標系での最近点(p1) triangleの3頂点のうちのどれか
+				float save_dis = -FLT_MAX;
+				XMVECTOR p1; //meshの座標系
+
+				if (XMVector3Dot(smallest_triangle.world_vertex_position[0], +Wn).m128_f32[0] > save_dis) { save_dis = XMVector3Dot(smallest_triangle.world_vertex_position[0], +Wn).m128_f32[0];  p1 = smallest_triangle.vertex_position[0]; };
+				if (XMVector3Dot(smallest_triangle.world_vertex_position[1], +Wn).m128_f32[0] > save_dis) { save_dis = XMVector3Dot(smallest_triangle.world_vertex_position[1], +Wn).m128_f32[0];  p1 = smallest_triangle.vertex_position[1]; };
+				if (XMVector3Dot(smallest_triangle.world_vertex_position[2], +Wn).m128_f32[0] > save_dis) { save_dis = XMVector3Dot(smallest_triangle.world_vertex_position[2], +Wn).m128_f32[0];  p1 = smallest_triangle.vertex_position[2]; };
+				p1 *= smallest_triangle.world_scale;
+
+				//boxAの逆行列の作成
+				Matrix44 rotate, inverse_rotate;
+				rotate = box->world_orientation().get_rotate_matrix();
+				rotate._41 = box->world_position().x; //transpseの入力
+				rotate._42 = box->world_position().y;
+				rotate._43 = box->world_position().z;
+				rotate._44 = 1;
+				inverse_rotate = matrix_inverse(rotate);
+
+				//p1をobbAのローカル座標系へ
+				XMVECTOR Wp1 = XMVector3Rotate(p1, smallest_triangle.world_orientation) + smallest_triangle.world_position;
+				//Vector3 P = vector3_quatrotate(Wp1, box->world_orientation()) + box->world_position();
+				//XMVECTOR c = vector3_trans(Wp1- obb.world_position, inverse_rotate);
+				XMVECTOR c = XMVector3Rotate(Wp1 - obb.world_position, XMQuaternionInverse(obb.world_orientation));
+
+				//obbAの最近点を求める
+				XMVECTOR p0 = c;
+				const Vector3& box_halfsize = box->world_scale();
+				if (c.m128_f32[0] > +box_halfsize.x)p0.m128_f32[0] = +box_halfsize.x;
+				if (c.m128_f32[0] < -box_halfsize.x)p0.m128_f32[0] = -box_halfsize.x;
+
+				if (c.m128_f32[1] > +box_halfsize.y)p0.m128_f32[1] = +box_halfsize.y;
+				if (c.m128_f32[1] < -box_halfsize.y)p0.m128_f32[1] = -box_halfsize.y;
+
+				if (c.m128_f32[2] > +box_halfsize.z)p0.m128_f32[2] = +box_halfsize.z;
+				if (c.m128_f32[2] < -box_halfsize.z)p0.m128_f32[2] = -box_halfsize.z;
+
+				p0 += XMVectorScale(XMVector3Rotate(-Wn, XMQuaternionInverse(obb.world_orientation)), smallest_penetration);
+
+				Crossing_struct crossing;
+				is_AC = true;
+				crossing.ACpenetration = smallest_penetration;
+				crossing.ACnormal = Wn;
+				crossing.ACcontact_pointA = p0;
+				crossing.ACcontact_pointB = p1;
+				crossing_structs.emplace_back(crossing);
+
+			}
+
+			//obbの頂点がtriangleの面と衝突した場合
+			else if (smallest_case == SAT_TYPE::POINTA_FACETB)
+			{
+				XMVECTOR Wn;
+				if (smallest_axis[1] == 3)
+				{
+					Wn = XMVector3Rotate(smallest_triangle.normal, smallest_triangle.world_orientation); //meshからboxに向けての法線(BからA)
+				}
+				else
+				{
+					Wn = XMVector3Rotate(XMVector3Cross(smallest_triangle.vertex_position[smallest_axis[1]], smallest_triangle.vertex_position[(smallest_axis[1] + 1) % 3]), smallest_triangle.world_orientation);
+
+					if (XMVector3Dot(Wn, smallest_triangle.vertex_position[smallest_axis[1]]).m128_f32[0] < XMVector3Dot(Wn, smallest_triangle.vertex_position[(smallest_axis[1] + 2) % 3]).m128_f32[0])Wn *= -1;
+				}
+				Wn = XMVector3Normalize(Wn);
+
+				XMVECTOR p0 = XMVectorSet(obb.half_width[0], obb.half_width[1], obb.half_width[2], 0);
+				//obbとtriangleの位置関係(d)より接触点(p)を求める
+				if (XMVector3Dot(obb.u_axes[0], Wn).m128_f32[0] > 0) p0.m128_f32[0] = -p0.m128_f32[0];
+				if (XMVector3Dot(obb.u_axes[1], Wn).m128_f32[0] > 0) p0.m128_f32[1] = -p0.m128_f32[1];
+				if (XMVector3Dot(obb.u_axes[2], Wn).m128_f32[0] > 0) p0.m128_f32[2] = -p0.m128_f32[2];
+
+				//p0をobbBのローカル座標系へ
+				const XMVECTOR WP = XMVector3Rotate(p0, obb.world_orientation) + obb.world_position;
+				XMVECTOR c = XMVector3Rotate(WP - triangle.world_position, XMQuaternionInverse(triangle.world_orientation));
+
+				//obbBの最近点を求める
+				XMVECTOR p1;
+				if (0) {
+					//meshと点の最近点を求める方法
+					c /= triangle.world_scale;
+					Closest_func_SIM::get_closestP_point_triangle(
+						c,
+						smallest_triangle.vertex_position[0],
+						smallest_triangle.vertex_position[1],
+						smallest_triangle.vertex_position[2],
+						smallest_triangle.normal,
+						p1
+					);
+
+					p1 *= triangle.world_scale;
+				}
+				else {
+					//法線とめり込み量から求める方法 //こっちのほうが圧倒的に早い けど少し不正確
+					p1 = c;
+					p1 += XMVectorScale(Wn, smallest_penetration);
+				}
+
+				Crossing_struct crossing;
+				is_AC = true;
+				crossing.ACpenetration = smallest_penetration;
+				crossing.ACnormal = Wn;
+				crossing.ACcontact_pointA = p0;
+				crossing.ACcontact_pointB = p1;
+				crossing_structs.emplace_back(crossing);
+			}
+			//③obb0の辺とobb1の辺と衝突した場合
+			else if (smallest_case == SAT_TYPE::EDGE_EDGE)
+			{
+				//Vector3 d = obbB.world_position - obbA.world_position;
+
+				const XMVECTOR& tri_vertex_p0 = XMLoadFloat3(&mesh->get_mesh_data()->vertices[mesh->get_mesh_data()->edges[smallest_triangle.Edge_num[smallest_axis[1]]].vertexID[0]]);
+				const XMVECTOR& tri_vertex_p1 = XMLoadFloat3(&mesh->get_mesh_data()->vertices[mesh->get_mesh_data()->edges[smallest_triangle.Edge_num[smallest_axis[1]]].vertexID[1]]);
+
+				const XMVECTOR& world_tri_vertex_p0 = XMVector3Rotate(XMVectorMultiply(tri_vertex_p0, triangle.world_scale), triangle.world_orientation);
+				const XMVECTOR& world_tri_vertex_p1 = XMVector3Rotate(XMVectorMultiply(tri_vertex_p1, triangle.world_scale), triangle.world_orientation);
+
+				XMVECTOR triangle_edge_dir = XMVector3Normalize(tri_vertex_p0 - tri_vertex_p1);
+				XMVECTOR world_triangle_edge_dir = XMVector3Rotate(triangle_edge_dir, smallest_triangle.world_orientation);
+
+				XMVECTOR Wn;
+				Wn = XMVector3Cross(obb.u_axes[smallest_axis[0]], world_triangle_edge_dir);
+				if (XMVector3Dot(Wn, obb.world_position - (world_tri_vertex_p0 + smallest_triangle.world_position)).m128_f32[0] < 0)	//
+				{
+					Wn = -Wn;
+				}
+				Wn = XMVector3Normalize(Wn);
+
+				XMVECTOR p[2] = { XMLoadFloat(obb.half_width) ,tri_vertex_p0 };
+				{
+					if (XMVector3Dot(obb.u_axes[0], Wn).m128_f32[0] > 0) p[0].m128_f32[0] = -p[0].m128_f32[0];
+					if (XMVector3Dot(obb.u_axes[1], Wn).m128_f32[0] > 0) p[0].m128_f32[1] = -p[0].m128_f32[1];
+					if (XMVector3Dot(obb.u_axes[2], Wn).m128_f32[0] > 0) p[0].m128_f32[2] = -p[0].m128_f32[2];
+				}
+
+				//world座標系でedgeとedgeの最近点を求める
+				XMVECTOR P0a = XMVector3Rotate(p[0], obb.world_orientation) + obb.world_position;
+				XMVECTOR P1a = XMVector3Rotate(XMVectorMultiply(p[1], smallest_triangle.world_scale), smallest_triangle.world_orientation) + smallest_triangle.world_position;
+
+				float s, t; //最近点を求めることのできるs,tを求める
+				Closest_func_SIM::get_closestP_two_line(
+					P0a, obb.u_axes[smallest_axis[0]],
+					P1a, XMVectorMultiply(world_triangle_edge_dir, smallest_triangle.world_scale),
+					s, t
+				);
+
+				//obbのlocal座標系での軸の向き
+				XMVECTOR b_axis[3]{
+					XMVectorSet(1,0,0,0),
+					XMVectorSet(0,1,0,0),
+					XMVectorSet(0,0,1,0)
+				};
+
+				Crossing_struct crossing;
+				is_AC = true;
+				crossing.ACpenetration = smallest_penetration;
+				crossing.ACnormal = Wn;
+				crossing.ACcontact_pointA = p[0] + XMVectorScale(b_axis[smallest_axis[0]], s);
+				crossing.ACcontact_pointB = XMVectorMultiply((p[1] + XMVectorScale(triangle_edge_dir, t)), smallest_triangle.world_scale);
+				crossing_structs.emplace_back(crossing);
+			}
+
+			else assert(0);
+
+		}
+
+		if (is_AC)
+		{
+			is_crossing = true;
+			if (pair->check_oncoll_only == true) return false;
+
+			float smallest_penetrate = FLT_MAX;
+			XMVECTOR smallest_axis = XMVectorZero();
+			for (const auto& crossing : crossing_structs) {
+				if (smallest_penetrate > crossing.ACpenetration) {
+					smallest_penetrate = crossing.ACpenetration;
+					smallest_axis = crossing.ACnormal;
+				}
+			}
+
+			for (const auto& crossing : crossing_structs) {
+				if (XMVector3Dot(crossing.ACnormal, smallest_axis).m128_f32[0] < 0)continue;
+
+				//oncoll_enterのみの場合ここでreturn
+
+				Vector3 ACnormal_;
+				Vector3 ACcontact_pointA_;
+				Vector3 ACcontact_pointB_;
+
+				DirectX::XMStoreFloat3(&ACnormal_, crossing.ACnormal);
+				DirectX::XMStoreFloat3(&ACcontact_pointA_, crossing.ACcontact_pointA);
+				DirectX::XMStoreFloat3(&ACcontact_pointB_, crossing.ACcontact_pointB);
+
+
+				if (pair->body[0]->get_shape_tag() == box->get_shape_tag())
+					pair->contacts.addcontact(
+						crossing.ACpenetration,
+						ACnormal_,
+						ACcontact_pointA_,
+						ACcontact_pointB_
+					);
+				else
+					pair->contacts.addcontact(
+						crossing.ACpenetration,
+						-ACnormal_,
+						ACcontact_pointB_,
+						ACcontact_pointA_
+					);
+			}
+
+
+		}
+
+
+		return is_AC;
+
+
+
+
+		return true;
+	}
+}
 #pragma endregion
 
 #pragma region Capsule-Capsule
@@ -2479,6 +2475,8 @@ bool Physics_function::generate_contact_capsule_capsule(const Collider_shape* ca
 	//pB から pA　方向への法線 Acoord
 	XMVECTOR Wn = pA_Wco - pB_Wco;
 	float length = XMVector3Length(Wn).m128_f32[0];
+	if (length == 0)return false; //全く一緒の場合 衝突点がわからないのでreturn
+
 	Wn = Wn / length;
 
 	if (length < capsuleA->world_scale().x + capsuleB->world_scale().x) {
