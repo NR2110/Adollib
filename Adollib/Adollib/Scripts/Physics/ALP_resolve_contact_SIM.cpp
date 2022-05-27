@@ -146,6 +146,8 @@ void Physics_function::resolve_contact(std::list<Physics_function::ALP_Collider*
 	const float inv_duration = 1 / (Physics_manager::physicsParams.timeStep / timescale);
 
 	//::: 解決用オブジェクトの生成 :::::::::::
+	//static std::vector<ALP_Solverbody> SBs;
+	//SBs.clear();
 	std::vector<ALP_Solverbody> SBs;
 	SBs.reserve(ALP_colliders.size());
 	// SBs.resize(colliders.size()); //アライメントでSIMDとコンテナが競合する??? reserveにしたら治った
@@ -544,16 +546,16 @@ void Physics_function::resolve_contact(std::list<Physics_function::ALP_Collider*
 		for (auto& joint : joints) {
 
 			{
-				const Vector3 joint_posA = joint->limit_constraint_pos[0];
-				const Vector3 joint_posB = joint->limit_constraint_pos[1];
+				const XMVECTOR joint_posA = XMLoadFloat3(&joint->limit_constraint_pos[0]);
+				const XMVECTOR joint_posB = XMLoadFloat3(&joint->limit_constraint_pos[1]);
 
 				ALPphysics[0] = joint->ALPcollider[0]->get_ALPphysics();
 				ALPphysics[1] = joint->ALPcollider[1]->get_ALPphysics();
 				solverbody[0] = ALPphysics[0]->solve;
 				solverbody[1] = ALPphysics[1]->solve;
 
-				const XMVECTOR rA = XMVector3Rotate(XMLoadFloat3(&joint_posA), solverbody[0]->Worient);
-				const XMVECTOR rB = XMVector3Rotate(XMLoadFloat3(&joint_posB), solverbody[1]->Worient);
+				const XMVECTOR rA = XMVector3Rotate(joint_posA, solverbody[0]->Worient);
+				const XMVECTOR rB = XMVector3Rotate(joint_posB, solverbody[1]->Worient);
 
 				Constraint& constraint = joint->constraint_limit;
 				const XMVECTOR axis = XMLoadFloat3(&constraint.axis);
@@ -564,7 +566,7 @@ void Physics_function::resolve_contact(std::list<Physics_function::ALP_Collider*
 				delta_velocity[1] = solverbody[1]->delta_LinearVelocity + XMVector3Cross(solverbody[1]->delta_AngulaVelocity, rB);
 				delta_impulse -= constraint.jacDiagInv * XMVectorGetX(XMVector3Dot(axis, delta_velocity[0] - delta_velocity[1]));
 
-				float old_impulse = constraint.accuminpulse;
+				const float& old_impulse = constraint.accuminpulse;
 				constraint.accuminpulse = ALClamp(old_impulse + delta_impulse, constraint.lowerlimit, constraint.upperlimit);
 				delta_impulse = constraint.accuminpulse - old_impulse;
 
@@ -576,16 +578,16 @@ void Physics_function::resolve_contact(std::list<Physics_function::ALP_Collider*
 
 			for (int i = 0; i < joint->anchor_count; i++) {
 
-				const Vector3 joint_posA = joint->anchor[i].posA;
-				const Vector3 joint_posB = joint->anchor[i].posB;
+				const XMVECTOR joint_posA = XMLoadFloat3(&joint->anchor[i].posA);
+				const XMVECTOR joint_posB = XMLoadFloat3(&joint->anchor[i].posB);
 
 				ALPphysics[0] = joint->ALPcollider[0]->get_ALPphysics();
 				ALPphysics[1] = joint->ALPcollider[1]->get_ALPphysics();
 				solverbody[0] = ALPphysics[0]->solve;
 				solverbody[1] = ALPphysics[1]->solve;
 
-				const XMVECTOR rA = XMVector3Rotate(XMLoadFloat3(&joint_posA), solverbody[0]->Worient);
-				const XMVECTOR rB = XMVector3Rotate(XMLoadFloat3(&joint_posB), solverbody[1]->Worient);
+				const XMVECTOR rA = XMVector3Rotate(joint_posA, solverbody[0]->Worient);
+				const XMVECTOR rB = XMVector3Rotate(joint_posB, solverbody[1]->Worient);
 
 				Constraint& constraint = joint->constraint[i];
 				const XMVECTOR axis = XMLoadFloat3(&constraint.axis);
@@ -596,7 +598,7 @@ void Physics_function::resolve_contact(std::list<Physics_function::ALP_Collider*
 				delta_velocity[1] = solverbody[1]->delta_LinearVelocity + XMVector3Cross(solverbody[1]->delta_AngulaVelocity, rB);
 				delta_impulse -= constraint.jacDiagInv * XMVectorGetX(XMVector3Dot(axis, delta_velocity[0] - delta_velocity[1]));
 
-				float old_impulse = constraint.accuminpulse;
+				const float old_impulse = constraint.accuminpulse;
 				constraint.accuminpulse = ALClamp(old_impulse + delta_impulse, constraint.lowerlimit, constraint.upperlimit);
 				delta_impulse = constraint.accuminpulse - old_impulse;
 
@@ -635,7 +637,7 @@ void Physics_function::resolve_contact(std::list<Physics_function::ALP_Collider*
 					delta_velocity[0] = solverbody[0]->delta_LinearVelocity + XMVector3Cross(solverbody[0]->delta_AngulaVelocity, rA);
 					delta_velocity[1] = solverbody[1]->delta_LinearVelocity + XMVector3Cross(solverbody[1]->delta_AngulaVelocity, rB);
 					delta_impulse -= constraint.jacDiagInv * XMVectorGetX(XMVector3Dot(axis, delta_velocity[0] - delta_velocity[1]));
-					float old_impulse = constraint.accuminpulse;
+					const float old_impulse = constraint.accuminpulse;
 					constraint.accuminpulse = ALClamp(old_impulse + delta_impulse, constraint.lowerlimit, constraint.upperlimit);
 					delta_impulse = constraint.accuminpulse - old_impulse;
 					solverbody[0]->delta_LinearVelocity = solverbody[0]->delta_LinearVelocity + XMVectorScale(axis, delta_impulse * solverbody[0]->inv_mass);
@@ -659,7 +661,7 @@ void Physics_function::resolve_contact(std::list<Physics_function::ALP_Collider*
 					delta_velocity[0] = solverbody[0]->delta_LinearVelocity + XMVector3Cross(solverbody[0]->delta_AngulaVelocity, rA);
 					delta_velocity[1] = solverbody[1]->delta_LinearVelocity + XMVector3Cross(solverbody[1]->delta_AngulaVelocity, rB);
 					delta_impulse -= constraint.jacDiagInv * XMVectorGetX(XMVector3Dot(axis, delta_velocity[0] - delta_velocity[1]));
-					float old_impulse = constraint.accuminpulse;
+					const float old_impulse = constraint.accuminpulse;
 					constraint.accuminpulse = ALClamp(old_impulse + delta_impulse, constraint.lowerlimit, constraint.upperlimit);
 					delta_impulse = constraint.accuminpulse - old_impulse;
 					solverbody[0]->delta_LinearVelocity = solverbody[0]->delta_LinearVelocity + XMVectorScale(axis, delta_impulse * solverbody[0]->inv_mass);
@@ -678,7 +680,7 @@ void Physics_function::resolve_contact(std::list<Physics_function::ALP_Collider*
 					delta_velocity[0] = solverbody[0]->delta_LinearVelocity + XMVector3Cross(solverbody[0]->delta_AngulaVelocity, rA);
 					delta_velocity[1] = solverbody[1]->delta_LinearVelocity + XMVector3Cross(solverbody[1]->delta_AngulaVelocity, rB);
 					delta_impulse -= constraint.jacDiagInv * XMVectorGetX(XMVector3Dot(axis, delta_velocity[0] - delta_velocity[1]));
-					float old_impulse = constraint.accuminpulse;
+					const float old_impulse = constraint.accuminpulse;
 					constraint.accuminpulse = ALClamp(old_impulse + delta_impulse, constraint.lowerlimit, constraint.upperlimit);
 					delta_impulse = constraint.accuminpulse - old_impulse;
 					solverbody[0]->delta_LinearVelocity = solverbody[0]->delta_LinearVelocity + XMVectorScale(axis, delta_impulse * solverbody[0]->inv_mass);
