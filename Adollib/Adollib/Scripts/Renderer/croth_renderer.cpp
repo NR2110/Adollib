@@ -26,24 +26,24 @@ using namespace ConstantBuffer;
 using namespace Compute_S;
 
 //#define use_thread_crothrenderer
-
-template<class T>
-T* map_buffer(Microsoft::WRL::ComPtr<ID3D11Buffer>& buffer) {
-	HRESULT hr = S_OK;
-	const D3D11_MAP map = D3D11_MAP_WRITE_DISCARD;
-	D3D11_MAPPED_SUBRESOURCE mappedBuffer = {};
-	hr = Systems::DeviceContext->Map(buffer.Get(), 0, map, 0, &mappedBuffer);
-
-	if (FAILED(hr))
-	{
-		assert(0 && "failed Map InstanceBuffer dynamic(RenderManager)");
-		return nullptr;
-	}
-	return static_cast<T*>(mappedBuffer.pData);
-}
-void unmap_buffer(Microsoft::WRL::ComPtr<ID3D11Buffer>& buffer) {
-	Systems::DeviceContext->Unmap(buffer.Get(), 0);
-}
+//
+//template<class T>
+//T* map_buffer(Microsoft::WRL::ComPtr<ID3D11Buffer>& buffer) {
+//	HRESULT hr = S_OK;
+//	const D3D11_MAP map = D3D11_MAP_WRITE_DISCARD;
+//	D3D11_MAPPED_SUBRESOURCE mappedBuffer = {};
+//	hr = Systems::DeviceContext->Map(buffer.Get(), 0, map, 0, &mappedBuffer);
+//
+//	if (FAILED(hr))
+//	{
+//		assert(0 && "failed Map InstanceBuffer dynamic(RenderManager)");
+//		return nullptr;
+//	}
+//	return static_cast<T*>(mappedBuffer.pData);
+//}
+//void unmap_buffer(Microsoft::WRL::ComPtr<ID3D11Buffer>& buffer) {
+//	Systems::DeviceContext->Unmap(buffer.Get(), 0);
+//}
 
 
 void Croth_renderer::init() {
@@ -250,7 +250,7 @@ void Croth_renderer::update() {
 		int mesh_count = 0;
 		for (auto& buffer : computeBuf_vertexoffset) {
 
-			auto data = map_buffer<Croth_VertexOffset>(buffer);
+			auto data = ComputeShader_function::map_buffer<Croth_VertexOffset>(buffer, Systems::DeviceContext);
 
 			int vertex_size = meshes->at(mesh_count).vertices.size();
 			int vertex_start = 0;
@@ -259,7 +259,7 @@ void Croth_renderer::update() {
 				data[i].normal = mesh_offset->at(mesh_count)[i].second;
 			}
 			++mesh_count;
-			unmap_buffer(buffer);
+			ComputeShader_function::unmap_buffer(buffer, Systems::DeviceContext);
 		}
 	}
 
@@ -270,11 +270,11 @@ void Croth_renderer::update() {
 		int instance_count = 0;
 		for (auto& buffer : computeBuf_color) {
 
-			auto data = map_buffer<Vector4>(buffer);
+			auto data = ComputeShader_function::map_buffer<Vector4>(buffer, Systems::DeviceContext);
 
 			data[0] = Vector4(color.x, color.y, color.z, instance_count);
 
-			unmap_buffer(buffer);
+			ComputeShader_function::unmap_buffer(buffer, Systems::DeviceContext);
 
 			instance_count += meshes->at(mesh_count).indexces.size() / 3;
 			++mesh_count;

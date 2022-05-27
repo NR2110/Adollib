@@ -19,7 +19,6 @@ using namespace DirectX;
 //:::::::::::::::::::::::::::
 #pragma region resolve_contact
 //:::::::::::::::::::::::::::
-//#ifdef PHYICSE_USED_SIMD
 #if 1
 
 //Õ“Ë‰ğŒˆ

@@ -77,6 +77,28 @@ namespace Adollib {
 
 			// StructureBufferÇ©ÇÁUAVÇÃçÏê¨
 			static HRESULT createUAV_fromSB(Microsoft::WRL::ComPtr<StructureBuffer>& pBuffer, Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView>& ppUAVOut);
+
+			template<class T>
+			static T* map_buffer(Microsoft::WRL::ComPtr<ID3D11Buffer>& buffer, ComPtr<ID3D11DeviceContext>& context) {
+				HRESULT hr = S_OK;
+				//const D3D11_MAP map = D3D11_MAP_READ;
+				const D3D11_MAP map = D3D11_MAP_WRITE_DISCARD;
+				D3D11_MAPPED_SUBRESOURCE mappedBuffer = {};
+				hr = context->Map(buffer.Get(), 0, map, 0, &mappedBuffer);
+
+				if (FAILED(hr))
+				{
+					assert(0 && "failed Map InstanceBuffer dynamic(RenderManager)");
+					return nullptr;
+				}
+				return static_cast<T*>(mappedBuffer.pData);
+			};
+
+			static void unmap_buffer(Microsoft::WRL::ComPtr<ID3D11Buffer>& buffer, ComPtr<ID3D11DeviceContext>& context) {
+				context->Unmap(buffer.Get(), 0);
+			};
+
+
 		};
 	}
 }

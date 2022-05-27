@@ -191,14 +191,20 @@
     <Filter Include="ソース ファイル\game\scene_title\title_state_manager">
       <UniqueIdentifier>{869b328b-02c3-48b3-812a-4c1b9844879a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\demo">
-      <UniqueIdentifier>{7264c1e2-201e-4bd8-9da9-1cf092b9c00f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\demo\particle">
-      <UniqueIdentifier>{8629ccf9-50b8-4aa5-b405-770b1f59ffb6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00_Adollib\22_physics\ALP\compute">
       <UniqueIdentifier>{d1422c47-4fc9-4ed1-bf80-40ef60b337d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\demo_fluid">
+      <UniqueIdentifier>{7264c1e2-201e-4bd8-9da9-1cf092b9c00f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\demo_GPUparticle">
+      <UniqueIdentifier>{6ace0b8b-efc7-4b21-9ff9-f294bb70fccc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\demo_GPUparticle\simulation_GPUparticle">
+      <UniqueIdentifier>{13e8b79e-e9dd-47f8-a0b5-e98129defa24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\demo_fluid\simluation_fluid">
+      <UniqueIdentifier>{8629ccf9-50b8-4aa5-b405-770b1f59ffb6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -539,10 +545,10 @@
       <Filter>00_Adollib\44_render\posteffect</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Scene\scene_SPH.cpp">
-      <Filter>ソース ファイル\demo</Filter>
+      <Filter>ソース ファイル\demo_fluid</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\simulation_SPH.cpp">
-      <Filter>ソース ファイル\demo\particle</Filter>
+      <Filter>ソース ファイル\demo_fluid\simluation_fluid</Filter>
     </ClCompile>
     <ClCompile Include="..\Scripts\debug_camera_controller.cpp">
       <Filter>ソース ファイル\game</Filter>
@@ -561,6 +567,12 @@
     </ClCompile>
     <ClCompile Include="Scripts\Math\crossing_func_SIM.cpp">
       <Filter>00_Adollib\11_math\functions</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Scene\scene_GPUparticle.cpp">
+      <Filter>ソース ファイル\demo_GPUparticle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\simulation_GPUparticle.cpp">
+      <Filter>ソース ファイル\demo_GPUparticle\simulation_GPUparticle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1075,16 +1087,22 @@
       <Filter>00_Adollib\44_render\posteffect</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Scene\scene_SPH.h">
-      <Filter>ソース ファイル\demo</Filter>
+      <Filter>ソース ファイル\demo_fluid</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\simulation_SPH.h">
-      <Filter>ソース ファイル\demo\particle</Filter>
+      <Filter>ソース ファイル\demo_fluid\simluation_fluid</Filter>
     </ClInclude>
     <ClInclude Include="..\Scripts\debug_camera_controller.h">
       <Filter>ソース ファイル\game</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Main\defines.h">
       <Filter>00_Adollib\00_main</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Scene\scene_GPUparticle.h">
+      <Filter>ソース ファイル\demo_GPUparticle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\simulation_GPUparticle.h">
+      <Filter>ソース ファイル\demo_GPUparticle\simulation_GPUparticle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1144,7 +1162,7 @@
       <Filter>00_Adollib\44_render\posteffect\shader\vignette_effect</Filter>
     </None>
     <None Include="..\Data\Shader\fluid_simulation.hlsli">
-      <Filter>ソース ファイル\demo\particle</Filter>
+      <Filter>ソース ファイル\demo_fluid\simluation_fluid</Filter>
     </None>
     <None Include="DefaultShader\defines.hlsli">
       <Filter>00_Adollib\44_render\shader\hlsl\base</Filter>
@@ -1233,19 +1251,19 @@
       <Filter>00_Adollib\44_render\posteffect\shader\vignette_effect</Filter>
     </FxCompile>
     <FxCompile Include="..\Data\Shader\fluid_simulation_density_cs.hlsl">
-      <Filter>ソース ファイル\demo\particle</Filter>
+      <Filter>ソース ファイル\demo_fluid\simluation_fluid</Filter>
     </FxCompile>
     <FxCompile Include="..\Data\Shader\fluid_simulation_pressure_cs.hlsl">
-      <Filter>ソース ファイル\demo\particle</Filter>
+      <Filter>ソース ファイル\demo_fluid\simluation_fluid</Filter>
     </FxCompile>
     <FxCompile Include="..\Data\Shader\fluid_simulation_force_cs.hlsl">
-      <Filter>ソース ファイル\demo\particle</Filter>
+      <Filter>ソース ファイル\demo_fluid\simluation_fluid</Filter>
     </FxCompile>
     <FxCompile Include="..\Data\Shader\fluid_simulation_integrate_cs.hlsl">
-      <Filter>ソース ファイル\demo\particle</Filter>
+      <Filter>ソース ファイル\demo_fluid\simluation_fluid</Filter>
     </FxCompile>
     <FxCompile Include="..\Data\Shader\fluid_simulation_collide.hlsl">
-      <Filter>ソース ファイル\demo\particle</Filter>
+      <Filter>ソース ファイル\demo_fluid\simluation_fluid</Filter>
     </FxCompile>
     <FxCompile Include="DefaultShader\setup_solver_joint_cs.hlsl">
       <Filter>00_Adollib\22_physics\ALP\compute</Filter>

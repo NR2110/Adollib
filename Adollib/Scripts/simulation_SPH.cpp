@@ -2143,24 +2143,24 @@ static Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> dencity_write;
 static Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> pressure_write;
 static Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> force_write;
 
-template<class T>
-T* map_buffer_(Microsoft::WRL::ComPtr<ID3D11Buffer>& buffer) {
-	HRESULT hr = S_OK;
-	//const D3D11_MAP map = D3D11_MAP_READ;
-	const D3D11_MAP map = D3D11_MAP_WRITE_DISCARD;
-	D3D11_MAPPED_SUBRESOURCE mappedBuffer = {};
-	hr = Systems::DeviceContext->Map(buffer.Get(), 0, map, 0, &mappedBuffer);
-
-	if (FAILED(hr))
-	{
-		assert(0 && "failed Map InstanceBuffer dynamic(RenderManager)");
-		return nullptr;
-	}
-	return static_cast<T*>(mappedBuffer.pData);
-}
-void unmap_buffer_(Microsoft::WRL::ComPtr<ID3D11Buffer>& buffer) {
-	Systems::DeviceContext->Unmap(buffer.Get(), 0);
-}
+//template<class T>
+//T* map_buffer_(Microsoft::WRL::ComPtr<ID3D11Buffer>& buffer) {
+//	HRESULT hr = S_OK;
+//	//const D3D11_MAP map = D3D11_MAP_READ;
+//	const D3D11_MAP map = D3D11_MAP_WRITE_DISCARD;
+//	D3D11_MAPPED_SUBRESOURCE mappedBuffer = {};
+//	hr = Systems::DeviceContext->Map(buffer.Get(), 0, map, 0, &mappedBuffer);
+//
+//	if (FAILED(hr))
+//	{
+//		assert(0 && "failed Map InstanceBuffer dynamic(RenderManager)");
+//		return nullptr;
+//	}
+//	return static_cast<T*>(mappedBuffer.pData);
+//}
+//void unmap_buffer_(Microsoft::WRL::ComPtr<ID3D11Buffer>& buffer) {
+//	Systems::DeviceContext->Unmap(buffer.Get(), 0);
+//}
 
 void Simulation_SPH::awake() {
 
@@ -2267,13 +2267,13 @@ void Simulation_SPH::update() {
 
 	Systems::DeviceContext->CopyResource(read_particle_buffer.Get(), particle_buffer.Get());
 	{
-		auto data = map_buffer_<Particle>(read_particle_buffer);
+		auto data = ComputeShader_function::map_buffer<Particle>(read_particle_buffer, Systems::DeviceContext);
 
 		for (int i = 0; i < nP; ++i) {
 			//data[i].position += Vector3(0, 1, 0) * 0.01f;
 			particle_gos[i]->transform->local_pos = data[i].position;
 		}
-		unmap_buffer_(read_particle_buffer);
+		ComputeShader_function::unmap_buffer(read_particle_buffer, Systems::DeviceContext);
 	}
 
 
@@ -2420,17 +2420,17 @@ void RdDat(void) {
 	for (iX = 0; iX < 20; iX++) {
 		for (iY = 0; iY < 80; iY++) {
 			for (iZ = 0; iZ < 5; iZ++) {
-	//for (iX = 0; iX < 4; iX++) {
-	//	for (iY = 0; iY < 5; iY++) {
-	//		for (iZ = 0; iZ < 4; iZ++) {
+				//for (iX = 0; iX < 4; iX++) {
+				//	for (iY = 0; iY < 5; iY++) {
+				//		for (iZ = 0; iZ < 4; iZ++) {
 				x = PARTICLE_DISTANCE * (float)(iX)-10 * PARTICLE_DISTANCE;
 				y = PARTICLE_DISTANCE * (float)(iY)-40 * PARTICLE_DISTANCE;
 				z = PARTICLE_DISTANCE * (float)(iZ)-5 * PARTICLE_DISTANCE;
 #else
 	for (iX = 0; iX < 100; iX++) {
 		for (iY = 0; iY < 80; iY++) {
-	//for (iX = 0; iX < 10; iX++) {
-	//	for (iY = 0; iY < 8; iY++) {
+			//for (iX = 0; iX < 10; iX++) {
+			//	for (iY = 0; iY < 8; iY++) {
 			x = PARTICLE_DISTANCE * (float)(iX)-50 * PARTICLE_DISTANCE;
 			y = PARTICLE_DISTANCE * (float)(iY)-40 * PARTICLE_DISTANCE;
 #endif
@@ -2443,7 +2443,7 @@ void RdDat(void) {
 
 
 #ifdef USE_3D
-			}
+		}
 #endif
 		}
 	}

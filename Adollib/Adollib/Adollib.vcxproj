@@ -170,6 +170,7 @@
     <ClInclude Include="..\Scripts\move_block_from_2flags.h" />
     <ClInclude Include="..\Scripts\object_manager.h" />
     <ClInclude Include="..\Scripts\object_rotate.h" />
+    <ClInclude Include="..\Scripts\simulation_GPUparticle.h" />
     <ClInclude Include="..\Scripts\simulation_SPH.h" />
     <ClInclude Include="..\Scripts\player.h" />
     <ClInclude Include="..\Scripts\player_manager.h" />
@@ -327,6 +328,7 @@
     <ClInclude Include="Scripts\Renderer\vignette_effect.h" />
     <ClInclude Include="Scripts\Scene\scene.h" />
     <ClInclude Include="Scripts\Scene\scene_game.h" />
+    <ClInclude Include="Scripts\Scene\scene_GPUparticle.h" />
     <ClInclude Include="Scripts\Scene\scene_list.h" />
     <ClInclude Include="Scripts\Scene\scene_manager.h" />
     <ClInclude Include="Scripts\Scene\scene_player.h" />
@@ -344,6 +346,7 @@
     <ClCompile Include="..\Scripts\input_changer.cpp" />
     <ClCompile Include="..\Scripts\object_manager.cpp" />
     <ClCompile Include="..\Scripts\object_rotate.cpp" />
+    <ClCompile Include="..\Scripts\simulation_GPUparticle.cpp" />
     <ClCompile Include="..\Scripts\simulation_SPH.cpp" />
     <ClCompile Include="..\Scripts\player.cpp" />
     <ClCompile Include="..\Scripts\player_funcs.cpp" />
@@ -457,6 +460,7 @@
     <ClCompile Include="Scripts\Renderer\UI_renderer.cpp" />
     <ClCompile Include="Scripts\Renderer\vignette_effect.cpp" />
     <ClCompile Include="Scripts\Scene\scene_game.cpp" />
+    <ClCompile Include="Scripts\Scene\scene_GPUparticle.cpp" />
     <ClCompile Include="Scripts\Scene\scene_manager.cpp" />
     <ClCompile Include="Scripts\Scene\scene_player.cpp" />
     <ClCompile Include="Scripts\Scene\scene_SPH.cpp" />
