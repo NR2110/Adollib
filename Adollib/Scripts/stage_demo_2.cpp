@@ -54,7 +54,7 @@ namespace Adollib
 				Sponza
 			};
 
-			Stage_types stage_type = Stage_types::Mesh_Cube;
+			Stage_types stage_type = Stage_types::Teach;
 			Gameobject* GO = nullptr;
 
 			if (stage_type == Stage_types::Cube) {

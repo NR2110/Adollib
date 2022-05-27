@@ -336,15 +336,15 @@ void Closest_func_SIM::get_closestP_segment_triangle(
 	XMVECTOR& closest_p
 ) {
 	const XMVECTOR plane_dis = XMVector3Dot(t_normal, t_point0); //平面の法線
-	XMVECTOR line_dir = segG - segS; //線分の向き
+	const XMVECTOR line_dir = segG - segS; //線分の向き
 
-	if (XMVectorGetX(XMVector3LengthSq(line_dir)) == 0) {
+	if ((XMVector3LengthSq(line_dir).m128_f32[0]) == 0) {
 		get_closestP_point_triangle(segG, t_point0, t_point1, t_point2, t_normal, closest_p);
 		closest_t = 0;
 		return;
 	}
 
-	closest_t = XMVectorGetX((plane_dis - XMVector3Dot(segS, t_normal)) / XMVector3Dot(t_normal, line_dir));
+	closest_t = ((plane_dis - XMVector3Dot(segS, t_normal)) / XMVector3Dot(t_normal, line_dir)).m128_f32[0];
 	//線分を直線とした平面上の交点
 	XMVECTOR proj = segS + XMVectorScale(line_dir, closest_t);
 
@@ -356,9 +356,9 @@ void Closest_func_SIM::get_closestP_segment_triangle(
 	const XMVECTOR edgeP12_normal = XMVector3Cross(edgeP12, t_normal);
 	const XMVECTOR edgeP20_normal = XMVector3Cross(edgeP20, t_normal);
 
-	const float voronoiEdgeP01_check1 = XMVectorGetX(XMVector3Dot(proj - t_point0, edgeP01_normal));
-	const float voronoiEdgeP12_check1 = XMVectorGetX(XMVector3Dot(proj - t_point1, edgeP12_normal));
-	const float voronoiEdgeP20_check1 = XMVectorGetX(XMVector3Dot(proj - t_point2, edgeP20_normal));
+	const float voronoiEdgeP01_check1 = XMVector3Dot(proj - t_point0, edgeP01_normal).m128_f32[0];
+	const float voronoiEdgeP12_check1 = XMVector3Dot(proj - t_point1, edgeP12_normal).m128_f32[0];
+	const float voronoiEdgeP20_check1 = XMVector3Dot(proj - t_point2, edgeP20_normal).m128_f32[0];
 
 	// 交点が３角形Meshの内側の時
 	if (voronoiEdgeP01_check1 <= 0.0f && voronoiEdgeP12_check1 <= 0.0f && voronoiEdgeP20_check1 <= 0.0f) {
@@ -393,11 +393,11 @@ void Closest_func_SIM::get_closestP_segment_triangle(
 			t_pS, t_pG,
 			t, s
 		);
-		float dis = XMVectorGetX(XMVector3LengthSq((segS + XMVectorScale(line_dir, t)) - (t_pS + XMVectorScale(line_dir, s))));
+		float dis = XMVector3LengthSq((segS + XMVectorScale(line_dir, t)) - (t_pS + XMVectorScale(t_line_dir, s))).m128_f32[0];
 		if (dis < min_dis) {
 			min_dis = dis;
 			closest_t = t;
-			closest_p = t_pS + XMVectorScale(line_dir, s);
+			closest_p = t_pS + XMVectorScale(t_line_dir, s);
 		}
 	}
 
@@ -412,11 +412,11 @@ void Closest_func_SIM::get_closestP_segment_triangle(
 			t_pS, t_pG,
 			t, s
 		);
-		float dis = XMVectorGetX(XMVector3LengthSq((segS + XMVectorScale(line_dir, t)) - (t_pS + XMVectorScale(line_dir, s))));
+		float dis = XMVectorGetX(XMVector3LengthSq((segS + XMVectorScale(line_dir, t)) - (t_pS + XMVectorScale(t_line_dir, s))));
 		if (dis < min_dis) {
 			min_dis = dis;
 			closest_t = t;
-			closest_p = t_pS + XMVectorScale(line_dir, s);
+			closest_p = t_pS + XMVectorScale(t_line_dir, s);
 		}
 	}
 
@@ -431,11 +431,11 @@ void Closest_func_SIM::get_closestP_segment_triangle(
 			t_pS, t_pG,
 			t, s
 		);
-		float dis = XMVectorGetX(XMVector3LengthSq((segS + XMVectorScale(line_dir, t)) - (t_pS + XMVectorScale(line_dir, s))));
+		float dis = XMVectorGetX(XMVector3LengthSq((segS + XMVectorScale(line_dir, t)) - (t_pS + XMVectorScale(t_line_dir, s))));
 		if (dis < min_dis) {
 			min_dis = dis;
 			closest_t = t;
-			closest_p = t_pS + XMVectorScale(line_dir, s);
+			closest_p = t_pS + XMVectorScale(t_line_dir, s);
 		}
 	}
 

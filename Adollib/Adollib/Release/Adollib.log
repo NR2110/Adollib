@@ -1,9 +1,15 @@
-﻿  ALP_generate_contact_SIM.cpp
+﻿  closest_func_SIM.cpp
+  crossing_func_SIM.cpp
+  ALP__physics_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP__physics_manager.cpp(133,27): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
+  ALP_generate_contact.cpp
+  ALP_generate_contact_SIM.cpp
 C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact_SIM.cpp(509,11): warning C4101: 'axis': ローカル変数は 1 度も使われていません。
 C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_generate_contact_SIM.cpp(2217,26): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
   コード生成しています。
-  1 of 11494 functions (<0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    69 functions had inline decision re-evaluated but remain unchanged
+  893 of 11498 functions ( 7.8%) were compiled, the rest were copied from previous compilation.
+    22 functions were new in current compilation
+    258 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Release\Adollib.exe

@@ -29,9 +29,9 @@ const bool Crossing_func_SIM::getCrossingP_plane_line(
 	float& crossing_t, bool Consider_sp
 ) {
 
-	if (Consider_sp && (fabsf(XMVectorGetX(XMVector3Dot(l_plane_n, l_line_dir)) < FLT_EPSILON)))return false; //•½–Ê‚ÆŒõü‚ªŒð‚í‚ç‚È‚¢Žžfalse‚ð•Ô‚·
+	if (Consider_sp && (fabsf((XMVector3Dot(l_plane_n, l_line_dir).m128_f32[0]) < FLT_EPSILON)))return false; //•½–Ê‚ÆŒõü‚ªŒð‚í‚ç‚È‚¢Žžfalse‚ð•Ô‚·
 
-	crossing_t = (plane_dis - XMVectorGetX(XMVector3Dot(line_p, l_plane_n))) / XMVectorGetX(XMVector3Dot(l_plane_n, l_line_dir));
+	crossing_t = (plane_dis - (line_p, l_plane_n).m128_f32[0]) / (XMVector3Dot(l_plane_n, l_line_dir).m128_f32[0]);
 
 	return true;
 
