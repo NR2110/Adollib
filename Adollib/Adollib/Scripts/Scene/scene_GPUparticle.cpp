@@ -13,8 +13,8 @@ namespace Adollib {
 
 
 	void Scene_GPUparticle::initialize() {
-		//ALKLib::MonoAudio::PlayMusic(0, true);
-		//ALKLib::MonoAudio::PlayMusic(1, true);
+		//MonoAudio::PlayMusic(0, true);
+		//MonoAudio::PlayMusic(1, true);
 
 		//{
 		//	Gameobject* simulation_SPH = Gameobject_manager::create("simulation_SPH");

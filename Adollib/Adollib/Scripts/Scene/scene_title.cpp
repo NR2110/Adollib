@@ -11,11 +11,11 @@
 namespace Adollib {
 
 	void Scene_title::initialize() {
-		ALKLib::MonoAudio::StopMusic(0);
-		ALKLib::MonoAudio::StopMusic(1);
-		ALKLib::MonoAudio::StopMusic(2);
-		ALKLib::MonoAudio::StopMusic(3);
-		ALKLib::MonoAudio::PlayMusic(0, true);
+		MonoAudio::StopMusic(0);
+		MonoAudio::StopMusic(1);
+		MonoAudio::StopMusic(2);
+		MonoAudio::StopMusic(3);
+		MonoAudio::PlayMusic(0, true);
 
 		{
 			Gameobject* camera = Gameobject_manager::create("camera");

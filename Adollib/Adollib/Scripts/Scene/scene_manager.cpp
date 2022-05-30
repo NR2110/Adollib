@@ -6,6 +6,7 @@
 #include "scene_title.h"
 #include "scene_player.h"
 #include "scene_SPH.h"
+#include "scene_music.h"
 
 #include "../Main/defines.h"
 #include "../Object/gameobject_manager.h"
@@ -28,11 +29,14 @@ void Scene_manager::initialize() {
 	scenes[Scenelist::scene_title] = std::make_unique<Scene_title>();
 	scenes[Scenelist::scene_player] = std::make_unique<Scene_player>();
 	scenes[Scenelist::scene_SPH] = std::make_unique<Scene_SPH>();
+	scenes[Scenelist::scene_music] = std::make_unique<Scene_music>();
 
 
+
+	set_active(Scenelist::scene_music);
 	//set_active(Scenelist::scene_SPH);
 	//set_active(Scenelist::scene_title);
-	set_active(Scenelist::scene_title);
+	//set_active(Scenelist::scene_title);
 
 }
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

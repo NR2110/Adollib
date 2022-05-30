@@ -1,16 +1,52 @@
-﻿  simulation_GPUparticle.cpp
-  simulation_SPH.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2175,86): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2434,39): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2435,39): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2417,6): warning C4101: 'flagOfParticleGeneration': ローカル変数は 1 度も使われていません。
-C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2414,14): warning C4101: 'iZ': ローカル変数は 1 度も使われていません。
-  rope_renderer.cpp
-  compute_shader.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Renderer\Shader\compute_shader.h(82,4): error C2061: 構文エラー: 識別子 'ComPtr'
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Renderer\Shader\compute_shader.h(97,81): error C2061: 構文エラー: 識別子 'ComPtr'
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Renderer\Shader\compute_shader.h(87,10): error C3861: 'context': 識別子が見つかりませんでした
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Renderer\Shader\compute_shader.h(87,10): message : コンパイラでのこの診断により関数 'T *Adollib::Compute_S::ComputeShader_function::map_buffer(Microsoft::WRL::ComPtr<Adollib::Compute_S::UAVBuffer> &)' が生成されました。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Renderer\Shader\compute_shader.h(98,5): error C2065: 'context': 定義されていない識別子です。
-  croth_renderer.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Renderer\croth_renderer.cpp(275,49): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+﻿  demo_music.cpp
+  player.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(20,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。
+  player_funcs.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(20,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(1159,72): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+  se_manager.cpp
+  stage_01_funcs.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(20,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_01_funcs.cpp(829,66): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+  stage_02_funcs.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(20,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_02_funcs.cpp(1042,66): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+  stage_99_funcs.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(20,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_99_funcs.cpp(469,76): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_99_funcs.cpp(477,76): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_99_funcs.cpp(498,51): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_99_funcs.cpp(504,51): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+  stage_demo_1_funcs.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(20,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_1_funcs.cpp(346,66): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+  stage_demo_2_funcs.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(20,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_2_funcs.cpp(790,66): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+  stage_demo_funcs.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(20,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_demo_funcs.cpp(292,66): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+  main.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。
+  mono_audio.cpp
+  scene_GPUparticle.cpp
+  scene_SPH.cpp
+  scene_game.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(20,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。
+  scene_music.cpp
+  scene_player.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(20,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。
+  scene_title.cpp
+  コード生成しています。
+  635 of 11491 functions ( 5.5%) were compiled, the rest were copied from previous compilation.
+    4 functions were new in current compilation
+    68 functions had inline decision re-evaluated but remain unchanged
+  コード生成が終了しました。
+  Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Release\Adollib.exe

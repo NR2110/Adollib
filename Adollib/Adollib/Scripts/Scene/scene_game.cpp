@@ -7,11 +7,11 @@
 namespace Adollib {
 
 	void Scene_game::awake() {
-		ALKLib::MonoAudio::StopMusic(0);
-		ALKLib::MonoAudio::StopMusic(1);
-		ALKLib::MonoAudio::StopMusic(2);
-		ALKLib::MonoAudio::StopMusic(3);
-		ALKLib::MonoAudio::PlayMusic(ALKLib::Music::BGM_Game, true);
+		MonoAudio::StopMusic(0);
+		MonoAudio::StopMusic(1);
+		MonoAudio::StopMusic(2);
+		MonoAudio::StopMusic(3);
+		MonoAudio::PlayMusic(Music::BGM_Game, true);
 
 		//auto player_manager = Gameobject_manager::find("Player_manager", Scenelist::scene_player)->findComponent<Player_manager>();
 		//player_manager->add_players(1);

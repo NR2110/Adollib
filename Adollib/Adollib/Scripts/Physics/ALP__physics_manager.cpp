@@ -210,6 +210,9 @@ bool Physics_manager::update()
 				Work_meter::stop("Resolve", 1);
 
 				{
+					Work_meter::start("Intgrate", 1);
+					Work_meter::tag_start("Intgrate", 1);
+
 					std::lock_guard <std::mutex> lock(mtx);
 					// 計算中にgameobjectへtransformが適応されていた場合 ちゃんとtransformを更新してからintegrateを行う
 					if (is_updated_mainthread) {
@@ -224,6 +227,9 @@ bool Physics_manager::update()
 					dadapt_delete_data(false);
 
 					is_updated_physicsthread = true;
+
+					Work_meter::start("Intgrate", 1);
+					Work_meter::tag_start("Intgrate", 1);
 				}
 			}
 

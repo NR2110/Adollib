@@ -20,17 +20,12 @@ using namespace Compute_S;
 #include <math.h>
 #include <string.h>
 
-#define PARTICLE_DISTANCE    0.5f / 5.1 //‰Šú—±qŠÔ‹——£
-#define EPS             (0.01 * PARTICLE_DISTANCE)
-#define DIM 2				//ŸŒ³”
-
-int cs_thread = 512;
-
 void Simulation_GPUparticle::awake() {
 
 
 }
 
 void Simulation_GPUparticle::update() {
+
 
 }

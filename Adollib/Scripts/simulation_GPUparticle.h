@@ -8,6 +8,7 @@ namespace Adollib {
 	class Simulation_GPUparticle : public Component {
 
 	private:
+		int cs_thread = 512;
 
 		//std::vector<Particle> particles; //•`‰æ—p
 

@@ -5,8 +5,35 @@
 #include <assert.h>
 #include <string>
 
+//#include <windows.h>
+//#include <tchar.h>
+//#include <sstream>
+//#include <d3d11.h>
+//#include <dxgi.h>
+//#include <dxgi1_4.h>
+//#include <dxgi1_6.h>
+//#include <wrl.h>
+//#include <memory>
+//#include <map>
+//#include <vector>
+//#include <assert.h>
+//
+//#pragma comment(lib,"d3d11.lib")
+//
+//#include "../../Main/Adollib.h"
+//#include "../../Scene/scene.h"
+//#include "../../Main/input.h"
+//#include "../../Main/time.h"
+//#include "../../Main/states_manager.h"
+//
+//using Microsoft::WRL::ComPtr;
+//
+////#include "../../Main/systems.h"
+
+
 namespace Adollib {
 	namespace Compute_S {
+
 
 		typedef ID3D11Buffer StructureBuffer;
 		typedef ID3D11Buffer UAVBuffer;
@@ -79,7 +106,7 @@ namespace Adollib {
 			static HRESULT createUAV_fromSB(Microsoft::WRL::ComPtr<StructureBuffer>& pBuffer, Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView>& ppUAVOut);
 
 			template<class T>
-			static T* map_buffer(Microsoft::WRL::ComPtr<ID3D11Buffer>& buffer, ComPtr<ID3D11DeviceContext>& context) {
+			static T* map_buffer(Microsoft::WRL::ComPtr<StructureBuffer>& buffer, Microsoft::WRL::ComPtr<ID3D11DeviceContext>& context) {
 				HRESULT hr = S_OK;
 				//const D3D11_MAP map = D3D11_MAP_READ;
 				const D3D11_MAP map = D3D11_MAP_WRITE_DISCARD;
@@ -94,7 +121,7 @@ namespace Adollib {
 				return static_cast<T*>(mappedBuffer.pData);
 			};
 
-			static void unmap_buffer(Microsoft::WRL::ComPtr<ID3D11Buffer>& buffer, ComPtr<ID3D11DeviceContext>& context) {
+			static void unmap_buffer(Microsoft::WRL::ComPtr<StructureBuffer>& buffer, Microsoft::WRL::ComPtr<ID3D11DeviceContext>& context) {
 				context->Unmap(buffer.Get(), 0);
 			};
 

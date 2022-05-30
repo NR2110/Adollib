@@ -16,7 +16,7 @@ namespace DirectX
 
 }
 
-namespace ALKLib
+namespace Adollib
 {
 	static constexpr int MUSIC_FILE_MAX = 32;
 	static constexpr int WAVE_FILE_MAX = 128;
@@ -32,6 +32,7 @@ namespace ALKLib
 	{
 		BGM_Title,
 		BGM_Game,
+		DEMO,
 
 		SE_Pop = 10,
 		SE_Jump,
@@ -39,7 +40,8 @@ namespace ALKLib
 		SE_Step0,
 		SE_Step1,
 		SE_Button_on,
-		SE_Button_off,
+		SE_Button_off
+
 
 	};
 	enum class Sound
@@ -53,9 +55,11 @@ namespace ALKLib
 	class MonoAudio
 	{
 	private:
+	public:
 		// AudioEnngine
 		static std::unique_ptr<DirectX::AudioEngine>			audioEngine;
-
+		static DirectX::AudioListener listener; //é©êgÇÃç¿ïW
+		static DirectX::AudioEmitter emitter;   //âπÇÃç¿ïW
 		// Music
 		struct MusicData
 		{
@@ -72,6 +76,7 @@ namespace ALKLib
 			float											soundVolume[WAVE_FILE_MAX] = {};
 		} static soundData;
 
+	private:
 	public:
 		static void awake();
 		static void destroy();

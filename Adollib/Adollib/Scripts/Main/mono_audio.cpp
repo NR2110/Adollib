@@ -4,7 +4,7 @@
 using namespace DirectX;
 using namespace std;
 
-namespace ALKLib
+namespace Adollib
 {
 	using DirectX::AUDIO_ENGINE_FLAGS;
 	using DirectX::AudioEngine;
@@ -16,6 +16,8 @@ namespace ALKLib
 
 	// AudioEnngine
 	std::unique_ptr<DirectX::AudioEngine> MonoAudio::audioEngine;
+	AudioListener MonoAudio::listener; //自身の座標
+	AudioEmitter MonoAudio::emitter;   //音の座標
 
 	// Music
 	MonoAudio::MusicData MonoAudio::musicData;
@@ -31,6 +33,7 @@ namespace ALKLib
 		LoadMusic(static_cast<int>(Music::BGM_Game), L"../Data/sounds/BGM/tuitekuru_tuitekuru.wav", 0.6f);
 		//LoadMusic(static_cast<int>(Music::BGM_Title), L"../Data/sounds/BGM/Take_it_easy.wav", 0);
 		//LoadMusic(static_cast<int>(Music::BGM_Game), L"../Data/sounds/BGM/tuitekuru_tuitekuru.wav", 0);
+		LoadMusic(static_cast<int>(Music::DEMO), L"../Data/sounds/Demo_BGM/Theme_of_Rabi-Ribi.wav", 0.15f);
 
 		LoadMusic(static_cast<int>(Music::SE_Pop),  L"../Data/sounds/SE/Motion-Pop03-2.wav", 0.5f);
 		LoadMusic(static_cast<int>(Music::SE_Jump), L"../Data/sounds/SE/SNES-Action01-01(Jump).wav", 0.5f);
@@ -47,6 +50,9 @@ namespace ALKLib
 		LoadMusic(static_cast<int>(Music::SE_Step1     ) + 10, L"../Data/sounds/SE/Motion-Pop28-3.wav", 0.2f);
 		LoadMusic(static_cast<int>(Music::SE_Button_on ) + 10, L"../Data/sounds/SE/Onmtp-Click02-1.wav", 0.15f);
 		LoadMusic(static_cast<int>(Music::SE_Button_off) + 10, L"../Data/sounds/SE/Onmtp-Click02-1.wav", 0.15f);
+
+
+
 		//// BGMのロード
 		//LoadSound(L"Assets/Sounds/SE/Win/sound_effect.xwb");
 
@@ -57,12 +63,22 @@ namespace ALKLib
 	//--------------------------------
 	void MonoAudio::awake()
 	{
+#if 0
+		{
+			// This is only needed in Win32 desktop apps
+			HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+			if (FAILED(hr))assert("Audio, CoInitializeEx failed");
+		}
+#endif
+
 		// Create DirectXTK for Audio objects
-		DirectX::AUDIO_ENGINE_FLAGS eflags = DirectX::AudioEngine_Default;
+		//DirectX::AUDIO_ENGINE_FLAGS eflags = DirectX::AudioEngine_Default;
+		DirectX::AUDIO_ENGINE_FLAGS eflags = DirectX::AudioEngine_ReverbUseFilters | DirectX::AudioEngine_EnvironmentalReverb;
 #ifdef _DEBUG
 		eflags = eflags | DirectX::AudioEngine_Debug;
 #endif
 		audioEngine = make_unique<AudioEngine>(eflags);
+		audioEngine->SetReverb(Reverb_Default);
 
 		for (auto& p : musicData.musicVolume) p = 1.0f;
 		for (auto& p : soundData.soundVolume) p = 1.0f;
@@ -117,10 +133,20 @@ namespace ALKLib
 	//  bool isLoop                     ループ再生するかどうか
 	void MonoAudio::PlayMusic(int trackNo, bool isLoop)
 	{
+		//if (!musicData.music[trackNo]) return;
+		//musicData.musicInst[trackNo] = musicData.music[trackNo]->CreateInstance();
+		//musicData.musicInst[trackNo]->Play(isLoop);
+		//musicData.musicInst[trackNo]->SetVolume(musicData.musicVolume[trackNo]);
+
 		if (!musicData.music[trackNo]) return;
-		musicData.musicInst[trackNo] = musicData.music[trackNo]->CreateInstance();
+		musicData.musicInst[trackNo] = musicData.music[trackNo]->CreateInstance(DirectX::SoundEffectInstance_Use3D | DirectX::SoundEffectInstance_ReverbUseFilters);
 		musicData.musicInst[trackNo]->Play(isLoop);
 		musicData.musicInst[trackNo]->SetVolume(musicData.musicVolume[trackNo]);
+
+		//listener.SetPosition(DirectX::XMFLOAT3(0, 0, 0));
+		//emitter.SetPosition(DirectX::XMFLOAT3(0, 0, 1));
+
+		//musicData.musicInst[trackNo]->Apply3D(listener, emitter);
 	}
 
 	//--------------------------------

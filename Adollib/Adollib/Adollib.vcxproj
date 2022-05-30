@@ -159,6 +159,7 @@
     <ClInclude Include="..\Scripts\chenge_color_rainbow.h" />
     <ClInclude Include="..\Scripts\debug_camera_controller.h" />
     <ClInclude Include="..\Scripts\demo_house.h" />
+    <ClInclude Include="..\Scripts\demo_music.h" />
     <ClInclude Include="..\Scripts\door.h" />
     <ClInclude Include="..\Scripts\area_goal.h" />
     <ClInclude Include="..\Scripts\event_exclamation.h" />
@@ -331,6 +332,7 @@
     <ClInclude Include="Scripts\Scene\scene_GPUparticle.h" />
     <ClInclude Include="Scripts\Scene\scene_list.h" />
     <ClInclude Include="Scripts\Scene\scene_manager.h" />
+    <ClInclude Include="Scripts\Scene\scene_music.h" />
     <ClInclude Include="Scripts\Scene\scene_player.h" />
     <ClInclude Include="Scripts\Scene\scene_SPH.h" />
     <ClInclude Include="Scripts\Scene\scene_title.h" />
@@ -341,6 +343,7 @@
     <ClCompile Include="..\Scripts\camera.cpp" />
     <ClCompile Include="..\Scripts\debug_camera_controller.cpp" />
     <ClCompile Include="..\Scripts\demo_house.cpp" />
+    <ClCompile Include="..\Scripts\demo_music.cpp" />
     <ClCompile Include="..\Scripts\fall_object_comp.cpp" />
     <ClCompile Include="..\Scripts\fall_object_manager.cpp" />
     <ClCompile Include="..\Scripts\input_changer.cpp" />
@@ -462,6 +465,7 @@
     <ClCompile Include="Scripts\Scene\scene_game.cpp" />
     <ClCompile Include="Scripts\Scene\scene_GPUparticle.cpp" />
     <ClCompile Include="Scripts\Scene\scene_manager.cpp" />
+    <ClCompile Include="Scripts\Scene\scene_music.cpp" />
     <ClCompile Include="Scripts\Scene\scene_player.cpp" />
     <ClCompile Include="Scripts\Scene\scene_SPH.cpp" />
     <ClCompile Include="Scripts\Scene\scene_title.cpp" />
