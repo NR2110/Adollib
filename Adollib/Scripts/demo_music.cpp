@@ -14,6 +14,8 @@
 #include "../../Scripts/Main/mono_audio.h"
 
 using namespace Adollib;
+using namespace DirectX;
+
 namespace DirectX
 {
 	class AudioEngine;
@@ -31,10 +33,32 @@ namespace DirectX
 
 void Demo_music::awake() {
 
-	MonoAudio::PlayMusic(Music::DEMO, true);
+	// Create DirectXTK for Audio objects
+	//DirectX::AUDIO_ENGINE_FLAGS eflags = DirectX::AudioEngine_Default;
+	DirectX::AUDIO_ENGINE_FLAGS eflags =
+		DirectX::AudioEngine_ReverbUseFilters |
+		DirectX::AudioEngine_EnvironmentalReverb |
+		DirectX::AudioEngine_UseMasteringLimiter;
+
+	audioEngine = std::make_unique<AudioEngine>(eflags);
+	audioEngine->SetReverb(AUDIO_ENGINE_REVERB::Reverb_LargeRoom);
+	//audioEngine->SetReverb(AUDIO_ENGINE_REVERB::Reverb_Default);
+
+	soundeffect = new SoundEffect(audioEngine.get(), L"../Data/sounds/Demo_BGM/Theme_of_Rabi-Ribi.wav");
+
+	audioInstance = soundeffect->CreateInstance(DirectX::SoundEffectInstance_Use3D | DirectX::SoundEffectInstance_ReverbUseFilters);
+	//audioInstance = soundeffect->CreateInstance(DirectX::SoundEffectInstance_Default);
+	audioInstance->Play(true);
+	audioInstance->SetVolume(0.12f);
 }
 
 void Demo_music::update() {
+	audioEngine->Update();
+
+	if (audioEngine->IsCriticalError()) {
+		assert(!audioEngine->IsCriticalError() && "audioengine critial error");
+	}
+
 	ImGuiWindowFlags flag = 0;
 	//flag |= ImGuiWindowFlags_AlwaysAutoResize;
 	flag |= ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize;
@@ -43,30 +67,38 @@ void Demo_music::update() {
 
 		// reserve_type
 		{
-			static int R = 0;
+			static int R = DirectX::AUDIO_ENGINE_REVERB::Reverb_LargeRoom;
+			int ago = R;
 			ImGui::InputInt("Reserve", &R, 1);
 			if (R < 0)R = 0;
 			if (DirectX::AUDIO_ENGINE_REVERB::Reverb_MAX <= R)R = DirectX::AUDIO_ENGINE_REVERB::Reverb_MAX - 1;
-			MonoAudio::audioEngine->SetReverb(static_cast<DirectX::AUDIO_ENGINE_REVERB>(R));
+			if (ago != R) {
+				audioEngine->SetReverb(static_cast<DirectX::AUDIO_ENGINE_REVERB>(R));
+				audioInstance->SetVolume(0.12f);
+				if (audioInstance->GetState() != SoundState::PLAYING) {
+					assert(0 && "error");
+				}
+			}
 		}
 
 		// listener_pos
 		{
 			static Vector3 pos;
 			ImGui::DragFloat3("my_pos", &pos.x, 0.1f, -10, 10);
-			MonoAudio::listener.SetPosition(pos);
+			listener.Position = pos;
 		}
 
 		// sound_pos
 		{
 			static Vector3 pos;
 			ImGui::DragFloat3("sound_pos", &pos.x, 0.1f, -10, 10);
-			MonoAudio::emitter.SetPosition(pos);
+			emitter.Position = pos;
 		}
 
-		MonoAudio::musicData.musicInst[Music::DEMO]->Apply3D(MonoAudio::listener, MonoAudio::emitter);
 
 	}
 	ImGui::End();
+
+	//audioInstance->Apply3D(listener, emitter);
 
 }
