@@ -4,7 +4,13 @@
 #include <DirectXMath.h>
 #include <fstream>
 #include <wrl.h>
+
+#pragma warning(push)
+#pragma warning(disable:26812)
+#pragma warning(disable:26495)
 #include <fbxsdk.h>
+#pragma warning(pop)
+
 #include "../Math/math.h"
 
 #include <d3dcompiler.h>

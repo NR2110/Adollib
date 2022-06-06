@@ -30,8 +30,8 @@ namespace Adollib
 		static void fetch_animations(FbxMesh* fbx_mesh, std::vector<Mesh::skeletal_animation>& skeletal_animation, u_int sampling_rate = 0);
 
 		struct Texture_data {
-			ComPtr<ID3D11ShaderResourceView> ShaderResourceView;
-			D3D11_TEXTURE2D_DESC Tex2dDesc;
+			ComPtr<ID3D11ShaderResourceView> ShaderResourceView = nullptr;
+			D3D11_TEXTURE2D_DESC Tex2dDesc = {};
 		};
 		static std::unordered_map<std::string, std::vector<Mesh::mesh>> meshes;
 		static std::unordered_map<std::wstring, Texture_data> texturs;

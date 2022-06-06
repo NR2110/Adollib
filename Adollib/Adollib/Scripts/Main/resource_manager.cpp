@@ -4,9 +4,15 @@
 #include <wrl.h>
 #include <map>
 #include <string>
-#include <fbxsdk.h>
 #include <vector>
 #include <functional>
+
+#pragma warning(push)
+#pragma warning(disable:26812)
+#pragma warning(disable:26495)
+#include <fbxsdk.h>
+#pragma warning(pop)
+
 #include "../../DirectXTK-master/Inc/WICTextureLoader.h"
 #include "misc.h"
 #include "systems.h"

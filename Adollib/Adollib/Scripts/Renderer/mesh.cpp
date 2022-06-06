@@ -1,4 +1,9 @@
+#pragma warning(push)
+#pragma warning(disable:26812)
+#pragma warning(disable:26495)
 #include <fbxsdk.h>
+#pragma warning(pop)
+
 #include <vector>
 #include <functional>
 #include <sstream>
