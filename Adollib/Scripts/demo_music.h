@@ -39,6 +39,8 @@ namespace Adollib {
 		// 毎フレーム呼ばれる更新処理
 		void update() override;
 
+		void finalize() override;
+
 		// このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる
 		void onEnable() override {};
 

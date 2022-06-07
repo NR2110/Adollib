@@ -79,6 +79,7 @@ void Demo_music::awake() {
 #endif;
 
 	audioEngine = std::make_unique<AudioEngine>(eflags);
+	audioEngine->Reset();
 	//audioEngine->SetReverb(AUDIO_ENGINE_REVERB::Reverb_Arena);
 	//audioEngine->SetReverb(AUDIO_ENGINE_REVERB::Reverb_Default);
 
@@ -174,4 +175,8 @@ void Demo_music::update() {
 
 	audioInstance->Apply3D(listener, emitter);
 
+	audioEngine->Reset();
+}
+
+void Demo_music::finalize() {
 }
