@@ -15,8 +15,9 @@ namespace Adollib {
 	void Scene_music::initialize() {
 
 		{
-			Gameobject* go = Gameobject_manager::create("demo_music");
-			go->addComponent<Demo_music>();
+			Gameobject* go = Gameobject_manager::create("demo_music_1");
+			auto comp = go->addComponent<Demo_music>();
+			comp->num = 0;
 		}
 
 		{

@@ -102,11 +102,7 @@ void Gameobject_manager::update(Scenelist Sce) {
 #endif // Use_physics_thread
 
 	{
-		 //Work_meter::start("adapt_transform_to_gameobject");
-		 //Physics_manager::adapt_transform_to_gameobject();
-		 //Work_meter::stop("adapt_transform_to_gameobject");
-
-		// 親から子に座標の更新を行う
+	   // 親から子に座標の更新を行う
 		{
 			std::unordered_map<Gameobject*, bool> masters_manag;
 			for (auto& GO : gos) {
@@ -117,10 +113,6 @@ void Gameobject_manager::update(Scenelist Sce) {
 				masters_manag[master] = true;
 			}
 		}
-
-		 //Work_meter::start("copy_gameobject_transform");
-		 //Physics_manager::copy_gameobject_transform();
-		 //Work_meter::stop("copy_gameobject_transform");
 	}
 
 	Work_meter::start("update_to_children");

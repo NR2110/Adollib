@@ -65,7 +65,7 @@ static const XAUDIO2FX_REVERB_I3DL2_PARAMETERS gReverbPresets[] =
 #include <math.h>
 #include <string.h>
 
-void Demo_music::awake() {
+void Demo_music::start() {
 
 	// Create DirectXTK for Audio objects
 	//DirectX::AUDIO_ENGINE_FLAGS eflags = DirectX::AudioEngine_Default;
@@ -79,18 +79,26 @@ void Demo_music::awake() {
 #endif;
 
 	audioEngine = std::make_unique<AudioEngine>(eflags);
-	audioEngine->Reset();
 	//audioEngine->SetReverb(AUDIO_ENGINE_REVERB::Reverb_Arena);
 	//audioEngine->SetReverb(AUDIO_ENGINE_REVERB::Reverb_Default);
 
-	soundeffect = new SoundEffect(audioEngine.get(), L"../Data/sounds/Demo_BGM/Theme_of_Rabi-Ribi.wav");
-	audioInstance = soundeffect->CreateInstance(DirectX::SoundEffectInstance_ReverbUseFilters | DirectX::SoundEffectInstance_Use3D);
-	//audioInstance = soundeffect->CreateInstance(DirectX::SoundEffectInstance_Default);
-	audioInstance->Play(true);
-	audioInstance->SetVolume(0.12f);
+
+	soundeffect[0] = new SoundEffect(audioEngine.get(), L"../Data/sounds/Demo_BGM/Theme_of_Rabi-Ribi.wav");
+
+	audioInstance[0] = soundeffect[0]->CreateInstance(DirectX::SoundEffectInstance_ReverbUseFilters | DirectX::SoundEffectInstance_Use3D);
+	audioInstance[0]->Play(true);
+	audioInstance[0]->SetVolume(0.12f);
+
+	soundeffect[1] = new SoundEffect(audioEngine.get(), L"../Data/sounds/Demo_BGM/Theme_of_Rabi-Ribi.wav");
+
+	audioInstance[1] = soundeffect[1]->CreateInstance(DirectX::SoundEffectInstance_ReverbUseFilters | DirectX::SoundEffectInstance_Use3D);
+	//audioInstance[1]->Play(true);
+	//audioInstance[1]->SetVolume(0.12f);
 }
 
 void Demo_music::update() {
+
+
 	audioEngine->Update();
 
 	if (audioEngine->IsCriticalError()) {
@@ -105,15 +113,6 @@ void Demo_music::update() {
 
 		// reserve_type
 		{
-
-			//static int R = AUDIO_ENGINE_REVERB::Reverb_Default;
-			//int ago = R;
-			//ImGui::InputInt("Reserve", &R, 1);
-			//if (R < 0)R = 0;
-			//if (DirectX::AUDIO_ENGINE_REVERB::Reverb_MAX <= R)R = DirectX::AUDIO_ENGINE_REVERB::Reverb_MAX - 1;
-			//DirectX::AUDIO_ENGINE_REVERB aaa = static_cast<DirectX::AUDIO_ENGINE_REVERB>(R);
-			//audioEngine->SetReverb(aaa);
-
 			//:::::::::::
 			XAUDIO2FX_REVERB_PARAMETERS native;
 			static XAUDIO2FX_REVERB_I3DL2_PARAMETERS param = gReverbPresets[Reverb_Default];
@@ -125,34 +124,24 @@ void Demo_music::update() {
 			if (DirectX::AUDIO_ENGINE_REVERB::Reverb_MAX <= R)R = DirectX::AUDIO_ENGINE_REVERB::Reverb_MAX - 1;
 			if (R != ago)param = gReverbPresets[R];
 
-			ImGui::SliderFloat("WetDryMix"        ,&param.WetDryMix,  0, 100);			// [0, 100] (percentage)
-			ImGui::SliderInt  ("Room"             ,&param.Room, -10000, 0);		        // [-10000, 0] in mB (hundredths of decibels)
-			ImGui::SliderInt  ("RoomHF"           ,&param.RoomHF, -10000, 0);		    // [-10000, 0] in mB (hundredths of decibels)
-			ImGui::SliderFloat("RoomRolloffFactor",&param.RoomRolloffFactor, 0, 10);	// [0.0, 10.0]
-			ImGui::SliderFloat("DecayTime"        ,&param.DecayTime, 0.1f, 20.0f);	    // [0.1, 20.0] in seconds
-			ImGui::SliderFloat("DecayHFRatio"     ,&param.DecayHFRatio, 0.1f, 2.0f);	// [0.1, 2.0]
-			ImGui::SliderInt  ("Reflections"      ,&param.Reflections, -10000, 1000);	// [-10000, 1000] in mB (hundredths of decibels)
-			ImGui::SliderFloat("ReflectionsDelay" ,&param.ReflectionsDelay, 0, 0.3f);	// [0.0, 0.3] in seconds
-			ImGui::SliderInt  ("Reverb"           ,&param.Reverb, -10000, 2000);		// [-10000, 2000] in mB (hundredths of decibels)
-			ImGui::SliderFloat("ReverbDelay"      ,&param.ReverbDelay, 0.0f, 0.1f);     // [0.0, 0.1] in seconds
-			ImGui::SliderFloat("Diffusion"        ,&param.Diffusion, 0, 100);			// [0.0, 100.0] (percentage)
-			ImGui::SliderFloat("Density"          ,&param.Density, 0, 100);			    // [0.0, 100.0] (percentage)
-			ImGui::SliderFloat("HFReference"      ,&param.HFReference, 20.0, 20000);	// [20.0, 20000.0] in Hz
+			ImGui::SliderFloat("WetDryMix", &param.WetDryMix, 0, 100);			// [0, 100] (percentage)
+			ImGui::SliderInt("Room", &param.Room, -10000, 0);		        // [-10000, 0] in mB (hundredths of decibels)
+			ImGui::SliderInt("RoomHF", &param.RoomHF, -10000, 0);		    // [-10000, 0] in mB (hundredths of decibels)
+			ImGui::SliderFloat("RoomRolloffFactor", &param.RoomRolloffFactor, 0, 10);	// [0.0, 10.0]
+			ImGui::SliderFloat("DecayTime", &param.DecayTime, 0.1f, 20.0f);	    // [0.1, 20.0] in seconds
+			ImGui::SliderFloat("DecayHFRatio", &param.DecayHFRatio, 0.1f, 2.0f);	// [0.1, 2.0]
+			ImGui::SliderInt("Reflections", &param.Reflections, -10000, 1000);	// [-10000, 1000] in mB (hundredths of decibels)
+			ImGui::SliderFloat("ReflectionsDelay", &param.ReflectionsDelay, 0, 0.3f);	// [0.0, 0.3] in seconds
+			ImGui::SliderInt("Reverb", &param.Reverb, -10000, 2000);		// [-10000, 2000] in mB (hundredths of decibels)
+			ImGui::SliderFloat("ReverbDelay", &param.ReverbDelay, 0.0f, 0.1f);     // [0.0, 0.1] in seconds
+			ImGui::SliderFloat("Diffusion", &param.Diffusion, 0, 100);			// [0.0, 100.0] (percentage)
+			ImGui::SliderFloat("Density", &param.Density, 0, 100);			    // [0.0, 100.0] (percentage)
+			ImGui::SliderFloat("HFReference", &param.HFReference, 20.0, 20000);	// [20.0, 20000.0] in Hz
 
 
 			ReverbConvertI3DL2ToNative(&param, &native);
 			audioEngine->SetReverb(&native);
 			//::::::::::
-
-
-			//static int R = AUDIO_ENGINE_REVERB::Reverb_Default;
-			//int ago = R;
-			//ImGui::InputInt("Reserve", &R, 1);
-			//if (R < 0)R = 0;
-			//if (DirectX::AUDIO_ENGINE_REVERB::Reverb_MAX <= R)R = DirectX::AUDIO_ENGINE_REVERB::Reverb_MAX - 1;
-			//XAUDIO2FX_REVERB_PARAMETERS native;
-			//ReverbConvertI3DL2ToNative(&gReverbPresets[R], &native);
-			//audioEngine->SetReverb(&native);
 		}
 
 		// listener_pos
@@ -170,13 +159,25 @@ void Demo_music::update() {
 		}
 
 
+		{
+			bool is = false;
+
+			ImGui::Checkbox("sound",&is);
+			if (is) {
+				//soundeffect[1] = new SoundEffect(audioEngine.get(), L"../Data/sounds/Demo_BGM/Theme_of_Rabi-Ribi.wav");
+
+				//audioInstance[1] = soundeffect[1]->CreateInstance(DirectX::SoundEffectInstance_ReverbUseFilters | DirectX::SoundEffectInstance_Use3D);
+				////audioInstance = soundeffect->CreateInstance(DirectX::SoundEffectInstance_Default);
+				audioInstance[1]->Play(true);
+				audioInstance[1]->SetVolume(0.12f);
+			}
+		}
+
+
 	}
 	ImGui::End();
 
-	audioInstance->Apply3D(listener, emitter);
+	//audioInstance[0]->Apply3D(listener, emitter);
+	audioInstance[1]->Apply3D(listener, emitter);
 
-	audioEngine->Reset();
-}
-
-void Demo_music::finalize() {
 }

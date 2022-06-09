@@ -4,6 +4,10 @@
 #include "../Imgui/work_meter.h"
 
 #include "../Physics/ALP__physics_manager.h"
+
+#include "defines.h"
+
+
 using namespace Adollib;
 
 bool loop::init(HWND hWnd) {

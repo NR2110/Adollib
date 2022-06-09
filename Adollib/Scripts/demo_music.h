@@ -22,24 +22,25 @@ namespace Adollib {
 
 	private:
 		std::unique_ptr<DirectX::AudioEngine> audioEngine = nullptr;
-		DirectX::SoundEffect* soundeffect;
-		std::unique_ptr<DirectX::SoundEffectInstance> audioInstance;
+		DirectX::SoundEffect* soundeffect[10];
+		std::unique_ptr<DirectX::SoundEffectInstance> audioInstance[10];
 
 		DirectX::AudioListener listener; //自身の座標
 		DirectX::AudioEmitter emitter;   //音の座標
-	private:
+	public:
+		int num = 0;
 
 
 	public:
-		void awake() override;
+		void awake() override {};
 
 		// 所属するシーンの初期化時に一度だけ呼ばれる
-		void start() override {};
+		void start() override ;
 
 		// 毎フレーム呼ばれる更新処理
 		void update() override;
 
-		void finalize() override;
+		void finalize() override {};
 
 		// このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる
 		void onEnable() override {};
