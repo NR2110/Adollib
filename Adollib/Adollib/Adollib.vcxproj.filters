@@ -212,6 +212,9 @@
     <Filter Include="ソース ファイル\demo_music\demo_music">
       <UniqueIdentifier>{61abba84-021a-4e55-ab71-8377bbc492d9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00_Adollib\66_audio\manager">
+      <UniqueIdentifier>{251b8a4b-66fc-4939-b351-8253cd9df950}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Scripts\player.cpp">
@@ -589,13 +592,19 @@
     <ClCompile Include="Scripts\Audio\audio_source.cpp">
       <Filter>00_Adollib\66_audio</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Audio\audio_resource_manager.cpp">
-      <Filter>00_Adollib\66_audio</Filter>
-    </ClCompile>
     <ClCompile Include="Scripts\Audio\audio_listener.cpp">
       <Filter>00_Adollib\66_audio</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Audio\audio_emitter.cpp">
+      <Filter>00_Adollib\66_audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Audio\audio_manager.cpp">
+      <Filter>00_Adollib\66_audio\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Audio\audio_resource_manager.cpp">
+      <Filter>00_Adollib\66_audio\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Audio\audio_reverb.cpp">
       <Filter>00_Adollib\66_audio</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1137,9 +1146,6 @@
     <ClInclude Include="Scripts\Audio\audio_source.h">
       <Filter>00_Adollib\66_audio</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Audio\audio_resource_manager.h">
-      <Filter>00_Adollib\66_audio</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts\Audio\audio_data_struct.h">
       <Filter>00_Adollib\66_audio</Filter>
     </ClInclude>
@@ -1147,6 +1153,15 @@
       <Filter>00_Adollib\66_audio</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Audio\audio_emitter.h">
+      <Filter>00_Adollib\66_audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Audio\audio_manager.h">
+      <Filter>00_Adollib\66_audio\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Audio\audio_resource_manager.h">
+      <Filter>00_Adollib\66_audio\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Audio\audio_reverb.h">
       <Filter>00_Adollib\66_audio</Filter>
     </ClInclude>
   </ItemGroup>

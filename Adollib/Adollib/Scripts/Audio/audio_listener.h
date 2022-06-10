@@ -10,11 +10,11 @@ namespace Adollib {
 	class Audio_listener : public Component {
 
 	public:
-		Vector3 OrientFront; // orientation of front direction, used only for matrix and delay calculations or listeners with cones for matrix, LPF (both direct and reverb paths), and reverb calculations, must be normalized when used
-		Vector3 OrientTop;   // orientation of top direction, used only for matrix and delay calculations, must be orthonormal with OrientFront when used
+		Vector3 OrientFront_off = Vector3(0, 0, -1); // orientation of front direction, used only for matrix and delay calculations or listeners with cones for matrix, LPF (both direct and reverb paths), and reverb calculations, must be normalized when used
+		Vector3 OrientTop_off = Vector3(0, 1, 0);   // orientation of top direction, used only for matrix and delay calculations, must be orthonormal with OrientFront when used
 
-		Vector3 Position; // position in user-defined world units, does not affect Velocity
-		Vector3 Velocity; // velocity vector in user-defined world units/second, used only for doppler calculations, does not affect Position
+		Vector3 Position_off = Vector3(0); // position in user-defined world units, does not affect Velocity
+		Vector3 Velocity_off = Vector3(0); // velocity vector in user-defined world units/second, used only for doppler calculations, does not affect Position
 		//X3DAUDIO_CONE* pCone; // sound cone, used only for matrix, LPF (both direct and reverb paths), and reverb calculations, NULL specifies omnidirectionality
 
 	private:

@@ -15,8 +15,8 @@ namespace Adollib {
 		float volume = 0.3f;
 		bool is_mute = false;
 		bool is_loop = false;
-		float pitch = 1;
-		float pan = 0;
+
+		float pitch = 0;
 
 
 	private:
@@ -30,11 +30,18 @@ namespace Adollib {
 	public:
 		std::shared_ptr<Audio_emitter> get_emitter_ptr() { return emitter_data; };
 
+		//static void set_reverb(value);
+
+		//Gameobject* go = Gameobject::create();
 	public:
 		// fileの読み込み, sorcevoiceの作成
 		void load(const std::string& file_path, const bool is_use3D = true, const bool is_useReverb = true, const bool is_usePitchchenge = false);
 
 		void play(const bool is_loop);
+
+		void stop();
+
+		void pause();
 
 
 
@@ -50,6 +57,10 @@ namespace Adollib {
 		// 毎フレーム呼ばれる更新処理
 		void update() override;
 
+		// Hierarchyの表示(Imguiの関数 Imgui::begin,Imgui::endはいらない)
+		void Update_hierarchy() override;
+
+		//
 		void finalize() override;
 
 		// このスクリプトがアタッチされているGOのactiveSelfがtrueになった時呼ばれる

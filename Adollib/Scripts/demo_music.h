@@ -9,6 +9,8 @@
 #include <wrl.h>
 #include <stdio.h>
 #include "Audio.h"
+#include "../../Scripts/Audio/audio_source.h"
+#include "../../Scripts/Audio/audio_reverb.h"
 
 namespace DirectX {
 	class AudioEngine;
@@ -27,8 +29,10 @@ namespace Adollib {
 
 		DirectX::AudioListener listener; //é©êgÇÃç¿ïW
 		DirectX::AudioEmitter emitter;   //âπÇÃç¿ïW
+		Audio_reverb reverb;
+
 	public:
-		int num = 0;
+		Audio_source* audio = nullptr;
 
 
 	public:

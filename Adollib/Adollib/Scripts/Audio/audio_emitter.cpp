@@ -28,7 +28,7 @@ void Audio_emitter::convert_to_DirectXAudioEmitter(DirectX::AudioEmitter* out, c
 	//out->pLPFReverbCurve = pLPFReverbCurve;
 	//out->pReverbCurve = pReverbCurve;
 
-	//out->CurveDistanceScaler = CurveDistanceScaler;
+	out->CurveDistanceScaler = CurveDistanceScaler;
 	out->DopplerScaler = DopplerScaler;
 
 

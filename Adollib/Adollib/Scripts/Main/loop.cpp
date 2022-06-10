@@ -4,6 +4,7 @@
 #include "../Imgui/work_meter.h"
 
 #include "../Physics/ALP__physics_manager.h"
+#include "../Audio/audio_manager.h"
 
 #include "defines.h"
 
@@ -13,6 +14,7 @@ using namespace Adollib;
 bool loop::init(HWND hWnd) {
 
 	Scene_manager::initialize();
+	Audio_manager::initialize();
 	Gameobject_manager::awake();
 
 	Systems::SetViewPort(Al_Global::SCREEN_WIDTH, Al_Global::SCREEN_HEIGHT);
@@ -26,6 +28,7 @@ bool loop::Update(MSG hMsg, HWND hWnd, int width, int height) {
 	Systems::inputManager->update();
 
 	Scene_manager::update();
+	Audio_manager::update();
 
 	return true;
 }
@@ -48,6 +51,8 @@ bool loop::Render(){
 
 bool loop::destroy() {
 
+	Audio_manager::destroy();
+
 	// ‚·‚×‚Ä‚Ìscene‚Ìgameobject‚ğíœ
 	for (int i = 0; i < static_cast<int>(Scenelist::scene_list_size); i++) {
 		Gameobject_manager::destroy(static_cast<Scenelist>(i));
@@ -56,6 +61,7 @@ bool loop::destroy() {
 	// phtsics_manager‚Ìthread‚ğ~‚ß‚é
 	Physics_function::Physics_manager::thread_stop_and_join();
 	Physics_function::Physics_manager::destroy();
+
 
 	// imgu.i‚ğ~‚ß‚é
 	Adollib::Imgui_manager::destroy();
