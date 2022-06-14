@@ -578,11 +578,8 @@ bool sphere_cast_mesh(const Vector3& l_Ray_pos, const Vector3& l_Ray_dir, const 
 	bool crossing = false; //どこかが交差していたらtrueに変更
 	const std::vector<Vector3>& vertices = mesh->get_mesh_data()->vertices;
 
-	Matrix44 mat = matrix_world(mesh->world_scale(), mesh->world_orientation().get_rotate_matrix(), mesh->world_position());
-	Matrix44 mat_inv = matrix_inverse(mat);
-
 	//Rayの情報をmeshの座標系にに持ってくる
-	const Vector3 Ray_pos = vector3_trans(l_Ray_pos, mat_inv);
+	const Vector3 Ray_pos = vector3_quatrotate(l_Ray_pos - mesh->world_position(), mesh->world_orientation().inverse()) / mesh->world_scale();
 	const Vector3 Ray_dir = vector3_quatrotate(l_Ray_dir, mesh->world_orientation().inverse()) / mesh->world_scale();
 
 	for (auto& facet : mesh->get_mesh_data()->facets) {
@@ -592,22 +589,22 @@ bool sphere_cast_mesh(const Vector3& l_Ray_pos, const Vector3& l_Ray_dir, const 
 		const Vector3& PB = vertices.at(facet.vertexID[1]);
 		const Vector3& PC = vertices.at(facet.vertexID[2]);
 
-		float d = vector3_dot(PA, n);
+		const float d = vector3_dot(PA, n);
 		float t = 0;
 		if (Crossing_func::getCrossingP_plane_line(n, d, Ray_pos, Ray_dir, t, false) == false) continue;
 
 		if (ray_min > t) continue; // Rayが半直線の場合
 
 		//点がポリゴン内にあるかどうかの判定
-		Vector3 crossing_p = Ray_pos + t * Ray_dir;
+		const Vector3 crossing_p = Ray_pos + t * Ray_dir;
 
-		Vector3 QA = PA - crossing_p;
-		Vector3 QB = PB - crossing_p;
-		Vector3 QC = PC - crossing_p;
+		const Vector3 QA = PA - crossing_p;
+		const Vector3 QB = PB - crossing_p;
+		const Vector3 QC = PC - crossing_p;
 
-		Vector3 NA = vector3_cross(QA, QB);
-		Vector3 NB = vector3_cross(QB, QC);
-		Vector3 NC = vector3_cross(QC, QA);
+		const Vector3 NA = vector3_cross(QA, QB);
+		const Vector3 NB = vector3_cross(QB, QC);
+		const Vector3 NC = vector3_cross(QC, QA);
 
 		if (vector3_dot(NA, NB) < 0)continue;
 		if (vector3_dot(NB, NC) < 0)continue;
@@ -618,7 +615,6 @@ bool sphere_cast_mesh(const Vector3& l_Ray_pos, const Vector3& l_Ray_dir, const 
 			normal = n;
 		}
 		tmax = ALmax(tmax, t);
-
 	}
 
 	normal = vector3_quatrotate(normal, mesh->world_orientation());

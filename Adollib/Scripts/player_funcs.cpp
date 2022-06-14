@@ -334,7 +334,7 @@ void Player::shot_rope() {
 		// ƒJƒƒ‰‚©‚ç‚Ìraycast
 		Ray camera_ray;
 		camera_ray.direction = vector3_quatrotate(Vector3(0, 0, 1), camera->transform->orientation);
-		camera_ray.position = camera->transform->position;
+		camera_ray.position = camera->transform->position + camera_ray.direction * vector3_dot(Lhand->transform->position, camera_ray.direction);
 
 		Ray::Raycast_struct camera_ray_data;
 		camera_ray_data.collider_tag = Collider_tags::Stage;
@@ -393,7 +393,7 @@ void Player::shot_rope() {
 
 		Ray camera_ray;
 		camera_ray.direction = vector3_quatrotate(Vector3(0, 0, 1), camera->transform->orientation);
-		camera_ray.position = camera->transform->position;
+		camera_ray.position = camera->transform->position + camera_ray.direction * vector3_dot(Lhand->transform->position, camera_ray.direction);
 
 		Ray::Raycast_struct camera_ray_data;
 		camera_ray_data.collider_tag = Collider_tags::Stage;

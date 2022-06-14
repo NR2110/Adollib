@@ -1,27 +1,11 @@
-﻿  demo_music.cpp
-  audio_manager.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Audio\audio_manager.h(51,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Audio_manager' の左辺を無視します。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DirectXTK-master\Audio\WAVFileReader.h(39,5): warning C4099: 'DirectX::WAVData': タイプ名は最初 'class' として使われていましたが 'struct' として使われています。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DirectXTK-master\Audio\WAVFileReader.h(38): message : 'DirectX::WAVData' の宣言を確認してください
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Audio\audio_resource_manager.h(29,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Audio_resource_manager' の左辺を無視します。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Audio\audio_listener.h(6,21): warning C4099: 'DirectX::AudioListener': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DirectXTK-master\Inc\Audio.h(435): message : 'DirectX::AudioListener' の宣言を確認してください
-  loop.cpp
+﻿  player_funcs.cpp
 C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Audio\audio_manager.h(51,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Audio_manager' の左辺を無視します。
-  scene_music.cpp
-  audio_listener.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DirectXTK-master\Inc\Audio.h(435,26): warning C4099: 'DirectX::AudioListener': タイプ名は最初 'class' として使われていましたが 'struct' として使われています。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DirectXTK-master\Inc\Audio.h(435): message : 'DirectX::AudioListener' の宣言を確認してください
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Audio\audio_manager.h(51,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Audio_manager' の左辺を無視します。
-  audio_source.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Audio\audio_manager.h(51,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Audio_manager' の左辺を無視します。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Audio\audio_emitter.h(7,20): warning C4099: 'DirectX::AudioEmitter': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DirectXTK-master\Inc\Audio.h(518): message : 'DirectX::AudioEmitter' の宣言を確認してください
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(20,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(1159,72): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
   コード生成しています。
-  869 of 11779 functions ( 7.4%) were compiled, the rest were copied from previous compilation.
-    23 functions were new in current compilation
-    99 functions had inline decision re-evaluated but remain unchanged
+  1 of 11817 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    103 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
 imgui_impl_win32.obj : warning LNK4099: PDB 'vc142.pdb' が 'imgui_impl_win32.obj' で、または 'C:\Users\waaaa\Documents\Adollib\Adollib\Release\vc142.pdb' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Release\Adollib.exe

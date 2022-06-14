@@ -33,9 +33,9 @@ void Scene_manager::initialize() {
 
 
 
-	set_active(Scenelist::scene_music);
+	//set_active(Scenelist::scene_music);
 	//set_active(Scenelist::scene_SPH);
-	//set_active(Scenelist::scene_title);
+	set_active(Scenelist::scene_title);
 	//set_active(Scenelist::scene_title);
 
 }

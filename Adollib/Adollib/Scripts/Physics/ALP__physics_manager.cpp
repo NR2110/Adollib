@@ -228,8 +228,8 @@ bool Physics_manager::update()
 
 					is_updated_physicsthread = true;
 
-					Work_meter::start("Intgrate", 1);
-					Work_meter::tag_start("Intgrate", 1);
+					Work_meter::tag_stop(1);
+					Work_meter::stop("Intgrate", 1);
 				}
 			}
 

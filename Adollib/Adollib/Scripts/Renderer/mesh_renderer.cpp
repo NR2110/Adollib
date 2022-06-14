@@ -238,13 +238,13 @@ bool Mesh_renderer::check_frustum(const Frustum_data& frustum_data) {
 	// frustum_culling‚ðs‚¤
 	{
 		const Vector3& box_position = transform->position;
-		Vector3 box_axis[3] = {
+		const Vector3 box_axis[3] = {
 			vector3_quatrotate(Vector3(1,0,0),transform->orientation),
 			vector3_quatrotate(Vector3(0,1,0),transform->orientation),
 			vector3_quatrotate(Vector3(0,0,1),transform->orientation)
 		};
 
-		Vector3 dop_average = Vector3(
+		const Vector3 dop_average = Vector3(
 			fabsf(mesh.dop.min[0]) + fabsf(mesh.dop.max[0]),
 			fabsf(mesh.dop.min[1]) + fabsf(mesh.dop.max[1]),
 			fabsf(mesh.dop.min[2]) + fabsf(mesh.dop.max[2])
@@ -255,7 +255,7 @@ bool Mesh_renderer::check_frustum(const Frustum_data& frustum_data) {
 			mesh.dop.min[1] + mesh.dop.max[1],
 			mesh.dop.min[2] + mesh.dop.max[2]
 		) * 0.5f;
-		dop_center_offset = vector3_quatrotate(dop_center_offset, transform->orientation);
+		dop_center_offset = vector3_quatrotate(dop_center_offset, transform->orientation) * transform->scale;
 
 		bool is_contain = true;
 		for (int i = 0; i < 6; i++) {

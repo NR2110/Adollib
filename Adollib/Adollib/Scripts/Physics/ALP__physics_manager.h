@@ -83,8 +83,8 @@ namespace Adollib
 			float bias = 0.15f;//めり込みを直す力
 			float slop = 0.003f;//衝突の許容値
 
-			int solver_iteration = 15; //衝突の精度
-			int calculate_iteration = 3; //計算の精度
+			int solver_iteration = 10; //衝突の精度
+			int calculate_iteration = 5; //計算の精度
 
 			int sweep_and_prune_divide_value = 100; //SweepAndPruneのX軸分割の分母
 
