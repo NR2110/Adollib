@@ -5,6 +5,7 @@
 
 #include "../Physics/ALP__physics_manager.h"
 #include "../Audio/audio_manager.h"
+#include "../Renderer/renderer_manager.h"
 
 #include "defines.h"
 
@@ -13,6 +14,7 @@ using namespace Adollib;
 
 bool loop::init(HWND hWnd) {
 
+	Renderer_manager::awake();
 	Scene_manager::initialize();
 	Audio_manager::initialize();
 	Gameobject_manager::awake();

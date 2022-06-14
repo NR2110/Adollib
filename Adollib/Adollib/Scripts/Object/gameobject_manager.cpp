@@ -45,8 +45,6 @@ void Gameobject_manager::awake() {
 	Systems::SetRasterizerState(State_manager::RStypes::RS_CULL_BACK);
 	Systems::SetBlendState(State_manager::BStypes::BS_ADD);
 
-	Renderer_manager::awake();
-
 	//scene‚Ì”‚¾‚¯list‚ğ¶¬
 	for (int i = 0; i < static_cast<int>(Scenelist::scene_list_size); i++) {
 		std::list<Gameobject*> go_manager;
