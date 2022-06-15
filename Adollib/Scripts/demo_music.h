@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include "Audio.h"
 #include "../../Scripts/Audio/audio_source.h"
-#include "../../Scripts/Audio/audio_reverb.h"
+//#include "../../Scripts/Audio/audio_reverb.h"
 
 namespace DirectX {
 	class AudioEngine;
@@ -26,10 +26,6 @@ namespace Adollib {
 		std::unique_ptr<DirectX::AudioEngine> audioEngine = nullptr;
 		DirectX::SoundEffect* soundeffect[10];
 		std::unique_ptr<DirectX::SoundEffectInstance> audioInstance[10];
-
-		DirectX::AudioListener listener; //é©êgÇÃç¿ïW
-		DirectX::AudioEmitter emitter;   //âπÇÃç¿ïW
-		Audio_reverb reverb;
 
 	public:
 		Audio_source* audio = nullptr;

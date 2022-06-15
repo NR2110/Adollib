@@ -19,9 +19,11 @@ DirectX::AudioListener Audio_manager::listener = {};
 
 void Audio_manager::initialize() {
     DirectX::AUDIO_ENGINE_FLAGS eflags =
-        DirectX::AudioEngine_ReverbUseFilters |
-        DirectX::AudioEngine_EnvironmentalReverb |
-        DirectX::AudioEngine_UseMasteringLimiter;
+/*        DirectX::AudioEngine_EnvironmentalReverb
+        | DirectX::AudioEngine_ReverbUseFilters
+        | DirectX::AudioEngine_UseMasteringLimiter
+        | */DirectX::AudioEngine_Default | DirectX::AudioEngine_UseMasteringLimiter
+        ;
 
 #ifdef _DEBUG
     eflags |= DirectX::AudioEngine_Debug;
@@ -61,12 +63,10 @@ void Audio_manager::release(const std::string& file_path) {
     return Audio_resource_manager::release(file_path);
 }
 
-void Audio_manager::create_instance(std::unique_ptr<DirectX::SoundEffectInstance>& out, std::unique_ptr<DirectX::SoundEffect>& soundefect, const bool is_use3D, const bool is_useReverb, const bool is_usePitchchenge) {
+void Audio_manager::create_instance(std::unique_ptr<DirectX::SoundEffectInstance>& out, std::unique_ptr<DirectX::SoundEffect>& soundefect, const bool is_use3D) {
 
-    SOUND_EFFECT_INSTANCE_FLAGS flag = DirectX::SOUND_EFFECT_INSTANCE_FLAGS::SoundEffectInstance_Default;
-    if (is_use3D)            flag |= DirectX::SOUND_EFFECT_INSTANCE_FLAGS::SoundEffectInstance_Use3D;
-    if (is_useReverb)        flag |= DirectX::SOUND_EFFECT_INSTANCE_FLAGS::SoundEffectInstance_ReverbUseFilters;
-    //if (!is_usePitchchenge)  flag |= DirectX::SOUND_EFFECT_INSTANCE_FLAGS::SoundEffectInstance_NoSetPitch;
+    SOUND_EFFECT_INSTANCE_FLAGS flag =  DirectX::SOUND_EFFECT_INSTANCE_FLAGS::SoundEffectInstance_Default;
+    if (is_use3D)               flag |= DirectX::SOUND_EFFECT_INSTANCE_FLAGS::SoundEffectInstance_Use3D;
 
     out = soundefect->CreateInstance(flag);
 }

@@ -23,6 +23,30 @@ namespace Adollib {
 			auto demo = go->addComponent<Demo_music>();
 			demo->audio = sorce;
 		}
+		//{
+		//	Gameobject* go = Gameobject_manager::create("demo_music_2");
+		//	auto sorce = go->addComponent<Audio_source>();
+		//	auto demo = go->addComponent<Demo_music>();
+		//	demo->audio = sorce;
+		//}
+		//{
+		//	Gameobject* go = Gameobject_manager::create("demo_music_3");
+		//	auto sorce = go->addComponent<Audio_source>();
+		//	auto demo = go->addComponent<Demo_music>();
+		//	demo->audio = sorce;
+		//}
+		//{
+		//	Gameobject* go = Gameobject_manager::create("demo_music_4");
+		//	auto sorce = go->addComponent<Audio_source>();
+		//	auto demo = go->addComponent<Demo_music>();
+		//	demo->audio = sorce;
+		//}
+		//{
+		//	Gameobject* go = Gameobject_manager::create("demo_music_5");
+		//	auto sorce = go->addComponent<Audio_source>();
+		//	auto demo = go->addComponent<Demo_music>();
+		//	demo->audio = sorce;
+		//}
 
 		{
 			Gameobject* camera = Gameobject_manager::create("camera");

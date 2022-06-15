@@ -70,106 +70,11 @@ static const XAUDIO2FX_REVERB_I3DL2_PARAMETERS gReverbPresets[] =
 
 void Demo_music::start() {
 
-	// Create DirectXTK for Audio objects
-	//DirectX::AUDIO_ENGINE_FLAGS eflags = DirectX::AudioEngine_Default;
-	//DirectX::AUDIO_ENGINE_FLAGS eflags =
-	//	DirectX::AudioEngine_ReverbUseFilters |
-	//	DirectX::AudioEngine_EnvironmentalReverb |
-	//	DirectX::AudioEngine_UseMasteringLimiter;
-
-#ifdef _DEBUG
-	//eflags |= DirectX::AudioEngine_Debug;
-#endif;
-
-	//audioEngine = std::make_unique<AudioEngine>(eflags);
-
-
-	//soundeffect[0] = new SoundEffect(audioEngine.get(), L"../Data/sounds/Demo_BGM/Theme_of_Rabi-Ribi.wav");
-
-	//audioInstance[0] = soundeffect[0]->CreateInstance(DirectX::SoundEffectInstance_ReverbUseFilters | DirectX::SoundEffectInstance_Use3D);
-	//audioInstance[0]->Play(true);
-	//audioInstance[0]->SetVolume(0.12f);
-
-	//soundeffect[1] = new SoundEffect(audioEngine.get(), L"../Data/sounds/Demo_BGM/Theme_of_Rabi-Ribi.wav");
-
-	//audioInstance[1] = soundeffect[1]->CreateInstance(DirectX::SoundEffectInstance_ReverbUseFilters | DirectX::SoundEffectInstance_Use3D);
-	////audioInstance[1]->Play(true);
-	////audioInstance[1]->SetVolume(0.12f);
-
-	audio->load("../Data/sounds/Demo_BGM/Theme_of_Rabi-Ribi.wav", true, true, false);
+	audio->load("../Data/sounds/Demo_BGM/Theme_of_Rabi-Ribi.wav", true);
 	audio->play(true);
-
-	//reverb.setparam_from_prepared(Audio_reverb::Reverb_effects_enum::Reverb_Arena);
-	reverb.set_reverb();
 }
 
 void Demo_music::update() {
-
-
-	//audioEngine->Update();
-
-	//if (audioEngine->IsCriticalError()) {
-	//	assert(!audioEngine->IsCriticalError() && "audioengine critial error");
-	//}
-
-	ImGuiWindowFlags flag = 0;
-	//flag |= ImGuiWindowFlags_AlwaysAutoResize;
-	flag |= ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize;
-	flag |= ImGuiWindowFlags_::ImGuiWindowFlags_NoDocking;
-	if (ImGui::Begin("Music_demo", 0, flag)) {
-
-		// reserve_type
-		{
-			//:::::::::::
-			static int R = 0;
-			int ago = R;
-			ImGui::InputInt("Reserve", &R, 1);
-			if (R < 0)R = 0;
-			if (static_cast<int>(Audio_reverb::Reverb_effects_enum::Reverb_Max) <= R)R = static_cast<int>(Audio_reverb::Reverb_effects_enum::Reverb_Max) - 1;
-			if (R != ago)	reverb.setparam_from_prepared(static_cast<Audio_reverb::Reverb_effects_enum>(R));
-
-			ImGui::SliderFloat("WetDryMix", &reverb.WetDryMix, 0, 100);			// [0, 100] (percentage)
-			ImGui::SliderInt("Room", &reverb.Room, -10000, 0);		        // [-10000, 0] in mB (hundredths of decibels)
-			ImGui::SliderInt("RoomHF", &reverb.RoomHF, -10000, 0);		    // [-10000, 0] in mB (hundredths of decibels)
-			ImGui::SliderFloat("RoomRolloffFactor", &reverb.RoomRolloffFactor, 0, 10);	// [0.0, 10.0]
-			ImGui::SliderFloat("DecayTime", &reverb.DecayTime, 0.1f, 20.0f);	    // [0.1, 20.0] in seconds
-			ImGui::SliderFloat("DecayHFRatio", &reverb.DecayHFRatio, 0.1f, 2.0f);	// [0.1, 2.0]
-			ImGui::SliderInt("Reflections", &reverb.Reflections, -10000, 1000);	// [-10000, 1000] in mB (hundredths of decibels)
-			ImGui::SliderFloat("ReflectionsDelay", &reverb.ReflectionsDelay, 0, 0.3f);	// [0.0, 0.3] in seconds
-			ImGui::SliderInt("Reverb", &reverb.Reverb, -10000, 2000);		// [-10000, 2000] in mB (hundredths of decibels)
-			ImGui::SliderFloat("ReverbDelay", &reverb.ReverbDelay, 0.0f, 0.1f);     // [0.0, 0.1] in seconds
-			ImGui::SliderFloat("Diffusion", &reverb.Diffusion, 0, 100);			// [0.0, 100.0] (percentage)
-			ImGui::SliderFloat("Density", &reverb.Density, 0, 100);			    // [0.0, 100.0] (percentage)
-			ImGui::SliderFloat("HFReference", &reverb.HFReference, 20.0, 20000);	// [20.0, 20000.0] in Hz
-
-
-			XAUDIO2FX_REVERB_I3DL2_PARAMETERS param;
-			param.WetDryMix = reverb.WetDryMix;
-			param.Room = reverb.Room;
-			param.RoomHF = reverb.RoomHF;
-			param.RoomRolloffFactor = reverb.RoomRolloffFactor;
-			param.DecayTime = reverb.DecayTime;
-			param.DecayHFRatio = reverb.DecayHFRatio;
-			param.Reflections = reverb.Reflections;
-			param.ReflectionsDelay = reverb.ReflectionsDelay;
-			param.Reverb = reverb.Reverb;
-			param.ReverbDelay = reverb.ReverbDelay;
-			param.Diffusion = reverb.Diffusion;
-			param.Density = reverb.Density;
-			param.HFReference = reverb.HFReference;
-			XAUDIO2FX_REVERB_PARAMETERS native;
-
-
-			ReverbConvertI3DL2ToNative(&param, &native);
-			Audio_manager::set_reverb(&native);
-
-			reverb.set_reverb();
-			//::::::::::
-		}
-
-
-	}
-	ImGui::End();
 
 
 }

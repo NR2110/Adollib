@@ -27,7 +27,7 @@ namespace Adollib {
 		// ƒŠƒ\[ƒX‚Ì‰ğ•ú
 		static void release(const std::string& file_path);
 		// soundeffect instance‚Ì¶¬ (sorce voice‚Ì¶¬)
-		static void create_instance(std::unique_ptr<DirectX::SoundEffectInstance>& out, std::unique_ptr<DirectX::SoundEffect>& soundefect, const bool is_use3D, const bool is_useReverb, const bool is_usePitchchenge);
+		static void create_instance(std::unique_ptr<DirectX::SoundEffectInstance>& out, std::unique_ptr<DirectX::SoundEffect>& soundefect, const bool is_use3D);
 
 		//:::: listener :::
 		// listener‚ğÏ‚Ş

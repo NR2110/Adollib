@@ -20,7 +20,7 @@ void Audio_listener::set_listener() {
 
 void Audio_listener::convert_to_DirectXAudioListener(DirectX::AudioListener* out) {
     out->Position = vector3_quatrotate(Position_off, transform->orientation) + transform->position;
-    out->Velocity = vector3_quatrotate(Velocity_off, transform->orientation) + transform->position;
+    out->Velocity = vector3_quatrotate(Velocity_off, transform->orientation);
     out->OrientFront = vector3_quatrotate(OrientFront_off, transform->orientation);
     out->OrientTop = vector3_quatrotate(OrientTop_off, transform->orientation);
     //listener.pCone = pCone;

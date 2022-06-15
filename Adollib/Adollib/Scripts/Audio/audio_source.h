@@ -24,8 +24,13 @@ namespace Adollib {
 		std::shared_ptr<Audio_emitter> emitter_data;
 
 		bool is_use3D = true;
-		bool is_useReverb = true;
-		bool is_usePitchchenge = false;
+
+		std::string filepath;
+
+	private:
+		// ファイルを開く
+		bool openFileName(char* filepath, int size, const char* filter);
+
 
 	public:
 		std::shared_ptr<Audio_emitter> get_emitter_ptr() { return emitter_data; };
@@ -35,7 +40,7 @@ namespace Adollib {
 		//Gameobject* go = Gameobject::create();
 	public:
 		// fileの読み込み, sorcevoiceの作成
-		void load(const std::string& file_path, const bool is_use3D = true, const bool is_useReverb = true, const bool is_usePitchchenge = false);
+		std::shared_ptr<Audio_emitter> load(const std::string& file_path, const bool is_use3D = true);
 
 		void play(const bool is_loop);
 

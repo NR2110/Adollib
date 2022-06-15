@@ -13,13 +13,13 @@ namespace Adollib {
 		Vector3 OrientFront_local = Vector3(0, 0, -1); // orientation of front direction, used only for emitter angle calculations or with multi-channel emitters for matrix calculations or single-channel emitters with cones for matrix, LPF (both direct and reverb paths), and reverb calculations, must be normalized when used
 		Vector3 OrientTop_local = Vector3(0, 1, 0);   // orientation of top direction, used only with multi-channel emitters for matrix calculations, must be orthonormal with OrientFront when used
 
-		Vector3 Position_local= Vector3(0); // position in user-defined world units, does not affect Velocity
-		Vector3 Velocity_local= Vector3(0); // velocity vector in user-defined world units/second, used only for doppler calculations, does not affect Position
+		Vector3 Position_local = Vector3(0); // position in user-defined world units, does not affect Velocity
+		Vector3 Velocity_local = Vector3(0); // velocity vector in user-defined world units/second, used only for doppler calculations, does not affect Position
 
-		float InnerRadius = 0;      // inner radius, must be within [0.0f, FLT_MAX]
+		float InnerRadius = 0.5f;      // inner radius, must be within [0.0f, FLT_MAX]
 		float InnerRadiusAngle = ToRadian(90); // inner radius angle, must be within [0.0f, X3DAUDIO_PI/4.0)
 
-		int ChannelCount= 1;       // number of sound channels, must be > 0
+		int ChannelCount = 1;       // number of sound channels, must be > 0
 		float ChannelRadius = 1;     // channel radius, used only with multi-channel emitters for matrix calculations, must be >= 0.0f when used
 		float* pChannelAzimuths = nullptr; // channel azimuth array, used only with multi-channel emitters for matrix calculations, contains positions of each channel expressed in radians along the channel radius with respect to the front orientation vector in the plane orthogonal to the top orientation vector, or X3DAUDIO_2PI to specify an LFE channel, must have at least ChannelCount elements, all within [0.0f, X3DAUDIO_2PI] when used
 
