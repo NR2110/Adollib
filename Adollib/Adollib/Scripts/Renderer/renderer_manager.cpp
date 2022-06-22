@@ -179,7 +179,7 @@ void Renderer_manager::render(const std::list<Scenelist>& active_scenes, const s
 				}
 
 				// collider‚Ìrender
-				Physics_function::Physics_manager::render_collider();
+				//Physics_function::Physics_manager::render_collider();
 			}
 	}
 

@@ -1,0 +1,308 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{a04c5186-b33e-49f6-a551-84832623243f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{a8545c36-362b-4bce-8413-a30f1ce9870c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fbx sdk">
+      <UniqueIdentifier>{142da70f-734d-48b2-a5e9-0e352782b162}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Inc">
+      <UniqueIdentifier>{25612678-7391-44f9-ad83-e72916c1c4dd}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Src\Physics\ALP__meshcoll_data.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\ALP__physics_function.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\ALP__physics_manager.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\ALP__tags.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\ALP_anchor.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\ALP_broadphase.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\ALP_collider.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\ALP_contact.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\ALP_generate_contact.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\ALP_integrate.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\ALP_joint.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\ALP_midphase.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\ALP_physics.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\ALP_raycast.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\ALP_resolve_contact.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\ALP_solverbody.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\ALP_struct_contacted_data.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\ALP_struct_world_transform.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\balljoint.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\collider.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\collider_croth.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\collider_rope.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\collider_shape.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\collider_types.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\conejoint.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\coneTwistjoint.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\hingejoint.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\joint.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\joint_base.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\meshcoll_resorce_manager.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\ray.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\shape_box.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\shape_capsule.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\shape_croth.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\shape_meshcoll.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\shape_plane.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\shape_rope.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\shape_sphere.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\springjoint.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Physics\twistjoint.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Math\closest_func.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Math\complex.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Math\crossing_func.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Math\DOP.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Math\math.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Math\math_e.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Math\matrix.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Math\matrixSIM_e.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Math\quaternion.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Math\quaternionSIM_e.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Math\vector.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Math\vectorSIM_e.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\FBX SDK\2019.2\include\fbxsdk.h">
+      <Filter>fbx sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\Adollibphysics.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Src\Physics\ALP__physics_manager.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Physics\ALP_broadphase.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Physics\ALP_collider.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Physics\ALP_contact.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Physics\ALP_generate_contact.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Physics\ALP_generate_contact_SIM.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Physics\ALP_integrate.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Physics\ALP_joint.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Physics\ALP_midphase.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Physics\ALP_physics.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Physics\ALP_raycast.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Physics\ALP_resolve_contact.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Physics\ALP_resolve_contact_SIM.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Physics\balljoint.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Physics\collider.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Physics\collider_croth.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Physics\collider_rope.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Physics\collider_shape.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Physics\conejoint.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Physics\coneTwistjoint.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Physics\hingejoint.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Physics\joint.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Physics\joint_base.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Physics\meshcoll_resorce_manager.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Physics\ray.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Physics\shape_croth.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Physics\shape_rope.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Physics\twistjoint.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Math\closest_func.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Math\closest_func_SIM.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Math\complex.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Math\crossing_func.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Math\crossing_func_SIM.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Src\Math\matrix3x3.inl">
+      <Filter>Math</Filter>
+    </None>
+    <None Include="Src\Math\matrix4x4.inl">
+      <Filter>Math</Filter>
+    </None>
+    <None Include="Src\Math\quaternion.inl">
+      <Filter>Math</Filter>
+    </None>
+    <None Include="Src\Math\vector.inl">
+      <Filter>Math</Filter>
+    </None>
+  </ItemGroup>
+</Project>

@@ -2,9 +2,9 @@
 #include "scene_manager.h"
 
 #include "scene.h"
-#include "scene_game.h"
-#include "scene_title.h"
-#include "scene_player.h"
+//#include "scene_game.h"
+//#include "scene_title.h"
+//#include "scene_player.h"
 #include "scene_SPH.h"
 #include "scene_music.h"
 
@@ -25,9 +25,9 @@ Scenelist Scene_manager::processing_scene;
 //::: SceneÇïœçXÇ∑ÇÈç€ÇÕÇ±Ç±ÇïœçX ::::::::::::::::::::::::::::::::::::::::
 void Scene_manager::initialize() {
 
-	scenes[Scenelist::scene_game] = std::make_unique<Scene_game>();
-	scenes[Scenelist::scene_title] = std::make_unique<Scene_title>();
-	scenes[Scenelist::scene_player] = std::make_unique<Scene_player>();
+	//scenes[Scenelist::scene_game] = std::make_unique<Scene_game>();
+	//scenes[Scenelist::scene_title] = std::make_unique<Scene_title>();
+	//scenes[Scenelist::scene_player] = std::make_unique<Scene_player>();
 	scenes[Scenelist::scene_SPH] = std::make_unique<Scene_SPH>();
 	scenes[Scenelist::scene_music] = std::make_unique<Scene_music>();
 
@@ -103,11 +103,11 @@ void Scene_manager::update() {
 	// physics_managerÇÃupdate
 	{
 		Work_meter::start("adapt_transform_to_gameobject");
-		Physics_function::Physics_manager::adapt_transform_to_gameobject();
+		//Physics_function::Physics_manager::adapt_transform_to_gameobject();
 		Work_meter::stop("adapt_transform_to_gameobject");
 
 #ifdef UseImgui
-		Physics_function::Physics_manager::update_Gui();
+		//Physics_function::Physics_manager::update_Gui();
 #endif
 
 	}
@@ -122,7 +122,7 @@ void Scene_manager::update() {
 	// physics_managerÇÃlate_update
 	{
 		Work_meter::start("copy_gameobject_transform");
-		Physics_function::Physics_manager::copy_gameobject_transform();
+		//Physics_function::Physics_manager::copy_gameobject_transform();
 		Work_meter::stop("copy_gameobject_transform");
 	}
 

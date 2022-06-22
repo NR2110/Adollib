@@ -80,14 +80,14 @@
       <PrecompiledHeader />
       <AdditionalUsingDirectories>
       </AdditionalUsingDirectories>
-      <AdditionalIncludeDirectories>.\DirectXTK-master\Inc;.\FBX SDK\2016.1.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\DirectXTK-master\Inc;.\FBX SDK\2016.1.2\include;.\Adollib_Physics\Inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>.\DirectXTK-master\Bin\Desktop_2019\Win32\Debug;.\DirectXTK-master\Audio\Bin\Desktop_2019\Win32\Debug;.\FBX SDK\2016.1.2\lib\vs2015\x86\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libfbxsdk-md.lib;DirectXTK.lib;DirectXTKAudioWin8.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>.\DirectXTK-master\Bin\Desktop_2019\Win32\Debug;.\DirectXTK-master\Audio\Bin\Desktop_2019\Win32\Debug;.\FBX SDK\2016.1.2\lib\vs2015\x86\debug;.\Adollib_Physics\Bin\Win32\2022\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libfbxsdk-md.lib;DirectXTK.lib;DirectXTKAudioWin8.lib;Adollib_Physics.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>
@@ -119,7 +119,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>.\DirectXTK-master\Inc;.\FBX SDK\2016.1.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\DirectXTK-master\Inc;.\FBX SDK\2016.1.2\include;.\Adollib_Physics\Inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <UndefinePreprocessorDefinitions>%(UndefinePreprocessorDefinitions)</UndefinePreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
@@ -127,8 +127,8 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>.\DirectXTK-master\Bin\Desktop_2019\Win32\Release;.\DirectXTK-master\Audio\Bin\Desktop_2019\Win32\Release;.\FBX SDK\2016.1.2\lib\vs2015\x86\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libfbxsdk-md.lib;DirectXTK.lib;DirectXTKAudioWin8.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>.\DirectXTK-master\Bin\Desktop_2019\Win32\Release;.\DirectXTK-master\Audio\Bin\Desktop_2019\Win32\Release;.\FBX SDK\2016.1.2\lib\vs2015\x86\release;.\Adollib_Physics\Bin\Win32\2022\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libfbxsdk-md.lib;DirectXTK.lib;DirectXTKAudioWin8.lib;Adollib_Physics.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>
@@ -154,59 +154,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\Scripts\buttan.h" />
-    <ClInclude Include="..\Scripts\camera.h" />
-    <ClInclude Include="..\Scripts\chenge_color_rainbow.h" />
     <ClInclude Include="..\Scripts\debug_camera_controller.h" />
-    <ClInclude Include="..\Scripts\demo_house.h" />
     <ClInclude Include="..\Scripts\demo_music.h" />
-    <ClInclude Include="..\Scripts\door.h" />
-    <ClInclude Include="..\Scripts\area_goal.h" />
-    <ClInclude Include="..\Scripts\event_exclamation.h" />
-    <ClInclude Include="..\Scripts\fall_object_comp.h" />
-    <ClInclude Include="..\Scripts\fall_object_manager.h" />
-    <ClInclude Include="..\Scripts\input_changer.h" />
-    <ClInclude Include="..\Scripts\kinematic_block.h" />
-    <ClInclude Include="..\Scripts\lever.h" />
-    <ClInclude Include="..\Scripts\move_block_from_2flags.h" />
-    <ClInclude Include="..\Scripts\object_manager.h" />
-    <ClInclude Include="..\Scripts\object_rotate.h" />
     <ClInclude Include="..\Scripts\simulation_GPUparticle.h" />
     <ClInclude Include="..\Scripts\simulation_SPH.h" />
-    <ClInclude Include="..\Scripts\player.h" />
-    <ClInclude Include="..\Scripts\player_manager.h" />
-    <ClInclude Include="..\Scripts\respown_area.h" />
-    <ClInclude Include="..\Scripts\area_respown_set.h" />
-    <ClInclude Include="..\Scripts\rotate_block.h" />
-    <ClInclude Include="..\Scripts\change_scaleY_reinbow.h" />
-    <ClInclude Include="..\Scripts\scene_game_all.h" />
-    <ClInclude Include="..\Scripts\scene_title_all.h" />
-    <ClInclude Include="..\Scripts\select_playernum_manager.h" />
-    <ClInclude Include="..\Scripts\select_stage_manager.h" />
-    <ClInclude Include="..\Scripts\se_manager.h" />
-    <ClInclude Include="..\Scripts\stageparts_base.h" />
-    <ClInclude Include="..\Scripts\stageparts_tags.h" />
-    <ClInclude Include="..\Scripts\stage_01.h" />
-    <ClInclude Include="..\Scripts\stage_02.h" />
-    <ClInclude Include="..\Scripts\stage_99.h" />
-    <ClInclude Include="..\Scripts\stage_base.h" />
-    <ClInclude Include="..\Scripts\stage_demo.h" />
-    <ClInclude Include="..\Scripts\stage_demo_1.h" />
-    <ClInclude Include="..\Scripts\stage_demo_2.h" />
-    <ClInclude Include="..\Scripts\stage_manager.h" />
-    <ClInclude Include="..\Scripts\stage_types.h" />
-    <ClInclude Include="..\Scripts\title_state_base.h" />
-    <ClInclude Include="..\Scripts\tag_andcircuit.h" />
-    <ClInclude Include="..\Scripts\title_camera.h" />
-    <ClInclude Include="..\Scripts\title_stage.h" />
-    <ClInclude Include="..\Scripts\title_states.h" />
-    <ClInclude Include="..\Scripts\title_state_manager.h" />
-    <ClInclude Include="..\Scripts\touch_moveable.h" />
-    <ClInclude Include="..\Scripts\tutrial_base.h" />
-    <ClInclude Include="..\Scripts\tutrial_manager.h" />
-    <ClInclude Include="..\Scripts\tutrial_stage02_rope.h" />
-    <ClInclude Include="..\Scripts\tutrial_stage01_move_camera_catch.h" />
-    <ClInclude Include="..\Scripts\ui_manager.h" />
+    <ClInclude Include="Adollib_Physics\Inc\Adollibphysics.h" />
     <ClInclude Include="Imgui\imconfig.h" />
     <ClInclude Include="Imgui\imgui.h" />
     <ClInclude Include="Imgui\imgui_impl_dx11.h">
@@ -285,45 +237,6 @@
     <ClInclude Include="Scripts\Object\hierarchy.h" />
     <ClInclude Include="Scripts\Object\object.h" />
     <ClInclude Include="Scripts\Object\transform.h" />
-    <ClInclude Include="Scripts\Physics\ALP_anchor.h" />
-    <ClInclude Include="Scripts\Physics\ALP_struct_contacted_data.h" />
-    <ClInclude Include="Scripts\Physics\ALP_joint.h" />
-    <ClInclude Include="Scripts\Physics\ALP_struct_world_transform.h" />
-    <ClInclude Include="Scripts\Physics\balljoint.h" />
-    <ClInclude Include="Scripts\Physics\collider_croth.h" />
-    <ClInclude Include="Scripts\Physics\collider_rope.h" />
-    <ClInclude Include="Scripts\Physics\shape_croth.h" />
-    <ClInclude Include="Scripts\Physics\conejoint.h" />
-    <ClInclude Include="Scripts\Physics\coneTwistjoint.h" />
-    <ClInclude Include="Scripts\Physics\hingejoint.h" />
-    <ClInclude Include="Scripts\Physics\joint_base.h" />
-    <ClInclude Include="Scripts\Physics\ALP_raycast.h" />
-    <ClInclude Include="Scripts\Physics\ALP__meshcoll_data.h" />
-    <ClInclude Include="Scripts\Physics\collider_shape.h" />
-    <ClInclude Include="Scripts\Physics\ALP__tags.h" />
-    <ClInclude Include="Scripts\Physics\ALP_physics.h" />
-    <ClInclude Include="Scripts\Physics\ALP_broadphase.h" />
-    <ClInclude Include="Scripts\Physics\ALP_collider.h" />
-    <ClInclude Include="Scripts\Physics\ALP_generate_contact.h" />
-    <ClInclude Include="Scripts\Physics\ALP_integrate.h" />
-    <ClInclude Include="Scripts\Physics\ALP_midphase.h" />
-    <ClInclude Include="Scripts\Physics\ALP_resolve_contact.h" />
-    <ClInclude Include="Scripts\Physics\ALP__physics_function.h" />
-    <ClInclude Include="Scripts\Physics\ALP__physics_manager.h" />
-    <ClInclude Include="Scripts\Physics\collider.h" />
-    <ClInclude Include="Scripts\Physics\shape_box.h" />
-    <ClInclude Include="Scripts\Physics\shape_capsule.h" />
-    <ClInclude Include="Scripts\Physics\shape_meshcoll.h" />
-    <ClInclude Include="Scripts\Physics\shape_plane.h" />
-    <ClInclude Include="Scripts\Physics\shape_rope.h" />
-    <ClInclude Include="Scripts\Physics\shape_sphere.h" />
-    <ClInclude Include="Scripts\Physics\collider_types.h" />
-    <ClInclude Include="Scripts\Physics\ALP_contact.h" />
-    <ClInclude Include="Scripts\Physics\joint.h" />
-    <ClInclude Include="Scripts\Physics\meshcoll_resorce_manager.h" />
-    <ClInclude Include="Scripts\Physics\ray.h" />
-    <ClInclude Include="Scripts\Physics\springjoint.h" />
-    <ClInclude Include="Scripts\Physics\twistjoint.h" />
     <ClInclude Include="Scripts\Renderer\billboard_renderer.h" />
     <ClInclude Include="Scripts\Renderer\croth_renderer.h" />
     <ClInclude Include="Scripts\Renderer\frustum_data.h" />
@@ -350,56 +263,17 @@
     <ClInclude Include="Scripts\Renderer\UI_renderer.h" />
     <ClInclude Include="Scripts\Renderer\vignette_effect.h" />
     <ClInclude Include="Scripts\Scene\scene.h" />
-    <ClInclude Include="Scripts\Scene\scene_game.h" />
     <ClInclude Include="Scripts\Scene\scene_GPUparticle.h" />
     <ClInclude Include="Scripts\Scene\scene_list.h" />
     <ClInclude Include="Scripts\Scene\scene_manager.h" />
     <ClInclude Include="Scripts\Scene\scene_music.h" />
-    <ClInclude Include="Scripts\Scene\scene_player.h" />
     <ClInclude Include="Scripts\Scene\scene_SPH.h" />
-    <ClInclude Include="Scripts\Scene\scene_title.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Scripts\area_goal.cpp" />
-    <ClCompile Include="..\Scripts\area_respown_set.cpp" />
-    <ClCompile Include="..\Scripts\camera.cpp" />
     <ClCompile Include="..\Scripts\debug_camera_controller.cpp" />
-    <ClCompile Include="..\Scripts\demo_house.cpp" />
     <ClCompile Include="..\Scripts\demo_music.cpp" />
-    <ClCompile Include="..\Scripts\fall_object_comp.cpp" />
-    <ClCompile Include="..\Scripts\fall_object_manager.cpp" />
-    <ClCompile Include="..\Scripts\input_changer.cpp" />
-    <ClCompile Include="..\Scripts\object_manager.cpp" />
-    <ClCompile Include="..\Scripts\object_rotate.cpp" />
     <ClCompile Include="..\Scripts\simulation_GPUparticle.cpp" />
     <ClCompile Include="..\Scripts\simulation_SPH.cpp" />
-    <ClCompile Include="..\Scripts\player.cpp" />
-    <ClCompile Include="..\Scripts\player_funcs.cpp" />
-    <ClCompile Include="..\Scripts\player_manager.cpp" />
-    <ClCompile Include="..\Scripts\select_playernum_manager.cpp" />
-    <ClCompile Include="..\Scripts\select_stage_manager.cpp" />
-    <ClCompile Include="..\Scripts\se_manager.cpp" />
-    <ClCompile Include="..\Scripts\stage_01.cpp" />
-    <ClCompile Include="..\Scripts\stage_01_funcs.cpp" />
-    <ClCompile Include="..\Scripts\stage_02.cpp" />
-    <ClCompile Include="..\Scripts\stage_02_funcs.cpp" />
-    <ClCompile Include="..\Scripts\stage_99.cpp" />
-    <ClCompile Include="..\Scripts\stage_99_funcs.cpp" />
-    <ClCompile Include="..\Scripts\stage_base.cpp" />
-    <ClCompile Include="..\Scripts\stage_demo.cpp" />
-    <ClCompile Include="..\Scripts\stage_demo_1.cpp" />
-    <ClCompile Include="..\Scripts\stage_demo_1_funcs.cpp" />
-    <ClCompile Include="..\Scripts\stage_demo_funcs.cpp" />
-    <ClCompile Include="..\Scripts\stage_demo_2.cpp" />
-    <ClCompile Include="..\Scripts\stage_demo_2_funcs.cpp" />
-    <ClCompile Include="..\Scripts\stage_manager.cpp" />
-    <ClCompile Include="..\Scripts\title_camera.cpp" />
-    <ClCompile Include="..\Scripts\title_stage.cpp" />
-    <ClCompile Include="..\Scripts\title_state_manager.cpp" />
-    <ClCompile Include="..\Scripts\tutrial_manager.cpp" />
-    <ClCompile Include="..\Scripts\tutrial_stage02_rope.cpp" />
-    <ClCompile Include="..\Scripts\tutrial_stage01_move_camera_catch.cpp" />
-    <ClCompile Include="..\Scripts\ui_manager.cpp" />
     <ClCompile Include="Imgui\imgui.cpp" />
     <ClCompile Include="Imgui\imgui_demo.cpp" />
     <ClCompile Include="Imgui\imgui_draw.cpp" />
@@ -455,34 +329,6 @@
     <ClCompile Include="Scripts\Object\gameobject.cpp" />
     <ClCompile Include="Scripts\Object\gameobject_manager.cpp" />
     <ClCompile Include="Scripts\Object\hierarchy.cpp" />
-    <ClCompile Include="Scripts\Physics\ALP_broadphase.cpp" />
-    <ClCompile Include="Scripts\Physics\ALP_collider.cpp" />
-    <ClCompile Include="Scripts\Physics\ALP_generate_contact.cpp" />
-    <ClCompile Include="Scripts\Physics\ALP_generate_contact_SIM.cpp" />
-    <ClCompile Include="Scripts\Physics\ALP_integrate.cpp" />
-    <ClCompile Include="Scripts\Physics\ALP_joint.cpp" />
-    <ClCompile Include="Scripts\Physics\ALP_midphase.cpp" />
-    <ClCompile Include="Scripts\Physics\ALP_physics.cpp" />
-    <ClCompile Include="Scripts\Physics\ALP_raycast.cpp" />
-    <ClCompile Include="Scripts\Physics\ALP_resolve_contact.cpp" />
-    <ClCompile Include="Scripts\Physics\ALP_resolve_contact_SIM.cpp" />
-    <ClCompile Include="Scripts\Physics\balljoint.cpp" />
-    <ClCompile Include="Scripts\Physics\collider_croth.cpp" />
-    <ClCompile Include="Scripts\Physics\collider_rope.cpp" />
-    <ClCompile Include="Scripts\Physics\collider_shape.cpp" />
-    <ClCompile Include="Scripts\Physics\ALP__physics_manager.cpp" />
-    <ClCompile Include="Scripts\Physics\collider.cpp" />
-    <ClCompile Include="Scripts\Physics\ALP_contact.cpp" />
-    <ClCompile Include="Scripts\Physics\conejoint.cpp" />
-    <ClCompile Include="Scripts\Physics\coneTwistjoint.cpp" />
-    <ClCompile Include="Scripts\Physics\hingejoint.cpp" />
-    <ClCompile Include="Scripts\Physics\joint.cpp" />
-    <ClCompile Include="Scripts\Physics\joint_base.cpp" />
-    <ClCompile Include="Scripts\Physics\meshcoll_resorce_manager.cpp" />
-    <ClCompile Include="Scripts\Physics\ray.cpp" />
-    <ClCompile Include="Scripts\Physics\shape_croth.cpp" />
-    <ClCompile Include="Scripts\Physics\shape_rope.cpp" />
-    <ClCompile Include="Scripts\Physics\twistjoint.cpp" />
     <ClCompile Include="Scripts\Renderer\billboard_renderer.cpp" />
     <ClCompile Include="Scripts\Renderer\material.cpp" />
     <ClCompile Include="Scripts\Renderer\material_for_collider.cpp" />
@@ -502,13 +348,10 @@
     <ClCompile Include="Scripts\Renderer\croth_renderer.cpp" />
     <ClCompile Include="Scripts\Renderer\UI_renderer.cpp" />
     <ClCompile Include="Scripts\Renderer\vignette_effect.cpp" />
-    <ClCompile Include="Scripts\Scene\scene_game.cpp" />
     <ClCompile Include="Scripts\Scene\scene_GPUparticle.cpp" />
     <ClCompile Include="Scripts\Scene\scene_manager.cpp" />
     <ClCompile Include="Scripts\Scene\scene_music.cpp" />
-    <ClCompile Include="Scripts\Scene\scene_player.cpp" />
     <ClCompile Include="Scripts\Scene\scene_SPH.cpp" />
-    <ClCompile Include="Scripts\Scene\scene_title.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Data\Shader\fluid_simulation.hlsli" />
@@ -793,26 +636,6 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-    </FxCompile>
-    <FxCompile Include="DefaultShader\setup_solver_joint_cs.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
-    </FxCompile>
-    <FxCompile Include="DefaultShader\setup_solver_pair_cs.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="DefaultShader\sky_map_vs.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>

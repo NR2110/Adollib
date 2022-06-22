@@ -1,0 +1,4 @@
+C:\Users\waaaa\source\repos\Adollib_Physics\Bin\Win32\2022\Debug\Adollib_Physics.pdb
+C:\Users\waaaa\source\repos\Adollib_Physics\Obj\Debug\Adollib_Physics.pdb
+C:\Users\waaaa\Documents\Adollib_Physics\Adollib_Physics\Bin\Win32\2022\Debug\Adollib_Physics.pdb
+C:\Users\waaaa\Documents\Adollib_Physics\Adollib_Physics\Obj\Debug\Adollib_Physics.pdb

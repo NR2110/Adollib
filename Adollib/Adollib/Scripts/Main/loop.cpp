@@ -3,9 +3,10 @@
 #include "../Imgui/imgui_manager.h"
 #include "../Imgui/work_meter.h"
 
-#include "../Physics/ALP__physics_manager.h"
+//#include "../Physics/ALP__physics_manager.h"
 #include "../Audio/audio_manager.h"
 #include "../Renderer/renderer_manager.h"
+#include <Adollibphysics.h>
 
 #include "defines.h"
 
@@ -29,6 +30,7 @@ bool loop::Update(MSG hMsg, HWND hWnd, int width, int height) {
 
 	Systems::inputManager->update();
 
+	Physics_function::Physics_manager::update();
 	Scene_manager::update();
 	Audio_manager::update();
 
@@ -63,6 +65,7 @@ bool loop::destroy() {
 	// phtsics_manager‚Ìthread‚ðŽ~‚ß‚é
 	Physics_function::Physics_manager::thread_stop_and_join();
 	Physics_function::Physics_manager::destroy();
+
 
 
 	// imgu.i‚ðŽ~‚ß‚é

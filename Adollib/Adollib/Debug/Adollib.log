@@ -1,5 +1,120 @@
-﻿  audio_source.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Audio\audio_manager.h(54,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Audio_manager' の左辺を無視します。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Audio\audio_emitter.h(7,20): warning C4099: 'DirectX::AudioEmitter': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DirectXTK-master\Inc\Audio.h(518): message : 'DirectX::AudioEmitter' の宣言を確認してください
-  Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe
+﻿  debug_camera_controller.cpp
+  demo_music.cpp
+  simulation_GPUparticle.cpp
+  simulation_SPH.cpp
+  imgui.cpp
+  imgui_demo.cpp
+  imgui_draw.cpp
+  imgui_impl_dx11.cpp
+  imgui_impl_win32.cpp
+  imgui_widgets.cpp
+  audio_manager.cpp
+  audio_reverb.cpp
+  debug.cpp
+  imgui_manager.cpp
+  inspector.cpp
+  work_meter.cpp
+  Adollib.cpp
+  input.cpp
+  loop.cpp
+  main.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Audio\audio_manager.h(54,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Audio_manager' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Audio\audio_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DirectXTK-master\Audio\WAVFileReader.h(39,5): warning C4099: 'DirectX::WAVData': タイプ名は最初 'class' として使われていましたが 'struct' として使われています。 (ソース ファイルをコンパイルしています Scripts\Audio\audio_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DirectXTK-master\Audio\WAVFileReader.h(38): message : 'DirectX::WAVData' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Audio\audio_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Audio\audio_resource_manager.h(29,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Audio_resource_manager' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Audio\audio_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Audio\audio_listener.h(6,21): warning C4099: 'DirectX::AudioListener': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています Scripts\Audio\audio_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DirectXTK-master\Inc\Audio.h(435): message : 'DirectX::AudioListener' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Audio\audio_manager.cpp)
+  mono_audio.cpp
+  resource_manager.cpp
+  sprite.cpp
+  systems.cpp
+  closest_func.cpp
+  closest_func_SIM.cpp
+  complex.cpp
+  crossing_func.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2073,85): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2329,39): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2330,39): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2312,6): warning C4101: 'flagOfParticleGeneration': ローカル変数は 1 度も使われていません。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\simulation_SPH.cpp(2309,14): warning C4101: 'iZ': ローカル変数は 1 度も使われていません。
+  crossing_func_SIM.cpp
+  camera_costantbuffer_template.cpp
+  component_camera.cpp
+  component_light.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Audio\audio_manager.h(54,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Audio_manager' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\demo_music.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\debug_camera_controller.cpp)
+  gameobject.cpp
+  gameobject_manager.cpp
+  hierarchy.cpp
+  billboard_renderer.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Main\loop.cpp)
+  material.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Main\main.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Audio\audio_manager.h(54,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Audio_manager' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Main\loop.cpp)
+  material_for_collider.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\systems.cpp(156,25): warning C4834: 'nodiscard' 属性を持つ関数の戻り値を破棄しています
+  material_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(570,82): warning C4018: '>': signed と unsigned の数値を比較しようとしました。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(572,63): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(615,27): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Main\resource_manager.cpp(713,35): warning C4244: '=': 'double' から 'Adollib::u_int' への変換です。データが失われる可能性があります。
+  mesh.cpp
+  mesh_renderer.cpp
+  renderer_base.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\component_camera.cpp(57,26): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\component_camera.cpp(58,26): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\component_camera.cpp(59,26): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Object\component_camera.cpp(60,26): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\vector.inl(339): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
+  renderer_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject_manager.cpp)
+  rope_renderer.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Math\vector.inl(339): warning C4172: ローカル変数またはテンポラリのアドレスを返します: R
+  compute_shader.cpp
+  shader.cpp
+  directional_shadow.cpp
+  sky_sphere.cpp
+  UI.cpp
+  sprite_renderer.cpp
+  texture.cpp
+  croth_renderer.cpp
+  UI_renderer.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Renderer\directional_shadow.cpp(24,58): warning C4244: '引数': 'const float' から 'Adollib::u_int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Renderer\directional_shadow.cpp(24,42): warning C4244: '引数': 'const float' から 'Adollib::u_int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Renderer\directional_shadow.cpp(27,66): warning C4244: '引数': 'const float' から 'Adollib::u_int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Renderer\directional_shadow.cpp(27,50): warning C4244: '引数': 'const float' から 'Adollib::u_int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Renderer\directional_shadow.cpp(44,51): warning C4244: '引数': 'const float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Renderer\directional_shadow.cpp(44,35): warning C4244: '引数': 'const float' から 'int' への変換です。データが失われる可能性があります。
+  vignette_effect.cpp
+  scene_GPUparticle.cpp
+  scene_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Renderer\renderer_manager.cpp)
+  scene_music.cpp
+  scene_SPH.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Renderer\vignette_effect.cpp(16,29): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Renderer\vignette_effect.cpp(17,29): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Renderer\vignette_effect.cpp(18,29): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Renderer\vignette_effect.cpp(19,29): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Renderer\croth_renderer.cpp(275,49): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Scene\scene_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Scene\scene_manager.cpp(70,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Audio\audio_listener.h(6,21): warning C4099: 'DirectX::AudioListener': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています Scripts\Scene\scene_music.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DirectXTK-master\Inc\Audio.h(435): message : 'DirectX::AudioListener' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Scene\scene_music.cpp)
+  audio_emitter.cpp
+  audio_listener.cpp
+  audio_source.cpp
+  audio_resource_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DirectXTK-master\Inc\Audio.h(518,25): warning C4099: 'DirectX::AudioEmitter': タイプ名は最初 'class' として使われていましたが 'struct' として使われています。 (ソース ファイルをコンパイルしています Scripts\Audio\audio_emitter.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DirectXTK-master\Inc\Audio.h(518): message : 'DirectX::AudioEmitter' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Audio\audio_emitter.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Audio\audio_resource_manager.h(29,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Audio_resource_manager' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Audio\audio_resource_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DirectXTK-master\Audio\WAVFileReader.h(39,5): warning C4099: 'DirectX::WAVData': タイプ名は最初 'class' として使われていましたが 'struct' として使われています。 (ソース ファイルをコンパイルしています Scripts\Audio\audio_resource_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DirectXTK-master\Audio\WAVFileReader.h(38): message : 'DirectX::WAVData' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Audio\audio_resource_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DirectXTK-master\Inc\Audio.h(435,26): warning C4099: 'DirectX::AudioListener': タイプ名は最初 'class' として使われていましたが 'struct' として使われています。 (ソース ファイルをコンパイルしています Scripts\Audio\audio_listener.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DirectXTK-master\Inc\Audio.h(435): message : 'DirectX::AudioListener' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Audio\audio_listener.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Audio\audio_manager.h(54,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Audio_manager' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Audio\audio_source.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Audio\audio_emitter.h(7,20): warning C4099: 'DirectX::AudioEmitter': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています Scripts\Audio\audio_source.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DirectXTK-master\Inc\Audio.h(518): message : 'DirectX::AudioEmitter' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Audio\audio_source.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Audio\audio_manager.h(54,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Audio_manager' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Audio\audio_listener.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Audio\audio_listener.h(6,21): warning C4099: 'DirectX::AudioListener': タイプ名は最初 'struct' として使われていましたが 'class' として使われています。 (ソース ファイルをコンパイルしています Scripts\Audio\audio_resource_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\DirectXTK-master\Inc\Audio.h(435): message : 'DirectX::AudioListener' の宣言を確認してください (ソース ファイルをコンパイルしています Scripts\Audio\audio_resource_manager.cpp)
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppCommon.targets(876,5): error MSB6006: "link.exe" はコード 1 を伴って終了しました。
