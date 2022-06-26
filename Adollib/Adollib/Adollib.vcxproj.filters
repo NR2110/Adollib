@@ -116,6 +116,21 @@
     <Filter Include="00_Adollib\66_audio\manager">
       <UniqueIdentifier>{251b8a4b-66fc-4939-b351-8253cd9df950}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\demo_collider">
+      <UniqueIdentifier>{5a0c0660-21ac-4591-a4d8-e752f53f3185}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\demo_collider\collider_comp">
+      <UniqueIdentifier>{092ba094-cf62-4ccd-b564-55bb6e1239f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\demo_collider\physics_lib_demo">
+      <UniqueIdentifier>{bba9159d-6621-4771-a7f4-0b35a8c9feb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\demo_collider\collobject_creater">
+      <UniqueIdentifier>{3e2a0408-687c-4bad-a52e-e893902280a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Adollib\22_physics\Src">
+      <UniqueIdentifier>{0e937411-c060-4ca1-a20f-27371f8c38e1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Imgui\imgui.cpp">
@@ -306,6 +321,93 @@
     </ClCompile>
     <ClCompile Include="..\Scripts\debug_camera_controller.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\collider_comp.cpp">
+      <Filter>ソース ファイル\demo_collider\collider_comp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\scene_Physics.cpp">
+      <Filter>ソース ファイル\demo_collider</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\physics_demo_stage.cpp">
+      <Filter>ソース ファイル\demo_collider\physics_lib_demo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\physics_demo_obj.cpp">
+      <Filter>ソース ファイル\demo_collider\physics_lib_demo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Scripts\collobject_creater.cpp">
+      <Filter>ソース ファイル\demo_collider\collobject_creater</Filter>
+    </ClCompile>
+    <ClCompile Include="Adollib_Physics\Src\Physics\ALP__physics_manager.cpp">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Adollib_Physics\Src\Physics\ALP_broadphase.cpp">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Adollib_Physics\Src\Physics\ALP_collider.cpp">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Adollib_Physics\Src\Physics\ALP_contact.cpp">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Adollib_Physics\Src\Physics\ALP_generate_contact.cpp">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Adollib_Physics\Src\Physics\ALP_generate_contact_SIM.cpp">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Adollib_Physics\Src\Physics\ALP_integrate.cpp">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Adollib_Physics\Src\Physics\ALP_joint.cpp">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Adollib_Physics\Src\Physics\ALP_midphase.cpp">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Adollib_Physics\Src\Physics\ALP_physics.cpp">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Adollib_Physics\Src\Physics\ALP_raycast.cpp">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Adollib_Physics\Src\Physics\ALP_resolve_contact.cpp">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Adollib_Physics\Src\Physics\ALP_resolve_contact_SIM.cpp">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Adollib_Physics\Src\Physics\balljoint.cpp">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Adollib_Physics\Src\Physics\collider.cpp">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Adollib_Physics\Src\Physics\collider_shape.cpp">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Adollib_Physics\Src\Physics\conejoint.cpp">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Adollib_Physics\Src\Physics\coneTwistjoint.cpp">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Adollib_Physics\Src\Physics\hingejoint.cpp">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Adollib_Physics\Src\Physics\joint.cpp">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Adollib_Physics\Src\Physics\joint_base.cpp">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Adollib_Physics\Src\Physics\meshcoll_resorce_manager.cpp">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Adollib_Physics\Src\Physics\ray.cpp">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Adollib_Physics\Src\Physics\twistjoint.cpp">
+      <Filter>00_Adollib\22_physics\Src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -593,6 +695,129 @@
     </ClInclude>
     <ClInclude Include="Adollib_Physics\Inc\Adollibphysics.h">
       <Filter>00_Adollib\22_physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\collider_comp.h">
+      <Filter>ソース ファイル\demo_collider\collider_comp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\scene_Physics.h">
+      <Filter>ソース ファイル\demo_collider</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\physics_demo_stage.h">
+      <Filter>ソース ファイル\demo_collider\physics_lib_demo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\physics_demo_obj.h">
+      <Filter>ソース ファイル\demo_collider\physics_lib_demo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\collobject_creater.h">
+      <Filter>ソース ファイル\demo_collider\collobject_creater</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\ALP__meshcoll_data.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\ALP__physics_function.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\ALP__physics_manager.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\ALP__tags.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\ALP_anchor.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\ALP_broadphase.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\ALP_collider.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\ALP_contact.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\ALP_generate_contact.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\ALP_integrate.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\ALP_joint.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\ALP_midphase.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\ALP_physics.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\ALP_raycast.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\ALP_resolve_contact.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\ALP_solverbody.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\ALP_struct_contacted_data.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\ALP_struct_world_transform.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\balljoint.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\collider.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\collider_shape.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\collider_types.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\conejoint.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\coneTwistjoint.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\hingejoint.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\joint.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\joint_base.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\meshcoll_resorce_manager.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\ray.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\shape_box.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\shape_capsule.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\shape_meshcoll.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\shape_plane.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\shape_sphere.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\springjoint.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\twistjoint.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

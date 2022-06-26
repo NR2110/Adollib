@@ -90,11 +90,11 @@ bool Physics_manager::update()
 		dadapt_delete_data(false);
 
 		//
-		if (is_added_ALPcollider == false) {
+		//if (is_added_ALPcollider == false) {
 			// 追加したものを配列に加える 追加された瞬間はis_added_ALPcolliderがtrue worldtransformが更新されたら毎フレームfalseになる
 			adapt_added_data(false);
 
-		}
+		//}
 
 		// gameobjectが更新したworld_trnsformの更新
 		copy_transform(ALP_colliders, ALP_physicses);

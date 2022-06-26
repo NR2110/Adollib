@@ -182,7 +182,7 @@ namespace Adollib
 				ALP_Physics* ALPphysics_ptr = nullptr;
 			};
 
-			static ColliderPhysics_ptrs add_collider(Collider* coll, void* GO_ptr) {
+			static ColliderPhysics_ptrs add_collider(Collider* coll, const void* GO_ptr, const Physics_function::Vector3& Wpos, const Physics_function::Quaternion& Worient, const Physics_function::Vector3& Wscale, const DirectX::XMFLOAT4& pearent_Worient_inv) {
 				std::lock_guard <std::mutex> lock(mtx);
 
 				is_added_ALPcollider = true;
@@ -221,6 +221,8 @@ namespace Adollib
 				}
 
 				//::: èâä˙ílÇÇ¢ÇÍÇÈ :::
+				ALPcollider_ptr->copy_transform_gameobject(Wpos, Worient, Wscale, pearent_Worient_inv);
+
 				physicsParams.set_default_physics_data(coll->physics_data);
 				//coll->physics_data.inertial_mass = physicsParams.inertial_mass; //éøó 
 				//coll->physics_data.drag = physicsParams.linear_drag; //ãÛãCíÔçR

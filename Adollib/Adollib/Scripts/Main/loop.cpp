@@ -23,6 +23,8 @@ bool loop::init(HWND hWnd) {
 	Systems::SetViewPort(Al_Global::SCREEN_WIDTH, Al_Global::SCREEN_HEIGHT);
 	Adollib::Imgui_manager::init(hWnd);
 
+	Physics_function::Physics_manager::thread_start();
+
 	return true;
 }
 
@@ -30,7 +32,6 @@ bool loop::Update(MSG hMsg, HWND hWnd, int width, int height) {
 
 	Systems::inputManager->update();
 
-	Physics_function::Physics_manager::update();
 	Scene_manager::update();
 	Audio_manager::update();
 

@@ -9,7 +9,7 @@ namespace Adollib {
 		Physics_function::Vector3	rotate;//‰ñ“]
 		Physics_function::Vector3	size;//‘å‚«‚³
 
-		Box(Physics_function::ALP_Collider* l_ALPcollider_ptr) : center(DirectX::XMFLOAT3(0)), rotate(DirectX::XMFLOAT3(0)), size(DirectX::XMFLOAT3(1,1,1)) {
+		Box(Physics_function::ALP_Collider* l_ALPcollider_ptr) : center(Physics_function::Vector3(0)), rotate(Physics_function::Vector3(0)), size(Physics_function::Vector3(1,1,1)) {
 			shape_tag = Physics_function::ALPCollider_shape_type::BOX;
 			ALPcollider_ptr = l_ALPcollider_ptr;
 		};

@@ -17,7 +17,6 @@
 #include "../Renderer/Shader/light_types.h"
 #include "../Renderer/material_for_collider.h"
 
-#include "../Physics/ALP__physics_manager.h"
 #include "hierarchy.h"
 
 #include "../Imgui/work_meter.h"
@@ -27,7 +26,6 @@
 #include <thread>
 
 using namespace Adollib;
-using namespace Physics_function;
 using namespace ConstantBuffer;
 
 std::map<Scenelist, std::list<Gameobject*>> Gameobject_manager::gameobjects;
@@ -56,7 +54,7 @@ void Gameobject_manager::awake() {
 
 
 #ifdef Use_physics_thread
-	Physics_manager::thread_start();
+	//Physics_manager::thread_start();
 
 #endif // Use_physics_thread
 

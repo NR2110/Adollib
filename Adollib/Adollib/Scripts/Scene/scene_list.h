@@ -10,6 +10,7 @@ namespace Adollib {
 
 		scene_SPH,
 		scene_music,
+		scene_physics,
 
 		scene_list_size
 	};
