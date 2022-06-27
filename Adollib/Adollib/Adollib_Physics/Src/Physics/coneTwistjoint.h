@@ -15,7 +15,7 @@ namespace Adollib {
 	// Conetwist å®Ç»Ç«Ç…égóp
 	class ConetwistJoint : public ConeJoint {
 	public:
-		ConetwistJoint(Collider* l_colliderA_comp, Collider* l_colliderB_comp, Physics_function::ALP_Joint* l_ALPjoint)
+		ConetwistJoint(std::shared_ptr<Collider> l_colliderA_comp, std::shared_ptr<Collider> l_colliderB_comp, Physics_function::ALP_Joint* l_ALPjoint)
 			: ConeJoint(l_colliderA_comp, l_colliderB_comp, l_ALPjoint) {}
 
 		Anchor anchor; //ê⁄ë±ì_

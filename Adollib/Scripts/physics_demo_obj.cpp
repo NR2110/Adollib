@@ -2,10 +2,13 @@
 #include "physics_demo_obj.h"
 
 #include "../../Scripts/Object/gameobject_manager.h"
+#include "../../Scripts/Renderer/renderer_base.h"
 
 #include "../../Scripts/Imgui/imgui_all.h"
 
 #include "collobject_creater.h"
+
+#include <Adollibphysics.h>
 
 using namespace Adollib;
 
@@ -114,7 +117,6 @@ void Physics_demo_obj::update() {
 			imgui_num++;
 		}
 
-		/*
 		//CAPSULEpyramid
 		{
 			static int CAPSULE_pyramid_count = 5;
@@ -126,16 +128,30 @@ void Physics_demo_obj::update() {
 			ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), CAPSULE_pyramid_pos, 0.1f); ImGui::NextColumn(); ImGui::NextColumn();
 			ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &CAPSULE_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
 
-			if (summon == true)
+			if (summon == true) {
+				Gameobject* pearent = Gameobject_manager::create("Capsulepyramid");
+				GOs.emplace_back(pearent);
+
 				for (int i = 0; i < CAPSULE_pyramid_count; i++) {
 					for (int o = 0; o < CAPSULE_pyramid_count - i; o++) {
-						set_capsule(Vector3(2.50001f * o - (CAPSULE_pyramid_count - i) * 2.500001f / 2.0f + CAPSULE_pyramid_pos[0], 5.0f + 4.50001f * i + CAPSULE_pyramid_pos[1], CAPSULE_pyramid_pos[2]), 1, 1, Vector3(0, 1, 1));
+						Collider_creater::create_capsule(
+							Vector3(
+								2.50001f * o - (CAPSULE_pyramid_count - i) * 2.500001f / 2.0f + CAPSULE_pyramid_pos[0],
+								5.0f + 4.50001f * i + CAPSULE_pyramid_pos[1],
+								CAPSULE_pyramid_pos[2]),
+							1,
+							1,
+							Vector3(255, 0, 255),
+							pearent
+							);
 					}
 
 				}
+			}
 			imgui_num++;
 		}
 
+		/*
 		//Meshpyramid
 		{
 			static int Mesh_pyramid_count = 5;
@@ -156,6 +172,7 @@ void Physics_demo_obj::update() {
 				}
 			imgui_num++;
 		}
+		*/
 
 		//deskpyramid
 		{
@@ -163,7 +180,7 @@ void Physics_demo_obj::update() {
 			static float pos[3] = { 0 };
 			bool summon = false;
 			ImGui::Separator();
-			ImGui::Text("Daruma_pyramid"); ImGui::NextColumn();
+			ImGui::Text("Desk_pyramid"); ImGui::NextColumn();
 			ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
 			ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), pos, 0.1f); ImGui::NextColumn(); ImGui::NextColumn();
 			ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &count, 1, 1, 100000); ImGui::NextColumn();
@@ -186,19 +203,19 @@ void Physics_demo_obj::update() {
 
 						// darumaの生成とcolliderのアタッチ
 						Gameobject* Daruma = nullptr;
-						Daruma = Gameobject_manager::create("Daruma", GO_tag::Sphere);
+						Daruma = Gameobject_manager::create("Desk", GO_tag::Sphere);
 						Daruma->transform->local_pos = Vector3(position[0], position[1], position[2]);
 						Daruma->transform->local_scale = Vector3(1, 1, 1) * 0.5f;
 
-						Collider* coll = Daruma->addComponent<Collider>();
+						Collider_comp* coll = Daruma->addComponent<Collider_comp>();
 
 						{
 							Box* box[5] = { nullptr };
-							box[0] = coll->add_shape<Box>();
-							box[1] = coll->add_shape<Box>();
-							box[2] = coll->add_shape<Box>();
-							box[3] = coll->add_shape<Box>();
-							box[4] = coll->add_shape<Box>();
+							box[0] = coll->get_collider()->add_shape<Box>();
+							box[1] = coll->get_collider()->add_shape<Box>();
+							box[2] = coll->get_collider()->add_shape<Box>();
+							box[3] = coll->get_collider()->add_shape<Box>();
+							box[4] = coll->get_collider()->add_shape<Box>();
 
 							box[0]->center = Vector3(0, 0.75f, 0);
 							box[0]->size = Vector3(4, 0.5f, 3);
@@ -254,11 +271,6 @@ void Physics_demo_obj::update() {
 						Daruma->add_child(parts[4]);
 
 						GOs.emplace_back(Daruma);
-						GOs.emplace_back(parts[0]);
-						GOs.emplace_back(parts[1]);
-						GOs.emplace_back(parts[2]);
-						GOs.emplace_back(parts[3]);
-						GOs.emplace_back(parts[4]);
 					}
 
 				}
@@ -268,38 +280,40 @@ void Physics_demo_obj::update() {
 
 		{}
 
-		//treepyramid
-		{
+		/*
+		////treepyramid
+		//{
 
-			static int TREE_pyramid_count = 5;
-			static float TREE_pyramid_pos[3] = { 0 };
-			bool summon = false;
-			ImGui::Separator();
-			ImGui::Text("TREE_pyramid"); ImGui::NextColumn();
-			ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
-			ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), TREE_pyramid_pos, 0.1f); ImGui::NextColumn(); ImGui::NextColumn();
-			ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &TREE_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
+		//	static int TREE_pyramid_count = 5;
+		//	static float TREE_pyramid_pos[3] = { 0 };
+		//	bool summon = false;
+		//	ImGui::Separator();
+		//	ImGui::Text("TREE_pyramid"); ImGui::NextColumn();
+		//	ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
+		//	ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), TREE_pyramid_pos, 0.1f); ImGui::NextColumn(); ImGui::NextColumn();
+		//	ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &TREE_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
 
-			if (summon == true) {
-				Gameobject* pearent = Gameobject_manager::create("Treepyramid");
-				GOs.emplace_back(pearent);
-				for (int i = 0; i < TREE_pyramid_count; i++) {
-					for (int o = 0; o < TREE_pyramid_count - i; o++) {
-						pearent->add_child(
-							set_tree(
-								Vector3(10.0f * o - (TREE_pyramid_count - i) * 10.0f / 2.0f + TREE_pyramid_pos[0],
-									TREE_pyramid_pos[1] + i * 13.0f,
-									TREE_pyramid_pos[2]),
-								Vector3(1),
-								Vector3(0),
-								Vector3(1)
-							));
-					}
+		//	if (summon == true) {
+		//		Gameobject* pearent = Gameobject_manager::create("Treepyramid");
+		//		GOs.emplace_back(pearent);
+		//		for (int i = 0; i < TREE_pyramid_count; i++) {
+		//			for (int o = 0; o < TREE_pyramid_count - i; o++) {
+		//				pearent->add_child(
+		//					set_tree(
+		//						Vector3(10.0f * o - (TREE_pyramid_count - i) * 10.0f / 2.0f + TREE_pyramid_pos[0],
+		//							TREE_pyramid_pos[1] + i * 13.0f,
+		//							TREE_pyramid_pos[2]),
+		//						Vector3(1),
+		//						Vector3(0),
+		//						Vector3(1)
+		//					));
+		//			}
 
-				}
-			}
-			imgui_num++;
-		}
+		//		}
+		//	}
+		//	imgui_num++;
+		//}
+		*/
 
 
 		//BallJoint_Shpererope
@@ -315,60 +329,62 @@ void Physics_demo_obj::update() {
 			ImGui::DragFloat3(std::to_string(imgui_num + 250).c_str(), JointBox_pyramid_size, 0.1f); ImGui::NextColumn();
 			ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &JointBox_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
 
-			static Gameobject* joint_base = Gameobject_manager::create("BallJoint_Shpererope_joint_base");
 			if (summon == true) {
+				Gameobject* joint_base = Gameobject_manager::create("BallJoint_Shpererope_joint_base");
 				Gameobject* pearent = Gameobject_manager::create("BallJoint_Shpererope");
+				pearent->add_child(joint_base);
 				GOs.emplace_back(pearent);
-				Collider* old_coll = nullptr;
+				Collider_comp* old_coll = nullptr;
 				Gameobject* old_go = nullptr;
 
 				{
-					Collider* coll = nullptr;
 					Gameobject* go = nullptr;
-					go = set_sphere(coll, Vector3(
+					auto coll_comp = Collider_creater::create_sphere(Vector3(
 						JointBox_pyramid_pos[0],
 						JointBox_pyramid_pos[1] + 2,
 						JointBox_pyramid_pos[2]
 					),
 						2,
-						Vector3(0, 1, 1))
-						;
+						Vector3(0, 255, 255)
+					);
 
-					coll->physics_data.inertial_mass = 10;
+					go = coll_comp->gameobject;
 					pearent->add_child(go);
 
-					old_coll = coll;
+					coll_comp->get_collider()->physics_data.inertial_mass = 10;
+
+					old_coll = coll_comp;
 					old_go = go;
 				}
 
 				for (int i = 0; i < JointBox_pyramid_count; i++) {
-					Collider* coll = nullptr;
 					Gameobject* go = nullptr;
-					go = set_sphere(coll, Vector3(
+					auto coll_comp = Collider_creater::create_sphere(Vector3(
 						JointBox_pyramid_pos[0] + 0.0001f,
 						JointBox_pyramid_pos[1] + i * 2 + 5,
 						JointBox_pyramid_pos[2]
 					),
 						1,
-						Vector3(1, 0, (1.0f / JointBox_pyramid_count) * i)
+						Vector3(255, 0, (255.0f / JointBox_pyramid_count) * i)
 					);
+					go = coll_comp->gameobject;
 
 					pearent->add_child(go);
 
 					if (old_coll != nullptr) {
 						if (i == 0)
-							Joint::add_balljoint(old_coll, coll, Vector3(0, 2, 0), Vector3(0, -1, 0), 0.1f);
+							Joint::add_balljoint(old_coll->get_collider(), coll_comp->get_collider(), Vector3(0, 2, 0), Vector3(0, -1, 0), 0.1f);
 						else
-							Joint::add_balljoint(old_coll, coll, Vector3(0, 1, 0), Vector3(0, -1, 0), 0.1f);
+							Joint::add_balljoint(old_coll->get_collider(), coll_comp->get_collider(), Vector3(0, 1, 0), Vector3(0, -1, 0), 0.1f);
 					}
 
-					old_coll = coll;
+					old_coll = coll_comp;
 					old_go = go;
 				}
 
 
 				if (old_coll != nullptr) {
-					old_coll->physics_data.is_moveable = false;
+					old_coll->get_collider()->physics_data.is_moveable = false;
 					joint_base->add_child(old_go);
 				}
 
@@ -379,6 +395,7 @@ void Physics_demo_obj::update() {
 			imgui_num++;
 		}
 
+		/*
 		//BallJoint_Boxrope
 		{
 			static int JointBox_pyramid_count = 5;
@@ -489,6 +506,7 @@ void Physics_demo_obj::update() {
 
 			imgui_num++;
 		}
+		*/
 
 		//gear
 		{
@@ -510,8 +528,8 @@ void Physics_demo_obj::update() {
 				Gameobject* GEAR = Gameobject_manager::create("GEAR");
 				GEAR->transform->local_pos = pos;
 
-				Collider* coll = GEAR->addComponent<Collider>();
-				coll->tag |= Collider_tags::Stage;
+				Collider_comp* coll = GEAR->addComponent<Collider_comp>();
+				coll->get_collider()->tag |= Collider_tags::Stage;
 				//coll->set_tensor(make_box_tensor(Vector3(5, 5, 50), 1));
 
 				for (int gear_tooth_num = 0; gear_tooth_num < TREE_pyramid_count; gear_tooth_num++) {
@@ -526,21 +544,21 @@ void Physics_demo_obj::update() {
 				}
 
 				for (int gear_tooth_num = 0; gear_tooth_num < TREE_pyramid_count; gear_tooth_num++) {
-					Box* box = coll->add_shape<Box>();
+					Box* box = coll->get_collider()->add_shape<Box>();
 					box->size = size;
 					box->rotate = Vector3(0, 0, 360.0f / TREE_pyramid_count * gear_tooth_num);
 					box->center = Vector3(0, size.y * 2, 0);
-					box->center = vector3_quatrotate(box->center, quaternion_axis_angle(Vector3(0, 0, 1), 360.0f / TREE_pyramid_count * gear_tooth_num));
+					box->center = Adollib::vector3_quatrotate(box->center, quaternion_axis_angle(Vector3(0, 0, 1), 360.0f / TREE_pyramid_count * gear_tooth_num));
 
 				}
 
 
 				Gameobject* gear_joint = Gameobject_manager::createCube("gear_joint");
 				gear_joint->transform->local_pos = pos;
-				Collider* gear_joint_collider = gear_joint->addComponent<Collider>();
-				gear_joint_collider->physics_data.is_moveable = false;
+				Collider_comp* gear_joint_collider = gear_joint->addComponent<Collider_comp>();
+				gear_joint_collider->get_collider()->physics_data.is_moveable = false;
 
-				Joint::add_Hingejoint(gear_joint_collider, coll, Vector3(0, 0, +10), Vector3(0, 0, -10), Vector3(0, 0, +10), Vector3(0, 0, -10), 1, 0.1f);
+				Joint::add_Hingejoint(gear_joint_collider->get_collider(), coll->get_collider(), Vector3(0, 0, +10), Vector3(0, 0, -10), Vector3(0, 0, +10), Vector3(0, 0, -10), 1, 0.1f);
 
 			}
 			imgui_num++;
@@ -566,7 +584,7 @@ void Physics_demo_obj::update() {
 				Gameobject* PATAPATA = Gameobject_manager::create("PATAPATA");
 				PATAPATA->transform->local_pos = pos;
 
-				Collider* coll = PATAPATA->addComponent<Collider>();
+				Collider_comp* coll = PATAPATA->addComponent<Collider_comp>();
 				//coll->set_tensor(make_box_tensor(Vector3(5, 5, 50), 1));
 
 				for (int gear_tooth_num = 0; gear_tooth_num < TREE_pyramid_count; gear_tooth_num++) {
@@ -581,24 +599,24 @@ void Physics_demo_obj::update() {
 				}
 
 				for (int gear_tooth_num = 0; gear_tooth_num < TREE_pyramid_count; gear_tooth_num++) {
-					Box* box = coll->add_shape<Box>();
+					Box* box = coll->get_collider()->add_shape<Box>();
 					box->size = size;
 					box->rotate = Vector3(0, 360.0f / TREE_pyramid_count * gear_tooth_num, 0);
 					box->center = Vector3(0, size.y * 0, 0);
-					box->center = vector3_quatrotate(box->center, quaternion_axis_angle(Vector3(0, 1, 0), 360.0f / TREE_pyramid_count * gear_tooth_num));
+					box->center = Adollib::vector3_quatrotate(box->center, quaternion_axis_angle(Vector3(0, 1, 0), 360.0f / TREE_pyramid_count * gear_tooth_num));
 
 				}
 
 
 				Gameobject* gear_joint = Gameobject_manager::createCube("gear_joint");
 				gear_joint->transform->local_pos = pos;
-				Collider* gear_joint_collider = gear_joint->addComponent<Collider>();
-				gear_joint_collider->physics_data.is_moveable = false;
+				Collider_comp* gear_joint_collider = gear_joint->addComponent<Collider_comp>();
+				gear_joint_collider->get_collider()->physics_data.is_moveable = false;
 
 				//auto hinge = Joint::add_Hingejoint(gear_joint_collider, coll, Vector3(0, +10, 0), Vector3(0, -10, 0), Vector3(0, +10, 0), Vector3(0, -10, 0), 2, 0.1f);
 				auto hinge = Joint::add_Hingejoint(
-					gear_joint_collider,
-					coll,
+					gear_joint_collider->get_collider(),
+					coll->get_collider(),
 					Vector3(0, 10, 0).unit_vect() * 10, Vector3(0, -10, 0).unit_vect() * 10,
 					Vector3(0, +10, 0), Vector3(0, -10, 0),
 					2, 0.1f
@@ -615,6 +633,7 @@ void Physics_demo_obj::update() {
 			imgui_num++;
 		}
 
+		/*
 		//ConeTwist
 		{
 
@@ -670,8 +689,306 @@ void Physics_demo_obj::update() {
 			imgui_num++;
 
 		}
-
 		*/
+
+		//RagDoll
+		{
+			static int TREE_pyramid_count = 3;
+			static float pos[3] = { 0 };
+			bool summon = false;
+			ImGui::Separator();
+			ImGui::Text("RagDoll"); ImGui::NextColumn();
+			ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
+			ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), pos, 0.1f); ImGui::NextColumn(); ImGui::NextColumn();
+			ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &TREE_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
+
+			if (summon == true) {
+				Gameobject* Human = Gameobject_manager::create("Human");
+				Human->transform->local_pos = Vector3(pos[0], pos[1] + 8, pos[2]);
+				Human->update_world_trans_to_children();
+
+				//::: Gameobjectの生成 :::
+				Gameobject* Head = Gameobject_manager::createCube("Head");
+
+				Gameobject* Rsholder = Gameobject_manager::createCube("Rsholder");
+				Gameobject* Relbow = Gameobject_manager::createCube("Relbow");
+				Gameobject* Lsholder = Gameobject_manager::createCube("Lsholder");
+				Gameobject* Lelbow = Gameobject_manager::createCube("Lelbow");
+
+				Gameobject* Body = Gameobject_manager::createCube("Body");
+
+				Gameobject* Waist = Gameobject_manager::createCube("Waist");
+
+				Gameobject* Rleg = Gameobject_manager::createCube("Rleg");
+				Gameobject* Rfoot = Gameobject_manager::createCube("Rfoot");
+				Gameobject* Lleg = Gameobject_manager::createCube("Lleg");
+				Gameobject* Lfoot = Gameobject_manager::createCube("Lfoot");
+
+				Vector4 face_color = Vector4(0.5f, 0.5f, 0.5f, 1);
+				{
+					Gameobject* eye0 = Gameobject_manager::createSphere("eye0");
+					Head->add_child(eye0);
+					eye0->transform->local_pos = Vector3(+0.5f, 0.5f, -1);
+					eye0->transform->local_scale = Vector3(0.25f, 0.25f, 0.25f);
+					eye0->renderer->color = face_color;
+				}
+				{
+					Gameobject* eye1 = Gameobject_manager::createSphere("eye1");
+					Head->add_child(eye1);
+					eye1->transform->local_pos = Vector3(-0.5f, 0.5f, -1);
+					eye1->transform->local_scale = Vector3(0.25f, 0.25f, 0.25f);
+					eye1->renderer->color = face_color;
+				}
+				{
+					Gameobject* mouth = Gameobject_manager::createCube("mouth");
+					Head->add_child(mouth);
+					mouth->transform->local_pos = Vector3(0, -0.45f, -1);
+					mouth->transform->local_scale = Vector3(0.7f, 0.25f, 0.3f);
+					mouth->renderer->color = face_color;
+				}
+
+				{
+					Gameobject* belt = Gameobject_manager::createCube("belt");
+					Waist->add_child(belt);
+					belt->transform->local_pos = Vector3(0, -0.45f, 0);
+					belt->transform->local_scale = Vector3(1.1f, 0.25f, 1.1f);
+					belt->renderer->color = face_color;
+				}
+
+
+				//::: 親子関係の設定 :::
+				Human->add_child(Body);
+
+				Human->add_child(Head);
+
+				Human->add_child(Rsholder);
+				Human->add_child(Relbow);
+				Human->add_child(Lsholder);
+				Human->add_child(Lelbow);
+
+				Human->add_child(Waist);
+
+				Human->add_child(Rleg);
+				Human->add_child(Rfoot);
+				Human->add_child(Lleg);
+				Human->add_child(Lfoot);
+
+				//::: gameobjectの座標設定 :::
+				Vector3 head_size = Vector3(1, 1, 1);
+				Vector3 body_size = Vector3(0.8f, 0.6f, 0.8f);
+				Vector3 Waist_size = Vector3(0.81f, 0.7f, 0.81f);
+				{
+					{
+						Head->transform->local_scale = head_size;
+						Head->transform->local_pos = Vector3(0, body_size.y + head_size.y + 0.2f, 0);
+					}
+				}
+
+				{
+					{
+						auto& GO = Body;
+						GO->transform->local_scale = body_size;
+						GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
+						GO->transform->local_pos = Vector3(0, 0, 0);
+					}
+					{
+						auto& GO = Waist;
+						GO->transform->local_scale = Waist_size;
+						GO->transform->local_pos = Vector3(0, -0.7f * 2, 0);
+					}
+				}
+
+				Vector3 arm_size = Vector3(0.4f, 0.5f, 0.4f);
+				float arm_y_pos = 0.18f;
+				{
+					{
+						auto& GO = Rsholder;
+						GO->transform->local_scale = arm_size;
+						GO->transform->local_orient = quaternion_from_euler(0, 0, -90);
+						GO->transform->local_pos = Vector3(-(body_size.x + arm_size.x * 2), arm_y_pos, 0);
+					}
+					{
+						auto& GO = Relbow;
+						GO->transform->local_scale = arm_size;
+						GO->transform->local_orient = quaternion_from_euler(0, 0, -90);
+						GO->transform->local_pos = Vector3(-(body_size.x + arm_size.x * 5), arm_y_pos, 0);
+					}
+					{
+						auto& GO = Lsholder;
+						GO->transform->local_scale = arm_size;
+						GO->transform->local_orient = quaternion_from_euler(0, 0, +90);
+						GO->transform->local_pos = Vector3(+(body_size.x + arm_size.x * 2), arm_y_pos, 0);
+					}
+					{
+						auto& GO = Lelbow;
+						GO->transform->local_scale = arm_size;
+						GO->transform->local_orient = quaternion_from_euler(0, 0, +90);
+						GO->transform->local_pos = Vector3(+(body_size.x + arm_size.x * 5), arm_y_pos, 0);
+					}
+				}
+
+				Vector3 Foot_size = Vector3(0.4f, 0.25, 0.4f);
+				float leg_x_pos = 0.6f;
+				{
+					{
+						auto& GO = Rleg;
+						GO->transform->local_scale = Foot_size;
+						GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
+						GO->transform->local_pos = Vector3(-leg_x_pos, -(body_size.y + Waist_size.y * 2 + Foot_size.y * 2), 0);
+					}
+					{
+						auto& GO = Rfoot;
+						GO->transform->local_scale = Foot_size;
+						GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
+						GO->transform->local_pos = Vector3(-leg_x_pos, -(body_size.y + Waist_size.y * 2 + Foot_size.y * 5), 0);
+					}
+					{
+						auto& GO = Lleg;
+						GO->transform->local_scale = Foot_size;
+						GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
+						GO->transform->local_pos = Vector3(+leg_x_pos, -(body_size.y + Waist_size.y * 2 + Foot_size.y * 2), 0);
+					}
+					{
+						auto& GO = Lfoot;
+						GO->transform->local_scale = Foot_size;
+						GO->transform->local_orient = quaternion_from_euler(0, 0, 0);
+						GO->transform->local_pos = Vector3(+leg_x_pos, -(body_size.y + Waist_size.y * 2 + Foot_size.y * 5), 0);
+					}
+				}
+
+				//::: collider,shapeのアタッチ :::
+				std::shared_ptr<Collider> Head_collider = Head->addComponent<Collider_comp>()->get_collider();
+				std::shared_ptr<Collider> Rsholder_collider = Rsholder->addComponent<Collider_comp>()->get_collider();
+				std::shared_ptr<Collider> Relbow_collider = Relbow->addComponent<Collider_comp>()->get_collider();
+				std::shared_ptr<Collider> Lsholder_collider = Lsholder->addComponent<Collider_comp>()->get_collider();
+				std::shared_ptr<Collider> Lelbow_collider = Lelbow->addComponent<Collider_comp>()->get_collider();
+				std::shared_ptr<Collider> Body_collider = Body->addComponent<Collider_comp>()->get_collider();
+				std::shared_ptr<Collider> Waist_collider = Waist->addComponent<Collider_comp>()->get_collider();
+				std::shared_ptr<Collider> Rleg_collider = Rleg->addComponent<Collider_comp>()->get_collider();
+				std::shared_ptr<Collider> Rfoot_collider = Rfoot->addComponent<Collider_comp>()->get_collider();
+				std::shared_ptr<Collider> Lleg_collider = Lleg->addComponent<Collider_comp>()->get_collider();
+				std::shared_ptr<Collider> Lfoot_collider = Lfoot->addComponent<Collider_comp>()->get_collider();
+
+				Sphere* Head_shape = Head_collider->add_shape<Sphere>();
+				Capsule* Rsholder_shape = Rsholder_collider->add_shape<Capsule>();
+				Capsule* Relbow_shape = Relbow_collider->add_shape<Capsule>();
+				Capsule* Lsholder_shape = Lsholder_collider->add_shape<Capsule>();
+				Capsule* Lelbow_shape = Lelbow_collider->add_shape<Capsule>();
+				Box* Body_shape = Body_collider->add_shape<Box>();
+				Box* Waist_shape = Waist_collider->add_shape<Box>();
+				Sphere* Rleg_shape = Rleg_collider->add_shape<Sphere>();
+				Sphere* Rfoot_shape = Rfoot_collider->add_shape<Sphere>();
+				Sphere* Lleg_shape = Lleg_collider->add_shape<Sphere>();
+				Sphere* Lfoot_shape = Lfoot_collider->add_shape<Sphere>();
+
+				//::: 質量の調整 :::
+				Head_collider->physics_data.inertial_mass = 3;
+				Rsholder_collider->physics_data.inertial_mass = 2;
+				Relbow_collider->physics_data.inertial_mass = 1;
+				Lsholder_collider->physics_data.inertial_mass = 2;
+				Lelbow_collider->physics_data.inertial_mass = 1;
+				Body_collider->physics_data.inertial_mass = 5;
+				Waist_collider->physics_data.inertial_mass = 4;
+				Rleg_collider->physics_data.inertial_mass = 2;
+				Rfoot_collider->physics_data.inertial_mass = 1;
+				Lleg_collider->physics_data.inertial_mass = 2;
+				Lfoot_collider->physics_data.inertial_mass = 1;
+
+
+				//::: capsuleの調整 :::
+				Relbow_shape->length *= (Relbow->transform->local_scale.y - Relbow->transform->local_scale.x) / (Relbow->transform->local_scale.y);
+				Rsholder_shape->length *= (Rsholder->transform->local_scale.y - Rsholder->transform->local_scale.x) / (Rsholder->transform->local_scale.y);
+				Lelbow_shape->length *= (Lelbow->transform->local_scale.y - Lelbow->transform->local_scale.x) / (Lelbow->transform->local_scale.y);
+				Lsholder_shape->length *= (Lsholder->transform->local_scale.y - Lsholder->transform->local_scale.x) / (Lsholder->transform->local_scale.y);
+
+				//Body_shape->length *= (Body->transform->local_scale.y - Body->transform->local_scale.x) / (Body->transform->local_scale.y);
+
+				//Rleg_shape->length *= Rleg->transform->local_scale.y / (Rleg->transform->local_scale.x + Rleg->transform->local_scale.y);
+				//Rfoot_shape->length *= Rfoot->transform->local_scale.y / (Rfoot->transform->local_scale.x + Rfoot->transform->local_scale.y);
+				//Lleg_shape->length *= Lleg->transform->local_scale.y / (Lleg->transform->local_scale.x + Lleg->transform->local_scale.y);
+				//Lfoot_shape->length *= Lfoot->transform->local_scale.y / (Lfoot->transform->local_scale.x + Lfoot->transform->local_scale.y);
+
+				//::: sphereの調整 :::
+				Rleg_shape->r = Rleg->transform->local_scale.y * 2;
+				Rfoot_shape->r = Rfoot->transform->local_scale.y * 2;
+				Lleg_shape->r = Lleg->transform->local_scale.y * 2;
+				Lfoot_shape->r = Lfoot->transform->local_scale.y * 2;
+
+
+
+
+				//::: Jointの設定
+
+				{
+					auto Ball = Joint::add_Conejoint(Head_collider, Body_collider, Vector3(0, -1, 0), Vector3(0, 0.8f, 0), Vector3(0, 1, 0), Vector3(0, 1, 0));
+					Ball->limit = 30;
+
+					auto Twist = Joint::add_Twistjoint(Body_collider, Head_collider, Vector3(0, 1, 0), Vector3(0, 1, 0));
+					Twist->limit = Vector2(360 - 90, 90);
+				}
+				{
+					auto Cone = Joint::add_Conejoint(Body_collider, Rsholder_collider, Vector3(-1.1f, 0.2f, 0), Vector3(0, 0.5f, 0), Vector3(-1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect());
+					Cone->limit = 120;
+
+					auto Twist = Joint::add_Twistjoint(Body_collider, Rsholder_collider, Vector3(0, 1, 0), Vector3(0, 1, 0));
+					Twist->limit = Vector2(360 - 90, 90);
+				}
+				{
+					auto hinge = Joint::add_Hingejoint(Rsholder_collider, Relbow_collider, Vector3(-1, -0.6f, 0), Vector3(+1, -0.6f, 0), Vector3(-1, 0.6f, 0), Vector3(+1, 0.6f, 0));
+					hinge->limit = Vector2(230, 360);
+				}
+
+				{
+					auto Cone = Joint::add_Conejoint(Body_collider, Lsholder_collider, Vector3(+1.1f, 0.2f, 0), Vector3(0, 0.5f, 0), Vector3(-1, 0, -1).unit_vect(), Vector3(0, -1, 0).unit_vect());
+					Cone->limit = 120;
+
+					auto Twist = Joint::add_Twistjoint(Body_collider, Lsholder_collider, Vector3(0, 1, 0), Vector3(0, 1, 0));
+					Twist->limit = Vector2(360 - 90, 90);
+				}
+				{
+					auto hinge = Joint::add_Hingejoint(Lsholder_collider, Lelbow_collider, Vector3(-1, -0.6f, 0), Vector3(+1, -0.6f, 0), Vector3(-1, 0.6f, 0), Vector3(+1, 0.6f, 0));
+					hinge->limit = Vector2(230, 360);
+				}
+
+				{
+					auto Cone = Joint::add_Conejoint(Body_collider, Waist_collider, Vector3(0, -1.0f, 0), Vector3(0, 0.5f, 0), Vector3(0, 1, 0).unit_vect(), Vector3(0, 1.5f, -1).unit_vect());
+					Cone->limit = 40;
+
+					auto Twist = Joint::add_Twistjoint(Body_collider, Waist_collider, Vector3(0, 1, 0), Vector3(0, 1, 0));
+					Twist->limit = Vector2(360 - 30, 30);
+				}
+
+				{
+					auto Cone = Joint::add_Conejoint(Waist_collider, Rleg_collider, Vector3(-0.6f, -0.8f, 0), Vector3(0, 0.3f, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect());
+					Cone->limit = 48;
+
+					auto Twist = Joint::add_Twistjoint(Waist_collider, Rleg_collider, Vector3(0, 1, 0), Vector3(0, 1, 0));
+					Twist->limit = Vector2(360 - 5, 15);
+				}
+				{
+					auto hinge = Joint::add_Hingejoint(Rleg_collider, Rfoot_collider, Vector3(-1, -0.4f, 0), Vector3(+1, -0.3f, 0), Vector3(-1, +0.3f, 0), Vector3(+1, +0.3f, 0));
+					hinge->limit = Vector2(0, 60);
+				}
+				{
+					auto Cone = Joint::add_Conejoint(Waist_collider, Lleg_collider, Vector3(+0.6f, -0.8f, 0), Vector3(0, 0.3f, 0), Vector3(0, -1, -1.02f).unit_vect(), Vector3(0, -1, 0).unit_vect());
+					Cone->limit = 48;
+
+					auto Twist = Joint::add_Twistjoint(Waist_collider, Lleg_collider, Vector3(0, 1, 0), Vector3(0, 1, 0));
+					Twist->limit = Vector2(360 - 15, 5);
+				}
+				{
+					auto hinge = Joint::add_Hingejoint(Lleg_collider, Lfoot_collider, Vector3(-1, -0.4f, 0), Vector3(+1, -0.3f, 0), Vector3(-1, +0.3f, 0), Vector3(+1, +0.3f, 0));
+					hinge->limit = Vector2(0, 60);
+				}
+
+
+
+				imgui_num++;
+			}
+
+			}
+
+
 
 		ImGui::Columns(1);
 		ImGui::End();

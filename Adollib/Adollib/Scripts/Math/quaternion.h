@@ -24,7 +24,9 @@ namespace Adollib {
 
 		Quaternion()noexcept;
 		Quaternion(DirectX::XMFLOAT3)noexcept;
+		Quaternion(DirectX::XMFLOAT4)noexcept;
 		Quaternion(Vector3)noexcept;
+
 		//::::::::::
 		// x, y, z
 		//::::::::::

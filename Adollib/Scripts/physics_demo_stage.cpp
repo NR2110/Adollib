@@ -8,6 +8,8 @@
 
 #include "../../Imgui/imgui.h"
 
+#include <Adollibphysics.h>
+
 using namespace Adollib;
 
 void Physics_demo_stage::awake() {

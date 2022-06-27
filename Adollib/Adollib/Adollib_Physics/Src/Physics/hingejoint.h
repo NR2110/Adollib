@@ -13,7 +13,7 @@ namespace Adollib {
 	// ヒンジジョイント
 	class HingeJoint : public Joint_base {
 	public:
-		HingeJoint(Collider* l_colliderA_comp, Collider* l_colliderB_comp, Physics_function::ALP_Joint* l_ALPjoint)
+		HingeJoint(std::shared_ptr<Collider> l_colliderA_comp, std::shared_ptr<Collider> l_colliderB_comp, Physics_function::ALP_Joint* l_ALPjoint)
 			: Joint_base(l_colliderA_comp, l_colliderB_comp, l_ALPjoint) {}
 
 		Anchor anchor_s; //Hinge 始点

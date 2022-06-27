@@ -165,40 +165,40 @@ void ALP_Collider::Update_hierarchy() {
 	//}
 };
 
-void ALP_Collider::adapt_to_gameobject_transform(Vector3& local_pos, Quaternion& local_orient, const Quaternion& Worient) const
+void ALP_Collider::adapt_to_gameobject_transform(Vector3& position_amount_of_change, Quaternion& orientation_amount_of_change, const Quaternion& Worient) const
 {
 	//Physics_manager::mutex_lock();
 
 	// mainthreaddから呼ばれるためここでis_deletedチェックを行えばよい
 	if (is_deleted) return; // gameobjectが削除されていたらreturn
-	if (ALPphysics->is_movable() == false)return;
+	//if (ALPphysics->is_movable() == false)return;
 
 	//親のorientationの逆をとる
-	Quaternion parent_orientate_inv = transform.parent_orientate_inv;
+	//Quaternion parent_orientate_inv = transform.parent_orientate_inv;
 
-	const Vector3& position_amount_of_change = vector3_quatrotate(transform.position - transform_start.position, parent_orientate_inv);
-	const Quaternion& buffer = (transform_start.orientation.inverse() * transform.orientation).unit_vect();
-	const Quaternion& orientation_amount_of_change = quaternion_axis_radian(vector3_quatrotate(buffer.axis(), parent_orientate_inv), buffer.radian());
+	//position_amount_of_change = vector3_quatrotate(transform.position - transform_start.position, parent_orientate_inv);
+	//const Quaternion& buffer = (transform_start.orientation.inverse() * transform.orientation).unit_vect();
+	//orientation_amount_of_change = quaternion_axis_radian(vector3_quatrotate(buffer.axis(), parent_orientate_inv), buffer.radian());
+	position_amount_of_change = transform.position - transform_start.position;
+	orientation_amount_of_change = transform_start.orientation.inverse() * transform.orientation;
 
-	if (is_adapt_shape_for_copy_transform_gameobject) {
-		// 自身のcolliderを含む orientationのinverseを作成
-		Quaternion orientate_inv = Worient.inverse();
+	//if (is_adapt_shape_for_copy_transform_gameobject) {
+	//	// 自身のcolliderを含む orientationのinverseを作成
+	//	Quaternion orientate_inv = Worient.inverse();
 
-		const Vector3& position_amount_of_change_local = vector3_quatrotate(transform.position - transform_start.position, orientate_inv);
-		const Quaternion& buffer = (transform_start.orientation.inverse() * transform.orientation).unit_vect();
-		const Quaternion& orientation_amount_of_change_local = quaternion_axis_radian(vector3_quatrotate(buffer.axis(), orientate_inv), buffer.radian());
+	//	const Vector3& position_amount_of_change_local = vector3_quatrotate(transform.position - transform_start.position, orientate_inv);
+	//	const Quaternion& buffer = (transform_start.orientation.inverse() * transform.orientation).unit_vect();
+	//	const Quaternion& orientation_amount_of_change_local = quaternion_axis_radian(vector3_quatrotate(buffer.axis(), orientate_inv), buffer.radian());
 
-		for (const auto& shape : shapes) {
-			shape->effect_for_copy_transform_to_gameobject(
-				position_amount_of_change, orientation_amount_of_change,
-				position_amount_of_change_local, orientation_amount_of_change_local
-			);
-		}
-		return;
-	}
+	//	for (const auto& shape : shapes) {
+	//		shape->effect_for_copy_transform_to_gameobject(
+	//			position_amount_of_change, orientation_amount_of_change,
+	//			position_amount_of_change_local, orientation_amount_of_change_local
+	//		);
+	//	}
+	//	return;
+	//}
 
-	local_pos = position_amount_of_change;
-	local_orient = orientation_amount_of_change;
 }
 
 void ALP_Collider::copy_transform_gameobject(const Vector3& Wpos, const Quaternion& Worient, const Vector3& Wscale, const Quaternion& pearentWorient_inverse) {

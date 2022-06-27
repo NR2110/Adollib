@@ -22,6 +22,11 @@ namespace Adollib {
 			return create_sphere("sphere", pos, r, color, pearent);
 		}
 
+		static Collider_comp* create_capsule(const std::string& name, const Vector3& pos, float length, float r, const Vector3& color, Gameobject* pearent = nullptr);
+		static Collider_comp* create_capsule(const Vector3& pos, float length, float r, const Vector3& color, Gameobject* pearent = nullptr) {
+			return create_capsule("capsule", pos, length, r, color, pearent);
+		}
+
 
 
 

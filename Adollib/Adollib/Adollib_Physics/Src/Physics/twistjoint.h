@@ -15,7 +15,7 @@ namespace Adollib {
 	// collider1ÇÃâÒì]ó Ç…êßå¿Çâ¡Ç¶ÇÈ
 	class TwistJoint : public Joint_base {
 	public:
-		TwistJoint(Collider* l_colliderA_comp, Collider* l_colliderB_comp, Physics_function::ALP_Joint* l_ALPjoint)
+		TwistJoint(std::shared_ptr<Collider> l_colliderA_comp, std::shared_ptr<Collider> l_colliderB_comp, Physics_function::ALP_Joint* l_ALPjoint)
 			: Joint_base(l_colliderA_comp, l_colliderB_comp, l_ALPjoint) {}
 
 		Physics_function::Vector3 vec0 = Physics_function::Vector3(1, 0, 0); //collider_comp[0]ÇÃé≤

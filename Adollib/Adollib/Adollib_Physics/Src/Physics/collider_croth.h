@@ -103,19 +103,19 @@ namespace Adollib {
 		const bool concoll_enter(const Collider_tagbit tag_name);
 
 		// 並進移動に力を加える
-		void add_force(const Vector3& force, const bool& is_force_local = false);
+		void add_force(const Vector3& force, const float& delta_time, const bool& is_force_local = false);
 
 		// 並進移動に力を加える
-		void add_force(const Vector3& force, const Vector3& position, const bool& is_position_local = false, const bool& is_force_local = false);
+		void add_force(const Vector3& force, const Vector3& position, const float& delta_time, const bool& is_position_local = false, const bool& is_force_local = false);
 
 		// 角回転に力を加える
-		void add_torque(const Vector3& force, const bool& is_local = false);
+		void add_torque(const Vector3& force, const float& delta_time, const bool& is_local = false);
 
 		// 並進加速に値を加える
-		void add_linear_acc(const Vector3& force);
+		void add_linear_acc(const Vector3& force, const float& delta_time);
 
 		// 角加速に値を加える
-		void add_angula_acc(const Vector3& force);
+		void add_angula_acc(const Vector3& force, const float& delta_time);
 
 		// 現在かかっている速度、加速度、力を0にする
 		void reset_force() { for (auto& map : colliders) for (auto ptr : map.second) ptr->reset_force(); };

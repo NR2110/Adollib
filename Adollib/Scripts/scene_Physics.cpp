@@ -20,9 +20,10 @@ namespace Adollib {
 			auto camera_cont = camera->addComponent<Debug_camera_controller>();
 			camera->addComponent<Audio_listener>();
 
-			camera->transform->local_pos = Vector3(0, 2, -10);
-			camera->transform->local_orient = quaternion_from_euler(20, 0, 0);
-			camera_cont->linear_speed = 1;
+			camera->transform->local_pos = Vector3(0, 10, -20);
+			camera->transform->local_orient = quaternion_from_euler(15, 0, 0);
+
+			camera_cont->linear_speed = 10;
 
 		}
 

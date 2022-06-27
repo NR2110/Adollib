@@ -144,7 +144,7 @@ namespace Adollib {
 		//:::::::::
 		void awake(const void* Goptr, const DirectX::XMFLOAT3& Wpos, const DirectX::XMFLOAT4& Worient, const DirectX::XMFLOAT3& Wscale, const DirectX::XMFLOAT4& pearent_Worient_inv);
 
-		//void update();
+		void update();
 
 		void update_get_amount_of_change(DirectX::XMFLOAT3& pos_amount_of_change, DirectX::XMFLOAT4& orient_amount_of_change);
 

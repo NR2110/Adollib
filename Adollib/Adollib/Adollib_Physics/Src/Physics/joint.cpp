@@ -10,7 +10,7 @@ using namespace Adollib;
 using namespace Physics_function;
 //#pragma optimize("", off)
 BallJoint* Joint::add_balljoint(
-	Collider* colliderA, Collider* colliderB,
+	std::shared_ptr<Collider> colliderA, std::shared_ptr<Collider> colliderB,
 	const Vector3& anchorA, const Vector3& anchorB,
 	const float& bias
 ) {
@@ -33,7 +33,7 @@ BallJoint* Joint::add_balljoint(
 //#pragma optimize("", on)
 
 HingeJoint* Joint::add_Hingejoint(
-	Collider* colliderA, Collider* colliderB,
+	std::shared_ptr<Collider> colliderA, std::shared_ptr<Collider> colliderB,
 	const Vector3& anchorA_s, const Vector3& anchorA_g,
 	const Vector3& anchorB_s, const Vector3& anchorB_g,
 	const float& bias,
@@ -64,7 +64,7 @@ HingeJoint* Joint::add_Hingejoint(
 }
 
 ConeJoint* Joint::add_Conejoint(
-	Collider* colliderA, Collider* colliderB,
+	std::shared_ptr<Collider> colliderA, std::shared_ptr<Collider> colliderB,
 	const Vector3& anchorA, const Vector3& anchorB,
 	const Vector3& axisA, const Vector3& axisB,
 	const float& bias
@@ -91,7 +91,7 @@ ConeJoint* Joint::add_Conejoint(
 }
 
 ConetwistJoint* Joint::add_Conetwistjoint(
-	Collider* colliderA, Collider* colliderB,
+	std::shared_ptr<Collider> colliderA, std::shared_ptr<Collider> colliderB,
 	const Vector3& anchorA, const Vector3& anchorB,
 	const Vector3& axisA, const Vector3& axisB,
 	const float& bias
@@ -118,7 +118,7 @@ ConetwistJoint* Joint::add_Conetwistjoint(
 }
 
 TwistJoint* Joint::add_Twistjoint(
-	Collider* colliderA, Collider* colliderB,
+	std::shared_ptr<Collider> colliderA, std::shared_ptr<Collider> colliderB,
 	const Vector3& axisA,
 	const Vector3& axisB,
 	const float& bias

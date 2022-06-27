@@ -12,6 +12,8 @@ namespace Adollib {
 	}
 	inline Quaternion::Quaternion(DirectX::XMFLOAT3 Q)  noexcept :XMFLOAT4(Q.x, Q.y, Q.z, 0) {
 	}
+	inline Quaternion::Quaternion(DirectX::XMFLOAT4 Q)  noexcept :XMFLOAT4(Q.x, Q.y, Q.z, Q.w) {
+	}
 	inline Quaternion::Quaternion(Vector3 Q)  noexcept :XMFLOAT4(Q.x, Q.y, Q.z, 0) {
 	}
 	//quaternion::quaternion(VECTOR4 Q) : x(Q.x), y(Q.y), z(Q.z), w(Q.w) {

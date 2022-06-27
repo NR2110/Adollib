@@ -117,10 +117,16 @@ Joint_base* Collider::get_joint(const int num) {
 }
 
 
-void Collider::awake(const void* Goptr, const DirectX::XMFLOAT3& Wpos, const DirectX::XMFLOAT4& Worient, const DirectX::XMFLOAT3& Wscale, const DirectX::XMFLOAT4& pearent_Worient_inv){
+void Collider::awake(const void* Goptr, const DirectX::XMFLOAT3& l_Wpos, const DirectX::XMFLOAT4& l_Worient, const DirectX::XMFLOAT3& l_Wscale, const DirectX::XMFLOAT4& l_pearent_Worient_inv) {
 	Physics_manager::ColliderPhysics_ptrs data;
 
-	data = Physics_manager::add_collider(this, Goptr, Wpos, Worient, Wscale, pearent_Worient_inv);
+	Wposition = l_Wpos;
+	Worientation = l_Worient;
+	Wscale = l_Wscale;
+	pearent_Worientation_inverse = l_pearent_Worient_inv;
+
+
+	data = Physics_manager::add_collider(this, Goptr, Wposition, Worientation, Wscale, pearent_Worientation_inverse);
 
 	ALPcollider_ptr = data.ALPcollider_ptr;
 	ALPphysics_ptr = data.ALPphysics_ptr;
@@ -228,46 +234,46 @@ const DirectX::XMFLOAT3 Collider::get_barycenter() const {
 	return ret;
 };
 
-//void Collider::update() {
-//
-//	Physics_manager::mutex_lock();
-//
-//	Vector3 position_amount_of_change;
-//	Quaternion orientation_amount_of_change;
-//	ALPcollider_ptr->adapt_to_gameobject_transform(position_amount_of_change, orientation_amount_of_change, pearent_Worientation_inverse);
-//
-//	Wposition = Vector3(Wposition) + position_amount_of_change;
-//	Worientation = Quaternion(Worientation) * orientation_amount_of_change;
-//
-//	ALPcollider_ptr->copy_transform_gameobject(Wposition, Worientation, Wscale, pearent_Worientation_inverse);
-//
-//	Physics_manager::mutex_unlock();
-//}
+void Collider::update() {
 
-void Collider::update_get_amount_of_change(DirectX::XMFLOAT3& pos_amount_of_change, DirectX::XMFLOAT4& orient_amount_of_change) {
 	Physics_manager::mutex_lock();
 
 	Vector3 position_amount_of_change;
 	Quaternion orientation_amount_of_change;
 	ALPcollider_ptr->adapt_to_gameobject_transform(position_amount_of_change, orientation_amount_of_change, pearent_Worientation_inverse);
 
-	pos_amount_of_change = position_amount_of_change;
-	orient_amount_of_change = orientation_amount_of_change;
-
-	Physics_manager::mutex_unlock();
-}
-
-void Collider::update_set_Wtransform(const DirectX::XMFLOAT3& l_Wpos, const DirectX::XMFLOAT4& l_Worient, const DirectX::XMFLOAT3& l_Wscale, const DirectX::XMFLOAT4& l_pearent_Worient_inv) {
-	Physics_manager::mutex_lock();
-
-	Wposition = l_Wpos;
-	Worientation = l_Worient;
-	Wscale = l_Wscale;
-
-	if(l_pearent_Worient_inv.x * l_pearent_Worient_inv.x + l_pearent_Worient_inv.y * l_pearent_Worient_inv.y + l_pearent_Worient_inv.z + l_pearent_Worient_inv.z + l_pearent_Worient_inv.w + l_pearent_Worient_inv.w != 0)
-	pearent_Worientation_inverse = l_pearent_Worient_inv;
+	Wposition = Vector3(Wposition) + position_amount_of_change;
+	Worientation = Quaternion(Worientation) * orientation_amount_of_change;
 
 	ALPcollider_ptr->copy_transform_gameobject(Wposition, Worientation, Wscale, pearent_Worientation_inverse);
 
 	Physics_manager::mutex_unlock();
 }
+
+//void Collider::update_get_amount_of_change(DirectX::XMFLOAT3& pos_amount_of_change, DirectX::XMFLOAT4& orient_amount_of_change) {
+//	Physics_manager::mutex_lock();
+//
+//	Vector3 position_amount_of_change;
+//	Quaternion orientation_amount_of_change;
+//	ALPcollider_ptr->adapt_to_gameobject_transform(position_amount_of_change, orientation_amount_of_change, pearent_Worientation_inverse);
+//
+//	pos_amount_of_change = position_amount_of_change;
+//	orient_amount_of_change = orientation_amount_of_change;
+//
+//	Physics_manager::mutex_unlock();
+//}
+//
+//void Collider::update_set_Wtransform(const DirectX::XMFLOAT3& l_Wpos, const DirectX::XMFLOAT4& l_Worient, const DirectX::XMFLOAT3& l_Wscale, const DirectX::XMFLOAT4& l_pearent_Worient_inv) {
+//	Physics_manager::mutex_lock();
+//
+//	Wposition = l_Wpos;
+//	Worientation = l_Worient;
+//	Wscale = l_Wscale;
+//
+//	if(l_pearent_Worient_inv.x * l_pearent_Worient_inv.x + l_pearent_Worient_inv.y * l_pearent_Worient_inv.y + l_pearent_Worient_inv.z + l_pearent_Worient_inv.z + l_pearent_Worient_inv.w + l_pearent_Worient_inv.w != 0)
+//	pearent_Worientation_inverse = l_pearent_Worient_inv;
+//
+//	ALPcollider_ptr->copy_transform_gameobject(Wposition, Worientation, Wscale, pearent_Worientation_inverse);
+//
+//	Physics_manager::mutex_unlock();
+//}

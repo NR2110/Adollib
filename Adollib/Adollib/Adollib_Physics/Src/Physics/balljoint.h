@@ -12,7 +12,7 @@ namespace Adollib {
 	// ボールジョイント
 	class BallJoint : public Joint_base {
 	public:
-		BallJoint(Collider* l_colliderA_comp, Collider* l_colliderB_comp, Physics_function::ALP_Joint* l_ALPjoint)
+		BallJoint(std::shared_ptr<Collider> l_colliderA_comp, std::shared_ptr<Collider> l_colliderB_comp, Physics_function::ALP_Joint* l_ALPjoint)
 			: Joint_base(l_colliderA_comp, l_colliderB_comp, l_ALPjoint) {}
 
 		Anchor anchor;

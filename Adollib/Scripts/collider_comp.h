@@ -1,10 +1,9 @@
 #pragma once
 
-#include <Adollibphysics.h>
-
 #include "../Adollib/Scripts/Object/component.h"
 
 namespace Adollib {
+	class Collider;
 	class Collider_comp : public Component {
 
 	private:

@@ -3,6 +3,7 @@
 #include "../Math/math.h"
 
 #include <vector>
+#include <memory>
 #include "ALP_anchor.h"
 
 namespace Adollib {
@@ -14,7 +15,7 @@ namespace Adollib {
 
 	class Joint_base {
 	public:
-		Joint_base(Collider* l_colliderA_comp, Collider* l_colliderB_comp, Physics_function::ALP_Joint* l_ALPjoint)
+		Joint_base(std::shared_ptr<Collider> l_colliderA_comp, std::shared_ptr<Collider> l_colliderB_comp, Physics_function::ALP_Joint* l_ALPjoint)
 			: ALPjoint(l_ALPjoint)
 		{
 			collider_comp[0] = l_colliderA_comp;
@@ -35,13 +36,13 @@ namespace Adollib {
 
 		int anchor_count = 0; //接続点の数
 
-		Collider* collider_comp[2] = { nullptr }; // 剛体のcomponentへのポインタ
+		std::shared_ptr<Collider> collider_comp[2] = { nullptr }; // 剛体のcomponentへのポインタ
 
 		Physics_function::ALP_Joint* ALPjoint = nullptr; // 計算用Jointへのポインタ
 
 	public:
-		Collider* get_colliderA() const { return collider_comp[0]; };
-		Collider* get_colliderB() const { return collider_comp[1]; };
+		std::shared_ptr<Collider> get_colliderA() const { return collider_comp[0]; };
+		std::shared_ptr<Collider> get_colliderB() const { return collider_comp[1]; };
 
 		const Anchor* get_anchors()const { return anchors; };
 		const int     get_anchors_count()const { return anchor_count; };
