@@ -409,6 +409,15 @@
     <ClCompile Include="Adollib_Physics\Src\Physics\twistjoint.cpp">
       <Filter>00_Adollib\22_physics\Src</Filter>
     </ClCompile>
+    <ClCompile Include="..\Scripts\collider_croth_comp.cpp">
+      <Filter>ソース ファイル\demo_collider\collider_comp</Filter>
+    </ClCompile>
+    <ClCompile Include="Adollib_Physics\Src\Physics\collider_croth.cpp">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Adollib_Physics\Src\Physics\shape_croth.cpp">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imconfig.h">
@@ -817,6 +826,15 @@
       <Filter>00_Adollib\22_physics\Src</Filter>
     </ClInclude>
     <ClInclude Include="Adollib_Physics\Src\Physics\twistjoint.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Scripts\collider_croth_comp.h">
+      <Filter>ソース ファイル\demo_collider\collider_comp</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\collider_croth.h">
+      <Filter>00_Adollib\22_physics\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Adollib_Physics\Src\Physics\shape_croth.h">
       <Filter>00_Adollib\22_physics\Src</Filter>
     </ClInclude>
   </ItemGroup>

@@ -14,24 +14,12 @@ void Collider_comp::awake() {
 }
 
 void Collider_comp::update() {
-	//coll->Wposition = transform->position;
-	//coll->Worientation = transform->orientation;
-	//coll->Wscale = transform->scale;
 
-	//auto p_orient_inv = Quaternion(1, 0, 0, 0);
-	//if (gameobject->parent() != nullptr)p_orient_inv = gameobject->parent()->transform->orientation.inverse();
-	//coll->pearent_Worientation_inverse = p_orient_inv;
-
-	//Vector3 pos_change;
-	//Quaternion orient_change;
-	//coll->update_get_amount_of_change(pos_change, orient_change);
-
-	//transform->local_pos += pos_change;
-	//transform->local_orient *= orient_change;
-
-	//coll->update_set_Wtransform(transform->position + pos_change, transform->orientation * orient_change, transform->scale, p_orient_inv);
-
+	const Vector3 save_Wpos = coll->Wposition;
+	const Quaternion save_Worient = coll->Worientation;
 	coll->update();
+	const Vector3& coll_Wpos = coll->Wposition;
+	const Quaternion& coll_Worient = coll->Worientation;
 
 	Vector3 pearent_Wpos = Vector3(0);
 	Quaternion pearent_Worient = Quaternion(1, 0, 0, 0);
@@ -43,12 +31,15 @@ void Collider_comp::update() {
 		pearent_Wscale = gameobject->parent()->transform->scale;
 	}
 
-	const Vector3& coll_Wpos = coll->Wposition;
-	const Quaternion& coll_Worient = coll->Worientation;
+	const Vector3 pos_amount_of_change       = coll_Wpos - save_Wpos;
+	const Quaternion orient_amount_of_change = (save_Worient * pearent_Worient.inverse()).inverse() * coll_Worient * pearent_Worient.inverse();
 
-	transform->local_pos = vector3_quatrotate(coll_Wpos - pearent_Wpos, pearent_Worient.inverse()) / pearent_Wscale;
-	transform->local_orient = coll_Worient * pearent_Worient.inverse();
+	transform->local_pos += vector3_quatrotate(pos_amount_of_change, pearent_Worient.inverse()) / pearent_Wscale;
+	transform->local_orient *= orient_amount_of_change;
 
+	gameobject->update_world_trans_to_children();
+
+	coll->update_Wtransform(gameobject->world_position(), gameobject->world_orientate(), gameobject->world_scale(), pearent_Worient.inverse());
 
 }
 

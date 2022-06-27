@@ -9,10 +9,23 @@ C:\Users\waaaa\Documents\Adollib_Physics\Adollib_Physics\Src\Physics\ALP_broadph
 C:\Users\waaaa\Documents\Adollib_Physics\Adollib_Physics\Src\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。
   ALP_integrate.cpp
 C:\Users\waaaa\Documents\Adollib_Physics\Adollib_Physics\Src\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。
-  ALP_joint.cpp
-C:\Users\waaaa\Documents\Adollib_Physics\Adollib_Physics\Src\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。
   ALP_physics.cpp
 C:\Users\waaaa\Documents\Adollib_Physics\Adollib_Physics\Src\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。
+  ALP_raycast.cpp
+C:\Users\waaaa\Documents\Adollib_Physics\Adollib_Physics\Src\Physics\ALP_raycast.cpp(119,23): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib_Physics\Adollib_Physics\Src\Physics\ALP_raycast.cpp(377,23): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib_Physics\Adollib_Physics\Src\Physics\ALP_raycast.cpp(423,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib_Physics\Adollib_Physics\Src\Physics\ALP_raycast.cpp(424,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib_Physics\Adollib_Physics\Src\Physics\ALP_raycast.cpp(425,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib_Physics\Adollib_Physics\Src\Physics\ALP_raycast.cpp(427,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib_Physics\Adollib_Physics\Src\Physics\ALP_raycast.cpp(428,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib_Physics\Adollib_Physics\Src\Physics\ALP_raycast.cpp(429,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib_Physics\Adollib_Physics\Src\Physics\ALP_raycast.cpp(486,21): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib_Physics\Adollib_Physics\Src\Physics\ALP_raycast.cpp(487,21): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib_Physics\Adollib_Physics\Src\Physics\ALP_raycast.cpp(488,21): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib_Physics\Adollib_Physics\Src\Physics\ALP_raycast.cpp(517,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib_Physics\Adollib_Physics\Src\Physics\ALP_raycast.cpp(518,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib_Physics\Adollib_Physics\Src\Physics\ALP_raycast.cpp(519,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
   ALP_resolve_contact.cpp
 C:\Users\waaaa\Documents\Adollib_Physics\Adollib_Physics\Src\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。
   ALP_resolve_contact_SIM.cpp
@@ -30,7 +43,12 @@ C:\Users\waaaa\Documents\Adollib_Physics\Adollib_Physics\Src\Physics\hingejoint.
 C:\Users\waaaa\Documents\Adollib_Physics\Adollib_Physics\Src\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。
   joint_base.cpp
 C:\Users\waaaa\Documents\Adollib_Physics\Adollib_Physics\Src\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。
+  meshcoll_resorce_manager.cpp
   ray.cpp
 C:\Users\waaaa\Documents\Adollib_Physics\Adollib_Physics\Src\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。
   twistjoint.cpp
+  collider_croth.cpp
+C:\Users\waaaa\Documents\Adollib_Physics\Adollib_Physics\Src\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。
+  shape_croth.cpp
+C:\Users\waaaa\Documents\Adollib_Physics\Adollib_Physics\Src\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。
   Adollib_Physics.vcxproj -> C:\Users\waaaa\Documents\Adollib_Physics\Adollib_Physics\\Bin\Win32\2022\Release\Adollib_Physics.lib

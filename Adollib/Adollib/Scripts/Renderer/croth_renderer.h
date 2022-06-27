@@ -55,7 +55,7 @@ namespace Adollib {
 
 		int instance_count = 0;
 
-		std::shared_ptr<std::vector<std::vector<std::pair<Vector3,Vector3>>>> mesh_offset;
+		std::shared_ptr<std::vector<std::vector<std::pair<DirectX::XMFLOAT3, DirectX::XMFLOAT3>>>> mesh_offset;
 
 	public:
 		void load_texture(const wchar_t* filename = nullptr);
@@ -64,7 +64,7 @@ namespace Adollib {
 
 		void set_meshes(std::vector<Mesh::mesh>* l_meshes) override;
 
-		void set_meshoffset(std::shared_ptr<std::vector<std::vector<std::pair<Vector3, Vector3>>>> off) {
+		void set_meshoffset(std::shared_ptr<std::vector<std::vector<std::pair<DirectX::XMFLOAT3, DirectX::XMFLOAT3>>>> off) {
 			mesh_offset = off;
 		};
 

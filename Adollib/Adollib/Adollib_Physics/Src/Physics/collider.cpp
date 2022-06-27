@@ -117,71 +117,38 @@ Joint_base* Collider::get_joint(const int num) {
 }
 
 
-void Collider::awake(const void* Goptr, const DirectX::XMFLOAT3& l_Wpos, const DirectX::XMFLOAT4& l_Worient, const DirectX::XMFLOAT3& l_Wscale, const DirectX::XMFLOAT4& l_pearent_Worient_inv) {
-	Physics_manager::ColliderPhysics_ptrs data;
-
-	Wposition = l_Wpos;
-	Worientation = l_Worient;
-	Wscale = l_Wscale;
-	pearent_Worientation_inverse = l_pearent_Worient_inv;
-
-
-	data = Physics_manager::add_collider(this, Goptr, Wposition, Worientation, Wscale, pearent_Worientation_inverse);
-
-	ALPcollider_ptr = data.ALPcollider_ptr;
-	ALPphysics_ptr = data.ALPphysics_ptr;
-
-	//data.ALPcollider_ptr->shapes.resize(1);
-	//data.ALPcollider_itr->shapes.at(0).ALPcollider = data.ALPcollider_itr;
-}
-
-void Collider::finalize() {
-
-	//Phyisics_manager::add_delete_buffer_ALPCollider(ALPcollider_ptr);
-	//Phyisics_manager::add_delete_buffer_ALPPhysics(ALPphysics_ptr);
-	Physics_manager::add_delete_buffer_ALPCollider_and_ALPPhsics(ALPcollider_ptr, ALPphysics_ptr);
-	////アタッチされたALP_Collider,ALP_Physicsの終了処理
-	//ALPcollider_ptr->destroy();
-	//ALPphysics_ptr->destroy();
-
-	////削除
-	//delete ALPcollider_ptr;
-	//delete ALPphysics_ptr;
-}
-
-
-void Collider::Update_hierarchy() {
-
-	ALPcollider_ptr->Update_hierarchy();
-
-	//if (ImGui::BeginTabBar("Physics")) {
-	//	ImGui::Checkbox("moveable", &physics_data.is_moveable);
-	//	ImGui::Checkbox("fallable", &physics_data.is_fallable);
-	//	ImGui::Checkbox("kinematic", &physics_data.is_kinematic);
-	//	ImGui::Checkbox("is_kinmatic_anglar", &physics_data.is_kinmatic_anglar);
-	//	ImGui::Checkbox("is_kinmatic_linear", &physics_data.is_kinmatic_linear);
-	//	ImGui::Checkbox("hitable", &physics_data.is_hitable);
-
-	//	ImGui::DragFloat("mass", &physics_data.inertial_mass, 0.001f, 0, 0);
-
-	//	ImGui::DragFloat("restitution", &physics_data.restitution, 0.001f, 0, 0);
-
-	//	ImGui::DragFloat("friction", &physics_data.dynamic_friction, 0.001f, 0, 100000000.f);
-
-	//	ImGui::DragFloat("linear_drag", &physics_data.drag, 0.01f, 0, 1);
-	//	ImGui::DragFloat("anglar_drag", &physics_data.anglar_drag, 0.01f, 0, 1);
-
-	//	ImGui::DragFloat("linear_sleep_threrhold", &physics_data.linear_sleep_threrhold, 0.01f, 0, 1);
-	//	ImGui::DragFloat("angula_sleep_threrhold", &physics_data.angula_sleep_threrhold, 0.01f, 0, 1);
-
-	//	ImGui::Text("linear_velocity : %f", linear_velocity().norm_sqr());
-	//	ImGui::Text("angula_velocity : %f", angula_velocity().norm_sqr());
-
-
-	//	ImGui::EndTabBar();
-	//}
-
-}
+//void Collider::Update_hierarchy() {
+//
+//	ALPcollider_ptr->Update_hierarchy();
+//
+//	//if (ImGui::BeginTabBar("Physics")) {
+//	//	ImGui::Checkbox("moveable", &physics_data.is_moveable);
+//	//	ImGui::Checkbox("fallable", &physics_data.is_fallable);
+//	//	ImGui::Checkbox("kinematic", &physics_data.is_kinematic);
+//	//	ImGui::Checkbox("is_kinmatic_anglar", &physics_data.is_kinmatic_anglar);
+//	//	ImGui::Checkbox("is_kinmatic_linear", &physics_data.is_kinmatic_linear);
+//	//	ImGui::Checkbox("hitable", &physics_data.is_hitable);
+//
+//	//	ImGui::DragFloat("mass", &physics_data.inertial_mass, 0.001f, 0, 0);
+//
+//	//	ImGui::DragFloat("restitution", &physics_data.restitution, 0.001f, 0, 0);
+//
+//	//	ImGui::DragFloat("friction", &physics_data.dynamic_friction, 0.001f, 0, 100000000.f);
+//
+//	//	ImGui::DragFloat("linear_drag", &physics_data.drag, 0.01f, 0, 1);
+//	//	ImGui::DragFloat("anglar_drag", &physics_data.anglar_drag, 0.01f, 0, 1);
+//
+//	//	ImGui::DragFloat("linear_sleep_threrhold", &physics_data.linear_sleep_threrhold, 0.01f, 0, 1);
+//	//	ImGui::DragFloat("angula_sleep_threrhold", &physics_data.angula_sleep_threrhold, 0.01f, 0, 1);
+//
+//	//	ImGui::Text("linear_velocity : %f", linear_velocity().norm_sqr());
+//	//	ImGui::Text("angula_velocity : %f", angula_velocity().norm_sqr());
+//
+//
+//	//	ImGui::EndTabBar();
+//	//}
+//
+//}
 
 //meshcolliderのアタッチ
 void Collider::add_mesh_shape(const char* filepass, bool is_right_rtiangle, bool is_permit_edge_have_many_facet) {
@@ -234,6 +201,33 @@ const DirectX::XMFLOAT3 Collider::get_barycenter() const {
 	return ret;
 };
 
+void Collider::awake(const void* Goptr, const DirectX::XMFLOAT3& l_Wpos, const DirectX::XMFLOAT4& l_Worient, const DirectX::XMFLOAT3& l_Wscale, const DirectX::XMFLOAT4& l_pearent_Worient_inv) {
+	Physics_manager::ColliderPhysics_ptrs data;
+
+	Wposition = l_Wpos;
+	Worientation = l_Worient;
+	Wscale = l_Wscale;
+	pearent_Worientation_inverse = l_pearent_Worient_inv;
+
+
+	data = Physics_manager::add_collider(this, Goptr, Wposition, Worientation, Wscale, pearent_Worientation_inverse);
+
+	ALPcollider_ptr = data.ALPcollider_ptr;
+	ALPphysics_ptr = data.ALPphysics_ptr;
+
+	//data.ALPcollider_ptr->shapes.resize(1);
+	//data.ALPcollider_itr->shapes.at(0).ALPcollider = data.ALPcollider_itr;
+}
+
+void Collider::update_Wtransform(const DirectX::XMFLOAT3& l_Wpos, const DirectX::XMFLOAT4& l_Worient, const DirectX::XMFLOAT3& l_Wscale, const DirectX::XMFLOAT4& l_pearent_Worient_inv) {
+	Wposition = l_Wpos;
+	Worientation = l_Worient;
+	Wscale = l_Wscale;
+	pearent_Worientation_inverse = l_pearent_Worient_inv;
+
+	ALPcollider_ptr->copy_transform_gameobject(Wposition, Worientation, Wscale, pearent_Worientation_inverse);
+}
+
 void Collider::update() {
 
 	Physics_manager::mutex_lock();
@@ -250,30 +244,16 @@ void Collider::update() {
 	Physics_manager::mutex_unlock();
 }
 
-//void Collider::update_get_amount_of_change(DirectX::XMFLOAT3& pos_amount_of_change, DirectX::XMFLOAT4& orient_amount_of_change) {
-//	Physics_manager::mutex_lock();
-//
-//	Vector3 position_amount_of_change;
-//	Quaternion orientation_amount_of_change;
-//	ALPcollider_ptr->adapt_to_gameobject_transform(position_amount_of_change, orientation_amount_of_change, pearent_Worientation_inverse);
-//
-//	pos_amount_of_change = position_amount_of_change;
-//	orient_amount_of_change = orientation_amount_of_change;
-//
-//	Physics_manager::mutex_unlock();
-//}
-//
-//void Collider::update_set_Wtransform(const DirectX::XMFLOAT3& l_Wpos, const DirectX::XMFLOAT4& l_Worient, const DirectX::XMFLOAT3& l_Wscale, const DirectX::XMFLOAT4& l_pearent_Worient_inv) {
-//	Physics_manager::mutex_lock();
-//
-//	Wposition = l_Wpos;
-//	Worientation = l_Worient;
-//	Wscale = l_Wscale;
-//
-//	if(l_pearent_Worient_inv.x * l_pearent_Worient_inv.x + l_pearent_Worient_inv.y * l_pearent_Worient_inv.y + l_pearent_Worient_inv.z + l_pearent_Worient_inv.z + l_pearent_Worient_inv.w + l_pearent_Worient_inv.w != 0)
-//	pearent_Worientation_inverse = l_pearent_Worient_inv;
-//
-//	ALPcollider_ptr->copy_transform_gameobject(Wposition, Worientation, Wscale, pearent_Worientation_inverse);
-//
-//	Physics_manager::mutex_unlock();
-//}
+void Collider::finalize() {
+
+	//Phyisics_manager::add_delete_buffer_ALPCollider(ALPcollider_ptr);
+	//Phyisics_manager::add_delete_buffer_ALPPhysics(ALPphysics_ptr);
+	Physics_manager::add_delete_buffer_ALPCollider_and_ALPPhsics(ALPcollider_ptr, ALPphysics_ptr);
+	////アタッチされたALP_Collider,ALP_Physicsの終了処理
+	//ALPcollider_ptr->destroy();
+	//ALPphysics_ptr->destroy();
+
+	////削除
+	//delete ALPcollider_ptr;
+	//delete ALPphysics_ptr;
+}

@@ -19,7 +19,7 @@ namespace Adollib {
 			int vertex_id = 0;
 			int mesh_id = 0;
 			float size = 0.01f;
-			std::shared_ptr<std::vector<std::vector<std::pair<Vector3, Vector3>>>> vertex_offset;
+			std::shared_ptr<std::vector<std::vector<std::pair<DirectX::XMFLOAT3, DirectX::XMFLOAT3>>>> vertex_offset;
 
 		public:
 

@@ -45,7 +45,7 @@ namespace Adollib {
 		}
 	}
 
-	class Collider_Croth  {
+	class Collider_Croth {
 
 	public:
 		//::: tag ::::::::
@@ -82,9 +82,9 @@ namespace Adollib {
 		};
 
 	private:
-		std::map<Physics_function::Meshcollider_data*, std::vector<Collider*>> colliders; //頂点毎にアタッチしたcolliderの配列
+		std::map < Physics_function::Meshcollider_data*, std::vector<std::shared_ptr<Collider>>> colliders; //頂点毎にアタッチしたcolliderの配列
 
-		std::shared_ptr<std::vector<std::vector<std::pair<Vector3, Vector3>>>> vertex_offset; //model頂点からどれくらいずれているか rendererがposition,normalのstd::pairなので合わせる
+		std::shared_ptr<std::vector<std::vector<std::pair<DirectX::XMFLOAT3, DirectX::XMFLOAT3>>>> vertex_offset; //model頂点からどれくらいずれているか rendererがposition,normalのstd::pairなので合わせる
 
 		std::vector<Croth_constraint> croth_constraints; //構成ばね
 
@@ -96,42 +96,42 @@ namespace Adollib {
 		// 指定した番号にアタッチされているjointの情報を得る
 		Joint_base* get_joint(const int num);
 
-		std::shared_ptr<std::vector<std::vector<std::pair<Vector3, Vector3>>>> get_vertex_offset() { return vertex_offset; };
+		std::shared_ptr<std::vector<std::vector<std::pair<DirectX::XMFLOAT3, DirectX::XMFLOAT3>>>> get_vertex_offset() { return vertex_offset; };
 
 	public:
 		// 交差していたらtrueを返す
 		const bool concoll_enter(const Collider_tagbit tag_name);
 
 		// 並進移動に力を加える
-		void add_force(const Vector3& force, const float& delta_time, const bool& is_force_local = false);
+		void add_force(const Physics_function::Vector3& force, const float& delta_time, const bool& is_force_local = false);
 
 		// 並進移動に力を加える
-		void add_force(const Vector3& force, const Vector3& position, const float& delta_time, const bool& is_position_local = false, const bool& is_force_local = false);
+		void add_force(const Physics_function::Vector3& force, const Physics_function::Vector3& position, const float& delta_time, const bool& is_position_local = false, const bool& is_force_local = false);
 
 		// 角回転に力を加える
-		void add_torque(const Vector3& force, const float& delta_time, const bool& is_local = false);
+		void add_torque(const Physics_function::Vector3& force, const float& delta_time, const bool& is_local = false);
 
 		// 並進加速に値を加える
-		void add_linear_acc(const Vector3& force, const float& delta_time);
+		void add_linear_acc(const Physics_function::Vector3& force, const float& delta_time);
 
 		// 角加速に値を加える
-		void add_angula_acc(const Vector3& force, const float& delta_time);
+		void add_angula_acc(const Physics_function::Vector3& force, const float& delta_time);
 
 		// 現在かかっている速度、加速度、力を0にする
 		void reset_force() { for (auto& map : colliders) for (auto ptr : map.second) ptr->reset_force(); };
 
 		// 速度制限を行う
-		void set_max_linear_velocity(const float& max_scalar) {for(auto& map : colliders) for (auto ptr : map.second) ptr->set_max_linear_velocity(max_scalar); };
-		void set_max_angula_velocity(const float& max_scalar) {for(auto& map : colliders) for (auto ptr : map.second) ptr->set_max_angula_velocity(max_scalar); };
+		void set_max_linear_velocity(const float& max_scalar) { for (auto& map : colliders) for (auto ptr : map.second) ptr->set_max_linear_velocity(max_scalar); };
+		void set_max_angula_velocity(const float& max_scalar) { for (auto& map : colliders) for (auto ptr : map.second) ptr->set_max_angula_velocity(max_scalar); };
 
 		// 慣性モーメントをユーザー定義で設定する
-		void set_tensor(const Matrix33& tensor) { for (auto& map : colliders) for (auto ptr : map.second) ptr->set_tensor(tensor); };
+		void set_tensor(const Physics_function::Matrix33& tensor) { for (auto& map : colliders) for (auto ptr : map.second) ptr->set_tensor(tensor); };
 
 		// 重心をユーザー定義で設定する
-		void set_barycenter(const Vector3& cent) { for (auto& map : colliders) for (auto ptr : map.second) ptr->set_barycenter(cent); };
+		void set_barycenter(const Physics_function::Vector3& cent) { for (auto& map : colliders) for (auto ptr : map.second) ptr->set_barycenter(cent); };
 
 		// 重心のlocal座標を返す
-		const Vector3 get_barycenter() const;
+		const Physics_function::Vector3 get_barycenter() const;
 
 		// 指定の頂点のphysics_dataを変更する
 		void set_vertex_data(const int& mesh_num, const int& vertex_num, const Physics_data& physics_data);
@@ -139,9 +139,10 @@ namespace Adollib {
 		const Physics_data& get_vertex_data(const int& mesh_num, const int& vertex_num) const;
 
 	public:
-		void load_file(const std::string& filename, bool is_right_rtiangle, bool is_permit_edge_have_many_facet);
+		void load_file(const std::string& filename, bool is_right_rtiangle, const void* unique_ptr, const DirectX::XMFLOAT3& Wpos, const DirectX::XMFLOAT4& Worient, const DirectX::XMFLOAT3& Wscale, const DirectX::XMFLOAT4& pearent_Worient_inv, const bool is_permit_edge_have_many_facet = false);
+		void load_file(const DirectX::XMFLOAT3* vertexis, int vertex_size, const int* indexis, int index_size, bool is_right_rtiangle);
 
-		void Update_hierarchy();
+		//void Update_hierarchy();
 
 		void update();
 

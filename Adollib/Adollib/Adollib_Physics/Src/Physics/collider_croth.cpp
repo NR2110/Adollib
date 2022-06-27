@@ -82,19 +82,18 @@ const Physics_data& Collider_Croth::get_vertex_data(const int& mesh_num, const i
 	return colliders.at(&meshcoll_data->at(mesh_num)).at(vertex_num)->physics_data;
 }
 
-void Collider_Croth::load_file(const std::string& filename, bool is_right_rtiangle, bool is_permit_edge_have_many_facet) {
+void Collider_Croth::load_file(const std::string& filename, bool is_right_rtiangle, const void* unique_ptr, const DirectX::XMFLOAT3& Wpos, const DirectX::XMFLOAT4& Worient, const DirectX::XMFLOAT3& Wscale, const DirectX::XMFLOAT4& pearent_Worient_inv, const bool is_permit_edge_have_many_facet) {
 	//FBXのLoadを行う
 	//std::vector<Physics_function::Meshcollider_data>* meshcoll_data = nullptr;
 	meshcoll_data = nullptr;
 	Physics_function::Collider_ResourceManager::CreateMCFromFBX(filename.c_str(), &meshcoll_data, is_right_rtiangle, is_permit_edge_have_many_facet);
 
-	vertex_offset = std::make_shared<std::vector<std::vector<std::pair<Vector3, Vector3>>>>();
+	vertex_offset = std::make_shared<std::vector<std::vector<std::pair<DirectX::XMFLOAT3, DirectX::XMFLOAT3>>>>();
 	vertex_offset->resize(meshcoll_data->size());
 
 	// すべての頂点情報から個別にColliderを生成
 	int mesh_id = 0;
 	for (auto& data : *meshcoll_data) {
-
 
 		int vertex_size = data.vertices.size();
 		auto& colliders_per_mesh = colliders[&data];
@@ -102,15 +101,13 @@ void Collider_Croth::load_file(const std::string& filename, bool is_right_rtiang
 
 		for (int vertex_num = 0; vertex_num < vertex_size; ++vertex_num) {
 
-			vertex_offset->at(mesh_id).emplace_back(std::pair<Vector3, Vector3>(Vector3(0), Vector3(0)));
+			vertex_offset->at(mesh_id).emplace_back(std::pair<DirectX::XMFLOAT3, DirectX::XMFLOAT3>(DirectX::XMFLOAT3(0,0,0), DirectX::XMFLOAT3(0,0,0)));
 
 			// colliderを情報として扱う (気持ち悪いけれど仕方ない)
-			auto collider = new Collider;
-			collider->gameobject = gameobject;
-			collider->transform = std::make_shared<Transform>();
+			auto collider = std::make_shared<Collider>();
 			collider->tag = tag;
 			collider->ignore_tags = ignore_tags;
-			collider->awake();
+			collider->awake(unique_ptr, Wpos, Worient, Wscale, pearent_Worient_inv);
 
 			collider->physics_data = default_physics_data;
 
@@ -162,7 +159,7 @@ void Collider_Croth::load_file(const std::string& filename, bool is_right_rtiang
 						constraint.vertId1 = vertId1;
 						constraint.mesh = &data;
 						constraint.constraint_type = croth_constraint_type::sructural_spring;
-						constraint.natural_length = vector3_distance_sqr(data.vertices[vertId0] * transform->local_scale, data.vertices[vertId1] * transform->local_scale);
+						constraint.natural_length = vector3_distance_sqr(data.vertices[vertId0] * Wscale, data.vertices[vertId1] * Wscale);
 
 						edgeID_Table[tableId] = croth_constraints.size();
 						croth_constraints.emplace_back(constraint);
@@ -206,7 +203,7 @@ void Collider_Croth::load_file(const std::string& filename, bool is_right_rtiang
 						constraint.vertId1 = vertId1;
 						constraint.mesh = &data;
 						constraint.constraint_type = croth_constraint_type::bending_spring; //初めは曲げばね
-						constraint.natural_length = vector3_distance_sqr(data.vertices[vertId0] * transform->local_scale, data.vertices[vertId1] * transform->local_scale);
+						constraint.natural_length = vector3_distance_sqr(data.vertices[vertId0] * Wscale, data.vertices[vertId1] * Wscale);
 
 						edgeID_Table[tableId] = croth_constraints.size();
 						croth_constraints.emplace_back(constraint);
@@ -295,9 +292,9 @@ void Collider_Croth::update() {
 			int facet_mum = 0;
 			for (auto& facet : data.facets) {
 
-				const Vector3& vertex_0 = data.vertices[facet.vertexID[0]] + vertex_offset->at(mesh_num).at(facet.vertexID[0]).first;
-				const Vector3& vertex_1 = data.vertices[facet.vertexID[1]] + vertex_offset->at(mesh_num).at(facet.vertexID[1]).first;
-				const Vector3& vertex_2 = data.vertices[facet.vertexID[2]] + vertex_offset->at(mesh_num).at(facet.vertexID[2]).first;
+				const Vector3& vertex_0 = data.vertices[facet.vertexID[0]] + Vector3(vertex_offset->at(mesh_num).at(facet.vertexID[0]).first);
+				const Vector3& vertex_1 = data.vertices[facet.vertexID[1]] + Vector3(vertex_offset->at(mesh_num).at(facet.vertexID[1]).first);
+				const Vector3& vertex_2 = data.vertices[facet.vertexID[2]] + Vector3(vertex_offset->at(mesh_num).at(facet.vertexID[2]).first);
 
 				const Vector3& normal = vector3_cross(vertex_1 - vertex_0, vertex_2 - vertex_0).unit_vect();
 
@@ -336,12 +333,29 @@ void Collider_Croth::update() {
 		}
 	}
 
+	for (auto& map_s : colliders) {
+		for (auto& coll : map_s.second) {
+			coll->update();
+		}
+	}
 
+	//Physics_manager::mutex_lock();
+
+	//Vector3 position_amount_of_change;
+	//Quaternion orientation_amount_of_change;
+	//ALPcollider_ptr->adapt_to_gameobject_transform(position_amount_of_change, orientation_amount_of_change, pearent_Worientation_inverse);
+
+	//Wposition = Vector3(Wposition) + position_amount_of_change;
+	//Worientation = Quaternion(Worientation) * orientation_amount_of_change;
+
+	//ALPcollider_ptr->copy_transform_gameobject(Wposition, Worientation, Wscale, pearent_Worientation_inverse);
+
+	//Physics_manager::mutex_unlock();
 
 
 }
 
-void Collider_Croth::awake() {
+void Collider_Croth::awake(){
 	// 初期値の調整
 	Physics_manager::physicsParams.set_default_physics_data(default_physics_data);
 
@@ -349,21 +363,22 @@ void Collider_Croth::awake() {
 	default_physics_data.inertial_mass = 1;
 
 	default_sphere_r = 0.01f;
+
 }
 
 void Collider_Croth::finalize() {
 
 	for (auto& map : colliders) for (auto ptr : map.second) ptr->finalize();
 
-	for (auto& map : colliders) for (auto ptr : map.second) delete ptr;
+	//for (auto& map : colliders) for (auto ptr : map.second) delete ptr;
 	int adsfdg = 0;
 }
 
-void Collider_Croth::Update_hierarchy() {
-
-	for (auto& map : colliders) for (auto ptr : map.second) ptr->Update_hierarchy();
-
-}
+//void Collider_Croth::Update_hierarchy() {
+//
+//	for (auto& map : colliders) for (auto ptr : map.second) ptr->Update_hierarchy();
+//
+//}
 
 
 // 重心のlocal座標を返す

@@ -255,7 +255,7 @@ void Croth_renderer::update() {
 			int vertex_size = meshes->at(mesh_count).vertices.size();
 			int vertex_start = 0;
 			for (int i = 0; i < vertex_size; ++i) {
-				data[i].position = mesh_offset->at(mesh_count)[i].first / transform->scale;
+				data[i].position = Vector3(mesh_offset->at(mesh_count)[i].first) / transform->scale;
 				data[i].normal = mesh_offset->at(mesh_count)[i].second;
 			}
 			++mesh_count;
@@ -433,14 +433,14 @@ void Croth_renderer::set_meshes(std::vector<Mesh::mesh>* l_meshes) {
 			}
 
 			// offset—p”z—ñ‚Ì€”õ
-			mesh_offset = std::make_shared<std::vector<std::vector<std::pair<Vector3, Vector3>>>>();
+			mesh_offset = std::make_shared<std::vector<std::vector<std::pair<DirectX::XMFLOAT3, DirectX::XMFLOAT3>>>>();
 			//mesh_offset->resize(meshes->size());
-			std::pair<Vector3, Vector3> zero_format;
+			std::pair<DirectX::XMFLOAT3, DirectX::XMFLOAT3> zero_format;
 			zero_format.first = Vector3(0);
 			zero_format.second = Vector3(0);
 
 			for (auto& meshess : (*meshes)) {
-				std::vector<std::pair<Vector3, Vector3>> initial_mesh;
+				std::vector<std::pair<DirectX::XMFLOAT3, DirectX::XMFLOAT3>> initial_mesh;
 
 				initial_mesh.resize(meshess.vertices.size());
 				for (auto& mesh : initial_mesh) {
