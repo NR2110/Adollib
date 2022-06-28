@@ -9,7 +9,6 @@
 #include "ALP_joint.h"
 
 #include "shape_meshcoll.h"
-#include "shape_croth.h"
 
 
 using namespace Adollib;

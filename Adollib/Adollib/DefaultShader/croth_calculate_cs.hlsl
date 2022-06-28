@@ -54,7 +54,8 @@ void main( const CSInput input )
     const uint index_num = indexces[input.dispatch.x]; //index
 
     // color[0].w‚Í‚»‚Ìmesh‚Ìinstance‚ÌstartˆÊ’u
-    BufOut[color[0].w + instance_num].position[vertex_num] = vertices[index_num].position + vertices_offset[index_num].position;
+   // BufOut[color[0].w + instance_num].position[vertex_num] = vertices[index_num].position + vertices_offset[index_num].position;
+    BufOut[color[0].w + instance_num].position[vertex_num] =  vertices_offset[index_num].position;
     BufOut[color[0].w + instance_num].normal[vertex_num] = vertices_offset[index_num].normal;
     //BufOut[color[0].w + instance_num].normal[vertex_mum] = normalize(vertices[index_num].normal + vertices_offset[index_num].normal);
     BufOut[color[0].w + instance_num].color = float4(color[0].xyz, 1);

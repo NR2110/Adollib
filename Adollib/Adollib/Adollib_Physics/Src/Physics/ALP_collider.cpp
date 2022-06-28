@@ -9,7 +9,6 @@
 #include "ALP__meshcoll_data.h"
 
 #include "shape_meshcoll.h"
-#include "shape_croth.h"
 
 using namespace Adollib;
 using namespace Physics_function;
@@ -182,22 +181,22 @@ void ALP_Collider::adapt_to_gameobject_transform(Vector3& position_amount_of_cha
 	position_amount_of_change = transform.position - transform_start.position;
 	orientation_amount_of_change = transform_start.orientation.inverse() * transform.orientation;
 
-	//if (is_adapt_shape_for_copy_transform_gameobject) {
-	//	// Ž©g‚Ìcollider‚ðŠÜ‚Þ orientation‚Ìinverse‚ðì¬
-	//	Quaternion orientate_inv = Worient.inverse();
+	if (is_adapt_shape_for_copy_transform_gameobject) {
+		// Ž©g‚Ìcollider‚ðŠÜ‚Þ orientation‚Ìinverse‚ðì¬
+		Quaternion orientate_inv = Worient.inverse();
 
-	//	const Vector3& position_amount_of_change_local = vector3_quatrotate(transform.position - transform_start.position, orientate_inv);
-	//	const Quaternion& buffer = (transform_start.orientation.inverse() * transform.orientation).unit_vect();
-	//	const Quaternion& orientation_amount_of_change_local = quaternion_axis_radian(vector3_quatrotate(buffer.axis(), orientate_inv), buffer.radian());
+		const Vector3& position_amount_of_change_local = vector3_quatrotate(transform.position - transform_start.position, orientate_inv);
+		const Quaternion& buffer = (transform_start.orientation.inverse() * transform.orientation).unit_vect();
+		const Quaternion& orientation_amount_of_change_local = quaternion_axis_radian(vector3_quatrotate(buffer.axis(), orientate_inv), buffer.radian());
 
-	//	for (const auto& shape : shapes) {
-	//		shape->effect_for_copy_transform_to_gameobject(
-	//			position_amount_of_change, orientation_amount_of_change,
-	//			position_amount_of_change_local, orientation_amount_of_change_local
-	//		);
-	//	}
-	//	return;
-	//}
+		for (const auto& shape : shapes) {
+			shape->effect_for_copy_transform_to_gameobject(
+				position_amount_of_change, orientation_amount_of_change,
+				position_amount_of_change_local, orientation_amount_of_change_local
+			);
+		}
+		return;
+	}
 
 }
 

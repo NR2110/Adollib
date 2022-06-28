@@ -185,7 +185,6 @@
     <ClInclude Include="Adollib_Physics\Src\Physics\ALP__tags.h" />
     <ClInclude Include="Adollib_Physics\Src\Physics\balljoint.h" />
     <ClInclude Include="Adollib_Physics\Src\Physics\collider.h" />
-    <ClInclude Include="Adollib_Physics\Src\Physics\collider_croth.h" />
     <ClInclude Include="Adollib_Physics\Src\Physics\collider_shape.h" />
     <ClInclude Include="Adollib_Physics\Src\Physics\collider_types.h" />
     <ClInclude Include="Adollib_Physics\Src\Physics\conejoint.h" />
@@ -197,7 +196,6 @@
     <ClInclude Include="Adollib_Physics\Src\Physics\ray.h" />
     <ClInclude Include="Adollib_Physics\Src\Physics\shape_box.h" />
     <ClInclude Include="Adollib_Physics\Src\Physics\shape_capsule.h" />
-    <ClInclude Include="Adollib_Physics\Src\Physics\shape_croth.h" />
     <ClInclude Include="Adollib_Physics\Src\Physics\shape_meshcoll.h" />
     <ClInclude Include="Adollib_Physics\Src\Physics\shape_plane.h" />
     <ClInclude Include="Adollib_Physics\Src\Physics\shape_sphere.h" />
@@ -339,7 +337,6 @@
     <ClCompile Include="Adollib_Physics\Src\Physics\ALP__physics_manager.cpp" />
     <ClCompile Include="Adollib_Physics\Src\Physics\balljoint.cpp" />
     <ClCompile Include="Adollib_Physics\Src\Physics\collider.cpp" />
-    <ClCompile Include="Adollib_Physics\Src\Physics\collider_croth.cpp" />
     <ClCompile Include="Adollib_Physics\Src\Physics\collider_shape.cpp" />
     <ClCompile Include="Adollib_Physics\Src\Physics\conejoint.cpp" />
     <ClCompile Include="Adollib_Physics\Src\Physics\coneTwistjoint.cpp" />
@@ -348,7 +345,6 @@
     <ClCompile Include="Adollib_Physics\Src\Physics\joint_base.cpp" />
     <ClCompile Include="Adollib_Physics\Src\Physics\meshcoll_resorce_manager.cpp" />
     <ClCompile Include="Adollib_Physics\Src\Physics\ray.cpp" />
-    <ClCompile Include="Adollib_Physics\Src\Physics\shape_croth.cpp" />
     <ClCompile Include="Adollib_Physics\Src\Physics\twistjoint.cpp" />
     <ClCompile Include="Imgui\imgui.cpp" />
     <ClCompile Include="Imgui\imgui_demo.cpp" />

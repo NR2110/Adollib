@@ -1,3 +1,0 @@
-﻿  collider_croth.cpp
-C:\Users\waaaa\Documents\Adollib_Physics\Adollib_Physics\Src\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。
-  Adollib_Physics.vcxproj -> C:\Users\waaaa\Documents\Adollib_Physics\Adollib_Physics\\Bin\Win32\2022\Debug\Adollib_Physics.lib

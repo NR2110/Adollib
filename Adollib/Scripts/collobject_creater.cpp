@@ -10,7 +10,6 @@ using namespace Adollib;
 
 Collider_comp* Collider_creater::create_box(const std::string& name, const Vector3& pos, const Vector3& orient, const Vector3 scale, const Vector3& color, Gameobject* pearent) {
 
-
 	auto go = Gameobject_manager::createCube(name);
 	go->transform->local_pos = pos;
 	go->transform->local_orient = quaternion_from_euler(orient);

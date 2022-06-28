@@ -33,7 +33,8 @@ PSInput main(VSInput input, VSInput_INSTANCE instance_input)
     float4 worldPos = mul(P, W);
 	// 射影空間に変換(列優先)
 
-    row_major float4x4 matWVP = mul(W, mul(View, Projection));
+    //row_major float4x4 matWVP = mul(W, mul(View, Projection));
+    row_major float4x4 matWVP =  mul(View, Projection);
     P = mul(P, matWVP);
 
 	// ワールド法線算出

@@ -9,7 +9,7 @@
 
 #include "collobject_creater.h"
 #include "collider_comp.h"
-#include "collider_croth_comp.h"
+//#include "collider_croth_comp.h"
 
 
 
@@ -995,50 +995,98 @@ void Physics_demo_obj::update() {
 			imgui_num++;
 		}
 
-		//croth plane16
-		{
-			static int TREE_pyramid_count = 3;
-			static float pos[3] = { 0 };
-			static float scale[3] = { 1,1,1 };
-			bool summon = false;
-			ImGui::Separator();
-			ImGui::Text("Croth_plane16x"); ImGui::NextColumn();
-			ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
-			ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), pos, 0.1f); ImGui::NextColumn();
-			ImGui::DragFloat3(std::to_string(imgui_num + 250).c_str(), scale, 0.1f); ImGui::NextColumn();
-			ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &TREE_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
+		////croth plane16
+		//{
+		//static int TREE_pyramid_count = 3;
+		//static float pos[3] = { 0 };
+		//static float scale[3] = { 1,1,1 };
+		//bool summon = false;
+		//ImGui::Separator();
+		//ImGui::Text("Croth_plane02x"); ImGui::NextColumn();
+		//ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
+		//ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), pos, 0.1f); ImGui::NextColumn();
+		//ImGui::DragFloat3(std::to_string(imgui_num + 250).c_str(), scale, 0.1f); ImGui::NextColumn();
+		//ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &TREE_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
 
-			if (summon == true) {
-				auto go = Gameobject_manager::createFromFBX("plane", "./DefaultModel/plane_16x16vertex.fbx");
-				go->transform->local_pos = Vector3(pos[0], pos[1], pos[2]);
-				go->transform->local_scale = Vector3(scale[0], scale[1], scale[2]);
-				go->update_world_trans_to_children();
+		//if (summon == true) {
+		//	auto go = Gameobject_manager::createFromFBX("plane", "./DefaultModel/plane_02x02vertex.fbx");
+		//	GOs.push_back(go);
 
-				auto coll = go->addComponent<Collider_croth_comp>();
-				//coll->mesh_scale = Vector3(scale[0], scale[1], scale[2]);
-				//coll->load_file("./DefaultModel/plane_16x16vertex.fbx", true, false);
+		//	go->transform->local_pos = Vector3(pos[0], pos[1], pos[2]);
+		//	go->transform->local_scale = Vector3(scale[0], scale[1], scale[2]);
+		//	go->update_world_trans_to_children();
 
-				Physics_data data;
-				data = coll->get_collider()->get_vertex_data(0, 259);
-				data.is_moveable = false;
-				coll->get_collider()->set_vertex_data(0, 259, data);
-				data = coll->get_collider()->get_vertex_data(0, 274);
-				data.is_moveable = false;
-				coll->get_collider()->set_vertex_data(0, 274, data);
+		//	auto coll = go->addComponent<Collider_croth_comp>();
+		//	//coll->mesh_scale = Vector3(scale[0], scale[1], scale[2]);
+		//	//coll->load_file("./DefaultModel/plane_16x16vertex.fbx", true, false);
 
-				for (int i = 259; i < 275; ++i) {
-					data = coll->get_collider()->get_vertex_data(0, i);
-					data.is_moveable = false;
-					coll->get_collider()->set_vertex_data(0, i, data);
-				}
+		//	//Physics_data data;
+		//	//data = coll->get_collider()->get_vertex_data(0, 259);
+		//	//data.is_moveable = false;
+		//	//coll->get_collider()->set_vertex_data(0, 259, data);
+		//	//data = coll->get_collider()->get_vertex_data(0, 274);
+		//	//data.is_moveable = false;
+		//	//coll->get_collider()->set_vertex_data(0, 274, data);
+
+		//	//for (int i = 259; i < 275; ++i) {
+		//	//	data = coll->get_collider()->get_vertex_data(0, i);
+		//	//	data.is_moveable = false;
+		//	//	coll->get_collider()->set_vertex_data(0, i, data);
+		//	//}
 
 
-				auto renderer = go->addComponent<Croth_renderer>();
-				renderer->set_meshoffset(coll->get_collider()->get_vertex_offset());
+		//	auto renderer = go->addComponent<Croth_renderer>();
+		//	renderer->set_meshoffset(coll->get_collider()->get_vertex_offset());
 
-			}
-			imgui_num++;
-		}
+		//}
+		//imgui_num++;
+		//}
+		////croth plane16
+		//{
+		//	static int TREE_pyramid_count = 3;
+		//	static float pos[3] = { 0 };
+		//	static float scale[3] = { 1,1,1 };
+		//	bool summon = false;
+		//	ImGui::Separator();
+		//	ImGui::Text("Croth_plane16x"); ImGui::NextColumn();
+		//	ImGui::Checkbox(std::to_string(imgui_num + 100).c_str(), &summon); ImGui::NextColumn();
+		//	ImGui::DragFloat3(std::to_string(imgui_num + 200).c_str(), pos, 0.1f); ImGui::NextColumn();
+		//	ImGui::DragFloat3(std::to_string(imgui_num + 250).c_str(), scale, 0.1f); ImGui::NextColumn();
+		//	ImGui::DragInt(std::to_string(imgui_num + 300).c_str(), &TREE_pyramid_count, 1, 1, 100000); ImGui::NextColumn();
+
+		//	if (summon == true) {
+		//		auto go = Gameobject_manager::createFromFBX("plane", "./DefaultModel/plane_16x16vertex.fbx");
+		//		GOs.push_back(go);
+
+		//		go->transform->local_pos = Vector3(pos[0], pos[1], pos[2]);
+		//		go->transform->local_scale = Vector3(scale[0], scale[1], scale[2]);
+		//		go->update_world_trans_to_children();
+
+		//		auto coll = go->addComponent<Collider_croth_comp>();
+		//		//coll->mesh_scale = Vector3(scale[0], scale[1], scale[2]);
+		//		//coll->load_file("./DefaultModel/plane_16x16vertex.fbx", true, false);
+
+		//		Physics_data data;
+		//		data = coll->get_collider()->get_vertex_data(0, 259);
+		//		data.is_moveable = false;
+		//		coll->get_collider()->set_vertex_data(0, 259, data);
+		//		data = coll->get_collider()->get_vertex_data(0, 274);
+		//		data.is_moveable = false;
+		//		coll->get_collider()->set_vertex_data(0, 274, data);
+
+		//		for (int i = 259; i < 275; ++i) {
+		//			data = coll->get_collider()->get_vertex_data(0, i);
+		//			data.is_moveable = false;
+		//			coll->get_collider()->set_vertex_data(0, i, data);
+		//		}
+
+
+		//		auto renderer = go->addComponent<Croth_renderer>();
+		//		renderer->set_meshoffset(coll->get_collider()->get_vertex_offset());
+
+		//	}
+		//	imgui_num++;
+		//}
 
 
 

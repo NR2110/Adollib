@@ -128,7 +128,7 @@ void Croth_renderer::render(const Frustum_data& frustum_data) {
 	// CB : ConstantBufferPerOBJ
 	// GO‚Ìtransform‚Ìî•ñ‚ðConstantBuffer‚ÖƒZƒbƒg‚·‚é
 	ConstantBufferPerGO g_cb;
-	g_cb.world = matrix_world(transform->scale, transform->orientation.get_rotate_matrix(), transform->position);
+	g_cb.world = matrix_world(Vector3(1), matrix33_identity(), Vector3(0));
 	Systems::DeviceContext->UpdateSubresource(world_cb.Get(), 0, NULL, &g_cb, 0, 0);
 	Systems::DeviceContext->VSSetConstantBuffers(0, 1, world_cb.GetAddressOf());
 	Systems::DeviceContext->PSSetConstantBuffers(0, 1, world_cb.GetAddressOf());

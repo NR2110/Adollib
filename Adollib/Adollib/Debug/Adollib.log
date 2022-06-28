@@ -1,3 +1,5 @@
-﻿  collider_comp.cpp
-C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Adollib_Physics\Src\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。
+﻿  ALP_collider.cpp
+  collider.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Adollib_Physics\Src\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。 (ソース ファイルをコンパイルしています Adollib_Physics\Src\Physics\collider.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Adollib_Physics\Src\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。 (ソース ファイルをコンパイルしています Adollib_Physics\Src\Physics\ALP_collider.cpp)
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe
