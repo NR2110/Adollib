@@ -28,8 +28,8 @@ void Scene_manager::initialize() {
 	scenes[Scenelist::scene_game] = std::make_unique<Scene_game>();
 	scenes[Scenelist::scene_title] = std::make_unique<Scene_title>();
 	scenes[Scenelist::scene_player] = std::make_unique<Scene_player>();
-	scenes[Scenelist::scene_SPH] = std::make_unique<Scene_SPH>();
-	scenes[Scenelist::scene_music] = std::make_unique<Scene_music>();
+	//scenes[Scenelist::scene_SPH] = std::make_unique<Scene_SPH>();
+	//scenes[Scenelist::scene_music] = std::make_unique<Scene_music>();
 
 
 

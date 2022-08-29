@@ -139,8 +139,8 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 		return 0;
 	}
 
-	//MonoAudio::awake();
-	//MonoAudio::Init();
+	MonoAudio::awake();
+	MonoAudio::Init();
 
 	//ƒƒCƒ“ƒ‹[ƒv
 	MSG hMsg = { 0 };
@@ -163,7 +163,9 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 		else
 		{
 			if (Systems::time->tick() == false)continue;
+#ifdef UseImgui
 			if (Adollib::Imgui_manager::update(hMsg) == false) continue;
+#endif
 
 			//Systems::time->tick();
 
@@ -194,7 +196,7 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 		}
 	}
 
-	//MonoAudio::destroy();
+	MonoAudio::destroy();
 	loop.destroy();
 	Systems::Release();
 

@@ -16,11 +16,14 @@ bool loop::init(HWND hWnd) {
 
 	Renderer_manager::awake();
 	Scene_manager::initialize();
-	Audio_manager::initialize();
+	//Audio_manager::initialize();
 	Gameobject_manager::awake();
 
 	Systems::SetViewPort(Al_Global::SCREEN_WIDTH, Al_Global::SCREEN_HEIGHT);
+
+#ifdef UseImgui
 	Adollib::Imgui_manager::init(hWnd);
+#endif
 
 	return true;
 }
@@ -30,7 +33,7 @@ bool loop::Update(MSG hMsg, HWND hWnd, int width, int height) {
 	Systems::inputManager->update();
 
 	Scene_manager::update();
-	Audio_manager::update();
+	//Audio_manager::update();
 
 	return true;
 }
@@ -41,7 +44,9 @@ bool loop::Render(){
 	Scene_manager::render();
 
 	Work_meter::start("Imgui_render");
+#ifdef UseImgui
 	Adollib::Imgui_manager::render();
+#endif
 	Work_meter::stop("Imgui_render");
 	Work_meter::stop(std::string("loop_render"));
 
@@ -53,7 +58,7 @@ bool loop::Render(){
 
 bool loop::destroy() {
 
-	Audio_manager::destroy();
+	//Audio_manager::destroy();
 
 	// ‚·‚×‚Ä‚Ìscene‚Ìgameobject‚ğíœ
 	for (int i = 0; i < static_cast<int>(Scenelist::scene_list_size); i++) {
@@ -66,7 +71,9 @@ bool loop::destroy() {
 
 
 	// imgu.i‚ğ~‚ß‚é
+#ifdef UseImgui
 	Adollib::Imgui_manager::destroy();
+#endif
 
 	return true;
 }

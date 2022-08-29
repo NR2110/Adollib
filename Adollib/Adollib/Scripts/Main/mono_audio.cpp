@@ -33,7 +33,7 @@ namespace Adollib
 		LoadMusic(static_cast<int>(Music::BGM_Game), L"../Data/sounds/BGM/tuitekuru_tuitekuru.wav", 0.6f);
 		//LoadMusic(static_cast<int>(Music::BGM_Title), L"../Data/sounds/BGM/Take_it_easy.wav", 0);
 		//LoadMusic(static_cast<int>(Music::BGM_Game), L"../Data/sounds/BGM/tuitekuru_tuitekuru.wav", 0);
-		LoadMusic(static_cast<int>(Music::DEMO), L"../Data/sounds/Demo_BGM/Theme_of_Rabi-Ribi.wav", 0.15f);
+		//LoadMusic(static_cast<int>(Music::DEMO), L"../Data/sounds/Demo_BGM/Theme_of_Rabi-Ribi.wav", 0.15f);
 
 		LoadMusic(static_cast<int>(Music::SE_Pop),  L"../Data/sounds/SE/Motion-Pop03-2.wav", 0.5f);
 		LoadMusic(static_cast<int>(Music::SE_Jump), L"../Data/sounds/SE/SNES-Action01-01(Jump).wav", 0.5f);
@@ -78,7 +78,7 @@ namespace Adollib
 		eflags = eflags | DirectX::AudioEngine_Debug;
 #endif
 		audioEngine = make_unique<AudioEngine>(eflags);
-		audioEngine->SetReverb(Reverb_Default);
+		audioEngine->SetReverb(Reverb_Off);
 
 		for (auto& p : musicData.musicVolume) p = 1.0f;
 		for (auto& p : soundData.soundVolume) p = 1.0f;
