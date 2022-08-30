@@ -6,6 +6,7 @@
 #include <Windows.h>
 #include <tchar.h>
 
+#include "defines.h"
 #include "systems.h"
 #include "Adollib.h"
 #include "../Imgui/imgui_manager.h"

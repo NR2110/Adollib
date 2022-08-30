@@ -1,2 +1,29 @@
-﻿  mono_audio.cpp
+﻿  camera.cpp
+  debug_camera_controller.cpp
+  demo_house.cpp
+  input_changer.cpp
+  player_funcs.cpp
+  title_camera.cpp
+  imgui_manager.cpp
+  work_meter.cpp
+  loop.cpp
+  mono_audio.cpp
+  gameobject_manager.cpp
+  scene_manager.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\input_changer.cpp(100,80): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\input_changer.cpp(100,47): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\demo_house.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\player_funcs.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Scene\scene_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Scene\scene_manager.cpp(70,20): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\camera.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Main\loop.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\stage_types.h(20,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Stage_types' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\player_funcs.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\title_camera.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。 (ソース ファイルをコンパイルしています ..\Scripts\debug_camera_controller.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Object\gameobject_manager.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\title_camera.cpp(93,43): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\title_camera.cpp(94,43): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Audio\audio_manager.h(54,3): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Audio_manager' の左辺を無視します。 (ソース ファイルをコンパイルしています Scripts\Main\loop.cpp)
+C:\Users\waaaa\Documents\Adollib\Adollib\Scripts\player_funcs.cpp(1159,72): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
   Adollib.vcxproj -> C:\Users\waaaa\Documents\Adollib\Adollib\Debug\Adollib.exe

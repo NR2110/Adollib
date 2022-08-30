@@ -1,8 +1,9 @@
-﻿  mono_audio.cpp
+﻿  main.cpp
+C:\Users\waaaa\Documents\Adollib\Adollib\Adollib\Scripts\Physics\ALP_broadphase.h(27,5): warning C4091: 'static ': 変数が何も宣言されていないときは、'Adollib::Physics_function::Broadphase_static::Edge_sort_axis' の左辺を無視します。
   コード生成しています。
-  2 of 10874 functions (<0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    38 functions had inline decision re-evaluated but remain unchanged
+  522 of 11495 functions ( 4.5%) were compiled, the rest were copied from previous compilation.
+    136 functions were new in current compilation
+    151 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
 imgui.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
 imgui_demo.obj : warning LNK4020: 'c:\users\waaaa\documents\adollib\adollib\adollib\release\vc142.pdb' の型レコードは破損しています。一部のシンボルおよび型は、デバッガーからはアクセスできない可能性があります。
